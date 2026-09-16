@@ -1,154 +1,113 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 12:43. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 12:43. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
-| contador | valor | esperado |
+| contador | valor | esperado | dono |
+|---|---|---|---|
+| parados_esperando_corte | 3 | fila do Ronald | Ronald |
+| fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
+| contratos_estruturais | 8/22 | 22/22 | Code |
+| balao de chamados (Validar + Decidir) | 739 | — | admin |
+| fila de trabalho (aberto + em analise) | 1.321 | — | admin/colab |
+| competencias_pagas_sem_tranca | 0 | 0 | DP |
+| chamados_em_competencia_trancada | 0 | 0 | sistema |
+| sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
+| furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
+
+## NO AR HOJE (16/09) — 9 fatias
+
+| hora | fatia | o que mudou |
 |---|---|---|
-| parados_esperando_corte | 3 | fila do Ronald |
-| fatias_esperando_smoke | 15 | fila do Ronald |
-| contratos_estruturais | 8/22 | 22/22 |
-| competencias_pagas_sem_tranca | 0 | 0 (dono DP) |
-| sla_vencido_sem_aviso | 260 | 0 (dono supervisao/DP) |
-| furos_vetados_por_regua | 4 em 3 vinculos | 0 (dono DP/cadastro) |
-| chamados_em_competencia_trancada | 0 | 0 (dono sistema) |
+| 09:1x | P7.1-MARCO-SEM-HORA (bug) | marco de intermitente sem hora derrubava o auditor diario; 7 perguntas, nenhuma mudou de estado. Auditoria re-rodada em prod: alarme de negocio (13 invariantes), nao mais erro |
+| 09:34 | SLA-PELA-FILA | o alerta de prazo ve a fila inteira. Sem rajada: passivo de 1.203 vencidos virou Pauta DP 89/90/91 |
+| 09:5x | COMPETENCIAS-PAGAS-SEM-TRANCA | contador de mes pago sem tranca (hoje 0) |
+| 10:27 | VETO-QUE-CAI-REJULGA (bug) | furo vetado pela regua deixa de ficar preso quando o veto cai; porta para desfazer a confirmacao de "cadastro errado" |
+| 10:55 | TRANCA-SEM-CADASTRO (bug) | a tranca nao encerra aviso de cadastro nem revisao de desligamento; o emissor nao reabre dia trancado |
+| 11:12 | HAIKU-BUSCA-PESSOA | busca de pessoa por nome parcial, sem acento e sem ordem; zero resultado = "nao achei", nunca "em dia" |
+| 11:35 | ADESAO-AGRUPA-SO-VIVO | o agrupamento da adesao nao reagrupa chamado encerrado |
+| 11:56 | CALENDARIO-UM-JUIZ (bug) | tela e rodape leem um juiz; "extra" virou selo HE (so acima de 10 min); dia de folga com batida = "Trabalhou na folga" |
+| 12:14 | BALAO-DO-ADMIN | o balao mostra Validar + Decidir (739); antes mostrava 836 "toques" |
+| ~12:30 | C1-EMISSORES-VIVOS | aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo; registro da familia chamado 54 -> 52 |
 
-## FATIAS NO AR EM 16/09
+Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
-**P7.1-MARCO-SEM-HORA** (turno) — 09:1x
-- Marco de intermitente sem hora derrubava a derivacao do tipo e o auditor diario (7 perguntas, nenhuma mudou de estado).
-- Suite 6.793 verde, sombra refeita com a cura OK, DIFF folha 0. Auditoria de invariantes re-rodada em prod: rc=2 (alarme de negocio, 13 violadas), nao mais erro.
+## ATOS EM PROD HOJE (com aval)
 
-**SLA-PELA-FILA** (chamado) — 09:34
-- O alerta de prazo ve a fila inteira; um juiz so para tela e cron.
-- Sem rajada: marco de corte gravado 09:35; passivo de 1.203 vencidos (260 sem aviso) virou Pauta DP 89/90/91, nunca push.
+- **Tranca pela porta** (emp 2/08, 3/07, 3/08, 4/08), com a lista dos "de fora" na trilha. Encerramento aplicado: 1.795 + 65 + 323 + 113. Regra: mes pago ou exportado tranca pela porta; quem ficou de fora nao barra.
+- **Reparo da tranca**: 72 avisos de cadastro e 38 revisoes de desligamento reabertos; 48 gemeos superados no original. Segunda passada 0.
+- **SLA**: marco de corte gravado; Pautas DP 89/90/91.
+- **Pautas escritas**: 92 (supervisao, colab 49), 93/94/95 (DP, HE 12x36), **39 Pautas de posto** (supervisao, colaboradores sem notificacao do app).
 
-**COMPETENCIAS-PAGAS-SEM-TRANCA** (fechamento) — 09:5x
-- Contador no placar: mes pago sem tranca. Hoje 0.
+## E0 BALDES — os 739 do balao
 
-**VETO-QUE-CAI-REJULGA** (turno, bug achado) — 10:27
-- Furo vetado pela regua ficava preso para sempre depois que o veto caia; agora a celula e rejulgada.
-- Porta nova para desfazer a confirmacao de "cadastro errado" (motivo obrigatorio, trilha, rejulga na hora). Tela da porta: fila de TELA.
-
-**HAIKU-BUSCA-PESSOA** (copiloto, pedido Ronald) — NO AR 11:12 (commit 25675b48)
-- A busca de pessoa acha por nome parcial, sem acento e sem ordem. Vale para o copiloto e para as telas.
-- 1 resultado = responde; varios = lista para escolher; zero = "nao achei ninguem com esse nome", nunca "em dia".
-- Golden +3 (um, varios, zero). Conferido em prod: "simoes samyra" = 1, "Silva" = 150, nome inexistente = 0.
-
-**TRANCA-SEM-CADASTRO** (chamado, bug achado) — NO AR 10:55; chamados_em_competencia_trancada = 0
-- A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
-- Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
-- Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado.
-- Passivo da revisao de desligamento (aval Ronald 10:59): 38 reabertos (emp 2 27, emp 3 7, emp 4 4; 34 de colaboradores ja desligados), trilha "reaberto: tranca nao encerra cadastro/desligamento". Vivos 1.873 -> 1.911; fila 1.312 -> 1.318 (a maioria continua no arquivo). Segunda passada 0.
-
-**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — NO AR 11:35 (commit 419eb885)
-- O agrupamento da adesao nao reagrupa chamado encerrado (quem esta vivo e pergunta do motor).
-
-**CALENDARIO-UM-JUIZ** (tela, bug achado, corte Ronald) — NO AR 11:56 (commit 08862aac)
-- Tela, rodape e porta curta do calendario leem UM juiz; o tipo do dia vem da lei de precedencia.
-- "Extra" virou selo HE (so acima de 10 min no dia); dia de folga com batida = "Trabalhou na folga".
-- Conferido em prod: colab 901, 15/09 = ok, sem selo, sem "+0.0h". Suite 6.849 verde, DIFF folha 0.
-
-**BALAO-DO-ADMIN** (chamado, corte Ronald) — NO AR 12:14 (commit c8b20688)
-- O balao do icone de chamados mostrava 836 ("toques", sem pilula correspondente).
-- Agora mostra o que exige ato do ADMIN, das mesmas pilulas: Validar + Decidir. Em prod depois do deploy: 739 = 152 + 587 (Cobrar 573 fica fora).
-
-**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — NO AR ~12:30 (commit be3865ed)
-- Aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo. Registro da familia chamado 54 -> 52.
-
-## EM CURSO
-
-## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
-
-**REGRA**: mes PAGO (ou exportado) tranca pela porta; os "de fora" (conta vazia, turno aberto, 12x36 sem ancora) nao barram e ficam listados na trilha.
-
-| emp | comp | marco | de fora (na trilha) | encerramento aplicado |
-|---|---|---|---|---|
-| 2 | 08/2026 | paga | 193 | 1.795 |
-| 3 | 07/2026 | exportada | 70 | 65 |
-| 3 | 08/2026 | paga | 61 | 323 |
-| 4 | 08/2026 | paga | 16 | 113 |
-
-Pilula (fila de trabalho): 1.621 -> 1.345. Dos 562 chamados encerrados: 230 estavam em cobrar, 51 em decidir, 170 arquivados, 108 registrados.
-Ficam com o admin (resposta do colaborador sem veredito): emp 2/08 18 chamados; emp 3/07 4; emp 3/08 11; emp 4/08 2.
-
-**emp 2 07/2026 e 06/2026 — NAO trancadas**: anteriores ao rollout da emp 2 (folha fora do sistema). Espera o DP confirmar.
-
-## CONCILIACAO DO 837 (pedido Ronald 16/09)
-
-Nenhum recorte da fila da exatamente 837, nem agora nem antes da tranca (fonte unica: pilulas por verbo e painel, por empresa). O mais proximo e a pilula **Cobrar** (todas as empresas): 830 as 04:00 (antes da tranca) e **574 agora**. Dos 562 encerrados pela tranca, 230 estavam em Cobrar.
-
-A fila de trabalho agora (1.321) = Validar 151 + Cobrar 574 + Decidir 586 + historico 4 + sem verbo 6. Arquivados (171 na pilula) e registros (429) ficam fora da fila.
-
-| todas as empresas | antes (04:00) | agora |
-|---|---|---|
-| fila (aberto + em analise) | 1.621 | 1.321 |
-| Validar | 156 | 151 |
-| Cobrar | 830 | 574 |
-| Decidir | 630 | 586 |
-| arquivados (pilula) | 281 | 171 |
-
-Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62 -> 39. Falta saber qual tela mostrou 837 para fechar a conta.
-
-## E0 BALDES — os 739 do balao (Validar 152 + Decidir 587)
-
-571 causas raiz (modulo x template/posto/colab x motivo). As 20 maiores cobrem so 119 (16%): a cauda e por colaborador. A maior e o lote classe A: 28 chamados de 20 colaboradores fecham com UMA acao.
+571 causas raiz; as 20 maiores cobrem so 119 (16%) — a cauda e por colaborador.
 
 | porta que fecha | chamados | acoes |
 |---|---|---|
 | pergunta ao colab / declarar dia | 161 | 154 |
 | validar um a um | 122 | 100 |
 | fila de suporte (solicitacoes) | 120 | 84 |
-| carimbar o dia (geofence sem dia; e do Code) | 92 | 56 |
+| "sem dia" (ver abaixo) | 92 | 56 |
 | corrigir cadastro da escala | 67 | 61 |
 | medir (sem causa) | 29 | 28 |
 | validar lote classe A | 28 | **1** |
-| proposta de escala — wizard | 28 | 10 |
-| proposta de escala — Aplicar | 26 | 12 |
+| proposta de escala — wizard / Aplicar | 28 / 26 | 10 / 12 |
 | conferir adesao | 26 | 26 |
 | lastro (feriado do posto) | 15 | 14 |
 | plano de folgas | 14 | 14 |
 | pergunta ao colab (conversa) | 11 | 11 |
 
-**BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, **8.470 h em jogo** (previsto menos realizado, teto bruto). Idade mediana 21 dias; 248 colaboradores com 15 dias ou mais. **63 sem canal de push** (477 perguntas, 1.783 h). R$ nao medivel: o sistema nao tem salario cadastrado. Pauta PREVIA-DO-HOLERITE (app) registrada na fila F7.
+- **Lote classe A (DRY)**: 46 perguntas prontas. **Espera aval e quem assina.**
+- **Criterio revisado da classe A** (casa qualquer marco do mesmo tipo +-10 min, sem contradicao no dia), sobre os 124 "um a um": 57 perguntas entrariam, so 3 chamados fechariam inteiros. Nada aplicado.
+- **Os 92 "sem dia" nao sao defeito de emissor**: 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 avisos de cadastro com periodo, 8 modulos sem dia pelo catalogo. Proposta: a fila por causa rotear pelo catalogo (gaveta "revisao de cadastro"). **Espera corte.**
 
-### E0 — desdobramentos (16/09 tarde)
+**BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
 
-- **Lote classe A (DRY)**: 46 perguntas classe A em 256 chamados da gaveta "respondido". Espera o aval e QUEM assina (usuario).
-- **Criterio revisado** (hora respondida casa qualquer marco do mesmo tipo +-10 min, sem batida ou resposta que contradiga no dia), sobre os 124 "validar um a um" (259 perguntas): **57 perguntas entrariam**, mas so **3 chamados** fechariam inteiros. Recusas: nao casa marco 143, sem hora ou dia 38, contradicao no dia 18, nao e hora 3.
-- **Sem push**: 63 colaboradores em 39 postos (9 pracas) — **39 Pautas para a supervisao escritas**, uma por posto, com ids e pendencias.
-- **"Carimbar o dia" (92)**: nao e defeito de emissor. 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 sao avisos de cadastro com periodo, 8 sao modulos sem dia pelo catalogo. Proposta: a fila por causa rotear pelo catalogo (gaveta de cadastro), em vez de pedir dia. Espera corte.
+## CONCILIACAO DO 837
+
+Nenhum recorte da fila da exatamente 837, antes ou depois da tranca. O mais proximo e a pilula Cobrar: 830 as 04:00, 574 agora. **Falta saber de qual tela veio.**
+
+| todas as empresas | antes (04:00) | 12:00 |
+|---|---|---|
+| fila (aberto + em analise) | 1.621 | 1.321 |
+| Validar | 156 | 151 |
+| Cobrar | 830 | 574 |
+| Decidir | 630 | 586 |
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
-- Tela **Fechamento**, escolher mes/ano/empresa, botao **Aprovar** do lote. Nao existe botao so de "trancar".
-- O botao aprova os abertos e so TRANCA quando ninguem fica de fora (conta vazia, turno aberto, 12x36 sem ancora).
-- Mes ja PAGO com gente de fora: o botao nao tranca; pedir a tranca pela porta (regra acima).
-- Ao trancar, o sistema encerra sozinho os chamados e perguntas dos dias da competencia (avisos de cadastro ficam).
-- Ordem certa: aprovar → exportar TXT → TRANCAR → publicar holerite.
+- Tela **Fechamento** → mes/ano/empresa → botao **Aprovar** do lote. Nao existe botao so de "trancar".
+- O botao so tranca quando ninguem fica de fora (conta vazia, turno aberto, 12x36 sem ancora). Mes ja pago com gente de fora: pedir a tranca pela porta.
+- Ao trancar, o sistema encerra os chamados dos dias da competencia; avisos de cadastro e revisao de desligamento ficam.
+- Ordem: aprovar → exportar TXT → trancar → publicar holerite.
 
 ## CASOS
 
-- **colab 49**: 23/08 e 12/09 sao furos vetados (cadastro confirmado como errado em 08/09). Corte: a sequencia 24/08-04/09 foi cobertura. Pergunta a supervisao na Pauta 92; depois: declarar a cobertura, desfazer a confirmacao, resolver o aviso 17652, rejulgar.
-- **colab 901, 15/09**: dia cumprido (720/720 min). A tela pinta "extra" por 10 segundos de hora extra (bug de tela na fila). O 14/09 segue cobrado: a colaboradora contestou ("era folga") e espera validacao do admin — ou o DP antecipa a nova escala para 14/09.
-- **Medida da re-lavra 16/09**: fechou. Os 2 casos batem com a simulacao; das 265 diferencas sem causa, 253 sao o dia a mais de batidas; 12 ficam para autopsia.
+- **colab 49**: furos 23/08 e 12/09 vetados (cadastro confirmado errado em 08/09). Corte: 24/08-04/09 foi cobertura. Espera a supervisao (Pauta 92).
+- **colab 901, 15/09**: dia cumprido, calendario corrigido (ok, sem selo). 14/09 segue cobrado: a colaboradora contestou ("era folga") e espera validacao do admin.
+- **Re-lavra 16/09**: medida fechada; 12 diferencas ficam para autopsia.
 
 ## PARADOS
 
 - T4-MARCO-QUE-A-BATIDA-OCUPA — DIFF TXT=9 RETIDOS=47 → Pauta DP 83/84/85.
 - TURNO-F1-S3 / P71-ANTECIPACAO-12X36 — corte Ronald.
-- **HE 12x36 sem tolerancia de 10 min/dia** (bug achado) — cura so DEPOIS do export de 09. Pauta DP 93/94/95: 08/2026 paga com 36,3 h (emp 2), 21,5 h (emp 3), 1,0 h (emp 4) de HE que a CLT manda ignorar.
+- **HE 12x36 sem a tolerancia de 10 min/dia** (bug) — cura so depois do export de 09. Pauta DP 93/94/95 (08/2026 paga: 36,3 h emp 2, 21,5 h emp 3, 1,0 h emp 4).
 
 ## FILA
 
-- Copiloto: legenda do calendario; recusa honesta sem porta por colaborador; dia do colaborador na ficha (que mora no core).
-- UI do fio do colaborador (cabecalho + card da proposta de escala, evidencia de 28 dias).
+- Copiloto: legenda do calendario; dia do colaborador na ficha (a ficha mora no core).
+- UI do fio do colaborador (cabecalho + proposta de escala com 28 dias de evidencia).
+- PREVIA-DO-HOLERITE (app, em horas) + cobranca escalonada + metrica resposta_48h.
+- Familia chamado: 52 sitios no registro. Achado: "tem canal de push?" tem dois juizes.
 
-## ESPERANDO RONALD / DP
+## ESPERANDO RONALD / DP / SUPERVISAO
 
-- DP: Pautas 89/90/91 (passivo do SLA), 93/94/95 (HE 12x36), 83/84/85 (T4).
-- DP: emp 2 06 e 07/2026 — a folha saiu fora do sistema?
-- Supervisao: Pauta 92 (colab 49 foi cobertura?).
+- Ronald: aval e usuario para o lote classe A (46).
+- Ronald: corte sobre os 92 "sem dia".
+- Ronald: de qual tela veio o 837.
+- DP: Pautas 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
+- Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
-- CONGELAMENTO de dinheiro: qua 16/09 18:00 → qui 17/09 14:00.
+- CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
