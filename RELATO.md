@@ -16,7 +16,7 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 15 fatias
+## NO AR HOJE (16/09) — 17 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -35,18 +35,13 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 14:18 | FICHA-DO-COLAB-NO-CORE | uma porta para o copiloto, o fio e a ficha completa: vinculo em uma linha, lotacao, app, horas (do espelho), pendencias (das pilulas), proposta de escala, acoes pelo que mais resolve; telefone so na tela |
 | 14:37 | PRECEDENCIA-VINCULO-ENCERRADO (bug) | a precedencia do dia enxerga o vinculo encerrado pela troca de escala (colab 152, 07/09: agora "trabalho", previsto); 47 vinculos, 435 dias na competencia; DIFF de folha 0 |
 | 14:52 | FERIADO-PADRAO-POR-ESCALA (corte Ronald) | vinculo novo nasce pelo tipo de escala: 5x2 e 6x1 comercial folgam no feriado, 12x36 e escala corrida trabalham; o posto que declarou "opera em feriado" vence. Os existentes nao mudaram (Pautas DP 140-149). Contador vinculos_5x2_6x1_trabalha_feriado = 183 hoje, 0 declarados (nenhum posto marcou "opera em feriado" ainda; quem zera sao as Pautas 140-149); DIFF de folha 0 |
+| 15:23 | FURO-PARCIAL-SEM-COBRANCA (bug) | o furo parcial vira cobranca tambem no julgamento na hora (a chave do cron saiu; crontab reinstalado e igual ao codigo); o chamado do dia e o espelho da celula (um por colab-dia, reabre nomeando o marco); retratacao e emissao leem a ata do julgamento corrente. Marco nao vencido, dia trancado e veto nao cobram. DIFF de folha 0 |
+| 15:3x | APP-FALTA-NO-TETO | no app nativo, o dia de hoje sem batida so vira "falta" depois do fim do turno previsto (antes, as 14h ja era falta); so leitor |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 **Em curso** (fila da cadeia, nesta ordem):
-- **FURO-PARCIAL-SEM-COBRANCA** (bug, P7.1, fura a fila): rodando de novo desde 14:49. As duas primeiras rodadas pararam em contratos da casa (diagrama, escritor de veredito, leitura do dia cru); todos corrigidos. Achado no caminho, e ja dentro da cura: a retratacao por marco e a emissao leem a ata DESTE julgamento (com a ata velha, o dia passado que recebe batidas uma a uma ganhava cobranca que nao caia).
-  - Cura: a lei nao tem flag; o julgamento na hora cobra igual ao cron; o chamado do dia e o espelho da celula, um por colab-dia, e reabre nomeando o marco. Selos: marco nao vencido, dia trancado e veto nao cobram.
-  - **Por que parecia desligado**: o corte de 22/08 aposentou OUTRO emissor, o clone cego de intervalo (cobranca dupla + intervalo batido fora do horario = ruido de marco, hoje coberto pela ata por lampada e pelo chamado unico). No crontab vivo, o furo parcial esta ligado desde 11/09; o cron emitiu em 2 de 15 rodadas porque o julgamento na hora carimbava antes.
-  - Depois do deploy: contador `furos_sem_cobranca_viva` e DRY do passivo (por porta x empresa), esperando o "!".
-  - Guarda: sobe so ate 16:00; senao, quinta 14:00.
-  - Fora da fatia: 117 celulas FURO_COM_COBRANCA_MORTA (dia inteiro com cobranca encerrada) -- corte a parte. A linha Haiku (dia_do_colab com marcos + golden do colab 709) vem depois do passivo, porque o golden e o payload real.
 - CANAL-DE-PUSH (cauda 1): "tem canal de push?" com um juiz em core; contador `juizes_discordam_push`. Ensaio verde (350 testes).
-- APP-FALTA-NO-TETO (cauda 3): no app nativo, hoje sem batida so vira "falta" depois do fim do turno. So leitor. Ensaio verde.
 
 
 ## ATOS EM PROD HOJE (com aval)
@@ -84,6 +79,20 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - **Os 92 "sem dia"**: roteados pelo catalogo (fatia no ar 13:0x).
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
+
+## PASSIVO DO FURO SEM COBRANCA (DRY 15:23, nada cobrado)
+
+Contador `furos_sem_cobranca_viva` = **479** celulas em 151 colabs (competencia aberta, ate ontem).
+
+| empresa | pergunta ao colab (tem canal) | supervisao sem push | veto (fora do total) |
+|---|---|---|---|
+| 2 | 338 | 40 | 0 |
+| 3 | 87 | 5 | 3 |
+| 4 | 8 | 1 | 0 |
+
+- Colab 709 esta na lista: 03, 04, 08, 09, 14 e 15/09.
+- `--apply` espera o "!" do Ronald. Cada celula passa pela mesma porta do cron; o dia com chamado encerrado reabre o mesmo chamado.
+- Fora: 117 FURO_COM_COBRANCA_MORTA (dia inteiro com cobranca encerrada) -- corte a parte.
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
@@ -125,5 +134,5 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
-- Ronald: furo parcial sem cobranca (colab 709; na frota, 680 celulas em 188 colabs). Decidir: (a) ligar o furo parcial no julgamento na hora; (b) desenho do chamado do dia (reabrir o chamado nomeando o marco, ou um chamado por marco); (c) DRY do passivo antes do "!".
+- Ronald: "!" do passivo do furo sem cobranca (479 celulas, DRY acima); corte dos 117 FURO_COM_COBRANCA_MORTA.
 - CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
