@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 11:44. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 11:57. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -45,14 +45,14 @@ _Atualizado 16/09 11:44. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 **ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — NO AR 11:35 (commit 419eb885)
 - O agrupamento da adesao nao reagrupa chamado encerrado (quem esta vivo e pergunta do motor).
 
+**CALENDARIO-UM-JUIZ** (tela, bug achado, corte Ronald) — NO AR 11:56 (commit 08862aac)
+- Tela, rodape e porta curta do calendario leem UM juiz; o tipo do dia vem da lei de precedencia.
+- "Extra" virou selo HE (so acima de 10 min no dia); dia de folga com batida = "Trabalhou na folga".
+- Conferido em prod: colab 901, 15/09 = ok, sem selo, sem "+0.0h". Suite 6.849 verde, DIFF folha 0.
+
 ## EM CURSO
 
-**CALENDARIO-UM-JUIZ** (tela, bug achado, corte Ronald) — suite e DIFF rodando desde 11:36; sobe sozinha se verde e antes das 16:00
-- Tela, rodape e porta curta do calendario leem UM juiz; o tipo do dia vem da lei de precedencia (ausencia e feriado vencem a grade).
-- "Extra" deixou de ser status: vira selo HE e so acende quando a hora extra conta (acima de 10 min no dia). Dia de folga com batida = "Trabalhou na folga".
-- Medido na sombra (14.326 dias): 2.535 mudam; 1.574 eram "extra" indevido; 126 folgas com batida pintavam ok verde.
-
-**BALAO-DO-ADMIN** (chamado, corte Ronald) — construida; sobe depois do calendario
+**BALAO-DO-ADMIN** (chamado, corte Ronald) — suite rodando; sobe em seguida
 - O balao do icone de chamados mostrava 836 = "toques" (outra derivacao, sem pilula correspondente).
 - Passa a mostrar o que exige ato do ADMIN, lido das mesmas pilulas: Validar + Decidir (738 as 11:43). Cobrar e do colaborador e nao entra.
 - Contraprova no selo: balao = soma das duas pilulas. RED 3 falhas + 1 erro; GREEN 1.245 verdes.
@@ -111,7 +111,7 @@ Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62
 
 ## FILA
 
-- Tela do calendario: status "extra" com rotulo errado e dois juizes para o mesmo dia.
+- C1-EMISSORES-VIVOS (chamado): aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo; construida, sobe depois do balao.
 - Copiloto: legenda do calendario; recusa honesta sem porta por colaborador; dia do colaborador na ficha (que mora no core).
 - UI do fio do colaborador (cabecalho + card da proposta de escala, evidencia de 28 dias).
 
