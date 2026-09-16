@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 12:51. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 13:09. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -9,14 +9,14 @@ _Estado de 16/09 12:51. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
-| balao de chamados (Validar + Decidir) | 739 | — | admin |
+| balao de chamados (Validar + Decidir) | 734 | — | admin |
 | fila de trabalho (aberto + em analise) | 1.321 | — | admin/colab |
 | competencias_pagas_sem_tranca | 0 | 0 | DP |
 | chamados_em_competencia_trancada | 0 | 0 | sistema |
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 9 fatias
+## NO AR HOJE (16/09) — 11 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -30,6 +30,7 @@ _Estado de 16/09 12:51. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 11:56 | CALENDARIO-UM-JUIZ (bug) | tela e rodape leem um juiz; "extra" virou selo HE (so acima de 10 min); dia de folga com batida = "Trabalhou na folga" |
 | 12:14 | BALAO-DO-ADMIN | o balao mostra Validar + Decidir (739); antes mostrava 836 "toques" |
 | ~12:30 | C1-EMISSORES-VIVOS | aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo; registro da familia chamado 54 -> 52 |
+| 13:0x | FILA-ROTEIA-CATALOGO (bug) | chamado sem dia por natureza sai da gaveta "carimbar o dia": revisao de vinculo e aviso de cadastro vao para "revisao de cadastro" (supervisao, um toque por colaborador); modulo sem dia pela lei tem gaveta propria |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
@@ -59,22 +60,15 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 | plano de folgas | 14 | 14 |
 | pergunta ao colab (conversa) | 11 | 11 |
 
-- **Lote classe A (DRY)**: 46 perguntas prontas. **Espera aval e quem assina.**
+- **Lote classe A — PARADO no meio (aval Ronald 16/09, assinado pelo sistema)**: 16 das 46 validadas e materializadas; 30 nao rodaram. Parado por dois defeitos achados na execucao:
+  - **a validacao planta batida em competencia TRANCADA e paga** — 8 perguntas de dia trancado validadas; 5 batidas plantadas (emp 2 08/2026: colab 439, 01/08, 3 batidas; emp 4 08/2026: colab 510, 10/08; emp 3 07/2026: colab 746, 06/07). **Espera corte: retratar as 5.**
+  - **a validacao grava o veredito antes de materializar e, quando a guarda recusa fechar a disputa, a excecao sobe** — 9 perguntas ficaram validadas e materializadas sem o registro de validacao.
+  - Antes x depois: pendentes 174 -> 156; classe A 46 -> 30; vivos 1.921 -> 1.912; balao 742 -> 734; 21 dos 30 chamados envolvidos estao resolvidos.
+  - Pauta de conferencia do admin: ainda nao escrita (o lote parou antes).
 - **Criterio revisado da classe A** (casa qualquer marco do mesmo tipo +-10 min, sem contradicao no dia), sobre os 124 "um a um": 57 perguntas entrariam, so 3 chamados fechariam inteiros. Nada aplicado.
-- **Os 92 "sem dia" nao sao defeito de emissor**: 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 avisos de cadastro com periodo, 8 modulos sem dia pelo catalogo. **Corte Ronald: rotear pelo catalogo** — fatia FILA-ROTEIA-CATALOGO construida (RED 4 falhas + 1 erro, GREEN verde), suite completa rodando; sobe em seguida. Gavetas novas: "revisao de cadastro" (supervisao, um toque por colaborador) e "sem dia por natureza".
+- **Os 92 "sem dia"**: roteados pelo catalogo (fatia no ar 13:0x).
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
-
-## CONCILIACAO DO 837
-
-Nenhum recorte da fila da exatamente 837, antes ou depois da tranca. O mais proximo e a pilula Cobrar: 830 as 04:00, 574 agora. **Falta saber de qual tela veio.**
-
-| todas as empresas | antes (04:00) | 12:00 |
-|---|---|---|
-| fila (aberto + em analise) | 1.621 | 1.321 |
-| Validar | 156 | 151 |
-| Cobrar | 830 | 574 |
-| Decidir | 630 | 586 |
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
@@ -105,7 +99,6 @@ Nenhum recorte da fila da exatamente 837, antes ou depois da tranca. O mais prox
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
 - Ronald: aval e usuario para o lote classe A (46).
-- Ronald: de qual tela veio o 837.
 - DP: Pautas 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
