@@ -16,7 +16,7 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 13 fatias
+## NO AR HOJE (16/09) — 15 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -33,12 +33,21 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 13:0x | FILA-ROTEIA-CATALOGO (bug) | chamado sem dia por natureza sai da gaveta "carimbar o dia": revisao de vinculo e aviso de cadastro vao para "revisao de cadastro" (supervisao, um toque por colaborador); modulo sem dia pela lei tem gaveta propria |
 | 13:3x | VALIDACAO-RESPEITA-TRANCA (bug) | validar nao planta batida em competencia trancada; a disputa que nao fecha nao derruba quem validou; o lote classe A nao lista dia trancado |
 | 14:18 | FICHA-DO-COLAB-NO-CORE | uma porta para o copiloto, o fio e a ficha completa: vinculo em uma linha, lotacao, app, horas (do espelho), pendencias (das pilulas), proposta de escala, acoes pelo que mais resolve; telefone so na tela |
+| 14:37 | PRECEDENCIA-VINCULO-ENCERRADO (bug) | a precedencia do dia enxerga o vinculo encerrado pela troca de escala (colab 152, 07/09: agora "trabalho", previsto); 47 vinculos, 435 dias na competencia; DIFF de folha 0 |
+| 14:52 | FERIADO-PADRAO-POR-ESCALA (corte Ronald) | vinculo novo nasce pelo tipo de escala: 5x2 e 6x1 comercial folgam no feriado, 12x36 e escala corrida trabalham; o posto que declarou "opera em feriado" vence. Os existentes nao mudaram (Pautas DP 140-149). Contador vinculos_5x2_6x1_trabalha_feriado = 183 hoje, 0 declarados (nenhum posto marcou "opera em feriado" ainda; quem zera sao as Pautas 140-149); DIFF de folha 0 |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
-**Em curso**:
-- PRECEDENCIA-VINCULO-ENCERRADO (bug): o teste falhou na arvore anterior (4 falhas) e passou com a cura; suite verde (6.885 testes) e DIFF de folha 0 (TXT 0, retidos 0). Commit e deploy em andamento desde 14:24.
-- FERIADO-PADRAO-POR-ESCALA (corte Ronald): a 1a rodada parou num defeito do proprio teste (12x36 exige a fase declarada); corrigido, testes e DIFF de folha rodando de novo desde 14:28. Regra: vinculo novo nasce pelo tipo de escala (5x2 e 6x1 comercial folgam no feriado; 12x36 e escala corrida trabalham); o posto que declarou "opera em feriado" vence; os 195 existentes nao mudam (Pautas DP 140-149). Contador novo: vinculos_5x2_6x1_trabalha_feriado. Guarda: sobe so ate 16:00; senao, quinta 14:00.
+**Em curso** (fila da cadeia, nesta ordem):
+- **FURO-PARCIAL-SEM-COBRANCA** (bug, P7.1, fura a fila): rodando de novo desde 14:49. As duas primeiras rodadas pararam em contratos da casa (diagrama, escritor de veredito, leitura do dia cru); todos corrigidos. Achado no caminho, e ja dentro da cura: a retratacao por marco e a emissao leem a ata DESTE julgamento (com a ata velha, o dia passado que recebe batidas uma a uma ganhava cobranca que nao caia).
+  - Cura: a lei nao tem flag; o julgamento na hora cobra igual ao cron; o chamado do dia e o espelho da celula, um por colab-dia, e reabre nomeando o marco. Selos: marco nao vencido, dia trancado e veto nao cobram.
+  - **Por que parecia desligado**: o corte de 22/08 aposentou OUTRO emissor, o clone cego de intervalo (cobranca dupla + intervalo batido fora do horario = ruido de marco, hoje coberto pela ata por lampada e pelo chamado unico). No crontab vivo, o furo parcial esta ligado desde 11/09; o cron emitiu em 2 de 15 rodadas porque o julgamento na hora carimbava antes.
+  - Depois do deploy: contador `furos_sem_cobranca_viva` e DRY do passivo (por porta x empresa), esperando o "!".
+  - Guarda: sobe so ate 16:00; senao, quinta 14:00.
+  - Fora da fatia: 117 celulas FURO_COM_COBRANCA_MORTA (dia inteiro com cobranca encerrada) -- corte a parte. A linha Haiku (dia_do_colab com marcos + golden do colab 709) vem depois do passivo, porque o golden e o payload real.
+- CANAL-DE-PUSH (cauda 1): "tem canal de push?" com um juiz em core; contador `juizes_discordam_push`. Ensaio verde (350 testes).
+- APP-FALTA-NO-TETO (cauda 3): no app nativo, hoje sem batida so vira "falta" depois do fim do turno. So leitor. Ensaio verde.
+
 
 ## ATOS EM PROD HOJE (com aval)
 
@@ -93,7 +102,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
     - (a) o julgamento na hora (quando chega batida ou resposta) nao usa a chave `--furo-parcial` do cron, grava a impressao, e o cron das 06:28 pula a celula (colab 709, 14/09);
     - (b) o cartorio nao emite quando o dia ja tem QUALQUER chamado, inclusive resolvido. O chamado da entrada atrasada fecha as 07:2x e cala o furo da tarde (03, 04, 08, 09 e 15/09).
   - Frota, competencia ate 15/09: 839 celulas com furo; 332 sem chamado nenhum e 348 so com chamado encerrado, ou seja, 680 celulas sem cobranca viva em 188 colabs. No log do cron, o furo parcial emitiu 2 vezes em 15 rodadas.
-- **Feriado abrindo chamado** (so leitura, 14:0x): 76 chamados vivos em dia de feriado (07/09 e 08/09), sendo 26 em 5x2, 24 em 6x1, 24 em 12x36 e 2 em personalizado. Em todos o vinculo esta marcado "trabalha em feriado"; a celula, a escala e a precedencia dizem "dia de trabalho", entao o emissor cobra pela regra. Nos 5x2 e 6x1 vigentes, 195 de 200 vinculos estao marcados assim (o padrao do sistema). Se eles folgam no feriado, e cadastro: **Pautas DP 140-149** escritas (lista por posto; aval Ronald). Achados: (1) colab 143 esta sem posto, entao nao enxerga feriado municipal (cadastro); (2) **bug**: a precedencia nao enxerga o vinculo ja encerrado por troca de escala (colab 152, 07/09: a celula diz trabalho e a precedencia diz feriado sem previsao). Na competencia sao 47 vinculos, 42 colabs e 435 dias, 271 deles de trabalho. Cura so na precedencia (aval Ronald): fatia PRECEDENCIA-VINCULO-ENCERRADO na esteira desde 14:13, com DIFF de folha; se nao subir ate 16:00, espera o fim do congelamento.
+- **Feriado abrindo chamado** (so leitura, 14:0x): 76 chamados vivos em dia de feriado (07/09 e 08/09), sendo 26 em 5x2, 24 em 6x1, 24 em 12x36 e 2 em personalizado. Em todos o vinculo esta marcado "trabalha em feriado"; a celula, a escala e a precedencia dizem "dia de trabalho", entao o emissor cobra pela regra. Nos 5x2 e 6x1 vigentes, 195 de 200 vinculos estao marcados assim (o padrao do sistema). Se eles folgam no feriado, e cadastro: **Pautas DP 140-149** escritas (lista por posto; aval Ronald). Achados: (1) colab 143 esta sem posto, entao nao enxerga feriado municipal (cadastro); (2) **bug**: a precedencia nao enxerga o vinculo ja encerrado por troca de escala (colab 152, 07/09: a celula diz trabalho e a precedencia diz feriado sem previsao). Na competencia sao 47 vinculos, 42 colabs e 435 dias, 271 deles de trabalho. Cura so na precedencia (aval Ronald): **no ar** (PRECEDENCIA-VINCULO-ENCERRADO).
 - **Re-lavra 16/09**: medida fechada; 12 diferencas ficam para autopsia.
 
 ## PARADOS
