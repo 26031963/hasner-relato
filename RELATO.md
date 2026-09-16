@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 13:09. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 13:35. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -9,14 +9,14 @@ _Estado de 16/09 13:09. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
-| balao de chamados (Validar + Decidir) | 734 | — | admin |
+| balao de chamados (Validar + Decidir) | 711 | — | admin |
 | fila de trabalho (aberto + em analise) | 1.321 | — | admin/colab |
 | competencias_pagas_sem_tranca | 0 | 0 | DP |
 | chamados_em_competencia_trancada | 0 | 0 | sistema |
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 11 fatias
+## NO AR HOJE (16/09) — 12 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -31,6 +31,7 @@ _Estado de 16/09 13:09. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 12:14 | BALAO-DO-ADMIN | o balao mostra Validar + Decidir (739); antes mostrava 836 "toques" |
 | ~12:30 | C1-EMISSORES-VIVOS | aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo; registro da familia chamado 54 -> 52 |
 | 13:0x | FILA-ROTEIA-CATALOGO (bug) | chamado sem dia por natureza sai da gaveta "carimbar o dia": revisao de vinculo e aviso de cadastro vao para "revisao de cadastro" (supervisao, um toque por colaborador); modulo sem dia pela lei tem gaveta propria |
+| 13:3x | VALIDACAO-RESPEITA-TRANCA (bug) | validar nao planta batida em competencia trancada; a disputa que nao fecha nao derruba quem validou; o lote classe A nao lista dia trancado |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
@@ -60,11 +61,11 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 | plano de folgas | 14 | 14 |
 | pergunta ao colab (conversa) | 11 | 11 |
 
-- **Lote classe A — PARADO no meio (aval Ronald 16/09, assinado pelo sistema)**: 16 das 46 validadas e materializadas; 30 nao rodaram. Parado por dois defeitos achados na execucao:
-  - **a validacao planta batida em competencia TRANCADA e paga** — 8 perguntas de dia trancado validadas; 5 batidas plantadas (emp 2 08/2026: colab 439, 01/08, 3 batidas; emp 4 08/2026: colab 510, 10/08; emp 3 07/2026: colab 746, 06/07). **Espera corte: retratar as 5.**
-  - **a validacao grava o veredito antes de materializar e, quando a guarda recusa fechar a disputa, a excecao sobe** — 9 perguntas ficaram validadas e materializadas sem o registro de validacao.
-  - Antes x depois: pendentes 174 -> 156; classe A 46 -> 30; vivos 1.921 -> 1.912; balao 742 -> 734; 21 dos 30 chamados envolvidos estao resolvidos.
-  - Pauta de conferencia do admin: ainda nao escrita (o lote parou antes).
+- **Lote classe A — FEITO** (aval Ronald 16/09, assinado pelo sistema, trilha "classe A, criterio declarado, aval Ronald 16/09"):
+  - 12:57: 16 validadas; o lote parou em dois defeitos (validacao em mes trancado e disputa que nao fecha). As 5 batidas plantadas em mes trancado foram RETRATADAS; cura no ar 13:3x.
+  - 13:34 (retomada): 22 validadas, 4 recusadas pela guarda de paridade (batida vizinha do mesmo tipo); 38 perguntas de mes trancado ficaram de fora; 0 batida em mes trancado; trilha completada em 9 que estavam sem ela.
+  - Antes (12:57) x depois (13:34): respostas pendentes 174 -> 128; classe A 46 -> 0 (4 ficam, todas em mes trancado); chamados vivos 1.921 -> 1.890; balao 742 -> 711; na retomada 22 chamados passaram a resolvido.
+  - Pauta de conferencia para o admin: 5 escritas (DP, por empresa). Retratacao possivel pela porta de retratar batida.
 - **Criterio revisado da classe A** (casa qualquer marco do mesmo tipo +-10 min, sem contradicao no dia), sobre os 124 "um a um": 57 perguntas entrariam, so 3 chamados fechariam inteiros. Nada aplicado.
 - **Os 92 "sem dia"**: roteados pelo catalogo (fatia no ar 13:0x).
 
@@ -98,7 +99,6 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
-- Ronald: aval e usuario para o lote classe A (46).
 - DP: Pautas 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
