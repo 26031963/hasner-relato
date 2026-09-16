@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 11:57. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 12:14. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -50,12 +50,14 @@ _Atualizado 16/09 11:57. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - "Extra" virou selo HE (so acima de 10 min no dia); dia de folga com batida = "Trabalhou na folga".
 - Conferido em prod: colab 901, 15/09 = ok, sem selo, sem "+0.0h". Suite 6.849 verde, DIFF folha 0.
 
+**BALAO-DO-ADMIN** (chamado, corte Ronald) — NO AR 12:14 (commit c8b20688)
+- O balao do icone de chamados mostrava 836 ("toques", sem pilula correspondente).
+- Agora mostra o que exige ato do ADMIN, das mesmas pilulas: Validar + Decidir. Em prod depois do deploy: 739 = 152 + 587 (Cobrar 573 fica fora).
+
 ## EM CURSO
 
-**BALAO-DO-ADMIN** (chamado, corte Ronald) — suite rodando; sobe em seguida
-- O balao do icone de chamados mostrava 836 = "toques" (outra derivacao, sem pilula correspondente).
-- Passa a mostrar o que exige ato do ADMIN, lido das mesmas pilulas: Validar + Decidir (738 as 11:43). Cobrar e do colaborador e nao entra.
-- Contraprova no selo: balao = soma das duas pilulas. RED 3 falhas + 1 erro; GREEN 1.245 verdes.
+**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — suite rodando; sobe em seguida
+- Aceite de escala e pedido de autorizacao de batida fora do horario perguntam ao motor quem esta vivo (o chamado em analise ficava de fora). Registro da familia chamado 54 -> 52.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
@@ -111,7 +113,6 @@ Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62
 
 ## FILA
 
-- C1-EMISSORES-VIVOS (chamado): aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo; construida, sobe depois do balao.
 - Copiloto: legenda do calendario; recusa honesta sem porta por colaborador; dia do colaborador na ficha (que mora no core).
 - UI do fio do colaborador (cabecalho + card da proposta de escala, evidencia de 28 dias).
 
