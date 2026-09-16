@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 10:33. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 10:37. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -35,7 +35,8 @@ _Atualizado 16/09 10:33. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 **TRANCA-SEM-CADASTRO** (chamado, bug achado) — suite rodando desde 10:29
 - A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
 - Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
-- Cura: a tranca deixa aviso de cadastro de fora; o emissor nao reabre chamado de dia trancado.
+- Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado. Suite relancada 10:37.
+- Passivo da revisao de desligamento: 38 encerrados as 09:12 (34 de colaboradores ja desligados, 4 de ativos; emp 2 27, emp 3 7, emp 4 4). DRY pronto, espera o "!".
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
@@ -86,5 +87,5 @@ Ficam com o admin (resposta do colaborador sem veredito): emp 2/08 18 chamados; 
 - DP: emp 2 06 e 07/2026 — a folha saiu fora do sistema?
 - Supervisao: Pauta 92 (colab 49 foi cobertura?).
 - Admin: validar a contestacao de 14/09 do colab 901.
-- Corte: desligamento_revisao continua sendo encerrado pela tranca?
+- "!" para reabrir as 38 revisoes de desligamento encerradas pela tranca.
 - CONGELAMENTO de dinheiro: qua 16/09 18:00 → qui 17/09 14:00.
