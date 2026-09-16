@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 10:37. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 10:56. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -32,11 +32,17 @@ _Atualizado 16/09 10:37. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 
 ## EM CURSO
 
-**TRANCA-SEM-CADASTRO** (chamado, bug achado) — suite rodando desde 10:29
+**TRANCA-SEM-CADASTRO** (chamado, bug achado) — suite verde (6.820), commit feito, regua e deploy em curso
 - A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
 - Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
 - Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado. Suite relancada 10:37.
 - Passivo da revisao de desligamento: 38 encerrados as 09:12 (34 de colaboradores ja desligados, 4 de ativos; emp 2 27, emp 3 7, emp 4 4). DRY pronto, espera o "!".
+
+**HAIKU-BUSCA-PESSOA** (copiloto, pedido Ronald) — construida, sobe depois da anterior
+- A busca de pessoa acha por nome parcial, sem acento e sem ordem ("Simoes Samyra" acha a mesma pessoa). Vale para o copiloto e para as telas.
+- 1 resultado = responde; varios = lista para escolher; zero = "nao achei ninguem com esse nome", nunca "em dia".
+- Golden +3 (um, varios, zero); o juiz reprova "em dia" quando a busca deu zero.
+- RED 7 falhas, GREEN 15 verdes.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
