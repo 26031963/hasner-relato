@@ -38,7 +38,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 **Em curso**:
 - PRECEDENCIA-VINCULO-ENCERRADO (bug): o teste falhou na arvore anterior (4 falhas) e passou com a cura; suite verde (6.885 testes) e DIFF de folha 0 (TXT 0, retidos 0). Commit e deploy em andamento desde 14:24.
-- FERIADO-PADRAO-POR-ESCALA (corte Ronald): testes e DIFF de folha rodando desde 14:24. Regra: vinculo novo nasce pelo tipo de escala (5x2 e 6x1 comercial folgam no feriado; 12x36 e escala corrida trabalham); o posto que declarou "opera em feriado" vence; os 195 existentes nao mudam (Pautas DP 140-149). Contador novo: vinculos_5x2_6x1_trabalha_feriado. Guarda: sobe so ate 16:00; senao, quinta 14:00.
+- FERIADO-PADRAO-POR-ESCALA (corte Ronald): a 1a rodada parou num defeito do proprio teste (12x36 exige a fase declarada); corrigido, testes e DIFF de folha rodando de novo desde 14:28. Regra: vinculo novo nasce pelo tipo de escala (5x2 e 6x1 comercial folgam no feriado; 12x36 e escala corrida trabalham); o posto que declarou "opera em feriado" vence; os 195 existentes nao mudam (Pautas DP 140-149). Contador novo: vinculos_5x2_6x1_trabalha_feriado. Guarda: sobe so ate 16:00; senao, quinta 14:00.
 
 ## ATOS EM PROD HOJE (com aval)
 
