@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 11:12. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 11:36. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -42,9 +42,15 @@ _Atualizado 16/09 11:12. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado.
 - Passivo da revisao de desligamento (aval Ronald 10:59): 38 reabertos (emp 2 27, emp 3 7, emp 4 4; 34 de colaboradores ja desligados), trilha "reaberto: tranca nao encerra cadastro/desligamento". Vivos 1.873 -> 1.911; fila 1.312 -> 1.318 (a maioria continua no arquivo). Segunda passada 0.
 
+**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — NO AR 11:35 (commit 419eb885)
+- O agrupamento da adesao nao reagrupa chamado encerrado (quem esta vivo e pergunta do motor).
+
 ## EM CURSO
 
-**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — suite rodando; sobe em seguida.
+**CALENDARIO-UM-JUIZ** (tela, bug achado, corte Ronald) — suite e DIFF rodando desde 11:36; sobe sozinha se verde e antes das 16:00
+- Tela, rodape e porta curta do calendario leem UM juiz; o tipo do dia vem da lei de precedencia (ausencia e feriado vencem a grade).
+- "Extra" deixou de ser status: vira selo HE e so acende quando a hora extra conta (acima de 10 min no dia). Dia de folga com batida = "Trabalhou na folga".
+- Medido na sombra (14.326 dias): 2.535 mudam; 1.574 eram "extra" indevido; 126 folgas com batida pintavam ok verde.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
@@ -61,6 +67,22 @@ Pilula (fila de trabalho): 1.621 -> 1.345. Dos 562 chamados encerrados: 230 esta
 Ficam com o admin (resposta do colaborador sem veredito): emp 2/08 18 chamados; emp 3/07 4; emp 3/08 11; emp 4/08 2.
 
 **emp 2 07/2026 e 06/2026 — NAO trancadas**: anteriores ao rollout da emp 2 (folha fora do sistema). Espera o DP confirmar.
+
+## CONCILIACAO DO 837 (pedido Ronald 16/09)
+
+Nenhum recorte da fila da exatamente 837, nem agora nem antes da tranca (fonte unica: pilulas por verbo e painel, por empresa). O mais proximo e a pilula **Cobrar** (todas as empresas): 830 as 04:00 (antes da tranca) e **574 agora**. Dos 562 encerrados pela tranca, 230 estavam em Cobrar.
+
+A fila de trabalho agora (1.321) = Validar 151 + Cobrar 574 + Decidir 586 + historico 4 + sem verbo 6. Arquivados (171 na pilula) e registros (429) ficam fora da fila.
+
+| todas as empresas | antes (04:00) | agora |
+|---|---|---|
+| fila (aberto + em analise) | 1.621 | 1.321 |
+| Validar | 156 | 151 |
+| Cobrar | 830 | 574 |
+| Decidir | 630 | 586 |
+| arquivados (pilula) | 281 | 171 |
+
+Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62 -> 39. Falta saber qual tela mostrou 837 para fechar a conta.
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
