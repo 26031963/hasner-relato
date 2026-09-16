@@ -85,6 +85,15 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
 
+## BO QUESTIONARIO VAZIO (colab 709, medido 17:2x, so leitura)
+
+- **Colab 709**: 6 chamados vivos de furo. A pergunta aparece no app em 3 dias (03, 08 e 09/09, criadas pelo passivo das 15:41). Nos outros 3 o questionario vem vazio:
+  - 04/09: a fabrica de perguntas o dava por resolvido, porque as perguntas de outro marco ja tinham virado batida;
+  - 14/09: a batida de origem saia do dia 15, e o dia julgado era outro;
+  - 15/09: o juiz da jornada nao via falta, e a ata (que acusa) nao era lida.
+- **Frota**: 552 de 1.247 chamados vivos de furo sem pergunta no app (emp 2: 425, emp 3: 114, emp 4: 13). Causas: guarda de turno pareado 220, pergunta de outro marco ja materializada 110, origem de outro dia 99, jornada sem falta com a ata acusando 63, dia de hoje ainda sem ata 36, outros 34.
+- **Cura na origem** (fatia PERGUNTA-NO-APP, na esteira desde 17:3x; nao e dinheiro): chamado de dia passado com marco nomeado pergunta pela ata do seu dia. Contador `chamados_vivos_sem_pergunta_no_app` e DRY do passivo saem no deploy; --apply espera o "!".
+
 ## PASSIVO DO FURO SEM COBRANCA — APLICADO (aval Ronald 16/09, 15:41-15:44)
 
 Pela porta do cron, com trilha "passivo furo sem cobranca, aval Ronald 16/09" em cada celula. O push de supervisao foi suprimido (dias retroativos); a pergunta ao colab segue o fluxo normal.
