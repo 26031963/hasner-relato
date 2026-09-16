@@ -16,7 +16,7 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 18 fatias
+## NO AR HOJE (16/09) — 19 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -38,10 +38,14 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 15:23 | FURO-PARCIAL-SEM-COBRANCA (bug) | o furo parcial vira cobranca tambem no julgamento na hora (a chave do cron saiu; crontab reinstalado e igual ao codigo); o chamado do dia e o espelho da celula (um por colab-dia, reabre nomeando o marco); retratacao e emissao leem a ata do julgamento corrente. Marco nao vencido, dia trancado e veto nao cobram. DIFF de folha 0 |
 | 15:3x | APP-FALTA-NO-TETO | no app nativo, o dia de hoje sem batida so vira "falta" depois do fim do turno previsto (antes, as 14h ja era falta); so leitor |
 | 15:47 | CANAL-DE-PUSH | "tem canal de push?" tem um juiz so, em core (cobranca e holerite importam dele); contador juizes_discordam_push = 0 |
+| 16:18 | FUROS-SEM-COBRANCA-PORTAS | o contador do furo sem cobranca so conta o que o emissor pode cobrar; **furos_sem_cobranca_viva = 0** (portas fora do total: veto da celula 16, coberto por quem superou 1, decidido pelo admin 3, veto da regua 3) |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
-**Em curso** (fila da cadeia, nesta ordem):
+**Em curso** (fila da cadeia):
+- **GEOFENCE-VALIDAR-E-RECUSAR** (BO Ronald): **PRONTA 16:17** -- teste vermelho na arvore anterior (7 falhas + 2 erros), suite verde (6.930), DIFF de folha 0 (TXT 0, retidos 0), esmeril limpo. **Deploy armado para qui 17/09 14:00** (dinheiro: a recusa retrata batida); o DRY dos 231 registrados sai no deploy e o --apply espera o "!".
+- **FURO-COBRANCA-MORTA-REABRE** (corte Ronald: 117): a regra do chamado do dia vale para o dia inteiro com cobranca encerrada. Ensaiada (vermelho 3, verde); testes e DIFF rodando desde 16:18. Deploy tambem qui 14:00; o DRY do passivo sai no deploy.
+  - Achado no ensaio: pela lei E1 (03/09), chamado do dia FECHADO pelo admin tambem renasce quando o furo segue. Mantido; o contador foi alinhado a isso.
 
 
 ## ATOS EM PROD HOJE (com aval)
@@ -94,7 +98,7 @@ Pela porta do cron, com trilha "passivo furo sem cobranca, aval Ronald 16/09" em
   - 16: celula que nao e dia de trabalho (vinculo intermitente);
   - 1: dia coberto por pedido de ausencia em analise;
   - 3: chamado do dia fechado pelo admin (decisao humana).
-- Fatia FUROS-SEM-COBRANCA-PORTAS na esteira: o contador passa a separar essas tres portas, e `furos_sem_cobranca_viva` vai a 0 no placar.
+- FUROS-SEM-COBRANCA-PORTAS no ar 16:18: `furos_sem_cobranca_viva` = 0 no placar.
 - Achado (fila): celula de intermitente (nao e dia de trabalho) lavrada como furo parcial.
 - Colab 709: 14/09 e os outros 5 dias entraram em cobranca.
 
@@ -145,5 +149,5 @@ Pela porta do cron, com trilha "passivo furo sem cobranca, aval Ronald 16/09" em
 - DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
-- Ronald: corte dos 117 FURO_COM_COBRANCA_MORTA; "!" dos 231 geofence registrados (DRY quando a fatia existir).
+- Ronald: "!" dos 231 geofence registrados (DRY no deploy de quinta); "!" do passivo da cobranca morta (DRY no deploy de quinta).
 - CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
