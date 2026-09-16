@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 12:43. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 12:51. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -61,7 +61,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 - **Lote classe A (DRY)**: 46 perguntas prontas. **Espera aval e quem assina.**
 - **Criterio revisado da classe A** (casa qualquer marco do mesmo tipo +-10 min, sem contradicao no dia), sobre os 124 "um a um": 57 perguntas entrariam, so 3 chamados fechariam inteiros. Nada aplicado.
-- **Os 92 "sem dia" nao sao defeito de emissor**: 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 avisos de cadastro com periodo, 8 modulos sem dia pelo catalogo. Proposta: a fila por causa rotear pelo catalogo (gaveta "revisao de cadastro"). **Espera corte.**
+- **Os 92 "sem dia" nao sao defeito de emissor**: 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 avisos de cadastro com periodo, 8 modulos sem dia pelo catalogo. **Corte Ronald: rotear pelo catalogo** — fatia FILA-ROTEIA-CATALOGO construida (RED 4 falhas + 1 erro, GREEN verde), suite completa rodando; sobe em seguida. Gavetas novas: "revisao de cadastro" (supervisao, um toque por colaborador) e "sem dia por natureza".
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
 
@@ -105,7 +105,6 @@ Nenhum recorte da fila da exatamente 837, antes ou depois da tranca. O mais prox
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
 - Ronald: aval e usuario para o lote classe A (46).
-- Ronald: corte sobre os 92 "sem dia".
 - Ronald: de qual tela veio o 837.
 - DP: Pautas 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
