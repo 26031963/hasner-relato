@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 11:36. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 11:44. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -51,6 +51,11 @@ _Atualizado 16/09 11:36. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - Tela, rodape e porta curta do calendario leem UM juiz; o tipo do dia vem da lei de precedencia (ausencia e feriado vencem a grade).
 - "Extra" deixou de ser status: vira selo HE e so acende quando a hora extra conta (acima de 10 min no dia). Dia de folga com batida = "Trabalhou na folga".
 - Medido na sombra (14.326 dias): 2.535 mudam; 1.574 eram "extra" indevido; 126 folgas com batida pintavam ok verde.
+
+**BALAO-DO-ADMIN** (chamado, corte Ronald) — construida; sobe depois do calendario
+- O balao do icone de chamados mostrava 836 = "toques" (outra derivacao, sem pilula correspondente).
+- Passa a mostrar o que exige ato do ADMIN, lido das mesmas pilulas: Validar + Decidir (738 as 11:43). Cobrar e do colaborador e nao entra.
+- Contraprova no selo: balao = soma das duas pilulas. RED 3 falhas + 1 erro; GREEN 1.245 verdes.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
