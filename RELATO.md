@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 13:35. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 13:56. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -34,6 +34,8 @@ _Estado de 16/09 13:35. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 13:3x | VALIDACAO-RESPEITA-TRANCA (bug) | validar nao planta batida em competencia trancada; a disputa que nao fecha nao derruba quem validou; o lote classe A nao lista dia trancado |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
+
+**Em curso**: FICHA-DO-COLAB-NO-CORE (copiloto/tela). A 1a suite parou num contrato: a ficha julgava "resposta sem veredito" lendo o carimbo direto. Agora pergunta ao juiz da disputa; suite rodando de novo desde 14:1x. Uma porta para o copiloto, o fio e a ficha completa: vinculo em uma linha, lotacao, app, horas (do espelho), pendencias (das pilulas), proposta de escala e acoes, das que mais resolvem para as que menos. Telefone so na tela.
 
 ## ATOS EM PROD HOJE (com aval)
 
@@ -82,6 +84,8 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 - **colab 49**: furos 23/08 e 12/09 vetados (cadastro confirmado errado em 08/09). Corte: 24/08-04/09 foi cobertura. Espera a supervisao (Pauta 92).
 - **colab 901, 15/09**: dia cumprido, calendario corrigido (ok, sem selo). 14/09 segue cobrado: a colaboradora contestou ("era folga") e espera validacao do admin.
+- **colab 709, espelho app x admin** (so leitura, 14:0x): mesmos numeros. Competencia 21/08-20/09: 112,5 h trabalhadas, 3,8 h extras, 4 turnos abertos e 11 dias inconsistentes nos dois lados, que leem a mesma funcao. Nao voltou o BUG 139. Ela nao tem aparelho cadastrado e usa o app pela web, que abre a mesma tela do admin. Diferencas so de apresentacao: (a) no app nativo, a lista de dias vai de 01 a 30/09, mas os totais sao da competencia; (b) o app pinta "alerta" em qualquer atraso, e o admin so marca dia inconsistente; (c) no app nativo, o dia de hoje sem batida ja aparece como "falta" no meio do dia (teto temporal; nao atinge ela; vai para a fila).
+- **Feriado abrindo chamado** (so leitura, 14:0x): 76 chamados vivos em dia de feriado (07/09 e 08/09), sendo 26 em 5x2, 24 em 6x1, 24 em 12x36 e 2 em personalizado. Em todos o vinculo esta marcado "trabalha em feriado"; a celula, a escala e a precedencia dizem "dia de trabalho", entao o emissor cobra pela regra. Nos 5x2 e 6x1 vigentes, 195 de 200 vinculos estao marcados assim (o padrao do sistema). Se eles folgam no feriado, e cadastro: **Pautas DP 140-149** escritas (lista por posto; aval Ronald). Achados: (1) colab 143 esta sem posto, entao nao enxerga feriado municipal (cadastro); (2) **bug**: a precedencia nao enxerga o vinculo ja encerrado por troca de escala (colab 152, 07/09: a celula diz trabalho e a precedencia diz feriado sem previsao). Na competencia sao 47 vinculos, 42 colabs e 435 dias, 271 deles de trabalho. Cura so na precedencia (aval Ronald): fatia PRECEDENCIA-VINCULO-ENCERRADO na esteira desde 14:13, com DIFF de folha; se nao subir ate 16:00, espera o fim do congelamento.
 - **Re-lavra 16/09**: medida fechada; 12 diferencas ficam para autopsia.
 
 ## PARADOS
@@ -99,7 +103,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
-- DP: Pautas 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
+- DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
 - CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
