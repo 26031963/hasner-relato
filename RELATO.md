@@ -54,7 +54,7 @@ _Atualizado 16/09 12:31. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - O balao do icone de chamados mostrava 836 ("toques", sem pilula correspondente).
 - Agora mostra o que exige ato do ADMIN, das mesmas pilulas: Validar + Decidir. Em prod depois do deploy: 739 = 152 + 587 (Cobrar 573 fica fora).
 
-**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — NO AR 12:33 (commit be3865ed)
+**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — NO AR ~12:30 (commit be3865ed)
 - Aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo. Registro da familia chamado 54 -> 52.
 
 ## EM CURSO
