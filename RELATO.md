@@ -1,70 +1,90 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 09:37. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 10:33. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
-## PLACAR (15/09 — sem mudanca)
+## PLACAR
 
 | contador | valor | esperado |
 |---|---|---|
 | parados_esperando_corte | 3 | fila do Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald |
 | contratos_estruturais | 8/22 | 22/22 |
+| competencias_pagas_sem_tranca | 0 | 0 (dono DP) |
+| sla_vencido_sem_aviso | 260 | 0 (dono supervisao/DP) |
+| furos_vetados_por_regua | 4 em 3 vinculos | 0 (dono DP/cadastro) |
 
-## FATIAS DE 16/09
+## FATIAS NO AR EM 16/09
 
-**P7.1-MARCO-SEM-HORA** (turno) — NO AR 09:1x (commit 9177d8dd)
-- Bug da S3 fatia 4: marco de intermitente sem hora (so rotulo) derrubava a derivacao do tipo da batida; o auditor diario de invariantes caiu em prod 07:18 e o ensaio (sombra) de 16/09 saiu FALHOU.
-- 7 perguntas afetadas (3385, 3673, 5509, 6149, 6415, 6911, 8736), todas ja validadas: nenhum chamado mudou de estado.
-- RED 3 erros → suite 6.793 verde → sombra refeita com a cura OK (erro 0) → DIFF folha 0 (TXT=0 RETIDOS=0) → deploy OK.
-- Auditoria de invariantes de 16/09 re-rodada em prod 09:11 (aval): rodou ate o fim, rc=2 = alarme de negocio (13 invariantes violadas, 60 OK), nao mais erro.
+**P7.1-MARCO-SEM-HORA** (turno) — 09:1x
+- Marco de intermitente sem hora derrubava a derivacao do tipo e o auditor diario (7 perguntas, nenhuma mudou de estado).
+- Suite 6.793 verde, sombra refeita com a cura OK, DIFF folha 0. Auditoria de invariantes re-rodada em prod: rc=2 (alarme de negocio, 13 violadas), nao mais erro.
 
-**SLA-PELA-FILA** (chamado) — NO AR 09:34 (commit 14d00c65)
-- O alerta de prazo passa a ver a fila inteira (aberto + em analise); o prazo tem um juiz so, lido pela tela e pelo cron.
-- Passivo sem rajada: marco de corte gravado 09:35; 1.203 vencidos (260 sem aviso) viraram Pauta DP 89/90/91 (emp 2: 898, emp 3: 270, emp 4: 35), nunca push. Push so para vencimento novo, ate 20 por passada.
-- Contador sla_vencido_sem_aviso = 260 (dono supervisao/DP).
-- 1a cadeia caiu na regua (faltava um teste na lista da cadeia); corrigida e relancada.
+**SLA-PELA-FILA** (chamado) — 09:34
+- O alerta de prazo ve a fila inteira; um juiz so para tela e cron.
+- Sem rajada: marco de corte gravado 09:35; passivo de 1.203 vencidos (260 sem aviso) virou Pauta DP 89/90/91, nunca push.
 
-**UI-FIO-DO-COLAB** — pauta registrada (evidencia de 28 dias do propositor; a ficha do copiloto mora no core).
+**COMPETENCIAS-PAGAS-SEM-TRANCA** (fechamento) — 09:5x
+- Contador no placar: mes pago sem tranca. Hoje 0.
 
-## EM SEGUIDA
+**VETO-QUE-CAI-REJULGA** (turno, bug achado) — 10:27
+- Furo vetado pela regua ficava preso para sempre depois que o veto caia; agora a celula e rejulgada.
+- Porta nova para desfazer a confirmacao de "cadastro errado" (motivo obrigatorio, trilha, rejulga na hora). Tela da porta: fila de TELA.
 
-- **COMPETENCIAS-PAGAS-SEM-TRANCA** — contador; testes rodando.
-- **Medida da re-lavra 16/09** — roda sozinha com a sombra OK.
-- **ADESAO sitio 2** — teste corrigido: RED 3 falhas, GREEN verde.
+## EM CURSO
+
+**TRANCA-SEM-CADASTRO** (chamado, bug achado) — suite rodando desde 10:29
+- A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
+- Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
+- Cura: a tranca deixa aviso de cadastro de fora; o emissor nao reabre chamado de dia trancado.
+
+## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
+
+**REGRA**: mes PAGO (ou exportado) tranca pela porta; os "de fora" (conta vazia, turno aberto, 12x36 sem ancora) nao barram e ficam listados na trilha.
+
+| emp | comp | marco | de fora (na trilha) | encerramento aplicado |
+|---|---|---|---|---|
+| 2 | 08/2026 | paga | 193 | 1.795 |
+| 3 | 07/2026 | exportada | 70 | 65 |
+| 3 | 08/2026 | paga | 61 | 323 |
+| 4 | 08/2026 | paga | 16 | 113 |
+
+Pilula (fila de trabalho): 1.621 -> 1.345. Dos 562 chamados encerrados: 230 estavam em cobrar, 51 em decidir, 170 arquivados, 108 registrados.
+Ficam com o admin (resposta do colaborador sem veredito): emp 2/08 18 chamados; emp 3/07 4; emp 3/08 11; emp 4/08 2.
+
+**emp 2 07/2026 e 06/2026 — NAO trancadas**: anteriores ao rollout da emp 2 (folha fora do sistema). Espera o DP confirmar.
+
+## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
+
+- Tela **Fechamento**, escolher mes/ano/empresa, botao **Aprovar** do lote. Nao existe botao so de "trancar".
+- O botao aprova os abertos e so TRANCA quando ninguem fica de fora (conta vazia, turno aberto, 12x36 sem ancora).
+- Mes ja PAGO com gente de fora: o botao nao tranca; pedir a tranca pela porta (regra acima).
+- Ao trancar, o sistema encerra sozinho os chamados e perguntas dos dias da competencia (avisos de cadastro ficam).
+- Ordem certa: aprovar → exportar TXT → TRANCAR → publicar holerite.
+
+## CASOS
+
+- **colab 49**: 23/08 e 12/09 sao furos vetados (cadastro confirmado como errado em 08/09). Corte: a sequencia 24/08-04/09 foi cobertura. Pergunta a supervisao na Pauta 92; depois: declarar a cobertura, desfazer a confirmacao, resolver o aviso 17652, rejulgar.
+- **colab 901, 15/09**: dia cumprido (720/720 min). A tela pinta "extra" por 10 segundos de hora extra (bug de tela na fila). O 14/09 segue cobrado: a colaboradora contestou ("era folga") e espera validacao do admin — ou o DP antecipa a nova escala para 14/09.
+- **Medida da re-lavra 16/09**: fechou. Os 2 casos batem com a simulacao; das 265 diferencas sem causa, 253 sao o dia a mais de batidas; 12 ficam para autopsia.
 
 ## PARADOS
 
 - T4-MARCO-QUE-A-BATIDA-OCUPA — DIFF TXT=9 RETIDOS=47 → Pauta DP 83/84/85.
 - TURNO-F1-S3 / P71-ANTECIPACAO-12X36 — corte Ronald.
+- **HE 12x36 sem tolerancia de 10 min/dia** (bug achado) — cura so DEPOIS do export de 09. Pauta DP 93/94/95: 08/2026 paga com 36,3 h (emp 2), 21,5 h (emp 3), 1,0 h (emp 4) de HE que a CLT manda ignorar.
 
-## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
+## FILA
 
-**REGRA**: mes PAGO (ou exportado) tranca pela porta; os "de fora" (conta vazia, turno aberto, 12x36 sem ancora) NAO barram e ficam listados na trilha. Contador **competencias_pagas_sem_tranca** (esperado 0, dono DP): hoje **0**.
+- ADESAO sitio 2 (teste corrigido, RED/GREEN ok).
+- Tela do calendario: status "extra" com rotulo errado e dois juizes para o mesmo dia.
+- Copiloto: legenda do calendario; recusa honesta sem porta por colaborador; dia do colaborador na ficha (que mora no core).
+- UI do fio do colaborador (cabecalho + card da proposta de escala, evidencia de 28 dias).
 
-| emp | comp | marco | de fora (na trilha) | encerramento aplicado |
-|---|---|---|---|---|
-| 2 | 08/2026 | paga | 193 (41 vazias, 152 turno aberto) | 1.795 (407 chamados, 1.366 perguntas, 22 disputas) |
-| 3 | 07/2026 | exportada | 70 (23, 47) | 65 (31, 34) |
-| 3 | 08/2026 | paga | 61 (17, 44) | 323 (92, 229, 2) |
-| 4 | 08/2026 | paga | 16 (4, 12) | 113 (32, 81) |
+## ESPERANDO RONALD / DP
 
-Ficam com o admin (resposta do colaborador sem veredito, nada foi apagado): emp 2/08 18 chamados e 158 perguntas; disputa 3421 segue aberta ate a pergunta 21042 ter veredito.
-
-**emp 2 07/2026 — NAO trancada, espera DP**: competencia anterior ao rollout da emp 2 (136 batidas de 37 colaboradores contra 20.188 de 375 em 08; nenhuma exportacao nem holerite no sistema). O "aprovada" vem de UMA aprovacao de conta com 0 h em 31/07 (fechamento 2781). A folha de 07 saiu fora do sistema. Proposta: DP confirma e ela tranca pela porta com trilha "anterior ao rollout" (7 acoes); a 06/2026 esta no mesmo caso.
-
-emp 4 07/2026 ja trancada (15/09).
-
-## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
-
-- Tela **Fechamento**, escolher mes/ano/empresa, botao **Aprovar** do lote. Nao existe botao so de "trancar".
-- O botao aprova os abertos e so TRANCA quando ninguem fica de fora. Ficam de fora (e a tranca nao acontece): conta vazia (0 h), turno aberto, 12x36 sem ancora. A mensagem avisa "Periodo NAO bloqueado" e lista quem ficou de fora.
-- Ao trancar, o sistema encerra sozinho os chamados e perguntas dos dias da competencia.
-- Mes ja PAGO com gente de fora: o botao nao tranca; pedir a tranca pela porta (regra acima).
-- Ordem certa: aprovar → exportar TXT → TRANCAR → publicar holerite.
-
-## ESPERANDO RONALD
-
-- emp 2 07/2026 (e 06/2026): confirmar com o DP que a folha saiu fora do sistema.
-- AMOSTRA-QUINTA-17-09 e caso do admin (adicional noturno): esperam os nomes.
-- Pauta DP 89/90/91: o DP decide responder em lote ou arquivar o passivo do SLA.
+- DP: Pautas 89/90/91 (passivo do SLA), 93/94/95 (HE 12x36), 83/84/85 (T4).
+- DP: emp 2 06 e 07/2026 — a folha saiu fora do sistema?
+- Supervisao: Pauta 92 (colab 49 foi cobertura?).
+- Admin: validar a contestacao de 14/09 do colab 901.
+- Corte: desligamento_revisao continua sendo encerrado pela tranca?
 - CONGELAMENTO de dinheiro: qua 16/09 18:00 → qui 17/09 14:00.
