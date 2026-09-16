@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 12:14. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 12:31. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -54,10 +54,10 @@ _Atualizado 16/09 12:14. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - O balao do icone de chamados mostrava 836 ("toques", sem pilula correspondente).
 - Agora mostra o que exige ato do ADMIN, das mesmas pilulas: Validar + Decidir. Em prod depois do deploy: 739 = 152 + 587 (Cobrar 573 fica fora).
 
-## EM CURSO
+**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — NO AR 12:33 (commit be3865ed)
+- Aceite de escala e pedido de autorizacao perguntam ao motor quem esta vivo. Registro da familia chamado 54 -> 52.
 
-**C1-EMISSORES-VIVOS** (chamado, pergunta C1) — suite rodando; sobe em seguida
-- Aceite de escala e pedido de autorizacao de batida fora do horario perguntam ao motor quem esta vivo (o chamado em analise ficava de fora). Registro da familia chamado 54 -> 52.
+## EM CURSO
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
@@ -90,6 +90,28 @@ A fila de trabalho agora (1.321) = Validar 151 + Cobrar 574 + Decidir 586 + hist
 | arquivados (pilula) | 281 | 171 |
 
 Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62 -> 39. Falta saber qual tela mostrou 837 para fechar a conta.
+
+## E0 BALDES — os 739 do balao (Validar 152 + Decidir 587)
+
+571 causas raiz (modulo x template/posto/colab x motivo). As 20 maiores cobrem so 119 (16%): a cauda e por colaborador. A maior e o lote classe A: 28 chamados de 20 colaboradores fecham com UMA acao.
+
+| porta que fecha | chamados | acoes |
+|---|---|---|
+| pergunta ao colab / declarar dia | 161 | 154 |
+| validar um a um | 122 | 100 |
+| fila de suporte (solicitacoes) | 120 | 84 |
+| carimbar o dia (geofence sem dia; e do Code) | 92 | 56 |
+| corrigir cadastro da escala | 67 | 61 |
+| medir (sem causa) | 29 | 28 |
+| validar lote classe A | 28 | **1** |
+| proposta de escala — wizard | 28 | 10 |
+| proposta de escala — Aplicar | 26 | 12 |
+| conferir adesao | 26 | 26 |
+| lastro (feriado do posto) | 15 | 14 |
+| plano de folgas | 14 | 14 |
+| pergunta ao colab (conversa) | 11 | 11 |
+
+**BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, **8.470 h em jogo** (previsto menos realizado, teto bruto). Idade mediana 21 dias; 248 colaboradores com 15 dias ou mais. **63 sem canal de push** (477 perguntas, 1.783 h). R$ nao medivel: o sistema nao tem salario cadastrado. Pauta PREVIA-DO-HOLERITE (app) registrada na fila F7.
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
