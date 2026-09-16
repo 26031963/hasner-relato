@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 20:23. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -15,6 +15,7 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | chamados_em_competencia_trancada | 0 | 0 | sistema |
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
+| deploys_agendados | 1 (qui 17/09 14:00) | — | Code |
 
 ## CERTIFICACAO 09/2026 (fechada 18:09; so leitura, na sombra, nenhum deploy) -- LER ANTES DAS 08:00
 
@@ -40,9 +41,9 @@ Um colaborador pode estar em mais de uma classe. Adicional noturno reduzido x re
 | bug a | HE do 12x36 sem a tolerancia de 10 min (bug A) | codigo (motor) | conhecida; cura depois do export de 09 | 93/94/95 | 97 | 52 | 4 |
 | t4 t8a | saida antecipada que e intervalo (T4/T8a) | codigo (leitura do marco) | conhecida | 83/84/85 | 32 | 9 | 2 |
 | intervalo nao batido celula x folha | intervalo nao batido: folha = jornada corrida + intervalo indenizado; celula = pausa | lei (Art. 71 par. 4) + dado (a batida que falta) | espera a resposta do colaborador (perguntado em 16/09) | 150-168 | 94 | 26 | 8 |
-| espelho so com vinculo ativo | espelho calcula todos os dias com a escala de hoje (troca/encerramento de vinculo); vale a folha | codigo (tela) | PARADO; RED escrito | 150-168 | 11 | 6 | 0 |
-| celula noturna perde a madrugada | celula do noturno conta so ate a meia-noite: % de pronto cai para ~40% e pode reter | codigo (celula/cartorio) | PARADO; RED escrito | 150-168 | 12 | 1 | 1 |
-| borda espelho conta continuacao da vespera | espelho soma a madrugada do dia 21 que e da jornada do dia 20; vale a folha | codigo (tela) | PARADO; RED escrito | 150-168 | 8 | 0 | 1 |
+| espelho so com vinculo ativo | o espelho comeca no vinculo de hoje: os dias do vinculo anterior (troca ou encerramento na competencia) nao aparecem na tela, e a folha os paga; vale a folha | codigo (tela) | PARADO; **RED confirmado** (0 h na tela x 9,07 h na folha) | 150-168 | 11 | 6 | 0 |
+| celula noturna perde a madrugada | celula do noturno conta so ate a meia-noite: % de pronto cai para ~40% e pode reter | a confirmar (o RED simples nao reproduziu; o mecanismo de prod segue em apuracao) | PARADO | 150-168 | 12 | 1 | 1 |
+| borda espelho conta continuacao da vespera | espelho soma a madrugada do dia 21 que e da jornada do dia 20; vale a folha | codigo (tela) | PARADO; **RED confirmado** (3 h na tela x 0 na folha) | 150-168 | 8 | 0 | 1 |
 | turno longo 16h | turno de 16h ou mais (batida faltando ou resposta no dia errado); retidos fora do TXT | dado (batidas/respostas) | PARADO; conferir antes de liberar | 150-168 | 4 | 0 | 0 |
 | celula conta mais que a folha | celula do dia conta mais que a folha | a apurar | PARADO | 150-168 | 5 | 0 | 0 |
 | celula x folha diferenca pequena | diferenca pequena celula x folha (menos de 10 h no periodo) | a apurar | PARADO | 150-168 | 8 | 1 | 0 |
@@ -82,7 +83,13 @@ aplicada enquanto a resposta nao chega.
 93 cartoes (emp 2: 39, emp 3: 34, emp 4: 20), escolhidos pelo sistema entre certificados e classes, sem CPF e sem
 matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
-## NO AR HOJE (16/09) — 20 fatias
+## DEPLOYS AGENDADOS
+
+Gate temporal agora e do SISTEMA (cron de 1 disparo na VM), nao de processo do Code: os dois esperadores de quinta morreram com a sessao e foram reagendados.
+
+- **qui 17/09 14:00** — rotulo qui1709: GEOFENCE-VALIDAR-E-RECUSAR, depois FURO-COBRANCA-MORTA-REABRE, em sequencia. Cada uma: testes → DIFF de folha → deploy → DRY do passivo. Ao fim grava o arquivo de sinal, escreve uma linha aqui por fatia e remove o proprio agendamento. Os dois --apply seguem esperando o "!".
+
+## NO AR HOJE (16/09) — 22 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -106,6 +113,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 | 15:47 | CANAL-DE-PUSH | "tem canal de push?" tem um juiz so, em core (cobranca e holerite importam dele); contador juizes_discordam_push = 0 |
 | 16:18 | FUROS-SEM-COBRANCA-PORTAS | o contador do furo sem cobranca so conta o que o emissor pode cobrar; **furos_sem_cobranca_viva = 0** (portas fora do total: veto da celula 16, coberto por quem superou 1, decidido pelo admin 3, veto da regua 3) |
 | 17:12 | CONTRATO-TROCAR-SENHA (pedido Fernando) | contrato da troca de senha escrito do codigo e travado por teste; /api/me passa a dizer se a troca e obrigatoria; contador colabs_com_troca_de_senha_pendente = 38 (emp 2: 36, emp 3: 2); copiloto responde "quantos colabs estao com senha provisoria?" |
+| 18:3x | PERGUNTA-NO-APP (bug) | o chamado de furo de dia passado pergunta pela ata do seu dia; app, contador e copiloto leem a mesma selecao; dia_do_colab diz se a pergunta chegou e quem reteve. Contador chamados_vivos_sem_pergunta_no_app = 515; **passivo aplicado 18:28** (aval Ronald, sem push): 433 chamados em 144 colabs; contador 515 -> **129** |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
@@ -113,7 +121,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - **GEOFENCE-VALIDAR-E-RECUSAR** (BO Ronald): **PRONTA 16:17** -- teste vermelho na arvore anterior (7 falhas + 2 erros), suite verde (6.930), DIFF de folha 0 (TXT 0, retidos 0), esmeril limpo. **Deploy armado para qui 17/09 14:00** (dinheiro: a recusa retrata batida); o DRY dos 231 registrados sai no deploy e o --apply espera o "!". Antes do deploy, os testes rodam de novo (o crons.py mudou depois do ensaio).
 - **FURO-COBRANCA-MORTA-REABRE** (corte Ronald: 117): a regra do chamado do dia vale para o dia inteiro com cobranca encerrada. **PRONTA 16:26** (vermelho 3; suite 6.928; DIFF de folha 0). Deploy tambem qui 14:00; o DRY do passivo sai no deploy.
   - Achado no ensaio: pela lei E1 (03/09), chamado do dia FECHADO pelo admin tambem renasce quando o furo segue. Mantido; o contador foi alinhado a isso.
-
+| 20:2x | GATE-DE-DEPLOY (infra, sem dinheiro) | deploy com hora marcada vive em agendamento de disparo unico na VM, nao em processo da sessao; arquivo de sinal + linha aqui ao terminar; contador deploys_agendados no placar |
 
 ## ATOS EM PROD HOJE (com aval)
 
@@ -158,7 +166,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
   - 14/09: a batida de origem saia do dia 15, e o dia julgado era outro;
   - 15/09: o juiz da jornada nao via falta, e a ata (que acusa) nao era lida.
 - **Frota**: 552 de 1.247 chamados vivos de furo sem pergunta no app (emp 2: 425, emp 3: 114, emp 4: 13). Causas: guarda de turno pareado 220, pergunta de outro marco ja materializada 110, origem de outro dia 99, jornada sem falta com a ata acusando 63, dia de hoje ainda sem ata 36, outros 34.
-- **Cura na origem** (fatia PERGUNTA-NO-APP, na esteira desde 17:3x; nao e dinheiro): chamado de dia passado com marco nomeado pergunta pela ata do seu dia. Contador `chamados_vivos_sem_pergunta_no_app` e DRY do passivo saem no deploy; --apply espera o "!".
+- **Cura no ar** (PERGUNTA-NO-APP). **Passivo aplicado 18:28** (aval Ronald, sem push, com trilha): 433 chamados em 144 colabs. Contador 515 -> 129. Sobram: 46 com pergunta do mesmo marco e dia ja encerrada e a ata ainda apagada (conferencia humana, a fabrica nao repergunta), 39 com a pergunta viva num outro chamado do mesmo dia (a pergunta esta no app), 34 fora da fabrica, 7 cobertos por ausencia, 3 sem dia.
 
 ## PASSIVO DO FURO SEM COBRANCA — APLICADO (aval Ronald 16/09, 15:41-15:44)
 
