@@ -36,15 +36,15 @@ _Atualizado 16/09 11:12. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - 1 resultado = responde; varios = lista para escolher; zero = "nao achei ninguem com esse nome", nunca "em dia".
 - Golden +3 (um, varios, zero). Conferido em prod: "simoes samyra" = 1, "Silva" = 150, nome inexistente = 0.
 
-**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — suite rodando; sobe em seguida.
-
-## EM CURSO
-
 **TRANCA-SEM-CADASTRO** (chamado, bug achado) — NO AR 10:55; chamados_em_competencia_trancada = 0
 - A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
 - Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
 - Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado.
 - Passivo da revisao de desligamento (aval Ronald 10:59): 38 reabertos (emp 2 27, emp 3 7, emp 4 4; 34 de colaboradores ja desligados), trilha "reaberto: tranca nao encerra cadastro/desligamento". Vivos 1.873 -> 1.911; fila 1.312 -> 1.318 (a maioria continua no arquivo). Segunda passada 0.
+
+## EM CURSO
+
+**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — suite rodando; sobe em seguida.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
