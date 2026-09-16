@@ -12,6 +12,7 @@ _Atualizado 16/09 10:56. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 | competencias_pagas_sem_tranca | 0 | 0 (dono DP) |
 | sla_vencido_sem_aviso | 260 | 0 (dono supervisao/DP) |
 | furos_vetados_por_regua | 4 em 3 vinculos | 0 (dono DP/cadastro) |
+| chamados_em_competencia_trancada | 0 | 0 (dono sistema) |
 
 ## FATIAS NO AR EM 16/09
 
@@ -32,10 +33,10 @@ _Atualizado 16/09 10:56. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 
 ## EM CURSO
 
-**TRANCA-SEM-CADASTRO** (chamado, bug achado) — suite verde (6.820), commit feito, regua e deploy em curso
+**TRANCA-SEM-CADASTRO** (chamado, bug achado) — NO AR 10:55; chamados_em_competencia_trancada = 0
 - A tranca de 09:12 encerrou 73 avisos de cadastro (o dia deles e o inicio do defeito, que segue vivo); o emissor recriou 50 em 2 min e reabriu 1.
 - Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
-- Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado. Suite relancada 10:37.
+- Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado.
 - Passivo da revisao de desligamento: 38 encerrados as 09:12 (34 de colaboradores ja desligados, 4 de ativos; emp 2 27, emp 3 7, emp 4 4). DRY pronto, espera o "!".
 
 **HAIKU-BUSCA-PESSOA** (copiloto, pedido Ronald) — construida, sobe depois da anterior
