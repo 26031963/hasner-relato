@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 10:59. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 11:12. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -31,6 +31,13 @@ _Atualizado 16/09 10:59. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - Furo vetado pela regua ficava preso para sempre depois que o veto caia; agora a celula e rejulgada.
 - Porta nova para desfazer a confirmacao de "cadastro errado" (motivo obrigatorio, trilha, rejulga na hora). Tela da porta: fila de TELA.
 
+**HAIKU-BUSCA-PESSOA** (copiloto, pedido Ronald) — NO AR 11:12 (commit 25675b48)
+- A busca de pessoa acha por nome parcial, sem acento e sem ordem. Vale para o copiloto e para as telas.
+- 1 resultado = responde; varios = lista para escolher; zero = "nao achei ninguem com esse nome", nunca "em dia".
+- Golden +3 (um, varios, zero). Conferido em prod: "simoes samyra" = 1, "Silva" = 150, nome inexistente = 0.
+
+**ADESAO-AGRUPA-SO-VIVO** (chamado, sitio 2) — suite rodando; sobe em seguida.
+
 ## EM CURSO
 
 **TRANCA-SEM-CADASTRO** (chamado, bug achado) — NO AR 10:55; chamados_em_competencia_trancada = 0
@@ -38,12 +45,6 @@ _Atualizado 16/09 10:59. Publico: so ids e contagens, nunca nome/CPF, nenhum cod
 - Passivo com "!": 72 avisos reabertos, 48 gemeos superados no original.
 - Cura: a tranca deixa de fora o aviso de cadastro e a revisao de desligamento (corte Ronald 16/09: ato do DP com dinheiro, fica ate o DP resolver); o emissor nao reabre chamado de dia trancado.
 - Passivo da revisao de desligamento (aval Ronald 10:59): 38 reabertos (emp 2 27, emp 3 7, emp 4 4; 34 de colaboradores ja desligados), trilha "reaberto: tranca nao encerra cadastro/desligamento". Vivos 1.873 -> 1.911; fila 1.312 -> 1.318 (a maioria continua no arquivo). Segunda passada 0.
-
-**HAIKU-BUSCA-PESSOA** (copiloto, pedido Ronald) — construida, sobe depois da anterior
-- A busca de pessoa acha por nome parcial, sem acento e sem ordem ("Simoes Samyra" acha a mesma pessoa). Vale para o copiloto e para as telas.
-- 1 resultado = responde; varios = lista para escolher; zero = "nao achei ninguem com esse nome", nunca "em dia".
-- Golden +3 (um, varios, zero); o juiz reprova "em dia" quando a busca deu zero.
-- RED 7 falhas, GREEN 15 verdes.
 
 ## TRANCA DAS COMPETENCIAS (16/09, aval Ronald)
 
@@ -83,7 +84,6 @@ Ficam com o admin (resposta do colaborador sem veredito): emp 2/08 18 chamados; 
 
 ## FILA
 
-- ADESAO sitio 2 (teste corrigido, RED/GREEN ok).
 - Tela do calendario: status "extra" com rotulo errado e dois juizes para o mesmo dia.
 - Copiloto: legenda do calendario; recusa honesta sem porta por colaborador; dia do colaborador na ficha (que mora no core).
 - UI do fio do colaborador (cabecalho + card da proposta de escala, evidencia de 28 dias).
