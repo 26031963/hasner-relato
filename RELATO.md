@@ -16,7 +16,7 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
-## NO AR HOJE (16/09) — 17 fatias
+## NO AR HOJE (16/09) — 18 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -37,11 +37,11 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | 14:52 | FERIADO-PADRAO-POR-ESCALA (corte Ronald) | vinculo novo nasce pelo tipo de escala: 5x2 e 6x1 comercial folgam no feriado, 12x36 e escala corrida trabalham; o posto que declarou "opera em feriado" vence. Os existentes nao mudaram (Pautas DP 140-149). Contador vinculos_5x2_6x1_trabalha_feriado = 183 hoje, 0 declarados (nenhum posto marcou "opera em feriado" ainda; quem zera sao as Pautas 140-149); DIFF de folha 0 |
 | 15:23 | FURO-PARCIAL-SEM-COBRANCA (bug) | o furo parcial vira cobranca tambem no julgamento na hora (a chave do cron saiu; crontab reinstalado e igual ao codigo); o chamado do dia e o espelho da celula (um por colab-dia, reabre nomeando o marco); retratacao e emissao leem a ata do julgamento corrente. Marco nao vencido, dia trancado e veto nao cobram. DIFF de folha 0 |
 | 15:3x | APP-FALTA-NO-TETO | no app nativo, o dia de hoje sem batida so vira "falta" depois do fim do turno previsto (antes, as 14h ja era falta); so leitor |
+| 15:47 | CANAL-DE-PUSH | "tem canal de push?" tem um juiz so, em core (cobranca e holerite importam dele); contador juizes_discordam_push = 0 |
 
 Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 **Em curso** (fila da cadeia, nesta ordem):
-- CANAL-DE-PUSH (cauda 1): "tem canal de push?" com um juiz em core; contador `juizes_discordam_push`. Ensaio verde (350 testes).
 
 
 ## ATOS EM PROD HOJE (com aval)
@@ -80,19 +80,30 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, 8.470 h em jogo (teto bruto). Idade mediana 21 dias. 63 sem notificacao do app, em 39 postos — Pautas de posto escritas. R$ nao medivel (sistema sem salario). Pauta PREVIA-DO-HOLERITE (em horas) na fila F7.
 
-## PASSIVO DO FURO SEM COBRANCA (DRY 15:23, nada cobrado)
+## PASSIVO DO FURO SEM COBRANCA — APLICADO (aval Ronald 16/09, 15:41-15:44)
 
-Contador `furos_sem_cobranca_viva` = **479** celulas em 151 colabs (competencia aberta, ate ontem).
+Pela porta do cron, com trilha "passivo furo sem cobranca, aval Ronald 16/09" em cada celula. O push de supervisao foi suprimido (dias retroativos); a pergunta ao colab segue o fluxo normal.
 
-| empresa | pergunta ao colab (tem canal) | supervisao sem push | veto (fora do total) |
-|---|---|---|---|
-| 2 | 338 | 40 | 0 |
-| 3 | 87 | 5 | 3 |
-| 4 | 8 | 1 | 0 |
+| | celulas | colabs |
+|---|---|---|
+| antes | 478 | 151 |
+| cobradas | 457 | |
+| 2o DRY | 20 | 5 |
 
-- Colab 709 esta na lista: 03, 04, 08, 09, 14 e 15/09.
-- `--apply` espera o "!" do Ronald. Cada celula passa pela mesma porta do cron; o dia com chamado encerrado reabre o mesmo chamado.
-- Fora: 117 FURO_COM_COBRANCA_MORTA (dia inteiro com cobranca encerrada) -- corte a parte.
+- As 20 que sobraram o emissor, pela lei, nao cobra:
+  - 16: celula que nao e dia de trabalho (vinculo intermitente);
+  - 1: dia coberto por pedido de ausencia em analise;
+  - 3: chamado do dia fechado pelo admin (decisao humana).
+- Fatia FUROS-SEM-COBRANCA-PORTAS na esteira: o contador passa a separar essas tres portas, e `furos_sem_cobranca_viva` vai a 0 no placar.
+- Achado (fila): celula de intermitente (nao e dia de trabalho) lavrada como furo parcial.
+- Colab 709: 14/09 e os outros 5 dias entraram em cobranca.
+
+## BO GEOFENCE (medido 15:4x, so leitura)
+
+1. **Emissao nao caiu.** Furo de geofence: 2 a 5 por dia nos ultimos 14 dias (48 chamados novos; ocorrencias novas vao para o chamado vivo do colab: 176 chamados com nota nova em 14 dias). O ultimo foi hoje as 13:12.
+2. **Onde estao**: 231 vivos em "registrado", **sem verbo, fora da fila do admin**. A causa e o corte A3.1b (e201b0c2, 23/08: modulo de auditoria nasce "registrado"). A FILA-ROTEIA-CATALOGO de hoje so mexeu na revisao de vinculo (69 em Decidir, gaveta "revisao de cadastro"), nao no furo de geofence -- nao e bug da fatia de hoje. Autorizacoes do admin por semana: 55 (03/08), 22, 15, 5 (24/08), 0, 3.
+3. **Porta do admin**: o fio tem "Aceitar" e "Negar e advertir", e o segundo TAMBEM autoriza a batida (so grava advertencia). Nao existe recusa. E em chamado "registrado" os dois botoes falham: a transicao manual registrado -> resolvido nao e permitida.
+- **Corte (Claude)**: fatia GEOFENCE-VALIDAR-E-RECUSAR. O furo de geofence volta a ser cobranca do admin (nasce aberto, verbo Validar); porta de RECUSA com motivo obrigatorio (retrata a batida pela porta unica, trilha "fora do posto"); aceitar/advertir/recusar funcionam tambem no que esta "registrado". A batida continua nunca barrada na hora. A recusa tira batida da folha, entao e dinheiro: sobe quinta 14:00. Os 231 registrados passam para "em analise" por DRY + "!".
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
@@ -134,5 +145,5 @@ Contador `furos_sem_cobranca_viva` = **479** celulas em 151 colabs (competencia 
 - DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
-- Ronald: "!" do passivo do furo sem cobranca (479 celulas, DRY acima); corte dos 117 FURO_COM_COBRANCA_MORTA.
+- Ronald: corte dos 117 FURO_COM_COBRANCA_MORTA; "!" dos 231 geofence registrados (DRY quando a fatia existir).
 - CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
