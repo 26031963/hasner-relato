@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Atualizado 16/09 12:31. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Atualizado 16/09 12:43. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -112,6 +112,13 @@ Por empresa, fila antes -> agora: emp 2 1.182 -> 988; emp 3 377 -> 294; emp 4 62
 | pergunta ao colab (conversa) | 11 | 11 |
 
 **BALDE 0 — com o colaborador** (competencia corrente): 365 colaboradores, 1.965 perguntas sem resposta, 1.457 furos sem justificativa, **8.470 h em jogo** (previsto menos realizado, teto bruto). Idade mediana 21 dias; 248 colaboradores com 15 dias ou mais. **63 sem canal de push** (477 perguntas, 1.783 h). R$ nao medivel: o sistema nao tem salario cadastrado. Pauta PREVIA-DO-HOLERITE (app) registrada na fila F7.
+
+### E0 — desdobramentos (16/09 tarde)
+
+- **Lote classe A (DRY)**: 46 perguntas classe A em 256 chamados da gaveta "respondido". Espera o aval e QUEM assina (usuario).
+- **Criterio revisado** (hora respondida casa qualquer marco do mesmo tipo +-10 min, sem batida ou resposta que contradiga no dia), sobre os 124 "validar um a um" (259 perguntas): **57 perguntas entrariam**, mas so **3 chamados** fechariam inteiros. Recusas: nao casa marco 143, sem hora ou dia 38, contradicao no dia 18, nao e hora 3.
+- **Sem push**: 63 colaboradores em 39 postos (9 pracas) — **39 Pautas para a supervisao escritas**, uma por posto, com ids e pendencias.
+- **"Carimbar o dia" (92)**: nao e defeito de emissor. 69 sao revisao de vinculo (evidencia de 30 dias, sem dia por natureza), 17 sao avisos de cadastro com periodo, 8 sao modulos sem dia pelo catalogo. Proposta: a fila por causa rotear pelo catalogo (gaveta de cadastro), em vez de pedir dia. Espera corte.
 
 ## ONDE O DP TRANCA A COMPETENCIA (proximos meses)
 
