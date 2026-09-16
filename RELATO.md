@@ -16,6 +16,72 @@ _Estado de 16/09 14:25. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 
+## CERTIFICACAO 09/2026 (fechada 18:09; so leitura, na sombra, nenhum deploy) -- LER ANTES DAS 08:00
+
+_Dados de prod das 04:00 de 16/09. Turnos comparados ate 14/09 (o dump pega o noturno de 15/09 pela metade); celula x
+folha ate 15/09. Certificado = a celula do dia (a), a folha que o TXT escreveria por rubrica (b) e o espelho e o cartao
+PDF (c) concordam turno a turno, e celula x folha concorda no total do periodo._
+
+### N/N por empresa
+
+| empresa | colabs | certificados | so classes conhecidas | alguma classe fora das conhecidas |
+|---|---|---|---|---|
+| 2 | 414 | **210/414** | 79 | 125 |
+| 3 | 120 | **50/120** | 37 | 33 |
+| 4 | 20 | **9/20** | 2 | 9 |
+| total | 554 | **269/554** | 118 | 167 |
+
+Um colaborador pode estar em mais de uma classe. Adicional noturno reduzido x relogio e rotulo, nao divergencia (nao conta).
+
+### Classes
+
+| classe | o que o admin vai ver | natureza | estado | Pauta DP | emp 2 | emp 3 | emp 4 |
+|---|---|---|---|---|---|---|---|
+| bug a | HE do 12x36 sem a tolerancia de 10 min (bug A) | codigo (motor) | conhecida; cura depois do export de 09 | 93/94/95 | 97 | 52 | 4 |
+| t4 t8a | saida antecipada que e intervalo (T4/T8a) | codigo (leitura do marco) | conhecida | 83/84/85 | 32 | 9 | 2 |
+| intervalo nao batido celula x folha | intervalo nao batido: folha = jornada corrida + intervalo indenizado; celula = pausa | lei (Art. 71 par. 4) + dado (a batida que falta) | espera a resposta do colaborador (perguntado em 16/09) | 150-168 | 94 | 26 | 8 |
+| espelho so com vinculo ativo | espelho calcula todos os dias com a escala de hoje (troca/encerramento de vinculo); vale a folha | codigo (tela) | PARADO; RED escrito | 150-168 | 11 | 6 | 0 |
+| celula noturna perde a madrugada | celula do noturno conta so ate a meia-noite: % de pronto cai para ~40% e pode reter | codigo (celula/cartorio) | PARADO; RED escrito | 150-168 | 12 | 1 | 1 |
+| borda espelho conta continuacao da vespera | espelho soma a madrugada do dia 21 que e da jornada do dia 20; vale a folha | codigo (tela) | PARADO; RED escrito | 150-168 | 8 | 0 | 1 |
+| turno longo 16h | turno de 16h ou mais (batida faltando ou resposta no dia errado); retidos fora do TXT | dado (batidas/respostas) | PARADO; conferir antes de liberar | 150-168 | 4 | 0 | 0 |
+| celula conta mais que a folha | celula do dia conta mais que a folha | a apurar | PARADO | 150-168 | 5 | 0 | 0 |
+| celula x folha diferenca pequena | diferenca pequena celula x folha (menos de 10 h no periodo) | a apurar | PARADO | 150-168 | 8 | 1 | 0 |
+| pdf x espelho turno | cartao PDF mostra turno que a tela nao mostra | codigo (tela x PDF) | PARADO | 150-168 | 1 | 0 | 0 |
+
+Natureza: **codigo** = o sistema mostra ou calcula diferente em dois lugares (cura em fatia, depois do congelamento);
+**dado** = batida ou resposta que falta ou esta no dia errado (DP/supervisao conferem); **lei** = regra de pagamento
+aplicada enquanto a resposta nao chega.
+
+**Pautas para o admin ler antes das 08:00**: DP 150 a 168 (uma por classe e empresa, com os ids), e as ja abertas
+93/94/95 (bug A) e 83/84/85 (T4).
+
+### Ids por classe
+
+- **bug a** -- emp 2 (97): 190 195 197 237 247 249 251 253 254 255 276 277 280 281 284 287 300 320 332 335 340 342 346 347 351 360 364 385 388 389 394 396 398 399 400 407 411 414 415 424 425 432 442 443 454 455 456 464 466 473 475 478 482 496 511 516 523 551 552 556 557 558 566 570 576 579 612 625 626 627 654 658 668 673 696 718 719 737 739 760 820 835 838 841 852 854 860 861 871 887 888 891 901 904 908 930 938; emp 3 (52): 49 56 59 60 61 62 63 70 78 79 80 84 90 91 92 94 97 98 100 101 109 111 115 123 126 134 138 139 141 150 154 157 159 166 168 169 170 171 173 639 643 741 744 747 750 752 755 761 866 873 876 925; emp 4 (4): 27 28 29 40
+- **t4 t8a** -- emp 2 (32): 174 193 196 212 217 219 231 238 296 306 418 435 450 489 570 696 707 820 821 824 827 841 843 846 847 861 865 874 889 890 913 920; emp 3 (9): 99 104 109 119 145 515 639 769 876; emp 4 (2): 50 624
+- **intervalo nao batido celula x folha** -- emp 2 (94): 192 193 202 211 243 247 248 263 277 296 301 306 320 331 340 366 390 406 415 435 444 446 450 452 465 466 468 469 476 492 503 511 516 518 532 549 564 575 583 592 600 612 617 618 627 631 634 696 697 698 699 709 723 727 739 787 789 820 821 824 825 827 833 838 840 841 843 846 847 852 853 861 862 869 872 874 878 884 888 889 890 893 899 902 904 906 907 915 919 920 923 926 930 944; emp 3 (26): 59 60 72 82 98 99 104 107 109 110 111 119 125 150 154 171 502 638 746 769 829 873 876 909 911 925; emp 4 (8): 28 40 41 42 50 510 624 712
+- **espelho so com vinculo ativo** -- emp 2 (11): 331 367 375 441 465 584 707 736 789 853 859; emp 3 (6): 91 115 168 515 743 866
+- **celula noturna perde a madrugada** -- emp 2 (12): 193 196 219 231 331 418 446 489 707 841 843 865; emp 3 (1): 119; emp 4 (1): 857
+- **borda espelho conta continuacao da vespera** -- emp 2 (8): 196 200 218 231 296 343 843 865; emp 4 (1): 857
+- **turno longo 16h** -- emp 2 (4): 174 243 556 922
+- **celula conta mais que a folha** -- emp 2 (5): 235 258 283 382 655
+- **celula x folha diferenca pequena** -- emp 2 (8): 191 200 238 259 736 784 880 903; emp 3 (1): 145
+- **pdf x espelho turno** -- emp 2 (1): 935
+
+### 08/2026 (paga): nao certificavel -- Pauta DP
+
+- emp 2: o TXT entregue (exportacao de 01/09) bate com o recibo do Dominio em 2 de 92 colaboradores. HE 50% (60 colabs)
+  e faltas parciais (45) do TXT nao aparecem em recibo nenhum; adicional noturno diverge em 41, intrajornada em 27. Tudo
+  o que bate e numero redondo: o TXT parece nao ter sido importado, ou o Dominio recalculou (natureza: **dado/processo**).
+- emp 3 e emp 4: nao ha exportacao de 08/2026 no sistema (a ultima e de 07), e os recibos trazem horas (**processo**).
+- cadastro: dois colaboradores com o mesmo codigo Dominio (883 e 885); cabecalho do recibo diferente do cadastro em 885
+  (emp 2), 142 e 624 (emp 4) (**dado**).
+
+### Amostra do admin
+
+93 cartoes (emp 2: 39, emp 3: 34, emp 4: 20), escolhidos pelo sistema entre certificados e classes, sem CPF e sem
+matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
+
 ## NO AR HOJE (16/09) — 20 fatias
 
 | hora | fatia | o que mudou |
@@ -202,6 +268,7 @@ login. Os textos vêm sem acento, como estão no código.
 
 - T4-MARCO-QUE-A-BATIDA-OCUPA — DIFF TXT=9 RETIDOS=47 → Pauta DP 83/84/85.
 - TURNO-F1-S3 / P71-ANTECIPACAO-12X36 — corte Ronald.
+- **CERTIFICACAO 09**: 8 classes fora das conhecidas (tabela acima), PARADAS ate o fim do congelamento; RED de cada uma na fila. **08/2026**: TXT x recibo nao bate (Pauta DP).
 - **HE 12x36 sem a tolerancia de 10 min/dia** (bug) — cura so depois do export de 09. Pauta DP 93/94/95 (08/2026 paga: 36,3 h emp 2, 21,5 h emp 3, 1,0 h emp 4).
 
 ## FILA
