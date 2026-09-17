@@ -152,6 +152,9 @@ A lampada (marco da ata) comunica o proprio estado por evento; cron e VIGIA, nun
     - placar: `juizes_por_varredura` (23) e `divergencia_grade_x_cartorio` (1.498 no log das 06:20);
     - o diagrama gerado ganha o bloco "lampada avisa, cron vigia" (escala -> celula/ata -> evento do cartorio -> consumidores; cada cron pintado como juiz ou vigia pelo papel declarado);
     - 5 linhas do principio no CLAUDE.md e no PRIMER.
+  - **Corte Claude 10:2x -- duas fatias novas:** **WORKLIST-ATA** (familia chamado): a worklist de inconsistencias le a ata (`lampadas_sem_ata` -> 0), depois da C5-TELA, que mexe no mesmo arquivo. **TELA-MARCO** (fila de tela, depois da familia chamado): calendario, app e fio mostram o marco faltante com "?" pela ata, como o espelho do admin ja faz.
+  - **10:1x -- familia chamado montada** (todas esperando a vez, em sequencia pelo registro): RESPOSTA-TARDIA, INTEL-JUIZ, **C5-CANAL** (canal partido, selo de data divergente do fio, mapa_divergencia e a justificativa leem o dia pelo juiz; o detector deixa de acusar leitura de formulario; universo antes/depois medido na sombra antes de subir), **AGIR-POR-DONO** (departamento dono do modulo; colab e cadastro -> supervisao, sistema -> TI; gestor geral age em tudo; lotes dizem quantos ficaram fora; 0 acoes das ultimas 48h seriam recusadas). Leitura do item (6): nao e formulario de abertura, e a justificativa do turno -- os modulos que ela liga vem do catalogo (`COBRANCAS_DO_TURNO`) e o dia do juiz.
+  - **Ordem da familia chamado:** RESPOSTA-TARDIA -> INTEL-JUIZ -> C5-CANAL -> AGIR-POR-DONO -> WORKLIST-ATA; TABULEIRO e TABULEIRO-HAIKU correm ao lado (arquivos proprios); depois TELA-MARCO.
   - **Fatia TABULEIRO-HAIKU** em seguida: a pergunta "o sistema ainda vasculha?" no copiloto, lendo os dois contadores.
   - **Leitura minha:** o HANDOFF.md e o contrato da API do app; o principio vai no CLAUDE.md e no PRIMER, que sao os documentos de arquitetura.
 
