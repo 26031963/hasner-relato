@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 23:03. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 17/09 00:12. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -58,6 +58,22 @@ aplicada enquanto a resposta nao chega.
 **Pautas para o admin ler antes das 08:00**: DP 150 a 168 (uma por classe e empresa, com os ids), e as ja abertas
 93/94/95 (bug A) e 83/84/85 (T4).
 
+### Natureza apurada das classes "a apurar" (noite de 16/09, do registro da rodada; so leitura, sem cura)
+
+| classe | ids | natureza | o que e | teste vermelho |
+|---|---|---|---|---|
+| turno longo 16h | 174, 922 | dado | jornadas reais de ~16 h batidas (05:05-21:10, 06:55-23:10); folha e tela concordam -- conferir se e dobra autorizada | -- |
+| turno longo 16h | 243 | dado | saida no dia seguinte a mesma hora da entrada (24 h): batida ou resposta no dia errado | -- |
+| turno longo 16h | 556 | codigo sobre dado | a folha pareia 18:56 com 18:56 do dia seguinte (24 h) e a tela deixa o turno aberto: dois pareadores sobre uma batida faltando | escrito; nao reproduziu com fixture simples |
+| celula conta mais | 258, 283, 655 | codigo | em dia de AUSENCIA parcial a celula nao desconta o intervalo e a folha desconta (60 min exatos por dia); 655 tambem tem um turno aberto retido (dado) | -- |
+| celula conta mais | 235, 382 | codigo (provavel) | noturno partido (21:00-00:00 / 01:00-05:00): a celula conta a metade depois da meia-noite que nao foi batida (+240 min por dia) -- mesma familia da "celula noturna" | escrito; nao reproduziu com fixture simples |
+| diferenca pequena | 191, 880, 238, 145 | lei | pausa prevista e nao batida: a folha conta a jornada corrida (60 min a mais por dia) sem marcar intrajornada indenizada; a celula desconta -- mesmo tema da classe do intervalo | **CONFIRMADO** (12x36: celula 10 h x folha 11 h) |
+| diferenca pequena | 259, 736 | codigo | dia de ausencia parcial: folha e celula contam diferente (a folha a mais) | -- |
+| diferenca pequena | 200, 784, 903 | dado | turno aberto retido: a celula conta, a folha nao | -- |
+| pdf x tela | 935 | codigo | o cartao PDF lista o noturno 05/09 18:52 -> 06/09 06:58 e a tela nao | escrito; nao reproduziu com fixture simples |
+
+Testes vermelhos da certificacao (fora da arvore): 7 escritos -- 3 confirmados (espelho so com vinculo ativo, borda do dia 21, pausa nao batida no 12x36), 4 sem reproduzir (celula noturna, turno de 24 h, noturno so no PDF, noturno partido): o mecanismo de producao segue em apuracao.
+
 ### Ids por classe
 
 - **bug a** -- emp 2 (97): 190 195 197 237 247 249 251 253 254 255 276 277 280 281 284 287 300 320 332 335 340 342 346 347 351 360 364 385 388 389 394 396 398 399 400 407 411 414 415 424 425 432 442 443 454 455 456 464 466 473 475 478 482 496 511 516 523 551 552 556 557 558 566 570 576 579 612 625 626 627 654 658 668 673 696 718 719 737 739 760 820 835 838 841 852 854 860 861 871 887 888 891 901 904 908 930 938; emp 3 (52): 49 56 59 60 61 62 63 70 78 79 80 84 90 91 92 94 97 98 100 101 109 111 115 123 126 134 138 139 141 150 154 157 159 166 168 169 170 171 173 639 643 741 744 747 750 752 755 761 866 873 876 925; emp 4 (4): 27 28 29 40
@@ -84,6 +100,20 @@ aplicada enquanto a resposta nao chega.
 
 93 cartoes (emp 2: 39, emp 3: 34, emp 4: 20), escolhidos pelo sistema entre certificados e classes, sem CPF e sem
 matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
+
+## BLOCOS DA NOITE (non-stop ate qui 17/09 14:00)
+
+Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou veredito ate qui 14:00.
+
+- **Esteira parada ate ~04:50 por regra**: depois da meia-noite o deploy exige o ensaio da sombra de HOJE, que so se refaz as 04:15, e 03:40-04:45 e janela sem deploy. As fatias seguem prontas e encadeadas; nada foi contornado.
+- **bloco a (familia chamado, registro 50 -> 0)** -- em andamento. Na esteira: C5-AUDITOR (50 -> 48), C5-EMISSORES (-> 42; contador `registro_chamado` no placar), C5-TELA (-> 40), C1-MSGDP (-> 39). PARADO-CORTE de negocio (medido): responder chamado resolvido/cancelado/superado; score de incidentes (790 x 2.009 chamados, 324 de 444 scores mudam); contador "chamados abertos" da inteligencia; quem pode agir no chamado (gerir_chamados ignora a area). PARADO-CORTE: emitir_furo_retroativo e o sinal que rejulga a celula (dinheiro, qui 14:00); canal partido, selo de data divergente do fio e mapa_divergencia (o juiz mudaria o universo -- medido); ponto/views (campo do formulario).
+- **bloco b fechado: Pautas DP 169-174 = 46 chamados.** A porta de 1 clique (validar de novo / apagar marco) fica PARADO-CORTE ate qui 14:00: validar de novo planta batida e apagar marco mexe na ata.
+- **bloco d** -- na esteira, completo: F7-DIA-DA-FROTA ("quem faltou no dia X?" pela celula; golden +1) e F7B (legenda do calendario com selo preso a tela; o dia de hoje na ficha do copiloto, pela mesma funcao da ponte do dia; golden +1).
+- **bloco e fechado: testes vermelhos da certificacao = 3 confirmados de 7** (natureza das 4 classes "a apurar" na secao CERTIFICACAO).
+- **bloco f (familia ausencia, 49)** -- na esteira: AUS-ESCRITA-1 (o PWA segue o juiz do documento; 49 -> 47). PARADO-CORTE: AusenciaForm sem consumidor.
+- **bloco c** -- na esteira: PROPOSTA-EVIDENCIA (a faixa da proposta traz os 28 dias de evidencia e marca o chamado que ela resolve; o front espera smoke; o Aplicar nao foi tocado).
+- **bloco g** -- na esteira: CAUDA-G (LICOES.md; o tripwire do modo app sem a excecao morta). PREVIA-DO-HOLERITE segue na fila.
+- **Retomada agendada**: `noite17` as 04:50 (cron de disparo unico), em sequencia -- UIFIC3, C5-EMISSORES, C5-TELA, F7, AUS-ESCRITA-1, PROPOSTA-EVIDENCIA, F7B, CAUDA-G, C1-MSGDP (previsao: ate ~11h, antes do deploy da geofence das 14:00). Cada fatia escreve aqui em DEPLOYS AGENDADOS quando termina.
 
 ## DEPLOYS AGENDADOS
 
@@ -189,11 +219,12 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - **NO AR 21:1x** (PERGUNTA-NO-APP-CAUSAS + CERTIFICACAO-LINHA-HAIKU, tela): cada causa com nome e dono no registro do chamado; contador por causa no placar (130 = 46 admin + 84 sistema); linha Haiku da certificacao: contador **colabs_nao_certificados = 285** (emp 2 210/414, emp 3 50/120, emp 4 9/20), o copiloto responde "a folha de 09 esta certificada?" pela lavra (sem lavra: "nao medida", nunca "sim"); golden +3 (certificacao; colab 709 em 15/09 e em 04/09).
 - **Na esteira, em ordem** (uma cadeia por vez):
   1. **NO AR 21:4x** C5-FABRICA (familia chamado, cobranca): a fabrica de perguntas le o dia do chamado pelo juiz; medido antes, 8 chamados de ausencia recebiam pergunta de qualquer dia. Registro do chamado 52 -> 50.
-  2. **cabecalho no ar, aguardando smoke** (23:0x: o texto no formato do print -- escala numa linha com dias e desde dd/mm/aaaa, posto · praca/UF, "tel · app: PWA iOS, ultima batida dd/mm hh:mm", o vinculo de hoje em negrito na ficha completa; o rotulo da plataforma entrou junto) (22:35: partial aplicado na arvore e `docker compose restart ui`, corte Ronald; compacto, 3 linhas, a ficha completa com uma linha por vinculo; 13 selos verdes na copia da arvore viva antes do restart). Parte do git no ar desde 22:0x. UI-FIO-CABECALHO (tela): a ficha do core devolve as 3 linhas prontas (escala · horario · pausa · desde; posto · praca; telefone · app com a ultima batida) e uma linha por vinculo; o painel do fio e a ficha completa recebem a MESMA ficha; o copiloto passa a ler a ficha (a rota existia sem cliente) e responde "qual a escala e o posto de <nome>?". **O partial e os dois templates ficam fora do git, esperando o smoke do Ronald** (64 testes verdes com o front aplicado, teto de queries do modal incluido).
+  2. **UI-FIO-CABECALHO -- "nao aparece" (conferido pelo Ronald 23:2x): O QUE ERA.** Medido 23:4x: o partial estava no container (mesmo arquivo do host) e o modal que o painel carrega (`/chamados/modal/<id>/`, aberto pelo Ronald as 23:27 e 23:30) o renderizava. Mas o nome que o admin ve fica no TOPO FIXO do painel, preenchido pelo JS, e o bloco vinha no CONTEUDO, que o JS rola ate o card clicado (ou ate o fim) -- o cabecalho saia de vista. Cura: o painel sobe o bloco para o topo fixo, abaixo do nome, tambem depois de cada acao (65 selos verdes na copia da arvore viva, sintaxe do JS conferida). **Cabecalho no ar, aguardando smoke (17/09 00:0x, `docker compose restart ui`).** Prova no processo do ui: o painel traz o espaco no topo fixo e o JS que sobe o bloco (na abertura e depois de cada acao); o modal do colab 248 (o que o Ronald abriu) traz o bloco com a linha "6x1 · 07:30-16:30 · pausa 12:00-13:00 · desde 21/07/2026". Ctrl+F5 no painel antes de conferir. De carona: "Londrina/PR/PR" (21 de 26 pracas ja trazem a UF) -- ajuste na esteira.
+     Antes: (23:0x: o texto no formato do print -- escala numa linha com dias e desde dd/mm/aaaa, posto · praca/UF, "tel · app: PWA iOS, ultima batida dd/mm hh:mm", o vinculo de hoje em negrito na ficha completa; o rotulo da plataforma entrou junto) (22:35: partial aplicado na arvore e `docker compose restart ui`, corte Ronald; compacto, 3 linhas, a ficha completa com uma linha por vinculo; 13 selos verdes na copia da arvore viva antes do restart). Parte do git no ar desde 22:0x. UI-FIO-CABECALHO (tela): a ficha do core devolve as 3 linhas prontas (escala · horario · pausa · desde; posto · praca; telefone · app com a ultima batida) e uma linha por vinculo; o painel do fio e a ficha completa recebem a MESMA ficha; o copiloto passa a ler a ficha (a rota existia sem cliente) e responde "qual a escala e o posto de <nome>?". **O partial e os dois templates ficam fora do git, esperando o smoke do Ronald** (64 testes verdes com o front aplicado, teto de queries do modal incluido).
   3. **NO AR 22:3x** UI4-REABRIR (**bug**, P7.1): "Reabrir questionario nao aciona". Medido: 4 cliques de 4 hoje caiam em "Nenhuma disputa aberta" -- a disputa mora no chamado-container e o card clicado e o do furo; o botao aparece pelo juiz do fio e a view procurava outra coisa. Cura: a view pergunta ao mesmo juiz.
 - **Familia chamado, o que fica medido e parado** (nao sobe hoje):
   - dia cru no sinal que rejulga a celula quando o chamado muda de estado: com o juiz, mais chamados disparam o cartorio -- espera o fim do congelamento (qui 14:00);
-  - dia cru no auditor de invariantes: com o juiz, o alarme "chamado vivo em dia coberto por ausencia aprovada" ganharia ~25 casos em modulos que nao cobram dia (revisao de desligamento, sem previsao de escala, geofence). Precisa de corte: o alarme olha so modulos de cobranca de dia?
+  - dia cru no auditor de invariantes: **corte 16/09 -- so modulos de cobranca de dia.** Na esteira (C5-AUDITOR, sobe depois da meia-noite): o alarme olha o mesmo universo do "ausencia em decisao" e le o dia pelo juiz; medido antes, 1 -> 0 (saiu um chamado que nao cobra dia); os outros dois alarmes nao mudam.
 - **UI-5 (painel colapsado)**: ja no ar desde 13/09 (pacote do smoke que entrou no git): 1 linha + Validar/Rejeitar/Corrigir, o resto atras de "detalhes do caso".
 
 ## PASSIVO DO FURO SEM COBRANCA — APLICADO (aval Ronald 16/09, 15:41-15:44)
@@ -318,6 +349,7 @@ login. Os textos vêm sem acento, como estão no código.
 
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
+- **Ronald, antes de qui 14:00: smoke do cabecalho (painel do fio + ficha completa).** O deploy agendado da geofence tambem toca `modal_fio.html`; sem o smoke, o commit dela leva junto as linhas do cabecalho que estao no ar fora do git (o desfazer dela ja nao apaga o cabecalho). Se preferir separar, diga e a geofence espera.
 - DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
