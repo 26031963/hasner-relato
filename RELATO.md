@@ -114,6 +114,17 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
 
+- **12:13 TRANCA-DE-VERDADE NO AR** (0ebf3fed) -- a regra vale para toda tranca daqui em diante (trancar fecha, reabrir devolve). **Passivo, DRY por empresa x competencia -- espera o seu "!":**
+
+  | empresa | competencia | chamados | perguntas (respondidas -> Pauta DP) | disputas | acoes |
+  |---|---|---|---|---|---|
+  | 2 | 08/2026 | 108 | 158 (145) | 12 | 278 |
+  | 3 | 07/2026 | 8 | 28 (26) | 2 | 38 |
+  | 3 | 08/2026 | 54 | 35 (35) | 1 | 90 |
+  | 4 | 07/2026 | 0 | 6 (6) | 1 | 7 |
+  | 4 | 08/2026 | 4 | 10 (10) | 3 | 17 |
+
+  Contador `chamados_em_competencia_trancada` = **430** (esperado 0 depois do apply). Com o "!": cinco comandos, um por linha, cada um com a sua Pauta DP; nada toca ata, celula ou folha. `registro_chamado` = 48 (esta fatia nao mexe no registro).
 - **11:59 CRON-VIGIA NO AR**: cron de producao que morre (saida diferente de 0 e de 2) abre na hora uma Pauta de sistema para TI e acende `crons_quebrados` no placar (esperado 0); a pauta fecha sozinha quando o cron volta a terminar bem.
 - **12:0x -- o vigia ja acusou: `crons_quebrados=9`, e e bug provado.** Oito crons morreram com exit 137 (processo derrubado): sete as 12:00 (detectar_ausencias, processar_alertas_turno, processar_alertas_avancados, reconciliar_chamados, reconciliar_fantasmas, lavrar_badge_navbar, alertar_chamados_sla, reavaliar_ausencias_lancadas emp 2) e o escalonar_documentos_ausencia das 07:51 -- **todos no minuto de um deploy**: o reinicio do `saas_core` derruba o comando que estava rodando dentro dele. Os de 5/15/30 minutos se recuperam sozinhos na proxima corrida (e a Pauta de sistema fecha). **Causa de fundo, minha:** desde a raia TELA (08:1x) cada fatia reiniciava as cascas tres vezes (copia, desfazer, deploy) pelo `--sem-sombra`. **Fatia DEPLOY-ESPERA-CRON (bug, depois da TRANCA-DE-VERDADE e da LOGIN-APP; so host):** o envelope `cron_run.sh` marca o cron em curso e o restart do deploy espera ele terminar (ate 10 min); a raia TELA recarrega a copia pelo HUP gracioso (`DEPLOY_SEM_SOMBRA` no `--reload-copia`), que nao derruba comando. O contrato do deploy acusa as tres coisas na arvore de hoje (RED 3). As cadeias que ainda nao comecaram ja recarregam a copia pelo HUP; so o deploy final reinicia.
 - **11:59 FABRICA-PELA-ATA -- copia desfeita, sem estrago:** a regua nao chegou a rodar ("template database test_juliani does not exist": o banco de testes sumiu no meio da criacao, colisao com outro processo). Relancada as 12:0x; o "!" segue valendo.
