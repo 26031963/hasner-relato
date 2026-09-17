@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 17/09 07:53. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 17/09 13:52. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -115,7 +115,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 ## FILA ESTRUTURAL (Ronald 12:3x: nunca para) -- `registro_chamado` 48 -> 0
 
 Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela da manha no meio (UIFIC3, UIFIC-FRONT, F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G) -> RESPOSTA-TARDIA (-1) -> INTEL-JUIZ (-2) -> C5-CANAL (-4) -> AGIR-POR-DONO (-3) -> WORKLIST-ATA -> fabrica por evento. Ao lado, com arquivos proprios: FABRICA-PELA-ATA (com o seu "!"), TABULEIRO.
-- `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01) · 12:59 UIFIC3 no ar (sem registro; a UF uma vez so e a escala como tipo e apelido -- os ajustes 1 e 2 do seu smoke de 00:2x) = 48. UIFIC-FRONT: a copia dos testes falhou (pasta nao recriada no script), corrigida e relancada. Proximo no registro: C5-EMISSORES (-> 42).
+- `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01) · 12:59 UIFIC3 no ar (sem registro; a UF uma vez so e a escala como tipo e apelido -- os ajustes 1 e 2 do seu smoke de 00:2x) = 48. UIFIC-FRONT: a copia dos testes falhou (pasta nao recriada no script), corrigida e relancada. 13:30 **C5-EMISSORES NO AR** (fadb3646): seis emissores e fechadores de cobranca leem o dia pelo juiz = **42**. Proximo no registro: C5-TELA (-> 40). UIFIC-FRONT: um arquivo de teste estava com dono root (editado com sudo na madrugada) e a copia falhou sem mexer em nada; dono corrigido e cadeia relancada. 13:46 UIFIC-FRONT caiu na regua por um arquivo meu solto em docs (o comando de contraponto do SMOKE-150, lido como codigo novo); copia desfeita limpa, arquivo virou texto, fatia relancada. C5-TELA (-> 40) na regua desde 13:45; F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G e C1-MSGDP em sequencia atras. `registro_chamado` = **42**.
 
 ## FILA BO (admin, Ronald, Fernando) -- medir em segundo plano; so bug provado de codigo entra, ATRAS da estrutural em curso
 
@@ -123,6 +123,18 @@ Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela
 - **12:48 LOGIN-APP NO AR**: login do app (cabecalho `X-Hasner-Client`) com conta sem colaborador responde 403 `conta_sem_colaborador`; `admin_em_mobile` deixou de dar 500. *Para o Fernando:* "teste com uma conta de colaborador; a de gestao agora recebe 403 conta_sem_colaborador no login -- mostre erro_msg e erro_dica".
 - **13:18 DEPLOY-ESPERA-CRON NO AR** (f1da40f5): o reinicio do deploy espera o cron em curso (ate 10 min) e a raia TELA recarrega a copia pelo HUP gracioso -- deploy nao derruba mais cron.
 - **Conta de teste iOS por empresa** -- decisao do Ronald (ver "Contratos do app").
+- **GEO-PAINEL**: parada desde 12:35 sem aviso (import sobrando no teste novo barrou o ruff); curada e relancada 13:46, atras da estrutural.
+- **SMOKE-PORTAS-150 (Ronald 13:3x; so leitura, na sombra, nenhum deploy)** -- em curso, rodada final lancada 13:49.
+  - A competencia 09/2026 **nao tem fechamento gravado** (nem em prod nem na sombra): o TXT recusa ("recalcule a competencia"). A simulacao usa as portas do admin na ordem dele -- Recalcular -> Gerar TXT -> Cartoes em lote -- como gestor, tudo numa transacao que volta. Prova do rollback, por empresa: exportacoes 0 -> 1 -> 0, fechamentos aprovados 0 -> 92/38/8 -> 0, trilha 498.104 -> 498.105 -> 498.104; fechamentos 09 antes 0, depois 0.
+  - Selecao (celula soberana ate 16/09: 0 marco apagado, 0 pergunta viva, vinculo e escala unicos no periodo): **91 elegiveis** das 3 empresas (teto 150 nao alcancado).
+  - 1a leitura (antes da autopsia): **17 dos 91 retidos no TXT por furo_espelho** com a celula limpa (o juiz do export e a celula discordam); 22 entram sem nenhuma linha (nada a exportar -- a rodada final compara com zero).
+  - **Classe nova 1 -- cartao conta falta em dia que ainda nao chegou**: 50 colabs com 2-3 "faltas" em 17-20/09 no cartao; o TXT nao as tem. Fere a regra do teto temporal.
+  - **Classe nova 2 -- plantao em dia de folga da celula (veredito fato_sem_previsao)**: o cartao soma o turno (trabalhadas, noturno, intrajornada) e a folha/TXT nao (ids 251 em 05/09, 282 em 08/09 -- 10,30 h de noturno --, 512 em 02/09). Nenhum dos dois paga HE desse plantao: pergunta de dinheiro para o DP.
+  - Cartao pedido por mes/ano sai no **mes civil (01-30/09)** para quem nao tem pendencia e na competencia (21/08-20/09) para quem tem: o mesmo lote mistura dois periodos.
+  - Classes conhecidas (bug A, T4/T8a, AN reduzido): nenhuma diferenca cartao x TXT atribuida a elas nesta amostra (as duas saidas leem o mesmo motor).
+  - Arquivos para baixar em `app/docs/smoke150/` (nomes mascarados da sombra, ids reais; nao vao para o git): TXT dos selecionados, cartoes em lote nos dois modos, selecao e resultado por colab, e o contraponto por colab.
+  - *Para a admin:* "estamos conferindo o cartao-ponto contra o arquivo da folha antes do fechamento; ate o dia 20 o cartao pode mostrar como falta dias que ainda nao aconteceram -- ignore esses dias."
+
 - **Os 4 furos de 16/09 que seguem fora (medido 12:5x, so leitura):** #22474 ja tem pergunta viva ligada (29908) -- nasceu depois da primeira leitura. **#22887, #22891, #22927 -- BUG PROVADO de codigo:** a ata acusa a volta do intervalo e a fabrica tira o motivo certo (`intervalo_volta`), mas o escritor (`gerar_perguntas_disputa`) so deduplica por DIA os motivos da lista `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET` (ancora_ausente, orfao_14h, saida_sem_entrada); os de INTERVALO caem no dedup "uma pergunta por disputa e motivo". Prova: colab 890 tem uma disputa so (3102, aberta) com seis perguntas de volta do intervalo de outros dias (08/2026) -- a de 16/09 nunca nasce; o DRY da fabrica para o dia da 6 alvos e 0 perguntas. **Fatia INTERVALO-DATADO** (fila BO, atras da estrutural): intervalo_saida e intervalo_volta deduplicam por dia, como os outros motivos datados; antes, medir quantos dias com o intervalo acusado estao sem pergunta por isso. **Medido 13:2x: 1.107 marcos de intervalo acusados sem pergunta na competencia corrente, 142 colaboradores** (emp 2: saida 488 + volta 498; emp 3: 55 + 56; emp 4: 5 + 5). Fatia montada (a lista dos auditores nao muda; a nova vale so para o dedup do escritor), em testes; **espera o seu "!"** -- o lote nasce no cron de amanha as 06:38, sem push.
 
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
@@ -253,6 +265,7 @@ Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou v
 
 ## DEPLOYS AGENDADOS
 
+- 17/09 13:30 deploy agendado manha17, fatia c5emi: rc=0 -- C5E-FIM
 - 17/09 12:59 deploy agendado manha17, fatia uifront: rc=1 -- NAO LANCADA: copia falhou
 - 17/09 12:59 deploy agendado manha17, fatia uific3: rc=0 -- UIFIC3-FIM
 - 17/09 11:01 deploy agendado manha17, fatia c5aud: rc=0 -- C5A-FIM
