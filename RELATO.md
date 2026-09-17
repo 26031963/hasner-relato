@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 17/09 00:12. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 17/09 07:21. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -101,6 +101,12 @@ Testes vermelhos da certificacao (fora da arvore): 7 escritos -- 3 confirmados (
 93 cartoes (emp 2: 39, emp 3: 34, emp 4: 20), escolhidos pelo sistema entre certificados e classes, sem CPF e sem
 matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
+## BLOQUEIO DA MANHA (17/09 07:2x) -- bug, P7.1
+
+- **O cron `termometro_regua` das 06:00 QUEBROU em producao**: o retratador tenta fechar a disputa 5082, que tem 4 respostas do colaborador sem veredito; a guarda recusa (certo) e a recusa derruba o comando inteiro (errado). Os crons que dependem dele nesta manha precisam de conferencia.
+- **O ensaio da sombra das 04:15 reproduziu a mesma quebra** (status FALHOU, 1 erro) -- e sem ensaio OK nenhum deploy passa hoje. Por isso a fila da noite (10 fatias) NAO subiu: todas desistiram as 06:50 sem mexer em nada. Pelo mesmo motivo o deploy agendado da geofence das 14:00 tambem nao passaria.
+- **Proposta**: cura do bug (a recusa do fechamento vira "fica aberta", sem derrubar o comando) com teste vermelho; como o ensaio so volta a passar com a cura no ar, subir essa fatia com `deploy.sh --sem-sombra` e refazer a sombra em seguida -- **precisa do aval do Ronald**. Depois disso a fila da noite e a geofence voltam a andar.
+
 ## BLOCOS DA NOITE (non-stop ate qui 17/09 14:00)
 
 Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou veredito ate qui 14:00.
@@ -117,6 +123,16 @@ Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou v
 
 ## DEPLOYS AGENDADOS
 
+- 17/09 06:50 deploy agendado noite17, fatia c1msg: rc=1 -- NAO LANCADA: a CAUDA-G nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia caudag: rc=1 -- NAO LANCADA: a F7B nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia f7b: rc=1 -- NAO LANCADA: a PROPOSTA-EVIDENCIA nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia propev: rc=1 -- NAO LANCADA: a AUS-ESCRITA-1 nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia aus1: rc=1 -- NAO LANCADA: a F7 nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia f7frota: rc=1 -- NAO LANCADA: a C5-TELA nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia c5tela: rc=1 -- NAO LANCADA: a C5-EMISSORES nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia c5emi: rc=1 -- NAO LANCADA: a UIFIC-FRONT nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia uifront: rc=1 -- NAO LANCADA: a UIFIC3 nao terminou no ar
+- 17/09 06:50 deploy agendado noite17, fatia uific3: rc=1 -- NAO LANCADA: a C5-AUDITOR nao terminou no ar
 Gate temporal agora e do SISTEMA (cron de 1 disparo na VM), nao de processo do Code: os dois esperadores de quinta morreram com a sessao e foram reagendados.
 
 - **qui 17/09 14:00** — rotulo qui1709: GEOFENCE-VALIDAR-E-RECUSAR, depois FURO-COBRANCA-MORTA-REABRE, em sequencia. Cada uma: testes → DIFF de folha → deploy → DRY do passivo. Ao fim grava o arquivo de sinal, escreve uma linha aqui por fatia e remove o proprio agendamento. Os dois --apply seguem esperando o "!".
@@ -219,6 +235,7 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - **NO AR 21:1x** (PERGUNTA-NO-APP-CAUSAS + CERTIFICACAO-LINHA-HAIKU, tela): cada causa com nome e dono no registro do chamado; contador por causa no placar (130 = 46 admin + 84 sistema); linha Haiku da certificacao: contador **colabs_nao_certificados = 285** (emp 2 210/414, emp 3 50/120, emp 4 9/20), o copiloto responde "a folha de 09 esta certificada?" pela lavra (sem lavra: "nao medida", nunca "sim"); golden +3 (certificacao; colab 709 em 15/09 e em 04/09).
 - **Na esteira, em ordem** (uma cadeia por vez):
   1. **NO AR 21:4x** C5-FABRICA (familia chamado, cobranca): a fabrica de perguntas le o dia do chamado pelo juiz; medido antes, 8 chamados de ausencia recebiam pergunta de qualquer dia. Registro do chamado 52 -> 50.
+  2. **UI-FIO-CABECALHO: smoke Ronald OK (17/09 00:2x) + 3 ajustes.** Ajuste 3 (a linha encostava no botao "Ficha completa" e ele quebrava; bloco com teto de largura, botao sem quebra, fonte 1 passo menor) **no ar 00:4x** (restart ui; 66 selos verdes; provado no processo do ui). Ajustes 1 ("6x1milano 6x1" vira "6x1 · milano") e 2 ("Londrina/PR/PR") sao codigo da ficha: sobem pelo deploy na fila das 04:50 (UIFIC3, primeira da fila) -- codigo so vai ao ar pelo deploy, e o ensaio de hoje so existe depois das 04:15. Em seguida a UIFIC-FRONT leva o front aprovado ao git (fatias esperando smoke: -1).
   2. **UI-FIO-CABECALHO -- "nao aparece" (conferido pelo Ronald 23:2x): O QUE ERA.** Medido 23:4x: o partial estava no container (mesmo arquivo do host) e o modal que o painel carrega (`/chamados/modal/<id>/`, aberto pelo Ronald as 23:27 e 23:30) o renderizava. Mas o nome que o admin ve fica no TOPO FIXO do painel, preenchido pelo JS, e o bloco vinha no CONTEUDO, que o JS rola ate o card clicado (ou ate o fim) -- o cabecalho saia de vista. Cura: o painel sobe o bloco para o topo fixo, abaixo do nome, tambem depois de cada acao (65 selos verdes na copia da arvore viva, sintaxe do JS conferida). **Cabecalho no ar, aguardando smoke (17/09 00:0x, `docker compose restart ui`).** Prova no processo do ui: o painel traz o espaco no topo fixo e o JS que sobe o bloco (na abertura e depois de cada acao); o modal do colab 248 (o que o Ronald abriu) traz o bloco com a linha "6x1 · 07:30-16:30 · pausa 12:00-13:00 · desde 21/07/2026". Ctrl+F5 no painel antes de conferir. De carona: "Londrina/PR/PR" (21 de 26 pracas ja trazem a UF) -- ajuste na esteira.
      Antes: (23:0x: o texto no formato do print -- escala numa linha com dias e desde dd/mm/aaaa, posto · praca/UF, "tel · app: PWA iOS, ultima batida dd/mm hh:mm", o vinculo de hoje em negrito na ficha completa; o rotulo da plataforma entrou junto) (22:35: partial aplicado na arvore e `docker compose restart ui`, corte Ronald; compacto, 3 linhas, a ficha completa com uma linha por vinculo; 13 selos verdes na copia da arvore viva antes do restart). Parte do git no ar desde 22:0x. UI-FIO-CABECALHO (tela): a ficha do core devolve as 3 linhas prontas (escala · horario · pausa · desde; posto · praca; telefone · app com a ultima batida) e uma linha por vinculo; o painel do fio e a ficha completa recebem a MESMA ficha; o copiloto passa a ler a ficha (a rota existia sem cliente) e responde "qual a escala e o posto de <nome>?". **O partial e os dois templates ficam fora do git, esperando o smoke do Ronald** (64 testes verdes com o front aplicado, teto de queries do modal incluido).
   3. **NO AR 22:3x** UI4-REABRIR (**bug**, P7.1): "Reabrir questionario nao aciona". Medido: 4 cliques de 4 hoje caiam em "Nenhuma disputa aberta" -- a disputa mora no chamado-container e o card clicado e o do furo; o botao aparece pelo juiz do fio e a view procurava outra coisa. Cura: a view pergunta ao mesmo juiz.
@@ -349,7 +366,7 @@ login. Os textos vêm sem acento, como estão no código.
 
 ## ESPERANDO RONALD / DP / SUPERVISAO
 
-- **Ronald, antes de qui 14:00: smoke do cabecalho (painel do fio + ficha completa).** O deploy agendado da geofence tambem toca `modal_fio.html`; sem o smoke, o commit dela leva junto as linhas do cabecalho que estao no ar fora do git (o desfazer dela ja nao apaga o cabecalho). Se preferir separar, diga e a geofence espera.
+- ~~Smoke do cabecalho~~ -- **feito pelo Ronald 00:2x** (a geofence de 14:00 nao leva mais o front de carona: ele entra no git antes, na UIFIC-FRONT).
 - DP: Pautas 140-149 (feriado em 5x2/6x1; colab 143 sem posto), 89/90/91 (SLA), 93/94/95 (HE 12x36), 83/84/85 (T4); emp 2 06 e 07/2026 — folha fora do sistema?
 - Supervisao: Pauta 92 (colab 49) e as 39 Pautas de posto (notificacao do app).
 - Admin: validar a contestacao de 14/09 do colab 901.
