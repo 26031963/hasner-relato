@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 16/09 20:23. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 16/09 23:03. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -16,6 +16,8 @@ _Estado de 16/09 20:23. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 | deploys_agendados | 1 (qui 17/09 14:00) | — | Code |
+| colabs_nao_certificados (09/2026) | 285 | 0 | Code |
+| chamados_vivos_sem_pergunta_no_app | 130 (46 admin, 84 sistema) | 0 | admin/sistema |
 
 ## CERTIFICACAO 09/2026 (fechada 18:09; so leitura, na sombra, nenhum deploy) -- LER ANTES DAS 08:00
 
@@ -89,7 +91,7 @@ Gate temporal agora e do SISTEMA (cron de 1 disparo na VM), nao de processo do C
 
 - **qui 17/09 14:00** — rotulo qui1709: GEOFENCE-VALIDAR-E-RECUSAR, depois FURO-COBRANCA-MORTA-REABRE, em sequencia. Cada uma: testes → DIFF de folha → deploy → DRY do passivo. Ao fim grava o arquivo de sinal, escreve uma linha aqui por fatia e remove o proprio agendamento. Os dois --apply seguem esperando o "!".
 
-## NO AR HOJE (16/09) — 22 fatias
+## NO AR HOJE (16/09) — 27 fatias
 
 | hora | fatia | o que mudou |
 |---|---|---|
@@ -122,6 +124,12 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
 - **FURO-COBRANCA-MORTA-REABRE** (corte Ronald: 117): a regra do chamado do dia vale para o dia inteiro com cobranca encerrada. **PRONTA 16:26** (vermelho 3; suite 6.928; DIFF de folha 0). Deploy tambem qui 14:00; o DRY do passivo sai no deploy.
   - Achado no ensaio: pela lei E1 (03/09), chamado do dia FECHADO pelo admin tambem renasce quando o furo segue. Mantido; o contador foi alinhado a isso.
 | 20:2x | GATE-DE-DEPLOY (infra, sem dinheiro) | deploy com hora marcada vive em agendamento de disparo unico na VM, nao em processo da sessao; arquivo de sinal + linha aqui ao terminar; contador deploys_agendados no placar |
+| 21:1x | PERGUNTA-NO-APP-CAUSAS + CERTIFICACAO-LINHA-HAIKU (tela) | retencao do chamado com nome e dono, contador por causa; "a folha de 09 esta certificada?" no copiloto; colabs_nao_certificados = 285 no placar |
+| 21:4x | C5-FABRICA (familia chamado) | a fabrica de perguntas le o dia do chamado pelo juiz (8 chamados de ausencia) |
+| 22:0x | UI-FIO-CABECALHO (tela; front espera smoke) | a ficha do core devolve o cabecalho pronto; o copiloto le a ficha |
+| 22:3x | UI4-REABRIR (bug) | "Reabrir questionario" no card do furo volta a cobrar/reabrir (4 cliques de 4 caiam em "nenhuma disputa") |
+| 22:35 | UI-FIO-CABECALHO front (restart ui, corte Ronald) | cabecalho compacto no painel do fio e na ficha completa -- aguardando smoke |
+| 23:0x | UI-FIO-CABECALHO formato (tela) | texto do cabecalho como no print; app pelo rotulo |
 
 ## ATOS EM PROD HOJE (com aval)
 
@@ -167,6 +175,26 @@ Todas com suite verde, regua e deploy OK; as de dinheiro com DIFF de folha 0.
   - 15/09: o juiz da jornada nao via falta, e a ata (que acusa) nao era lida.
 - **Frota**: 552 de 1.247 chamados vivos de furo sem pergunta no app (emp 2: 425, emp 3: 114, emp 4: 13). Causas: guarda de turno pareado 220, pergunta de outro marco ja materializada 110, origem de outro dia 99, jornada sem falta com a ata acusando 63, dia de hoje ainda sem ata 36, outros 34.
 - **Cura no ar** (PERGUNTA-NO-APP). **Passivo aplicado 18:28** (aval Ronald, sem push, com trilha): 433 chamados em 144 colabs. Contador 515 -> 129. Sobram: 46 com pergunta do mesmo marco e dia ja encerrada e a ata ainda apagada (conferencia humana, a fabrica nao repergunta), 39 com a pergunta viva num outro chamado do mesmo dia (a pergunta esta no app), 34 fora da fabrica, 7 cobertos por ausencia, 3 sem dia.
+
+- **Conferencia 20:3x (so leitura, pelo mesmo juiz do app)** — pergunta no app do colab 709:
+  - **14/09: sim** (pergunta 27390, volta do intervalo);
+  - **15/09: sim** (27391 saida do intervalo e 27392 saida);
+  - **04/09: NAO.** O dia entrou nos 46 abaixo: as 4 perguntas foram respondidas e validadas em 10/09, mas a da volta do intervalo foi fechada como "chamado encerrado" sem virar batida. A ata segue acusando a volta e o chamado 20138 segue em analise. Vai ao admin (Pauta DP 169) e ao golden do dia 04/09.
+
+## CAUDA DA NOITE (16/09)
+
+- **Os 46 "pergunta encerrada, marco apagado" viraram Pauta DP 169 a 174** (por empresa e competencia, com os ids dos chamados e o dia): o colaborador ja respondeu a pergunta daquele marco, a ata segue acusando e o chamado segue vivo; o app nao pergunta de novo. Quem decide o dia e o admin.
+  - **ACHADO para o Ronald numerar**: em 13 dos 46 a pergunta respondida e validada foi fechada como "chamado encerrado" com o chamado ainda vivo. Chamados: 18149, 18323, 19142, 19382, 20138, 20319, 20436, 20798, 21001, 21012, 21290, 21332, 21660.
+- **Contador na hora (130)**: 46 pergunta encerrada com marco apagado (dono admin) · 38 pergunta viva em outro chamado · 36 fora da fabrica = 28 com pergunta do proprio chamado ja encerrada + 8 turnos que a saida do dia seguinte fechou (dono sistema) · 7 cobertos por ausencia · 3 sem dia.
+- **NO AR 21:1x** (PERGUNTA-NO-APP-CAUSAS + CERTIFICACAO-LINHA-HAIKU, tela): cada causa com nome e dono no registro do chamado; contador por causa no placar (130 = 46 admin + 84 sistema); linha Haiku da certificacao: contador **colabs_nao_certificados = 285** (emp 2 210/414, emp 3 50/120, emp 4 9/20), o copiloto responde "a folha de 09 esta certificada?" pela lavra (sem lavra: "nao medida", nunca "sim"); golden +3 (certificacao; colab 709 em 15/09 e em 04/09).
+- **Na esteira, em ordem** (uma cadeia por vez):
+  1. **NO AR 21:4x** C5-FABRICA (familia chamado, cobranca): a fabrica de perguntas le o dia do chamado pelo juiz; medido antes, 8 chamados de ausencia recebiam pergunta de qualquer dia. Registro do chamado 52 -> 50.
+  2. **cabecalho no ar, aguardando smoke** (23:0x: o texto no formato do print -- escala numa linha com dias e desde dd/mm/aaaa, posto · praca/UF, "tel · app: PWA iOS, ultima batida dd/mm hh:mm", o vinculo de hoje em negrito na ficha completa; o rotulo da plataforma entrou junto) (22:35: partial aplicado na arvore e `docker compose restart ui`, corte Ronald; compacto, 3 linhas, a ficha completa com uma linha por vinculo; 13 selos verdes na copia da arvore viva antes do restart). Parte do git no ar desde 22:0x. UI-FIO-CABECALHO (tela): a ficha do core devolve as 3 linhas prontas (escala · horario · pausa · desde; posto · praca; telefone · app com a ultima batida) e uma linha por vinculo; o painel do fio e a ficha completa recebem a MESMA ficha; o copiloto passa a ler a ficha (a rota existia sem cliente) e responde "qual a escala e o posto de <nome>?". **O partial e os dois templates ficam fora do git, esperando o smoke do Ronald** (64 testes verdes com o front aplicado, teto de queries do modal incluido).
+  3. **NO AR 22:3x** UI4-REABRIR (**bug**, P7.1): "Reabrir questionario nao aciona". Medido: 4 cliques de 4 hoje caiam em "Nenhuma disputa aberta" -- a disputa mora no chamado-container e o card clicado e o do furo; o botao aparece pelo juiz do fio e a view procurava outra coisa. Cura: a view pergunta ao mesmo juiz.
+- **Familia chamado, o que fica medido e parado** (nao sobe hoje):
+  - dia cru no sinal que rejulga a celula quando o chamado muda de estado: com o juiz, mais chamados disparam o cartorio -- espera o fim do congelamento (qui 14:00);
+  - dia cru no auditor de invariantes: com o juiz, o alarme "chamado vivo em dia coberto por ausencia aprovada" ganharia ~25 casos em modulos que nao cobram dia (revisao de desligamento, sem previsao de escala, geofence). Precisa de corte: o alarme olha so modulos de cobranca de dia?
+- **UI-5 (painel colapsado)**: ja no ar desde 13/09 (pacote do smoke que entrou no git): 1 linha + Validar/Rejeitar/Corrigir, o resto atras de "detalhes do caso".
 
 ## PASSIVO DO FURO SEM COBRANCA — APLICADO (aval Ronald 16/09, 15:41-15:44)
 
