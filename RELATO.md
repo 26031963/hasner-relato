@@ -114,6 +114,9 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
 
+- **Corte Claude 09:2x, aplicado nos scripts:** (1) **fila sem teto** -- a cadeia espera a vez o tempo que for (a trava da regua tambem); a guarda continua sendo a conferencia da arvore na hora de copiar. (2) **raia TELA = UMA passada de regua**: a 1a passada acusava o teste novo da propria fatia como "fora do git", ficava FALHOU e a 2a passada rodava a suite inteira de novo (21 min na TEXTO-FURO); agora os testes novos entram no indice por intencao antes da regua, ela fica verde na 1a e as passadas pos-commit viram carimbo. Vale para as fatias que ainda nao comecaram a cadeia; as 4 que ja esperavam a vez (TRANCA-TELA, FABRICA-SEM-FIO-MUDO, VALIDAR-DIZ-O-SEU, COBRAR-DIA) seguem na versao antiga -- reinicia-las foi barrado pela permissao (ver abaixo). (3) **#22929 e #22930 -> Pautas DP 178 e 179** (ancoradas no chamado, mesma classe dos 46 "marco apagado"): nao se repergunta; o DP decide o dia no proprio chamado.
+- **CRON-VIGIA:** vermelha as 09:26 -- o command novo `cron_quebrado` nao estava declarado fora do pipeline (contrato B6). Cura no construir; como agora mexe em `config/crons.py` (o mesmo da FABRICA-SEM-FIO-MUDO), a 2a rodada espera a FABRICA subir, e refaz os testes sozinha se a arvore andar antes da copia (ate 3 vezes).
+- **09:23 TEXTO-FURO NO AR** (b355ca25): chamado de furo de dia passado passa a dizer "dd/mm -- marco HH:MM (volta do intervalo) sem batida", sem "atraso atual". Os ja abertos com o texto antigo (513) ficam -- passivo com DRY e aval. Contador `chamados_vivos_sem_pergunta_no_app` = 141 depois do deploy (138 as 09:16; os novos furos do dia entram e saem pelo ciclo). *Para a admin:* "o texto dos chamados novos de dias passados agora diz o dia e o marco; os antigos seguem com o texto velho".
 - **A `manha17` NAO disparou as 08:20**: a linha do cron tinha 1.168 caracteres (12 caminhos de fatia) e o cron ignora linha de mais de 1.000, sem aviso. A de 08:40 teria caido igual; a `qui1709` (2 fatias, ~290) cabe e segue valendo. Cura do agendador (lista de fatias em arquivo, linha curta) vai para a fatia RAIAS. A fila da manha espera o disparo manual. Correm sozinhas, na frente: AUS-SALVAR-ERRO (lancada 08:23, 3 vermelhos antes, suite 6.994 verde) -> TRANCA-TELA -> SOLIC-FLAG.
 - **TELA** = regua + publica, sem ensaio da sombra, sobe a qualquer hora (fora das janelas 23:20-00:00 e 03:40-04:45). **DINHEIRO** = ensaio + DIFF de folha + janela. Fatia de tela nunca espera fatia de dinheiro; cabeca travada para so a raia de dinheiro.
 - **Ja valendo na fila da manha:** as 12 fatias de tela publicam com `deploy --sem-sombra "raia TELA <fatia>"` (o motivo fica na trilha do deploy) e cada uma so espera a anterior TERMINAR -- a dependencia entre elas e guardada pela conferencia da arvore e pelas contagens de cada fatia, nao por marcador. A raia de dinheiro hoje: `qui1709` 14:00 (geofence, furo-cobranca) e AUS-ESCRITA-1 (espera a janela).
@@ -178,6 +181,8 @@ Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou v
 
 ## DEPLOYS AGENDADOS
 
+- 17/09 09:26 deploy agendado manha17, fatia cronvigia: rc=1 -- NAO LANCADA: rodar cronvigia: GREEN parcial vermelho 09:26
+- 17/09 09:23 deploy agendado manha17, fatia textofuro: rc=0 -- TEXTOFURO-FIM
 - 17/09 06:50 deploy agendado noite17, fatia c1msg: rc=1 -- NAO LANCADA: a CAUDA-G nao terminou no ar
 - 17/09 06:50 deploy agendado noite17, fatia caudag: rc=1 -- NAO LANCADA: a F7B nao terminou no ar
 - 17/09 06:50 deploy agendado noite17, fatia f7b: rc=1 -- NAO LANCADA: a PROPOSTA-EVIDENCIA nao terminou no ar
