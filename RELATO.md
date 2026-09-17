@@ -112,8 +112,21 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 - **O ensaio da sombra das 04:15 reproduziu a mesma quebra** (status FALHOU, 1 erro) -- e sem ensaio OK nenhum deploy passa hoje. Por isso a fila da noite (10 fatias) NAO subiu: todas desistiram as 06:50 sem mexer em nada. Pelo mesmo motivo o deploy agendado da geofence das 14:00 tambem nao passaria.
 - **CURA NO AR 07:51** (TERMO-FECHAR, `deploy --sem-sombra` com aval do Ronald): a vassoura do chamado resolvido deixa aberta a disputa com resposta sem veredito e o comando segue (teste vermelho antes; suite 6.990 verde). **O `termometro_regua` de hoje rodou de novo pelo envelope do cron as 07:51 e terminou bem** (exit 0, 76 s; 91 avisos de cadastro tocados, 26 retratados); a disputa 5082 segue aberta esperando o veredito do admin. Sombra sendo refeita agora; em seguida `manha17` as 08:40.
 
+## FILA ESTRUTURAL (Ronald 12:3x: nunca para) -- `registro_chamado` 48 -> 0
+
+Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela da manha no meio (UIFIC3, UIFIC-FRONT, F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G) -> RESPOSTA-TARDIA (-1) -> INTEL-JUIZ (-2) -> C5-CANAL (-4) -> AGIR-POR-DONO (-3) -> WORKLIST-ATA -> fabrica por evento. Ao lado, com arquivos proprios: FABRICA-PELA-ATA (com o seu "!"), TABULEIRO.
+- `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01). Proximo: UIFIC3 (sem registro) e C5-EMISSORES (-> 42).
+
+## FILA BO (admin, Ronald, Fernando) -- medir em segundo plano; so bug provado de codigo entra, ATRAS da estrutural em curso
+
+- **GEO-PAINEL** (bug, Ronald 12:2x) -- o pino de GPS do painel situacional parou de abrir o mapa em **05/09, commit 1c109378** ("Censo de app ganha a coluna ... estado do aparelho"): a coluna "app" entrou antes de "push" e o GPS foi da posicao 7 para a 8; o script `geo-colab-map.js` achava a coluna pela POSICAO (`cellIndex 7`) e o clique passou a cair fora, calado. O mapa nao tem URL propria (abre por JS) e o "Ver no mapa" do fio ja usa a mesma engine -- fonte unica, so o gatilho do painel morreu. Cura: a celula ganha nome (`data-col="geo"`) e o script procura o nome. **Na esteira, atras da estrutural em curso; sobe para o seu smoke nas duas cascas e so entra no git depois dele.**
+- **LOGIN-APP** (bug, Fernando iOS) e **DEPLOY-ESPERA-CRON** (bug, vigia de crons) -- prontas; ja estavam esperando a vez antes desta regra.
+- **Conta de teste iOS por empresa** -- decisao do Ronald (ver "Contratos do app").
+
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
 
+- **12:37 FABRICA-PELA-ATA NO AR** (168073c1) e **lote aplicado com o seu "!"**, sem push: **957 perguntas, 8 disputas e 8 chamados**. Contador `chamados_vivos_sem_pergunta_no_app` 153 -> 141. Dos 10 furos de 16/09 que so a ata alcancava, **6 chegaram ao app** (#22852, #22857, #22922, #22924, #22925, #22926); **4 seguem fora** com a causa "fabrica nao rodou" (#22474, #22887, #22891, #22927) -- medicao na fila BO. *Para a admin:* "mais perguntas dos dias com furo foram para o app, sem notificacao".
+- **12:24 FORM-CATALOGO NO AR**: "Nova solicitacao" do admin com 7 areas (supervisao, dp, rh, cadastro, ti, seguranca, hasner), todas com "Outros"; Beneficios grava o modulo `beneficio`; em "Colaborador" o tipo vem do catalogo (ausencia, esclarecimento de um dia, regularizacao externa, agenda do dia, mensagem do DP), com o dia do fato quando o tipo pede. **Esperando o seu smoke.** *Para a admin:* "em Nova solicitacao ha RH, Cadastro e Suporte Hasner; em Colaborador escolha o tipo e, quando pedir, o dia".
 - **12:13 TRANCA-DE-VERDADE NO AR** (0ebf3fed) -- a regra vale para toda tranca daqui em diante (trancar fecha, reabrir devolve). **Passivo, DRY por empresa x competencia -- espera o seu "!":**
 
   | empresa | competencia | chamados | perguntas (respondidas -> Pauta DP) | disputas | acoes |
