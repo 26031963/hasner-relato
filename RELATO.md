@@ -114,6 +114,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
 
+- **ORDEM (Ronald 11:0x) -- nada novo na frente sem bug provado:** TRANCA-DE-VERDADE -> fila da manha (C5-AUDITOR, UIFIC3, UIFIC-FRONT, C5-EMISSORES, C5-TELA, F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G, C1-MSGDP) -> RESPOSTA-TARDIA -> INTEL-JUIZ -> C5-CANAL -> AGIR-POR-DONO -> WORKLIST-ATA -> fabrica por evento. **`registro_chamado` (alvo 0), a cada fatia:** 11:0x = **48** (C5-AUDITOR copiada, na regua; 50 antes dela) · 11:01 C5-AUDITOR NO AR (fcbfc867) = **48**. *Como a ordem e garantida:* a trava da cadeia nao e fila; a fila da manha restante e a FORM-CATALOGO so entram depois da TRANCA-DE-VERDADE (portao por arquivo). As quatro que ja esperavam a vez antes da ordem (SOLIC-FLAG, TRANCA-TELA, CRON-VIGIA, FABRICA-PELA-ATA) podem passar antes dela.
 - **10:47 COBRAR-DIA NO AR** (liberado por voce): botao "Cobrar este dia (pergunta no app)" na caixa do Resolver dia. **Esperando o seu smoke.** *Para a admin:* "no calendario, em Resolver dia, o botao Cobrar este dia pede ao colaborador pelo app quando o sistema nao cobrou".
 - **TRANCA-DE-VERDADE (P7.1, 10:5x) -- medido e em testes, na frente da fila:**
   - **Medido (so leitura):** competencias trancadas = 08/2026 (emp 2, 3, 4) e 07/2026 (emp 3, 4); emp 2 07/2026 e as 06/2026 NAO estao trancadas. Com dia nelas: **172 chamados vivos** (43 na fila: validar 24, decidir 12, cobrar 7; 38 sem verbo; 64 arquivados; 2 historico) e **249 perguntas vivas** (224 respondidas, 25 sem resposta).
@@ -143,6 +144,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 - **(3b) FORM-CATALOGO na esteira (corte Claude 09:1x)** -- sobe depois da SOLIC-FLAG (as duas mexem na mesma view). O catalogo de modulos virou a fonte: 7 areas por departamento dono (supervisao, dp, rh, cadastro, ti, seguranca, hasner), todas com "Outros"; `abrivel_por_humano` marca os seis modulos. Leitura do corte: so `beneficio` casa 1:1 com uma categoria de quem abre para si (dp -> Beneficios, grava `beneficio`); os outros cinco falam de OUTRA pessoa e viraram o "Tipo" do "abrir no fio de uma pessoa" (ausencia, esclarecimento de um dia, regularizacao externa, agenda do dia, mensagem do DP -- padrao); tipo de um dia so pede o "Dia do fato". Esperando o seu smoke depois de subir. *Para a admin:* "em Nova solicitacao ha RH, Cadastro e Suporte Hasner, todos com Outros; em Colaborador escolha o tipo (e o dia, quando pedir)".
 - **FABRICA-PELA-ATA pronta (corte Claude 09:1x)** -- espera a FABRICA-SEM-FIO-MUDO subir; depois roda os testes, mede o lote NA SOMBRA (arvore do ar contra a nova, mesma copia) e para no **seu "!" proprio**. Cada marco faltante da ata vira o seu motivo; sem ata lavrada o dia espera; sem escala vigente a lei segue respondendo.
   - **10:21 PRONTA, esperando o seu "!" -- DRY na sombra (copia de prod das 04:15, antes do lote de hoje):** arvore do ar = 807 perguntas em 141 colaboradores (o lote que ja foi aplicado as 09:16); **arvore nova (pela ata) = 2.821 alvos em 247 colaboradores, dos quais 1.654 perguntas nasceriam** (o resto ja tem a pergunta do mesmo fato) -- por empresa: emp2 2.498 + 4 fio mudo, emp3 309 + 3, emp4 7. Celulas que acusam: 1.833 pela lei x 6.035 pela ata (a ata acusa cada marco apagado, a lei so um motivo por dia). **Liquido sobre o que ja nasceu hoje: ~850 perguntas a mais, em ~106 colaboradores a mais.** Com o "!", a fatia sobe e o lote nasce no cron de amanha as 06:38 (sem push, como o de hoje) -- ou aplico na hora, se voce disser.
+  - **10:56 "!" do Ronald (--apply sem push):** fatia liberada; o lote nasce na propria cadeia, logo depois do deploy, com o contador antes/depois.
 - **Esteira P7.1:** AUS-SALVAR-ERRO em cadeia (regua), TRANCA-TELA e SOLIC-FLAG na fila atras dela. A `manha17` segue esperando o disparo manual.
 
 ## PRINCIPIO TABULEIRO (Ronald 17/09 09:5x)
@@ -219,6 +221,7 @@ Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou v
 
 ## DEPLOYS AGENDADOS
 
+- 17/09 11:01 deploy agendado manha17, fatia c5aud: rc=0 -- C5A-FIM
 - 17/09 09:26 deploy agendado manha17, fatia cronvigia: rc=1 -- NAO LANCADA: rodar cronvigia: GREEN parcial vermelho 09:26
 - 17/09 09:23 deploy agendado manha17, fatia textofuro: rc=0 -- TEXTOFURO-FIM
 - 17/09 06:50 deploy agendado noite17, fatia c1msg: rc=1 -- NAO LANCADA: a CAUDA-G nao terminou no ar
@@ -368,6 +371,15 @@ Pela porta do cron, com trilha "passivo furo sem cobranca, aval Ronald 16/09" em
 - **Corte (Claude)**: fatia GEOFENCE-VALIDAR-E-RECUSAR. O furo de geofence volta a ser cobranca do admin (nasce aberto, verbo Validar); porta de RECUSA com motivo obrigatorio (retrata a batida pela porta unica, trilha "fora do posto"); aceitar/advertir/recusar funcionam tambem no que esta "registrado". A batida continua nunca barrada na hora. A recusa tira batida da folha, entao e dinheiro: sobe quinta 14:00. Os 231 registrados passam para "em analise" por DRY + "!".
 
 ## CONTRATOS DO APP
+
+### Login iOS com conta sem colaborador (BO Fernando 17/09) -- medido, cura na esteira (LOGIN-APP)
+
+- **A conta:** a "conta de teste JSP" usada no iOS e o **usuario 656**, uma conta de **gestao** (superusuario, grupo gestor, supervisao em 4 setores) **sem colaborador ligado** -- sem situacao, empresa ou vinculo. Nao e conta de colaborador.
+- **As 3 rotas:** login, device-register e bater resolvem o colaborador pelo MESMO caminho (`request.user.colaborador`) -- nao sao tres juizes. O login tem um ramo proprio para admin sem colaborador: devolve 200 com `colaborador.id = null` e `perfil = "admin"`, e so barra admin no celular pelo User-Agent -- o app iOS se apresenta como `HasnerWK/1 CFNetwork/... Darwin/...`, sem "iphone"/"mobile", entao passou.
+- **Reproduzido na sombra** (mesmo token, transacao desfeita): device-register e bater dao 404 "Colaborador nao encontrado." com `X-Hasner-Client: ios`, sem o cabecalho e com `wv` -- **nao depende da plataforma**.
+- **Cura (LOGIN-APP, na esteira logo apos a TRANCA-DE-VERDADE):** com o cabecalho `X-Hasner-Client`, o login de conta sem colaborador responde **403 `conta_sem_colaborador`** -- "Conta sem colaborador ativo nesta empresa." (+ `erro_dica`). As tres rotas passam a dizer a mesma coisa para a mesma conta. De carona: `admin_em_mobile` dava 500 (chave errada na tabela de erros). Contrato no HANDOFF.
+- **Para o Fernando:** teste com uma conta de **colaborador** (usuario ligado a colaborador ativo com vinculo); a 656 e de gestao. Na tela de login, mostre `erro_msg` e `erro_dica`.
+- **Conta de teste iOS por empresa -- espera decisao do Ronald:** um colaborador de teste em producao entra no fechamento e no TXT da folha. Opcoes: (a) usar um colaborador real que o DP indicar, por empresa; (b) criar colaborador de teste com uma marca que o tire do fechamento/TXT (fatia de dinheiro, depois da janela). Nada foi criado.
 
 _Para o Fernando (app iOS). A mesma coisa está em app/docs/HANDOFF.md, seção "Plataforma do app"._
 
