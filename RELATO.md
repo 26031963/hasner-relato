@@ -115,13 +115,15 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 ## FILA ESTRUTURAL (Ronald 12:3x: nunca para) -- `registro_chamado` 48 -> 0
 
 Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela da manha no meio (UIFIC3, UIFIC-FRONT, F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G) -> RESPOSTA-TARDIA (-1) -> INTEL-JUIZ (-2) -> C5-CANAL (-4) -> AGIR-POR-DONO (-3) -> WORKLIST-ATA -> fabrica por evento. Ao lado, com arquivos proprios: FABRICA-PELA-ATA (com o seu "!"), TABULEIRO.
-- `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01). Proximo: UIFIC3 (sem registro) e C5-EMISSORES (-> 42).
+- `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01) · 12:59 UIFIC3 no ar (sem registro; a UF uma vez so e a escala como tipo e apelido -- os ajustes 1 e 2 do seu smoke de 00:2x) = 48. UIFIC-FRONT: a copia dos testes falhou (pasta nao recriada no script), corrigida e relancada. Proximo no registro: C5-EMISSORES (-> 42).
 
 ## FILA BO (admin, Ronald, Fernando) -- medir em segundo plano; so bug provado de codigo entra, ATRAS da estrutural em curso
 
 - **GEO-PAINEL** (bug, Ronald 12:2x) -- o pino de GPS do painel situacional parou de abrir o mapa em **05/09, commit 1c109378** ("Censo de app ganha a coluna ... estado do aparelho"): a coluna "app" entrou antes de "push" e o GPS foi da posicao 7 para a 8; o script `geo-colab-map.js` achava a coluna pela POSICAO (`cellIndex 7`) e o clique passou a cair fora, calado. O mapa nao tem URL propria (abre por JS) e o "Ver no mapa" do fio ja usa a mesma engine -- fonte unica, so o gatilho do painel morreu. Cura: a celula ganha nome (`data-col="geo"`) e o script procura o nome. **Na esteira, atras da estrutural em curso; sobe para o seu smoke nas duas cascas e so entra no git depois dele.**
-- **LOGIN-APP** (bug, Fernando iOS) e **DEPLOY-ESPERA-CRON** (bug, vigia de crons) -- prontas; ja estavam esperando a vez antes desta regra.
+- **12:48 LOGIN-APP NO AR**: login do app (cabecalho `X-Hasner-Client`) com conta sem colaborador responde 403 `conta_sem_colaborador`; `admin_em_mobile` deixou de dar 500. *Para o Fernando:* "teste com uma conta de colaborador; a de gestao agora recebe 403 conta_sem_colaborador no login -- mostre erro_msg e erro_dica".
+- **13:18 DEPLOY-ESPERA-CRON NO AR** (f1da40f5): o reinicio do deploy espera o cron em curso (ate 10 min) e a raia TELA recarrega a copia pelo HUP gracioso -- deploy nao derruba mais cron.
 - **Conta de teste iOS por empresa** -- decisao do Ronald (ver "Contratos do app").
+- **Os 4 furos de 16/09 que seguem fora (medido 12:5x, so leitura):** #22474 ja tem pergunta viva ligada (29908) -- nasceu depois da primeira leitura. **#22887, #22891, #22927 -- BUG PROVADO de codigo:** a ata acusa a volta do intervalo e a fabrica tira o motivo certo (`intervalo_volta`), mas o escritor (`gerar_perguntas_disputa`) so deduplica por DIA os motivos da lista `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET` (ancora_ausente, orfao_14h, saida_sem_entrada); os de INTERVALO caem no dedup "uma pergunta por disputa e motivo". Prova: colab 890 tem uma disputa so (3102, aberta) com seis perguntas de volta do intervalo de outros dias (08/2026) -- a de 16/09 nunca nasce; o DRY da fabrica para o dia da 6 alvos e 0 perguntas. **Fatia INTERVALO-DATADO** (fila BO, atras da estrutural): intervalo_saida e intervalo_volta deduplicam por dia, como os outros motivos datados; antes, medir quantos dias com o intervalo acusado estao sem pergunta por isso. **Medido 13:2x: 1.107 marcos de intervalo acusados sem pergunta na competencia corrente, 142 colaboradores** (emp 2: saida 488 + volta 498; emp 3: 55 + 56; emp 4: 5 + 5). Fatia montada (a lista dos auditores nao muda; a nova vale so para o dedup do escritor), em testes; **espera o seu "!"** -- o lote nasce no cron de amanha as 06:38, sem push.
 
 ## DUAS RAIAS (corte Ronald 17/09 08:1x)
 
@@ -251,6 +253,8 @@ Uma cadeia por vez, espera por arquivo de sinal. Nada em folha, ata, batida ou v
 
 ## DEPLOYS AGENDADOS
 
+- 17/09 12:59 deploy agendado manha17, fatia uifront: rc=1 -- NAO LANCADA: copia falhou
+- 17/09 12:59 deploy agendado manha17, fatia uific3: rc=0 -- UIFIC3-FIM
 - 17/09 11:01 deploy agendado manha17, fatia c5aud: rc=0 -- C5A-FIM
 - 17/09 09:26 deploy agendado manha17, fatia cronvigia: rc=1 -- NAO LANCADA: rodar cronvigia: GREEN parcial vermelho 09:26
 - 17/09 09:23 deploy agendado manha17, fatia textofuro: rc=0 -- TEXTOFURO-FIM
