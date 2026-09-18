@@ -83,6 +83,28 @@ Por colab (os 12 com mais assinaturas):
 
 Proximo (fatia): o servico vira `anomalias_do_colab` / `anomalias_da_frota` (o copiloto comeca por elas em "o que esta acontecendo com o ponto do X"), contador no placar e cron noturno como vigia; cada assinatura com o dono acima (cadastro -> Pauta supervisao automatica; juiz -> RED; tela -> fila).
 
+## LISTA-PROPOSTAS x ESMERIL (18/09 19:1x, so leitura) -> fatia CADASTRO-X-REALIDADE na esteira
+
+A tela "Escalas propostas (LIMBO)" (o PDF do Plano de Escalas) lista **69** colabs; so **37 dos 270** que o ESMERIL acusa aparecem la, **233 ficam de fora**. Por assinatura (colabs na tela LIMBO / colabs no esmeril):
+
+| A1 | A2 | A3 | A4 | A5 | A6 | A7 | A8 | A9 | A10 |
+|---|---|---|---|---|---|---|---|---|---|
+| 0/22 | 0/36 | 4/22 | 14/65 | 12/65 | 16/53 | 18/95 | 0/47 | 3/38 | 0/89 |
+
+E o inverso: **32** colabs da tela LIMBO nao carregam assinatura nenhuma -- a escala sem folga cadastrada nao aparece no ponto como repeticao. Viram a **A11** (escala sem folga cadastrada, dono cadastro).
+
+Fatia (raia tela, smoke Ronald): a tela vira a UNICA lista "Cadastro x realidade" -- fonte = as assinaturas do esmeril (a lavra da vigia), por posto -> vinculo -> assinatura -> acao (wizard do template, vinculo, Plano de Folgas, fio; as de juiz dizem "com o sistema"), o propositor v0 como coluna "destino sugerido"; PDF no botao padrao da casa com "o que este PDF contem" ao lado; o botao proprio morre (a rota antiga leva a lista nova); a lei do botao PDF passa a olhar o destino do link (o LIMBO escapou 18 dias por nao dizer "PDF"). Contador na tela = colabs_com_anomalia_recorrente (sobe com a A11: ate +32). O Haiku ("quais escalas estao erradas?") vem na fatia seguinte, depois do smoke.
+
+Para a admin: nada muda ainda; quando subir, "Escalas propostas (LIMBO)" no Plano de Escalas vira "Cadastro x realidade", uma lista so com o botao de cada caso.
+
+ESMERIL fatia 1 (19:24): a suite completa barrou -- o servico chaveava um turno pela data da batida (lei L1: o dia e o que o pareamento de turnos diz). Corrigido na A3 (turno partido na meia-noite) e relancada 19:28; a fatia 2 (Haiku) e o Cadastro x realidade esperam por ela. Para a admin: nada muda.
+
+**19:54 ESMERIL-ESPELHO NO AR** (08fe82ae): as 10 assinaturas por colab com dono, vigia noturna 08:30, contador `colabs_com_anomalia_recorrente` no placar, linhas de cadastro na Pauta da supervisao, ponte do copiloto. **19:31 AUSENCIA-TIPO-REJULGA-TELA** e **19:42 PAUTA-DO-DIA** no ar, esperando smoke. Aval PAUSA-DESLOCADA repetido as 19:5x: ja estava aplicado (18:31); o fechamento de 09 segue sem nenhuma linha em prod (nasce com a cura quando o DP processar); resto possivel = 21 cobrancas vivas dos 46 colabs afetados (turno aberto 10, saida sem entrada 5, orfao 14 h 5, volta do intervalo 1) -- DRY com a sombra refeita amanha cedo, aval proprio. Para a admin: nada muda; os dois smokes sao do Ronald.
+
+**20:35 LAVRA-FORA-DA-REGUA NO AR** (4f607348): regua verde de novo; ESMERIL-2 e CADREAL relancadas 20:36. Para a admin: nada muda.
+
+**20:13 REGUA VERMELHA PARA TODA FATIA** -- a 1a lavra de prod do ESMERIL (19:54) gravou o retrato da frota na arvore, que e montada nos containers da regua; os testes da Pauta da supervisao passaram a ler as linhas de PROD. A CADREAL caiu na regua (copia desfeita, prod intacto) e a ESMERIL-2 cai pelo mesmo motivo. Cura LAVRA-FORA-DA-REGUA (raia estrutural, 20:16): a suite le um arquivo proprio, nunca o de prod; ao subir, ESMERIL-2 e CADREAL relancam sozinhas. Para a admin: nada muda (so a esteira parou).
+
 ## CENSO-PORTAS-DE-ESCRITA (18/09 18:2x, so leitura)
 
 159 portas de escrita na tela (POST de humano; sem 2 redirecionamentos genericos do Django), lidas do codigo + do log de acesso do ui (desde 12/09, 8 dias) + LogAuditoria 14 dias (so acoes exclusivas da porta, autor gente: sem sistema/Code). **126 sem uso humano (79%); 159 sem smoke de clique (100%)** -- o unico navegador da casa (smoke chromium) abre pagina, nao clica.
