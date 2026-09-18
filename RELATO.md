@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 17/09 22:03. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 17/09 22:4x. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -10,6 +10,8 @@ _Estado de 17/09 22:03. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
 | juizes_por_varredura | 26 | 0 | Code |
+| leitores_narnia (telas que contam por conta propria) | 169 | 0 | Code |
+| cartao_x_txt_divergentes | 0 | 0 | Code |
 | divergencia_grade_x_cartorio | 1.498 | 0 | cartorio |
 | balao de chamados (Validar + Decidir) | 711 | — | admin |
 | fila de trabalho (aberto + em analise) | 1.321 | — | admin/colab |
@@ -115,10 +117,41 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 - **O ensaio da sombra das 04:15 reproduziu a mesma quebra** (status FALHOU, 1 erro) -- e sem ensaio OK nenhum deploy passa hoje. Por isso a fila da noite (10 fatias) NAO subiu: todas desistiram as 06:50 sem mexer em nada. Pelo mesmo motivo o deploy agendado da geofence das 14:00 tambem nao passaria.
 - **CURA NO AR 07:51** (TERMO-FECHAR, `deploy --sem-sombra` com aval do Ronald): a vassoura do chamado resolvido deixa aberta a disputa com resposta sem veredito e o comando segue (teste vermelho antes; suite 6.990 verde). **O `termometro_regua` de hoje rodou de novo pelo envelope do cron as 07:51 e terminou bem** (exit 0, 76 s; 91 avisos de cadastro tocados, 26 retratados); a disputa 5082 segue aberta esperando o veredito do admin. Sombra sendo refeita agora; em seguida `manha17` as 08:40.
 
+## CENSO-NARNIA (Ronald 17/09 noite; so leitura, raia TELA, nenhuma cura) -- `leitores_narnia` = **169**
+
+Tres varreduras (servicos e views; templates e JS; PDFs e ferramentas do copiloto), juntas sem repeticao: **339 lugares** que mostram numero ou estado a um humano. **A 130** leem juiz/ata/celula, **B 81** derivam por conta propria, **C 88** misturam, e 40 so contam o que o servidor ja mandou (herdam). Tabela completa por tela (arquivo, o que mostra, classe, de onde tira hoje, juiz que deveria ler): `CENSO_NARNIA.md`, junto deste relato.
+
+| ordem (o que o admin decide primeiro) | narnia (B+C) |
+|---|---|
+| 1 painel situacional (situacional, operacional, TV, dashboards) | 31 |
+| 2 quem cobrar (fila, balao, ranking de furos, worklist) | 29 |
+| 3 fechamento e folha | 21 |
+| 4 espelho individual, cartao, calendario, ficha | 41 |
+| 5 score e inteligencia | 11 |
+| 6 ferramentas do copiloto | 15 |
+| 7 demais relatorios | 21 |
+
+O que o mapa mostra, na ordem:
+1. **Situacional**: "em turno" e "turno aberto" em todas as telas de gestao (situacional, operacional, TV, os tres dashboards) saem do tipo da ultima batida ou de uma vivacidade propria -- nenhuma passa pelo juiz do turno aberto; so o app e o painel do colaborador leem o juiz. O placar lavrado so guarda a mesma derivacao.
+2. **Quem cobrar**: a central (verbos e balao) esta limpa. A fila por causa (toques, bloqueios para fechar) e a worklist re-pareiam batidas; a coluna FOLHA (APTO) do ranking re-julga o TXT com regra propria em vez do classificador do export; o ranking conta o furo da ata sem olhar o veredito.
+3. **Fechamento**: TXT, previa, retidos e raio-X leem a autoridade. Fora dela: "pode aprovar/pronto" (regra propria), a coluna "entra na folha" (copia a ordem do classificador), o PDF de validacao (soma o realizado gravado na ata) e a matriz de dias furados (ata sem veredito).
+4. **Espelho/cartao/calendario/ficha**: o motor recalculado ao vivo e a fonte que mais se repete fora do juiz (horas do espelho, app, ficha, selos do calendario, extrato). No cartao, so HE/noturno/intra/atraso/faltas vem da folha, e so quando o periodo e a competencia; troca de escala na janela faz todos os totais virem do motor.
+5. **Score**: o produtor e todo B (ausencia de qualquer tipo, mes civil); os leitores filtram por mes civil.
+6. **Copiloto**: "o que o dia diz" monta veredito proprio sem ler o da celula; ficha com motor ao vivo; ranking de HE escolhe a competencia sozinho.
+
+**Registro**: a lista entra como familia TELA (7a) no registro de juizes na mesma ordem -- e fatia de arvore (codigo + selo de contrato que conta a familia), vai para a raia TELA atras da TRANCA-DIZ-O-MESMO e da CARTAO-PELA-CELULA. Cerca de 30 dos 169 ja estao no registro por outras familias (mes civil, ausencia/ferias, feriado, fechamento) -- na fatia serao ligados, nao duplicados; a conta exata sai do selo.
+
+**Achados de passagem** (fila BO, nao nesta fatia): (1) KPI "pendentes" da confirmacao de holerite provavelmente sai vazio; (2) no fechamento, o filtro "Com Inc." esvazia a lista inteira (procura uma coluna que nao existe); (3) no painel operacional, posto com 2+ turnos abertos some do filtro "aberto"; (4) "chamados de emergencia" do dashboard sai de dois universos diferentes em duas telas; (5) contador de justificativas do situacional ignora o filtro de empresa. 15 pontos de JS acham elemento por posicao -- viram a lista de entrada do selo da CAUDA JS-CINTURAO.
+
+*Para a admin:* "o numero de uma tela e o de outra podem discordar hoje porque 169 lugares ainda fazem a conta por conta propria; o mapa esta pronto e vai sendo ligado ao juiz na ordem painel -> quem cobrar -> fechamento -> espelho -> score."
+
 ## FILA ESTRUTURAL (Ronald 12:3x: nunca para) -- `registro_chamado` 48 -> 0
 
 Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela da manha no meio (UIFIC3, UIFIC-FRONT, F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G) -> RESPOSTA-TARDIA (-1) -> INTEL-JUIZ (-2) -> C5-CANAL (-4) -> AGIR-POR-DONO (-3) -> WORKLIST-ATA -> fabrica por evento. Ao lado, com arquivos proprios: FABRICA-PELA-ATA (com o seu "!"), TABULEIRO.
 - `registro_chamado`: 50 -> **48** (C5-AUDITOR, 11:01) · 12:59 UIFIC3 no ar (sem registro; a UF uma vez so e a escala como tipo e apelido -- os ajustes 1 e 2 do seu smoke de 00:2x) = 48. UIFIC-FRONT: a copia dos testes falhou (pasta nao recriada no script), corrigida e relancada. 13:30 **C5-EMISSORES NO AR** (fadb3646): seis emissores e fechadores de cobranca leem o dia pelo juiz = **42**. Proximo no registro: C5-TELA (-> 40). UIFIC-FRONT: um arquivo de teste estava com dono root (editado com sudo na madrugada) e a copia falhou sem mexer em nada; dono corrigido e cadeia relancada. 13:46 UIFIC-FRONT caiu na regua por um arquivo meu solto em docs (o comando de contraponto do SMOKE-150, lido como codigo novo); copia desfeita limpa, arquivo virou texto, fatia relancada. C5-TELA (-> 40) na regua desde 13:45; F7, PROPOSTA-EVIDENCIA, F7B, CAUDA-G e C1-MSGDP em sequencia atras. `registro_chamado` = **42**. 14:16 **C5-TELA NO AR** (cc280d68): o calendario do colaborador e a worklist do DP leem o dia do chamado pelo juiz = **40**. *Para a admin:* "o chamado aparece no dia certo do calendario e da lista do DP, mesmo quando foi aberto em outro dia." Proximo: F7-FROTA, PROPOSTA-EVIDENCIA, F7B, CAUDA-G, C1-MSGDP (-> 39); UIFIC-FRONT e, atras dela, GEO-PAINEL e SEM-FURO disputam a trava. 14:2x **UIFIC-FRONT no git** (d20c4d2e): o front do cabecalho do colaborador (painel do fio e ficha completa), com o seu smoke de 00:2x, entra no git; push e deploy em curso. `registro_chamado` = **40**. 15:48 **FURO-COBRANCA-MORTA-REABRE** (a6d222ed) e 17:2x **C1-MSGDP no ar** (ea9b0778): a mensagem rapida do DP reusa o chamado vivo, nao so o aberto -- **registro_chamado = 39**, a fila da manha fechada. 17:31 **SEM-FURO no ar** (d68e0366): o contador `colabs_sem_furo_no_periodo` passa a sair do placar, lido de prod -- **179/554** hoje. 18:32 **CARTORIO-SO-CHAMADO-DE-BATIDA NO AR** (e0cc7b5a, com o seu "!", deploy com ensaio da sombra). A guarda de baseline tinha barrado as 17:3x porque o `cartorio.py` mudou hoje em tres fatias: refeita contra a arvore nova (RED 3, suite 7.100). **O efeito nao e imediato e isso e da regra**: celula ja lavrada so muda quando e re-julgada. Como a impressao do dia passa a ser outra (a lista de chamados encolheu), o cartorio re-julga sozinho na varredura das 06:28 de amanha e os 21 saem da retencao. **Adiantado com o aval do Ronald as 21:50** (`processar_cartorio --apply` pelas 3 empresas, pelo mesmo envelope do cron, rc=0 nas tres, fim 22:0x): **os 21 sairam da retencao, nenhum ficou** -- 80, 100, 159, 284, 306, 342, 388, 399, 418, 424, 472, 473, 668, 719, 744, 761, 844, 854, 887, 889, 918. Celulas `cobrado` na competencia: 689 -> 560 (as que ficam tem cobranca de batida viva). *Para a admin:* "21 colaboradores que estavam presos na folha por um aviso que nao cobrava nada voltaram para o arquivo do Dominio." 17:45 **CAUDA-TRILHA-DO-CARTAO no ar** (a9463665): cartao em lote e TXT gravam trilha (quem, quando, filtro, ids, quantos) e o cartao informacional ganha rodape com quem gerou e o periodo -- o buraco que apareceu hoje de manha esta fechado. 18:10 **TABULEIRO no ar** (d59d24df): todo cron declara o papel, o selo barra juiz fora da lista, e o placar mede `juizes_por_varredura` (26, a divida) e `divergencia_grade_x_cartorio` (1.498). O principio entrou no CLAUDE.md (secao 4a) com o seu nome. Na trava: CARTORIO-SO-CHAMADO-DE-BATIDA (com o "!"), CREDITO-NO-PROPRIO-DIA, CARTAO-PELA-CELULA, PROPOSTA-EVIDENCIA, TRANCA-DIZ-O-MESMO, TABULEIRO, CAUDA, F7B, CAUDA-G. 14:53 **F7-DIA-DA-FROTA no ar** (4ad1c94d): o copiloto responde quem faltou num dia, na frota, pela celula soberana. Antes dela, as 14:0x, subiu o deploy agendado `qui1709` (GEOFENCE-VALIDAR-E-RECUSAR, f5d67b52 -- raia dinheiro, janela aberta). Na fila da trava: GEO-PAINEL (na regua), SEM-FURO, PROPOSTA-EVIDENCIA.
+
+- **22:06 CARTAO-PELA-CELULA NO AR** (89011d2c, raia TELA): o cartao-ponto da competencia le a celula e os totais da folha (um banco, um resultado), ate ontem; novo contador `cartao_x_txt_divergentes` = **0** (cartao x TXT por rubrica, na competencia lavrada). *Para a admin:* "o cartao-ponto e o arquivo do Dominio agora mostram as mesmas horas, porque leem a mesma conta."
+- **22:1x CREDITO-NO-PROPRIO-DIA (dinheiro) presa ate 00:05**: a trava de horario da cadeia so barrava 23:20-00:00 e deixaria a fatia subir antes da meia-noite, contra a sua ordem. Esteira parada (ainda so esperando a F7B, nada tinha sido tocado) e relancada com portao de data: testes e cadeia so comecam 18/09 00:05.
 
 - **RESPOSTA-TARDIA (estrutural, -1 no registro) -- PRECISA DE RECONSTRUCAO**: montada de manha, a cura nao casa mais com a arvore (a resposta do colaborador passou a validar a hora antes, e o selo antigo `test_z4_chamado_fechado_bloqueia_resposta` esperava 400 onde a fatia quer 200 com nota/Pauta). Nao e ajuste de linha: o ramo da resposta tardia tem que entrar antes da validacao da hora. Fica na fila estrutural, para refazer depois que a leva de hoje subir.
 
