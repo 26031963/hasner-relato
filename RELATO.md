@@ -1,18 +1,18 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 18/09 12:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
 | contador | valor | esperado | dono |
 |---|---|---|---|
-| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **28** | 0 | Code |
-| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **48** | 0 | Code |
+| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **27** | 0 | Code |
+| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **43** | 0 | Code |
 | **leitores_narnia** (telas que contam por conta propria) | **167** | 0 | Code |
 | **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **0** | 0 | Code |
-| **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **179/554** | 554/554 | admin |
-| aval_mais_velho_h | 146 | nenhum acima de 24 h | Ronald |
-| avais_pendentes | 10 | nenhum acima de 24 h | Ronald |
+| **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **192/554** | 554/554 | admin |
+| aval_mais_velho_h | 148 | nenhum acima de 24 h | Ronald |
+| avais_pendentes | 9 | nenhum acima de 24 h | Ronald |
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
@@ -29,22 +29,110 @@ _Estado de 18/09 12:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | colabs_nao_certificados (09/2026) | 285 | 0 | Code |
 | chamados_vivos_sem_pergunta_no_app | 196 (18/09 05:4x; marco apagado 71 admin, ata ausente 33, pergunta viva em outro chamado 30, fabrica nao rodou 26, pergunta ja encerrada 22 -- sistema; o dia 17/09 entrou) | 0 | admin/sistema |
 
-## PENDENTES DO RONALD (10) -- aval, "!", corte e smoke esperando voce
 
-_Gerada de `PENDENTES_RONALD.json` em 18/09 17:51. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 10; `aval_mais_velho_h` = 146 (esperado: nenhum acima de 24 h -- hoje **6 acima**)._
+
+## PENDENTES DO RONALD (9) -- aval, "!", corte e smoke esperando voce
+
+_Gerada de `PENDENTES_RONALD.json` em 18/09 19:02. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 9; `aval_mais_velho_h` = 148 (esperado: nenhum acima de 24 h -- hoje **7 acima**)._
 
 | # | tipo | o que e | desde | idade | afeta | frase para colar |
 |---|---|---|---|---|---|---|
-| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **146 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
-| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **31 h** | 1 tela | `smoke OK: COBRAR-DIA` |
-| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **30 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
-| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **29 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
-| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **29 h** | 1 tela | `smoke OK: GEO-PAINEL` |
-| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **27 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
-| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | 24 h | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
-| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | 9 h | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
-| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 3 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
-| 10 | aval | PAUSA-DESLOCADA (dinheiro): pausa real fora da pausa declarada deixa de partir o turno. DIFF na sombra: TXT 09 -496 h de desconto (8069) e -31 h de intrajornada em 8 matriculas; fechamento 08/09 ~50 colabs. Fatia testada e parada esperando o aval; a janela de dinheiro fecha 20/09 (depois so apos o export de 09). 08 paga: Pauta DP 239 (retificacao de 5 matriculas). | 18/09 17:44 | 0 h | 8 matriculas no TXT de 09 | `aval Ronald: PAUSA-DESLOCADA sobe` |
+| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **148 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
+| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **32 h** | 1 tela | `smoke OK: COBRAR-DIA` |
+| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **31 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
+| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **31 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
+| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **30 h** | 1 tela | `smoke OK: GEO-PAINEL` |
+| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **28 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
+| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **25 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
+| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | 10 h | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
+| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 5 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+
+## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
+
+**colabs_com_anomalia_recorrente = 270 de 532** em operacao (isentos fora). Leitura: col196, col231 e col193 aparecem em A1+A2+A3+A8 ao mesmo tempo -- e a PAUSA-DESLOCADA (a madrugada partida cai na folga seguinte e vira "trabalhou na folga"); a cura com aval deve derrubar essas quatro juntas.
+
+| assinatura | colabs | ocorrencias | top 5 | dono |
+|---|---|---|---|---|
+| A1 antecipada/atraso >180 min em 3+ dias | 22 | 176 | col119(14), col193(14), col196(14), col231(14), col624(14) | juiz (PAUSA-DESLOCADA) / cadastro |
+| A2 trabalhou na folga em dias alternados/seguidos | 36 | 306 | col196(14), col882(14), col231(13), col451(13), col165(12) | cadastro (Pauta supervisao) |
+| A3 turno partido na meia-noite | 22 | 72 | col196(13), col231(13), col193(12), col843(6), col827(4) | juiz (PAUSA-DESLOCADA) |
+| A4 4 batidas com escala de 2 marcos (ou 2 com pausa cadastrada) | 65 | 770 | col81(24), col384(23), col522(23), col819(23), col457(21) | cadastro (Pauta supervisao: pausa) |
+| A5 orfa recorrente no mesmo horario | 65 | 171 | col859(8), col221(6), col278(6), col788(6), col877(6) | cadastro (Pauta supervisao: marco) |
+| A6 HE identica (+-5 min) em 3+ dias | 53 | 330 | col600(19), col129(18), col155(18), col81(17), col207(14) | juiz (RED quando provado) |
+| A7 batida todo dia deslocada do marco | 95 | 172 | col503(4), col572(4), col889(4), col206(3), col502(3) | cadastro (termometro) |
+| A8 dia sem marco previsto com turno completo | 47 | 341 | col196(14), col882(14), col231(13), col451(13), col165(12) | cadastro / juiz (A3) |
+| A9 ausencia aprovada com batida no dia | 38 | 60 | col42(9), col61(4), col120(3), col655(3), col928(3) | juiz (Pauta DP 238) |
+| A10 chamado vivo repetido no mesmo motivo 5+ dias | 89 | 93 | col564(2), col788(2), col820(2), col904(2), col114(1) | cadastro (cobranca em loop) |
+
+Por colab (os 12 com mais assinaturas):
+
+| colab | assinaturas |
+|---|---|
+| col827 | A1 A2 A3 A4 A7 A8 A10 |
+| col193 | A1 A2 A3 A4 A7 A8 |
+| col196 | A1 A2 A3 A4 A7 A8 |
+| col231 | A1 A2 A3 A4 A7 A8 |
+| col616 | A2 A4 A5 A7 A8 A10 |
+| col843 | A1 A2 A3 A4 A7 A8 |
+| col865 | A3 A5 A6 A7 A8 A10 |
+| col165 | A2 A3 A5 A8 A10 |
+| col206 | A2 A5 A7 A8 A10 |
+| col221 | A2 A4 A5 A8 A10 |
+| col639 | A1 A3 A5 A6 A8 |
+| col727 | A2 A5 A7 A8 A10 |
+
+Proximo (fatia): o servico vira `anomalias_do_colab` / `anomalias_da_frota` (o copiloto comeca por elas em "o que esta acontecendo com o ponto do X"), contador no placar e cron noturno como vigia; cada assinatura com o dono acima (cadastro -> Pauta supervisao automatica; juiz -> RED; tela -> fila).
+
+## CENSO-PORTAS-DE-ESCRITA (18/09 18:2x, so leitura)
+
+159 portas de escrita na tela (POST de humano; sem 2 redirecionamentos genericos do Django), lidas do codigo + do log de acesso do ui (desde 12/09, 8 dias) + LogAuditoria 14 dias (so acoes exclusivas da porta, autor gente: sem sistema/Code). **126 sem uso humano (79%); 159 sem smoke de clique (100%)** -- o unico navegador da casa (smoke chromium) abre pagina, nao clica.
+
+| familia (ordem do admin) | portas | uso 0 | sem smoke |
+|---|---|---|---|
+| chamados | 22 | 17 | 22 |
+| dia do ponto | 6 | 2 | 6 |
+| ausencia | 11 | 4 | 11 |
+| escala/vinculo | 14 | 9 | 14 |
+| pautas | 5 | 5 | 5 |
+| ferias | 12 | 12 | 12 |
+| folha | 24 | 23 | 24 |
+| cadastro/config | 65 | 54 | 65 |
+
+Portas-chave (uso = POST em 8 dias ou registro exclusivo em 14; "podem" = admins ativos que passam no guarda, de 22):
+
+| porta | podem | uso | admins que usaram | smoke |
+|---|---|---|---|---|
+| modal_fio (chamados) | 22 | 993 | 5 | nao |
+| reabrir_disputa_supervisao (chamados) | ? | 65 | 1 | nao |
+| abrir (chamados) | 22 | 0 | 0 | nao |
+| arquivar_chamado (chamados) | 22 | 0 | 0 | nao |
+| arquivar_lote (chamados) | 22 | 0 | 0 | nao |
+| cobrar_dia (chamados) | 20 | 0 | 0 | nao |
+| cobrar_massa (chamados) | 22 | 0 | 0 | nao |
+| validar_inline (chamados) | 22 | 0 | 0 | nao |
+| flip_batida (dia do ponto) | 20 | 15 | 1 | nao |
+| aprovar_lote_justificativas (dia do ponto) | 22 | 12 | 1 | nao |
+| aprovar_justificativa (dia do ponto) | ? | 10 | 2 | nao |
+| veredito_celula (dia do ponto) | 20 | 3 | 2 | nao |
+| materializar_saida_retroativa (dia do ponto) | 16 | 0 | 0 | nao |
+| rejeitar_lote_justificativas (dia do ponto) | 22 | 0 | 0 | nao |
+| lancar_ausencia (ausencia) | 22 | 72 | 5 | nao |
+| editar_ausencia (ausencia) | 22 | 45 | 2 | nao |
+| aprovar_ausencia (ausencia) | 22 | 35 | 3 | nao |
+| rejeitar_ausencia (ausencia) | ? | 2 | 2 | nao |
+| aprovar_ausencia_lote (ausencia) | 22 | 0 | 0 | nao |
+| rejeitar_ausencia_lote (ausencia) | 22 | 0 | 0 | nao |
+| vincular_escala (escala/vinculo) | 20 | 55 | 6 | nao |
+| wizard_salvar (escala/vinculo) | 20 | 8 | 2 | nao |
+| vincular_folga (escala/vinculo) | 20 | 0 | 0 | nao |
+| escrever (pautas) | 22 | 0 | 0 | nao |
+| agendar_ferias (ferias) | 22 | 0 | 0 | nao |
+| avaliar_solicitacao (ferias) | 22 | 0 | 0 | nao |
+| validar_e_enviar (folha) | 16 | 0 | 0 | nao |
+| aprovar_fechamento (folha) | 16 | 0 | 0 | nao |
+| avaliar_solicitacao_beneficio (cadastro/config) | 16 | 0 | 0 | nao |
+
+Leitura: nos chamados, as acoes (validar, resolver, cobrar) passam quase todas pelo POST do modal do fio (993 em 8 dias, 5 admins); as portas dedicadas (cobrar dia, cobrar em massa, validar inline, arquivar, abrir) tem uso 0. Pautas: 0 em tudo (medido hoje: o compositor nao deixava 14 de 22 admins enviar -- cura PAUTA-DO-DIA). Ferias: 0 em 12 portas em 8 dias. Folha: 23 de 24 sem uso (fora da janela de fechamento, esperado em parte). Proximos: contadores portas_humanas_sem_uso_14d e portas_sem_smoke no placar, 8a familia PORTAS no registro, e as portas de uso 0 como lista do smoke headless do JS-CINTURAO.
 
 ## CERTIFICACAO 09/2026 (fechada 18:09; so leitura, na sombra, nenhum deploy) -- LER ANTES DAS 08:00
 
@@ -154,7 +242,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 
 **06:2x ajuste da esteira (erro meu, pego antes de travar):** as tres esteiras novas (REGISTRO-TELA, WORKLIST-ATA, TROCA-DE-ESCALA) sairam de um molde sem retentativa e sem a linha "fim" -- a TROCA esperava um "fim" que a WORKLIST nunca escreveria, e qualquer "baseline divergiu" pararia a fatia. Paradas (nenhuma tinha copiado nada) e relancadas pela esteira padrao: ate 3 tentativas, "fim" so no fim. A REGISTRO-TELA pegou tambem a colisao com a C5-CANAL: o selo de data do fio sai do mapa porque a C5-CANAL o ligou ao juiz -- `leitores_narnia` nasce **167** se a C5-CANAL subir (a contagem sai da arvore, nao de numero fixo).
 | ausencia (cont.) | **16:1x AUSENCIA-TIPO-REJULGA -- MEDIDO e cura na esteira (raia estrutural; a frase da tela vai com smoke)**. Caso-selo #4280 (col928): nasceu atestado (exige documento) em 16/09 15:08, editada para saida antecipada (nao exige) em 17/09 11:05 e seguiu 'aguardando documento' com prazo 23/09 e aviso vermelho; o DP nao tinha o botao de aprovar. Causa: a edicao do tipo (`editar_ausencia_registro`, sitio unico) nao perguntava de novo ao juiz do status (`estado_inicial`). Cura: trocou o tipo, o status ABERTO e rejulgado pelo juiz via a porta (`mudar_estado`, com trilha de quem editou); decidida nao se toca; `Ausencia.exige_documento` pelo mesmo juiz; tela (fatia de front, smoke): 'Documento: nao exigido para este tipo' no lugar do aviso vermelho. **Passivo: 1 (a propria #4280)** -- DRY na tabela PENDENTES quando pousar. Informativo, sem mexer: 47 ausencias em 'aguardando decisao' com tipo que exige documento e sem anexo (42 atestados) -- o inverso; tirar da mesa do DP o que ele ja tem e decisao dele. *Para a admin: ao trocar o tipo de uma ausencia, o sistema passa a dizer na hora se o documento e exigido; a #4280 sai de 'aguardando documento' assim que o Ronald der o aval.* |
-| dinheiro (cont.) | **17:4x PAUSA-DESLOCADA -- MEDIDO, RED, Pauta DP 239; a cura espera o aval (DIFF != 0)**. Caso col843 (mat 1703) 14-16/08: 12x36 19-07 com pausa DECLARADA 03-04; pausa real 00:00-00:58 (e 22:58-23:58, sem cruzar a meia-noite). O juiz de turno so via intervalo a ate 90 min dos marcos da pausa: fechava o turno na S e abria outro na volta, com o dia do turno na FOLGA seguinte; o motor lia 7 h de saida antecipada + 60 min de intrajornada suprimida por noite. A classe e 'pausa real fora da pausa declarada', nao so a meia-noite. Frota (sombra, recalculo em transacao que volta): **08 -- 52 colabs, -1.487 h de saida antecipada, -131,7 h de intrajornada, +20,3 h noturnas, +18,9 h HE 100 (trabalhadas e turnos abertos iguais)**; 09 -- 46 colabs, -1.086 h antecipada, -94,3 h intra. **No TXT: 08 emp2 exportado em 01/09 bate com o 'antes' em 5 matriculas -- 325,52 h DESCONTADAS a mais (rubrica 8069) e 18 h de intrajornada PAGAS a mais -> Pauta DP 239 de retificacao** (emp3 nao tem exportacao de 08 pelo sistema). TXT 09: -496 h de desconto e -31 h de intra em 8 matriculas. Autopsia: a 1a versao da cura juntava um dia do col301 num turno aberto (a S final ja era absorvida pela regra velha); refinada, a prova so vale com a S que fecha. Fatia testada, parada no aval (tabela PENDENTES); janela do dinheiro ate 20/09. *Para a admin: nao mexe; e com o DP (Pauta 239).* |
+| dinheiro (cont.) | **18:31 PAUSA-DESLOCADA NO AR** (9be2767d; aval Ronald 17:5x '--apply'). O --apply nao tem passivo gravado em 09: NENHUM fechamento de 09 existe em prod (0 linhas nas 3 empresas; a 08 foi processada em 31/08) -- a competencia nasce quando o DP processa o fechamento, e ja nasce com a cura; ensaio na sombra refeita as 18:4x (46 colabs) sem nada estranho (trabalhadas nunca caem). A 08 paga segue pela Pauta DP 239. De carona: o selo `test_vigia_de_hora` que lia o relogio real (vermelho de toda regua depois das 18:00) ficou com o now() fixado. Antes: Caso col843 (mat 1703) 14-16/08: 12x36 19-07 com pausa DECLARADA 03-04; pausa real 00:00-00:58 (e 22:58-23:58, sem cruzar a meia-noite). O juiz de turno so via intervalo a ate 90 min dos marcos da pausa: fechava o turno na S e abria outro na volta, com o dia do turno na FOLGA seguinte; o motor lia 7 h de saida antecipada + 60 min de intrajornada suprimida por noite. A classe e 'pausa real fora da pausa declarada', nao so a meia-noite. Frota (sombra, recalculo em transacao que volta): **08 -- 52 colabs, -1.487 h de saida antecipada, -131,7 h de intrajornada, +20,3 h noturnas, +18,9 h HE 100 (trabalhadas e turnos abertos iguais)**; 09 -- 46 colabs, -1.086 h antecipada, -94,3 h intra. **No TXT: 08 emp2 exportado em 01/09 bate com o 'antes' em 5 matriculas -- 325,52 h DESCONTADAS a mais (rubrica 8069) e 18 h de intrajornada PAGAS a mais -> Pauta DP 239 de retificacao** (emp3 nao tem exportacao de 08 pelo sistema). TXT 09: -496 h de desconto e -31 h de intra em 8 matriculas. Autopsia: a 1a versao da cura juntava um dia do col301 num turno aberto (a S final ja era absorvida pela regra velha); refinada, a prova so vale com a S que fecha. Fatia testada, parada no aval (tabela PENDENTES); janela do dinheiro ate 20/09. *Para a admin: nao mexe; e com o DP (Pauta 239).* |
 | tela (cont.) | **17:2x PAUTA-DO-DIA (P7.1 parte B) na esteira (front, smoke)**. Medido: o botao 'Abrir Pauta DP' do dia fechado so abria a gaveta VAZIA (sem ancora, sem texto); e a porta exige 'assinado por' de superusuario e de quem tem 2+ setores, campo que o compositor nao tinha -- 14 dos 22 admins nao conseguiam enviar pauta nenhuma. **Zero pautas escritas por gente em todo o historico** (as 236 dos ultimos 14 dias sao do sistema). Cura: o botao passa colab e dia; o compositor abre para o DP colado no dia; a porta cola o dia no corpo (colab/matricula, marcos, batidas, o que a celula acusa e quais marcos ficaram sem batida, link do calendario); campo 'assinado por'; a ficha do colab lista as pautas dele. *Para a admin: dia de competencia fechada nao se mexe -- e com o DP; o botao 'Abrir Pauta DP' agora ja leva o dia inteiro para o DP.* |
 | tela (cont.) | **16:56 WIZARD-12x36-FASE regra 3 na esteira (front, por cima da fase12 no ar; vai no mesmo commit, depois do smoke)**. Corte Claude na pergunta ao Ronald (16:4x, 'ritmo = 2+ plantoes seguidos; avulso fica na escala anterior'): VIGENCIA = primeiro plantao realizado da fase nova depois do ultimo que a contradiz; sem plantao ainda, o primeiro dia da fase nova com o descanso cumprido. A tela diz 'dias antes de dd/mm ficam como estao (escala anterior); dias a partir de dd/mm seguem a fase nova'. Inicio da apuracao por escolha: 'a partir da mudanca' (padrao) ou 'desde o inicio do vinculo' (aviso vermelho; nunca antes da competencia aberta), previa de furos dos dois. **Achado no caminho: a sugestao votava pela maioria da janela e mandaria a col99 -- ja corrigida para 13/09 -- de volta a fase antiga (11 plantoes antigos x 3 novos)**; agora segue o ritmo recente. Sombra: col901 (mat 1757) fase par, vigencia 18/09, plantao de 15/09 avulso; col99 fase impar, vigencia 13/09. Contagem por dias corridos (par em setembro = impar em agosto). *Para a admin: ao trocar a fase de um 12x36, o sistema propoe a data em que o ritmo mudou e mostra o que muda nos dois jeitos de aplicar.* |
 | tela (cont.) | **16:22 UI-CHAMADOS-LENTA-2 na esteira** (fecha os 800 ms): o resumo da Central agrupa/conta/ordena pelas colunas e so materializa os 25 cartoes da pagina (a arvore anterior materializava todos os chamados do filtro). Sombra: painel 461 -> 343 ms. |
