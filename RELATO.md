@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 17/09 22:4x. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 18/09 05:4x. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -21,8 +21,8 @@ _Estado de 17/09 22:4x. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
 | deploys_agendados | 1 (qui 17/09 14:00) | — | Code |
 | colabs_nao_certificados (09/2026) | 285 | 0 | Code |
-| **colabs_sem_furo_no_periodo (09/2026, ate 16/09)** | **179/554** (no placar desde 17:31) | 554/554 | admin |
-| chamados_vivos_sem_pergunta_no_app | 130 (46 admin, 84 sistema) | 0 | admin/sistema |
+| **colabs_sem_furo_no_periodo (09/2026, ate 17/09)** | **162/554** (era 179 ate 16/09; o dia 17 entrou na conta) | 554/554 | admin |
+| chamados_vivos_sem_pergunta_no_app | 196 (18/09 05:4x; marco apagado 71 admin, ata ausente 33, pergunta viva em outro chamado 30, fabrica nao rodou 26, pergunta ja encerrada 22 -- sistema; o dia 17/09 entrou) | 0 | admin/sistema |
 
 ## CERTIFICACAO 09/2026 (fechada 18:09; so leitura, na sombra, nenhum deploy) -- LER ANTES DAS 08:00
 
@@ -117,6 +117,17 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 - **O ensaio da sombra das 04:15 reproduziu a mesma quebra** (status FALHOU, 1 erro) -- e sem ensaio OK nenhum deploy passa hoje. Por isso a fila da noite (10 fatias) NAO subiu: todas desistiram as 06:50 sem mexer em nada. Pelo mesmo motivo o deploy agendado da geofence das 14:00 tambem nao passaria.
 - **CURA NO AR 07:51** (TERMO-FECHAR, `deploy --sem-sombra` com aval do Ronald): a vassoura do chamado resolvido deixa aberta a disputa com resposta sem veredito e o comando segue (teste vermelho antes; suite 6.990 verde). **O `termometro_regua` de hoje rodou de novo pelo envelope do cron as 07:51 e terminou bem** (exit 0, 76 s; 91 avisos de cadastro tocados, 26 retratados); a disputa 5082 segue aberta esperando o veredito do admin. Sombra sendo refeita agora; em seguida `manha17` as 08:40.
 
+## MADRUGADA 18/09 -- quatro no ar, nenhum deploy na janela proibida
+
+| hora | fatia | o que muda | para a admin |
+|---|---|---|---|
+| 00:17 | **F7B** (910788a8) | a ficha do copiloto traz o dia de hoje da pessoa; o copiloto le a legenda do calendario | "perguntado sobre um colaborador, o copiloto diz como esta o dia de hoje dele e explica as cores do calendario." |
+| 04:58 | **CREDITO-NO-PROPRIO-DIA** (1b2d0f17, dinheiro; testes so depois de 00:05, deploy so depois do ensaio da sombra de hoje) | a declaracao parcial (comparecimento, meio periodo) abate so o atraso do PROPRIO dia; o credito que sobra nao vira saldo nem apaga atraso de outro dia. TXT identico no DIFF; muda o atraso gravado de 2 colaboradores, ambos retidos | "a declaracao de um dia nao apaga mais o atraso de outro dia; o cartao e a folha mostram o mesmo atraso." |
+| 05:13 | **CAUDA-G** (e62f93e7) | LICOES.md (gate temporal, certificar na ponta, selo com excecao morta) e o selo do modo app sem a excecao que nunca casava | -- (processo interno) |
+| 05:25 | **RESPOSTA-TARDIA** (96f46e4f) | a resposta do colaborador em chamado encerrado nunca cai no vazio: se o dia ainda acusa, o chamado renasce; se nao, vira nota "resposta tardia" no fio e, se for texto, Pauta para o DP. `registro_chamado` 39 -> **38** | "quando o colaborador responde num chamado que ja foi encerrado, a resposta aparece no fio e, se for texto, chega ao DP como Pauta -- ninguem ve mais 'erro'." |
+
+Suite na regua: 7.138 -> 7.147 verdes. Ficam fora: GEO-PAINEL (espera o seu smoke; os tres arquivos seguem na arvore), o json medido das crons (entra no proximo corte de cron). Proximo na estrutural: INTEL-JUIZ -> C5-CANAL -> AGIR-POR-DONO -> WORKLIST-ATA; na raia TELA: o registro da familia TELA (CENSO-NARNIA) e a CAUDA JS-CINTURAO.
+
 ## CENSO-NARNIA (Ronald 17/09 noite; so leitura, raia TELA, nenhuma cura) -- `leitores_narnia` = **169**
 
 Tres varreduras (servicos e views; templates e JS; PDFs e ferramentas do copiloto), juntas sem repeticao: **339 lugares** que mostram numero ou estado a um humano. **A 130** leem juiz/ata/celula, **B 81** derivam por conta propria, **C 88** misturam, e 40 so contam o que o servidor ja mandou (herdam). Tabela completa por tela (arquivo, o que mostra, classe, de onde tira hoje, juiz que deveria ler): `CENSO_NARNIA.md`, junto deste relato.
@@ -154,6 +165,11 @@ Ordem: C5-EMISSORES (-6) -> C5-TELA (-2) -> C1-MSGDP (-1), com as fatias de tela
 - **22:1x CREDITO-NO-PROPRIO-DIA (dinheiro) presa ate 00:05**: a trava de horario da cadeia so barrava 23:20-00:00 e deixaria a fatia subir antes da meia-noite, contra a sua ordem. Esteira parada (ainda so esperando a F7B, nada tinha sido tocado) e relancada com portao de data: testes e cadeia so comecam 18/09 00:05.
 
 - **22:17 COLAB 863 (mat 1723) -- 33 ETIQUETAS APLICADAS** (com o seu "!" de 22:1x; um caso, pela porta do flip, trilha nas 33, ensaio antes na sombra): nos 11 plantoes 19-07 de 21/08 a 16/09, as tres batidas da madrugada estavam com a etiqueta invertida (pausa, volta e saida gravadas ao contrario). Depois: nenhuma etiqueta trocada; cartao da competencia **0h -> 120,17h trabalhadas**, adicional noturno 0 -> 100,26h, atraso 1,12h (entrada 19:25 em 04/09), 1 falta (12/09, plantao sem batida). **A folha segue retida** por dois chamados de batida ausente: o de 12/09 (#23147, dia sem batida, falta real) e o de 04/09 (#23149), que **cobra marcos da escala velha** (07:00/14:00/15:00) num dia em que o plantao novo esta completo -- cobranca morta nascida antes da troca de escala. Proposta: a supervisao resolve o 04/09 pelo "Resolver dia" (ou o seu "!" para eu fechar pela porta); e fica na fila BO: troca de escala pela porta nao re-julga as cobrancas vivas que pedem marcos do vinculo anterior. *Para a admin:* "o colaborador de matricula 1723 agora aparece com as horas dos plantoes noturnos; falta resolver o 04/09 (cobranca da escala antiga) e responder o 12/09."
+
+- **23:0x CRON-DURACAO-DO-HORARIO NO AR** (d082e0ae): a duracao da cron so mede corrida que comecou no horario dela; o cartorio volta a 249 s e o contrato do bloco diario fica verde. **Deslize meu:** o vigia que devolvia o arquivo gerado ao git reverteu tambem a copia da propria fatia (corrida de segundos antes do "copiados") -- o filtro e o selo entraram, o json medido nao. Sem efeito: o json que ficou na arvore e identico ao que a suite da cura aprovou e o do git tambem passa; entra no proximo corte de cron (ou no `crons.sh check` das 04:05). F7B relancada atras dela; CAUDA-G atras da F7B.
+- **23:12 F7B PARADA DE PROPOSITO**: entrou na regua as 23:10 e o deploy sairia por volta das 23:30, dentro da janela proibida (23:20-00:00) -- a trava da cadeia so cobria a das 03:40. Parada antes do commit; a copia foi desfeita e recarregada as 23:12 (antes das 23:20); a suite orfa foi encerrada. Relancada, mas os testes terminaram as 23:18 e a trava do topo deixou passar (23:18 < 23:20): parada de novo as 23:19, copia desfeita as 23:19:00. **Relancada as 23:19 com a espera na propria esteira: testes e cadeia so depois de 00:00.** CAUDA-G, RESPOSTA-TARDIA e CREDITO seguem atras, e todas as cadeias esperam a meia-noite pela propria trava.
+
+- **23:06 RESPOSTA-TARDIA REFEITA E NA FILA** (atras da F7B): o vermelho da tarde era do teste, nao da cura -- o colaborador de teste nunca bateu, e o cartorio re-julga o dia dele como "nunca bateu" no meio da requisicao (lei certa), o que acusa e faz o chamado renascer. O teste agora monta o dia como no caso real: decidido pelo admin, que o cartorio nao re-julga. O selo antigo que esperava 400 em chamado fechado vira o selo da lei nova (200, nunca erro). Testes focados: 29 verdes.
 
 - **22:53 PERGUNTAS DE 16/09 EMITIDAS, SEM PUSH** (o seu aval de 22:4x): **69 perguntas em 35 colaboradores** (mais 1 disputa e 1 chamado para quem ainda nao tinha), pelo proprio comando, uma passada so. **Fora: as 2 do colab 866** (escala em fase errada, Pauta 204 com a supervisao; 16/09 era folga dele) -- o `--colab` nao serve para excluir (o fio mudo vaza para os outros; o ensaio parou sozinho antes de gravar), entao a leitura da ata devolveu "nada a perguntar" so para ele durante a passada. **Atencao:** o cron das 06:38 pergunta essas 2 amanha, a menos que a escala dele seja corrigida antes. *Para a admin:* "69 perguntas de 16/09 foram para o app de 35 colaboradores, sem notificacao."
 - **22:53 TRANCA-DIZ-O-MESMO NO AR** (9bcb067b, com o CALENDARIO-UNICO): validar pergunta de competencia fechada passa a responder a mesma frase da tela do dia ("competencia fechada -- decisao pelo DP, abra uma Pauta"), nao mais "reabra o fechamento"; e o contador `chamados_em_competencia_trancada` passa a ver as 12 perguntas vivas de chamados resgatados depois da tranca (empresa 4, 07/2026), que ficam com o admin. Fica na fila (front, precisa do seu smoke): o botao "Abrir Pauta DP" dentro do proprio aviso. *Para a admin:* "quando o mes esta fechado, o sistema diz a mesma coisa em todo lugar: a decisao e do DP, por Pauta."
