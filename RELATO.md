@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 18/09 05:4x. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 18/09 09:50. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
@@ -150,6 +150,45 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 2. **#16896 (col824, mat 1684, 23/08).** Escala 17:00-05:00 (pausa 22-23). Batidas, todas do APP, nenhuma retratada: E12:55, S17:00, E18:00, S01:00 (24/08). Ata: E17:00 acesa pela batida das 17:00 (gravada como SAIDA), S22:00 apagada, E23:00 acesa pela das 01:00, S05:00 apagada; orfas 12:55 e 18:00. As duas perguntas (intervalo e saida final) respondidas "17:00", nao validadas. **Leitura: nao e ruido** (sem eco de relogio, sem duplicata) -- e um turno REAL em outro horario naquele dia (12:55-17:00 + 18:00-01:00). A porta de retratar existe (regularizacao, acao "remover"/"corrigir" com motivo), mas nao e o caso. *Para a admin:* "as batidas de 23/08 sao do app e parecem um turno feito em outro horario; nao apague -- confirme o dia pelo Resolver dia (trabalhou) ou peca a supervisao a escala do dia." Tela (os 3 avisos virando um texto com a acao certa) entra na fila tela.
 3. **COPILOTO-DIA.** "batida errada do X no dia D" tem que ir ao `dia_do_colab(X, D)` e responder pela ata; golden +1 com este caso. Fatia na fila tela (mensageria + golden + HAIKU-DENTES).
 4. **Colab mat 1138 (col165, emp 3) -- NAO BATE COM O BO.** Escala cadastrada: 12x36 **19:00-07:00** (pausa 01-02), desde 21/06. Real em 21 dias: 1a entrada mediana **18:52**, ultima saida **07:05** -- a escala casa com o horario. O que difere: a pausa real (sai ~23:45, volta ~00:40; desde 11/09 ~01:50-02:50) e 2 plantoes extras (01/09, 11/09). Propositor: sem destino ("nenhum template cobre 90% dos dias"; 16 batidos x 14 previstos, 0 discordantes). **Pauta NAO escrita** -- a premissa "12-20 x 11-19" nao aparece no dado; confirme se e outro colaborador ou se escrevo a Pauta com o que medi (pausa fora do cadastro).
+5. **P7.1 COPILOTO-INVENTA -- NO AR 09:40** (Lei 1 no copiloto; `respostas_sem_payload` no placar, nasce 1 = a #1991). Reproduzido (conversa #1991, 07:54): A admin perguntou so o NOME, em maiusculas. **Nenhuma ferramenta da pessoa foi chamada** (nem ficha, nem dia): o extrator de pessoa descarta palavra toda em maiuscula e a 1a palavra da frase, entao nao houve termo de pessoa. Vieram 16 blocos gerais (fila, ausencias, ferias, `escalas_com_desvio`, saude...). De onde saiu a frase: **"J.A"** e o nome da empresa 2 no bloco `escalas_com_desvio` (o colaborador e da empresa 3); **"~1h00"** e o desvio tipico que aparece na lista da empresa 3; **"6x1 Seg-Sab 12:00-20:00" e "21 dias" nao existem no payload** -- nenhum item da lista tem 12:00-20:00 e nenhum tem esse nome. **Nao e homonimo nem ficha de outro colab: e texto gerado sem ferramenta**, colando o bloco da frota com invencao. A guarda "numero fora dos dados" nao pegou porque olha digito solto ("12", "20", "21" existem em algum lugar do contexto grande). Dado real do colab: 12x36 19-07, horario casa (ver item 4). Cura na fila tela, na frente da COPILOTO-DIA: (a) o extrator reconhece nome em maiusculas; (b) **Lei 1 deterministica**: pergunta com pessoa e sem a ficha/dia dela no payload = recusa ("nao achei esse colaborador"), e horario/escala na resposta tem que existir LITERAL no payload; (c) contador `respostas_sem_payload` (esperado 0); (d) golden +2 (este caso e o homonimo). *Para a admin:* "a resposta sobre esse colaborador estava errada: o copiloto nao abriu a ficha dele e inventou a escala. A escala real e 12x36 19h-7h e bate com as batidas."
+
+## BO ADMIN 18/09 -- colab mat 1072 (col99, emp 3) + TROCA-DE-ESCALA parte B -- medido (so leitura)
+
+**A ata nao confirma a inversao pela troca.** Vinculo antigo PAI-12x36.9 (10-22), ancora 24/06: plantoes nos dias PARES de setembro (02, 04, 06, 08). Troca em 10/09 para PAI-12x36.1 (07-19) com "inicio do turno" 10/09 -- **par, a mesma fase**. O que mudou foi o TRABALHO REAL: ele trabalhou 10 e 12 (pares, casam), depois **12 e 13 seguidos**, e dai em diante os IMPARES (13, 15, 17). Resultado: desde 13/09, impares = batida sem previsao e pares 14 e 16 = falta. **Proposta** (escala so com o seu "!" ou pela supervisao): fase impar a partir de 13/09 (ancora 13/09); ensaio na sombra antes. *Para a admin:* "a troca de horario de 10/09 manteve os dias; ele passou a trabalhar nos dias impares a partir de 13/09. Corrija o inicio do turno para 13/09 -- ou peca a supervisao."
+
+**Passivo (vinculos com troca de escala/ancora registrada desde 15/09: 30 trocas em 26 colaboradores)**, fase x batidas nos ultimos 14 dias (medida grosseira para noturno -- a manha cai no dia seguinte):
+- FASE DIVERGE (os dois lados >= 2 dias): **col99** (mat 1072, acima) e **col866** (o de ontem, Pauta 204). O col863 aparece mas e noturno -- o 12x36 dele esta conferido pela ata desde ontem.
+- **BUG NOVO: col60 com a ancora gravada em ANO 0026** (0026-09-09) -- a porta aceitou o ano digitado errado; nenhum dia casa (4 batidas "em folga", 0 plantoes). Entra na fila BO (a porta tem de recusar ano fora da janela) e o caso volta com o seu "!" ou pela supervisao.
+- A conferir pela ata: col277 (7 batidas em folga), col489 (6), col189 (4, noturno -- provavel falso positivo).
+
+**Parte B da TROCA-DE-ESCALA (tela, precisa do seu smoke):** (a) a porta preenche "inicio do turno" com o proximo plantao REAL (mediana das batidas) e so muda se o admin editar de proposito, com o aviso "isso muda os dias de plantao"; (b) previa "N furos antes -> M depois" com confirmacao; (c) selo: mudar SO o horario mantem a fase; (d) passivo acima em DRY -> seu aval para recolocar a fase.
+
+## P7.1 DINHEIRO -- ausencia aprovada x celula (medido na sombra, 18/09 10:0x) -- **NAO e bug de desconto: e a familia ausencia, sitio 1 (celula/ata)**
+
+**(1) Os 134 dias com ausencia APROVADA e celula acusando (48 colaboradores):** o TXT **nao desconta** nenhum pela celula -- o desconto (8792) so nasce de ausencia tipo "falta" (8 dias, certo). O efeito da celula acusando e **reter** o colaborador (fora do TXT). Na competencia 09, so **5 colaboradores** estao retidos SO por esses dias (col61, col120, col259, col375, col707), e todos por **"fato em ausencia"** -- batida E ausencia no mesmo dia, conflito real que o DP decide (nao e bug). Os 74 dias "nunca bateu" sao de colaboradores retidos tambem por outros dias sem cobertura. Quando liberado, o abono (8932) sai certo. Por tipo: atestado 62 (52 "nunca bateu", 10 "fato em ausencia"), declaracao 20, abono 14, saida antecipada 9, falta 8, treinamento 7, folga compensatoria 6, afastamento INSS 4, outros 4.
+
+**(2) Os 102 dias com BATIDA + ausencia:** na ata, ~metade vira "fato em ausencia" (conflito -> retido ate o DP decidir); no resto prevalece a ausencia (concorde). **6 dias** com celula concorde, horas trabalhadas E abono no mesmo dia (5 treinamento, 1 troca de plantao) = risco de pagar duas vezes -> **Pauta DP** (qual prevalece), nao codigo.
+
+**(3) Por que a aprovacao nao "desliga a lampada":** o signal ausencia -> cartorio EXISTE e re-julga -- **125 das 134 celulas foram julgadas DEPOIS da aprovacao** (so 2 ficaram sem re-julgar). A precedencia da ausencia age **so no veredito, nao na ata**: por isso os 654 dias tem veredito certo (concorde) e a ata ainda mostra o marco "faltando". **Cura = familia ausencia sitio 1:** a ata marca como DISPENSADO o marco coberto por ausencia -- sobe logo atras da fatia do chamado em curso. Contador `ausencias_aprovadas_sem_efeito_na_celula` (esperado 0) em montagem.
+
+## AUSENCIA-A0 (corte Ronald 18/09 09:3x) -- so leitura + RED fora da arvore
+
+**Registro: 49 sitios hoje** (nao 52: 3 ja sairam por fatias anteriores) -- 41 tela, 8 dinheiro, em 11 perguntas. Mapa na ordem do caminho de ESCRITA do admin (criar -> aprovar -> efeito na celula/ata -> espelho/app -> tranca/competencia): em construcao. **`registro_ausencia` no placar**: fatia REGISTRO-AUSENCIA na fila tela (atras da COPILOTO-INVENTA), 49 no nascimento.
+
+**Medido na sombra** (ausencias CRIADAS nos ultimos 30 dias): 985 (906 aprovadas, 44 aguardando decisao, 16 aguardando documento, 19 rejeitadas); tipos: ferias 410, atestado 194, falta 180, abono 90, declaracao 41, folga compensatoria 29, outros 41. Dias cobertos por ausencia APROVADA (ate ontem): **926**. Neles:
+- **654 dias com a lampada ainda APAGADA na ata** (o marco do dia continua "faltando" em vez de dispensado pela ausencia) -- o veredito sai certo (concorde, pela precedencia), mas a ata nao reflete a ausencia;
+- **134 dias com a celula ainda ACUSANDO** (nunca bateu 39+ em atestado, fato em ausencia, ...);
+- **102 dias com BATIDA no proprio dia** coberto (declaracao 20+, atestado, folga compensatoria, suspensao, ferias);
+- **Ferias de 1 dia por desenho:** as 410 Ausencias tipo ferias sao TODAS de 1 dia (uma linha por dia de ferias); os 78 agendamentos de ferias nao tem nenhum de 1 dia.
+- **Ano 0026 de novo:** uma ausencia (aviso de home office, #3307) gravada em 0026-02-23 -- a mesma porta sem conferencia de ano do col60 (fila BO).
+
+**Mapa (49 sitios, na ordem do caminho de escrita):** 1 CRIAR 16 · 2 APROVAR 1 · 3 CELULA/ATA 3 · 4 ESPELHO/APP 24 · 5 TRANCA/FOLHA 5. Dinheiro = 8 (#1, 2, 3, 9, 10, 11, 12, 22). Achados: o estagio "aprovar" quase nao tem sitio proprio -- o efeito do aprovar chega na celula pelo signal (#12); o formulario de ausencia (#46, #47) nao tem uso em producao (o "Lancar" do admin chama `criar_ausencia` direto); a copia do prazo de documento no modelo (#18) nao tem leitor; o juiz do fracionamento de ferias nao exige o minimo de 5 dias das demais fracoes (Pauta DP). Mapa completo em `scratchpad/ausencia_a0/mapa.md`.
+
+**RED das 3 primeiras fatias -- prontos, vermelhos pelo motivo certo, fora da arvore** (controles verdes):
+- **F1 DOCUMENTO NA PORTA** (juiz `estado_inicial`): o colaborador manda atestado sem anexo pelo app -> hoje a porta RECUSA; pela lei nasce "aguardando documento" com prazo.
+- **F2 FRACIONAMENTO NA PORTA DE FERIAS** (juiz `AgendamentoFerias.clean`): com 20 dias ja gozados, a 2a fracao de 10 -> o juiz aceita (CLT 134: uma fracao >= 14), a tela recusa ("toda fracao >= 14").
+- **F3 ABONO 1/3 PELO JUIZ** (juiz `dias_vendaveis`): gozo historico com 12 dias vendidos num periodo que so pode vender mais 5 -> hoje grava cortando CALADO; tem de recusar. E o teto de 1/3 e recalculado em 3 lugares fora do juiz.
+Todas tela; entram na fila estrutural atras da ultima do chamado. Primeira de dinheiro (depois do export 09/2026, com aval): o signal da ausencia (#12) tem teto proprio de 62 dias -- atestado INSS de 90 dias nao re-julga as celulas do dia 64 em diante.
 
 ## MADRUGADA 18/09 -- quatro no ar, nenhum deploy na janela proibida
 
