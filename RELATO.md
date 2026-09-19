@@ -11,7 +11,7 @@ _Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | **leitores_narnia** (telas que contam por conta propria) | **167** | 0 | Code |
 | **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **0** | 0 | Code |
 | **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **192/554** | 554/554 | admin |
-| aval_mais_velho_h | 151 | nenhum acima de 24 h | Ronald |
+| aval_mais_velho_h | 162 | nenhum acima de 24 h | Ronald |
 | avais_pendentes | 14 | nenhum acima de 24 h | Ronald |
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
@@ -33,24 +33,24 @@ _Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 
 ## PENDENTES DO RONALD (14) -- aval, "!", corte e smoke esperando voce
 
-_Gerada de `PENDENTES_RONALD.json` em 18/09 22:18. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 14; `aval_mais_velho_h` = 151 (esperado: nenhum acima de 24 h -- hoje **7 acima**)._
+_Gerada de `PENDENTES_RONALD.json` em 19/09 09:06. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 14; `aval_mais_velho_h` = 162 (esperado: nenhum acima de 24 h -- hoje **8 acima**)._
 
 | # | tipo | o que e | desde | idade | afeta | frase para colar |
 |---|---|---|---|---|---|---|
-| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **151 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
-| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **36 h** | 1 tela | `smoke OK: COBRAR-DIA` |
-| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **35 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
-| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **34 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
-| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **33 h** | 1 tela | `smoke OK: GEO-PAINEL` |
-| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **31 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
-| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **28 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
-| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | 13 h | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
-| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 8 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
-| 10 | aval | AUSENCIA-TIPO-REJULGA: passivo em DRY = 1 ausencia (#4280, col928, saida antecipada) presa em 'aguardando documento' num tipo que nao exige -> 'aguardando decisao'. Aplicar pelo comando com trilha? | 18/09 16:40 | 6 h | 1 ausencia | `aval Ronald: rejulgar_status_por_tipo --apply` |
-| 11 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | 5 h | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
-| 12 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | 3 h | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
-| 13 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | 3 h | 1 tela | `smoke OK: PAUTA-DO-DIA` |
-| 14 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | 1 h | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
+| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **162 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
+| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **46 h** | 1 tela | `smoke OK: COBRAR-DIA` |
+| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **46 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
+| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **45 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
+| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **44 h** | 1 tela | `smoke OK: GEO-PAINEL` |
+| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **42 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
+| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **39 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
+| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | **24 h** | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
+| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 19 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+| 10 | aval | AUSENCIA-TIPO-REJULGA: passivo em DRY = 1 ausencia (#4280, col928, saida antecipada) presa em 'aguardando documento' num tipo que nao exige -> 'aguardando decisao'. Aplicar pelo comando com trilha? | 18/09 16:40 | 16 h | 1 ausencia | `aval Ronald: rejulgar_status_por_tipo --apply` |
+| 11 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | 16 h | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
+| 12 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | 14 h | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
+| 13 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | 13 h | 1 tela | `smoke OK: PAUTA-DO-DIA` |
+| 14 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | 12 h | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
 
@@ -87,6 +87,37 @@ Por colab (os 12 com mais assinaturas):
 | col727 | A2 A5 A7 A8 A10 |
 
 Proximo (fatia): o servico vira `anomalias_do_colab` / `anomalias_da_frota` (o copiloto comeca por elas em "o que esta acontecendo com o ponto do X"), contador no placar e cron noturno como vigia; cada assinatura com o dono acima (cadastro -> Pauta supervisao automatica; juiz -> RED; tela -> fila).
+
+## NOTA DA NOITE 18->19/09 (07:4x) -- **registro_chamado = 27 · registro_ausencia = 43** (os mesmos da noite anterior: nenhuma fatia subiu)
+
+A trava A nao ficou vazia por falta de fila, e sim porque nada passou. Tres causas, as tres minhas de vigiar:
+1. **Bomba-relogio na regua a 00:00:** `ferias.test_ciclos_completos.test_ciclo_vigente_em_curso` admite o colab em 19/09/2023 e espera "em curso" o periodo que comeca em 19/09/2025 -- em **19/09/2026 esse periodo completou**. Desde a meia-noite a regua esta vermelha para QUALQUER fatia: a TROCA-B (00:11) e a FABRICA-POR-EVENTO (00:20) cairam nela, copia desfeita, prod intacto. Cura agora: o teste pergunta o periodo vigente pela data de hoje, nao por data cravada.
+2. **C-MIUDOS-1 caiu no selo de direcao (22:52):** importei o juiz do chamado no topo de um comando do ponto (o ponto so importa o catalogo de chamados no topo). Erro meu; o import vai para dentro da funcao.
+3. **O vigia nao me acordou:** a C-MIUDOS-2 abortou por tabela e a AUSENCIA-F4 ficou esperando um "fim" que a C-MIUDOS-2 nunca escreveu; os esperadores desta sessao foram interrompidos e ninguem viu ate 07:4x. Nenhum deploy, nenhum dado mexido.
+
+**ARVORE-VERMELHA (corte Ronald 08:0x, na frente):** (1) **vigia da arvore** de hora em hora (:05, com 00:05 e 06:05): suite da arvore viva em banco proprio; antes de alarmar, os vermelhos rodam de novo sozinhos (verde sozinho = instavel, anotado); vermelho que repete = Pauta de sistema para a TI + linha no topo deste relato; contador `arvore_vermelha_min` no placar. (3) **isolamento**: regua vermelha com a fatia -> a copia sai e os mesmos testes rodam sem ela; vermelho tambem sem a fatia = da arvore: a fatia solta a arvore e se relanca sozinha quando a arvore voltar (confere a cada 10 min, ate 12 h). (2) **TESTE-SEM-RELOGIO** (selo + varredura, bombas confirmadas congelando o relogio em dia 20, 21, 1o e 00:05) em montagem. Fila: RELOGIO-FERIAS (07:57 na cadeia) -> ARVORE-VERMELHA (08:00 testando) -> fila da noite (ja com o isolamento) -> TESTE-SEM-RELOGIO.
+
+**08:17 RELOGIO-FERIAS NO AR** (558672ac): regua verde de novo. **08:53 ARVORE-VERMELHA NO AR** (c49f4cb9): vigia da arvore no cron (1a corrida 09:05; ate la `arvore_vermelha_min` sai vazio no placar), isolamento nas cadeias, Pauta de sistema. Fila da noite relancada 08:17-08:18 e ja testada (TROCA-B, FABRICA, C-MIUDOS-1 na fila da arvore). Para a admin: nada muda na tela.
+
+**09:0x TROCA-DE-ESCALA-B NO AR** (c39fc050, commit feito; push e deploy da cadeia em curso): a porta do vinculo diz o que a troca retroativa muda nos furos ("N furos antes -> M depois") no veredito, no aviso de quem clicou e na trilha. Na fila da arvore: FABRICA-POR-EVENTO, C-MIUDOS-1, depois C-MIUDOS-2, AUSENCIA-F4, TESTE-SEM-RELOGIO. Vigia da arvore: 1a corrida 09:05 em andamento. Para a admin: ao trocar a escala de alguem com efeito no passado, o aviso diz quantos furos havia e quantos ficam.
+
+**TESTE-SEM-RELOGIO montada (08:54; testa depois da AUSENCIA-F4):** suite inteira congelada em 4 instantes -> **16 bombas em 11 arquivos**: 12 explodem na virada da competencia (**21/09 00:05 -- domingo**), 4 no dia 1o 00:05; uma delas (ferias migracao, admissao cravada) explode de verdade a **00:00 de 24/09**. Cura: cada classe roda com o relogio congelado em 15/09 12:00; verdes no relogio real, 21/09, 01/10 e 24/09. Selo estatico: arquivo de teste NOVO que le o relogio sem congelar = vermelho; os que ja existem viram lista que so encolhe -- `testes_sem_relogio` = **460** no placar (esperado 0). Tripwire de calendario (`bin/regua_calendario.sh`: regua no dia 20, 21 00:05 e 1o 00:05) pega a classe desta madrugada que o selo estatico nao ve; ligar no vigia da arvore (diario) e a proxima. **Precisa subir antes de sab 20/09 23:59.**
+
+Ordem de agora: cura da bomba-relogio (estrutural, primeiro, porque trava tudo) -> TROCA-B -> FABRICA-POR-EVENTO -> C-MIUDOS-1 -> C-MIUDOS-2 -> AUSENCIA-F4, todas ja testadas; o que muda no registro quando subirem: chamado 27 -> 19, ausencia 43 -> 39.
+
+Para a admin: nada mudou na tela esta noite.
+
+## NOITE 18->19/09 -- trava A (estrutural) nunca vazia (ordem Ronald 22:2x)
+
+Fila A: ~~FALTAS-DE-HOJE-ADESAO~~ (ja no ar 50204ba6) -> **TROCA-B** (22:24 na esteira) -> **fabrica por evento** (montando) -> **C-MIUDOS-1** (22:3x; entra depois das duas, ou 45 min depois da TROCA-B sem a fabrica) -> **C-MIUDOS-2** (22:44; comeca depois da 1) -> **AUSENCIA-F4** (22:45; comeca depois da C-MIUDOS-2: as tres mexem no registro) -> ... Tela (B): so o que ja esta pronto (smokes pendentes); nenhum BO novo ate 07:00. Deploy proibido 23:20-00:00 e 03:40-04:45: a arvore volta a andar 00:00.
+
+- **TROCA-B** (a porta do vinculo com "N furos antes -> M depois", qualquer escala): troca que alcanca o passado calcula os furos do trecho (ate 60 dias, ate ontem) antes (celula de hoje) x depois (template escolhido com a fase), no veredito da porta, no aviso e na trilha do historico. A confirmacao obrigatoria fica para a tela (smoke): exigir agora travaria toda troca retroativa da admin.
+- **FABRICA-POR-EVENTO** (montada 23:1x; testa depois da TROCA-B): a pergunta do caminho da celula nasce no julgamento da celula (cartorio e signals de batida, ausencia e chamado), so para dia passado, com um escritor unico; o lote das 06:38 vira VIGIA ("o julgamento deixou N", placar `perguntas_que_o_julgamento_nao_fez`, esperado 0) e mantem o --apply de rede ate alguns dias em 0. Medido em prod: o lote cria 26-48 perguntas/dia (1.220 em 18/09). **Achado (sem cura esta noite):** dos 233 alvos atuais do lote, 214 sao de hoje ou de 19-20/09 -- conferir se o lote pergunta dia que ainda nao aconteceu.
+- **C-MIUDOS-1** -- registro_chamado 27 -> **21**, nenhum valor muda: o prazo de 20 min da cobranca estava cravado em 7 lugares (3 declarados + 4 escondidos) -> um juiz so no motor, com o estouro; cluster espurio e orfa leem o dia do chamado pelo juiz (medido em prod, 18.377 chamados: o juiz nunca discorda do dia gravado quando ele existe). Os outros 4 sitios do "dia do chamado" dariam dia a chamado que hoje nao tem (celula no nascimento para regua/desligamento, dia exportado para gps/disputa, regularizado para disputa de furo, furo retroativo contando chamado de gps como cobranca) -- fatia medida, a seguir.
+- **C-MIUDOS-2** -- registro_chamado 21 -> **19**: o "dia ja exportado" (guarda do renascer) e a guarda S122 leem o dia pelo juiz, com a mesma excecao da tranca (aviso de cadastro e rescisao renascem). Medido em prod: **174 chamados encerrados com dia em competencia exportada deixam de poder renascer** (disputa 67, disputa manual 26, gps fora do geofence 81) -- e a lei que a propria guarda declara ("reabrir cobranca de competencia entregue e reescrever o passado"); 8 vivos ganham dia no S122, todos com a celula limpa. Fica: a celula no nascimento (um chamado sem modulo com `data` no contexto liga celula hoje) e os 3 de dinheiro (supra_juiz, cartorio, furo retroativo) -- depois do export de 09.
+- **AUSENCIA-F4** -- registro_ausencia 43 -> **39**, estagio CRIAR, tudo tela: a copia sem leitor do prazo de documento sai; o vigia pergunta ao juiz quais tipos exigem documento (medido: os mesmos 11); o formulario de ausencia le o catalogo vivo (aceita os 3 codigos que a lista congelada nao tinha) e a maternidade deixa de poder ficar sem fim -- o formulario nao tem uso em producao.
+
+Para a admin: nada muda na tela esta noite.
 
 ## LISTA-PROPOSTAS x ESMERIL (18/09 19:1x, so leitura) -> fatia CADASTRO-X-REALIDADE na esteira
 
