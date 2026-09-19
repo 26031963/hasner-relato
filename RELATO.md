@@ -11,8 +11,8 @@ _Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 | **leitores_narnia** (telas que contam por conta propria) | **167** | 0 | Code |
 | **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **0** | 0 | Code |
 | **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **192/554** | 554/554 | admin |
-| aval_mais_velho_h | 148 | nenhum acima de 24 h | Ronald |
-| avais_pendentes | 9 | nenhum acima de 24 h | Ronald |
+| aval_mais_velho_h | 151 | nenhum acima de 24 h | Ronald |
+| avais_pendentes | 14 | nenhum acima de 24 h | Ronald |
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
 | fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
@@ -31,21 +31,26 @@ _Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 
 
 
-## PENDENTES DO RONALD (9) -- aval, "!", corte e smoke esperando voce
+## PENDENTES DO RONALD (14) -- aval, "!", corte e smoke esperando voce
 
-_Gerada de `PENDENTES_RONALD.json` em 18/09 19:02. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 9; `aval_mais_velho_h` = 148 (esperado: nenhum acima de 24 h -- hoje **7 acima**)._
+_Gerada de `PENDENTES_RONALD.json` em 18/09 22:18. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 14; `aval_mais_velho_h` = 151 (esperado: nenhum acima de 24 h -- hoje **7 acima**)._
 
 | # | tipo | o que e | desde | idade | afeta | frase para colar |
 |---|---|---|---|---|---|---|
-| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **148 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
-| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **32 h** | 1 tela | `smoke OK: COBRAR-DIA` |
-| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **31 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
-| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **31 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
-| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **30 h** | 1 tela | `smoke OK: GEO-PAINEL` |
-| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **28 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
-| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **25 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
-| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | 10 h | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
-| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 5 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **151 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
+| 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **36 h** | 1 tela | `smoke OK: COBRAR-DIA` |
+| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **35 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
+| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **34 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
+| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **33 h** | 1 tela | `smoke OK: GEO-PAINEL` |
+| 6 | corte | classe 3 do SMOKE-150: plantao batido em dia de folga -- paga 100%? | 17/09 15:00 | **31 h** | a medir | `corte Ronald: classe 3 paga 100% (ou: nao paga)` |
+| 7 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **28 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
+| 8 | aval | col165 (mat 1138): o '12-20 x 11-19' do BO veio do copiloto inventando; o real e 12x36 19-07 e casa -- escrever Pauta supervisao so com a pausa fora do cadastro? | 18/09 09:05 | 13 h | 1 Pauta | `aval Ronald: Pauta supervisao col165 pausa (ou: col165 nao precisa)` |
+| 9 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | 8 h | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+| 10 | aval | AUSENCIA-TIPO-REJULGA: passivo em DRY = 1 ausencia (#4280, col928, saida antecipada) presa em 'aguardando documento' num tipo que nao exige -> 'aguardando decisao'. Aplicar pelo comando com trilha? | 18/09 16:40 | 6 h | 1 ausencia | `aval Ronald: rejulgar_status_por_tipo --apply` |
+| 11 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | 5 h | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
+| 12 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | 3 h | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
+| 13 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | 3 h | 1 tela | `smoke OK: PAUTA-DO-DIA` |
+| 14 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | 1 h | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
 
@@ -100,6 +105,8 @@ Para a admin: nada muda ainda; quando subir, "Escalas propostas (LIMBO)" no Plan
 ESMERIL fatia 1 (19:24): a suite completa barrou -- o servico chaveava um turno pela data da batida (lei L1: o dia e o que o pareamento de turnos diz). Corrigido na A3 (turno partido na meia-noite) e relancada 19:28; a fatia 2 (Haiku) e o Cadastro x realidade esperam por ela. Para a admin: nada muda.
 
 **19:54 ESMERIL-ESPELHO NO AR** (08fe82ae): as 10 assinaturas por colab com dono, vigia noturna 08:30, contador `colabs_com_anomalia_recorrente` no placar, linhas de cadastro na Pauta da supervisao, ponte do copiloto. **19:31 AUSENCIA-TIPO-REJULGA-TELA** e **19:42 PAUTA-DO-DIA** no ar, esperando smoke. Aval PAUSA-DESLOCADA repetido as 19:5x: ja estava aplicado (18:31); o fechamento de 09 segue sem nenhuma linha em prod (nasce com a cura quando o DP processar); resto possivel = 21 cobrancas vivas dos 46 colabs afetados (turno aberto 10, saida sem entrada 5, orfao 14 h 5, volta do intervalo 1) -- DRY com a sombra refeita amanha cedo, aval proprio. Para a admin: nada muda; os dois smokes sao do Ronald.
+
+**21:00 ESMERIL-2 NO AR** (Haiku: "o que esta acontecendo com o ponto do X" comeca pelas anomalias que se repetem; a frota por assinatura). **20:56 CADASTRO-X-REALIDADE NO AR, esperando smoke** -- 1a lavra de prod: **colabs_com_anomalia_recorrente = 300 de 533**. Por assinatura (colabs): A1 4, A2 30, A3 13, A4 58, A5 64, A6 53, A7 95, A8 40, A9 40, A10 85, **A11 69** (31 so com a A11). Destino sugerido pelo propositor para 223 dos 300. Leitura: A1 22 -> 4 e A3 22 -> 13 desde a 1a rodada (sombra de 12:19) = a PAUSA-DESLOCADA no ar. O Haiku das "escalas erradas" (CADREAL-2) sobe depois do smoke. Para a admin: a lista nova fica no Plano de Escalas, com um botao por caso; a antiga nao existe mais.
 
 **20:35 LAVRA-FORA-DA-REGUA NO AR** (4f607348): regua verde de novo; ESMERIL-2 e CADREAL relancadas 20:36. Para a admin: nada muda.
 
