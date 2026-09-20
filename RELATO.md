@@ -1,33 +1,40 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 20/09 17:05 (placar regerado por `bin/placar_code.sh`; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 ## PLACAR
 
 | contador | valor | esperado | dono |
 |---|---|---|---|
-| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **27** | 0 | Code |
-| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **43** | 0 | Code |
-| **leitores_narnia** (telas que contam por conta propria) | **167** | 0 | Code |
+| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **14** | 0 | Code |
+| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **11** | 0 | Code |
+| **registro_portas** (views de escrita da tela sem smoke de clique) | **149** | 0 | Code |
+| **leitores_narnia** (telas que contam por conta propria) | **158** | 0 | Code |
 | **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **0** | 0 | Code |
-| **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **192/554** | 554/554 | admin |
-| aval_mais_velho_h | 193 | nenhum acima de 24 h | Ronald |
-| avais_pendentes | 19 | nenhum acima de 24 h | Ronald |
+| **colabs_sem_furo_no_periodo** (competencia 09, ate ontem) | **178/554** | 554/554 | admin |
+| **colabs_com_anomalia_recorrente** (anomalia que se repete: cadastro -> Pauta, juiz -> RED, tela -> fila) | **311/533** | 0 | Code |
+| aval_mais_velho_h | 194 | nenhum acima de 24 h | Ronald |
+| avais_pendentes | 18 | nenhum acima de 24 h | Ronald |
 | parados_esperando_corte | 3 | fila do Ronald | Ronald |
-| fatias_esperando_smoke | 15 | fila do Ronald | Ronald |
+| fatias_esperando_smoke | 16 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
-| juizes_por_varredura | 26 | 0 | Code |
-| horas_esteira_parada_com_fatia_pronta (48 h) | 9,5 (reconstruidas de 17-18/09; cai a 0 se a fila nao parar) | 0 | Code |
-| divergencia_grade_x_cartorio | 1.498 | 0 | cartorio |
-| balao de chamados (Validar + Decidir) | 711 | — | admin |
-| fila de trabalho (aberto + em analise) | 1.321 | — | admin/colab |
+| juizes_por_varredura | 27 | 0 | Code |
+| horas_esteira_parada_com_fatia_pronta (48 h) | 0,3 | 0 | Code |
+| noites_sem_fatia (7 noites, 22:00-07:30) | 2 | 0 | Code |
+| arvore_vermelha_min | 0 | 0 | Code |
+| testes_em_quarentena | 0 | 0 | Code |
+| escalas_ajustadas_auto / reversoes | 21 / 0 | reversoes < 5% | Code |
+| acoes_perdidas_no_fio (copiloto) | 0 | 0 | Code |
+| divergencia_grade_x_cartorio | 1.362 | 0 | cartorio |
+| balao de chamados (Validar + Decidir) | 711 (18/09) | — | admin |
+| fila de trabalho (aberto + em analise) | 1.321 (18/09) | — | admin/colab |
 | competencias_pagas_sem_tranca | 0 | 0 | DP |
-| chamados_em_competencia_trancada | 0 | 0 | sistema |
-| sla_vencido_sem_aviso | 260 | 0 | supervisao/DP |
-| furos_vetados_por_regua | 4 (3 vinculos) | 0 | DP/cadastro |
-| deploys_agendados | 1 (qui 17/09 14:00) | — | Code |
+| chamados_em_competencia_trancada | 3 | 0 | sistema |
+| sla_vencido_sem_aviso | 348 | 0 | supervisao/DP |
+| furos_vetados_por_regua | 5 | 0 | DP/cadastro |
+| deploys_agendados | 0 | — | Code |
 | colabs_nao_certificados (09/2026) | 285 | 0 | Code |
-| chamados_vivos_sem_pergunta_no_app | 196 (18/09 05:4x; marco apagado 71 admin, ata ausente 33, pergunta viva em outro chamado 30, fabrica nao rodou 26, pergunta ja encerrada 22 -- sistema; o dia 17/09 entrou) | 0 | admin/sistema |
+| chamados_vivos_sem_pergunta_no_app | 155 (20/09 17:0x; marco apagado 71 admin; pergunta viva em outro chamado 40, pergunta ja encerrada 25, coberto por ausencia 12, turno fechado na virada 4, sem dia 3 -- sistema) | 0 | admin/sistema |
 
 
 
@@ -271,31 +278,56 @@ _Estado de 18/09 18:00. Publico: so ids e contagens, nunca nome/CPF, nenhum codi
 
 **20/09 16:30 vigia da esteira (ALARME)** -- a fatia cq_c5supra caiu por vermelho DELA (fim sem causa conhecida) -- nao relanco.
 
-## PENDENTES DO RONALD (19) -- aval, "!", corte e smoke esperando voce
 
-_Gerada de `PENDENTES_RONALD.json` em 20/09 16:39. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 19; `aval_mais_velho_h` = 193 (esperado: nenhum acima de 24 h -- hoje **18 acima**)._
+**20/09 16:40 vigia da esteira** -- vigia escreveu o fim de lembrete as 16:40 (NO_AR), que a esperada tb_jscint le no portao. Para a admin: nada muda.
+
+
+**20/09 16:50 vigia da esteira** -- vigia relancou tb_jscint as 16:50 (portao morto). Para a admin: nada muda.
+
+
+**20/09 17:00 vigia da esteira (ALARME)** -- a fatia cq_c5cart caiu por vermelho DELA (fim sem causa conhecida) -- nao relanco.
+
+
+**20/09 17:00 O NUMERO DO DP (SMOKE-PORTAS + diff do TXT, sombra completa das 16:49)** -- efeito das curas de dinheiro no TXT da competencia 09/2026, arvore de ontem antes das curas (b76300df^) x arvore de agora:
+
+| rubrica | antes | depois | delta | colabs |
+|---|---|---|---|---|
+| 0150 HE 50% | 53,57 h | 20,37 h | **-33,20 h** | 67 |
+| 0200 HE 100% | 50,33 h | 110,13 h | **+59,80 h** | 5 |
+| 0243 / 8069 / 0025 | — | — | **0** | 0 |
+| **liquido** | | | **+26,60 h** | |
+
+O arquivo cai de 288 para 251 linhas e NINGUEM entra nem sai: seguem os mesmos 121 colabs com linha (77 emp2, 38 emp3, 6 emp4). Medindo arvore a arvore: o -33,20 h da 0150 e inteiro da cura do 12x36; o +59,80 h da 0200 e inteiro da classe 3; HE100-RUBRICA e as duas de ausencia nao mudam uma linha do TXT de 09. As estimativas anteriores (-59,1 h, +413,8 h, 288,9 h migrando) eram sobre o FECHAMENTO de todos os colabs; o TXT so leva os 121 nao retidos.
+
+SMOKE-PORTAS sobre a arvore de agora (com AUS-CELULA e AUS-FOLHA): **136/554 certificados** (eram 139 as 10:37 -- 3 passaram a retidos, o universo com furo subiu de 378 para 380), 408 retidos por pendencia no espelho, 435 sem linha no TXT. **Nenhuma classe nova**: as 4 da classe 3 e as 5 da Pauta 269. O col881 e o unico fora da lista e ja esta autopsiado (mesma classe do col920: furo de pre-adesao em 21/08 que o TXT corretamente nao cobra) -- registrado na resposta 289 da Pauta 269. Rollback provado nas 3 empresas; o fechamento de 09 segue com zero linha em prod.
+
+Ajuste manual que fica para o DP no export: **col866** (mat 1726, Dominio 651) -- rubrica 0243 = 13,00 h, nao 20,00.
+
+
+## PENDENTES DO RONALD (18) -- aval, "!", corte e smoke esperando voce
+
+_Gerada de `PENDENTES_RONALD.json` em 20/09 17:05. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 18; `aval_mais_velho_h` = 194 (esperado: nenhum acima de 24 h -- hoje **17 acima**)._
 
 | # | tipo | o que e | desde | idade | afeta | frase para colar |
 |---|---|---|---|---|---|---|
-| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **193 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
+| 1 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **194 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
 | 2 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **78 h** | 1 tela | `smoke OK: COBRAR-DIA` |
-| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **77 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
-| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **76 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
+| 3 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **78 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
+| 4 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **77 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
 | 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **76 h** | 1 tela | `smoke OK: GEO-PAINEL` |
 | 6 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **71 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
-| 7 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | **50 h** | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
-| 8 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | **47 h** | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
-| 9 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | **45 h** | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
+| 7 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | **51 h** | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+| 8 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | **48 h** | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
+| 9 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | **46 h** | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
 | 10 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | **45 h** | 1 tela | `smoke OK: PAUTA-DO-DIA` |
 | 11 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | **44 h** | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
 | 12 | corte | CORTE RECEBIDO 12:5x ("C7 leitura 1": o admin segue fechando o silencio; a regra unica vale para o fechamento automatico) -- fatia em montagem; sai daqui quando estiver no ar. C7 'disputa fecha quando': a regra unica (todas as perguntas materializadas ou com via + celula concorde) deixa fechar so 32 das 456 disputas abertas; hoje o admin fecha 396, e 364 delas tem pergunta muda sem via (o corte E1 de 03/09 diz que fechar e o veredito do admin sobre o SILENCIO). (1) o admin segue fechando o silencio e a regra unica vale so para o fechamento automatico; ou (2) a regra unica vale para todos e as 364 deixam de poder ser fechadas pelo admin? | 19/09 09:40 | **31 h** | 456 disputas | `corte Ronald: C7 leitura 1 (ou: leitura 2)` |
-| 13 | aval | PAUTAS-DO-ESMERIL no ar (so DRY ate o aval): a 1a lavra abriria 233 Pautas da supervisao por posto e acao (horarios 98, loop de cobranca 61, folga 38, vinculo 36); fecham sozinhas quando a assinatura some. | 19/09 10:50 | **30 h** | 233 Pautas | `aval Ronald: pautas_do_esmeril --apply` |
-| 14 | smoke | FILA-VALIDAR-EM-LOTE (na esteira 14:25; smoke quando o relato disser NO AR): Central > 'Validar em lote os N coerentes' (so classe A, hoje 35) > conferir a previa no drawer > validar; e no copiloto 'quantos posso validar em lote?' tem de responder o numero e apontar o botao. | 19/09 14:25 | **26 h** | 1 tela + copiloto | `smoke OK: FILA-VALIDAR-EM-LOTE` |
-| 15 | smoke | LEMBRETE-EM-LOTE (na esteira 14:38, atras do lote de validar; smoke quando o relato disser NO AR): Central > fila Cobrar > 'Lembrar quem tem pergunta no app (N colabs)' > conferir a previa > enviar (um push por colab, 1/dia; sem push vira Pauta de posto); e no copiloto 'quantos tem questionario pendente no app e posso lembrar?' responde o numero e aponta o botao. | 19/09 14:38 | **26 h** | 1 tela + copiloto | `smoke OK: LEMBRETE-EM-LOTE` |
-| 16 | corte | Tela para segunda: RECUSA-COM-PORTA, UI-TOOLTIP-FILA e WIZARD-12x36-FDS nao tem definicao em ticket nem no relato -- o que e cada uma? | 19/09 15:05 | **26 h** | 3 fatias | `(uma linha por fatia com o que ela faz)` |
-| 17 | aval | Passivo da ata: re-lavra pelo cartorio (316 colabs, push desligado) derruba o contador principal de 28 para 9, mas emite 49 cobrancas e 920 protestos. Os 120 'nunca bateu em dia coberto' e os 294 'sem celula com vinculo' nao se curam por re-lavra (precedencia e gerar_celulas). Recomendado nao aplicar. | 19/09 16:20 | **24 h** | 316 colabs / 19 dias | `aval Ronald: re-lavra ATA (ou: nao)` |
-| 18 | corte | Registro ausencia, ultimos 11 sitios: bater ponto hoje bloqueia pela situacao crua ('afastado': 12 colabs, 1 deles SEM ausencia bloqueante -- caso de 1 acao pela porta; 'ferias' ninguem escreve: 15 de ferias pelo juiz batem ponto). Pelo juiz, os 15 passariam a ser barrados -- conflita com 'batida de chao nunca e barrada'. Bloquear pelo juiz, ou so avisar e cobrar? | 19/09 16:20 | **24 h** | 1 colab bloqueado a mais + 15 | `corte Ronald: ferias/afastado bloqueia (ou: so avisa)` |
-| 19 | corte | Suite rapida: depois do hash MD5 so no CI (-27%), o maior peso que sobra e UM teste -- test_grade_fuzz.test_fuzz_ancorado, 162 s, que nao se divide entre os 4 processos (a suite nao fecha em 4 min com ele). Duas saidas, as duas mudam o que ele exercita: (a) re-semear por forma (menos sorteios, mesma cobertura declarada); (b) montar a grade em memoria (mais rapido, mas deixa de exercitar o caminho do banco). Ou (c) deixar como esta e aceitar ~6 min. | 20/09 12:40 | 4 h | 162 s de 486 s | `corte Ronald: fuzz da grade (a) re-semear / (b) em memoria / (c) fica como esta` |
+| 13 | smoke | FILA-VALIDAR-EM-LOTE (na esteira 14:25; smoke quando o relato disser NO AR): Central > 'Validar em lote os N coerentes' (so classe A, hoje 35) > conferir a previa no drawer > validar; e no copiloto 'quantos posso validar em lote?' tem de responder o numero e apontar o botao. | 19/09 14:25 | **27 h** | 1 tela + copiloto | `smoke OK: FILA-VALIDAR-EM-LOTE` |
+| 14 | smoke | LEMBRETE-EM-LOTE (na esteira 14:38, atras do lote de validar; smoke quando o relato disser NO AR): Central > fila Cobrar > 'Lembrar quem tem pergunta no app (N colabs)' > conferir a previa > enviar (um push por colab, 1/dia; sem push vira Pauta de posto); e no copiloto 'quantos tem questionario pendente no app e posso lembrar?' responde o numero e aponta o botao. | 19/09 14:38 | **26 h** | 1 tela + copiloto | `smoke OK: LEMBRETE-EM-LOTE` |
+| 15 | corte | Tela para segunda: RECUSA-COM-PORTA, UI-TOOLTIP-FILA e WIZARD-12x36-FDS nao tem definicao em ticket nem no relato -- o que e cada uma? | 19/09 15:05 | **26 h** | 3 fatias | `(uma linha por fatia com o que ela faz)` |
+| 16 | aval | Passivo da ata: re-lavra pelo cartorio (316 colabs, push desligado) derruba o contador principal de 28 para 9, mas emite 49 cobrancas e 920 protestos. Os 120 'nunca bateu em dia coberto' e os 294 'sem celula com vinculo' nao se curam por re-lavra (precedencia e gerar_celulas). Recomendado nao aplicar. | 19/09 16:20 | **25 h** | 316 colabs / 19 dias | `aval Ronald: re-lavra ATA (ou: nao)` |
+| 17 | corte | Registro ausencia, ultimos 11 sitios: bater ponto hoje bloqueia pela situacao crua ('afastado': 12 colabs, 1 deles SEM ausencia bloqueante -- caso de 1 acao pela porta; 'ferias' ninguem escreve: 15 de ferias pelo juiz batem ponto). Pelo juiz, os 15 passariam a ser barrados -- conflita com 'batida de chao nunca e barrada'. Bloquear pelo juiz, ou so avisar e cobrar? | 19/09 16:20 | **25 h** | 1 colab bloqueado a mais + 15 | `corte Ronald: ferias/afastado bloqueia (ou: so avisa)` |
+| 18 | corte | Suite rapida: depois do hash MD5 so no CI (-27%), o maior peso que sobra e UM teste -- test_grade_fuzz.test_fuzz_ancorado, 162 s, que nao se divide entre os 4 processos (a suite nao fecha em 4 min com ele). Duas saidas, as duas mudam o que ele exercita: (a) re-semear por forma (menos sorteios, mesma cobertura declarada); (b) montar a grade em memoria (mais rapido, mas deixa de exercitar o caminho do banco). Ou (c) deixar como esta e aceitar ~6 min. | 20/09 12:40 | 4 h | 162 s de 486 s | `corte Ronald: fuzz da grade (a) re-semear / (b) em memoria / (c) fica como esta` |
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
 
@@ -383,7 +415,7 @@ Proximo (fatia): o servico vira `anomalias_do_colab` / `anomalias_da_frota` (o c
 
 **A ausencia caiu de 43 (ontem 07:00) para 11**: hoje subiram AUS-CELULA, AUS-FOLHA e os dois ESPELHOS, alem do contador de ontem. O chamado esta em 14 (CQ-C6 as 14:24; C7, C8 e as duas C5 na fila). Na esteira agora: 6 em curso, 1 pronta esperando, 6 paradas, 1 no ar esperando smoke.
 
-**Dia de export:** a SMOKE-PORTAS final rodou sobre o codigo no ar, **sem classe nova**; o unico ajuste a mao continua sendo o **col866 (rubrica 0243 = 13,00 h)**.
+**Dia de export, com tres respostas honestas (perguntas do Ronald 16:4x):** (1) **a SMOKE-PORTAS final das 10:34 NAO cobriu a arvore de agora** -- a AUS-CELULA (11:06) e a AUS-FOLHA (11:36) subiram depois dela; esta rodando de novo sobre a arvore de verdade. (2) **O DP ainda NAO exportou**: em prod, 09/2026 tem zero exportacao e zero linha de fechamento (o fechamento nasce quando o DP processa) -- da tempo de medir. (3) **O efeito COMBINADO no TXT ainda nao foi medido**: tenho o de cada fatia isolada (12x36 -59,1 h de HE; classe3 +413,8 h na rubrica 200; HE100 288,9 h saindo da 0150 para a 0200; ausencia celula/folha zero), e estou medindo o dos quatro juntos, por rubrica e por empresa, contra a arvore de ontem antes das curas -- e o numero que o DP vai ver. A frase anterior deste relato ("a SMOKE-PORTAS rodou sobre o codigo no ar") estava certa as 10:34 e ficou velha as 11:36: corrigida aqui.
 
 ## DOMINGO 20/09 -- RELATO DAS 12:00
 
