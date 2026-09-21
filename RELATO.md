@@ -2714,6 +2714,108 @@ evitar. Ganhou guarda de carimbo: sem a linha `prova de casca: N estaticos...` n
 e' FALHOU.
 
 
+
+**21/09 16:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**21/09 16:45 vigia da esteira (ALARME)** -- a fatia t_lote caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+**21/09 16:5x GEOFENCE (BO Fernando iOS, passo 6) -- NAO existe endpoint, e a REGRA PARALELA ja
+existe hoje.** (fork; so leitura, `app/` conferido intacto por md5 antes e depois)
+
+### 1. Existe endpoint que de a cerca ao app? **NAO**
+
+| prova | arquivo:linha |
+|---|---|
+| `/api/me/` (core) devolve so o **nome** do posto | `api/views_core.py:328` |
+| `/api/me/` (UI), gemeo identico | `api/views.py:339` |
+| nenhuma das 13 rotas do kernel e de geofence | `api/urls_core.py:7-19` |
+| `raio_metros` em resposta de API | **0 ocorrencias** em `api/` (so uso interno no calculo do ping) |
+| HANDOFF nao documenta geofence | `app/docs/HANDOFF.md`, 0 hits em 219 linhas |
+
+**O unico dado de cerca que o app recebe hoje e o VEREDITO, nunca a cerca**: a resposta de
+`POST /api/ping-geo/` (`api/views_core.py:1021-1026`) traz `dentro_geofence` e `distancia_metros`.
+
+### 2. O juiz nao e um: sao QUATRO sitios de distancia, e dois ja sao REGRA PARALELA
+
+| # | sitio | arquivo:linha | |
+|---|---|---|---|
+| 1 | `calcular_distancia` **canonico** (haversine, `asin`, int) | `ponto/services/geofence.py:34-40` | o juiz, usado por `verificar_geofence`, `reconciliar_geofence`, `reconciliar_vinculo`, `ponto/models.py:260` |
+| 2 | **haversine inline** no `api_ping_geo` | `api/views_core.py:963-970` **==** `api/views.py:2126-2133` (provado por `diff`: IDENTICOS) | `atan2`, float -- **nao chama** o juiz |
+| 3 | `api_ping_geo` do PWA | `ponto/views.py:2121-2128` | **chama** o juiz -- certo |
+| 4 | `_geo_status_pino` (pino do painel) | `colaboradores/views.py:2300-2310` | inline de novo; so tela |
+
+Mesmo resultado numerico hoje, implementacao duplicada: **o risco e divergir na proxima correcao**.
+E ha uma divergencia ja escrita: `verificar_geofence:67,89,92` le `posto.raio_metros` **cru**; o ping
+e o pino usam `raio_metros or 200`. Posto com raio 0 seria "tudo fora" num e "200 m" noutro --
+**hoje teorico: 0 postos ativos com raio <= 0**.
+
+### 3. A FONTE DA VERDADE -- e o numero que ela impoe ao contrato
+
+**`Batida.posto_para_calculo` (`ponto/models.py:88-90`)**: `posto_efetivo or colaborador.posto`, com
+`posto_efetivo` vindo de `OrdemSubstituicao.ativa_para` (`api/views_core.py:572-579`).
+**NAO e `EscalaColaborador.posto`.**
+
+E isso nao e detalhe: **49 colaboradores ativos tem `Colaborador.posto` DIFERENTE do posto do
+vinculo vigente** (+7 sem posto nenhum). Um endpoint que montasse a lista pelo VINCULO entregaria a
+esses 49 **uma cerca contra a qual o servidor nao julga**. E a familia que
+`detectar_vinculo_divergente` ja vigia; quantos tem chamado vivo, nao foi medido.
+
+**E o geofence NAO barra batida** (A LEI, §4): `verificar_geofence` roda DEPOIS da escrita,
+best-effort com `registrar_engolido` (`api/views_core.py:768-775`). O unico bloqueio e
+`gps_obrigatorio` (403, `:434`) -- que e' **falta de coordenada**, nao estar fora da cerca.
+
+### 4. Os numeros, com predicado colado
+
+**`postos_sem_coordenada` = 10 de 205.** UNIVERSO `Posto.ativo=True` (schema juliani); UNIDADE
+posto; PREDICADO `lat IS NULL OR lon IS NULL OR raio IS NULL OR raio <= 0`; EXCLUSOES inativos.
+Sem lat/lon **10**; raio nulo ou <= 0 **zero**. Por praca: Londrina 4/114 · "A definir" 1/9 ·
+Curitiba 1/30 · Porto Alegre 1/14 · Fazenda Rio Grande 1/3 · Palotina 1/1 · "T" 1/1. Atinge **10
+colaboradores ativos**. Bate com o censo de 10/09 (`colaboradores/services/geofence_raios.py:11-14`).
+**De quebra, os raios**: 200 m x122 · 100 m x59 · 50 m x12 · ... · **50.000 m x1** e 2.000 m x1.
+
+**Colabs com mais de um posto no vinculo vigente = 0 de 547.** UNIVERSO EC ativa e vigente hoje,
+colab ativo; UNIDADE colaborador; PREDICADO mais de um `posto_id` distinto. Substituicao cobrindo
+agora: **0**. -> **o `postos[]` real tem 1 elemento, no maximo 2 com substituicao. Os 20 do contrato
+nao tem lastro nos dados.**
+
+### 5. O contrato, campo a campo -- o que existe e o que falta
+
+| campo | existe | falta |
+|---|---|---|
+| rota | o Caddy ja manda `/api/ponto/*` para o core -- **sem mexer no Caddy** | a `path()` nos DOIS kernels (`test_contract_paridade_kernels.py:26` exige AST identico) |
+| auth | `JWTComCredencial` ja e a 1a classe (`settings/base.py:33-39`) | nada |
+| `versao`/ETag | `core/views.py:531-544` e o UNICO ETag da casa | **tudo**: `api/` tem 0 hits de ETag, e `Posto` **nao tem** `atualizado_em` -- a versao tem de ser **hash do payload** |
+| `monitorar_segundo_plano` | **mecanismo pronto**: `ParametroSistema(empresa, chave, valor)` (`core/models.py:119-142`), com precedente de 17/09 em `chamados/services/solicitacoes_no_app.py:9-20` | a chave + o leitor + **entrada em `core/configuracao_efeito.py::DECLARACAO`**, senao `test_contract_configuracao_nao_mente` recusa. **Nao criar campo em `Empresa`.** "Sem linha" = False, que ja e o default pedido |
+| `turno_previsto` | juiz existe: `EscalaColaborador.marcos_do_dia` (DNA congelado) + `marcos_turno` | montar o datetime. **Se usar `janela_turno_de`, HERDA o TURNO-NATIMORTO** -- use `EC.marcos_do_dia` |
+| `postos[]` | `latitude`/`longitude`/`raio_metros` em `colaboradores/models.py:154-157` (`raio` e `IntegerField(default=200)`, nao nulavel) | o serializador, **saindo de `posto_para_calculo`** |
+| `sem_geofence` | — | derivado: `lat is None or lon is None`. "Sem raio" **nao e estado alcancavel** |
+
+**A frase que TEM de estar no contrato** (§4a: consumidor le a lampada, nunca re-julga): *a cerca
+entregue ao app e GATILHO, nunca VEREDITO*. Sem ela, o dev do iOS constroi o **quinto** juiz com a
+cerca que acabamos de entregar.
+
+### 6. Dois achados laterais
+
+- **`/api/me/` le meio celula, meio template**: `api/views_core.py:237` faz `te.marcos_do_dia(hoje)`
+  com `te = vinculo.tipo_escala` (**template**), enquanto `trabalho = vinculo.eh_dia_trabalho(hoje)`
+  le a **celula**. Gemeo em `api/views.py:248`.
+- A conta de teste do app (col955) e **intermitente** -> `turno_previsto: null` e o esperado, nao falha.
+
+### 7. Sem prova, declarado
+
+**O que o APK Android chama para geofence: nao sei.** O fonte Kotlin **nao esta no repo**, o Caddy so
+loga erro, e `PingGeo` em 30 dias tem **188 linhas com 0 `provider`, 0 `assinatura`, 0 `from_mock`**
+-- compativel tanto com "o APK nao faz ping-geo" quanto com "o APK em campo e anterior ao S87".
+Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
+
+
+
+**21/09 17:13 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 128 min.
+
+
+**21/09 17:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (26) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` em 21/09 07:45. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 26; `aval_mais_velho_h` = 208 (esperado: nenhum acima de 24 h -- hoje **17 acima**)._
@@ -3885,3 +3987,86 @@ login. Os textos vêm sem acento, como estão no código.
 - Admin: validar a contestacao de 14/09 do colab 901.
 - Ronald: "!" dos 231 geofence registrados (DRY no deploy de quinta); "!" do passivo da cobranca morta (DRY no deploy de quinta).
 - CONGELAMENTO de dinheiro: hoje 18:00 → qui 17/09 14:00.
+
+---
+
+**21/09 ~20:1x PASSIVO GERADOR-FOTO -- APLICADO EM PROD (aval Ronald). 89 -> 10.**
+
+### O universo: o "102/20" do aval nao existe -- o que existe e 89/23, e esta declarado
+
+Antes de escrever eu medi tres vezes e deu tres numeros (241, 751, 224). O proprio RELATO das 12:0x
+ja registrava o motivo: *"Nao sei qual universo gerou o 102"* -- e' a terceira contagem minha que
+nao reproduz. O universo REPRODUZIVEL, com contrato de entrada declarado, e a classe
+`c_FOTO_APAGOU_O_CICLO` da sonda `frota.py`:
+
+> FONTE `CelulaDia` + `EscalaColaborador` + `TipoEscala.folga_dia_semana` + `FolgaDia` ·
+> UNIDADE celula-dia · UNIVERSO `trabalha=True`, EC **vigente na data** (`data_inicio`/`data_fim`),
+> template com `folga_dia_semana` e `data.weekday()` nos dias de folga, e **ha foto do mes
+> (`FolgaDia`) que NAO contem a data** -- a foto apagou o ciclo ·
+> EXCLUSOES `origem='editada'` (P13), 12x36/24x48/intermitente (nao declaram fase).
+
+**89 celulas / 23 colabs / 23 vinculos** -- reproduzido exatamente no momento da escrita.
+
+**As outras 29 NAO foram tocadas, e e de proposito:** `a_GERADA_ANTES_DO_CADASTRO` 25,
+`b_OUTRO_VINCULO` 1, `z_NAO_CLASSIFICADA` 3. Sao defeitos DIFERENTES, e regenerar a classe `a`
+reescreveria contra o cadastro de HOJE um passado que o cadastro de ENTAO nao tinha -- exatamente o
+que o fork das 12:0x apontou sobre julgar toda data contra o vinculo atual.
+
+### A prova de que a regeneracao morde (checada ANTES de escrever)
+
+`out_frota.txt:22` -- `classe=c_FOTO_APAGOU_O_CICLO  codigo_vivo=False -> 89`. O codigo de hoje ja
+diz FOLGA nesses dias; a celula e que ficou com a foto velha. Se fosse `True`, a porta escreveria
+trilha e nao mudaria nada.
+
+### Aplicado pela porta, em duas etapas
+
+`ponto/portas/celula.py::regenerar_celulas_vinculo` (escritor unico), autor `sistema`, motivo
+`"PASSIVO GERADOR-FOTO (aval Ronald 21/09): a foto do mes (FolgaDia) apagou a folga do ciclo"`.
+`desde` travado em `max(1a celula da classe, ec.data_inicio)` -- nunca antes da vigencia.
+
+| | |
+|---|---|
+| etapa 1 (1 vinculo, conferido) | EC#181 col212 26/08 -> `trabalha=False`, `regeneracoes=2`, `regenerada_em` gravado, `dna_anterior` presente |
+| etapa 2 (os outros 22) | **106 celulas reescritas** |
+| **total** | **107 celulas** |
+| **classe c depois** | **89 -> 10** |
+
+As 10 que restam sao **as barradas pela guarda de competencia exportada**, e isso esta certo: dia que
+virou folha nao se toca. A guarda devolveu `barrados` em 4 vinculos -- EC#188 col220 (23 dias),
+EC#409 col476 (20), EC#857 col152 (27), EC#1204 col107 (18), todos "competencia ja exportada no TXT
+do Dominio". Nao sumiu calado: conta, entra na trilha e voltou na saida.
+
+Trilha da regeneracao: `evento_kw(acao='regenerar_celulas_vinculo', modelo='EscalaColaborador')`.
+Nenhum push no caminho (conferido em `portas/celula.py`, `gerar_celulas.py`, `supra_juiz.py`,
+`chamados/reconciliador.py`).
+
+### 83 celulas viraram FOLGA. 41 chamados vivos perderam o lastro -- e ainda NAO morreram
+
+Nos dias corrigidos: 28 `aberto`, 13 `em_analise`, 5 `resolvido`, 3 `fechado`. **41 VIVOS**, entre
+eles os casos-selo **#23611 e #23990 (col148)**, **#23601 #23603 #23698 #23991 (col902)** e
+**#17805 (col212)**.
+
+**PARADO POR PERMISSAO:** `supra_juiz --empresa N --executar` (quem retrata
+`COBRANCA_EM_DIA_SEM_TRABALHO`) foi **recusado pelo classificador de auto-mode** -- "Modify Shared
+Resources". Sem ele os 41 seguem vivos ate o cron das **06:54/56/58** de amanha, que faz exatamente
+isso. Nao contornei por outra porta: seria a mesma escrita por caminho lateral.
+**Para a admin:** os dias ja aparecem como folga; a cobranca some amanha de manha (ou agora, se o
+Ronald liberar o comando).
+
+### PASSIVO TURNO-NATIMORTO (flip do tipo) -- NAO APLICADO, e o motivo e o juiz
+
+A lista de **"172 batidas (col923 + os 8)"** **nao esta declarada em lugar nenhum** -- o unico 172
+do RELATO (`:3614`) e **172 chamados vivos em competencia trancada**, outra medida. Em vez de
+inventar a terceira contagem do dia, perguntei ao juiz real, em seco
+(`flip_automatico --competencia`, sem `--apply`):
+
+> `placar: {'dia_em_curso': 10, 'humano': 19, 'intocavel': 2}` -- **`auto` nao aparece. Zero.**
+
+`flip_automatico --apply` mudaria **0 batidas**. Os 19 sao `HUMANO` com motivo escrito ("decisor nao
+propoe flip", "flip nao deixa o dia perfeito", "decisor nao inclui o alvo do tripwire"), e o col923
+aparece 2x -- uma delas **"decisor propoe 2 flips (ambiguo)"**.
+
+Chamar `flip_tipo` direto em 172 batidas atropelaria o juiz que existe para isso (so flipa quando o
+flip e UNICO e deixa o dia perfeito), em dado de ponto de producao. **Nao fiz.** O que falta para
+fazer: ou a lista de ids do fork (o RELATO `:3535` cita um scratchpad `bo1723/etiquetas.py` de OUTRA
+sessao, que nao existe nesta maquina), ou o "!" sobre os 19 do juiz, um a um, com a ata como juiz.
