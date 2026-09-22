@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 22/09 11:2x (placar regerado por `bin/placar_code.sh` as 11:2x, sobre a suite de 7.723 testes que carimbou OK as 11:21; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 22/09 18:5x (placar regerado por `bin/placar_code.sh` as 18:4x, sobre a suite de 7.768 testes que carimbou OK as 18:38; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 > **APAGAO 21/09 12:06-12:12:33 -- CAUSA: MINHA. NAO VOLTOU SOZINHO, EU CUREI.**
 > **O que:** toda pagina da casca UI devolveu 500 (`/`, `/ponto/espelho/`, `/chamados/meu-atendimento/`,
@@ -36,10 +36,10 @@ _Estado de 22/09 11:2x (placar regerado por `bin/placar_code.sh` as 11:2x, sobre
 | **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **2** (igual a ontem) | 0 | Code |
 | **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **3** (era 5) | 0 | Code |
 | **registro_portas** (views de escrita da tela sem smoke de clique) | **149** | 0 | Code |
-| **leitores_narnia** (telas que contam por conta propria) | **153** (era 156) | 0 | Code |
+| **leitores_narnia** (telas que contam por conta propria) | **145** (era 153) | 0 | Code |
 | **ausencia_bloqueante_sem_fim** (NOVO 21/09: licenca que bloqueia ponto, exige fim e esta sem ele) | **1** (col650) | 0 | DP/cadastro |
 | **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **10** (era 2 -- SUBIU, ver nota) | 0 | Code |
-| **colabs_sem_furo_no_periodo** (competencia lavrada, ate ontem) | **173/554** (era 156) | 554/554 | admin |
+| **colabs_sem_furo_no_periodo** (competencia lavrada, ate ontem) | **179/554** (era 173) | 554/554 | admin |
 | **colabs_com_anomalia_recorrente** | **63/532** (era 311/533) | 0 | Code |
 | aval_mais_velho_h | 202 | nenhum acima de 24 h | Ronald |
 | avais_pendentes | 24 | nenhum acima de 24 h | Ronald |
@@ -2919,6 +2919,18 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **22/09 17:50 vigia da esteira** -- vigia relancou fio_msgs_competencia as 17:50 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
 
+
+**22/09 18:00 vigia da esteira (ALARME)** -- a fatia fio_msgs_competencia caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 18:00 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**22/09 18:05 vigia da esteira (ALARME)** -- a fatia k8_gerar_alertas esta PRONTA ha 176 min e nao esta na fila de integracao: trabalho terminado que ninguem vai buscar. Se ela tem portao, o fatia.done tem de DIZER qual; se nao tem, reentregue com bin/entregar.sh..
+
+
+**22/09 19:05 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (54) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 22/09 15:17. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 54 (aval 7 - corte 33 - smoke 14); `mais_velho_h` = 239 (esperado: nenhum acima de 24 h -- hoje **31 acima**)._
@@ -4820,3 +4832,43 @@ fila/worker, nao 6-28 forks simultaneos; depois do 27). Nao construi.
 prod "93,7% ociosa") estava CERTA como medida e ERRADA como conclusao -- prod estava ociosa porque
 nao havia cron na janela, nao porque um nucleo bastasse. Medir sob a carga errada e a mesma familia
 da amostra de n=60: o numero nao mente, a pergunta e que estava mal feita.
+
+---
+
+**22/09 18:4x PRONTA-QUE-NAO-ERA -- o painel chamava de pronta uma fatia que tinha caido.**
+
+BO das 18:07: tres fatias "prontas e LIVRES fora da fila" ha 221, 178 e 54 min, fila de integracao
+VAZIA, arvore verde. "Elas deviam entrar e nao entram."
+
+**Nenhuma das tres estava pronta.** `score_fmcomp` e `k8_gerar_alertas` morreram em "construir
+falhou"; `fio_msgs_competencia` em "GREEN parcial vermelho". O `pronta.json` era RESIDUO de uma
+corrida anterior -- em todas o `fatia.done` e mais novo que a entrega (14:26->15:40, 15:09->15:50,
+17:13->17:57). Os DOIS leitores perguntavam so "existe pronta.json?".
+
+**A raiz e mais funda que o sintoma.** `estado_do_done` colapsa PRONTA, NO_AR e FIM no mesmo valor
+NO_AR, e os dois leitores excluem NO_AR das prontas -- entao a categoria "PRONTA e LIVRE" **nao
+conseguia conter uma fatia de fato pronta**. Por construcao ela so podia conter falha com residuo:
+um alarme que so sabia disparar falso. E as tres eram contadas DUAS vezes, em "3 prontas" e dentro
+das "6 paradas".
+
+**Por isso nao fiz a guarda pedida.** O corte dizia "o vigia RELANCA o enfileiramento"; isso
+mandaria fatia quebrada ao integrador. A cura e o status parar de mentir. Fatia que caiu se cura no
+relance, nao na fila. Fonte unica `pronta_de_verdade`, os dois leitores consomem, selo com 5 casos
+(RED 5 erros -> GREEN 5 OK). Depois: 3 prontas -> 0, 3 alarmes -> 0, 6 paradas mantidas.
+
+Mesma familia do fantasma `tb_jscint` desta manha: **artefato obsoleto lido como sinal bom**. E o
+terceiro caso do dia -- o primeiro foi o `materializada_em`, que diz "saiu da fila" e nao "virou
+batida". Tres em um dia sugere que a classe merece selo proprio, nao cura caso a caso.
+
+As 6 presas, com causa: `t_gemeo` (GREEN parcial vermelho, 0 relances), `f_dobracal` (idem, 1),
+`score_fmcomp` (construir falhou, 1), `k8_gerar_alertas` (construir falhou, 1), `fila_prazo_juiz`
+(GREEN parcial vermelho, 0), `fio_msgs_competencia` (GREEN parcial vermelho, 1).
+
+**`bin/esteira.sh`** (corte das 18:3x): uma linha, OK ou TRAVADA com a frase pronta. Provado nos dois
+sentidos na hora. Aval NAO trava, pela regra 3 da autorizacao previa -- se travasse, diria TRAVADA
+para sempre, porque o PENDENTES e a fila de revisao do Ronald e nunca fica vazio por desenho.
+
+**`_F6` declarado** -> `ponto/janelas.py::competencia_fechada`, fora de SEM_JUIZ, com a fronteira
+`_K4` x `_F6` escrita ao lado. O sitio da regularizacao externa NAO mudou de juiz: a fatia
+`[REG-FECHADO-E-TRANCADO]` das 14:01 ja o curou com a TRANCA e trouxe 3 selos. Trocar seria reverter
+fatia deployada -- foi para PENDENTES com a frase de reversao, nao virou meia-correcao calada.
