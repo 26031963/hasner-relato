@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 21/09 02:3x (placar regerado por `bin/placar_code.sh` as 02:2x; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+_Estado de 22/09 11:2x (placar regerado por `bin/placar_code.sh` as 11:2x, sobre a suite de 7.723 testes que carimbou OK as 11:21; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
 
 > **APAGAO 21/09 12:06-12:12:33 -- CAUSA: MINHA. NAO VOLTOU SOZINHO, EU CUREI.**
 > **O que:** toda pagina da casca UI devolveu 500 (`/`, `/ponto/espelho/`, `/chamados/meu-atendimento/`,
@@ -33,37 +33,37 @@ _Estado de 21/09 02:3x (placar regerado por `bin/placar_code.sh` as 02:2x; balao
 
 | contador | valor | esperado | dono |
 |---|---|---|---|
-| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **2** (era 9 as 19:30 de ontem) | 0 | Code |
-| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **5** (era 11) | 0 | Code |
+| **registro_chamado** (familia chamado: sitios que respondem por conta propria) | **2** (igual a ontem) | 0 | Code |
+| **registro_ausencia** (familia ausencia/ferias, na ordem do caminho de escrita) | **3** (era 5) | 0 | Code |
 | **registro_portas** (views de escrita da tela sem smoke de clique) | **149** | 0 | Code |
-| **leitores_narnia** (telas que contam por conta propria) | **156** (era 158) | 0 | Code |
+| **leitores_narnia** (telas que contam por conta propria) | **153** (era 156) | 0 | Code |
 | **ausencia_bloqueante_sem_fim** (NOVO 21/09: licenca que bloqueia ponto, exige fim e esta sem ele) | **1** (col650) | 0 | DP/cadastro |
-| **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **2** | 0 | Code |
-| **colabs_sem_furo_no_periodo** (competencia lavrada, ate ontem) | **156/554** | 554/554 | admin |
-| **colabs_com_anomalia_recorrente** | **311/533** | 0 | Code |
+| **cartao_x_txt_divergentes** (cartao x TXT por rubrica) | **10** (era 2 -- SUBIU, ver nota) | 0 | Code |
+| **colabs_sem_furo_no_periodo** (competencia lavrada, ate ontem) | **173/554** (era 156) | 554/554 | admin |
+| **colabs_com_anomalia_recorrente** | **63/532** (era 311/533) | 0 | Code |
 | aval_mais_velho_h | 202 | nenhum acima de 24 h | Ronald |
 | avais_pendentes | 24 | nenhum acima de 24 h | Ronald |
-| parados_esperando_corte | 3 | fila do Ronald | Ronald |
-| fatias_esperando_smoke | 16 | fila do Ronald | Ronald |
+| parados_esperando_corte | 6 | fila do Ronald | Ronald |
+| fatias_esperando_smoke | 17 | fila do Ronald | Ronald |
 | contratos_estruturais | 8/22 | 22/22 | Code |
 | juizes_por_varredura | 27 | 0 | Code |
-| testes_em_quarentena | 4 (3 abertos esta noite: 2 de relogio, 1 achado que espera corte) | 0 | Code |
+| testes_em_quarentena | 4 | 0 | Code |
 | testes_sem_relogio | 465 | 0 (a lista so encolhe) | Code |
-| arvore_vermelha_min / na semana | 0 / 60 | 0 | Code |
-| horas_esteira_parada_com_fatia_pronta (48 h) | 0,3 | 0 | Code |
-| noites_sem_fatia (7 noites, 22:00-07:30) | 2 | 0 | Code |
+| arvore_vermelha_min / na semana | 0 / 300 | 0 | Code |
+| horas_esteira_parada_com_fatia_pronta (48 h) | 0,0 | 0 | Code |
+| noites_sem_fatia (7 noites, 22:00-07:30) | 3 (era 2) | 0 | Code |
 | escalas_ajustadas_auto / reversoes | 21 / 0 | reversoes < 5% | Code |
 | acoes_perdidas_no_fio (copiloto) | 0 | 0 | Code |
-| divergencia_grade_x_cartorio | ? (reconciliar_grade de hoje ainda nao rodou) | 0 | cartorio |
+| divergencia_grade_x_cartorio | **1.390** (reconciliar_grade de hoje; era "?" ontem) | 0 | cartorio |
 | balao de chamados (Validar + Decidir) | 711 (18/09) | — | admin |
 | fila de trabalho (aberto + em analise) | 1.321 (18/09) | — | admin/colab |
 | competencias_pagas_sem_tranca | 0 | 0 | DP |
-| chamados_em_competencia_trancada | 3 | 0 | sistema |
-| sla_vencido_sem_aviso | 351 | 0 | supervisao/DP |
+| chamados_em_competencia_trancada | 4 | 0 | sistema |
+| sla_vencido_sem_aviso | 265 | 0 | supervisao/DP |
 | furos_vetados_por_regua | 0 | 0 | DP/cadastro |
 | deploys_agendados | 0 | — | Code |
 | colabs_nao_certificados (09/2026) | 285 | 0 | Code |
-| chamados_vivos_sem_pergunta_no_app | 264 (21/09 02:2x) | 0 | admin/sistema |
+| chamados_vivos_sem_pergunta_no_app | 176 (22/09 11:2x) | 0 | admin/sistema |
 
 
 
@@ -2816,38 +2816,67 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **21/09 17:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
-## PENDENTES DO RONALD (26) -- aval, "!", corte e smoke esperando voce
 
-_Gerada de `PENDENTES_RONALD.json` em 21/09 07:45. Entra quando o DRY/pedido nasce, sai quando aplicado. `avais_pendentes` = 26; `aval_mais_velho_h` = 208 (esperado: nenhum acima de 24 h -- hoje **17 acima**)._
+**21/09 17:25 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+<!-- PENDENTES:INICIO -->
+
+**22/09 12:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**22/09 13:20 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+## PENDENTES DO RONALD (43) -- aval, "!", corte e smoke esperando voce
+
+_Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 22/09 11:26. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 43 (aval 7 - corte 22 - smoke 14); `mais_velho_h` = 235 (esperado: nenhum acima de 24 h -- hoje **30 acima**)._
 
 | # | tipo | o que e | desde | idade | afeta | frase para colar |
 |---|---|---|---|---|---|---|
-| 1 | corte | CORTE RECEBIDO 12:5x ("C7 leitura 1": o admin segue fechando o silencio; a regra unica vale para o fechamento automatico) -- fatia em montagem; sai daqui quando estiver no ar. C7 'disputa fecha quando': a regra unica (todas as perguntas materializadas ou com via + celula concorde) deixa fechar so 32 das 456 disputas abertas; hoje o admin fecha 396, e 364 delas tem pergunta muda sem via (o corte E1 de 03/09 diz que fechar e o veredito do admin sobre o SILENCIO). (1) o admin segue fechando o silencio e a regra unica vale so para o fechamento automatico; ou (2) a regra unica vale para todos e as 364 deixam de poder ser fechadas pelo admin? | 19/09 09:40 | **46 h** | 456 disputas | `corte Ronald: C7 leitura 1 (ou: leitura 2)` |
-| 2 | corte | Tela para segunda: RECUSA-COM-PORTA, UI-TOOLTIP-FILA e WIZARD-12x36-FDS nao tem definicao em ticket nem no relato -- o que e cada uma? | 19/09 15:05 | **40 h** | 3 fatias | `(uma linha por fatia com o que ela faz)` |
-| 3 | corte | FERIAS na porta da batida (metade que sobrou do corte de 20/09): a metade do AFASTADO esta resolvida e no ar (A-AFASTADO-AVISA e A-AFASTADO-TRIO: afastado nunca bloqueia, so avisa e cobra a supervisao; a porta pergunta ao juiz). Falta a de FERIAS: hoje a porta barra por `situacao == 'ferias'`, campo que NINGUEM escreve, e 15 pessoas que o juiz diz estarem de ferias batem ponto sem aviso nenhum. Pelo juiz elas passariam a ser barradas -- e isso conflita com 'batida de chao nunca e barrada'. Mesmo desenho do afastado (nunca barra, avisa e cobra), ou ferias barra mesmo? | 19/09 16:20 | **39 h** | 15 colabs de ferias pelo juiz | `corte Ronald: ferias nunca barra (ou: barra)` |
-| 4 | corte | Suite rapida: depois do hash MD5 so no CI (-27%), o maior peso que sobra e UM teste -- test_grade_fuzz.test_fuzz_ancorado, 162 s, que nao se divide entre os 4 processos (a suite nao fecha em 4 min com ele). Duas saidas, as duas mudam o que ele exercita: (a) re-semear por forma (menos sorteios, mesma cobertura declarada); (b) montar a grade em memoria (mais rapido, mas deixa de exercitar o caminho do banco). Ou (c) deixar como esta e aceitar ~6 min. | 20/09 12:40 | 19 h | 162 s de 486 s | `corte Ronald: fuzz da grade (a) re-semear / (b) em memoria / (c) fica como esta` |
-| 5 | corte | DIA DO CHAMADO por um juiz so (os 2 ultimos do registro_chamado): trocar a leitura crua do `contexto_json` pelo juiz `data_do_chamado` muda o dia de 4.705 chamados dos 22.765 (20,7%) em DOIS escritores de prod (supra_juiz e cartorio), dentro da janela de fechamento. Nos exemplos o campo cru esta vazio e o juiz acha data. Medido 20/09 19:2x, so leitura. E o que falta para registro_chamado = 0. | 20/09 19:20 | 12 h | 4.705 chamados, 2 escritores | `corte Ronald: dia do chamado pelo juiz (com DIFF antes)` |
-| 6 | corte | EXPIRA_EM NA VIRADA (achado 21/09 00:3x): a graca de -1 dia de `_dentro_da_janela_viva` vale a CADA competencia, entao o dia 20 (ultimo da competencia) expira um mes depois do dia 19 -- medido em prod: 18 e 19/09 -> 21/10; 20 e 21/09 -> 21/11. A graca e do TURNO que cruza a meia-noite (e ai vale uma vez so, na borda de entrada) ou do EVENTO (e ai o selo pede demais e o texto dele muda)? Selo `test_selo_lavrado_orfaos::test_expira_em_devolve_FIM_DE_COMPETENCIA_nao_prazo_fixo` em quarentena com este motivo, 48 h. | 21/09 00:35 | 7 h | todo evento do dia 20 de qualquer competencia | `corte Ronald: graca de -1d e do turno (ou: do evento)` |
-| 7 | corte | ESCRITOR DE `situacao='afastado'` (ultimo pendente da familia ausencia, 21/09): `ponto/views.py` grava o campo quando o DP lanca a ausencia e NINGUEM reverte quando ela acaba. Parar de gravar mexe em 4 universos que nao sao desta familia (`situacao__in=('ativo','afastado',...)` em inteligencia, relatorios e ponto). E a trilha nao tem NENHUMA linha com 'situacao' em prod -- ou o escritor nunca rodou, ou grava sem trilha, e isso precisa ser sabido antes. (1) o campo continua sendo cadastro e ganha REVERSAO (quem reverte: cron, como o de ferias); ou (2) o campo sai e o juiz `afastado_hoje` responde sozinho, com os 4 universos adaptados. | 21/09 01:10 | 6 h | 12 colabs com o campo; 4 universos | `corte Ronald: situacao afastado com reversao (ou: sai e fica so o juiz)` |
-| 8 | corte | K8-FM-DE-HOJE x JANELA DE FECHAMENTO (21/09): a fatia que tira o mes CIVIL de 11 sitios do FechamentoMensal e raia DINHEIRO, e a janela barra dinheiro ate o export do DP -- entao a fatia que protege o export esta parada pela regra que protege o export. Medido hoje: `janela_atual` = 21/09-20/10 nas 3 empresas, `hoje.month` = 9, e `FechamentoMensal` mes=9/2026 tem 592 linhas (todas abertas) = a competencia em exportacao. A tela sempre manda `mes`/`ano`, entao o caminho de todo dia nao cai no default; quem cai e POST sem o campo. E `recalcular_fechamento_mes` grava sobre `aprovado` e nao consulta `PeriodoFechado` (K4). (1) abrir excecao da janela para a K8 antes do export; ou (2) ela espera o export como as outras de dinheiro. CONFERIDO 21/09 03:4x: o portao de dinheiro e' so HORA + carimbo da sombra (`sombra.sh --conferir` ja devolve rc=0 com o carimbo de 20/09) e a faixa 03:00-04:45 abre as 04:45 -- a k_fmhoje teria pousado SOZINHA por volta das 05:00 se eu nao a tivesse tirado a mao da fila de integracao. "Nenhuma fatia de dinheiro ate o export" e POLITICA do CLAUDE.md e NAO esta em trava nenhuma: falta um portao de politica (arquivo tipo `esteira.dinheiro_fechado` lido pelo `portoes_abertos`, como ele ja le `esteira.pausada`). Sem ele, a proxima fatia de dinheiro entra sozinha. | 21/09 02:15 | 5 h | 11 sitios; 592 fechamentos abertos | `! K8 entra antes do export (ou: espera)` |
-| 9 | corte | PAUTA-HUMANA, a pergunta que decide a fatia 1 (censo em app/docs/PAUTA-HUMANA.md, 21/09 03:0x): os tres campos (titulo/linha/acao) sao COLUNAS do modelo -- selo forte, Pauta sem acao nao nasce, mas migration e as 500 vivas nascem sem eles -- ou DIVISAO na hora de mostrar (zero migration, mas o selo passa a afirmar sobre heuristica)? Recomendacao: colunas OPCIONAIS na fatia 1, selo exigindo so para Pauta nova, passivo vira contador que so encolhe. Medido: 500 vivas, 88% com caixa-alta tecnica, ZERO comecando com verbo; telefone preenchido em 778 de 859 (a porta do 'Ligar' cobre 91%); o valor da Pauta de pagamento NAO tem campo. Segunda pergunta: as 41 vivas de 'ti' (aviso de esteira) ficam na fila do humano ou saem dela? | 21/09 03:10 | 4 h | 500 pautas vivas, 238 do esmeril | `corte Ronald: pauta humana em colunas opcionais (ou: divisao na hora de mostrar)` |
-| 10 | aval | Passivo da ata: re-lavra pelo cartorio (316 colabs, push desligado) derruba o contador principal de 28 para 9, mas emite 49 cobrancas e 920 protestos. Os 120 'nunca bateu em dia coberto' e os 294 'sem celula com vinculo' nao se curam por re-lavra (precedencia e gerar_celulas). Recomendado nao aplicar. | 19/09 16:20 | **39 h** | 316 colabs / 19 dias | `aval Ronald: re-lavra ATA (ou: nao)` |
-| 11 | aval | SLA do chamado pelo juiz: hoje escala por idade >= 20 min cravada; o juiz le o prazo gravado e 'sem prazo = nao estourou'. Trocar direto CALA 27 escalonamentos vivos (230 disputas, 203 concordam, 27 so pela idade, 0 so pelo juiz; 983 dos 2.535 vivos sem prazo). Proposta em dois passos: 1o o emissor carimba o prazo no nascimento, 2o o leitor troca. | 20/09 19:20 | 12 h | 27 escalonamentos, 983 sem prazo | `aval Ronald: carimbar prazo no nascimento, depois trocar o leitor` |
-| 12 | aval | COL650, licenca-maternidade de 4 meses que a lei nao enxerga (achado 21/09 01:5x): AUS#3186 aprovada desde 13/05/2026 SEM data final e com dias_corridos=1. `ausencia_cobre`=None, `fatos_do_dia`='trabalho', 61 celulas `nunca_bateu`, 24 chamados abertos contra ela, 08/2026 fechado APROVADO com 0,00 h. (1) Pauta DP para o cadastro por a data de fim (120 dias de 13/05 = 09/09); (2) depois disso, retratar os 24 chamados pela porta e re-lavrar as celulas da competencia aberta; (3) 08/2026 esta aprovada -- retificar ou nao e decisao sua. Contador novo `ausencia_bloqueante_sem_fim` = 1 no placar (esperado 0). Nada executado. | 21/09 01:55 | 5 h | 1 colab, 24 chamados, 61 celulas, 1 competencia paga | `! col650: cadastro -> retratar -> (retificar 08 ou nao)` |
-| 13 | aval | INTEGRADOR SEM QUEM O LIGUE (achado 21/09 07:4x): o `hasner-integrador-off.timer` desliga E DESABILITA o `hasner-integrador.timer` as 06:00 (aval seu de 20/09 17:3x, 'so a noite ate o resize') -- e nao existe timer para LIGAR de volta. `is-enabled` responde `disabled` agora. Consequencia: hoje a noite nada sobe sozinho; a fila fica cheia e quieta ate alguem rodar `systemctl --user enable --now hasner-integrador.timer` na mao. Mesma familia dos crons declarados e nunca instalados (04/09). Cura de uma linha: um `hasner-integrador-on.timer` as 22:00, irmao do que desliga. Nao liguei: o aval diz 'desligado de dia' e producao esta acordada. | 21/09 07:45 | 0 h | 2 fatias PRONTAS na fila (AUS-COLISAO, I-RAIA-VAZIA) | `aval Ronald: criar o integrador-on as 22:00 (ou: ligo na mao toda noite)` |
-| 14 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **208 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
-| 15 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **92 h** | 1 tela | `smoke OK: COBRAR-DIA` |
-| 16 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **92 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
-| 17 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **91 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
-| 18 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **90 h** | 1 tela | `smoke OK: GEO-PAINEL` |
-| 19 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **85 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
-| 20 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | **65 h** | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
-| 21 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | **62 h** | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
-| 22 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | **60 h** | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
-| 23 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | **60 h** | 1 tela | `smoke OK: PAUTA-DO-DIA` |
-| 24 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | **58 h** | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
-| 25 | smoke | FILA-VALIDAR-EM-LOTE (na esteira 14:25; smoke quando o relato disser NO AR): Central > 'Validar em lote os N coerentes' (so classe A, hoje 35) > conferir a previa no drawer > validar; e no copiloto 'quantos posso validar em lote?' tem de responder o numero e apontar o botao. | 19/09 14:25 | **41 h** | 1 tela + copiloto | `smoke OK: FILA-VALIDAR-EM-LOTE` |
-| 26 | smoke | LEMBRETE-EM-LOTE (na esteira 14:38, atras do lote de validar; smoke quando o relato disser NO AR): Central > fila Cobrar > 'Lembrar quem tem pergunta no app (N colabs)' > conferir a previa > enviar (um push por colab, 1/dia; sem push vira Pauta de posto); e no copiloto 'quantos tem questionario pendente no app e posso lembrar?' responde o numero e aponta o botao. | 19/09 14:38 | **41 h** | 1 tela + copiloto | `smoke OK: LEMBRETE-EM-LOTE` |
+| 1 | corte | F6 'a competencia do dia esta fechada (pode escrever)?' em chamados/services/regularizacao_ext.py:88-95 (`_folha_fechada`, impressao `colaborador=reg.colaborador, ano=_d.year, mes=_d.month).first()`, registro core/juizes.py:306). NAO FABRIQUEI FATIA porque _F6 NAO TEM JUIZ DECLARADO: esta em SEM_JUIZ['feriado/prazo'] (core/juizes.py:206, 'nenhuma leitora: trancar_periodo grava a chave da COMPETENCIA e quatro leitores consultam o mes civil'). Declarar autoridade e corte seu, nao meu. O MOTIVO de nao haver juiz e real, e nao e esquecimento: existem HOJE duas leis vivas e DISCORDANTES de 'fechado barra a escrita' -- (1) ponto/janelas.py:75-90 `competencia_fechada(colaborador, timestamp)`, que se declara 'LEI UNICA de mes fechado', por COLABORADOR, fechado = FechamentoMensal.status in ('aprovado','exportado'), e que desde o seu corte CALENDARIO-UNICO (17/09) le a COMPETENCIA do dia, nunca o mes civil; (2) ponto/services/fechamento.py:465-472 `competencia_trancada(empresa_id, mes, ano)`, juiz JA declarado de _K4 (core/juizes.py:188), por EMPRESA, fechado = PeriodoFechado sem reaberto_em, e cuja docstring diz em letra que aprovada/exportada sao MARCOS, 'nunca fechada'. Escolher uma das duas para _F6 e decisao de negocio que nao esta escrita. O texto de SEM_JUIZ esta DESATUALIZADO (escrito 14/09, antes do CALENDARIO-UNICO de 17/09 que fez competencia_fechada virar leitora de competencia); o comentario core/juizes.py:915 ('competencia_fechada fica no _F6') e intencao, nao declaracao. DESCARTEI a cura barata (o sitio perguntar so `janela_atual` -- juiz declarado de _F5 -- e seguir com o literal de status): depois dela o corpo de `_folha_fechada` vira copia linha a linha de competencia_fechada, a linha de _F6 sairia do registro com o sitio AINDA respondendo _F6 por conta propria, e o pendente irmao de _K4 na MESMA funcao (core/juizes.py:325, 'copia de competencia_fechada') ficaria mais verdadeiro, nao menos -- meia-correcao. EFEITO VISIVEL HOJE, se voce quiser peso para decidir: nos dias >= corte (21-31) o guard le o FechamentoMensal da competencia ANTERIOR; se ela estiver aprovada/exportada, o item e barrado com 'reabra antes' mesmo pertencendo a competencia ABERTA -- e o mesmo bug que o CALENDARIO-UNICO curou para as 241 perguntas de validacao. A reg nao morre: cai no ramo 'fossil invertido' (regularizacao_ext.py:177-182), fica status='confirmada' sem batida e espera `retomar_regularizacoes_confirmadas`. NAO MEDIDO quantas regs estao presas assim -- FONTE juliani.chamados_regularizacaoexterna + chamados_regularizacaoitembatida na sombra / UNIDADE RegularizacaoExterna / UNIVERSO os 3 CNPJs / EXCLUSOES status != 'confirmada' (consulta na sombra nao autorizada nesta corrida). PARA QUEM FOR FABRICAR DEPOIS DO SEU CORTE: se a escolha for competencia_fechada, a assinatura e (colaborador, timestamp) e devolve MENSAGEM ('' = pode escrever), nao status -- o ramo corrigir/remover ja tem `alvo.timestamp` para entregar; o ramo adicionar so tem `item.data` e precisa de ponte data->datetime aware (meio-dia local e seguro), e as duas mensagens de erro dos chamadores (:110 e :150-151) passam a repetir a do juiz. Nao toquei core/juizes.py nem o contador de ponto/tests/test_contract_juiz_feriado.py:95 (22): a linha do registro so sai com corte seu. | 22/09 00:00 | 11 h | 1 sitio (registro F6; 2 leis candidatas; regs presas NAO MEDIDAS) | `corte Ronald: declarar _F6 = ponto/janelas.py::competencia_fechada e tirar de SEM_JUIZ (ou: competencia_trancada / manter)` |
+| 2 | corte | F3 'feriado trabalhado paga dobra ou hora simples?' em ponto/views.py:1677 (`hora_extra_100 = request.POST.get('hora_extra_100') == 'on'`, registro core/juizes.py:301). NAO FABRIQUEI FATIA porque o sitio NAO re-deriva a resposta do juiz: ele so COLETA um check do admin. O valor sai do POST, passa pela porta (ponto/services/ausencia.py:72 e :229) e para no campo Ausencia.hora_extra_100 (ponto/models.py:590). LIDO POR NINGUEM -- censo de leitores fechado: grep de hora_extra_100 em todo o app da 4 familias e nenhuma le o campo do MODELO: (a) o campo em si; (b) 11 sitios em ponto/motor_calculo_v2.py, que sao OUTRO objeto (o atributo homonimo do dataclass PeriodoTrabalho, :148, que o motor ESCREVE por conta propria); (c) a escrita da tela/porta; (d) o selo ponto/tests/test_lancar_casca.py:65 test_hora_extra_100_preservado, que pina justamente o campo morto. Por isso trocar a linha por uma pergunta ao juiz declarado (ponto/motor_calculo_v2.py::CICLOS_FERIADO_SIMPLES) nao muda nada: qualquer selo novo ficaria VERDE na arvore original E na curada, e selo que nao morde nao prende nada. Isto nao e contrato 1 (um juiz por pergunta) e sim contrato 3: hoje o parametro nao e CONSUMIDO nem esta ROTULADO 'sem efeito'. As tres saidas, todas suas: (1) CONSUMIR -- motor/export passam a ler Ausencia.hora_extra_100; e zona inviolavel (motor_calculo_v2 + folha) E mudanca de LEI de dinheiro, porque um check do admin passaria a vencer o juiz do feriado (feriado_12x36_em_dobra / CICLOS_FERIADO_SIMPLES); (2) ROTULAR SEM EFEITO -- tirar o checkbox de templates/ponto/lancar_ausencia.html:73-78 e o campo do POST, mantendo a coluna; e front, so sobe com o seu smoke de clique; (3) MANTER como pendente declarado. Detalhe que pesa na (2): o checkbox NAO e gated por tipo -- nada em template ou JS mostra/esconde `campo-hora-extra`, entao ele aparece em TODO lancamento de ausencia, inclusive atestado e ferias, e nao so no tipo 'feriado_folga' (que e vigente: ponto/catalogo/ausencias.py:50, SUPRIME, e vira faixa 'folga' em ponto/precedencia.py:63). Qualquer que seja a saida, o selo test_lancar_casca.py:65 anda junto. NAO MEDIDO: quantas linhas tem o flag ligado em prod -- FONTE juliani.ponto_ausencia na sombra / UNIDADE linha de Ausencia / UNIVERSO os 3 CNPJs / EXCLUSOES nenhuma (a consulta na sombra nao foi autorizada nesta corrida). Nao toquei core/juizes.py nem o contador de core/tests/test_contract_juiz_tela.py: a linha do registro so sai com corte seu. | 22/09 00:00 | 11 h | 1 sitio (registro F3; 0 leitores do campo; linhas com o flag ligado NAO MEDIDAS) | `corte Ronald: rotular hora_extra_100 sem efeito e tirar o checkbox (ou: motor consome / manter)` |
+| 3 | corte | A6 'o colaborador esta de ferias hoje?' em ponto/services/triagem_batida.py:53 (`elif colaborador.situacao == 'ferias':`, registro core/juizes.py:281). O ramo NAO dispara: ninguem grava situacao='ferias' em codigo (a porta so grava 'desligado' em colaboradores/services/desligamento.py e 'afastado' em ponto/views.py); so o Django admin (colaboradores/admin.py:23) alcanca o valor. PROPOSTA (default): APAGAR o elif (linhas 53-58) -- nao toca a API, e quem TEM agendamento segue avisado pelo juiz, que ja responde nesta casca (ponto/services/aviso_da_batida.py:73 -> ferias/services.py::em_gozo_hoje). NAO DECIDI porque (a) a casca irma barra ferias PELA situacao (api/views_core.py:378-386, api/views.py:395) e isso foi pinado como LEI em 21/09 -- test_afastado_na_batida.py:110-118 'desligado e ferias barram', com o aviso de que mudar ferias de carona em outra fatia e mudanca de LEI; (b) o proprio sitio esta tagueado 'decisao Ronald' em ponto/tests/test_ferias_dia21.py:17 ('orfaos gemeos'). Apagar = a web deixa de sinalizar quem for marcado no admin sem agendamento (API segue 403). Manter = fica no registro como pendente declarado. A terceira leitura (o elif perguntar ao em_gozo_hoje e virar vivo) esta FORA: o ramo abre chamado acesso_bloqueado por _Chamado.criar com exists() na mao, fora do juiz de duplicado (abrir), e viraria 2o emissor do mesmo fato contra chamados/detector_anomalias.py:113 (contrato 2). NAO MEDIDO: quantos colaboradores tem situacao='ferias' hoje (a consulta na sombra nao foi autorizada nesta corrida) -- FONTE juliani.colaboradores_colaborador na sombra / UNIDADE colaborador / UNIVERSO os 3 CNPJs / EXCLUSOES nenhuma. | 22/09 00:00 | 11 h | 1 sitio (registro A6; 0 colaboradores medidos) | `corte Ronald: apagar o gate de ferias da web (ou: manter)` |
+| 4 | corte | CORTE RECEBIDO 12:5x ("C7 leitura 1": o admin segue fechando o silencio; a regra unica vale para o fechamento automatico) -- fatia em montagem; sai daqui quando estiver no ar. C7 'disputa fecha quando': a regra unica (todas as perguntas materializadas ou com via + celula concorde) deixa fechar so 32 das 456 disputas abertas; hoje o admin fecha 396, e 364 delas tem pergunta muda sem via (o corte E1 de 03/09 diz que fechar e o veredito do admin sobre o SILENCIO). (1) o admin segue fechando o silencio e a regra unica vale so para o fechamento automatico; ou (2) a regra unica vale para todos e as 364 deixam de poder ser fechadas pelo admin? | 19/09 09:40 | **73 h** | 456 disputas | `corte Ronald: C7 leitura 1 (ou: leitura 2)` |
+| 5 | smoke | GEO-PAINEL: pino de GPS do painel situacional volta a abrir o mapa (front na arvore, fora do git) | 17/09 13:00 | **118 h** | 1 tela | `smoke OK: GEO-PAINEL` |
+| 6 | smoke | COBRAR-DIA: botao 'Cobrar este dia' na caixa do Resolver dia | 17/09 10:47 | **120 h** | 1 tela | `smoke OK: COBRAR-DIA` |
+| 7 | smoke | SOLIC-FLAG: Solicitacoes no app por empresa (desligado por padrao) | 17/09 11:34 | **119 h** | 1 tela | `smoke OK: SOLIC-FLAG` |
+| 8 | smoke | FORM-CATALOGO: 'Nova solicitacao' com 7 areas pelo catalogo | 17/09 12:24 | **119 h** | 1 tela | `smoke OK: FORM-CATALOGO` |
+| 9 | smoke | PROPOSTA-EVIDENCIA: faixa da proposta de escala no fio com a evidencia dos 28 dias | 17/09 17:54 | **113 h** | 1 tela | `smoke OK: PROPOSTA-EVIDENCIA` |
+| 10 | smoke | lista ESPERA SMOKE do TICKETS (front fora do git): ORDEM-10 UI-3/4/5, ORDEM-12 TELA-1730, ORDEM-15 R15-TOKEN, GATE-FERIAS-AVISO, SW-CASCA-VERSAO, PROPOSTA-NO-FIO, ATESTADO-POR-MINUTOS, E4, E7, ESPELHO-COLAB-APP-PENDENTE, BUG-140-BOTAO-OCULTO, ESPELHO-COLAB-PENDENTE, ORDEM-20 SUPORTE-HASNER, ORDEM-21 ROTULO-SOLICITACAO, ABA-CHAMADOS-DO-COLAB | 12/09 15:30 | **235 h** | 15 telas | `smoke OK: <nome da fatia> (uma por vez)` |
+| 11 | smoke | WIZARD-12x36-FASE refeita (2o smoke): Colaboradores > Vincular > um 12x36 (col99) -- calendario no painel, dentro de 'Vincular escala', abaixo da escala, 7 colunas, legenda em 1 linha, 'Inicio do turno dd/mm -- marcado pela paridade real (N% dos dias)', 'N furos antes -> M depois', um botao so 'Salvar'; lista de Vincular intacta; componente do ciclo no wizard (folgas, 12x36) + REGRA 3 (vigencia da fase nova; Inicio da apuracao: a partir da mudanca x desde o vinculo; caso col901 mat 1757 -> 18/09) | 18/09 14:26 | **93 h** | 1 tela + 1 Pauta | `smoke OK: WIZARD-12x36-FASE` |
+| 12 | smoke | TELA-FOLGA-ROTULO: no calendario do colab, o Ok verde so aparece em dia de trabalho com o marco batido; folga, feriado e ausencia nunca ganham Ok (front na arvore, fora do git) | 18/09 17:16 | **90 h** | 1 tela | `smoke OK: TELA-FOLGA-ROTULO` |
+| 13 | smoke | AUSENCIA-TIPO-REJULGA-TELA: painel da ausencia de tipo que nao pede documento diz 'Documento: nao exigido para este tipo' no lugar do aviso vermelho (front na arvore, fora do git) | 18/09 19:31 | **87 h** | 1 tela | `smoke OK: AUSENCIA-TIPO-REJULGA-TELA` |
+| 14 | smoke | PAUTA-DO-DIA: 'Abrir Pauta DP' no dia de competencia fechada cria a pauta colada no dia (o dia no corpo); a ficha do colab lista as pautas dele (front na arvore, fora do git) | 18/09 19:42 | **87 h** | 1 tela | `smoke OK: PAUTA-DO-DIA` |
+| 15 | smoke | CADASTRO-X-REALIDADE: Plano de Escalas > 'Cadastro x realidade' (no lugar de 'Escalas propostas (LIMBO)') -- lista por posto, vinculo, assinatura e botao da acao; coluna destino sugerido; contador 300 de 533; botao PDF padrao com 'o que este PDF contem' ao lado e o PDF da mesma lista (front na arvore, fora do git) | 18/09 20:56 | **86 h** | 1 tela + 1 PDF | `smoke OK: CADASTRO-X-REALIDADE` |
+| 16 | smoke | FILA-VALIDAR-EM-LOTE (na esteira 14:25; smoke quando o relato disser NO AR): Central > 'Validar em lote os N coerentes' (so classe A, hoje 35) > conferir a previa no drawer > validar; e no copiloto 'quantos posso validar em lote?' tem de responder o numero e apontar o botao. | 19/09 14:25 | **69 h** | 1 tela + copiloto | `smoke OK: FILA-VALIDAR-EM-LOTE` |
+| 17 | smoke | LEMBRETE-EM-LOTE (na esteira 14:38, atras do lote de validar; smoke quando o relato disser NO AR): Central > fila Cobrar > 'Lembrar quem tem pergunta no app (N colabs)' > conferir a previa > enviar (um push por colab, 1/dia; sem push vira Pauta de posto); e no copiloto 'quantos tem questionario pendente no app e posso lembrar?' responde o numero e aponta o botao. | 19/09 14:38 | **68 h** | 1 tela + copiloto | `smoke OK: LEMBRETE-EM-LOTE` |
+| 18 | corte | Tela para segunda: RECUSA-COM-PORTA, UI-TOOLTIP-FILA e WIZARD-12x36-FDS nao tem definicao em ticket nem no relato -- o que e cada uma? | 19/09 15:05 | **68 h** | 3 fatias | `(uma linha por fatia com o que ela faz)` |
+| 19 | aval | Passivo da ata: re-lavra pelo cartorio (316 colabs, push desligado) derruba o contador principal de 28 para 9, mas emite 49 cobrancas e 920 protestos. Os 120 'nunca bateu em dia coberto' e os 294 'sem celula com vinculo' nao se curam por re-lavra (precedencia e gerar_celulas). Recomendado nao aplicar. | 19/09 16:20 | **67 h** | 316 colabs / 19 dias | `aval Ronald: re-lavra ATA (ou: nao)` |
+| 20 | corte | Suite rapida: depois do hash MD5 so no CI (-27%), o maior peso que sobra e UM teste -- test_grade_fuzz.test_fuzz_ancorado, 162 s, que nao se divide entre os 4 processos (a suite nao fecha em 4 min com ele). Duas saidas, as duas mudam o que ele exercita: (a) re-semear por forma (menos sorteios, mesma cobertura declarada); (b) montar a grade em memoria (mais rapido, mas deixa de exercitar o caminho do banco). Ou (c) deixar como esta e aceitar ~6 min. | 20/09 12:40 | **46 h** | 162 s de 486 s | `corte Ronald: fuzz da grade (a) re-semear / (b) em memoria / (c) fica como esta` |
+| 21 | corte | EXPIRA_EM NA VIRADA (achado 21/09 00:3x): a graca de -1 dia de `_dentro_da_janela_viva` vale a CADA competencia, entao o dia 20 (ultimo da competencia) expira um mes depois do dia 19 -- medido em prod: 18 e 19/09 -> 21/10; 20 e 21/09 -> 21/11. A graca e do TURNO que cruza a meia-noite (e ai vale uma vez so, na borda de entrada) ou do EVENTO (e ai o selo pede demais e o texto dele muda)? Selo `test_selo_lavrado_orfaos::test_expira_em_devolve_FIM_DE_COMPETENCIA_nao_prazo_fixo` em quarentena com este motivo, 48 h. | 21/09 00:35 | **34 h** | todo evento do dia 20 de qualquer competencia | `corte Ronald: graca de -1d e do turno (ou: do evento)` |
+| 22 | aval | COL650, licenca-maternidade de 4 meses que a lei nao enxerga (achado 21/09 01:5x): AUS#3186 aprovada desde 13/05/2026 SEM data final e com dias_corridos=1. `ausencia_cobre`=None, `fatos_do_dia`='trabalho', 61 celulas `nunca_bateu`, 24 chamados abertos contra ela, 08/2026 fechado APROVADO com 0,00 h. (1) Pauta DP para o cadastro por a data de fim (120 dias de 13/05 = 09/09); (2) depois disso, retratar os 24 chamados pela porta e re-lavrar as celulas da competencia aberta; (3) 08/2026 esta aprovada -- retificar ou nao e decisao sua. Contador novo `ausencia_bloqueante_sem_fim` = 1 no placar (esperado 0). Nada executado. | 21/09 01:55 | **33 h** | 1 colab, 24 chamados, 61 celulas, 1 competencia paga | `! col650: cadastro -> retratar -> (retificar 08 ou nao)` |
+| 23 | corte | ESCRITOR DE `situacao='afastado'` (ultimo pendente da familia ausencia, 21/09): `ponto/views.py` grava o campo quando o DP lanca a ausencia e NINGUEM reverte quando ela acaba. Parar de gravar mexe em 4 universos que nao sao desta familia (`situacao__in=('ativo','afastado',...)` em inteligencia, relatorios e ponto). E a trilha nao tem NENHUMA linha com 'situacao' em prod -- ou o escritor nunca rodou, ou grava sem trilha, e isso precisa ser sabido antes. (1) o campo continua sendo cadastro e ganha REVERSAO (quem reverte: cron, como o de ferias); ou (2) o campo sai e o juiz `afastado_hoje` responde sozinho, com os 4 universos adaptados. RE-TRIADO 22/09 pelo fabricante de fatia (item `ponto/views.py#3` do registro): NAO fabricado, e a leitura (2) nao e mecanica -- `ponto/services/afastado_avisa.py:26-33` usa o campo de proposito como DIVERGENCIA declarada (cadastro diz afastado e o juiz nao: 11 concordam, 1 so no cadastro, 0 so no juiz), entao tirar o escritor CALA justamente o caso que mais precisa da Pauta. `ponto/views.py:1706-1708` e `TICKETS.md` A-AFASTADO-TRIO ja dizem "espera corte". RE-TRIADO OUTRA VEZ 22/09 (item `ponto/views.py#2` do registro, MESMA ancora do #3): o sitio nao re-deriva a pergunta -- ele ESCREVE um campo de cadastro, e o juiz `afastado_hoje` (ponto/turnos.py:989) ja responde pela Ausencia; nao ha cura mecanica, so as duas leituras acima. Enquanto a linha ficar em `PENDENTES['ausencia/ferias']` sem corte, o fabricante vai sortear este sitio toda vez que a trava A cair abaixo de 3 -- e' o unico item da familia sem cura mecanica. So o corte (ou tirar a linha do registro, que e' palavra sua) para o laco. | 21/09 01:10 | **34 h** | 12 colabs com o campo; 4 universos | `corte Ronald: situacao afastado com reversao (ou: sai e fica so o juiz)` |
+| 24 | corte | K8-FM-DE-HOJE x JANELA DE FECHAMENTO (21/09): a fatia que tira o mes CIVIL de 11 sitios do FechamentoMensal e raia DINHEIRO, e a janela barra dinheiro ate o export do DP -- entao a fatia que protege o export esta parada pela regra que protege o export. Medido hoje: `janela_atual` = 21/09-20/10 nas 3 empresas, `hoje.month` = 9, e `FechamentoMensal` mes=9/2026 tem 592 linhas (todas abertas) = a competencia em exportacao. A tela sempre manda `mes`/`ano`, entao o caminho de todo dia nao cai no default; quem cai e POST sem o campo. E `recalcular_fechamento_mes` grava sobre `aprovado` e nao consulta `PeriodoFechado` (K4). (1) abrir excecao da janela para a K8 antes do export; ou (2) ela espera o export como as outras de dinheiro. CONFERIDO 21/09 03:4x: o portao de dinheiro e' so HORA + carimbo da sombra (`sombra.sh --conferir` ja devolve rc=0 com o carimbo de 20/09) e a faixa 03:00-04:45 abre as 04:45 -- a k_fmhoje teria pousado SOZINHA por volta das 05:00 se eu nao a tivesse tirado a mao da fila de integracao. "Nenhuma fatia de dinheiro ate o export" e POLITICA do CLAUDE.md e NAO esta em trava nenhuma: falta um portao de politica (arquivo tipo `esteira.dinheiro_fechado` lido pelo `portoes_abertos`, como ele ja le `esteira.pausada`). Sem ele, a proxima fatia de dinheiro entra sozinha. | 21/09 02:15 | **33 h** | 11 sitios; 592 fechamentos abertos | `! K8 entra antes do export (ou: espera)` |
+| 25 | corte | FERIAS na porta da batida (metade que sobrou do corte de 20/09): a metade do AFASTADO esta resolvida e no ar (A-AFASTADO-AVISA e A-AFASTADO-TRIO: afastado nunca bloqueia, so avisa e cobra a supervisao; a porta pergunta ao juiz). Falta a de FERIAS: hoje a porta barra por `situacao == 'ferias'`, campo que NINGUEM escreve, e 15 pessoas que o juiz diz estarem de ferias batem ponto sem aviso nenhum. Pelo juiz elas passariam a ser barradas -- e isso conflita com 'batida de chao nunca e barrada'. Mesmo desenho do afastado (nunca barra, avisa e cobra), ou ferias barra mesmo? | 19/09 16:20 | **67 h** | 15 colabs de ferias pelo juiz | `corte Ronald: ferias nunca barra (ou: barra)` |
+| 26 | corte | DIA DO CHAMADO por um juiz so (os 2 ultimos do registro_chamado): trocar a leitura crua do `contexto_json` pelo juiz `data_do_chamado` muda o dia de 4.705 chamados dos 22.765 (20,7%) em DOIS escritores de prod (supra_juiz e cartorio), dentro da janela de fechamento. Nos exemplos o campo cru esta vazio e o juiz acha data. Medido 20/09 19:2x, so leitura. E o que falta para registro_chamado = 0. | 20/09 19:20 | **40 h** | 4.705 chamados, 2 escritores | `corte Ronald: dia do chamado pelo juiz (com DIFF antes)` |
+| 27 | aval | SLA do chamado pelo juiz: hoje escala por idade >= 20 min cravada; o juiz le o prazo gravado e 'sem prazo = nao estourou'. Trocar direto CALA 27 escalonamentos vivos (230 disputas, 203 concordam, 27 so pela idade, 0 so pelo juiz; 983 dos 2.535 vivos sem prazo). Proposta em dois passos: 1o o emissor carimba o prazo no nascimento, 2o o leitor troca. | 20/09 19:20 | **40 h** | 27 escalonamentos, 983 sem prazo | `aval Ronald: carimbar prazo no nascimento, depois trocar o leitor` |
+| 28 | corte | PAUTA-HUMANA, a pergunta que decide a fatia 1 (censo em app/docs/PAUTA-HUMANA.md, 21/09 03:0x): os tres campos (titulo/linha/acao) sao COLUNAS do modelo -- selo forte, Pauta sem acao nao nasce, mas migration e as 500 vivas nascem sem eles -- ou DIVISAO na hora de mostrar (zero migration, mas o selo passa a afirmar sobre heuristica)? Recomendacao: colunas OPCIONAIS na fatia 1, selo exigindo so para Pauta nova, passivo vira contador que so encolhe. Medido: 500 vivas, 88% com caixa-alta tecnica, ZERO comecando com verbo; telefone preenchido em 778 de 859 (a porta do 'Ligar' cobre 91%); o valor da Pauta de pagamento NAO tem campo. Segunda pergunta: as 41 vivas de 'ti' (aviso de esteira) ficam na fila do humano ou saem dela? | 21/09 03:10 | **32 h** | 500 pautas vivas, 238 do esmeril | `corte Ronald: pauta humana em colunas opcionais (ou: divisao na hora de mostrar)` |
+| 29 | aval | INTEGRADOR SEM QUEM O LIGUE (achado 21/09 07:4x): o `hasner-integrador-off.timer` desliga E DESABILITA o `hasner-integrador.timer` as 06:00 (aval seu de 20/09 17:3x, 'so a noite ate o resize') -- e nao existe timer para LIGAR de volta. `is-enabled` responde `disabled` agora. Consequencia: hoje a noite nada sobe sozinho; a fila fica cheia e quieta ate alguem rodar `systemctl --user enable --now hasner-integrador.timer` na mao. Mesma familia dos crons declarados e nunca instalados (04/09). Cura de uma linha: um `hasner-integrador-on.timer` as 22:00, irmao do que desliga. Nao liguei: o aval diz 'desligado de dia' e producao esta acordada. | 21/09 07:45 | **27 h** | 2 fatias PRONTAS na fila (AUS-COLISAO, I-RAIA-VAZIA) | `aval Ronald: criar o integrador-on as 22:00 (ou: ligo na mao toda noite)` |
+| 30 | corte | APROVAR/TRANCAR A COMPETENCIA NAO TEM JUIZ (censo da familia fechamento, 21/09 07:5x, em app/docs/FAMILIA-FECHAMENTO.md): a pergunta 'a competencia pode ser aprovada/trancada, e o que bloqueia' tem SEIS sitios e NENHUM juiz declarado -- cinco deles de DINHEIRO, cada um com um crivo diferente: o lote cego pula conta vazia mas a selecao manual, o aprovar_colaborador e o TXT aprovam assim mesmo; 12x36 sem ancora fica fora do lote; aprovar_colaborador olha so turno aberto; a tranca so acontece com empresa e sem pulados (sem empresa aprova todas e nunca tranca); e o TXT aprova pelo `entra` de classificar_export, sem os crivos do botao e sem trancar. Com 592 fechamentos de 09/2026 abertos, e por aqui que eles passam. Qual e o juiz unico de 'pode aprovar' e de 'pode trancar', e o que cada um barra? | 21/09 07:55 | **27 h** | 6 sitios (5 de dinheiro), 592 fechamentos abertos | `corte Ronald: juiz unico de aprovar/trancar (e o que ele barra)` |
+| 31 | aval | COL935: bateu 05 e 06/09 e a admissao/vinculo dela comeca em 07/09 (medido 21/09 08:0x). Nos dois dias ha batida e NENHUMA celula, porque nenhum vinculo cobre o dia -- o cartao conta pela batida e o TXT le a celula, e sai a divergencia de adicional noturno de 9,11 h (cartao 72,05 x TXT 62,94) do gate item 3. Varri os 7 divergentes: ela e a UNICA com batida em dia sem celula; os outros seis tem as 31 celulas e a causa e outra. Cura sem codigo: o DP corrige a data de admissao/inicio do vinculo para 05/09 e o TXT dela sai certo NESTA competencia. Se a data de 07/09 estiver certa, entao as batidas de 05 e 06/09 e que precisam de decisao. | 21/09 08:10 | **27 h** | 1 colab, 9,11 h de adicional noturno, competencia em exportacao | `! col935: admissao/vinculo em 05/09 (ou: as batidas de 05-06/09 nao valem)` |
+| 32 | corte | CONTRATO TROCA-DE-PLANTAO (topico de 21/09, DINHEIRO, 09 ainda nao exportada). Medido: 8 trocas na 09, todas emp 2, lancadas como TipoAusencia('troca_de_plantao', efeito='abona') que NAO existe no codigo; o par cedido<->assumido so vive no texto livre da descricao. O dia ASSUMIDO e folga na celula de quem assume, entao as horas caem em horas_folga_trabalhada -> rubrica 200 (HE 100%) e o adicional noturno e a intrajornada do dia nao saem: 33,22 h na 200 que deviam ser jornada normal (col841 3,93 / col276 12,06 / col190 12,14 / col852 5,09). 2 RED fora da arvore vermelhos pelo motivo certo (red_fora_da_arvore/test_troca_de_plantao.py) e ensaio na sombra com o delta por colab. O CONTRATO a cortar: (1) troca vira PAR declarado (dia cedido <-> dia assumido) na porta de ausencia/escala; (2) a celula do dia assumido vira trabalha=True pelo gerador; (3) precedencia troca > folga; (4) dia assumido paga jornada NORMAL + AN + intra, SEM HE 100; dia cedido sem desconto e sem furo; (5) troca sem par acende contador `trocas_sem_par`. Nada construido. OrdemSubstituicao e AgendaDia ja existem e nenhuma das duas alcanca a folha. | 21/09 10:25 | **25 h** | 8 trocas na 09 / 33,22 h na rubrica 200 | `corte Ronald: contrato TROCA-DE-PLANTAO` |
+| 33 | smoke | POPOVER-RESOLVER-DIA pronto e FORA DO GIT ate o seu smoke (FRONT SEM SMOKE NAO SOBE, BUG 73). Toca `static/js/popover-acao.js` (novo), `templates/ponto/partials/_veredito_dia.html`, `base.html` e `base_app.html` -- template BASE nas DUAS cascas. Selo `core/tests/test_selo_popover_acao.py` 6/6 verde, com chromium medindo 1366 e 1024. Smoke pedido: abrir o calendario de um colaborador, clicar "Resolver dia" num SABADO ou DOMINGO (ultima coluna) e conferir que os botoes aparecem inteiros e clicaveis; e o smoke de sempre nas duas cascas (colab bate ponto; admin faz uma acao com modal). | 21/09 11:00 | **24 h** | 1366: estourava 50 px; 1024: 99 px | `smoke Ronald: Resolver dia na ultima coluna (SAB/DOM), 1366 e 1024` |
+| 34 | corte-dado | CORTE RECEBIDO 21/09 13:5x: **o contrato HORARIO-MOVEL vale**. Contrato de entrada escrito na hora (CLAUDE.md secao 6, 4 linhas) -- FONTE: a 1a entrada de cada dia por `ponto/turnos.py::turnos_do_colab` (nunca Batida crua) contra o marco `hi` de `EscalaColaborador.marcos_do_dia`; UNIDADE: colab-dia, agregado por colab-competencia; UNIVERSO: vinculos ativos 6x1/5x2 na competencia medida; EXCLUSOES: 12x36/24x48 (fase por ancora, nao tem `hi` fixo), intermitente (ja e posicional por desenho), isento de ponto, e os dias sem previsao. PENDENTE de MEDIDA (fork em voo): o limiar '>=90 min em >=30% dos dias' e a separacao dancante x bimodal x deslocamento-fixo so viram numero quando o fork devolver. **O item 3 do despacho (lote seguro = 10 min) NAO esta destravado por este corte**: `tolerancia_marcacao_min` esta em `core/regua_cct.py:44-52 SEM_EFEITO_NO_CALCULO` (o casamento batida x marco nao a consulta), entao usar '10 min da regua' exige LIGAR um parametro hoje decorativo -- fatia de DINHEIRO propria, com DIFF. | 21/09 13:50 | 21 h | contrato escrito; limiar espera a medida do fork | `corte Ronald: contrato HORARIO-MOVEL vale (recebido 21/09 13:5x)` |
+| 35 | corte-dado | CORTE 21/09 16:3x: **guarda da janela AGORA (com DIFF); dia do turno por proximidade so DEPOIS do export**. Estado: fatia 1 construida e GUARDADA fora da arvore (`.fatias_construidas/TURNO-NATIMORTO-fatia1.patch`, `git apply --check` OK) + 2 selos em `red_fora_da_arvore/`. Ela NAO esta no ar -- rodou 27 min em prod por engano (12:13-12:40) e foi retirada. **DIFF ja medido na sombra: NAO e zero** -- 172 batidas trocam de tipo, 188 mudam de sequencia, 185 turnos fecham, 8 colabs movem dinheiro, resto = ZERO confirmado; no TXT so col297 muda de lado (os outros 7 seguem retidos por furo_espelho). **FALTA para a fatia 1 ficar COMPLETA** (corte de 16:1x): o gemeo PERSISTIDO `ponto/nucleo.py:31 dt_fim_previsto_de` (grava no banco a janela nascida da DATA) e os 4 consumidores -- `ponto/selecao_periodo.py:208`, `core/services/painel_op.py:129`, `processar_alertas_turno.py:98,108`, `processar_alertas_avancados.py:69-70`; selo por FUNCAO, nao por arquivo (o de hoje guarda so `ponto/turnos.py`, e `janela_turno_de` tem 6 chamadores); e o DIFF refeito depois disso. | 21/09 16:30 | 18 h | 172 batidas / 185 turnos / 8 colabs; falta o gemeo persistido + 4 consumidores | `corte Ronald: TURNO-NATIMORTO guarda da janela agora (com DIFF); proximidade depois do export` |
+| 36 | corte-dado | CORTE 21/09 16:3x: **o contrato TROCA-DE-PLANTAO vale** (FONTE `eventos_do_fechamento` sobre o turno do dia assumido; UNIDADE colab-dia; UNIVERSO pares de troca na competencia; EXCLUSOES folga trabalhada sem troca, isento, cadastro errado; ESCALA lote + contador `trocas_sem_par`). Medido: 8 trocas na 09, todas emp2, lancadas como `TipoAusencia('troca_de_plantao', efeito='abona')` que NAO existe no codigo; o par so vive no texto livre. **33,22 h na rubrica 200** que deviam ser jornada normal. Os 2 RED estao em `red_fora_da_arvore/test_troca_de_plantao.py`, vermelhos pelo motivo certo. **Pendente de medida**: explicar o +24,14 h do col190 (o ensaio devolveu mais que o dia isolado) e corrigir a Pauta P562 se o numero mudar. | 21/09 16:30 | 18 h | 8 trocas / 33,22 h na 200 / 2 RED prontos | `corte Ronald: contrato TROCA-DE-PLANTAO vale` |
+| 37 | corte-dado | CORTE FINAL 21/09 17:0x: **JSP (emp3) = CLT** (hora noturna reduzida no 12x36), decisao da empresa; **TODAS as demais empresas = a CCT vigente da praca**. **UNIDADE DA REGUA = empresa x praca** -- a CATEGORIA SAI da unidade, e a medicao 'emp2 Londrina com hora reduzida ligada' esta CANCELADA. **Consequencia boa, e ela destrava a fatia A**: a barreira que eu tinha levantado era a categoria nao existir como dado (`Colaborador.cargo` e texto livre, 53% vazio, 32 grafias; em Londrina 138 de 319 sem cargo). Sem categoria na unidade, **isso deixa de bloquear** -- empresa e praca sao dados solidos. Fatia A segue: DIFF so nos **36** da JSP (emp3 Londrina 12x36 noturno), **ZERO** nos 59 da emp2 e nos 7 da emp4, e PARA no "!". `colabs_sem_regua_declarada` nasce em 241 (dono cadastro) e nao bloqueia. | 21/09 16:30 | 18 h | 36 colabs movem; unidade sem categoria destrava a fatia A | `corte Ronald: REGUA-NOMEADA -- JSP pela CLT, demais pela CCT da praca; unidade empresa x praca (sem categoria)` |
+| 38 | corte | GEOFENCE-API (BO Fernando iOS, passo 6) -- MEDIDO 21/09 16:5x. **Nao existe endpoint**: `/api/me/` devolve so o NOME do posto (`api/views_core.py:328`); o app so recebe o VEREDITO no ping-geo, nunca a cerca. **Regra paralela JA EXISTE**: 4 sitios de distancia, e o haversine inline de `api/views_core.py:963-970` (== `api/views.py:2126-2133`) NAO chama o juiz `ponto/services/geofence.py:34-40`. **Fonte da verdade = `Batida.posto_para_calculo` (`ponto/models.py:88-90`), NAO `EscalaColaborador.posto`** -- montar pelo vinculo entrega cerca errada a **49 colaboradores**. Medido: `postos_sem_coordenada` **10 de 205** (Londrina 4, +1 raio de 50 km); colabs multi-posto **0 de 547** -> o `postos[]` tem 1, no maximo 2: **os 20 do contrato nao tem lastro**. `monitorar_segundo_plano` usa `ParametroSistema` por empresa (precedente de 17/09) e exige entrada em `configuracao_efeito.DECLARACAO`; NAO criar campo em `Empresa`. ETag tem de ser hash do payload (`Posto` nao tem `atualizado_em`). `turno_previsto` deve sair de `EC.marcos_do_dia` -- se sair de `janela_turno_de`, HERDA o TURNO-NATIMORTO. A frase obrigatoria: **a cerca e GATILHO, nunca VEREDITO**. | 21/09 16:35 | 18 h | nao existe endpoint; 4 sitios de distancia; 10/205 postos sem coordenada; 49 com posto divergente | `corte Ronald: contrato GEOFENCE-API vale (monitorar em segundo plano: ligado por empresa, default desligado)` |
+| 39 | aval | TURNO-NATIMORTO FLIP DO TIPO -- o aval de 21/09 17:0x nao tem conjunto para aplicar. As "172 batidas" nao existem como lista declarada (o unico 172 do RELATO e 172 CHAMADOS vivos em competencia trancada, outra medida). O juiz real (`flip_automatico --competencia`, em seco) devolve `{'dia_em_curso': 10, 'humano': 19, 'intocavel': 2}` -- **sem chave `auto`**: `--apply` mudaria 0 batidas. O que existe sao 19 batidas que o juiz mandou para DECISAO HUMANA, com motivo escrito: col923 03/09 #90374 (decisor propoe 2 flips -- ambiguo) e 09/09 #96164; col769 5; col926 4; col435 2; col92 #104630; col489 #84690; col192/col363/col859/col889 1 cada. Chamar `flip_tipo` direto nelas passa por cima do juiz que so flipa quando o flip e UNICO e deixa o dia perfeito. Nada escrito. | 21/09 17:05 | 18 h | 19 batidas, 9 colabs | `aval Ronald: flip vale sobre as 19 (ou: aponte a lista de ids)` |
+| 40 | corte | A ATA VENCE A CELULA, e a porta da celula nao fecha a cadeia. `escala/services/leitor_celula.py:344`: `_tipo = ata.get('tipo_dia') or (...cel.trabalha...)` -- `cel.trabalha` e so o FALLBACK. Em 21/09 regenerei 107 celulas para folga e o supra_juiz seguiu lendo `tipo_dia='trabalho'` / `previsto=480` da ata velha: os 41 chamados sem lastro NAO morreram. FECHADO A MAO no mesmo dia (cartorio escopado com `julgar_colab` nas 82 celulas -> 122 julgadas, 40 reconciliados, 41 -> 0 chamados, ZERO chamado novo), e o DRY provou que o cron das 06:28 faria o mesmo sozinho (identico com e sem `--forcar`: a impressao muda com a celula). Entao a pergunta que sobra NAO e' 'como resolver este caso' -- e' de desenho: (1) `regenerar_celulas_vinculo` passa a pedir o re-carimbo das celulas que mudou, e a cadeia celula->ata->chamado fecha na PORTA (1 escritor, efeito completo no mesmo ato); ou (2) fica como esta e a lampada espera o cron -- e isso vira linha escrita no CLAUDE.md, para a proxima pessoa nao repetir a minha surpresa de hoje. | 21/09 17:45 | 17 h | 82 atas; 41 chamados (fechado a mao 21/09 18:2x) | `corte Ronald: a porta da celula re-carimba (ou: espera o cron das 06:28)` |
+| 41 | aval | O QUE SOBROU DA GERADOR-FOTO (passivo FECHADO em 21/09: 89 -> 10 celulas, 41 -> 0 chamados). As 10 que restam sao exatamente as que a guarda `HX-REGEN-NAO-TOCA-EXPORTADO` barrou -- competencia 08/2026 ja emitida no TXT do Dominio: col107 03/08, 10/08, 17/08; col152 25/07, 26/07; col220 29/07, 12/08; col476 01/08, 08/08, 15/08. A guarda esta CERTA (dia que virou folha nao se toca) e nao sumiu calado: voltou em `barrados` com texto. Para alcanca-las existe porta formal -- `apesar_da_lavra='<motivo>'`, que grava o motivo na trilha de cada celula. Isso e passado JA PAGO: so com a sua palavra, e provavelmente nunca. | 21/09 17:30 | 17 h | 10 celulas, 4 colabs | `aval Ronald: deixar as 10 como estao (ou: apesar_da_lavra com motivo X)` |
+| 42 | corte | REALIZADO DE 3.121 MINUTOS NUM DIA (achado de passagem ao fechar a GERADOR-FOTO, 21/09 18:2x). `col371 29/08`: celula com `realizado=3121, previsto=420` -- **52 horas num dia** -- e protestos `FURO_PARCIAL` + `REALIZADO_INFLADO`. E' par de batidas que atravessa dias sem fechar, a mesma classe que o placar ja conta (`REALIZADO_INFLADO` = 51 na competencia encerrada da emp2, 6 na emp3, 3 na emp4). NAO mexi: e' zona de dinheiro e a competencia esta em fechamento (janela de 15/09). O numero entra na folha por `minutos_realizados_do_dia`, entao 52 h num dia nao e so feiura de relatorio. Depois do export: medir a frota inteira, decidir se o teto e por JORNADA PREVISTA x fator ou se o par sem fechamento vira furo, e curar com DIFF na sombra. | 21/09 18:25 | 17 h | 1 dia medido; 51 na frota (emp2, competencia encerrada) | `corte Ronald: realizado inflado entra na fila depois do export (ou: antes, com DIFF)` |
+| 43 | corte | A LINHA DO REGISTRO ESTA VELHA -- O SITIO JA LE O JUIZ. O motivo gravado diz 'feriado = folga na tela, ate de quem trabalha em feriado', e isso NAO acontece mais. Cadeia lida ao vivo: colaboradores/services/calendario.py:384-390 chama `ponto.precedencia.fatos_do_periodo` uma vez para a janela; :474 faz `_faixa = _fd.get('faixa')`; :107 (`if faixa == 'feriado':`) apenas MAPEIA o veredito do juiz para o status da tela, nao re-deriva a supressao. Quem decide se o feriado vence e' ponto/precedencia.py:243 (`feriado_so_no_pagamento = bool(feriado and previsto is True and getattr(ec, 'trabalha_em_feriado', False))`), que tira o feriado de `presentes` -- entao o 12x36 com trabalha_em_feriado=True em dia previsto sai com faixa 'trabalho' e cai no caminho normal (falta/ok/irregular), nunca em 'folga'. `fatos_do_dia` e' a mesma implementacao desde 16/09 (precedencia.py:161-177). Linha do tempo: a clausula entrou no juiz em 64fff072 (14/09 05:02, PRECEDENCIA-X-GRADE 4b, corte Ronald 13/09) e a tela inteira passou a ler a lei A2 em 08862aac (16/09, CALENDARIO-UM-JUIZ); a linha do registro nasceu em d5c0155f (14/09 08:27, S6-JUIZ-FERIADO), descrevendo a tela de antes. O juiz ja tem selo que MORDE: ponto/tests/test_a2_precedencia.py:278 `test_MORDE_12x36_que_trabalha_em_feriado_segue_previsto`. Conferido tambem contra a working tree: o diff nao-commitado de calendario.py toca o rotulo de folga e o veredito (:124-155), nao o ramo do feriado. POR ISSO NAO FABRIQUEI FATIA: a cura nao existe -- um selo novo ficaria VERDE na arvore original E na curada, e selo que nao morde nao prende nada (regra do selo anti-vacuidade). O QUE DE FATO SOBRA PARA O SEU OLHO, e nao e' desta linha: a clausula do juiz decide `previsto` por `eh_dia_trabalho_calculado` (aritmetica do VINCULO), nao pela CELULA. Se as duas divergirem num feriado, o juiz volta a dizer 'feriado' e a tela volta a pintar folga -- mas isso e' item da familia celula/precedencia, no juiz, nao no calendario. Nao mexi. | 22/09 10:23 | 1 h | 1 linha do registro (core/juizes.py:291, PENDENTES['feriado/prazo'], _F2 'o feriado suprime o trabalho do dia?', sitio colaboradores/services/calendario.py); 0 sitios a curar. FONTE: o codigo VIVO em HEAD + a working tree. UNIDADE: linha de pendente. UNIVERSO: so esta linha. EXCLUSOES: as outras 3 linhas de _F2 (fila_por_causa, detectar_ausencias, reavaliar_ausencias_feriado) nao foram olhadas nesta corrida. | `corte Ronald: apagar a linha do registro (core/juizes.py:291) e decrementar o contador de test_contract_juiz_tela (ou: manter, com motivo novo)` |
+
+<!-- PENDENTES:FIM -->
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
 
@@ -2939,7 +2968,7 @@ Proximo (fatia): o servico vira `anomalias_do_colab` / `anomalias_da_frota` (o c
 
 ## DOMINGO 20/09 -- RELATO DAS 12:00
 
-| registro_chamado | registro_ausencia | arvore_vermelha_min | fatias no ar hoje |
+| registro_chamado | **2** (igual a ontem) | arvore_vermelha_min | fatias no ar hoje |
 |---|---|---|---|
 | **15** | **24** (31 as 09:00) | vermelha 00:15-10:2x (**~10 h**), verde desde a ARVORE-VERDE | **4** |
 
@@ -3018,7 +3047,7 @@ A nota do fim de semana e **registro_chamado** e **registro_ausencia** zerando; 
 
 ## SABADO 19/09 12:5x -- relato das 12:00 (saiu 50 min atrasado: a sessao do Code caiu as 11:50 no meio da coleta)
 
-| registro_chamado | registro_ausencia | arvore_vermelha_min | colabs_sem_furo |
+| registro_chamado | **2** (igual a ontem) | arvore_vermelha_min | colabs_sem_furo |
 |---|---|---|---|
 | **19** (27 as 07:00) | **39** (43 as 07:00) | **0** -- mas o vigia da arvore esta SEM RETRATO desde 09:35 (ver abaixo), entao o 0 e velho | **181/554** |
 
@@ -4070,3 +4099,620 @@ Chamar `flip_tipo` direto em 172 batidas atropelaria o juiz que existe para isso
 flip e UNICO e deixa o dia perfeito), em dado de ponto de producao. **Nao fiz.** O que falta para
 fazer: ou a lista de ids do fork (o RELATO `:3535` cita um scratchpad `bo1723/etiquetas.py` de OUTRA
 sessao, que nao existe nesta maquina), ou o "!" sobre os 19 do juiz, um a um, com a ata como juiz.
+
+**21/09 ~17:4x POR QUE OS 41 NAO MORRERAM -- a ATA vence a CELULA, e o elo que falta e o CARTORIO.**
+
+O Ronald rodou os tres `supra_juiz --empresa N --executar`. **Zero retratacoes.** Medido depois:
+41 vivos, 0 mortos. A causa nao e permissao nem a guarda de conversa -- e ordem de camadas.
+
+Primeiro achado: o `--executar` sem `--encerrada` avaliou **so o dia de hoje**. Em 21/09
+`janela_atual` abre a competencia 10/2026, e todos os dias que corrigi (21-30/08, 08-20/09) estao na
+**encerrada**. Por isso os exemplos do placar saiam todos com data 2026-09-21.
+
+Mas com `--encerrada` (em seco, 11.904 dias-colab) `COBRANCA_EM_DIA_SEM_TRABALHO` **tambem da 0**.
+Fui aos termos da condicao (`supra_juiz.py:271`), um a um, pelos juizes reais:
+
+| termo | valor | passa? |
+|---|---|---|
+| `CelulaDia.trabalha` | **False** (regenerada) | — |
+| `fatos_do_dia` -> `tipo_do_dia` | **'folga'** | ok |
+| os 41 estao em `FURO_MODULES`? | **41/41**, todos `batida_ausente` | ok |
+| `tipo_dia` que o JUIZ recebe | **'trabalho'** | **NAO** |
+| `minutos_previstos` que o JUIZ recebe | **480** (col148 12/09), **540** (col902 13/09) | **NAO** |
+
+`classificar_dia(...) -> []`. A celula diz folga, a precedencia diz folga, e o juiz ouve "trabalho".
+
+### Onde os dois se separam: `escala/services/leitor_celula.py:344-347`
+
+```python
+_tipo = ata.get('tipo_dia') or ('trabalho' if cel.trabalha else 'folga' if cel.trabalha is False else 'indefinido')
+_prev = ata.get('minutos_previstos')
+```
+
+**A ATA VENCE A CELULA.** `cel.trabalha` e' so o fallback de quando a ata nao tem `tipo_dia`. A ata
+e' o carimbo do CARTORIO -- o que se VIU no dia -- e foi lavrada ANTES da regeneracao, dizendo
+trabalho/480. Regenerar a celula nao re-lavra a ata.
+
+Isso nao e bug do leitor: e' o tabuleiro funcionando. ESCALA = o que devia acontecer; ATA = o que
+aconteceu (a LAMPADA). Corrigi a escala; a lampada continua acesa com a leitura velha.
+
+### O elo que falta, e a ordem que ja existe no cron
+
+    06:28 processar_cartorio --apply   re-lavra a ata do dia (le a celula NOVA)
+    06:54/56/58 supra_juiz --executar  ve tipo_dia=folga, previsto=0 -> retrata
+
+A cadeia certa e **celula -> ata -> chamado**, e o cron ja roda nessa ordem. Amanha de manha os 41
+morrem sozinhos, desde que o cartorio alcance dias de 21/08-20/09 (a conferir: se a janela dele for
+curta, 26/08 nao volta).
+
+**Correcao do que eu disse antes:** publiquei "morrem sozinhos no cron das 06:54". Certo por acaso --
+quem faz a diferenca e o **06:28**, nao o 06:54. Sem o cartorio, o supra_juiz olha e nao ve nada.
+
+**O que eu NAO fiz e por que:** nao forcei `processar_cartorio --apply` nem `carimbar` na mao. E'
+escrita em prod em cima de 83 dias-colab, e a ordem importa (o relampago das 06:26 vem antes). Fica
+para o "!" do Ronald ou para o cron.
+
+**21/09 ~18:0x FECHANDO O ELO -- a cadeia se completa sozinha as 06:28, e forcar agora CUSTA.**
+
+O `processar_cartorio --apply --encerrada` que o Ronald colou **nao rodou**: o comando exige
+`--empresa` e **nao tem** `--encerrada` (`usage: ... --empresa EMPRESA [--apply] [--limite] [--forcar]`).
+Os tres `supra_juiz --encerrada --executar` rodaram em cima da ata velha -- emp2 marcou
+`CSF_RETRATADO 1`, que e' o col784 19/09, nao os nossos. **41 vivos, 0 mortos**, sem mudanca.
+
+### Rodei o cartorio REAL em seco, escopado nas 82 celulas que mudaram
+
+`julgar_colab` -- a mesma funcao que o command chama --, sem `--apply`, so nas celulas com
+`regenerada_em` de hoje e `data < hoje` (82 celulas, 21 colabs):
+
+    julgadas 82 · protestos 53 · emitiria_furo_parcial 1 (col371 29/08)
+    cods: COBRANCA_EM_DIA_SEM_TRABALHO em 29/08, 30/08, 08/09, 12/09, 13/09, 15/09, 19/09, 20/09
+
+**A classe acende.** Re-lavrar a ata dessas celulas e' exatamente o que falta para o supra_juiz
+retratar. Cadeia confirmada: **celula -> ata -> chamado**.
+
+### E ela nao precisa de `--forcar`: o cron de amanha resolve
+
+Rodei o mesmo DRY com `forcar=False` e deu **identico** (`julgadas=82`, mesmos codigos). A impressao
+da celula MUDOU com a regeneracao, entao o cartorio nao pula esses dias. O universo dele e' toda
+celula com `data < hoje` da empresa (`processar_cartorio.py:48`), sem piso de data -- 26/08 esta
+dentro.
+
+    06:28 processar_cartorio --apply (emp 2,3,4)   re-lavra as 82 atas
+    06:54/56/58 supra_juiz --executar              retrata os 41
+
+**Entao a correcao que eu publiquei as 17:4x ("nao morrem sozinhos") estava errada: morrem.** O que
+eu nao sabia era se a impressao mudava; mudou.
+
+### Por que NAO forcei agora
+
+Forcar hoje adianta ~12 h e cobra por isso: **emite 1 chamado novo** (col371 29/08, furo parcial
+real) e lavra 53 protestos, dentro da **JANELA DE FECHAMENTO** (corte Ronald 15/09: de 20/09 ate o
+export da 09/2026, so fatia de TELA). Escrever documento trabalhista novo na vespera do export para
+ganhar meia noite nao paga. Se o Ronald quiser hoje, o comando escopado esta em
+`/tmp/gf_cart.py` (basta `apply_=True`) -- **nao** `processar_cartorio --forcar --empresa N`, que
+pegaria o acervo inteiro da empresa.
+
+---
+
+**21/09 18:0x PLACAR E PENDENTES REGERADOS · 3 ESTRUTURAIS NA FILA · FABRICANTE ENGATADO.**
+
+### A tabela PENDENTES nao era gerada -- agora e
+
+O cabecalho dizia "_Gerada de `PENDENTES_RONALD.json`_" e **nao era**: o JSON tinha 38 itens e a
+tabela mostrava 26, escrita a mao. Contador que so o autor sabe regerar mente na primeira vez que
+alguem esquece. Virou comando: **`bin/gerar_pendentes.py`**, com marcadores no RELATO para a
+reescrita ser idempotente (chamar 2x = mesmo arquivo).
+
+**Armadilha paga na 1a rodada:** meu parser esperava `DD/MM HH:MM` e o JSON grava ISO. O regex nao
+casava, toda idade saiu 0 e o cabecalho anunciou "**0** acima de 24 h" com itens de 56 h na tabela.
+Ausencia de sinal lida como sinal bom, de novo -- a mesma familia que o CLAUDE.md cobra nos selos.
+Curado: data invalida agora imprime `?` VISIVEL na coluna, nunca zero.
+
+**PENDENTES: 38 -> 40.** Saiu `aval-passivo-gerador-foto` (aplicado hoje). Entraram tres:
+`aval-flip-19-humanas` (o flip nao tem conjunto -- so as 19 do juiz), `corte-regenera-nao-relavra-ata`
+(a ata vence a celula; a porta fecha a cadeia ou espera o cron?) e `aval-gerador-foto-10-barradas`
+(as 10 que a competencia exportada barrou). Hoje: **aval 7 - corte 19 - smoke 14**, mais velho 218 h,
+**18 acima de 24 h**.
+
+### Placar: 31 contadores acesos, e um deles ja mostra a cura de hoje
+
+`celulas_contra_o_template` **241 -> 169** (a regeneracao da GERADOR-FOTO). `portas_sem_smoke=162`,
+`registro_portas=149`, `registro_ausencia=4`, `registro_chamado=2`, `juizes_por_varredura=27`,
+`arvore_vermelha_min_semana=300`, `testes_fora_do_git=4`.
+
+### ARVORE VERMELHA achada e curada: a LOTE-SEGURO subiu pela METADE
+
+Ao montar a 1a fatia nova, o GREEN parcial dela acusou um vermelho que **nao era meu**:
+`test_contract_direcao_a16` -- `chamados` importando `ponto` no TOPO. Veio com a
+`[LOTE-SEGURO-PELA-CONSTANTE]` (be3dd942), que pos
+`from ponto.motor_calculo_v2 import TOLERANCIA_CONFORMIDADE_MIN` em modulo.
+
+E havia um segundo: o `construir.py` daquela fatia tambem ajustava o selo vizinho
+(`test_fila_validar_lote`, 15:20 -> 15:08, porque com envelope 10 os 20 min mudam de classe), **mas
+esse arquivo nao estava nos paths declarados da fatia** -- entao o envelope subiu e o selo vizinho
+ficou para tras. **Meia-correcao**, exatamente o que o CLAUDE.md cobra. A arvore estava vermelha
+nisso desde ~17:4x e o contador do vigia nao pegou porque o pacote daquela fatia nao incluia o selo.
+
+Curados os dois: a dependencia virou **runtime** (`_envelope_lote_min()`, com `__getattr__` de
+modulo pela PEP 562 para `ENVELOPE_LOTE_MIN`/`ROTULO_LOTE` seguirem importaveis de fora -- busca de
+global dentro do proprio modulo nao passa pelo `__getattr__`, por isso o uso interno chama a
+funcao), e o selo vizinho foi alinhado. **35 testes OK.** A regra nao proibe chamados CHAMAR ponto;
+proibe amarrar os dois no tempo de import.
+
+### Tres estruturais fabricadas, todas com RED provado ANTES de lancar
+
+Alvos escolhidos com um criterio novo: **so sitio com juiz JA declarado**. Os que dizem "deveria ler
+nenhum" precisam de juiz novo, que e corte do Ronald, nao trabalho de fatia. E um alvo foi
+descartado por estar MORTO: `core/services/painel_op.py:120` consta no registro e foi curado em
+14/09 (F1 TURNO, sitio 6) -- a impressao continua batendo, o defeito nao existe mais.
+
+| fatia | o que troca | o RED que morde |
+|---|---|---|
+| **ADESAO-PELO-JUIZ** | `situacional.py`: "instalou/bateu e parou" deixa de contar linha de Batida e pergunta a `adesao.ids_com_adesao` | dois colabs com 1 batida cada, uma RETRATADA -- tem de dar estados DIFERENTES |
+| **FURO-VIVO-PELO-MOTOR** | `furos_diarios.py`: "vivo" deixa de ser `NOT TERMINAIS` e passa a ser `VIVOS` | a PARTICAO: `STATUS_CHOICES - (VIVOS \| TERMINAIS)` tem de ser vazio -- fica vermelho no commit que acrescentar status sem classificar |
+| **RELATORIO-JANELA-DA-EMPRESA** | `relatorios/views.py`: a empresa passa a ser lida ANTES da janela | empresa de corte 1 recebia **21/09 em vez de 02/09** -- 19 dias de erro na tela de quem cobra |
+
+As tres provadas em copia antes de lancar (original VERMELHA, curada VERDE) -- o passo que faltou nas
+tres que ficaram em loop as 16:45. As tres tambem **encolhem o registro**: tiram a propria linha de
+`core/juizes.py` e baixam os DOIS numeros declarados do selo (total e lista por grupo). Baixar so o
+total deixou a arvore vermelha as 18:01; corrigido.
+
+### FABRICANTE engatado (ESTEIRA-AUTOALIMENTADA)
+
+`bin/fabricante.sh` + `bin/fabricante_alvo.py` + `bin/fabricante_prompt.md`, timer de usuario
+`hasner-fabricante.timer` a cada 30 min. Se a trava A tem 3 ou mais fatias estruturais vivas ou
+prontas, **nao faz nada**. Faltando, escolhe UM alvo e chama o Code headless para fabricar a fatia,
+que dai em diante passa pela esteira normal (esmeril, RED, GREEN, regua, integrador).
+
+Guardas, e nenhuma e enfeite:
+- **ALLOWLIST de zona, nao denylist.** So `TELA`. A 1a versao usava denylist e escolheu
+  `escala/utils.py::minutos_realizados_do_dia` -- que nao esta rotulado DINHEIRO e alimenta a ata que
+  a prontidao e o supra-juiz leem. Com allowlist, rotulo novo nasce FORA do alcance do fabricante.
+  Por cima, uma lista de vizinhanca do dinheiro que nunca entra.
+- **alvo tem de estar VIVO**: a impressao tem de existir exatamente 1x no arquivo. E a licao do
+  painel_op: item no registro nao prova defeito no disco.
+- uma fatia por corrida, flock, `esteira.pausada` manda, item usado nao volta, e **nada de push,
+  commit ou deploy**.
+- **defeito meu, pago na hora:** o contador de trava A usava `pgrep` com caminho ABSOLUTO e as
+  esteiras sao lancadas com caminho relativo -- contou **0 com tres fatias vivas** e ia fabricar por
+  cima de fila cheia. Ausencia de match lida como fila vazia. Corrigido para o nome da fatia.
+
+**21/09 18:2x CADEIA FECHADA: celula -> ata -> chamado. 41 -> 0, e NENHUM chamado novo.**
+
+Ordem executada a pedido do Ronald: cartorio escopado com `apply_=True` nas 82 celulas que a
+GERADOR-FOTO mudou, depois `supra_juiz --executar --encerrada` nas empresas 2, 3 e 4.
+
+### Cartorio (escopado, `julgar_colab` -- a funcao real, nao um script paralelo)
+
+    julgadas 122 · carimbadas 122 · reconciliados 40 · protestos (contador) 54 · emitiria_furo_parcial 1
+
+Os codigos `COBRANCA_EM_DIA_SEM_TRABALHO` **sairam vazios ja nesta passada**: o proprio cartorio
+reconcilia quando re-julga (`cartorio.py:607`, B5.3b -- cobranca em celula que nao acusa furo vai
+para o reconciliador canonico na mesma passada). As linhas `[RECONCILIA]` nomeiam os chamados um a
+um: col93 #23607 #23608 #23656 #23939, col148 #23611 #23612 #23697 #23990, col200 #19964 #19965,
+col212 #17805, col215 #18204...
+
+### supra_juiz nas tres empresas: nada mais a retratar
+
+11.904 + 3.441 + 620 dias-colab avaliados. `COBRANCA_EM_DIA_SEM_TRABALHO` e `COBRANCA_SEM_FURO`
+**nao aparecem** -- porque o cartorio ja tinha resolvido. A ordem importava e estava certa.
+
+### ANTES x DEPOIS
+
+| | antes | depois |
+|---|---|---|
+| chamados vivos dos 41 | **40** (um morreu sozinho no meio-tempo) | **0** |
+| como morreram | — | 41 `resolvido`, via `sistema` |
+| celulas com `julgada_em` | — | **82 de 82** |
+| chamados NOVOS emitidos pela corrida | — | **0** |
+| total de chamados no acervo | 23.125 | 23.126 (+1, e nao e meu) |
+
+**O chamado novo do col371 NAO nasceu.** O DRY previa `emitiria_furo_parcial=1` em col371 29/08, e
+na aplicacao o dedup segurou: aquele dia **ja tinha** o #18436 (`batida_ausente`, aberto em 29/08
+15:15), e `ChamadoColaborador.abrir` nao duplica. Os 2 chamados criados na janela sao operacao viva,
+nao minha corrida: **#24488** col925 dia 21/09 (hoje) e **#24489** col608 `disputa_supervisao`.
+
+### Protestos: o contador diz 54, o DADO diz 13 -- e os dois estao certos
+
+`out['protestos'] += 1` conta DIA com qualquer contradicao entre as 122 julgadas; o campo
+`CelulaDia.protestos` e o que fica gravado. Gravados: **13 celulas** --
+`FATO_SEM_PREVISAO` 11 · `FURO_PARCIAL` 1 · `REALIZADO_INFLADO` 1 · `FATO_EM_AUSENCIA` 1.
+Declaro os dois numeros em vez de repetir o do contador: 54 protestos gravados seria falso.
+
+Veredito das 82: **concorde 67** · fato_sem_previsao 11 · cobrado 1 · furo 1 · fato_em_ausencia 1 ·
+trabalhou 1. Os 11 `fato_sem_previsao` sao todos `realizado=0 / previsto=0` -- dia que virou folga e
+onde nada aconteceu. **Nenhum dinheiro nesses 11.**
+
+### Achado de passagem que NAO e desta fatia: col371 29/08 com 3.121 minutos
+
+`realizado=3121, previsto=420`, protestos `FURO_PARCIAL` + `REALIZADO_INFLADO`. **52 horas num dia**
+-- par de batidas que atravessa dias sem fechar. E o mesmo `REALIZADO_INFLADO` que o placar acusa
+(51 na competencia encerrada da emp2). Nao mexi: e' zona de dinheiro e a competencia esta em
+fechamento. Fica registrado para depois do export.
+
+---
+
+**22/09 09:2x HANDOFF -- placar e PENDENTES regerados; as 3 estruturais NO AR; fabricante vivo.**
+
+### 1. As tres estruturais pousaram. Registro de tela: **156 -> 153**
+
+    55145b95 [RELATORIO-JANELA-DA-EMPRESA] o relatorio de furos abre na competencia DA EMPRESA
+    db603f59 [FURO-VIVO-PELO-MOTOR] "furo vivo" e a lista VIVOS, nao o complemento de TERMINAIS
+    (+ [ADESAO-PELO-JUIZ], no lote anterior)
+
+Cada uma tirou a propria linha de `core/juizes.py` e baixou os DOIS numeros declarados do selo
+(total e lista por grupo). Baixar so o total deixou a arvore vermelha duas vezes -- o selo
+`test_contract_juiz_tela` cobra os dois, e esta certo.
+
+### 2. Placar: **33 contadores acesos**
+
+`celulas_contra_o_template=169` (era 241 antes da GERADOR-FOTO) · `registro_portas=149` ·
+`portas_sem_smoke=162` · `registro_ausencia=4` · `registro_chamado=2` ·
+**`testes_fora_do_git=4`** -- `core/hooks/__init__.py`, `core/hooks/hooks_fonte.py`,
+`test_contract_static_no_manifest.py`, `test_selo_popover_acao.py`. Rodam na regua e sumiriam num
+clone novo. Esperam o `ok` para `git add`.
+
+### 3. PENDENTES: 40 -> 39
+
+Sairam `cortado-lote-seguro-tolerancia` e `cortado-tolerancia-10` (consumidos: a
+LOTE-SEGURO-PELA-CONSTANTE esta no ar). Entrou **`corte-realizado-inflado-col371`** (52 h num dia;
+a classe tem 51 dias na emp2, 6 na emp3, 3 na emp4 -- entra na fila depois do export). Atualizados
+`corte-regenera-nao-relavra-ata` (a cadeia foi fechada a mao; a pergunta que sobra e de DESENHO, nao
+de caso) e `aval-gerador-foto-10-barradas` (o passivo em volta dele fechou).
+
+### 4. FABRICANTE: dois defeitos pagos, e o primeiro nascimento sem sessao
+
+**(a) `_VIVAS: unbound variable`** -- `trava_a()` era chamada em `$( )`, que e SUBSHELL: atribuir a
+global la dentro nao chega ao pai, e com `set -u` a leitura explodia. Agora a funcao devolve os tres
+numeros numa linha e quem precisa le da saida.
+
+**(b) alvo queimado por falha de PLATAFORMA.** As corridas de 08:30 e 09:00 voltaram rc=1 com
+*"You've hit your monthly spend limit"* -- e o alvo ja tinha ido para `fabricante_usados.txt`. Dois
+sitios perdidos sem ninguem ter tentado cura-los. Agora o alvo so queima **depois** de a corrida
+acontecer, e limite de uso/quota faz o fabricante PARAR dizendo por que, em vez de consumir fila.
+
+**(c) encher, nao repor.** A 1a versao fabricava UMA por corrida. Com as tres da tarde pousando
+juntas, a trava caiu de 3 para 0 e levaria uma hora e meia de timer para voltar -- fila seca e
+exatamente o que este fabricante existe para impedir. Agora fabrica ate ENCHER, reconferindo a trava
+a cada volta, com teto duro de corrida para fatia que cai no esmeril nao virar laco.
+
+**09:18: o fabricante esta fabricando sozinho**, alvo `ponto/services/vigia_ausencia.py` ("o
+lancamento colide com outro fato?" -- hoje respondido por comparacao propria de datas). Primeira
+fatia desta esteira nascendo **sem sessao interativa na frente**.
+
+**22/09 09:5x O FABRICANTE FABRICOU SOZINHO -- e o que ele RECUSOU vale mais que o que fez.**
+
+Primeira corrida com credito: tres voltas, **1 fatia montada e 2 recusas com motivo**.
+
+| alvo | resultado |
+|---|---|
+| `ponto/services/vigia_ausencia.py` -- "o lancamento colide com outro fato?" | **fatia `a_vigiacol` montada** |
+| `ponto/services/triagem_batida.py:53` -- "o colaborador esta de ferias hoje?" | **recusada: ramo morto** -- ninguem grava `situacao='ferias'` |
+| `ponto/views.py` -- escritor de `situacao='afastado'` | **recusada: espera corte ja declarado** (`corte-escritor-situacao-afastado`) |
+
+As duas recusas sao o comportamento pedido no molde ("se a cura exigir decisao de negocio que nao
+esta escrita, NAO fabrique"). Um fabricante que so fabrica encheria a fila de fatia que nao pode
+subir; este leu o sitio, viu que a pergunta ja e sua e parou.
+
+A fatia que ele fez: `vigia_ausencia.py::contadores` decidia sobreposicao por conta propria (fim
+derivado `a.data_fim or a.data`, corte de laco e comparacao de bordas na mao) e lia `data_fim`
+NULO como DIA UNICO -- inclusive em tipo de RANGE ABERTO. Ou seja, **o contador da familia repetia
+por conta propria o erro que ele existe para denunciar** (caso EMMELI col422, contadores 6 e 7).
+Passa a perguntar a `ponto/turnos.py::dias_da_ausencia`, gemeo de `ausencia_sobrepoe` e insumo
+declarado de `veto_de_lancamento`.
+
+### O defeito da corrida: fatia pronta FORA da fila
+
+Ele montou a `a_vigiacol` inteira e **imprimiu o comando de lancar dentro de um bloco de codigo**,
+em vez de executa-lo. Fatia pronta, fora da fila, trava A ainda em 0 -- a esteira teria secado do
+mesmo jeito, com o trabalho feito. **Passo que depende de o modelo lembrar nao e passo, e conselho.**
+O lancamento virou passo do SCRIPT: ele olha `.esteira/` antes e depois da corrida, e a pasta que
+nasceu e registrada em `fila_esteira.txt` e lancada por ele, com guarda de "ja esta viva" e alarme
+se nascer mais de uma. Lancada a mao agora; a proxima nasce ja na fila.
+
+---
+
+**22/09 10:xx MAPA-VIVO fatia 1 -- a inscricao da bolha. NO AR (obra de fundo, fora do estrutural).**
+
+### 1. Formato, decidido uma vez: **docstring estruturada de modulo, lida por AST**
+
+    @bolha <familia>   @entra <o que recebe>   @sai <o que devolve>   @invariante <o que vale sempre>
+    @juiz-unico-de <fato>   @chamado-por <modulo>   @chama <modulo>
+
+Docstring e nao decorator porque o parser tem de rodar no HOST, no mesmo gancho do `placar_code.sh`,
+**sem Django, sem import e sem efeito colateral**: `ast.parse` le um arquivo em microssegundos e
+nunca executa codigo, enquanto um decorator obrigaria a importar o modulo -- settings, banco, cadeia
+inteira -- so para ler uma etiqueta. E a docstring ja e onde esta casa escreve "quem manda aqui e o
+que quebra se eu mexer": a inscricao e a forma ESTRUTURADA do que ja se escrevia em prosa, no mesmo
+arquivo, sem documento paralelo para envelhecer. Razao completa em **`app/docs/ADR/0001`**.
+
+Parser: `app/core/mapa/contrato.py` -- fonte unica, dentro de `app/` (ver defeito (b) abaixo).
+
+### 2. Gerador: `bin/gerar_mapa.py` -> `app/docs/MAPA/`
+
+`README.md` (indice e numeros) · um `.md` por familia (arvore bolha -> juizes -> portas com o
+contrato de cada) · `GRAFO.md` (mermaid, arestas = imports REAIS) · `VAZAMENTOS.md`.
+
+**Vazamento** = bolha que chama outra **sem declarar** no `@chama`. Nao e proibido chamar; e
+proibido chamar calado -- foi assim que "quem nao consulta a grade" passou meses invisivel. E o
+espelho: `@chama` declarado e nao usado aparece como **decorativo**, porque contrato que envelhece
+nao pode passar por contrato bom.
+
+### 3. Amostra: 3 bolhas inscritas, **0 vazamentos**
+
+| modulo | bolha | juiz unico de |
+|---|---|---|
+| `ponto/turnos.py` | turno/marcos | o par que forma turno · o turno aberto agora · o tipo da proxima batida · os dias que a ausencia ocupa |
+| `ponto/services/cartorio.py` | celula/precedencia | quando o dia foi julgado e com que veredito |
+| `ponto/portas/celula.py` | celula/precedencia | que dias de um vinculo precisam ser reescritos e ate onde |
+
+`ponto/turnos.py` **nao tinha docstring de modulo** -- o juiz mais central da casa nao dizia o que
+era. Agora diz, com os invariantes que o CLAUDE.md ja cobrava em prosa (batida de chao nunca barrada
+aqui; universo de apuracao = `batidas_apuraveis`; a fase e do vinculo, nunca do template).
+
+### 4. Selo com passivo que SO ENCOLHE, e prova de que morde
+
+`core/tests/test_selo_mapa_contrato.py`, 4 testes. Selo que travasse a arvore com 48 vermelhos no
+dia em que nasce nao e selo -- e um `skip` com outro nome, e alguem o desliga na primeira urgencia.
+Entao o passivo (`app/core/mapa_passivo.txt`, **48 de 50**) carrega a divida NOMEADA e o selo
+defende as **duas** bordas:
+
+- bolha NOVA sem contrato = vermelho;
+- **passivo que nao encolhe = vermelho** -- nome que ja tem inscricao e ficou na lista. Sem esta
+  segunda borda bastaria inscrever tudo e deixar a lista intacta para o contador mentir para sempre.
+
+**Provado:** tirei `chamados/juizes.py` do passivo e o selo ficou VERMELHO
+(`AssertionError: ['chamados/juizes.py'] != []`); restaurado, verde.
+
+Contador **`mapa_sem_contrato=48 (de 50)`** no placar. Molde (`bin/molde_fatia/LEIAME`) e prompt do
+fabricante atualizados: toda fatia daqui pra frente inscreve a bolha que tocou e tira a linha do
+passivo no mesmo `construir.py`. O PRESENTE se documenta fatia a fatia; o passado o gerador varre
+depois do estrutural.
+
+### Tres defeitos meus, pagos na hora
+
+**(a) o instrumento se mediu.** O parser lia a PROPRIA documentacao do formato como inscricao (a
+doc contem `@bolha` de exemplo) -- 1 bolha falsa. Excecao explicita para `core/mapa/`.
+
+**(b) o selo pulou os quatro testes.** Nasceu com o parser em `bin/`, e a fatia monta a copia com
+`app/` e **sem** `bin/`: `RAIZ/bin` nao existia no container e o `skipTest` engolia tudo --
+`OK (skipped=4)`, verde por ausencia de sinal. Mesma cura do `core/hooks/` de ontem: a fonte mudou
+para `app/core/mapa/` e viaja com a arvore; `bin/` so chama.
+
+**(c) 10 decorativos falsos.** Eu comparava o `@chama` declarado contra os imports **ja filtrados
+por "esta inscrito"** -- enquanto so 3 bolhas existiam, toda declaracao verdadeira aparecia como
+decorativa. Agora compara com os imports reais inteiros.
+
+E um quarto, de higiene: o gerador nao apagava saida velha, entao um `.md` de familia que so existiu
+enquanto o parser se lia sozinho ficou no diretorio. Mapa gerado e FOTO do codigo de agora, nao
+album -- limpa antes de escrever.
+
+---
+
+**22/09 11:2x RESIZE 4 -> 8 vCPU: a esteira recalibrada, e o vazamento que o resize sozinho nao curava.**
+
+Pedido do Ronald: teto de fatias 2 -> 4, cpuset fixando producao e teste, fabricante enchendo ate 4,
+placar e PENDENTES regerados. "cpuset e o mais importante: teste nunca rouba CPU do cliente."
+
+### O achado que mudou o desenho
+
+`bin/regua.sh:111` e `bin/pre-push.sh:46,51` rodavam a suite com **`docker exec saas_core`** -- 7.723
+testes com `--parallel 2` **dentro do container que atende `/api/ponto/bater/`**. Mais dois sitios
+faziam o mesmo: `bin/placar_code.sh` (contador `credencial_sem_trilha`) e `bin/regua_relogio.sh` (o
+tripwire do relogio, que roda a regua INTEIRA e ainda fazia `docker cp` de um shim de settings **para
+dentro de prod**).
+
+Isso torna o passo 1 do pedido ARMADILHA, nao so incompleto: fixar prod nos vCPU 0-1 e deixar a suite
+la dentro faria a suite brigar por **2** nucleos onde antes tinha 4 -- pior que nao fazer nada. Mover
+os quatro nao foi escopo a mais; era o passo 1.
+
+### O que ficou de pe
+
+| | |
+|---|---|
+| vCPU 0-1 | PRODUCAO exclusiva: `saas_db saas_core saas_ui saas_caddy mensageria` |
+| vCPU 2-5 | TESTE: `juliani_db_test` + todo `docker run` de suite (`--cpus 4 --memory 3g`) |
+| vCPU 6-7 | LIVRE de proposito -- margem para subir teto ou dar nucleo a prod sem tirar de ninguem |
+
+**Fonte unica: `bin/recursos.sh`.** Ele aplica (`--aplicar`) e cobra (`--conferir`) os tres lados:
+cgroup do container vivo, os dois `docker-compose` e a contagem. **Aplicado por `docker update`, com
+prod NO AR**: uptime intacto (nenhum recreate), `/health/` 200, `/colaboradores/` 302, `/` 302. O
+cpuset foi tambem aos dois compose para o container NASCER certo no proximo recreate -- mas `up -d`
+recria o `saas_db`, entao isso fica dormente ate um recreate deliberado, nunca no `bin/deploy.sh`.
+
+**Medido na passada de aceitacao** (a suite inteira, forma nova, 22/09 11:15-11:21):
+`Ran 7723 tests in 362.156s / OK (skipped=33)` -- mesma contagem do vigia. **Nao ha ganho de velocidade
+medido**: o vigia deu 364 s as 09:05 e 432 s as 10:05 na forma antiga, entao 362 s esta no mesmo patamar
+e a variacao entre corridas e maior que qualquer efeito do cpuset. O que o cpuset compra nao e' suite mais
+rapida, e' cliente que nao espera. Durante ela: container de teste em `cpuset=2-5`, pico de **671 MiB** de
+3 GiB (o teto tem 4,5x de folga), e **prod a 0,03% / 0,07% ao lado**. E a primeira vez que a suite
+roda AO LADO do cliente e nao DENTRO dele.
+
+Que a forma nova e verde nao foi aposta: `bin/vigia_arvore.sh` ja rodava estas MESMAS labels por
+`docker run --env-file .env` -- portanto sem o `HASNER_TENANT_URLCONF` que o compose da ao core --
+e carimbou 7.723 OK as 10:05. O risco estava medido antes de eu tocar em nada.
+
+### Selo, porque promessa sem guarda ja custou caro aqui
+
+`bin/tests/test_recursos_sourced.sh`, tres casos, **os tres provados que mordem** (tirei a guarda, o
+selo ficou vermelho, restaurei, verde):
+1. `source bin/recursos.sh` imune aos posicionais de quem chama -- sem isso `bin/sombra.sh --conferir`
+   (comando real) cairia no `case` do recursos, conferiria cpuset e SAIRIA: o deploy leria um ensaio
+   que ninguem lavrou;
+2. nenhuma suite volta para dentro do `saas_core`;
+3. todo `docker run` de suite carrega o cpuset -- sem isso o vazamento volta calado.
+
+**E `bin/tests/` nao era chamado por ninguem.** Dois selos de host escritos em 21/09, provados, e
+mudos -- guarda prometida que nao roda e guarda nenhuma. Agora a regua roda a pasta inteira antes da
+suite, junto do `node_check`.
+
+### Dois bloqueios PRE-EXISTENTES que achei no caminho
+
+**(a) a regua estava VERMELHA antes de eu chegar, e nao por teste.** `bin/fabricante.sh` (escrito
+21/09, mexido hoje 09:5x) procurava fatia viva pelo TEXTO da linha de comando, tres vezes -- a
+LICAO-PGREP que o CLAUDE.md secao 6 proibe desde 14/09. O selo de arvore acusava `=3` e a regua saia
+**antes da suite**: `BLOQUEADO: espera por processo na esteira`. Fatia que rodasse trabalhava e nao
+commitava. **Curado pela propria lei**: toda fatia segura `/tmp/esteira_<nome>.lock` a vida inteira
+(`molde_fatia/esteira.sh:6`), que e o sinal-arquivo que o `esteira_slots.sh` ja usa. Provei os dois
+sentidos (`fuser` ve o lock segurado; nao ve depois que o dono morre). Selo agora `=0`.
+
+**(b) o que segura AGORA, e e do Ronald**: `bin/testes_fora_do_git.sh` acusa **7 arquivos de teste
+fora do git** (`core/hooks/` x2, `core/mapa/` x2, `test_contract_static_no_manifest`,
+`test_selo_mapa_contrato`, `test_selo_popover_acao`). Rodam na regua e sumiriam num clone novo. Com
+isso o carimbo fica `FALHOU` mesmo com 7.723 OK, e **a esteira segue PAUSADA** -- soltar agora seria
+mandar fatia trabalhar para morrer no commit. Cura: `git add` (ou apagar, se rascunho). **Nao committo
+sem o seu ok.**
+
+Da mesma familia, para o seu conhecimento: `bin/fabricante.sh`, `bin/esteira_teto.sh`,
+`bin/fabricante_alvo.py`, `bin/fabricante_prompt.md` e `bin/esmeril_da_copia.sh` estao **fora do git**,
+e ha timer do systemd instalado apontando para eles. Foi exatamente por nao haver porteiro que a
+violacao do (a) entrou.
+
+### Teto: 4, e por que NAO 6
+
+Dia 2 -> **4**; noite tambem **4**. A nota que o proprio `esteira_teto.sh` carregava dizia "No resize,
+6" -- ela e de 21/09, quando a esteira disputava a maquina inteira. Hoje o teste vive fixo em QUATRO
+nucleos, e nao ha sexto nem setimo para a 5a e a 6a cadeia irem buscar: cpuset nao transborda. Teto 6
+sobre 4 nucleos nao faz mais trabalho, faz o mesmo mais devagar e em seis frentes -- e cadeia lenta
+segura a arvore por mais tempo. **4 = um nucleo por cadeia.** Se quiser 6, o lugar de mexer e o cpuset
+primeiro (6-7 estao livres de proposito). Fabricante: `TETO` 3 -> 4, casando com o teto de cadeias.
+
+**E a segunda-feira tinha um segundo dono do teto:** `esteira_slots.sh` cravava `N=2` a partir das
+06:00 de segunda, desfazendo calado o que o timer tivesse posto. Com o cliente tendo nucleo proprio,
+"a producao acorda" deixou de ser motivo para a esteira ceder -- ela nao tem o que ceder. Um escritor
+so: o arquivo `esteira.slots`, escrito pelo timer.
+
+### Residuo declarado
+
+O banco `sombra` mora DENTRO do `saas_db`, que e prod (0-1) -- o lado POSTGRES do ensaio segue nos
+nucleos do cliente. Corre as 04:15, sem transito. Mover exige postgres proprio para a sombra: fila,
+nao esta fatia. O `--cpus 1` deliberado do ensaio foi preservado; so mudou ONDE ele roda.
+
+As 78 copias renderizadas em `.esteira/*/rodar.sh` e `cadeia.sh` foram remendadas na hora: o vigia
+relanca fatia parada, e sem isso o container de teste dela nasceria com a maquina inteira.
+
+---
+
+**22/09 11:5x CPUSET E TETO -- a protecao fechada antes de acelerar (ordem Ronald 11:37).**
+
+Os quatro pontos do corte, com a prova de cada um.
+
+### 1. Controlador de teto: a causa era minha, e o "relance que nao pega" era OUTRA coisa
+
+O alarme `teto_morto` das **10:50** fui eu: as 10:48 rodei `pkill -f esteira_slots.sh` e o padrao casou com
+a **propria linha de comando da shell que o executava** -- matou o controlador e a si mesma. Ironia
+completa: e a LICAO-PGREP, a mesma lei que eu tinha acabado de fazer o fabricante cumprir. O vigia
+alarmou as 10:50, religou, e **resolveu as 10:55** (`ACAO resolver teto_morto` no log).
+
+O `RELANCE NAO PEGOU` que se repetia **nao era do controlador**: era da fatia **`tb_jscint`**, e a causa
+e estrutural -- ela morava em
+`/tmp/claude-1001/-home-ronald/29337c84-.../scratchpad/tb_jscint`, o **scratchpad de uma sessao do
+Code**, que e apagado com a sessao. A pasta sumiu, a linha ficou em `logs/fila_esteira.txt`, e o vigia
+queimava um relance nela **a cada 5 minutos, para sempre** -- `systemd-run --working-directory <pasta
+que nao existe>` falha, o fallback `popen` tambem, e o alarme repetia. **Um fantasma mascarando todo
+relance de verdade.** Fila varrida (1 fantasma fora, 47 linhas ficam); `paradas` caiu de 3 para 2.
+FICA COMO FATIA (nao mexi em app/ com a esteira travada): o vigia deve declarar a fatia MORTA na
+primeira passada em que a pasta nao existe, em vez de retentar sem fim.
+
+**Controlador agora e SERVICO, nao processo solto** -- `bin/hasner-slots.service` (versionado, instalado
+em `~/.config/systemd/user/`), `Restart=always`, `enabled`, com linger ligado. Antes o dono dele era
+sempre uma sessao, e processo de que o teto depende nao pode ter dono humano. **PROVA:** `kill -9` no
+PID 61188 -> o systemd subiu o **61549** sozinho, segurando `/tmp/esteira_slots.lock`, aplicando
+`CADEIAS=4`.
+
+### 2. cpuset do teste no NASCIMENTO -- aqui a falha era minha
+
+Eu tinha fixado o `juliani_db_test` **a mao** (`docker update`). O Ronald pegou certo: limite que so
+existe no container vivo **nao e limite** -- o primeiro `docker rm` devolveria a maquina inteira ao
+teste, calado. E o achado atras disso e pior: **este container nunca teve script nenhum.** Nasceu de um
+`docker run` digitado ha meses e viveu de `docker start` -- por isso caiu no reboot do resize e nao
+voltou (`restart=no`), deixando a esteira em 0 sem ninguem ver.
+
+**`bin/db_teste.sh`**: nascimento declarado e idempotente (cria se falta, sobe se parado, **ajusta
+sempre** -- porque o caso de hoje era "de pe e sem limite"), com `--conferir`. Fora do compose de
+proposito: `up -d` recria o `saas_db` junto, e banco de PROD nao se recria para acertar banco de TESTE.
+Sem teto de RAM no banco, com a razao escrita: cap no postgres seria OOM-kill no meio da suite, log sem
+"Ran N tests", vermelho anonimo -- a familia do tblib. O teto de RAM vive onde o consumo e conhecido
+(3g por container que roda suite).
+
+### 3. A PROVA, com os numeros colados
+
+**Carga:** 4 suites cheias simultaneas (7.723 testes cada, `--parallel 2`), load 5,6.
+
+CPU por nucleo durante a carga (`mpstat -P ALL`):
+
+| nucleo | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| **ocioso** | **93,7%** | **96,0%** | 0,0% | 0,0% | 0,0% | 0,0% | 97,0% | 96,0% |
+
+Os quatro nucleos de teste **saturados**, os dois do cliente **praticamente intocados**. E a fronteira
+existindo, nao prometida.
+
+p95 (n=150; rotas de LEITURA -- **nao ha POST em `/api/ponto/bater/`**: escrita em prod e proibida pela
+secao 4, entao meco a MESMA casca e o mesmo caminho por `/api/me/`, que passa por Django e auth no
+container da batida):
+
+| rota | casca | esteira parada | 4 suites cheias |
+|---|---|---|---|
+| `/api/me/` | core (batida) | p95 **19 ms** | p95 **20 ms** |
+| `/login/` (pagina real) | ui | p95 **20 ms** | p95 **20 ms** |
+
+**Diferenca dentro do ruido de medicao.** Honestidade sobre o caminho ate aqui: a primeira rodada, com
+n=60, deu `/login/` p95=26 e max=108 -- eu ia reportar como violacao do criterio. Com n=150 sob a MESMA
+carga deu p95=20, p99=22, max=23. Era um outlier numa amostra em que o p95 e a 58a medida. **Nao
+declarei verde ate a amostra aguentar a pergunta.**
+
+### 4. Teto 4 esta seguro
+
+1, 2 e 3 verdes, entao o teto fica em **4** -- nao houve motivo para baixar a 2.
+
+### Selo, e um erro meu que o proprio teste de mordida pegou
+
+O caso 4 do `bin/tests/test_recursos_sourced.sh` (nascimento do banco declarado) **nasceu VACUO**: o
+grep casava com a linha do `docker update` e passava mesmo com o `docker run` sem cpuset. Descobri
+porque fiz o teste de mordida -- tirei o cpuset da criacao e o selo continuou verde. Refeito, cobra
+criacao e ajuste **separadamente**, com as continuacoes juntadas. Os tres sub-casos mordem, provados um
+a um: `docker-run/cpuset`, `docker-run/restart`, `docker-update/cpuset`.
+
+---
+
+**22/09 13:0x A MAQUINA TEM 4 NUCLEOS, NAO 8 -- e a minha divisao da manha tinha invertido o dono.**
+
+`lscpu`: AMD EPYC-Genoa, **SMT 2, 4 core(s) per socket**. `thread_siblings_list`: core0=cpu0,1 ·
+core1=cpu2,3 · core2=cpu4,5 · core3=cpu6,7. **"8 vCPU" sao 8 THREADS.** Cpuset se escreve em vCPU,
+entao a divisao que eu declarei de manha -- "prod 0-1, teste 2-5" -- deu a **PRODUCAO UM nucleo
+fisico** e ao **TESTE DOIS**. O oposto exato do que a linha dizia fazer, e eu escrevi a linha, o
+selo, o CLAUDE.md e o commit sem olhar a topologia uma vez.
+
+**Quem cobrou foi o Ronald, e o sintoma nao era teste.** Ao medir a base para o teto 6 a base veio
+PIOR (p95 106 ms) -- e o culpado era o lote de crons `*/5`, que roda de **6 a 28 `tenant_command`
+DENTRO do saas_core**. Producao competindo consigo mesma num nucleo so.
+
+| condicao (n=150, `/api/me/`, rota de LEITURA) | p95 |
+|---|---|
+| base quieta | **18 ms** |
+| 4 suites cheias, fora do cron | 20 ms |
+| 6 suites cheias, fora do cron | 20 ms |
+| janela de cron, prod em `0-1` (1 nucleo fisico) | **106 ms** |
+| janela de cron, prod em `0-1,6-7` (2 nucleos) | 33 ms |
+| janela de cron, prod em `0-3` (2 nucleos) | **32 ms** |
+
+Trocar QUAIS nucleos nao mudou nada (33 x 32): o que manda e o NUMERO. Alargar de 1 para 2 curou
+106 -> 32. Nao ha terceiro passo -- so existem 4 fisicos.
+
+**Divisao final: prod `0-3` (core0+core1), teste `4-7` (core2+core3).** Metade fisica para cada lado,
+nada ocioso, nenhuma sobreposicao.
+
+**TETO FICA EM 4.** O criterio do Ronald para subir a 6 era "p95 na janela de cron <= base quieta", e
+ele **nao foi atingido** (32 x 18-20) -- nem e atingivel por cpuset. Registro do que o 6 mediu, para
+quando o gargalo cair: fora do cron, 6 suites custam o MESMO que 4 (p95 20 nas duas) e a RAM sobra
+(pico **512 MiB** por cadeia contra teto de 2g, maquina com 9 GB livres). O 6 nao foi reprovado por
+recurso -- ficou barrado pelo cron. `--memory` 3g -> 2g na mesma medida.
+
+**O que sobra virou registro, nao codigo:** `[CRONS-EM-FILA]` no TICKETS (corte Ronald: crons em
+fila/worker, nao 6-28 forks simultaneos; depois do 27). Nao construi.
+
+**Licao que fica:** contei vCPU como se fosse nucleo. Toda a medicao da manha (nucleos 2-5 "saturados",
+prod "93,7% ociosa") estava CERTA como medida e ERRADA como conclusao -- prod estava ociosa porque
+nao havia cron na janela, nao porque um nucleo bastasse. Medir sob a carga errada e a mesma familia
+da amostra de n=60: o numero nao mente, a pergunta e que estava mal feita.
