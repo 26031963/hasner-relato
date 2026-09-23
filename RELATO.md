@@ -2820,6 +2820,93 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 **21/09 17:25 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 <!-- PENDENTES:INICIO -->
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**22/09 20:00 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**22/09 20:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**22/09 20:15 vigia da esteira (ALARME)** -- a fatia prazo_vencido_juiz caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 20:30 vigia da esteira (ALARME)** -- a fatia fila_vizinho_celula caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 20:40 vigia da esteira (ALARME)** -- a fatia tv_previsto_celula caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 20:40 vigia da esteira** -- vigia relancou dash_em_turno_juiz as 20:40 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**22/09 20:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**22/09 20:55 vigia da esteira** -- vigia relancou dash_batidas_hoje_juiz as 20:55 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
+
+**22/09 21:00 vigia da esteira (ALARME)** -- a fatia dash_batidas_hoje_juiz caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:00 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**22/09 21:05 vigia da esteira** -- vigia relancou prazo_vencido_juiz2 as 21:05 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
+
+**22/09 21:10 vigia da esteira (ALARME)** -- a fatia prazo_vencido_juiz2 caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:10 vigia da esteira** -- vigia relancou fila_vizinho_celula2 as 21:10 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
+
+**22/09 21:15 vigia da esteira (ALARME)** -- a fatia fila_vizinho_celula2 esta PRONTA ha 31 min e nao esta na fila de integracao: trabalho terminado que ninguem vai buscar. Se ela tem portao, o fatia.done tem de DIZER qual; se nao tem, reentregue com bin/entregar.sh..
+
+
+**22/09 21:20 vigia da esteira (ALARME)** -- a fatia fila_vizinho_celula2 caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:23 vigia da esteira (ALARME)** -- arvore vermelha por JSON/arquivo de logs lido pelo teste -- cura de codigo, sem autocura.
+
+
+**22/09 21:23 ARVORE VERMELHA (vigia da arvore)** -- 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_selo_mapa_contrato.SeloMapaContratoTest.test_MORDE_bolha_nova_sem_contrato_e_vermelha . Toda fatia que cair nesses mesmos testes espera e se relanca sozinha. Para a admin: nada muda na tela.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**22/09 21:35 vigia da esteira (ALARME)** -- a fatia sla_painel_juiz caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:35 vigia da esteira (ALARME)** -- a fatia badge_navbar_consome caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:35 vigia da esteira (ALARME)** -- a fatia ranking_veredito caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:35 vigia da esteira (ALARME)** -- a fatia furos_estado_veredito caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**22/09 21:50 vigia da esteira (ALARME)** -- a fatia quem_cobrar_folha caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**22/09 21:55 vigia da esteira (ALARME)** -- a fatia nunca_bateu_juiz caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
 ## PENDENTES DO RONALD (89) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 22/09 19:44. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 89 (aval 10 - corte 65 - smoke 14); `mais_velho_h` = 244 (esperado: nenhum acima de 24 h -- hoje **39 acima**)._
