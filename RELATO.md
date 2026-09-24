@@ -1,6 +1,52 @@
 # RELATO — esteira saas-hasner
 
-_Estado de 23/09 16:5x (regua OK 23/09 15:32, 7.890 testes; suite do dia fechou 7.894 OK; PENDENTES = 77; balao e fila de trabalho seguem da lavra de 18/09 -- sao contadores da operacao, nao do Code). Publico: so ids e contagens, nunca nome/CPF, nenhum codigo._
+## CARTAO=ESPELHO: **INCOMPLETO** (24/09) -- os 6 RED e o que falta para cada um
+
+O corte manda: o cartao desenha EXATAMENTE o dict `dias` de `espelho_do_colab`, mesma janela da
+competencia, sem funcao propria de dia, batida, total ou rotulo. **Nao esta pronto**, e a lista
+abaixo e o que falta -- medido, nao estimado.
+
+| # | RED | estado |
+|---|---|---|
+| 1 | col37 21/08 **vazio** | **falta**: o cartao mostra 3 batidas (78517/78540/78667, madrugada do turno de 20/08); a tela mostra `[]`. Adotar a tela resolve. **Eu tinha classificado isso como perda de marcacao e estava ERRADO**: as 3 sao do turno de 20/08, a celula concorda, e aparecem no cartao de agosto. Nada se perde. |
+| 2 | col37 22/08 **quatro batidas** | **JA BATE** (medido 24/09): tela e cartao mostram as MESMAS quatro -- 80049, 80206, 80230, 80360. col29 idem (80002, 80195, 80213, 80302). |
+| 3 | col37 17/09 **"Em aberto"** | **falta a fiacao**: `em_aberto=True` e `rotulo_ausencia=None` -- o dia sai sem palavra. A palavra existe (`palavra_do_dia`), a grade e o PDF ainda nao a leem. |
+| 4 | col443 13/09 **"Falta (desconta 12h)"** | **falta a fiacao**: a palavra ja sai exata do servico (aus#4245, 720 min = 12h); o cartao ainda imprime o texto longo do catalogo, sem cor. |
+| 5 | col29 **tela == PDF** | **falta 1 dia de 31**: so 21/08 difere (tela `[]`, cartao 3 batidas -- o mesmo caso do #1). Os outros 30 ja batem batida a batida, e nenhum dia existe no cartao e nao na tela. |
+| 6 | **196 divergentes = 0** | **nao medido depois da troca** (a troca nao aconteceu). |
+
+### O que impede, nomeado
+
+1. **`_coletar_dados_espelho` ainda monta o proprio `dias`.** Precisa chamar `espelho_do_colab` e
+   recortar na competencia. Medido: a tela e SUPERSET -- col37 122 dias, col29 114, e **zero** dia
+   existe no cartao e nao na tela. O recorte da exatamente os 31.
+2. **As chaves do DIA nao batem.** A tela emite `ausencia, ausencia_icone, folga, previsto,
+   previsto_canon, realizado_grade, orfas_grade`; o desenho do PDF consome `rotulo_ausencia, feriado,
+   minutos_realizados, realizado_sem_turno, celulas_isencao`. Enquanto o desenho ler as do cartao, ele
+   nao pode receber as da tela.
+3. **6 chaves de resumo so existem no cartao**: `acrescimo_noturno, noturnas_relogio, dias_abono,
+   datas_furo_apurado` -- que a tela precisa passar a devolver -- e `trab_feriado, trab_normal`, que
+   sao **escritas e lidas por ninguem** (medido 24/09: grep em `*.py` + `*.html` fora de tests = 0
+   consumidor) e morrem com o corte.
+4. **A palavra por dia esta pronta e desligada.** `ponto/services/dia_decidido.py` responde os 7
+   vereditos com 7 palavras distintas (selo verde), inclusive `Falta (desconta 12h)` e `Em aberto`.
+   Falta a grade e o PDF lerem.
+
+### O que ja esta no ar, deste corte
+
+- `dia_das_batidas` **fora do registro de juizes** (commit `8b845853`).
+- Selo do grep: derivacao de dia em `relatorios/` = **0**; chamada do juiz com **teto 1**, que vai a
+  zero quando (1) acontecer. O grep literal do corte devolve 12 ocorrencias e **11 sao falso
+  positivo** (`_djm` e bordas de janela em `views.py`) -- o selo conta o que o corte quer dizer.
+- Selo da palavra: 7 vereditos, 7 palavras, `trabalhou` mudo. Ele achou onde o dia emudecia --
+  `rotulo_curto` devolve **vazio** para `falta` e `ferias`, por regra escrita ("desenho em vez de
+  palavra"), e e isso que o corte revoga.
+- Trava JUIZ-NOVO, com o morde provado nos dois sentidos.
+
+LEI-AKITA: origem=espelho_do_colab; testemunha=celula; juizes novos=0.
+
+
+_Estado de 24/09 12:3x (PDF-SEM-REGRA-PROPRIA, MARCA-DO-VEREDITO e ME-POSTO-GEO no ar desde o deploy de 02:2x com ensaio verde; Pauta do DP com classes e nomes escrita as 08:50; .esteira reconciliada de 176 para 46 pacotes). Numeros do dia mais abaixo, na secao MANHA 24/09._
 
 > **APAGAO 21/09 12:06-12:12:33 -- CAUSA: MINHA. NAO VOLTOU SOZINHO, EU CUREI.**
 > **O que:** toda pagina da casca UI devolveu 500 (`/`, `/ponto/espelho/`, `/chamados/meu-atendimento/`,
@@ -2874,6 +2920,231 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **24/09 08:05 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
+
+**24/09 09:10 vigia da esteira** -- vigia relancou h_hookgit as 09:10 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:10 vigia da esteira (ALARME)** -- vigia sem efeito: 108 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+
+**24/09 09:15 vigia da esteira** -- vigia relancou h_hookgit as 09:15 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:25 vigia da esteira (ALARME)** -- a fatia corte_form_juiz caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**24/09 09:30 vigia da esteira (ALARME)** -- a fatia janela_comercial_feriado caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**24/09 09:30 vigia da esteira (ALARME)** -- a fatia h_hookgit caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 09:30 vigia da esteira** -- vigia relancou c_slaprazo as 09:30 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:35 vigia da esteira** -- vigia relancou c_slaprazo as 09:35 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:40 vigia da esteira (ALARME)** -- a fatia c_slaprazo caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 09:40 vigia da esteira** -- vigia relancou c_pviva as 09:40 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:45 vigia da esteira** -- vigia relancou c_pviva as 09:45 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:50 vigia da esteira (ALARME)** -- a fatia c_pviva caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 09:50 vigia da esteira** -- vigia relancou a_feriasjanela as 09:50 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 09:55 vigia da esteira** -- vigia relancou a_feriasjanela as 09:55 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:00 vigia da esteira (ALARME)** -- a fatia a_feriasjanela caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:00 vigia da esteira** -- vigia relancou c_dispfalta as 10:00 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:05 vigia da esteira** -- vigia relancou c_dispfalta as 10:05 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:10 vigia da esteira (ALARME)** -- a fatia c_dispfalta caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:10 vigia da esteira** -- vigia relancou gate as 10:10 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:15 vigia da esteira** -- vigia relancou gate as 10:15 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:20 vigia da esteira (ALARME)** -- a fatia gate caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:20 vigia da esteira** -- vigia relancou i_janela1 as 10:20 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:25 vigia da esteira** -- vigia relancou i_janela1 as 10:25 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:30 vigia da esteira (ALARME)** -- a fatia i_janela1 caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:30 vigia da esteira** -- vigia relancou a_afastjuiz as 10:30 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:35 vigia da esteira** -- vigia relancou a_afastjuiz as 10:35 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:40 vigia da esteira (ALARME)** -- a fatia a_afastjuiz caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:40 vigia da esteira** -- vigia relancou a_afastavisa as 10:40 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:45 vigia da esteira** -- vigia relancou a_afastavisa as 10:45 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:50 vigia da esteira (ALARME)** -- a fatia a_afastavisa caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 10:50 vigia da esteira** -- vigia relancou c_dispfim as 10:50 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 10:55 vigia da esteira** -- vigia relancou c_dispfim as 10:55 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:00 vigia da esteira (ALARME)** -- a fatia c_dispfim caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:00 vigia da esteira** -- vigia relancou c_s127 as 11:00 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:05 vigia da esteira** -- vigia relancou c_s127 as 11:05 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:10 vigia da esteira (ALARME)** -- a fatia c_s127 caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:10 vigia da esteira** -- vigia relancou relancepega as 11:10 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:15 vigia da esteira** -- vigia relancou relancepega as 11:15 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:20 vigia da esteira (ALARME)** -- a fatia relancepega caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:20 vigia da esteira** -- vigia relancou arvoreverde as 11:20 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:25 vigia da esteira** -- vigia relancou arvoreverde as 11:25 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:30 vigia da esteira (ALARME)** -- a fatia arvoreverde caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:30 vigia da esteira** -- vigia relancou apertos as 11:30 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:35 vigia da esteira** -- vigia relancou apertos as 11:35 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:40 vigia da esteira (ALARME)** -- a fatia apertos caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:40 vigia da esteira** -- vigia relancou quarentena as 11:40 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:45 vigia da esteira** -- vigia relancou quarentena as 11:45 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:50 vigia da esteira (ALARME)** -- a fatia quarentena caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 11:50 vigia da esteira** -- vigia relancou autorevert as 11:50 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 11:50 vigia da esteira** -- docs/MAPA.md modificado fora do git depois de fatia no ar (lembrete, pdf_realizado_dia, varre_comentario): a cadeia commitou o diagrama e nao o MAPA -- incluir no proximo commit (python3 bin/gerar_diagrama.py e git add app/docs/MAPA.md).
+
+
+**24/09 11:55 vigia da esteira** -- vigia relancou autorevert as 11:55 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:00 vigia da esteira (ALARME)** -- a fatia autorevert caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:00 vigia da esteira** -- vigia relancou vigiaporfatia as 12:00 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:05 vigia da esteira** -- vigia relancou vigiaporfatia as 12:05 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:10 vigia da esteira (ALARME)** -- a fatia vigiaporfatia caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:10 vigia da esteira** -- vigia relancou suitelote as 12:10 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:15 vigia da esteira** -- vigia relancou suitelote as 12:15 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:20 vigia da esteira (ALARME)** -- a fatia suitelote caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:20 vigia da esteira** -- vigia relancou aus_celula as 12:20 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:25 vigia da esteira** -- vigia relancou aus_celula as 12:25 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:25 vigia da esteira (ALARME)** -- vigia sem efeito: 108 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+
+**24/09 12:30 vigia da esteira (ALARME)** -- a fatia aus_celula caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:30 vigia da esteira** -- vigia relancou aus_folha as 12:30 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:35 vigia da esteira** -- vigia relancou aus_folha as 12:35 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:40 vigia da esteira (ALARME)** -- a fatia aus_folha caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:40 vigia da esteira** -- vigia relancou aus_esp1 as 12:40 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:45 vigia da esteira** -- vigia relancou aus_esp1 as 12:45 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:50 vigia da esteira (ALARME)** -- a fatia aus_esp1 caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 12:50 vigia da esteira** -- vigia relancou aus_esp2 as 12:50 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 12:55 vigia da esteira** -- vigia relancou aus_esp2 as 12:55 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 13:00 vigia da esteira (ALARME)** -- a fatia aus_esp2 caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 13:00 vigia da esteira** -- vigia relancou cq_c8 as 13:00 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 13:05 vigia da esteira (ALARME)** -- a fatia cq_c8 caiu duas vezes seguidas pelo MESMO motivo de arvore (nunca lancada) depois de relancada -- nao relanco a terceira; a arvore (ou a fatia) precisa de cura.
+
+
+**24/09 13:05 vigia da esteira** -- vigia relancou cq_c6 as 13:05 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**24/09 13:10 vigia da esteira** -- vigia relancou cq_c6 as 13:10 (nunca lancada) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
 ## PENDENTES DO RONALD (92) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 23/09 23:59. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 92 (aval 31 - corte 40 - smoke 15); `mais_velho_h` = 272 (esperado: nenhum acima de 24 h -- hoje **64 acima**)._
@@ -5499,3 +5770,104 @@ espiao no `do_periodo`, `None` = 0 em 196 colaboradores. Dias marcados `inconsis
 1616, que e a mesma aritmetica do despilhamento (o alerta que estava concentrado num dia passa a
 marcar o dia a que pertence); o TOTAL do cartao nao se move, porque `dias_inconsistentes` vem do
 fechamento gravado.
+
+## MANHA 24/09 — o que fechou, com numero
+
+**PAUTA DO DP (prazo 10:00, escrita 08:50).** Os 292 dias em aberto nao sao 292 dias espalhados:
+**87% sao 13 pessoas que nao bateram, ou quase nao bateram, o mes inteiro** (255 dias). O resto e 1
+que parou no meio (22 dias) e 9 com dias avulsos (15 dias). A classe TECNICA nao servia --
+`classificar_falta` devolvia `saida_sem_entrada` em 284 dos 292 (97%), uma classe so, e ela mente:
+col440 e col642 tem ZERO batida na competencia inteira. Oito pautas FILHAS sob as tres cabecas que
+ja existiam (#678/679/680, nenhuma lida), com nomes e "o que fazer" por classe.
+
+**AS 8 HORAS DE TRAVA A VAZIA: o fabricante nunca parou.** Ele acordou de 30 em 30 min, das 01:02 as
+09:4x, 17 vezes, e escreveu sempre "registro sem item livre com alvo vivo". Estava VIVO E FAMINTO: a
+fila nao tinha item que ele aceitasse (as recusas estao em FABRICANTE.md, com motivo cada uma). A
+trava A voltou a encher quando o BACKLOG ganhou itens. Contador novo `horas_trava_A_vazia` marcou 7 h
+na primeira medicao e diz a diferenca entre faminto e quebrado -- "processo vivo" nao e sinal de
+esteira andando, e foi essa a leitura errada.
+
+**AS 2 FATIAS SEM CAUSA: a causa estava escrita.** `espelho_tela_dia` (00:57) e `espelho_app_dia`
+(01:02) imprimiram "PAROU -- dia_das_batidas ainda nao esta no HEAD (espera o commit da
+PDF-SEM-REGRA-PROPRIA)" e foram carimbadas "fim sem causa conhecida" -> CAIU_FATIA, que o vigia nunca
+relanca. Ficaram 9 h mortas esperando algo que chegou em 1 h. (As 6 portas de 00:05-01:05 sao de
+23/09 e tem causa conhecida: `GREEN parcial vermelho`.)
+
+**.ESTEIRA RECONCILIADA: 176 pacotes -> 46, 25 GB -> 5,1 GB.** 131 eram RESIDUO ja commitado, e era
+isso que segurava os alvos. Quatro classes agora, `pacotes_sem_classe=0`, e o vps perdeu a palavra
+"paradas". **Errei duas vezes aqui e as duas estao no commit**: imprimi "apagado" 131 vezes sem
+conferir (foram ~28; os pacotes tem arquivos de root dentro e o `ignore_errors` engoliu a falha), e a
+remocao parcial destruiu a evidencia de classificacao, deixando 120 cascas mentindo como "portao".
+Reconstrui pela lista tirada ANTES e removi com container root, conferindo item a item.
+
+**DOIS RUNS SIMULTANEOS NO BANCO DE TESTE: 940 errors falsos.** `Ran 4788 tests in 1789318715.905s`
+-- numeros que nao existem. Pior que vermelho: vermelho MENTIROSO. A regra existia em prosa desde
+sempre ("UM run por vez") e nada impedia. Agora ha `bin/trava_teste.sh` (flock, nao pgrep) no
+pre-push e na regua, com selo que MORDE: serializa de verdade, e quem nao consegue a vez sai 75 --
+codigo proprio, para nao confundir "nao rodou" com "rodou e deu vermelho".
+
+**BO DO APP (col878): a premissa estava invertida, e o POST CHEGA.** "O servidor nao recebe" vinha de
+olhar o `saas_core`; o Caddy so manda `/api/ponto/*`, `/api/auth/*`, `/api/me/`, `/api/regularizacao/*`,
+`/api/ping-geo/`, `/api/registrar-fcm/` e `/health/` para o core -- **`/api/ausencias/` e servida pelo
+`saas_ui`**. La estao os POSTs: hoje 08:51 e 08:55, `colab=u894`, os dois **409**. E u894 e o col878.
+Ele tem a ausencia **#4345, atestado 10/09-23/09, ja APROVADA e sem documento** -- o 409 e "ja
+existe", e o que ele estava tentando fazer era justamente ANEXAR o documento. O app descarta a frase
+do servidor (que vem em portugues) e mostra "Erro ao enviar". Cadeia inteira provada; a cura e o
+item (1) do BO AUSENCIA-API v2 (idempotencia: anexa e devolve 200).
+
+## 24/09 10:56 — RECALCULO DOS FECHAMENTOS DA COMPETENCIA 09 (ordem direta do Ronald, export hoje)
+
+Rodado em PROD por `tenant_command recalcular_fechamento --mes 9 --ano 2026 --apply`, que chama a
+MESMA funcao do botao "Recalcular" (`ponto/services/fechamento.py::recalcular_fechamento_mes`) --
+sem copia de regra. Foto antes/depois gravada em `logs/recalculo/recalculo_09-2026_20260924_105607.json`.
+
+**CARIMBO.** `Max(atualizado_em)` **20/09 18:16:48 -> 24/09 10:56:07** (Min 24/09 10:54:55). Os 603
+ficaram com carimbo de 24/09; os 592 anteriores eram TODOS de 20/09 18:12-18:16. Status: 603
+`aberto`, ZERO aprovado -- apuracao normal, nao cura.
+
+**UNIVERSO.** 592 fechamentos antes, **603 depois**: 11 nasceram agora (gente que nao tinha
+fechamento na competencia). **321 de 603 mexeram.**
+
+| rubrica | antes | depois | delta |
+|---|---:|---:|---:|
+| horas_trabalhadas | 67.917,51 | 69.371,95 | **+1.454,44** |
+| horas_noturnas | 17.487,43 | 17.941,67 | +454,24 |
+| horas_extras | 1.578,84 | 1.535,79 | -43,05 |
+| horas_extras_50 | 620,37 | 599,06 | -21,31 |
+| horas_extras_50_noturna | 138,96 | 141,20 | +2,24 |
+| horas_extras_100 | 958,45 | 936,72 | -21,73 |
+| horas_extras_100_feriado | 682,38 | 677,75 | -4,63 |
+| horas_extras_100_noturna | 69,29 | 69,89 | +0,60 |
+| **horas_folga_trabalhada** | **468,15** | **2.547,74** | **+2.079,59** |
+| horas_atraso | 136,81 | 146,58 | +9,77 |
+| horas_saida_antecipada | 1.040,70 | 1.042,87 | +2,17 |
+| horas_falta | 1.085,51 | 1.169,51 | +84,00 |
+| horas_intra_indenizada | 2.209,42 | 2.249,78 | +40,36 |
+| saldo_banco_horas | -10.448,79 | -10.277,38 | +171,41 |
+| minutos_previstos | 5.887.999 | 5.850.436 | -37.563 |
+| minutos_abonados | 413.364 | 448.424 | +35.060 |
+| turnos_abertos | 836 | 803 | -33 |
+| dias_incertos | 30 | 31 | +1 |
+| inconsistencias | 1.280 | 1.408 | +128 |
+
+**O QUE SALTA, e eu avisei antes de rodar**: `horas_folga_trabalhada` multiplica por **5,4**
+(468 -> 2.548 h). E a rubrica paga a 100%. `horas_trabalhadas` sobe 1.454 h e `minutos_previstos`
+CAI 37.563 (626 h) -- previsto menor com realizado maior e a assinatura de regra de ausencia/escala
+que mudou desde 20/09. `turnos_abertos` cai 33 e `inconsistencias` sobe 128.
+
+**PORQUE SUBIU ASSIM**: os fechamentos eram de **20/09 18:16** e carregavam o motor daquele dia. Tudo
+que entrou desde entao (as fatias de 21 a 24/09) so chegou a folha agora, de uma vez. O recalculo nao
+inventou nada -- ele parou de esconder.
+
+**IDEMPOTENTE, provado em PROD**: a 2a passada deu `fechamentos_mexidos=0 de 603`. E antes disso ja
+tinha sido provado na sombra (delta 0,00 em todas as rubricas na 2a chamada).
+
+**MUDOU QUEM ENTRA NO TXT**: `cartao_x_txt_divergentes` roda agora com **189 colaboradores no TXT**;
+de manha, antes do recalculo, eram **181**. Oito pessoas passaram a entrar no export da competencia
+09. `cartao_x_txt_divergentes=0` (o cartao e o TXT seguem concordando, porque o cartao le o
+fechamento gravado) e `dias_em_aberto=292` nao se moveu.
+
+**REVERSAO**: a foto tem o antes por colaborador. Para desfazer um caso,
+`logs/recalculo/recalculo_09-2026_20260924_105607.json` -> chave `antes` -> `FechamentoMensal.update()`
+daquele colab. Para desfazer TUDO nao ha botao: seria reescrever 321 fechamentos com numeros que o
+motor de hoje nao produz mais.
