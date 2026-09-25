@@ -1,5 +1,397 @@
 # RELATO — esteira saas-hasner
 
+## 25/09 07:xx — PRONTA-QUE-NAO-POUSA: a esteira estava seca por DOIS comentarios e um rc que ninguem lia
+
+**AS 8, MEDIDAS** (pelo juiz real `esteira_vigia.pronta_de_verdade` + `logs/fila_integracao.txt`,
+nunca por lista escrita a mao). Todas com `fatia.done` **VAZIO** e fora da fila de integracao:
+
+| pacote | `cadeia.done` | fora da fila ha | o que E de verdade |
+|---|---|---|---|
+| `score_fmcomp` | **rc=1** | 3.896 min (**65 h**) | CAIU -- `pronta.json` residual |
+| `k8_gerar_alertas` | **rc=1** | 3.853 min (64 h) | CAIU -- residuo |
+| `fila_vizinho_celula2` | **rc=1** | 3.328 min (55 h) | CAIU -- residuo |
+| `sla_painel_juiz` | **rc=1** | 2.423 min (40 h) | CAIU -- residuo |
+| `pergunta_cega_juiz` | **rc=1** | 2.423 min (40 h) | CAIU -- residuo |
+| `rotulo_escala_juiz` | **rc=1** | 2.423 min (40 h) | CAIU -- residuo |
+| `arquivar_comp_juiz` | **rc=1** | 2.423 min (40 h) | CAIU -- residuo |
+| `gerar_celulas_janela` | **rc=0** | 2.158 min (36 h) | **PRONTA de verdade**, unica das 8 |
+
+**A RESPOSTA A SUA PERGUNTA** ("por que nao estao em `fila_integracao.txt`?"): **sete delas nao
+estavam prontas -- cairam**, e so pareciam prontas porque o juiz de PRONTA tinha 3 guardas
+(`pronta.json` existe · estado nao e queda · `fatia.done` nao e mais novo · nao esta no git) e
+**nenhuma lia o `cadeia.done`, que e o rc da corrida**. O relance APAGA o `fatia.done`; a cadeia roda
+e cai; o vazio faz a guarda de estado calar; e o `pronta.json` residual, mais novo que o vazio, faz a
+guarda de idade calar. **E a quarta camada do mesmo residuo** (as tres anteriores: BO 22/09 18:07,
+23/09 19:1x, e o `ja_esta_no_git`).
+
+**O DANO ERA O QUE VOCE DESCREVEU**: `bin/fabricante.sh::trava_a` conta PRONTA como trabalho vivo,
+entao a trava media **8 >= teto 6** e o fabricante se achava cheio -- **sem fabricar desde 21/09**.
+Com a 4a guarda a trava caiu **8 -> 1**, e com `gerar_celulas_janela` enfileirada, **-> 0**.
+
+**A SEGUNDA RAIZ, independente e da MESMA familia**: `bin/selo_espera_por_processo.sh` estava
+VERMELHO por **uma linha de COMENTARIO** -- `bin/trava_teste.sh:11`, que escreve a propria lei
+("A trava e um ARQUIVO (flock), nao um pgrep"). Documentar a regra virava violacao da regra. E com a
+regua vermelha **o integrador nao rodava a suite**, entao nada pousava. Irmao exato do
+`ARQUITETURA.mmd` inflado de 21 para 24 nos por palavras em comentario (13/09) e do
+`[CONTRATO-VARRE-COMENTARIO]`, que curou isto nos contratos do Django e **deixou o de HOST de fora**.
+
+**CURADO** (7 sitios): 4a guarda no juiz unico · `integrador_lote.varrer_e_enfileirar` (pronta rc=0
+sem portao entra sozinha, lendo o juiz unico) · `trava_a` conta pronta **so se estiver NA FILA** ·
+`_subir` **confere o returncode do push** (era `_git([push])` com o resultado jogado fora e em
+seguida `FIM / no ar pelo lote` -- com o push rejeitado as 21:0x de 24/09 a fatia saia da fila
+dizendo "no ar" sem estar) · alarme > 30 min no topo do RELATO + push · contador
+**`prontas_fora_da_fila`** no PLACAR, esperado 0 · o selo de host julga CODIGO, com o PAR que morde
+(`bin/tests/test_selo_espera_processo_morde.sh`: dois arquivos que diferem so em um `#`).
+
+**RED**: `test_MORDE_cadeia_que_CAIU_nao_e_pronta` contra a arvore de antes ->
+`AssertionError: True is not false`.
+
+**UM SELO ANTIGO ME PEGOU, E TINHA RAZAO**: minha 1a versao da conferencia do push trocou
+`_git(['push', 'origin', 'HEAD'], saida)` por `subprocess.run`, e derrubou
+`CommitLocalNaoParaAEsteiraTest::test_MORDE_o_subir_empurra_mesmo_sem_fatia_que_subiu` -- um selo de
+20/09 23:1x que afirma sobre a LINHA porque e a linha que garante **push incondicional** (era
+`if subiram:` e um commit de quarentena ficou local, matando toda passada seguinte do integrador).
+Conferir o resultado nunca pediu mecanismo novo: **`_git` ja devolve o rc de `_rodar`**. A linha da
+lei ficou e o rc passou a ser lido. Meu selo novo tambem afirma a linha agora, para os dois nao se
+contradizerem.
+
+**O QUE SOBRA, e e do proprio PROIBIDO deste corte**: `bin/tests/test_fabricante_seco.sh` segue
+**RED** -- `em_obra()=121, sem filtro=121`, nenhum alvo livre no registro com **24 caidas**
+existindo. E "sem item livre com pronta ou caida existindo", que o corte proibe. Fatia propria, na
+selecao de alvo do fabricante (filha do O36). E o alarme de `cortes_registrados` caiu de 2 para 1:
+`ASSINATURA-EC-P256` estava em `recebido` ha 32 h **com o commit `e22a32b4` no git desde 24/09** --
+o estado mentia, nao havia corte parado. Sobra `TROCA-DE-PLANTAO` (37 h), que e seu de verdade.
+
+## 25/09 10:1x — ARQUIVO-SIMPLES v2, item 1: O CENSO DE TODA TRAVA AUTOMATICA
+
+As 250 mencoes de `competencia_trancada`/`PeriodoFechado`/`trancad`/`bloquear_se` na arvore de
+producao **colapsam em 6 JUIZES e 22 CONSUMIDORES**. O resto e teste, comentario, import e o proprio
+servico. **Nenhuma sobra** -- o censo saiu pela AST (chamadas, nao grep de palavra), e o efeito de
+cada sitio foi lido nas 6 linhas seguintes a chamada.
+
+### Os 6 juizes (quem responde "esta trancado / exportado?")
+
+| juiz | onde nasce | o que responde |
+|---|---|---|
+| `competencia_trancada` | `ponto/services/fechamento.py:465` (+ espelho em `ponto/templatetags/tranca_tags.py:10`) | linha viva de `PeriodoFechado` para (empresa, mes, ano) |
+| `periodo_trancado` | `ponto/services/fechamento.py:456` | idem, por periodo |
+| `dia_em_competencia_trancada` | `chamados/juizes.py:1076` | o DIA cai numa competencia trancada (usa `janela_fechamento`, nao mes civil) |
+| `dia_em_competencia_exportada` | `chamados/juizes.py:1097` | fronteira de imutabilidade: o dia ja foi entregue ao Dominio (`ExportacaoDominio`) |
+| `competencia_fechada` | `ponto/janelas.py:75` | a competencia do dia esta fechada (pode escrever?) |
+| `bloquear_se_sem_posto` | `ponto/utils.py:9` | **NAO e tranca de periodo** -- e cadastro (colab sem posto). Entra no censo e SAI dele |
+
+### Os 22 consumidores, por DESTINO proposto
+
+A LEI (c) da ordem -- *"nada tranca: sem competencia trancada, sem aviso de exportado; folha/TXT =
+leitura da celula em qualquer periodo"* -- nao trata os 22 igual. Tres grupos:
+
+**A. MORREM** (a trava e o que a lei (c) revoga) -- 9 sitios que RECUSAM ou SILENCIAM escrita:
+
+| sitio | juiz | efeito hoje | quem dispara |
+|---|---|---|---|
+| `ponto/services/ausencia.py:165` | `competencia_trancada` | **RAISE** `AusenciaInvalida` | DP lanca ausencia |
+| `ponto/services/ausencia.py:332` | `competencia_trancada` | **RAISE** | DP edita ausencia |
+| `ponto/views.py:932` | `periodo_trancado` | **RAISE** | tela de fechamento |
+| `chamados/services/validacao.py:85` | `dia_em_competencia_trancada` | **return recusa** ("Reabra a competencia") | admin valida pergunta |
+| `chamados/services/cobrar_dia.py:28` | `competencia_trancada` | **return recusa** | emissor de cobranca |
+| `ponto/services/flip_batida.py:22` | `competencia_fechada` | **return recusa** | `flip_automatico` 07:12 |
+| `ponto/services/justificativa.py:37` | `competencia_trancada` | return (sai) | colab justifica |
+| `ponto/services/justificativa.py:235` | `competencia_trancada` | return (sai) | idem |
+| `ponto/registro_batida.py:94` | `competencia_fechada` | return (sai) -- **so escrita ADMINISTRATIVA** | admin lanca batida retroativa |
+
+**A porta da batida NAO fura a lei, e eu levantei um `!` que nao existe.** Li a linha de cima antes
+de afirmar: `registro_batida.py:91` e `if not fato_de_chao:` -- a guarda de competencia **so roda
+quando NAO e fato de chao**. Batida de chao nunca chega ali, exatamente como a CLAUDE.md 4 manda
+("batida de chao NUNCA e barrada em runtime"); o que a linha 94 barra e lancamento ADMINISTRATIVO
+retroativo em competencia fechada. Destino sob a lei (c): morre com as outras do grupo A, e sem
+pergunta -- sobra so a do exportado, abaixo.
+
+**B. VIRAM ARQUIVO** (silencio, que e o que a lei (a) quer) -- 4 sitios que ja fazem isso:
+
+| sitio | juiz | efeito hoje |
+|---|---|---|
+| `ponto/services/cartorio.py:651` | `dia_em_competencia_trancada` | **ENCERRA/arquiva** -- ja e o comportamento que a lei quer |
+| `ponto/services/furos_sem_cobranca.py:69` | `dia_em_competencia_trancada` | **PULA o item** (silencia o furo) |
+| `chamados/models.py:528` | `competencia_trancada` | return (sai) -- no dedup de chamado |
+| `chamados/services/competencia_trancada.py:79` | `periodo_trancado` | return (sai) -- o servico do passivo |
+
+**C. IMUTABILIDADE DO EXPORTADO** (3 sitios) -- `dia_em_competencia_exportada` em
+`chamados/models.py:514`, `chamados/services/disputa_emissao.py:1064` e
+`chamados/services/fabrica_da_celula.py:46`. **Isto nao e "periodo fechado com outro nome"**: e a
+fronteira E1 (corte 03/09) que impede reescrever dia JA ENTREGUE ao Dominio. A lei (c) diz "sem aviso
+de exportado" -- e por isso preciso da sua palavra: **"sem AVISO" e o mesmo que "sem FRONTEIRA"?**
+Se o TXT ja saiu e o fato muda depois, a folha entregue e a celula divergem, e quem responde ao
+Dominio e o Ronald, nao o codigo.
+
+**D. EXIBICAO, nao trava** (6 sitios) -- `ponto/services/tranca_do_dia.py:18`,
+`ponto/services/checar_ausencia.py:32`, `ponto/services/fechamento.py:493`, `ponto/views.py:1852`,
+`chamados/management/commands/validar_classe_a.py:59` e `ponto/services/triagem_batida.py:69` (este
+ultimo e `bloquear_se_sem_posto`, cadastro, fora do assunto). Estes so MARCAM ou MOSTRAM -- a lei (c)
+os apaga junto com a trava que eles anunciam, sem decisao propria.
+
+### O que o censo me fez ver, e que a ordem nao previu
+
+`chamados/services/competencia_trancada.py` tem **38 mencoes** -- e o maior sitio do censo -- e e um
+SERVICO INTEIRO dedicado ao passivo. Mais dois commands (`encerrar_por_competencia_trancada`,
+`chamados_em_competencia_trancada`) e uma via de encerramento (`via_resolucao='competencia_trancada'`,
+**1.994 perguntas** medidas hoje). O item 7 da ordem ("passivo vira arquivado com trilha") nao e uma
+migracao de flag: e **1.994 linhas de historia** cuja via de encerramento deixa de existir. O DRY que
+voce pediu tem de dizer, alem do numero, **o que a via passa a se chamar** -- senao a forense de
+amanha le "arquivado" e nao sabe que aquilo foi tranca.
+
+**LEI-AKITA**: origem=os 6 juizes de tranca (censo, nao cura), testemunha=`PeriodoFechado`,
+`ExportacaoDominio` e a celula, RED=o censo fecha em 6 + 22 com **zero sobra** (250 mencoes
+classificadas), quem-mais-le=`chamados_visiveis`, o cartorio, os emissores e a folha, juizes novos=0.
+**Itens 2-8 nao comecaram**: a ordem manda o censo primeiro, e ele levanta **uma** pergunta sua --
+a fronteira do EXPORTADO (grupo C, 3 sitios): *"sem AVISO de exportado" e o mesmo que "sem
+FRONTEIRA"?* Se o TXT ja saiu e o fato muda depois, a folha entregue e a celula divergem, e quem
+responde ao Dominio e voce, nao o codigo. Os outros 19 sitios tem destino claro pela lei (c).
+
+## 25/09 09:5x — ESTEIRA-SECA-25-09 + ADENDO: os 10, marcados
+
+Ordem das 09:4x mais o adendo das 08:4x. **Nenhum item ficou sem numero.**
+
+| # | resultado | estado | o numero |
+|---|---|---|---|
+| **1** | fabricante.log 08:30/09:00 com >=1 fatia | ❌ **RED, e a causa esta nomeada** | trava A **8 -> 0 as 07:30** (a 4a guarda entrou), ticks 07:30/08:00/08:30 = `fabricando`, **0 fabricadas**. O tick 09:00 ainda nao chegou (agora sao 08:3x). Causa: `fabricante_alvo.py` devolve VAZIO -- `em_obra()=121` alvos ocupados contra `itens_livres_total=44` do `censo_registro`, e `ja_commitadas()=12` contra `pacotes_residuo=10` do `esteira_classes`. **DUAS fontes para "este pacote ja esta no git?"**, e e a de `fabricante_alvo` que libera alvo |
+| **2** | o registro le a ORDEM 25/09 | ❌ **RED** | grep de `K8`, `REABRIR-LINHA-UI`, `col824`, `col504`, `GEOFENCE`, `W12X36` no registro = **0 cada**. A ordem vive em `docs/BACKLOG.md` (O37-O43) e em `PROMPTS.md`; o **registro por sitio nao a conhece**, e o `fabricante_alvo` le o registro. E o mesmo defeito do item 1, por outro lado |
+| **3** | `k_fmhoje` fora da fila + portao `esteira.dinheiro_fechado` | ✅ **FEITO** | `k_fmhoje` esta em `fila_esteira.txt` com raia **dinheiro**, rc=0, PRONTA desde 21/09, e mexe em `ponto/janelas.py`. **O buraco era meu e nasceu hoje**: `varrer_e_enfileirar` so filtra raia quando `RAIAS_ABERTAS` vem cheia, e esse env so o `bin/integrador.sh` define -- fora dele nao filtrava nada. Nao entrou por outro motivo, o que e **sorte, nao guarda**. Agora ha `esteira.dinheiro_fechado` (ARQUIVO com DONO, POR QUE e CONDICAO DE SAIDA dentro), lido pelo **bash** (`portoes_abertos`) e pelo **Python** (`_dinheiro_fechado`) -- o MESMO arquivo. A JANELA DE FECHAMENTO da CLAUDE.md 4b era TEXTO e virou portao |
+| **4** | tabela do `git status --short` | ✅ **FEITO, sem commitar nada** | **111 linhas**, nao 86 -- e a diferenca nao e desacordo: `git status --short` depende do `cwd`. Tabela inteira em **`docs/ARVORE-NAO-COMMITADA.md`**. Donos: 46 de fatias anteriores de hoje · 29 sem dono (todos agrupados e nomeados) · 15 do item 9 · 8 do item 1/3/6/7 · 5 scratch · 4 docs · 2 lixo · 1 do pacote `gerar_celulas_janela`. **Achado**: `escala.tests.test_ranking_acusa_veredito` sao **5.603 bytes de saida de teste redirecionada para um arquivo com nome de label** (24/09 23:39) |
+| **5'** | cpuset de teste = contrato | ✅ **FEITO** | `exciting_chaum` ja morreu; o anonimo de agora e `infallible_davinci`: imagem `saas-hasner-core:latest`, comando `manage.py test <13 labels> --parallel 2`, **cpuset 4-7, cpus 4, mem 2g**, com `cpu_prod_pct=1`. **Dentro do teto** -- era a regua. Selo novo `bin/tests/test_cpuset_de_teste.sh` afirma sobre a ARVORE (cpuset a mao em script de teste = 0) e sobre o MUNDO (suite viva fora de 4-7 = 0), com o PAR que morde |
+| **6** | UMA fonte por numero | ✅ **FEITO** | `contador == len(lista)` **ja valia**: `--classe d` = 17 linhas e `pacotes_portao=17`. A divergencia era **UNIVERSO**: `esteira_status.sh` varre `logs/fila_esteira.txt` (**37** pacotes) e `esteira_classes.py` varre `.esteira/*/` (**54**). Numeros certos de perguntas diferentes com rotulos que pareciam o mesmo. LEI-AKITA 8: os dois rotulos passam a dizer o universo |
+| **7** | `lembrete` NO_AR sem git | ✅ **FEITO** | `lembrete` tem `ESTADO=NO_AR` desde 21/09, **sem `pronta.json`** e com o titulo FORA do git -- e o painel o conta em "2 no ar esperando smoke", como entregue. Causa: `estado_final:308` declarava um **terminal de sucesso** por uma STRING no log (`'NO AR' in esteira_out`). Agora, com o diretorio em mao, a prova e `ja_esta_no_git`; sem prova o estado e **PRONTA** (entregue, espera o lote provar), nem queda nem sucesso. Os 2 chamadores reais ja tinham o diretorio |
+| **8** | CORTES.md ganha CERT-VIGIA e o alias K8 | ✅ **FEITO** | `CERT-VIGIA` (RED: juliani venceu 25/09 00:57, 1h03 sem TLS) e `K8-COMPETENCIA-NAO-E-MES-CIVIL` como alias de **K8-FM-DE-HOJE #46**, com o RED que voce deu (**FM 4590 ABERTO**) e o que eu medi -- ver o item 2 do K8 abaixo |
+| **9** | SEGREDO-FORA-DO-ARGV | ✅ **FEITO, e era culpa minha** | **12 sitios** em `bin/` passavam `-e DB_PASSWORD="$PW"`, e **o comando canonico da CLAUDE.md 3 mandava fazer isso** -- a fonte do vazamento era a lei, nao so o meu uso. Argv e publico (`ps aux`). Agora `teste_envfile` (bin/recursos.sh) escreve `logs/.env_teste` com **modo 600** e o argv leva so o caminho. **`senha_no_argv=0`**. Senha **ROTACIONADA**, com prova de ponta a ponta (3 testes de banco OK) |
+| **10** | o RED do item 1 | ✅ **nomeado** | tick 08:30 = `"sem item livre no registro"` com 24 caidas e 3 verdes listadas ao lado, e a ORDEM 25/09 de 6 itens invisivel ao registro. **PRONTA-QUE-NAO-POUSA nao fecha sem o item 2**, e concordo: a trava A foi curada e a esteira segue seca por OUTRA razao, que e a fonte do alvo |
+
+### O que a rotacao da senha me ensinou errando (e esta na cura)
+
+Rotacionei com `ALTER USER` e **quebrei a fonte que a esteira le**: `POSTGRES_PASSWORD` no env do
+container e IMUTAVEL sem recreate, e o Postgres so o usa na INICIALIZACAO do volume -- entao o env
+ficou com a senha velha e o banco com a nova. Pior: a senha nova morreu com o shell. Rotacionei de
+novo **gravando no mesmo ato**, e a cura de desenho e essa: **a fonte passa a ser
+`logs/.senha_teste` (600)**, escrito por `bin/db_teste.sh` no nascimento e em toda rotacao; o
+`printenv` do container fica como ultimo recurso para banco antigo. Senha que nao se pode rotacionar
+sem recriar o banco nao e segredo gerenciavel, e **segredo preso**.
+E `logs/` **nao estava no `.gitignore`** -- um `git add -A` mandaria o segredo ao GitHub. A CLAUDE.md
+6 ja proibe o `-A`; proibicao de conduta nao protege segredo, ignore protege. Ignorado.
+
+### A armadilha do dia, tres vezes em 24 h
+
+Comentario lido como codigo: o `ARQUITETURA.mmd` inflado de 21 para 24 nos (13/09), o
+`bin/selo_espera_por_processo.sh` **VERMELHO por um comentario que escrevia a propria lei** (hoje, e
+com a regua vermelha **o integrador nao rodava a suite**, entao nada pousava), e um `assertNotIn` meu
+sobre `Sum('dias_corridos')` que leu a historia da cura como a violacao (hoje). Os tres selos novos
+de hoje julgam **codigo**, e os tres trazem o PAR: dois arquivos que diferem so em um `#`.
+
+**LEI-AKITA**: origem=`fabricante_alvo.em_obra`/`ja_commitadas` (item 1, DUAS fontes -- nao curado,
+nomeado) + `estado_final:308` + `varrer_e_enfileirar` + `bin/recursos.sh`,
+testemunha=`cadeia.done`, `logs/fila_integracao.txt`, `ja_esta_no_git`, `esteira.dinheiro_fechado`,
+RED=`True is not false` (4a guarda) · `senha_no_argv=0` contra 12 · `PRONTA` contra `NO_AR` sem git,
+quem-mais-le=`trava_a`, `esteira_status.sh`, `esteira_classes.py`, `portoes_abertos` e o PLACAR,
+juizes novos=0.
+
+## 25/09 09:2x — K8-COMPETENCIA-NAO-E-MES-CIVIL: a classe e ZERO, e o col504 e outro bug
+
+Item 2 da FILA das 09:00. **MEDI ANTES DE CODAR, e a premissa nao se sustenta** -- a casa ja le a
+competencia certa, e desde **14/09** (S7-FECHADO-QUER-DIZER). Tres provas independentes, todas pela
+funcao REAL:
+
+**1. O juiz que recusa** (`chamados/juizes.py::dia_em_competencia_trancada`) itera os
+`PeriodoFechado` vivos e usa `janela_fechamento(mes, ano, empresa)`. Medido nas **TRES** empresas:
+
+```
+empresa 2 (PeriodoFechado vivo: 08/2026)   empresa 3 (07 e 08)   empresa 4 (07 e 08)
+   19/08 -> trancado? True        <- certo: competencia 08 = 21/07-20/08
+   21/08 -> False    26/08 -> False    31/08 -> False    07/09 -> False    20/09 -> False
+col504 (empresa 2): 26/08 trancado? False | 07/09 trancado? False
+```
+**A validacao de 21-31/08 NAO esta bloqueada.**
+
+**2. A frota**: das **1.994** perguntas com `via_resolucao='competencia_trancada'`, **ZERO** tem a
+competencia real (21-20) da `data_evento` ABERTA. Nenhuma foi encerrada por mes civil. A **20655**
+(`data_evento` **22/07** -> competencia 08, TRANCADA) foi encerrada **CERTO**, nao errado.
+
+**3. O grep**: os sitios que um `grep .month` marcaria usam o idioma **CORRETO** --
+`_comp = janela_atual(data, empresa)[1]` e depois `_comp.month`, que e o **rotulo** da competencia,
+nao o mes civil do fato. `ponto/services/ausencia.py:160` ate escreve a lei no comentario: *"a chave
+e a COMPETENCIA do dia (o corte da empresa), nao o mes civil -- o dia 25/08 e da competencia 09"*.
+
+### Entao o que o item 2 virou: o TRIPWIRE, que nasce com ZERO
+
+Um `grep .month` cru marcaria **~20 sitios CERTOS** como violacao -- a mesma armadilha que inflou o
+`ARQUITETURA.mmd` de 21 para 24 nos (13/09), que deixou `bin/selo_espera_por_processo.sh` vermelho
+por um comentario (hoje) e que me pegou num `assertNotIn` sobre `Sum('dias_corridos')` (hoje tambem).
+Entao a pergunta e **pela AST** e e mais fina: numa chamada
+`competencia_trancada(empresa, X.month, X.year)`, **de onde vem `X`?**
+
+- de `janela_atual` / `janela_fechamento` / `janela_anterior` / `periodo_apuracao*` = **CERTO**
+- de qualquer outra coisa (a data do fato, `hoje`, `timezone.now()`) = **VERMELHO**
+
+Selo: `ponto/tests/test_contract_competencia_nao_e_mes_civil.py`, **7 caminhos varridos**
+(`fechamento`, `ausencia`, `checar_ausencia`, `validacao`, `materializacao`, `chamados/juizes`,
+`folha/export`), **allowlist ZERO**, 6 casos -- e o **PAR que morde**: a mesma chamada, mudando so de
+onde vem o mes, da vereditos diferentes (`test_MORDE_o_idioma_ERRADO_e_pego` /
+`test_MORDE_o_idioma_CERTO_passa`). Sem esse par o selo passaria com uma funcao que devolve `[]`.
+
+### O col504 e OUTRO bug, e eu o localizei
+
+A **25092** tem `data_evento` **07/09** (nao 26/08), competencia **09 -- ABERTA**, `validada_em`
+25/09 10:45, `materializada_em` **None**, `via_resolucao` **vazio**. Ela **nao foi recusada**: passou
+como sucesso sem materializar. A causa e `chamados/services/validacao.py:114`:
+
+```python
+if proprios or (erros and perg.materializada_em is None):
+```
+
+O `erros and` faz a guarda depender de **haver erro**. Sem erro e sem materializacao a condicao e
+False, a funcao segue para o retorno de sucesso e o toast diz **"ponto gravado"** com nada gravado.
+E o `[]` de dois sentidos da CLAUDE.md 6: **ausencia de sinal lida como sinal bom**. A guarda tem de
+ser sobre o FATO (`materializada_em is None`), e -- pela memoria desta casa -- a prova final e a
+**Batida**, nao o campo (`materializada_em` diz "saiu da fila", nao "virou batida"). Isso e o item
+4(b) da fila, com RED na sombra.
+
+E o item (a) daquele BO **ja existe** desde P7.1 16/09: `validacao.py:85` devolve
+`{'ok': False, 'estado': 'competencia_trancada'}` com a frase *"Reabra a competencia pelo fechamento
+se for o caso"*. O que falta e o caminho SILENCIOSO, nao o caminho da recusa.
+
+**LEI-AKITA**: origem=`dia_em_competencia_trancada` (medida e ja correta) ->
+o selo virou TRIPWIRE, testemunha=`janela_fechamento` + `PeriodoFechado` + as 1.994 perguntas,
+RED=`test_MORDE_o_idioma_ERRADO_e_pego` (a mesma chamada com o mes da data do fato),
+quem-mais-le=os 7 caminhos declarados, juizes novos=0.
+
+## AS 4 DECISOES DOS CONTRATOS 9-12/22 — nenhuma se executa sem a sua frase
+
+Ordem sua (25/09): para cada uma, o que guarda, A/B, o que muda de dinheiro ou tela, minha
+recomendacao e a frase pronta. **Tudo abaixo foi MEDIDO** chamando as funcoes reais; nada construido.
+
+---
+
+### 9/22 — `Colaborador.situacao` e LAMPADA ou CADASTRO? _(familia ausencia/ferias x um juiz)_
+
+**O QUE GUARDA**: que "o colaborador esta afastado hoje?" tenha UMA autoridade
+(`ponto/turnos.py::afastado_hoje`), e nao o campo de cadastro que o lancamento do DP escreve de lado.
+
+**MEDIDO**: 11 colabs com `situacao='afastado'`. Os **contadores ja migraram** para o juiz em 20/09
+(`relatorios/views.py:336`, `inteligencia/views.py:79` -- *"a situacao dizia 12 com 11 afastados"*).
+O que **sobra** e cadastral: 8 filtros `situacao__in=('ativo','afastado','ferias')`, 4 badges de
+template, o filtro "Afastados" da lista de colaboradores, e 2 gates de api
+(`situacao not in ('ativo','afastado')`).
+
+| | **A -- e LAMPADA** (derivado) | **B -- e CADASTRO** (independente) |
+|---|---|---|
+| o que se faz | a escrita de `ponto/views.py` sai; os 4 badges e o filtro da lista passam a ler `afastado_hoje` | a escrita do DP e legitima; o pendente esta **mal classificado** e sai da lista por ato |
+| **dinheiro** | **ZERO** nas duas: nenhum sitio de folha le `situacao` para afastamento desde 20/09 | **ZERO** |
+| **tela** | os 4 badges passam a dizer "Afastado" por FATO (ausencia que cobre hoje), nao por cadastro; **o filtro "Afastados" muda de universo**; toca template -> exige seu smoke | **nada muda hoje**; o campo segue como e, com o reversor das 06:16 de guarda |
+| risco | MEIA-CORRECAO se um leitor ficar: campo com escritor removido e leitor vivo mente | o campo pode divergir do juiz de novo -- mas o reversor de 24/09 fecha isso |
+
+**RECOMENDO B**, e nao por ser mais barato: o cabecalho do drawer rotula o campo literalmente como
+**"Situacao cadastral"**, e o DP usa o filtro "Afastados" para achar quem esta com o vinculo suspenso,
+que e uma pergunta de CADASTRO -- diferente de "quem esta afastado HOJE", que o juiz responde. Sao
+duas perguntas, e ja tem duas autoridades. A sobra real e que ninguem declarou isso.
+
+> **Frase pronta (A):** `corte Ronald: Colaborador.situacao e LAMPADA da ausencia -- a escrita de ponto/views.py sai, os badges e o filtro "Afastados" passam a ler afastado_hoje, e o pendente _A14 fecha. Smoke meu nas duas cascas antes do push.`
+> **Frase pronta (B):** `corte Ronald: Colaborador.situacao e CADASTRO -- a escrita do DP e legitima, a pergunta "afastado hoje" segue no juiz afastado_hoje, e o pendente _A14 sai da lista por mal classificado. Registrar a fronteira em core/juizes.py.`
+
+---
+
+### 10/22 — o fallback `if _real.sem_turno:` de `escala/utils.py:1208` _(familia celula/precedencia x um juiz)_
+
+**O QUE GUARDA**: que "quantos minutos o dia realizou?" venha da autoridade
+(`ponto/turnos.py::realizado_do_dia`) em **todos** os ramos. Hoje, quando o juiz nao acha turno, o
+montador **re-soma as celulas** -- segunda voz sobre o numero que a ata, a prontidao e o supra-juiz leem.
+
+**MEDIDO na competencia 09 (21/08-20/09, leitura, funcao real):**
+```
+dias de trabalho olhados ................. 10.423
+dias em que o juiz NAO acha turno ........  3.014  em 366 colabs  (29%)
+   ... DESSES, com batida apuravel .......      0
+   ... sem batida nenhuma ...............  3.014  (100%)
+```
+**O numero que decide**: em **100%** dos casos em que o fallback dispara **nao existe batida**.
+Ele soma uma lista de celulas VAZIA e grava **0**. Nao ha, hoje, um unico dia em que as duas vozes
+possam discordar. A nota da matriz temia "lavrar 0 por falta de turno" -- e e exatamente 0 que o
+fallback grava.
+
+| | **A -- o fallback MORRE** | **B -- a AUTORIDADE passa a responder 0 no dia vazio** |
+|---|---|---|
+| o que se faz | apaga o ramo; `_minutos_real = _real.minutos` sempre | `realizado_do_dia` responde `0` quando o dia nao tem batida (e segue `None` quando tem batida e nenhum par) ; o ramo morre depois |
+| **dinheiro** | **0 minutos mudam** -- nenhum dos 3.014 tem batida | **0 minutos mudam** |
+| **tela / ata** | **3.014 dias passam de `minutos_realizados=0` para `None`**; todo consumidor (ata, prontidao, supra-juiz, PDF) tem de tratar `None` -- o PDF ja imprime `--` | **nada muda em nenhum leitor**: o numero continua 0, so muda quem o diz |
+| risco | ripple de `None` em 4+ consumidores, cada um um sitio a conferir | precisa distinguir "dia vazio" de "batida sem par", e o segundo caso hoje e ZERO |
+
+**RECOMENDO B.** E a LEI-AKITA 1 na forma mais limpa que existe aqui: a cura vai na FONTE (o juiz
+passa a responder a pergunta inteira), o montador perde o ramo, e o **DIFF e zero por construcao** --
+nao por sorte, porque o numero e o mesmo. A (apagar o ramo) tem DIFF de dinheiro zero tambem, mas
+empurra `None` para 4 consumidores e cria trabalho de tela sem ganhar nada.
+
+> **Frase pronta (B, recomendada):** `corte Ronald: realizado_do_dia responde 0 no dia SEM BATIDA (segue None quando ha batida e nenhum par), e o fallback de escala/utils.py:1208 morre. DIFF esperado 0; medir na sombra antes.`
+> **Frase pronta (A):** `corte Ronald: o fallback de escala/utils.py:1208 morre e minutos_realizados passa a None nos 3.014 dias sem turno; cada consumidor (ata, prontidao, supra_juiz, PDF) trata None no mesmo commit.`
+
+---
+
+### 11/22 — `_perto` em `ponto/motor_calculo_v2.py` _(familia turno/marcos x um juiz)_ — **ZONA INVIOLAVEL**
+
+**O QUE GUARDA**: que "que marco previsto a batida ocupa?" tenha UMA autoridade
+(`escala/utils.py::_match_marcos`, com o cluster-guard "a batida ocupa o marco MAIS PROXIMO dela").
+Hoje o `Motor12x36ComEscala` responde com regra propria: proximidade **circular de 90 min** (`_perto`).
+
+**MEDIDO**: **341 vinculos 12x36 ativos** (de 543 com escala ativa: 149 em 6x1, 40 em 5x2, 9
+intermitentes, 4 personalizados). Esse e o universo. **Quantos minutos mudam, eu NAO medi** -- e nao
+por falta de tempo: medir exige construir a cura em copia e rodar o DIFF na sombra, e `motor_calculo_v2.py`
+so se toca com o seu aval (CLAUDE.md 4). O DIFF na sombra **nao escreve em prod** e eu o rodo no minuto
+em que voce disser qual opcao.
+
+| | **A -- `_perto` passa a chamar a autoridade** | **B -- `_perto` fica, declarado como fronteira** |
+|---|---|---|
+| o que se faz | o motor pergunta a `_match_marcos`; `_perto` morre | `_perto` e registrado como a autoridade do 12x36 para essa pergunta, com a fronteira escrita |
+| **dinheiro** | **desconhecido ate o DIFF** -- 90 min circular contra o marco mais proximo divergem quando a batida esta entre dois marcos; 341 vinculos no universo, competencia 09 | **ZERO** -- nada muda |
+| **tela** | nenhuma | nenhuma |
+| risco | e a zona que paga a folha de 341 pessoas; sem DIFF isso nao se toca | fica **dois juizes** para a mesma pergunta, que e o que o contrato existe para acabar -- 22/22 nao fecha por aqui |
+
+**RECOMENDO A, com o portao no DIFF**: primeiro o aval para MEDIR (sombra, nada em prod); se o DIFF
+for 0 ou so em casos que a autoridade ganha por autopsia, a cura entra; se surpreender, PARA com o
+numero e a fronteira de B fica declarada como estado provisorio, com item na fila. **Nao ofereco B
+como atalho** -- ele fecha a celula no papel deixando duas vozes no dinheiro.
+
+> **Frase pronta (A, recomendada):** `aval Ronald: medir na sombra o DIFF de trocar _perto (90 min circular) por _match_marcos no Motor12x36ComEscala, competencia 09, 341 vinculos. Nada em prod. Trazer o numero antes de tocar.`
+> **Frase pronta (B):** `corte Ronald: _perto e a autoridade do 12x36 para "que marco a batida ocupa" -- declarar a fronteira contra _match_marcos em core/juizes.py e fechar a celula com dois juizes declarados.`
+
+---
+
+### 12/22 — os 16 campos SEM_EFEITO: **rotular ou remover?** _(5 celulas de parametro de uma vez)_
+
+**O QUE GUARDA**: que parametro que a tela deixa editar seja **consumido**, ou que a tela **diga** que
+nao tem efeito. Hoje 16 campos sao editaveis e ninguem os le.
+
+**MEDIDO**: o rotulo **JA EXISTE** (`ce.ROTULO_SEM_EFEITO`), a tag `{% rotulo_efeito %}` existe e e
+selada -- e **NENHUM template a chama** (grep em `templates/` = 0). Os 16, por familia:
+`folha/export` **7** (`adicional_noturno_pct`, `periculosidade_pct`, `divisor_hora_extra`,
+`divisor_faltas`, `horas_contratuais_turno`, `Praca.adicional_noturno_percentual`,
+`Praca.banco_horas_prazo_dias`) · `batida` 3 · `turno/marcos` 3 · `escala` 2 · `ausencia/ferias` 1.
+A nota da matriz diz *"corte 13/09: sem consumidor no fecho do E4, sai"* -- e esse corte **nao esta no
+CORTES.md** (grep vazio). E a CLAUDE.md 4b diz outra coisa: *"PARAMETRO consumido ou **rotulado** sem efeito"*.
+
+| | **A -- ROTULAR** | **B -- REMOVER da tela e do admin** |
+|---|---|---|
+| o que se faz | `{% rotulo_efeito %}` ao lado dos 16 campos, em 4 telas | os 16 saem dos forms e do `ModelAdmin`; a coluna do banco pode ficar (o censo mede o **editavel**) |
+| **dinheiro** | **ZERO** (nenhum tem leitor -- e a definicao de SEM_EFEITO) | **ZERO** |
+| **tela** | 16 campos ganham a frase "sem efeito no calculo (declarado, ainda nao consumido)"; o DP para de achar que edita algo | 16 campos **desaparecem**; o DP deixa de ver 7 campos que parecem de folha |
+| fecha as 5 celulas? | **so se a matriz aceitar "rotulado"** -- hoje o selo de 13/09 exige SEM_EFEITO **zero** | **sim**, mecanicamente |
+| risco | toca 4 templates -> exige seu smoke; e a matriz precisa de um ato seu para aceitar rotulo | o DP pode querer o campo de volta; e 7 deles tem cara de dinheiro e podem ser regra que alguem quis |
+
+**RECOMENDO B para os 9 de `batida`/`turno`/`escala`/`ausencia` e A para os 7 de `folha/export`.**
+A razao nao e meio-termo: os 9 sao lotacao, tolerancia e raio -- ninguem sente falta. Os 7 de folha
+sao **percentuais e divisores**, e um deles pode ser regra que o cliente realmente quer e que nunca
+foi ligada; remove-los apaga a pista. Rotular esses 7 deixa a pergunta visivel no lugar onde ela
+nasce, e `folha/export` fica como a unica celula vermelha do contrato 3 -- com motivo escrito.
+
+> **Frase pronta (B nos 9 + A nos 7, recomendada):** `corte Ronald: os 9 campos SEM_EFEITO de batida, turno, escala e ausencia SAEM da tela e do admin; os 7 de folha/export ficam e ganham o rotulo "sem efeito". A matriz fecha 4 celulas; folha/export segue vermelha com o motivo declarado.`
+> **Frase pronta (A nos 16):** `corte Ronald: os 16 campos SEM_EFEITO ficam e ganham o rotulo na tela; a matriz do estrutural passa a aceitar "rotulado" como verde no contrato 3, afrouxando o selo de 13/09.`
+> **Frase pronta (B nos 16):** `corte Ronald: os 16 campos SEM_EFEITO saem da tela e do admin; as 5 celulas de parametro fecham mecanicamente.`
+
+---
+
 ## O30 FATIA 2 (HISTORICO) — construida e verde; **o print da guia nao saiu**
 
 **RED nomeado:** `ponto/tests/test_linha_do_tempo.py` (9 selos) + o da guia em
@@ -3150,6 +3542,24 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **25/09 06:50 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
+
+**ALARME integrador** -- o push do lote foi REJEITADO (["error: failed to push some refs to 'https://github.com/26031963/hasner-ponto.git'"]). As 1 fatia(s) ficam NA FILA com o commit local; nenhuma foi marcada "no ar". Cura: git fetch + rebase e `bash bin/push.sh`.
+
+
+**25/09 07:55 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 08:40 vigia da esteira** -- vigia relancou gerar_celulas_janela as 08:40 (baseline divergiu: a arvore andou depois do teste da fatia) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**25/09 08:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 09:45 vigia da esteira (ALARME)** -- a fatia cert_vigia caiu por vermelho DELA (esmeril sujo) -- nao relanco.
+
+
+**25/09 09:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
@@ -3518,36 +3928,37 @@ e o dia sem batida que ninguem decidiu ganhou nome proprio no papel -- 'Em abert
   hora do patch, nunca de um retrato de horas antes.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (24)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (25)
 
-> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (29 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (38 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 39 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 31 h | construindo | O9 PDF-E-O-ESPELHO |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 30 h | construindo | CORTES-REGISTRADOS |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 29 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **NOITE-23-09** | 2026-09-23 18:4x | 29 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 28 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **ASSINATURA-EC-P256** | 2026-09-23 23:2x | 24 h | recebido | ASSINATURA-EC-P256 |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 11 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 10 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 9 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 8 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 7 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 7 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 7 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 7 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 4 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 1 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 1 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 48 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 40 h | construindo | O9 PDF-E-O-ESPELHO |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 39 h | construindo | CORTES-REGISTRADOS |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 38 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **NOITE-23-09** | 2026-09-23 18:4x | 38 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 37 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 20 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 19 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 18 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 17 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 16 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 16 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 16 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 16 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 13 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 10 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 10 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 0 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 0 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
 <!-- SEUS-CORTES:FIM -->
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
