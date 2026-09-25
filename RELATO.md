@@ -3126,6 +3126,30 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 **21/09 17:25 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 <!-- PENDENTES:INICIO -->
+
+**25/09 00:40 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 01:40 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 02:40 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 03:40 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 03:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 04:45.
+
+
+**25/09 04:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 05:50 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 06:50 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
@@ -3494,31 +3518,36 @@ e o dia sem batida que ninguem decidiu ganhou nome proprio no papel -- 'Em abert
   hora do patch, nunca de um retrato de horas antes.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (19)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (24)
 
-> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (28 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (29 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 38 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 29 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 28 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 28 h | construindo | CORTES-REGISTRADOS |
-| **NOITE-23-09** | 2026-09-23 18:4x | 28 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 26 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **ASSINATURA-EC-P256** | 2026-09-23 23:2x | 23 h | recebido | ASSINATURA-EC-P256 |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 9 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 8 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 7 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 7 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 6 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 6 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 5 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 5 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 2 h | recebido | O32 ZUMBIDO |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 39 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 31 h | construindo | O9 PDF-E-O-ESPELHO |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 30 h | construindo | CORTES-REGISTRADOS |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 29 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **NOITE-23-09** | 2026-09-23 18:4x | 29 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 28 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **ASSINATURA-EC-P256** | 2026-09-23 23:2x | 24 h | recebido | ASSINATURA-EC-P256 |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 11 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 10 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 9 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 8 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 7 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 7 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 7 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 7 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 4 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 1 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 1 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 0 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 0 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 0 h | esperando "!" | O35 CONTRATOS-14 |
 <!-- SEUS-CORTES:FIM -->
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
@@ -5884,3 +5913,227 @@ fechamento gravado) e `dias_em_aberto=292` nao se moveu.
 `logs/recalculo/recalculo_09-2026_20260924_105607.json` -> chave `antes` -> `FechamentoMensal.update()`
 daquele colab. Para desfazer TUDO nao ha botao: seria reescrever 321 fechamentos com numeros que o
 motor de hoje nao produz mais.
+
+## 25/09 — CONTRATOS-14: os 14 que faltam para 22/22, medidos um por um
+
+Ordem do Ronald (25/09 00:xx): listar os 14 com invariante, fonte que le, o que
+escapa hoje e custo; fabricar os fabricaveis; os que exigem corte viram frase no
+CORTES.md. **PLACAR: 8/22 verdes** (era 8; a matriz nao subiu nesta volta, e a
+razao esta no achado abaixo, que veio antes de qualquer numero).
+
+### O ACHADO QUE VEIO PRIMEIRO: a matriz aceitava verde por afirmacao
+
+O selo da matriz cobra que **toda excecao DECLARADA** esteja vazia. As **6**
+celulas de `parametro consumido ou sem efeito` declaravam `excecoes=()`. Logo
+`verde=True` em qualquer uma delas **passava o selo** — medido:
+
+```
+(batida, parametro) verde=True, excecoes=() -> cheias=[] -> o selo PASSA: True
+   ... e os campos SEM_EFEITO de batida estao VIVOS:
+       ParametroSistema.janela_offline_horas, ParametroSistema.raio_geofence_padrao,
+       Posto.tolerante_offline
+```
+
+Era exatamente o "numero que sobe porque alguem escreveu que subiu" que o
+cabecalho do proprio arquivo diz recusar. **CURA NA ORIGEM**: uma tupla por
+familia em `core/configuracao_efeito.py`, **DERIVADA da DECLARACAO no import**
+(`sem_efeito_da_familia`) — escrever a lista a mao seria a segunda verdade que a
+LEI-AKITA 1 proibe: no dia em que um campo novo nascesse SEM_EFEITO, a lista a
+mao continuaria vazia e a celula seguiria verde mentindo. As 6 celulas passam a
+declarar essa tupla. GREEN medido:
+
+```
+(batida, parametro) excecoes=(SEM_EFEITO_BATIDA,) -> cheias=[SEM_EFEITO_BATIDA]
+   -> verde seria RECUSADO: True
+```
+
+Selos novos que **mordem**: `test_MORDE_celula_de_parametro_declara_a_excecao_DERIVADA`,
+`test_MORDE_parametro_com_campo_sem_efeito_vivo_nao_fica_verde` (duas familias
+reais com veredito diferente pela mesma regra), `test_MORDE_campo_SEM_EFEITO_sem_familia_da_matriz`
+e `test_MORDE_as_tuplas_por_familia_cobrem_TODO_sem_efeito`. **33 testes OK.**
+
+### O segundo achado: 4 das 21 celulas NAO EXISTIAM
+
+`(batida, juiz)`, `(escala, juiz)`, `(folha/export, juiz)` e `(chamado, escritor)`
+nao tinham chave na MATRIZ. Celula ausente conta contra o 22 **sem dizer uma
+palavra sobre o que falta nela** — e o arquivo promete o contrario ("celula sem
+teste declarado diz onde a proxima sessao pega"). As quatro foram declaradas com
+o numero medido, e um selo novo cobra que **toda familia tenha celula de juiz e
+de escritor** (`test_MORDE_toda_familia_tem_celula_de_JUIZ_e_de_ESCRITOR`).
+Chaves na matriz: **16 -> 20**; declaradas (com teste nomeado) **16 -> 18**.
+
+### O TETO ARITMETICO DA MATRIZ E 21/22, NAO 22/22  (`!` no PENDENTES)
+
+Tentei declarar `(chamado, parametro)` verde — a familia tem **ZERO campo
+editavel** (`chamados/admin.py` esta VAZIO, nenhuma tela de chamado em
+`ce.TELAS`). O selo de **13/09** reprovou, e com razao:
+`test_MORDE_celula_do_contrato_3_so_e_verde_sem_campo_sem_efeito` exige
+*"familia sem campo editavel **nao tem** celula"*. LEI-AKITA 4: a lei existente
+manda. Mas entao essa celula **nunca pode ficar verde**, e `TOTAL = 7x3+1 = 22`
+com uma celula proibida de existir da teto **21/22**. Tres saidas, e a escolha e
+do Ronald (esta no PENDENTES): (a) a celula nasce vazia e verde, afrouxando o
+selo de 13/09; (b) `TOTAL` desconta a familia sem campo editavel; (c) **o chamado
+GANHA cadastro** — e e a que a LEI-AKITA 12 sugere, porque `PRAZO_ARQUIVO_DIAS` e
+a tabela de SLA sao regra que varia e hoje sao literal em `chamados/catalogo/motor.py`.
+
+### A TABELA DOS 14
+
+| # | celula que falta | invariante que guarda (uma frase) | fonte que le | o que escapa hoje | custo |
+|---|---|---|---|---|---|
+| 1 | **chamado x um escritor por entidade** | ChamadoColaborador, DisputaSupervisao, PerguntaDisputa e ResolvedoraCruzada so se escrevem numa porta declarada, e a porta e idempotente | `core/portas.py::PORTAS['chamado']` + censo por arvore (`core/censo_escritas.varrer_arvore`) | **122 escritas fora de porta, em 49 arquivos** (134 sitios; 12 na porta). Toda outra familia esta em **ZERO**. Views, signals, 20+ commands e o reconciliador escrevem chamado direto; a idempotencia que o contrato 2 exige nao tem onde morar | **sessao E3-CHAMADO**, a maior fatia estrutural que sobrou; uma entidade por vez, na ordem emite -> fecha -> tela |
+| 2 | **folha/export x um juiz por pergunta** | quem entra no TXT, o que "fechado" quer dizer e o que bloqueia tem UMA autoridade | `core/juizes.py::PENDENTES_FECHAMENTO` (censo da S7, 14/09) | **19 sitios** por conta propria, **8 DINHEIRO**: o lote cego pula conta vazia; o TXT aprova pelo `entra` de `classificar_export` sem os crivos do botao e sem trancar; o recalculo grava sobre aprovado sem consultar `PeriodoFechado` | fatia de sessao por sitio de dinheiro, com DIFF. **Ja declarada** nesta volta: a lista tinha ZERO leitor fora de `core/juizes.py` ate 25/09 |
+| 3 | **chamado x um juiz por pergunta** | cron de varredura e VIGIA ("esperado 0", so alarma), nunca juiz | `config/crons.py::JUIZES_POR_VARREDURA` | `PENDENTES_CHAMADO` **ja esta em 0** — o que trava a celula sao os **27 crons** que ainda JULGAM na varredura, contra o principio do TABULEIRO (CLAUDE.md 4a) | **corte** (frase no CORTES.md): a divida e de desenho — cada cron sai da lista quando a celula agendar o proprio marco |
+| 4 | **turno/marcos x um juiz por pergunta** | "que marco a batida ocupa" e "o vao foi intervalo" tem um juiz | `core/juizes.py::PENDENTES_TURNO` | **2 sitios**: `_perto` (proximidade circular de 90 min do `Motor12x36ComEscala`) em **ponto/motor_calculo_v2.py**, DINHEIRO; e `minutos_realizados_do_dia` em `escala/utils.py`, que re-pareia E->S sobre as celulas | **1 aval do Ronald** — `motor_calculo_v2.py` e ZONA INVIOLAVEL. O 2o cai junto com a linha 5 |
+| 5 | **celula/precedencia x um juiz por pergunta** | "quantos minutos o dia realizou?" e da autoridade, em TODOS os ramos | `core/juizes.py::PENDENTES_CELULA` | **1 sitio**: o fallback `if _real.sem_turno:` de `escala/utils.py:1208` re-soma as celulas quando o juiz nao acha turno. **A cura do montador JA esta no ar** e a 2a condicao da nota (**BUG-145**) esta **FEITA 15/09** — sobrou so o fallback | **fabricavel com DIFF na sombra**: medir em prod quantos dias de 09/2026 caem nesse ramo; se 0, o fallback morre |
+| 6 | **ausencia/ferias x um juiz por pergunta** | quanto a ausencia dura, se e ferias hoje e se esta afastado tem UMA autoridade | `core/juizes.py::PENDENTES_AUSENCIA` | **3 sitios, todos TELA**: `relatorios/views.py::Sum('dias_corridos')`; o ramo morto `triagem_batida.py::situacao == 'ferias'` (ninguem escreve esse valor); `ponto/views.py::_gravar_colab(situacao='afastado')` | **fabricavel** (ja e o item 4 da FILA de 24/09 16:5x). O 3o so depois de **CENSO DE LEITORES** de `situacao == 'afastado'` — escritor removido com leitor vivo mente |
+| 7 | **batida x um juiz por pergunta** | as perguntas da batida (geofence? espuria? par relampago? janela offline? de que aparelho?) tem autoridade declarada | — **nao existe** `JUIZES['batida']` nem `PENDENTES['batida']` | **o censo inteiro**: nenhuma pergunta da familia tem autoridade nomeada, so implementacao espalhada. Nao se sabe quantos sitios respondem por conta propria porque ninguem contou | **sessao S-BATIDA** no formato das S2-S7. Registrar autoridade cai na **TRAVA JUIZ-NOVO**: exige `corte Ronald: juiz <nome> nasce` |
+| 8 | **escala x um juiz por pergunta** | que tipo vale no dia, se o vinculo cobre a data, se a folga e do calendario ou da aritmetica | — **nao existe** `JUIZES['escala']` nem `PENDENTES['escala']` | idem: censo inexistente. O risco de dinheiro e menor porque a **GRADE e fonte unica de previsto (S133)**, mas ninguem mediu | **sessao S-ESCALA**. Tambem sob a TRAVA JUIZ-NOVO |
+| 9 | **batida x parametro** | parametro editavel e consumido, ou a tela diz "sem efeito" | `core.configuracao_efeito.SEM_EFEITO_BATIDA` (**novo, derivado**) | **3 campos** que a tela deixa editar e ninguem le: `ParametroSistema.raio_geofence_padrao`, `ParametroSistema.janela_offline_horas`, `Posto.tolerante_offline` | **corte** — a nota de 13/09 diz "sai", mas esse corte **nao esta no CORTES.md**; frase escrita nesta volta |
+| 10 | **turno/marcos x parametro** | idem | `SEM_EFEITO_TURNO` | **3**: `ParametroSistema.tolerancia_minutos`, `ParametroSistema.intrajornada_minutos`, `Praca.tolerancia_minutos` (so a lista de pracas mostra) | **corte** (mesma frase) |
+| 11 | **escala x parametro** | idem | `SEM_EFEITO_ESCALA` | **2**: `Posto.lotacao_minima`, `Posto.lotacao_maxima` | **corte** (mesma frase) |
+| 12 | **ausencia/ferias x parametro** | idem | `SEM_EFEITO_AUSENCIA` | **1**: `TipoAusencia.medico` ("Entra nos relatorios medicos": ninguem le) | **corte** (mesma frase) |
+| 13 | **folha/export x parametro** | idem | `SEM_EFEITO_FOLHA` | **7**, o pior lote, e todo de dinheiro aparente: `adicional_noturno_pct`, `periculosidade_pct`, `divisor_hora_extra`, `divisor_faltas`, `horas_contratuais_turno`, `Praca.adicional_noturno_percentual`, `Praca.banco_horas_prazo_dias`. O DP edita e **nada acontece** | **corte** (mesma frase). Ligar qualquer um e zona de dinheiro com DIFF |
+| 14 | **chamado x parametro** | idem | `SEM_EFEITO_CHAMADO` = `()` | a familia tem **ZERO campo editavel** — e por isso a celula **nao pode existir** pelo selo de 13/09. E a celula do teto 21/22 | **corte** (as tres saidas acima; `!` no PENDENTES) |
+
+Numeros medidos nesta volta, todos pela funcao REAL que a regua usa
+(`core/censo_escritas.varrer_arvore`, `core/juizes.PENDENTES`,
+`core/configuracao_efeito.DECLARACAO`), nunca por logica replicada:
+
+```
+escritas fora de porta por familia: chamado 122 (49 arquivos) | TODAS as outras 0
+PENDENTES: celula 1 · turno 2 · ausencia 3 · chamado 0 · feriado/prazo 15
+           fechamento 19 · tela 123 · portas 124
+JUIZES_POR_VARREDURA: 27 crons que julgam
+SEM_EFEITO por familia: folha/export 7 · turno 3 · batida 3 · escala 2 · ausencia 1 · chamado 0
+```
+
+**LEI-AKITA**: origem=`core/contratos_estruturais.py` + `core/configuracao_efeito.py`
+(a matriz media a si mesma sem excecao mecanica), testemunha=`PENDENTES`/`PORTAS`/`DECLARACAO`,
+RED=`(batida, parametro) verde=True` passava o selo e agora e recusado,
+quem-mais-le=o gerador do TICKETS (`contratos_estruturais: N/22`) e o PLACAR,
+juizes novos=0.
+
+## 25/09 — AUSENCIA 3 -> 1 (item 4 da FILA de 24/09 16:5x, dentro do CONTRATOS-14)
+
+Os 3 pendentes de `PENDENTES['ausencia/ferias']`, um por um. **Dois curados com
+RED evidenciado; o terceiro e decisao sua, e esta no PENDENTES com o censo.**
+
+### _A12 — "quanto a ausencia dura?" · `relatorios/views.py::atestados_acumulados`
+
+O relatorio "Atestados acumulados" somava `Sum('dias_corridos')`. E
+`dias_corridos` e **campo DERIVADO**: o proprio `Ausencia.save` o reescreve a
+partir do range (`ponto/models.py`: *"RANGE e a fonte: dias_corridos DERIVA
+dele"*). Somar o espelho no lugar de perguntar a autoridade e a LEI-AKITA 2 ao
+contrario — e foi exatamente assim que o relatorio MENSAL contava inteiro o
+atestado de 30 dias comecado no dia 25, curado na AUS-ESPELHO-2 em 19/09. O
+irmao anual ficou.
+
+**CURA**: pergunta a `ponto/turnos.py::dias_da_ausencia`, o mesmo juiz do irmao.
+Template intacto (as chaves do dict nao mudaram, entao a fatia nao toca front).
+
+**MEDIDO EM PROD** (leitura, 2026, 298 atestados aprovados de 130 colabs):
+
+```
+cru (Sum dias_corridos)          = 1299
+autoridade, ano fechado          = 1299   <- 0 de 298 divergem
+autoridade, com o clip em hoje   = 1218   <- os 81 dias sao TODOS futuro
+colabs que mudam de numero: 10 de 130
+   col318 120 -> 92 (-28)   col647 83 -> 67 (-16)   col557 31 -> 21 (-10)
+   col30   14 ->  5 ( -9)   col644 100 -> 92 (-8)   col919 30 -> 26 (-4)
+atestados que passam de 31/12: 0 | em aberto sem data_fim: 0
+```
+
+**A ESCOLHA, DECLARADA**: o campo e o juiz dao o MESMO numero sobre o ano
+fechado. Toda a diferenca vem de **dia futuro deixar de contar** — e o maior
+caso, col318 de 120 para 92, e um atestado que segue correndo cujos dias de
+outubro a dezembro ja estavam somados como se tivessem acontecido. E a mesma
+escolha que o irmao `absenteismo` ja faz desde 19/09; o relatorio nao alimenta
+folha (numero de TELA).
+
+**RED EVIDENCIADO** (selo novo rodado contra a arvore do HEAD anterior):
+
+```
+FAIL: test_MORDE_atestado_que_ainda_corre_nao_traz_os_dias_futuros
+AssertionError: 61 != 21
+```
+
+O caso que MORDE e um PAR: dois atestados de mesma duracao declarada, um fechado
+e um correndo, tem de dar numeros DIFERENTES. Somando o campo derivado os dois
+dao 61 e o selo passaria por ausencia de sinal. Selo:
+`relatorios/tests/test_atestados_acumulados_pelo_juiz.py` (3 casos).
+
+**ROTULO** (LEI-AKITA 8, declarado e nao curado): o titulo da tela segue
+"Atestados acumulados — {{ ano }}" e a conta agora e **do ano ate hoje**. Conferi
+o irmao: `absenteismo.html` tambem nao diz "ate hoje" desde a cura de 19/09,
+entao o precedente ja estava posto e nao inventei um segundo padrao. A frase nos
+dois titulos e fatia de UMA linha de template -- e template nao sobe sem smoke de
+clique (BUG 73), por isso nao entrou aqui; fica junto com o irmao.
+
+### _A6 — "esta de ferias hoje?" · `ponto/services/triagem_batida.py`
+
+Havia um ramo `elif colaborador.situacao == 'ferias'` com o titulo **"Acesso
+bloqueado — Ferias"**. Ele **nunca rodou e nunca poderia**:
+
+```
+escritores de situacao='ferias' na arvore: 0  (so leitores, em filtros que juntam ativo/afastado/ferias)
+colaboradores com situacao='ferias' em prod: 0  (544 ativos · 11 afastados · 311 desligados)
+```
+
+**O ramo morre.** E a decisao que importa e a que NAO tomei: religa-lo na
+autoridade (`ferias/services.py::em_gozo_hoje`, que ja existe e ja esta
+declarada) faria nascer, para todo mundo que esta de ferias e bate, a mesma frase
+que o **corte Ronald de 20/09** condenou no afastado — *"a pessoa lia recusa onde
+houve registro"*. Se o DP quiser o aviso, ele nasce no molde do afastado
+(registra + avisa + cobra supervisao), e isso e fatia sua, nao consequencia
+silenciosa desta.
+
+### _A14 — "esta afastado hoje?" · `ponto/views.py` — **NAO curado, e o motivo**
+
+O sitio e `_gravar_colab(colab, 'situacao', {'situacao': 'afastado'})`: o
+lancamento do DP escreve o CADASTRO. Fiz o censo de leitores antes de mexer,
+porque campo com escritor removido e leitor vivo **mente** (MEIA-CORRECAO):
+
+```
+os CONTADORES ja migraram para o juiz:
+   relatorios/views.py:336  A-AFASTADO-JUIZ (20/09) -- "a situacao dizia 12 com 11 afastados"
+   inteligencia/views.py:79 idem
+os que SOBRAM sao CADASTRAIS, e nao somem se o campo parar de ser escrito:
+   8 filtros `situacao__in=('ativo','afastado','ferias')` -- os 11 continuariam entrando como 'ativo'
+   4 badges de template ("Afastado" em lista, editar, painel, cabecalho do drawer)
+   1 filtro de tela: colaboradores/lista.html "Afastados" iria a ZERO
+   api/views.py:416 e views_core.py:403 `situacao not in ('ativo','afastado')`
+```
+
+**PARA, e e `!`**: a pergunta nao e "qual leitor nao migrou" — e **o que
+`Colaborador.situacao` E**. Se e LAMPADA da ausencia (um escritor, com o reversor
+das 06:16 que nasceu em 24/09), o campo e derivado e os badges deviam ler
+`afastado_hoje`; se e CADASTRO independente (situacao cadastral, como o proprio
+cabecalho do drawer a rotula), a escrita do DP e legitima e o pendente esta
+MAL CLASSIFICADO e sai da lista por ato. As duas leituras dao fatias diferentes e
+nenhuma e minha. `PENDENTES['ausencia/ferias']` fica em **1**, com o censo.
+
+### O QUE A SUITE PEGOU, e vale como licao
+
+Tres vermelhos depois da cura, e os tres eram consequencia legitima:
+
+1. **`ponto/tests/test_afastado_hoje.py`** cobrava `len(exposto) == 1` -- que o
+   pendente EXPOSTO pela cura de 20/09 seguisse DECLARADO. Curado, ele sai da
+   lista por contrato, e o selo ficou mentindo ao contrario. Reescrito para a
+   afirmacao dos DOIS LADOS, que e a que continua mordendo: a soma crua nao esta
+   no codigo **E** nao esta escondida em lista nenhuma.
+2. **O mesmo selo passou a falhar por TEXTO**: o arquivo CITA `Sum('dias_corridos')`
+   em dois comentarios que contam a historia das duas curas, e o `assertNotIn` os
+   leu como codigo. E a MESMA armadilha que inflou o `ARQUITETURA.mmd` de 21 para
+   24 nos em 13/09 -- palavra em comentario virando aresta. Refeito pela **AST**
+   ("existe uma CHAMADA `Sum` sobre `dias_corridos`?"), com o caso que morde ao
+   lado (a mesma leitura sobre uma fonte que TEM a chamada).
+3. **`docs/ARQUITETURA.mmd`** divergiu, e a divergencia era exatamente a cura:
+   `ausencia/ferias ... registro: 3 sitio(s)` -> `1 sitio(s)`. Regerado por
+   `bin/gerar_diagrama.py`.
+
+**LEI-AKITA**: origem=`relatorios/views.py` e `triagem_batida.py` (leitor com
+regra propria de duracao; ramo morto lendo campo sem escritor),
+testemunha=`ponto/turnos.py::dias_da_ausencia` e `ferias/services.py::em_gozo_hoje`,
+RED=`61 != 21` contra a arvore de antes, quem-mais-le=o CSV do mesmo relatorio
+(mesma funcao) e o contrato `test_MORDE_pendente_curado_sai_da_lista`,
+juizes novos=0.
