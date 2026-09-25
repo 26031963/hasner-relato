@@ -1,5 +1,33 @@
 # RELATO — esteira saas-hasner
 
+## CURADO HOJE (ordem unica de 25/09: uma fatia por commit, com RED)
+
+| # | id | commit | estado |
+|---|---|---|---|
+| — | `PRONTA-QUE-NAO-POUSA` | `2c8e87a6` | **no ar** — 7 de 8 "prontas" eram CAIDAS; trava A 8 -> 0 |
+| — | `ESTEIRA-SECA` (10 itens) | `828d4149` | **no ar** — o fabricante voltou a fabricar as 10:08 |
+| — | `SELO-VE-O-CASO-COMUM` | `852dc73d` | **no ar** — o `regua_tickets` nao via ID com hifen |
+| — | `GEOFENCE-VALIDAR-VOLTA` (raia B) | `ebde81d4` | **no ar, ESPERA SMOKE** — toca template |
+| — | `HOOK-NAO-E-COPIA` | `c8aecb25` | **no ar** — 3 pushes perdidos por copia em `.git/hooks/` |
+| **1** | `REGIME-POR-EMPRESA` | **`c6467e3a`** | **CODIGO NO AR; APPLY espera o `!`** (DRY: +2.259 h de adicional noturno em 08+09) |
+| 2 | O37 gerador 12x36 | — | causa medida (`escala/models.py:967,986`); e a proxima |
+| 3 | LISTA-RETENCAO-09 | — | na fila |
+| 4 | geo em producao + print | — | commit no ar, falta o deploy e o print |
+| 5 | O38 toast (`validacao.py:114`) | — | causa medida; na fila |
+| 6 | miolo (col369) | — | causa medida (`escala/utils.py:235-245`, o cluster-guard); na fila |
+| 7 | RELATORIO-VINCULO-PARTIDO | — | na fila |
+
+**Em paralelo**: FECHAMENTO-ONLINE F1 publica o DIFF sem virar a chave (secao propria abaixo).
+
+**A DOENCA DO DIA, SETE VEZES EM 24 H — texto lido como fato**: o `ARQUITETURA.mmd` inflado de 21 para
+24 nos por palavras em comentario (13/09) · `selo_espera_por_processo` VERMELHO por um comentario que
+escrevia a propria lei · meu `assertNotIn` sobre `Sum('dias_corridos')` lendo a historia da cura como
+a violacao · o `alarme_sem_fatia` contando a reimpressao do tick (**0 min** com **765 min** de esteira
+parada) · o `regua_tickets` acusando uma fatia chamada **"B"** vinda de prosa de commit, **e nunca
+vendo ID com hifen** (dos 4 IDs citados, casava ZERO) · o `test_contract_status_literal` na raia B ·
+e o meu selo do regime lendo **o meu proprio comentario** `"JSP = CLT"` como literal de negocio. O
+**O46 EXECUTA-CLAUDE-6** existe para varrer a familia inteira; os selos novos de hoje julgam pela AST.
+
 ## 25/09 07:xx — PRONTA-QUE-NAO-POUSA: a esteira estava seca por DOIS comentarios e um rc que ninguem lia
 
 **AS 8, MEDIDAS** (pelo juiz real `esteira_vigia.pronta_de_verdade` + `logs/fila_integracao.txt`,
@@ -61,6 +89,251 @@ existindo. E "sem item livre com pronta ou caida existindo", que o corte proibe.
 selecao de alvo do fabricante (filha do O36). E o alarme de `cortes_registrados` caiu de 2 para 1:
 `ASSINATURA-EC-P256` estava em `recebido` ha 32 h **com o commit `e22a32b4` no git desde 24/09** --
 o estado mentia, nao havia corte parado. Sobra `TROCA-DE-PLANTAO` (37 h), que e seu de verdade.
+
+## 25/09 12:2x — FECHAMENTO-ONLINE passo 2: o DIFF na sombra, e ele achou o risco central
+
+Aval das 12:0x: *"DIFF na sombra: FechamentoMensal gravado x lido da celula para 07, 08 e 09, por
+colab e por rubrica, colado no RELATO"*. Rodado na **sombra** (carimbo 20260925, completa, diverge=0),
+chamando a funcao REAL (`recalcular_fechamento_mes`) dentro de `atomic()` com rollback, comparando
+**26 campos derivados** campo a campo. Nao refatorei nada para medir.
+
+| competencia | FM gravados | **mudariam** | FM que nasceriam |
+|---|---|---|---|
+| **07/2026** | 629 | **621** (99%) | 89 |
+| **08/2026** | 618 | **500** (81%) | 35 |
+| **09/2026** | 603 | **4** (0,7%) | 0 |
+
+### O resultado e o CONTRARIO do que "o materializado esta velho" sugere
+
+A competencia **CORRENTE esta em dia** (4 de 603) e as **ENCERRADAS divergem em massa**. Nao e o
+numero que envelheceu: e o **CODIGO que andou** desde que 07 e 08 foram calculadas. Os campos que
+mudam mais em 07 sao `causa_espelho` (621), `inconsistencias` (234), `motivos_espelho` (226) --
+diagnostico, nao dinheiro. Mas embaixo deles ha dinheiro:
+
+```
+col27  horas_noturnas 24.00 -> 21.00   horas_extras 0.22 -> 0.00   minutos_previstos 10800 -> 0
+col28  horas_noturnas 96.62 -> 84.54   minutos_previstos 9900 -> 0    minutos_realizados 9239 -> 0
+col29  horas_noturnas 102.13 -> 89.36  horas_saida_antecipada 1.68 -> 1.05
+col30  horas_noturnas 96.02 -> 84.02   minutos_previstos 10800 -> 0   minutos_realizados 9301 -> 0
+```
+
+### O RISCO CENTRAL, e e um `!`
+
+**`minutos_previstos 10800 -> 0` e `minutos_realizados 9239 -> 0`.** Recalcular a competencia **07**
+hoje **ZERA** o previsto e o realizado desses colaboradores. A celula de julho nao sustenta mais a
+leitura -- ou ela nao existe para aquela janela, ou o vinculo/escala de hoje nao alcanca o passado.
+
+E `horas_noturnas 24.00 -> 21.00` em varios: e **mudanca de REGRA aplicada retroativamente** (a
+familia do `HORA_REDUZIDA_12X36` / clausula 38-d da CCT dos vigilantes, ligada em 01/09).
+
+**Isto e exatamente o que a irretroatividade da CELULA existe para impedir** (CLAUDE.md 4:
+"dia+marcos como DADO com dna congelado, irretroativo"). A LEI (c) do ARQUIVO-SIMPLES diz
+*"folha/TXT = leitura da celula em qualquer periodo"* e a LEI do FECHAMENTO-ONLINE diz
+*"recalcular deixa de existir"*. O DIFF mostra o que isso custa no passado: **leitura online aplica a
+regra de HOJE a um periodo que foi pago com a regra de ONTEM**, e em 07/2026 isso muda 621 de 629
+colaboradores, alguns zerando o previsto.
+
+**O que eu NAO vou fazer sem a sua palavra**: virar qualquer chave. O aval ja diz "so depois do DIFF
+lido por Ronald", e o DIFF esta aqui. A pergunta que ele levanta e mais estreita e mais dura:
+
+> **a leitura online vale para a competencia CORRENTE e o passado fica com o numero LAVRADO?**
+
+Se sim, o FECHAMENTO-ONLINE nasce seguro: 09 divergiria em 4 de 603 (e os 4 sao `causa_espelho`,
+`motivos_espelho` e `inconsistencias` -- diagnostico), e 07/08 seguem como estao, lavrados. Se a
+leitura tiver de valer para todo periodo, entao antes dela vem uma fatia que hoje nao existe: **a
+celula (ou a regra) precisa ser versionada por competencia**, porque sem isso "ler o passado" e
+"recalcular o passado com a regra nova", que e o que os 621 mostram.
+
+**Os RED que o aval nomeia** (col37 09/2026 153h56 e col39 saida antecipada 5h) nao aparecem entre os
+4 divergentes de 09 -- os dois estao ESTAVEIS entre gravado e recalculado. Ou seja: o problema deles
+nao e "materializado velho", e outra coisa (o col37 e o O33, arredondamento; o col39 foi aplicado em
+24/09). Isso e bom para a fatia: eles nao dependem dela.
+
+**LEI-AKITA**: origem=`ponto/services/fechamento.py::recalcular_fechamento_mes` (a derivacao a
+extrair), testemunha=`FechamentoMensal` gravado x a funcao real na sombra, 26 campos,
+RED=07/2026 621 de 629 mudam com `minutos_previstos 10800 -> 0`; 09/2026 muda 4 de 603,
+quem-mais-le=os 9 leitores de valor e os 15 de estado do censo de 20/09, juizes novos=0.
+**Passos 3-6 do plano nao comecaram**: o passo 2 e a extracao de ~100 linhas de derivacao de dentro de
+uma funcao de 330 em zona de folha, e ela nasce com este DIFF na mao ou nao nasce.
+
+## 25/09 11:3x — GERADOR-PERDE-CICLO-2109, item 1: a causa com arquivo:linha, e ela inverte duas coisas
+
+### Primeiro: o commit de hoje esta ABSOLVIDO, e a minha enfileirada tambem
+
+O item 1 pede "incluir se o commit `09a36f61` GERAR-CELULAS-JANELA-PELO-JUIZ de 25/09 07:25 tocou
+nelas". **Nao tocou.** As celulas de 21/09+ do col418 nasceram em **21/09 08:50:23** (`gerada_em`),
+quatro dias antes. E o pacote `gerar_celulas_janela` que **eu** enfileirei as 08:5x de hoje esta com
+`ESTADO=CAIU_FATIA / "construir falhou"` -- ele nunca pousou, porque a cura dele ja estava no ar pelo
+commit das 07:25. Nenhum dos dois criou este bug.
+
+### A causa, medida
+
+```
+col418 (ADRIANO LUCAS, EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
+  17/09 a 20/09   trabalha alternado T.T.   gerada_em 2026-08-21 08:50:12
+  21/09 a 30/09   trabalha TODOS True       gerada_em 2026-09-21 08:50:23
+```
+
+**O corte em 21/09 NAO e o da competencia** -- e onde a FOTO DO MES acaba. Os tres 12x36 do lote
+(col366, col418, col820) tem **10 `FolgaDia` em 09/2026** (02, 04, 06, 08... ate ~20) e **16 em
+08/2026**. Dentro da foto o dia sai folga; fora dela, `escala/models.py`:
+
+- **`:967`** `if ancora_colab and ... and not _tem_foto_mes:` -- **a foto DESLIGA a ancora**
+- **`:986`** `base = True if _ciclo is None else _ciclo` -- e no 12x36 o TEMPLATE devolve `None` por
+  lei (`:672-677`, LAPIDE F4: "a fase do ciclo mora SO no vinculo"), entao **cai em True**
+
+O vinculo **tem** fase declarada (`data_ancora_colaborador`) e ela nao e consultada.
+
+### O que INVERTE, e e o mais importante do item 1
+
+**(1) A cura de 21/09 nao e a culpada -- e ela e' anterior por 42 minutos.** O commit
+`212971ad [GERADOR-FOTO-NAO-APAGA-O-CICLO]` e de **21/09 09:32** e as celulas nasceram **08:50:23**.
+Cheguei a formular que a cura do BO mat 1758 tinha criado isto; a hora diz o contrario.
+
+**(2) E o codigo de HOJE erra IGUAL -- entao NAO e passivo, e BUG VIVO.** Chamei
+`eh_dia_trabalho_calculado` agora, na arvore no ar, para 21-30/09:
+
+```
+col366  GRAVADO(21/09 08:50)=TTTTTTTTTT   CODIGO DE HOJE=TTTTTTTTTT   IGUAL
+col418  GRAVADO=TTTTTTTTTT                CODIGO DE HOJE=TTTTTTTTTT   IGUAL
+col820  GRAVADO=TTTTTTTTTT                CODIGO DE HOJE=TTTTTTTTTT   IGUAL
+col824  GRAVADO=TTTTTTTTTT                CODIGO DE HOJE=TTTTTTTTTT   IGUAL
+```
+
+A cura de 21/09 corrigiu "fora da foto -> trabalho" **so onde o ciclo sabe responder**, e o proprio
+commit declara ter excluido o 12x36 de proposito ("no 12x36/24x48 o template nao declara fase e a
+foto segue sendo a fonte inteira"). Verdade para vinculo SEM ancora; **falso para estes, que tem**.
+Regenerar sem curar o codigo reescreveria o mesmo erro.
+
+**(3) O lote de 7 mistura DOIS fenomenos, e 3 deles MELHORARAM em 21/09.** col400, col438 e col727
+sao **6x1**, nao 12x36:
+
+```
+col400  6x1  T.T.T.TTTTTT.TTT   <- antes de 21/09 alternava dia-sim-dia-nao (ERRADO para 6x1)
+col438  6x1  .T.T.TTT.TTTTTT.      depois: 6 trabalho + 1 folga (CERTO)
+col727  6x1  .T.T..TTTTTT.TTT
+```
+
+Para 6x1, `T.T.T.` e o defeito e `TTTTTT.` e o ciclo. **O que quebrou para o 12x36 consertou a
+leitura do 6x1** -- porque neles a foto de 10 dias alternados e que estava mandando. Entao o
+universo do bug e **12x36/24x48 COM ancora e COM foto no mes**, nao "os 7".
+
+E o **col824** e o quarto caso e tem outra forma: **1 `FolgaDia`** (06/09) e nenhuma em agosto, e por
+isso ele e todo `T` desde antes de 15/09 -- uma folga sozinha basta para desligar a ancora do mes
+inteiro.
+
+### A frota, e o que NAO fiz
+
+**FROTA**: 338 vinculos 12x36/24x48 COM ancora, 3 SEM. Quantos tem foto no mes -- e portanto estao
+neste bug -- e a medida que abre o item 4 (o selo de frota), e ela vem antes do APPLY.
+**Nao curei o codigo ainda e nao regenerei nada**: e DINHEIRO (dia previsto vira furo, falta e DSR),
+o `esteira.dinheiro_fechado` esta fechado com **export 09 = desconhecido**, e o item 3 da ordem exige
+**DRY antes do APPLY, com aval**. O col418 tem o colab CONTESTANDO (FOLGA_CONTESTA 22/09, disputa
+5580, chamado #24840) -- ele tem razao, e o item 5 (encerrar a cobranca a favor dele) depende da cura.
+
+**LEI-AKITA**: origem=`escala/models.py:967` (a foto desliga a ancora) e `:986` (`True` quando o
+template nao sabe a fase), testemunha=`data_ancora_colaborador` + `CelulaDia.gerada_em` + o commit
+`212971ad`, RED=`eh_dia_trabalho_calculado` devolve `TTTTTTTTTT` para 21-30/09 em col366/418/820/824
+na arvore de HOJE, quem-mais-le=`gerar_celulas` (cron 05:50), o motor, o espelho, o cartao, o furo do
+dia e a cobranca, juizes novos=0.
+
+## 25/09 10:5x — ESTEIRA-SECA itens 1 e 2 curados (aval das 10:3x): e a 2a causa era minha
+
+O aval foi explicito: *"itens 1 e 2 NAO sao fatia propria: curar AGORA"*. Curados, e no caminho
+**meu diagnostico anterior caiu em dois pontos** -- os dois valem mais que a cura.
+
+### Item 1 — a causa que eu dei estava errada, e a real e ORDEM DE OPERACOES
+
+Eu havia escrito "**duas fontes** para *este pacote ja esta no git?*". **Medi e nao era isso**:
+`fabricante_alvo.ja_commitadas` e `esteira_vigia.ja_esta_no_git` davam **12 e 12, conjuntos
+IDENTICOS**. Os `pacotes_residuo=10` do `esteira_classes` respondem outra pergunta (classificacao).
+
+A causa real estava em `em_obra()`:
+
+```python
+nomes = set(os.listdir('.esteira'))
+nomes -= ja_commitadas(d)            # tira os 12 commitados
+for linha in open('logs/fila_esteira.txt'):
+    nomes.add(...)                    # e RE-ADICIONA tudo, inclusive os 12
+```
+
+A subtracao vinha **antes** da uniao, e a uniao a desfazia. **A cura do BO de 23/09 19:1x foi escrita
+e ANULADA** -- o `ja_commitadas` existia, media certo e nao tinha efeito nenhum. Os 12 residuos
+seguravam 27 arquivos. Subtracao movida para depois: **`em_obra()` 122 -> 101**, o
+`bin/fabricante_alvo.py` voltou a devolver alvo (`relatorios/pdf_espelho.py#65`) e
+**`bin/tests/test_fabricante_seco.sh` virou OK** -- era o RED preexistente que eu tinha reportado
+como "fatia filha para depois", e ele morreu com essa linha.
+
+**E a UMA FONTE que o aval pediu foi feita mesmo com as duas concordando**: `ja_commitadas` passou a
+delegar a `esteira_vigia.ja_esta_no_git`. Eu havia usado a concordancia como argumento de que nao
+havia problema; o aval nao esperou a divergencia, e esta certo -- duas implementacoes que concordam
+hoje sao duas que divergem um dia. O `git log` e lido uma vez e passado, que era a unica vantagem
+real da copia.
+
+### Item 2 — a segunda causa era MINHA, e a lei da casa a nomeia
+
+O `grep` de `K8`, `REABRIR-LINHA-UI`, `col824`, `col504`, `GEOFENCE` e `W12X36` no registro dava
+**ZERO cada**. Eu atribui isso ao filtro da palavra "livre". Era parte. A outra parte:
+
+**eu escrevi no `PROMPTS.md` que cinco ordens dele tinham virado `O40`, `O41`, `O42`, `O43` e `O44`,
+e NENHUM dos cinco existia no `BACKLOG.md`.**
+
+A CLAUDE.md 7b e literal: *"Prompt que pede obra vira item no bloco OBRAS de `docs/BACKLOG.md` NO
+MESMO turno -- **se nao virou item, nao foi recebido, foi lido**."* Pela definicao dele, **cinco
+ordens foram lidas, nao recebidas**. O contador `prompts_repetidos` mede prompt que chega duas vezes;
+**nada media prompt que virou texto e nao virou item**. Os cinco estao criados, e o selo novo
+`bin/tests/test_prompt_virou_item.sh` fecha o buraco: todo `Oxx`/`Fxx` que o PROMPTS cita como item
+TEM de existir na tabela do BACKLOG. `prompts_prometidos_sem_item = 0`, com o par que morde
+(promessa vazia acusa; promessa cumprida nao).
+
+### E desfiz o que eu tinha feito errado na 1a tentativa do item 2
+
+Minha 1a cura criou um bloco `<!-- ORDEM:INICIO -->` em `docs/FILA.md` e fez o `fabricante_alvo` le-lo.
+Isso era uma **SEGUNDA declaracao da ordem** -- a doenca que esta casa paga toda semana (as LABELS em
+quatro lugares, que custaram 58 min de arvore vermelha; o `.month` em dois juizos). O aval e explicito:
+**a ordem e o BACKLOG**. O bloco saiu, a `FILA.md` voltou a ser prosa para humano, e o escalonamento
+ficou **declarado no `main()`, em dois niveis**: primeiro o que o BACKLOG diz **livre** (8 alvos),
+depois os itens da ORDEM (21) -- e **nunca os 5 que esperam o Ronald**.
+
+**Dois selos meus cobravam a lei revogada.** Nao os afrouxei: o `test_fabricante_backlog.sh` passou a
+**cobrar o escalonamento** (`escalonar=True` tem de entregar MAIS que o padrao, senao o 2o nivel nao
+existe) e o `test_fabricante_le_a_ordem.sh` foi **reescrito** para a unica afirmacao que ninguem mais
+guarda: item com `aval`/`corte`/`smoke`/`suspens` na coluna de estado **nao e sorteavel**. Medido:
+**5 itens esperam o Ronald, 18 sorteaveis, zero violacao**. Selo que cobra lei revogada fica vermelho
+para sempre sem causa, e afrouxa-lo seria pior que reescrever.
+
+### O PRONTO, com o numero do log
+
+O aval pediu **"tick com >= 1 fabricada"**. Do `logs/fabricante.log`:
+
+```
+25/09 03:00 -> 07:00   trava A = 8 (vivas 0 + prontas 8) >= 6 -- nada a fabricar   <- antes
+25/09 07:30            trava A = 0 (vivas 0 + prontas 0) < 6 -- fabricando          <- 4a guarda entrou
+25/09 08:00 / 08:30    "sem item livre no registro" com 24 caidas e 3 verdes        <- alvo vazio
+25/09 10:00            alvo: relatorios/pdf_espelho.py#65
+25/09 10:08            fatia pdf_previsto_juiz LANCADA pelo fabricante              <- >= 1 FABRICADA
+25/09 10:08            trava A = 1 (vivas 1 + prontas 0) < 6 -- fabricando (1a desta corrida)
+25/09 10:08            alvo: relatorios/services.py#67                              <- ja buscando a 2a
+```
+
+**A esteira voltou a fabricar**, e a sequencia mostra as duas causas separadas: a trava A caiu as
+07:30 (guarda do `cadeia.done`) e o ALVO so apareceu depois da cura do `em_obra()` -- entre 07:30 e
+08:30 a trava estava livre e o fabricante rodava em falso, exatamente o que o item 10 do adendo
+nomeou. Primeira fatia: `pdf_previsto_juiz`. Regua de host: **16 de 17 verdes**; o unico RED e
+`cortes_registrados` (TROCA-DE-PLANTAO, 38 h em "recebido"), que e do Ronald.
+
+**COLISAO A x B, e nao foi de arquivo**: a suite de [A] morreu com exit 1 e saida vazia porque o
+subagente [B] estava criando/destruindo o banco de teste no mesmo instante -- **um run por vez no
+`juliani_db_test`** (CLAUDE.md 3). O aval previa colisao de ARQUIVO; esta foi de RECURSO. Nao inventei
+mecanismo: a suite de [A] passou a rodar sob `flock /tmp/regua.lock`, que e a trava que o
+`bin/push.sh` e a regua ja usam -- espera a vez em vez de colidir.
+
+**LEI-AKITA**: origem=`bin/fabricante_alvo.py::em_obra` (ordem de operacoes) + `ja_commitadas` (duas
+implementacoes) + o PROMPTS prometendo item que nao existia,
+testemunha=`esteira_vigia.ja_esta_no_git` (juiz unico) e a tabela do `BACKLOG.md`,
+RED=`em_obra()` 122 -> 101 com `test_fabricante_seco` virando OK · `prompts_prometidos_sem_item` 5 -> 0,
+quem-mais-le=`bin/fabricante.sh::trava_a`, `esteira_classes.py`, `esteira_status.sh` e o PLACAR,
+juizes novos=0.
 
 ## 25/09 10:1x — ARQUIVO-SIMPLES v2, item 1: O CENSO DE TODA TRAVA AUTOMATICA
 
@@ -3560,6 +3833,69 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **25/09 09:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
+
+**ALARME integrador** -- o push do lote foi REJEITADO (rc=1; o motivo esta em `logs/integrador.log`). As 0 fatia(s) ficam NA FILA com o commit local e NENHUMA foi marcada "no ar" -- commit local nao e "no ar". Cura: git fetch + rebase e `bash bin/push.sh`.
+
+
+**25/09 10:25 vigia da esteira** -- vigia relancou pdf_previsto_juiz as 10:25 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
+
+**ALARME integrador** -- o push do lote foi REJEITADO (rc=1; o motivo esta em `logs/integrador.log`). As 0 fatia(s) ficam NA FILA com o commit local e NENHUMA foi marcada "no ar" -- commit local nao e "no ar". Cura: git fetch + rebase e `bash bin/push.sh`.
+
+
+**25/09 10:30 vigia da esteira (ALARME)** -- a fatia porta_criar_periodo caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
+
+
+**25/09 10:30 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 4 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 5 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 4 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 5 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 6 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**25/09 11:30 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**25/09 12:30 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 13:35 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 14:35 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
@@ -3928,37 +4264,47 @@ e o dia sem batida que ninguem decidiu ganhou nome proprio no papel -- 'Em abert
   hora do patch, nunca de um retrato de horas antes.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (25)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (35)
 
-> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (38 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (40 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 48 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 40 h | construindo | O9 PDF-E-O-ESPELHO |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 39 h | construindo | CORTES-REGISTRADOS |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 38 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **NOITE-23-09** | 2026-09-23 18:4x | 38 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 37 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 20 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 19 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 18 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 17 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 16 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 16 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 16 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 16 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 13 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 10 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 10 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 9 h | esperando "!" | O35 CONTRATOS-14 |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 50 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 41 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 40 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 40 h | construindo | CORTES-REGISTRADOS |
+| **NOITE-23-09** | 2026-09-23 18:4x | 40 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 38 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 21 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 20 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 19 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 19 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 18 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 18 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 17 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 17 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 14 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 12 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 12 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 1 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 1 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
-| **CERT-VIGIA** | 2026-09-25 09:4x | 0 h | recebido | CERT-VIGIA |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 0 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 0 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 0 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 0 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **PARAMETRO-GANHA-ROTULO** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 0 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 0 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 0 h | recebido | E3-CHAMADO |
+| **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 <!-- SEUS-CORTES:FIM -->
 
 ## ESMERIL-ESPELHO -- 1a rodada (18/09 18:2x, so leitura; sombra das 12:19; celulas de 21/08 a 17/09)
