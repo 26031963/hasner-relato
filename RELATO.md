@@ -1,5 +1,56 @@
 # RELATO — esteira saas-hasner
 
+## ESPELHO-VERDADE-E2 — o RED, medido pela chamada REAL do fechamento
+
+Comecou a E2 (O53 JUIZ-UNICO-DA-BATIDA, com o O49 dentro). A frase de nascimento do juiz existe em
+`docs/CORTES.md` desde 25/09 11:0x ("corte Ronald: juiz batida nasce"), reafirmada as 18:5x amarrada a
+O53 -- conferido no registro, nao de memoria.
+
+Medido chamando `get_motor_cct(...).calcular_mes(...)` com `batidas_apuraveis`, que e o caminho do
+FECHAMENTO (o que vira dinheiro), sobre o vinculo vigente NAQUELE dia -- nao o ativo de hoje.
+
+### col638 [nome], te#187 `PAI-COMERCIAL.3` -- tres defeitos no MESMO dia
+
+Cadastro: intervalo **fixo 13:00-14:30 = 90 min**, `intervalo_indenizavel=**False**`, jornada 530 min.
+
+| dia | batidas | o motor hoje | o cadastro diz |
+|---|---|---|---|
+| 13/08 | `E06:56 S13:15 S15:57` | 540 min, **HE 1,68 h**, **indenizou 60 min** | 540 − 90 = **450 min**, abaixo de 530 -> **0 HE** |
+| 18/08 | `E06:52 S13:30 S15:50` | 537 min, **HE 1,63 h**, **indenizou 60 min** | 537 − 90 = **447 min** -> **0 HE** |
+
+Os tres defeitos, com a mesma raiz -- **o motor nao le o cadastro do intervalo**:
+
+1. **O intervalo CADASTRADO nao e descontado.** Sem a batida de volta, `_intra_real` = 0 e
+   `duracao -= 0`: o almoco inteiro vira trabalho. Pre-assinalado quer dizer o contrario -- o
+   cadastrado SAI da jornada, com ou sem batida.
+2. **Indenizou com `intervalo_indenizavel=False`.** A politica esta decidida desde 19/08 (Art.71 §4 /
+   Sum.437) e o cadastro que decide **existe** (`TipoEscala.intervalo_indenizavel`); o motor nao o le.
+   O alerta que ele emite -- "60min pagos como hora extra" -- e uma frase de lei aplicada ao contrario
+   do que o cadastro manda.
+3. **O minimo julgado e o 60 CRAVADO** (`motor_calculo_v2.py:355`), nao os 90 do cadastro.
+   `intervalo_duracao_min` tem leitor na ficha, no wizard e na validacao do Art.71 -- e **nenhum no
+   calculo**. Campo que o admin preenche e a folha ignora: "ligar o formulario que nao liga nada".
+
+### col369, te#454, intervalo 12:00-13:00 -- o pareamento pelo TIPO GRAVADO
+
+Batidas de 23/09: `E07:01 S13:00 S13:59 E14:59` (a volta do almoco foi gravada como **S**). O motor
+devolveu **DOIS periodos ABERTOS e 0,00 h** num dia inteiro trabalhado -- ele pareia pelo `tipo` que a
+batida carrega, e o tipo esta errado. O juiz da E2 responde por **instante contra marco**, e o marco de
+intervalo esta cadastrado: 13:00-13:59 cai nele.
+
+Aqui o veredito CERTO nao e "somar horas": e **dia em aberto + pergunta**, porque a saida do dia
+realmente nao existe. O defeito e inventar dois periodos abertos e perder o intervalo, nao o zero.
+
+### Contrato de entrada do juiz (4 linhas, antes de codar)
+
+**FONTE**: `CelulaDia.ata` (luz + `tipo_real`, instante contra marco) + `TipoEscala` para o intervalo
+CADASTRADO (`intervalo_modo`, `intervalo_duracao_min` ou a janela `hora_inicio_intervalo`/`hora_fim_intervalo`,
+`intervalo_indenizavel`) -- tudo existente, zero campo novo.
+**UNIDADE**: minutos.
+**UNIVERSO**: um dia de um colaborador, pelo vinculo vigente naquele dia.
+**EXCLUSOES**: batida retratada (ja fora por `batidas_apuraveis`); orfa entra VISIVEL e **nunca soma**.
+
+
 ## PORTA DA ESPELHO-VERDADE-E1 — **INCOMPLETA**: 2 dos 3 selos em zero, o terceiro espera o seu `!`
 
 Medido em prod 26/09 01:2x, competencia corrente 21/09-20/10, chamando as funcoes reais.
@@ -20,16 +71,27 @@ vinculos, antes do O37) tinha o mesmo vies, entao a queda real e maior do que 15
 
 ### Item por item: RED, cura e commit
 
+**CORRECAO ANTES DE ALGUEM LER ERRADO**: a primeira versao desta tabela dizia "no ar" para todos.
+**Nao esta.** `origin/main` continua em `4ea0942b` e **nenhum `bin/deploy.sh` rodou nesta sessao** -- o
+vocabulario do TICKETS distingue "CODIGO NO AR" de "commitado, NAO deployado", e num quadro de porta a
+diferenca e tudo: codigo commitado nao mudou nada para o colaborador nem para o DP.
+
 | item | RED | commit | estado |
 |---|---|---|---|
-| O50 escritor unico de vigencia | 9 portas escreviam `data_fim`, 5 sem guarda | `f516ad50` | **no ar** |
-| O37 fase do 12x36 pela foto | col418 `T.T...TTTTTTTTTT` (foto parcial virava trabalho) | `a5cd3d39`+`1e1338d7` | **no ar**, 82 celulas |
-| fase_conflitante (contador) | foto e ancora discordam em 71 dias e ninguem contava | `a6705443` | **no ar** |
-| **BUG-A** dado+trilha no mesmo `atomic` | `ec835`: `update()` passou, `registrar_log` estourou (`%` no motivo) -> zero trilha | `48c490bb` | **no ar** |
-| **BUG-B** a lavra diz QUEM barrou | a frase cravava "exportada" para toda janela lavrada | `890570b4` + cauda | **no ar** |
-| **BUG-C** a lista ve a vigencia impossivel | 47 de 51 colabs invisiveis na unica lista de cadastro x realidade | `6abe6223` | **no ar** |
-| **BUG-D** `objeto_id` sem ambiguidade | 626 ids existem como vinculo E como colaborador; 1.377 linhas indistinguiveis | neste lote | **no ar** |
-| contador `vigencia_impossivel` | "quantos vinculos com vigencia impossivel?" nao tinha UMA resposta | neste lote | **no ar** |
+| O50 escritor unico de vigencia | 9 portas escreviam `data_fim`, 5 sem guarda | `f516ad50` | **no ar** (deployado 25/09) |
+| O37 fase do 12x36 pela foto | col418 `T.T...TTTTTTTTTT` (foto parcial virava trabalho) | `a5cd3d39`+`1e1338d7` | **aplicado em prod** (82 celulas, pela porta) |
+| fase_conflitante (contador) | foto e ancora discordam em 71 dias e ninguem contava | `a6705443` | **commitado, nao deployado** |
+| **BUG-A** dado+trilha no mesmo `atomic` | `ec835`: `update()` passou, `registrar_log` estourou (`%` no motivo) -> zero trilha | `48c490bb` | **commitado, nao deployado** |
+| **BUG-B** a lavra diz QUEM barrou | a frase cravava "exportada" para toda janela lavrada | `890570b4` + `b53aa49e` | **commitado, nao deployado** |
+| **BUG-C** a lista ve a vigencia impossivel | 47 de 51 colabs invisiveis na unica lista de cadastro x realidade | `6abe6223` + `f3d39add` | **commitado, nao deployado** (o TEMPLATE, sim, vale na hora -- provado que degrada sem 500) |
+| **BUG-D** `objeto_id` sem ambiguidade | 626 ids existem como vinculo E como colaborador; 1.377 linhas indistinguiveis | neste lote | **commitado, nao deployado** |
+| contador `vigencia_impossivel` | "quantos vinculos com vigencia impossivel?" nao tinha UMA resposta | neste lote | **commitado, nao deployado** |
+
+**QUANDO SOBE**: depois da suite verde e do push, por `bin/deploy.sh` com o ensaio de sombra que se
+refaz sozinho as 04:15. Nenhuma destas fatias mexe em calculo de dinheiro -- a que mexeria e a E3, e a
+porta dela e o DIFF na sombra com o seu `!`. A unica coisa que JA esta na tela e o template do BUG-C
+(bind-mount vale na hora), e ele foi provado contra o payload velho na casca do ui: 82.067 bytes, sem
+erro, sem janela de 500.
 
 ### O que e MEU e esta fechado
 
