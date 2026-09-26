@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 02:04:32.**
+**Medido em 26/09/2026 02:09:32.**
 
 | | |
 |---|---|
@@ -24,7 +24,9 @@ e452f0e3 [BUG-C] o selo estrutural olha NOS da AST, e a porta E1 deixa de dizer 
 ## `git status --short`
 
 ```
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_e3_motor_le_o_cadastro_do_intervalo.py
 ```
@@ -33,43 +35,43 @@ e452f0e3 [BUG-C] o selo estrutural olha NOS da AST, e a porta E1 deixa de dizer 
 
 ```
 
-  O DIFF da E3 está rodando na sombra (motor de HEAD × motor que lê o juiz, 07/08/09) — é o seu ponto de leitura.
+● Essa medição muda o veredito. Medindo a contradição de frente:
+
+  Ran 1 shell command
+
+● A medição fecha o caso, e ela inverte o veredito:
+
+  ┌────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┐
+  │ 81 templates 12x36 jornada 720 — todos com intervalo de 60 min │                                           │
+  ├────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ indenizavel=False                                              │ 53 — e todos modo=fixo (janela declarada) │
+  ├────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ indenizavel=True                                               │ 27 — e todos modo=duracao (sem janela)    │
+  ├────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ trilha que menciona a flag                                     │ 0 linhas                                  │
+  ├────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ vigilantes 12x36 ativos que perderiam a indenização            │ 198 (137 seguiriam recebendo)             │
+  └────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
+
+  A flag não carrega uma decisão jurídica — ela pega carona no modo de cadastro do intervalo. Aplicar o DIFF retiraria 663 h de pagamento de 198 vigilantes com base num valor que
+  ninguém registra ter escolhido.
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Escrevendo o PAREI com o número, no topo da fila de decisão:
 
   Ran 3 shell commands
 
-● O dump está progredindo (07/2026: 718 colaboradores). Esperando os dois:
+● Um fato decisivo que muda o que eu faço agora: o reload agendado das 03:30 faz HUP gracioso, e worker que sobe reimporta o .py do disco. Conferindo antes de agir:
 
-  Read 3 files, ran 8 shell commands
+● Running 1 shell command…
 
-● O push e o dump disputam os mesmos núcleos de teste, então ambos estão mais lentos. Uso o tempo para o selo do outro lado da política — o vigilante que continua indenizando:
-
-  Listed 1 directory
-
-● Background command "Esperar o veredito do push19" completed (exit code 0)
-
-  Read 1 file
-
-● Background command "Esperar o primeiro dos dois" completed (exit code 0)
-
-● Uma única falha em 8.323 testes com a mudança da E3. Lendo o que ela afirma:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● A falha é artefato meu, não da E3: inspect.getsource devolveu uma linha do calcular_periodo porque eu editei o arquivo durante a corrida da suíte — conteúdo novo com números de
-  linha antigos. É a O56 na forma mais pura, e a E3 não quebrou teste nenhum. Escrevendo os selos da E3 no nível do motor:
-
-  Read 1 file, ran 1 shell command
-
-● ORIG pronto; CURA rodando. Rodando os selos da E3:
-
-  Running 1 shell command…
-
-✽ Quantumizing… (1h 18m 58s · ↓ 253.0k tokens)
+✽ Quantumizing… (1h 23m 58s · ↓ 270.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

@@ -1,5 +1,58 @@
 # RELATO — esteira saas-hasner
 
+## PAREI — ESPELHO-VERDADE-E3: o DIFF esta pronto, e ele diz **-663,24 h**. Nao aplico.
+
+**O DIFF** (sombra, motor de HEAD x motor curado, **duas arvores e UMA trava**, `atomic()+rollback`,
+competencias 07/08/09 -- nao "gravado x recalculado", que arrastaria a deriva pre-existente):
+
+| competencia | colabs que mudam | intra indenizada | horas trabalhadas | HE |
+|---|---|---|---|---|
+| 07/2026 | 40 de 718 | **-44,21 h** | -62,00 h | -2,04 h |
+| 08/2026 | 108 de 653 | **-269,69 h** | -268,00 h | -9,27 h |
+| 09/2026 | 117 de 603 | **-349,34 h** | -341,00 h | -8,36 h |
+| **total** | | **-663,24 h** | **-671,00 h** | **-19,67 h** |
+
+Alguns SOBEM (col118 2,00 -> 8,36; col82 1,00 -> 5,52): sao escalas cujo intervalo cadastrado e MAIOR
+que os 60 que o motor cravava. Esses eu assino: e o cadastro passando a valer.
+
+### Por que eu paro, e nao e cautela generica -- e a fonte que nao sustenta o numero
+
+O codigo esta CERTO NA FORMA: o motor tinha de parar de cravar 60 e passar a ler o cadastro. Fui medir
+**quem decidiu** o valor que ele passa a ler, e:
+
+| medido 26/09 | |
+|---|---|
+| templates 12x36 com jornada 720 -- **todos com intervalo de 60 min** | **81** |
+| com `intervalo_indenizavel=False` | **53** -- e **todos** `modo=fixo` |
+| com `intervalo_indenizavel=True` | **27** -- e **todos** `modo=duracao` |
+| linhas de trilha de `TipoEscala` que mencionam a flag | **0** (de 19) |
+| vigilantes 12x36 ativos que PERDERIAM a indenizacao | **198** |
+| vigilantes 12x36 ativos que seguiriam recebendo | **137** |
+
+**A flag nao carrega uma decisao juridica: ela pega carona no MODO de cadastro do intervalo.** Dois
+templates da mesma familia `PAI-12x36.*`, mesmo ciclo, mesma jornada, mesmo intervalo de 60 min, ficam
+em lados opostos -- e o unico traco que os separa e ter sido cadastrado com janela (`fixo`) ou com
+duracao. Ninguem esta registrado como tendo escolhido isso.
+
+E o lado juridico fecha contra: **no 12x36 que NAO goza o intervalo, a Sum.437/Art.71 §4 manda
+indenizar**, e eu medi **602 dias** em comp 09 desses mesmos colaboradores com o marco de intervalo
+APAGADO. Retirar o pagamento neles nao seria economia: seria erro com exposicao.
+
+### O que eu preciso de voce -- e nao e "aplica ou nao"
+
+E a **decisao de origem**: `intervalo_indenizavel` so pode ter efeito no calculo depois de um ato que
+declare o valor **por escala, com trilha**. Enquanto esse ato nao existir, o certo e o motor **nao ler
+a flag** (fica como hoje, indenizando) e a E3 entregar so a metade inequivoca: **o 60 cravado morre em
+favor do intervalo CADASTRADO** -- que e exatamente o caso da [nome] (13/08: 541 - 90 = 451 min,
+abaixo da jornada de 530, **0 HE**) e que **nao tira dinheiro de ninguem**.
+
+E uma classe que muda o desenho, nao um caso: **parametro de dinheiro que ganha leitor precisa, no
+mesmo ato, de prova de que o valor foi DECIDIDO.** Sem isso, ligar o leitor e transformar um default em
+sentenca -- e foi por um milimetro que isso nao aconteceu aqui, porque o DIFF me obrigou a olhar.
+
+**Nada foi aplicado e nada foi deployado.** O codigo esta commitado; o motor em prod segue o de antes.
+
+
 ## ESPELHO-VERDADE-E2 — o RED, medido pela chamada REAL do fechamento
 
 Comecou a E2 (O53 JUIZ-UNICO-DA-BATIDA, com o O49 dentro). A frase de nascimento do juiz existe em
