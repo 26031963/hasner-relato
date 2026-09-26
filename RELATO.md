@@ -1,5 +1,61 @@
 # RELATO — esteira saas-hasner
 
+## PAREI: DIFF da O69 (VINCULO-DO-DIA) medido -- dinheiro move, **-399,76 h em 7 colabs** | espera `!`
+
+Cura construida em copia do HEAD, **nada aplicado**. Medida contra o gravado de PROD (nao o da sombra,
+que e pre-E3 e somaria tres curas num numero), dentro de `atomic()` com **rollback provado 607/607**.
+
+### Onde a cura morde, e a direcao
+
+| campo | delta | colabs | classe |
+|---|---:|---:|---|
+| `horas_trabalhadas` | **-399,76 h** | 7 | DINHEIRO |
+| `horas_noturnas` | -88,12 h | 2 | DINHEIRO |
+| `horas_folga_trabalhada` | -75,60 h | 4 | DINHEIRO |
+| `saldo_banco_horas` | +67,28 h | 4 | DINHEIRO |
+| `horas_intra_indenizada` | -10,62 h | 4 | DINHEIRO |
+| `horas_extras` | -5,63 h | 3 | DINHEIRO |
+| `inconsistencias` / `turnos_abertos` | -24 / -9 | 5 / 4 | contador |
+
+**Movimento absoluto em dinheiro: 654,74 h, e quase tudo NEGATIVO** -- que e a assinatura certa: o que
+sai e o DOBRO que nunca existiu.
+
+### Os 9 do TXT, um por um, sob a cura
+
+| colab | trabalhadas antes | depois | delta | causa |
+|---|---:|---:|---:|---|
+| **col866** | 239,95 | **156,01** | **-83,94 h** | vinculo SOBREPOSTO -- a cura resolve, e o valor passa a bater com a coluna (155h54) |
+| col924 | 0,00 | 0,00 | — | zero vinculo **e zero celula**: a cura nao alcanca |
+| col391 | 0,00 | 0,00 | — | idem |
+| col43 | 0,00 | 0,00 | — | idem |
+| col942 | 0,00 | 0,00 | — | idem |
+| col935 | 77,06 | 77,06 | — | troca de vinculo no meio: nao e sobreposicao |
+| col648 | 182,63 | 182,63 | — | idem |
+| col400 | 156,94 | 156,94 | — | sem causa dessas |
+| col245 | 13,98 | 13,98 | — | sem causa dessas |
+
+**Dos 9 do TXT a cura resolve UM** (col866) e deixa oito como estao. Ela e cirurgica: morde a
+SOBREPOSICAO, que era a hipotese, e nao finge resolver o resto.
+
+### O que a cura faz, em uma frase
+
+O laco do `recalcular_fechamento_mes` roda o motor **uma vez por escala** e **soma**; com dois vinculos
+cobrindo os mesmos dias, os mesmos dias entram duas vezes. Agora, antes de rodar a fatia, ele pergunta
+a **`CelulaDia.escala_geradora`** quais dias sao daquele vinculo -- e a cobertura em 09 e de **100%**
+(17.329 de 17.329). Fatia cujos dias pertencem todos a outro vinculo **nao roda**. Dia sem celula segue
+como antes, sem dono inventado.
+
+### Tres classes, e so uma esta curada
+
+1. **sobreposicao** (5 colabs, gravado maior) -- **curada por esta fatia**;
+2. **zero vinculo E zero celula** (4 no TXT, 132h40+31h57+29h20+28h09) -- a celula tambem nao responde;
+   e classe propria, e **nao esta no passivo da E1** (intersecao vazia com os 53 registros / 51 colabs);
+3. **troca de vinculo no meio** (8) e **sem causa dessas** (7) -- seguem abertas.
+
+Dinheiro move, entao **PAREI**. O `!` que esta fatia pede e sobre as 654,74 h, sabendo que 399,76 h
+delas sao trabalhadas saindo de 7 colabs e que **apenas col866 esta entre os 9 que o DP vai pagar**.
+
+
 ## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25
 
 ### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda

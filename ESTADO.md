@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:52:45.**
+**Medido em 26/09/2026 19:53:36.**
 
 | | |
 |---|---|
-| `HEAD` local | `fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO sao da E1, mas 3 dos 25 sao` |
+| `HEAD` local | `28c7c62c [O69 VINCULO-DO-DIA] PAREI: DIFF medido -- dinheiro move -399,76 h em 7 colabs, e so 1 dos 9 do TXT` |
 | `origin/main` | `af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+28c7c62c [O69 VINCULO-DO-DIA] PAREI: DIFF medido -- dinheiro move -399,76 h em 7 colabs, e so 1 dos 9 do TXT
 fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO sao da E1, mas 3 dos 25 sao
 cb4152ef [O67] PAREI no item (6): 85 colabs, 3.268h56 -- e os meus DOIS medidores estavam cegos ao RED
 e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no TXT, dos quais 9 com ajuste
 6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo
-3046eef0 [BECO-FIO-FECHADO-CELULA-ABERTA] O66 medida: celula_furo_sem_canal = 68, e nenhum fechador consulta a celula
 ```
 
 ## `git status --short`
@@ -39,14 +39,6 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Cobertura 100% — 17.329 células, todas com escala_geradora. O juiz pode responder. E dois achados que mudam o desenho:
-
-  - col866 tem 31 células com duas geradoras distintas (1188, 1246): a célula já sabe qual vínculo gerou cada dia — o fechamento dobra porque não pergunta a ela. A cura resolve
-    exatamente esse.
-  - os 4 de zero vínculo têm ZERO CÉLULAS na competência. Para eles a célula também não responde: a raiz é batida sem vínculo e sem célula, classe própria.
-
-  Vendo como o fechamento escolhe a escala hoje:
 
   Searched for 1 pattern, ran 2 shell commands
 
@@ -65,14 +57,22 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ● Dinheiro move: −399,76 h de trabalhadas em 7 colabs, 654,74 h de movimento absoluto, quase tudo negativo — é o dobro saindo. Agora a lista dos 9 do TXT sob a cura:
 
-● Medir os 9 do TXT sob a cura
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/o69nove.py <<'PYEOF'
-     """Os 9 do TXT sob a cura da O69: antes x depois, em prod, com rollback."""
-     from django.db import transaction
-     from ponto.models import FechamentoMensal
-     from ponto.services.fechamento import recalcular_fechament…
+  Ran 1 shell command
 
-* Shenaniganing… (9m 20s · ↓ 9.5k tokens)
+● O DIFF fechou e ele é cirúrgico. PAREI com a tabela:
+
+  Publicar o PAREI com a tabela
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/RELATO.md'
+     s=open(f,encoding='utf-8').read()
+     cab='# RELATO — esteira saas-hasner\n'
+     L=[];A=L.append
+     A('')
+     A('## PAREI: DIFF da O69 (VINCULO-DO-DIA) medido -- dinheiro move, **-399,76 h em 7 colabs** | espera `!`')
+     A('')
+     A('Cura construida em copia do HEAD, **nada aplicad…
+
+✢ Shenaniganing… (10m 12s · ↓ 11.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
