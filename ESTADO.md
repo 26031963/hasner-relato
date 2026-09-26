@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:10:44.**
+**Medido em 26/09/2026 15:15:45.**
 
 | | |
 |---|---|
@@ -43,16 +43,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Contrato verde. Agora a amostra dia a dia:
-
-  Ran 1 shell command
-
-● A amostra está respondendo exatamente o que a ordem pediu. Vendo o resto:
-
-  Ran 2 shell commands
-
-● A amostra fecha em três e não fecha em dois (col87 explica só metade do delta). A causa é minha: usei um proxy para "estava aberto" em vez de perguntar à autoridade real.
-  Refazendo com o pareador de verdade:
 
   Ran 2 shell commands
 
@@ -68,15 +58,25 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● Confirmado, e é defeito meu: nesses dias o DNA da célula tem só dois marcos (hi, hf), então as batidas de intervalo (13:57/14:57) ficam órfãs na ata — e eu fundia o dia num
   período só, jogando o intervalo fora. O DIFF que publiquei está inflado por isso. A fronteira honesta:
 
-● Guarda da orfa e remedir os cinco · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
-     f='app/ponto/motor_calculo_v2.py'
-     s=open(f,encoding='utf-8').read()
-     velho = """ if resp.get('desalinhado') or resp.get('em_aberto'):"""
-     novo = """ # A ATA SO DECIDE O DIA QUANDO EXPLICA TODAS AS BATIDAS DELE. Se sobrou batida sem marco, ela
-     # esta …
+  Ran 1 shell command
 
-✶ Twisting… (11m 9s · ↓ 26.6k tokens)
+● A orfas da ata vem vazia — o produtor não a preenche nesses dias. Então não confio no campo: conto:
+
+  Ran 2 shell commands
+
+● col255 (12x36 noturno) ainda tem o padrão em 8 dias — minha guarda contava batidas do dia civil, e o turno dele cruza a meia-noite. A pergunta certa é se a ata explica tudo
+  dentro do período:
+
+  Ran 2 shell commands
+
+● Agora está limpo: zero dias suspeitos, e dois dos cinco colabs ficaram exatamente neutros — o "ganho" deles era todo o meu bug. Refazendo o DIFF completo, que estava inflado:
+
+  DIFF completo com a guarda · 1m 42s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo v3" && docker run --rm --cpuset-cpus
+     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=con… (1m 40s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Twisting… (16m 10s · ↓ 35.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
