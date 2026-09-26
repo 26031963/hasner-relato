@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:52:01.**
+**Medido em 26/09/2026 12:57:16.**
 
 | | |
 |---|---|
@@ -32,49 +32,56 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## `git status --short`
 
 ```
+ M app/api/urls.py
+ M app/api/views_mensageria.py
  M app/config/crons_duracao.json
+ M app/docs/HAIKU-DENTES.md
  M bin/gerar_estado.py
+ M mensageria/nucleo/core_client.py
+ M mensageria/nucleo/ferramentas.py
+?? app/api/tests/test_selo_helper_nao_tem_decorador_de_view.py
 ?? app/inteligencia/management/commands/lavrar_fabrica.py
 ?? bin/fabrica_estado.py
 ?? esteira.pausada
+?? mensageria/nucleo/tests/test_fabrica_ligada.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Medidor único funcionando. Agora o gerar_estado.py para de derivar e passa a ler:
-
-  Ran 1 shell command
-
-● Background command "Empurrar os dois commits" completed (exit code 0)
-
-  Ran 1 shell command
-
-● push35 rc=0 e origin/main = 6944da89, ahead = 0. Conferindo que os três commits estão lá:
-
-  Ran 1 shell command
-
-● Os três estão no remoto. Passo 2 da cadeia — o Django como escritor do snapshot:
-
-  Ran 2 shell commands
-
-● Passo 3 — o endpoint que o Haiku consulta. Vendo o padrão:
-
-  Ran 5 shell commands
-
-● Bug provado no meu caminho: @require_GET está num helper que é chamado sem request (linha 271). Vendo se explode ou se alguém engole:
-
-  Ran 1 shell command
 
 ● Sem guarda no sítio da chamada. Medindo se isso aparece em prod:
 
-● Procurar o endpoint nos logs do container
-  ⎿  $ cd /home/ronald/saas-hasner && ls logs/ | grep -i "access\|caddy" | head; docker logs saas_ui --since 48h 2>&1 | grep -c "prontidao-folha"; docker logs saas_ui --since 48h
-     2>&1 | grep "prontidao-folha" | tail -3
+  Ran 5 shell commands
 
-✢ Misting… (58m 9s · ↓ 96.2k tokens · still thinking)
+● Provado no container de produção: a linha 271 explode com TypeError. Qualquer request no caminho por empresa dá 500, e o Haiku engole isso como core_indisponivel — fica cego sem
+  dizer por quê. Curando na origem:
+
+  Ran 1 shell command
+
+● Selo que morde, por AST (não por regex, que leria minha própria prosa):
+
+  Ran 1 shell command
+
+● Agora o endpoint que o Haiku consulta, lendo os dois snapshots:
+
+  Ran 2 shell commands
+
+● Passo 4 — o lado da mensageria: cliente, bloco e a costura no contexto:
+
+  Ran 1 shell command
+
+● Passo 5 — o golden "a fábrica está ligada?", com o caso que morde:
+
+  Ran 5 shell commands
+
+● Rodando a cadeia inteira de ponta a ponta:
+
+  Rodar api e inteligencia · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=selo bash bin/trava_teste.sh -- docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTE…
+
+✽ Misting… (1h 3m 24s · ↓ 110.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
