@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:24:03.**
+**Medido em 26/09/2026 01:29:03.**
 
 | | |
 |---|---|
@@ -24,51 +24,60 @@ d64f1a53 TICKETS: linha do ESTADO-PUBLICADO que o pre-push cobrou (fatia citada 
 ## `git status --short`
 
 ```
+ M app/api/views_mensageria.py
  M app/colaboradores/services/vinculo.py
+ M app/config/crons.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
  M app/escala/services/cadastro_realidade.py
+ M app/escala/services/vigencia_sem_trilha.py
+ M app/escala/tests/test_cadastro_x_realidade.py
+?? app/escala/management/commands/lavrar_vigencia_impossivel.py
+?? app/escala/services/vigencia_impossivel.py
+?? app/escala/tests/test_contador_vigencia_impossivel.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Relato publicado (145 substituições, 0 vazamento). Agora o item (7) — porta da E1. Medindo os três selos de frota em prod:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● SELO 3 fechado (0). SELO 2 caiu de 15 para 1 colab — e é o col899, exatamente o vínculo que restaurei ontem. Medindo antes de concluir:
-
-  Ran 1 shell command
-
-● Achado: não é bug de fase — é a fronteira entre dois vínculos. Dias 21-24 vêm do ec1311 (6x1) e 25 do ec1310, e meu selo contava a corrida atravessando a troca. Remedindo pelo
-  vínculo gerador, e de passo um censo do cadastro que mente:
-
-  Ran 1 shell command
-
-● SELO 2 = 0 medido corretamente — o "1" era falso positivo do meu próprio selo atravessando a troca de vínculo. E aparece um achado de cadastro: 50 dos 132 templates se declaram
-  12x36/24x48 com jornada < 11h ou folga por dia-da-semana (16 vínculos ativos).
-
-  Searched for 2 patterns, listed 1 directory, ran 7 shell commands
-
-● O golden vive na stack da mensageria (nucleo/ não está neste repo); o que é meu aqui é o número que ela consome. E ele tem de sair da mesma derivação que a lista usa — então o
-  censo vai morar junto da lei:
+● O irmão vigencia_sem_trilha tem a mesma comparação escrita de novo (data_fim__lt=F(...)) — o que acabei de proibir. Ele passa a ler o censo:
 
   Ran 2 shell commands
 
-● Agora o contador de vigia que a tela e o copiloto leem, pelo mesmo censo:
+● Agora o contador novo — vigencia_impossivel, pelo mesmo censo — e o painel que a tela e o copiloto leem:
+
+  Ran 2 shell commands
+
+● Dois selos a acertar: o estrutural do BUG-C (o leitor agora delega) e um novo para o contador:
+
+  Ran 4 shell commands
+
+● Dois pushes simultâneos — o do integrador (mais antigo) e o meu. Isso colide, e a lei é clara: o push do fabricante é dele. Mato o meu:
 
   Ran 1 shell command
 
-● O irmão vigencia_sem_trilha tem a mesma comparação escrita de novo (data_fim__lt=F(...)) — o que acabei de proibir. Ele passa a ler o censo:
+● Um erro no meu fixture: as datas relativas caem em competências diferentes e a interseção não fecha. Datas fixas, determinísticas:
 
-  Running 1 shell command…
-  ⎿  $ sed -n 60,110p escala/services/vigencia_sem_trilha.py
+  Ran 1 shell command
 
-· Quantumizing… (38m 29s · ↓ 114.1k tokens)
+● Registro o achado estrutural que isso expõe:
+
+  Ran 2 shell commands
+
+● Escrevendo a porta da E1 no RELATO, com o veredito de cada selo e o que espera quem:
+
+  Ran 2 shell commands
+
+● Commitando o trabalho em voo enquanto a fila está com o integrador:
+
+● Running 1 shell command…
+
+✢ Quantumizing… (43m 29s · ↓ 133.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

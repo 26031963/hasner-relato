@@ -1,5 +1,70 @@
 # RELATO — esteira saas-hasner
 
+## PORTA DA ESPELHO-VERDADE-E1 — **INCOMPLETA**: 2 dos 3 selos em zero, o terceiro espera o seu `!`
+
+Medido em prod 26/09 01:2x, competencia corrente 21/09-20/10, chamando as funcoes reais.
+
+| selo de frota da porta | medido | veredito |
+|---|---|---|
+| **1. vinculo com `data_fim` < `data_inicio`** | **53** vinculos, **51** colabs, **0 ativos** | **ABERTO — espera `!`** |
+| **2. 12x36/24x48 com 3+ `trabalha` seguidos** | **0** de 334 colabs | **FECHADO** |
+| **3. dia de colab ativo com vinculo vigente e sem previsao valida** | **0** sem celula, **0** com celula de vinculo invalido | **FECHADO** |
+
+### O selo 2 me deu um falso positivo, e o falso positivo era meu
+
+A primeira medicao disse **1 colab (col899)**. Investigado antes de escrever: `ec1311` (6x1) gera 21 a
+24/09 como trabalho, `ec1310` (12x36) assume em 25/09 -- a corrida `TTTTT` atravessa a **troca de
+vinculo**, e num 6x1 quatro dias seguidos de trabalho e o esperado. Meu selo contava a corrida no
+colaborador, ignorando quem GEROU cada dia. Remedido por vinculo gerador: **0**. O numero anterior (15
+vinculos, antes do O37) tinha o mesmo vies, entao a queda real e maior do que 15 -> 1.
+
+### Item por item: RED, cura e commit
+
+| item | RED | commit | estado |
+|---|---|---|---|
+| O50 escritor unico de vigencia | 9 portas escreviam `data_fim`, 5 sem guarda | `f516ad50` | **no ar** |
+| O37 fase do 12x36 pela foto | col418 `T.T...TTTTTTTTTT` (foto parcial virava trabalho) | `a5cd3d39`+`1e1338d7` | **no ar**, 82 celulas |
+| fase_conflitante (contador) | foto e ancora discordam em 71 dias e ninguem contava | `a6705443` | **no ar** |
+| **BUG-A** dado+trilha no mesmo `atomic` | `ec835`: `update()` passou, `registrar_log` estourou (`%` no motivo) -> zero trilha | `48c490bb` | **no ar** |
+| **BUG-B** a lavra diz QUEM barrou | a frase cravava "exportada" para toda janela lavrada | `890570b4` + cauda | **no ar** |
+| **BUG-C** a lista ve a vigencia impossivel | 47 de 51 colabs invisiveis na unica lista de cadastro x realidade | `6abe6223` | **no ar** |
+| **BUG-D** `objeto_id` sem ambiguidade | 626 ids existem como vinculo E como colaborador; 1.377 linhas indistinguiveis | neste lote | **no ar** |
+| contador `vigencia_impossivel` | "quantos vinculos com vigencia impossivel?" nao tinha UMA resposta | neste lote | **no ar** |
+
+### O que e MEU e esta fechado
+
+Os tres leitores da vigencia impossivel -- a lista (`C1`), o contador de vigia e quem medir a mao --
+passaram a ler **um censo so**, que fica ao lado da lei (`vinculo.py::vigencias_impossiveis`, chamando
+`validar_vigencia`). Achei **uma terceira** escrita da mesma lei no caminho: `vigencia_sem_trilha`
+tambem filtrava `data_fim__lt=F('data_inicio')` por conta propria, e era ele que decidia o que SAI do
+numero -- divergir ali move o passivo sem ninguem ver. Curado no mesmo ato, com selo estrutural que
+cobra os tres.
+
+### O que espera o `!` do Ronald
+
+1. **Saneamento dos 53 + `CheckConstraint`.** Com a correcao que publiquei: **12** tem resolucao unica
+   pela trilha (`valor_antes` com `data_fim`, backfill do BUG 95) -- **nao toquei**. **38** cruzam
+   competencia exportada e sao **PROIBIDOS**. Sobram 3.
+2. **Os 8 dias da emp4** (`emp4-8-dias-lavrados-por-holerite`): o aval era condicional ao BUG-B, e o
+   BUG-B nao era a trava -- eles estao lavrados por **holerite publicado**. Reabrir exige
+   `apesar_da_lavra` com motivo escrito.
+3. **`bin/crons.sh install`** (`cron-host-diverge-do-codigo`): instalar liga `reverter_situacao_afastado
+   --apply`, que esta declarado e desligado, e apaga `alarme_sem_fatia.sh`, que roda e nao e declarado.
+
+### O que espera o ADMIN (nao voce)
+
+Os **19 do GRUPO B** (colab com outro vinculo ativo) e os **14** que nao apareciam na lista unica --
+esses ja **aparecem** desde o BUG-C, com `ec<pk>` e as duas datas, e com botao.
+
+### Achado novo, medido, nao comecado
+
+**50 dos 132 templates se declaram `12x36`/`24x48` e nao parecem**: jornada abaixo de 11 h ou folga por
+dia-da-semana (te#230 `PAI-12x36.37`: 480 min e folga no sabado; te#277: 480 min e folga no domingo).
+**16 vinculos ativos de colab ativo** sob eles. Se o ciclo declarado mente, a fase, a hora reduzida e o
+adicional noturno saem do ramo errado -- e foi um desses (te#230) que produziu o falso positivo do selo
+2. Nao e correcao minha: e cadastro, e precisa de decisao de quem o mantem. Registrado.
+
+
 ## BUG-C — a unica lista de "cadastro x realidade" nao via a classe mais crua do cadastro
 
 RED medido em prod 26/09, e **maior do que o que eu publiquei**: eu disse "os 14". Os 14 eram o recorte
