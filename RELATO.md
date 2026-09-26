@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+PAREI: e3-parei-a-flag-nao-carrega-decisao | espera Ronald (decisao de origem, -663,24 h)
+
 ## PAREI — ESPELHO-VERDADE-E3: o DIFF esta pronto, e ele diz **-663,24 h**. Nao aplico.
 
 **O DIFF** (sombra, motor de HEAD x motor curado, **duas arvores e UMA trava**, `atomic()+rollback`,
@@ -34,9 +36,11 @@ templates da mesma familia `PAI-12x36.*`, mesmo ciclo, mesma jornada, mesmo inte
 em lados opostos -- e o unico traco que os separa e ter sido cadastrado com janela (`fixo`) ou com
 duracao. Ninguem esta registrado como tendo escolhido isso.
 
-E o lado juridico fecha contra: **no 12x36 que NAO goza o intervalo, a Sum.437/Art.71 §4 manda
-indenizar**, e eu medi **602 dias** em comp 09 desses mesmos colaboradores com o marco de intervalo
-APAGADO. Retirar o pagamento neles nao seria economia: seria erro com exposicao.
+**CORRECAO DE UM EXCESSO MEU, antes que voce o encontre**: eu escrevi que os **602 dias** em comp 09
+com o marco de intervalo APAGADO provariam exposicao juridica. Nao provam -- e eu estava tratando "nao
+batido" como "suprimido", que e exatamente a pergunta em disputa: sob pre-assinalacao, nao batido e o que
+se PRESUME gozado. Os 602 mostram que a pergunta esta ABERTA em muitos dias, nao que a resposta seja
+uma. O que sustenta o PAREI e o outro argumento, e ele basta: **a flag nao carrega decisao**.
 
 ### O que eu preciso de voce -- e nao e "aplica ou nao"
 
@@ -60,7 +64,7 @@ vivo) e em qualquer recalculo de fechamento. Eram 02:45 quando eu medi isso.
 
 Entao a cura saiu da arvore e esta guardada em TRES formas, com md5:
 `motor_calculo_v2.py.CURA`, `test_e3.py.CURA` e `e3.patch` (44 linhas), em
-`scratchpad/e3_parada/`. **Prova**: `app/ponto/motor_calculo_v2.py` e byte a byte o de `HEAD`, e o
+**`/tmp/e3_parada_2609/`** (convencao da casa, como o `/tmp/tela_quebrada_2509/`). **Prova**: `app/ponto/motor_calculo_v2.py` e byte a byte o de `HEAD`, e o
 `grep` de `intervalo_indenizavel` nele da **0**.
 
 Registro a tensao com a propria lei, porque ela existe: "voltar ao HEAD arquivo que prod usa" esta na
@@ -205,11 +209,23 @@ diferenca e tudo: codigo commitado nao mudou nada para o colaborador nem para o 
 | **BUG-D** `objeto_id` sem ambiguidade | 626 ids existem como vinculo E como colaborador; 1.377 linhas indistinguiveis | neste lote | **commitado, nao deployado** |
 | contador `vigencia_impossivel` | "quantos vinculos com vigencia impossivel?" nao tinha UMA resposta | neste lote | **commitado, nao deployado** |
 
-**QUANDO SOBE**: depois da suite verde e do push, por `bin/deploy.sh` com o ensaio de sombra que se
-refaz sozinho as 04:15. Nenhuma destas fatias mexe em calculo de dinheiro -- a que mexeria e a E3, e a
-porta dela e o DIFF na sombra com o seu `!`. A unica coisa que JA esta na tela e o template do BUG-C
-(bind-mount vale na hora), e ele foi provado contra o payload velho na casca do ui: 82.067 bytes, sem
-erro, sem janela de 500.
+**QUANDO SOBE -- E EU TINHA ESCRITO ERRADO.** Esta linha dizia "por `bin/deploy.sh` com o ensaio das
+04:15". **Nao e isso**: `config/crons.py:116` agenda `bin/deploy.sh --reload-agendado` as **03:30**, e
+li o codigo (`bin/deploy.sh`, ramo `AGENDADO=1`): a UNICA guarda dele e migration pendente, e nenhuma
+destas fatias tem migration. O HUP e gracioso e o worker novo importa do disco (`preload_app=False`),
+entao **tudo o que eu commitei hoje entra no ar as 03:30**, sem `deploy.sh` na mao. Eu descobri isso ao
+decidir o que fazer com a E3, e a conclusao vale para o lote inteiro -- por isso a coluna acima nao diz
+mais "nao deployado".
+
+**E isso e seguro, dito com o motivo de cada uma**: BUG-A e BUG-D mexem em TRILHA; BUG-B em MENSAGEM e
+numa chave de trilha; BUG-C acrescenta uma classe a uma LISTA de leitura; o juiz da E2 **nao tem
+consumidor** (nenhum leitor o chama ainda, efeito zero); os tres contadores so rodam por cron (nao
+instalado) ou a mao; a anotacao de tipo em `escala/models.py` nao muda comportamento. **Nenhuma toca
+calculo de dinheiro** -- a que tocaria era a E3, e e exatamente por isso que eu a tirei da arvore. A
+suite de **8.323 testes** passou sobre todas elas (corrida do integrador, verde).
+
+O template do BUG-C ja estava na tela desde o commit (bind-mount vale na hora) e foi provado contra o
+payload velho na casca do ui: 82.067 bytes, sem erro, sem janela de 500.
 
 ### O que e MEU e esta fechado
 
@@ -222,9 +238,13 @@ cobra os tres.
 
 ### O que espera o `!` do Ronald
 
-1. **Saneamento dos 53 + `CheckConstraint`.** Com a correcao que publiquei: **12** tem resolucao unica
-   pela trilha (`valor_antes` com `data_fim`, backfill do BUG 95) -- **nao toquei**. **38** cruzam
-   competencia exportada e sao **PROIBIDOS**. Sobram 3.
+1. **Saneamento dos 53 + `CheckConstraint`.** **CORRECAO DE UM NUMERO QUE EU PUBLIQUEI**: eu disse que
+   **38** dos 53 cruzam competencia lavrada e sao proibidos. Os 38 eram de OUTRO conjunto (os 81 destinos
+   do esmeril, da medicao do saneamento), e eu os carreguei para o contexto dos 53. Medido agora pelo
+   contador novo, chamando a autoridade da porta (`_competencias_exportadas`, exportacao OU holerite
+   publicado): dos 53, **11 cruzam** (`ec550 ec1055 ec1056 ec1057 ec1061 ec1064 ec1068 ec1069 ec1072
+   ec1073 ec1158`) e **42 NAO cruzam**. O passivo e bem mais acionavel do que eu disse. Dos 53, **12**
+   tem resolucao unica pela trilha (backfill do BUG 95) -- **nao toquei**, esperam voce.
 2. **Os 8 dias da emp4** (`emp4-8-dias-lavrados-por-holerite`): o aval era condicional ao BUG-B, e o
    BUG-B nao era a trava -- eles estao lavrados por **holerite publicado**. Reabrir exige
    `apesar_da_lavra` com motivo escrito.
