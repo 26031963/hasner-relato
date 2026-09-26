@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:33:01.**
+**Medido em 26/09/2026 14:38:29.**
 
 | | |
 |---|---|
@@ -49,6 +49,7 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O archive só traz app/ — os selos de host moram na árvore real, e eles não são servidos por prod:
 
   Ran 1 shell command
 
@@ -76,12 +77,11 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● 96,4% das batidas têm segundos, e a ata guarda HH:MM. Achei um defeito meu de desenho: eu estava usando a ata para a aritmética quando ela só responde qual marco a batida
   cumpriu. O instante é da Batida:
 
-● Suites de dinheiro com o instante da Batida · 1m 6s
+  Suites de dinheiro com o instante da Batida
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=o60 bash bin/trava_teste.sh -- docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTEC… (1m 5s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTEC…
 
-✢ Concocting… (1h 30m 32s · ↓ 99.9k tokens)
+✶ Concocting… (1h 36m 1s · ↓ 99.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
