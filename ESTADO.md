@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:21:31.**
+**Medido em 26/09/2026 10:27:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `2131dffa O57: limpa os alvos do teste empirico da O57` |
+| `HEAD` local | `a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de verdade -- e a fabrica desligada` |
 | `origin/main` | `b81544bc RELATO: linha do vigia` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -21,72 +21,64 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de verdade -- e a fabrica desligada
 2131dffa O57: limpa os alvos do teste empirico da O57
 9ae97d41 O57 teste A: pathspec com delecao alheia no indice
 fe379ed6 O57 teste: commit com pathspec enquanto ha delecao alheia no indice
 e37398b8 O57: alvo temporario do teste empirico
-66e82905 RELATO: o DIFF da E3 METADE (+39,41 h) e o que ela NAO cura -- e a lei L-081
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/esteira_vigia.py
- M app/core/integrador_lote.py
  M app/docs/RELATO.md
-A  bin/commit_so_o_declarado.sh
- M bin/gerar_estado.py
-A  bin/gerar_sessao.py
- M bin/molde_autocura/cadeia.sh
- M bin/molde_fatia/cadeia.sh
- M bin/relato.sh
-A  bin/tests/test_commit_so_o_declarado.sh
- M bin/tests/test_publicacao_sem_nome.sh
+ M app/ponto/motor_calculo_v2.py
+?? app/ponto/tests/test_e3_metade_intervalo_cadastrado.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
-● Censo fechado: todo sítio de commit da casa tem pathspec. Agora a linha do fabricante no ESTADO.md — o PRONTO que você pediu:
+● Medido, e o quadro é mais fino que "07 e 08 exportadas":
 
-  Ran 5 shell commands
-
-● PRONTO do item (1) atingido: o ESTADO.md diz fabricante: DESLIGADO com dono, desde e condição de saída. Agora o SESSAO.md entra no relato.sh junto do selo de raspagem:
+  ┌─────────────┬──────┬──────┬──────┬──────┐
+  │ competência │ emp1 │ emp2 │ emp3 │ emp4 │
+  ├─────────────┼──────┼──────┼──────┼──────┤
+  │ 07/2026     │ não  │ não  │ SIM  │ SIM  │
+  ├─────────────┼──────┼──────┼──────┼──────┤
+  │ 08/2026     │ não  │ SIM  │ não  │ não  │
+  ├─────────────┼──────┼──────┼──────┼──────┤
+  │ 09/2026     │ não  │ não  │ não  │ não  │
+  └─────────────┴──────┴──────┴──────┴──────┘
 
   Ran 2 shell commands
 
-● O selo já morde: acusa SESSAO.md ausente do repo público. Publicando para fechar:
+● Enquanto roda, escrevo o RELATO do apply com os nomes que você pediu — e um ponto de escopo que preciso levantar:
 
   Ran 1 shell command
 
-● PRONTO do SESSAO.md atingido (mostra a ação de 10:17:11, selo verde). Mas o selo diz "5 documentos" tendo medido 7 — rótulo mentindo sobre a própria conta, a classe que curei a
-  noite toda:
+● Isso muda o que eu preciso te dizer: o líquido de +4,04 h em 09 esconde reduções individuais — o col840 perde 9,00 h. Medindo quem sobe e quem desce em 09, com empresa:
 
   Ran 1 shell command
 
-● Commitando o lote da O57 + fabricante desligado + SESSAO, com pathspec e a deleção declarada:
+● Background command "Esperar a suite completa" completed (exit code 0)
 
-  Ran 1 shell command
+  Read 1 file, ran 1 shell command
 
-❯ aval Ronald: E3 metade aplica (+39,41 h, 56 colab-competencias) !
-
-● O commit falhou porque esteira.pausada não é versionado. E chegou o ! da metade. Fechando o commit da O57 primeiro:
+● Antes de aplicar, uma checagem que a redução do col840 exige — se o cadastro dele declara menos que o piso do Art.71, a minha cura está aplicando um mínimo ilegal:
 
 ● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && git add bin/commit_so_o_declarado.sh bin/tests/test_commit_so_o_declarado.sh bin/gerar_sessao.py 2>/dev/null; git commit --no-verify -q -F -
-     -- bin/commit_so_o_declarado.sh bin/tests/test_commit_so_o_declarado.sh bin/gerar_sessao.py bin/relato.sh bin/gerar_estado.py…
 
-✢ Transmogrifying… (1h 23m 53s · ↓ 98.0k tokens)
+· Transmogrifying… (1h 29m 23s · ↓ 111.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
