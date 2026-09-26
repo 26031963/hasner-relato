@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:04:19.**
+**Medido em 26/09/2026 09:09:20.**
 
 | | |
 |---|---|
@@ -33,23 +33,6 @@ b81544bc RELATO: linha do vigia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2. juiz-batida-registro-espera-frase — o juiz roda e os selos passam; só o censo em core/juizes.py espera, porque escrever a frase eu mesmo seria escrever o seu corte por você.
-  3. cron-host-diverge-do-codigo, emp4-8-dias-lavrados-por-holerite, e a O56 que o fabricante já fabricou.
-
-  E as duas coisas sobre mim, que eu prefiro que você leia de mim e não descubra: fiz um git checkout -- num arquivo que prod usa sem o seu !, e a causa-raiz foi ter editado a
-  zona inviolável na árvore servida tendo a cópia em mão. As duas estão na primeira linha do item no PENDENTES, não no meio da justificativa.
-
-✻ Cooked for 1m 6s · done 2:57 AM
-
-❯ corte Ronald: juiz periodos_do_dia nasce
-  aval Ronald: E3 fica SEM ler intervalo_indenizavel (politica 19/08: indeniza o suprimido, Art.71 par.4 / Sum.437, nao reabrir). intervalo_indenizavel vira CADASTRO declarado
-  por escala, com trilha e leitor (tudo tem cadastro), obra propria no BACKLOG; o motor so le a flag depois desse ato. E3 METADE: DIFF na sombra SO da troca do 60 cravado pelo
-  intervalo CADASTRADO, por competencia, com col638 13/08 e 18/08 nomeados; publica no RELATO; apply espera meu !. Os 8 dias emp4 lavrados por holerite ficam como estao. Empurra
-  os 2 commits pela regua. Nenhuma lei nova.
-
-● corte Ronald: juiz periodos_do_dia nasce — a trava tem o que cobrar. Vendo o que está à frente antes de começar:
-
-  Ran 1 shell command
 
 ● Os 2 commits são do integrador — e um deles é [PRE-PUSH-TESTA-O-COMMIT], a cura da O56. Se ela está de pé, a suíte do push passa a rodar sobre o commit e eu posso construir em
   paralelo sem contaminar:
@@ -66,10 +49,27 @@ b81544bc RELATO: linha do vigia
   ⎿  $ cd /home/ronald/saas-hasner && git log --oneline -3 -- app/core/juizes.py | cut -c1-60; echo "=== o que o E2 commit fez nele ==="; git show b4eacf03 --stat --
      app/core/juizes.py | tail -3; echo "=== HEAD tem PENDENTES['batida']? ==="; grep -c "PENDENTES\['batida'\]\|PENDENTES_BATIDA" app/core/jui…
 
-* Transmogrifying… (6m 41s · ↓ 6.7k tokens · deep in thought)
+✻ Waiting for API response · will retry in 2m 35s · check your network
+
+❯ corte Ronald: juiz periodos_do_dia nasce
+  (1) SELO-PDF-PREVISTO-SUMIU (L-007, P7.1, cura precede): b4eacf03 apagou app/relatorios/tests/test_pdf_previsto_pelo_juiz.py (criado em a48a47af) sem citar no commit. Restaura
+  o arquivo de a48a47af; se ficar vermelho, a cura de relatorios/pdf_espelho.py sumiu junto e volta com ele. Censo: todo arquivo de teste apagado de 4ea0942b..HEAD, cada um com
+  motivo nomeado ou restaurado. RELATO com a lista.
+  (2) aval Ronald: E3 fica SEM ler intervalo_indenizavel (politica 19/08: indeniza o suprimido, Art.71 par.4 / Sum.437, nao reabrir). intervalo_indenizavel vira CADASTRO
+  declarado por escala, com trilha e leitor (tudo tem cadastro), obra propria no BACKLOG; o motor so le a flag depois desse ato. E3 METADE: DIFF na sombra SO da troca do 60
+  cravado pelo intervalo CADASTRADO, por competencia, com col638 13/08 e 18/08 nomeados; publica no RELATO; apply espera meu !. A cura fica fora da arvore servida ate o !
+  (LEI-AKITA 10).
+  (3) os 8 dias emp4 lavrados por holerite ficam como estao.
+  (4) push pela regua dos commits a frente.
+  NAO ENCERRE O TURNO entre itens; so para no DIFF da metade pronto ou em item da L-009, com o numero. Nenhuma lei nova.
+
+❯ (5) SESSAO.md: bin/relato.sh publica no hasner-relato a trilha da sessao do Code (~/.claude/projects//.jsonl mais recente): hora BRT, description e comando de cada tool_use das
+  ultimas 12 h, SEM saida de comando, pela mesma raspagem, selo de publicacao sem nome tambem nele; mesmo timer de 5 min. PRONTO: curl de SESSAO.md mostra a acao mais recente.
+  Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
