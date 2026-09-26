@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:43:45.**
+**Medido em 26/09/2026 14:49:01.**
 
 | | |
 |---|---|
@@ -49,22 +49,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo verde na árvore. Agora o segundo selo — motor que pareia pelo tipo gravado:
-
-  Ran 1 shell command
-
-● Agora o DIFF de três colunas, que é o PRONTO da ordem. Uma corrida por motor, mesmo gravado de base:
-
-  Ran 2 shell commands
-
-● Coluna do motor de HEAD medida, rollback provado nas três competências. Agora o motor novo:
-
-  Ran 2 shell commands
-
-● O DIFF saiu grande — e antes de publicar preciso testar uma suspeita minha: a luz da ata é HH:MM, então a reconstrução do instante perde os segundos. Se as batidas têm segundos,
-  isso é viés sistemático:
-
-  Ran 1 shell command
 
 ● 96,4% das batidas têm segundos, e a ata guarda HH:MM. Achei um defeito meu de desenho: eu estava usando a ata para a aritmética quando ela só responde qual marco a batida
   cumpriu. O instante é da Batida:
@@ -77,16 +61,32 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Contrato e selos verdes. Refazendo o DIFF com o instante vindo da Batida:
 
-● Refazer o DIFF do motor novo
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo v2" && docker run --rm --cpuset-cpus
-     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=con…
+  Ran 2 shell commands
 
-* Concocting… (1h 41m 17s · ↓ 103.8k tokens)
+● A correção dos segundos cortou o ruído (trabalhadas: 426 → 132 colabs em 09). Medindo a direção do que sobrou, que é a frase mais importante da tabela:
+
+  Ran 1 shell command
+
+● O quadro fechou, e é grande: 164 colaboradores tinham turno deixado ABERTO pelo pareamento por tipo gravado (101 em 08, 63 em 09), e esses dias valiam +2.399 h trabalhadas.
+  Rodando a suíte inteira enquanto escrevo:
+
+● Publicar o PAREI com a tabela de tres colunas
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/RELATO.md'
+     s=open(f,encoding='utf-8').read()
+     cab='# RELATO — esteira saas-hasner\n'
+     L=[];A=L.append
+     A('')
+     A('## PAREI: E3 COMPLETA medida, e ela NAO e cirurgica | espera `!` de criterio (L-082) | O60')
+     A('')
+     A('A cura esta pronta e verde. O DIFF na sombra diz que ela mex…
+
+· Concocting… (1h 46m 32s · ↓ 111.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

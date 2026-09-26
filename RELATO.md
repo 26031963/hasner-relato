@@ -1,5 +1,100 @@
 # RELATO — esteira saas-hasner
 
+## PAREI: E3 COMPLETA medida, e ela NAO e cirurgica | espera `!` de criterio (L-082) | O60
+
+A cura esta pronta e verde. O DIFF na sombra diz que ela mexe em MUITO mais do que o campo-alvo, e
+por isso nao aplico: o `!` de criterio pede que todo campo fora do alvo de todo colab de zero, e aqui
+nao da. **Nada foi aplicado em prod.**
+
+### O que a cura faz, e o achado que ela expoe
+
+O motor parou de decidir o papel da batida pelo campo `tipo` e passou a ler o MARCO que ela cumpriu,
+pelo juiz da ata (`ponto/juiz_batida.py::periodos_do_dia`). O caso col369 de 23/09 era o exemplo;
+medido, ele e uma CLASSE:
+
+| competencia | `turnos_abertos` | colabs com turno que agora FECHA | `horas_trabalhadas` | `horas_extras` |
+|---|---:|---:|---:|---:|
+| 07/2026 | −2 | 1 | +12,47 h | +26,25 h |
+| 08/2026 | **−231** | **101** | **+1.451,44 h** | +199,51 h |
+| 09/2026 | **−175** | **63** | **+948,43 h** | +244,64 h |
+
+**164 colaboradores** tinham turno deixado em ABERTO pelo pareamento por tipo gravado, e esses dias
+valiam **+2.399 h** de trabalho nas duas competencias. Nao e ajuste de arredondamento: e jornada
+inteira que nao era contada porque a batida foi gravada com o tipo oposto ao marco que ela cumpriu.
+Em nenhuma competencia o numero anda para o outro lado -- `turnos_abertos` **so cai** (0 colabs em que
+sobe), que e a assinatura de cura e nao de troca de criterio.
+
+### O DIFF de tres colunas, no campo-alvo `horas_intra_indenizada`
+
+DERIVA = gravado x motor de HEAD (o fechamento esta velho). CURA = motor HEAD x motor novo. TOTAL = soma.
+
+| competencia | empresa | DERIVA | CURA | TOTAL | colabs der/cura |
+|---|---|---:|---:|---:|---:|
+| 07/2026 | 2 | +2,67 | +0,00 | +2,67 | 212/2 |
+| 07/2026 | 3 | −45,49 | −3,00 | −48,49 | 125/32 |
+| 07/2026 | 4 | −2,92 | +0,00 | −2,92 | 24/5 |
+| **07/2026** | **total** | **−45,74** | **−3,00** | **−48,74** | |
+| 08/2026 | 2 | −116,69 | +360,62 | +243,93 | 334/188 |
+| 08/2026 | 3 | +23,29 | +83,45 | +106,74 | 86/54 |
+| 08/2026 | 4 | −10,80 | +42,00 | +31,20 | 18/7 |
+| **08/2026** | **total** | **−104,20** | **+486,07** | **+381,87** | |
+| 09/2026 | 2 | −6,26 | +345,53 | +339,27 | 41/156 |
+| 09/2026 | 3 | +16,50 | +61,16 | +77,66 | 11/44 |
+| 09/2026 | 4 | +0,80 | +36,62 | +37,42 | 3/9 |
+| **09/2026** | **total** | **+11,04** | **+443,31** | **+454,35** | |
+
+Colabs sem `FechamentoMensal` que o motor CRIARIA: **93** em 07, **39** em 08, **4** em 09. Eles nao
+aparecem em DIFF por campo (nao tem "antes") e por isso estao nomeados aqui: sem esta linha, quem
+nunca foi medido desapareceria justamente da conta que decide.
+
+E a metade da JORNADA nao moveu dinheiro nenhum: `horas_falta` e `horas_abono` deram **exatamente
+zero** nas tres competencias. Falta e abono pararam de ser "contagem x jornada do template" e
+passaram a somar o previsto de cada dia -- e nestas competencias as duas contas coincidem. A cura
+esta certa e o efeito e futuro; quem move o numero hoje e a outra metade, a dos periodos.
+
+### Tres bugs MEUS no caminho, os tres medidos e curados antes desta tabela
+
+1. **Tratei "nao ha juiz" como "jornada zero"** e zerei a hora extra de **16 selos** numa rodada.
+   Motor sem colaborador -- e motor com `colaborador_id` que o banco nao conhece -- nao tem
+   autoridade a consultar; isso e `None`, nao `0`. `0` e veredito do juiz (folga, sem escala vigente,
+   template incompleto). A porta `_jornada_do_dia` e o unico sitio que trata o `None`, e os dias
+   assim vao para `_dias_sem_juiz`, que **no caminho do dinheiro tem de ser zero**.
+2. **Curto-circuitei o memo antes de consulta-lo**: dois selos da v3 cairam dizendo "o piso veio do
+   lixo" quando o que eu fazia era jogar fora a resposta do juiz que estava na mao.
+3. **Usei a ata para a ARITMETICA, e ela so serve para o PAPEL.** A `luz` da ata e `HH:MM`; medido na
+   sombra, **96,4% das 27.013 batidas** apuraveis de 09 tem segundo != 0. Calcular com o instante
+   reconstruido truncava ate 59 s por batida e aparecia no DIFF como deslocamento de
+   `horas_trabalhadas` em **426 dos 607** colabs -- vies que parecia cura. Agora a ata diz QUEM e a
+   entrada e QUEM e a saida, e o instante vem da propria `Batida`: o mesmo DIFF caiu para 132 colabs,
+   e o que sobrou tem explicacao (sao os turnos que FECHAM).
+
+### Cobertura declarada, nao suposta
+
+- **turno partido fica FORA** do juiz da ata: nele os marcos `hii`/`hfi` DIVIDEM BLOCOS (o motor
+  declara `AUT_MARCOS_INTERVALO=False`), enquanto o juiz le `hi..hf` como um periodo com intrajornada
+  no meio. Medido: aplicar o juiz la fundiu os blocos e a HE50 do dia caiu de 30 para 0 min. Contado
+  em `_dias_partido_fora_do_juiz`.
+- **dia sem celula, dia desalinhado e dia em aberto** seguem com a autoridade de geometria -- a unica
+  fonte que existe para eles. Nao e fallback: nao ha duas regras para o mesmo dia, ha dias com ata e
+  dias sem ata.
+- **lampada sem a `Batida` correspondente**: o dia nao entra, porque calcular dinheiro com instante
+  truncado e o bug 3 de novo. Contado em `_dias_luz_sem_batida`.
+
+### O que espera o `!`
+
+Aplicar em **09/2026** (07 e 08 viram Pauta DP, gravado intocado). O numero do aval, se vier, e
+**+443,31 h de cura** no campo-alvo, e a tabela acima e o escopo literal: a cura tambem move
+`horas_trabalhadas` (+948,43 h), `horas_extras` (+244,64 h) e `turnos_abertos` (−175) em 09 --
+nenhum desses e "campo fora do alvo que deu zero", entao a L-082 nao cobre e a L-009 manda.
+
+PROVA: DIFF na sombra (carimbo `dia=20260926 tipo=completa diverge=0`), duas corridas -- uma por
+arvore, `origin/main` e a arvore curada --, as duas chamando `recalcular_fechamento_mes` dentro de
+`atomic()` com `raise` no fim. Rollback provado em cada uma: **629/629** linhas de 07, **618/618** de
+08 e **603/603** de 09 identicas ao inicio. Selos: `ponto.tests.test_e3_completa_o_marco_manda` (10
+casos) e `test_selo_motor_nao_pareia_pelo_tipo_gravado` (8, com o par que morde) VERDES; divida
+`dinheiro_le_jornada_lixo` de **18 para 5** linhas de codigo, e a contagem parou de somar comentario.
+
+
 ## Pauta DP de 07/08: SUSPENSA por aval (26/09 ~13:5x) | dono Ronald | saida = o DIFF da O60
 
 O PAREI abaixo foi RESPONDIDO no mesmo turno. A Pauta nao esta parada sem dono: ela esta suspensa
