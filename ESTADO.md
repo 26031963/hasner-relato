@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:05:31.**
+**Medido em 26/09/2026 15:10:44.**
 
 | | |
 |---|---|
@@ -36,46 +36,47 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Falta empurrar 06311b07 — estou esperando a suíte de fundo liberar o banco de teste para não queimar a tentativa com rc=75.
-
-✻ Worked for 1h 53m 48s · done 2:56 PM
-
-❯ E3-COMPLETA antes do !: (1) AMOSTRA: 5 dos 63 de 09 (maiores deltas, empresas diferentes), dia a dia: batidas reais com hora, marco que cada uma cumpriu, turno que estava
-  aberto e horas que entram -- prova de dia trabalhado, nao batida espuria sendo pareada. (2) 08 foi fechada A MAO pelo admin e enviada ao Dominio: a Pauta de 08 compara o motor
-  curado com o que foi PAGO (recibo do Dominio, se existir), nunca com o nosso gravado; sem recibo, lista por colab para o DP conferir. PAREI com a amostra; o ! vem depois dela.
-  Nenhuma lei nova.
-
-● Ordem recebida. Registrando e escolhendo a amostra pelos dados que já tenho:
+● Contrato verde. Agora a amostra dia a dia:
 
   Ran 1 shell command
 
-● Amostra: col107 (emp3), col51 (emp4), col736 (emp2), col87 (emp3), col255 (emp2) — três empresas, deltas de +29 a +42 h. Agora a sonda dia a dia:
-
-  Ran 1 shell command
-
-● Background command "Suite completa contra a arvore curada" completed (exit code 0)
-
-  Ran 1 shell command
-
-● A suíte inteira: 8.362 testes, 1 vermelho — meu comando novo sem casa. Dou a ele um cron de verdade, que é o que um censo datado pede:
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● Preciso do mapa real, não de chute — o teste conhece as durações medidas:
+● A amostra está respondendo exatamente o que a ordem pediu. Vendo o resto:
 
   Ran 2 shell commands
 
-● Contrato verde. Agora a amostra dia a dia:
+● A amostra fecha em três e não fecha em dois (col87 explica só metade do delta). A causa é minha: usei um proxy para "estava aberto" em vez de perguntar à autoridade real.
+  Refazendo com o pareador de verdade:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Twisting… (5m 56s · ↓ 11.1k tokens)
+● A amostra ainda não fecha porque eu inferia os dias em vez de medir os dois motores. Medindo minuto a minuto, uma corrida por árvore:
+
+  Ran 3 shell commands
+
+● Achei algo grave no meu próprio DIFF. Os dias que ganham +48 a +61 min com o MESMO par (col87 30/08: 10:01-13:57, 14:57-18:19 → 10:01-18:19) perderam o intervalo no meio.
+  Medindo o que o juiz devolve nesses dias:
+
+  Ran 1 shell command
+
+● Confirmado, e é defeito meu: nesses dias o DNA da célula tem só dois marcos (hi, hf), então as batidas de intervalo (13:57/14:57) ficam órfãs na ata — e eu fundia o dia num
+  período só, jogando o intervalo fora. O DIFF que publiquei está inflado por isso. A fronteira honesta:
+
+● Guarda da orfa e remedir os cinco · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
+     f='app/ponto/motor_calculo_v2.py'
+     s=open(f,encoding='utf-8').read()
+     velho = """ if resp.get('desalinhado') or resp.get('em_aberto'):"""
+     novo = """ # A ATA SO DECIDE O DIA QUANDO EXPLICA TODAS AS BATIDAS DELE. Se sobrou batida sem marco, ela
+     # esta …
+
+✶ Twisting… (11m 9s · ↓ 26.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
