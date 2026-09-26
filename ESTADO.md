@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:30:31.**
+**Medido em 26/09/2026 18:33:31.**
 
 | | |
 |---|---|
@@ -39,40 +39,40 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  09/2026 LIBERADA
 
-  Ran 1 shell command
+  ┌───────────────────────────────┬───────────────────────────────────────────────────────────┐
+  │             prova             │                          número                           │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
+  │ cartao_x_txt_divergentes      │ 0 (203 no TXT)                                            │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
+  │ pdf_x_espelho_divergentes     │ 0 (203 medidos)                                           │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
+  │ recálculo imediatamente antes │ zero movimento (607 colabs × 27 campos, rollback 607/607) │
+  └───────────────────────────────┴───────────────────────────────────────────────────────────┘
 
-● Todas as 68 caem no mesmo dia, 20/09 — o último da competência, onde o PDF tem minutos e o espelho tem 0. É artefato da minha chamada: passei hoje=fim, e o espelho trata hoje
-  como o dia corrente. Corrigindo:
+  Antes disso, a O66 ficou medida e o número dela é duro: celula_furo_sem_canal = 68 em 09 (emp2 67, emp3 1, emp4 0) — 68 dias em que a casa acusa e ninguém pode resolver. E 509
+  chamados fechados com célula ainda acusando: 220 por admin (humano), 130 sistema + 130 cascade (automatismo). Declarei a divergência com os 66 da sua ordem em vez de forçar o
+  número. A FONTE está nomeada: chamados/models.py:652::encerrar é o principal, e a própria docstring entrega — "fecha qualquer estado != fechado, sem guard, sem raise". Nenhum
+  fechador consulta o veredito; todos perguntam ao juiz de estado, que responde outra pergunta.
 
-  Ran 1 shell command
+  O caso [nome] está registrado como O67 com o desenho da sua segunda mensagem: cada item vira contador de frota na competência 09, o Jean é o RED e a cura vai na origem da
+  classe — (1) tipo trocado não corrigido, (2) celula_veredito_velho, (3) julgar marco futuro, (4) abono em dia de folga, (5) o chip do atestado em duas linhas.
 
-❯ CASO [nome] (emp4, 5x2 ter-sab 21:00-07:00), setembro -- entra junto da O66 (L-002, P7.1):
-  (1) 11/09: a 21:01 gravada S e a ENTRADA do plantao (marco 21:00) e nao recebeu o tipo corrigido; o dia segue com aviso e chamado #22148. Autopsia: a ata do dia explica as 4
-  batidas? A celula foi rejulgada depois da E3/O65? Se a guarda recusou, dizer qual lampada falta.
-  (2) 12/09: plantao completo (20:55, 00:58, 02:06, 06:57) com aviso. Se for veredito gravado velho: contador celula_veredito_velho (veredito gravado x juiz atual) na competencia
-  09, frota inteira; rejulgar pela porta do cartorio; se dinheiro der ZERO aplica com DEPLOY JA, se mover dinheiro PAREI.
-  (3) 26/09 (hoje): a tela pinta "sem registro" as 18h com o plantao comecando as 21:00. Nenhum leitor julga marco futuro (classe da emissao prematura de 08/08): medir se nasceu
-  chamado ou pergunta; curar na origem; RED = este dia antes das 21:00.
-  (4) atestado 01-07/09 cobre as folgas 06 e 07: medir se o FechamentoMensal contou abono nesses dias; atestado so tem efeito em dia de trabalho, a exibicao do periodo fica.
-  (5) tela: o chip do atestado vai em duas linhas (tipo em cima, periodo embaixo), sem corte.
-  Nenhuma lei nova.
+  Falta empurrar; depois sigo pela O66 e O67.
 
-❯ Cada item do caso [nome] mede a FROTA na competencia 09 e vira contador no MetricaSnapshot; o Jean e o RED, nao o universo: (1) dias com batida de tipo trocado que o juiz
-  nao corrigiu, e por qual motivo a guarda recusou; (2) celula_veredito_velho; (3) celulas julgadas como falta ou sem registro antes do marco chegar; (4) dias de folga com abono
-  contado no fechamento. A cura e na origem de cada classe, nunca no caso.
+✻ Sautéed for 16m 34s · done 6:31 PM
 
-● pdf_x_espelho_divergentes = 0 de 203 medidos — o medidor agora existe e o número é real. As três provas fecham. Declarando e registrando as ordens novas:
+❯ (6) cartao PDF de 09 do [nome]: topo "Trabalhadas 82h44" x soma da coluna Realizado 90h32, e "Noturno 63h05" x soma 64h03 -- mesma pagina, duas fontes (fechamento gravado x
+  espelho); topo = soma das linhas ou PAREI. (7) 12/09 HE 3h02 contra 1h44 recalculado (o sabado 19/09 identico da 1h55): medir se as horas do 11/09 caem no 12. (8) caudas de
+  plantao sem entrada na linha errada: 22/08 "em aberto" com a saida 07:00 no 23/08; o plantao de 26/08 partido em 26 (02:00) e 27 (01:00). (9) rotulo das folgas sob atestado diz
+  "Atestado (abonado)" e elas nao sao abonadas (os 7 dias do topo provam): o rotulo diz o efeito real. Cada item mede a frota.
 
-● Commitar o medidor e a liberacao de 09 · 2s
-  ⎿  $ python3 <<'ENDPY'
-     f='docs/TICKETS.md'
-     s=open(f,encoding='utf-8').read()
-     anc='| BECO-FIO-FECHADO-CELULA-ABERTA | chamado |'
-     linha = ('| PDF-X-ESPELHO-MEDIDOR | infra | o contador `pdf_x_espelho_divergentes` passa a EXISTIR em codigo: compara, por '
-     'colab e por dia, o que o PDF desenha contra o qu…
+● Itens 6-9 registrados, e o (6) é o mais grave — mesma página com duas fontes. Medindo a frota:
 
-✢ Whisking… (15m 39s · ↓ 25.3k tokens)
+  Running 1 shell command…
+
+· Tinkering… (19s · ↓ 1.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
