@@ -1,5 +1,36 @@
 # RELATO — esteira saas-hasner
 
+## HANDOFF 26/09 ~11:5x — estado exato para um chat novo (pre-auto-compact)
+
+| frente | estado |
+|---|---|
+| **E3 v3 em 09/2026** | **APLICADA nos 18** (col207 fora). PROVA: `FechamentoMensal` medido antes (sombra das 04:00) e depois (prod), 26 campos; o campo-alvo `horas_intra_indenizada` moveu **+13,29 h** |
+| **deriva do apply** | col709 (10 campos: +9,72 h trabalhadas, +0,91 h HE, +8,80 h banco, 3->2 turnos abertos) e col945 (+1 inconsistencia). **ACEITA por aval, NAO reverter** |
+| **col207** | **fora da E3 ate o cadastro**: `te#216` declara 240 min / 08-12 e ele faz 337 min / 06:30-12:30. Esta na lista CADASTRO x REALIDADE pela assinatura `C2`. Gravado intacto em 11,00 h |
+| **07 e 08** | **NAO mudam o gravado** em empresa nenhuma -> Pauta DP por empresa. 07 = +25,26 h (14 colabs), 08 = +10,11 h (23) |
+| **censo de velhos** | **67 de 603** FM de 09 divergem do motor de HEAD (11,1%); em prod agora **~49**, porque a sombra tem o gravado das 04:00 e os 18 ja foram reconciliados |
+| **fork FASE 2** | EM CURSO, so leitura, unica escrita `app/docs/RELATORIOS-PLANO.md`. A sessao **nao espera** por ele; quando entregar, commitar com pathspec |
+| **fabricante** | **DESLIGADO** por Ronald (timer `disabled`), com condicao de saida "criterio do estrutural fechado + corte Ronald" |
+
+### PUSH: por que as tentativas 30 e 31 morreram, e qual o proximo passo
+
+| tentativa | causa medida |
+|---|---|
+| **push30** | `regua_tickets` RED: a fatia `AFIRMA-COM-PROVA` citada em commit **sem linha na tabela** do TICKETS. Curado: linha aberta |
+| **push31** | **rc=125, e nao foi vermelho de codigo**: eu escrevi os comentarios do `--tmpfs` DENTRO da linha do `docker run`, como `` `# texto` `` -- substituicao de comando fingindo ser comentario. Um deles citava `` `find /tmp/prepush-arvore.* -user root` `` **entre backticks**, os internos FECHARAM a substituicao e o `find` foi **EXECUTADO**: o docker tentou rodar a imagem `find:latest` (`pull access denied for find`) e a suite nao chegou a rodar. Curado em `83bf14e9`: os comentarios foram para ACIMA do comando |
+
+**Proximo passo do push**: `git push origin HEAD:main` com a arvore verde. A suite completa foi rodada
+ANTES (8.345 testes) e as duas falhas que ela achou -- as duas minhas -- estao curadas: o gap do turno
+partido voltou a indenizar 30 min (faltava passar o FATO do dia) e o selo de performance do calendario
+voltou ao teto de 25 (**nao subi o teto**: tirei a query, tornando o previsto lazy e memoizado).
+
+E o **integrador ja empurra commit desta sessao sem depender de lote** -- `bin/integrador.sh:36-45`,
+com **201** tentativas no log. O que o barrava era a suite, nunca a falta de lote.
+
+PROVA: `origin/main` estava em `b81544bc` (02:47) quando este handoff foi escrito; o hash novo vai na
+linha abaixo assim que o push pousar.
+
+
 ## CENSO (so leitura): **67 de 603** FechamentoMensal de 09/2026 estao VELHOS
 
 PROVA: medido na SOMBRA (banco lateral, gravado = copia do prod das 04:00), dentro de `atomic()` com

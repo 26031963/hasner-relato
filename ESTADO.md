@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 11:53:31.**
+**Medido em 26/09/2026 11:59:01.**
 
 | | |
 |---|---|
@@ -32,35 +32,13 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ┌──────────┬──────────────────────────────────────────────────┐
-  │   push   │                      causa                       │
-  ├──────────┼──────────────────────────────────────────────────┤
-  │ 20/22/27 │ barrado antes da suíte (placar/rodapé/TICKETS)   │
-  ├──────────┼──────────────────────────────────────────────────┤
-  │ 23       │ minha cura quebrou meu próprio selo              │
-  ├──────────┼──────────────────────────────────────────────────┤
-  │ 28/29    │ 4 smokes de clique (staticfiles) + mapa_contrato │
-  ├──────────┼──────────────────────────────────────────────────┤
-  │ 30       │ linha de TICKETS faltando                        │
-  ├──────────┼──────────────────────────────────────────────────┤
-  │ 31       │ meu comentário executou um comando               │
-  └──────────┴──────────────────────────────────────────────────┘
-
-  E o item (2) já estava no código: bin/integrador.sh:36-45 empurra commit desta sessão sem depender de lote, e tentou 201 vezes — o que o barrava era a suíte.
-
-  O censo de leitura que você pediu:
-
-  67 de 603 FechamentoMensal de 09/2026 (11,1%) estão velhos contra o motor de HEAD, nos 26 campos. Medido na sombra, em atomic() com rollback confirmado. Os campos que mais
-  divergem: causa_espelho (33), horas_intra_indenizada (31), minutos_realizados (26), horas_trabalhadas (25). O pior é o col899 com 17 campos — o vínculo que eu restaurei ontem. E
-  o col709 aparece com 10: ele não era exceção, era um caso da fila.
-
-  Com a ressalva de qual banco foi medido: a sombra tem o gravado das 04:00, então os 18 que já reconciliei contam como velhos ali; em prod agora são ~49. Não vou refinar medindo
   em prod, porque a medição exige recálculo e recálculo em prod é escrita.
 
   A deriva do col709/col945 fica, como você mandou. E duas regressões minhas da v3 foram curadas na origem antes do push: o gap do turno partido voltou a indenizar os 30 min
@@ -69,13 +47,36 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
   O fork do censo de relatórios recebeu a FASE 2, com a única escrita autorizada sendo o RELATORIOS-PLANO.md.
 
 ✻ Waiting for 1 background agent to finish
+
+❯ HANDOFF ANTES DO AUTO-COMPACT (0%): grava agora em TICKETS e no topo do RELATO o estado exato: causa das tentativas 30 e 31 do push (o que o comentario executou), proximo passo
+  do push, fork FASE 2 em curso, 67 FM de 09 velhos (~49 em prod), deriva col709/col945 aceita, col207 fora, E3 09 aplicada com PROVA. Depois empurra com a suite verde SEM
+  esperar o fork, e prova o hash de origin/main. Nenhuma lei nova.
+
+● Gravando o handoff agora, antes de qualquer outra coisa:
+
+● Handoff no topo do RELATO
+  ⎿  $ python3 <<'ENDPY'
+     f = 'docs/RELATO.md'
+     s = open(f, encoding='utf-8').read()
+     cab = '# RELATO — esteira saas-hasner\n'
+     L = []
+     A = L.append
+     A('')
+     A('## HANDOFF 26/09 ~11:5x — estado exato para um chat novo (pre-auto-compact)')
+     A('')
+     A('| frente | estado |')
+     A('|---|---|')
+     A('| **E3 v3 em 09/2026** |…
+
+✢ Compacting conversation… (5m 9s · ↓ 1.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ prova o hash de origin/main quando o push32 fechar
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Copying medir2.py into saas_ui                                                                                                     10m 15s · ↓ 140.1k tokens
+  ◯ general-purpose  Checking relatorios/pendencias.py consumers                                                                                        15m 44s · ↓ 171.6k tokens
   ⧉  index
 ```
