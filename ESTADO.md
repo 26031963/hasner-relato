@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:33:54.**
+**Medido em 26/09/2026 12:36:01.**
 
 | | |
 |---|---|
@@ -43,10 +43,6 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● push34 foi barrado pelo rodapé velho (diz b81544bc, o mundo diz 4c081b17), e o revisor achou o que eu declarei sem medir: bin/placar_code.sh:290 chama o alarme antigo. Curando
-  as duas coisas:
 
   Ran 2 shell commands
 
@@ -71,11 +67,15 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 
 ● RED evidenciado (o arquivo ainda não está no repo público). Publicando:
 
-  Publicar e conferir o selo · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -5; echo "=== selo ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 | tail -2; echo "=== esta no ar?
-     ==="; ls -l /home/ronald/hasner-relato/RELATORIOS-PLANO.md 2>&1 | tail -1
+  Ran 1 shell command
 
-✻ Misting… (40m 1s · ↓ 61.8k tokens)
+● Publicado (0 nomes, 0 CPFs). Mas o rótulo do selo diz "7 documentos" contando 8 — rótulo tem de dizer o que a conta faz:
+
+● Acertar a contagem da lista
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n "/^for f in (/,/):\$/p" bin/tests/test_publicacao_sem_nome.sh | head -3; echo "--- grep direto ---"; sed -n "/^for f in (/,/):\$/p"
+     bin/tests/test_publicacao_sem_nome.sh | grep -oE "[A-Za-z-]+\.(md|mmd)" | sort -u | wc -l
+
+✢ Misting… (42m 9s · ↓ 63.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

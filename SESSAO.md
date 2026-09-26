@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 12:33:54.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.1 MB). Acoes na janela: **663**.
+**Medido em 26/09/2026 12:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.1 MB). Acoes na janela: **667**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:35:56 | Bash | Acertar a contagem da lista | `cd /home/ronald/saas-hasner && sed -n "/^for f in (/,/):\$/p" bin/tests/test_publicacao_sem_nome.sh \| head -3; echo "--- grep direto ---"; sed -n "/^for f in (/,/):\$/p" bin/tests/test_publicacao_sem_nome.sh \| grep -oE "[A-Za-z-]+\.(md\|mmd)" \| sort -u \| wc -l` |
+| 12:35:10 | Bash | Rotulo passa a contar a propria lista | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='bin/tests/test_publicacao_sem_nome.sh' s=open(f,encoding='utf-8').read() v='echo "test_publicacao_sem_nome: OK -- 7 documentos publicos, 0 nome (inteiro ou primeiro), 0 CPF"' # numero cravado no rotulo mente na proxima vez: quem conta e a propria lista n='''# O NUMERO SAI DA LISTA, nao da minha memoria: este rotulo dizia "7" enquanto a lista me ...` |
+| 12:34:53 | Bash | Achar o rotulo com a contagem | `cd /home/ronald/saas-hasner && grep -n "documentos publicos" bin/tests/test_publicacao_sem_nome.sh \| tail -3` |
+| 12:33:51 | Bash | Publicar e conferir o selo | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -5; echo "=== selo ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 \| tail -2; echo "=== esta no ar? ==="; ls -l /home/ronald/hasner-relato/RELATORIOS-PLANO.md 2>&1 \| tail -1` |
 | 12:32:54 | Bash | Estender o selo sem-nome ao plano | `cd /home/ronald/saas-hasner && sed -n '45,47p' bin/tests/test_publicacao_sem_nome.sh; python3 - <<'ENDPY' f='bin/tests/test_publicacao_sem_nome.sh' s=open(f,encoding='utf-8').read() v = """for f in ('RELATO.md', 'LEIS.md', 'MAPA.md', 'MAPA-JUIZES.md', 'BACKLOG-TOPO.md',""" n = """for f in ('RELATO.md', 'LEIS.md', 'MAPA.md', 'MAPA-JUIZES.md', 'BACKLOG-TOPO.md', 'RELATORIOS-PLANO.md',""" assert s.co ...` |
 | 12:32:46 | Bash | Ver como o selo enumera os publicados | `cd /home/ronald/saas-hasner && grep -n "BACKLOG-TOPO\\|LISTA\\|for \\|ALVOS" bin/tests/test_publicacao_sem_nome.sh \| head -12` |
 | 12:32:42 | Bash | Achar o selo da publicacao | `cd /home/ronald/saas-hasner && ls bin/tests/ \| grep -i "relato\\|publica" ; grep -rln "BACKLOG-TOPO" bin/tests/ app/core/tests/ 2>/dev/null \| head -4` |
