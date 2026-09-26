@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:41:31.**
+**Medido em 26/09/2026 12:46:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anterior NAO estava -- e a lista agora e selo` |
+| `HEAD` local | `6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF` |
 | `origin/main` | `4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -21,11 +21,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF
 be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anterior NAO estava -- e a lista agora e selo
 9b033fa2 [FABRICANTE-DESLIGADO] o alarme para de contar a fabrica e passa a contar a SESSAO (item 8)
 4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact
 83bf14e9 [PRE-PUSH-TESTA-O-COMMIT] o comentario que EXECUTOU e matou o push com rc=125
-dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ```
 
 ## `git status --short`
@@ -38,14 +38,6 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 6 shell commands
-
-● RED evidenciado (o arquivo ainda não está no repo público). Publicando:
-
-  Ran 1 shell command
-
-● Publicado (0 nomes, 0 CPFs). Mas o rótulo do selo diz "7 documentos" contando 8 — rótulo tem de dizer o que a conta faz:
-
   Ran 4 shell commands
 
 ● Registrando o prompt, a correção do meu censo errado e a divergência do cron de host:
@@ -66,11 +58,19 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 
 ● Item (1) fechado no ESTADO publicado. Agora o HAIKU — fabricante_estado e pacotes_caidos no snapshot, com o golden:
 
-● Quem le o snapshot
-  ⎿  $ ls docs/HAIKU* 2>/dev/null; grep -rln "golden" --include=*.py core/ inteligencia/ chamados/ 2>/dev/null | head -6; echo "=== calculadores: um exemplo ==="; sed -n '1,40p'
-     inteligencia/calculadores.py
+  Searched for 5 patterns, listed 1 directory, ran 10 shell commands
 
-✢ Misting… (47m 39s · ↓ 73.5k tokens · deep in thought)
+❯ Card 4 e RESCISAO andam juntos: o espelho por periodo livre COM hash e o espelho final da rescisao (21 ate a data do desligamento); cada emissao grava registro (quem, quando,
+  periodo, hash, arquivo) na trilha que ja existe, e a rescisao e a ficha corrida leem esse registro para o dossie do desligado. Registrar a ligacao nas duas obras do BACKLOG; o
+  hash por periodo livre espera o parecer do advogado.
+
+● Ordem nova recebida. Registrando a ligação nas duas obras antes de seguir — prompt que pede obra vira item no mesmo turno:
+
+● Commitar as duas obras ligadas · 20s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -2; tail -3 logs/push35.log (19s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (52m 39s · ↓ 84.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

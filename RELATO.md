@@ -12,6 +12,30 @@
 | **fork FASE 2** | EM CURSO, so leitura, unica escrita `app/docs/RELATORIOS-PLANO.md`. A sessao **nao espera** por ele; quando entregar, commitar com pathspec |
 | **fabricante** | **DESLIGADO** por Ronald (timer `disabled`), com condicao de saida "criterio do estrutural fechado + corte Ronald" |
 
+### CARD4-E-RESCISAO-ANDAM-JUNTOS — pedido de 13:xx, registrado no mesmo turno
+
+Duas obras abertas no bloco OBRAS, cada uma citando a outra, porque separadas nenhuma das duas fecha:
+
+- **O58 ESPELHO-COM-HASH-POR-PERIODO-LIVRE**: o espelho por periodo livre passa a sair COM hash CLT e
+  cada emissao grava registro na trilha que JA existe (`RegistroPDFAuditavel`): quem, quando, periodo,
+  hash, arquivo. O censo de hoje da o tamanho: `folha/services.py:174` manda o periodo livre direto ao
+  informacional **sem nem tentar** o auditavel, e foi assim que **1.709 de 1.720** espelhos sairam sem
+  hash -- 71 das 75 geracoes de lote, e por caminho, nao por recusa.
+- **O59 RESCISAO-LE-O-REGISTRO**: o espelho final da rescisao e o MESMO artefato com outra janela (dia
+  21 ate a data do desligamento), pela mesma porta; e a rescisao e a ficha corrida montam o dossie do
+  desligado **lendo o registro**, nunca reemitindo. Essa e a parte que torna a ligacao obrigatoria: um
+  dossie que reemite o PDF na hora responde com numero de HOJE sobre um desligado de ONTEM.
+
+O **hash por periodo livre espera o parecer do advogado** -- o auditavel de hoje pressupoe competencia
+fechada, e quem decide se data livre pode carimbar hash e o juridico. A parte que NAO espera parecer e
+gravar o registro de cada emissao, que o Card 4 ja poderia fazer hoje.
+
+A obra da rescisao **nao existia** no BACKLOG; abri neste ato em vez de fingir que registrei numa
+linha que nao havia. O dossie tem endereco: a ficha corrida esta em `docs/ADVERTENCIA-FICHA.md` e a
+`F2 VISAO-FALTAS-FERIAS` mora na MESMA tela.
+
+PROVA: `grep -c "^| O" docs/BACKLOG.md` = 59 (era 57), O58 e O59 presentes; ligacao tambem escrita na
+ficha do Card 4 em `RELATORIOS-PLANO.md`; linha em PROMPTS.md.
 ### CORRECAO do meu proprio censo no commit 9b033fa2 — e o que a cura virou
 
 Eu escrevi, na linha LEI-AKITA daquele commit, `quem-mais-le=so o crontab chamava o alarme antigo`.

@@ -184,6 +184,14 @@ admin) · o que muda no export · escala em 5.000 · obra de que depende · selo
 - **Tamanho**: 1 fatia, e ela e' **remocao de link + rota**, nao reescrita.
 
 ### 4. Cartoes-ponto em lote — **MANTER e reescrever por dentro** (e o unico card com uso)
+- **LIGACAO COM A RESCISAO (corte Ronald 26/09 13:xx, obras O58 + O59)**: este card e a porta de
+  emissao do espelho **por periodo livre COM hash**, e o espelho final da rescisao e o MESMO artefato
+  com outra janela -- do dia 21 ate a **data do desligamento**. Cada emissao grava registro na trilha
+  que JA existe (`RegistroPDFAuditavel`): quem, quando, periodo, hash, arquivo. A rescisao e a ficha
+  corrida **leem esse registro** para montar o dossie do desligado -- nunca reemitem nem recalculam,
+  senao o dossie responde com numero de HOJE sobre um desligado de ONTEM. O **hash por periodo livre
+  espera o parecer do advogado** (o auditavel de hoje pressupoe competencia fechada; se data livre
+  pode carimbar hash e decisao juridica). O que NAO espera parecer: gravar o registro de cada emissao.
 - **Autoridade**: `gerar_pdf_espelho` passa a ler os periodos do **juiz da batida** (O54-E2) e o
   informacional deixa de ser um segundo desenho — **cartao == espelho == fechamento == TXT** (E4).
 - **Tela**: o formulario ganha o **filtro universal** (hoje ha um seletor proprio alimentado por
