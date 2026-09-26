@@ -1,5 +1,74 @@
 # RELATO — esteira saas-hasner
 
+## O66 BECO-FIO-FECHADO-CELULA-ABERTA: o contador medido, os REDs e o censo dos fechadores
+
+### O CONTADOR do invariante
+
+Invariante: celula de competencia ABERTA com veredito `furo`/`cobrado` tem SEMPRE um canal vivo
+(pergunta nao validada ou chamado nao fechado, ancorados nela).
+
+| empresa | celulas acusando em 09 | **sem canal vivo** |
+|---|---:|---:|
+| emp2 | 1.089 | **67** |
+| emp3 | 185 | **1** |
+| emp4 | 22 | 0 |
+| **total** | **1.296** | **`celula_furo_sem_canal` = 68** |
+
+**68 dias em que a casa acusa e ninguem pode resolver.** Piores: col923 10, col610 10, col921 9,
+col348 6, col906 4.
+
+### O RED, e a DIVERGENCIA com o numero da ordem
+
+A ordem fala de "as **66** fechadas pelo sistema com celula ainda em furo/cobrado em 09 (col168 21,
+col864 8, col348 5...)". Medi e **nao reproduzi essa particao** -- digo o que medi, com a definicao ao
+lado, em vez de forcar o numero:
+
+| corte medido | quantos |
+|---|---:|
+| chamados FECHADOS (com `resolvido_em`) cuja celula ainda acusa, em 09 | **509** |
+| — por via `admin` (decisao HUMANA) | 220 |
+| — por via **`sistema`** | **130** |
+| — por via **`cascade`** | **130** |
+| — por via `superado` / `legado` | 25 / 4 |
+| celulas acusando SEM canal vivo nenhum (o invariante) | **68** |
+
+Os dois numeros medem coisas diferentes e os dois importam: **260** foram fechados por AUTOMATISMO
+(`sistema` + `cascade`) com a celula ainda acusando, e **68** e o subconjunto em que nao sobrou canal
+algum. Piores colabs no corte de 509: col879 25, col849 19, col788 17, col922 16, col651 15. A lista
+da ordem (col168, col864) nao aparece no meu topo -- pode ser outra janela ou outro criterio, e
+prefiro dizer isso a fabricar coincidencia.
+
+### A FONTE: cada fechador, com arquivo:linha
+
+| fechador | via | o que ele pergunta hoje |
+|---|---|---|
+| `chamados/models.py:652::encerrar()` | `admin`/cascade | **NADA.** A docstring o diz: "Fecha qualquer estado != fechado, **sem guard, sem raise**" -- e o principal suspeito |
+| `chamados/models.py:664::encerrar_por_competencia_trancada()` | `competencia_trancada` | pergunta se a competencia esta TRANCADA. **Excecao legitima**: o dia e imutavel por lei, nao ha o que resolver |
+| `chamados/models.py:334::reconciliar()` | `reconciliar` | o juiz `decidir(estado, evento)` -- estado x evento, nao a celula |
+| `chamados/models.py:370::superar()` | `superado` | idem |
+| `chamados/models.py:347::cancelar()` | `cancelado` | humano (tem `user`) |
+| `chamados/models.py:281` | `transicao_humana` | humano |
+| `chamados/services/adesao.py` | `cascade` | agrupa sob adesao e fecha em cascata |
+| escritores de `validada_em` | — | `chamados/services/materializacao.py:430` e `:939`, `chamados/services/disputa_emissao.py:1361` |
+
+**Nenhum deles consulta o veredito atual da celula.** Todos perguntam ao juiz de ESTADO
+(`decidir(estado, evento)`), que responde "a transicao e permitida?" -- pergunta legitima e
+diferente de "o fato ja esta resolvido?". E por isso o fio fecha com a celula ainda acusando.
+
+### O que ainda NAO fiz nesta fatia
+
+Fica dito para nao parecer fechada: falta o **MUDA** (o fechador perguntar o veredito e recusar),
+o **selo** (fechador que nao consulta a celula = vermelho), o **HAIKU**
+(`celula_furo_sem_canal` no snapshot + golden "quantos dias estao travados sem ninguem poder
+resolver?") e a autopsia dos tres de 1 dia (col874 27/08, col707 20/09, col281 08/09). O **PASSIVO**
+de reabrir os canais de 09 e DRY e **espera o `!`**, como a ordem manda.
+
+PROVA: medido em prod, so leitura, pelos modelos vivos (`CelulaDia.veredito` em
+`VEREDITOS_ACUSAM`, `PerguntaDisputa.validada_em`, `ChamadoColaborador.status_local` contra
+`NAO_FECHADOS` do motor, e `via_encerramento` contra as 7 vias declaradas em
+`chamados/catalogo/motor.py:93`).
+
+
 ## O65: o juiz de GEOMETRIA passa a ler a ata -- dinheiro ZERO, 62 turnos abertos morrem
 
 Depois do deploy da E3 o PDF dizia `08:47-16:23 = 420 min` e o rotulo da tela, no mesmo dia, dizia
