@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:30:45.**
+**Medido em 26/09/2026 12:33:54.**
 
 | | |
 |---|---|
@@ -34,18 +34,15 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
  M app/config/crons_duracao.json
  M bin/alarme_sessao_ociosa.py
  M bin/placar_code.sh
+ M bin/relato.sh
  M bin/tests/test_alarme_vigia_a_sessao.sh
+ M bin/tests/test_publicacao_sem_nome.sh
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Background command "Empurrar o commit do alarme" completed (exit code 0)
-
   Ran 1 shell command
 
 ● push34 foi barrado pelo rodapé velho (diz b81544bc, o mundo diz 4c081b17), e o revisor achou o que eu declarei sem medir: bin/placar_code.sh:290 chama o alarme antigo. Curando
@@ -70,10 +67,15 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 
 ● Selo verde e provado que morde. Agora o pedido novo — relato.sh publica o plano também:
 
-● Ver o bloco de raspagem e copia
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '64,80p' bin/relato.sh
+  Ran 6 shell commands
 
-* Misting… (36m 53s · ↓ 59.5k tokens)
+● RED evidenciado (o arquivo ainda não está no repo público). Publicando:
+
+  Publicar e conferir o selo · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -5; echo "=== selo ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 | tail -2; echo "=== esta no ar?
+     ==="; ls -l /home/ronald/hasner-relato/RELATORIOS-PLANO.md 2>&1 | tail -1
+
+✻ Misting… (40m 1s · ↓ 61.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

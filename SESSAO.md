@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 12:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.0 MB). Acoes na janela: **659**.
+**Medido em 26/09/2026 12:33:54.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.1 MB). Acoes na janela: **663**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:32:54 | Bash | Estender o selo sem-nome ao plano | `cd /home/ronald/saas-hasner && sed -n '45,47p' bin/tests/test_publicacao_sem_nome.sh; python3 - <<'ENDPY' f='bin/tests/test_publicacao_sem_nome.sh' s=open(f,encoding='utf-8').read() v = """for f in ('RELATO.md', 'LEIS.md', 'MAPA.md', 'MAPA-JUIZES.md', 'BACKLOG-TOPO.md',""" n = """for f in ('RELATO.md', 'LEIS.md', 'MAPA.md', 'MAPA-JUIZES.md', 'BACKLOG-TOPO.md', 'RELATORIOS-PLANO.md',""" assert s.co ...` |
+| 12:32:46 | Bash | Ver como o selo enumera os publicados | `cd /home/ronald/saas-hasner && grep -n "BACKLOG-TOPO\\|LISTA\\|for \\|ALVOS" bin/tests/test_publicacao_sem_nome.sh \| head -12` |
+| 12:32:42 | Bash | Achar o selo da publicacao | `cd /home/ronald/saas-hasner && ls bin/tests/ \| grep -i "relato\\|publica" ; grep -rln "BACKLOG-TOPO" bin/tests/ app/core/tests/ 2>/dev/null \| head -4` |
+| 12:31:27 | Bash | Publicar o plano pelo relato.sh | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='bin/relato.sh' s=open(f,encoding='utf-8').read() # 3. raspagem: entra na MESMA chamada, entao herda a mascara sem um segundo caminho v=' "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" \|\| exit 1' n=''' "$RAIZ/app/docs/RELATORIOS-PLANO.md:RELATORIOS-PLANO.md" \\ "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" \|\| exit 1''' assert s.count(v)==1 s=s.replace(v,n,1) ...` |
 | 12:30:42 | Bash | Ver o bloco de raspagem e copia | `cd /home/ronald/saas-hasner && sed -n '64,80p' bin/relato.sh` |
 | 12:30:19 | Bash | Ver como o relato.sh publica | `cd /home/ronald/saas-hasner && grep -n "SESSAO.md\\|ESTADO.md\\|RELATO.md\\|publica\\|gist\\|hasner-relato" bin/relato.sh \| head -30` |
 | 12:29:53 | Bash | Selo pergunta por execucao e prova que morde | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='bin/tests/test_alarme_vigia_a_sessao.sh' s=open(f,encoding='utf-8').read() velho = """ \| awk -F: '{ linha=$0; sub(/^[^:]*:[0-9]*:/, "", linha); sub(/^[ \\t]+/, "", linha); if (substr(linha,1,1) != "#") print $1 ":" $2 }')""" novo = """ \| awk -F: '{ linha=$0; sub(/^[^:]*:[0-9]*:/, "", linha); sub(/^[ \\t]+/, "", linha); if (substr(linha,1,1) ==  ...` |
