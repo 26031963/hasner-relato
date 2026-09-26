@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:18:31.**
+**Medido em 26/09/2026 17:24:01.**
 
 | | |
 |---|---|
@@ -41,40 +41,40 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  era −31), tratei "não há juiz" como "jornada zero" (zerou HE de 16 selos), e um contador meu contou a própria prosa.
 
-  Esperando você: O64 (col369 inconsistencias 10×14, já resolvido pelo seu corte — posso fechar a obra), O65 (o juiz de geometria), O62 (juiz dizendo "sem intervalo" com cadastro
-  de 70) e a Pauta de 08 contra o TXT entregue, que só a emp2 tem.
-
-✻ Baked for 11m 41s · done 5:15 PM
-
-❯ O65 AGORA (P7.1, coerencia tela = PDF): parear_turnos / turnos_do_colab passa a perguntar ao juiz da batida (ponto/juiz_batida.py), o mesmo do motor; nenhum leitor de turno
-  pareia pelo tipo gravado (o selo da E3 estende a eles). RED: col736 11/09 e col369 23/09 -- rotulo da tela = PDF = motor. DIFF por leitor na sombra: rotulos que mudam,
-  turnos_abertos, chamados e perguntas de turno aberto que morrem, e dinheiro. Se o dinheiro der ZERO, aplica e faz DEPLOY JA com smoke; se mover dinheiro, PAREI com a tabela
-  (L-082). Depois: cartao_x_txt e pdf_x_espelho da 09 = 0 e recalculo imediatamente antes de declarar "09 liberada". Nenhuma lei nova.
-
-● Registrando a ordem e lendo o juiz de geometria:
+● _turno_aberto_calc é justamente quem alimenta chamado e pergunta de turno aberto — o que a ordem quer ver morrer. Alimentando:
 
   Ran 2 shell commands
 
-● O pareamento decide no t = b.tipo (linha ~513), e parear_turnos é puro, sem DB. Então a autoridade entra por alimentação, como a casa faz. Lendo o chamador:
-
-  Searched for 1 pattern
-
-● Agora a cura: o juiz de geometria ganha alimentação de papel, e o chamador a tira da ata — o mesmo juiz do motor:
+● A chave vinha naive da ata e a busca aware — nunca casavam. Normalizando as duas para local naive:
 
   Ran 1 shell command
 
-● Agora o chamador tira o papel da ata — pelo mesmo juiz que o motor usa:
+● 08:47-16:23 fechado — a geometria agora concorda com o motor. Medindo o RED da ordem: rótulo da tela = PDF = motor:
 
   Ran 1 shell command
 
-● Uma das duas chamadas ficou sem alimentação — meia-correção é o que a casa proíbe. Achando a outra:
+● RED fechado: rótulo da tela = ok nos dois, e o PDF em 420 min. Agora o DIFF por leitor — ensaio em prod com rollback, que é o que decide se aplica:
 
-● Ver o contexto das outras chamadas
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '640,650p;750,760p;818,826p' app/ponto/turnos.py
+  Ran 1 shell command
 
-✢ Pouncing… (1m 51s · ↓ 6.5k tokens · thinking)
+● ZERO campos se movem — nem dinheiro, nem contador. O FM já vinha do motor curado; a O65 só muda quem pergunta à geometria. Medindo esse lado, que é o que a ordem pede:
+
+  Ran 1 shell command
+
+● Surpresa que impede aplicar assim: 11 colabs deixam de ter turno aberto, mas o total sobe de 806 para 845. Ata parcial relabela umas batidas e não outras — o mesmo risco que o
+  motor já tinha. Aplicando a mesma guarda:
+
+  Ran 1 shell command
+
+● Agora na direção certa e sem nascer nenhum: 806 → 744 turnos abertos, 62 morrem, e 11 colabs saem da lista. Reconfirmando que dinheiro segue ZERO:
+
+● Reconfirmar dinheiro zero e o RED · 57s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o65.py').read())" 2>&1 | grep -E
+     "ROLLBACK|processados|SOMA|nenhum|^[a-z_]+ +[-+]" | head -8; echo "=== RED dos dois casos ==="; docker exec saas_core python mana… (56s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Pouncing… (7m 21s · ↓ 17.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
