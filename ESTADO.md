@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:07:20.**
+**Medido em 26/09/2026 16:09:01.**
 
 | | |
 |---|---|
@@ -39,40 +39,40 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  isso que evitou gravar contra número errado.
 
-● Achei a causa, e ela não é minha. fechamento.py:231 decide horas_folga_trabalhada lendo logs/esmeril_espelho.json (corte CLASSE3-FOLGA-100: folga trabalhada só paga 100% com a
-  escala certa no dia). A sombra roda com --tmpfs /app/logs — o arquivo não existe lá, então a lavra vem vazia, ninguém é excluído e a folga é contada. Prod está certo; meu
-  esperado estava errado. Refazendo com a lavra visível:
+  O dinheiro bate inteiro. Nenhum campo de dinheiro, de nenhum colab, divergiu do esperado. Sobraram 606 divergências de previsto_em — carimbo de quando a conta rodou, que não
+  pode bater por construção; isso é defeito do meu critério, que devia tê-lo excluído por nome. E uma real: inconsistencias do col369, prod calcula 10, a sombra calculou 14.
+  Determinístico nos dois, duas corridas cada, com dado provado idêntico. Não é dinheiro, e não está explicado.
 
-  Ran 2 shell commands
+  O achado vale mais que a fatia. A primeira conferência acusou 8 colabs com horas_folga_trabalhada = 0 em prod contra até 134,71 h na sombra. Eliminei uma variável por vez — dado
+  (vínculos, FolgaDia, células com trabalha/origem/regeneradas, batidas, ausências, vereditos), motor e parâmetros de CCT, imagem (mesmo sha), Python, libs, settings, bytecode
+  com -B: tudo idêntico. A causa saiu instrumentando builtins.open:
 
-● 608 divergências, e as visíveis são todas do carimbo previsto_em. Agrupando:
+  fechamento.py:231 lê logs/esmeril_espelho.json — porque o corte CLASSE3-FOLGA-100 diz que folga trabalhada paga 100% só com a escala certa no dia, e quem diz isso é a lavra do
+  esmeril, um arquivo. A sombra roda com --tmpfs /app/logs: o arquivo não existe lá, a lavra vem vazia, ninguém é excluído e a folga é paga. Prod está certo; meu esperado estava
+  errado. Montei a lavra e as 8 divergências sumiram (col203 foi de 84,65 para 0,00).
 
-  Ran 1 shell command
+  Duas consequências, que abri como O63: todo ensaio de folha na sombra superestimou folga trabalhada desde aquele corte — é desenho do ensaio, não erro de hoje; e um campo de
+  dinheiro depende de arquivo do host, falhando para o lado caro (sem o arquivo, todo mundo tem "escala certa").
 
-● Sobrou uma divergência fora do carimbo: col369 inconsistencias 10 (prod) contra 14 (sombra). Medindo a causa:
+  A prova dos 26 campos está no RELATO. Em prod: intra −33,33 h (49 colabs), trabalhadas +390,25 h (81), turnos_abertos −141 (50 colabs, e não sobe em nenhum), horas_falta zero.
+  Diferem dos números do aval porque aqueles foram medidos contra o gravado da sombra e estes contra o de prod — a deriva que você aceitou.
 
-  Ran 1 shell command
+  Uma linha sua destrava: o col369 com inconsistencias 10 em vez de 14 entra? É contador, não dinheiro, e a fonte do 14 é o ambiente que hoje se provou infiel — não vou decidir
+  por você qual dos dois vale. Com o ok, aplico na hora; o ensaio já está escrito e reverte sozinho se algo sair do lugar.
 
-● Nenhuma retratação — as 17 batidas são iguais. Aplico a mesma técnica que funcionou: espiar quais arquivos o recálculo de col369 abre:
+  Também curei os 5 vermelhos que a suíte completa achou, todos meus (papel lavra do cron novo, horário movido para 07:31, ARQUITETURA.mmd regenerado). Falta empurrar dd0d7d68 e
+  dois anteriores.
 
-  Ran 5 shell commands
+✻ Cogitated for 43m 17s · done 4:08 PM
 
-● Determinístico e diferente: prod 10, sombra 14. A lição do caso anterior vale — falta outro arquivo na sombra. Alargando a espia para qualquer arquivo não-.py:
+❯ aval Ronald: E3 completa APLICA em 09/2026 pelo ensaio de hoje (603/603). previsto_em sai do criterio (carimbo). col369 inconsistencias = valor de PROD (10); a sombra e infiel
+  (O63). Esperado em prod: intra -33,33 h (49 colabs), trabalhadas +390,25 h (81), turnos_abertos -141 (50, nao sobe em nenhum), horas_falta zero; a diferenca para o aval
+  anterior e a deriva aceita. PROVA pos-apply igual ao ensaio, campo a campo. Em seguida O63 (P7.1): dinheiro nunca depende de arquivo do host -- a lavra do esmeril que decide a
+  folga 100% passa a vir do banco; sem lavra = PAREI com alarme, nunca paga todo mundo nem ninguem em silencio; o ensaio na sombra passa a montar a lavra. !
 
-  Ran 2 shell commands
-
-● Determinístico, mesmo arquivo, mesmo dado — e não explicado. O critério do aval é literal, então PAREI. Montando a prova dos 26 campos a partir do ensaio:
-
-  Commitar o PAREI e publicar
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg9.txt <<'EOF'
-     [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, e a SOMBRA mentiu uma vez hoje
-     LEI-AKITA: origem=ponto/services/fechamento.py:231 (decide dinheiro lendo `logs/esmeril_espelho.json`,
-     um ARQUIVO do host) +…
-
-✽ Wrangling… (42m 25s · ↓ 72.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✢ Billowing… (7s · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
