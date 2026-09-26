@@ -62,6 +62,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 | **L-079** | PAUSA COM DONO: pausa sem quem/por que/condicao de saida nao tem saida -- ela simplesmente dura | corte Ronald 21/09 14:2x | `bin/pausar.sh` | `core/esteira_vigia.py` alarma pausa > 30 min sem dono | vigente |
 | **L-080** | CHAVE DE MATCH SEMPRE CPF OU NOME COMPLETO, nunca matricula; timestamps em UTC no banco, apresentados em UTC-3 | CLAUDE.md secao 4 (zona inviolavel) | transversal (importadores, holerite, folha) | sem selo unico -- cobrado por fatia | vigente |
 | **L-081** | CURA-MAIS-RESTRITIVA: bug PROVADO com mais de uma cura candidata NAO espera o Ronald -- aplica-se a mais RESTRITIVA (ou as duas, se nao conflitam), o porque vai ao RELATO e segue; so espera `!` se a cura cair na L-009 | corte Ronald 26/09 ~09:4x (nasceu da O57: bug provado, duas curas na mao, e eu registrei "nao decidido") | `CLAUDE.md` secao 7b | transversal -- a esteira inteira | **vigente** |
+| **L-082** | AVAL-DE-CRITERIO (**altera a L-009**): apply de dinheiro com `!` de CRITERIO aplica sem nova parada se (a) o DIFF move so os campos-alvo nomeados, (b) todo outro campo de todo colab da ZERO e (c) o total fica na faixa aprovada; qualquer violacao = PAREI com a tabela. Sem criterio escrito, vale a L-009 | corte Ronald 26/09 ~11:4x (nasceu do apply de 09/2026: `!` de +12,29 h, gravado moveu +13,29 h com 10 campos fora do alvo em 2 colabs) | `CLAUDE.md` secao 7b | todo apply de dinheiro | **vigente** |
 
 ## Leis escritas que NAO TEM DONO (a lista mais importante daqui)
 

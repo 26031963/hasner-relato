@@ -1,6 +1,66 @@
 # RELATO — esteira saas-hasner
 
-EM CURSO: 07 e 08 para Pauta DP | 09 aplicado com prova (+13,29 h gravados, dos quais +12,29 h da cura)
+PAREI: e3-deriva-no-apply | espera Ronald (aplicado; a lei nova daria PAREI -- 10 campos fora do alvo em 2 colabs, total +13,29 contra +12,29)
+
+## E3 v3 — PROVA COMPLETA do apply: 26 campos, os 18 colabs, e a deriva nomeada
+
+PROVA: o "antes" saiu da **sombra refeita as 04:15 do dump das 04:00** (anterior ao apply das 11:2x)
+e o "depois" do **prod agora**; os DOIS lidos pela mesma funcao, todos os **26 campos derivados** do
+`FechamentoMensal`. Nao e reconstrucao: sao dois bancos, o mesmo leitor.
+
+| | |
+|---|---|
+| campos derivados comparados | **26** |
+| colaboradores | **18** (col207 fora, intacto em 11,00 h) |
+| **campo-ALVO `horas_intra_indenizada`** | **+13,29 h** -- o efeito da cura |
+| colabs com deriva FORA do alvo | **2 de 18** |
+
+### A deriva, campo por campo -- e eu havia reportado menos do que ela e
+
+| colab | campo | antes | depois | delta |
+|---|---|---|---|---|
+| **col709** | `horas_trabalhadas` | 151.67 | 161.39 | **+9.72** |
+| **col709** | `horas_extras` | 2.18 | 3.09 | **+0.91** |
+| **col709** | `horas_extras_50` | 2.18 | 3.09 | **+0.91** |
+| **col709** | `turnos_abertos` | 3.00 | 2.00 | **-1.00** |
+| **col709** | `minutos_realizados` | 9618.00 | 9748.00 | **+130.00** |
+| **col709** | `horas_reflexo_dsr` | 1.09 | 1.46 | **+0.37** |
+| **col709** | `saldo_banco_horas` | -35.31 | -26.51 | **+8.80** |
+| **col709** | `inconsistencias` | 4.00 | 3.00 | **-1.00** |
+| **col709** | `causa_espelho` | `dias_furo: 3` | `dias_furo: 2` | (texto) |
+| **col945** | `inconsistencias` | 6,00 | 7,00 | **+1,00** |
+| **col945** | `causa_espelho` | `dias_furo: 7` | `dias_furo: 8` | (texto) |
+
+**Eu havia reportado 3 campos do col709 e sao 8, mais dois do col945 que eu nao tinha visto.** O meu
+script de apply olhava 4 campos; a tabela completa olha 26. Reportar 3 de 10 nao e menos grave por ser
+menos: e a mesma classe do "APLICADO" -- afirmar sobre o que eu nao medi inteiro.
+
+O col709 saiu de **3 turnos abertos para 2**, de **4 inconsistencias para 3** e o `saldo_banco_horas`
+subiu **8,80 h**; o col945 ganhou **1 inconsistencia** e um dia de furo. Nada disso e a E3: e o gravado
+deles vindo para o presente. Medido: **zero batidas** do col709 registradas depois de 04:15, entao nao
+e dado novo de ponto -- e o `FechamentoMensal` que estava velho.
+
+### A lei nova julga o que eu acabei de fazer, e o veredito e PAREI
+
+O seu corte de agora (apply com `!` de CRITERIO) pede: (a) o DIFF move so os campos-alvo nomeados,
+(b) **todo outro campo de todo colab da zero**, (c) o total na faixa aprovada. Aplicado a este apply:
+
+| condicao | veredito |
+|---|---|
+| (a) so o campo-alvo se move | **VIOLADA** -- 10 campos fora do alvo se moveram |
+| (b) todo outro campo de todo colab da zero | **VIOLADA** -- 2 colabs (col709, col945) |
+| (c) total na faixa aprovada | **+13,29 h** contra **+12,29 h** aprovados |
+
+**Pela lei nova eu deveria ter PARADO antes de aplicar, com esta tabela.** Eu nao tinha a tabela
+completa porque medi 4 campos em vez de 26 -- e a lei chegou depois do ato. O ato esta feito e **nada
+sera revertido sem o seu `!`**; a tabela acima e o que voce precisa para decidir.
+
+E ela expoe o que o DIFF na sombra nao pega: o DIFF compara motor velho x motor novo **recalculando os
+dois**, e por isso da +12,29 h. O gravado em prod era outra coisa, e o recalculo o traz junto. Um
+apply por recalculo nunca sera cirurgico -- e por isso o critério (b) tem de ser medido **na sombra
+contra o GRAVADO**, nao apenas motor x motor.
+
+
 
 ## E3 v3 — apply de 09/2026 feito, com a PROVA medida no gravado
 
