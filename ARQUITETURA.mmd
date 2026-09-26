@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (49 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (50 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -56,6 +56,7 @@ flowchart TD
   subgraph e_auditoria["auditoria"]
     c_auditar_invariantes_chamados["auditar_invariantes_chamados<br/>07:18"]
     c_lavrar_fase_conflitante["lavrar_fase_conflitante<br/>07:14"]
+    c_lavrar_jornada_lixo["lavrar_jornada_lixo<br/>07:31"]
     c_lavrar_vigencia_impossivel["lavrar_vigencia_impossivel<br/>07:17"]
     c_lavrar_vigencia_sem_trilha["lavrar_vigencia_sem_trilha<br/>07:16"]
     c_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>07:26"]

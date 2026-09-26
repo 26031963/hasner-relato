@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:32:01.**
+**Medido em 26/09/2026 15:37:02.**
 
 | | |
 |---|---|
@@ -32,7 +32,9 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## `git status --short`
 
 ```
+ M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/docs/ARQUITETURA.mmd
  M app/docs/RELATO.md
 ?? esteira.pausada
 ```
@@ -40,44 +42,44 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Nada aplicado. O ! agora tem número honesto: −31,08 h no campo-alvo e +266,24 h trabalhadas em 09. Falta empurrar 54a06418, esperando a suíte liberar o banco de teste.
-
-✻ Worked for 24m 24s · done 3:23 PM · 1 shell still running
-
-❯ aval Ronald: E3 completa APLICA em 09/2026 -- o motor curado entra na arvore servida (zona inviolavel, este ! e o aval do commit) e os FM de 09 sao recalculados. Esperado:
-  horas_intra_indenizada -31,08 h, horas_trabalhadas +266,24 h, turnos_abertos -114 (39 colabs), mais a deriva do gravado velho de 09, ACEITA. Criterio (L-082): o gravado depois
-  tem de bater com a coluna TOTAL do DIFF campo a campo, colab a colab; qualquer diferenca, ou dia com DNA sem intervalo (O62) mudando dinheiro = PAREI com a tabela. PROVA: 26
-  campos antes/depois no RELATO. 07 e 08 nao mudam o gravado. !
-
-● O ! veio. Antes de tocar em dinheiro, confiro a suíte e preparo o critério de conferência campo a campo:
-
-  Ran 1 shell command
-
-● A árvore bate com o commit. Montando o critério antes do apply — o esperado por colab e campo, tirado da coluna TOTAL do DIFF:
-
-  Ran 1 shell command
-
-● Vou fazer o apply em dois passos: ensaio em prod dentro de atomic() com rollback provado e comparação com o esperado; só depois a escrita real. Assim, divergência = PAREI sem
   nada gravado.
 
   Ran 2 shell commands
 
 ● O ensaio rodou até o dump; só a serialização quebrou. Corrigindo e vendo o resultado inteiro:
 
-● Rodar o ensaio e ver a conferencia · 56s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
-     p='/tmp/claude-1001/pauta/apply/apply09.py'
-     s=open(p).read()
-     s=s.replace(" 'divergencias': [[c[0], c[1], c[2], c[3]] for c in fora]}, fh)",
-     " 'divergencias': [[str(c[0]), str(c[1]), str(c[2]), str(c[3])] for c in fora]}, fh)")
-     open(p,'w').write(s… (55s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Wrangling… (7m 6s · ↓ 7.3k tokens)
+● Rollback provado (603/603). As 616 divergências parecem ser todas de um carimbo, não de dinheiro. Conferindo por campo:
+
+  Ran 1 shell command
+
+● Background command "Suite completa com a guarda" completed (exit code 0)
+
+● Divergência real fora do carimbo: 8 colabs com horas_folga_trabalhada = 0 em prod contra até 134,71 h na sombra, e col369 com inconsistencias 10 contra 14. O critério é literal
+  — PAREI, e nada foi gravado. Mas PAREI com causa vale mais: medindo por que:
+
+  Ran 1 shell command
+
+● A suíte tem 5 vermelhos meus (cron sem papel declarado, diagrama fora de sincronia). Curando-os primeiro:
+
+  Ran 6 shell commands
+
+● Cinco curados. Voltando ao PAREI — medindo se a divergência é código ou dado que mudou em prod depois da cópia da sombra:
+
+  Ran 1 shell command
+
+● Todos os 8 são empresa 2 e 12x36, e em prod têm FolgaDia=0. Na 12x36 a folga vem do ciclo, não da tabela — então comparo o mesmo dado na sombra:
+
+  Mesmo dado na sombra · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && cp /tmp/claude-1001/pauta/cmp.py /tmp/claude-1001/pauta/saida/ && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh
+     2>/dev/null; trancar_sombra "cmp" && echo "### SOMBRA" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 1 --network saas-hasner_d…
+
+✽ Wrangling… (12m 6s · ↓ 14.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
