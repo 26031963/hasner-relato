@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:06:01.**
+**Medido em 26/09/2026 18:10:12.**
 
 | | |
 |---|---|
-| `HEAD` local | `f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)` |
+| `HEAD` local | `af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor` |
 | `origin/main` | `2fe6ce39 RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por furo_espelho` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor
 f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 59383af3 [O65-GEOMETRIA-LE-A-ATA] smoke pos-deploy: geometria, PDF e rotulo da tela concordando
 27ef363d [O65-GEOMETRIA-LE-A-ATA] nenhum leitor de turno pareia pelo tipo gravado -- dinheiro ZERO, 62 turnos abertos morrem
 2fe6ce39 RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por furo_espelho
-858fe169 TICKETS: linha da DEPLOY-JA que a regua cobrou (fatia citada em fbd909bc sem linha)
 ```
 
 ## `git status --short`
@@ -39,21 +39,6 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  as batidas já carregadas) e o calendário 25→27 (duas, porque a tela pergunta a dois leitores de turno). Tentei não pagar no calendário: turnos_do_colab aceita celulas=, mas o
-  mapa nasce depois do laço no fluxo atual — fica como dívida com endereço, escrita no próprio selo.
-
-  A O66 (BECO-FIO-FECHADO-CELULA-ABERTA) está registrada e entra quando a O65 fechar com deploy e smoke. Já comecei o censo dos fechadores: as vias chamado_encerrado,
-  celula_absolveu e completude_turno vivem em chamados/juizes.py:844-879 e chamados/reconciliador.py:643; quem escreve validada_em está em
-  chamados/services/materializacao.py:430,939 e disputa_emissao.py:1361. A Q2-JA "conversa parada" aparece em arquivar_competencia_encerrada.py e celula_carimbada.py — é onde vou
-  conferir contra o DECIDIR-642.
-
-✻ Churned for 32m 34s · done 5:49 PM · 1 shell still running
-
-● Background command "Suite completa para liberar o deploy" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Suíte inteira verde: 8.366 testes OK. Commitando e deployando pela L-083:
 
   Ran 1 shell command
 
@@ -67,12 +52,27 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 
 ● Enquanto o push41 roda, a cauda da ordem — os dois contadores de 09:
 
-● Medir cartao_x_txt de 09 · 54s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani 2>&1 | tail -4; echo "=== pdf_x_espelho ===";
-     grep -rn "pdf_x_espelho" app/ bin/ 2>/dev/null | grep -v "\.pyc" | head -4 (54s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Perambulating… (3m 23s · ↓ 5.1k tokens)
+● cartao_x_txt_divergentes = 0 em 09 (203 colabs no TXT). E dias_em_aberto = 284 dias em 23 colabs. Provando que um recálculo agora não move nada:
+
+  Ran 1 shell command
+
+● 09 está estável: recálculo agora move zero em 607 colabs × 27 campos. Registrando a cauda com o que falta:
+
+  Registrar a cauda e commitar · 2s
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/RELATO.md'
+     s=open(f,encoding='utf-8').read()
+     anc='### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando'
+     L=[];A=L.append
+     A('### A cauda da ordem: NAO declaro "09 liberada", e digo exatamente por que')
+     A('')
+     A('| condicao pedida | medido |')
+     A('|---|---|')
+     A('| `c…
+
+✢ Perambulating… (7m 34s · ↓ 7.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

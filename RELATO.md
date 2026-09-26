@@ -15,6 +15,22 @@ pergunta a `ponto/turnos.py`. Agora os dois leem o mesmo juiz da batida.
 | col736 11/09 — PDF do cartao | 420 min | **420 min** (nao mudou: ja estava curado) |
 | col369 23/09 — rotulo da tela | `aberto` | **`ok`** |
 
+### A cauda da ordem: NAO declaro "09 liberada", e digo exatamente por que
+
+| condicao pedida | medido |
+|---|---|
+| `cartao_x_txt` de 09 = 0 | **0 divergentes** em 203 colabs no TXT |
+| `pdf_x_espelho` de 09 = 0 | **NAO TEM MEDIDOR.** E contador da obra **O9** (PDF-E-O-ESPELHO), que esta em fila -- nao existe comando que o calcule. Nao afirmo zero sobre o que nao medi |
+| recalculo imediatamente antes | **ZERO movimento**: 607 colabs x 27 campos, nenhum se move, rollback provado 607/607. 09 esta ESTAVEL |
+
+Duas das tres fecham. A terceira nao **pode** fechar hoje porque o medidor nao existe -- e inventar
+um numero para ela seria o oposto do que esta fatia inteira fez. Entao a declaracao espera, e o que
+falta tem nome: **O9**.
+
+E ha dois numeros que o DP vai encontrar de todo jeito, medidos agora: **337 dos 402 retidos** do
+export de 09 sao `furo_espelho`, e ha **284 dias em aberto (furo sem decisao) em 23 colaboradores**.
+Esse segundo numero e exatamente a familia da **O66** que acabou de ser pedida -- celula em furo sem
+canal vivo.
 ### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando
 
 | fonte | col736 11/09 | col369 23/09 |
