@@ -3,13 +3,20 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:16:01.**
+**Medido em 26/09/2026 10:17:34.**
 
 | | |
 |---|---|
 | `HEAD` local | `2131dffa O57: limpa os alvos do teste empirico da O57` |
 | `origin/main` | `b81544bc RELATO: linha do vigia` |
 | commits a subir (`ahead`) | **9** |
+
+## Fabrica
+
+**fabricante: DESLIGADO** -- dono `Ronald`, desde `2026-09-26 10:01:34`.
+
+- por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
+- condicao de saida: criterio do estrutural fechado + corte Ronald
 
 ## `git log --oneline -5`
 
@@ -28,9 +35,11 @@ e37398b8 O57: alvo temporario do teste empirico
  M app/core/esteira_vigia.py
  M app/core/integrador_lote.py
  M app/docs/RELATO.md
+ M bin/gerar_estado.py
  M bin/molde_autocura/cadeia.sh
  M bin/molde_fatia/cadeia.sh
  M bin/relato.sh
+ M bin/tests/test_publicacao_sem_nome.sh
 ?? bin/commit_so_o_declarado.sh
 ?? bin/gerar_sessao.py
 ?? bin/tests/test_commit_so_o_declarado.sh
@@ -40,16 +49,6 @@ e37398b8 O57: alvo temporario do teste empirico
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo verde com o caso que morde. Agora o item (2) — um escritor na árvore: os três sítios param de commitar arquivo versionado:
-
-  Ran 1 shell command
-
-● Aplicando a forma mais restritiva (L-081): os três param de escrever e commitar arquivo versionado — esta sessão é a única escritora da árvore:
-
-  Ran 2 shell commands
-
-● Agora o esteira_vigia.py (quarentena) e a linha do fabricante no ESTADO.md, que é o PRONTO que você pediu:
-
   Ran 3 shell commands
 
 ● O que sobrou é o commit da fatia em si (legítimo), mas sem pathspec. Aplicando a cura (a) nele, com os caminhos da própria fatia:
@@ -70,9 +69,19 @@ e37398b8 O57: alvo temporario do teste empirico
 
 ● Censo fechado: todo sítio de commit da casa tem pathspec. Agora a linha do fabricante no ESTADO.md — o PRONTO que você pediu:
 
-● Running 1 shell command…
+  Ran 5 shell commands
 
-✢ Transmogrifying… (1h 18m 23s · ↓ 88.3k tokens)
+● PRONTO do item (1) atingido: o ESTADO.md diz fabricante: DESLIGADO com dono, desde e condição de saída. Agora o SESSAO.md entra no relato.sh junto do selo de raspagem:
+
+  Ran 2 shell commands
+
+● O selo já morde: acusa SESSAO.md ausente do repo público. Publicando para fechar:
+
+● Publicar o SESSAO e fechar o selo · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -4; echo "=== o selo fecha? ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 | tail -3; echo "=== PRONTO:
+     curl mostra a acao mais recente? ==="; curl -s "https://raw.githubusercontent.com/26031963/hasner-relato/main/SESSAO.md?noca…
+
+✢ Transmogrifying… (1h 19m 56s · ↓ 92.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
