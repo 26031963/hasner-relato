@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:59:31.**
+**Medido em 26/09/2026 02:04:32.**
 
 | | |
 |---|---|
@@ -26,49 +26,50 @@ e452f0e3 [BUG-C] o selo estrutural olha NOS da AST, e a porta E1 deixa de dizer 
 ```
  M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
+?? app/ponto/tests/test_e3_motor_le_o_cadastro_do_intervalo.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
 
-● O DIFF certo para a E3 é motor velho × motor novo, ambos na sombra — não "gravado × recalculado", que mistura a deriva pré-existente. Conferindo a sombra e o veredito do push:
+  O DIFF da E3 está rodando na sombra (motor de HEAD × motor que lê o juiz, 07/08/09) — é o seu ponto de leitura.
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● A sombra é completa de 25/09 — cobre 07/08/09. Montando as duas árvores para o DIFF enquanto o push termina:
+● O dump está progredindo (07/2026: 718 colaboradores). Esperando os dois:
 
-  Ran 1 shell command
+  Read 3 files, ran 8 shell commands
 
-● As duas árvores diferem só no motor (e na prosa do RELATO). Vendo como o simular_folha.sh chama o container, para replicar exatamente:
+● O push e o dump disputam os mesmos núcleos de teste, então ambos estão mais lentos. Uso o tempo para o selo do outro lado da política — o vigilante que continua indenizando:
 
-  Ran 1 shell command
+  Listed 1 directory
 
-● O par é a ferramenta da casa e carrega as guardas (--conferir e --cobre-competencia). Lançando o DIFF da competência corrente:
-
-  Ran 2 shell commands
-
-● Background command "Rodar o DIFF par na sombra" completed (exit code 0)
-
-● A guarda disparou com razão: a sombra é de 25/09 e o --conferir exige carimbo de hoje. Para 07/08/09 (competências fechadas antes disso) a cópia serve e eu digo por quê; para a
-  corrente, não. Rodando o DIFF das três, sob a trava da sombra:
-
-  Ran 2 shell commands
-
-● Background command "Rodar os dois dumps na sombra" completed (exit code 0)
+● Background command "Esperar o veredito do push19" completed (exit code 0)
 
   Read 1 file
 
-● Falta o ponto de montagem: as cópias do git archive não têm logs/ nem media/ (o :ro impede o docker de criá-los). Criando e rodando de novo:
+● Background command "Esperar o primeiro dos dois" completed (exit code 0)
+
+● Uma única falha em 8.323 testes com a mudança da E3. Lendo o que ela afirma:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● A falha é artefato meu, não da E3: inspect.getsource devolveu uma linha do calcular_periodo porque eu editei o arquivo durante a corrida da suíte — conteúdo novo com números de
+  linha antigos. É a O56 na forma mais pura, e a E3 não quebrou teste nenhum. Escrevendo os selos da E3 no nível do motor:
+
+  Read 1 file, ran 1 shell command
+
+● ORIG pronto; CURA rodando. Rodando os selos da E3:
 
   Running 1 shell command…
 
-* Quantumizing… (1h 13m 57s · ↓ 235.2k tokens)
+✽ Quantumizing… (1h 18m 58s · ↓ 253.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
