@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 20:03:31.**
+**Medido em 26/09/2026 20:09:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
  M app/ponto/services/fechamento.py
 ?? esteira.pausada
 ```
@@ -40,9 +41,6 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ col924 · col391 · col43 · col942 │   0,00 │   0,00 │        — │ zero vínculo e zero célula: a cura não alcança                     │
-  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
-  │ col935 · col648                  │      — │      — │        — │ troca de vínculo no meio                                           │
   ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
   │ col400 · col245                  │      — │      — │        — │ sem causa dessas                                                   │
   └──────────────────────────────────┴────────┴────────┴──────────┴────────────────────────────────────────────────────────────────────┘
@@ -58,7 +56,7 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
   O ! que esta fatia pede é sobre as 654,74 h, sabendo que apenas col866 está entre os 9 que o DP vai pagar. Falta ainda o lado do espelho (a ordem manda os dois lerem a célula) e
   o selo do leitor que escolhe vínculo sem perguntar — não fiz, e não os conto como feitos.
 
-✻ Sautéed for 11m 4s · done 7:54 PM · 1 shell still running
+✻ Sautéed for 11m 4s · done 7:54 PM · 2 shells still running
 
 ❯ aval Ronald: aplica a O69 (654,74 h) !
 
@@ -68,16 +66,19 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ● Enquanto a suíte roda, preparo o apply num só ato — ensaio, expectativa, escrita e conferência campo a campo na mesma corrida:
 
-● Esperar a suite da O69 · 4m 52s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 16); do if grep -qE "^Ran [0-9]+ tests" logs/o69_suite.log 2>/dev/null; then break; fi; sleep 55; done; grep -E
-     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o69_suite.log | tail -8 (4m 46s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-✢ Smooshing… (5m 45s · ↓ 3.8k tokens)
+● Suíte ainda rodando (10 min) — não aplico dinheiro antes dela. Esperando:
+
+● Esperar a suite terminar · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite.log 2>/dev/null; do sleep 30; done; grep -E "^(FAIL|ERROR):|^Ran |^(OK|FAILED)"
+     logs/o69_suite.log | tail -8
+
+✢ Smooshing… (11m 15s · ↓ 4.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
