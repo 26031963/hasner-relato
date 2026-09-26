@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:38:29.**
+**Medido em 26/09/2026 14:43:45.**
 
 | | |
 |---|---|
@@ -49,14 +49,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O archive só traz app/ — os selos de host moram na árvore real, e eles não são servidos por prod:
-
-  Ran 1 shell command
-
-● O selo fica VERMELHO contra a árvore real (5 declarados contra 8 reais) — é ele mordendo. Aplicando a cura no ato do commit, como manda a lei 10:
-
-  Ran 1 shell command
-
 ● Selo verde na árvore. Agora o segundo selo — motor que pareia pelo tipo gravado:
 
   Ran 1 shell command
@@ -77,11 +69,19 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● 96,4% das batidas têm segundos, e a ata guarda HH:MM. Achei um defeito meu de desenho: eu estava usando a ata para a aritmética quando ela só responde qual marco a batida
   cumpriu. O instante é da Batida:
 
-  Suites de dinheiro com o instante da Batida
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=o60 bash bin/trava_teste.sh -- docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTEC…
+  Ran 4 shell commands
 
-✶ Concocting… (1h 36m 1s · ↓ 99.9k tokens)
+● O contrato é sobre chavear batida por data de calendário. Indexo por minuto truncado, sem .date():
+
+  Ran 1 shell command
+
+● Contrato e selos verdes. Refazendo o DIFF com o instante vindo da Batida:
+
+● Refazer o DIFF do motor novo
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo v2" && docker run --rm --cpuset-cpus
+     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=con…
+
+* Concocting… (1h 41m 17s · ↓ 103.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
