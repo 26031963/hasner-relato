@@ -305,6 +305,8 @@ flowchart TD
     jmais_tela["... +3 arquivos de juiz"] --- jf_tela
     jf_portas["portas<br/>1 com juiz · 0 sem juiz<br/>registro: 124 sitio(s)"]
     ja_core_portas_da_tela_py(["core/portas_da_tela.py"]) --- jf_portas
+    jf_batida["batida<br/>1 com juiz · 3 sem juiz<br/>registro: 2 sitio(s)"]
+    ja_ponto_juiz_batida_py(["ponto/juiz_batida.py"]) --- jf_batida
   end
 
   %% (g) PORTAS DE ESCRITA — fonte: core/portas_da_tela.py (FAMILIAS; censo em prod: manage.py censo_portas)

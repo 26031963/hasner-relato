@@ -1,6 +1,73 @@
 # RELATO — esteira saas-hasner
 
-PAREI: e3-metade-apply | espera Ronald (`!` para +39,41 h em 56 colab-competencias; a metade NAO cura o RED da [nome])
+PAREI: e3-metade-numero-mudou | espera Ronald (`!` aprovou +39,41 h; o numero real e **+13,04 h** em 09)
+
+## E3 METADE — PAREI, e a razao e um bug MEU que eu achei ANTES de aplicar
+
+Voce deu o `!` para **+39,41 h / 56 colab-competencias**, com escopo "so competencia NAO exportada por
+empresa". Fui medir o escopo e, no caminho, encontrei um defeito na minha propria cura. Corrigido, **o
+numero mudou** -- e por isso eu paro: aval e literal (LEI-AKITA 9), e nao aplico um numero que voce nao viu.
+
+### O bug: o cadastro podia dar MENOS que a lei
+
+A linha era `self.intrajornada_minutos = _cad or _piso(jornada)`. Com `or`, o CADASTRADO vence sempre --
+inclusive quando ele e **menor que o piso do Art.71**. Medido:
+
+| | |
+|---|---|
+| `te#445` (col840), jornada **720 min** | janela declarada de **15 min**, piso do Art.71 = **60** |
+| efeito no DIFF v1 | col840 perdia **9,00 h** de intrajornada indenizada em 09/2026 |
+| por que estava errado | o minimo aplicado era **ILEGAL** -- 15 min numa jornada de 12 h |
+| censo da frota | **2 templates, 3 vinculos ativos** (`te#258` PAI-12x36.60 com 2, `te#445` com 1) |
+
+Cura na origem: **`max(cadastrado, piso)`**. A lei e o PISO; o cadastro sobe dele, nunca desce. E o
+sentido inverso continua valendo -- `te#194` declara **160 min** e manda, porque cadastro acima da lei e
+direito do colaborador, nao excesso a corrigir. Os dois sentidos tem caso no selo.
+
+Prova nos quatro nomeados, pela chamada real: col840 15 -> **60** (`piso Art.71`), col207 **15**
+(jornada de 240 min tem piso 0: o declarado manda, e a reducao dele e legitima), col118 **160**,
+col638 **90**.
+
+### O numero novo, por competencia
+
+| competencia | DIFF v1 (com o bug) | **DIFF v2 (curado)** |
+|---|---|---|
+| 07/2026 | +25,26 h · 14 colabs | **+25,26 h · 14** |
+| 08/2026 | +10,11 h · 23 colabs | **+27,36 h · 22** |
+| 09/2026 | **+4,04 h · 19 colabs** | **+13,04 h · 18 colabs** |
+| total | **+39,41 h** | **+65,66 h** |
+
+E **col840 saiu da lista**: com o piso, o minimo dele volta a 60 e nada muda. Era o unico caso em que
+um colaborador perdia horas em 09 -- some junto com o bug. Quem ainda desce e o **col207** (emp2),
+11,00 -> 2,75 h em 09 e 7,00 -> 1,75 h em 08, e desce com razao: a jornada dele e de **4 h**, que o
+Art.71 nao obriga a intervalo, e o 60 cravado vinha indenizando um minimo que a lei nao pede.
+
+### O escopo que voce deu, medido -- e um ponto que precisa da sua palavra
+
+| competencia | emp1 | emp2 | emp3 | emp4 |
+|---|---|---|---|---|
+| 07/2026 exportada? | nao | nao | **SIM** | **SIM** |
+| 08/2026 exportada? | nao | **SIM** | nao | nao |
+| 09/2026 exportada? | nao | nao | nao | nao |
+
+**09/2026 nao foi exportada por NENHUMA empresa** -- o escopo alcanca as quatro. Mas a sua regra e
+"por empresa", e a sua frase seguinte joga 07 e 08 INTEIRAS para Pauta DP. Pela regra literal, 08
+tambem seria aplicavel em emp1/emp3/emp4 (que nao exportaram) e 07 em emp1/emp2. **Nao fiz**, porque
+o seu exemplo atribuiu os dois diffs inteiros a Pauta -- mas registro a divergencia em vez de
+escolher por voce.
+
+### Estado: nada aplicado, nada deployado, cura FORA da arvore
+
+O motor da arvore e byte a byte o de `HEAD` (conferido por `diff`), e o `grep` de
+`intervalo_cadastrado` nele da **0** -- o reload de amanha as 03:30 nao poe nada no ar. A cura v2 esta
+em **`/tmp/e3_metade_2609/`** (`metade_v2.patch` md5 `b8da9158`, mais o arquivo de selo), e o selo
+sai da arvore com ela, porque sem o codigo ele ficaria vermelho.
+
+**O que eu preciso**: o `!` no numero certo -- **+13,04 h em 18 colabs (09/2026)**, com 07 (+25,26 h)
+e 08 (+27,36 h) em Pauta DP. Se preferir aplicar tambem 08 e 07 onde a empresa nao exportou, diga, que
+a regra literal permite.
+
+
 
 ## E3 METADE — o DIFF, e o que ele **nao** cura (leia isto antes do `!`)
 
