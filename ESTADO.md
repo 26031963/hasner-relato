@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:57:16.**
+**Medido em 26/09/2026 12:59:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF` |
+| `HEAD` local | `c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada"` |
 | `origin/main` | `6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,36 +22,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada"
 6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF
 be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anterior NAO estava -- e a lista agora e selo
 9b033fa2 [FABRICANTE-DESLIGADO] o alarme para de contar a fabrica e passa a contar a SESSAO (item 8)
 4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact
-83bf14e9 [PRE-PUSH-TESTA-O-COMMIT] o comentario que EXECUTOU e matou o push com rc=125
 ```
 
 ## `git status --short`
 
 ```
- M app/api/urls.py
- M app/api/views_mensageria.py
  M app/config/crons_duracao.json
- M app/docs/HAIKU-DENTES.md
- M bin/gerar_estado.py
- M mensageria/nucleo/core_client.py
- M mensageria/nucleo/ferramentas.py
-?? app/api/tests/test_selo_helper_nao_tem_decorador_de_view.py
-?? app/inteligencia/management/commands/lavrar_fabrica.py
-?? bin/fabrica_estado.py
 ?? esteira.pausada
-?? mensageria/nucleo/tests/test_fabrica_ligada.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Sem guarda no sítio da chamada. Medindo se isso aparece em prod:
-
   Ran 5 shell commands
 
 ● Provado no container de produção: a linha 271 explode com TypeError. Qualquer request no caminho por empresa dá 500, e o Haiku engole isso como core_indisponivel — fica cego sem
@@ -77,16 +64,19 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Rodando a cadeia inteira de ponta a ponta:
 
-  Rodar api e inteligencia · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=selo bash bin/trava_teste.sh -- docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTE…
+  Ran 4 shell commands
 
-✽ Misting… (1h 3m 24s · ↓ 110.6k tokens)
+● 431 testes OK. Fechando a fatia no TICKETS e no RELATO:
+
+  Publicar o relato · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -2
+
+· Misting… (1h 5m 53s · ↓ 116.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

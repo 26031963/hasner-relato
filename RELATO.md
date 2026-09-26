@@ -12,6 +12,41 @@
 | **fork FASE 2** | EM CURSO, so leitura, unica escrita `app/docs/RELATORIOS-PLANO.md`. A sessao **nao espera** por ele; quando entregar, commitar com pathspec |
 | **fabricante** | **DESLIGADO** por Ronald (timer `disabled`), com condicao de saida "criterio do estrutural fechado + corte Ronald" |
 
+### HAIKU-A-FABRICA-ESTA-LIGADA — a pergunta ganha DADO, e a cadeia toda tem um dono por etapa
+
+| etapa | quem | por que separado |
+|---|---|---|
+| MEDE | `bin/fabrica_estado.py::ler` (host) | a verdade sao `esteira.pausada` e `logs/vigia_esteira.estado`, e o container **so monta `app/`** -- ele nao ve esses arquivos nem se quiser |
+| ESCREVE | `inteligencia/management/commands/lavrar_fabrica.py` | um escritor por estado; o comando recebe o medido por `--json` e **nao mede nada** |
+| LE | `api/views_mensageria.py::api_mensageria_fabrica` | devolve o gravado com a IDADE do numero ao lado |
+| PERGUNTA | `nucleo/ferramentas.py::como_esta_a_fabrica`, no `contexto_do_chat` | o copiloto nao ve o host; sem esta ponte ele responderia por conta propria |
+
+O cuidado que define a fatia: **sem snapshot a resposta e `desconhecido`, nunca "ligada"**. "Ligada"
+e o palpite mais provavel e foi o estado da fabrica por meses -- um copiloto que complete a lacuna
+com o mais provavel acerta quase sempre e erra exatamente no dia em que a fabrica foi desligada, que
+e o unico dia em que alguem pergunta. Esse e o caso que MORDE no golden.
+
+E o `bin/gerar_estado.py` **parou de derivar**: aquelas 14 linhas que abriam o `esteira.pausada`
+inline eram exatamente o que o HAIKU teria copiado, e duas testemunhas com a mesma conta e a doenca
+da LEI-AKITA 2. Agora os tres (ESTADO, placar, copiloto) leem o mesmo medidor.
+
+**BUG PROVADO NO CAMINHO, curado na hora (LEI-AKITA 6).** `api/views_mensageria.py::_abriu_e_nao_bateu`
+carregava `@require_GET` sendo um helper sem rota, chamado como `_abriu_e_nao_bateu()`. O decorador
+exige `request` posicional, entao a chamada levantava `TypeError` -- e o caminho por EMPRESA do
+`/api/mensageria/prontidao-folha/` devolvia **500** sempre que houvesse snapshot de `prontidao_folha`
+(medi: **237**, competencia 09/2026). O consumidor, `prontidao_da_folha` do copiloto, tem
+`except Exception: return core_indisponivel` -- ou seja, **a IA ficava cega sobre a prontidao da
+folha dizendo "core indisponivel"**. Ficou invisivel porque o `?todas=1` retorna ANTES daquela linha,
+e e por isso que os 424 acessos do log estavam todos 200: o defeito morava no ramo que ninguem
+chamava. Selo novo por AST (nao por regex, que leria a prosa que explica o bug): helper com
+decorador de metodo HTTP = VERMELHO, com o par que morde.
+
+PROVA: medido chamando a funcao REAL dentro do `saas_core` -- antes
+`TypeError: _abriu_e_nao_bateu() missing 1 required positional argument: 'request'`, depois devolve
+o dicionario lavrado. Cadeia de ponta a ponta: `lavrado 2026-09-26: fabrica DESLIGADA, 72 pacote(s)
+caido(s)`, e os dois snapshots conferidos no banco (`fabricante_estado` valor=0,
+`pacotes_caidos` num=72 com o mapa por motivo). Suites: `api` + `inteligencia` **431 testes OK**,
+golden da mensageria **5 OK**, `HAIKU-DENTES.md em sincronia` (34 blocos, 40 endpoints).
 ### CARD4-E-RESCISAO-ANDAM-JUNTOS — pedido de 13:xx, registrado no mesmo turno
 
 Duas obras abertas no bloco OBRAS, cada uma citando a outra, porque separadas nenhuma das duas fecha:
