@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 20:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.1 MB). Acoes na janela: **794**.
+**Medido em 26/09/2026 20:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.6 MB). Acoes na janela: **802**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:45:17 | Bash | Ler o bloco HANDOFF atual | `sed -n '420,434p' docs/TICKETS.md` |
+| 20:45:13 | Bash | Como o selo confere o rodape e quais secoes o TICKETS tem | `cd /home/ronald/saas-hasner && grep -n "rodape" bin/regua_tickets.sh \| head -20; echo "---"; grep -n "^## \\|^# " app/docs/TICKETS.md \| head -30` |
+| 20:45:06 | Bash | Ver linhas curtas finais do TICKETS (rodape) | `awk 'length($0)<400' docs/TICKETS.md \| tail -30` |
+| 20:45:02 | Bash | Ver o rodape do TICKETS | `echo "=== RODAPE (ultimas 40) ===" && tail -40 docs/TICKETS.md` |
+| 20:44:53 | Bash | Ver topo do RELATO e linhas O65-O69 no TICKETS | `echo "=== RELATO head 24 ===" && sed -n '1,24p' docs/RELATO.md && echo "=== TICKETS: onde entra linha de fatia ===" && grep -n "^\| O6[5-9]" docs/TICKETS.md \| head` |
+| 20:44:33 | Bash | Ver como cada sitio escolhe vinculo | `for f in ponto/services/espelho.py ponto/services/faltas_de_hoje.py ponto/services/abriu_nao_bateu.py ponto/services/bordas_realizado.py ponto/services/esmeril_espelho.py relatorios/views.py folha/export.py; do echo "### $f"; grep -nE "EscalaColaborador\.objects" "$f" \| head -8; done` |
+| 20:44:31 | Bash | Conferir HEAD, origin e o veredito do push44 | `cd /home/ronald/saas-hasner && echo "=== HEAD/ORIGIN ===" && git log --oneline -3 && git fetch -q origin 2>&1 \| tail -2; echo "origin/main = $(git log --oneline -1 origin/main)"; echo "ahead = $(git rev-list --count origin/main..HEAD)"; echo "=== push44 ==="; tail -6 logs/push44.log 2>/dev/null \|\| echo "sem log"` |
+| 20:41:05 | Bash | Selo do vinculo pela celula com a divida declarada | `cd /home/ronald/saas-hasner && cat > bin/tests/vinculo_sem_perguntar_a_celula.txt <<'EOF' ; LEITOR QUE ESCOLHE VINCULO SEM PERGUNTAR A CELULA (O69, corte Ronald 27/09; L-002, L-021). ; ; A pergunta "qual vinculo vale NESTE dia" tem UM juiz: `CelulaDia.escala_geradora`. Quem escolhe vinculo ; por conta propria -- "exige ativa", "pega o ultimo", ".first()" -- tem regra propria para pergunta que ; ja ...` |
 | 20:37:01 | Bash | Empurrar os nove commits | `cd /home/ronald/saas-hasner && (git push origin HEAD:main > logs/push44.log 2>&1; echo "rc_push=$?" >> logs/push44.log; { git fetch -q origin; echo "origin/main = $(git log --oneline -1 origin/main)"; echo "ahead = $(git rev-list --count origin/main..HEAD)"; } >> logs/push44.log); grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|rc_push\|origin/main\|ahead\|RED" logs/push44.log \| tail -8` |
 | 20:36:54 | Bash | Abrir as linhas e commitar | `python3 <<'ENDPY' f='docs/TICKETS.md' s=open(f,encoding='utf-8').read() anc='\| PDF-X-ESPELHO-MEDIDOR \| infra \|' l1 = ('\| O69 VINCULO-DO-DIA \| dinheiro \| a pergunta "qual vinculo vale NESTE dia" passa a ter um juiz: ' '`CelulaDia.escala_geradora`. O fechamento pergunta a ela antes de rodar a fatia, e vinculo SOBREPOSTO para de contar ' 'os mesmos dias duas vezes \| **APLICADA em 09 e no ar 27 ...` |
 | 20:36:28 | Bash | Veredito do push43 | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|rc_push\|origin/main\|ahead\|RED" logs/push43.log \| tail -8` |
