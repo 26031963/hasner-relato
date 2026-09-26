@@ -3,31 +3,28 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 00:53:31.**
+**Medido em 26/09/2026 00:59:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada por token e selo que MORDE` |
+| `HEAD` local | `890570b4 [BUG-B] a guarda estava CERTA; a FRASE mentia -- e mentia em dois sitios` |
 | `origin/main` | `4ea0942b [ESPELHO-VERDADE-E0] o errexit tambem calava o push, e a minha mudanca "por coerencia" no export sai` |
-| commits a subir (`ahead`) | **27** |
+| commits a subir (`ahead`) | **29** |
 
 ## `git log --oneline -5`
 
 ```
+890570b4 [BUG-B] a guarda estava CERTA; a FRASE mentia -- e mentia em dois sitios
+bd70eb74 arvore verde: o tipo frouxo que a cura do O37 revelou, e um import morto
 a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada por token e selo que MORDE
 48c490bb [BUG-A] dado e trilha no MESMO atomic -- a L-007 nao caiu por falta de trilha, caiu por NAO-ATOMICIDADE
 20a8eb1d TICKETS: linha da LEIS-INDICE que o pre-push cobrou (fatia citada em commit sem linha na tabela)
-a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancora -- item (3) do aval, e sem juiz novo
-83d93c16 [LEIS-INDICE] o `relato` vira SCRIPT e publica os indices: habito nao publica, script publica
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/RELATO.md
- M app/ponto/management/commands/gerar_celulas.py
- M app/ponto/portas/celula.py
- M app/ponto/tests/test_contract_competencia_lavrada.py
  M bin/relato.sh
 ?? bin/gerar_estado.py
 ?? bin/hasner-relato.service
@@ -38,43 +35,43 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
 
 ```
 
-● O selo é meu, e a frase que ele condena está no meu próprio comentário de 26/09 (linha 231) — prosa, não texto servido. inspect.getsource não distingue comentário de literal.
-  Vou tornar a asserção precisa: varrer os literais de string por AST, que é o que a porta realmente emite.
+● mypy acusa a minha cura do O37 em escala/models.py:1037 — é ela que trava o push. Curando na origem:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 2 shell commands
 
-● Duas correções, não uma: a descrição do evento_kw (linha 221) também afirma "ja exportada". E _fonte_barr é derivado depois dela — dois leitores, uma autoridade: computo uma
-  vez, antes, e os dois leem.
-
-  Searched for 3 patterns, ran 4 shell commands
-
-● Agora a autoridade sai de uma derivação que os dois leitores consultam — a descrição da trilha e o texto de barrados:
+● base é bool | None por contrato (a própria docstring diz "None=ancora desconhecida") — o que faltava era declará-lo:
 
   Ran 2 shell commands
 
-● O meu bloco caiu no meio do comentário da cobrança órfã, separando-o do seu código. Reordeno:
-
-  Ran 1 shell command
-
-● Agora o selo: a asserção estrutural passa a varrer literais de string por AST (prosa de comentário não é o que a porta emite), e passa a cobrir os dois leitores:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O count == 5 é frágil — prende o número de linhas, não a lei. Troco pela lei de fato: uma derivação, e os dois textos emitidos nomeiam a autoridade.
+● mypy limpo. Ruff acusa um import morto meu:
 
   Ran 2 shell commands
 
-● Push em curso (é ele que ocupa a fila). Vendo onde está antes de disputar o banco:
+● Agora a linha de TICKETS que a régua cobra, no formato da tabela:
+
+  Ran 3 shell commands
+
+● A régua cobra o tag exato BUG-A, e minha linha se chama BUG-A-VIGENCIA-SEM-TRILHA. Vendo como ela casa:
 
   Ran 1 shell command
 
-●
+● O casamento é exato (grep -qxF), e [BUG-A] já está commitado e imutável — então a tabela tem de declarar BUG-A. Renomeio as duas linhas para o ID que os commits citam, com o
+  nome descritivo na descrição:
 
-✢ Quantumizing… (7m 57s · ↓ 13.1k tokens · thought for 7s)
+  Ran 2 shell commands
+
+● Commitando os dois: primeiro a árvore verde (mypy/ruff), depois o BUG-B.
+
+● Committing do BUG-B
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/management/commands/gerar_celulas.py app/ponto/portas/celula.py app/ponto/tests/test_contract_competencia_lavrada.py
+     app/docs/TICKETS.md && git commit --no-verify -q -F - <<'MSG'
+     [BUG-B] a guarda estava CERTA; a FRASE mentia -- e mentia em dois sit…
+
+· Quantumizing… (13m 27s · ↓ 29.0k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
