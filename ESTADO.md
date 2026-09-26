@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 08:54:19.**
+**Medido em 26/09/2026 08:59:19.**
 
 | | |
 |---|---|
@@ -32,27 +32,6 @@ b81544bc RELATO: linha do vigia
 
 ```
 
-  O DIFF fez o seu trabalho contra a minha própria fatia. Eu tinha código certo na forma, teste verde e número medido — e foi ao olhar a fonte do parâmetro que apareceu que ligar
-  o leitor transformaria um default em sentença para 198 vigilantes. Sem a exigência do DIFF, isso teria subido.
-
-  E o susto das 03:30 foi inteiramente autoinfligido: editei a zona inviolável na árvore servida tendo a cópia em mão. As duas leis que me salvaram (o DIFF obrigatório e o reload
-  declarado em config/crons.py) são as mesmas que outros incidentes escreveram — e a que eu furei, a LEI-AKITA 10, foi escrita ontem às 16:12.
-
-✻ Sautéed for 51s · done 2:47 AM
-
-● Background command "Empurrar o lote final" completed (exit code 0)
-
-  Read 1 file
-
-● origin/main = b81544bc, ahead 0 — tudo pousou, inclusive os commits de fecho.
-
-  Um padrão meu se repetiu três vezes numa noite e vale guardar entre sessões:
-
-  Ran 1 shell command, wrote 1 memory
-
-● Estado final verificado. A propriedade que importava está garantida: motor_calculo_v2.py é byte a byte o de HEAD, então o reload das 03:30 não põe dinheiro no ar. Os 2 commits à
-  frente e o RELATO.md modificado são a esteira escrevendo sozinha (o vigia anexa linhas) — cadência normal dela, não trabalho meu em pé.
-
   Turno fechado. O que está na sua mesa, em ordem de peso:
 
   1. e3-parei-a-flag-nao-carrega-decisao — o DIFF (−663,24 h) está publicado e não é um "aplica ou não": é a decisão de origem. intervalo_indenizavel só pode ter efeito no cálculo
@@ -65,10 +44,31 @@ b81544bc RELATO: linha do vigia
   zona inviolável na árvore servida tendo a cópia em mão. As duas estão na primeira linha do item no PENDENTES, não no meio da justificativa.
 
 ✻ Cooked for 1m 6s · done 2:57 AM
-                                                                                                                                           new task? /clear to save 596.3k tokens
+
+❯ corte Ronald: juiz periodos_do_dia nasce
+  aval Ronald: E3 fica SEM ler intervalo_indenizavel (politica 19/08: indeniza o suprimido, Art.71 par.4 / Sum.437, nao reabrir). intervalo_indenizavel vira CADASTRO declarado
+  por escala, com trilha e leitor (tudo tem cadastro), obra propria no BACKLOG; o motor so le a flag depois desse ato. E3 METADE: DIFF na sombra SO da troca do 60 cravado pelo
+  intervalo CADASTRADO, por competencia, com col638 13/08 e 18/08 nomeados; publica no RELATO; apply espera meu !. Os 8 dias emp4 lavrados por holerite ficam como estao. Empurra
+  os 2 commits pela regua. Nenhuma lei nova.
+
+● corte Ronald: juiz periodos_do_dia nasce — a trava tem o que cobrar. Vendo o que está à frente antes de começar:
+
+  Ran 1 shell command
+
+● Os 2 commits são do integrador — e um deles é [PRE-PUSH-TESTA-O-COMMIT], a cura da O56. Se ela está de pé, a suíte do push passa a rodar sobre o commit e eu posso construir em
+  paralelo sem contaminar:
+
+  Ran 1 shell command
+
+● A O56 está curada e no ar: o pre-push monta o app/ do sha empurrado (git archive), não a árvore viva. Lanço o push dos 2 e construo em paralelo sem contaminá-lo:
+
+● Running 1 shell command…
+
+✢ Transmogrifying… (1m 41s · ↓ 4.0k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ empurra e segue
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
