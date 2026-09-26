@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:38:21.**
+**Medido em 26/09/2026 01:39:04.**
 
 | | |
 |---|---|
@@ -28,9 +28,6 @@ _arvore limpa (`git status` vazio)_
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────┤
-  │ intervalo_indenizavel=False                                                             │ não foi lido — indenizou pré-assinalado         │
-  ├─────────────────────────────────────────────────────────────────────────────────────────┼─────────────────────────────────────────────────┤
   │ o mínimo julgado                                                                        │ 60 cravado, não os 90 do cadastro               │
   └─────────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────────┘
 
@@ -53,15 +50,18 @@ _arvore limpa (`git status` vazio)_
 
 ● Republicando a porta corrigida, e fazendo a sondagem (3) da ata:
 
-  Ler o conteudo da ata dos dois casos
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -2; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >
-     $S/ata.py <<'PY'
-     import datetime, json
-     from escala.models import CelulaDia
-     for cid, dia in ((638, datetime.date(2026, 8, 13)), (…
+  Ran 1 shell command
 
-· Quantumizing… (52m 47s · ↓ 158.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Decisivo: a ata já tem a verdade. Ela guarda tipo (o que o marco pede) e tipo_real (o que a batida carregava) — o cartório já casou por INSTANTE:
+
+  ┌──────────────┬─────────────────┬───────┬──────┬────────────────────┐
+  │ col369 23/09 │      marco      │  luz  │ tipo │     tipo_real      │
+  ├──────────────┼─────────────────┼───────┼──────┼────────────────────┤
+  │ hfi 13:00    │ intervalo volta │ 13:59 │ E    │ S ← gravada errada │
+  ├──────────────┼─────────────────┼───────┼──────┼────────────────────┤
+  │ hf 15:00     │ saída           │ 14:59 │ S    │ E ← gravada errada │
+  └──────────────┴─────────────────┴───────┴──────┴────────────────────┘
+
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
