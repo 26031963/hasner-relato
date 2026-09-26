@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:05:45.**
+**Medido em 26/09/2026 17:07:31.**
 
 | | |
 |---|---|
@@ -66,13 +66,13 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 
 ● Enquanto o push39 roda, uma medição que importa depois de um apply de dinheiro — o que ele fez com a prontidão do export de 09:
 
-● Commitar a prontidao e publicar
-  ⎿  $ cd /home/ronald/saas-hasner && git add -- app/docs/RELATO.md && git commit -q -m "RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por
-     furo_espelho
-     Medido pelo juiz \`folha/export.py::classificar_export\`, so leitura, por empresa. NAO afirmo delta: o
-     numero de a…
+● Esperar e ler o veredito do push39 · 1m 0s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 14); do if grep -qE "rc_push="
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk78pxgfu.output 2>/dev/null; then break; fi; sleep 45; done; grep -E
+     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)|rc_push|origin/main|ahea… (59s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Propagating… (1m 31s · ↓ 4.6k tokens)
+✢ Propagating… (3m 16s · ↓ 5.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
