@@ -1,6 +1,78 @@
 # RELATO — esteira saas-hasner
 
-PAREI: e3-metade-reescopo | espera Ronald (nada aplicado; col207 vai para CADASTRO x REALIDADE)
+PAREI: e3-metade-piso-do-campo-lixo | espera Ronald (nada aplicado; o piso sai de `minutos_jornada`, LIXO declarado em 4 sitios)
+
+## PAREI na E3 METADE — o piso legal sai de um campo que a casa declara LIXO, e eu nao fiz o grep
+
+Aval: "reescopo de aval = **PAREI com a tabela ANTES de aplicar qualquer parte**, nunca apply parcial".
+Entendido, e o estado real e melhor do que eu havia escrito: **nada foi aplicado** (medido no
+`FechamentoMensal` -- 16 dos 17 seguem no valor de antes). Agora a tabela, e ela traz um achado que
+muda a fatia.
+
+### O achado: `piso_intervalo_art71(minutos_jornada)` le o campo LIXO
+
+A minha cura faz `_piso(self.jornada_minutos)`, e `jornada_minutos = tipo_escala.minutos_jornada`.
+**A casa declara esse campo LIXO em quatro sitios**, um deles o selo que eu restaurei HOJE:
+
+| sitio | o que diz |
+|---|---|
+| `escala/utils.py:1377` | "Nao usa minutos_jornada (**lixo declarado**) nem intervalo_duracao_min" |
+| `escala/models.py:454` | "**NUNCA** usa intervalo_duracao_min nem minutos_jornada (**lixo**)" |
+| `escala/services/leitor_celula.py:351` | "a casa chama de **lixo declarado**" |
+| `relatorios/tests/test_pdf_previsto_pelo_juiz.py:10` | "`minutos_jornada=480` (**lixo**, 8 h) contra marcos de 12 h" |
+
+A lei existia (LEI-AKITA 4: **lei existente antes de corte novo**) e eu nao dei o grep. Pior: o
+quarto sitio e o selo que eu restaurei hoje de manha, no item (1) desta mesma ordem.
+
+### O tamanho, medido
+
+| | templates | vinculos ativos |
+|---|---|---|
+| em uso por colab ativo | 199 | — |
+| `minutos_jornada` **contradiz os marcos do proprio template** (>15 min) | **127** | **333** |
+| e nisso o **piso do Art.71 muda** -- o dano real da minha fonte | **3** | **4** |
+
+Os tres: `te#258` PAI-12x36.60 (declara 720 -> piso 60; marcos dao **0** -> piso 0), `te#450`
+(720 -> 60; marcos 360 -> **15**) e `te#445` (720 -> 60; marcos 345 -> **15**) -- este ultimo e o do
+col840, o mesmo que apareceu no censo do piso. Entao o dano e pequeno (4 vinculos) mas e real, e a
+fonte esta errada por principio, nao por acidente.
+
+### E muda o DESENHO, nao so a linha
+
+O piso do intervalo e **por DIA**, porque a jornada varia por dia -- o sabado de meio periodo da 6x1
+cai no piso ZERO, e e por isso que ele pode ser declarado sem pausa (esta escrito na docstring de
+`piso_intervalo_art71`). Eu fixei `intrajornada_minutos` no `__init__` do motor, por ESCALA. **Isso e
+o 60 cravado um nivel acima**: troquei um numero fixo por um numero fixo melhor, em vez de perguntar
+por dia.
+
+A autoridade existe e e a mesma que eu citei no selo restaurado hoje:
+**`escala/utils.py::minutos_previstos_do_dia`** -- "quantos minutos o dia preve", juiz declarado da
+familia celula/precedencia. O piso tem de sair dela, por dia.
+
+### Estado: nada aplicado, nada deployado, cura FORA da arvore
+
+| | |
+|---|---|
+| aplicado | **NADA** (medido: 16 dos 17 no valor de antes) |
+| deployado | **NADA** |
+| motor da arvore | tem a metade v2, **mas ela le o campo lixo** -- nao sobe assim |
+| col207 | **fora da E3 ate o cadastro**, e agora aparece na lista CADASTRO x REALIDADE |
+
+### col207 entrou na lista unica, com assinatura nova `C2`
+
+`C2` = "jornada declarada longe da medida: o piso do Art.71 sai da declarada e muda a folha". Ela le o
+cadastro e o juiz da batida, **sem depender da lavra**, e o detalhe diz **qual campo consertar**:
+
+| colab | detalhe da C2 | quem mente |
+|---|---|---|
+| col207 | `te#216` declara 240 min, marcos dao 240; medido **337** em 19 dias (+97) | os **marcos** e a jornada, juntos |
+| col840 | `te#445` declara 720 min, marcos dao **345**; medido 347 em 14 dias (-373) | so o **`minutos_jornada`** |
+
+Sao dois consertos diferentes, e sem os tres numeros lado a lado o admin mexeria no campo errado --
+e mexer no errado muda o previsto de todos os vinculos sob o template. **252 colaboradores** entram
+na lista por essa assinatura.
+
+
 
 ## CORRECAO GRAVE: eu escrevi "APLICADO" e **NAO APLIQUEI NADA**
 

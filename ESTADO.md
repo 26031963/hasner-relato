@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:59:31.**
+**Medido em 26/09/2026 11:05:01.**
 
 | | |
 |---|---|
@@ -43,40 +43,40 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├───────┼────────────────────────────────────────┤
+  │ :712  │ horas_falta = faltas × jornada         │
+  ├───────┼────────────────────────────────────────┤
+  │ :714  │ horas_abono                            │
+  ├───────┼────────────────────────────────────────┤
+  │ :845  │ extra = duracao - jornada — hora extra │
+  ├───────┼────────────────────────────────────────┤
+  │ :906  │ jornada_diaria                         │
+  └───────┴────────────────────────────────────────┘
 
-● Agora o col207 na lista CADASTRO x REALIDADE, onde você mandou — assinatura C2, lendo a jornada declarada contra o que o juiz mede:
+  Hora extra, falta e abono saem do campo que a casa declara lixo, e ele contradiz os marcos em 333 vínculos. Fazendo a E3 v3 como você mandou, e o selo com a lista que só
+  encolhe:
 
   Ran 1 shell command
 
-● Medindo a C2 em prod antes de qualquer selo — o col207 tem de aparecer:
+● Agora o _intra_minima por dia, o preenchimento em calcular_mes e os três sítios que leem o mínimo:
 
   Ran 1 shell command
 
-● 252 colabs, e o col207 aparece com +97. Mas os 12 maiores são todos 12x36 declarando 720 min e medindo ~410 — isso não fecha, e eu não publico um contador que pode estar
-  acusando 252 falsos. Medindo um caso dia a dia:
+● Faltam dois sítios, e o PerfilApuracao precisa continuar vencendo dentro do _intra_minima. Fechando:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● O medidor está certo, e o achado é maior do que eu pensava. Não é "declarado ≠ medido" — é o cadastro contradizendo a si mesmo:
+● Os três sítios leem o dia. Provando nos casos nomeados, com o piso vindo do juiz:
 
-  ┌───────────────┬─────────────────┬────────────────────────┬─────────┐
-  │               │ minutos_jornada │   marcos declarados    │ medido  │
-  ├───────────────┼─────────────────┼────────────────────────┼─────────┤
-  │ col840 te#445 │ 720             │ 13:00–19:00 = 360      │ 349     │
-  ├───────────────┼─────────────────┼────────────────────────┼─────────┤
-  │ col263 te#407 │ 720             │ 09:00–17:00 − 60 = 420 │ 371-442 │
-  └───────────────┴─────────────────┴────────────────────────┴─────────┘
+● A v3 nos quatro casos nomeados
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/v3.py <<'PY'
+     import datetime
+     from django.db.models import Q
+     from colaboradores.models import Colaborador
+     from escala.models import EscalaColaborador
+     from ponto.…
 
-  E isso atinge a minha própria cura da E3: eu calculo o piso do Art.71 sobre minutos_jornada — o campo que a casa já declara lixo:
-
-  Searched for 1 pattern
-
-● A lei existia e eu não fiz o grep. A casa declara minutos_jornada lixo em quatro sítios — inclusive no selo que eu acabei de restaurar ("minutos_jornada=480 (lixo, 8 h) contra
-  marcos de 12 h") — e a minha cura calcula o piso do Art.71 exatamente sobre ele. Medindo o tamanho:
-
-● Running 1 shell command…
-
-✢ Discombobulating… (5m 19s · ↓ 14.8k tokens)
+✢ Discombobulating… (10m 49s · ↓ 31.8k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
