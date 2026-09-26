@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 02:12:04.**
+**Medido em 26/09/2026 02:14:32.**
 
 | | |
 |---|---|
@@ -28,16 +28,6 @@ _arvore limpa (`git status` vazio)_
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
-  │ vigilantes 12x36 ativos que perderiam a indenização            │ 198 (137 seguiriam recebendo)             │
-  └────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
-
-  A flag não carrega uma decisão jurídica — ela pega carona no modo de cadastro do intervalo. Aplicar o DIFF retiraria 663 h de pagamento de 198 vigilantes com base num valor que
-  ninguém registra ter escolhido.
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Escrevendo o PAREI com o número, no topo da fila de decisão:
 
   Ran 3 shell commands
 
@@ -52,20 +42,30 @@ _arvore limpa (`git status` vazio)_
 
 ● O motor está de volta ao HEAD (zero referências à flag) — o reload das 03:30 não põe nada novo no ar. A cura está guardada em três formas com md5. Registrando isso e publicando:
 
-  Commitar o PAREI e publicar · 2s
-  ⎿  $ python3 - <<'PY'
-     f = 'docs/RELATO.md'
-     s = open(f, encoding='utf-8').read()
-     anc = "**Nada foi aplicado e nada foi deployado.** O codigo esta commitado; o motor em prod segue o de antes."
-     assert s.count(anc) == 1
-     n = '''### E TIREI A CURA DA ARVORE SERVIDA, porque as 03:30 ela entraria no ar sozinh…
+  Ran 1 shell command
 
-✶ Quantumizing… (1h 26m 30s · ↓ 273.3k tokens)
+● Background command "Rodar os selos da E3 e os de intra existentes" completed (exit code 0)
+
+● Background command "Esperar os selos da E3" completed (exit code 0)
+
+● Background command "Esperar os selos da E3" completed (exit code 0)
+
+● Background command "Esperar selos e DIFF e imprimir os dois" completed (exit code 0)
+
+  Read 1 file
+
+● Os 29 selos restantes (intra existentes + o juiz) passam com o motor de volta ao HEAD — a árvore está consistente. Empurrando:
+
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+
+✶ Quantumizing… (1h 28m 58s · ↓ 276.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
