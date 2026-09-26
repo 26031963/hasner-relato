@@ -1,5 +1,44 @@
 # RELATO — esteira saas-hasner
 
+## DEPLOY feito (L-083) + SMOKE em prod: o PDF diz 420 min, e o rotulo da tela ainda diz "aberto"
+
+**Deploy OK** pelo `bin/deploy.sh --sem-migrate`: `collectstatic` (static mais novo que o manifest),
+**prova de casca** (16 estaticos conferidos, 5 paginas compiladas), reload das TRES cascas juntas,
+tres rotas provadas (`/health/` do core 200, `/colaboradores/` do ui 302, `/health/` da mensageria
+200), selo BUG 128 verde e `importerror_500=0`. Migrations pendentes no schema do cliente: **0**.
+
+### O smoke que o corte pediu
+
+| fonte | col736 11/09 | col369 23/09 |
+|---|---|---|
+| **PDF do cartao** (`_coletar_dados_espelho`) | **`08:47-16:23 = 420 min`** | linha fora da janela do coletor |
+| folha gravada (FM de 09) | trabalhadas 198,44 h | 27,30 h |
+| rotulo da tela (`status_do_dia`) | **`aberto`** | **`aberto`** |
+
+**O PDF diz 420 min** -- o numero exato do corte. E o rotulo da tela ainda diz "aberto", e eu achei
+a causa em vez de deixar como misterio:
+
+```
+turnos_do_colab (juiz de GEOMETRIA), col736 11/09: 2 turno(s) -> 08:47-ABERTO; 16:23-ABERTO
+```
+
+**A cura vive no MOTOR; o rotulo da tela vem do JUIZ DE GEOMETRIA** (`ponto/turnos.py::turnos_do_colab`),
+que segue pareando pelo TIPO GRAVADO. Quem pergunta ao motor (folha, PDF, espelho) ja ve o dia inteiro;
+quem pergunta a geometria (o rotulo do calendario e o contador `turnos_abertos`) ainda ve dois turnos
+abertos. Nao e regressao do deploy: e o alcance da fatia, e o escopo da ordem dizia `MUDA:
+motor_calculo_v2.py`. Mudar o juiz de geometria alcanca TODOS os leitores dele de uma vez -- e obra
+propria, **O65**, nao um ajuste de passagem.
+
+TRES ASSIMETRIAS DE LEITOR curadas no caminho, as tres medidas: `espelho_do_colab` (a tela do espelho
+E a fonte do PDF) criava o motor sem celula e sem `colaborador_id`; o `pdf_espelho` alimentava celula
+mas nao passava `colaborador_id`; e a minha guarda da orfa contava batida CRUA, quando a exibicao le o
+cru por lei (Portaria 671) e a ata so tem lampada para o APURAVEL -- uma retratada dentro do periodo
+barrava a cura.
+
+PROVA: saida do `bin/deploy.sh` acima; smoke rodado em prod logo depois, so leitura; e
+ponto+relatorios+colaboradores+folha+escala = **4.078 testes OK** com esta arvore.
+
+
 ## APLICADO em 09/2026: a E3 completa entrou, e a prova pos-apply e ZERO divergencia
 
 PROVA: conferencia pos-apply de **607 colabs x 27 campos** contra o que o ensaio previu =

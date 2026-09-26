@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 17:02:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (68.3 MB). Acoes na janela: **650**.
+**Medido em 26/09/2026 17:03:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (68.3 MB). Acoes na janela: **653**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:02:50 | Bash | Abrir a linha que faltava | `python3 <<'ENDPY' f='docs/TICKETS.md' s=open(f,encoding='utf-8').read() anc='\| ESPELHO-VERDADE-E3-COMPLETA \| dinheiro \|' linha = ('\| ESMERIL-LAVRA-NO-BANCO \| dinheiro \| O63: a lavra do esmeril, que decide se a folga trabalhada paga 100%, ' 'para de vir de `logs/esmeril_espelho.json` e passa a ser DADO no banco (snapshot `esmeril_espelho`); sem lavra o ' 'recalculo RECUSA em vez de decidir no ...` |
+| 17:02:34 | Bash | Ver o que a regua de tickets cobra | `cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 \| tail -4` |
+| 17:02:28 | Bash | Registrar o deploy, o smoke e a O65 | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## DEPLOY feito (L-083) + SMOKE em prod: o PDF diz 420 min, e o rotulo da tela ainda diz "aberto"') A('') A('**Deploy OK** pelo `bin/deploy.sh --sem-migrate`: `collectstatic` (static mais novo que o manifest),') A('**prova de casca** (16 estaticos conferidos, 5 pag ...` |
 | 17:01:51 | Bash | Confirmar que o juiz de geometria ainda abre o dia | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as dt from colaboradores.models import Colaborador from ponto.janelas import janela_fechamento from ponto.turnos import turnos_do_colab for cid, dia in ((736, dt.date(2026,9,11)), (369, dt.date(2026,9,23))): c = Colaborador.objects.filter(pk=cid).select_related('e ...` |
 | 16:59:49 | Bash | Smoke completo das duas telas | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' p='/tmp/claude-1001/pauta/apply/smoke2.py' s=open(p).read() s=s.replace(""" try: esp = espelho_do_colab(c, mes=9, ano=2026) except TypeError: esp = espelho_do_colab(c)""", """ esp = espelho_do_colab(c, fim, ini, fim, ano=2026)""") s=s.replace(""" print(' TELA: %s' % {k: x.get(k) for k in ('status', 'horas', 'trabalhadas', 'minutos', 'turnos_txt',  ...` |
 | 16:59:40 | Bash | Ver a assinatura do espelho_do_colab | `grep -n "def espelho_do_colab" -A 6 ponto/services/espelho.py \| head -8` |

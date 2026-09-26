@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:02:01.**
+**Medido em 26/09/2026 17:03:13.**
 
 | | |
 |---|---|
-| `HEAD` local | `84ed1467 [ESPELHO-VERDADE-E3] a TESTEMUNHA passa a ler a mesma autoridade da folha (tela do espelho e PDF do cartao)` |
+| `HEAD` local | `fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo da tela vem de outro juiz` |
 | `origin/main` | `aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,28 +22,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo da tela vem de outro juiz
 84ed1467 [ESPELHO-VERDADE-E3] a TESTEMUNHA passa a ler a mesma autoridade da folha (tela do espelho e PDF do cartao)
 9e608c51 [ESMERIL-LAVRA-NO-BANCO] O63: dinheiro para de depender de arquivo do host, e sem lavra o recalculo RECUSA
 6b209c59 [ESPELHO-VERDADE-E3-COMPLETA] APLICADO em 09/2026 -- 607 colabs, 0 divergencia na conferencia pos-apply
 dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, e a SOMBRA mentiu uma vez hoje
-54a06418 [ESPELHO-VERDADE-E3-COMPLETA] a AMOSTRA achou um bug meu: o DIFF que publiquei estava INFLADO
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● A corrida colidiu com a suíte de fundo (um run por vez no banco de teste). Esperando o veredito dela:
-
   Ran 1 shell command
 
 ● Background command "Suites dos leitores tocados" completed (exit code 0)
@@ -70,9 +65,13 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 
 ● Confirmado: o juiz de geometria ainda devolve 2 turnos abertos no mesmo dia em que o motor e a folha dizem 420 min. Registrando:
 
-● Running 1 shell command…
+  Commitar o deploy e o smoke, publicar
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg13.txt <<'EOF'
+     [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo da tela vem de outro juiz
+     LEI-AKITA: origem=o deploy (L-083) para a casca servir o motor ja aplicado, testemunha=a saida do
+     proprio bin/deploy.sh (prova …
 
-· Billowing… (53m 7s · ↓ 61.6k tokens · thought for 3s)
+✻ Billowing… (54m 20s · ↓ 65.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
