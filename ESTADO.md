@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:25:45.**
+**Medido em 26/09/2026 19:28:10.**
 
 | | |
 |---|---|
-| `HEAD` local | `cb4152ef [O67] PAREI no item (6): 85 colabs, 3.268h56 -- e os meus DOIS medidores estavam cegos ao RED` |
+| `HEAD` local | `fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO sao da E1, mas 3 dos 25 sao` |
 | `origin/main` | `af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,62 +22,61 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO sao da E1, mas 3 dos 25 sao
 cb4152ef [O67] PAREI no item (6): 85 colabs, 3.268h56 -- e os meus DOIS medidores estavam cegos ao RED
 e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no TXT, dos quais 9 com ajuste
 6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo
 3046eef0 [BECO-FIO-FECHADO-CELULA-ABERTA] O66 medida: celula_furo_sem_canal = 68, e nenhum fechador consulta a celula
-af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ colab  │ diferença │  topo  │ coluna │             causa             │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col924 │ 132h40    │ 0h00   │ 132h40 │ zero vínculo na janela        │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col866 │ 84h03     │ 239h57 │ 155h54 │ vínculo SOBREPOSTO (conta 2x) │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col391 │ 31h57     │ 0h00   │ 31h57  │ zero vínculo na janela        │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col43  │ 29h20     │ 0h00   │ 29h20  │ zero vínculo na janela        │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col942 │ 28h09     │ 0h00   │ 28h09  │ zero vínculo na janela        │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col935 │ 11h02     │ 77h04  │ 88h06  │ troca de vínculo no meio      │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col400 │ 8h38      │ 156h56 │ 148h18 │ sem causa dessas              │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col245 │ 7h01      │ 13h59  │ 21h00  │ sem causa dessas              │
-  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
-  │ col648 │ 1h29      │ 182h38 │ 181h09 │ troca de vínculo no meio      │
-  └────────┴───────────┴────────┴────────┴───────────────────────────────┘
+  SELO: leitor de dinheiro ou de espelho que escolhe vinculo sem perguntar a celula = vermelho. Nenhuma lei nova.
 
-  9 no TXT somando 334h20; os outros 16 (867h35) já estão retidos e não foram pagos.
+● Ordem registrada. Fazendo o "MEDIR ANTES" que ela exige — os 4 de zero vínculo contra os 53 da E1:
 
-  (2) Sua hipótese se confirma exatamente na assinatura que você previu: dos 9 com gravado MAIOR que o espelho, 5 têm vínculo sobreposto — col277, col899, col866, col107, col736.
-  "Gravado maior que o espelho tem essa cara" estava certo. Mais 8 com troca de vínculo no meio da competência.
+  Ran 1 shell command
 
-  (3) Os de gravado 0h00: 7 colabs, todos com FM existindo — nenhum é "nunca calculado". E 4 têm zero vínculo ativo. Entre os que entram no TXT, quatro (col924, col391, col43,
-  col942) têm zero vínculo na janela: o fechamento calculou zero porque não achou vínculo, e o espelho vê as horas porque pega o último vínculo mesmo inativo. Duas regras
-  diferentes para "qual vínculo vale" — e é essa a raiz das duas pontas (o zero e o dobrado).
+● 53 registros mas 1 colaborador é suspeito — pode ser a minha extração falhando. Conferindo a forma antes de afirmar:
 
-  Nada tocado. O que espera seu ! é a cura dessa raiz, e ela tem endereço: o fechamento exige vínculo ativo e o espelho toma o último; enquanto as duas regras conviverem, o topo e
-  a coluna vão divergir por construção.
+  Ran 1 shell command
 
-✻ Baked for 18m 57s · done 7:20 PM
+● Eram tuplas, não dicts — minha extração devolveu None em todas e a resposta "não" não valia. Lendo a forma certa:
+
+  Ran 1 shell command
+
+● A forma é (pk, colaborador_id, data_inicio, data_fim, ativa) — o colaborador_id é o segundo. Medindo certo:
+
+  Ran 1 shell command
+
+● Agora a resposta vale, e ela tem um achado a mais:
+
+● Registrar o medir antes e commitar · 2s
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/RELATO.md'
+     s=open(f,encoding='utf-8').read()
+     cab='# RELATO — esteira saas-hasner\n'
+     L=[];A=L.append
+     A('')
+     A('## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25')
+     A('')
+     A('### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda')
+     A('')
+     A('A coluna do car…
+
+✽ Spinning… (1m 53s · ↓ 5.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```

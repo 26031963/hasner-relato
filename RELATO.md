@@ -1,5 +1,55 @@
 # RELATO — esteira saas-hasner
 
+## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25
+
+### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda
+
+A coluna do cartao soma **todos** os periodos; no fechamento a **folga trabalhada e campo separado**
+(`horas_folga_trabalhada`). Somando as duas parcelas, o "resto" vira arredondamento: col451 0h08,
+col416 0h07, col165 0h08. **Sessenta dos 85 nao eram divergencia, eram separacao de rubrica.** Terceira
+vez hoje que a minha medicao precisou de correcao antes de virar afirmacao.
+
+### (1) Cruzamento com o TXT: o dinheiro sao NOVE
+
+| colab | diferenca | topo | coluna | causa |
+|---|---|---|---|---|
+| col924 | 132h40 | 0h00 | 132h40 | **zero vinculo na janela** |
+| col866 | 84h03 | 239h57 | 155h54 | **vinculo SOBREPOSTO (conta 2x)** |
+| col391 | 31h57 | 0h00 | 31h57 | zero vinculo na janela |
+| col43 | 29h20 | 0h00 | 29h20 | zero vinculo na janela |
+| col942 | 28h09 | 0h00 | 28h09 | zero vinculo na janela |
+| col935 | 11h02 | 77h04 | 88h06 | troca de vinculo no meio |
+| col400 | 8h38 | 156h56 | 148h18 | sem causa dessas |
+| col245 | 7h01 | 13h59 | 21h00 | sem causa dessas |
+| col648 | 1h29 | 182h38 | 181h09 | troca de vinculo no meio |
+
+**9 no TXT somando 334h20.** Os outros 16 (867h35) estao retidos e nao foram pagos.
+
+### (2) A sua hipotese, confirmada na assinatura
+
+Dos **9 com gravado MAIOR que o espelho, 5 tem vinculo SOBREPOSTO** -- col277, col899, col866, col107,
+col736. "Gravado maior que o espelho tem essa cara" estava certo. Mais **8 com troca de vinculo no
+meio** da competencia.
+
+### (3) Os de gravado 0h00, e o "MEDIR ANTES"
+
+7 colabs, **todos com FechamentoMensal existindo** -- nenhum e "nunca calculado" --, e **4 com zero
+vinculo ativo**. Entre os que entram no TXT, quatro tem **zero vinculo na janela**: o fechamento
+calculou zero porque nao achou vinculo; o espelho ve as horas porque pega o ultimo, ativo ou nao.
+
+**Os 4 NAO estao no passivo da E1** (53 registros em 51 colaboradores): intersecao VAZIA. Entao a raiz
+deles nao e vigencia impossivel -- e zero vinculo cobrindo a janela, causa propria.
+
+**Mas tres dos 25 ESTAO: col277, col736 e col866** -- e sao tres dos cinco com vinculo sobreposto. A
+vigencia impossivel e a sobreposicao andam juntas neles, e a restauracao vai pelo propositor com o seu
+`!`, como a ordem previu.
+
+E **eu quase respondi errado aqui**: a 1a leitura do censo devolveu "53 registros em **1**
+colaborador" porque `vigencias_impossiveis` retorna **tuplas** `(pk, colaborador_id, ini, fim, ativa)`
+e eu extrai com `.get('colaborador_id')` -- `None` em todas, colapsando o conjunto. O "nao" so passou
+a valer depois de eu ler o contrato da funcao. **51 colaboradores, nao 1.**
+
+
 ## PAREI no item (6): **85 colabs com diferenca de VALOR, somando 3.268h56** | e os meus dois medidores estavam cegos
 
 Voce disse "o [nome] nao aparece no item (1), e o medidor nao ve plantao que cruza a meia-noite". Refiz
