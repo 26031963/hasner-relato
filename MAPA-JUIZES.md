@@ -1,8 +1,3 @@
-<!-- PUBLICADO de saas-hasner/app/docs/MAPA-JUIZES.md. Nomes e CPFs RASPADOS: a lista de nomes vem do BANCO
-     (869 colaboradores, mais os prefixos de 2 a 4 tokens, porque os documentos truncam),
-     nunca de regex adivinhada. Substituicoes neste arquivo: 0 nome(s), 0 CPF(s).
-     Os IDs  FICAM -- eles nao identificam ninguem fora desta casa. -->
-
 # MAPA DE JUIZES — quem responde cada pergunta, por familia
 
 _GERADO de `app/core/juizes.py` (adendo Ronald 25/09, LEIS-INDICE). **Nao editar a mao**: rode o

@@ -1,8 +1,3 @@
-<!-- PUBLICADO de saas-hasner/app/docs/LEIS.md. Nomes e CPFs RASPADOS: a lista de nomes vem do BANCO
-     (869 colaboradores, mais os prefixos de 2 a 4 tokens, porque os documentos truncam),
-     nunca de regex adivinhada. Substituicoes neste arquivo: 0 nome(s), 0 CPF(s).
-     Os IDs  FICAM -- eles nao identificam ninguem fora desta casa. -->
-
 # LEIS.md — INDICE UNICO DAS LEIS VIGENTES
 
 _Criado em 25/09 por ordem do Ronald (LEIS-INDICE). **Nenhuma lei inventada**: cada linha sai de

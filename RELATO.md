@@ -1,8 +1,3 @@
-<!-- PUBLICADO de saas-hasner/app/docs/RELATO.md. Nomes e CPFs RASPADOS: a lista de nomes vem do BANCO
-     (869 colaboradores, mais os prefixos de 2 a 4 tokens, porque os documentos truncam),
-     nunca de regex adivinhada. Substituicoes neste arquivo: 91 nome(s), 0 CPF(s).
-     Os IDs  FICAM -- eles nao identificam ninguem fora desta casa. -->
-
 # RELATO — esteira saas-hasner
 
 ## ESPELHO-VERDADE-E1 — os 54 pela LEI EXISTENTE (propositor + lista unica): 1 aplicado, e um **RED da lista**

@@ -1,9 +1,9 @@
 # BACKLOG — TOPO (obras ABERTAS)
 
-_Gerado de `app/docs/BACKLOG.md` (bloco OBRAS) a cada `relato`. **Sem nome e sem CPF**: a
-raspagem usa a lista de nomes do banco (869 colaboradores) como autoridade, nunca regex
-adivinhada; os ids `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa.
-Obra FEITA sai desta lista — ela e o que esta EM PE._
+_Gerado de `app/docs/BACKLOG.md` (bloco OBRAS) por `bin/relato.sh`. **Sem nome e sem CPF**:
+a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada; os ids
+`colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
+lista — ela e o que esta EM PE._
 
 **54 obras abertas.**
 
@@ -19,7 +19,7 @@ Obra FEITA sai desta lista — ela e o que esta EM PE._
 | **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **em fila** |
 | **O9** | PDF-E-O-ESPELHO | espera corte |
 | **O10** | TROCA-DE-PLANTAO | espera corte |
-| **O11** | BAI[nome]A-DIFERIDA-TODA-FAMILIA | espera aval |
+| **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera aval |
 | **O12** | CHAVE-MORTA-TRAB-FERIADO | **livre** |
 | **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | **em esteira** |
 | **O14** | ESPELHO-APP-DERIVA-DIA | espera aval |
@@ -34,8 +34,8 @@ Obra FEITA sai desta lista — ela e o que esta EM PE._
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |
 | **O25** | PISO-NAO-SOBE-POR-BATIDA | **proxima, logo apos CARTAO=ESPELHO 6/6* |
-| **O26** | W12[nome]36-HPD | **spec completa, posicao 2 da fila** |
-| **O27** | JANELA-E[nome]ATA | **medido; RED aberto e OUTRO** |
+| **O26** | W12X36-HPD | **spec completa, posicao 2 da fila** |
+| **O27** | JANELA-EXATA | **medido; RED aberto e OUTRO** |
 | **O28** | CATALOGO-SAIDA-ANTECIPADA-DESCONTA | espera `!` |
 | **O29** | RELATORIO-ATESTADOS-FOTOS | **SUPERADO pelo O30** (virou a FATIA 3 d |
 | **O30** | AUSENCIAS-DRAWER-E-LOTE | espera aval |
@@ -43,9 +43,9 @@ Obra FEITA sai desta lista — ela e o que esta EM PE._
 | **O32** | ZUMBIDO | **recebido -- obra de ESTEIRA/FABRICANTE |
 | **O33** | CARTAO-TOTAL-IGUAL-SOMA | **na fila, depois da F3** |
 | **O34** | FATIA-ANCORA-ENVELHECE | espera aval |
-| **O35** | CONTRATOS-14 | espera aval |
+| **O35** | CONTRATOS-14 | espera `!` |
 | **O36** | PRONTA-QUE-NAO-POUSA | **curado e no ar; 1 item filho (fabrican |
-| **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12[nome]36 | espera aval |
+| **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 | espera aval |
 | **O38** | VALIDACAO-QUE-NAO-GRAVA-DIZ-O-MOTIVO | **medindo** |
 | **O39** | REABRIR-LINHA-UI | **FRENTE DA FILA** |
 | **O40** | K8-COMPETENCIA-NAO-E-MES-CIVIL | **tripwire no ar; a fronteira FM x Perio |
@@ -53,13 +53,13 @@ Obra FEITA sai desta lista — ela e o que esta EM PE._
 | **O42** | ESTEIRA-SECA-25-09 + ADENDO | **8 de 10 feitos; 1 e 2 em cura** |
 | **O43** | RASTRO-ADMIN | **livre** |
 | **O44** | ARQUIVO-SIMPLES v2 | **item 1 feito; 2-8 com aval, na fila** |
-| **O45** | EM-ABERTO-CARTAO-[nome]-TELA | espera corte |
-| **O46** | E[nome]ECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
+| **O45** | EM-ABERTO-CARTAO-X-TELA | espera corte |
+| **O46** | EXECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
 | **O47** | AUDITORIA-JSP02: ato de admin sem IP | **na fila BO, dentro do RASTRO-ADMIN (O4 |
 | **O48** | FECHAMENTO-ONLINE | espera aval |
 | **O49** | INTERVALO-CADASTRADO-NAO-VIRA-HE | espera `!` |
-| **O50** | VINCULO-FIM-ANTES-DO-INICIO | espera aval |
+| **O50** | VINCULO-FIM-ANTES-DO-INICIO | espera `!` |
 | **O51** | CARTAO-COLUNA-SAIDA-ANT | nao comecado |
 | **O52** | ROTULO-TREINO-NAS-FOLGAS | nao comecado |
 | **O53** | JUIZ-UNICO-DA-BATIDA | espera aval |
-| **O54** | ESPELHO-VERDADE | espera aval |
+| **O54** | ESPELHO-VERDADE | espera `!` |
