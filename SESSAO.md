@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 12:59:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.8 MB). Acoes na janela: **678**.
+**Medido em 26/09/2026 13:02:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (64.9 MB). Acoes na janela: **673**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:02:36 | Bash | Veredito do push36 | `cd /home/ronald/saas-hasner && grep -E "rc_push\|origin/main\|ahead\|^Ran \|^(OK\|FAILED)" logs/push36.log \| tail -5` |
+| 12:59:42 | Bash | Publicar o relato | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -2` |
 | 12:59:30 | Bash | Empurrar a fatia do Haiku | `cd /home/ronald/saas-hasner && (git push origin HEAD:main > logs/push36.log 2>&1; echo "rc_push=$?" >> logs/push36.log; { git fetch -q origin; echo "origin/main = $(git log --oneline -1 origin/main)"; echo "ahead = $(git rev-list --count origin/main..HEAD)"; } >> logs/push36.log); grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|rc_push\|origin/main\|ahead" logs/push36.log \| tail -10` |
 | 12:59:15 | Bash | Commitar a fatia do Haiku | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg5.txt <<'EOF' [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada" LEI-AKITA: origem=bin/gerar_estado.py (derivava o estado da fabrica inline, e era o que o HAIKU ia copiar), testemunha=MetricaSnapshot fabricante_estado/pacotes_caidos, lavrado pelo medidor unico do host, RED=mensageria/ ...` |
 | 12:58:42 | Bash | Placar e a segunda instancia do pendente | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/regua_tickets.sh \| tail -1; python3 - <<'ENDPY' import json p='app/docs/PENDENTES_RONALD.json' d=json.load(open(p,encoding='utf-8')) itens = d if isinstance(d,list) else d.get('itens',d) for it in itens: if isinstance(it,dict) and it.get('id')=='cron-host-diverge-do-codigo': it['o_que'] = it['o_que'].rs ...` |
@@ -681,10 +683,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:03:56 | TaskStop |  | `-` |
 | 01:03:53 | TaskStop |  | `-` |
 | 01:03:53 | TaskStop |  | `-` |
-| 01:01:25 | Bash | Medir os vinculos com vigencia impossivel | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/bugc_red.py <<'PY' import json, os from escala.models import EscalaColaborador from colaboradores.models import Colaborador from django.db.models import F imp = list(EscalaColaborador.objects.filter(data_fim__isnull=False, data_fim__lt=F('data_inicio')) .values(' ...` |
-| 01:01:01 | Bash | PDF, vocabulario e leitores | `sed -n 87,126p escala/services/cadastro_realidade.py; echo "=== ASSINATURAS ==="; grep -n "^ASSINATURAS" -A 16 ponto/services/esmeril_espelho.py \| head -22; echo "=== quem chama lista( ==="; grep -rn "cadastro_realidade" --include=*.py --include=*.html . \| grep -v tests \| head` |
-| 01:00:38 | Bash | Ler a autoridade de vigencia | `grep -n "class VigenciaInvalida\\|def validar_vigencia" -A 30 colaboradores/services/vinculo.py \| head -60` |
-| 01:00:23 | Bash | Ler a lista unica inteira | `cat -n escala/services/cadastro_realidade.py \| sed -n 1,90p` |
-| 01:00:18 | Bash | Mapa da lista unica | `wc -l escala/services/cadastro_realidade.py && grep -n "^def \\|^ASSINATURA\\|^class \\|assinatura\\|SIGN\\|^CLASSES\\|def lista" escala/services/cadastro_realidade.py \| head -40` |
-| 01:00:09 | Bash | Lancar o push pela regua | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; git fetch origin -q; echo "ahead=$(git rev-list --count origin/main..HEAD)"; nohup git push origin HEAD:main > $S/push15.log 2>&1 & echo "push15 lancado $(date +%H:%M)"` |
-| 01:00:02 | Bash | Escrever e commitar o RELATO | `python3 - <<'PY' f = 'docs/RELATO.md' s = open(f, encoding='utf-8').read() cab = '# RELATO — esteira saas-hasner\n' assert s.startswith(cab) novo = ''' ## BUG-B — nao ha off-by-one: a guarda estava CERTA e a FRASE mentia (commit `890570b4`) O aval de ontem pedia o par **"emp4: 20/07 barra, 21/07 passa"**, na hipotese de um off-by-one na guarda de competencia lavrada, e mandava regenerar os 8 dias  ...` |
