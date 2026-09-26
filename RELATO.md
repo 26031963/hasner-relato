@@ -50,7 +50,27 @@ E uma classe que muda o desenho, nao um caso: **parametro de dinheiro que ganha 
 mesmo ato, de prova de que o valor foi DECIDIDO.** Sem isso, ligar o leitor e transformar um default em
 sentenca -- e foi por um milimetro que isso nao aconteceu aqui, porque o DIFF me obrigou a olhar.
 
-**Nada foi aplicado e nada foi deployado.** O codigo esta commitado; o motor em prod segue o de antes.
+### E TIREI A CURA DA ARVORE SERVIDA, porque as 03:30 ela entraria no ar sozinha
+
+Isto eu quase deixei passar. `config/crons.py:116` agenda `bin/deploy.sh --reload-agendado` as **03:30**,
+e esse reload e HUP gracioso: **o worker que sobe reimporta o `.py` do disco**. Ele so se recusa a rodar
+com migration pendente -- e a E3 nao tem migration. Em outras palavras: bastaria eu deixar o arquivo na
+arvore e **-663,24 h entrariam em producao as 03:30, sem ninguem olhando**, no espelho (que calcula ao
+vivo) e em qualquer recalculo de fechamento. Eram 02:45 quando eu medi isso.
+
+Entao a cura saiu da arvore e esta guardada em TRES formas, com md5:
+`motor_calculo_v2.py.CURA`, `test_e3.py.CURA` e `e3.patch` (44 linhas), em
+`scratchpad/e3_parada/`. **Prova**: `app/ponto/motor_calculo_v2.py` e byte a byte o de `HEAD`, e o
+`grep` de `intervalo_indenizavel` nele da **0**.
+
+Registro a tensao com a propria lei, porque ela existe: "voltar ao HEAD arquivo que prod usa" esta na
+lista do **NUNCA pre-aprovado** (L-009). Ela esta la para me impedir de descartar trabalho ou de mexer
+no que prod usa por conta propria. Aqui os dois lados apontam para o mesmo ato: **voltar ao HEAD e o que
+PROTEGE prod**, e nada foi descartado -- a cura esta inteira, medida, com o DIFF publicado e o patch
+guardado. Deixa-la na arvore seria o contrario: um apply de dinheiro por cron, sem aval, exatamente o
+que a L-009 proibe.
+
+**Nada foi aplicado e nada foi deployado.** O motor em prod e o de antes, e agora tambem o da arvore.
 
 
 ## ESPELHO-VERDADE-E2 — o RED, medido pela chamada REAL do fechamento
@@ -5351,6 +5371,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 02:00 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**26/09 02:10 vigia da esteira (ALARME)** -- a fatia placar_data_fixa caiu por vermelho DELA (esmeril sujo) -- nao relanco.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
