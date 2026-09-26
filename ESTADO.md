@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 04:00:45.**
+**Medido em 26/09/2026 04:05:45.**
 
 | | |
 |---|---|
@@ -24,6 +24,7 @@ b81544bc RELATO: linha do vigia
 ## `git status --short`
 
 ```
+ M app/config/crons_duracao.json
  M app/docs/RELATO.md
 ```
 
