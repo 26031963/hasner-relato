@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:26:31.**
+**Medido em 26/09/2026 15:32:01.**
 
 | | |
 |---|---|
@@ -40,22 +40,6 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  col736 11/09   HEAD: 08:47-ABERTO, 16:23-ABERTO → 0 min
-                 NOVO: 08:47-16:23               → 420 min
-  col51  19/09   HEAD: 07:12-ABERTO, 11:12-ABERTO → 0 min
-                 NOVO: 07:12-11:12               → 239 min  (sábado de 4 h, e a escala diz 07-11)
-
-  Duas batidas separadas por horas, ambas deixadas abertas, e o total caindo exatamente onde a escala manda. Não é batida espúria sendo pareada — e a amostra mostra o contrário: o
-  col107 tem um 21:20:00 S seguido de 21:20:25 E (25 segundos) que o marco corretamente ignora. turnos_abertos só cai: −137 em 08 (60 colabs) e −114 em 09 (39), e não sobe em
-  colab nenhum.
-
-  Item (2): o TXT entregue ao Domínio existe (08/2026 emp2, 11.073 caracteres para 261 linhas), mas só a emp2 tem exportação em 08 — para emp3 e emp4 a Pauta vira lista por colab,
-  como você previu. E houve dois envios da emp2 (352 linhas em 31/08, re-envio de 261 em 01/09): a Pauta tem de resolver qual vale antes de comparar. Quase errei aqui — eu media
-  na sombra, onde esse campo vem raspado (12 caracteres), e ia escrever que o sistema nunca guardou o arquivo. Conferi em prod: estava lá.
-
-  Abri O61 (Pauta de 08 contra o pago) e O62 (o juiz dizer "sem intervalo" com cadastro de 70 — achado que não curei, porque mudar o juiz alcança todos os leitores dele e o escopo
-  da ordem era o motor).
-
   Nada aplicado. O ! agora tem número honesto: −31,08 h no campo-alvo e +266,24 h trabalhadas em 09. Falta empurrar 54a06418, esperando a suíte liberar o banco de teste.
 
 ✻ Worked for 24m 24s · done 3:23 PM · 1 shell still running
@@ -71,9 +55,25 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 
 ● A árvore bate com o commit. Montando o critério antes do apply — o esperado por colab e campo, tirado da coluna TOTAL do DIFF:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Wrangling… (1m 36s · ↓ 2.2k tokens)
+● Vou fazer o apply em dois passos: ensaio em prod dentro de atomic() com rollback provado e comparação com o esperado; só depois a escrita real. Assim, divergência = PAREI sem
+  nada gravado.
+
+  Ran 2 shell commands
+
+● O ensaio rodou até o dump; só a serialização quebrou. Corrigindo e vendo o resultado inteiro:
+
+● Rodar o ensaio e ver a conferencia · 56s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
+     p='/tmp/claude-1001/pauta/apply/apply09.py'
+     s=open(p).read()
+     s=s.replace(" 'divergencias': [[c[0], c[1], c[2], c[3]] for c in fora]}, fh)",
+     " 'divergencias': [[str(c[0]), str(c[1]), str(c[2]), str(c[3])] for c in fora]}, fh)")
+     open(p,'w').write(s… (55s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Wrangling… (7m 6s · ↓ 7.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
