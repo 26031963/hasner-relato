@@ -92,8 +92,8 @@ do aval manda):
 
 | vinculo | colab | taxa inativo x ativo | `data_fim` | efeito |
 |---|---|---|---|---|
-| ec1302 | col152 [nome] | `50,0` x **`100,0`** | `2026-09-15` -> **`2026-09-24`** | escala DIFERENTE: 1 dia (24/09) passa a usar `PAI-12x36.35` |
-| ec1008 | col624 [nome] | `n/a` x **`91,9`** | `2026-07-13` -> **`2026-07-21`** | MESMA escala nos dois: **0 efeito** |
+| ec1302 | col152 RAUL | `50,0` x **`100,0`** | `2026-09-15` -> **`2026-09-24`** | escala DIFERENTE: 1 dia (24/09) passa a usar `PAI-12x36.35` |
+| ec1008 | col624 SILVANA | `n/a` x **`91,9`** | `2026-07-13` -> **`2026-07-21`** | MESMA escala nos dois: **0 efeito** |
 
 Passivo **57 -> 54**. CheckConstraint segue bloqueado.
 
@@ -161,25 +161,25 @@ Tres coisas que os numeros dizem, e valem mais que o veredito:
 
 | colab | INATIVO (o que o escritor errado fechou) | ATIVO | trilha |
 |---|---|---|---|
-| col30 [nome] | ec896 `PAI-12x36.101` 21/06 | ec895 `PAI-12x36.5` 23/05 | 3 |
-| col134 [nome] | ec835 `PAI-12x36.4` 24/06 | ec1027 `PAI-12x36.4` 22/06 | 2 |
-| col152 [nome] | ec1302 `PAI-12x36.35` 24/09 | ec1229 `112` 16/09 | 3 |
-| col165 [nome] | ec1092 `PAI-12x36.101` 21/07 | ec1093 `PAI-12x36.101` 21/06 | 2 |
-| col225 [nome] | ec1089 `PAI-12x36.3` 22/07 | ec193 `PAI-12x36.3` 21/07 | 3 |
-| col227 [nome] | ec1131 `PAI-12x36.42` 22/07 | ec195 `PAI-12x36.42` 21/07 | 5 |
-| col277 [nome] | ec1237 `88` 16/09 | ec1238 `88` 21/08 | 2 |
-| col369 [nome] | ec1296 `111` 22/09 | ec1313 `42x1` 19/09 | 2 |
-| col624 [nome] | ec1008 `PAI-12x36.1` 21/07 | ec1010 `PAI-12x36.1` 14/07 | **0** |
-| col650 [nome] | ec1075 `PAI-12x36.45` 26/08 | ec695 `PAI-12x36.45` 21/07 | **0** |
-| col736 [nome] | ec1187 `75` 31/08 | ec1289 `33` 21/08 | 2 |
-| col866 [nome] | ec1194 `PAI-12x36.64` 07/09 | ec1188 `PAI-12x36.64` 05/09 | 2 |
-| col876 [nome] | ec1158 `PAI-12x36.5` 06/08 | ec1159 `PAI-12x36.5` 04/08 | 2 |
-| col878 [nome] | ec1055 `80` 06/08 | ec1161 `80` 27/07 | 2 |
-| col883 [nome] | ec1061 `PAI-12x36.104` 07/08 | ec1146 `PAI-12x36.104` 01/08 | 1 |
-| col887 [nome] | ec1223 `TPL-12x36-DIU` 21/08 | ec1070 `TPL-12x36-DIU` 11/08 | 2 |
-| col889 [nome] | ec1068 `PAI-12x36.9` 12/08 | ec1079 `PAI-12x36.9` 10/08 | **0** |
-| col893 [nome] | ec1073 `PAI-COMERCIAL` 12/08 | ec1085 `PAI-COMERCIAL` 11/08 | 1 |
-| col899 [nome] | ec1310 `PAI-12x36.37` 25/09 | ec1311 `117` 01/09 | 2 |
+| col30 ADEILTON | ec896 `PAI-12x36.101` 21/06 | ec895 `PAI-12x36.5` 23/05 | 3 |
+| col134 MARIO | ec835 `PAI-12x36.4` 24/06 | ec1027 `PAI-12x36.4` 22/06 | 2 |
+| col152 RAUL | ec1302 `PAI-12x36.35` 24/09 | ec1229 `112` 16/09 | 3 |
+| col165 THIAGO | ec1092 `PAI-12x36.101` 21/07 | ec1093 `PAI-12x36.101` 21/06 | 2 |
+| col225 NIVALDO | ec1089 `PAI-12x36.3` 22/07 | ec193 `PAI-12x36.3` 21/07 | 3 |
+| col227 JOAO MARCOS | ec1131 `PAI-12x36.42` 22/07 | ec195 `PAI-12x36.42` 21/07 | 5 |
+| col277 VALDECI | ec1237 `88` 16/09 | ec1238 `88` 21/08 | 2 |
+| col369 LUIZ MAURICIO | ec1296 `111` 22/09 | ec1313 `42x1` 19/09 | 2 |
+| col624 SILVANA | ec1008 `PAI-12x36.1` 21/07 | ec1010 `PAI-12x36.1` 14/07 | **0** |
+| col650 MILENE | ec1075 `PAI-12x36.45` 26/08 | ec695 `PAI-12x36.45` 21/07 | **0** |
+| col736 JULIANE | ec1187 `75` 31/08 | ec1289 `33` 21/08 | 2 |
+| col866 CLEMILSON | ec1194 `PAI-12x36.64` 07/09 | ec1188 `PAI-12x36.64` 05/09 | 2 |
+| col876 MARCO ANTONIO | ec1158 `PAI-12x36.5` 06/08 | ec1159 `PAI-12x36.5` 04/08 | 2 |
+| col878 GREICE | ec1055 `80` 06/08 | ec1161 `80` 27/07 | 2 |
+| col883 FELIPE | ec1061 `PAI-12x36.104` 07/08 | ec1146 `PAI-12x36.104` 01/08 | 1 |
+| col887 CHRYSTIAN | ec1223 `TPL-12x36-DIU` 21/08 | ec1070 `TPL-12x36-DIU` 11/08 | 2 |
+| col889 WELLINGTON | ec1068 `PAI-12x36.9` 12/08 | ec1079 `PAI-12x36.9` 10/08 | **0** |
+| col893 SELMA | ec1073 `PAI-COMERCIAL` 12/08 | ec1085 `PAI-COMERCIAL` 11/08 | 1 |
+| col899 JUNIOR CESAR | ec1310 `PAI-12x36.37` 25/09 | ec1311 `117` 01/09 | 2 |
 
 **O PADRAO QUE MUDA A DECISAO DO ADMIN: em 14 dos 19 os DOIS vinculos tem a MESMA escala**, com o
 inativo comecando poucos dias DEPOIS do ativo. Isso nao e troca de escala -- e **vinculo DUPLICADO**,
@@ -268,9 +268,9 @@ porta com guardas, como o ato das 22:32.
 
 | vinculo | colab | celulas alteradas | barrados |
 |---|---|---|---|
-| ec949 | col820 [nome] | 5 | 0 |
-| ec1165 | col366 [nome] | 5 | 0 |
-| ec939 | col418 [nome] | 5 | 0 |
+| ec949 | col820 BRUNO | 5 | 0 |
+| ec1165 | col366 IURI | 5 | 0 |
+| ec939 | col418 ADRIANO | 5 | 0 |
 
 ```
 PROVA col418, 01-30/09
@@ -339,13 +339,13 @@ Tres perguntas suas, respondidas com medicao.
 
 | colab | vinculo | dias `T->F` |
 |---|---|---|
-| col242 [nome] | ec1155 | 22, 24, 26, 28, 30/08 |
-| col334 [nome] | ec1115 | 22, 24, 26, 28, 30/08 |
-| col245 [nome] | ec211 | 22, 24, 26, 28, 30/08 |
-| col334 [nome] | ec292 | 22, 24, 26, 28, 30/08 |
-| col415 [nome] | ec355 | 21, 23, 25, 27, 29, 31/08 |
-| col219 [nome] | ec187 | 22, 24, 26, 28, 30/08 |
-| col824 [nome] | ec983 | 22, 24, 26, 28/08 · 02, 04, 08, 10, 12, 14, 16, 18, 20/09 · **22, 24, 26, 28, 30/09** |
+| col242 FABRICIO | ec1155 | 22, 24, 26, 28, 30/08 |
+| col334 NILTON | ec1115 | 22, 24, 26, 28, 30/08 |
+| col245 OSMAR | ec211 | 22, 24, 26, 28, 30/08 |
+| col334 NILTON | ec292 | 22, 24, 26, 28, 30/08 |
+| col415 NELSON | ec355 | 21, 23, 25, 27, 29, 31/08 |
+| col219 HEITOR | ec187 | 22, 24, 26, 28, 30/08 |
+| col824 ROULIAN | ec983 | 22, 24, 26, 28/08 · 02, 04, 08, 10, 12, 14, 16, 18, 20/09 · **22, 24, 26, 28, 30/09** |
 | **total** | 7 vinculos / 6 colabs | **49** (44 medidos + 5 que o horizonte da porta alcancou) |
 
 Eram "52" por dois erros meus: a paridade calculada **so para tras** (a cura usa a mais proxima em
@@ -383,9 +383,9 @@ resolveu, e todos com a foto terminando em **20/09**:
 
 | colab | vinculo | template | vira |
 |---|---|---|---|
-| col820 [nome] | ec949 | te#233 | 22, 24, 26, 28, 30/09 |
-| col366 [nome] | ec1165 | te#180 | 22, 24, 26, 28, 30/09 |
-| col418 [nome] (o RED) | ec939 | te#180 | 22, 24, 26, 28, 30/09 |
+| col820 BRUNO | ec949 | te#233 | 22, 24, 26, 28, 30/09 |
+| col366 IURI | ec1165 | te#180 | 22, 24, 26, 28, 30/09 |
+| col418 ADRIANO (o RED) | ec939 | te#180 | 22, 24, 26, 28, 30/09 |
 | **total** | | | **15 dias** |
 
 **O padrao vale a pena notar**: as tres fotos param em 20/09, que e o fim da competencia 09. A foto e
@@ -416,13 +416,13 @@ motivo citando o corte. `barrados = 0` em todos (nenhuma competencia exportada f
 
 | vinculo | colab | celulas alteradas | dias `T->F` em 21/08-20/09 | dias `T->F` em 21/09-20/10 |
 |---|---|---|---|---|
-| ec1155 | col242 [nome] | 10 | 5 (22,24,26,28,30/08) | 0 |
-| ec1115 | col334 [nome] | 10 | 5 (26,28,30/08...) | 0 |
-| ec211 | col245 [nome] | 5 | 5 (22,24,26,28,30/08) | 0 |
-| ec292 | col334 [nome] | **0** | 5 | 0 |
-| ec355 | col415 [nome] | 6 | 6 (21,23,25,27,29,31/08) | 0 |
-| ec187 | col219 [nome] | 10 | 5 (26,28,30/08...) | 0 |
-| ec983 | col824 [nome] | 26 | 13 | **5** (22,24,26,28,30/09) |
+| ec1155 | col242 FABRICIO | 10 | 5 (22,24,26,28,30/08) | 0 |
+| ec1115 | col334 NILTON | 10 | 5 (26,28,30/08...) | 0 |
+| ec211 | col245 OSMAR | 5 | 5 (22,24,26,28,30/08) | 0 |
+| ec292 | col334 NILTON | **0** | 5 | 0 |
+| ec355 | col415 NELSON | 6 | 6 (21,23,25,27,29,31/08) | 0 |
+| ec187 | col219 HEITOR | 10 | 5 (26,28,30/08...) | 0 |
+| ec983 | col824 ROULIAN | 26 | 13 | **5** (22,24,26,28,30/09) |
 | **total** | **6 colabs / 7 vinculos** | **67** | **44** | **5** |
 
 **67 celulas tocadas**, as 67 com `dna_anterior` preenchido e `regeneracoes=1`; **49 dias viraram
@@ -444,7 +444,7 @@ humana.
 
 ### O RED NAO FOI CURADO NO DADO
 
-**col418 [nome], que e o RED da fatia, nao foi tocado**: `regeneracoes=0`, celulas ainda
+**col418 ADRIANO, que e o RED da fatia, nao foi tocado**: `regeneracoes=0`, celulas ainda
 `21=T 22=T ... 30=T`. Os dias ruins dele sao 21-30/09 = competencia **10**, fora da janela que eu
 medi, e ele nao entrou no universo porque o universo foi medido na comp 09. O codigo curado **ja
 responde certo** para ele (`21=T 22=F 23=T 24=F ...`), mas o dado segue errado.
@@ -490,7 +490,7 @@ logo acima declara a lei certa -- *"a foto COMPLEMENTA onde o ciclo sabe respond
 ele nao sabe"* -- mas no 12x36 o TEMPLATE devolve `None` (nao declara fase) e o codigo assume
 **trabalho**. A ANCORA sabe responder (`delta % 2`), e nao e consultada nesse ramo.
 
-**RED col418 [nome]** (te#180 PAI-12x36.5, ancora 20/07): a foto de 09/2026 declara folga nos dias
+**RED col418 ADRIANO** (te#180 PAI-12x36.5, ancora 20/07): a foto de 09/2026 declara folga nos dias
 PARES, 02 a 20/09, e **para ai**. Como existe foto no mes, o ramo vale para setembro inteiro; 21 a
 30/09 nao estao na foto -> `None` -> trabalho. Celulas: `21=T 22=T 23=T ... 30=T`, **dez dias
 seguidos num 12x36**.
@@ -627,9 +627,9 @@ passada por pacote para o import relativo.
 
 | colab | pedido no aval | em prod agora | |
 |---|---|---|---|
-| col639 [nome] | 120,00 h | **120,00 h** | OK |
-| col70 [nome] | 8h00/noite | **72,00 h em 9 noites = 8h00** | OK |
-| col296 [nome] | 6h51/noite | **6,00 h** (emp2/CCT, **intocado** pelo apply so-emp3) | ver abaixo |
+| col639 ANDERSON | 120,00 h | **120,00 h** | OK |
+| col70 CLAUDIO | 8h00/noite | **72,00 h em 9 noites = 8h00** | OK |
+| col296 GENEIS | 6h51/noite | **6,00 h** (emp2/CCT, **intocado** pelo apply so-emp3) | ver abaixo |
 
 `col296` e emp2, declarada `cct` pelo proprio aval, e a clausula 38-d afasta a hora reduzida:
 `360 min / 60 = 6h00`. Os `6h51` sao `360 / 52,5`, a hora REDUZIDA, que e CLT. O apply "so emp3" nao
@@ -935,7 +935,7 @@ trilha do recalculo    acao=recalc_regime_clt | usuario=ronald_ti
 08/2026                INTACTA -- col70 segue com 120,00 h
 ```
 
-**A CONFERENCIA QUE O AVAL PEDIU** -- `col70 [nome]`:
+**A CONFERENCIA QUE O AVAL PEDIU** -- `col70 CLAUDIO DA SILVA`:
 
 ```
 fonte da regua       legal (empresa em CLT: Juliani Seguranca Patrimonial)
@@ -955,93 +955,93 @@ competencia 08/2026. Rodado em `atomic()` com rollback: **nada foi escrito**.
 
 | colab | nome | AN | HE 50 | HE 100 | DSR | Banco | Trab |
 |---|---|---|---|---|---|---|---|
-| col126 | [nome] | +51.41 | -0.49 | — | -0.25 | — | +24.04 |
-| col134 | [nome] NE | +43.36 | -0.26 | — | -0.35 | — | +23.94 |
-| col155 | [nome] CONCE | +43.09 | -22.49 | -22.51 | — | — | — |
-| col67 | [nome] | +35.84 | — | — | — | — | — |
-| col168 | [nome] | +35.72 | -0.28 | — | -0.27 | — | — |
-| col84 | [nome] | +35.12 | -0.02 | — | -0.02 | — | — |
-| col59 | [nome] | +34.60 | — | — | — | — | — |
-| col499 | [nome] | +34.45 | — | — | — | — | — |
-| col173 | [nome] | +34.41 | -0.21 | — | -0.23 | — | — |
-| col111 | [nome] | +34.21 | — | — | — | — | — |
-| col101 | [nome] BERTH | +34.11 | -0.40 | — | -0.39 | — | — |
-| col113 | [nome] | +33.98 | — | — | — | — | — |
-| col177 | [nome] FRE | +33.49 | — | — | — | — | +0.07 |
-| col157 | [nome] | +33.32 | -0.12 | — | -0.13 | — | — |
-| col94 | [nome] | +33.01 | -1.08 | — | -1.15 | — | — |
-| col154 | [nome] FERREIR | +32.38 | -0.24 | — | -0.21 | — | +0.19 |
-| col70 | [nome] | +32.35 | -0.16 | — | -0.15 | — | — |
-| col141 | [nome] | +31.84 | -0.09 | — | -0.08 | — | — |
-| col130 | [nome] | +30.67 | -0.07 | — | -0.03 | — | — |
-| col747 | [nome] GONCALVE | +30.58 | -0.95 | — | -0.85 | — | — |
-| col72 | [nome] | +29.29 | — | — | — | — | — |
-| col165 | [nome] | +25.57 | — | — | — | — | — |
-| col80 | [nome] | +25.24 | -0.15 | — | -0.09 | — | — |
-| col127 | [nome] | +25.12 | — | — | — | — | — |
-| col163 | [nome] | +23.96 | — | — | — | — | — |
-| col121 | [nome]  | +22.63 | — | — | — | — | — |
-| col110 | [nome] RODRIGU | +22.54 | — | — | — | — | — |
-| col78 | [nome] | +22.34 | -0.15 | — | -0.20 | — | — |
-| col876 | [nome] | +20.05 | — | — | — | — | — |
-| col149 | [nome] | +19.14 | -0.14 | — | -0.10 | — | — |
-| col125 | [nome] | +13.56 | — | — | — | — | — |
-| col49 | [nome] | -13.53 | -8.78 | — | — | — | -26.65 |
-| col95 | [nome] | +10.86 | — | — | — | — | — |
-| col868 | [nome] | +7.43 | — | — | — | -0.21 | — |
-| col128 | [nome] JUN | +6.95 | — | — | — | — | — |
-| col109 | [nome] | +5.72 | — | — | — | — | — |
-| col85 | [nome] BENEDI | +2.30 | — | — | — | — | — |
-| col147 | [nome] | +2.29 | — | — | — | +7.54 | — |
-| col56 | [nome] | — | -0.17 | — | -0.18 | — | — |
-| col58 | [nome] | — | -0.12 | — | -0.11 | — | — |
-| col61 | [nome] BARZ | — | -0.39 | — | -0.43 | — | — |
-| col639 | [nome] | — | -0.85 | — | -0.80 | — | — |
-| col638 | [nome] NASC | — | — | — | — | +7.54 | — |
-| col62 | [nome] BEN | — | -0.22 | — | -0.27 | — | — |
-| col63 | [nome]  | — | -1.57 | — | -1.44 | — | — |
-| col761 | [nome] | — | -0.79 | — | -0.82 | — | — |
-| col79 | [nome] | — | -0.35 | — | -0.24 | — | — |
-| col81 | [nome] | — | -5.45 | — | — | — | — |
-| col82 | [nome] | — | — | — | — | +7.55 | — |
-| col746 | [nome] | — | — | — | — | +7.54 | — |
-| col87 | [nome] | — | — | — | — | +7.54 | — |
-| col89 | [nome] | — | — | — | — | +7.54 | — |
-| col90 | [nome] | — | -0.52 | — | -0.53 | — | — |
-| col91 | [nome] NEVE | — | -0.11 | — | -0.08 | — | — |
-| col92 | [nome] OLIVE | — | -0.83 | — | -0.85 | — | — |
-| col741 | [nome] | — | -0.09 | — | -0.11 | — | — |
-| col750 | [nome] | — | -0.98 | — | -0.98 | — | — |
-| col752 | [nome] | — | -1.00 | — | -0.95 | — | — |
-| col642 | [nome] | — | — | — | — | +3.35 | — |
-| col743 | [nome] GONC | — | -3.89 | -0.07 | +2.83 | — | -13.19 |
-| col97 | [nome] SAN | — | -0.68 | — | -0.73 | — | — |
-| col100 | [nome] | — | -0.64 | — | -0.76 | — | — |
-| col104 | [nome] | — | -0.07 | — | -0.20 | — | — |
-| col106 | [nome] JUN | — | — | — | — | — | +0.11 |
-| col107 | [nome] | — | +3.54 | +2.90 | +0.81 | -16.94 | +107.68 |
-| col112 | [nome] PEREIR | — | +0.12 | — | — | — | +0.13 |
-| col114 | [nome] | — | — | — | — | +7.55 | — |
-| col866 | [nome] SIL | — | -0.04 | — | -0.01 | — | +59.88 |
-| col115 | [nome] | — | -0.03 | — | -0.04 | — | — |
-| col744 | [nome] | — | -0.51 | — | -0.47 | — | — |
-| col123 | [nome] | — | -0.74 | — | -1.05 | — | — |
-| col749 | [nome] | — | — | — | — | +7.54 | — |
-| col131 | [nome] | — | — | — | — | +67.90 | — |
-| col137 | [nome] | — | — | — | — | — | +12.00 |
-| col138 | [nome] | — | -0.02 | — | — | — | — |
-| col139 | [nome] G | — | -0.48 | — | -0.57 | — | — |
-| col829 | [nome] | — | — | — | — | +7.54 | — |
-| col150 | [nome] | — | -1.22 | — | -1.10 | — | — |
-| col152 | [nome] | — | +0.51 | — | — | -15.93 | -12.89 |
-| col159 | [nome] | — | -0.99 | — | -0.99 | — | — |
-| col755 | [nome] | — | -0.46 | — | -0.44 | — | — |
-| col643 | [nome] | — | -0.54 | — | -0.54 | — | — |
-| col166 | [nome] SIL | — | -0.13 | — | -0.13 | — | — |
-| col169 | [nome] | — | -1.10 | — | -1.06 | — | — |
-| col170 | [nome] | — | -0.89 | — | -0.87 | — | — |
-| col171 | [nome] TRAMON | — | -0.05 | — | -0.04 | — | — |
-| col172 | [nome] INA | — | -0.08 | — | -0.08 | — | — |
+| col126 | LUCAS ZACARIA RUIZ | +51.41 | -0.49 | — | -0.25 | — | +24.04 |
+| col134 | MARIO CLARO DE CARVALHO NE | +43.36 | -0.26 | — | -0.35 | — | +23.94 |
+| col155 | REINALDO PACIFICO DA CONCE | +43.09 | -22.49 | -22.51 | — | — | — |
+| col67 | CIRINEU AMARAL | +35.84 | — | — | — | — | — |
+| col168 | VALDEMIR DOS SANTOS | +35.72 | -0.28 | — | -0.27 | — | — |
+| col84 | EMERSON DE OLIVEIRA | +35.12 | -0.02 | — | -0.02 | — | — |
+| col59 | AIRTON JOSE DE AZEVEDO | +34.60 | — | — | — | — | — |
+| col499 | RODRIGO ESTEVAM SARDI | +34.45 | — | — | — | — | — |
+| col173 | VITORIO DE GODOY | +34.41 | -0.21 | — | -0.23 | — | — |
+| col111 | JOAO VITOR DE FREITAS REIS | +34.21 | — | — | — | — | — |
+| col101 | HUGO LEONARDO ARAUJO BERTH | +34.11 | -0.40 | — | -0.39 | — | — |
+| col113 | JOEL MARCOS DE NEZ | +33.98 | — | — | — | — | — |
+| col177 | WEVERTOWN RODRIGUES DE FRE | +33.49 | — | — | — | — | +0.07 |
+| col157 | RENATO ALEX DE BASSI | +33.32 | -0.12 | — | -0.13 | — | — |
+| col94 | FERNANDO JERONIMO DE PAULA | +33.01 | -1.08 | — | -1.15 | — | — |
+| col154 | REGINALDO PINHEIRO FERREIR | +32.38 | -0.24 | — | -0.21 | — | +0.19 |
+| col70 | CLAUDIO DA SILVA | +32.35 | -0.16 | — | -0.15 | — | — |
+| col141 | MATHEUS SUNTAQUE DE SOUZA | +31.84 | -0.09 | — | -0.08 | — | — |
+| col130 | MARCIO MACEDO DA SILVA | +30.67 | -0.07 | — | -0.03 | — | — |
+| col747 | EMERSON RODRIGUES GONCALVE | +30.58 | -0.95 | — | -0.85 | — | — |
+| col72 | CLEBER CORREA | +29.29 | — | — | — | — | — |
+| col165 | THIAGO APARECIDO PERES | +25.57 | — | — | — | — | — |
+| col80 | EDIMAR DOS SANTOS | +25.24 | -0.15 | — | -0.09 | — | — |
+| col127 | LUCIANE MARIA ASSENCIO | +25.12 | — | — | — | — | — |
+| col163 | THALYSON KAIKE DAGUANO | +23.96 | — | — | — | — | — |
+| col121 | JULIO WELLINGTON DOMINGOS  | +22.63 | — | — | — | — | — |
+| col110 | JOAO VITOR BATISTA RODRIGU | +22.54 | — | — | — | — | — |
+| col78 | DIOGO FERNANDES GOMES | +22.34 | -0.15 | — | -0.20 | — | — |
+| col876 | MARCO ANTONIO ROMAGNA | +20.05 | — | — | — | — | — |
+| col149 | RADAMI NEVES JUNIOR | +19.14 | -0.14 | — | -0.10 | — | — |
+| col125 | LUAN CRISTIAN DA CRUZ | +13.56 | — | — | — | — | — |
+| col49 | JANERSON ERIK FRANÇA LIMA | -13.53 | -8.78 | — | — | — | -26.65 |
+| col95 | GEOVANI BAMBIL COELHO | +10.86 | — | — | — | — | — |
+| col868 | LUCAS HENRIQUE TRIANO | +7.43 | — | — | — | -0.21 | — |
+| col128 | LUIZ CARLOS DOS SANTOS JUN | +6.95 | — | — | — | — | — |
+| col109 | JEFFERSON SOUZA DA SILVA | +5.72 | — | — | — | — | — |
+| col85 | EMERSON DE OLIVEIRA BENEDI | +2.30 | — | — | — | — | — |
+| col147 | PEDRO VIEIRA LAVOURA | +2.29 | — | — | — | +7.54 | — |
+| col56 | ADEMIR DOS SANTOS | — | -0.17 | — | -0.18 | — | — |
+| col58 | ADRIANO RIBEIRO DE GODOI | — | -0.12 | — | -0.11 | — | — |
+| col61 | ALYSSON FELIPE SANTOS BARZ | — | -0.39 | — | -0.43 | — | — |
+| col639 | ANDERSON DE ALMEIDA ASSIS | — | -0.85 | — | -0.80 | — | — |
+| col638 | ANDRESSA FRANCISCA DO NASC | — | — | — | — | +7.54 | — |
+| col62 | ANTONIO JOAQUIM WERNER BEN | — | -0.22 | — | -0.27 | — | — |
+| col63 | APARECIDO VALENTIM SOARES  | — | -1.57 | — | -1.44 | — | — |
+| col761 | CLAYTON COSME PARDINHO | — | -0.79 | — | -0.82 | — | — |
+| col79 | DOUGLAS BESSANI | — | -0.35 | — | -0.24 | — | — |
+| col81 | EDNEI ELCIO DE MELO | — | -5.45 | — | — | — | — |
+| col82 | EDSON CLEI DA SILVA | — | — | — | — | +7.55 | — |
+| col746 | EMERSON LEANDRO CATHARINO | — | — | — | — | +7.54 | — |
+| col87 | FABIO ROSA DA SILVA | — | — | — | — | +7.54 | — |
+| col89 | FELIPE FERNANDES BARROZO | — | — | — | — | +7.54 | — |
+| col90 | FELIPE LEMES RAIMUNDO | — | -0.52 | — | -0.53 | — | — |
+| col91 | FERNANDO FERREIRA DAS NEVE | — | -0.11 | — | -0.08 | — | — |
+| col92 | FERNANDO HENRIQUE DE OLIVE | — | -0.83 | — | -0.85 | — | — |
+| col741 | FERNANDO RODRIGO DA SILVA | — | -0.09 | — | -0.11 | — | — |
+| col750 | FERNANDO RODRIGUES LEANDRO | — | -0.98 | — | -0.98 | — | — |
+| col752 | FLAVIO FARIAS OLIVEIRA | — | -1.00 | — | -0.95 | — | — |
+| col642 | FRANCISLAINE SMOLAK CENA | — | — | — | — | +3.35 | — |
+| col743 | GABRIEL ALCIDES LAMAR GONC | — | -3.89 | -0.07 | +2.83 | — | -13.19 |
+| col97 | GUILHERME MENDONÇA DOS SAN | — | -0.68 | — | -0.73 | — | — |
+| col100 | HERALDO GIANGARELLI | — | -0.64 | — | -0.76 | — | — |
+| col104 | ILSON ALVES DOS REIS | — | -0.07 | — | -0.20 | — | — |
+| col106 | IZENOR INACIO DE ABREU JUN | — | — | — | — | — | +0.11 |
+| col107 | JANDERSON DA SILVA ARAUJO | — | +3.54 | +2.90 | +0.81 | -16.94 | +107.68 |
+| col112 | JOAO VITOR DE SOUZA PEREIR | — | +0.12 | — | — | — | +0.13 |
+| col114 | JOSE CARLOS APOLINARIO | — | — | — | — | +7.55 | — |
+| col866 | JOSE CLEMILSON DE MELO SIL | — | -0.04 | — | -0.01 | — | +59.88 |
+| col115 | JOSE EDILMAR DO NASCIMENTO | — | -0.03 | — | -0.04 | — | — |
+| col744 | JUAN PABLO HENRIQUE DACIUK | — | -0.51 | — | -0.47 | — | — |
+| col123 | LEANDRO REDON DA SILVA | — | -0.74 | — | -1.05 | — | — |
+| col749 | LUIZ HENRIQUE LADEIRA | — | — | — | — | +7.54 | — |
+| col131 | MARCO ANTONIO BORTOLOTI | — | — | — | — | +67.90 | — |
+| col137 | MATEUS DE SOUZA FERMINO | — | — | — | — | — | +12.00 |
+| col138 | MATHEUS GODOY DA COSTA | — | -0.02 | — | — | — | — |
+| col139 | MATHEUS HENRIQUE RIBEIRO G | — | -0.48 | — | -0.57 | — | — |
+| col829 | RAFAEL OLIVEIRA SILVA | — | — | — | — | +7.54 | — |
+| col150 | RAILTON CAMPOS DA SILVA | — | -1.22 | — | -1.10 | — | — |
+| col152 | RAUL GONÇALVES ALVES | — | +0.51 | — | — | -15.93 | -12.89 |
+| col159 | RODOLFO MORILHAS | — | -0.99 | — | -0.99 | — | — |
+| col755 | RODRIGO DE SOUZA SANFELICE | — | -0.46 | — | -0.44 | — | — |
+| col643 | RODRIGO HENRIQUE DE SOUZA | — | -0.54 | — | -0.54 | — | — |
+| col166 | THIAGO HENRIQUE SIMIÃO SIL | — | -0.13 | — | -0.13 | — | — |
+| col169 | VALDINEI FERREIRA | — | -1.10 | — | -1.06 | — | — |
+| col170 | VICTOR LIMA ROCHA | — | -0.89 | — | -0.87 | — | — |
+| col171 | VINICIUS DOS SANTOS TRAMON | — | -0.05 | — | -0.04 | — | — |
+| col172 | VITOR FELIPE FRANCISCO INA | — | -0.08 | — | -0.08 | — | — |
 
 TOTAL (87 colabs): AN +979.40 h · HE 50 -57.91 h · HE 100 -19.68 h · DSR -17.73 h · Banco +106.05 h · Trab +175.31 h
 
@@ -1061,7 +1061,7 @@ TOTAL (87 colabs): AN +979.40 h · HE 50 -57.91 h · HE 100 -19.68 h · DSR -17.
 A razao: a regua legal nao muda so a prorrogacao noturna -- ela tambem troca `regua_excedente` de
 `'legais'` para `'relogio'` e desliga a hora reduzida do Art.73. Com a hora de 60 min, o trabalhado
 sobe **e** o excedente sobre o teto de 8h diario cai, entao HE desce enquanto AN sobe.
-**Lancar so o AN paga a mais.** Caso extremo, a 3a linha da tabela: `col155 [nome]` tem
+**Lancar so o AN paga a mais.** Caso extremo, a 3a linha da tabela: `col155 REINALDO` tem
 **AN +43,09** contra **HE 50 -22,49 e HE 100 -22,51**.
 
 ### Duas coisas que ficam declaradas
@@ -1156,7 +1156,7 @@ commit das 07:25. Nenhum dos dois criou este bug.
 ### A causa, medida
 
 ```
-col418 ([nome], EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
+col418 (ADRIANO LUCAS, EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
   17/09 a 20/09   trabalha alternado T.T.   gerada_em 2026-08-21 08:50:12
   21/09 a 30/09   trabalha TODOS True       gerada_em 2026-09-21 08:50:23
 ```
@@ -4957,6 +4957,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **25/09 22:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 00:00.
+
+
+**25/09 23:33 ARVORE VERMELHA (vigia da arvore)** -- 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_contract_mypy.ContratoMypyTest.test_mypy_zero . Toda fatia que cair nesses mesmos testes espera e se relanca sozinha. Para a admin: nada muda na tela.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
