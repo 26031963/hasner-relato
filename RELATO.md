@@ -5414,6 +5414,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **ALARME integrador** -- o push do lote foi REJEITADO (rc=1; o motivo esta em `logs/integrador.log`). As 1 fatia(s) ficam NA FILA com o commit local e NENHUMA foi marcada "no ar" -- commit local nao e "no ar". Cura: git fetch + rebase e `bash bin/push.sh`.
 
+
+**26/09 03:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 04:45.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
