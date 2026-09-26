@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:13:14.**
+**Medido em 26/09/2026 13:14:52.**
 
 | | |
 |---|---|
-| `HEAD` local | `c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada"` |
+| `HEAD` local | `aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082` |
 | `origin/main` | `6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,31 +22,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082
 c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada"
 6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF
 be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anterior NAO estava -- e a lista agora e selo
 9b033fa2 [FABRICANTE-DESLIGADO] o alarme para de contar a fabrica e passa a contar a SESSAO (item 8)
-4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Falta o schema do tenant — a sombra é multi-tenant como prod:
-
-  Ran 1 shell command
 
 ● Background command "Empurrar a fatia do Haiku" completed (exit code 0)
 
@@ -70,11 +62,17 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● push36 barrado por dois vermelhos meus. Curando:
 
-  Ver o que o ruff acusou
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && docker run --rm $TESTE_DOCKER -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache
-     saas-hasner-core:latest sh -c "cd /app && ruff check . 2>&1 | tail -12"
+  Searched for 1 pattern, ran 3 shell commands
 
-✽ Concocting… (10m 45s · ↓ 15.0k tokens)
+● Curados os dois. Registrando a divergência com a tabela antes de escrever qualquer Pauta:
+
+  Commitar as curas e o PAREI · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg6.txt <<'EOF'
+     [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082
+     LEI-AKITA: origem=nao ha cura nesta fatia, e MEDICAO + dois vermelhos meus do push36,
+     testemunha=recalcular_fechamento_mes cham…
+
+✻ Concocting… (12m 23s · ↓ 19.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

@@ -1,5 +1,47 @@
 # RELATO — esteira saas-hasner
 
+## PAREI: numero da Pauta DP de 07/08 divergiu do aval | espera Ronald (`!` de criterio, L-082)
+
+O aval dizia que a diferenca de 07 e 08 (**+25,26 h** e **+10,11 h**) viraria Pauta DP por empresa.
+Medi na sombra antes de escrever a Pauta, e o numero **nao e mais esse** -- inclusive o SINAL virou:
+
+| competencia | empresa 2 | empresa 3 | empresa 4 | total em `horas_intra_indenizada` |
+|---|---|---|---|---|
+| 07/2026 | +2,67 h (2 colabs) | **-45,49 h** (44) | -2,92 h (13) | **-45,74 h** |
+| 08/2026 | **-116,69 h** (57) | +23,29 h (26) | -10,80 h (3) | **-104,20 h** |
+
+POR QUE divergiu, e a explicacao e a propria L-082: o que eu medi agora e **gravado x motor de
+HEAD**, e HEAD ja carrega a v3. Esse numero e a SOMA de duas coisas de naturezas diferentes -- a
+CURA da intra (o que o aval aprovou) e a DERIVA (o `FechamentoMensal` de 07 e 08 esta velho, e o
+recalculo o traz para o presente junto). Os **+25,26 h** foram medidos motor-velho x motor-novo, que
+e so a coluna da CURA; a deriva nao aparecia ali. E exatamente o buraco que a L-082 nomeou hoje de
+manha, quando o `!` de +12,29 h virou +13,29 h gravados com 10 campos fora do alvo.
+
+**Nao escrevi a Pauta.** Uma Pauta DP e mensagem para gente do cliente: mandar -45,74 h hoje e
++25,26 h amanha seria pior do que nao mandar. E reescopo de aval se resolve com a tabela ANTES do
+ato, nunca com o ato parcial.
+
+O que decompoe esses numeros e exatamente a coluna dupla que a ordem da **O60
+ESPELHO-VERDADE-E3-COMPLETA** exige (`gravado x motor HEAD` = DERIVA | `motor HEAD x motor novo` =
+CURA). Entao sigo para a O60 e a Pauta sai **com as duas colunas separadas por empresa**, que e o
+unico numero defensavel. A ordem diz que a E3-COMPLETA entra depois da Pauta; o que inverte a
+sequencia nao sou eu, e a medicao: a Pauta depende do numero que so o DIFF da O60 produz.
+
+DOIS ACHADOS DE LEITURA no caminho, que entram no DIFF da O60:
+
+- **93 colaboradores de 07 e 39 de 08 nao tem `FechamentoMensal` gravado** e o motor criaria a linha
+  (`len(antes)=629` contra `len(depois)=722` em 07; 618 contra 657 em 08). Colab sem fechamento nao
+  aparece em DIFF por campo -- ele nao tem "antes" --, e por isso a tabela da O60 precisa de uma
+  linha propria para ele, senao some da conta justamente quem nunca foi medido.
+- os campos que mudam nao sao so a intra: `horas_trabalhadas`, `horas_noturnas`, `horas_extras`,
+  `horas_extras_50`, `horas_extras_50_noturna`, `horas_extras_100`, `horas_extras_100_noturna` e
+  `horas_folga_trabalhada` tambem se movem. Isso e DERIVA, e e o que a coluna dupla separa.
+
+PROVA: medido na sombra (carimbo `dia=20260926 status=OK tipo=completa diverge=0`) chamando a
+FUNCAO REAL `recalcular_fechamento_mes` dentro de `atomic()` com `raise` no fim; rollback provado na
+mesma corrida -- **629/629** linhas de 07 e **618/618** de 08 identicas ao inicio depois do desfazer.
+
+
 ## HANDOFF 26/09 ~11:5x — estado exato para um chat novo (pre-auto-compact)
 
 | frente | estado |
