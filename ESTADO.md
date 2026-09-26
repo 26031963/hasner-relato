@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:45:45.**
+**Medido em 26/09/2026 13:50:45.**
 
 | | |
 |---|---|
@@ -69,12 +69,12 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● Os três são meus e cada um diz algo diferente. Os dois primeiros: eu curto-circuitei o memo antes de consultá-lo. O terceiro é mais importante — o turno partido não cabe no
   modelo do juiz, porque nele os marcos de intervalo dividem blocos em vez de serem intrajornada:
 
-  Rodar as suites de dinheiro e tela · 2m 42s
+  Rodar as suites de dinheiro e tela · 7m 41s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && D=$(cat /tmp/claude-1001/arvore_o60) && ESTEIRA_QUEM=o60 bash
-     bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file … (2m 40s)
+     bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file … (7m 40s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Concocting… (43m 16s · ↓ 62.3k tokens)
+· Concocting… (48m 16s · ↓ 62.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
