@@ -12,6 +12,36 @@
 | **fork FASE 2** | EM CURSO, so leitura, unica escrita `app/docs/RELATORIOS-PLANO.md`. A sessao **nao espera** por ele; quando entregar, commitar com pathspec |
 | **fabricante** | **DESLIGADO** por Ronald (timer `disabled`), com condicao de saida "criterio do estrutural fechado + corte Ronald" |
 
+### FABRICANTE-DESLIGADO item (4) — os caidos, por MOTIVO, e o relance em zero
+
+Medido na fonte que o vigia escreve, `logs/vigia_esteira.estado::motivos` -- nao no meu resumo dela:
+
+| motivo da queda | pacotes |
+|---|---:|
+| `baseline divergiu: a arvore andou depois do teste da fatia` | **42** |
+| `nunca lancada` | **25** |
+| `o processo morreu sem escrever fim` | 2 |
+| `vermelho da ARVORE no lote` | 2 |
+| `copia falhou` | 1 |
+| **TOTAL** | **72** |
+
+O que esta tabela diz, e e a leitura que sustenta o desligamento: **67 dos 72 (93%) cairam por
+motivo que nao tem NADA a ver com o conteudo da fatia.** So 2 foram vermelho de teste. Os 42 do
+`baseline divergiu` morreram porque a arvore andou enquanto o pacote esperava a vez -- defeito da
+propria esteira, nao da fatia; e os 25 `nunca lancada` sao a corrida sem executor. A fabrica
+nao estava produzindo fatia ruim: ela estava, na maioria, nao produzindo.
+
+**Relance = zero**, e nao por disciplina minha: o timer esta `disabled` e nada relanca sozinho.
+
+DIVERGENCIA DECLARADA, em vez de silenciada: a ordem fala de "28 caidos + 17 portao congelados" e
+"4 verdes". Nao reproduzi essa particao pela fonte e nao vou escrever numero que nao medi. O que a
+fonte da: 72 entradas em `motivos` (acumuladas, incluindo caminhos de scratchpad de sessoes
+antigas), das quais **16** sao pacotes que ainda existem em `.esteira/`; dos 60 pacotes vivos,
+**31 fecharam `cadeia.done` e nunca cairam**. Dizer quais desses 31 sao "verde ainda nao pousado"
+exige casar nome de diretorio com nome de fatia, e esse mapa nao existe -- e item proprio, nao
+numero para eu arredondar aqui.
+
+PROVA: `logs/vigia_esteira.estado::motivos` (72 chaves) e `.esteira/*/cadeia.done` (31 fora dos caidos).
 ### FABRICANTE-DESLIGADO item (6) — horas por autoria desde 19/09, pelo git
 
 O git **nao** separa isso por autor: os 459 commits desde 19/09 sao todos `Ronald|Ronald`, e 249 dos
@@ -6054,6 +6084,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 11:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**26/09 12:20 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

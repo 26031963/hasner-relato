@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:15:31.**
+**Medido em 26/09/2026 12:20:45.**
 
 | | |
 |---|---|
@@ -34,50 +34,52 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
 ?? app/docs/RELATORIOS-PLANO.md
+?? bin/alarme_sessao_ociosa.py
+?? bin/tests/test_alarme_vigia_a_sessao.sh
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo verde. Agora a prova que importa: os 5 smokes que barraram o push32, na árvore do commit, com a montagem nova:
-
-  Ran 2 shell commands
-
-● Os 5 smokes: 8 testes OK na árvore do commit. Gravando TICKETS e commitando:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● O placar do topo é ancorado por linha — o bloco tem de ir depois dele:
-
-  Ran 4 shell commands
-
-● Handoff durável em 4c081b17. Agora o push, sem esperar o fork:
+● Escrevendo o alarme da sessão, com o juízo puro separado da leitura:
 
   Ran 1 shell command
 
-● Enquanto o push33 roda a suíte sobre o commit, o item (6) do FABRICANTE-DESLIGADO — horas por autoria desde 19/09, pelo git:
+› Message from @general-purpose (ctrl+o to expand)
 
-  Ran 4 shell commands
+● O fork entregou. Antes de consumi-lo, fecho o selo do alarme:
 
-● O discriminador honesto existe: até 26/09 a cadeia.sh emitia TICKETS: placar e rodape (<NOME>) logo após cada fatia do fabricante. Medindo por ele:
+  Ran 1 shell command
+
+● RED evidenciado (os 5 casos do juiz passam; o cron é o vermelho). Trocando o cron, com trilha:
 
   Read 1 file, ran 2 shell commands
 
-● Item (4) — os pacotes caídos e o portão congelado, medidos na fonte:
+● 8.345 testes OK na árvore do commit — a cura do staticfiles pousou. Enquanto o control-plane roda, verifico o achado mais grave do fork antes de afirmar:
 
-● Medir pacotes caidos e portao
-  ⎿  $ cd /home/ronald/saas-hasner && ls .esteira/ 2>/dev/null | head -20; echo "=== quarentena / caidos ==="; ls .esteira/quarentena 2>/dev/null | wc -l; ls .esteira/*/ -d
-     2>/dev/null | head; echo "=== estado da esteira ==="; cat logs/vigia_esteira.estado 2>/dev/null | head -20
+  Ran 1 shell command
 
-· Misting… (21m 39s · ↓ 28.5k tokens)
+● Verificado antes de afirmar: as 3 views não são buraco de autenticação — AnonymousUser.is_staff é False, então anônimo é redirecionado, não servido. O defeito real é outro: elas
+  usam is_staff em vez do juiz de permissão da casa (tem_acao/ver_relatorios). Vai como fatia, não como incêndio.
+
+  Read 1 file
+
+› Message from @ae00f60618529c9ad (ctrl+o to expand)
+
+● Agent "Censo dos 15 cards de relatorios" finished · 36m 50s
+
+  Ran 1 shell command
+
+● Preparando o resumo do censo no RELATO enquanto o control-plane fecha:
+
+  Running 1 shell command…
+
+· Misting… (26m 53s · ↓ 43.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Correcting citations in RELATORIOS-PLANO.md                                                                                        32m 15s · ↓ 220.4k tokens
   ⧉  index
 ```
