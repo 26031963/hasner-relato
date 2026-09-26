@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:58:01.**
+**Medido em 26/09/2026 20:03:31.**
 
 | | |
 |---|---|
@@ -33,19 +33,13 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ```
  M app/config/crons_duracao.json
+ M app/ponto/services/fechamento.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Os 9 do TXT, um por um:
-
-  ┌──────────────────────────────────┬────────┬────────┬──────────┬────────────────────────────────────────────────────────────────────┐
-  │              colab               │ antes  │ depois │  delta   │                               causa                                │
-  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
-  │ col866                           │ 239,95 │ 156,01 │ −83,94 h │ sobreposto — a cura resolve, e passa a bater com a coluna (155h54) │
-  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
   │ col924 · col391 · col43 · col942 │   0,00 │   0,00 │        — │ zero vínculo e zero célula: a cura não alcança                     │
   ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
   │ col935 · col648                  │      — │      — │        — │ troca de vínculo no meio                                           │
@@ -64,19 +58,26 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
   O ! que esta fatia pede é sobre as 654,74 h, sabendo que apenas col866 está entre os 9 que o DP vai pagar. Falta ainda o lado do espelho (a ordem manda os dois lerem a célula) e
   o selo do leitor que escolhe vínculo sem perguntar — não fiz, e não os conto como feitos.
 
-✻ Sautéed for 11m 4s · done 7:54 PM
+✻ Sautéed for 11m 4s · done 7:54 PM · 1 shell still running
 
 ❯ aval Ronald: aplica a O69 (654,74 h) !
 
 ● ! recebido. Aplicando a cura na árvore (lei 10: aplicar no ato) e rodando a suíte, que é o portão:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Smooshing… (14s · ↓ 650 tokens)
+● Enquanto a suíte roda, preparo o apply num só ato — ensaio, expectativa, escrita e conferência campo a campo na mesma corrida:
+
+● Esperar a suite da O69 · 4m 52s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 16); do if grep -qE "^Ran [0-9]+ tests" logs/o69_suite.log 2>/dev/null; then break; fi; sleep 55; done; grep -E
+     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o69_suite.log | tail -8 (4m 46s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Smooshing… (5m 45s · ↓ 3.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
