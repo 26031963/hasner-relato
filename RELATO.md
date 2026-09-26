@@ -6552,6 +6552,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **26/09 16:30 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
+
+**26/09 16:55 vigia da esteira (ALARME)** -- vigia sem efeito: 1 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._

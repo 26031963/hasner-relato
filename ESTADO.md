@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:51:01.**
+**Medido em 26/09/2026 16:56:31.**
 
 | | |
 |---|---|
@@ -43,23 +43,6 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ainda aberto, e o primeiro motor aplicou a cura 18 vezes — então 11/09 não está entre eles no caminho do PDF. Medindo o dia especificamente nos dois caminhos:
-
-  Ran 1 shell command
-
-● O juiz responde certo (08:47→16:23, intervalo 36). Vendo se a minha cura no espelho pegou nos dois motores:
-
-  Ran 1 shell command
-
-● O guarda conta batidas cruas, e a tela/PDF alimentam o motor com o cru por lei (Portaria 671) — enquanto a ata descreve só as apuráveis. Corrigindo o universo do guarda:
-
-  Ran 1 shell command
-
-● Paro de supor e leio a decisão do dia, dentro do motor do PDF:
-
-  Ran 1 shell command
-
 ● A cura funciona: o motor devolve 08:47 → 16:23 fechado, nos dois motores. Então a linha do dia não vem dos períodos do motor. Lendo de onde ela vem:
 
   Ran 1 shell command
@@ -70,17 +53,34 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 
 ● A suíte de fundo ainda roda. Rodando as suítes dos leitores que toquei, para commitar e deployar:
 
-● Suites dos leitores tocados · 7m 0s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=leitores bash bin/trava_teste.sh -- docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronal… (6m 58s)
+  Ran 1 shell command
+
+● Background command "Commitar a O63 e a lei, e rodar a suite inteira" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Três selos estruturais caíram — eles afirmam qual função o motor consulta, e minha porta nova deslocou a chamada. Lendo o primeiro:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● inspect.getsource devolveu uma linha só — sintoma clássico de bytecode desalinhado com a fonte. Testando com o cache fora da árvore:
+
+  Ran 1 shell command
+
+● A corrida colidiu com a suíte de fundo (um run por vez no banco de teste). Esperando o veredito dela:
+
+● Esperar e ler o veredito das suites dos leitores · 1m 13s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in 1 2 3 4 5 6 7 8 9 10 11 12; do if grep -qE "^(OK|FAILED)"
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6988sci0.output 2>/dev/null; then break; fi; sleep 45; done; grep -E
+     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" /tmp… (1m 12s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Billowing… (42m 7s · ↓ 51.0k tokens)
+✢ Billowing… (47m 37s · ↓ 54.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
