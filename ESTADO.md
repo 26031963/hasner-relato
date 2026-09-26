@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 20:09:01.**
+**Medido em 26/09/2026 20:14:25.**
 
 | | |
 |---|---|
@@ -32,31 +32,20 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## `git status --short`
 
 ```
+ M app/config/crons.py
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
  M app/ponto/services/fechamento.py
+ M app/relatorios/management/commands/pdf_x_espelho_divergentes.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
-  │ col400 · col245                  │      — │      — │        — │ sem causa dessas                                                   │
-  └──────────────────────────────────┴────────┴────────┴──────────┴────────────────────────────────────────────────────────────────────┘
-
-  Dos 9 do TXT a cura resolve um. Ela é cirúrgica: morde a sobreposição, que era a sua hipótese, e não finge resolver o resto.
-
-  Como: antes de rodar cada fatia, o laço pergunta a CelulaDia.escala_geradora quais dias são daquele vínculo; fatia cujos dias pertencem todos a outro vínculo não roda; dia sem
-  célula segue como antes, sem dono inventado. O col866 tem 31 células com duas geradoras distintas — o dado para não dobrar estava lá e o fechamento não perguntava.
-
-  Três classes, uma curada: a sobreposição (curada); o zero vínculo e zero célula — 4 no TXT somando 221h66, classe própria e fora do passivo da E1; e a troca de vínculo no meio
-  (8) mais "sem causa" (7), que seguem abertas.
-
-  O ! que esta fatia pede é sobre as 654,74 h, sabendo que apenas col866 está entre os 9 que o DP vai pagar. Falta ainda o lado do espelho (a ordem manda os dois lerem a célula) e
   o selo do leitor que escolhe vínculo sem perguntar — não fiz, e não os conto como feitos.
 
-✻ Sautéed for 11m 4s · done 7:54 PM · 2 shells still running
+✻ Sautéed for 11m 4s · done 7:54 PM
 
 ❯ aval Ronald: aplica a O69 (654,74 h) !
 
@@ -70,15 +59,28 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ● Suíte ainda rodando (10 min) — não aplico dinheiro antes dela. Esperando:
 
-● Esperar a suite terminar · 3s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite.log 2>/dev/null; do sleep 30; done; grep -E "^(FAIL|ERROR):|^Ran |^(OK|FAILED)"
-     logs/o69_suite.log | tail -8
+  Ran 1 shell command
 
-✢ Smooshing… (11m 15s · ↓ 4.3k tokens)
-                                                                                                                                           ✔ Update installed · Restart to update
+● Background command "Esperar a suite da O69" completed (exit code 0)
+
+● Background command "Aplicar a cura na arvore e rodar a suite" completed (exit code 0)
+
+● Dois vermelhos meus, e dinheiro não passa por cima de suíte vermelha. Curando:
+
+  Declarar a casa e conferir · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
+     f='app/config/crons.py'
+     s=open(f,encoding='utf-8').read()
+     v = "FORA_DE_PIPELINE = {\n 'lavrar_fabrica':"
+     n = ("FORA_DE_PIPELINE = {\n"
+     " 'pdf_x_espelho_divergentes':\n"
+     " 'PDF-E-O-ESPELHO (O9): contador do placar, NAO cron. Compara, por colab e p…
+
+✢ Smooshing… (16m 38s · ↓ 6.4k tokens)
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
