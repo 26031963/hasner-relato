@@ -1,6 +1,13 @@
 # RELATO — esteira saas-hasner
 
-## 09/2026 LIBERADA — as tres provas, e o medidor que faltava agora EXISTE
+## 09/2026 LIBERADA **CONDICIONAL** -- coerencia provada, certeza NAO (corte Ronald 26/09 22:4x)
+
+A palavra certa e sua: **liberada prova COERENCIA, nao CERTEZA.** O cartao do [nome] tem 11/09 e 12/09
+errados em dinheiro com `pdf_x_espelho = 0` -- o medidor diz que as duas testemunhas contam a MESMA
+historia, e nao que a historia esta certa. Duas fontes coerentes podem estar coerentemente erradas.
+
+**Nao vai ao DP** antes das tres medicoes de frota que voce pediu (itens 1, 6 e 7), com a lista dos
+colabs afetados e as horas de cada um. As tres provas abaixo seguem validas pelo que provam:
 
 | prova | numero |
 |---|---|

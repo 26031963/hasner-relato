@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:33:31.**
+**Medido em 26/09/2026 18:39:01.**
 
 | | |
 |---|---|
@@ -33,46 +33,49 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  09/2026 LIBERADA
+  Ran 1 shell command
 
-  ┌───────────────────────────────┬───────────────────────────────────────────────────────────┐
-  │             prova             │                          número                           │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
-  │ cartao_x_txt_divergentes      │ 0 (203 no TXT)                                            │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
-  │ pdf_x_espelho_divergentes     │ 0 (203 medidos)                                           │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────┤
-  │ recálculo imediatamente antes │ zero movimento (607 colabs × 27 campos, rollback 607/607) │
-  └───────────────────────────────┴───────────────────────────────────────────────────────────┘
+● Agora o item (6), que tem a regra mais clara — topo do cartão contra a soma da coluna, na frota:
 
-  Antes disso, a O66 ficou medida e o número dela é duro: celula_furo_sem_canal = 68 em 09 (emp2 67, emp3 1, emp4 0) — 68 dias em que a casa acusa e ninguém pode resolver. E 509
-  chamados fechados com célula ainda acusando: 220 por admin (humano), 130 sistema + 130 cascade (automatismo). Declarei a divergência com os 66 da sua ordem em vez de forçar o
-  número. A FONTE está nomeada: chamados/models.py:652::encerrar é o principal, e a própria docstring entrega — "fecha qualquer estado != fechado, sem guard, sem raise". Nenhum
-  fechador consulta o veredito; todos perguntam ao juiz de estado, que responde outra pergunta.
+  Ran 1 shell command
 
-  O caso [nome] está registrado como O67 com o desenho da sua segunda mensagem: cada item vira contador de frota na competência 09, o Jean é o RED e a cura vai na origem da
-  classe — (1) tipo trocado não corrigido, (2) celula_veredito_velho, (3) julgar marco futuro, (4) abono em dia de folga, (5) o chip do atestado em duas linhas.
+❯ 09 LIBERADA fica CONDICIONAL: liberada prova coerencia, nao certeza (o cartao do [nome] tem 11/09 e 12/09 errados em dinheiro com pdf_x_espelho = 0). Antes de declarar para o DP,
+  mede na frota de 09, so leitura: (1) dias com batida de tipo trocado nao corrigida, (7) dia seguinte inflado com horas do dia anterior, (6) topo do cartao x soma das linhas.
+  Entrega: lista dos colabs afetados, com as horas de cada um. A 09 sai para o DP como "203 no TXT, dos quais N com ajuste listado", ou PAREI se N for grande. Nenhuma lei nova.
 
-  Falta empurrar; depois sigo pela O66 e O67.
+● O item (6) mediu 169 de 202 em trabalhadas — mas as diferenças são de 7-9 min em ~30 dias, cara de arredondamento por período, não de fonte. E sua ordem nova está certa:
+  liberada prova coerência, não certeza. Corrigindo a declaração primeiro:
 
-✻ Sautéed for 16m 34s · done 6:31 PM
+  Ran 1 shell command
 
-❯ (6) cartao PDF de 09 do [nome]: topo "Trabalhadas 82h44" x soma da coluna Realizado 90h32, e "Noturno 63h05" x soma 64h03 -- mesma pagina, duas fontes (fechamento gravado x
-  espelho); topo = soma das linhas ou PAREI. (7) 12/09 HE 3h02 contra 1h44 recalculado (o sabado 19/09 identico da 1h55): medir se as horas do 11/09 caem no 12. (8) caudas de
-  plantao sem entrada na linha errada: 22/08 "em aberto" com a saida 07:00 no 23/08; o plantao de 26/08 partido em 26 (02:00) e 27 (01:00). (9) rotulo das folgas sob atestado diz
-  "Atestado (abonado)" e elas nao sao abonadas (os 7 dias do topo provam): o rotulo diz o efeito real. Cada item mede a frota.
+● Agora as duas medições que faltam. Item (1) — tipo trocado não corrigido, com o motivo da recusa:
 
-● Itens 6-9 registrados, e o (6) é o mais grave — mesma página com duas fontes. Medindo a frota:
+  Ran 1 shell command
 
-  Running 1 shell command…
+● Item (1): 15 dias em 9 colabs, com o motivo de cada recusa nomeado. Agora o item (7) — horas do dia anterior caindo no dia seguinte:
 
-· Tinkering… (19s · ↓ 1.0k tokens)
+  Ran 1 shell command
+
+❯ O67 ANTES DE SEGUNDA (P7.1, L-002, L-082):
+  (a) GUARDA: a ata explica o plantao que cruza a meia-noite (batidas da data civil seguinte pertencem ao turno do dia de inicio); RED = [nome] 11/09 (21:01, 00:59, 02:07, 07:00)
+  com os 4 papeis pelo marco e ~9h no motor; medir na frota de 09 quantos dias saem do plano B.
+  (b) APOSENTAR O PLANO B NO DINHEIRO: o motor nunca mais pareia pelo tipo gravado; dia que a ata nao explica = "em aberto (a decidir)", visivel, nunca pago em silencio. Selo: o
+  caminho do dinheiro nao tem fallback por tipo.
+  (c) DIFF de (a)+(b) em 09: colabs que mudam de valor e colabs que saem do TXT por dia em aberto, com a lista. Dinheiro move = PAREI com a tabela para o meu !.
+  (d) INDICE ENXUTO: aposentar Fila do flip E/S, Quem cobrar (pilula do Fechamento redireciona para a Auditoria de espelhos) e Beneficios; grep de cada rota = 0 antes de remover;
+  DEPLOY JA com smoke.
+  Depois: 09 para o DP com a lista de ajuste. Nenhuma lei nova.
+
+✢ Tinkering… (5m 50s · ↓ 10.3k tokens · still thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
