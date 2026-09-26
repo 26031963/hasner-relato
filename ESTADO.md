@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:18:41.**
+**Medido em 26/09/2026 13:24:01.**
 
 | | |
 |---|---|
@@ -33,46 +33,49 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● RED 1 já está provado e é exatamente o desenho: as lâmpadas de col369 em 23/09 têm marco E às 13:00 com tipo_real='S' e marco S às 15:00 com tipo_real='E' — invertidas. Motor
-  que pareia pelo tipo gravado vê E S S E = dois períodos abertos. Buscando o resto:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● RED 1 fecha a aritmética: batidas 07:01 E, 13:00 S, 13:59 S, 14:59 E. Pelo tipo gravado dá E S S E = 2 períodos abertos, 0,00 h. Pelo marco da ata: entrada 07:01, intervalo
-  13:00→13:59, saída 14:59 → 478 − 59 = 419 min, o número exato da ordem. Faltam os outros dois:
-
-  Ran 1 shell command
-
-● Os três REDs estão medidos:
-
-  ┌──────────────┬────────────────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────────┐
-  │     RED      │                          medido na sombra                          │                           o que o número prova                           │
-  ├──────────────┼────────────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ col369 23/09 │ batidas E S S E; ata pareia por marco → 07:01–14:59, 419 min       │ motor que pareia pelo tipo gravado dá 2 períodos abertos e 0,00 h        │
-  ├──────────────┼────────────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ col840       │ escala 6x1 · 13:00-19:00: minutos_jornada=720, juiz=345            │ piso_art71(720)=60 contra piso_art71(345)=15 — a diferença é dinheiro    │
-  ├──────────────┼────────────────────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────┤
-  │ col638 13/08 │ intervalo cadastrado 60, intervalo_indenizavel=False, previsto 440 │ max(60, piso(440)=60) = 60: sem mudança de HE enquanto a flag não é lida │
-  └──────────────┴────────────────────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
-
-  Lendo as duas fontes e o sítio que pareia, antes de tocar no motor:
+● O padrão para ler o juiz por dia já existe no motor, da v3. Reusando em vez de criar um segundo:
 
   Searched for 1 pattern, ran 1 shell command
 
-● O juiz E2 já existe e já nomeia o sintoma do col369 (tipo_divergente). O que falta é o motor ler isso. Vendo onde ele pareia e os três sítios do campo lixo:
+● Preciso ver o contexto exato dos quatro sítios — e a ordem proíbe fallback para minutos_jornada, então cada zero do juiz tem de ter destino declarado:
 
-  Ler a lista que so encolhe
-  ⎿  $ cd /home/ronald/saas-hasner && cat bin/tests/dinheiro_le_jornada_lixo.txt
+  Ran 1 shell command
 
-· Concocting… (16m 12s · ↓ 28.3k tokens)
+❯ aval Ronald: Pauta DP de 07/08 SUSPENSA ate o DIFF da E3 completa (O60); sai UMA Pauta por empresa com tres colunas (deriva do gravado | cura | total) sobre o motor final. A
+  divergencia de hoje (07 -45,74 h, 08 -104,20 h contra +25,26/+10,11) fica registrada no RELATO com a causa medida. Nenhuma lei nova.
+
+● Aval recebido: a Pauta fica suspensa com condição de saída, não parada anônima. Atualizando o topo do RELATO e registrando:
+
+  Ran 1 shell command
+
+● Agora a cura do motor, construída em cópia do HEAD (LEI-AKITA 10). Antes, o último contexto que falta:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Tenho os quatro sítios e o dia do laço. Escrevendo a cura na cópia do HEAD:
+
+  Ran 4 shell commands
+
+● 8 sítios de consumo saíram (18 → 10, e 5 dos 10 são comentário). Falta a metade maior: o motor ler os períodos do juiz. Vendo o pareador:
+
+  Ran 2 shell commands
+
+● A cura dos períodos tem de nascer no motor (é o escopo da ordem). Vendo a forma que ele consome:
+
+● Ver o que o juiz devolve em intervalo
+  ⎿  $ sed -n '215,240p' ponto/juiz_batida.py
+
+✢ Concocting… (21m 32s · ↓ 45.3k tokens · thought for 4s)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

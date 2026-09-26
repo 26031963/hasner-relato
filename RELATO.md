@@ -1,6 +1,11 @@
 # RELATO — esteira saas-hasner
 
-## PAREI: numero da Pauta DP de 07/08 divergiu do aval | espera Ronald (`!` de criterio, L-082)
+## Pauta DP de 07/08: SUSPENSA por aval (26/09 ~13:5x) | dono Ronald | saida = o DIFF da O60
+
+O PAREI abaixo foi RESPONDIDO no mesmo turno. A Pauta nao esta parada sem dono: ela esta suspensa
+com condicao de saida escrita -- sai **UMA Pauta por empresa, com as tres colunas (deriva do
+gravado | cura | total) sobre o motor FINAL** da O60. A divergencia de hoje fica registrada aqui
+com a causa medida, que era o pedido literal do aval.
 
 O aval dizia que a diferenca de 07 e 08 (**+25,26 h** e **+10,11 h**) viraria Pauta DP por empresa.
 Medi na sombra antes de escrever a Pauta, e o numero **nao e mais esse** -- inclusive o SINAL virou:
