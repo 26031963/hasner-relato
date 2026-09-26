@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 00:42:54.**
+**Medido em 26/09/2026 00:48:01.**
 
 | | |
 |---|---|
@@ -25,6 +25,9 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/management/commands/gerar_celulas.py
+ M app/ponto/portas/celula.py
+ M app/ponto/tests/test_contract_competencia_lavrada.py
  M bin/relato.sh
 ?? bin/gerar_estado.py
 ?? bin/hasner-relato.service
@@ -34,41 +37,41 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  colisões declarada:
+● BUG-B: o bug era a frase, não a guarda — e o seu aval dos 8 dias precisa ser revisto.
+
+  Medido: col624 e col857 têm holerite publicado da competência 08/2026, e a comp 08 da emp4 vai de 21/07 a 20/08. Os 8 dias barrados (ec1008 21/07, ec1087 14–20/08) caem
+  exatamente nessa janela. A guarda já olhava as duas autoridades desde o BUG 85 (seu corte de 08/09: "o TXT não é a única forma de lavrar; para quem tem holerite publicado,
+  aquele período já virou papel na mão dele").
+
+  Então não há off-by-one, e eu reporto o meu erro sem rodeio: li a frase "competência já exportada no TXT do Dominio" ao pé da letra, conferi contra ExportacaoDominio, não achei
+  a exportação e diagnostiquei um bug inexistente — duas vezes, no RELATO e para você. Foi texto lido como fato, e a frase é que estava errada.
+
+  A cura é a frase: fonte_da_lavra() nomeia a autoridade (exportacao (TXT do Dominio) · holerite PUBLICADO deste colaborador · ambas), e o barrados passa a dizer "competência
+  LAVRADA por …". A distinção muda a decisão: exportação se reabre por ato com trilha (apesar_da_lavra), holerite publicado é papel na mão do colaborador. O selo prende os dois
+  lados e proíbe a frase fixa voltar.
+
+  E aqui eu paro, com o número, pela L-009: o seu aval era "regenerar pela porta só os 8 dias da emp4 depois do BUG-B curado e com selo verde". O BUG-B está curado, mas a premissa
+  dele caiu — aqueles 8 dias não estão presos por guarda errada, estão lavrados por holerite publicado de 08/2026 de dois colaboradores. Regenerá-los seria reescrever célula de
+  período que já virou holerite na mão de col624 e col857, contra a L-052 e contra o seu próprio corte do BUG 85. Não regenerei.
+
+  Se você ainda quiser, o caminho existe e é explícito: regenerar_celulas_vinculo(..., apesar_da_lavra="<sua frase>") abre a guarda por ato, com trilha — e é o mesmo mecanismo do
+  caso [nome] de 08/09, onde o holerite tinha sido publicado sem a folha ter sido gerada. Mas isso é ! novo, com a frase, e não o aval que você deu.
+
+  Sigo para BUG-C (a lista não vê vigência impossível) assim que o selo confirmar.
+
+✻ Churned for 9m 58s · done 12:45 AM · 9 shells still running
+
+● Background command "O selo do BUG-B" completed (exit code 0)
 
   Ran 1 shell command
 
-❯ NAO ENCERRE O TURNO entre itens: ao fechar um, puxe o proximo desta fila. Bug achado no caminho entra na fila na hora (cura precede) e voce segue. So para em: DIFF da E3 pronto
-  para o Ronald ler, ou item da L-009 (com o numero). Publique o relato a cada commit.
+● O selo estrutural pegou a frase ainda viva em algum lugar do módulo. Achando onde:
 
-● Republicado (f43d5d5, 145 substituições, 0 vazamento). Conferindo no público e escrevendo o selo:
+  Onde a frase sobreviveu
 
-  Ran 2 shell commands
-
-● Selo verde. Dois commits (são fatias diferentes) e o push:
-
-  Ran 2 shell commands
-
-● Push14 (27 commits). Item (3) — ESTADO.md com a raspagem curada e timer de 5 min:
-
-  Ran 1 shell command
-
-● Dois tropeços meus: o — num arquivo declarado ascii, e o py_compile falhou antes de editar o relato.sh (que então rodou na versão velha). Consertando os dois:
-
-  Ran 1 shell command
-
-● ESTADO.md publicado — e note que a raspagem pegou 1 nome + 1 após id + 2 tokens dentro dele: os assuntos de commit no git log -5 carregavam nome. O timer, seguindo o padrão das
-  unidades que já existem:
-
-  Timer de 5 min do relato
-  ⎿  $ cd /home/ronald/saas-hasner && cat > bin/hasner-relato.service <<'EOF'
-     # RELATO PUBLICADO (cauda do LEIS-INDICE, corte Ronald 26/09): o RELATO e os indices vao ao repo
-     # publico a cada 5 min, sempre pela raspagem de nome/CPF do `bin/raspar_publico.py`.
-     #
-     # POR QUE TIMER E NAO HABITO (L-078): o `r…
-
-✶ Deliberating… (7m 19s · ↓ 20.4k tokens)
-                                                                                                                                           ✔ Update installed · Restart to update
+✢ Compacting conversation… (2m 27s · ↓ 626 tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
