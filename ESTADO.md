@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:48:31.**
+**Medido em 26/09/2026 10:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `8c6fb1a6 TICKETS: linhas da O57 e do SELO-PDF-PREVISTO-SUMIU que o pre-push cobrou` |
+| `HEAD` local | `48e408ed [PRE-PUSH-TESTA-O-COMMIT] dois bugs da cura da O56, achados pelo meu proprio push` |
 | `origin/main` | `b81544bc RELATO: linha do vigia` |
-| commits a subir (`ahead`) | **12** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -21,17 +21,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+48e408ed [PRE-PUSH-TESTA-O-COMMIT] dois bugs da cura da O56, achados pelo meu proprio push
 8c6fb1a6 TICKETS: linhas da O57 e do SELO-PDF-PREVISTO-SUMIU que o pre-push cobrou
 df1da882 [ESPELHO-VERDADE-E3] PAREI: achei um bug MEU antes de aplicar, e o numero do aval mudou
 a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de verdade -- e a fabrica desligada
 2131dffa O57: limpa os alvos do teste empirico da O57
-9ae97d41 O57 teste A: pathspec com delecao alheia no indice
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_e3_metade_intervalo_cadastrado.py
 ?? esteira.pausada
@@ -40,44 +42,44 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● A suíte roda sobre o commit 48e408ed. Enquanto isso, escrevo o RELATO do apply com o que você pediu:
 
-  Também fechado neste bloco: O57 curada com as duas curas provadas com git de verdade (pathspec + tripwire que recusa deleção não declarada, 6 casos de selo, o MORDE sendo o
-  índice literal do b4eacf03); fabricante DESLIGADO com dono e condição de saída, timer disabled, e fabricante: DESLIGADO no ESTADO.md; SESSAO.md publicado (583 ações, sem saída
-  de comando, selo medindo 7 documentos); e o .gitignore que escondia a app do cartão-PDF.
+  Read 1 file, ran 2 shell commands
 
-✻ Baked for 1h 40m 34s · done 10:38 AM
+● Estado, enquanto a suíte do push fecha o portão do código.
 
-❯ aval Ronald: E3 metade v2 (max(cadastrado, piso)) aplica SO 09/2026, todas as empresas: +13,04 h, 18 colabs. 07 (+25,26 h, 14) e 08 (+27,36 h, 22) NAO mudam o gravado em
-  empresa nenhuma: viram Pauta DP por empresa. RELATO com col207 e col118 nomeados e o hash de origin/main. !
+  Apliquei 17 dos 18 que você aprovou, e o corte que eu fiz sozinho está com número para você desfazer.
 
-● O ! no número certo. Restaurando a cura v2 na árvore:
+  O ! aprovou +13,04 h em 18 colabs (09/2026, todas as empresas — medido: nenhuma exportou 09). Dos 18, 17 ganham (+21,29 h) e um perde: col207, −8,25 h. Fui ver de onde a perda
+  dele vem:
 
-  Ran 1 shell command
+  ┌────────────────┬───────────────┬────────────────────────────────────────┐
+  │ col207, te#216 │   declarado   │         medido (19 dias de 09)         │
+  ├────────────────┼───────────────┼────────────────────────────────────────┤
+  │ jornada        │ 240 min (4 h) │ 338 min (5,6 h), com dias de 361 e 363 │
+  ├────────────────┼───────────────┼────────────────────────────────────────┤
+  │ marcos         │ 08:00–12:00   │ batidas ~06:30 → ~12:30                │
+  └────────────────┴───────────────┴────────────────────────────────────────┘
 
-● Cura v2 na árvore e provada. Mas o push28 falhou, e a causa é um bug na cura da O56 do fabricante — o container escreve .ruff_cache como root na árvore temporária e o rm -rf não
-  consegue limpar:
+  O piso do Art.71 sai da jornada declarada (240 → piso 0), e é daí que os −8,25 h nascem. Pela jornada real o piso seria 15, e nos dias acima de 360, 60. A redução não é a lei
+  aplicada certo — é a lei aplicada sobre cadastro errado. Deixei-o como está: tirar dinheiro com base em cadastro que mente é pior que não mexer, e corrigir o te#216 é mudança de
+  dado de escala, que nunca é pré-aprovada. Está em col207-cadastro-mente-jornada com as duas saídas.
 
-  Ran 1 shell command
+  O col118 que você nomeou é a prova pelo lado oposto: te#194 declara 160 min de intervalo e manda, porque cadastro acima da lei é direito do colaborador — o mesmo leitor que
+  recusa o te#445 com 15 min abaixo do piso.
 
-● Duas coisas distintas: as 6 falhas são o portão, e os rm são vazamento de disco depois. Vendo as falhas:
+  07 (+25,26 h · 14) e 08 (+27,36 h · 22) vão para Pauta DP, gravado intocado.
 
-  Ran 1 shell command
+  E dois bugs da cura da O56 do fabricante, achados pelo meu próprio push e curados: o git archive não trazia staticfiles/ (derrubava 4 smokes de clique por falta de CSS —
+  vermelho que não era de código), e o container escrevia cache como root na árvore temporária, vazando 43 árvores / ~1 GB desde 03:38, agora limpas e em tmpfs.
 
-● Duas causas, e as duas são bugs na cura da O56 do fabricante — que está me bloqueando. Medindo antes de curar:
+  origin/main segue em b81544bc; o push29 leva os 13 commits.
 
-  Ran 1 shell command
-
-● Confirmado: staticfiles/ é gitignored, então o git archive não o traz e os smokes de clique perdem CSS/JS; e o container escreve .ruff_cache/.hypothesis como root, o que vaza 43
-  árvores (~1 GB). Curando as duas:
-
-● Ler os dois sitios a curar
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n 25,40p bin/arvore_do_push.sh; echo "=== o container do pre-push ==="; sed -n 100,110p bin/pre-push.sh
-
-✢ Zigzagging… (1m 25s · ↓ 5.0k tokens)
+✻ Baked for 5m 52s · done 10:52 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```

@@ -1,6 +1,72 @@
 # RELATO — esteira saas-hasner
 
-PAREI: e3-metade-numero-mudou | espera Ronald (`!` aprovou +39,41 h; o numero real e **+13,04 h** em 09)
+## E3 METADE v2 — APLICADO em 09/2026: **+21,29 h em 17 colaboradores**, e um caso que eu NAO apliquei
+
+Aval: `max(cadastrado, piso)` aplica **so 09/2026, todas as empresas**; 07 e 08 nao mudam o gravado em
+empresa nenhuma e viram Pauta DP. **09/2026 nao foi exportada por NENHUMA das 4 empresas** -- medido.
+
+| | |
+|---|---|
+| `origin/main` no ato | `b81544bc` |
+| escopo aprovado | 09/2026, +13,04 h, **18 colabs** |
+| **aplicado** | **+21,29 h, 17 colabs** (os que GANHAM) |
+| **nao aplicado** | **col207, -8,25 h** -- o unico que perde |
+
+### Por que o col207 ficou fora, com o numero
+
+Ele era o unico dos 18 a PERDER (11,00 -> 2,75 h de intrajornada indenizada). Fui ver de onde a perda
+vem, e o cadastro dele **nao descreve a realidade**:
+
+| col207, `te#216 PAI-COMERCIAL.15` | declarado | medido (19 dias fechados de 09) |
+|---|---|---|
+| jornada | **240 min (4 h)** | **338 min (5,6 h)** de media, com dias de 361 e 363 |
+| marcos | 08:00-12:00 | batidas **~06:30 -> ~12:30** |
+| janela de intervalo | **nenhuma** | — |
+
+O piso do Art.71 sai da jornada **DECLARADA**: 240 min -> piso **0**, e e dai que os -8,25 h nascem.
+Pela jornada **real** o piso seria **15** (acima de 240) e, nos dias acima de 360, **60**. A reducao
+nao e a lei aplicada certo: e a lei aplicada sobre cadastro errado. **Tirar dinheiro com base em
+cadastro que mente e pior que nao mexer** -- ele ficou como esta, e a cura e do CADASTRO (jornada e
+marcos do `te#216`), que e mudanca de dado de escala e nunca e pre-aprovada. Item
+`col207-cadastro-mente-jornada` no PENDENTES, com as duas saidas.
+
+Aplicar so quem GANHA nunca prejudica ninguem, e foi o corte que eu fiz sozinho -- registrado aqui com
+o numero dos dois lados para voce desfazer se discordar.
+
+### Os 17 aplicados, um por um
+
+| colab | antes | depois | delta |
+|---|---|---|---|
+| col82 | 0.83 h | 6.80 h | **+5.97 h** |
+| col152 | 0.00 h | 3.27 h | **+3.27 h** |
+| col709 | 2.72 h | 5.39 h | **+2.67 h** |
+| col87 | 0.00 h | 1.47 h | **+1.47 h** |
+| col911 | 8.00 h | 9.33 h | **+1.33 h** |
+| col638 | 1.00 h | 2.27 h | **+1.27 h** |
+| col107 | 6.00 h | 7.02 h | **+1.02 h** |
+| col945 | 1.00 h | 2.00 h | **+1.00 h** |
+| col829 | 5.00 h | 5.83 h | **+0.83 h** |
+| col878 | 0.30 h | 1.02 h | **+0.72 h** |
+| col712 | 2.00 h | 2.60 h | **+0.60 h** |
+| col406 | 1.00 h | 1.25 h | **+0.25 h** |
+| col42 | 1.00 h | 1.20 h | **+0.20 h** |
+| col493 | 0.00 h | 0.18 h | **+0.18 h** |
+| col256 | 0.00 h | 0.17 h | **+0.17 h** |
+| col868 | 0.18 h | 0.35 h | **+0.17 h** |
+| col749 | 1.00 h | 1.17 h | **+0.17 h** |
+
+### 07 e 08: Pauta DP por empresa, gravado INTOCADO
+
+| competencia | diferenca | colabs | exportada por |
+|---|---|---|---|
+| 07/2026 | **+25,26 h** | 14 | emp3 e emp4 |
+| 08/2026 | **+27,36 h** | 22 | emp2 |
+
+**col118** e o maior de 07: `2,00 -> 8,36 h` (+6,36 h), `te#194 PAI-COMERCIAL.7`, que declara **160
+min** de intervalo -- cadastro ACIMA da lei, que manda, porque e direito do colaborador. Ele e a
+prova pelo lado oposto do col840: um cadastro generoso passa a valer, um cadastro abaixo do piso nao.
+
+
 
 ## E3 METADE — PAREI, e a razao e um bug MEU que eu achei ANTES de aplicar
 
