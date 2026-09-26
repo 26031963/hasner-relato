@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:19:21.**
+**Medido em 26/09/2026 09:24:21.**
 
 | | |
 |---|---|
@@ -26,6 +26,7 @@ b81544bc RELATO: linha do vigia
 ```
  M app/config/crons_duracao.json
  M app/core/juizes.py
+ M app/docs/BACKLOG.md
  M app/docs/CORTES.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -36,13 +37,6 @@ A  app/relatorios/tests/test_resumo_espelho_morto.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Medido, e é pior do que "apaguei um arquivo": b4eacf03 tem 6 arquivos — carrega uma deleção que eu nunca staged, e perdeu o core/juizes.py que eu staged (ele já não tinha diff).
-  git commit commita o índice, e há outra sessão staged no mesmo repo. Curando primeiro:
-
-  Ran 1 shell command
 
 ● A cura em pdf_espelho.py sobreviveu (linhas 417-421) — só o selo dela foi levado. Rodando o selo restaurado:
 
@@ -64,16 +58,23 @@ A  app/relatorios/tests/test_resumo_espelho_morto.py
 
 ● O selo restaurado passa (5 testes OK, com ruff e mypy). Rodando o segundo antes de commitar:
 
-● Rodar os dois selos restaurados
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1;
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ESTEIRA_QUEM=pdfprev2 bash bin/trava_teste.sh --espera 2400 -- docker run
-     --rm $TESTE_DOCKER --net…
+  Ran 1 shell command
 
-✢ Transmogrifying… (21m 42s · ↓ 15.7k tokens)
+● Registrando as duas ordens novas no PROMPTS e o achado do índice compartilhado, que é a causa real:
+
+  Read 1 file, ran 2 shell commands
+
+● Enquanto roda, escrevo o RELATO do censo — que é o entregável do item (1):
+
+● Estado real
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; ls -l $S/scratchpad/pdfprev2.log 2>/dev/null | awk
+     '{print $5}'; tail -3 $S/scratchpad/pdfprev2.log 2>/dev/null; echo "--- push26:"; ls $S/scratchpad/push26.log 2>/dev/null && tail…
+
+· Transmogrifying… (26m 43s · ↓ 20.4k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

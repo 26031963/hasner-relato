@@ -1,6 +1,51 @@
 # RELATO — esteira saas-hasner
 
-PAREI: e3-parei-a-flag-nao-carrega-decisao | espera Ronald (decisao de origem, -663,24 h)
+## SELO-PDF-PREVISTO-SUMIU (P7.1, curado) — e a causa nao era "eu apaguei um arquivo"
+
+Voce apontou que `b4eacf03` (o meu commit da E2) apagou
+`app/relatorios/tests/test_pdf_previsto_pelo_juiz.py` sem citar. **Curado, e a medicao achou uma causa
+maior do que o caso.**
+
+### CENSO: todo arquivo de teste apagado em `4ea0942b..HEAD`
+
+| commit | arquivo apagado | citado? | veredito |
+|---|---|---|---|
+| `b4eacf03` [ESPELHO-VERDADE-E2] (meu) | `relatorios/tests/test_pdf_previsto_pelo_juiz.py` | **nao** | **RESTAURADO** de `a48a47af`, VERDE (5 testes) |
+| `a48a47af` [PDF-PREVISTO-PELO-JUIZ] (outra sessao) | `relatorios/tests/test_resumo_espelho_morto.py` | **nao** (`grep` na mensagem = 0) | **RESTAURADO** de `a48a47af^` |
+
+Sao os DOIS da janela -- nenhum outro. E os dois seguiam **validos**:
+
+- a cura de `relatorios/pdf_espelho.py` **estava intacta** (linhas 417-421 ainda perguntam a
+  `escala/utils.py::minutos_previstos_do_dia`); so o SELO dela foi levado, que e o pior dos dois mundos:
+  a cura no ar sem quem a defenda;
+- o `test_resumo_espelho_morto.py` era um selo de AUSENCIA (`resumo_espelho_colab`/`_linha_colab` nao
+  podem voltar). Medi: as duas seguem **ausentes** do codigo vivo -- so restou a lapide em
+  `relatorios/services.py:73`. O selo nao ficou obsoleto; ele foi levado junto.
+
+### A CAUSA: `git commit` commita o INDICE, e ha outra sessao staged no mesmo repo
+
+`b4eacf03` tem **6** arquivos. Eu adicionei **7 caminhos, por PATH**, como a lei manda. O que chegou:
+
+| | |
+|---|---|
+| os 5 meus que tinham diff | `juiz_batida.py`, `test_juiz_batida.py`, RELATO, TICKETS, PENDENTES |
+| **uma delecao que eu NUNCA staged** | `D relatorios/tests/test_pdf_previsto_pelo_juiz.py` |
+| dois que eu staged e **nao entraram** | `core/juizes.py` e `ARQUITETURA.mmd` -- chegaram **sem diff** |
+
+O `core/juizes.py` sem diff e o outro lado da mesma moeda: **o bloco `JUIZES['batida']` que eu havia
+escrito nao estava mais na arvore no momento do commit** -- alguem o reverteu antes. Por isso o meu
+proprio commit afirma que "o registro esta PARADO em `core/juizes.py`" enquanto o arquivo **nunca
+carregou nada**. Eu narrei o estado do arquivo pela minha memoria do que escrevi, e nao pelo que o
+`git show` diz. Refeito agora, com o corte em mao.
+
+**"add por PATH, nunca `-A`" protege contra eu staged demais. Nao protege contra OUTRO staged.** O
+fabricante roda no mesmo repo, com o mesmo indice, e `git commit` nao commita os caminhos que eu pedi:
+commita o indice. Registrado como **O57 COMMIT-CARREGA-O-INDICE**, com as duas curas candidatas
+(`git commit -- <paths>` em todo sitio, ou tripwire no pre-commit que RECUSE commit com arquivo fora da
+lista) e **nao comecado** -- e decisao de desenho, nao execucao.
+
+
+EM CURSO: E3 METADE (so a troca do 60 cravado) | o `!` do E3 resolveu a trava do PAREI de 02:4x
 
 ## PAREI — ESPELHO-VERDADE-E3: o DIFF esta pronto, e ele diz **-663,24 h**. Nao aplico.
 
