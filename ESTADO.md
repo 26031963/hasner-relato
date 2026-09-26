@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 00:42:02.**
+**Medido em 26/09/2026 00:42:54.**
 
 | | |
 |---|---|
@@ -27,14 +27,13 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
  M app/docs/RELATO.md
  M bin/relato.sh
 ?? bin/gerar_estado.py
+?? bin/hasner-relato.service
+?? bin/hasner-relato.timer
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● A lógica casa col152 [nome] e [nome]/[nome] estão na lista — então o arquivo publicado não saiu do raspador atual: ele é de uma publicação anterior aos blocos que eu acrescentei
-  depois. E falta a classe que a regex não vê: nome em coluna separada (| col152 | [nome] |). Curando o raspador com o token solto que você pediu, e com a lista de
   colisões declarada:
 
   Ran 1 shell command
@@ -56,16 +55,19 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
 
 ● Dois tropeços meus: o — num arquivo declarado ascii, e o py_compile falhou antes de editar o relato.sh (que então rodou na versão velha). Consertando os dois:
 
-  Corrigir e publicar o ESTADO.md
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p = 'bin/gerar_estado.py'
-     s = open(p, encoding='utf-8').read()
-     s = s.replace('# ESTADO — o repo e a sessao agora', '# ESTADO -- o repo e a sessao agora')
-     s = s.replace('—', '--').replace('’', "'")
-     open(p, 'w', encoding='utf-8').write(s)
-     import py…
+  Ran 1 shell command
 
-✢ Deliberating… (6m 27s · ↓ 19.0k tokens)
+● ESTADO.md publicado — e note que a raspagem pegou 1 nome + 1 após id + 2 tokens dentro dele: os assuntos de commit no git log -5 carregavam nome. O timer, seguindo o padrão das
+  unidades que já existem:
+
+  Timer de 5 min do relato
+  ⎿  $ cd /home/ronald/saas-hasner && cat > bin/hasner-relato.service <<'EOF'
+     # RELATO PUBLICADO (cauda do LEIS-INDICE, corte Ronald 26/09): o RELATO e os indices vao ao repo
+     # publico a cada 5 min, sempre pela raspagem de nome/CPF do `bin/raspar_publico.py`.
+     #
+     # POR QUE TIMER E NAO HABITO (L-078): o `r…
+
+✶ Deliberating… (7m 19s · ↓ 20.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
