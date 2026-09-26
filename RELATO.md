@@ -1,5 +1,57 @@
 # RELATO — esteira saas-hasner
 
+## O65: o juiz de GEOMETRIA passa a ler a ata -- dinheiro ZERO, 62 turnos abertos morrem
+
+Depois do deploy da E3 o PDF dizia `08:47-16:23 = 420 min` e o rotulo da tela, no mesmo dia, dizia
+"aberto". Duas testemunhas, duas respostas, o mesmo fato -- porque a cura vivia no MOTOR e o rotulo
+pergunta a `ponto/turnos.py`. Agora os dois leem o mesmo juiz da batida.
+
+### RED da ordem, fechado
+
+| caso | antes | agora |
+|---|---|---|
+| col736 11/09 — geometria | `2 turnos ABERTOS` | **`08:47-16:23`, fechado** |
+| col736 11/09 — rotulo da tela | `aberto` | **`ok`** |
+| col736 11/09 — PDF do cartao | 420 min | **420 min** (nao mudou: ja estava curado) |
+| col369 23/09 — rotulo da tela | `aberto` | **`ok`** |
+
+### DIFF POR LEITOR (sombra e prod, so leitura)
+
+| leitor | o que muda |
+|---|---|
+| **dinheiro** (`FechamentoMensal`, 27 campos x 607 colabs) | **ZERO. Nenhum campo se move**, rollback provado em 607/607. O FM ja vinha do motor curado pela E3 |
+| **turnos abertos** (frota ativa, 548 colabs) | **806 -> 744**: 62 morrem, e **nenhum nasce**. Colabs com turno aberto: 219 -> 208 |
+| **chamados e perguntas de turno aberto** | cada turno aberto vivo e um que deixa de nascer -- os mesmos **62** |
+| **rotulos** | universo alcancado: **118 dias com tipo divergente do marco, em 77 colaboradores** (de 4.482 dias cuja ata explica o dia inteiro, em 15.696 celulas da competencia) |
+
+Dinheiro ZERO era a condicao da ordem para aplicar sem nova parada. Aplicado e no ar.
+
+### O que eu quase deixei passar, e o numero que me segurou
+
+A 1a versao mediu **806 -> 845**: os turnos abertos SUBIAM 39 ao mesmo tempo que 11 colabs saiam da
+lista. Ata parcial relabela UMAS batidas e nao outras, e isso quebra pares que estavam de pe --
+relabelar metade de um dia e pior que nao relabelar. A guarda e a mesma do motor, agora tambem aqui:
+**a ata so da o papel do dia quando explica o dia inteiro** (numero de lampadas acesas == numero de
+batidas apuraveis do dia). Com ela: 806 -> 744, nenhum nascendo.
+
+E antes disso a cura ficou MUDA por um erro de fuso meu: a ata entrega `instante_luz` **naive local**
+e a batida vem **aware em UTC**; eu comparei chave naive com busca aware e nenhuma casou. O col736
+seguia com dois turnos abertos como se nada tivesse mudado. **Chave que nunca casa e pior que cura
+ausente, porque parece aplicada.**
+
+### Como a cura entrou, e o que ela NAO fez
+
+`parear_turnos` **segue puro, sem DB**: ele recebe `papel_por_minuto` como ALIMENTACAO e, quando ela
+responde, o papel do MARCO manda sobre o campo `tipo`. Quem le a celula e o chamador -- `turnos_do_colab`
+e `_turno_aberto_calc`, os dois com banco --, e o leitor da ata e o MESMO juiz do motor
+(`ponto/juiz_batida.py::periodos_do_dia`). Sem alimentacao o comportamento e byte-identico ao de
+antes. Nenhum juiz novo nasceu.
+
+O selo da E3 se estendeu aos leitores: **chamador que tem o colaborador na mao e nao alimenta o papel
+fica VERMELHO** -- e isso cobre `turnos_do_colab` (tela, contador, cartorio) e `_turno_aberto_calc`
+(de onde nascem o chamado e a pergunta).
+
+
 ## DEPLOY feito (L-083) + SMOKE em prod: o PDF diz 420 min, e o rotulo da tela ainda diz "aberto"
 
 **Deploy OK** pelo `bin/deploy.sh --sem-migrate`: `collectstatic` (static mais novo que o manifest),

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:24:01.**
+**Medido em 26/09/2026 17:29:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,9 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ```
  M app/config/crons_duracao.json
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
+ M app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py
  M app/ponto/turnos.py
 ?? esteira.pausada
 ```
@@ -41,44 +44,44 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● _turno_aberto_calc é justamente quem alimenta chamado e pergunta de turno aberto — o que a ordem quer ver morrer. Alimentando:
-
-  Ran 2 shell commands
-
-● A chave vinha naive da ata e a busca aware — nunca casavam. Normalizando as duas para local naive:
+● Selo estendido e verde. Rodando a suíte inteira, que a L-083 exige antes do deploy:
 
   Ran 1 shell command
 
-● 08:47-16:23 fechado — a geometria agora concorda com o motor. Medindo o RED da ordem: rótulo da tela = PDF = motor:
+● Enquanto a suíte roda, o número que falta do DIFF por leitor — quantos rótulos mudam:
 
   Ran 1 shell command
 
-● RED fechado: rótulo da tela = ok nos dois, e o PDF em 420 min. Agora o DIFF por leitor — ensaio em prod com rollback, que é o que decide se aplica:
+● DIFF por leitor completo. Escrevendo, para commitar assim que a suíte fechar:
 
-  Ran 1 shell command
-
-● ZERO campos se movem — nem dinheiro, nem contador. O FM já vinha do motor curado; a O65 só muda quem pergunta à geometria. Medindo esse lado, que é o que a ordem pede:
-
-  Ran 1 shell command
-
-● Surpresa que impede aplicar assim: 11 colabs deixam de ter turno aberto, mas o total sobe de 806 para 845. Ata parcial relabela umas batidas e não outras — o mesmo risco que o
-  motor já tinha. Aplicando a mesma guarda:
-
-  Ran 1 shell command
-
-● Agora na direção certa e sem nascer nenhum: 806 → 744 turnos abertos, 62 morrem, e 11 colabs saem da lista. Reconfirmando que dinheiro segue ZERO:
-
-● Reconfirmar dinheiro zero e o RED · 57s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o65.py').read())" 2>&1 | grep -E
-     "ROLLBACK|processados|SOMA|nenhum|^[a-z_]+ +[-+]" | head -8; echo "=== RED dos dois casos ==="; docker exec saas_core python mana… (56s)
+● Esperar a suite completa da O65 · 2m 44s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 18); do if grep -qE "^(OK|FAILED)"
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzg87gdny.output 2>/dev/null; then break; fi; sleep 50; done; grep -E
+     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o65_suite.log … (2m 42s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (7m 21s · ↓ 17.9k tokens)
+✢ Pouncing… (12m 51s · ↓ 26.3k tokens)
+
+❯ BECO-FIO-FECHADO-CELULA-ABERTA (P7.1; L-002 a celula manda): INVARIANTE: celula de competencia aberta com veredito furo/cobrado tem SEMPRE um canal vivo (pergunta aberta ao
+  colab ou pendencia do admin). Contador celula_furo_sem_canal, esperado 0, no MetricaSnapshot.
+  FONTE: quem fecha disputa/pergunta (vias chamado_encerrado, celula_absolveu, completude_turno, "nada a perguntar", Q2-JA "conversa parada") -- nomear arquivo:linha de cada
+  fechador.
+  MUDA: nenhum fechador encerra o fio sem perguntar o veredito atual da celula; se a celula ainda diz furo/cobrado, nao fecha. Q2-JA "conversa parada": conferir contra o corte
+  DECIDIR-642 (prescricao por competencia, nunca por idade).
+  RED: as 66 fechadas pelo sistema com celula ainda em furo/cobrado em 09 (col168 21, col864 8, col348 5 ...); e os 1-dia col874 27/08, col707 20/09, col281 08/09 (autopsia das
+  lampadas: que marco segue apagado depois da resposta gravada).
+  PASSIVO: reabrir canal dos becos de 09 = DRY com o numero, espera !.
+  SELO: fechador que nao consulta a celula = vermelho.
+  PROIBIDO: fechar por idade; fallback; atalho.
+  PRONTO: RELATO com os REDs, o contador medido e o commit. HAIKU: celula_furo_sem_canal no snapshot; golden "quantos dias estao travados sem ninguem poder resolver?". Nenhuma
+  lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
