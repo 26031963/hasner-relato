@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:47:31.**
+**Medido em 26/09/2026 19:52:45.**
 
 | | |
 |---|---|
@@ -39,18 +39,6 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  A O69 está registrada com a raiz nomeada: enquanto o fechamento exigir vínculo ativo e o espelho pegar o último, as duas pontas (o zero e o dobrado) são produzidas por
-  construção. O juiz único que você definiu — CelulaDia.escala_geradora — resolve as duas de uma vez.
-
-  Nada tocado em dinheiro. O próximo passo dela é o DIFF na sombra com os 25 e a lista dos 9, que é o que vai ao seu !.
-
-✻ Baked for 2m 46s · done 7:29 PM
-
-❯ roda o DIFF na sombra dos 25 com a lista dos 9
-
-● Antes de montar a cura, o contrato de entrada: a fonte existe e responde? Medindo a cobertura de escala_geradora:
-
-  Ran 1 shell command
 
 ● Cobertura 100% — 17.329 células, todas com escala_geradora. O juiz pode responder. E dois achados que mudam o desenho:
 
@@ -65,14 +53,26 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ● A mecânica do dobro está à vista: escalas_periodo roda o motor uma vez por escala e soma — vínculos sobrepostos computam os mesmos dias duas vezes. Montando a cura em cópia do
   HEAD:
 
-● Escrever a cura do vinculo do dia na copia
-  ⎿  $ cd /home/ronald/saas-hasner && D=$(bash bin/arvore_do_push.sh HEAD) && echo "$D" > /tmp/claude-1001/arvore_o69 && python3 <<ENDPY
-     D = open('/tmp/claude-1001/arvore_o69').read().strip()
-     f = D + '/app/ponto/services/fechamento.py'
-     s = open(f, encoding='utf-8').read()
-     velho = """ for esc in escalas_…
+  Ran 1 shell command
 
-✢ Shenaniganing… (4m 6s · ↓ 5.4k tokens · thinking)
+● O heredoc sem quotes interpretou os backticks — conferindo se o comentário saiu íntegro:
+
+  Ran 2 shell commands
+
+● A sombra tem o gravado pré-E3, então esse DIFF soma três curas. Para isolar a O69 preciso medir contra o gravado de prod — ensaio com rollback, mesma disciplina:
+
+  Ran 1 shell command
+
+● Dinheiro move: −399,76 h de trabalhadas em 7 colabs, 654,74 h de movimento absoluto, quase tudo negativo — é o dobro saindo. Agora a lista dos 9 do TXT sob a cura:
+
+● Medir os 9 do TXT sob a cura
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/o69nove.py <<'PYEOF'
+     """Os 9 do TXT sob a cura da O69: antes x depois, em prod, com rollback."""
+     from django.db import transaction
+     from ponto.models import FechamentoMensal
+     from ponto.services.fechamento import recalcular_fechament…
+
+* Shenaniganing… (9m 20s · ↓ 9.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
