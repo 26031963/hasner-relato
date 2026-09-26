@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:55:45.**
+**Medido em 26/09/2026 14:01:01.**
 
 | | |
 |---|---|
@@ -43,12 +43,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ```
 
-  Ran 3 shell commands
-
-● Rodando as suítes de dinheiro contra a cópia, antes de qualquer DIFF:
-
-  Ran 1 shell command
-
 ● Quebrou muito — e a causa é real, não ruído de teste: motor construído sem colaborador não tem juiz a consultar, e minha regra zerava toda HE. Uma porta só, que declara de onde
   veio a jornada:
 
@@ -69,12 +63,18 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● O juiz pode receber alimentação — é o mesmo contrato que marcos_do_dia e eh_dia_trabalho já aceitam. Curando o N+1 e o caso alimentado de uma vez:
 
-  Rodar de novo as cinco suites · 3m 11s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && D=$(cat /tmp/claude-1001/arvore_o60) && ESTEIRA_QUEM=o60 bash
-     bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file … (3m 9s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 3 shell commands
 
-· Concocting… (53m 16s · ↓ 66.9k tokens)
+● Ainda 0. Paro de adivinhar e leio o teste:
+
+  Searched for 1 pattern
+
+● Achei: o teste alimenta células FALSAS com colaborador_id=7 que não existe no banco. Meu código registrava 0 como se o juiz tivesse respondido "nada previsto" — colaborador
+  inexistente é ausência de juiz, não veredito zero:
+
+● Running 1 shell command…
+
+✢ Concocting… (58m 32s · ↓ 68.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
