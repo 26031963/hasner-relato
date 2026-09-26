@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**66 obras abertas.**
+**67 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -75,3 +75,4 @@ lista — ela e o que esta EM PE._
 | **O64** | col369: `inconsistencias` 10 em prod x 14 na sombra | espera `!` |
 | **O65** | O JUIZ DE GEOMETRIA AINDA PAREIA PELO TIPO GRAVADO | PAREI |
 | **O66** | BECO-FIO-FECHADO-CELULA-ABERTA | espera `!` |
+| **O67** | CASO [nome] -> QUATRO CLASSES DE FROTA | **livre** -- entra junto da O66 |

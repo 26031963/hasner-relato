@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 18:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.3 MB). Acoes na janela: **738**.
+**Medido em 26/09/2026 18:30:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.3 MB). Acoes na janela: **739**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:29:58 | Bash | Declarar 09 liberada e registrar as ordens novas | `python3 <<'ENDPY' import re f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## 09/2026 LIBERADA — as tres provas, e o medidor que faltava agora EXISTE') A('') A('\| prova \| numero \|') A('\|---\|---\|') A('\| `cartao_x_txt_divergentes` \| **0** (203 colaboradores no TXT) \|') A('\| `pdf_x_espelho_divergentes` \| **0** (203 medid ...` |
 | 18:26:55 | Bash | Corrigir a janela e remedir | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='app/relatorios/management/commands/pdf_x_espelho_divergentes.py' s=open(f,encoding='utf-8').read() v = " esp = espelho_do_colab(colab, fim, ini, fim, ano=ano)" n = (" # `hoje` UM DIA DEPOIS DO FIM, e nao o proprio fim: o espelho trata `hoje` como o dia\n" " # CORRENTE e o trunca (o cartao diz \"ate ontem\"). Medido: com `hoje=fim`, TODAS as 68\ ...` |
 | 18:24:17 | Bash | Ver o detalhe das divergencias | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani --mes 9 --ano 2026 --ids 2>&1 \| grep -E "^ col" \| head -12` |
 | 18:21:44 | Bash | Construir o medidor e rodar na 09 | `cd /home/ronald/saas-hasner && cat > app/relatorios/management/commands/pdf_x_espelho_divergentes.py <<'PYEOF' """PDF-E-O-ESPELHO (O9): contador do placar -- colaborador cujo PDF do cartao nao bate com o ESPELHO. python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani [--mes 9 --ano 2026] POR QUE ESTE ARQUIVO NASCE SO AGORA, e o registro importa: o numero `pdf_x_espelho=0 (196)` ...` |

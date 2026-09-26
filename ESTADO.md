@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:28:01.**
+**Medido em 26/09/2026 18:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `3046eef0 [BECO-FIO-FECHADO-CELULA-ABERTA] O66 medida: celula_furo_sem_canal = 68, e nenhum fechador consulta a celula` |
+| `HEAD` local | `6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo` |
 | `origin/main` | `af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,46 +22,30 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo
 3046eef0 [BECO-FIO-FECHADO-CELULA-ABERTA] O66 medida: celula_furo_sem_canal = 68, e nenhum fechador consulta a celula
 af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor
 f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 59383af3 [O65-GEOMETRIA-LE-A-ATA] smoke pos-deploy: geometria, PDF e rotulo da tela concordando
-27ef363d [O65-GEOMETRIA-LE-A-ATA] nenhum leitor de turno pareia pelo tipo gravado -- dinheiro ZERO, 62 turnos abertos morrem
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-?? app/relatorios/management/commands/pdf_x_espelho_divergentes.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    pdf_x_espelho=0 de 24/09 foi sonda de sessão, e o código dela não ficou.
-
-  Então: o número existiu, o medidor nunca. E medir é pré-aprovado — vou deixar o medidor de pé em vez de outra sonda:
-
-  Ran 2 shell commands
-
-● 68 divergentes de 203 — não é zero, então "09 liberada" não se declara. Mas antes de reportar isso como divergência do sistema, confiro se a comparação é da minha sonda:
 
   Ran 1 shell command
 
 ● Todas as 68 caem no mesmo dia, 20/09 — o último da competência, onde o PDF tem minutos e o espelho tem 0. É artefato da minha chamada: passei hoje=fim, e o espelho trata hoje
   como o dia corrente. Corrigindo:
 
-● Corrigir a janela e remedir · 1m 6s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
-     f='app/relatorios/management/commands/pdf_x_espelho_divergentes.py'
-     s=open(f,encoding='utf-8').read()
-     v = " esp = espelho_do_colab(colab, fim, ini, fim, ano=ano)"
-     n = (" # `hoje` UM DIA DEPOIS DO FIM, e nao o proprio fim: o espelho trata `hoje` c… (1m 4s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Whisking… (13m 9s · ↓ 20.7k tokens)
+  Ran 1 shell command
 
 ❯ CASO [nome] (emp4, 5x2 ter-sab 21:00-07:00), setembro -- entra junto da O66 (L-002, P7.1):
   (1) 11/09: a 21:01 gravada S e a ENTRADA do plantao (marco 21:00) e nao recebeu o tipo corrigido; o dia segue com aviso e chamado #22148. Autopsia: a ata do dia explica as 4
@@ -73,10 +57,25 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
   (4) atestado 01-07/09 cobre as folgas 06 e 07: medir se o FechamentoMensal contou abono nesses dias; atestado so tem efeito em dia de trabalho, a exibicao do periodo fica.
   (5) tela: o chip do atestado vai em duas linhas (tipo em cima, periodo embaixo), sem corte.
   Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
+
+❯ Cada item do caso [nome] mede a FROTA na competencia 09 e vira contador no MetricaSnapshot; o Jean e o RED, nao o universo: (1) dias com batida de tipo trocado que o juiz
+  nao corrigiu, e por qual motivo a guarda recusou; (2) celula_veredito_velho; (3) celulas julgadas como falta ou sem registro antes do marco chegar; (4) dias de folga com abono
+  contado no fechamento. A cura e na origem de cada classe, nunca no caso.
+
+● pdf_x_espelho_divergentes = 0 de 203 medidos — o medidor agora existe e o número é real. As três provas fecham. Declarando e registrando as ordens novas:
+
+● Commitar o medidor e a liberacao de 09 · 2s
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/TICKETS.md'
+     s=open(f,encoding='utf-8').read()
+     anc='| BECO-FIO-FECHADO-CELULA-ABERTA | chamado |'
+     linha = ('| PDF-X-ESPELHO-MEDIDOR | infra | o contador `pdf_x_espelho_divergentes` passa a EXISTIR em codigo: compara, por '
+     'colab e por dia, o que o PDF desenha contra o qu…
+
+✢ Whisking… (15m 39s · ↓ 25.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index

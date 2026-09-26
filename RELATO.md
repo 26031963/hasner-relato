@@ -1,5 +1,41 @@
 # RELATO — esteira saas-hasner
 
+## 09/2026 LIBERADA — as tres provas, e o medidor que faltava agora EXISTE
+
+| prova | numero |
+|---|---|
+| `cartao_x_txt_divergentes` | **0** (203 colaboradores no TXT) |
+| `pdf_x_espelho_divergentes` | **0** (203 medidos) |
+| recalculo imediatamente antes | **zero movimento**: 607 colabs x 27 campos, rollback provado 607/607 |
+
+### Eu errei a lei antes de acertar o numero
+
+Escrevi "`pdf_x_espelho` NAO TEM MEDIDOR" **sem dar o grep** -- e a lei da casa e LER ANTES DE
+AFIRMAR. O Ronald mandou grepar. O que o grep diz:
+
+- `pdf_x_espelho` aparece **so em docs** (PROMPTS, BACKLOG, RELATO). `git log --all -S` em `bin/`,
+  `app/core/` e `app/relatorios/`: **zero commits**. `pdf_x_espelho_divergentes` nao existia nem em doc.
+- o "196" nao era "196 medidos": sao os **196 colaboradores com turno cross-meia-noite**, sujeito do
+  DIFF do PDF-SEM-REGRA-PROPRIA. O `pdf_x_espelho=0` de 24/09 foi **sonda de sessao**, e o codigo dela
+  nao ficou.
+
+Ou seja: a conclusao estava certa e o metodo estava errado -- **o numero existiu, o medidor nunca**.
+E numero sem medidor volta como pergunta a cada vez; voltou hoje.
+
+### O medidor, agora de pe
+
+`relatorios/management/commands/pdf_x_espelho_divergentes.py` compara, por colaborador e por DIA, o
+que o PDF desenha (`_coletar_dados_espelho`) contra o que o espelho diz (`espelho_do_colab`, a mesma
+funcao da tela e do app): minutos trabalhados e se o dia tem turno aberto. Universo = quem ENTRA no
+TXT, pelo juiz `classificar_export`.
+
+E a primeira rodada dele acusou **68 divergentes** -- que eram da MINHA sonda, nao do sistema: todas
+as 68 cairam no mesmo dia, **20/09**, o ultimo da competencia, com o PDF tendo minutos e o espelho
+zero. Eu passei `hoje=fim`, e o espelho trata `hoje` como o dia CORRENTE e o trunca ("ate ontem").
+Com `hoje = fim + 1 dia`: **0 divergentes**. O comentario com esse numero ficou no proprio arquivo,
+para ninguem repetir o erro lendo o medidor.
+
+
 ## O66 BECO-FIO-FECHADO-CELULA-ABERTA: o contador medido, os REDs e o censo dos fechadores
 
 ### O CONTADOR do invariante
