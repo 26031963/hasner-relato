@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:10:46.**
+**Medido em 26/09/2026 10:16:01.**
 
 | | |
 |---|---|
@@ -25,7 +25,12 @@ e37398b8 O57: alvo temporario do teste empirico
 
 ```
  M app/config/crons_duracao.json
+ M app/core/esteira_vigia.py
+ M app/core/integrador_lote.py
  M app/docs/RELATO.md
+ M bin/molde_autocura/cadeia.sh
+ M bin/molde_fatia/cadeia.sh
+ M bin/relato.sh
 ?? bin/commit_so_o_declarado.sh
 ?? bin/gerar_sessao.py
 ?? bin/tests/test_commit_so_o_declarado.sh
@@ -35,39 +40,39 @@ e37398b8 O57: alvo temporario do teste empirico
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Achei os sítios. Escrevendo o tripwire da O57 — e vou medir uma subtileza em vez de supor: com git commit -- <paths>, o que o hook vê é o índice temporário ou o real?
-
-  Ran 1 shell command
-
-● Tenho uma deleção staged — a forma exata do dano. Medindo se git commit -- <paths> a carrega:
-
-  Ran 1 shell command
-
-● Provado: com git commit -- <paths> o commit levou só A _o57_outro.txt, e a deleção alheia ficou no índice, intocada. A cura (a) basta contra o mecanismo. Agora testo se o hook
-  vê o índice temporário ou o real:
-
-  Ran 1 shell command
-
-● O hook vê o índice temporário — as duas curas coexistem sem falso positivo. Agora o teste que morde: commit sem pathspec com a deleção alheia no índice:
-
-  Ran 1 shell command
-
-● Os três testes fecham: B recusou com a mensagem certa, C passou com a deleção declarada, e o pathspec não dá falso positivo. Escrevendo o selo de host com o caso que morde:
-
-  Ran 1 shell command
-
 ● Selo verde com o caso que morde. Agora o item (2) — um escritor na árvore: os três sítios param de commitar arquivo versionado:
 
   Ran 1 shell command
 
 ● Aplicando a forma mais restritiva (L-081): os três param de escrever e commitar arquivo versionado — esta sessão é a única escritora da árvore:
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-✻ Transmogrifying… (1h 13m 8s · ↓ 81.3k tokens)
+● Agora o esteira_vigia.py (quarentena) e a linha do fabricante no ESTADO.md, que é o PRONTO que você pediu:
+
+  Ran 3 shell commands
+
+● O que sobrou é o commit da fatia em si (legítimo), mas sem pathspec. Aplicando a cura (a) nele, com os caminhos da própria fatia:
+
+  Ran 1 shell command
+
+● _commitar já tem a lista de caminhos para o add — basta passá-la ao commit. É exatamente a cura (a):
+
+  Ran 1 shell command
+
+● Faltam dois: cadeia.sh:62 e autocura:59, que commitam a fatia sem pathspec. Fechando o censo:
+
+  Ran 1 shell command
+
+● $CAMINHOS não existe — preciso declará-lo da mesma expressão que o add usa, para que os dois leiam uma lista só:
+
+  Ran 1 shell command
+
+● Censo fechado: todo sítio de commit da casa tem pathspec. Agora a linha do fabricante no ESTADO.md — o PRONTO que você pediu:
+
+● Running 1 shell command…
+
+✢ Transmogrifying… (1h 18m 23s · ↓ 88.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
