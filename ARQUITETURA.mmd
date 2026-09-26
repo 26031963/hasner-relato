@@ -1,0 +1,349 @@
+%% GERADO POR bin/gerar_diagrama.py — NAO EDITAR A MAO.
+%% O selo core/tests/test_selo_diagrama_do_codigo.py regenera e compara;
+%% divergir do codigo deixa o build VERMELHO.
+flowchart TD
+  %% (a) FRONTEIRA — fonte: core/tests/test_contract_direcao_a16.py
+  subgraph FRONTEIRA["fronteira ponto x chamados (HX-DIRECAO-A16)"]
+    fr_ponto["ponto"]
+    fr_chamados["chamados"]
+    fr_catalogo["chamados.catalogo<br/>INERTE: 3 modulos"]
+    fr_ponto -->|topo PERMITIDO| fr_catalogo
+    fr_ponto -.->|topo: 8 na allowlist ETAPA 6, espera B5| fr_chamados
+    fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
+  end
+
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (46 nos diarios)
+  subgraph e_infra["infra"]
+    c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
+  end
+  subgraph e_madrugada["madrugada"]
+    c_calcular_metricas["calcular_metricas<br/>03:20"]
+    c_calcular_scores["calcular_scores<br/>03:25"]
+    c_health_crawl["health_crawl<br/>05:00"]
+    c_pre_fechamento["pre_fechamento<br/>05:10"]
+  end
+  subgraph e_grade["grade"]
+    c_efetivar_desligamentos_agendados["efetivar_desligamentos_agendados<br/>06:06"]
+    c_gerar_celulas["gerar_celulas<br/>05:50"]
+    c_reverter_situacao_afastado["reverter_situacao_afastado<br/>06:16"]
+    c_sincronizar_status_ferias["sincronizar_status_ferias<br/>06:15"]
+    c_termometro_regua["termometro_regua<br/>06:00"]
+    c_tripwire_celulas["tripwire_celulas<br/>06:05"]
+    c_tripwire_status_ferias["tripwire_status_ferias<br/>06:17"]
+    c_tripwire_vinculo_orfao["tripwire_vinculo_orfao<br/>06:07"]
+  end
+  subgraph e_cobranca["cobranca"]
+    c_apurar_furos_diarios["apurar_furos_diarios<br/>06:37"]
+    c_detectar_cluster_espurio["detectar_cluster_espurio<br/>06:24"]
+    c_detectar_par_relampago["detectar_par_relampago<br/>06:26"]
+    c_disparar_perguntas_competencia["disparar_perguntas_competencia<br/>06:38"]
+    c_processar_cartorio["processar_cartorio<br/>06:27"]
+    c_reconciliar_grade["reconciliar_grade<br/>06:20"]
+  end
+  subgraph e_reconciliacao["reconciliacao"]
+    c_detectar_intervalo_ausente["detectar_intervalo_ausente<br/>06:48"]
+    c_fechar_becos_disputa["fechar_becos_disputa<br/>07:10"]
+    c_flip_automatico["flip_automatico<br/>07:12"]
+    c_mapa_divergencia["mapa_divergencia<br/>07:07"]
+    c_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado<br/>07:02"]
+    c_reconciliar_geofence["reconciliar_geofence<br/>06:42"]
+    c_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas<br/>06:41"]
+    c_reconciliar_vinculo["reconciliar_vinculo<br/>06:47"]
+    c_silenciar_chamados_isentos["silenciar_chamados_isentos<br/>07:05"]
+    c_supra_juiz["supra_juiz<br/>06:54"]
+    c_verificar_nucleo["verificar_nucleo<br/>06:50"]
+  end
+  subgraph e_auditoria["auditoria"]
+    c_auditar_invariantes_chamados["auditar_invariantes_chamados<br/>07:18"]
+    c_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>07:26"]
+    c_pipeline_placar["pipeline_placar<br/>07:40"]
+    c_tripwire_tipo_batida["tripwire_tipo_batida<br/>07:21"]
+    c_vigia_b5_ausencia["vigia_b5_ausencia<br/>07:22"]
+    c_vigia_plantio_overnight["vigia_plantio_overnight<br/>07:28"]
+  end
+  subgraph e_alerta["alerta"]
+    c_alertar_disputas_pendentes["alertar_disputas_pendentes<br/>08:00"]
+    c_alertar_ferias_vencendo["alertar_ferias_vencendo<br/>07:47"]
+    c_alertar_justificativas_sla["alertar_justificativas_sla<br/>07:45"]
+    c_alertar_retornos["alertar_retornos<br/>07:46"]
+    c_escalonar_documentos_ausencia["escalonar_documentos_ausencia<br/>07:51"]
+    c_esmeril_espelho["esmeril_espelho<br/>08:30"]
+    c_pautas_de_ferias["pautas_de_ferias<br/>07:49"]
+    c_pautas_do_esmeril["pautas_do_esmeril<br/>08:40"]
+    c_suporte_hasner["suporte_hasner<br/>08:05"]
+    c_vigia_entrada_faltante["vigia_entrada_faltante<br/>07:50"]
+  end
+  c_processar_cartorio --> c_apurar_furos_diarios
+  c_apurar_furos_diarios --> c_auditar_invariantes_chamados
+  c_flip_automatico --> c_auditar_invariantes_chamados
+  c_reconciliar_grade --> c_detectar_cluster_espurio
+  c_processar_cartorio --> c_detectar_intervalo_ausente
+  c_reconciliar_grade --> c_detectar_par_relampago
+  c_processar_cartorio --> c_disparar_perguntas_competencia
+  c_apurar_furos_diarios --> c_disparar_perguntas_competencia
+  c_processar_cartorio --> c_esmeril_espelho
+  c_reconciliar_perguntas_orfas --> c_fechar_becos_disputa
+  c_detectar_par_relampago --> c_flip_automatico
+  c_processar_cartorio --> c_flip_automatico
+  c_apurar_furos_diarios --> c_mapa_divergencia
+  c_flip_automatico --> c_marcar_foto_ausente_retro
+  c_esmeril_espelho --> c_pautas_do_esmeril
+  c_auditar_invariantes_chamados --> c_pipeline_placar
+  c_reconciliar_grade --> c_processar_cartorio
+  c_processar_cartorio --> c_reavaliar_ausencias_feriado
+  c_gerar_celulas --> c_reconciliar_grade
+  c_termometro_regua --> c_reconciliar_grade
+  c_disparar_perguntas_competencia --> c_reconciliar_perguntas_orfas
+  c_detectar_par_relampago --> c_reconciliar_vinculo
+  c_processar_cartorio --> c_silenciar_chamados_isentos
+  c_processar_cartorio --> c_supra_juiz
+  c_gerar_celulas --> c_termometro_regua
+  c_gerar_celulas --> c_tripwire_celulas
+  c_sincronizar_status_ferias --> c_tripwire_status_ferias
+  c_flip_automatico --> c_tripwire_tipo_batida
+  c_detectar_par_relampago --> c_verificar_nucleo
+  c_processar_cartorio --> c_vigia_b5_ausencia
+  c_flip_automatico --> c_vigia_plantio_overnight
+  %% arestas `depende` declaradas: 31
+
+  %% (c) PORTAS CANONICAS — fonte: AST/grep sobre app/
+  subgraph PORTAS["escritores unicos / portas canonicas"]
+    p_julgar_celula(["julgar_celula()<br/>celula julgada<br/>18 chamador(es)"])
+    x_api_views_py["api/views.py"] --> p_julgar_celula
+    x_chamados_management_commands_auditar_invariantes_chamados_py["chamados/management/commands/auditar_invariantes_chamados.py"] --> p_julgar_celula
+    x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_julgar_celula
+    x_chamados_services_cobrar_dia_py["chamados/services/cobrar_dia.py"] --> p_julgar_celula
+    x_chamados_signals_py["chamados/signals.py"] --> p_julgar_celula
+    mais_julgar_celula["... +13 chamadores"] --> p_julgar_celula
+    p_criar_ausencia(["criar_ausencia()<br/>ausencia<br/>8 chamador(es)"])
+    x_api_views_py["api/views.py"] --> p_criar_ausencia
+    x_chamados_services_materializacao_py["chamados/services/materializacao.py"] --> p_criar_ausencia
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_criar_ausencia
+    x_ponto_forms_py["ponto/forms.py"] --> p_criar_ausencia
+    x_ponto_precedencia_py["ponto/precedencia.py"] --> p_criar_ausencia
+    mais_criar_ausencia["... +3 chamadores"] --> p_criar_ausencia
+    p_registrar_batida(["registrar_batida()<br/>batida<br/>15 chamador(es)"])
+    x_api_views_py["api/views.py"] --> p_registrar_batida
+    x_api_views_core_py["api/views_core.py"] --> p_registrar_batida
+    x_chamados_management_commands_reconciliar_chamados_py["chamados/management/commands/reconciliar_chamados.py"] --> p_registrar_batida
+    x_chamados_models_py["chamados/models.py"] --> p_registrar_batida
+    x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_registrar_batida
+    mais_registrar_batida["... +10 chamadores"] --> p_registrar_batida
+    p_relavrar(["relavrar()<br/>via da pergunta<br/>3 chamador(es)"])
+    x_chamados_management_commands_relavrar_via_i6_py["chamados/management/commands/relavrar_via_i6.py"] --> p_relavrar
+    x_config_crons_py["config/crons.py"] --> p_relavrar
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_relavrar
+    p_desfazer_carimbo_sem_lastro(["desfazer_carimbo_sem_lastro()<br/>carimbo desfeito<br/>2 chamador(es)"])
+    x_chamados_services_fabrica_da_celula_py["chamados/services/fabrica_da_celula.py"] --> p_desfazer_carimbo_sem_lastro
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_desfazer_carimbo_sem_lastro
+    p_materializar_perguntas_validadas_da_disputa(["materializar_perguntas_validadas_da_disputa()<br/>materializacao<br/>5 chamador(es)"])
+    x_chamados_models_py["chamados/models.py"] --> p_materializar_perguntas_validadas_da_disputa
+    x_chamados_services_acoes_disputa_py["chamados/services/acoes_disputa.py"] --> p_materializar_perguntas_validadas_da_disputa
+    x_chamados_services_fio_py["chamados/services/fio.py"] --> p_materializar_perguntas_validadas_da_disputa
+    x_chamados_services_validacao_py["chamados/services/validacao.py"] --> p_materializar_perguntas_validadas_da_disputa
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_materializar_perguntas_validadas_da_disputa
+    p_retratar(["retratar()<br/>retratacao S128<br/>27 chamador(es)"])
+    x_chamados_catalogo_premissa_py["chamados/catalogo/premissa.py"] --> p_retratar
+    x_chamados_management_commands_auditar_invariantes_chamados_py["chamados/management/commands/auditar_invariantes_chamados.py"] --> p_retratar
+    x_chamados_management_commands_retratar_chamados_lei_cala_py["chamados/management/commands/retratar_chamados_lei_cala.py"] --> p_retratar
+    x_chamados_veredito_lavrado_py["chamados/veredito_lavrado.py"] --> p_retratar
+    x_colaboradores_legenda_calendario_py["colaboradores/legenda_calendario.py"] --> p_retratar
+    mais_retratar["... +22 chamadores"] --> p_retratar
+    p_reapontar_resolvedora(["reapontar_resolvedora()<br/>reapontar fio<br/>2 chamador(es)"])
+    x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_reapontar_resolvedora
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_reapontar_resolvedora
+  end
+
+  %% (d) TABULEIRO — fonte: config/crons.py (papel declarado de cada cron)
+  subgraph TABULEIRO["tabuleiro: a lampada avisa, o cron vigia"]
+    t_escala["ESCALA<br/>o que devia acontecer (fonte unica)"]
+    t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
+    t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
+    t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
+    t_vigia["CRON = VIGIA<br/>19 vigias; contador esperado 0, so alarma"]
+    t_juiz["JUIZ POR VARREDURA (divida)<br/>27 crons ainda julgam: esperado 0"]
+    t_escala --> t_celula
+    t_evento --> t_celula
+    t_celula --> t_consumidor
+    t_vigia -.->|mede| t_celula
+    t_juiz ==>|re-julga, a sair| t_consumidor
+  end
+  j_apurar_furos_diarios["apurar_furos_diarios"] -.-> t_juiz
+  j_detectar_ausencias["detectar_ausencias"] -.-> t_juiz
+  j_detectar_cluster_espurio["detectar_cluster_espurio"] -.-> t_juiz
+  j_detectar_intervalo_ausente["detectar_intervalo_ausente"] -.-> t_juiz
+  j_detectar_par_relampago["detectar_par_relampago"] -.-> t_juiz
+  j_detectar_vinculo_divergente["detectar_vinculo_divergente"] -.-> t_juiz
+  j_disparar_perguntas_competencia["disparar_perguntas_competencia"] -.-> t_juiz
+  j_escalonar_documentos_ausencia["escalonar_documentos_ausencia"] -.-> t_juiz
+  j_fechar_becos_disputa["fechar_becos_disputa"] -.-> t_juiz
+  j_fechar_chamados_ausencia["fechar_chamados_ausencia"] -.-> t_juiz
+  j_fechar_cobranca_com_lastro["fechar_cobranca_com_lastro"] -.-> t_juiz
+  j_flip_automatico["flip_automatico"] -.-> t_juiz
+  j_marcar_foto_ausente_retro["marcar_foto_ausente_retro"] -.-> t_juiz
+  j_processar_alertas_avancados["processar_alertas_avancados"] -.-> t_juiz
+  j_processar_alertas_turno["processar_alertas_turno"] -.-> t_juiz
+  j_processar_cartorio["processar_cartorio"] -.-> t_juiz
+  j_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado"] -.-> t_juiz
+  j_reavaliar_ausencias_lancadas["reavaliar_ausencias_lancadas"] -.-> t_juiz
+  j_reconciliar_chamados["reconciliar_chamados"] -.-> t_juiz
+  j_reconciliar_fantasmas["reconciliar_fantasmas"] -.-> t_juiz
+  j_reconciliar_geofence["reconciliar_geofence"] -.-> t_juiz
+  j_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas"] -.-> t_juiz
+  j_reconciliar_vinculo["reconciliar_vinculo"] -.-> t_juiz
+  j_silenciar_chamados_isentos["silenciar_chamados_isentos"] -.-> t_juiz
+  j_supra_juiz["supra_juiz"] -.-> t_juiz
+  j_termometro_regua["termometro_regua"] -.-> t_juiz
+  j_vigia_de_hora["vigia_de_hora"] -.-> t_juiz
+
+  %% (e) EVENTO — fonte: @receiver em ponto/signals.py, chamados/signals.py, escala/signals.py (AST)
+  subgraph EVENTO["evento: o sinal carimba a celula e acorda o juiz do dia (a lampada avisa)"]
+    ev_juiz(["cartorio.julgar_celula<br/>juiz UNICO do dia"])
+    ev_celula["CELULA / ATA"]
+    ev_juiz --> ev_celula
+    evs_Ausencia[/"Ausencia<br/>2 receiver(s)"/]
+    evr_cartorio_post_delete_ausencia["_cartorio_post_delete_ausencia<br/>post_delete"]
+    evs_Ausencia --> evr_cartorio_post_delete_ausencia
+    evr_cartorio_post_delete_ausencia ==>|julga| ev_juiz
+    evr_cartorio_post_save_ausencia["_cartorio_post_save_ausencia<br/>post_save"]
+    evs_Ausencia --> evr_cartorio_post_save_ausencia
+    evr_cartorio_post_save_ausencia ==>|julga| ev_juiz
+    evs_Batida[/"Batida<br/>6 receiver(s)"/]
+    evr_cartorio_post_delete_batida["_cartorio_post_delete_batida<br/>post_delete"]
+    evs_Batida --> evr_cartorio_post_delete_batida
+    evr_cartorio_post_delete_batida ==>|julga| ev_juiz
+    evr_cartorio_post_save_batida["_cartorio_post_save_batida<br/>post_save"]
+    evs_Batida --> evr_cartorio_post_save_batida
+    evr_cartorio_post_save_batida ==>|julga| ev_juiz
+    evr_nucleo_post_delete_batida["_nucleo_post_delete_batida<br/>post_delete"]
+    evs_Batida --> evr_nucleo_post_delete_batida
+    evr_nucleo_post_save_batida["_nucleo_post_save_batida<br/>post_save"]
+    evs_Batida --> evr_nucleo_post_save_batida
+    evr_realtime_post_save_batida["_realtime_post_save_batida<br/>post_save"]
+    evs_Batida --> evr_realtime_post_save_batida
+    evr_reconciliador_post_save_batida["_reconciliador_post_save_batida<br/>post_save"]
+    evs_Batida --> evr_reconciliador_post_save_batida
+    evs_ChamadoColaborador[/"ChamadoColaborador<br/>4 receiver(s)"/]
+    evr_cartorio_post_save_chamado["_cartorio_post_save_chamado<br/>post_save"]
+    evs_ChamadoColaborador --> evr_cartorio_post_save_chamado
+    evr_cartorio_post_save_chamado ==>|julga| ev_juiz
+    evr_cartorio_pre_save_chamado["_cartorio_pre_save_chamado<br/>pre_save"]
+    evs_ChamadoColaborador --> evr_cartorio_pre_save_chamado
+    evr_rebaixa_urgencia_ao_resolver["rebaixa_urgencia_ao_resolver<br/>post_save"]
+    evs_ChamadoColaborador --> evr_rebaixa_urgencia_ao_resolver
+    evr_resolve_perguntas_ao_resolver["resolve_perguntas_ao_resolver<br/>post_save"]
+    evs_ChamadoColaborador --> evr_resolve_perguntas_ao_resolver
+    evs_DisputaSupervisao[/"DisputaSupervisao<br/>3 receiver(s)"/]
+    evr_disputa_fechada_fecha_chamado_pai["disputa_fechada_fecha_chamado_pai<br/>post_save"]
+    evs_DisputaSupervisao --> evr_disputa_fechada_fecha_chamado_pai
+    evr_materializa_perguntas_ao_fechar_disputa["materializa_perguntas_ao_fechar_disputa<br/>post_save"]
+    evs_DisputaSupervisao --> evr_materializa_perguntas_ao_fechar_disputa
+    evr_retoma_regularizacoes_ao_fechar_disputa["retoma_regularizacoes_ao_fechar_disputa<br/>post_save"]
+    evs_DisputaSupervisao --> evr_retoma_regularizacoes_ao_fechar_disputa
+    evs_EscalaColaborador[/"EscalaColaborador<br/>6 receiver(s)"/]
+    evr_ec_capturar_ancora_anterior["_ec_capturar_ancora_anterior<br/>pre_save"]
+    evs_EscalaColaborador --> evr_ec_capturar_ancora_anterior
+    evr_ec_folgas_seguem_a_pessoa["_ec_folgas_seguem_a_pessoa<br/>post_save"]
+    evs_EscalaColaborador --> evr_ec_folgas_seguem_a_pessoa
+    evr_ec_invalida_previsto["_ec_invalida_previsto<br/>post_save"]
+    evs_EscalaColaborador --> evr_ec_invalida_previsto
+    evr_ec_revalidar_disputas_ancora["_ec_revalidar_disputas_ancora<br/>post_save"]
+    evs_EscalaColaborador --> evr_ec_revalidar_disputas_ancora
+    evr_ec_vigencia_regenera_celulas["_ec_vigencia_regenera_celulas<br/>post_save"]
+    evs_EscalaColaborador --> evr_ec_vigencia_regenera_celulas
+    evr_nucleo_post_save_escala["_nucleo_post_save_escala<br/>post_save"]
+    evs_EscalaColaborador --> evr_nucleo_post_save_escala
+  end
+
+  %% (f) JUIZES — fonte: core/juizes.py (JUIZES, SEM_JUIZ, PENDENTES)
+  subgraph JUIZES["juizes por familia: a pergunta tem UM juiz; o registro conta quem ainda responde sozinho"]
+    jf_celula_precedencia["celula/precedencia<br/>8 com juiz · 0 sem juiz<br/>registro: 1 sitio(s)"]
+    ja_core_feriados_py(["core/feriados.py"]) --- jf_celula_precedencia
+    ja_escala_models_py(["escala/models.py"]) --- jf_celula_precedencia
+    ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_celula_precedencia
+    ja_escala_utils_py(["escala/utils.py"]) --- jf_celula_precedencia
+    jmais_celula_precedencia["... +2 arquivos de juiz"] --- jf_celula_precedencia
+    jf_turno_marcos["turno/marcos<br/>10 com juiz · 0 sem juiz<br/>registro: 2 sitio(s)"]
+    ja_escala_models_py(["escala/models.py"]) --- jf_turno_marcos
+    ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_turno_marcos
+    ja_escala_utils_py(["escala/utils.py"]) --- jf_turno_marcos
+    ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_turno_marcos
+    jmais_turno_marcos["... +1 arquivos de juiz"] --- jf_turno_marcos
+    jf_ausencia_ferias["ausencia/ferias<br/>14 com juiz · 0 sem juiz<br/>registro: 1 sitio(s)"]
+    ja_ferias_models_py(["ferias/models.py"]) --- jf_ausencia_ferias
+    ja_ferias_services_py(["ferias/services.py"]) --- jf_ausencia_ferias
+    ja_ferias_situacao_py(["ferias/situacao.py"]) --- jf_ausencia_ferias
+    ja_ponto_catalogo_ausencias_py(["ponto/catalogo/ausencias.py"]) --- jf_ausencia_ferias
+    jmais_ausencia_ferias["... +4 arquivos de juiz"] --- jf_ausencia_ferias
+    jf_chamado["chamado<br/>13 com juiz · 1 sem juiz<br/>registro: 0 sitio(s)"]
+    ja_chamados_catalogo_modulos_py(["chamados/catalogo/modulos.py"]) --- jf_chamado
+    ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_chamado
+    ja_chamados_catalogo_premissa_py(["chamados/catalogo/premissa.py"]) --- jf_chamado
+    ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_chamado
+    jmais_chamado["... +6 arquivos de juiz"] --- jf_chamado
+    jf_feriado_prazo["feriado/prazo<br/>6 com juiz · 2 sem juiz<br/>registro: 14 sitio(s)"]
+    ja_chamados_catalogo_motor_py(["chamados/catalogo/motor.py"]) --- jf_feriado_prazo
+    ja_ponto_catalogo_justificativas_py(["ponto/catalogo/justificativas.py"]) --- jf_feriado_prazo
+    ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_feriado_prazo
+    ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_feriado_prazo
+    jmais_feriado_prazo["... +1 arquivos de juiz"] --- jf_feriado_prazo
+    jf_fechamento["fechamento<br/>6 com juiz · 2 sem juiz<br/>registro: 19 sitio(s)"]
+    ja_folha_export_py(["folha/export.py"]) --- jf_fechamento
+    ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_fechamento
+    ja_ponto_services_fechamento_py(["ponto/services/fechamento.py"]) --- jf_fechamento
+    jf_tela["tela<br/>10 com juiz · 1 sem juiz<br/>registro: 121 sitio(s)"]
+    ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_tela
+    ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_tela
+    ja_ferias_models_py(["ferias/models.py"]) --- jf_tela
+    ja_folha_export_py(["folha/export.py"]) --- jf_tela
+    jmais_tela["... +3 arquivos de juiz"] --- jf_tela
+    jf_portas["portas<br/>1 com juiz · 0 sem juiz<br/>registro: 124 sitio(s)"]
+    ja_core_portas_da_tela_py(["core/portas_da_tela.py"]) --- jf_portas
+  end
+
+  %% (g) PORTAS DE ESCRITA — fonte: core/portas_da_tela.py (FAMILIAS; censo em prod: manage.py censo_portas)
+  subgraph PORTAS_ESCRITA["portas de escrita humanas, na ordem do admin (uso 14d e smoke: placar)"]
+    pe_censo(["censo_portas<br/>quem pode, uso humano 14d, smoke de clique"])
+    pe_1["1. chamados"] -.-> pe_censo
+    pe_2["2. dia do ponto"] -.-> pe_censo
+    pe_3["3. ausencia"] -.-> pe_censo
+    pe_4["4. escala/vinculo"] -.-> pe_censo
+    pe_5["5. pautas"] -.-> pe_censo
+    pe_6["6. ferias"] -.-> pe_censo
+    pe_7["7. folha"] -.-> pe_censo
+    pe_8["8. cadastro/config"] -.-> pe_censo
+    pe_censo -.->|contadores| pl_portas["placar: portas_humanas_sem_uso_14d · portas_sem_smoke"]
+  end
+
+  %% (h) VIGIAS — fonte: config/crons.py (papel vigia, AGENDADOS_FORA_DO_CRON, linhas contador=)
+  subgraph VIGIAS["vigias: contador esperado, dono; so alarmam"]
+    vg_auditar_invariantes_chamados["auditar_invariantes_chamados"]
+    vg_esmeril_espelho["esmeril_espelho"]
+    vg_mapa_divergencia["mapa_divergencia"]
+    vg_negou_fogo_diario_sh["negou_fogo_diario.sh"]
+    vg_pipeline_placar["pipeline_placar"]
+    vg_reconciliar_grade["reconciliar_grade"]
+    vg_sentinela_diario_sh["sentinela_diario.sh"]
+    vg_supra_juiz["supra_juiz"]
+    vg_tripwire_celulas["tripwire_celulas"]
+    vg_tripwire_status_ferias["tripwire_status_ferias"]
+    vg_tripwire_tipo_batida["tripwire_tipo_batida"]
+    vg_tripwire_vinculo_orfao["tripwire_vinculo_orfao"]
+    vg_verificar_nucleo["verificar_nucleo"]
+    vg_vigia_arvore_sh["vigia_arvore.sh"]
+    vg_vigia_b5_ausencia["vigia_b5_ausencia"]
+    vg_vigia_entrada_faltante["vigia_entrada_faltante"]
+    vg_vigia_logins_sh["vigia_logins.sh"]
+    vg_vigia_plantio_overnight["vigia_plantio_overnight"]
+    vg_vigiar_motor_autoridade["vigiar_motor_autoridade"]
+    vg_hasner_esteira_timer["hasner-esteira.timer<br/>*:0/5 (fora do cron)"]
+    ct_0{{"tickets_rodape_vs_git<br/>esperado 0 · dono Code"}}
+    ct_1{{"arvore_vermelha_min<br/>esperado 0 · dono Code"}}
+    vg_vigia_arvore_sh -.->|mede| ct_1
+    ct_2{{"(tamanho em MB no proprio log)<br/>esperado <=7 arquivos · dono Code"}}
+    vg_rotacionar_access_log -.->|mede| ct_2
+    ct_3{{"disputas foto_ausente abertas<br/>esperado poucas · dono Code"}}
+    vg_marcar_foto_ausente_retro -.->|mede| ct_3
+    ct_4{{"noites_sem_fatia<br/>esperado 0 · dono Code"}}
+    vg_hasner_esteira_timer -.->|mede| ct_4
+  end

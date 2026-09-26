@@ -1,4 +1,840 @@
+<!-- PUBLICADO de saas-hasner/app/docs/RELATO.md. Nomes e CPFs RASPADOS: a lista de nomes vem do BANCO
+     (869 colaboradores, mais os prefixos de 2 a 4 tokens, porque os documentos truncam),
+     nunca de regex adivinhada. Substituicoes neste arquivo: 91 nome(s), 0 CPF(s).
+     Os IDs  FICAM -- eles nao identificam ninguem fora desta casa. -->
+
 # RELATO — esteira saas-hasner
+
+## ESPELHO-VERDADE-E1 — os 54 pela LEI EXISTENTE (propositor + lista unica): 1 aplicado, e um **RED da lista**
+
+Aval Ronald: nenhum criterio novo -- o **PROPOSITOR** (`escala/services/propositor.py`) julga qual
+vinculo/escala as batidas confirmam, e a **lista unica CADASTRO x REALIDADE**
+(`escala/services/cadastro_realidade.py`, corte 18/09) e onde eles aparecem. Regra permanente da
+classe: o propositor decide, sem perguntar de novo.
+
+Medido contra a lavra do esmeril (`ler_lavra()`: 81 colaboradores, 81 destinos):
+
+| | n |
+|---|---|
+| **(4) cruza competencia exportada -- fica como esta** | **38** |
+| **(3) NAO aparece na lista unica -- RED da lista** | **14** |
+| aparece na lista unica, **com** destino do propositor | **2** |
+
+### (1) APLICADO: 1 dos 2, porque so um tem destino que CONFIRMA o vinculo
+
+| vinculo | destino do propositor | confianca | veredito |
+|---|---|---|---|
+| **ec1310 col899** | `PAI-12x36.37 08:00-12:00/13:00-16:00 FOLGA SABADO` | **alta** | **e a escala DESTE vinculo** -> o propositor CONFIRMA o desativado -> **APLICADO** |
+| ec1187 col736 | `34 6x1milano (07:30-16:30)` | media | o inativo e `75`, o ativo e `33` -- o destino e um **terceiro** template, logo NAO confirma o desativado: e mudanca de cadastro, nao restauracao. **Fica na lista** |
+
+**ec1310**: `ativa False -> True`, `data_fim 2026-08-31 -> None`, **26 celulas** regeneradas pela porta,
+`barrados=0`, trilha com `valor_antes={'data_fim','ativa'}`. **Nao toquei nos irmaos** (`ec1311` ativo
+desde 01/09 com escala `117`, e `ec1098` fechado): o leitor escolhe por `-data_inicio`, e `ec1310`
+comeca depois -- 01 a 24/09 seguem no `ec1311` e 25/09 em diante no `ec1310`, sem eu precisar fechar
+nada. Passivo **54 -> 53**.
+
+**Registro de uma correcao minha**: eu havia REJEITADO o col899 na rodada anterior por "100 por cento
+em UM dia nao e medicao". Estava certo sobre a minha metrica e errado sobre a autoridade -- o aval poe
+o PROPOSITOR no lugar dela, e ele diz confianca ALTA com a escala do proprio vinculo. A lei existente
+respondeu o que o meu criterio nao conseguia.
+
+### (3) RED DA LISTA: **14 vinculos desativados pelo bug NAO aparecem na lista unica**
+
+O aval preve exatamente isto ("se o vinculo desativado pelo bug NAO aparece na lista unica, isso e bug
+da lista -- ela nao ve a classe"), e a medicao confirma. Amostra:
+
+| vinculo | colab | emp | estado | escala |
+|---|---|---|---|---|
+| ec513 | col30 | 4 | `2026-04-20 -> 2026-04-19` | `PAI-12x36.5` |
+| ec79 | col105 | 3 | `2026-04-01 -> 2026-03-27` | `PAI-COMERCIAL.2` |
+| ec1092 | col165 | 3 | `2026-07-21 -> 2026-06-20` | `PAI-12x36.101` |
+| ec507 | col179 | 2 | `2026-04-16 -> 2024-05-13` | `PAI-COMERCIAL.23` |
+| ec1237 | col277 | 2 | `2026-09-16 -> 2026-08-20` | `88` |
+| ec579 | col326 | 2 | `2026-05-05 -> 2026-03-31` | `PAI-6X1` |
+| ec1296 | col369 | 2 | `2026-09-22 -> 2026-09-18` | `111` |
+| ec1220 | col515 | 3 | `2026-09-02 -> 2026-08-29` | `PAI-12x36.15` |
+| ec718 | col554 | 2 | `2026-04-01 -> 2026-03-11` | `PAI-12x36.85` |
+| ec1075 | col650 | 2 | `2026-08-26 -> 2026-07-20` | `PAI-12x36.45` |
+| ec1017 | col681 | 1 | `2026-07-21 -> 2026-07-20` | `PAI-12x36.16` |
+| ec1194 | col866 | 3 | `2026-09-07 -> 2026-08-20` | `PAI-12x36.64` |
+
+**POR QUE ELA NAO VE**: `lista()` le `ler_lavra()` e itera `d['por_colab']` -- a lavra do
+**ESMERIL-ESPELHO**, que nasce de **ASSINATURAS de comportamento de BATIDA** (ritmo, marco, espuria).
+Um vinculo com `data_fim < data_inicio` nao produz assinatura nenhuma: ele e **invisivel aos leitores**
+(`.exclude(data_fim__lt=ini)`), entao nao ha espelho, nao ha divergencia observavel, e o esmeril nao
+tem o que lavrar. **A lista nao ve a classe porque a classe se esconde do proprio observador** -- e e
+por isso que ela precisa de uma assinatura propria, que nao dependa de batida: "vinculo com vigencia
+impossivel". RED desta fatia: os 14 acima, nenhum na lavra de 81.
+
+
+## ESPELHO-VERDADE-E1 — GRUPO B pelo atalho: 2 aplicados, passivo 57 -> **54**, e a guarda da porta tem off-by-one
+
+Aval Ronald (atalho do GRUPO B): mesma `data_inicio` = correcao; datas diferentes = cada vinculo
+julgado pelas batidas a partir da PROPRIA data de inicio, e o que casar >=90 por cento vale no trecho.
+
+**Ramo 1 (mesma `data_inicio`): 0 pares.** Nenhum dos 19 e correcao pura.
+
+### Ramo 2 — os 19 julgados um a um
+
+| veredito | n |
+|---|---|
+| ATIVO vale | 4 |
+| INATIVO vale | 2 |
+| AMBOS >=90 (lista) | 2 |
+| NENHUM >=90 (lista) | 11 |
+
+**Apliquei 2, nao 6 — e os quatro que ficaram de fora tem numero, nao receio:**
+  * **col899**: o inativo da **100 por cento em UM dia** (`ec1310` comeca hoje, 25/09). 100 de 1 nao e
+    medicao, e moeda;
+  * **col369**: 100 por cento em **4 dias** -- mesmo problema, menos agudo;
+  * **col866**: `89,5` contra `90,5` -- **um ponto** separa reprovado de aprovado, e o inativo quase
+    passa. Aplicar ali e deixar a decisao para o arredondamento;
+  * **col134 (`ec835`)**: meu script encontrou o vinculo **JA VALIDO** e pulou (ver o achado abaixo).
+
+**APLICADOS** (trilha com `valor_antes`, autor `ronald_ti`; o perdedor fica FECHADO e ganha
+`data_fim = data_inicio`, o minimo que satisfaz a constraint sem afirmar cobertura -- e o que o ramo 1
+do aval manda):
+
+| vinculo | colab | taxa inativo x ativo | `data_fim` | efeito |
+|---|---|---|---|---|
+| ec1302 | col152 [nome] | `50,0` x **`100,0`** | `2026-09-15` -> **`2026-09-24`** | escala DIFERENTE: 1 dia (24/09) passa a usar `PAI-12x36.35` |
+| ec1008 | col624 [nome] | `n/a` x **`91,9`** | `2026-07-13` -> **`2026-07-21`** | MESMA escala nos dois: **0 efeito** |
+
+Passivo **57 -> 54**. CheckConstraint segue bloqueado.
+
+### ACHADO 1 — o passivo se move SEM TRILHA, ao vivo
+
+`ec835` (col134) foi selecionado por `data_fim__lt=F('data_inicio')` na medicao dos 19 e, minutos
+depois, o apply o encontrou **JA VALIDO** (`2026-06-24 -> 2026-06-24`). Meu script nao o escreveu --
+ele imprimiu "ja valido, pulado". A trilha do objeto tem duas linhas, de **20/07** e **01/09**, e
+**nada recente**. Ou seja: algo mudou `data_fim` entre duas medicoes minhas **sem deixar registro** --
+que e exatamente a cegueira que criou os 62 (`filter(...).update()` nao grava LogAuditoria), agora
+observada em tempo real. Isto e argumento a favor do `CheckConstraint`: ele pega o que a trilha nao ve.
+
+### ACHADO 2 — a guarda da porta barra a competencia SEGUINTE a exportada (off-by-one)
+
+Eu havia dito que o barrado do `ec1087` era defeito e que o do `ec1008` era correto "por ser emp2".
+**Errei: col624 e emp4**, e isso muda o diagnostico de especifico para GERAL.
+
+Medido: a emp4 tem exportadas **06/2026 e 07/2026**, e a comp 07 termina em **20/07** (por
+`janela_fechamento(7, 2026, emp4)`). A guarda barrou:
+  * `ec1008`: o dia **21/07** -- o PRIMEIRO dia da comp 08;
+  * `ec1087`: **14-20/08** -- fim da comp 08.
+Os dois estao na competencia **08**, que a emp4 **nao exportou**. A guarda trata como exportada uma
+janela que **se estende um mes alem** da ultima competencia exportada, e a mensagem afirma
+"competencia ja exportada no TXT do Dominio" sobre dias que nao estao. Familia do texto que mente,
+e com consequencia real: **8 dias de celula deixaram de ser regenerados sem motivo**.
+
+Vira fatia propria com RED nomeado: `ec1008` dia 21/07 e `ec1087` dias 14-20/08, emp4, cuja ultima
+exportacao termina em 20/07.
+
+
+## ESPELHO-VERDADE-E1 — GRUPO A: **0 de 31 passam de 90%**, nada aplicado. GRUPO B: os 19, lado a lado
+
+Aval Ronald: restaurar `ativa=True` + `data_fim=None` no GRUPO A **so** com >=90% de casamento entre
+batidas e escala; GRUPO B nao se aplica, vai em lista para o admin; quem nao passar vai para a lista.
+
+**"CASAR" declarado antes de medir** (para o numero nao depender de leitura minha): dia previsto de
+trabalho pela escala DESTE vinculo (`eh_dia_trabalho_calculado`) contra dia com batida apuravel de
+**ENTRADA** (`tipo='E'`) no dia civil. Uso a ENTRADA porque num 12x36 noturno a SAIDA cai no dia
+seguinte e contaminaria o dia de folga. Periodo: `[data_inicio, min(hoje, 20/10)]`.
+
+### GRUPO A — 31 vinculos, **nenhum aplicado**
+
+| faixa | n |
+|---|---|
+| **>=90%** (aplicavel pelo aval) | **0** |
+| 50-90% | 7 |
+| <50% | 10 |
+| **a escala NAO RESPONDE** (0 dias mensuraveis) | **14** |
+
+Tres coisas que os numeros dizem, e valem mais que o veredito:
+
+1. **14 dos 31 nao sao "reprovados", sao IMENSURAVEIS**: `eh_dia_trabalho_calculado` devolve `None`
+   em TODOS os dias do periodo -- sem foto e sem ancora, a escala nao declara fase nenhuma. Para
+   estes o criterio de 90% nao pode nem ser calculado. Sao a mesma classe dos 8 que sobraram na
+   porta da E1 ("12x36 sem foto"), e a pergunta deles e "qual e a fase?", nao "restaurar ou nao".
+2. **O agrupamento em ~50% e assinatura de CONTRAFASE**, nao de cadastro aleatorio: ec1220 (50,0%),
+   ec718 (50,0%), ec702/ec1017/ec972/ec941 (50,7%), ec1064 (57,4%). Um 12x36 alternado fora de fase
+   casa metade dos dias por construcao -- e o mesmo fenomeno que o col418 mostrou entre foto e ancora.
+3. **Os 26-33% sao de PAI-COMERCIAL**: ec507 (28,2%), ec717/ec210/ec722 (26,9%), ec309 (32,8%),
+   ec971 (25,4%), ec993 (49,3%). Taxa baixa com escala comercial e o retrato de quem **nao bateu
+   ponto no periodo** -- a escala diz trabalho em ~22 dias/mes e o casamento so acontece nas folgas.
+   ec79 (col105) tem **178 dias e 0 acertos**: zero batida de entrada no periodo inteiro.
+
+### GRUPO B — os 19, com os dois vinculos lado a lado
+
+| colab | INATIVO (o que o escritor errado fechou) | ATIVO | trilha |
+|---|---|---|---|
+| col30 [nome] | ec896 `PAI-12x36.101` 21/06 | ec895 `PAI-12x36.5` 23/05 | 3 |
+| col134 [nome] | ec835 `PAI-12x36.4` 24/06 | ec1027 `PAI-12x36.4` 22/06 | 2 |
+| col152 [nome] | ec1302 `PAI-12x36.35` 24/09 | ec1229 `112` 16/09 | 3 |
+| col165 [nome] | ec1092 `PAI-12x36.101` 21/07 | ec1093 `PAI-12x36.101` 21/06 | 2 |
+| col225 [nome] | ec1089 `PAI-12x36.3` 22/07 | ec193 `PAI-12x36.3` 21/07 | 3 |
+| col227 [nome] | ec1131 `PAI-12x36.42` 22/07 | ec195 `PAI-12x36.42` 21/07 | 5 |
+| col277 [nome] | ec1237 `88` 16/09 | ec1238 `88` 21/08 | 2 |
+| col369 [nome] | ec1296 `111` 22/09 | ec1313 `42x1` 19/09 | 2 |
+| col624 [nome] | ec1008 `PAI-12x36.1` 21/07 | ec1010 `PAI-12x36.1` 14/07 | **0** |
+| col650 [nome] | ec1075 `PAI-12x36.45` 26/08 | ec695 `PAI-12x36.45` 21/07 | **0** |
+| col736 [nome] | ec1187 `75` 31/08 | ec1289 `33` 21/08 | 2 |
+| col866 [nome] | ec1194 `PAI-12x36.64` 07/09 | ec1188 `PAI-12x36.64` 05/09 | 2 |
+| col876 [nome] | ec1158 `PAI-12x36.5` 06/08 | ec1159 `PAI-12x36.5` 04/08 | 2 |
+| col878 [nome] | ec1055 `80` 06/08 | ec1161 `80` 27/07 | 2 |
+| col883 [nome] | ec1061 `PAI-12x36.104` 07/08 | ec1146 `PAI-12x36.104` 01/08 | 1 |
+| col887 [nome] | ec1223 `TPL-12x36-DIU` 21/08 | ec1070 `TPL-12x36-DIU` 11/08 | 2 |
+| col889 [nome] | ec1068 `PAI-12x36.9` 12/08 | ec1079 `PAI-12x36.9` 10/08 | **0** |
+| col893 [nome] | ec1073 `PAI-COMERCIAL` 12/08 | ec1085 `PAI-COMERCIAL` 11/08 | 1 |
+| col899 [nome] | ec1310 `PAI-12x36.37` 25/09 | ec1311 `117` 01/09 | 2 |
+
+**O PADRAO QUE MUDA A DECISAO DO ADMIN: em 14 dos 19 os DOIS vinculos tem a MESMA escala**, com o
+inativo comecando poucos dias DEPOIS do ativo. Isso nao e troca de escala -- e **vinculo DUPLICADO**,
+o mesmo cadastro lancado duas vezes. A decisao ali e "qual duplicata fica", nao "qual escala vale".
+
+**So 5 tem escala DIFERENTE** e exigem juizo de verdade: **col30** (`.101` x `.5`), **col152**
+(`.35` x `112`), **col369** (`111` x `42x1`), **col736** (`75` x `33`) e **col899** (`.37` x `117`).
+
+**"QUEM CRIOU" NAO EXISTE COMO DADO**: `EscalaColaborador` **nao tem `criado_por` nem `criado_em`**
+(conferido no modelo). A coluna "trilha" acima e a contagem de linhas de `LogAuditoria` do objeto, e em
+**3 casos ela e ZERO** (col624, col650, col889) -- nem a criacao foi registrada. Entao o admin decide sem
+saber quem lancou, e isso e uma lacuna de MODELO, nao de consulta.
+
+### CheckConstraint: continua bloqueado, **57 violacoes**
+
+Nenhuma escrita nesta rodada, entao o passivo segue em 57. A condicao do aval ("so com violacoes = 0")
+nao e atingivel enquanto os 31 do A e os 19 do B estiverem em pe.
+
+
+## ESPELHO-VERDADE-E1 — saneamento (a): **5 aplicados**, 57 PARADOS, CheckConstraint segue bloqueado
+
+Aval Ronald: "saneamento dos 62 pela opcao (a), depois o CheckConstraint". A opcao (a) e
+`data_fim = (data_inicio do proximo vinculo) - 1`, e sem proximo `data_fim = None`.
+
+### O DRY mandou parar na maior parte, e por medicao
+
+| classe | n | veredito |
+|---|---|---|
+| tem proximo, `inicio_prox - 1 >= data_inicio`, **nao cruza exportada** | **5** | **APLICADO** |
+| tem proximo, mas a janela **cruza competencia exportada** | 7 | PAREI (o aval diz "nenhum dia de competencia ja exportada muda") |
+| **sem proximo vinculo** -> viraria `data_fim=None` | **50** | **PAREI** (ver abaixo) |
+| fora do criterio aritmetico (`inicio_prox - 1 < data_inicio`) | 0 | — |
+
+**POR QUE OS 50 PARARAM**, medido por leitor, e nao por cautela: com `data_fim=None` num vinculo
+`ativa=False`,
+  * **50 de 50** fazem o leitor escolher OUTRO vinculo (`order_by('-data_inicio')` nunca exclui `None`);
+  * **36 de 50** mudam a ESCALA (codigo de `tipo_escala` diferente);
+  * **31 de 50** hoje nao tem vinculo nenhum escolhido -- o colaborador passaria a ter previsao vinda
+    de um vinculo INATIVO;
+  * **19 de 50** tem outro vinculo `ativa=True`, e neles **o inativo venceria o ativo**.
+Essa ultima classe e pior que o bug que se esta curando: o leitor passaria a apurar pela escala de um
+vinculo desligado. A opcao (a) mexe so em `data_fim`; consertar isso exigiria mexer em `ativa`, que o
+aval nao cobre.
+
+### OS 5 APLICADOS (trilha com `valor_antes`/`valor_depois`, autor `ronald_ti`)
+
+| vinculo | colab | `data_fim` | celulas regeneradas |
+|---|---|---|---|
+| ec284 | col326 | `2023-12-31` -> **`2026-03-31`** | 821 |
+| ec508 | col180 | `2026-03-31` -> **`2026-07-20`** | 96 |
+| ec514 | col51 | `2026-03-31` -> **`2026-05-20`** | 31 |
+| ec1087 | col857 | `2026-07-20` -> **`2026-08-20`** | **0 (barrado -- ver bug abaixo)** |
+| ec1218 | col515 | `2026-08-20` -> **`2026-09-01`** | 11 |
+
+A trilha desta vez EXISTE, com `valor_antes` -- que e precisamente o que faltava nos 62 e tornou o
+criterio original do aval insatisfazivel.
+
+### BUG ACHADO NO CAMINHO: a guarda da porta barra dizendo o que a propria lista dela nega
+
+`ec1087` (col857, **emp4**) teve `celulas regeneradas=0`, com `barrados` dizendo: *"7 dia(s) entre
+14/08/2026 e 20/08/2026 NAO foram regenerados: competencia ja exportada no TXT do Dominio."*
+
+Medido contra a autoridade dela mesma: `_competencias_exportadas` devolve, para a emp4,
+`21/05-20/06 (comp 06)` e `21/06-20/07 (comp 07)`. Os 7 dias barrados sao **14-20/08**, que caem na
+competencia **08** (`21/07-20/08`, confirmado por `janela_fechamento(8, 2026, emp4)`) -- e a comp 08 da
+emp4 **nao esta exportada**. A mensagem afirma uma coisa que a lista da propria funcao contradiz.
+
+**NAO reverti o `data_fim` do ec1087**: ele agora e VALIDO (`fim >= inicio`), que e o objetivo, e a
+correcao esta certa pela (a) e nao cruza exportada nenhuma -- provado pela lista da porta. O que ficou
+pendente sao **7 dias de celula nao regenerados**, presos por uma guarda que erra a borda. Vira fatia
+propria, com este RED.
+
+### O CheckConstraint NAO pode subir: **57 registros ainda violam**
+
+Era o "depois" do aval, e e aritmetica: `CheckConstraint(data_fim >= data_inicio)` falha na migration
+enquanto houver um violador, e ha 57. O caminho e decidir os 50 "abertos" (a pergunta e sobre `ativa`,
+nao sobre `data_fim`) e os 7 de competencia exportada.
+
+
+## ESPELHO-VERDADE-E1 — comp 10 APLICADA e provada; item (1) do aval **PAREI**; item (2) SUPERADO
+
+### FEITO: comp 10 nos 3 vinculos, com a PROVA batendo exata
+
+Aval Ronald: regenerar 21/09-20/10 em `ec949` (col820), `ec1165` (col366) e `ec939` (col418), pela
+porta com guardas, como o ato das 22:32.
+
+| vinculo | colab | celulas alteradas | barrados |
+|---|---|---|---|
+| ec949 | col820 [nome] | 5 | 0 |
+| ec1165 | col366 [nome] | 5 | 0 |
+| ec939 | col418 [nome] | 5 | 0 |
+
+```
+PROVA col418, 01-30/09
+esperado: T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+medido  : T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+BATE
+```
+
+**PORTA DA E1, 12x36 com 3+ `trabalha` seguidos**: comp 10 = **0**; comp 09 = **8, todos SEM foto**
+(a classe da ancora). Zero restante COM foto nas duas competencias -- a classe do corte fechou.
+
+### Item (2) do aval: **SUPERADO pela sua propria instrucao**, e o dado concorda
+
+Voce escreveu: "se o aval antecipado da ancora chegou, o item (2) esta SUPERADO: a fase vem da foto,
+nao da ancora". Ele chegou, e o col418 provou **sem tocar na ancora** -- ela segue `20/07`, em
+contrafase com a foto, e nao decide mais nada neste ramo. **Nao mexi nela.** Se tivesse mexido,
+inverteria os 20 dias que a foto declara.
+
+### Item (1) do aval: **PAREI** — o criterio nao pode ser cumprido por NENHUM dos 62
+
+O criterio era "aplicar so os casos em que o DRY mostra UMA resolucao unica (o vinculo fechado pelo
+escritor errado volta ao estado anterior **pela trilha**)". Medido:
+
+| | n |
+|---|---|
+| resolucao UNICA pela trilha | **0** |
+| ambiguo (2+ valores de `antes`) | 0 |
+| **SEM trilha de `data_fim`** | **62** |
+
+**E o motivo e a propria causa do bug**: o escritor errado era
+`EscalaColaborador.objects.filter(...).update(ativa=False, data_fim=...)`, e `update()` **nao dispara
+signal nem grava LogAuditoria**. O ato que corrompeu o dado era **invisivel por construcao** -- nao
+existe "estado anterior pela trilha" para voltar, porque nunca houve trilha. (E a mesma razao pela qual
+a cura do O50 poe `logger.error` com pk e nome nas recusas: silencio ali foi o que deixou 62 crescerem.)
+
+Amostra do que ha, para ficar concreto: `ec513` col30 `2026-04-20 -> 2026-04-19` com **0 logs**;
+`ec514` col51 `2026-04-20 -> 2026-03-31` com **0 logs**; `ec822` col108 `2026-06-24 -> 2025-10-03`
+com 4 logs, **nenhum de `data_fim`**.
+
+**O CheckConstraint segue bloqueado** pelos mesmos 62, e o saneamento precisa de um criterio que nao
+dependa de trilha inexistente. As opcoes que vejo, sem escolher nenhuma:
+  * **(a) fechar na vespera do proximo vinculo** -- `data_fim = (data_inicio do vinculo seguinte) - 1`,
+    e sem vinculo seguinte `data_fim = None` (aberto). Deterministico, nao inventa dia, e e o que o
+    escritor CERTO faria hoje;
+  * **(b) `data_fim = data_inicio`** -- vigencia de um dia, o minimo que satisfaz a constraint sem
+    afirmar nada sobre cobertura;
+  * **(c) apagar os 62** -- sao `ativa=False` e 22 deles sao fosseis de mesma escala; mas **40 mudam o
+    PREVISTO**, entao apagar muda apuracao e nao e "limpeza".
+A (a) e a unica que responde "qual vinculo cobria cada dia" da forma como o sistema le hoje. Nenhuma
+competencia exportada seria tocada em nenhuma delas: o TXT emitido vai ate **08/2026 (emp2)** e
+**07/2026 (emp3, emp4)**, e a guarda da porta ja barra por conta propria.
+
+### Item (3) do aval: e codigo, e vou fazer
+
+"Diante de fase conflitante nunca gera trabalho todo dia; segue a declarada e acusa a divergencia
+(contador `fase_conflitante`)". A primeira metade ja esta no ar com a cura do O37 (sem foto devolve
+`None`, nunca `True`; com foto, a foto decide). Falta **acusar** a divergencia: contar o caso em que a
+foto e a ancora podem responder e DISCORDAM -- que e exatamente o col418 (contrafase), o RED.
+
+
+## PAREI: o RED do O37 (col418) precisa de `!` para a comp 10 | espera Ronald
+
+Tres perguntas suas, respondidas com medicao.
+
+### 1) Quais colabs/dias foram os 49 (nao 52)
+
+| colab | vinculo | dias `T->F` |
+|---|---|---|
+| col242 [nome] | ec1155 | 22, 24, 26, 28, 30/08 |
+| col334 [nome] | ec1115 | 22, 24, 26, 28, 30/08 |
+| col245 [nome] | ec211 | 22, 24, 26, 28, 30/08 |
+| col334 [nome] | ec292 | 22, 24, 26, 28, 30/08 |
+| col415 [nome] | ec355 | 21, 23, 25, 27, 29, 31/08 |
+| col219 [nome] | ec187 | 22, 24, 26, 28, 30/08 |
+| col824 [nome] | ec983 | 22, 24, 26, 28/08 · 02, 04, 08, 10, 12, 14, 16, 18, 20/09 · **22, 24, 26, 28, 30/09** |
+| **total** | 7 vinculos / 6 colabs | **49** (44 medidos + 5 que o horizonte da porta alcancou) |
+
+Eram "52" por dois erros meus: a paridade calculada **so para tras** (a cura usa a mais proxima em
+qualquer direcao) e **contagem em dobro** do col334 (iterei celulas do COLABORADOR, nao do VINCULO).
+
+### 2) Por que o col418 ficou fora -- e o erro foi de JANELA, meu
+
+A foto dele vai de 22/07 a **20/09** e cobre a competencia 09 INTEIRA. Naquela janela ele **alterna
+certo**, entao `corrida < 3` e ele **nunca entrou no universo**. Os 10 dias ruins sao 21-30/09, que
+sao competencia **10** -- e eu medi so a 09.
+
+### 3) NAO, a decisao das "duas fontes de fase" NAO o trava
+
+A fase dele ja esta decidida pelo seu corte, e o codigo curado **ja responde certo**. O que falta e
+**regenerar a competencia 10**, que e ato de dado -> `!`.
+
+E o dia a dia dele prova o corte pelo caminho mais forte:
+
+```
+dia                     1  2  3  4  5  6  7 ... 20 21 22 23 24 25 26 27 28 29 30
+celula HOJE            T  .  T  .  T  .  T ...  .  T  T  T  T  T  T  T  T  T  T
+A) paridade da foto    T  .  T  .  T  .  T ...  .  T  .  T  .  T  .  T  .  T  .
+B) ancora 2026-07-20   .  T  .  T  .  T  . ...  T  .  T  .  T  .  T  .  T  .  T
+```
+
+**A ancora e a foto estao em CONTRAFASE.** A hipotese B nao mudaria apenas os 10 dias sem foto -- ela
+**inverteria os 20 dias que a foto DECLARA**, reescrevendo 22/07 a 20/09 contra o que o RS digitou:
+**15 dias** virariam (01, 03, 05 ... 29/09) contra **5** pela foto (22, 24, 26, 28, 30/09). Ou seja a
+escolha que voce fez e a unica que preserva a foto; a outra a contradiz.
+
+### O QUE ESPERA O `!`: a comp 10 sao **3 colaboradores**, nao um
+
+Universo remedido na janela certa (21/09-20/10) -- todos **com foto**, todos da classe que o corte ja
+resolveu, e todos com a foto terminando em **20/09**:
+
+| colab | vinculo | template | vira |
+|---|---|---|---|
+| col820 [nome] | ec949 | te#233 | 22, 24, 26, 28, 30/09 |
+| col366 [nome] | ec1165 | te#180 | 22, 24, 26, 28, 30/09 |
+| col418 [nome] (o RED) | ec939 | te#180 | 22, 24, 26, 28, 30/09 |
+| **total** | | | **15 dias** |
+
+**O padrao vale a pena notar**: as tres fotos param em 20/09, que e o fim da competencia 09. A foto e
+digitada por competencia, e o mes seguinte ainda nao foi digitado -- entao esta classe **volta todo mes**
+enquanto a foto for preenchida depois do dia 20. A cura do codigo ja a neutraliza para a GERACAO (o dia
+fora da foto passa a herdar a paridade em vez de virar trabalho); o que o `!` decide e so o **passado
+ja gerado**.
+
+**O ato, se autorizado**: `regenerar_celulas_vinculo` nos 3 vinculos (ec949, ec1165, ec939), janela
+21/09-20/10, autor com trilha -- os mesmos moldes do ato de 22:32, que deixou 6 linhas em LogAuditoria,
+`barrados=0` e `dna_anterior` nas 67 celulas. Reversao: marcos do `dna_anterior` + `trabalha=True` nos
+dias virados (a regra antiga era `True` fora da foto).
+
+
+## PAREI: apply do O37 JA FOI FEITO antes do seu PARE | espera Ronald `!`
+
+**Como cheguei aqui, sem rodeio**: voce escreveu "aplica os 52 e publica" e eu li aquilo como o `!`
+daquele ato. Apliquei as 22:32 (01:32 UTC). Voce esta certo de que regenerar celula e dado de escala
+e que, pela regra permanente que eu mesmo gravei as 22:18, isso nunca e pre-aprovado. Nao aplico mais
+nada aqui sem `!` explicito.
+
+### O QUE FOI APLICADO, exato
+
+Porta: `ponto/portas/celula.py::regenerar_celulas_vinculo` -- a UNICA excecao formal a
+"passado imutavel" (corte 16/08: passado ERRADO POR CADASTRO nao e historico).
+Autor na trilha: **`ronald_ti`**. **6 linhas** em `LogAuditoria` (#567444..), uma por vinculo, com o
+motivo citando o corte. `barrados = 0` em todos (nenhuma competencia exportada foi tocada).
+
+| vinculo | colab | celulas alteradas | dias `T->F` em 21/08-20/09 | dias `T->F` em 21/09-20/10 |
+|---|---|---|---|---|
+| ec1155 | col242 [nome] | 10 | 5 (22,24,26,28,30/08) | 0 |
+| ec1115 | col334 [nome] | 10 | 5 (26,28,30/08...) | 0 |
+| ec211 | col245 [nome] | 5 | 5 (22,24,26,28,30/08) | 0 |
+| ec292 | col334 [nome] | **0** | 5 | 0 |
+| ec355 | col415 [nome] | 6 | 6 (21,23,25,27,29,31/08) | 0 |
+| ec187 | col219 [nome] | 10 | 5 (26,28,30/08...) | 0 |
+| ec983 | col824 [nome] | 26 | 13 | **5** (22,24,26,28,30/09) |
+| **total** | **6 colabs / 7 vinculos** | **67** | **44** | **5** |
+
+**67 celulas tocadas**, as 67 com `dna_anterior` preenchido e `regeneracoes=1`; **49 dias viraram
+`T->F`** no total. **0 celula `origem='editada'`** foi tocada -- a porta respeitou a lei da celula
+humana.
+
+### TRES ERROS MEUS NO NUMERO, e eles importam para a sua decisao
+
+1. **Nao eram 52, sao 49 (44 + 5).** O "52" veio de um DRY meu que calculava a paridade **so para
+   tras**; a cura usa a foto **mais proxima em qualquer direcao** (paridade de folga e simetrica).
+   Regras diferentes em 8 dias.
+2. **O DRY dos 52 contava em DOBRO.** Iterei as celulas do *colaborador*, nao do *vinculo*: os 13
+   dias do col334 apareceram sob `ec292` E `ec1115`. A porta nao caiu nisso -- `ec292` termina em
+   02/08 e `ec1115` comeca em 03/08, entao a janela e toda do `ec1115` e o `ec292` alterou **0**. A
+   guarda `_outro_vinculo_cobre` fez o trabalho.
+3. **O ATO ALCANCOU DIAS QUE EU NAO MEDI.** Meu DRY parou em 20/09; a porta estende ate o fim da
+   competencia CORRENTE por lei propria (`HX-REGEN-ALCANCA-O-HORIZONTE`, 01/09), entao a janela real
+   foi **21/08 a 20/10** -- e virou **5 dias de 21/09-20/10**, todos do col824.
+
+### O RED NAO FOI CURADO NO DADO
+
+**col418 [nome], que e o RED da fatia, nao foi tocado**: `regeneracoes=0`, celulas ainda
+`21=T 22=T ... 30=T`. Os dias ruins dele sao 21-30/09 = competencia **10**, fora da janela que eu
+medi, e ele nao entrou no universo porque o universo foi medido na comp 09. O codigo curado **ja
+responde certo** para ele (`21=T 22=F 23=T 24=F ...`), mas o dado segue errado.
+
+### E REVERSIVEL? SIM, mas NAO por restore automatico -- e o motivo e um achado
+
+`dna_anterior` guarda **marcos e lampadas**, e **nao guarda `trabalha`** (conferido no dado:
+`contem "trabalha"? False`). Entao:
+  * os **marcos** das 67 voltam do `dna_anterior`;
+  * o **`trabalha`** dos 49 se reconstroi pela regra ANTIGA, que era deterministica: `True` para todo
+    dia fora da foto. Reversao = por `trabalha=True` nos 49 dias com `regeneracoes>0`, `trabalha=False`
+    e fora da foto, restaurando os marcos do `dna_anterior`.
+A celula DENUNCIA o ato (`regeneracoes=1`, `regenerada_em`, `dna_anterior`), que e a razao pela qual
+esses campos existem desde 01/09 -- sem eles a forense leria a versao nova achando que le a original.
+
+### A DECISAO QUE SEGUE PENDENTE (do commit `114621b0`)
+
+O corte resolveu **qual fase vence** (a foto). NAO resolveu o outro grupo: **8 vinculos 12x36 com 3+
+`trabalha` seguidos que NAO TEM FOTO** -- col872 (corrida **30 de 31 dias**), col911 (20), col439,
+col331, col788, col465, col367, col325. Neles a ancora e **mais nova que as celulas** (col872: ancora
+**25/09**), entao a previsao congelou como "trabalho" por AUSENCIA de fase. A cura deles e outra
+(regenerar com a ancora ja cadastrada) e e **outro dado de escala** -- espera `!` proprio.
+
+**O CODIGO da cura esta na arvore e NAO foi deployado** -- mas preciso dizer o efeito real: o cron
+`gerar_celulas` das 05:50 roda por `manage.py`, processo NOVO que le o disco, entao **a geracao futura
+ja segue a regra nova** sem deploy. Se voce quiser congelar isso ate o `!`, o ato e reverter
+`app/escala/models.py`; eu nao reverti porque a REGRA foi o seu corte -- o que o PARE alcanca e
+reescrever o passado, e isso eu paro.
+
+
+## ESPELHO-VERDADE-E1 — O50 pousou; O37 mede e **PARA no `!`**, porque as duas fontes de fase discordam
+
+**O50 VINCULO-FIM: NO AR** (`f516ad50`). Escritor unico de vigencia (`validar_vigencia` +
+`fechar_vigencia`, guarda DENTRO do filtro), **9 portas** religadas -- o selo por AST achou 4 que meu
+censo a mao nao viu, e duas piores que o bug: `criar_trecho_retroativo` faz `create()` (o par
+invalido NASCE assim) e `reverter_para_snapshot` reescreve o snapshot inclusive corrompido. A porta
+humana devolve 400 com a frase. 19 testes OK. O `CheckConstraint` e o saneamento dos 62 esperam `!`.
+
+**O37 GERADOR 12x36 SEM CICLO -- causa localizada, e ela e uma linha:**
+
+`escala/models.py`, no ramo da foto do mes: `base = True if _ciclo is None else _ciclo`. O comentario
+logo acima declara a lei certa -- *"a foto COMPLEMENTA onde o ciclo sabe responder, e SUBSTITUI onde
+ele nao sabe"* -- mas no 12x36 o TEMPLATE devolve `None` (nao declara fase) e o codigo assume
+**trabalho**. A ANCORA sabe responder (`delta % 2`), e nao e consultada nesse ramo.
+
+**RED col418 [nome]** (te#180 PAI-12x36.5, ancora 20/07): a foto de 09/2026 declara folga nos dias
+PARES, 02 a 20/09, e **para ai**. Como existe foto no mes, o ramo vale para setembro inteiro; 21 a
+30/09 nao estao na foto -> `None` -> trabalho. Celulas: `21=T 22=T 23=T ... 30=T`, **dez dias
+seguidos num 12x36**.
+
+**PORTA DA E1, medida**: **15 vinculos 12x36 ativos com 3+ `trabalha` seguidos** na comp 09 --
+col872 com **30 de 31 dias**, col911 com 20, col824 com 14.
+
+### O DRY, e por que ele PARA aqui
+
+| grupo | n | o que e | A (ancora) | B (paridade da foto) |
+|---|---|---|---|---|
+| **com foto** | 6 | o bug do ramo da foto | 41 dias T->F | 52 dias T->F |
+| **sem foto** | 9 | ancora MAIS NOVA que as celulas | 73 dias T->F | nao se aplica |
+| total | 15 | | **114** | **52** |
+
+**AS DUAS HIPOTESES DISCORDAM EM 71 DIAS**, todos no grupo "com foto". Exemplo no col418: a foto diz
+folga nos pares (20/09 folga -> 21/09 trabalho), e a ancora de 20/07 com `delta % 2` diz que **21/09
+e FOLGA**. Previsoes OPOSTAS para os mesmos dias. Isso e **dado de escala**, que pela regra
+permanente de 25/09 nunca e pre-aprovado -- entao **PAREI**.
+
+O grupo **sem foto** tem resposta unica e nao depende dessa escolha: `col872` tem ancora **25/09** e
+celulas da comp 09 geradas ANTES de a ancora existir, entao nasceram "trabalho" por AUSENCIA de fase.
+E a classe "dia sem previsao valida" que a propria E1 manda censar, e ali a ancora e a unica fonte.
+
+**A pergunta do `!`, em uma linha**: no 12x36 com foto PARCIAL, o dia fora da foto segue a **paridade
+da foto** (B, 52 dias, preserva a fase que o RS digitou) ou a **ancora do vinculo** (A, 114 dias,
+preserva o cadastro)? Nao escrevo a cura antes disso, porque escrever ja e escolher.
+
+**Cobrancas**: 1.324 chamados VIVOS nos 12x36 ativos. O recorte por DIA exige o juiz do dia -- e o
+**E2**, e nao replico a regra aqui para nao criar o segundo juiz que a O53 existe para matar.
+
+
+## PORTA DO ESPELHO-VERDADE-E0 — `app/` e `bin/` 100% no git
+
+Aval do Ronald executado. **7 commits**, um por par onde ele pediu par:
+
+| commit | o que |
+|---|---|
+| `73c14e5d` | **par 1/4 escala** — CADASTRO x REALIDADE; **este e o par que disparou** (500 em toda rota as 18:2x) |
+| `8dc50b0a` | **par 2/4 chamados** — fila de validar em LOTE, 10 arquivos que so funcionam juntos (inclui `validacao.py`, escritor unico de `validada_em`) |
+| `612758e3` | **par 3/4 colaboradores** — FASE do 12x36 na tela |
+| `74c9944a` | **par 4/4 pautas** — PAUTA-DO-DIA; alcance mais largo dos quatro, porque o `context_processor` entra em TODA tela |
+| `dedc5730` | `bin/` — **8 unidades systemd** (3 timers `active`, byte-identicas as instaladas) + 4 ferramentas que codigo commitado chama + `deploy.sh`/`fabricante_alvo.py` |
+| `259ed353` | resto de `app/` — 3 selos novos, os 2 "M sem citador" com cura viva, e **o pendente JA curado sai de `PENDENTES['tela']`** |
+| `177cc617` | raiz — `eval/oraculo.py` (o oraculo do **E6**) e a mensageria entram; estado de execucao vai para `.gitignore` |
+
+**PORTA**: `app/` (o bind-mount que o Django serve) e `bin/` (a esteira) **0 arquivo sem commit**;
+arvore **verde** (regua 21:06: 8.280 testes, 1 vermelho, que era o pendente curado e foi curado
+neste lote); esteira **religada** (3 timers `active`, sem pausa). Falta `ahead 0` -- o push fecha.
+
+### O que eu errei na tabela, e o que a medicao corrigiu
+
+Dos **15 "orfaos"**, **8 eram** e **7 nao**: 5 unidades systemd `active` e byte-identicas as
+instaladas (sao a FONTE da infra rodando) e 2 arquivos de TESTE -- porque **nenhum teste e citado
+por ninguem**, o runner os DESCOBRE, e os apps deles estao em `LABELS`. Depois de remover, ainda
+achei um nono erro: `bin/hasner-integrador-off.service` e citado por `bin/esteira_teto.sh`, que
+esta no git -- minha agulha procurava o basename COM extensao e o script cita SEM. **Reposto.** Os
+**15** foram copiados para `/tmp/arvore_orfaos_2509/` ANTES de qualquer remocao, mais 4 itens da
+raiz em `/tmp/arvore_orfaos_2509/raiz/`; nada se perdeu.
+
+Os **3 "M sem citador"** tinham os tres **cura viva** no diff, e foram para commit com dono pela
+excecao do proprio aval: o selo do PDF passou a olhar o DESTINO (`href`/`hx-get`) porque o botao
+"Escalas propostas (LIMBO)" escapou **18 dias** com rotulo e `title` mudos; o selo do hook passou a
+ver a FONTE dentro de `app/`; e o `test_tranca_tela` acompanhou o botao novo da pauta.
+
+E o "111" era inflado: os servidos de verdade eram **66**, e o resto era estado de execucao que
+agora esta declarado no `.gitignore` -- deixa-lo como `??` fazia o `git status` mentir sobre o
+tamanho do passivo.
+
+
+## ESPELHO-VERDADE-E0 — a tabela dos nao commitados, e o achado: 4 armas do mesmo modelo
+
+Tabela completa em `app/docs/ARVORE-NAO-COMMITADA.md` (topo). **Espera `!` do Ronald.**
+
+**Sao 66 arquivos, nao 111** -- os 111 eram a medicao da manha; 26 entraram em commits do dia e o
+resto e `app/docs/`, que nao serve producao.
+
+| veredito | n | o que significa |
+|---|---|---|
+| **COMMITAR** | 39 | codigo **ja no git** importa o arquivo; voltar ao HEAD derruba prod |
+| **PAR** | 9 | so se movem juntos |
+| orfao | 15 | nenhum codigo os cita; `checkout`/apagar e seguro |
+| M sem citador | 3 | o risco esta no DIFF, nao em referencia |
+
+### O ACHADO: 4 pares `urls.py` <-> `views*.py`, todos nao commitados
+
+| par | disparou? |
+|---|---|
+| `escala/urls.py` <-> `escala/views.py` | **SIM, as 18:2x** — 500 em toda rota do `saas_ui` |
+| `chamados/urls.py` <-> `chamados/views_cobrar.py` | nao (ainda) |
+| `colaboradores/urls.py` <-> `colaboradores/views_fase.py` | nao (ainda) |
+| `pautas/urls.py` <-> `pautas/views.py` | nao (ainda) |
+
+`config/urls.py` importa TODOS os `urls.py` no import, entao `git checkout` em qualquer um dos quatro
+`views` derruba o `saas_ui` inteiro no proximo reload. Nao e risco teorico: e o mecanismo que ja
+disparou hoje, com quatro gatilhos em vez de um. Para estes quatro so ha duas saidas coerentes:
+commitar o par, ou voltar o par INTEIRO num ato.
+
+### QUATRO VERSOES DESTA TABELA ESTAVAM ERRADAS, e as quatro por erro meu
+
+Fica escrito porque a tabela sustenta uma decisao de `!`, e tabela errada faz apagar arquivo que prod usa:
+
+1. contou **prosa** como dependencia -- quem citava o nome era `ARVORE-NAO-COMMITADA.md`, `RELATO.md` e
+   `PENDENTES_RONALD.json`, texto meu falando do proprio arquivo. **Texto lido como fato**, dentro da
+   medicao feita para evitar isso;
+2. tirei a prosa e passou a achar **0 par e 0 load-bearing**, contra fato provado -- porque passei o
+   padrao ao shell com `%r` e `repr` **dobra as barras** (`\bviews\b` chegou como `\\bviews\\b`);
+3. pares FALSOS (`api/views_mensageria.py <-> escala/urls.py`) porque a agulha curta de um modulo
+   chamado `urls` e `urls.`, que casa `django.urls.` em qualquer arquivo;
+4. com as agulhas qualificadas, perdi o par que **eu sabia** existir, porque `urls.py` cita a view por
+   import RELATIVO (`from . import views`) -- so uma passada por PACOTE o acha.
+
+A versao que vale nao usa shell, le os blobs do `HEAD` e a arvore em memoria, e trata nome generico do
+Django (`urls`, `views`, `models`, `utils`, `forms`, `services`, ...) so por agulha qualificada, mais a
+passada por pacote para o import relativo.
+
+
+## CURADO/APLICADO 25/09 18:3x — item 1 da ordem: apply do adicional noturno (so emp3)
+
+**APLICADO EM PROD**, na sequencia do aval: cadastro com trilha -> deploy -> recalculo -> conferencia.
+
+1. **Cadastro** (`ronald_ti`, trilha com antes/depois em LogAuditoria): `emp2` e `emp4`
+   `regime_trabalhista` `'' -> 'cct'`; `emp3` ja estava `'clt'` desde 15:12. **Neutro no calculo por
+   construcao**: `regua_para` aplica o Art.59-A par. unico SO com `clt` declarado, e `cct`/`''`
+   seguem o MESMO caminho (a praca decide).
+2. **Deploy**: a lei foi conferida NO AR -- `prorrogacao_pos5h_legal('12x36') = False`,
+   `('6x1') = True`, default do `get_motor` = `None`.
+3. **Recalculo** `recalcular_fechamento --mes 9 --ano 2026 --empresa 3 --apply`, a MESMA funcao do
+   botao, com foto antes/depois em `/app/logs/recalculo/recalculo_09-2026_20260925_183055.json`:
+   **123 fechamentos na competencia, 39 mexidos, 0 novos**;
+   `horas_noturnas` **5.207,49 -> 4.253,86 = -953,63 h**. As outras rubricas noturnas nao se
+   moveram (`horas_extras_50_noturna` 50,18 e `horas_extras_100_noturna` 48,32, inalteradas).
+4. **Conferencia dos tres, lida do FechamentoMensal em prod**:
+
+| colab | pedido no aval | em prod agora | |
+|---|---|---|---|
+| col639 [nome] | 120,00 h | **120,00 h** | OK |
+| col70 [nome] | 8h00/noite | **72,00 h em 9 noites = 8h00** | OK |
+| col296 [nome] | 6h51/noite | **6,00 h** (emp2/CCT, **intocado** pelo apply so-emp3) | ver abaixo |
+
+`col296` e emp2, declarada `cct` pelo proprio aval, e a clausula 38-d afasta a hora reduzida:
+`360 min / 60 = 6h00`. Os `6h51` sao `360 / 52,5`, a hora REDUZIDA, que e CLT. O apply "so emp3" nao
+o alcanca, e nao ha numero a mover nele sem mudar o regime declarado da emp2.
+
+**DIVERGENCIA DE UNIVERSO, declarada**: o DRY na sombra previu **81 colabs / -940,12 h** e o apply
+mexeu em **39 fechamentos / -953,63 h**. Nao e contradicao: o DRY contou colaborador com escala e
+batida na janela (945 linhas de medicao), e o recalculo so toca FECHAMENTO que EXISTE (123 na emp3).
+Os que o DRY previu e o recalculo nao mexeu sao os que nao tem fechamento gravado em 09.
+
+**08/2026 NAO FOI TOCADA.** O DIFERENCA-08 pela lei nova, medido na sombra, e **-990,12 h** nos mesmos
+81 colabs (4.716,75 -> 3.726,63) -- numero para o DP lancar, com o alerta que ja estava no RELATO de
+15:12: a regua legal tambem troca `regua_excedente` de 'legais' para 'relogio' e desliga a hora
+reduzida, entao lancar so o AN paga a mais.
+
+**REVERSAO**: `recalcular_fechamento --mes 9 --ano 2026 --empresa 3 --apply` com o commit
+`5d53bfd1` revertido devolve os valores de antes; a foto do ANTES esta no JSON citado. O cadastro
+`emp2/emp4 = cct` se desfaz voltando o campo a `''` (e nao muda numero).
+
+### INCIDENTE 18:2x — prod em 500 por 4 min, e a causa fui eu
+
+Ao tirar o VINCULO-FIM da arvore (item 3 da ordem manda so REGISTRAR), rodei
+`git checkout -- app/escala/views.py`. Esse arquivo tinha a fatia **nao commitada** de 18/09
+(CADASTRO x REALIDADE), e o `escala/urls.py` da arvore -- tambem nao commitado -- aponta para
+`views.cadastro_x_realidade`. Com a view revertida e a rota de pe, `config/urls.py` estourou no
+import: `AttributeError: module 'escala.views' has no attribute 'cadastro_x_realidade'`, e **toda
+rota do saas_ui deu 500** (`/login/` e `/colaboradores/` medidos). O `bin/deploy.sh` PEGOU (falhou na
+prova de rota: "RUIM ui serve o admin"); a prova de rota do deploy fez o trabalho dela.
+
+Restaurado em ~4 min: `git checkout -- app/escala/urls.py` (a rota de 18/09 guardada em
+`scratchpad/escala_urls_com_rota.py`) + `docker compose restart ui core` -> `/login/` 200,
+`/colaboradores/` 200.
+
+**Meia-correcao, a doenca da propria CLAUDE.md secao 6**: revertei UM lado de um par nao commitado.
+E a segunda vez hoje que a arvore nao commitada me morde -- a primeira foi o template do calendario
+as 16:12. O que a torna perigosa e o que a tabela `docs/ARVORE-NAO-COMMITADA.md` ja diz: sao
+**111 arquivos** servindo producao sem commit, e nenhum deles tem par declarado.
+
+**O que se perdeu e como se repoe** (medido, nao suposto): a funcao `cadastro_x_realidade` de
+`escala/views.py`. Ela existe INTEIRA em `/tmp/snap_bite4/app/escala/views.py` e em
+`.esteira/baixa_toda_familia/orig/app/escala/views.py`, ambos com mtime `18/09 20:46` -- o mesmo do
+arquivo que eu sobrescrevi -- e as duas copias tem `propostas_limbo_pdf` E `cadastro_x_realidade`,
+entao o par views/urls volta consistente. O servico (`escala/services/cadastro_realidade.py`) e o
+template (`templates/escala/cadastro_x_realidade.html`) **nao foram tocados**. NAO reponho agora
+porque a ordem em curso proibe editar a arvore servida e prod esta consistente sem a rota; vira item.
+
+
+## PAREI: aval do adicional noturno nao fechou na condicao | espera Ronald
+
+**Aval recebido 25/09 (URGENTE)**: refazer o DRY com `emp3=clt`, aplicar SO emp3 em 09 **se**
+`col639=120,00h`, `col70=8h00/noite` e `col296=6h51/noite` exatos, senao PAREI.
+
+**DOIS dos tres bateram exato. O terceiro nao pode bater, e a razao e aritmetica.**
+
+| RED | pedido | medido (sombra, cadastro do aval) | |
+|---|---|---|---|
+| col639 09 | 120,00 h | **120,00 h** (de 138,62), **8h00/noite** em 15 noites | OK |
+| col70 09 | 8h00/noite | **8h00/noite** (72,00 h de 91,17; era 10h08 apos o apply de 15:12) | OK |
+| col296 | 6h51/noite | **6h00/noite** (360 min / 60) | **DIVERGE** |
+
+`col296` e **emp2**, e o proprio aval declara emp2 como `cct`. Com a CCT dos Vigilantes vale a
+clausula 38-d, que **afasta a hora reduzida**: a hora noturna e de 60 min, entao os 6 h de relogio
+(22-02 + 03-05, com o intervalo 02-03 fora) dao `360 / 60 = **6h00**`. Os `6h51` pedidos sao
+`360 / 52,5` -- a hora REDUZIDA do Art.73 par.1, que so se aplica a quem esta em **CLT**. Ou seja a
+condicao do aval e insatisfazivel junto com o cadastro do mesmo aval: ou o alvo de col296 e 6h00
+(emp2 em CCT, como declarado), ou col296 teria de estar em CLT -- que e exatamente o que o aval
+manda NAO aplicar. **Nao apliquei nada** (LEI-AKITA 9: aval condicional que nao fecha na condicao =
+PAROU com o numero).
+
+**O DRY refeito, com `emp3=clt`, `emp2=cct`, `emp4=cct` na sombra** (mesmo probe rodado duas vezes,
+HEAD e cura, e diferenciado):
+
+| competencia | medidos | mudam | empresas | ciclos | horas noturnas |
+|---|---|---|---|---|---|
+| 08/2026 | 452 | **81** | **so emp3** | so 12x36 | 4.716,75 -> 3.726,63 (**-990,12 h**) |
+| 09/2026 | 489 | **81** | **so emp3** | so 12x36 | 4.406,63 -> 3.466,51 (**-940,12 h**) |
+
+O universo fechou na JSP, que e o que o aval pede. Na medicao ANTERIOR (antes do aval) mudavam 128
+colabs e -1.427,94 h em 09, **114 deles emp2** -- porque eu aplicava o Art.59-A par. unico a todo
+piso legal. **O aval corrigiu a minha implementacao**, e a correcao esta no codigo: a regra do 12x36
+entra SO com `clt` DECLARADO; empresa declarada `cct` sem CCT vigente na praca mantem o valor
+historico, porque falta de cadastro nao decide folha. Selo do par:
+`ponto/tests/test_prorrogacao_pos5h_por_cadastro.py::test_MORDE_sem_regime_declarado_o_dinheiro_NAO_se_move`.
+
+**LISTA PARA O DP -- 12x36 noturnos de emp2/emp4 em praca SEM CCT cadastrada: 48 colaboradores em
+12 pracas.** Estes seguem com o valor historico e o que falta e CADASTRO de CCT, nao calculo:
+
+| praca | colabs |
+|---|---|
+| Curitiba/PR | 17 |
+| Primeiro de Maio/PR | 9 |
+| Porto Alegre/RS | 6 |
+| Ponta Grossa/PR | 5 |
+| Canoas/RS | 2 |
+| Fazenda Rio Grande/PR | 2 |
+| **"A definir"** (praca sem nome no cadastro) | **2** |
+| Pinhais/PR · Esteio/RS · Ibipora/PR · Foz do Iguacu/PR · Campo Largo/PR | 1 cada |
+
+Os 2 de praca **"A definir"** sao lacuna dupla: sem praca nomeada nao ha como cadastrar CCT nenhuma.
+
+**08/2026 emp3 -- DIFERENCA-08-JSP pela lei nova, SEM sobrescrever**: os mesmos 81 colaboradores,
+**-990,12 h** de adicional noturno (4.716,75 -> 3.726,63). A 08 esta exportada; o numero acima e para
+o DP lancar a diferenca, e nenhuma escrita foi feita nela.
+
+**O QUE ESTA FEITO E O QUE NAO**: o codigo da cura esta commitado com selos verdes e **NAO foi
+deployado**, e isso e deliberado -- `espelho_do_colab` e o cartao leem o motor AO VIVO, entao em
+prod (onde `emp3` ja esta `clt` desde 15:12) **o deploy E o apply** para tela e cartao. Publicar o
+codigo sem o seu `!` moveria o numero na tela dos 81. Reversao: `git revert` do commit da fatia; o
+cadastro `emp3=clt` em prod e de 15:12 e independente desta fatia.
+
+
+### MEDIDO 25/09 tarde — o que espera o `!` do Ronald
+
+**VINCULO-FIM-ANTES-DO-INICIO — passivo dos 62, DRY por colab (so leitura, prod).**
+O escritor foi achado: `colaboradores/services/vinculo.py:160-164` fechava
+`filter(colaborador=..., ativa=True).exclude(data_inicio=data_inicio)` -- TODO vinculo ativo que
+nao tivesse a MESMA data de inicio, **inclusive os que comecam depois**. Mesma forma em outros
+quatro sitios (`fechar_vinculos_ativos`, `encerrar_vinculo`, `ajustar_vinculo_pelo_sistema`,
+`desfazer_ajuste_do_sistema`).
+
+A lapide que ficava sobre esse `update()` dizia que `fim < inicio` era *"INERTE por construcao...
+Corrupcao real seria fim<ini com ativa=True - inexistente em prod"*. O censo dela esta CERTO (os 62
+estao todos com `ativa=False`) e a conclusao esta ERRADA: o filtro que "nunca casa" **e** o dano.
+`esmeril_espelho.py:109` e os leitores de cartao/espelho usam `.exclude(data_fim__lt=ini)`, e
+portanto **58 dos 62 desaparecem da competencia 09/2026**.
+
+| medida | numero |
+|---|---|
+| vinculos com `data_fim < data_inicio` | **62** (todos `ativa=False`; o mais novo, pk1310 col899, criado HOJE: comeca 25/09, fechado 31/08) |
+| invisiveis na comp 09 pelo filtro dos leitores | **58** |
+| **com PREVISTO diferente** (leitores usam outro `tipo_escala`) | **40** — e dinheiro e tela |
+| fosseis de mesma escala (sem efeito no previsto) | 22 |
+| colabs com 2+ vinculos tocando a comp 09 | 75 |
+| **intersecao com os 2+ vinculos** | **10**: col51, col152, col277, col369, col465, col515, col736, col866, col892, col899 |
+
+**col51 e um dos 5 cartoes que a DP reclamou** — o vinculo pk514 dele e `20/04 -> 31/03`. Ou seja o
+CARTAO-CORTADO tinha DUAS causas, e esta fatia cobre a segunda.
+
+**O `CheckConstraint(data_fim__gte=data_inicio)` NAO subiu nesta fatia, e o motivo e o banco**: os 62
+registros o violam e a migration falharia no deploy. Ele sobe no MESMO ato do saneamento do passivo,
+que espera o `!`. Ate lá quem prende e o escritor unico (`fechar_vigencia`, guarda no proprio filtro,
+nao um `if` depois da escrita) + o selo `escala/tests/test_vigencia_um_escritor.py` + log de recusa
+com pk e nome.
+
+**Reversao**: `git revert` do commit da fatia devolve os cinco sitios ao `update()` antigo; nenhum
+dado foi tocado (a fatia nao escreve nada em prod).
+
+---
+
+**ADICIONAL NOTURNO 12x36 — DRY de 08 e 09, e por que o apply PAROU.**
+A cura esta pronta e verde (`core/regua_cct.py::prorrogacao_pos5h_legal`, a lei num sitio;
+`regua_para` passa a ver o CICLO e a deriva-lo da escala ativa; `get_motor_cct` le o ciclo ANTES do
+switch da regua CCT e ATRIBUI em vez de `setdefault`; o default `True` do motor virou `None` em
+`motor_calculo_v2.py:290` e `get_motor:1556`). Selo:
+`ponto/tests/test_prorrogacao_pos5h_por_cadastro.py`, 8 casos, com o par 12x36 x jornada comum.
+
+DRY rodado DUAS VEZES na sombra com o MESMO probe -- uma no HEAD, uma na cura -- e diferenciado
+(sem reimplementar a regra velha):
+
+| competencia | colabs medidos | **mudam** | horas noturnas | por empresa |
+|---|---|---|---|---|
+| 08/2026 | 452 | **116** (todos 12x36) | 6.648,67 -> 5.246,15 (**-1.402,52 h**) | emp2 **103**, emp3 13 |
+| 09/2026 | 489 | **128** (todos 12x36) | 6.851,86 -> 5.423,92 (**-1.427,94 h**) | emp2 **114**, emp3 14 |
+
+**PAREI: o apply de 09 nao aconteceu, por duas razoes medidas.**
+
+1. **A sombra nao tem o cadastro de hoje.** Medido: `emp2 regime='' , emp3 regime='' , emp4 regime=''`
+   -- a sombra e de antes do REGIME-POR-EMPRESA que eu apliquei em prod as ~14h. Por isso dos 4 REDs
+   da ordem so **col639 confirma exato** (09: `138,62 h -> 120,00 h`, **8h00/noite** em 15 noites --
+   o mesmo numero que o Ronald escreveu na fila). `col70` deu **7h00**/noite e `col296` **5h49/6h00**,
+   e isso **nao e divergencia da lei**: sem `regime='clt'` eles caem na CCT dos Vigilantes, que
+   AFASTA a hora reduzida (`hora_reduzida_afastada_12x36`), e 420/60 = 7h00 em vez de 420/52,5 =
+   8h00. Refazer o DRY exige por `emp3.regime_trabalhista='clt'` na sombra primeiro.
+2. **O universo e maior do que a ordem nomeia.** A ordem fala da JSP (emp3), e **103 de 116 (08) e
+   114 de 128 (09) dos que mudam sao emp2**, cujo `regime_trabalhista` esta VAZIO. Eles mudam porque
+   o piso legal **e** a CLT: praca sem CCT vigente + 12x36 passa a nao contar a prorrogacao. Isso e
+   coerente com a lei (e o contrario criaria dois pisos legais, um para empresa declarada e outro
+   para quem nao declarou), mas **-1.428 h em 128 pessoas de emp2 nao e o que a ordem descreveu**, e
+   pela regra permanente (§7b item 2: "DIFF que surpreende -> NAO aplica") isto para aqui com o
+   numero na mao.
+
+**As duas perguntas para o `!`**: (a) refaco o DRY com a sombra carregando `emp3=clt` e aplico so
+emp3? (b) ou emp2/emp4 tambem entram, e ai o numero e -1.428 h em 128 colabs de 09?
+
+
+## CURADO 25/09 (tarde) — uma fatia por commit, com RED
+
+- **CURADO CALENDARIO-SEM-DOMINGO** `6c84d732` — as 7 colunas do calendario do perfil cabem no painel.
+  `repeat(7,1fr)` -> `repeat(7,minmax(0,1fr))` no cabecalho E na grade
+  (`_calendario_grade.html:5,6`). Causa medida no chromium: `1fr` e `minmax(AUTO,1fr)`, faixa `auto`
+  nao encolhe abaixo do min-content da celula, e o painel da coluna direita (`detalhe.html:87`,
+  `overflow:hidden` em `:202`) clipava a setima. **Numeros**: com `1fr`, faixas DESIGUAIS
+  (40 41 43,5 40 41 41,5 45 px), `scroll 317 > client 267`, **dentro=6 de 7**; com a cura, faixas
+  iguais e `scroll == client` em 1024, 1366 e 1920. Selo:
+  `colaboradores/tests/test_calendario_sete_colunas.py` (chromium nas 3 larguras + o caso que MORDE
+  com `1fr` de volta). `abre()` do R14 ganhou `largura=` em vez de uma copia das suas seis linhas.
+  **Incidente do mesmo dia, registrado porque custou UI em producao**: escrevi esta cura direto na
+  arvore SERVIDA as 16:12; template no bind-mount muda a tela na hora e os espelhos quebraram ate o
+  Ronald restaurar ao HEAD. A cura voltou por COPIA + commit, que e a LEI-AKITA 10.
+
 
 ## CURADO HOJE (ordem unica de 25/09: uma fatia por commit, com RED)
 
@@ -9,7 +845,7 @@
 | — | `SELO-VE-O-CASO-COMUM` | `852dc73d` | **no ar** — o `regua_tickets` nao via ID com hifen |
 | — | `GEOFENCE-VALIDAR-VOLTA` (raia B) | `ebde81d4` | **no ar, ESPERA SMOKE** — toca template |
 | — | `HOOK-NAO-E-COPIA` | `c8aecb25` | **no ar** — 3 pushes perdidos por copia em `.git/hooks/` |
-| **1** | `REGIME-POR-EMPRESA` | **`c6467e3a`** | **CODIGO NO AR; APPLY espera o `!`** (DRY: +2.259 h de adicional noturno em 08+09) |
+| **1** | `REGIME-POR-EMPRESA` | **`c6467e3a`** | **CURADO E APLICADO** (aval 17:xx) — emp3 = clt, 09 recalculada (+1.259,13 h, 48 colabs), col70 8h00 → **10h08/turno**, 08 intacta com `DIFERENCA-08-JSP` para o DP |
 | 2 | O37 gerador 12x36 | — | causa medida (`escala/models.py:967,986`); e a proxima |
 | 3 | LISTA-RETENCAO-09 | — | na fila |
 | 4 | geo em producao + print | — | commit no ar, falta o deploy e o print |
@@ -90,6 +926,162 @@ selecao de alvo do fabricante (filha do O36). E o alarme de `cortes_registrados`
 `ASSINATURA-EC-P256` estava em `recebido` ha 32 h **com o commit `e22a32b4` no git desde 24/09** --
 o estado mentia, nao havia corte parado. Sobra `TROCA-DE-PLANTAO` (37 h), que e seu de verdade.
 
+## 25/09 18:0x — CURADO 1: REGIME-POR-EMPRESA aplicado (aval das 17:xx) + DIFERENCA-08-JSP
+
+**APLICADO EM PROD**, na ordem do aval:
+
+```
+deploy                 OK -- migration 0051 em prod, 3 cascas reiniciadas e 3 rotas provadas
+emp3 regime            '' -> 'clt'   (demais empresas seguem VAZIAS = a praca decide)
+trilha                 acao=regime_trabalhista | usuario=ronald_ti | 25/09 18:07:30
+recalculo 09/2026 emp3 123 processados | 48 com adicional noturno alterado | +1.259,13 h
+                       (nao trancada: PeriodoFechado vivo = 0, conferido ANTES de escrever)
+trilha do recalculo    acao=recalc_regime_clt | usuario=ronald_ti
+08/2026                INTACTA -- col70 segue com 120,00 h
+```
+
+**A CONFERENCIA QUE O AVAL PEDIU** -- `col70 [nome]`:
+
+```
+fonte da regua       legal (empresa em CLT: Juliani Seguranca Patrimonial)
+prorrogacao pos 5h   True        hora reduzida afastada   False
+08/2026   120,00 h / 15 turnos = 8h00/turno      <- intacta, como mandado
+09/2026    91,17 h /  9 turnos = 10h08/turno     <- era 8h00; esperado 10h17
+```
+
+Os 9 min contra o teto nao sao defeito: **10h17 e o turno CHEIO** (19:00-07:00 inteiro), e os 9 turnos
+reais tem entrada e saida com minutos de variacao, entao a media fica pouco abaixo. O numero que
+importa e o salto: **8h00 -> 10h08**.
+
+### DIFERENCA-08-JSP -- para o DP lancar (a 08 nao foi tocada)
+
+Comparacao do **GRAVADO** (calculado com a regua da CCT) com o que a **regua legal** daria, na emp3,
+competencia 08/2026. Rodado em `atomic()` com rollback: **nada foi escrito**.
+
+| colab | nome | AN | HE 50 | HE 100 | DSR | Banco | Trab |
+|---|---|---|---|---|---|---|---|
+| col126 | [nome] | +51.41 | -0.49 | — | -0.25 | — | +24.04 |
+| col134 | [nome] NE | +43.36 | -0.26 | — | -0.35 | — | +23.94 |
+| col155 | [nome] CONCE | +43.09 | -22.49 | -22.51 | — | — | — |
+| col67 | [nome] | +35.84 | — | — | — | — | — |
+| col168 | [nome] | +35.72 | -0.28 | — | -0.27 | — | — |
+| col84 | [nome] | +35.12 | -0.02 | — | -0.02 | — | — |
+| col59 | [nome] | +34.60 | — | — | — | — | — |
+| col499 | [nome] | +34.45 | — | — | — | — | — |
+| col173 | [nome] | +34.41 | -0.21 | — | -0.23 | — | — |
+| col111 | [nome] | +34.21 | — | — | — | — | — |
+| col101 | [nome] BERTH | +34.11 | -0.40 | — | -0.39 | — | — |
+| col113 | [nome] | +33.98 | — | — | — | — | — |
+| col177 | [nome] FRE | +33.49 | — | — | — | — | +0.07 |
+| col157 | [nome] | +33.32 | -0.12 | — | -0.13 | — | — |
+| col94 | [nome] | +33.01 | -1.08 | — | -1.15 | — | — |
+| col154 | [nome] FERREIR | +32.38 | -0.24 | — | -0.21 | — | +0.19 |
+| col70 | [nome] | +32.35 | -0.16 | — | -0.15 | — | — |
+| col141 | [nome] | +31.84 | -0.09 | — | -0.08 | — | — |
+| col130 | [nome] | +30.67 | -0.07 | — | -0.03 | — | — |
+| col747 | [nome] GONCALVE | +30.58 | -0.95 | — | -0.85 | — | — |
+| col72 | [nome] | +29.29 | — | — | — | — | — |
+| col165 | [nome] | +25.57 | — | — | — | — | — |
+| col80 | [nome] | +25.24 | -0.15 | — | -0.09 | — | — |
+| col127 | [nome] | +25.12 | — | — | — | — | — |
+| col163 | [nome] | +23.96 | — | — | — | — | — |
+| col121 | [nome]  | +22.63 | — | — | — | — | — |
+| col110 | [nome] RODRIGU | +22.54 | — | — | — | — | — |
+| col78 | [nome] | +22.34 | -0.15 | — | -0.20 | — | — |
+| col876 | [nome] | +20.05 | — | — | — | — | — |
+| col149 | [nome] | +19.14 | -0.14 | — | -0.10 | — | — |
+| col125 | [nome] | +13.56 | — | — | — | — | — |
+| col49 | [nome] | -13.53 | -8.78 | — | — | — | -26.65 |
+| col95 | [nome] | +10.86 | — | — | — | — | — |
+| col868 | [nome] | +7.43 | — | — | — | -0.21 | — |
+| col128 | [nome] JUN | +6.95 | — | — | — | — | — |
+| col109 | [nome] | +5.72 | — | — | — | — | — |
+| col85 | [nome] BENEDI | +2.30 | — | — | — | — | — |
+| col147 | [nome] | +2.29 | — | — | — | +7.54 | — |
+| col56 | [nome] | — | -0.17 | — | -0.18 | — | — |
+| col58 | [nome] | — | -0.12 | — | -0.11 | — | — |
+| col61 | [nome] BARZ | — | -0.39 | — | -0.43 | — | — |
+| col639 | [nome] | — | -0.85 | — | -0.80 | — | — |
+| col638 | [nome] NASC | — | — | — | — | +7.54 | — |
+| col62 | [nome] BEN | — | -0.22 | — | -0.27 | — | — |
+| col63 | [nome]  | — | -1.57 | — | -1.44 | — | — |
+| col761 | [nome] | — | -0.79 | — | -0.82 | — | — |
+| col79 | [nome] | — | -0.35 | — | -0.24 | — | — |
+| col81 | [nome] | — | -5.45 | — | — | — | — |
+| col82 | [nome] | — | — | — | — | +7.55 | — |
+| col746 | [nome] | — | — | — | — | +7.54 | — |
+| col87 | [nome] | — | — | — | — | +7.54 | — |
+| col89 | [nome] | — | — | — | — | +7.54 | — |
+| col90 | [nome] | — | -0.52 | — | -0.53 | — | — |
+| col91 | [nome] NEVE | — | -0.11 | — | -0.08 | — | — |
+| col92 | [nome] OLIVE | — | -0.83 | — | -0.85 | — | — |
+| col741 | [nome] | — | -0.09 | — | -0.11 | — | — |
+| col750 | [nome] | — | -0.98 | — | -0.98 | — | — |
+| col752 | [nome] | — | -1.00 | — | -0.95 | — | — |
+| col642 | [nome] | — | — | — | — | +3.35 | — |
+| col743 | [nome] GONC | — | -3.89 | -0.07 | +2.83 | — | -13.19 |
+| col97 | [nome] SAN | — | -0.68 | — | -0.73 | — | — |
+| col100 | [nome] | — | -0.64 | — | -0.76 | — | — |
+| col104 | [nome] | — | -0.07 | — | -0.20 | — | — |
+| col106 | [nome] JUN | — | — | — | — | — | +0.11 |
+| col107 | [nome] | — | +3.54 | +2.90 | +0.81 | -16.94 | +107.68 |
+| col112 | [nome] PEREIR | — | +0.12 | — | — | — | +0.13 |
+| col114 | [nome] | — | — | — | — | +7.55 | — |
+| col866 | [nome] SIL | — | -0.04 | — | -0.01 | — | +59.88 |
+| col115 | [nome] | — | -0.03 | — | -0.04 | — | — |
+| col744 | [nome] | — | -0.51 | — | -0.47 | — | — |
+| col123 | [nome] | — | -0.74 | — | -1.05 | — | — |
+| col749 | [nome] | — | — | — | — | +7.54 | — |
+| col131 | [nome] | — | — | — | — | +67.90 | — |
+| col137 | [nome] | — | — | — | — | — | +12.00 |
+| col138 | [nome] | — | -0.02 | — | — | — | — |
+| col139 | [nome] G | — | -0.48 | — | -0.57 | — | — |
+| col829 | [nome] | — | — | — | — | +7.54 | — |
+| col150 | [nome] | — | -1.22 | — | -1.10 | — | — |
+| col152 | [nome] | — | +0.51 | — | — | -15.93 | -12.89 |
+| col159 | [nome] | — | -0.99 | — | -0.99 | — | — |
+| col755 | [nome] | — | -0.46 | — | -0.44 | — | — |
+| col643 | [nome] | — | -0.54 | — | -0.54 | — | — |
+| col166 | [nome] SIL | — | -0.13 | — | -0.13 | — | — |
+| col169 | [nome] | — | -1.10 | — | -1.06 | — | — |
+| col170 | [nome] | — | -0.89 | — | -0.87 | — | — |
+| col171 | [nome] TRAMON | — | -0.05 | — | -0.04 | — | — |
+| col172 | [nome] INA | — | -0.08 | — | -0.08 | — | — |
+
+TOTAL (87 colabs): AN +979.40 h · HE 50 -57.91 h · HE 100 -19.68 h · DSR -17.73 h · Banco +106.05 h · Trab +175.31 h
+
+### O ALERTA QUE O DP PRECISA LER ANTES DE LANCAR
+
+**Nao e so diferenca A PAGAR.** O total tem rubricas nos DOIS sentidos:
+
+| rubrica | total | sentido |
+|---|---|---|
+| **AN** (adicional noturno) | **+979,40 h** | a favor do colaborador |
+| Banco de horas | +106,05 h | a favor |
+| Horas trabalhadas | +175,31 h | base (a hora deixa de ser reduzida) |
+| **HE 50** | **-57,91 h** | **contra** |
+| **HE 100** | **-19,68 h** | **contra** |
+| **DSR (reflexo)** | **-17,73 h** | **contra** |
+
+A razao: a regua legal nao muda so a prorrogacao noturna -- ela tambem troca `regua_excedente` de
+`'legais'` para `'relogio'` e desliga a hora reduzida do Art.73. Com a hora de 60 min, o trabalhado
+sobe **e** o excedente sobre o teto de 8h diario cai, entao HE desce enquanto AN sobe.
+**Lancar so o AN paga a mais.** Caso extremo, a 3a linha da tabela: `col155 [nome]` tem
+**AN +43,09** contra **HE 50 -22,49 e HE 100 -22,51**.
+
+### Duas coisas que ficam declaradas
+
+1. **A trilha do meu ato saiu com `ip=None`** -- e exatamente o **O47** (272 de 693 linhas de
+   `LogAuditoria` sem IP, as portas que nao passam `request`). O meu ato de hoje entrou na estatistica
+   do bug que o proprio O47 nomeia, e isso e prova ao vivo de que a fatia precisa existir.
+2. **A 08 fica LAVRADA** por ordem do aval, e a tabela acima e a unica ponte. Lancada pela metade, a
+   folha de 08 fica num terceiro estado -- nem a regua da CCT, nem a legal.
+
+**LEI-AKITA**: origem=`Empresa.regime_trabalhista` (cadastro novo, lido por `regua_para`),
+testemunha=`regua_para` + `FechamentoMensal` gravado x recalculado na propria competencia,
+RED=col70 8h00 -> 10h08/turno em 09, com a 08 intacta em 8h00,
+quem-mais-le=`get_motor_cct` e por ele o motor, a folha, o TXT e o cartao, juizes novos=0
+
 ## 25/09 12:2x — FECHAMENTO-ONLINE passo 2: o DIFF na sombra, e ele achou o risco central
 
 Aval das 12:0x: *"DIFF na sombra: FechamentoMensal gravado x lido da celula para 07, 08 e 09, por
@@ -169,7 +1161,7 @@ commit das 07:25. Nenhum dos dois criou este bug.
 ### A causa, medida
 
 ```
-col418 (ADRIANO LUCAS, EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
+col418 ([nome], EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
   17/09 a 20/09   trabalha alternado T.T.   gerada_em 2026-08-21 08:50:12
   21/09 a 30/09   trabalha TODOS True       gerada_em 2026-09-21 08:50:23
 ```
@@ -3895,6 +4887,81 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **25/09 14:35 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 15:40 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 16:22 ARVORE VERMELHA (vigia da arvore)** -- 3 vermelho(s) confirmado(s) na arvore viva: api.tests.test_bug139_espelho_app_mesma_fonte.EspelhoAppMesmaFonteDoAdminTest.test_MORDE_app_nao_soma_batida_do_vinculo_anterior core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero ponto.tests.test_caracterizacao_espelho.CaracterizacaoEspelhoTe. Toda fatia que cair nesses mesmos testes espera e se relanca sozinha. Para a admin: nada muda na tela.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: api.tests.test_bug139_espelho_app_mesma_fonte.EspelhoAppMesmaFonteDoAdminTest.test_MORDE_app_nao_soma_batida_do_vinculo_anterior core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero ponto.tests.test_caracterizacao_espelho.CaracterizacaoEspelhoTe. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: api.tests.test_bug139_espelho_app_mesma_fonte.EspelhoAppMesmaFonteDoAdminTest.test_MORDE_app_nao_soma_batida_do_vinculo_anterior core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero ponto.tests.test_caracterizacao_espelho.CaracterizacaoEspelhoTe. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: api.tests.test_bug139_espelho_app_mesma_fonte.EspelhoAppMesmaFonteDoAdminTest.test_MORDE_app_nao_soma_batida_do_vinculo_anterior core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero ponto.tests.test_caracterizacao_espelho.CaracterizacaoEspelhoTe. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 1 vermelho(s) confirmado(s) na arvore viva: unittest.loader._FailedTest.test_MORDE_app_nao_soma_batida_do_vinculo_anterior . Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: a confirmacao nem rodou as 18:23 (log /home/ronald/saas-hasner/logs/vigia_arvore_251815.log.viva):                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ AttributeError: module 'escala.views' has no attribute 'cadastro_x_realidade' . Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: a confirmacao nem rodou as 18:23 (log /home/ronald/saas-hasner/logs/vigia_arvore_251815.log.viva):                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ AttributeError: module 'escala.views' has no attribute 'cadastro_x_realidade' . Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: a confirmacao nem rodou as 18:23 (log /home/ronald/saas-hasner/logs/vigia_arvore_251815.log.viva):                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ AttributeError: module 'escala.views' has no attribute 'cadastro_x_realidade' . Para a admin: nada muda.
+
+
+**ALARME integrador** -- o push do lote foi REJEITADO (rc=1; o motivo esta em `logs/integrador.log`). As 1 fatia(s) ficam NA FILA com o commit local e NENHUMA foi marcada "no ar" -- commit local nao e "no ar". Cura: git fetch + rebase e `bash bin/push.sh`.
+
+
+**25/09 19:37 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 202 min.
+
+
+**25/09 19:40 vigia da esteira** -- vigia relancou resumo_espelho_morto as 19:40 (baseline divergiu: a arvore andou depois do teste da fatia) -- E O RELANCE NAO PEGOU. Para a admin: nada muda.
+
+
+**25/09 19:45 vigia da esteira (ALARME)** -- a fatia resumo_espelho_morto caiu por vermelho DELA (construir falhou) -- nao relanco.
+
+
+**25/09 19:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**ALARME fabricante** -- 2 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 3 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 4 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**ALARME fabricante** -- 5 corridas SECAS seguidas (nenhuma fatia fabricada com a trava A abaixo do teto). Causa da ultima: nenhuma fatia nova nesta volta (recusa declarada pelo Code, ou nada montado). A maquina fica ociosa ate isto ser curado. Para a admin: nada muda.
+
+
+**25/09 20:22 ARVORE VERMELHA (vigia da arvore)** -- 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_contract_juiz_tela.JuizTelaContratoTest.test_MORDE_pendente_curado_sai_da_lista . Toda fatia que cair nesses mesmos testes espera e se relanca sozinha. Para a admin: nada muda na tela.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_contract_juiz_tela.JuizTelaContratoTest.test_MORDE_pendente_curado_sai_da_lista . Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_contract_juiz_tela.JuizTelaContratoTest.test_MORDE_pendente_curado_sai_da_lista . Para a admin: nada muda.
+
+
+**25/09 21:22 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 67 min.
+
+
+**25/09 21:25 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 22:30 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**25/09 22:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 00:00.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
