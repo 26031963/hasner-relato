@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:43:01.**
+**Medido em 26/09/2026 10:48:31.**
 
 | | |
 |---|---|
@@ -32,37 +32,14 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
 
 ```
  M app/config/crons_duracao.json
+ M app/ponto/motor_calculo_v2.py
+?? app/ponto/tests/test_e3_metade_intervalo_cadastrado.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ censo                            │ 2 templates, 3 vínculos ativos              │
-  └──────────────────────────────────┴─────────────────────────────────────────────┘
-
-  Cura na origem: max(cadastrado, piso). A lei é o piso, o cadastro sobe dele — e acima da lei continua mandando (te#194 com 160 min é direito do colaborador). Os dois sentidos
-  têm caso no selo.
-
-  O número mudou, então não aplico (LEI-AKITA 9):
-
-  ┌─────────────┬───────────────┬───────────────┐
-  │ competência │   aprovado    │     real      │
-  ├─────────────┼───────────────┼───────────────┤
-  │ 07/2026     │ +25,26 h · 14 │ +25,26 h · 14 │
-  ├─────────────┼───────────────┼───────────────┤
-  │ 08/2026     │ +10,11 h · 23 │ +27,36 h · 22 │
-  ├─────────────┼───────────────┼───────────────┤
-  │ 09/2026     │ +4,04 h · 19  │ +13,04 h · 18 │
-  ├─────────────┼───────────────┼───────────────┤
-  │ total       │ +39,41 h      │ +65,66 h      │
-  └─────────────┴───────────────┴───────────────┘
-
-  O col840 saiu da lista — era o único que perdia horas em 09, e sai junto com o bug. Quem ainda desce é o col207, e desce com razão: jornada de 4 h não exige intervalo (piso 0),
-  e o 60 cravado indenizava um mínimo que a lei não pede.
-
-  Escopo medido: 09/2026 não foi exportada por nenhuma das 4 empresas; 07 por emp3/emp4; 08 por emp2. Pela sua regra literal ("por empresa"), 08 também seria aplicável em
-  emp1/emp3/emp4 — não fiz, porque a sua frase seguinte joga 07 e 08 inteiras para Pauta DP. Registro em vez de escolher por você.
 
   Também fechado neste bloco: O57 curada com as duas curas provadas com git de verdade (pathspec + tripwire que recusa deleção não declarada, 6 casos de selo, o MORDE sendo o
   índice literal do b4eacf03); fabricante DESLIGADO com dono e condição de saída, timer disabled, e fabricante: DESLIGADO no ESTADO.md; SESSAO.md publicado (583 ações, sem saída
@@ -70,12 +47,37 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
 
 ✻ Baked for 1h 40m 34s · done 10:38 AM
 
-● How is Claude doing this session? (optional)
-  1: Bad    2: Fine   3: Good   0: Dismiss
+❯ aval Ronald: E3 metade v2 (max(cadastrado, piso)) aplica SO 09/2026, todas as empresas: +13,04 h, 18 colabs. 07 (+25,26 h, 14) e 08 (+27,36 h, 22) NAO mudam o gravado em
+  empresa nenhuma: viram Pauta DP por empresa. RELATO com col207 e col118 nomeados e o hash de origin/main. !
+
+● O ! no número certo. Restaurando a cura v2 na árvore:
+
+  Ran 1 shell command
+
+● Cura v2 na árvore e provada. Mas o push28 falhou, e a causa é um bug na cura da O56 do fabricante — o container escreve .ruff_cache como root na árvore temporária e o rm -rf não
+  consegue limpar:
+
+  Ran 1 shell command
+
+● Duas coisas distintas: as 6 falhas são o portão, e os rm são vazamento de disco depois. Vendo as falhas:
+
+  Ran 1 shell command
+
+● Duas causas, e as duas são bugs na cura da O56 do fabricante — que está me bloqueando. Medindo antes de curar:
+
+  Ran 1 shell command
+
+● Confirmado: staticfiles/ é gitignored, então o git archive não o traz e os smokes de clique perdem CSS/JS; e o container escreve .ruff_cache/.hypothesis como root, o que vaza 43
+  árvores (~1 GB). Curando as duas:
+
+● Ler os dois sitios a curar
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n 25,40p bin/arvore_do_push.sh; echo "=== o container do pre-push ==="; sed -n 100,110p bin/pre-push.sh
+
+✢ Zigzagging… (1m 25s · ↓ 5.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
