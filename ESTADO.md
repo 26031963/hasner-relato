@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:50:02.**
+**Medido em 26/09/2026 18:55:31.**
 
 | | |
 |---|---|
@@ -39,10 +39,6 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  item (6) a diferenca dele e 7h48, nao minutos: e o 11/09 pago como ~1h08 contra 8h59 da coluna. Refazer (1) e (6) com o [nome] como RED obrigatorio (se ele nao aparece, o medidor
-  esta errado); separar em (6) os de arredondamento (minutos) dos de valor (horas). So entao medir (a) na frota. Nenhuma lei nova.
-
-● Você pegou o essencial: o medidor repetiu o erro que eu já tinha curado no motor — contar batidas por data civil em vez de por período. No plantão do Jean, três das quatro
   batidas caem no dia seguinte. Achando ele primeiro:
 
   Ran 1 shell command
@@ -64,18 +60,22 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 ● Autopsia completa, e ela desmente minha classificação: em 11/09 o juiz responde perfeitamente (entrada 21:01, saída 07:00, intervalo 68) com três tipos invertidos, e a geometria
   já dá 1 turno fechado. O Jean não está na classe "não corrigido" — ele está na (6), e por outra razão. Medindo as três fontes dele:
 
-  Refazer o item 6 separando arredondamento de valor · 1m 58s
+● Refazer o item 6 separando arredondamento de valor
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/item6b.py <<'PYEOF'
      """O67b item (6) REFEITO: topo x coluna, separando ARREDONDAMENTO (minutos) de VALOR (horas).
      E com o [nome] (col857) como RED obrigatorio -- e com a terceira fonte na mesa: o FECHAMENTO gravado.
      """
-     import collec… (1m 57s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     import collec…
 
-✽ Misting… (4m 32s · ↓ 10.6k tokens)
+✢ Misting… (10m 1s · ↓ 10.6k tokens · deep in thought)
+
+❯ O51 COLUNA-SAIDA-ANTECIPADA (E4; L-002), entra logo apos a O68, antes da 09 ir ao DP: o cartao PDF e a tela ganham as colunas "Atraso" e "Saida antecipada", separadas do
+  Realizado, lendo o MESMO valor que o fechamento grava para a rubrica 8069 -- nenhuma conta propria no leitor. O topo mostra os dois totais = soma das linhas. RED: col39 24/08
+  (saida antecipada de 300 min, catalogo DESCONTA) aparece na coluna com 5h00, e o topo soma. Dinheiro ZERO -> DEPLOY JA com smoke. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
