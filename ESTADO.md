@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:22:14.**
+**Medido em 26/09/2026 14:27:41.**
 
 | | |
 |---|---|
@@ -49,7 +49,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Agora os dois selos. O primeiro tem de parar de contar comentário como consumidor:
 
   Ran 1 shell command
@@ -73,15 +72,16 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Agora o DIFF de três colunas, que é o PRONTO da ordem. Uma corrida por motor, mesmo gravado de base:
 
-  Rodar o DIFF do motor de HEAD · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
-     p='/tmp/claude-1001/pauta/saida/diff3.py'
-     s=open(p).read()
-     s=s.replace(""" out[str(r['colaborador_id'])] = {k: (float(v) if isinstance(v, (int, float)) or hasattr(v, 'is_finite') else v)
-     for k, v in r.items() if k != 'colaborador_id'}""",
-     """ out…
+  Ran 2 shell commands
 
-✽ Concocting… (1h 19m 45s · ↓ 92.2k tokens)
+● Coluna do motor de HEAD medida, rollback provado nas três competências. Agora o motor novo:
+
+  DIFF do motor novo · 37s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo" && docker run --rm --cpuset-cpus
+     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=config… (36s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Concocting… (1h 25m 12s · ↓ 93.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
