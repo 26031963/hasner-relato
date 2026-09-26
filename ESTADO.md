@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:04:31.**
+**Medido em 26/09/2026 12:10:01.**
 
 | | |
 |---|---|
@@ -33,29 +33,16 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M bin/arvore_do_push.sh
+ M bin/pre-push.sh
+ M bin/tests/test_prepush_testa_o_commit.sh
+?? app/docs/RELATORIOS-PLANO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  esperar o fork, e prova o hash de origin/main. Nenhuma lei nova.
-
-● Gravando o handoff agora, antes de qualquer outra coisa:
-
-  Ran 2 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brmoghkex.output (9 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0w3567zt.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b8j8u2exn.output (13 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bbqw4wc3i.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl1xa3jlg.output (17 lines)
-
-● Task "Censo dos 15 cards de relatorios" still running in background
-
-● Background command "Esperar o push32 e provar" completed (exit code 0)
-
-  Listed 1 directory, ran 2 shell commands
-
 ● Medindo a causa do push32 antes de curar — o symlink de staticfiles é absoluto do host, e o container só monta $ARVORE_PUSH/app:
 
   Ran 1 shell command
@@ -67,9 +54,26 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 
 ● Só o pre-push consome a árvore. Curando na origem — o fato "staticfiles vem de fora do archive" passa a morar em um lugar, e o container recebe montagem real em vez de symlink:
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Misting… (10m 39s · ↓ 6.7k tokens · thought for 8s)
+● Agora a cura, na origem e num só lugar:
+
+  Ran 1 shell command
+
+● Agora o selo que morde — prova dentro do container, que é quem roda a suíte:
+
+  Ran 2 shell commands
+
+● Selo verde. Agora a prova que importa: os 5 smokes que barraram o push32, na árvore do commit, com a montagem nova:
+
+  Ran 2 shell commands
+
+● Os 5 smokes: 8 testes OK na árvore do commit. Gravando TICKETS e commitando:
+
+● Ver o bloco SESSOES do TICKETS
+  ⎿  $ sed -n '569,578p' docs/TICKETS.md
+
+✢ Misting… (16m 9s · ↓ 14.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -77,6 +81,6 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Writing RELATORIOS-PLANO.md inventory                                                                                              21m 15s · ↓ 180.6k tokens
+  ◯ general-purpose  Verifying card ficha sections in RELATORIOS-PLANO.md                                                                               26m 45s · ↓ 200.0k tokens
   ⧉  index
 ```

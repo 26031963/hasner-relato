@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 12:04:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (63.2 MB). Acoes na janela: **598**.
+**Medido em 26/09/2026 12:10:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (63.3 MB). Acoes na janela: **607**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:07:24 | Bash | Ver o bloco SESSOES do TICKETS | `sed -n '569,578p' docs/TICKETS.md` |
+| 12:07:16 | Bash | Localizar o rodape do TICKETS | `grep -n "RODAPE\\|^## \\|^> " docs/TICKETS.md \| tail -20` |
+| 12:06:46 | Bash | Rodar os 5 smokes com o env-file certo | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && D=$(bash bin/arvore_do_push.sh HEAD) && MNT=$(bash bin/arvore_do_push.sh --montagem "$D") && ESTEIRA_QUEM=prova bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ...` |
+| 12:06:13 | Bash | Rodar os 5 smokes de clique na arvore do commit | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && D=$(bash bin/arvore_do_push.sh HEAD) && MNT=$(bash bin/arvore_do_push.sh --montagem "$D") && echo "arvore=$D montagem=$MNT" && ESTEIRA_QUEM=prova bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file "$RAIZ/.env" --env-file .env --env-file "$TESTE_ENVFILE ...` |
+| 12:05:59 | Bash | Escrever e rodar o selo com o caso que morde | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f = 'bin/tests/test_prepush_testa_o_commit.sh' s = open(f, encoding='utf-8').read() fim = """if [ "$falhas" -gt 0 ]; then echo "test_prepush_testa_o_commit: RED ($falhas)"; exit 1 fi""" bloco = '''# --------------------------------------- 3. o CONTAINER ve o staticfiles (achado 26/09 12:0x) # O caso que MORDE. A cura anterior punha um `ln -s` para o ...` |
+| 12:05:25 | Bash | Ler a estrutura do selo de host | `cd /home/ronald/saas-hasner && sed -n '55,90p' bin/tests/test_prepush_testa_o_commit.sh; echo "=== fim ==="; tail -8 bin/tests/test_prepush_testa_o_commit.sh` |
+| 12:05:18 | Bash | Curar o staticfiles dangling na origem | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f = 'bin/arvore_do_push.sh' s = open(f, encoding='utf-8').read() # (1) --montagem: o fato "staticfiles vem de FORA do archive" passa a morar num lugar so. uso_velho = """# bin/arvore_do_push.sh --igual <sha> rc 0 se os .py/.html de app/ na arvore de trabalho SAO os do # commit (nada modificado, nada untracked fora do .gitignore) -- so entao o # cari ...` |
+| 12:04:46 | Bash | Ler o cabecalho do arvore_do_push | `cd /home/ronald/saas-hasner && sed -n '1,30p' bin/arvore_do_push.sh` |
+| 12:04:32 | Bash | Ler o docker run do pre-push | `cd /home/ronald/saas-hasner && sed -n '105,142p' bin/pre-push.sh` |
 | 12:04:11 | Bash | Censo de quem consome a arvore do push | `cd /home/ronald/saas-hasner && grep -rn "arvore_do_push" bin/ app/ --include=* 2>/dev/null \| grep -v "^bin/arvore_do_push.sh" \| grep -v Binary \| head -20` |
 | 12:03:22 | Bash | Provar se o symlink de staticfiles resolve dentro do container | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; D=$(bash bin/arvore_do_push.sh HEAD) && echo "arvore=$D" && ls -l "$D/app/staticfiles" && echo "=== o que o CONTAINER ve em /app/staticfiles ===" && docker run --rm $TESTE_DOCKER -v "$D/app":/app saas-hasner-core:latest sh -c 'ls -l /app/staticfiles; echo "--- readlink:"; readlink /app/staticfiles; echo "--- existe dentro?"; te ...` |
 | 12:03:03 | Bash | Ver o symlink e como o pre-push monta a arvore | `cd /home/ronald/saas-hasner && sed -n '30,50p' bin/arvore_do_push.sh; echo "=== pre-push docker run ==="; grep -n "docker run\\|ARVORE\\|\-v " bin/pre-push.sh \| head -30` |
