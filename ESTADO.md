@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:35:40.**
+**Medido em 26/09/2026 10:37:31.**
 
 | | |
 |---|---|
@@ -38,6 +38,14 @@ fe379ed6 O57 teste: commit com pathspec enquanto ha delecao alheia no indice
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Agora o DIFF v2, com a cura do piso — e ele muda os números que você aprovou:
+
+  Ran 1 shell command
+
+● O DIFF mudou materialmente com a cura do piso, e isso me obriga a parar:
+
+  ┌─────────────┬────────────────────────┬───────────────┐
   │ competência │ v1 (com o bug do piso) │  v2 (curado)  │
   ├─────────────┼────────────────────────┼───────────────┤
   │ 07/2026     │ +25,26 h · 14          │ +25,26 h · 14 │
@@ -55,22 +63,14 @@ fe379ed6 O57 teste: commit com pathspec enquanto ha delecao alheia no indice
 
 ● A cura está fora da árvore com patch e teste guardados (md5). Escrevendo o PAREI com o número novo e publicando:
 
-  Commitar o PAREI e publicar · 2s
-  ⎿  $ python3 <<'ENDPY'
-     import json
-     f = 'docs/PENDENTES_RONALD.json'
-     d = json.load(open(f, encoding='utf-8'))
-     ids = {x.get('id') for x in d}
-     if 'e3-metade-numero-mudou' not in ids:
-     d.insert(0, {
-     "id": "e3-metade-numero-mudou",
-     "tipo": "!",
-     "dono": "Ronald",
-     "desde": "2026-09-26",
-     "o_que": (
-     "**PAREI: o…
+  Ran 2 shell commands
 
-✻ Transmogrifying… (1h 38m 1s · ↓ 127.3k tokens)
+● Publicado. Empurrando os commits (origin/main está parado em b81544bc desde 02:47, como você apontou):
+
+● Por que o push27 saiu com 1
+  ⎿  $ cd /home/ronald/saas-hasner && tail -8 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push27.log
+
+· Transmogrifying… (1h 39m 53s · ↓ 130.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
