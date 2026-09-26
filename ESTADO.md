@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:19:31.**
+**Medido em 26/09/2026 16:24:33.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● APLICADO: 607 colabs, 0 divergências. Os números batem com o aval. Agora a prova pós-apply contra o ensaio, campo a campo:
 
   Ran 1 shell command
@@ -67,14 +68,13 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 
 ● Lavra gravada no banco de prod. O risco agora é a suíte: medindo o impacto do fail-closed:
 
-● Conferir a lavra no banco e o impacto na suite · 1m 35s
+● Conferir a lavra no banco e o impacto na suite
   ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
      from ponto.services.esmeril_espelho import ler_lavra, CHAVE_LAVRA
      from inteligencia.models import MetricaSnapshot as M
-     s = M.objects.filter(chave=CHAVE_LAVRA).order_by('-data_re… (1m 34s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     s = M.objects.filter(chave=CHAVE_LAVRA).order_by('-data_re…
 
-· Billowing… (10m 37s · ↓ 15.6k tokens)
+· Billowing… (15m 39s · ↓ 15.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
