@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:55:09.**
+**Medido em 26/09/2026 15:00:02.**
 
 | | |
 |---|---|
@@ -41,40 +41,40 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  164 colaboradores tinham jornada inteira não contada porque a batida foi gravada com o tipo oposto ao marco. turnos_abertos só cai — não sobe em colab nenhum, o que é assinatura
+  de cura e não de troca de critério.
 
-● A correção dos segundos cortou o ruído (trabalhadas: 426 → 132 colabs em 09). Medindo a direção do que sobrou, que é a frase mais importante da tabela:
+  O DIFF de três colunas (deriva | cura | total) está no RELATO por empresa: 09 fecha em +443,31 h de cura no campo-alvo. E a metade da jornada não moveu dinheiro nenhum —
+  horas_falta e horas_abono deram zero nas três competências.
 
-  Ran 1 shell command
+  Três bugs meus, curados antes da tabela. O pior: eu estava usando a ata para a aritmética, e ela só responde o papel. A luz é HH:MM e 96,4% das 27.013 batidas de 09 têm segundo
+  ≠ 0 — o instante reconstruído truncava até 59 s por batida e deslocava horas_trabalhadas em 426 dos 607 colabs. Parecia cura, era perda de precisão. Agora a ata diz quem é
+  entrada e quem é saída; o instante vem da Batida, e o desvio caiu para 132 colabs — que são exatamente os turnos que fecham.
 
-● O quadro fechou, e é grande: 164 colaboradores tinham turno deixado ABERTO pelo pareamento por tipo gravado (101 em 08, 63 em 09), e esses dias valiam +2.399 h trabalhadas.
-  Rodando a suíte inteira enquanto escrevo:
+  Também: tratei "não há juiz a consultar" como "jornada zero" e zerei a HE de 16 selos (None ≠ 0), e o contador da dívida contou a própria prosa até eu refazê-lo por AST — onde
+  ele achou o que o selo de host não via: 11 acessos em 4 arquivos, não 1.
 
-  Ran 3 shell commands
+  A dívida minutos_jornada no motor caiu de 18 para 5 linhas de código, das quais uma única é leitura (a porta declarada).
 
-● Enquanto a suíte fecha, a cauda HAIKU. O contador aqui pode se medir sozinho — o código está dentro do container:
+  Falta empurrar 06311b07 — estou esperando a suíte de fundo liberar o banco de teste para não queimar a tentativa com rc=75.
 
-  Ran 1 shell command
+✻ Worked for 1h 53m 48s · done 2:56 PM · 1 shell still running
 
-● O contador contou a própria prosa — é exatamente a lição que já está na minha memória. Refazendo por AST:
+❯ E3-COMPLETA antes do !: (1) AMOSTRA: 5 dos 63 de 09 (maiores deltas, empresas diferentes), dia a dia: batidas reais com hora, marco que cada uma cumpriu, turno que estava
+  aberto e horas que entram -- prova de dia trabalhado, nao batida espuria sendo pareada. (2) 08 foi fechada A MAO pelo admin e enviada ao Dominio: a Pauta de 08 compara o motor
+  curado com o que foi PAGO (recibo do Dominio, se existir), nunca com o nosso gravado; sem recibo, lista por colab para o DP conferir. PAREI com a amostra; o ! vem depois dela.
+  Nenhuma lei nova.
 
-  Ran 1 shell command
+● Ordem recebida. Registrando e escolhendo a amostra pelos dados que já tenho:
 
-● Censo honesto: 11 acessos reais em 4 arquivos — e três deles o selo de host nunca viu, porque a lista dele tinha um arquivo só. Registrando o achado e lavrando:
+● Escolher os 5 da amostra pelos deltas
+  ⎿  $ cd /tmp/claude-1001/pauta/saida && python3 <<'ENDPY'
+     import json
+     H=json.load(open('diff_head.json')); N=json.load(open('diff_novo.json'))
+     h,n=H['comp']['09'],N['comp']['09']; grav,mh,mn=h['gravado'],h['motor'],n['motor']
+     def num(v): return v if isinstance(v,(int,float)) and not isinstance(v,bool)…
 
-  Ran 1 shell command
-
-● Agora o golden "o motor lê a jornada de onde?", pela mesma cadeia:
-
-  Searched for 1 pattern, ran 5 shell commands
-
-● Commitando a fatia agora; o pre-push (que testa a árvore do commit) é o portão autoritativo:
-
-● Publicar o PAREI e conferir a suite
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -1; echo "=== suite de fundo ==="; grep -E "^Ran |^(OK|FAILED)|^(FAIL|ERROR):" logs/o60_suite.log | tail -6
-
-✻ Concocting… (1h 52m 41s · ↓ 127.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✽ Twisting… (26s · ↓ 1.7k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
