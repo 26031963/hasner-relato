@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 19:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.6 MB). Acoes na janela: **756**.
+**Medido em 26/09/2026 19:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.6 MB). Acoes na janela: **757**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:09:47 | Bash | Testar se a folga trabalhada explica a diferenca | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/folga.py <<'PYEOF' """topo + folga_trabalhada == coluna? Se sim, a diferenca dos 85 era da MINHA sonda.""" from colaboradores.models import Colaborador from ponto.janelas import janela_fechamento from ponto.models import FechamentoMensal from relatorios.pdf_espelho import _coletar_dados_espelho def h(m): m = int(round(m or 0)); retu ...` |
 | 19:04:37 | Bash | Cruzar os 85 com o TXT e classificar por causa | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/os85.py <<'PYEOF' """Os 85 com diferenca de VALOR: cruzar com o TXT e classificar por CAUSA. Hipotese do Ronald, testada PRIMEIRO: vinculo SOBREPOSTO (duplicado na mesma competencia) faz o fechamento contar o plantao 2x -- "gravado maior que o espelho tem essa cara" (col277, col107, col515, col866, medido em 21/09). """ import colle ...` |
 | 18:59:43 | Bash | Registrar O51b e commitar o PAREI | `python3 <<'ENDPY' import re f='docs/BACKLOG.md' s=open(f,encoding='utf-8').read() m=re.search(r'^\\| O68 .*$', s, re.M) add = ('\| O51b \| **COLUNA-SAIDA-ANTECIPADA** (E4; L-002; pedido 26/09 23:3x) -- o cartao PDF e a tela ganham as colunas ' '**"Atraso"** e **"Saida antecipada"**, SEPARADAS do Realizado, lendo o **MESMO valor que o fechamento grava** para a ' 'rubrica **8069** -- nenhuma conta p ...` |
 | 18:58:58 | Bash | Registrar o PAREI e a correcao dos medidores | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## PAREI no item (6): **85 colabs com diferenca de VALOR, somando 3.268h56** \| e os meus dois medidores estavam cegos') A('') A('Voce disse "o [nome] nao aparece no item (1), e o medidor nao ve plantao que cruza a meia-noite". Refiz') A('os dois. **Os dois estavam e ...` |
