@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 08:59:19.**
+**Medido em 26/09/2026 09:04:19.**
 
 | | |
 |---|---|
@@ -25,18 +25,14 @@ b81544bc RELATO: linha do vigia
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/CORTES.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Turno fechado. O que está na sua mesa, em ordem de peso:
-
-  1. e3-parei-a-flag-nao-carrega-decisao — o DIFF (−663,24 h) está publicado e não é um "aplica ou não": é a decisão de origem. intervalo_indenizavel só pode ter efeito no cálculo
-     depois de um ato que declare o valor por escala, com trilha. Hoje ela pega carona no intervalo_modo — 53 fixo=False contra 27 duracao=True, mesma geometria, zero linha de
-     trilha.
   2. juiz-batida-registro-espera-frase — o juiz roda e os selos passam; só o censo em core/juizes.py espera, porque escrever a frase eu mesmo seria escrever o seu corte por você.
   3. cron-host-diverge-do-codigo, emp4-8-dias-lavrados-por-holerite, e a O56 que o fabricante já fabricou.
 
@@ -62,9 +58,15 @@ b81544bc RELATO: linha do vigia
 
 ● A O56 está curada e no ar: o pre-push monta o app/ do sha empurrado (git archive), não a árvore viva. Lanço o push dos 2 e construo em paralelo sem contaminá-lo:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Transmogrifying… (1m 41s · ↓ 4.0k tokens)
+● Agora o registro do juiz, que o ! destravou — uma pergunta, porque foi uma frase:
+
+● Historia do core/juizes.py
+  ⎿  $ cd /home/ronald/saas-hasner && git log --oneline -3 -- app/core/juizes.py | cut -c1-60; echo "=== o que o E2 commit fez nele ==="; git show b4eacf03 --stat --
+     app/core/juizes.py | tail -3; echo "=== HEAD tem PENDENTES['batida']? ==="; grep -c "PENDENTES\['batida'\]\|PENDENTES_BATIDA" app/core/jui…
+
+* Transmogrifying… (6m 41s · ↓ 6.7k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
