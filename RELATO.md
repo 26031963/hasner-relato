@@ -15,6 +15,17 @@ pergunta a `ponto/turnos.py`. Agora os dois leem o mesmo juiz da batida.
 | col736 11/09 — PDF do cartao | 420 min | **420 min** (nao mudou: ja estava curado) |
 | col369 23/09 — rotulo da tela | `aberto` | **`ok`** |
 
+### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando
+
+| fonte | col736 11/09 | col369 23/09 |
+|---|---|---|
+| geometria (`turnos_do_colab`) | **1 turno, `08:47-16:23`** | 0 turnos na data |
+| PDF do cartao | **`08:47-16:23 = 420 min`** | — |
+| rotulo da tela (`status_do_dia`) | **`ok`** | **`ok`** |
+
+Deploy: `collectstatic`, prova de casca, tres cascas recarregadas juntas, tres rotas provadas
+(`/health/` core 200, `/colaboradores/` ui 302, `/health/` mensageria 200), selo BUG 128 verde,
+`importerror_500=0`, migrations em dia. Suite completa antes: **8.366 testes OK**.
 ### DIFF POR LEITOR (sombra e prod, so leitura)
 
 | leitor | o que muda |
