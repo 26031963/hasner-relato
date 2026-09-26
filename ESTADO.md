@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:50:45.**
+**Medido em 26/09/2026 13:55:45.**
 
 | | |
 |---|---|
@@ -43,14 +43,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ```
 
-  Ran 1 shell command
-
-● push37 pousou (origin/main = aa7b4b42, ahead 0). Agora a cura dos períodos, na cópia:
-
-  Ran 1 shell command
-
-● Agora o lote no caminho do dinheiro, para o juiz não virar N+1:
-
   Ran 3 shell commands
 
 ● Rodando as suítes de dinheiro contra a cópia, antes de qualquer DIFF:
@@ -69,12 +61,20 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● Os três são meus e cada um diz algo diferente. Os dois primeiros: eu curto-circuitei o memo antes de consultá-lo. O terceiro é mais importante — o turno partido não cabe no
   modelo do juiz, porque nele os marcos de intervalo dividem blocos em vez de serem intrajornada:
 
-  Rodar as suites de dinheiro e tela · 7m 41s
+  Ran 2 shell commands
+
+● Um só. E a causa é mais funda que o teste: minutos_previstos_do_dia não vê a alimentação, então responde 0 e minha regra mata a HE. Conferindo a assinatura do juiz:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O juiz pode receber alimentação — é o mesmo contrato que marcos_do_dia e eh_dia_trabalho já aceitam. Curando o N+1 e o caso alimentado de uma vez:
+
+  Rodar de novo as cinco suites · 3m 11s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && D=$(cat /tmp/claude-1001/arvore_o60) && ESTEIRA_QUEM=o60 bash
-     bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file … (7m 40s)
+     bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file … (3m 9s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Concocting… (48m 16s · ↓ 62.3k tokens)
+· Concocting… (53m 16s · ↓ 66.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
