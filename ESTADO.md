@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:59:46.**
+**Medido em 26/09/2026 19:00:45.**
 
 | | |
 |---|---|
@@ -39,44 +39,44 @@ af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada --
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O mesmo naive/aware que já me pegou na O65 — agora na sonda. Normalizando:
+           S@07:00 luz 07:00 gravado S
+  JUIZ     entrada 21:01 · saída 07:00 · intervalo 68 · em_aberto=False
+  GEOMETRIA 1 turno 21:01-07:00        (já curado pela O65)
 
-  Ran 1 shell command
+  A ata explica o dia e o juiz acerta os quatro papéis com três tipos invertidos. O 11/09 dele não está quebrado no pareamento — está no valor, que é o item (6).
 
-● Ainda não aparece — então o medidor segue errado, e a causa é mais funda: se a ata não acende lâmpada nenhuma para o plantão que cruza a meia-noite, não existe tipo_divergente
-  para eu filtrar. Autopsia do 11/09 dele:
+  Medidor (6): você estava certo, e é maior do que eu disse. Confirmei que o topo é o fechamento gravado (topo == gravado, exato, em todos os casos). Separado como você pediu:
 
-  Ran 1 shell command
+  ┌────────────────────────┬────────┬─────────────────────────────┐
+  │         classe         │ colabs │            soma             │
+  ├────────────────────────┼────────┼─────────────────────────────┤
+  │ arredondamento (< 1 h) │    389 │ float acumulado por período │
+  ├────────────────────────┼────────┼─────────────────────────────┤
+  │ valor (≥ 1 h)          │     85 │ 3.268h56                    │
+  └────────────────────────┴────────┴─────────────────────────────┘
 
-● Autopsia completa, e ela desmente minha classificação: em 11/09 o juiz responde perfeitamente (entrada 21:01, saída 07:00, intervalo 68) com três tipos invertidos, e a geometria
-  já dá 1 turno fechado. O Jean não está na classe "não corrigido" — ele está na (6), e por outra razão. Medindo as três fontes dele:
+  col882  164h36   topo 11h00    coluna 175h36
+  col451  154h30   topo 35h57    coluna 190h27
+  col416  154h27   topo 0h00     coluna 154h27
+  col277  107h19   topo 257h04   coluna 149h45   ← topo MAIOR que a coluna
 
-  Ran 1 shell command
+  Meu número anterior estava errado por duas razões: universo restrito e os exemplos que imprimi eram os pequenos. E no Jean a diferença da competência é 0h42, não 7h48 — o 7h48
+  não é o total dele, e não vou dizer que medi o que não medi.
 
-● Agora a verdade aparece, e ela é muito maior do que eu reportei. Corrigindo os dois itens:
+  PAREI, e não "topo = soma das linhas". A sua regra resolve a exibição numa linha. Mas a medição mostra que o topo está igual ao gravado e é a coluna que discorda — em 85 colabs,
+  por horas. Trocar a fonte do topo deixaria a página coerente escondendo que o gravado e a apuração discordam; e há o corte de 23/09 que mandou o cabeçalho ler a folha porque é
+  ela que paga.
 
-  Ran 1 shell command
+  O que está na mesa é por que 85 fechamentos discordam do espelho depois do apply — inclusive alguns com gravado 0h00 contra coluna de 154h. Isso é dinheiro e espera seu ! com a
+  tabela. Nada tocado.
 
-❯ O51 COLUNA-SAIDA-ANTECIPADA (E4; L-002), entra logo apos a O68, antes da 09 ir ao DP: o cartao PDF e a tela ganham as colunas "Atraso" e "Saida antecipada", separadas do
-  Realizado, lendo o MESMO valor que o fechamento grava para a rubrica 8069 -- nenhuma conta propria no leitor. O topo mostra os dois totais = soma das linhas. RED: col39 24/08
-  (saida antecipada de 300 min, catalogo DESCONTA) aparece na coluna com 5h00, e o topo soma. Dinheiro ZERO -> DEPLOY JA com smoke. Nenhuma lei nova.
+  O51b registrada (colunas Atraso e Saída antecipada lendo o valor da folha, topo = soma das linhas, RED col39 24/08), entrando após a O68 e antes de a 09 ir ao DP.
 
-● Ordem registrada, e fecho este bloco com o commit:
-
-  Registrar O51b e commitar o PAREI
-  ⎿  $ python3 <<'ENDPY'
-     import re
-     f='docs/BACKLOG.md'
-     s=open(f,encoding='utf-8').read()
-     m=re.search(r'^\| O68 .*$', s, re.M)
-     add = ('| O51b | **COLUNA-SAIDA-ANTECIPADA** (E4; L-002; pedido 26/09 23:3x) -- o cartao PDF e a tela ganham as colunas '
-     '**"Atraso"** e **"Saida antecipada"**, SEPARADAS do Rea…
-
-✽ Misting… (14m 16s · ↓ 16.0k tokens)
+✻ Baked for 15m 11s · done 7:00 PM
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
   ⧉  index
 ```
