@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:17:09.**
+**Medido em 26/09/2026 14:22:14.**
 
 | | |
 |---|---|
@@ -49,13 +49,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Escrevendo os três REDs no mesmo estilo, com o par que morde:
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● A luz é HH:MM, não ISO — erro da minha fixture:
-
-  Ran 1 shell command
 
 ● Agora os dois selos. O primeiro tem de parar de contar comentário como consumidor:
 
@@ -76,12 +69,19 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Selo verde na árvore. Agora o segundo selo — motor que pareia pelo tipo gravado:
 
-● Selo do pareamento com o caso que morde
-  ⎿  $ cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py <<'PYEOF'
-     """SELO: motor que decide o papel da batida pelo TIPO GRAVADO = VERMELHO (O60, 26/09).
-     O QUE ELE GUARDA, com o caso que o gerou: em 23/09 o col369 bateu 07:01 E, 13:00 S, 13:59 S, 14:59 …
+  Ran 1 shell command
 
-✶ Concocting… (1h 14m 41s · ↓ 86.7k tokens)
+● Agora o DIFF de três colunas, que é o PRONTO da ordem. Uma corrida por motor, mesmo gravado de base:
+
+  Rodar o DIFF do motor de HEAD · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
+     p='/tmp/claude-1001/pauta/saida/diff3.py'
+     s=open(p).read()
+     s=s.replace(""" out[str(r['colaborador_id'])] = {k: (float(v) if isinstance(v, (int, float)) or hasattr(v, 'is_finite') else v)
+     for k, v in r.items() if k != 'colaborador_id'}""",
+     """ out…
+
+✽ Concocting… (1h 19m 45s · ↓ 92.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
