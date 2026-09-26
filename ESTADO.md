@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 12:10:01.**
+**Medido em 26/09/2026 12:15:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `83bf14e9 [PRE-PUSH-TESTA-O-COMMIT] o comentario que EXECUTOU e matou o push com rc=125` |
+| `HEAD` local | `4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact` |
 | `origin/main` | `b81544bc RELATO: linha do vigia` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -21,11 +21,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4c081b17 [PRE-PUSH-TESTA-O-COMMIT] o symlink que so o HOST via -- e o handoff antes do compact
 83bf14e9 [PRE-PUSH-TESTA-O-COMMIT] o comentario que EXECUTOU e matou o push com rc=125
 dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 5ca588d8 [ESPELHO-VERDADE-E3] duas regressoes MINHAS da v3, curadas na origem -- e a lei L-082 que julga o apply
 7103ae2b [AFIRMA-COM-PROVA] o relato RECUSA publicar "APLICADO" sem prova ao lado -- o RED e meu, de hoje
-1819eaad [ESPELHO-VERDADE-E3] v3: o piso do Art.71 le o JUIZ, por dia -- e o campo LIXO ganha selo com a divida nomeada
 ```
 
 ## `git status --short`
@@ -33,9 +33,6 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
- M bin/arvore_do_push.sh
- M bin/pre-push.sh
- M bin/tests/test_prepush_testa_o_commit.sh
 ?? app/docs/RELATORIOS-PLANO.md
 ?? esteira.pausada
 ```
@@ -43,44 +40,44 @@ dc9dbec6 TICKETS: linha do AFIRMA-COM-PROVA que o pre-push cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Medindo a causa do push32 antes de curar — o symlink de staticfiles é absoluto do host, e o container só monta $ARVORE_PUSH/app:
-
-  Ran 1 shell command
-
-● Causa provada: DANGLING. O symlink de staticfiles resolve só no host; dentro do container /app/staticfiles aponta para um caminho que não existe. A cura do fabricante para a O56
-  consertou a vista do host e não a do container. Gravando o handoff (durável) antes de curar:
-
-  Ran 1 shell command
-
-● Só o pre-push consome a árvore. Curando na origem — o fato "staticfiles vem de fora do archive" passa a morar em um lugar, e o container recebe montagem real em vez de symlink:
-
-  Ran 2 shell commands
-
-● Agora a cura, na origem e num só lugar:
-
-  Ran 1 shell command
-
-● Agora o selo que morde — prova dentro do container, que é quem roda a suíte:
-
-  Ran 2 shell commands
-
 ● Selo verde. Agora a prova que importa: os 5 smokes que barraram o push32, na árvore do commit, com a montagem nova:
 
   Ran 2 shell commands
 
 ● Os 5 smokes: 8 testes OK na árvore do commit. Gravando TICKETS e commitando:
 
-● Ver o bloco SESSOES do TICKETS
-  ⎿  $ sed -n '569,578p' docs/TICKETS.md
+  Searched for 1 pattern, ran 3 shell commands
 
-✢ Misting… (16m 9s · ↓ 14.5k tokens)
+● O placar do topo é ancorado por linha — o bloco tem de ir depois dele:
+
+  Ran 4 shell commands
+
+● Handoff durável em 4c081b17. Agora o push, sem esperar o fork:
+
+  Ran 1 shell command
+
+● Enquanto o push33 roda a suíte sobre o commit, o item (6) do FABRICANTE-DESLIGADO — horas por autoria desde 19/09, pelo git:
+
+  Ran 4 shell commands
+
+● O discriminador honesto existe: até 26/09 a cadeia.sh emitia TICKETS: placar e rodape (<NOME>) logo após cada fatia do fabricante. Medindo por ele:
+
+  Read 1 file, ran 2 shell commands
+
+● Item (4) — os pacotes caídos e o portão congelado, medidos na fonte:
+
+● Medir pacotes caidos e portao
+  ⎿  $ cd /home/ronald/saas-hasner && ls .esteira/ 2>/dev/null | head -20; echo "=== quarentena / caidos ==="; ls .esteira/quarentena 2>/dev/null | wc -l; ls .esteira/*/ -d
+     2>/dev/null | head; echo "=== estado da esteira ==="; cat logs/vigia_esteira.estado 2>/dev/null | head -20
+
+· Misting… (21m 39s · ↓ 28.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Verifying card ficha sections in RELATORIOS-PLANO.md                                                                               26m 45s · ↓ 200.0k tokens
+  ◯ general-purpose  Correcting citations in RELATORIOS-PLANO.md                                                                                        32m 15s · ↓ 220.4k tokens
   ⧉  index
 ```
