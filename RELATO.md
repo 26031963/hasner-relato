@@ -1,6 +1,36 @@
 # RELATO — esteira saas-hasner
 
-## PAREI no `!` da E3: **NADA APLICADO** | 1 divergencia fora do dinheiro | e a SOMBRA mentiu uma vez hoje
+## APLICADO em 09/2026: a E3 completa entrou, e a prova pos-apply e ZERO divergencia
+
+PROVA: conferencia pos-apply de **607 colabs x 27 campos** contra o que o ensaio previu =
+**0 divergencias**; e o ensaio que a previu rodou em prod dentro de `atomic()` com rollback
+conferido em **603/603** linhas. O gravado de antes esta guardado campo a campo em
+`logs/apply_e3_09_antes.json` (603 colabs), e a frase de reversao esta no PENDENTES.
+
+| campo | antes | depois | delta | colabs |
+|---|---:|---:|---:|---:|
+| `horas_intra_indenizada` | 2.247,07 | 2.213,74 | **−33,33 h** | 49 |
+| `horas_trabalhadas` | 69.475,85 | 69.866,10 | **+390,25 h** | 81 |
+| `turnos_abertos` | 770 | 629 | **−141** | 50 (nao sobe em nenhum) |
+| `horas_reflexo_dsr` | 116,45 | 347,60 | +231,15 h | 108 |
+| `horas_extras_50` | 554,63 | 752,10 | +197,47 h | 128 |
+| `horas_folga_trabalhada` | 2.530,72 | 2.362,42 | −168,30 h | 18 |
+| `horas_saida_antecipada` | 1.035,76 | 871,91 | −163,85 h | 17 |
+| `saldo_banco_horas` | −10.004,17 | −9.837,10 | +167,07 h | 35 |
+| `horas_falta` | — | — | **ZERO** | 0 |
+
+Bate com o esperado do aval nos quatro numeros que ele nomeou. **07 e 08 nao foram tocadas.**
+
+Duas exclusoes do criterio, as duas por corte seu e as duas NOMEADAS no codigo da conferencia:
+`previsto_em` (carimbo de quando a conta rodou -- duas corridas nunca o repetem) e o col369
+`inconsistencias` = **10**, o valor de PROD, porque a sombra se provou infiel hoje (O63).
+
+## O que o apply atravessou antes de entrar
+
+Fica registrado porque foi o que evitou gravar numero errado: a **1a** conferencia acusou 8 colabs
+com `horas_folga_trabalhada` = 0 em prod contra ate 134,71 h na sombra, e a causa nao era minha cura
+-- era o ensaio da sombra nao ver `logs/esmeril_espelho.json`.
+## O PAREI que antecedeu o apply (mantido: e a historia da medicao)
 
 Fiz o apply em DOIS passos, e foi por isso que nada quebrou: **ensaio em prod dentro de `atomic()`
 com rollback provado** (603/603 linhas identicas ao inicio) e conferencia campo a campo ANTES da

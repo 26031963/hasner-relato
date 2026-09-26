@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 16:14:08.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (67.7 MB). Acoes na janela: **602**.
+**Medido em 26/09/2026 16:14:59.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (67.7 MB). Acoes na janela: **604**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:14:31 | Bash | Publicar o APLICADO com a prova | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() # o PAREI de cima virou APLICADO: substituo o cabecalho e ponho a prova no topo v='## PAREI no `!` da E3: **NADA APLICADO** \| 1 divergencia fora do dinheiro \| e a SOMBRA mentiu uma vez hoje' L=[];A=L.append A('## APLICADO em 09/2026: a E3 completa entrou, e a prova pos-apply e ZERO divergencia') A('') A('PROVA: conferencia po ...` |
+| 16:14:06 | Bash | Corrigir o tipo e conferir o selo | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' import json p='app/docs/PENDENTES_RONALD.json' d=json.load(open(p,encoding='utf-8')) for it in d: if isinstance(it,dict) and it.get('id')=='e3-completa-09-aplicada': it['tipo']='!' it['o_que']='APLICADO sob o seu `!` de 26/09, espera a sua revisao. ' + it['o_que'].replace('APLICADO em 09/2026 com o seu `!`: a','A',1) print('tipo="!" posto') break  ...` |
 | 16:13:52 | Bash | Ver o vocabulario de decisao | `grep -n "DECISAO\s*=" -A 12 core/fila_pendentes.py \| head -18` |
 | 16:13:47 | Bash | Ler a regra do selo do PENDENTES | `sed -n '1,45p' core/tests/test_selo_pendentes_so_decisao.py` |
 | 16:13:21 | Bash | Conferir o selo do PENDENTES | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=pend bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest python manage.py test core.tests.te ...` |
