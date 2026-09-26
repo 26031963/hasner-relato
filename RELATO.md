@@ -1,6 +1,65 @@
 # RELATO — esteira saas-hasner
 
-PAREI: e3-v3-escopo-sem-col207 | espera Ronald (v3 = +39,41 h; 09 sem o col207 = **+12,29 h em 18**, e nao os +4,04 aprovados)
+EM CURSO: 07 e 08 para Pauta DP | 09 aplicado com prova (+13,29 h gravados, dos quais +12,29 h da cura)
+
+## E3 v3 — apply de 09/2026 feito, com a PROVA medida no gravado
+
+PROVA: `FechamentoMensal` de 09/2026 medido ANTES e DEPOIS na mesma execucao, pela funcao real
+`recalcular_fechamento_mes(9, 2026, colaborador_ids=[18 ids])` -- devolveu **18**, e o gravado moveu
+**+13,29 h** em 18 colaboradores. `col207` conferido intacto: **11,00 h**, nao tocado.
+
+| colab | intra antes | intra depois | delta |
+|---|---|---|---|
+| col82 | 0.83 h | 6.80 h | **+5.97 h** |
+| col709 | 1.72 h | 5.39 h | **+3.67 h** |
+| col152 | 0.00 h | 3.27 h | **+3.27 h** |
+| col87 | 0.00 h | 1.47 h | **+1.47 h** |
+| col911 | 8.00 h | 9.33 h | **+1.33 h** |
+| col638 | 1.00 h | 2.27 h | **+1.27 h** |
+| col107 | 6.00 h | 7.02 h | **+1.02 h** |
+| col945 | 1.00 h | 2.00 h | **+1.00 h** |
+| col829 | 5.00 h | 5.83 h | **+0.83 h** |
+| col878 | 0.30 h | 1.02 h | **+0.72 h** |
+| col712 | 2.00 h | 2.60 h | **+0.60 h** |
+| col406 | 1.00 h | 1.25 h | **+0.25 h** |
+| col42 | 1.00 h | 1.20 h | **+0.20 h** |
+| col493 | 0.00 h | 0.18 h | **+0.18 h** |
+| col256 | 0.00 h | 0.17 h | **+0.17 h** |
+| col868 | 0.18 h | 0.35 h | **+0.17 h** |
+| col749 | 1.00 h | 1.17 h | **+0.17 h** |
+| col840 | 12.00 h | 3.00 h | **-9.00 h** |
+| **total** | | | **+13,29 h** |
+
+### O `!` era +12,29 h e o gravado moveu +13,29 h -- a diferenca tem nome
+
+**+1,00 h inteira no `col709`, e nao e a minha cura: e DERIVA do gravado.** O DIFF compara o motor
+velho com o novo recalculando os DOIS na sombra; o que estava GRAVADO em prod era outra coisa:
+
+| col709 | gravado (velho) | motor velho recalculado | depois do apply |
+|---|---|---|---|
+| intra indenizada | **1,72 h** | **2,72 h** | 5,39 h |
+| horas trabalhadas | 151,67 h | — | **161,39 h** (+9,72) |
+| HE 50% | 2,18 h | — | **3,09 h** (+0,91) |
+
+Medido: **zero batidas** dele registradas depois de 26/09 04:15, entao nao e dado novo -- o
+`FechamentoMensal` dele simplesmente estava **velho**, e o recalculo o trouxe para o presente junto
+com a minha cura. Os **+9,72 h trabalhadas** e os **+0,91 h de HE** dele sao deriva INTEIRA, nao a
+E3: nenhum outro dos 18 mexeu em campo alem da intra.
+
+**A licao, que vale para todo apply por recalculo**: ele nao e cirurgico. `recalcular_fechamento_mes`
+recalcula o colaborador do zero, e leva tudo o que mudou desde a ultima gravacao. Nao existe "aplicar
+so a minha parte" -- e o `diff_fo` da madrugada ja tinha medido isso na frota (centenas de colabs com
+o gravado diferente do que a leitura daria hoje). Entao o numero do `!` (+12,29 h) e o efeito da
+CURA, e o numero do gravado (+13,29 h) e o efeito do ATO. Os dois estao aqui, e nao vou misturar.
+
+### O col840 perdeu 9,00 h, e esta certo
+
+Ele e o unico dos 18 que desce, e desce pela lei: previsto do juiz **345 min** (5,75 h), e o Art.71
+pede **15 min** de intervalo nessa faixa -- o 60 cravado vinha indenizando um minimo que a lei nao
+exige. Os marcos (345), o previsto (345) e o medido (347) concordam, e e isso que separa ele do
+col207, cujo cadastro declara 240 e a pessoa faz 337.
+
+
 
 ## DIFF v3 (piso pelo JUIZ) — e ele **volta ao numero do seu primeiro `!`**
 
