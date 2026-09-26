@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:59:43.**
+**Medido em 26/09/2026 10:00:45.**
 
 | | |
 |---|---|
@@ -33,10 +33,6 @@ bc927e6a TICKETS: placar e rodape (lote de 1 fatia(s))
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  rodape"); status deles vai so para o ESTADO.md.
-  (3) O57: git commit -- <paths> em todo sitio; pre-commit recusa arquivo fora da lista; selo MORDE com indice de outra sessao; nomeia quem reverteu JUIZES['batida'].
-  (4) 28 caidos + 17 portao congelados, zero relance; 4 verdes listados no RELATO, entram por esta sessao so se forem do estrutural.
-  (5) tela 138 e portas 149 voltam a ser desta sessao: fatia por PERGUNTA (um juiz cobre N sitios), ordem do BACKLOG, atras do ESPELHO-VERDADE.
   (6) leitura: horas por autoria desde 19/09 pelo git (bin/ + esteira x app/; sessao x fabricante x integrador), tabela no RELATO.
   (7) lei nova so nasce com frase "corte Ronald" no CORTES.md; sem frase e proposta no PENDENTES, nunca regra no CLAUDE.md.
   PROIBIDO: religar o fabricante sem corte; relancar caido; fallback; atalho.
@@ -61,11 +57,15 @@ bc927e6a TICKETS: placar e rodape (lote de 1 fatia(s))
 
 ● Cura (a) provada: o commit tem só os caminhos que eu nomeei. Publicando o gate e desligando o fabricante:
 
-● Publicar e achar o timer do fabricante · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -2; echo "=== timers da esteira ==="; systemctl list-timers --all 2>/dev/null | grep -iE
-     "fabric|esteira|integra|hasner" | head -6; echo "=== servicos ==="; systemctl list-units --type=service --all 2>/dev/null | grep -iE "fabric|estei…
+  Ran 2 shell commands
 
-· Transmogrifying… (1h 2m 5s · ↓ 66.1k tokens)
+● bin/esteira_slots.sh é o motor (rodando há 3 dias). Vendo o que desligar, e o que o esteira.pausada já alcança:
+
+  Estado do servico do fabricante
+  ⎿  $ cd /home/ronald/saas-hasner && systemctl list-units --all 2>/dev/null | grep -i hasner | head -6; echo "--- status:"; systemctl is-enabled hasner-fabricante.timer
+     hasner-fabricante.service 2>&1 | head -3; systemctl is-active hasner-fabricante.timer 2>&1; echo "--- o .service/.timer do fabricante:…
+
+· Transmogrifying… (1h 3m 7s · ↓ 67.7k tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
