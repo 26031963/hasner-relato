@@ -12,6 +12,50 @@
 | **fork FASE 2** | EM CURSO, so leitura, unica escrita `app/docs/RELATORIOS-PLANO.md`. A sessao **nao espera** por ele; quando entregar, commitar com pathspec |
 | **fabricante** | **DESLIGADO** por Ronald (timer `disabled`), com condicao de saida "criterio do estrutural fechado + corte Ronald" |
 
+### CORRECAO do meu proprio censo no commit 9b033fa2 — e o que a cura virou
+
+Eu escrevi, na linha LEI-AKITA daquele commit, `quem-mais-le=so o crontab chamava o alarme antigo`.
+**Era falso, e o meu proprio grep, minutos antes, tinha listado quatro arquivos.** Nao abri tres
+deles. Um era `bin/placar_code.sh:290`, que executava `alarme_sem_fatia.sh` e imprimia
+`minutos_sem_fatia_fabricada` **no PLACAR** -- ou seja: com a fabrica desligada, o contador que eu
+acabara de tirar do cron por "cresceria para sempre" continuava crescendo para sempre na tela, pelo
+outro leitor. Meia-correcao com nome de cura, no mesmo turno em que curei outra igual no staticfiles.
+
+Curado, e o censo deixou de depender da minha memoria:
+
+- `placar_code.sh:290` passa a chamar `alarme_sessao_ociosa.py` e a imprimir `minutos_sessao_ociosa`.
+- `noites_sem_fatia` (`placar_code.sh:459`), o OUTRO contador de fabrica, nao foi apagado: ficou
+  **rotulado "SEM EFEITO desde 26/09"** com o motivo, porque noite sem fatia da fabrica desligada e
+  o esperado, nao o alarme. Parametro consumido ou rotulado sem efeito -- nunca calado.
+- O selo ganhou a lista que **so encolhe**: qualquer arquivo de `bin/` que volte a EXECUTAR o alarme
+  da fabrica fica VERMELHO. Provado que morde: recoloquei a linha real no placar e o selo acusou
+  `placar_code.sh:296`; tirei, e voltou a OK.
+
+Duas tentativas desse ramo do selo falharam antes de prender, e as duas falhas sao a mesma doenca:
+a 1a **nao mordia** (o padrao exigia o nome do arquivo logo apos `bash`, e a forma real tem
+`$(dirname ...)` com espaco no meio -- provei num /tmp com a linha literal); a 2a **acusou prosa**,
+a docstring do meu proprio modulo, que nao comeca com `#`. Agora a pergunta e quem **executa**, nao
+quem cita. Foi a quinta vez neste turno que meu texto trombou com meu selo.
+
+E o rotulo do `test_publicacao_sem_nome` dizia "7 documentos publicos" contando 8, no minuto
+seguinte a entrada do plano: passou a contar a propria lista (e a 1a versao dessa conta imprimiu 0,
+mentindo para o outro lado).
+
+DIVERGENCIA QUE FICA ABERTA, nomeada em vez de escondida: a linha `*/20` do alarme vive no
+**crontab do host** e nao tem fonte declarada em `config/crons.py` nem em `bin/crons.sh` -- grep
+vazio nos dois. Entao a minha troca de cron e, ela mesma, uma instancia nova do pendente
+`cron-host-diverge-do-codigo`, e esta anotada la. Se um dia `bin/crons.sh install` rodar, ele nao
+sabe desta linha. PROVA: `grep -rn alarme_sem_fatia bin/crons.sh app/config/crons.py` = 0 linhas;
+backup do crontab anterior em `logs/crontab_antes_alarme_sessao.bak`.
+
+### RELATO-PUBLICA-O-PLANO — pedido de 12:4x, feito no mesmo turno
+
+`bin/relato.sh` publica `app/docs/RELATORIOS-PLANO.md` junto dos outros. Entrou na **mesma chamada**
+do `raspar_publico.py` -- de proposito: assim herda a mascara de nome/CPF em vez de nascer um segundo
+caminho de publicacao --, nas duas listas de commit do repo publico, no `afirma_com_prova` e na lista
+do selo sem-nome. RED evidenciado: o selo acusando `RELATORIOS-PLANO.md AUSENTE_DO_REPO_PUBLICO`.
+PROVA: publicado em `c209287`, `raspar_publico: 167 substituicoes, 0 vazamento`, e o selo agora diz
+**8 documentos publicos, 0 nome, 0 CPF**.
 ### CENSO-RELATORIOS — fases 1 e 2 entregues (fork so leitura, 476 linhas em RELATORIOS-PLANO.md)
 
 O plano inteiro (A inventario · B ficha por card · C cortes aplicados · D mapa) esta em
