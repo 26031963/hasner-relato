@@ -1,5 +1,63 @@
 # RELATO — esteira saas-hasner
 
+## CENSO (so leitura): **67 de 603** FechamentoMensal de 09/2026 estao VELHOS
+
+PROVA: medido na SOMBRA (banco lateral, gravado = copia do prod das 04:00), dentro de `atomic()` com
+`raise` no fim -- **rollback confirmado na saida, nada persistido nem na sombra**. Compara o GRAVADO
+contra o que `recalcular_fechamento_mes` daria com o motor de HEAD, nos **26 campos derivados**.
+
+| | |
+|---|---|
+| FM gravados em 09/2026 | **603** |
+| com ALGUM campo velho | **67 (11,1%)** |
+| soma da diferenca em `horas_intra_indenizada` | +11,04 h |
+
+| campo | colabs com ele velho |
+|---|---|
+| `causa_espelho` | 33 |
+| `horas_intra_indenizada` | 31 |
+| `minutos_realizados` | 26 |
+| `horas_trabalhadas` | 25 |
+| `inconsistencias` | 23 |
+| `motivos_espelho` | 17 |
+| `turnos_abertos` | 17 |
+| `horas_noturnas` | 13 |
+| `minutos_previstos` | 12 |
+| `dias_previstos` | 12 |
+| `semanas_dsr_ok` | 11 |
+| `semanas_dsr_perdido` | 10 |
+
+**RESSALVA HONESTA DE QUAL BANCO FOI MEDIDO**: a sombra tem o gravado das **04:00**, anterior ao meu
+apply das 11:2x. Entao os **18** que eu ja reconciliei em prod contam como velhos aqui pelo campo
+`horas_intra_indenizada` -- em prod agora o numero e **~49**, e a intra velha cai de 31 para ~13. Nao
+vou refinar isso medindo em prod, porque a medicao exige recalculo e recalculo em prod E ESCRITA: o
+numero honesto e o da sombra, com a ressalva dita.
+
+### Os 10 com mais campos velhos
+
+| colab | campos velhos | os primeiros |
+|---|---|---|
+| col899 | **17** | trabalhadas, extras, extras_50, extras_100, folga_trabalhada, intra |
+| col824 | **12** | trabalhadas, noturnas, folga_trabalhada, atraso, saida_antecipada, intra |
+| col249 | **11** | trabalhadas, noturnas, extras, extras_50, intra, turnos_abertos |
+| col334 | **11** | trabalhadas, noturnas, folga_trabalhada, intra, turnos_abertos, previstos |
+| col857 | **11** | trabalhadas, noturnas, extras, extras_50, extras_50_noturna, extras_100 |
+| col206 | **10** | trabalhadas, folga_trabalhada, turnos_abertos, previstos, realizados |
+| col444 | **10** | trabalhadas, extras, extras_50, extras_100, turnos_abertos, realizados |
+| col709 | **10** | trabalhadas, extras, extras_50, intra, turnos_abertos, realizados |
+| col76 | **9** | trabalhadas, noturnas, intra, previstos, realizados, dias_previstos |
+| col369 | **9** | folga_trabalhada, turnos_abertos, previstos, realizados, dias_previstos |
+
+O **col899** lidera com 17 campos, e faz sentido: e o vinculo `ec1310` que eu restaurei ontem no
+saneamento -- mexer no vinculo muda o previsto e o gravado nao foi refeito. O **col709** aparece aqui
+com 10, os mesmos 10 que o apply de hoje reconciliou: ele nao era excecao, era **um caso da fila**.
+
+**O que este numero significa**: 11% dos fechamentos de 09 nao refletem o que a leitura daria hoje. O
+apply de qualquer fatia de dinheiro em 09 vai arrastar essa deriva junto, colab por colab -- e e
+exatamente por isso que a L-082 exige medir a condicao (b) **contra o gravado**, e nao motor x motor.
+Nao ha fatia aqui: e censo, e nada muda sem o seu `!`.
+
+
 PAREI: e3-deriva-no-apply | espera Ronald (aplicado; a lei nova daria PAREI -- 10 campos fora do alvo em 2 colabs, total +13,29 contra +12,29)
 
 ## E3 v3 — PROVA COMPLETA do apply: 26 campos, os 18 colabs, e a deriva nomeada
