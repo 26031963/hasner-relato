@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 19:28:10.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.7 MB). Acoes na janela: **763**.
+**Medido em 26/09/2026 19:31:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.8 MB). Acoes na janela: **764**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:28:07 | Bash | Registrar o medir antes e commitar | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25') A('') A('### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda') A('') A('A coluna do cartao soma **todos** os periodos; no fechamento a **folga trabalhada e campo separado**') A('(`horas_folg ...` |
 | 19:27:19 | Bash | Medir a intersecao com o indice certo | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from colaboradores.services.vinculo import vigencias_impossiveis imp = vigencias_impossiveis() ids = {t[1] for t in imp} print('vigencias impossiveis: %d registro(s) em %d colaborador(es)' % (len(imp), len(ids))) alvo = [924, 391, 43, 942] print('os 4 de ZERO vinculo:') for cid i ...` |
 | 19:27:08 | Bash | Ler o contrato do censo | `cd /home/ronald/saas-hasner && grep -n "def vigencias_impossiveis" -A 16 app/colaboradores/services/vinculo.py \| head -20` |
 | 19:26:58 | Bash | Ver a forma real do censo de vigencias | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from colaboradores.services.vinculo import vigencias_impossiveis imp = vigencias_impossiveis() print('tipo:', type(imp).__name__, '\| len:', len(imp)) x = imp[0] if imp else None print('1o registro tipo:', type(x).__name__) print(' chaves/atributos:', sorted(x.keys())[:12] if isi ...` |

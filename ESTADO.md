@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:28:10.**
+**Medido em 26/09/2026 19:31:01.**
 
 | | |
 |---|---|
@@ -39,44 +39,44 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  SELO: leitor de dinheiro ou de espelho que escolhe vinculo sem perguntar a celula = vermelho. Nenhuma lei nova.
 
-● Ordem registrada. Fazendo o "MEDIR ANTES" que ela exige — os 4 de zero vínculo contra os 53 da E1:
+  (1) O dinheiro são nove, somando 334h20:
 
-  Ran 1 shell command
+  ┌─────────────────────────┬───────────────────────┬────────┬────────┬──────────────────────────┐
+  │          colab          │       diferença       │  topo  │ coluna │          causa           │
+  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
+  │ col924                  │ 132h40                │ 0h00   │ 132h40 │ zero vínculo na janela   │
+  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
+  │ col866                  │ 84h03                 │ 239h57 │ 155h54 │ vínculo sobreposto       │
+  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
+  │ col391 · col43 · col942 │ 31h57 · 29h20 · 28h09 │ 0h00   │ —      │ zero vínculo na janela   │
+  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
+  │ col935 · col648         │ 11h02 · 1h29          │ —      │ —      │ troca de vínculo no meio │
+  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
+  │ col400 · col245         │ 8h38 · 7h01           │ —      │ —      │ sem causa dessas         │
+  └─────────────────────────┴───────────────────────┴────────┴────────┴──────────────────────────┘
 
-● 53 registros mas 1 colaborador é suspeito — pode ser a minha extração falhando. Conferindo a forma antes de afirmar:
+  Os outros 16 (867h35) estão retidos — não foram pagos.
 
-  Ran 1 shell command
+  (2) Sua hipótese, confirmada na assinatura que você previu: dos 9 com gravado maior que o espelho, 5 têm vínculo sobreposto — col277, col899, col866, col107, col736. Mais 8 com
+  troca de vínculo no meio.
 
-● Eram tuplas, não dicts — minha extração devolveu None em todas e a resposta "não" não valia. Lendo a forma certa:
+  (3) O MEDIR ANTES: os 4 de zero vínculo não estão no passivo da E1 (53 registros em 51 colaboradores) — interseção vazia, raiz própria. Mas col277, col736 e col866 estão, e são
+  três dos cinco sobrepostos: vigência impossível e sobreposição andam juntas neles, e a restauração vai pelo propositor com seu !, como você previu.
 
-  Ran 1 shell command
+  E eu quase respondi errado aqui: a primeira leitura do censo deu "53 registros em 1 colaborador" porque vigencias_impossiveis devolve tuplas (pk, colaborador_id, ini, fim,
+  ativa) e eu extraí com .get('colaborador_id') — None em todas, colapsando o conjunto. O "não" só passou a valer depois de eu ler o contrato da função.
 
-● A forma é (pk, colaborador_id, data_inicio, data_fim, ativa) — o colaborador_id é o segundo. Medindo certo:
+  A O69 está registrada com a raiz nomeada: enquanto o fechamento exigir vínculo ativo e o espelho pegar o último, as duas pontas (o zero e o dobrado) são produzidas por
+  construção. O juiz único que você definiu — CelulaDia.escala_geradora — resolve as duas de uma vez.
 
-  Ran 1 shell command
+  Nada tocado em dinheiro. O próximo passo dela é o DIFF na sombra com os 25 e a lista dos 9, que é o que vai ao seu !.
 
-● Agora a resposta vale, e ela tem um achado a mais:
-
-● Registrar o medir antes e commitar · 2s
-  ⎿  $ python3 <<'ENDPY'
-     f='docs/RELATO.md'
-     s=open(f,encoding='utf-8').read()
-     cab='# RELATO — esteira saas-hasner\n'
-     L=[];A=L.append
-     A('')
-     A('## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25')
-     A('')
-     A('### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda')
-     A('')
-     A('A coluna do car…
-
-✽ Spinning… (1m 53s · ↓ 5.6k tokens)
+✻ Baked for 2m 46s · done 7:29 PM
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ roda o DIFF na sombra dos 25 com a lista dos 9
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
   ⧉  index
 ```
