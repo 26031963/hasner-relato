@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:39:33.**
+**Medido em 26/09/2026 09:45:01.**
 
 | | |
 |---|---|
@@ -31,22 +31,6 @@ b81544bc RELATO: linha do vigia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  é ignorado em silêncio. Medindo se há trabalho invisível:
-
-  Ran 1 shell command
-
-● Zero arquivo invisível hoje — mas a armadilha está viva: esse padrão está num bloco de diretórios de rascunho (.fatias_construidas/, red_fora_da_arvore/) e o relatorios/ da raiz
-  não existe; ele só alcança a app do cartão-PDF. Curo na hora (LEI-AKITA 6), ancorando:
-
-  Ran 1 shell command
-
-● Curado e provado: arquivo novo em app/relatorios/ agora é visível, e nada de lixo apareceu. Commitando e lançando o DIFF da metade:
-
-  Ran 2 shell commands
-
-● O DIFF está rodando (~15 min, dois recálculos de 3 competências). Enquanto isso, o item (5) — SESSAO.md. Vendo o que o relato.sh já faz para entrar pela mesma raspagem:
-
-  Ran 1 shell command
 
 ● O transcript tem 60 MB e contém nome real em comando meu (nome__icontains='[nome]') — a raspagem é obrigatória. Vendo a estrutura antes de escrever:
 
@@ -61,14 +45,30 @@ b81544bc RELATO: linha do vigia
 
   Ran 1 shell command
 
+● Correção importante de leitura minha: o relógio real é 09:38 BRT — o turno atravessou ~6,5 h de suítes e dumps. Então o reload das 03:30 já aconteceu, e o refazer da sombra das
+  04:15 também. Medindo o que isso significa:
+
+  Ran 1 shell command
+
+❯ aval Ronald: O57 COMMIT-CARREGA-O-INDICE e cura, nao desenho: (a) todo commit da casa vira git commit -- <paths>; (b) pre-commit RECUSA commit com arquivo fora da lista
+  declarada; (c) mede e nomeia QUEM reverteu JUIZES['batida'] na arvore (processo, hora, sessao); (d) fecha o achado app/relatorios no .gitignore contra a porta da E0. Entra logo
+  depois do DIFF da metade da E3. Nenhuma lei nova (L-002 um escritor na arvore).
+
 ●
 
-✢ Transmogrifying… (41m 54s · ↓ 40.6k tokens)
+· Transmogrifying… (47m 23s · ↓ 41.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ corte Ronald (lei nova, CLAUDE.md): bug PROVADO com mais de uma cura candidata nao espera o Ronald; aplica a cura mais restritiva (ou as duas, se nao conflitam), registra no
+  RELATO o porque e segue. So espera o Ronald se a cura cai na lista NUNCA PRE-APROVADO (L-009).
+
+❯ aval Ronald: pausa o fabricante com trilha (bin/pausar.sh) enquanto voce escreve na arvore; religa so depois da cura da O57 (git commit -- <paths> + pre-commit que recusa
+  arquivo fora da lista) provada no RELATO. Nenhuma lei nova (L-002, L-008).
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
