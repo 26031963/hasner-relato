@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:39:01.**
+**Medido em 26/09/2026 18:40:09.**
 
 | | |
 |---|---|
-| `HEAD` local | `6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo` |
+| `HEAD` local | `e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no TXT, dos quais 9 com ajuste` |
 | `origin/main` | `af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,39 +22,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no TXT, dos quais 9 com ajuste
 6cf370e6 [PDF-X-ESPELHO-MEDIDOR] 09/2026 LIBERADA -- e o medidor que faltava agora existe em codigo
 3046eef0 [BECO-FIO-FECHADO-CELULA-ABERTA] O66 medida: celula_furo_sem_canal = 68, e nenhum fechador consulta a celula
 af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada -- pdf_x_espelho nao tem medidor
 f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
-59383af3 [O65-GEOMETRIA-LE-A-ATA] smoke pos-deploy: geometria, PDF e rotulo da tela concordando
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Agora o item (6), que tem a regra mais clara — topo do cartão contra a soma da coluna, na frota:
-
-  Ran 1 shell command
-
-❯ 09 LIBERADA fica CONDICIONAL: liberada prova coerencia, nao certeza (o cartao do [nome] tem 11/09 e 12/09 errados em dinheiro com pdf_x_espelho = 0). Antes de declarar para o DP,
-  mede na frota de 09, so leitura: (1) dias com batida de tipo trocado nao corrigida, (7) dia seguinte inflado com horas do dia anterior, (6) topo do cartao x soma das linhas.
-  Entrega: lista dos colabs afetados, com as horas de cada um. A 09 sai para o DP como "203 no TXT, dos quais N com ajuste listado", ou PAREI se N for grande. Nenhuma lei nova.
-
-● O item (6) mediu 169 de 202 em trabalhadas — mas as diferenças são de 7-9 min em ~30 dias, cara de arredondamento por período, não de fonte. E sua ordem nova está certa:
-  liberada prova coerência, não certeza. Corrigindo a declaração primeiro:
-
   Ran 1 shell command
 
 ● Agora as duas medições que faltam. Item (1) — tipo trocado não corrigido, com o motivo da recusa:
@@ -75,7 +59,20 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
   DEPLOY JA com smoke.
   Depois: 09 para o DP com a lista de ajuste. Nenhuma lei nova.
 
-✢ Tinkering… (5m 50s · ↓ 10.3k tokens · still thinking)
+● Item (7): 1 colab, 1 dia, 1 minuto — não é problema de frota. Registrando a ordem nova e entregando as três medições com a lista:
+
+  Entregar as tres medicoes e commitar · 3s
+  ⎿  $ python3 <<'ENDPY'
+     f='docs/RELATO.md'
+     s=open(f,encoding='utf-8').read()
+     cab='# RELATO — esteira saas-hasner\n'
+     L=[];A=L.append
+     A('')
+     A('## 09 antes do DP: as TRES medicoes de frota, com a lista e as horas')
+     A('')
+     A('Universo das tres: os **202-203 colaboradores que ENTRAM no TXT de 09** pelo juiz'…
+
+✢ Tinkering… (6m 58s · ↓ 14.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

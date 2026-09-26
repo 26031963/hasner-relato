@@ -1,5 +1,68 @@
 # RELATO — esteira saas-hasner
 
+## 09 antes do DP: as TRES medicoes de frota, com a lista e as horas
+
+Universo das tres: os **202-203 colaboradores que ENTRAM no TXT de 09** pelo juiz
+`classificar_export`. So leitura.
+
+### Item (1) — batida de tipo trocado que o juiz NAO corrigiu
+
+| motivo da recusa | dias |
+|---|---:|
+| ata **nao explica o dia** (batida sem marco: orfa) | 11 |
+| dia **EM ABERTO** (falta marco com batida) | 4 |
+| — corrigidos pelo juiz (nao entram na lista) | 8 |
+
+**9 colaboradores, 15 dias**, e cada um com o motivo nomeado:
+
+```
+col189   4 dias  10/09, 12/09, 14/09, 16/09   (orfa)
+col60    2 dias  01/09, 07/09                 (em aberto)
+col227   2 dias  22/08, 24/08                 (orfa)
+col843   2 dias  22/08, 24/08                 (orfa)
+col306   1 dia   01/09                        (orfa)
+col390   1 dia   09/09                        (em aberto)
+col100   1 dia   04/09                        (orfa)
+col499   1 dia   15/09                        (em aberto)
+col142   1 dia   17/09                        (orfa)
+```
+
+### Item (7) — dia seguinte inflado com horas do dia anterior
+
+**Nao e problema de frota: 1 colaborador, 1 dia, 1 minuto** (col454, a linha de 01/09 recebe uma
+entrada de 02/09). Medi pela pergunta direta -- numa linha do dia D, ha periodo cuja ENTRADA local cai
+em outro dia? A resposta na frota e praticamente nao. Entao o que o [nome] mostra em 12/09 **nao e esta
+classe** e segue em aberto: pela sua ordem (a), a hipotese viva e o plantao que cruza a meia-noite nao
+ser explicado pela ata, caindo no pareamento por tipo.
+
+### Item (6) — topo do cartao x soma da coluna
+
+| campo | colabs com topo != soma |
+|---|---:|
+| `Trabalhadas` | **169** de 202 |
+| `Noturno` | **58** de 202 |
+
+**Mas a natureza e outra, e isso muda a decisao**: as diferencas sao de **7 a 9 minutos em ~30 dias**
+-- col226 167h49 contra 167h41, col418 163h41 contra 163h35, col196 164h37 contra 164h30. Isso nao e
+"duas fontes contando historias diferentes": e **arredondamento por periodo**. O topo acumula
+`p.horas_trabalhadas` (hora em float, arredondada em cada periodo) e a coluna soma
+`minutos_trabalhados` (inteiro). Somar hora arredondada 60 vezes acumula o erro.
+
+A sua regra resolve sem ambiguidade -- **topo = soma das linhas** --, e a cura e de uma linha: o topo
+passa a somar os MESMOS minutos e converter UMA vez. Nao e o mesmo defeito do 11/09 do [nome], que e
+dinheiro de verdade; sao duas classes e vou tratar como duas.
+
+### O que isso da como resposta para o DP
+
+**203 no TXT, dos quais 9 com ajuste listado** (item 1, dinheiro real, dias e motivo acima).
+Os 169 do item (6) nao mudam o TXT: mudam o CABECALHO que o DP le no PDF, por arredondamento -- e a
+cura entra junto. O item (7) nao entra: e 1 minuto em 1 colab.
+
+**N = 9 nao e grande**, e por isso nao chamo PAREI aqui -- mas a 09 segue **CONDICIONAL** ate o seu
+corte (a)+(b)+(c) rodar, porque e ele que decide o que acontece com os 15 dias que hoje o plano B
+paga em silencio.
+
+
 ## 09/2026 LIBERADA **CONDICIONAL** -- coerencia provada, certeza NAO (corte Ronald 26/09 22:4x)
 
 A palavra certa e sua: **liberada prova COERENCIA, nao CERTEZA.** O cartao do [nome] tem 11/09 e 12/09
