@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 00:48:01.**
+**Medido em 26/09/2026 00:53:31.**
 
 | | |
 |---|---|
@@ -37,41 +37,41 @@ a6705443 [FASE-CONFLITANTE] o contador que ACUSA a contrafase entre foto e ancor
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● BUG-B: o bug era a frase, não a guarda — e o seu aval dos 8 dias precisa ser revisto.
 
-  Medido: col624 e col857 têm holerite publicado da competência 08/2026, e a comp 08 da emp4 vai de 21/07 a 20/08. Os 8 dias barrados (ec1008 21/07, ec1087 14–20/08) caem
-  exatamente nessa janela. A guarda já olhava as duas autoridades desde o BUG 85 (seu corte de 08/09: "o TXT não é a única forma de lavrar; para quem tem holerite publicado,
-  aquele período já virou papel na mão dele").
-
-  Então não há off-by-one, e eu reporto o meu erro sem rodeio: li a frase "competência já exportada no TXT do Dominio" ao pé da letra, conferi contra ExportacaoDominio, não achei
-  a exportação e diagnostiquei um bug inexistente — duas vezes, no RELATO e para você. Foi texto lido como fato, e a frase é que estava errada.
-
-  A cura é a frase: fonte_da_lavra() nomeia a autoridade (exportacao (TXT do Dominio) · holerite PUBLICADO deste colaborador · ambas), e o barrados passa a dizer "competência
-  LAVRADA por …". A distinção muda a decisão: exportação se reabre por ato com trilha (apesar_da_lavra), holerite publicado é papel na mão do colaborador. O selo prende os dois
-  lados e proíbe a frase fixa voltar.
-
-  E aqui eu paro, com o número, pela L-009: o seu aval era "regenerar pela porta só os 8 dias da emp4 depois do BUG-B curado e com selo verde". O BUG-B está curado, mas a premissa
-  dele caiu — aqueles 8 dias não estão presos por guarda errada, estão lavrados por holerite publicado de 08/2026 de dois colaboradores. Regenerá-los seria reescrever célula de
-  período que já virou holerite na mão de col624 e col857, contra a L-052 e contra o seu próprio corte do BUG 85. Não regenerei.
-
-  Se você ainda quiser, o caminho existe e é explícito: regenerar_celulas_vinculo(..., apesar_da_lavra="<sua frase>") abre a guarda por ato, com trilha — e é o mesmo mecanismo do
-  caso [nome] de 08/09, onde o holerite tinha sido publicado sem a folha ter sido gerada. Mas isso é ! novo, com a frase, e não o aval que você deu.
-
-  Sigo para BUG-C (a lista não vê vigência impossível) assim que o selo confirmar.
-
-✻ Churned for 9m 58s · done 12:45 AM · 9 shells still running
-
-● Background command "O selo do BUG-B" completed (exit code 0)
+● O selo é meu, e a frase que ele condena está no meu próprio comentário de 26/09 (linha 231) — prosa, não texto servido. inspect.getsource não distingue comentário de literal.
+  Vou tornar a asserção precisa: varrer os literais de string por AST, que é o que a porta realmente emite.
 
   Ran 1 shell command
 
-● O selo estrutural pegou a frase ainda viva em algum lugar do módulo. Achando onde:
+● Duas correções, não uma: a descrição do evento_kw (linha 221) também afirma "ja exportada". E _fonte_barr é derivado depois dela — dois leitores, uma autoridade: computo uma
+  vez, antes, e os dois leem.
 
-  Onde a frase sobreviveu
+  Searched for 3 patterns, ran 4 shell commands
 
-✢ Compacting conversation… (2m 27s · ↓ 626 tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
-                                                                                                                                                            0% until auto-compact
+● Agora a autoridade sai de uma derivação que os dois leitores consultam — a descrição da trilha e o texto de barrados:
+
+  Ran 2 shell commands
+
+● O meu bloco caiu no meio do comentário da cobrança órfã, separando-o do seu código. Reordeno:
+
+  Ran 1 shell command
+
+● Agora o selo: a asserção estrutural passa a varrer literais de string por AST (prosa de comentário não é o que a porta emite), e passa a cobrir os dois leitores:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O count == 5 é frágil — prende o número de linhas, não a lei. Troco pela lei de fato: uma derivação, e os dois textos emitidos nomeiam a autoridade.
+
+  Ran 2 shell commands
+
+● Push em curso (é ele que ocupa a fila). Vendo onde está antes de disputar o banco:
+
+  Ran 1 shell command
+
+●
+
+✢ Quantumizing… (7m 57s · ↓ 13.1k tokens · thought for 7s)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
