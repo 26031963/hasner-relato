@@ -7,6 +7,19 @@
 tres rotas provadas (`/health/` do core 200, `/colaboradores/` do ui 302, `/health/` da mensageria
 200), selo BUG 128 verde e `importerror_500=0`. Migrations pendentes no schema do cliente: **0**.
 
+### A prontidao do export de 09 DEPOIS do apply (leitura, pelo juiz `classificar_export`)
+
+| empresa | entram no TXT | retidos | maior motivo |
+|---|---:|---:|---|
+| emp2 | 136 | 323 | `furo_espelho` 271 · `rescisao_modulo_proprio` 48 |
+| emp3 | 54 | 69 | `furo_espelho` 58 · `rescisao_modulo_proprio` 10 |
+| emp4 | 12 | 10 | `furo_espelho` 8 |
+| **total** | **202** | **402** | `furo_espelho` **337** |
+
+Digo o que medi e nao o que gostaria: este e o numero de AGORA. **Nao medi o de antes do apply**, e
+por isso nao afirmo delta -- o apply fechou 141 turnos abertos, o que deveria reduzir retencao por
+`furo_espelho`, mas "deveria" nao e medicao. O que fica dito e o gate: **337 dos 402 retidos sao
+`furo_espelho`**, e e' ele que o DP encontra quando tenta exportar 09.
 ### O smoke que o corte pediu
 
 | fonte | col736 11/09 | col369 23/09 |
