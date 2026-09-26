@@ -39,6 +39,24 @@ e a batida vem **aware em UTC**; eu comparei chave naive com busca aware e nenhu
 seguia com dois turnos abertos como se nada tivesse mudado. **Chave que nunca casa e pior que cura
 ausente, porque parece aplicada.**
 
+### O preco, e por que eu o declarei em vez de esconder
+
+Ler a ata custa query, e os dois selos de performance da casa cobraram na hora:
+
+| rota | antes | agora | o que a query compra |
+|---|---:|---:|---|
+| `registrar_batida (sem pergunta)` | teto 22, medido **24** | teto **23**, medido 23 | uma das duas saiu: passei as batidas que o chamador JA tinha carregado |
+| `colaboradores/N/calendario` | teto 25, medido **27** | teto **27** | duas, porque a tela pergunta a DOIS leitores de turno (`turnos_do_colab` e `_turno_aberto_calc`), e cada um le a ata da sua janela |
+
+O selo permite subir teto **com justificativa escrita ao lado do numero (C8)**, e e o que fiz --
+nomeando o que a query compra: o rotulo do dia parar de dizer "aberto" onde a folha e o PDF dizem
+420 min, e 62 turnos abertos saindo da conta da frota. **Tentei nao pagar** no calendario:
+`turnos_do_colab` passou a aceitar `celulas=` e a tela ja carrega a janela, mas o mapa (`_cels_mes`)
+nasce DEPOIS do laco no fluxo atual -- mover a carga para cima e refatoracao de ordem, nao desta
+fatia. Fica como divida com endereco, no proprio selo.
+
+Na batida de chao -- o caminho mais quente da casa -- eu **eliminei** uma das duas em vez de
+declarar as duas: as batidas ja estavam na mao do chamador.
 ### Como a cura entrou, e o que ela NAO fez
 
 `parear_turnos` **segue puro, sem DB**: ele recebe `papel_por_minuto` como ALIMENTACAO e, quando ela

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:45:32.**
+**Medido em 26/09/2026 17:50:45.**
 
 | | |
 |---|---|
@@ -47,44 +47,44 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │               leitor               │                                       o que muda                                       │
+  ├────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ dinheiro                           │ ZERO — nenhum dos 27 campos de nenhum dos 607 colabs se move, rollback provado 607/607 │
+  ├────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ turnos abertos                     │ 806 → 744: 62 morrem, nenhum nasce; colabs com turno aberto 219 → 208                  │
+  ├────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ chamados/perguntas de turno aberto │ os mesmos 62 deixam de nascer                                                          │
+  ├────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+  │ rótulos                            │ universo alcançado: 118 dias com tipo divergente do marco, em 77 colabs                │
+  └────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
-● A suíte segue rodando (12 min) e apareceu um AttributeError de fixture falsa sem ata — engolido pelo meu except, mas ruidoso. Esperando o veredito:
+  Dinheiro zero era a sua condição para aplicar sem nova parada.
 
-  Ran 1 shell command
+  Dois erros meus no caminho, os dois pegos por medição:
 
-● Background command "Suite completa da O65" completed (exit code 0)
+  A primeira versão media 806 → 845 — os turnos abertos subiam 39 ao mesmo tempo que 11 colabs saíam da lista. Ata parcial relabela umas batidas e não outras, e isso quebra pares
+  que estavam de pé. Curei com a mesma guarda do motor: a ata só dá o papel do dia quando explica o dia inteiro.
 
-● Duas falhas, as duas consequência da O65 — e teto não se levanta. Medindo:
+  E antes disso a cura ficou muda: a ata entrega instante_luz naive local, a batida vem aware em UTC, e eu comparei chave naive com busca aware — nenhuma casou. O col736 seguia
+  com dois turnos abertos como se nada tivesse mudado. Chave que nunca casa é pior que cura ausente, porque parece aplicada.
 
-  Ran 2 shell commands
+  parear_turnos segue puro — recebe o papel como alimentação; quem lê a célula é o chamador, e o leitor é o mesmo juiz do motor. Nenhum juiz novo nasceu. O selo da E3 se estendeu:
+  chamador com o colaborador na mão que não alimenta o papel fica vermelho.
 
-● Background command "Esperar a suite completa da O65" completed (exit code 0)
+  O preço, declarado: dois tetos de performance subiram com a justificativa escrita que o próprio selo exige (C8) — registrar_batida 22→23 (eliminei uma das duas queries passando
+  as batidas já carregadas) e o calendário 25→27 (duas, porque a tela pergunta a dois leitores de turno). Tentei não pagar no calendário: turnos_do_colab aceita celulas=, mas o
+  mapa nasce depois do laço no fluxo atual — fica como dívida com endereço, escrita no próprio selo.
 
-  Ran 2 shell commands
+  A O66 (BECO-FIO-FECHADO-CELULA-ABERTA) está registrada e entra quando a O65 fechar com deploy e smoke. Já comecei o censo dos fechadores: as vias chamado_encerrado,
+  celula_absolveu e completude_turno vivem em chamados/juizes.py:844-879 e chamados/reconciliador.py:643; quem escreve validada_em está em
+  chamados/services/materializacao.py:430,939 e disputa_emissao.py:1361. A Q2-JA "conversa parada" aparece em arquivar_competencia_encerrada.py e celula_carimbada.py — é onde vou
+  conferir contra o DECIDIR-642.
 
-● 24 queries contra teto 22 no caminho da batida de chão. As batidas já estão carregadas no chamador — deixo de reconsultá-las:
-
-  Ran 1 shell command
-
-● Sobrou uma query — a das células. Dou alimentação a quem já as tem, e no caminho da batida assumo o custo com a justificativa escrita que o próprio selo exige:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● _cels_mes nasce depois do uso — NameError meu. Revertendo e assumindo o custo com a mesma justificativa:
-
-  Subir o teto do calendario com justificativa e conferir
-  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
-     f='app/core/tests/test_selo_performance.py'
-     s=open(f,encoding='utf-8').read()
-     v = " 'colaboradores/N/calendario': 25,"
-     n = (" # 25 -> 26 (O65, 26/09). JUSTIFICATIVA ESCRITA, como o C8 exige: a +1 e a query que le a CELULA\n"
-     " # para o pareador sab…
-
-✽ Pouncing… (28m 52s · ↓ 41.1k tokens)
+✻ Churned for 32m 34s · done 5:49 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ deploy e smoke quando a suite fechar, depois O66
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
