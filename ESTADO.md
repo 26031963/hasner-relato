@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:53:01.**
+**Medido em 26/09/2026 15:58:31.**
 
 | | |
 |---|---|
@@ -43,39 +43,39 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 
 ```
 
-● Arquivo e mount idênticos. Há um except no meu código que engole erro e loga — conferindo se ele disparou em prod:
-
-  Ran 1 shell command
-
-● Percebi a diferença real entre as duas corridas: a primeira recalculou a frota inteira, as outras só 8 colabs. Testando se o resultado depende do escopo da chamada:
-
-  Ran 1 shell command
-
-● Vou comparar os dois ambientes de verdade — o container de prod tem 18 h de vida e a imagem :latest pode ter mudado:
-
-  Ran 1 shell command
-
-● Mesma imagem, mesmo Python. Então preciso saber se o resultado reproduz. Rodando o mesmo ensaio outra vez:
-
-  Ran 1 shell command
-
-● Reproduz. A única diferença restante entre os dois contextos é /app montado rw (exec) contra ro (run) — ou seja, __pycache__. Testando com bytecode ignorado:
-
-  Ran 1 shell command
-
-● Agora tenho o mecanismo à mão: com a minha alimentação, eh_dia_trabalho passa a ver a célula (que diz trabalha=True) onde antes caía na aritmética do ciclo (que dizia folga).
-  Isolando:
-
   Ran 1 shell command
 
 ● Minha tentativa de bloqueio funcionou e deu 0 nos dois — então a alimentação não é a causa. Isolo o que sobrou: as flags do docker run:
 
-● Isolar rw x ro e tmpfs · 2m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== docker run RW, sem tmpfs (igual ao exec) ==="; docker run --rm --network saas-hasner_default --env-file
-     /home/ronald/saas-hasner/.env -e TZ=America/Sao_Paulo -v /home/ronald/saas-hasner/app:/app -v /tmp/claude-1001/pauta/apply:/simular saas-hasner-core:lat… (2m 16s · 6 lines)
+  Ran 1 shell command
+
+● Achei. O diferenciador é --tmpfs /app/logs: com o diretório real, folga = 0; com tmpfs vazio, 84,65. Um cálculo de dinheiro está lendo arquivo de logs/:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● É o --tmpfs /app/logs: com o diretório real, folga = 0; vazio, 84,65. Um cálculo de dinheiro depende de arquivo em app/logs/. Achando qual:
+
+  Listed 2 directories, ran 1 shell command
+
+● Paro de adivinhar e instrumento o open:
+
+  Ran 1 shell command
+
+● /app/logs/esmeril_espelho.json — lido 3 vezes, uma por colab, dentro do recálculo da folha. Um cálculo de dinheiro lendo arquivo de snapshot. Vendo quem o lê e para quê:
+
+  Ran 2 shell commands
+
+● Achei a causa, e ela não é minha. fechamento.py:231 decide horas_folga_trabalhada lendo logs/esmeril_espelho.json (corte CLASSE3-FOLGA-100: folga trabalhada só paga 100% com a
+  escala certa no dia). A sombra roda com --tmpfs /app/logs — o arquivo não existe lá, então a lavra vem vazia, ninguém é excluído e a folga é contada. Prod está certo; meu
+  esperado estava errado. Refazendo com a lavra visível:
+
+  Refazer o DIFF com a lavra visivel · 54s
+  ⎿  $ cd /home/ronald/saas-hasner && ls -l app/logs/esmeril_espelho.json && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 com
+     lavra" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-… (53s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Wrangling… (28m 6s · ↓ 47.0k tokens)
+✢ Wrangling… (33m 36s · ↓ 53.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
