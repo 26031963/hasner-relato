@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:53:36.**
+**Medido em 26/09/2026 19:58:01.**
 
 | | |
 |---|---|
@@ -39,40 +39,40 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Os 9 do TXT, um por um:
 
-  Searched for 1 pattern, ran 2 shell commands
+  ┌──────────────────────────────────┬────────┬────────┬──────────┬────────────────────────────────────────────────────────────────────┐
+  │              colab               │ antes  │ depois │  delta   │                               causa                                │
+  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
+  │ col866                           │ 239,95 │ 156,01 │ −83,94 h │ sobreposto — a cura resolve, e passa a bater com a coluna (155h54) │
+  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
+  │ col924 · col391 · col43 · col942 │   0,00 │   0,00 │        — │ zero vínculo e zero célula: a cura não alcança                     │
+  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
+  │ col935 · col648                  │      — │      — │        — │ troca de vínculo no meio                                           │
+  ├──────────────────────────────────┼────────┼────────┼──────────┼────────────────────────────────────────────────────────────────────┤
+  │ col400 · col245                  │      — │      — │        — │ sem causa dessas                                                   │
+  └──────────────────────────────────┴────────┴────────┴──────────┴────────────────────────────────────────────────────────────────────┘
 
-● A mecânica do dobro está à vista: escalas_periodo roda o motor uma vez por escala e soma — vínculos sobrepostos computam os mesmos dias duas vezes. Montando a cura em cópia do
-  HEAD:
+  Dos 9 do TXT a cura resolve um. Ela é cirúrgica: morde a sobreposição, que era a sua hipótese, e não finge resolver o resto.
 
-  Ran 1 shell command
+  Como: antes de rodar cada fatia, o laço pergunta a CelulaDia.escala_geradora quais dias são daquele vínculo; fatia cujos dias pertencem todos a outro vínculo não roda; dia sem
+  célula segue como antes, sem dono inventado. O col866 tem 31 células com duas geradoras distintas — o dado para não dobrar estava lá e o fechamento não perguntava.
 
-● O heredoc sem quotes interpretou os backticks — conferindo se o comentário saiu íntegro:
+  Três classes, uma curada: a sobreposição (curada); o zero vínculo e zero célula — 4 no TXT somando 221h66, classe própria e fora do passivo da E1; e a troca de vínculo no meio
+  (8) mais "sem causa" (7), que seguem abertas.
 
-  Ran 2 shell commands
+  O ! que esta fatia pede é sobre as 654,74 h, sabendo que apenas col866 está entre os 9 que o DP vai pagar. Falta ainda o lado do espelho (a ordem manda os dois lerem a célula) e
+  o selo do leitor que escolhe vínculo sem perguntar — não fiz, e não os conto como feitos.
 
-● A sombra tem o gravado pré-E3, então esse DIFF soma três curas. Para isolar a O69 preciso medir contra o gravado de prod — ensaio com rollback, mesma disciplina:
+✻ Sautéed for 11m 4s · done 7:54 PM
 
-  Ran 1 shell command
+❯ aval Ronald: aplica a O69 (654,74 h) !
 
-● Dinheiro move: −399,76 h de trabalhadas em 7 colabs, 654,74 h de movimento absoluto, quase tudo negativo — é o dobro saindo. Agora a lista dos 9 do TXT sob a cura:
+● ! recebido. Aplicando a cura na árvore (lei 10: aplicar no ato) e rodando a suíte, que é o portão:
 
-  Ran 1 shell command
+● Running 1 shell command…
 
-● O DIFF fechou e ele é cirúrgico. PAREI com a tabela:
-
-  Publicar o PAREI com a tabela
-  ⎿  $ python3 <<'ENDPY'
-     f='docs/RELATO.md'
-     s=open(f,encoding='utf-8').read()
-     cab='# RELATO — esteira saas-hasner\n'
-     L=[];A=L.append
-     A('')
-     A('## PAREI: DIFF da O69 (VINCULO-DO-DIA) medido -- dinheiro move, **-399,76 h em 7 colabs** | espera `!`')
-     A('')
-     A('Cura construida em copia do HEAD, **nada aplicad…
-
-✢ Shenaniganing… (10m 12s · ↓ 11.4k tokens)
+✢ Smooshing… (14s · ↓ 650 tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

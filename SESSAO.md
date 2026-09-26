@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 19:53:37.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.9 MB). Acoes na janela: **772**.
+**Medido em 26/09/2026 19:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.9 MB). Acoes na janela: **773**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:53:34 | Bash | Publicar o PAREI com a tabela | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## PAREI: DIFF da O69 (VINCULO-DO-DIA) medido -- dinheiro move, **-399,76 h em 7 colabs** \| espera `!`') A('') A('Cura construida em copia do HEAD, **nada aplicado**. Medida contra o gravado de PROD (nao o da sombra,') A('que e pre-E3 e somaria tres curas num nume ...` |
 | 19:51:20 | Bash | Medir os 9 do TXT sob a cura | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/o69nove.py <<'PYEOF' """Os 9 do TXT sob a cura da O69: antes x depois, em prod, com rollback.""" from django.db import transaction from ponto.models import FechamentoMensal from ponto.services.fechamento import recalcular_fechamento_mes NOVE = [924, 866, 391, 43, 942, 935, 400, 245, 648] CAMPOS = ['horas_trabalhadas', 'horas_noturna ...` |
 | 19:49:34 | Bash | DIFF da O69 contra o gravado de prod, com rollback | `cd /home/ronald/saas-hasner && D=$(cat /tmp/claude-1001/arvore_o69) && source bin/recursos.sh >/dev/null 2>&1 && cp /tmp/claude-1001/pauta/apply/o65.py /tmp/claude-1001/pauta/apply/o69p.py && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file .env -e TZ=America/Sao_Paulo -v "$D/app":/app:ro --tmpfs /app/logs --tmpfs /app/media -v /home/ronald/saas-hasne ...` |
 | 19:47:57 | Bash | Rodar o DIFF da cura na sombra | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' D = open('/tmp/claude-1001/arvore_o69').read().strip() f = D + '/app/ponto/services/fechamento.py' s = open(f, encoding='utf-8').read() v = " # A CELULA JA SABE: diz qual vinculo gerou cada dia, e a cobertura em" n = " # A CELULA JA SABE: `CelulaDia.escala_geradora` diz qual vinculo gerou cada dia, e a cobertura em" assert s.count(v)==1 s=s.replace( ...` |
