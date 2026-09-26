@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 11:05:01.**
+**Medido em 26/09/2026 11:10:31.**
 
 | | |
 |---|---|
@@ -37,50 +37,52 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
  M app/escala/services/cadastro_realidade.py
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_e3_metade_intervalo_cadastrado.py
+?? bin/tests/dinheiro_le_jornada_lixo.txt
+?? bin/tests/test_dinheiro_nao_le_jornada_lixo.sh
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├───────┼────────────────────────────────────────┤
-  │ :712  │ horas_falta = faltas × jornada         │
-  ├───────┼────────────────────────────────────────┤
-  │ :714  │ horas_abono                            │
-  ├───────┼────────────────────────────────────────┤
-  │ :845  │ extra = duracao - jornada — hora extra │
-  ├───────┼────────────────────────────────────────┤
-  │ :906  │ jornada_diaria                         │
-  └───────┴────────────────────────────────────────┘
 
-  Hora extra, falta e abono saem do campo que a casa declara lixo, e ele contradiz os marcos em 333 vínculos. Fazendo a E3 v3 como você mandou, e o selo com a lista que só
-  encolhe:
+✻ Sautéed for 13m 32s · done 11:07 AM · 3 shells still running
+
+● Background command "Rodar os selos da v3" completed (exit code 0)
+
+  Listed 1 directory
+
+● As duas falhas são restos do meu selo v2 — as duas âncoras que não casaram na edição em lote. O piso mudou de lugar, e o selo tem de segui-lo:
+
+  Read 1 file, ran 5 shell commands
+
+● Background command "Reconferir os selos da v3" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Aguardar os selos" completed (exit code 0)
+
+● 52 de 53 passam — só o ruff, e provavelmente o import que ficou órfão quando o piso mudou de casa:
+
+  Ran 3 shell commands
+
+● Exatamente o import órfão que eu previ — o piso saiu do __init__:
 
   Ran 1 shell command
 
-● Agora o _intra_minima por dia, o preenchimento em calcular_mes e os três sítios que leem o mínimo:
-
-  Ran 1 shell command
-
-● Faltam dois sítios, e o PerfilApuracao precisa continuar vencendo dentro do _intra_minima. Fechando:
+● Ruff limpo. Vendo o DIFF v3, que é o número que importa:
 
   Ran 2 shell commands
 
-● Os três sítios leem o dia. Provando nos casos nomeados, com o piso vindo do juiz:
+● Enquanto o dump fecha, commito o que já está provado — a v3 no código, o selo da dívida e a C2:
 
-● A v3 nos quatro casos nomeados
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/v3.py <<'PY'
-     import datetime
-     from django.db.models import Q
-     from colaboradores.models import Colaborador
-     from escala.models import EscalaColaborador
-     from ponto.…
+  Running 1 shell command…
 
-✢ Discombobulating… (10m 49s · ↓ 31.8k tokens · thinking)
+✢ Beboppin'… (2m 47s · ↓ 7.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
