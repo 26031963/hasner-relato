@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 20:19:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.0 MB). Acoes na janela: **785**.
+**Medido em 26/09/2026 20:25:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.0 MB). Acoes na janela: **786**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:24:49 | Bash | Continuar esperando a suite | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite2.log \| tail -8` |
 | 20:14:43 | Bash | Esperar a suite fechar | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite2.log \| tail -8` |
 | 20:14:37 | Bash | Suite completa que libera o apply | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) && ESTEIRA_QUEM=o69f2 bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache --tm ...` |
 | 20:14:22 | Bash | Declarar a casa e conferir | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='app/config/crons.py' s=open(f,encoding='utf-8').read() v = "FORA_DE_PIPELINE = {\n 'lavrar_fabrica':" n = ("FORA_DE_PIPELINE = {\n" " 'pdf_x_espelho_divergentes':\n" " 'PDF-E-O-ESPELHO (O9): contador do placar, NAO cron. Compara, por colab e por dia, o que o PDF do '\n" " 'cartao desenha contra o que o espelho diz -- esperado 0. Roda a mao por  ...` |
