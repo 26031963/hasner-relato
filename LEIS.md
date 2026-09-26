@@ -61,6 +61,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 | **L-078** | GATE TEMPORAL = CRON/AT + ARQUIVO: espera longa nunca e processo do Code (morre com a sessao); agenda-se com `bin/deploy_agendado.sh` | licao 16/09, corte Ronald | `bin/deploy_agendado.sh` (cron de 1 disparo em /etc/cron.d) | `deploys_agendados` no placar | vigente |
 | **L-079** | PAUSA COM DONO: pausa sem quem/por que/condicao de saida nao tem saida -- ela simplesmente dura | corte Ronald 21/09 14:2x | `bin/pausar.sh` | `core/esteira_vigia.py` alarma pausa > 30 min sem dono | vigente |
 | **L-080** | CHAVE DE MATCH SEMPRE CPF OU NOME COMPLETO, nunca matricula; timestamps em UTC no banco, apresentados em UTC-3 | CLAUDE.md secao 4 (zona inviolavel) | transversal (importadores, holerite, folha) | sem selo unico -- cobrado por fatia | vigente |
+| **L-081** | CURA-MAIS-RESTRITIVA: bug PROVADO com mais de uma cura candidata NAO espera o Ronald -- aplica-se a mais RESTRITIVA (ou as duas, se nao conflitam), o porque vai ao RELATO e segue; so espera `!` se a cura cair na L-009 | corte Ronald 26/09 ~09:4x (nasceu da O57: bug provado, duas curas na mao, e eu registrei "nao decidido") | `CLAUDE.md` secao 7b | transversal -- a esteira inteira | **vigente** |
 
 ## Leis escritas que NAO TEM DONO (a lista mais importante daqui)
 

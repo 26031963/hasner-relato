@@ -1,5 +1,64 @@
 # RELATO — esteira saas-hasner
 
+PAREI: e3-metade-apply | espera Ronald (`!` para +39,41 h em 56 colab-competencias; a metade NAO cura o RED da [nome])
+
+## E3 METADE — o DIFF, e o que ele **nao** cura (leia isto antes do `!`)
+
+Aval Ronald 26/09: a E3 fica **sem ler** `intervalo_indenizavel` (politica de 19/08 mantida --
+indeniza o SUPRIMIDO, Art.71 par.4 / Sum.437, nao reabrir). Entra **so** a troca do 60 cravado pelo
+intervalo CADASTRADO. Construido em COPIA do HEAD (`/tmp/e3_metade_2609/`), **fora da arvore
+servida**, e la fica ate o seu `!`. Prova: `app/ponto/motor_calculo_v2.py` e byte a byte o de HEAD.
+
+### O DIFF (sombra com carimbo de HOJE, duas arvores, uma trava, `atomic()+rollback`)
+
+| competencia | colabs no dump | colabs que MUDAM | intra indenizada |
+|---|---|---|---|
+| 07/2026 | 722 | **14** | **+25,26 h** |
+| 08/2026 | 657 | **23** | **+10,11 h** |
+| 09/2026 | 607 | **19** | **+4,04 h** |
+| **total** | | **56 colab-competencias** | **+39,41 h** |
+
+**Um campo so se move.** `horas_trabalhadas`, `horas_extras`, `horas_extras_50`, `horas_noturnas`,
+`horas_reflexo_dsr` e `saldo_banco_horas`: **zero** diferenca nas tres competencias. E o que a metade
+deve fazer -- muda o MINIMO, e o minimo so alimenta a conta do "suprimido".
+
+Compare com o DIFF da versao INTEIRA, de madrugada: 265 colab-competencias, -663,24 h de intra e
+-671,00 h trabalhadas. A metade e **1/17 do impacto**, e no sentido oposto: mais dinheiro, nao menos.
+
+Sobe (o cadastro declara MAIS que 60) e desce (declara MENOS, ou o piso do Art.71 pela jornada e 15
+ou 0): col840 23,00 -> 5,75 e col207 11,00 -> 2,75 sao os que descem; col118 2,00 -> 8,36 e
+col82 1,00 -> 5,52 os que sobem.
+
+### col638 13/08 e 18/08, NOMEADOS -- e a metade NAO cura o RED
+
+| col638, te#187, jornada 530 min, intervalo declarado 13:00-14:30 | HEAD | metade |
+|---|---|---|
+| `intrajornada_minutos` | **60** (cravado) | **90** (`janela declarada`) |
+| 13/08 trabalhadas | 540 min | **540 min -- igual** |
+| 13/08 **HE 50%** | **1,68 h** | **1,68 h -- igual** |
+| 13/08 intra indenizada | 60 min | **90 min (+30)** |
+| 18/08 trabalhadas | 537 min | **537 min -- igual** |
+| 18/08 **HE 50%** | **1,63 h** | **1,63 h -- igual** |
+| 18/08 intra indenizada | 60 min | **90 min (+30)** |
+
+**Digo isto na cara: a metade nao entrega o "0 HE" que voce pediu no RED.** Ela corrige o MINIMO --
+que estava errado, e agora sai do cadastro -- e o efeito no caso nomeado e **+30 min de indenizacao
+por dia**, na direcao OPOSTA da queixa original ("13/08 +1,7h de HE -> 0 HE").
+
+O motivo e estrutural e vale registrar, porque separa as duas metades de verdade: o "0 HE" da
+[nome] vinha do **desconto do pre-assinalado** (os 90 min cadastrados SAINDO da jornada com ou sem
+batida, 540 - 90 = 450 < 530). Esse desconto **e** a leitura de `intervalo_indenizavel` -- e a metade
+que ficou fora por aval. Sem ele, a jornada segue com o almoco dentro (540 min) e a HE segue.
+
+Ou seja: **as duas metades nao sao independentes, e a medicao provou.** A que entra conserta o numero
+do minimo legal; a que espera conserta a jornada. A primeira, sozinha, paga mais; a segunda e a que
+reduz. Se o `!` vier para a metade, o que voce esta aprovando e **+39,41 h em 56 colab-competencias**,
+e o RED da [nome] fica em pe esperando a obra do cadastro.
+
+**Apply espera o seu `!`.** A cura esta em `/tmp/e3_metade_2609/cura/app/ponto/motor_calculo_v2.py`
+(o `calcular_periodo` dela e IDENTICO ao de HEAD -- conferido por `diff`), e a arvore servida intacta.
+
+
 ## SELO-PDF-PREVISTO-SUMIU (P7.1, curado) — e a causa nao era "eu apaguei um arquivo"
 
 Voce apontou que `b4eacf03` (o meu commit da E2) apagou
@@ -44,8 +103,6 @@ commita o indice. Registrado como **O57 COMMIT-CARREGA-O-INDICE**, com as duas c
 (`git commit -- <paths>` em todo sitio, ou tripwire no pre-commit que RECUSE commit com arquivo fora da
 lista) e **nao comecado** -- e decisao de desenho, nao execucao.
 
-
-EM CURSO: E3 METADE (so a troca do 60 cravado) | o `!` do E3 resolveu a trava do PAREI de 02:4x
 
 ## PAREI — ESPELHO-VERDADE-E3: o DIFF esta pronto, e ele diz **-663,24 h**. Nao aplico.
 
@@ -2480,9 +2537,6 @@ e nunca le `_esp['dias']` -- e o O14 do BACKLOG, e a metade de APP do O21 contin
 | chamados_vivos_sem_pergunta_no_app | 176 (22/09 11:2x) | 0 | admin/sistema |
 
 
-
-
-
 **19/09 12:50 vigia da esteira (ALARME)** -- a fatia cadreal2 espera ha mais de 60 min, e a anterior (tb_situ) ja terminou (NO_AR): portao que espera uma frase que nao vira.
 
 
@@ -2748,7 +2802,6 @@ SMOKE-PORTAS sobre a arvore de agora (com AUS-CELULA e AUS-FOLHA): **136/554 cer
 Ajuste manual que fica para o DP no export: **col866** (mat 1726, Dominio 651) -- rubrica 0243 = 13,00 h, nao 20,00.
 
 
-
 **20/09 17:10 vigia da esteira** -- vigia escreveu o fim de quarentena as 17:10 (NO_AR), que a esperada autorevert le no portao. Para a admin: nada muda.
 
 
@@ -2813,7 +2866,6 @@ vivas, 203 concordam, 27 escalam hoje e parariam -- todas sem prazo gravado; 983
 prazo). A cura honesta e em dois passos: primeiro o emissor carimba o prazo no nascimento, depois o leitor troca.
 E no `registro_ausencia`, 6 dos 11 estao com rotulo errado: respondem "esta afastado hoje?", nao "esta de ferias
 hoje?" -- pergunta que ainda nao tem juiz declarado. Zerar por cima seria trocar rotulo por cura.
-
 
 
 **20/09 19:30 vigia da esteira (ALARME)** -- a fatia a_feriasjanela caiu por vermelho DELA (GREEN parcial vermelho) -- nao relanco.
@@ -3936,7 +3988,6 @@ comando, *"bateu em outro horario = escala a corrigir"*. Ou seja: o tipo e o cad
 juntos, ou a cobranca sobrevive a cura.
 
 
-
 **21/09 10:10 vigia da esteira (ALARME)** -- controlador de teto morto: esteira.slots pede teto mas o bin/esteira_slots.sh nao esta rodando -- a esteira esta usando a maquina inteira.
 
 
@@ -4365,7 +4416,6 @@ apontou. Exemplo medido: col216 com 9 FolgaDia em outubro e sabado/domingo de 03
 `trabalha=True`.
 
 
-
 **21/09 11:11 vigia da esteira (ALARME)** -- controlador de teto morto: esteira.slots pede teto mas o bin/esteira_slots.sh nao esta rodando -- a esteira esta usando a maquina inteira.
 
 
@@ -4558,7 +4608,6 @@ morrem so as **caladas**:
   mesmo dia.
 
 
-
 **21/09 11:56 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 51 min.
 
 **21/09 12:2x SAIDA-TARDIA-NOTURNO -- REPRODUZIDO NA SOMBRA, MECANISMO PROVADO, RED VERMELHO.
@@ -4665,7 +4714,6 @@ Entra na regra: antes de refazer a sombra, perguntar se ha forense aberta sobre 
 (+ `ponto/turnos.py:24`) -- zona de dinheiro, exige DIFF na sombra. E corrigir o tipo **nao** mata os
 13 chamados: a batida das 09:2x fica a 105-143 min do marco, fora da tolerancia de 90 do
 `lastro.julgar`.
-
 
 
 **21/09 12:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
@@ -4828,7 +4876,6 @@ A cura esta guardada em `.fatias_construidas/TURNO-NATIMORTO-fatia1.patch` (`git
 e os dois selos em `red_fora_da_arvore/`. **Parado, esperando o "!".**
 
 
-
 **21/09 13:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 **21/09 13:2x CASO-SELO #17805 / D#4690 -- a emenda 6a supunha UMA cura; sao DUAS. E o contador que
@@ -4930,7 +4977,6 @@ o predicado da classe (a). Padrao: **eu publico contagem sem declarar o recorte.
 `reabrir_para_correcao` (`disputa_emissao.py:1171`) zera `resposta_colab`, `respondida_em` e
 `validada_em` mas **nao** `recusa_motivo` -- pq34136 carrega "Colaborador respondeu: Estava de
 folga..." com `resposta_colab=''`. E' o mesmo meio-estado que aquela funcao nasceu para matar.
-
 
 
 **21/09 14:20 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
@@ -5051,7 +5097,6 @@ cosmetico (o `os` ja vinha em `:23`, o ruff passava), mas errado. Removido; `py_
 da CASCA-SO-DE-NOITE segue verde.
 
 
-
 **21/09 14:45 vigia da esteira (ALARME)** -- a fatia t_led caiu por vermelho DELA (esmeril sujo) -- nao relanco.
 
 
@@ -5126,7 +5171,6 @@ A primeira versao usava heredoc **sem `-i`**: o `python -` lia stdin vazio e o s
 conferir nada** -- "pode recarregar" por ausencia de sinal, exatamente a doenca que ele existe para
 evitar. Ganhou guarda de carimbo: sem a linha `prova de casca: N estaticos...` na saida, o veredito
 e' FALHOU.
-
 
 
 **21/09 16:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
@@ -5222,7 +5266,6 @@ cerca que acabamos de entregar.
 loga erro, e `PingGeo` em 30 dias tem **188 linhas com 0 `provider`, 0 `assinatura`, 0 `from_mock`**
 -- compativel tanto com "o APK nao faz ping-geo" quanto com "o APK em campo e anterior ao S87".
 Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
-
 
 
 **21/09 17:13 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 128 min.

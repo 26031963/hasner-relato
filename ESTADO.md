@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:50:31.**
+**Medido em 26/09/2026 09:55:45.**
 
 | | |
 |---|---|
@@ -24,8 +24,12 @@ b81544bc RELATO: linha do vigia
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
+ M app/docs/CORTES.md
+ M app/docs/LEIS.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? bin/gerar_sessao.py
 ?? esteira.pausada
 ```
@@ -33,39 +37,39 @@ b81544bc RELATO: linha do vigia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────┼──────────────────┼──────────────────┤
-  │ 07/2026     │ 14 de 722        │ +25,26 h         │
-  ├─────────────┼──────────────────┼──────────────────┤
-  │ 08/2026     │ 23 de 657        │ +10,11 h         │
-  ├─────────────┼──────────────────┼──────────────────┤
-  │ 09/2026     │ 19 de 607        │ +4,04 h          │
-  ├─────────────┼──────────────────┼──────────────────┤
-  │ total       │                  │ +39,41 h         │
-  └─────────────┴──────────────────┴──────────────────┘
-
-  E o col638 aparece indo para cima (08: 4,00→6,00). Medindo os dois dias nomeados, porque isso tem uma consequência que você precisa ver:
-
-  Ran 1 shell command
-
-● Medido, e isto é o que você precisa ver antes de qualquer !: a metade NÃO cura o RED da [nome] — ela move o caso na direção oposta da sua queixa original.
-
-  ┌──────────────────────┬───────────────┬─────────────────────────┐
-  │     col638 13/08     │ motor de HEAD │         metade          │
-  ├──────────────────────┼───────────────┼─────────────────────────┤
-  │ intrajornada_minutos │ 60 (cravado)  │ 90 (janela declarada) ✓ │
-  ├──────────────────────┼───────────────┼─────────────────────────┤
-  │ trabalhadas          │ 540 min       │ 540 min — igual         │
-  ├──────────────────────┼───────────────┼─────────────────────────┤
-  │ HE 50%               │ 1,68 h        │ 1,68 h — igual          │
-  ├──────────────────────┼───────────────┼─────────────────────────┤
-  │ intra indenizada     │ 60 min        │ 90 min (+30)            │
-  └──────────────────────┴───────────────┴─────────────────────────┘
 
   O "0 HE" que você pediu exigia o desconto do pré-assinalado, que é exatamente a metade que ficou fora. Escrevendo isso e a lei nova:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Transmogrifying… (52m 53s · ↓ 48.2k tokens)
+● Agora a lei nova no CLAUDE.md, que é o que o seu corte pediu:
+
+  Ran 1 shell command
+
+● Agora a lei entra no índice (o selo cobra) e o corte no CORTES.md:
+
+  Searched for 2 patterns, ran 1 shell command
+
+● Lei indexada e selo verde. Agora a O57 — item (c) primeiro, porque a evidência é perecível: quem reverteu o JUIZES['batida']?
+
+  Ran 1 shell command
+
+● O reflog não pode responder isso — git checkout -- <path> não deixa entrada nele. Então vou onde a evidência existe: os scripts da esteira que tocam a árvore.
+
+  Ran 1 shell command
+
+● Zero scripts da casa fazem checkout/restore/reset/stash/clean, e as outras sessões não rodaram nenhum na janela. Antes de concluir, testo a hipótese mais simples — a mesma
+  armadilha do relatorios:
+
+  Ran 1 shell command
+
+● Medido: o arquivo não é ignorado, e desta vez o registro entrou (5f898f31). Falta um candidato medível — algo que gere o arquivo, que é justamente do que a L-002 trata:
+
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== alguem ESCREVE core/juizes.py? ==="; grep -rn "juizes.py" bin/*.py bin/*.sh app/**/management/commands/*.py 2>/dev/null | grep -viE
+     "gerar_mapa|leitura|read|open\(.*juizes.*'r'|import" | head -8; echo " (vazio = nenhum gerador escreve nele)"; echo "=== e o…
+
+· Transmogrifying… (58m 6s · ↓ 57.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
