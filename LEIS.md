@@ -33,7 +33,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 | **L-026** | COMPETENCIA CORRE DO DIA 21 AO 20 (`Empresa.dia_inicio_competencia`), nunca mes civil; nenhum juiz usa 21 cravado | CLAUDE.md secao 1 + corte K8-COMPETENCIA-NAO-E-MES-CIVIL (25/09 09:2x) | `ponto/janelas.py::janela_fechamento` / `janela_atual` / `corte_da_empresa` | `ponto/tests/test_contract_competencia_nao_e_mes_civil.py` | vigente |
 | **L-030** | A BATIDA DE CHAO NUNCA E BARRADA EM RUNTIME; chokepoint unico de escrita = `ponto/registro_batida.py`; o motor NUNCA fabrica batida | CLAUDE.md secao 4 (zona inviolavel) | `ponto/registro_batida.py` | `ponto/tests/` (contratos de batida) + `tripwire_tipo_batida` (cron 07:20) | vigente |
 | **L-031** | INTRAJORNADA: quem decide se o intervalo NAO BATIDO indeniza e o CADASTRO `TipoEscala.intervalo_indenizavel`. `True` = indeniza so o suprimido; `False` = pre-assinalado, sem HE e sem indenizacao, e a batida faltante vira PERGUNTA | decidida 19/08 (Art.71 par.4 / Sumula 437); reafirmada no adendo Ronald 25/09 19:0x | CAMPO existe em `escala/models.py:82`; **`ponto/motor_calculo_v2.py` NAO O LE em nenhuma linha** -- `:758-771` indeniza sempre | SEM SELO -- e a O49 | vigente, SEM DONO QUE A LEIA: 275 templates com `False` contra 63 com `True`, a MAIORIA indenizada contra o proprio cadastro |
-| **L-032** | PRE-ASSINALACAO DO INTERVALO (CLT art. 74 par.2): o intervalo CADASTRADO sempre sai da jornada; batida de intervalo fora do horario exato mas dentro do envelope E o intervalo -- nunca espuria, nunca HE | ordem Ronald 25/09 (INTERVALO-CADASTRADO-NAO-VIRA-HE) | NENHUM: `intervalo_duracao_min` nao tem leitor no motor; `motor_calculo_v2.py:355` fixa `intrajornada_minutos = 60` | SEM SELO -- e a O49 | vigente, SEM DONO: RED medido -- ANDRESSA te#187 (13:00-14:30, 90 min) recebeu +1,68 h e +1,63 h de HE em 13 e 18/08 |
+| **L-032** | PRE-ASSINALACAO DO INTERVALO (CLT art. 74 par.2): o intervalo CADASTRADO sempre sai da jornada; batida de intervalo fora do horario exato mas dentro do envelope E o intervalo -- nunca espuria, nunca HE | ordem Ronald 25/09 (INTERVALO-CADASTRADO-NAO-VIRA-HE) | NENHUM: `intervalo_duracao_min` nao tem leitor no motor; `motor_calculo_v2.py:355` fixa `intrajornada_minutos = 60` | SEM SELO -- e a O49 | vigente, SEM DONO: RED medido -- [nome] te#187 (13:00-14:30, 90 min) recebeu +1,68 h e +1,63 h de HE em 13 e 18/08 |
 | **L-033** | FURO SO DE INTERVALO NAO TRAVA A FOLHA: dia com entrada E saida batidas e so a batida de intervalo faltando e PAGAVEL, e a pergunta ao colab segue aberta sem bloquear | adendo Ronald 25/09 19:2x | a definir (porta de aptidao do fechamento) | SEM SELO -- porta extra da E2: `furo_so_intervalo` que bloqueia apto = 0 | vigente, SEM DONO: 832 celulas furo = 293 so intervalo + 539 entrada/saida; 49 colabs travados SO por intervalo |
 | **L-034** | REGIME POR EMPRESA: a EMPRESA vence a PRACA. `Empresa.regime_trabalhista` = `clt` -> piso legal mesmo em praca com CCT vigente; vazio = a praca decide | corte Ronald 25/09 ("JSP = CLT, demais = CCT") | `core/regua_cct.py::regua_para` | `core/tests/test_regime_por_empresa.py` (o PAR: mesma praca, mesma CCT, empresa em CLT x sem regime) | vigente -- aplicado: emp3=`clt`, emp2 e emp4=`cct` |
 | **L-035** | PRORROGACAO NOTURNA POS-05h, decidida em UM sitio pelo CADASTRO: CLT + 12x36 = NAO conta (art. 59-A par. unico) -> 22:00-05:00 reduzida = 8h/noite; CLT + jornada comum = conta (art. 73 par.5); CCT = o que a CCT cadastrada diz. A regra do 12x36 entra SO com `clt` DECLARADO | ordem Ronald 25/09 + aval das 18h (ADICIONAL-NOTURNO-12X36) | `core/regua_cct.py::prorrogacao_pos5h_legal`, lida por `regua_para` e `get_motor_cct`; o default do motor virou `None` (`motor_calculo_v2.py:290` e `get_motor:1556`) | `ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` (13 casos; MORDE: sem `clt` declarado o dinheiro NAO se move) | vigente -- aplicado em 09/2026 na emp3: 39 fechamentos, -953,63 h |
@@ -67,7 +67,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 | lei | o que falta | numero medido |
 |---|---|---|
 | `L-031` intrajornada por `intervalo_indenizavel` | `motor_calculo_v2.py` nao le o campo; `:758-771` indeniza sempre | **275** templates com `False` contra **63** com `True` |
-| `L-032` pre-assinalacao do intervalo | `intervalo_duracao_min` sem leitor; `:355` fixa `intrajornada_minutos = 60` | ANDRESSA te#187: **+1,68 h** (13/08) e **+1,63 h** (18/08) de HE |
+| `L-032` pre-assinalacao do intervalo | `intervalo_duracao_min` sem leitor; `:355` fixa `intrajornada_minutos = 60` | [nome] te#187: **+1,68 h** (13/08) e **+1,63 h** (18/08) de HE |
 | `L-033` furo so de intervalo nao trava folha | porta de aptidao do fechamento nao distingue a classe | **293** celulas furo so de intervalo; **49** colabs travados so por isso |
 | `L-025` universo de apuracao | tripwire contra `Batida.objects.filter` cru em caminho de apuracao NAO EXISTE | achado B5-F1, 04/09 |
 
@@ -102,7 +102,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 - `FABRICANTE-LE-O-BACKLOG`
 - `FECHAMENTO-ONLINE`
 - `FECHAMENTO-UI-PORTAS`
-- `FERNANDO-IOS`
+- `[nome]-IOS`
 - `FILA-24-09-16-5X`
 - `JANELA-EXATA`
 - `JUIZ-BATIDA-NASCE`
