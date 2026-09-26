@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:10:45.**
+**Medido em 26/09/2026 19:15:45.**
 
 | | |
 |---|---|
@@ -40,10 +40,6 @@ af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada --
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  tabela. Nada tocado.
-
-  O51b registrada (colunas Atraso e Saída antecipada lendo o valor da folha, topo = soma das linhas, RED col39 24/08), entrando após a O68 e antes de a 09 ir ao DP.
-
 ✻ Baked for 15m 11s · done 7:00 PM
 
 ❯ Para os 85: (1) CRUZAR COM O TXT primeiro -- quantos dos 85 estao entre os 203 que entram na folha de 09; esses sao dinheiro pago errado, os outros ja estao retidos. (2)
@@ -64,16 +60,20 @@ af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada --
 ● Três classes limpas, e uma delas era erro meu outra vez: a coluna soma todos os períodos e o topo separa folga_trabalhada em campo próprio. Refazendo a conta dos 85 com o topo
   completo:
 
-● Refazer a classificacao com o topo completo · 2s
+  Ran 1 shell command
+
+● 85 → 25. Sessenta eram erro da minha sonda. E a sua hipótese se confirma na assinatura. Extraindo os 9 que entram no TXT — o dinheiro:
+
+  Listar os 9 do TXT por causa · 10s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
      p='/tmp/claude-1001/pauta/apply/os85.py'
      s=open(p).read()
-     s=s.replace(""" topo = float(r.get('total_trabalhadas') or 0) * 60
-     if abs(topo - soma) < 60:
-     continue
-     fm = FechamentoMensal.objects.filter(colaborador_id=c.pk, mes=9, ano=2026).first()""",…
+     s=s.replace("""print('\\n--- LISTA (dif, topo, coluna, TXT?, vinculos: total/ativos/sobrepostos/trocas)')
+     for x in sorted(linhas, key=lambda y: -abs(y['dif']))[:20]:""",
+     """print('\\n--- O… (8s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Newspapering… (9m 17s · ↓ 6.5k tokens)
+· Newspapering… (14m 17s · ↓ 8.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
