@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:14:59.**
+**Medido em 26/09/2026 16:19:31.**
 
 | | |
 |---|---|
@@ -33,25 +33,14 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 
 ```
  M app/config/crons_duracao.json
+ M app/ponto/services/esmeril_espelho.py
+ M app/ponto/services/fechamento.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: E3 completa APLICA em 09/2026 pelo ensaio de hoje (603/603). previsto_em sai do criterio (carimbo). col369 inconsistencias = valor de PROD (10); a sombra e infiel
-  (O63). Esperado em prod: intra -33,33 h (49 colabs), trabalhadas +390,25 h (81), turnos_abertos -141 (50, nao sobe em nenhum), horas_falta zero; a diferenca para o aval
-  anterior e a deriva aceita. PROVA pos-apply igual ao ensaio, campo a campo. Em seguida O63 (P7.1): dinheiro nunca depende de arquivo do host -- a lavra do esmeril que decide a
-  folga 100% passa a vir do banco; sem lavra = PAREI com alarme, nunca paga todo mundo nem ninguem em silencio; o ensaio na sombra passa a montar a lavra. !
-
-● O ! fecha tudo. Aplicando — primeiro tiro o carimbo do critério e nomeio a exceção do col369:
-
-  Ran 1 shell command
-
-● Zero divergências em 607 colabs × 27 campos, rollback provado. O critério fecha. Aplicando:
-
-  Ran 1 shell command
-
 ● APLICADO: 607 colabs, 0 divergências. Os números batem com o aval. Agora a prova pós-apply contra o ensaio, campo a campo:
 
   Ran 1 shell command
@@ -66,13 +55,26 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 
 ● O item precisa de tipo do vocabulário de decisão — ele nasceu do seu ! e espera sua revisão:
 
-  Commitar o APLICADO e publicar · 8s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg10.txt <<'EOF'
-     [ESPELHO-VERDADE-E3-COMPLETA] APLICADO em 09/2026 -- 607 colabs, 0 divergencia na conferencia pos-apply
-     LEI-AKITA: origem=o apply autorizado pelo `!` de 26/09, testemunha=FechamentoMensal de 09/2026 lido
-     campo a campo antes e…
+  Ran 3 shell commands
 
-✶ Billowing… (6m 6s · ↓ 9.1k tokens)
+● Aplicado e publicado. Agora a O63, que o mesmo ! autorizou. Lendo a lavra atual:
+
+  Searched for 2 patterns, ran 1 shell command
+
+● Agora a O63, nas três partes que o corte pede — lavra no banco, sem-lavra que PARA com alarme, e o ensaio montando a lavra:
+
+  Ran 2 shell commands
+
+● Lavra gravada no banco de prod. O risco agora é a suíte: medindo o impacto do fail-closed:
+
+● Conferir a lavra no banco e o impacto na suite · 1m 35s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from ponto.services.esmeril_espelho import ler_lavra, CHAVE_LAVRA
+     from inteligencia.models import MetricaSnapshot as M
+     s = M.objects.filter(chave=CHAVE_LAVRA).order_by('-data_re… (1m 34s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Billowing… (10m 37s · ↓ 15.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
