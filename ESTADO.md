@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:42:01.**
+**Medido em 26/09/2026 19:47:31.**
 
 | | |
 |---|---|
@@ -39,44 +39,44 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  (1) O dinheiro são nove, somando 334h20:
-
-  ┌─────────────────────────┬───────────────────────┬────────┬────────┬──────────────────────────┐
-  │          colab          │       diferença       │  topo  │ coluna │          causa           │
-  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
-  │ col924                  │ 132h40                │ 0h00   │ 132h40 │ zero vínculo na janela   │
-  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
-  │ col866                  │ 84h03                 │ 239h57 │ 155h54 │ vínculo sobreposto       │
-  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
-  │ col391 · col43 · col942 │ 31h57 · 29h20 · 28h09 │ 0h00   │ —      │ zero vínculo na janela   │
-  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
-  │ col935 · col648         │ 11h02 · 1h29          │ —      │ —      │ troca de vínculo no meio │
-  ├─────────────────────────┼───────────────────────┼────────┼────────┼──────────────────────────┤
-  │ col400 · col245         │ 8h38 · 7h01           │ —      │ —      │ sem causa dessas         │
-  └─────────────────────────┴───────────────────────┴────────┴────────┴──────────────────────────┘
-
-  Os outros 16 (867h35) estão retidos — não foram pagos.
-
-  (2) Sua hipótese, confirmada na assinatura que você previu: dos 9 com gravado maior que o espelho, 5 têm vínculo sobreposto — col277, col899, col866, col107, col736. Mais 8 com
-  troca de vínculo no meio.
-
-  (3) O MEDIR ANTES: os 4 de zero vínculo não estão no passivo da E1 (53 registros em 51 colaboradores) — interseção vazia, raiz própria. Mas col277, col736 e col866 estão, e são
-  três dos cinco sobrepostos: vigência impossível e sobreposição andam juntas neles, e a restauração vai pelo propositor com seu !, como você previu.
-
-  E eu quase respondi errado aqui: a primeira leitura do censo deu "53 registros em 1 colaborador" porque vigencias_impossiveis devolve tuplas (pk, colaborador_id, ini, fim,
-  ativa) e eu extraí com .get('colaborador_id') — None em todas, colapsando o conjunto. O "não" só passou a valer depois de eu ler o contrato da função.
-
   A O69 está registrada com a raiz nomeada: enquanto o fechamento exigir vínculo ativo e o espelho pegar o último, as duas pontas (o zero e o dobrado) são produzidas por
   construção. O juiz único que você definiu — CelulaDia.escala_geradora — resolve as duas de uma vez.
 
   Nada tocado em dinheiro. O próximo passo dela é o DIFF na sombra com os 25 e a lista dos 9, que é o que vai ao seu !.
 
 ✻ Baked for 2m 46s · done 7:29 PM
+
+❯ roda o DIFF na sombra dos 25 com a lista dos 9
+
+● Antes de montar a cura, o contrato de entrada: a fonte existe e responde? Medindo a cobertura de escala_geradora:
+
+  Ran 1 shell command
+
+● Cobertura 100% — 17.329 células, todas com escala_geradora. O juiz pode responder. E dois achados que mudam o desenho:
+
+  - col866 tem 31 células com duas geradoras distintas (1188, 1246): a célula já sabe qual vínculo gerou cada dia — o fechamento dobra porque não pergunta a ela. A cura resolve
+    exatamente esse.
+  - os 4 de zero vínculo têm ZERO CÉLULAS na competência. Para eles a célula também não responde: a raiz é batida sem vínculo e sem célula, classe própria.
+
+  Vendo como o fechamento escolhe a escala hoje:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● A mecânica do dobro está à vista: escalas_periodo roda o motor uma vez por escala e soma — vínculos sobrepostos computam os mesmos dias duas vezes. Montando a cura em cópia do
+  HEAD:
+
+● Escrever a cura do vinculo do dia na copia
+  ⎿  $ cd /home/ronald/saas-hasner && D=$(bash bin/arvore_do_push.sh HEAD) && echo "$D" > /tmp/claude-1001/arvore_o69 && python3 <<ENDPY
+     D = open('/tmp/claude-1001/arvore_o69').read().strip()
+     f = D + '/app/ponto/services/fechamento.py'
+     s = open(f, encoding='utf-8').read()
+     velho = """ for esc in escalas_…
+
+✢ Shenaniganing… (4m 6s · ↓ 5.4k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ roda o DIFF na sombra dos 25 com a lista dos 9
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
