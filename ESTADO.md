@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 04:11:01.**
+**Medido em 26/09/2026 04:16:31.**
 
 | | |
 |---|---|
@@ -65,7 +65,7 @@ b81544bc RELATO: linha do vigia
   zona inviolável na árvore servida tendo a cópia em mão. As duas estão na primeira linha do item no PENDENTES, não no meio da justificativa.
 
 ✻ Cooked for 1m 6s · done 2:57 AM
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           new task? /clear to save 596.3k tokens
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ empurra e segue
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
