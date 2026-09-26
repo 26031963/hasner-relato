@@ -1,5 +1,91 @@
 # RELATO — esteira saas-hasner
 
+## BUG-C — a unica lista de "cadastro x realidade" nao via a classe mais crua do cadastro
+
+RED medido em prod 26/09, e **maior do que o que eu publiquei**: eu disse "os 14". Os 14 eram o recorte
+fora das competencias exportadas. A classe inteira e:
+
+| | n |
+|---|---|
+| vinculos com `data_fim` anterior a `data_inicio` | **53** |
+| colaboradores | **51** |
+| **que a lista mostrava** | **4** — e esses 4 por OUTRAS assinaturas, de batida |
+| **invisiveis** | **47** |
+
+**POR QUE ERA CEGA.** Tudo na lista vinha de `ler_lavra()`, e a lavra e o ESMERIL DO ESPELHO: A1 a A11
+nascem de COMPORTAMENTO NO PONTO. Vinculo com vigencia impossivel **nao produz batida nenhuma** -- e
+estado impossivel do cadastro --, entao nunca chegava a tela que promete exatamente "o cadastro diz uma
+coisa e o ponto mostra outra". Pior: a funcao abria com `if not d: return None`, entao **noite sem
+esmeril apagava a classe** junto com tudo o mais. Isso e "ausencia de sinal lida como sinal bom", a
+familia que o CLAUDE.md registra como a que mais custou aqui.
+
+**A CURA.** Nasce a assinatura **`C1`** -- codigo com **C de CADASTRO**, nao um `A12`, porque a origem e
+outra: `A` = o que o espelho repetiu; `C` = o que o cadastro diz AGORA, sem batida, sem cron, sem lavra.
+O leitor e computado ANTES da lavra e nao depende dela. **A lei nao se repete**: "esta vigencia e
+possivel?" ja tem autoridade (`validar_vigencia`, L-007), e o detector a CHAMA -- nao escreve
+`data_fim < data_inicio` nem manda `data_fim__lt` ao banco. Um selo estrutural cobra isso.
+
+**GREEN medido em prod (leitura, processo novo sobre o disco):** **51 de 51 visiveis**, os 12 pks do seu
+aval entre eles, PDF em 36.877 bytes. As duas sondas independentes -- o filtro SQL e o leitor que chama
+a autoridade -- **concordam exatamente**, que e a prova de que o leitor implementa a mesma lei.
+
+**Contadores e legenda, porque a frase tambem mente.** A tela dizia "N com anomalia recorrente --
+retrato da vigia de <data>" para tudo. Linha lida do cadastro agora **nao e recorrente e nao saiu da
+vigia**: rotular assim seria a mentira do BUG-B outra vez, num contador e num PDF que o DP imprime.
+Agora sao dois numeros com nomes proprios (`81` do espelho, `51` do cadastro, `128` listados -- os
+conjuntos se intersectam em **4**, e por isso somar os dois nao da o total), e sem lavra a tela diz
+**"Sem lavra da vigia"** em vez de inventar um retrato. A etiqueta nomeia o vinculo (`ec<pk>` e as duas
+datas): todos os 53 estao `ativa=False`, e a linha herda posto e template do vinculo VIGENTE, que esta
+correto -- sem o `ec<pk>` o admin iria mexer no lugar errado.
+
+**Listar nao e mexer.** Os 38 que cruzam competencia exportada **entram na lista** (o admin tem de
+ve-los) e ninguem toca em `ativa` nem em `data_fim` por isso.
+
+## BUG-D — `modelo` diz de que tabela e o `objeto_id`, ou nao diz nada
+
+RED medido em prod 26/09, e mais afiado do que o "905 x 686" que eu tinha publicado:
+
+| | n |
+|---|---|
+| registros com `modelo='EscalaColaborador'` | **1.900** |
+| ids distintos | 967 |
+| ids que existem como VINCULO | 905 |
+| ids que existem como COLABORADOR | 686 |
+| **ids que existem como OS DOIS -- indistinguiveis** | **626** |
+| **linhas indistinguiveis** | **1.377 de 1.900** |
+
+**ISSO ME CUSTOU UM NUMERO PUBLICADO.** Ao medir o passivo do VINCULO-FIM eu procurei por
+`objeto_id=<vinculo>` e anunciei **"62 sem trilha"**. Refeita a conta olhando tambem o id da PESSOA:
+dos 53, **51 tinham linha** -- 48 sob o id do colaborador. A ambiguidade nao e estetica: **ela fez um
+contador honesto dizer o contrario da verdade**, e a sua decisao sobre o saneamento estava pendurada
+naquele numero.
+
+**A LEI JA EXISTIA (L-007, nenhuma nova).** Sob `modelo='EscalaColaborador'`, `objeto_id` e o VINCULO --
+e nao por escolha minha: e o que **todos** os leitores do repo ja fazem (quatro selos procuram `ec.pk`)
+e o que o exemplo de uso na docstring de `registrar_log` mostra. **Os tres escritores que gravavam a
+pessoa eram os divergentes**, e estao curados: `colaboradores/services/vinculo.py:260` (883 linhas),
+`colaboradores/views.py:213` (22), `escala/views.py:221` (0 ainda). A trilha DA PESSOA tem casa propria
+e ja era chamada ao lado: `registrar_mudanca`/`HistoricoVinculo` -- nao se perde nada.
+
+**O tripwire** (`core/tests/test_selo_objeto_id_sem_ambiguidade.py`) varre a arvore por AST e le **as
+duas formas de chamada** (posicional em `registrar_log`, nomeada em `evento_kw`), porque um selo que
+visse so uma ficaria verde no dia em que o sitio ambiguo nascesse na outra. O caso que MORDE prova as
+duas, e prova tambem que o CERTO nao e acusado -- selo que da falso positivo alguem desliga.
+
+**NAO reescrevi os 686 registros historicos.** Trilha e historico. Por isso `vigencia_sem_trilha` segue
+olhando os TRES lugares -- nao por indecisao, mas porque o passado tem duas convencoes e a leitura
+honesta conhece as duas.
+
+**ACHADO NO CAMINHO, ESPERA `!` (`cron-host-diverge-do-codigo` no PENDENTES).** Os dois contadores novos
+precisavam de casa declarada, e o contrato `test_todo_command_tem_casa` cobrou -- certo. Ao rodar
+`bin/crons.sh check` apareceram **duas divergencias que nao sao minhas**: (1) `reverter_situacao_afastado
+--apply` esta DECLARADO no codigo e **nao esta instalado no host** -- um escritor de situacao de
+colaborador, desligado sem registro de quando; (2) `alarme_sem_fatia.sh --push` **roda no host a cada 20
+min e nao existe no codigo**. `install` e tudo-ou-nada: instalar LIGA um escritor desligado e APAGA um
+alarme vivo. **Nao instalei** -- e decisao sua (L-009), nao rotina. Os dois contadores ficam declarados
+e lavrados a mao hoje, para nao nascerem vazios.
+
+
 ## BUG-B — nao ha off-by-one: a guarda estava CERTA e a FRASE mentia (commit `890570b4`)
 
 O aval de ontem pedia o par **"emp4: 20/07 barra, 21/07 passa"**, na hipotese de um off-by-one na
