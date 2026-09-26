@@ -1,5 +1,97 @@
 # RELATO — esteira saas-hasner
 
+## PAREI no `!` da E3: **NADA APLICADO** | 1 divergencia fora do dinheiro | e a SOMBRA mentiu uma vez hoje
+
+Fiz o apply em DOIS passos, e foi por isso que nada quebrou: **ensaio em prod dentro de `atomic()`
+com rollback provado** (603/603 linhas identicas ao inicio) e conferencia campo a campo ANTES da
+escrita. O criterio do seu `!` nao fecha, entao nao escrevi.
+
+### O que o ensaio diz: o dinheiro TODO bate, e um contador nao
+
+Conferi os 28 campos de 607 colabs contra a coluna TOTAL do DIFF. Divergencias:
+
+| divergencia | quantas | o que e |
+|---|---:|---|
+| `previsto_em` | 606 | **carimbo de quando a conta rodou** -- nao pode bater por construcao. Defeito do MEU criterio, nao do dado: eu devia te-lo excluido por nome |
+| `inconsistencias` do col369 | **1** | prod calcula **10**, a sombra calculou **14**. Deterministico nos dois (2 corridas cada). **Nao explicado** |
+| campo de DINHEIRO | **0** | todos batem, colab a colab |
+
+E antes de chamar isso de "so um contador": a sombra **ja provou ser infiel uma vez hoje**, nesta
+mesma conferencia. Entao o numero dela nao e mais a autoridade automatica, e eu nao vou decidir por
+voce qual dos dois (10 ou 14) e o certo.
+
+### A SOMBRA MENTE sobre `horas_folga_trabalhada` -- e isso vale mais que a fatia
+
+A primeira conferencia acusou **8 colabs** com `horas_folga_trabalhada` = 0 em prod contra ate
+**134,71 h** na sombra. Persegui a causa eliminando uma variavel por vez: dado identico (vinculos,
+FolgaDia, celulas com `trabalha`/`origem`/`regeneradas`, batidas, ausencias, vereditos), motor
+identico (`Motor12x36ComEscala`, mesmos parametros de CCT), imagem identica (mesmo sha, Python
+3.13.15, Django 5.2.14), settings identico, bytecode descartado com `-B`. Tudo igual, resultado
+diferente.
+
+A causa, achada instrumentando o `open`: **`fechamento.py:231` le `logs/esmeril_espelho.json`**. E o
+corte CLASSE3-FOLGA-100 (19/09): folga trabalhada paga 100% **so com a escala certa no dia**, e quem
+diz isso e a lavra do esmeril, um ARQUIVO. A sombra roda com `--tmpfs /app/logs` (o
+`bin/simular_folha.sh` faz isso) -- **o arquivo nao existe lá**, a lavra vem vazia, ninguem e
+excluido, e a folga e paga. Prod esta CERTO; o meu esperado estava errado.
+
+Refiz o DIFF com a lavra montada e as 8 divergencias sumiram: o esperado do col203 foi de 84,65 para
+**0,00**, igual a prod.
+
+Duas coisas ficam ditas, porque sao maiores que esta fatia:
+
+1. **Todo ensaio de folha na sombra superestimou `horas_folga_trabalhada`** desde que o corte
+   CLASSE3-FOLGA-100 entrou. Nao e erro de medicao desta noite: e o desenho do ensaio.
+2. **Um campo de DINHEIRO depende de um ARQUIVO do host**, e falha para o lado CARO: sem o arquivo,
+   todo mundo tem "escala certa" e a folga paga 100%. Ausencia de sinal lida como sinal bom, na
+   folha. Obra O63.
+
+### PROVA: os 26 campos, gravado ANTES x motor DEPOIS (prod, ensaio revertido)
+
+| campo | gravado ANTES | motor DEPOIS | delta | colabs |
+|---|---:|---:|---:|---:|
+| `dias_previstos` | 10447.00 | 10440.00 | **-7.00** | 12 |
+| `horas_atraso` | 146.58 | 141.83 | **-4.75** | 3 |
+| `horas_extras` | 1460.17 | 1617.42 | **+157.25** | 130 |
+| `horas_extras_100` | 905.54 | 865.32 | **-40.22** | 13 |
+| `horas_extras_100_noturna` | 78.36 | 64.84 | **-13.52** | 9 |
+| `horas_extras_50` | 554.63 | 752.10 | **+197.47** | 128 |
+| `horas_extras_50_noturna` | 126.41 | 134.22 | **+7.81** | 25 |
+| `horas_folga_trabalhada` | 2530.72 | 2362.42 | **-168.30** | 18 |
+| `horas_intra_indenizada` | 2247.07 | 2213.74 | **-33.33** | 49 |
+| `horas_noturnas` | 18321.78 | 18341.71 | **+19.93** | 24 |
+| `horas_reflexo_dsr` | 116.45 | 347.60 | **+231.15** | 108 |
+| `horas_saida_antecipada` | 1035.76 | 871.91 | **-163.85** | 17 |
+| `horas_trabalhadas` | 69475.85 | 69866.10 | **+390.25** | 81 |
+| `inconsistencias` | 1379.00 | 1352.00 | **-27.00** | 21 |
+| `minutos_abonados` | 451676.00 | 456656.00 | **+4980.00** | 3 |
+| `minutos_previstos` | 5769716.00 | 5746763.00 | **-22953.00** | 12 |
+| `minutos_realizados` | 4113869.00 | 4114164.00 | **+295.00** | 25 |
+| `saldo_banco_horas` | -10004.17 | -9837.10 | **+167.07** | 35 |
+| `semanas_dsr_ok` | 1915.00 | 1925.00 | **+10.00** | 12 |
+| `semanas_dsr_perdido` | 818.00 | 817.00 | **-1.00** | 11 |
+| `turnos_abertos` | 770.00 | 629.00 | **-141.00** | 50 |
+
+Campos que NAO se movem em colab nenhum: `causa_espelho`, `dias_incertos`,
+`horas_extras_100_feriado`, **`horas_falta`**, `motivos_espelho`, `observacao`.
+
+Os numeros diferem dos que voce citou no aval (-31,08 h de intra, +266,24 h trabalhadas, -114
+turnos) porque aqueles foram medidos contra o gravado da SOMBRA e estes contra o gravado de PROD --
+e a deriva do gravado velho de 09 e justamente o que o seu aval aceitou. Em prod: intra **-33,33 h**
+(49 colabs), trabalhadas **+390,25 h** (81), `turnos_abertos` **-141** (50 colabs, e nao sobe em
+nenhum).
+
+### O que espera o seu `!` agora
+
+Uma frase resolve: **o col369 com `inconsistencias` 10 em vez de 14 entra?** E um contador, nao
+dinheiro, e a fonte do 14 e o ambiente que hoje se provou infiel. Com o seu ok nessa linha, aplico
+na hora -- o ensaio ja esta escrito e reverte sozinho se algo sair do lugar.
+
+PROVA: ensaio em prod via `atomic()` + `raise`, rollback conferido em 603/603 linhas; conferencia de
+28 campos x 607 colabs; causa do `esmeril_espelho.json` isolada instrumentando `builtins.open`; 2
+corridas em cada banco para provar determinismo do 10 e do 14.
+
+
 ## CORRIJO O QUE PUBLIQUEI AS 14:xx: o DIFF da E3 estava INFLADO por um bug MEU
 
 A tabela que publiquei hoje a tarde dizia **+443,31 h de cura** no campo-alvo em 09 e **+486,07 h**
