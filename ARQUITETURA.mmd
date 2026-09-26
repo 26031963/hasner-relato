@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (46 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (49 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -55,6 +55,9 @@ flowchart TD
   end
   subgraph e_auditoria["auditoria"]
     c_auditar_invariantes_chamados["auditar_invariantes_chamados<br/>07:18"]
+    c_lavrar_fase_conflitante["lavrar_fase_conflitante<br/>07:14"]
+    c_lavrar_vigencia_impossivel["lavrar_vigencia_impossivel<br/>07:17"]
+    c_lavrar_vigencia_sem_trilha["lavrar_vigencia_sem_trilha<br/>07:16"]
     c_marcar_foto_ausente_retro["marcar_foto_ausente_retro<br/>07:26"]
     c_pipeline_placar["pipeline_placar<br/>07:40"]
     c_tripwire_tipo_batida["tripwire_tipo_batida<br/>07:21"]
@@ -85,6 +88,9 @@ flowchart TD
   c_reconciliar_perguntas_orfas --> c_fechar_becos_disputa
   c_detectar_par_relampago --> c_flip_automatico
   c_processar_cartorio --> c_flip_automatico
+  c_reconciliar_vinculo --> c_lavrar_fase_conflitante
+  c_reconciliar_vinculo --> c_lavrar_vigencia_impossivel
+  c_reconciliar_vinculo --> c_lavrar_vigencia_sem_trilha
   c_apurar_furos_diarios --> c_mapa_divergencia
   c_flip_automatico --> c_marcar_foto_ausente_retro
   c_esmeril_espelho --> c_pautas_do_esmeril
@@ -104,7 +110,7 @@ flowchart TD
   c_detectar_par_relampago --> c_verificar_nucleo
   c_processar_cartorio --> c_vigia_b5_ausencia
   c_flip_automatico --> c_vigia_plantio_overnight
-  %% arestas `depende` declaradas: 31
+  %% arestas `depende` declaradas: 34
 
   %% (c) PORTAS CANONICAS — fonte: AST/grep sobre app/
   subgraph PORTAS["escritores unicos / portas canonicas"]

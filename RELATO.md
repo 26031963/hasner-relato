@@ -5239,6 +5239,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: chamados.tests.test_contract_crons.ContratoPipelineB6Test.test_todo_command_tem_casa core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero core.tests.test_contract_mypy.ContratoMypyTest.test_mypy_zero . Para a admin: nada muda.
 
+
+**26/09 01:40 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 144 min.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
