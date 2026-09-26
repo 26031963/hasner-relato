@@ -1,5 +1,21 @@
 # RELATO — esteira saas-hasner
 
+## HANDOFF 27/09 — estado exato antes do auto-compact
+
+**O69 APLICADA em 09 e no ar**: 654,74 h de movimento absoluto, reversao em
+`logs/apply_o69_09_antes.json` + `git revert 9b67131e`. **push43 NAO POUSOU** -- foi rejeitado pela
+`regua_tickets` (O67 e O69 citadas em commit sem linha na tabela), curado em `068e830b`; `push44` esta
+na suite com esse commit. Ultimo hash POUSADO em `origin/main`: **`af7a6425`**, `ahead = 9`. Nao invento
+hash de push43 porque ele nao existe.
+
+**FILA NA ORDEM** (ordem do Ronald 27/09, nenhuma lei nova): **(1)** O69 lado do espelho -- `espelho_do_colab`
+le `CelulaDia.escala_geradora` + selo do leitor que escolhe vinculo sem perguntar a celula; **(2)** O68 --
+guarda do plantao que cruza a meia-noite, aposentar o plano B no dinheiro, DIFF para o `!`; **(3)** O51b --
+colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a celula (68 dias sem canal).
+
+**ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
+no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
+
 ## APLICADA a O69 (654,74 h) -- e os sobrepostos cairam de 116h para 7 minutos
 
 607 colabs recalculados em 09/2026, e a **conferencia pos-apply de 607 x 27 campos contra o previsto
