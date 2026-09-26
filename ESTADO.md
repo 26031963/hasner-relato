@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:09:02.**
+**Medido em 26/09/2026 01:14:02.**
 
 | | |
 |---|---|
@@ -24,11 +24,18 @@ a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada p
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/vinculo.py
+ M app/colaboradores/views.py
+ M app/config/crons.py
  M app/docs/RELATO.md
  M app/escala/services/cadastro_realidade.py
  M app/escala/tests/test_cadastro_x_realidade.py
+ M app/escala/views.py
+ M app/ponto/management/commands/gerar_celulas.py
+ M app/ponto/tests/test_hx_regen_nao_toca_exportado.py
  M app/templates/escala/cadastro_x_realidade.html
  M bin/relato.sh
+?? app/core/tests/test_selo_objeto_id_sem_ambiguidade.py
 ?? bin/gerar_estado.py
 ?? bin/hasner-relato.service
 ?? bin/hasner-relato.timer
@@ -38,43 +45,43 @@ a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada p
 
 ```
 
-● Agora o selo, com os casos que mordem — inclusive o da lavra ausente:
-
   Ran 1 shell command
 
-● O push15 está rodando a suíte e é ele que tem a trava. Enfileiro o meu selo pela trava, com espera longa:
-
-  Ran 1 shell command
-
-● Medindo o GREEN em prod (processo novo lê o disco; só leitura):
-
-  Ran 1 shell command
-
-● GREEN em prod: 51/51 visíveis (era 4), as duas sondas independentes concordam, os 12 pks do aval aparecem, PDF renderiza. E 81+51−128 = 4, exatamente a interseção medida.
+● Agora o tripwire que impede a classe de voltar — varredura por AST em todo o repo, com o caso que morde:
 
   Ran 2 shell commands
 
-● Enquanto a trava está com o push, sigo para BUG-D (OBJETO-ID-AMBIGUO). Censo dos escritores:
+● RED do BUG-D bem mais afiado do que "905 × 686": 626 dos 967 ids existem como vínculo E como colaborador — 1.377 das 1.900 linhas são literalmente indistinguíveis.
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 1 shell command
 
-● Background command "Rodar o selo do BUG-C pela trava" completed (exit code 0)
+● push15 vermelho com 3 falhas, e as três são consequências minhas. Vendo todas:
 
-  Read 1 file
+  Searched for 1 pattern, ran 2 shell commands
 
-● 12 de 13 verdes. E a falha é o meu próprio erro do BUG-B repetido dentro da hora: a docstring cita data_fim__lt para dizer que ele não se usa, e a asserção varre prosa. Curo na
-  raiz — a asserção passa a ver só código:
+● Duas coisas: o meu censo de leitores perdeu este teste, e o formato ficou com parênteses duplos. Curo os dois, e declaro a casa dos dois commands novos:
 
-  Varrer codigo, nao prosa
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1;
-     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ESTEIRA_QUEM=bugc2 bash bin/trava_teste.sh --espera 1200 -- docker run --rm
-     $TESTE_DOCKER --networ…
+  Searched for 2 patterns, ran 1 shell command
 
-✽ Quantumizing… (23m 28s · ↓ 60.7k tokens)
+● Uma ocorrência só — a segunda falha era a subclasse herdando o método. Aplicando só o item 3:
+
+  Ran 1 shell command
+
+● Rodando tudo que toquei, junto dos selos novos:
+
+  Searched for 2 patterns, ran 3 shell commands
+
+● O check revela duas divergências pré-existentes entre host e código — importantes e não minhas:
+
+● Esperar o veredito do lote
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until grep -qE "^(OK|FAILED)" $S/scratchpad/bugcd.log 2>/dev/null; do sleep 15; done;
+     grep -E "^(OK|FAILED|Ran )" $S/scratchpad/bugcd.log; grep -E "^(FAIL|ERROR):" -A 12 $S/scratchpad/bugcd.log | head -50
+
+✽ Quantumizing… (28m 28s · ↓ 79.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
