@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 15:23:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (66.8 MB). Acoes na janela: **538**.
+**Medido em 26/09/2026 15:26:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (66.9 MB). Acoes na janela: **540**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:26:06 | Bash | Conferir suite e se a arvore bate com o commit | `cd /home/ronald/saas-hasner && grep -E "^Ran \|^(OK\|FAILED)\|^(FAIL\|ERROR):" logs/o60_suite2.log \| tail -8; echo "--- arvore == commit? ---"; git status --short -- app/ponto/motor_calculo_v2.py app/escala/utils.py app/ponto/services/fechamento.py \| head; echo "(vazio = arvore igual ao commit)"; git log --oneline -1` |
+| 15:23:00 | Bash | Publicar e conferir a suite | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -1; grep -E "^Ran \|^(OK\|FAILED)\|^(FAIL\|ERROR):" logs/o60_suite2.log \| tail -6` |
 | 15:22:49 | Bash | Commitar a guarda e a correcao | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg8.txt <<'EOF' [ESPELHO-VERDADE-E3-COMPLETA] a AMOSTRA achou um bug meu: o DIFF que publiquei estava INFLADO LEI-AKITA: origem=ponto/motor_calculo_v2.py::_periodos_pelo_marco (fundia o dia num periodo unico SEM carregar o intervalo), testemunha=a propria ata (quantas lampadas acesa) contra as batidas de dentro de [entrada, saida], RED=a amost ...` |
 | 15:22:18 | Bash | Conferir a suite completa | `cd /home/ronald/saas-hasner && grep -E "^Ran \|^(OK\|FAILED)\|^(FAIL\|ERROR):" logs/o60_suite2.log \| tail -6` |
 | 15:22:06 | Bash | Registrar o item 2 no RELATO | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() anc='### O achado que NAO curei, e por que\n' L=[];A=L.append A('### Item (2): a Pauta de 08 compara com o que foi PAGO -- e eu quase medi isso no lugar errado') A('') A('08/2026 foi fechada a mao pelo admin e enviada ao Dominio, entao comparar com o NOSSO gravado nao diz') A('nada sobre o que a pessoa recebeu. Medi onde mora o ...` |
