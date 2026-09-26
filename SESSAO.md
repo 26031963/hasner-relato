@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 20:14:25.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.0 MB). Acoes na janela: **782**.
+**Medido em 26/09/2026 20:19:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.0 MB). Acoes na janela: **785**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:14:43 | Bash | Esperar a suite fechar | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite2.log \| tail -8` |
+| 20:14:37 | Bash | Suite completa que libera o apply | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) && ESTEIRA_QUEM=o69f2 bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache --tm ...` |
+| 20:14:22 | Bash | Declarar a casa e conferir | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='app/config/crons.py' s=open(f,encoding='utf-8').read() v = "FORA_DE_PIPELINE = {\n 'lavrar_fabrica':" n = ("FORA_DE_PIPELINE = {\n" " 'pdf_x_espelho_divergentes':\n" " 'PDF-E-O-ESPELHO (O9): contador do placar, NAO cron. Compara, por colab e por dia, o que o PDF do '\n" " 'cartao desenha contra o que o espelho diz -- esperado 0. Roda a mao por  ...` |
 | 20:14:10 | Bash | Ver a primeira chave do FORA_DE_PIPELINE | `cd /home/ronald/saas-hasner && grep -n "^FORA_DE_PIPELINE" -A 3 app/config/crons.py \| head -6` |
 | 20:14:04 | Bash | Achar onde a chave mora agora | `cd /home/ronald/saas-hasner && grep -n "lavrar_jornada_lixo" app/config/crons.py \| head -3` |
 | 20:13:53 | Bash | Curar o ruff e a casa do comando | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='app/relatorios/management/commands/pdf_x_espelho_divergentes.py' s=open(f,encoding='utf-8').read() v = " import datetime\n\n from django.utils import timezone\n\n from colaboradores.models import Colaborador, Empresa" n = " import datetime\n\n from colaboradores.models import Colaborador, Empresa" assert s.count(v)==1, 'ancora do import' s=s.re ...` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 20:14:25.**
+**Medido em 26/09/2026 20:19:51.**
 
 | | |
 |---|---|
@@ -45,7 +45,7 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 ```
   o selo do leitor que escolhe vínculo sem perguntar — não fiz, e não os conto como feitos.
 
-✻ Sautéed for 11m 4s · done 7:54 PM
+✻ Sautéed for 11m 4s · done 7:54 PM · 1 shell still running
 
 ❯ aval Ronald: aplica a O69 (654,74 h) !
 
@@ -67,20 +67,20 @@ e571febd [O67] 09 CONDICIONAL: as tres medicoes de frota com a lista -- 203 no T
 
 ● Dois vermelhos meus, e dinheiro não passa por cima de suíte vermelha. Curando:
 
-  Declarar a casa e conferir · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
-     f='app/config/crons.py'
-     s=open(f,encoding='utf-8').read()
-     v = "FORA_DE_PIPELINE = {\n 'lavrar_fabrica':"
-     n = ("FORA_DE_PIPELINE = {\n"
-     " 'pdf_x_espelho_divergentes':\n"
-     " 'PDF-E-O-ESPELHO (O9): contador do placar, NAO cron. Compara, por colab e p…
+  Ran 5 shell commands
 
-✢ Smooshing… (16m 38s · ↓ 6.4k tokens)
+● Os dois curados. Rodando a suíte inteira de novo — é ela que libera o apply:
+
+  Esperar a suite fechar · 5m 7s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL|ERROR):|^Ran |^(OK|FAILED)"
+     logs/o69_suite2.log | tail -8 (5m 6s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Smooshing… (22m 5s · ↓ 7.6k tokens)
                                                                                                                                                             2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
