@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:24:33.**
+**Medido em 26/09/2026 16:30:02.**
 
 | | |
 |---|---|
@@ -42,18 +42,6 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 
 ```
 
-● APLICADO: 607 colabs, 0 divergências. Os números batem com o aval. Agora a prova pós-apply contra o ensaio, campo a campo:
-
-  Ran 1 shell command
-
-● PROVA PÓS-APPLY: 0 divergências em 607 colabs × 27 campos. Guardando o retrato de antes, para que reverter seja possível:
-
-  Ran 2 shell commands
-
-● O selo recusa: PENDENTES só guarda decisão dele. Lendo a regra para pôr no lugar certo:
-
-  Searched for 1 pattern, ran 2 shell commands
-
 ● O item precisa de tipo do vocabulário de decisão — ele nasceu do seu ! e espera sua revisão:
 
   Ran 3 shell commands
@@ -68,16 +56,28 @@ aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SI
 
 ● Lavra gravada no banco de prod. O risco agora é a suíte: medindo o impacto do fail-closed:
 
-● Conferir a lavra no banco e o impacto na suite
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from ponto.services.esmeril_espelho import ler_lavra, CHAVE_LAVRA
-     from inteligencia.models import MetricaSnapshot as M
-     s = M.objects.filter(chave=CHAVE_LAVRA).order_by('-data_re…
+  Ran 1 shell command
 
-· Billowing… (15m 39s · ↓ 15.6k tokens)
+● Fail-closed funcionando — e quebrando a suíte. A cura não é afrouxar a guarda, é notar que o juiz só é necessário quando há o que julgar:
+
+● Exigir a lavra so quando ha folga trabalhada · 5m 7s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
+     f='app/ponto/services/fechamento.py'
+     s=open(f,encoding='utf-8').read()
+     velho = """ from ponto.services.esmeril_espelho import ler_lavra as _ler_lavra
+     _lavra = _ler_lavra(exigir=True)
+     fechamento.horas_folga_trabalhada = round(sum(
+     p.minutos_trabalha… (5m 6s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Billowing… (21m 8s · ↓ 17.2k tokens)
+
+❯ DEPLOY AGORA (L-005): bin/deploy.sh com reload gracioso e prova de casca, para tela e PDF servirem o motor curado da E3 ja aplicada em 09. Smoke em prod logo apos: espelho
+  (tela) e cartao PDF do col736 11/09 = 420 min e do col369 23/09 = 07:01-14:59, iguais. Depois segue a O63 e repete o deploy ao fecha-la. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index

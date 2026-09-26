@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 16:24:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (67.8 MB). Acoes na janela: **610**.
+**Medido em 26/09/2026 16:30:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (67.8 MB). Acoes na janela: **611**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:24:55 | Bash | Exigir a lavra so quando ha folga trabalhada | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/services/fechamento.py' s=open(f,encoding='utf-8').read() velho = """ from ponto.services.esmeril_espelho import ler_lavra as _ler_lavra _lavra = _ler_lavra(exigir=True) fechamento.horas_folga_trabalhada = round(sum( p.minutos_trabalhados for p in resultado.periodos_ft if _certa(colab.id, timezone.localtime(p.entrada).date(), _lavra)) / ...` |
 | 16:17:56 | Bash | Conferir a lavra no banco e o impacto na suite | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from ponto.services.esmeril_espelho import ler_lavra, CHAVE_LAVRA from inteligencia.models import MetricaSnapshot as M s = M.objects.filter(chave=CHAVE_LAVRA).order_by('-data_ref').first() print('snapshot:', s.data_ref if s else None, '\| num=', s.numerador if s else None, '/', s ...` |
 | 16:16:48 | Bash | Fechamento exige a lavra e lavra no banco | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/services/fechamento.py' s=open(f,encoding='utf-8').read() velho = """ from escala.services.escala_certa import escala_certa_no_dia as _certa from ponto.services.esmeril_espelho import ler_lavra as _ler_lavra _lavra = _ler_lavra()""" novo = """ from escala.services.escala_certa import escala_certa_no_dia as _certa # SEM LAVRA, PARA COM A ...` |
 | 16:16:34 | Bash | Lavra vira dado no banco, com SemLavra | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/services/esmeril_espelho.py' s=open(f,encoding='utf-8').read() velho = '''def lavrar(hoje=None): """A vigia noturna: grava o retrato da frota. -> dict""" d = anomalias_da_frota(hoje) tmp = caminho_da_lavra() + '.novo' with open(tmp, 'w', encoding='utf-8') as f: json.dump(d, f, ensure_ascii=False) os.replace(tmp, caminho_da_lavra()) retu ...` |
