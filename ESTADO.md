@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 20:34:46.**
+**Medido em 26/09/2026 20:35:31.**
 
 | | |
 |---|---|
@@ -60,7 +60,7 @@ cb4152ef [O67] PAREI no item (6): 85 colabs, 3.268h56 -- e os meus DOIS medidore
 
   De diferenças de 45 a 116 horas para 7 a 10 minutos — o arredondamento residual. Registrando:
 
-  Registrar e publicar a O69 aplicada
+● Registrar e publicar a O69 aplicada
   ⎿  $ python3 <<'ENDPY'
      f='docs/RELATO.md'
      s=open(f,encoding='utf-8').read()
@@ -71,7 +71,7 @@ cb4152ef [O67] PAREI no item (6): 85 colabs, 3.268h56 -- e os meus DOIS medidore
      A('')
      A('607 colabs recalculados em 09/2026, e a **conferencia pos-apply de 607 x…
 
-✻ Smooshing… (37m 0s · ↓ 13.3k tokens)
+· Smooshing… (37m 45s · ↓ 14.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                             1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
