@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:40:31.**
+**Medido em 26/09/2026 17:45:32.**
 
 | | |
 |---|---|
@@ -33,10 +33,12 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 
 ```
  M app/config/crons_duracao.json
+ M app/core/tests/test_selo_performance.py
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M app/ponto/tests/test_selo_chokepoint_escrita.py
  M app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py
  M app/ponto/turnos.py
 ?? esteira.pausada
@@ -45,44 +47,44 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● DIFF por leitor completo. Escrevendo, para commitar assim que a suíte fechar:
-
-  Ran 2 shell commands
-
-❯ BECO-FIO-FECHADO-CELULA-ABERTA (P7.1; L-002 a celula manda): INVARIANTE: celula de competencia aberta com veredito furo/cobrado tem SEMPRE um canal vivo (pergunta aberta ao
-  colab ou pendencia do admin). Contador celula_furo_sem_canal, esperado 0, no MetricaSnapshot.
-  FONTE: quem fecha disputa/pergunta (vias chamado_encerrado, celula_absolveu, completude_turno, "nada a perguntar", Q2-JA "conversa parada") -- nomear arquivo:linha de cada
-  fechador.
-  MUDA: nenhum fechador encerra o fio sem perguntar o veredito atual da celula; se a celula ainda diz furo/cobrado, nao fecha. Q2-JA "conversa parada": conferir contra o corte
-  DECIDIR-642 (prescricao por competencia, nunca por idade).
-  RED: as 66 fechadas pelo sistema com celula ainda em furo/cobrado em 09 (col168 21, col864 8, col348 5 ...); e os 1-dia col874 27/08, col707 20/09, col281 08/09 (autopsia das
-  lampadas: que marco segue apagado depois da resposta gravada).
-  PASSIVO: reabrir canal dos becos de 09 = DRY com o numero, espera !.
-  SELO: fechador que nao consulta a celula = vermelho.
-  PROIBIDO: fechar por idade; fallback; atalho.
-  PRONTO: RELATO com os REDs, o contador medido e o commit. HAIKU: celula_furo_sem_canal no snapshot; golden "quantos dias estao travados sem ninguem poder resolver?". Nenhuma
-  lei nova.
-
-● Ordem nova registrada antes de qualquer coisa — a O65 ainda está fechando:
-
-  Ran 1 shell command
-
-● Suíte ainda rodando. Uso a espera para o censo que a O66 pede — cada fechador com arquivo:linha:
-
-  Searched for 1 pattern, ran 4 shell commands
 
 ● A suíte segue rodando (12 min) e apareceu um AttributeError de fixture falsa sem ata — engolido pelo meu except, mas ruidoso. Esperando o veredito:
 
-● Esperar o fim da suite · 2m 28s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if grep -qE "^Ran [0-9]+ tests" logs/o65_suite.log 2>/dev/null; then break; fi; sleep 50; done; grep -E
-     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o65_suite.log | tail -10 (2m 24s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Pouncing… (23m 51s · ↓ 30.4k tokens)
+● Background command "Suite completa da O65" completed (exit code 0)
+
+● Duas falhas, as duas consequência da O65 — e teto não se levanta. Medindo:
+
+  Ran 2 shell commands
+
+● Background command "Esperar a suite completa da O65" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● 24 queries contra teto 22 no caminho da batida de chão. As batidas já estão carregadas no chamador — deixo de reconsultá-las:
+
+  Ran 1 shell command
+
+● Sobrou uma query — a das células. Dou alimentação a quem já as tem, e no caminho da batida assumo o custo com a justificativa escrita que o próprio selo exige:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● _cels_mes nasce depois do uso — NameError meu. Revertendo e assumindo o custo com a mesma justificativa:
+
+  Subir o teto do calendario com justificativa e conferir
+  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
+     f='app/core/tests/test_selo_performance.py'
+     s=open(f,encoding='utf-8').read()
+     v = " 'colaboradores/N/calendario': 25,"
+     n = (" # 25 -> 26 (O65, 26/09). JUSTIFICATIVA ESCRITA, como o C8 exige: a +1 e a query que le a CELULA\n"
+     " # para o pareador sab…
+
+✽ Pouncing… (28m 52s · ↓ 41.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
