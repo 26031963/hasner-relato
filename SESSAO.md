@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 11:15:09.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (62.2 MB). Acoes na janela: **618**.
+**Medido em 26/09/2026 11:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (62.2 MB). Acoes na janela: **619**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:15:05 | Bash | Commitar o selo e publicar | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json f = 'app/docs/PENDENTES_RONALD.json' d = json.load(open(f, encoding='utf-8')) for x in d: if x.get('id') == 'e3-metade-numero-mudou': x['id'] = 'e3-v3-escopo-sem-col207' x['o_que'] = ( "**O DIFF v3 (piso pelo JUIZ) volta ao numero do seu PRIMEIRO `!`: +39,41 h no total, 09 com " "+4,04 h em 19.** A v2 (+65,66 h) era a errada -- ela punha  ...` |
 | 11:14:31 | Bash | RELATO com a tabela das tres versoes | `python3 <<'ENDPY' f = 'docs/RELATO.md' s = open(f, encoding='utf-8').read() cab = '# RELATO — esteira saas-hasner\n' L = [] A = L.append A('') A('## DIFF v3 (piso pelo JUIZ) — e ele **volta ao numero do seu primeiro `!`**') A('') A('\| competencia \| v1 (`cadastrado or piso`, piso do campo LIXO) \| v2 (`max`, piso do LIXO) \| **v3 (`max`, piso do JUIZ)** \|') A('\|---\|---\|---\|---\|') A('\| 07/2 ...` |
 | 11:13:55 | Bash | Selo com o RED de hoje e a costura no relato.sh | `cd /home/ronald/saas-hasner && cat > bin/tests/test_relato_afirma_com_prova.sh <<'ENDSH' #!/usr/bin/env bash # AFIRMACAO DE ATO EXIGE PROVA AO LADO (corte Ronald 26/09, cauda). Selo de host, sem Django. # # O RED E MEU E E DE HOJE. O RELATO foi publicado com o titulo # "## E3 METADE v2 — APLICADO em 09/2026: **+21,29 h em 17 colaboradores**" # e **nada tinha sido aplicado**: medido depois no `Fech ...` |
 | 11:13:21 | Bash | Refazer a base com o comentario certo | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' import py_compile, tempfile f = 'bin/relato_afirma_com_prova.py' s = open(f, encoding='utf-8').read() # comentario na base passa a ser ';' -- porque TODO titulo markdown comeca com '#' s = s.replace(""" return {l.rstrip('\\n') for l in open(p, encoding='utf-8') if l.strip() and not l.startswith('#')}""", """ # O COMENTARIO DA BASE E ';', NAO '#': to ...` |

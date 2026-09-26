@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 11:15:09.**
+**Medido em 26/09/2026 11:15:45.**
 
 | | |
 |---|---|
@@ -60,7 +60,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Selo verde com o RED de hoje, e o relato.sh recusa publicar. Commitando e publicando a tabela do DIFF v3:
 
-  Commitar o selo e publicar · 3s
+● Commitar o selo e publicar
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import json
      f = 'app/docs/PENDENTES_RONALD.json'
@@ -71,7 +71,7 @@ RELATO, com a lista de nomes do banco como autoridade._
      x['o_que'] = (
      "**O DIFF v3 (piso pelo JUIZ) volta ao numero do seu…
 
-· Beboppin'… (7m 25s · ↓ 24.3k tokens)
+· Beboppin'… (8m 1s · ↓ 25.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
