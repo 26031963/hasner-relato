@@ -38,8 +38,33 @@ devolveu **DOIS periodos ABERTOS e 0,00 h** num dia inteiro trabalhado -- ele pa
 batida carrega, e o tipo esta errado. O juiz da E2 responde por **instante contra marco**, e o marco de
 intervalo esta cadastrado: 13:00-13:59 cai nele.
 
-Aqui o veredito CERTO nao e "somar horas": e **dia em aberto + pergunta**, porque a saida do dia
-realmente nao existe. O defeito e inventar dois periodos abertos e perder o intervalo, nao o zero.
+**CORRECAO MINHA, no mesmo dia**: eu escrevi aqui que "a saida do dia realmente nao existe" e que o
+veredito certo seria dia em aberto. **Errado** -- a saida EXISTE, e a batida das 14:59; ela so foi
+gravada como `E`. Quem me mostrou foi o proprio juiz, ao ler o marco em vez do tipo: ele fecha o dia
+07:01 -> 14:59 e reconhece o intervalo 13:00-13:59 como BATIDO. Eu tinha lido a lista de tipos
+gravados, que e exatamente o erro que a fatia cura.
+
+### O juiz responde os tres, medido em prod
+
+| caso | o motor hoje | o juiz |
+|---|---|---|
+| col638 13/08 | 540 min, **HE 1,68 h**, indenizou 60 min | 541 − **90 (cadastrado)** = **451 min** < 530 -> **0 HE** |
+| col638 18/08 | 537 min, **HE 1,63 h**, indenizou 60 min | 538 − 90 = **448 min** < 530 -> **0 HE** |
+| col369 23/09 | **2 periodos abertos, 0,00 h** | intervalo **batido 59 min**, dia 07:01 -> 14:59 = **419 min**, e os 2 tipos divergentes NOMEADOS |
+
+Sao os numeros do seu pedido ("13/08 +1,7h e 18/08 +1,6h -> 0 HE"; "col369 sem espuria nem HE"). O juiz
+**nao paga nada**: ele entrega periodos, intervalo e a flag `intervalo_indenizavel`. Quem transforma em
+hora e o motor, e essa migracao e a **E3**, cuja porta e o DIFF na sombra com o seu `!`.
+
+### O registro do juiz esta PARADO, e de proposito
+
+`JUIZES['batida']` nao entrou em `core/juizes.py`. A TRAVA JUIZ-NOVO grep a frase pelo **nome da
+funcao** (`corte Ronald: juiz periodos_do_dia nasce`) e o corte que existe nomeia a **familia**
+("juiz batida nasce"). Escrever eu mesmo a frase que falta seria escrever o seu corte por voce -- e a
+trava existe exatamente contra isso (o caso `dia_das_batidas`: juiz que nasceu sem corte e discordava
+da celula em 650 batidas). Afrouxar o selo para o meu proprio codigo passar seria o mesmo erro pelo
+outro lado. Duas frases resolvem, ou a decisao de a trava aceitar o corte da familia -- item
+`juiz-batida-registro-espera-frase` no PENDENTES. O juiz e os selos estao no ar; so o censo espera.
 
 ### Contrato de entrada do juiz (4 linhas, antes de codar)
 
@@ -5241,6 +5266,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 01:40 ARVORE VERDE de novo (vigia da arvore)** -- vermelha por 144 min.
+
+
+**26/09 01:45 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

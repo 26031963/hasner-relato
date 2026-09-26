@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:44:04.**
+**Medido em 26/09/2026 01:49:05.**
 
 | | |
 |---|---|
@@ -23,44 +23,50 @@ f3d39add [BUG-C] o censo da vigencia impossivel vira UM, e ganha contador com do
 
 ## `git status --short`
 
-_arvore limpa (`git status` vazio)_
+```
+ M app/core/juizes.py
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
+?? app/ponto/juiz_batida.py
+?? app/ponto/tests/test_juiz_batida.py
+```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Achado decisivo: o instante congelado (dna.lampadas) só existe em 1,7% de 08 e 75% de 09. Então o juiz não pode depender dele. A saída não é fallback — é chamar o produtor sobre
-  o DNA congelado. Provando que os dois coincidem onde ambos existem:
+  Ran 1 shell command
+
+● O juiz responde os três REDs exatamente como o Ronald especificou:
+
+  ┌──────────────┬─────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────┐
+  │     caso     │           motor hoje            │                                       juiz                                       │
+  ├──────────────┼─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────┤
+  │ col638 13/08 │ 540 min, HE 1,68h, indenizou 60 │ 541 − 90 (cadastrado) = 451 min < 530 → 0 HE                                     │
+  ├──────────────┼─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────┤
+  │ col638 18/08 │ 537 min, HE 1,63h               │ 538 − 90 = 448 min → 0 HE                                                        │
+  ├──────────────┼─────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────┤
+  │ col369 23/09 │ 2 períodos abertos, 0,00h       │ intervalo batido 59 min, dia 07:01→14:59 = 419 min, 2 tipos divergentes nomeados │
+  └──────────────┴─────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────┘
+
+  E corrijo o que eu escrevi antes: a saída do col369 existe — é a 14:59, gravada como E. O juiz viu o que eu não vi.
 
   Ran 1 shell command
 
-● 7.457 de 7.457 — 100%, zero divergência. O desenho está provado, não suposto: um caminho só, sem ramo e sem fallback, e o selo sai de graça. Conferindo a fila para rodar os
-  selos pendentes:
+● Agora os selos do juiz, com os REDs como fixture e o caso que morde:
 
-  Ran 2 shell commands
+  Read 1 file
 
-● origin/main ainda em 4ea0942b — o push do integrador falhou e ele já tentou de novo. Preciso saber por quê (40 commits parados):
+● Background command "Commitar as curas e enfileirar a verificacao" failed with exit code 1
 
-  Ran 2 shell commands
+  Searched for 1 pattern
 
-● O advisor estava certo, e é a O56 em ação: meus arquivos em voo derrubaram o push do integrador três vezes. As falhas são todas minhas. Vendo o que o selo do relógio exige:
+● 89 testes OK — todo o trabalho commitado está verificado (o exit 1 foi o grep final não achando falha). Rodando os selos do juiz:
 
-  Searched for 1 pattern, ran 1 shell command
+● Regenerar diagrama e olhar o integrador
+  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/gerar_diagrama.py 2>&1 | tail -1; git fetch origin -q; echo "origin/main=$(git log --oneline -1 origin/main|cut -c1-45)"; echo
+     "ahead=$(git rev-list --count origin/main..HEAD)"; grep -c "FAIL" logs/integrador.log | head -1; tail -4 logs/integrador.log
 
-● Duas curas: congelar o relógio no arquivo novo e regenerar o diagrama.
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● Enquanto a verificação enfileira, escrevo o juiz. O desenho está fechado pelas medições: papel do marco vem da ata (o cartório já casou), instante vem do produtor sobre o DNA
-  congelado.
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O desenho fecha: as lâmpadas da ata vêm na ordem dos marcos do DNA, e montar_lampadas dá chave+instante na mesma ordem — então é um zip com conferência, não um palpite.
-  Escrevendo o juiz:
-
-  Running 1 shell command…
-
-* Quantumizing… (58m 30s · ↓ 176.4k tokens)
+✢ Quantumizing… (1h 3m 30s · ↓ 199.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
