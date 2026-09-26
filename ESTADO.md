@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:19:47.**
+**Medido em 26/09/2026 01:24:03.**
 
 | | |
 |---|---|
@@ -23,44 +23,47 @@ d64f1a53 TICKETS: linha do ESTADO-PUBLICADO que o pre-push cobrou (fatia citada 
 
 ## `git status --short`
 
-_arvore limpa (`git status` vazio)_
+```
+ M app/colaboradores/services/vinculo.py
+ M app/escala/services/cadastro_realidade.py
+```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● Relato publicado (145 substituições, 0 vazamento). Agora o item (7) — porta da E1. Medindo os três selos de frota em prod:
 
-● Background command "Rodar o lote de selos afetados" completed (exit code 0)
+  Searched for 1 pattern, ran 1 shell command
 
-● Background command "Esperar o lote de 89" completed (exit code 0)
-
-● Background command "Esperar o veredito do lote" completed (exit code 0)
-
-● Os 6 arquivos respondem 200 e o ESTADO.md publicado carrega o HEAD real. Veredito do lote:
-
-  Read 1 file
-
-● 89 testes OK. Uma checagem obrigatória antes de commitar: o template já está no bind-mount e muda a tela na hora, enquanto prod roda o .py velho. Provando que a combinação
-  velho+novo não dá 500:
+● SELO 3 fechado (0). SELO 2 caiu de 15 para 1 colab — e é o col899, exatamente o vínculo que restaurei ontem. Medindo antes de concluir:
 
   Ran 1 shell command
 
-● A tela é do saas_ui (o core roda urlconf enxuto). Rodando na casca certa:
+● Achado: não é bug de fase — é a fronteira entre dois vínculos. Dias 21-24 vêm do ec1311 (6x1) e 25 do ec1310, e meu selo contava a corrida atravessando a troca. Remedindo pelo
+  vínculo gerador, e de passo um censo do cadastro que mente:
 
   Ran 1 shell command
 
-● Degrada limpo: 82 KB, sem erro, cai no 7x — não há janela de 500. Commitando:
+● SELO 2 = 0 medido corretamente — o "1" era falso positivo do meu próprio selo atravessando a troca de vínculo. E aparece um achado de cadastro: 50 dos 132 templates se declaram
+  12x36/24x48 com jornada < 11h ou folga por dia-da-semana (16 vínculos ativos).
 
-  Ran 3 shell commands
+  Searched for 2 patterns, listed 1 directory, ran 7 shell commands
 
-● Régua limpa. Lançando o push (suíte completa pelo hook) e publicando o relato:
+● O golden vive na stack da mensageria (nucleo/ não está neste repo); o que é meu aqui é o número que ela consome. E ele tem de sair da mesma derivação que a lista usa — então o
+  censo vai morar junto da lei:
 
-  Lancar o push e publicar o relato · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; git fetch origin -q; echo "ahead=$(git
-     rev-list --count origin/main..HEAD)"; nohup git push origin HEAD:main > $S/push16.log 2>&1 & sleep 3; echo "push16 lancado $(date … (4s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✶ Quantumizing… (34m 13s · ↓ 100.2k tokens)
+● Agora o contador de vigia que a tela e o copiloto leem, pelo mesmo censo:
+
+  Ran 1 shell command
+
+● O irmão vigencia_sem_trilha tem a mesma comparação escrita de novo (data_fim__lt=F(...)) — o que acabei de proibir. Ele passa a ler o censo:
+
+  Running 1 shell command…
+  ⎿  $ sed -n 60,110p escala/services/vigencia_sem_trilha.py
+
+· Quantumizing… (38m 29s · ↓ 114.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
