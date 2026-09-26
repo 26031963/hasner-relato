@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 10:05:45.**
+**Medido em 26/09/2026 10:10:46.**
 
 | | |
 |---|---|
@@ -25,25 +25,16 @@ e37398b8 O57: alvo temporario do teste empirico
 
 ```
  M app/config/crons_duracao.json
-?? 0
+ M app/docs/RELATO.md
 ?? bin/commit_so_o_declarado.sh
 ?? bin/gerar_sessao.py
+?? bin/tests/test_commit_so_o_declarado.sh
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Encontrado: hasner-fabricante.timer (a cada 30 min, próximo às 10:30). Desligando com a trilha exata que você deu:
-
-  Ran 1 shell command
-
-● Fabricante DESLIGADO: pausa com dono e timer disabled+inactive, fora da lista de disparos. Agora a cura da O57 — os sítios que commitam e o pre-commit:
-
-  Ran 1 shell command
-
-● Só um sítio da casa commita no repo principal por script (relato.sh, e num repo separado). Mas os commits "linha do vigia" e "placar e rodape" existem — achando quem os faz, que
-  é o item (2):
 
   Ran 1 shell command
 
@@ -62,11 +53,21 @@ e37398b8 O57: alvo temporario do teste empirico
 
 ● O hook vê o índice temporário — as duas curas coexistem sem falso positivo. Agora o teste que morde: commit sem pathspec com a deleção alheia no índice:
 
-  O caso que MORDE, ao vivo
-  ⎿  $ cd /home/ronald/saas-hasner && echo "outra linha" >> app/docs/_o57_outro.txt && git add app/docs/_o57_outro.txt && echo "indice:"; git diff --cached --name-status | sed
-     's/^/ /'; echo "=== TESTE B: commit SEM pathspec (deve RECUSAR) ==="; git commit -q -m "O57 teste B: sem pathspec, com delecao a…
+  Ran 1 shell command
 
-· Transmogrifying… (1h 8m 7s · ↓ 76.6k tokens)
+● Os três testes fecham: B recusou com a mensagem certa, C passou com a deleção declarada, e o pathspec não dá falso positivo. Escrevendo o selo de host com o caso que morde:
+
+  Ran 1 shell command
+
+● Selo verde com o caso que morde. Agora o item (2) — um escritor na árvore: os três sítios param de commitar arquivo versionado:
+
+  Ran 1 shell command
+
+● Aplicando a forma mais restritiva (L-081): os três param de escrever e commitar arquivo versionado — esta sessão é a única escritora da árvore:
+
+  Running 1 shell command…
+
+✻ Transmogrifying… (1h 13m 8s · ↓ 81.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
