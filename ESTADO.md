@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:04:01.**
+**Medido em 26/09/2026 01:09:02.**
 
 | | |
 |---|---|
@@ -25,6 +25,9 @@ a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada p
 
 ```
  M app/docs/RELATO.md
+ M app/escala/services/cadastro_realidade.py
+ M app/escala/tests/test_cadastro_x_realidade.py
+ M app/templates/escala/cadastro_x_realidade.html
  M bin/relato.sh
 ?? bin/gerar_estado.py
 ?? bin/hasner-relato.service
@@ -34,40 +37,40 @@ a45201df [VAZAMENTO-RELATO] primeiro nome de colab no repo PUBLICO: 3a passada p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Medindo o RED em prod (só leitura) — os 14 e se a lista os vê:
+
+● Agora o selo, com os casos que mordem — inclusive o da lavra ausente:
 
   Ran 1 shell command
 
-● O RED é maior do que o que eu publiquei: não são 14 — são 47 dos 51 colabs invisíveis à lista (53 vínculos). Antes de escrever a cura, consulto o revisor:
+● O push15 está rodando a suíte e é ele que tem a trava. Enfileiro o meu selo pela trava, com espera longa:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 1 shell command
 
-● Aceito todos os pontos. Primeiro limpo os vigias zumbis e leio o que a advertência (5) manda ler antes de escrever:
+● Medindo o GREEN em prod (processo novo lê o disco; só leitura):
 
-● Stop Task
-  ⎿  L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push2.log; until grep -qE "main -> main|rejected|failed to push|… ·
-     stopped
+  Ran 1 shell command
 
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until grep -qE "^(OK|FAILED|Ran )|Error|error" $S/tasks/bt1zmu1yi.output 2… ·
-     stopped
+● GREEN em prod: 51/51 visíveis (era 4), as duas sondas independentes concordam, os 12 pks do aval aparecem, PDF renderiza. E 81+51−128 = 4, exatamente a interseção medida.
 
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until grep -qE "rc=" $S/tasks/bjbf3a20n.output 2>/dev/null; do sleep 20; d… ·
-     stopped
+  Ran 2 shell commands
 
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until grep -qE "rc=" $S/tasks/bjbf3a20n.output 2>/dev/null; do sleep 25; d… ·
-     stopped
+● Enquanto a trava está com o push, sigo para BUG-D (OBJETO-ID-AMBIGUO). Censo dos escritores:
 
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until grep -qE "deploy: OK|PAROU|ERRO|abortado" $S/scratchpad/deploy3.log… ·
-     stopped
+  Searched for 1 pattern, ran 1 shell command
 
-  Running 1 shell command…
+● Background command "Rodar o selo do BUG-C pela trava" completed (exit code 0)
 
-✶ Quantumizing… (18m 27s · ↓ 39.0k tokens)
+  Read 1 file
+
+● 12 de 13 verdes. E a falha é o meu próprio erro do BUG-B repetido dentro da hora: a docstring cita data_fim__lt para dizer que ele não se usa, e a asserção varre prosa. Curo na
+  raiz — a asserção passa a ver só código:
+
+  Varrer codigo, nao prosa
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1;
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ESTEIRA_QUEM=bugc2 bash bin/trava_teste.sh --espera 1200 -- docker run --rm
+     $TESTE_DOCKER --networ…
+
+✽ Quantumizing… (23m 28s · ↓ 60.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
