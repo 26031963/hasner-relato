@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 17:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (68.4 MB). Acoes na janela: **663**.
+**Medido em 26/09/2026 17:18:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (68.5 MB). Acoes na janela: **671**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:18:24 | Bash | Ver o contexto das outras chamadas | `cd /home/ronald/saas-hasner && sed -n '640,650p;750,760p;818,826p' app/ponto/turnos.py` |
+| 17:18:19 | Bash | Listar todas as chamadas ao pareador | `grep -n "parear_turnos(" ponto/turnos.py` |
+| 17:18:13 | Bash | Achar as duas chamadas ao pareador | `awk '/^def turnos_do_colab/,/^def [a-z_]+\(/{if (/parear_turnos\(/) print NR": "$0}' ponto/turnos.py` |
+| 17:18:06 | Bash | Chamador le a ata e alimenta o pareador | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ bs = list(bs) # explicito: ecos marcados nas MESMAS instancias que o pareador consome _marca_ecos_flush(bs)""" n = ''' bs = list(bs) # explicito: ecos marcados nas MESMAS instancias que o pareador consome _marca_ecos_flush(bs) # O PAPEL SAI DA ATA, PELO MESMO JUIZ DO MOTOR (O65, corte ...` |
+| 17:17:44 | Bash | Alimentacao de papel no juiz de geometria | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() # (1) a assinatura recebe a alimentacao de PAPEL v1 = """def parear_turnos(batidas, marcos_intervalo=None, marcos_borda=None, marcos_por_dia=None, intra_max_s=3 * 3600, cont_max_s=14 * 3600): \"\"\"Pareia batidas cruas (objs com .timestamp aware e .tipo E/S) em turnos. E abre turno; S fecha o ...` |
+| 17:17:15 | Bash | Ler turnos_do_colab | `grep -n "def turnos_do_colab" -A 26 ponto/turnos.py \| head -30` |
+| 17:17:03 | Bash | Ler onde o tipo decide a borda do turno | `sed -n '462,520p' ponto/turnos.py` |
+| 17:16:57 | Bash | Registrar a ordem e ler parear_turnos | `python3 - <<'ENDPY' f='docs/PROMPTS.md' s=open(f,encoding='utf-8').read() linha = ('\| 26/09 21:xx \| **O65-AGORA** (coerencia tela = PDF) \| `parear_turnos`/`turnos_do_colab` passam a perguntar ao juiz ' 'da batida, o mesmo do motor; nenhum leitor de turno pareia pelo tipo gravado e o selo da E3 se estende a eles. RED: ' 'col736 11/09 e col369 23/09 com rotulo da tela = PDF = motor. DIFF por LEIT ...` |
 | 17:06:31 | Bash | Esperar e ler o veredito do push39 | `cd /home/ronald/saas-hasner && for i in $(seq 1 14); do if grep -qE "rc_push=" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk78pxgfu.output 2>/dev/null; then break; fi; sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|rc_push\|origin/main\|ahead" logs/push39.log \| tail -8` |
 | 17:05:43 | Bash | Commitar a prontidao e publicar | `cd /home/ronald/saas-hasner && git add -- app/docs/RELATO.md && git commit -q -m "RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por furo_espelho Medido pelo juiz \`folha/export.py::classificar_export\`, so leitura, por empresa. NAO afirmo delta: o numero de antes do apply eu nao medi, e \"o apply fechou 141 turnos, entao deveria cair\" e raciocinio, nao medica ...` |
 | 17:05:33 | Bash | Registrar a prontidao e ver o push | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() anc='### O smoke que o corte pediu' L=[];A=L.append A('### A prontidao do export de 09 DEPOIS do apply (leitura, pelo juiz `classificar_export`)') A('') A('\| empresa \| entram no TXT \| retidos \| maior motivo \|') A('\|---\|---:\|---:\|---\|') A('\| emp2 \| 136 \| 323 \| `furo_espelho` 271 · `rescisao_modulo_proprio` 48 \|')  ...` |

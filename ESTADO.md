@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:13:01.**
+**Medido em 26/09/2026 17:18:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `2fe6ce39 RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por furo_espelho` |
-| `origin/main` | `aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082` |
-| commits a subir (`ahead`) | **9** |
+| `origin/main` | `2fe6ce39 RELATO: a prontidao do export de 09 DEPOIS do apply -- 202 entram, 402 retidos, 337 por furo_espelho` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -33,50 +33,52 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  turnos_do_colab (juiz de GEOMETRIA), col736 11/09: 2 turno(s) → 08:47-ABERTO; 16:23-ABERTO
+  era −31), tratei "não há juiz" como "jornada zero" (zerou HE de 16 selos), e um contador meu contou a própria prosa.
 
-  A cura vive no motor. Quem pergunta ao motor (folha, PDF, espelho) vê o dia inteiro; quem pergunta à geometria (rótulo do calendário, contador turnos_abertos) ainda vê dois
-  turnos abertos. Não é regressão do deploy — é o alcance da fatia, e o escopo da ordem dizia MUDA: motor_calculo_v2.py. Mudar parear_turnos alcança todos os leitores de turno de
-  uma vez, então abri O65 em vez de fazer de passagem.
+  Esperando você: O64 (col369 inconsistencias 10×14, já resolvido pelo seu corte — posso fechar a obra), O65 (o juiz de geometria), O62 (juiz dizendo "sem intervalo" com cadastro
+  de 70) e a Pauta de 08 contra o TXT entregue, que só a emp2 tem.
 
-  No caminho, três assimetrias de leitor curadas e medidas: espelho_do_colab (que é a tela e a fonte do PDF) criava o motor sem célula e sem colaborador_id; o pdf_espelho
-  alimentava célula mas não passava colaborador_id; e a minha guarda da órfã contava batida crua, quando a exibição lê o cru por lei e a ata só tem lâmpada para o apurável.
+✻ Baked for 11m 41s · done 5:15 PM
 
-  push38 está rodando com os sete commits — a régua testa a árvore do commit e eu te dou o hash quando pousar.
+❯ O65 AGORA (P7.1, coerencia tela = PDF): parear_turnos / turnos_do_colab passa a perguntar ao juiz da batida (ponto/juiz_batida.py), o mesmo do motor; nenhum leitor de turno
+  pareia pelo tipo gravado (o selo da E3 estende a eles). RED: col736 11/09 e col369 23/09 -- rotulo da tela = PDF = motor. DIFF por leitor na sombra: rotulos que mudam,
+  turnos_abertos, chamados e perguntas de turno aberto que morrem, e dinheiro. Se o dinheiro der ZERO, aplica e faz DEPLOY JA com smoke; se mover dinheiro, PAREI com a tabela
+  (L-082). Depois: cartao_x_txt e pdf_x_espelho da 09 = 0 e recalculo imediatamente antes de declarar "09 liberada". Nenhuma lei nova.
 
-✻ Cogitated for 55m 21s · done 5:04 PM · 1 shell still running
-
-● Background command "Empurrar os sete commits" completed (exit code 0)
-
-  Ran 1 shell command
-
-● push38 barrado antes da suíte. Vendo a causa:
-
-  Ran 1 shell command
-
-● A régua cobra linha para DEPLOY-JA — ela está certa, eu citei a fatia sem abrir a linha:
+● Registrando a ordem e lendo o juiz de geometria:
 
   Ran 2 shell commands
 
-● Enquanto o push39 roda, uma medição que importa depois de um apply de dinheiro — o que ele fez com a prontidão do export de 09:
+● O pareamento decide no t = b.tipo (linha ~513), e parear_turnos é puro, sem DB. Então a autoridade entra por alimentação, como a casa faz. Lendo o chamador:
 
-  Esperar e ler o veredito do push39 · 6m 30s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 14); do if grep -qE "rc_push="
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk78pxgfu.output 2>/dev/null; then break; fi; sleep 45; done; grep -E
-     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)|rc_push|origin/main|ahea… (6m 29s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern
 
-· Propagating… (8m 46s · ↓ 5.0k tokens)
+● Agora a cura: o juiz de geometria ganha alimentação de papel, e o chamador a tira da ata — o mesmo juiz do motor:
+
+  Ran 1 shell command
+
+● Agora o chamador tira o papel da ata — pelo mesmo juiz que o motor usa:
+
+  Ran 1 shell command
+
+● Uma das duas chamadas ficou sem alimentação — meia-correção é o que a casa proíbe. Achando a outra:
+
+● Ver o contexto das outras chamadas
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '640,650p;750,760p;818,826p' app/ponto/turnos.py
+
+✢ Pouncing… (1m 51s · ↓ 6.5k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
