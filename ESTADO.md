@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 11:10:31.**
+**Medido em 26/09/2026 11:15:09.**
 
 | | |
 |---|---|
-| `HEAD` local | `9698a07f [PRE-PUSH-TESTA-O-COMMIT] o terceiro cache root: censo por `find -user root`, nao um por push` |
+| `HEAD` local | `7103ae2b [AFIRMA-COM-PROVA] o relato RECUSA publicar "APLICADO" sem prova ao lado -- o RED e meu, de hoje` |
 | `origin/main` | `b81544bc RELATO: linha do vigia` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -21,24 +21,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7103ae2b [AFIRMA-COM-PROVA] o relato RECUSA publicar "APLICADO" sem prova ao lado -- o RED e meu, de hoje
+1819eaad [ESPELHO-VERDADE-E3] v3: o piso do Art.71 le o JUIZ, por dia -- e o campo LIXO ganha selo com a divida nomeada
 9698a07f [PRE-PUSH-TESTA-O-COMMIT] o terceiro cache root: censo por `find -user root`, nao um por push
 48e408ed [PRE-PUSH-TESTA-O-COMMIT] dois bugs da cura da O56, achados pelo meu proprio push
 8c6fb1a6 TICKETS: linhas da O57 e do SELO-PDF-PREVISTO-SUMIU que o pre-push cobrou
-df1da882 [ESPELHO-VERDADE-E3] PAREI: achei um bug MEU antes de aplicar, e o numero do aval mudou
-a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de verdade -- e a fabrica desligada
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/escala/services/cadastro_realidade.py
- M app/ponto/motor_calculo_v2.py
-?? app/ponto/tests/test_e3_metade_intervalo_cadastrado.py
-?? bin/tests/dinheiro_le_jornada_lixo.txt
-?? bin/tests/test_dinheiro_nao_le_jornada_lixo.sh
 ?? esteira.pausada
 ```
 
@@ -46,43 +39,43 @@ a8fa5dcf [O57] as DUAS curas do commit-carrega-o-indice, provadas com git de ver
 
 ```
 
-✻ Sautéed for 13m 32s · done 11:07 AM · 3 shells still running
+● 65 violações no histórico de 8.600 linhas — exigir prova retroativa seria ruído. Uso o mecanismo da casa: linha de base que só encolhe, e afirmação NOVA fica vermelha:
 
-● Background command "Rodar os selos da v3" completed (exit code 0)
+  Read 1 file, ran 1 shell command
 
-  Listed 1 directory
+● O DIFF v3 é idêntico ao v1 (+39,41 h) — e isso fecha o círculo: era a v2 que estava errada. Para o col840 a v3 chega em 15 min pelo motivo certo (previsto 345 → piso 15), onde a
+  v1 chegava por acidente e a v2 errava pelo campo lixo.
 
-● As duas falhas são restos do meu selo v2 — as duas âncoras que não casaram na edição em lote. O piso mudou de lugar, e o selo tem de segui-lo:
-
-  Read 1 file, ran 5 shell commands
-
-● Background command "Reconferir os selos da v3" completed (exit code 0)
-
-  Read 1 file
-
-● Background command "Aguardar os selos" completed (exit code 0)
-
-● 52 de 53 passam — só o ruff, e provavelmente o import que ficou órfão quando o piso mudou de casa:
-
-  Ran 3 shell commands
-
-● Exatamente o import órfão que eu previ — o piso saiu do __init__:
+  Fechando o selo com a linha de base que só encolhe:
 
   Ran 1 shell command
 
-● Ruff limpo. Vendo o DIFF v3, que é o número que importa:
+● Bug meu no selo: o leitor da base descarta linhas que começam com # como comentário — e todo título markdown começa com #. Trocando o caractere de comentário:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Enquanto o dump fecha, commito o que já está provado — a v3 no código, o selo da dívida e a C2:
+● Base correta e limpa. Agora o selo com o RED literal de hoje e a ligação no relato.sh, que é o que recusa a publicação:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✢ Beboppin'… (2m 47s · ↓ 7.2k tokens)
+● Selo verde com o RED de hoje, e o relato.sh recusa publicar. Commitando e publicando a tabela do DIFF v3:
+
+  Commitar o selo e publicar · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json
+     f = 'app/docs/PENDENTES_RONALD.json'
+     d = json.load(open(f, encoding='utf-8'))
+     for x in d:
+     if x.get('id') == 'e3-metade-numero-mudou':
+     x['id'] = 'e3-v3-escopo-sem-col207'
+     x['o_que'] = (
+     "**O DIFF v3 (piso pelo JUIZ) volta ao numero do seu…
+
+· Beboppin'… (7m 25s · ↓ 24.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
