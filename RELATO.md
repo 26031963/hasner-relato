@@ -1,5 +1,52 @@
 # RELATO — esteira saas-hasner
 
+## APLICADA a O69 (654,74 h) -- e os sobrepostos cairam de 116h para 7 minutos
+
+607 colabs recalculados em 09/2026, e a **conferencia pos-apply de 607 x 27 campos contra o previsto
+pelo ensaio deu 0 divergencias**. O ensaio rodou em prod dentro de `atomic()` com rollback conferido em
+**607/607** linhas -- so depois disso escrevi.
+
+| campo | antes | depois | delta | colabs |
+|---|---:|---:|---:|---:|
+| `horas_trabalhadas` | 69.866,10 | 69.466,34 | **-399,76 h** | 7 |
+| `horas_noturnas` | 18.341,71 | 18.253,59 | -88,12 h | 2 |
+| `horas_folga_trabalhada` | 2.362,42 | 2.286,82 | -75,60 h | 4 |
+| `saldo_banco_horas` | -9.837,10 | -9.769,82 | +67,28 h | 4 |
+| `horas_intra_indenizada` | 2.213,74 | 2.203,12 | -10,62 h | 4 |
+| `horas_extras` | 1.617,42 | 1.611,79 | -5,63 h | 3 |
+| `horas_reflexo_dsr` | 347,60 | 345,50 | -2,10 h | 3 |
+
+**Movimento absoluto em dinheiro: 654,74 h** -- exatamente o numero do aval -- e quase tudo NEGATIVO:
+o que sai e o dobro que nunca existiu. 07 e 08 nao foram tocadas.
+
+### SMOKE pos-deploy: o dobro saiu
+
+| colab | resto antes | resto agora |
+|---|---|---|
+| col866 | 84h03 | **0h07** |
+| col277 | 116h40 | **0h07** |
+| col736 | 45h41 | **0h10** |
+| col857 ([nome]) | 0h42 | 0h42 (nao e sobreposto: a cura nao o alcanca, e nao deveria) |
+
+De diferencas de 45 a 116 HORAS para 7 a 10 MINUTOS -- e os 7 a 10 min sao o arredondamento residual
+do topo, que e a outra classe (o item 6 do [nome], ainda aberta).
+
+Deploy pela L-083: `collectstatic`, prova de casca, tres cascas juntas, tres rotas provadas, selo BUG
+128 verde, `importerror_500=0`. Suite completa antes: **8.366 testes OK**.
+
+### Reversao possivel, e por isso guardada
+
+`logs/apply_o69_09_antes.json` tem o gravado dos 607 campo a campo ANTES do apply. A frase de reversao
+esta no PENDENTES, com o aviso de **nao** usar `recalcular_fechamento_mes` para reverter -- ele
+recalcularia com o motor de hoje e traria os numeros novos de volta.
+
+### O que esta fatia NAO fez, e fica dito
+
+O **espelho** tambem escolhe vinculo por conta propria ("pega o ultimo") e nao foi curado aqui -- a
+ordem manda os DOIS lerem a celula. E o **selo** do leitor que escolhe vinculo sem perguntar tambem
+nao existe ainda. Enquanto nao existirem, a lei vale por documento e nao por trava.
+
+
 ## PAREI: DIFF da O69 (VINCULO-DO-DIA) medido -- dinheiro move, **-399,76 h em 7 colabs** | espera `!`
 
 Cura construida em copia do HEAD, **nada aplicado**. Medida contra o gravado de PROD (nao o da sombra,

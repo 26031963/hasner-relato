@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 20:30:07.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.0 MB). Acoes na janela: **786**.
+**Medido em 26/09/2026 20:34:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (70.1 MB). Acoes na janela: **789**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:33:59 | Bash | Smoke pos-deploy nos casos do dobro | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from colaboradores.models import Colaborador from ponto.janelas import janela_fechamento from ponto.models import FechamentoMensal from relatorios.pdf_espelho import _coletar_dados_espelho def h(m): m=int(round(m or 0)); return '%dh%02d' % (m//60, m%60) for cid in (866, 277, 736, ...` |
+| 20:33:35 | Bash | Guardar o antes, registrar e deployar | `cd /home/ronald/saas-hasner && docker cp saas_core:/simular/o69_antes.json logs/apply_o69_09_antes.json && ls -l logs/apply_o69_09_antes.json && python3 - <<'ENDPY' import json p='app/docs/PENDENTES_RONALD.json' d=json.load(open(p,encoding='utf-8')) d.append({ "id": "o69-vinculo-do-dia-aplicada", "tipo": "!", "o_que": ("APLICADO sob o seu `!` de 27/09 (654,74 h), espera a sua revisao. A O69 VINCUL ...` |
+| 20:30:30 | Bash | Commitar e aplicar a O69 em prod | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg_o69.txt <<'EOF' [O69 VINCULO-DO-DIA] o fechamento pergunta a CELULA qual vinculo vale no dia -- sobreposicao para de dobrar LEI-AKITA: origem=ponto/services/fechamento.py (o laco rodava o motor UMA VEZ POR ESCALA e SOMAVA, entao vinculo sobreposto contava os mesmos dias 2x), testemunha=`CelulaDia.escala_geradora`, com cobertura MEDIDA de 10 ...` |
 | 20:24:49 | Bash | Continuar esperando a suite | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite2.log \| tail -8` |
 | 20:14:43 | Bash | Esperar a suite fechar | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite2.log 2>/dev/null; do sleep 45; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite2.log \| tail -8` |
 | 20:14:37 | Bash | Suite completa que libera o apply | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) && ESTEIRA_QUEM=o69f2 bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache --tm ...` |
