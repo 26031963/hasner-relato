@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 13:08:01.**
+**Medido em 26/09/2026 13:13:14.**
 
 | | |
 |---|---|
@@ -41,40 +41,40 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    SELO: leitor de dinheiro que le minutos_jornada = vermelho (lista zerada nos sitios curados); motor que pareia pelo tipo gravado = vermelho.
-    PROIBIDO: ler a flag; fallback para minutos_jornada; apply antes do !; atalho.
-    PRONTO: RELATO com os 3 REDs, o DIFF de tres colunas e o commit; faltando = INCOMPLETO com lista.
-    HAIKU: contador jornada_de_fonte_lixo (sitios restantes) no MetricaSnapshot; golden "o motor le a jornada de onde?".
-    Nenhuma lei nova.
-
-● Ordem recebida e registrada antes de qualquer código — ela entra depois da Pauta DP de 07/08, que é o que eu já estava fazendo:
-
-  Ran 2 shell commands
-
-● Agora a Pauta DP de 07/08. Achando o precedente #785/#787:
-
-  Searched for 3 patterns, listed 1 directory, ran 2 shell commands
-
-● A Pauta é por empresa, então preciso do número por empresa — medindo na sombra, não reusando o total:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● A medição correta é chamar a função REAL interceptando a escrita, na sombra. Vendo como se roda contra ela:
-
-  Ran 2 shell commands
-
-● Escrevendo a medição por empresa para 07 e 08 — chamando a função real e desfazendo:
 
   Ran 2 shell commands
 
 ● Falta o schema do tenant — a sombra é multi-tenant como prod:
 
-● Medir na sombra pelo schema do tenant · 1m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; D=$(bash bin/arvore_do_push.sh HEAD) && trancar_sombra "pauta dp
-     07/08" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-… (1m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Concocting… (5m 32s · ↓ 9.8k tokens)
+● Background command "Empurrar a fatia do Haiku" completed (exit code 0)
+
+● Rollback provado (629/629 e 618/618), mas zero delta — ou 07/08 já batem com o motor, ou a minha foto pós-recálculo veio vazia. Medindo qual das duas:
+
+  Ran 1 shell command
+
+● Os números não são os do aval. Medido agora, gravado × motor de HEAD:
+
+  ┌─────────────┬────────────────┬───────────────┬──────────────┬─────────────────────┐
+  │ competência │   empresa 2    │   empresa 3   │  empresa 4   │ total no campo-alvo │
+  ├─────────────┼────────────────┼───────────────┼──────────────┼─────────────────────┤
+  │ 07/2026     │ +2,67 h (2)    │ −45,49 h (44) │ −2,92 h (13) │ −45,74 h            │
+  ├─────────────┼────────────────┼───────────────┼──────────────┼─────────────────────┤
+  │ 08/2026     │ −116,69 h (57) │ +23,29 h (26) │ −10,80 h (3) │ −104,20 h           │
+  └─────────────┴────────────────┴───────────────┴──────────────┴─────────────────────┘
+
+  O aval dizia +25,26 h e +10,11 h. A diferença tem explicação medida, e é a própria L-082:
+
+  Ran 2 shell commands
+
+● push36 barrado por dois vermelhos meus. Curando:
+
+  Ver o que o ruff acusou
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && docker run --rm $TESTE_DOCKER -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache
+     saas-hasner-core:latest sh -c "cd /app && ruff check . 2>&1 | tail -12"
+
+✽ Concocting… (10m 45s · ↓ 15.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
