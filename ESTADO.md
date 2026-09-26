@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:37:02.**
+**Medido em 26/09/2026 15:42:24.**
 
 | | |
 |---|---|
@@ -42,40 +42,40 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  nada gravado.
-
-  Ran 2 shell commands
-
-● O ensaio rodou até o dump; só a serialização quebrou. Corrigindo e vendo o resultado inteiro:
-
-  Ran 1 shell command
-
-● Rollback provado (603/603). As 616 divergências parecem ser todas de um carimbo, não de dinheiro. Conferindo por campo:
-
-  Ran 1 shell command
-
-● Background command "Suite completa com a guarda" completed (exit code 0)
-
-● Divergência real fora do carimbo: 8 colabs com horas_folga_trabalhada = 0 em prod contra até 134,71 h na sombra, e col369 com inconsistencias 10 contra 14. O critério é literal
-  — PAREI, e nada foi gravado. Mas PAREI com causa vale mais: medindo por que:
-
-  Ran 1 shell command
-
-● A suíte tem 5 vermelhos meus (cron sem papel declarado, diagrama fora de sincronia). Curando-os primeiro:
-
-  Ran 6 shell commands
-
-● Cinco curados. Voltando ao PAREI — medindo se a divergência é código ou dado que mudou em prod depois da cópia da sombra:
-
   Ran 1 shell command
 
 ● Todos os 8 são empresa 2 e 12x36, e em prod têm FolgaDia=0. Na 12x36 a folga vem do ciclo, não da tabela — então comparo o mesmo dado na sombra:
 
-  Mesmo dado na sombra · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && cp /tmp/claude-1001/pauta/cmp.py /tmp/claude-1001/pauta/saida/ && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh
-     2>/dev/null; trancar_sombra "cmp" && echo "### SOMBRA" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 1 --network saas-hasner_d…
+  Ran 1 shell command
 
-✽ Wrangling… (12m 6s · ↓ 14.9k tokens)
+● Dado idêntico em prod e na sombra. Mesmo código, mesmo dado, resultado diferente — então a diferença está no settings. Conferindo:
+
+  Searched for 1 pattern
+
+● Settings não explica — ele só desliga saídas. Medindo os dois lados com a mesma chamada restrita, para ver quem muda:
+
+  Ran 1 shell command
+
+● Agora o quadro é decisivo e não é dado: na sombra o motor reproduz 84,65; em prod ele zera. Mesmo código, mesmo dado. E os 8 são todos 12x36 da empresa 2 — a CCT dos vigilantes.
+  Conferindo o ambiente:
+
+  Ran 2 shell commands
+
+● Falta um dado que eu não comparei: o tipo das células. E prod regenerou células hoje às 05:50, depois da cópia da sombra:
+
+  Ran 3 shell commands
+
+● Dado idêntico, código idêntico. Falta perguntar qual motor cada banco escolhe:
+
+  Comparar HEAD contra prod para os mesmos colabs · 2s
+  ⎿  $ cd /tmp/claude-1001/pauta/saida && python3 -c "
+     import json
+     H=json.load(open('diff_head.json')); N=json.load(open('diff_novo.json'))
+     g=H['comp']['09']['gravado']; mh=H['comp']['09']['motor']; mn=N['comp']['09']['motor']
+     for cid in ('203','877','278'):
+     print('col%s SOMBRA: gravado=%s motorHEAD=%s …
+
+✽ Wrangling… (17m 28s · ↓ 29.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
