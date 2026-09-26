@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 19:15:45.**
+**Medido em 26/09/2026 19:20:45.**
 
 | | |
 |---|---|
@@ -40,44 +40,44 @@ af7a6425 [O65] a cauda: cartao_x_txt=0 e 09 estavel, mas NAO declaro liberada --
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Baked for 15m 11s · done 7:00 PM
+  │ colab  │ diferença │  topo  │ coluna │             causa             │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col924 │ 132h40    │ 0h00   │ 132h40 │ zero vínculo na janela        │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col866 │ 84h03     │ 239h57 │ 155h54 │ vínculo SOBREPOSTO (conta 2x) │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col391 │ 31h57     │ 0h00   │ 31h57  │ zero vínculo na janela        │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col43  │ 29h20     │ 0h00   │ 29h20  │ zero vínculo na janela        │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col942 │ 28h09     │ 0h00   │ 28h09  │ zero vínculo na janela        │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col935 │ 11h02     │ 77h04  │ 88h06  │ troca de vínculo no meio      │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col400 │ 8h38      │ 156h56 │ 148h18 │ sem causa dessas              │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col245 │ 7h01      │ 13h59  │ 21h00  │ sem causa dessas              │
+  ├────────┼───────────┼────────┼────────┼───────────────────────────────┤
+  │ col648 │ 1h29      │ 182h38 │ 181h09 │ troca de vínculo no meio      │
+  └────────┴───────────┴────────┴────────┴───────────────────────────────┘
 
-❯ Para os 85: (1) CRUZAR COM O TXT primeiro -- quantos dos 85 estao entre os 203 que entram na folha de 09; esses sao dinheiro pago errado, os outros ja estao retidos. (2)
-  HIPOTESE REGISTRADA para testar antes de qualquer outra: col277 esta no GRUPO B de hoje (vinculos DUPLICADOS com a mesma escala: ec1237 e ec1238, escala 88), e em 21/09 ja se
-  sabia que "vinculos sobrepostos contam o plantao 2x" (col277, col107, col515, col866) -- gravado maior que o espelho tem essa cara. Medir quantos dos 85 tem vinculo sobreposto
-  na competencia, e quantos tem troca de vinculo no meio dela (fechamento calculado por um vinculo, espelho por outro). (3) Os de gravado 0h00: fechamento nunca calculado ou
-  calculado com vinculo inativo? Tabela por causa, com a lista, antes do !. Nenhuma lei nova.
+  9 no TXT somando 334h20; os outros 16 (867h35) já estão retidos e não foram pagos.
 
-● Ordem clara. Uma medição que produz a tabela por causa, testando sua hipótese primeiro:
+  (2) Sua hipótese se confirma exatamente na assinatura que você previu: dos 9 com gravado MAIOR que o espelho, 5 têm vínculo sobreposto — col277, col899, col866, col107, col736.
+  "Gravado maior que o espelho tem essa cara" estava certo. Mais 8 com troca de vínculo no meio da competência.
 
-  Ran 1 shell command
+  (3) Os de gravado 0h00: 7 colabs, todos com FM existindo — nenhum é "nunca calculado". E 4 têm zero vínculo ativo. Entre os que entram no TXT, quatro (col924, col391, col43,
+  col942) têm zero vínculo na janela: o fechamento calculou zero porque não achou vínculo, e o espelho vê as horas porque pega o último vínculo mesmo inativo. Duas regras
+  diferentes para "qual vínculo vale" — e é essa a raiz das duas pontas (o zero e o dobrado).
 
-● Antes de escrever a tabela, testo uma coisa: a coluna soma todos os períodos, e horas_folga_trabalhada é campo separado no fechamento. Se for isso, a diferença é da minha sonda
-  outra vez:
+  Nada tocado. O que espera seu ! é a cura dessa raiz, e ela tem endereço: o fechamento exige vínculo ativo e o espelho toma o último; enquanto as duas regras conviverem, o topo e
+  a coluna vão divergir por construção.
 
-  Ran 1 shell command
-
-● Três classes limpas, e uma delas era erro meu outra vez: a coluna soma todos os períodos e o topo separa folga_trabalhada em campo próprio. Refazendo a conta dos 85 com o topo
-  completo:
-
-  Ran 1 shell command
-
-● 85 → 25. Sessenta eram erro da minha sonda. E a sua hipótese se confirma na assinatura. Extraindo os 9 que entram no TXT — o dinheiro:
-
-  Listar os 9 do TXT por causa · 10s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'ENDPY'
-     p='/tmp/claude-1001/pauta/apply/os85.py'
-     s=open(p).read()
-     s=s.replace("""print('\\n--- LISTA (dif, topo, coluna, TXT?, vinculos: total/ativos/sobrepostos/trocas)')
-     for x in sorted(linhas, key=lambda y: -abs(y['dif']))[:20]:""",
-     """print('\\n--- O… (8s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Newspapering… (14m 17s · ↓ 8.5k tokens)
+✻ Baked for 18m 57s · done 7:20 PM
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on (shift+tab to cycle) · ← for agents
   ⧉  index
 ```
