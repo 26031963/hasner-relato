@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:27:41.**
+**Medido em 26/09/2026 14:33:01.**
 
 | | |
 |---|---|
@@ -49,16 +49,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora os dois selos. O primeiro tem de parar de contar comentário como consumidor:
-
-  Ran 1 shell command
-
-● De 18 para 9 cruas, 5 reais — e das 5, uma única é leitura (a porta declarada, :654); as outras são o nascimento do atributo e dois overrides. Ajustando o selo para contar
-  consumidor em vez de prosa:
-
-  Ran 1 shell command
-
-● O archive só traz app/ — os selos de host moram na árvore real, e eles não são servidos por prod:
 
   Ran 1 shell command
 
@@ -76,12 +66,22 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Coluna do motor de HEAD medida, rollback provado nas três competências. Agora o motor novo:
 
-  DIFF do motor novo · 37s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo" && docker run --rm --cpuset-cpus
-     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=config… (36s)
+  Ran 2 shell commands
+
+● O DIFF saiu grande — e antes de publicar preciso testar uma suspeita minha: a luz da ata é HH:MM, então a reconstrução do instante perde os segundos. Se as batidas têm segundos,
+  isso é viés sistemático:
+
+  Ran 1 shell command
+
+● 96,4% das batidas têm segundos, e a ata guarda HH:MM. Achei um defeito meu de desenho: eu estava usando a ata para a aritmética quando ela só responde qual marco a batida
+  cumpriu. O instante é da Batida:
+
+● Suites de dinheiro com o instante da Batida · 1m 6s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=o60 bash bin/trava_teste.sh -- docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTEC… (1m 5s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (1h 25m 12s · ↓ 93.2k tokens)
+✢ Concocting… (1h 30m 32s · ↓ 99.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
