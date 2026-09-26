@@ -80,6 +80,33 @@ esta certa e o efeito e futuro; quem move o numero hoje e a outra metade, a dos 
 - **lampada sem a `Batida` correspondente**: o dia nao entra, porque calcular dinheiro com instante
   truncado e o bug 3 de novo. Contado em `_dias_luz_sem_batida`.
 
+### Cauda HAIKU: o contador da divida e o golden "o motor le a jornada de onde?"
+
+`jornada_de_fonte_lixo` virou snapshot datado (`tenant_command lavrar_jornada_lixo --apply`), e o
+copiloto ganhou o bloco que responde a pergunta em portugues -- porque a resposta que ele daria
+sozinho e a ERRADA e soa certa: o cadastro mostra `minutos_jornada` na tela.
+
+E o censo achou o que o selo de host **nao via**. A lista dele vigiava UM arquivo, entao media a
+divida do motor e chamava aquilo de divida da casa. Varrendo por AST o app inteiro: **11 acessos
+reais em 4 arquivos** --
+
+| arquivo | linhas | o que e |
+|---|---|---|
+| `ponto/motor_calculo_v2.py` | 474, 696, 1712, 1713, 1868 | nascimento do atributo, a **porta** `_jornada_do_dia`, e dois overrides que ESCREVEM |
+| `escala/services/cadastro_tipo.py` | 213, 232, 293 | o cadastro que **escreve** o campo -- legitimo |
+| `escala/services/escala_auto_executor.py` | 78 | leitor fora do caminho da E3, **nao tocado** |
+| `ponto/management/commands/gerar_celulas.py` | 66 | leitor fora do caminho da E3, **nao tocado** |
+
+Os dois ultimos estao DECLARADOS na lista em vez de ficarem para ser redescobertos: o escopo da ordem
+era o motor, e ampliar por conta propria seria regra de negocio fora do pedido.
+
+A 1a versao deste contador contou **15** -- e 3 dos 15 eram a prosa DESTE arquivo (a docstring que
+explica o campo e o proprio padrao de busca). Medir codigo lendo texto faz o medidor entrar na
+propria conta; e a segunda vez hoje, e agora vai por AST.
+
+PROVA: `lavrado 2026-09-26: jornada_de_fonte_lixo = 11`; golden da mensageria
+`nucleo.tests.test_jornada_de_onde` + `test_fabrica_ligada` = **10 testes OK**; `HAIKU-DENTES.md em
+sincronia`.
 ### O que espera o `!`
 
 Aplicar em **09/2026** (07 e 08 viram Pauta DP, gravado intocado). O numero do aval, se vier, e

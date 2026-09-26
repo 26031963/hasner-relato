@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:49:01.**
+**Medido em 26/09/2026 14:54:31.**
 
 | | |
 |---|---|
@@ -32,34 +32,31 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## `git status --short`
 
 ```
+ M app/api/urls.py
+ M app/api/views_mensageria.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/HAIKU-DENTES.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/utils.py
  M app/ponto/motor_calculo_v2.py
  M app/ponto/services/fechamento.py
  M bin/tests/dinheiro_le_jornada_lixo.txt
  M bin/tests/test_dinheiro_nao_le_jornada_lixo.sh
+ M mensageria/nucleo/core_client.py
+ M mensageria/nucleo/ferramentas.py
+?? app/inteligencia/management/commands/lavrar_jornada_lixo.py
 ?? app/ponto/tests/test_e3_completa_o_marco_manda.py
 ?? app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py
 ?? esteira.pausada
+?? mensageria/nucleo/tests/test_jornada_de_onde.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● 96,4% das batidas têm segundos, e a ata guarda HH:MM. Achei um defeito meu de desenho: eu estava usando a ata para a aritmética quando ela só responde qual marco a batida
-  cumpriu. O instante é da Batida:
-
-  Ran 4 shell commands
-
-● O contrato é sobre chavear batida por data de calendário. Indexo por minuto truncado, sem .date():
-
-  Ran 1 shell command
-
-● Contrato e selos verdes. Refazendo o DIFF com o instante vindo da Batida:
 
   Ran 2 shell commands
 
@@ -70,18 +67,29 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● O quadro fechou, e é grande: 164 colaboradores tinham turno deixado ABERTO pelo pareamento por tipo gravado (101 em 08, 63 em 09), e esses dias valiam +2.399 h trabalhadas.
   Rodando a suíte inteira enquanto escrevo:
 
-● Publicar o PAREI com a tabela de tres colunas
-  ⎿  $ python3 <<'ENDPY'
-     f='docs/RELATO.md'
-     s=open(f,encoding='utf-8').read()
-     cab='# RELATO — esteira saas-hasner\n'
-     L=[];A=L.append
-     A('')
-     A('## PAREI: E3 COMPLETA medida, e ela NAO e cirurgica | espera `!` de criterio (L-082) | O60')
-     A('')
-     A('A cura esta pronta e verde. O DIFF na sombra diz que ela mex…
+  Ran 3 shell commands
 
-· Concocting… (1h 46m 32s · ↓ 111.5k tokens)
+● Enquanto a suíte fecha, a cauda HAIKU. O contador aqui pode se medir sozinho — o código está dentro do container:
+
+  Ran 1 shell command
+
+● O contador contou a própria prosa — é exatamente a lição que já está na minha memória. Refazendo por AST:
+
+  Ran 1 shell command
+
+● Censo honesto: 11 acessos reais em 4 arquivos — e três deles o selo de host nunca viu, porque a lista dele tinha um arquivo só. Registrando o achado e lavrando:
+
+  Ran 1 shell command
+
+● Agora o golden "o motor lê a jornada de onde?", pela mesma cadeia:
+
+  Searched for 1 pattern, ran 5 shell commands
+
+● Commitando a fatia agora; o pre-push (que testa a árvore do commit) é o portão autoritativo:
+
+● Running 1 shell command…
+
+✢ Concocting… (1h 52m 2s · ↓ 125.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
