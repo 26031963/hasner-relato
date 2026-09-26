@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:12:01.**
+**Medido em 26/09/2026 14:17:09.**
 
 | | |
 |---|---|
@@ -36,45 +36,52 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/escala/utils.py
+ M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/fechamento.py
+ M bin/tests/dinheiro_le_jornada_lixo.txt
+ M bin/tests/test_dinheiro_nao_le_jornada_lixo.sh
+?? app/ponto/tests/test_e3_completa_o_marco_manda.py
+?? app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Um só. E a causa é mais funda que o teste: minutos_previstos_do_dia não vê a alimentação, então responde 0 e minha regra mata a HE. Conferindo a assinatura do juiz:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O juiz pode receber alimentação — é o mesmo contrato que marcos_do_dia e eh_dia_trabalho já aceitam. Curando o N+1 e o caso alimentado de uma vez:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Ainda 0. Paro de adivinhar e leio o teste:
-
-  Searched for 1 pattern
-
-● Achei: o teste alimenta células FALSAS com colaborador_id=7 que não existe no banco. Meu código registrava 0 como se o juiz tivesse respondido "nada previsto" — colaborador
-  inexistente é ausência de juiz, não veredito zero:
-
-  Ran 1 shell command
-
-● 4.062 testes OK nas cinco suítes. Agora os REDs como teste. Vendo o estilo de fixture do vizinho:
-
-  Ran 2 shell commands
-
 ● Escrevendo os três REDs no mesmo estilo, com o par que morde:
 
   Searched for 1 pattern, ran 4 shell commands
 
 ● A luz é HH:MM, não ISO — erro da minha fixture:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Concocting… (1h 9m 32s · ↓ 77.9k tokens)
+● Agora os dois selos. O primeiro tem de parar de contar comentário como consumidor:
+
+  Ran 1 shell command
+
+● De 18 para 9 cruas, 5 reais — e das 5, uma única é leitura (a porta declarada, :654); as outras são o nascimento do atributo e dois overrides. Ajustando o selo para contar
+  consumidor em vez de prosa:
+
+  Ran 1 shell command
+
+● O archive só traz app/ — os selos de host moram na árvore real, e eles não são servidos por prod:
+
+  Ran 1 shell command
+
+● O selo fica VERMELHO contra a árvore real (5 declarados contra 8 reais) — é ele mordendo. Aplicando a cura no ato do commit, como manda a lei 10:
+
+  Ran 1 shell command
+
+● Selo verde na árvore. Agora o segundo selo — motor que pareia pelo tipo gravado:
+
+● Selo do pareamento com o caso que morde
+  ⎿  $ cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py <<'PYEOF'
+     """SELO: motor que decide o papel da batida pelo TIPO GRAVADO = VERMELHO (O60, 26/09).
+     O QUE ELE GUARDA, com o caso que o gerou: em 23/09 o col369 bateu 07:01 E, 13:00 S, 13:59 S, 14:59 …
+
+✶ Concocting… (1h 14m 41s · ↓ 86.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
