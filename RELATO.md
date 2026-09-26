@@ -5408,6 +5408,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **26/09 02:35 vigia da esteira (ALARME)** -- a fatia em_aberto_cartao_tela esta PRONTA ha 941 min e nao esta na fila de integracao: trabalho terminado que ninguem vai buscar. Se ela tem portao, o fatia.done tem de DIZER qual; se nao tem, reentregue com bin/entregar.sh..
 
+
+**26/09 02:50 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._

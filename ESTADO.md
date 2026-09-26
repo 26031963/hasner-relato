@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 02:49:39.**
+**Medido em 26/09/2026 02:54:39.**
 
 | | |
 |---|---|
@@ -23,7 +23,9 @@ b81544bc RELATO: linha do vigia
 
 ## `git status --short`
 
-_arvore limpa (`git status` vazio)_
+```
+ M app/docs/RELATO.md
+```
 
 ## painel da sessao (ultimas 40 linhas)
 
