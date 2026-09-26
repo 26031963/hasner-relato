@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:21:01.**
+**Medido em 26/09/2026 15:23:03.**
 
 | | |
 |---|---|
-| `HEAD` local | `06311b07 [ESPELHO-VERDADE-E3-COMPLETA] PAREI: o col369 era uma CLASSE -- 164 colabs com turno aberto pelo tipo gravado` |
+| `HEAD` local | `54a06418 [ESPELHO-VERDADE-E3-COMPLETA] a AMOSTRA achou um bug meu: o DIFF que publiquei estava INFLADO` |
 | `origin/main` | `aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,32 +22,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+54a06418 [ESPELHO-VERDADE-E3-COMPLETA] a AMOSTRA achou um bug meu: o DIFF que publiquei estava INFLADO
 06311b07 [ESPELHO-VERDADE-E3-COMPLETA] PAREI: o col369 era uma CLASSE -- 164 colabs com turno aberto pelo tipo gravado
 aa7b4b42 [ESPELHO-VERDADE-E3] PAREI: a Pauta DP de 07/08 mudou de numero E DE SINAL -- e o porque e a L-082
 c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a resposta e "nao sei", nunca "ligada"
 6944da89 [CARD4-E-RESCISAO] as duas obras nascem LIGADAS -- o dossie LE o registro, nao reemite o PDF
-be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anterior NAO estava -- e a lista agora e selo
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dentro do período:
-
-  Ran 2 shell commands
-
 ● Agora está limpo: zero dias suspeitos, e dois dos cinco colabs ficaram exatamente neutros — o "ganho" deles era todo o meu bug. Refazendo o DIFF completo, que estava inflado:
 
   Ran 2 shell commands
@@ -70,14 +61,18 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 
 ● Cuidado: isso é a sombra, que pode ter raspado o campo. Conferindo em prod — só tamanho, sem conteúdo:
 
-● Conferir o conteudo em prod, so tamanho
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from folha.models import ExportacaoDominio as E
-     from collections import Counter
-     c = Counter(len(y.conteudo or '') for y in E.objects.all())
-     print('PROD -- distribuicao do tamanh…
+  Ran 1 shell command
 
-· Twisting… (21m 26s · ↓ 46.4k tokens · thinking)
+● Bom que conferi: em prod o conteúdo existe (11.073 caracteres para 261 linhas) — a sombra o raspou. Então o item (2) tem base real:
+
+  Ran 3 shell commands
+
+● Commitando a guarda e a correção enquanto a suíte fecha:
+
+  Publicar e conferir a suite · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -1; grep -E "^Ran |^(OK|FAILED)|^(FAIL|ERROR):" logs/o60_suite2.log | tail -6
+
+· Twisting… (23m 28s · ↓ 52.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

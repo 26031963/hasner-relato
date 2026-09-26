@@ -110,6 +110,28 @@ arvore (`origin/main` e a curada) --, as duas chamando `recalcular_fechamento_me
 `atomic()` com `raise`. Rollback provado: **629/629**, **618/618** e **603/603**. A amostra rodou o
 motor REAL das duas arvores por colab e a soma dos dias fecha com o delta do `FechamentoMensal`.
 
+### Item (2): a Pauta de 08 compara com o que foi PAGO -- e eu quase medi isso no lugar errado
+
+08/2026 foi fechada a mao pelo admin e enviada ao Dominio, entao comparar com o NOSSO gravado nao diz
+nada sobre o que a pessoa recebeu. Medi onde mora o que foi entregue: `ExportacaoDominio` guarda o TXT
+com hash, e ele **existe** -- 08/2026 emp2 tem **11.073 caracteres para 261 linhas**.
+
+**Mas so a empresa 2 tem exportacao em 08.** emp3 e emp4 nao tem nenhuma: para elas nao existe "o que
+foi pago" no sistema, e a Pauta vira LISTA POR COLAB para o DP conferir, que e exatamente o que o
+corte previu.
+
+E ha um detalhe que a Pauta tem de resolver ANTES de comparar: houve **dois envios** de 08 para a
+emp2 -- 31/08 com **352 linhas** e um re-envio em 01/09 com **261**. Comparar com o arquivo errado e
+pior que nao comparar.
+
+QUASE ERREI AQUI, e a licao vale: eu media na SOMBRA, e lá o `conteudo` vem **raspado** -- 12
+caracteres (`… ecebca6b91`) em 17 das 18 exportacoes. Eu ja estava escrevendo que o sistema nunca
+guardou o TXT entregue, o que seria uma acusacao grave e falsa. Conferi em prod (so o TAMANHO do
+campo, sem imprimir conteudo de folha) e o arquivo estava lá. **A sombra serve para medir CALCULO,
+nao para medir se um dado existe** -- ela e uma copia mascarada, e mascara e ausencia de propósito.
+
+PROVA: `len(conteudo)` por exportacao em prod -- 11.073 ch para 08/2026 emp2, e 18 exportacoes com
+tamanhos de 675 a 14.720 ch; na sombra, 17 de 18 com 12 ch. Obra O61 aberta com estes numeros.
 ### O achado que NAO curei, e por que
 
 `periodos_do_dia` devolve `minutos=0, fonte='escala sem intervalo'` quando o DNA da celula nao tem
