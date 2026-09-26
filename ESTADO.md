@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 17:35:01.**
+**Medido em 26/09/2026 17:40:31.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
@@ -44,25 +45,9 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Selo estendido e verde. Rodando a suíte inteira, que a L-083 exige antes do deploy:
-
-  Ran 1 shell command
-
-● Enquanto a suíte roda, o número que falta do DIFF por leitor — quantos rótulos mudam:
-
-  Ran 1 shell command
-
 ● DIFF por leitor completo. Escrevendo, para commitar assim que a suíte fechar:
 
-  Esperar a suite completa da O65 · 8m 13s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 18); do if grep -qE "^(OK|FAILED)"
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bzg87gdny.output 2>/dev/null; then break; fi; sleep 50; done; grep -E
-     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o65_suite.log … (8m 12s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Pouncing… (18m 21s · ↓ 26.3k tokens)
+  Ran 2 shell commands
 
 ❯ BECO-FIO-FECHADO-CELULA-ABERTA (P7.1; L-002 a celula manda): INVARIANTE: celula de competencia aberta com veredito furo/cobrado tem SEMPRE um canal vivo (pergunta aberta ao
   colab ou pendencia do admin). Contador celula_furo_sem_canal, esperado 0, no MetricaSnapshot.
@@ -77,11 +62,27 @@ fbd909bc [DEPLOY-JA] deploy feito e smoke em prod: o PDF diz 420 min, e o rotulo
   PROIBIDO: fechar por idade; fallback; atalho.
   PRONTO: RELATO com os REDs, o contador medido e o commit. HAIKU: celula_furo_sem_canal no snapshot; golden "quantos dias estao travados sem ninguem poder resolver?". Nenhuma
   lei nova.
-  ctrl+x ctrl+s to send now
+
+● Ordem nova registrada antes de qualquer coisa — a O65 ainda está fechando:
+
+  Ran 1 shell command
+
+● Suíte ainda rodando. Uso a espera para o censo que a O66 pede — cada fechador com arquivo:linha:
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● A suíte segue rodando (12 min) e apareceu um AttributeError de fixture falsa sem ata — engolido pelo meu except, mas ruidoso. Esperando o veredito:
+
+● Esperar o fim da suite · 2m 28s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if grep -qE "^Ran [0-9]+ tests" logs/o65_suite.log 2>/dev/null; then break; fi; sleep 50; done; grep -E
+     "^(FAIL|ERROR):|^Ran |^(OK|FAILED)" logs/o65_suite.log | tail -10 (2m 24s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Pouncing… (23m 51s · ↓ 30.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
