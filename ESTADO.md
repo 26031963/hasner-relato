@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:42:24.**
+**Medido em 26/09/2026 15:47:51.**
 
 | | |
 |---|---|
@@ -42,23 +42,6 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Todos os 8 são empresa 2 e 12x36, e em prod têm FolgaDia=0. Na 12x36 a folga vem do ciclo, não da tabela — então comparo o mesmo dado na sombra:
-
-  Ran 1 shell command
-
-● Dado idêntico em prod e na sombra. Mesmo código, mesmo dado, resultado diferente — então a diferença está no settings. Conferindo:
-
-  Searched for 1 pattern
-
-● Settings não explica — ele só desliga saídas. Medindo os dois lados com a mesma chamada restrita, para ver quem muda:
-
-  Ran 1 shell command
-
-● Agora o quadro é decisivo e não é dado: na sombra o motor reproduz 84,65; em prod ele zera. Mesmo código, mesmo dado. E os 8 são todos 12x36 da empresa 2 — a CCT dos vigilantes.
-  Conferindo o ambiente:
-
   Ran 2 shell commands
 
 ● Falta um dado que eu não comparei: o tipo das células. E prod regenerou células hoje às 05:50, depois da cópia da sombra:
@@ -67,15 +50,32 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 
 ● Dado idêntico, código idêntico. Falta perguntar qual motor cada banco escolhe:
 
-  Comparar HEAD contra prod para os mesmos colabs · 2s
-  ⎿  $ cd /tmp/claude-1001/pauta/saida && python3 -c "
-     import json
-     H=json.load(open('diff_head.json')); N=json.load(open('diff_novo.json'))
-     g=H['comp']['09']['gravado']; mh=H['comp']['09']['motor']; mn=N['comp']['09']['motor']
-     for cid in ('203','877','278'):
-     print('col%s SOMBRA: gravado=%s motorHEAD=%s …
+  Ran 2 shell commands
 
-✽ Wrangling… (17m 28s · ↓ 29.9k tokens)
+● A bisseção ficou clara: em prod, HEAD mantém 84,65; meu código zera. Na sombra, meu código mantém. Falta isolar se o diferenciador é o banco ou o container:
+
+  Ran 3 shell commands
+
+● Arquivo e mount idênticos. Há um except no meu código que engole erro e loga — conferindo se ele disparou em prod:
+
+  Ran 1 shell command
+
+● Percebi a diferença real entre as duas corridas: a primeira recalculou a frota inteira, as outras só 8 colabs. Testando se o resultado depende do escopo da chamada:
+
+  Ran 1 shell command
+
+● Vou comparar os dois ambientes de verdade — o container de prod tem 18 h de vida e a imagem :latest pode ter mudado:
+
+  Ran 1 shell command
+
+● Mesma imagem, mesmo Python. Então preciso saber se o resultado reproduz. Rodando o mesmo ensaio outra vez:
+
+● Reproduzir o ensaio em prod · 59s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec -e MODO=ensaio saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/apply09.py').read())"
+     2>&1 | grep -E "ROLLBACK|divergencia|horas_folga_trabalhada|horas_trabalhadas|col203|turnos_abertos" | head -10 (58s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Wrangling… (22m 56s · ↓ 42.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
