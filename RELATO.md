@@ -66,6 +66,26 @@ da celula em 650 batidas). Afrouxar o selo para o meu proprio codigo passar seri
 outro lado. Duas frases resolvem, ou a decisao de a trava aceitar o corte da familia -- item
 `juiz-batida-registro-espera-frase` no PENDENTES. O juiz e os selos estao no ar; so o censo espera.
 
+### A porta extra da E2, medida PELO JUIZ (comp 09/2026)
+
+| | dias | colabs |
+|---|---|---|
+| sem marco apagado (completo) | **7.370** | |
+| **furo SO de intervalo** (`hii`/`hfi`) | **373** | 121 |
+| furo de entrada/saida | 1.975 | 329 |
+| ata e dna desalinhados -- o juiz diz **"nao sei"** | **11** (0,1 %) | |
+| lampada com `acesa=None` ("nao sei" do cartorio) | 0 | |
+| **colabs cujo UNICO furo e de intervalo** | | **24** |
+
+**Os numeros do seu adendo eram outros (293 + 539, 49 colabs) porque o universo e outro**, e vale dizer
+qual e qual: o adendo mediu a **lavra de furo** (o conjunto que TRAVA); esta tabela julga **todos os
+dias de trabalho de colab ativo** pelo juiz. Nao e correcao de ninguem -- sao duas perguntas, e a minha
+so passa a existir agora, porque antes nao havia quem respondesse "que marco faltou" num lugar so.
+
+Os **11 dias** em que o juiz responde "nao sei" (ata e dna discordando do marco) sao o resto honesto:
+0,1 %. Eles NAO viram hora chutada e NAO somem -- entram no censo. Quem os resolve e o cartorio, num
+item proprio, nunca um fallback aqui.
+
 ### Contrato de entrada do juiz (4 linhas, antes de codar)
 
 **FONTE**: `CelulaDia.ata` (luz + `tipo_real`, instante contra marco) + `TipoEscala` para o intervalo
