@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 01:54:31.**
+**Medido em 26/09/2026 01:59:31.**
 
 | | |
 |---|---|
@@ -23,49 +23,52 @@ e452f0e3 [BUG-C] o selo estrutural olha NOS da AST, e a porta E1 deixa de dizer 
 
 ## `git status --short`
 
-_arvore limpa (`git status` vazio)_
+```
+ M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
 
-  Ran 1 shell command
-
-● O push do integrador pousou: origin/main = 447aefca, ahead 0 — os 41 commits subiram. E a falha do selo é do meu fixture, não do juiz: o helper cravava a entrada 06:56 nos dois
-  dias, e em 18/08 ela foi 06:52 (a medição em prod já dizia 448).
+● O DIFF certo para a E3 é motor velho × motor novo, ambos na sombra — não "gravado × recalculado", que mistura a deriva pré-existente. Conferindo a sombra e o veredito do push:
 
   Ran 1 shell command
 
-● Background command "Esperar o veredito dos selos do juiz" completed (exit code 0)
-
-  Ran 3 shell commands
-
-● Enquanto o veredito sai, oriento a E3 — quem no motor passará a consumir o juiz:
+● A sombra é completa de 25/09 — cobre 07/08/09. Montando as duas árvores para o DIFF enquanto o push termina:
 
   Ran 1 shell command
 
-● Background command "Corrigir o fixture e reconferir" completed (exit code 0)
+● As duas árvores diferem só no motor (e na prosa do RELATO). Vendo como o simular_folha.sh chama o container, para replicar exatamente:
 
-● Background command "Esperar o veredito" completed (exit code 0)
+  Ran 1 shell command
+
+● O par é a ferramenta da casa e carrega as guardas (--conferir e --cobre-competencia). Lançando o DIFF da competência corrente:
+
+  Ran 2 shell commands
+
+● Background command "Rodar o DIFF par na sombra" completed (exit code 0)
+
+● A guarda disparou com razão: a sombra é de 25/09 e o --conferir exige carimbo de hoje. Para 07/08/09 (competências fechadas antes disso) a cópia serve e eu digo por quê; para a
+  corrente, não. Rodando o DIFF das três, sob a trava da sombra:
+
+  Ran 2 shell commands
+
+● Background command "Rodar os dois dumps na sombra" completed (exit code 0)
 
   Read 1 file
 
-● 25 selos verdes. Commitando a E2 e publicando:
+● Falta o ponto de montagem: as cópias do git archive não têm logs/ nem media/ (o :ro impede o docker de criá-los). Criando e rodando de novo:
 
-  Ran 1 shell command
+  Running 1 shell command…
 
-● Background command "Aguardar o verde dos selos" completed (exit code 0)
-
-● Empurrar a E2
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && nohup git push origin HEAD:main >
-     "$S/push19.log" 2>&1 & sleep 3; echo "push19 lancado $(date +%H:%M) ahead=$(cd /home/ronald/saas-hasner && git rev-list --count origi…
-
-✢ Quantumizing… (1h 8m 57s · ↓ 216.5k tokens)
+* Quantumizing… (1h 13m 57s · ↓ 235.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
