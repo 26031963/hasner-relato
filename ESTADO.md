@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:35:09.**
+**Medido em 26/09/2026 16:40:31.**
 
 | | |
 |---|---|
@@ -34,46 +34,49 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/espelho.py
+ M app/relatorios/pdf_espelho.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ corte Ronald (lei nova, "DEPLOY JA"): cura commitada e com a suite verde vai ao ar NA HORA pelo bin/deploy.sh (reload gracioso + prova de casca + collectstatic), a qualquer
-  hora, sem esperar o reload das 03:30; smoke em prod logo apos o deploy, com o resultado no RELATO. Vale tambem para mudanca de casca (base, settings, urls, middleware): a prova
-  de casca substitui a janela noturna. Excecoes que continuam: dinheiro so com o ! (L-009/L-082) e migration pendente segura o deploy. O reload das 03:30 fica como rede de
-  seguranca, nao como fila.
-
-● Duas ordens: deploy agora, e uma lei nova. Primeiro o vermelho que segura o deploy:
+● _coletar_dados_espelho é o coletor do PDF, e é só leitura. Escrevendo o smoke das duas fontes:
 
   Ran 1 shell command
 
-● O selo protegia por ponteiro de settings; agora o arquivo não é fonte. Atualizo o selo para afirmar a garantia nova, mais forte:
+● A cura não está alcançando tela e PDF — o dia segue aberto neles, com a folha já em 420 min. Medindo qual guarda barrou:
 
   Ran 1 shell command
 
-● Selo verde. Registrando a lei nova DEPLOY JÁ antes de usá-la:
+● Duas instâncias de motor no PDF: a primeira pega a cura (18 dias pelo marco), a segunda não recebe nada — e é dela que saem as linhas. Achando:
+
+  Searched for 3 patterns, ran 1 shell command
+
+● Achei a testemunha: ponto/services/espelho.py::espelho_do_colab — ela é a tela do espelho e a fonte do PDF, e roda um motor próprio sem células e sem colaborador_id. Curando:
 
   Ran 1 shell command
 
-● CORTES e CLAUDE.md gravados; falta o índice. Vendo o formato do LEIS.md:
-
-  Ran 2 shell commands
-
-● 25 pendentes no public pede medição antes de qualquer deploy — a lei diz que migration segura o deploy:
+● Ainda aberto, e o primeiro motor aplicou a cura 18 vezes — então 11/09 não está entre eles no caminho do PDF. Medindo o dia especificamente nos dois caminhos:
 
   Ran 1 shell command
 
-● Nenhuma migration é da minha fatia (zero arquivos) — as pendências são do multi-tenant, normais aqui. Commitando e rodando a suíte inteira, que a lei exige antes do deploy:
+● O juiz responde certo (08:47→16:23, intervalo 36). Vendo se a minha cura no espelho pegou nos dois motores:
 
-● Commitar a O63 e a lei, e rodar a suite inteira
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/msg11.txt <<'EOF'
-     [ESMERIL-LAVRA-NO-BANCO] O63: dinheiro para de depender de arquivo do host, e sem lavra o recalculo RECUSA
-     LEI-AKITA: origem=ponto/services/esmeril_espelho.py::ler_lavra (lia `logs/esmeril_espelho.json`),
-     testemunha=MetricaSn…
+  Ran 1 shell command
 
-* Billowing… (26m 16s · ↓ 28.4k tokens)
+● O guarda conta batidas cruas, e a tela/PDF alimentam o motor com o cru por lei (Portaria 671) — enquanto a ata descreve só as apuráveis. Corrigindo o universo do guarda:
+
+  Ran 1 shell command
+
+● Paro de supor e leio a decisão do dia, dentro do motor do PDF:
+
+● Running 1 shell command…
+
+✢ Billowing… (31m 37s · ↓ 45.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
