@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 09:09:20.**
+**Medido em 26/09/2026 09:14:20.**
 
 | | |
 |---|---|
@@ -25,35 +25,16 @@ b81544bc RELATO: linha do vigia
 
 ```
  M app/config/crons_duracao.json
+ M app/core/juizes.py
  M app/docs/CORTES.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+A  app/relatorios/tests/test_pdf_previsto_pelo_juiz.py
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Os 2 commits são do integrador — e um deles é [PRE-PUSH-TESTA-O-COMMIT], a cura da O56. Se ela está de pé, a suíte do push passa a rodar sobre o commit e eu posso construir em
-  paralelo sem contaminar:
-
-  Ran 1 shell command
-
-● A O56 está curada e no ar: o pre-push monta o app/ do sha empurrado (git archive), não a árvore viva. Lanço o push dos 2 e construo em paralelo sem contaminá-lo:
-
-  Ran 1 shell command
-
-● Agora o registro do juiz, que o ! destravou — uma pergunta, porque foi uma frase:
-
-● Historia do core/juizes.py
-  ⎿  $ cd /home/ronald/saas-hasner && git log --oneline -3 -- app/core/juizes.py | cut -c1-60; echo "=== o que o E2 commit fez nele ==="; git show b4eacf03 --stat --
-     app/core/juizes.py | tail -3; echo "=== HEAD tem PENDENTES['batida']? ==="; grep -c "PENDENTES\['batida'\]\|PENDENTES_BATIDA" app/core/jui…
-
-✻ Waiting for API response · will retry in 2m 35s · check your network
-
-❯ corte Ronald: juiz periodos_do_dia nasce
-  (1) SELO-PDF-PREVISTO-SUMIU (L-007, P7.1, cura precede): b4eacf03 apagou app/relatorios/tests/test_pdf_previsto_pelo_juiz.py (criado em a48a47af) sem citar no commit. Restaura
-  o arquivo de a48a47af; se ficar vermelho, a cura de relatorios/pdf_espelho.py sumiu junto e volta com ele. Censo: todo arquivo de teste apagado de 4ea0942b..HEAD, cada um com
   motivo nomeado ou restaurado. RELATO com a lista.
   (2) aval Ronald: E3 fica SEM ler intervalo_indenizavel (politica 19/08: indeniza o suprimido, Art.71 par.4 / Sum.437, nao reabrir). intervalo_indenizavel vira CADASTRO
   declarado por escala, com trilha e leitor (tudo tem cadastro), obra propria no BACKLOG; o motor so le a flag depois desse ato. E3 METADE: DIFF na sombra SO da troca do 60
@@ -66,11 +47,32 @@ b81544bc RELATO: linha do vigia
 ❯ (5) SESSAO.md: bin/relato.sh publica no hasner-relato a trilha da sessao do Code (~/.claude/projects//.jsonl mais recente): hora BRT, description e comando de cada tool_use das
   ultimas 12 h, SEM saida de comando, pela mesma raspagem, selo de publicacao sem nome tambem nele; mesmo timer de 5 min. PRONTO: curl de SESSAO.md mostra a acao mais recente.
   Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
+
+● Ordem nova, e o item (1) é P7.1 — cura precede. Medindo o dano do meu commit b4eacf03:
+
+  Ran 1 shell command
+
+● Duas deleções na janela, e a minha precisa de explicação. Medindo o que b4eacf03 carregou de fato:
+
+  Ran 1 shell command
+
+● Medido, e é pior do que "apaguei um arquivo": b4eacf03 tem 6 arquivos — carrega uma deleção que eu nunca staged, e perdeu o core/juizes.py que eu staged (ele já não tinha diff).
+  git commit commita o índice, e há outra sessão staged no mesmo repo. Curando primeiro:
+
+  Ran 1 shell command
+
+● A cura em pdf_espelho.py sobreviveu (linhas 417-421) — só o selo dela foi levado. Rodando o selo restaurado:
+
+● Rodar o selo restaurado
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1;
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ESTEIRA_QUEM=pdfprev bash bin/trava_teste.sh --espera 2400 -- docker run --rm
+     $TESTE_DOCKER --netw…
+
+✻ Transmogrifying… (16m 42s · ↓ 13.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
