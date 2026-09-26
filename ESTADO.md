@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 14:01:01.**
+**Medido em 26/09/2026 14:06:31.**
 
 | | |
 |---|---|
@@ -42,14 +42,6 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Quebrou muito — e a causa é real, não ruído de teste: motor construído sem colaborador não tem juiz a consultar, e minha regra zerava toda HE. Uma porta só, que declara de onde
-  veio a jornada:
-
-  Ran 2 shell commands
-
-● De 20+ para 3. Cada um precisa de julgamento, não de ajuste cego:
-
   Ran 1 shell command
 
 ● Os três são meus e cada um diz algo diferente. Os dois primeiros: eu curto-circuitei o memo antes de consultá-lo. O terceiro é mais importante — o turno partido não cabe no
@@ -72,9 +64,17 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ● Achei: o teste alimenta células FALSAS com colaborador_id=7 que não existe no banco. Meu código registrava 0 como se o juiz tivesse respondido "nada previsto" — colaborador
   inexistente é ausência de juiz, não veredito zero:
 
-● Running 1 shell command…
+● Curar e rodar as cinco suites · 5m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 <<'ENDPY'
+     D = open('/tmp/claude-1001/arvore_o60').read().strip()
+     f = D + '/app/ponto/motor_calculo_v2.py'
+     s = open(f, encoding='utf-8').read()
+     velho = """ if dia in self._previsto_min:
+     return self._previsto_min[dia] or 0
+     if not getattr(self, '_colab_do_calcu… (5m 18s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Concocting… (58m 32s · ↓ 68.4k tokens)
+✢ Concocting… (1h 4m 2s · ↓ 69.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
