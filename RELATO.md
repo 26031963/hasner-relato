@@ -1,5 +1,58 @@
 # RELATO — esteira saas-hasner
 
+## BUG-B — nao ha off-by-one: a guarda estava CERTA e a FRASE mentia (commit `890570b4`)
+
+O aval de ontem pedia o par **"emp4: 20/07 barra, 21/07 passa"**, na hipotese de um off-by-one na
+guarda de competencia lavrada, e mandava regenerar os 8 dias **depois do BUG-B curado**. Medido hoje:
+**o BUG-B nao era a trava, e o off-by-one nao existe.**
+
+| pergunta | medido 26/09 |
+|---|---|
+| a emp4 exportou 08/2026? | **nao** -- zero `ExportacaoDominio` |
+| entao por que 21/07 barra? | **holerite PUBLICADO** de `col624` e de `col857` para 08/2026 |
+| a comp 08/2026 da emp4 e | **21/07 a 20/08** -- os 8 dias caem dentro dela |
+| a guarda olha holerite desde | **BUG 85, corte Ronald 08/09** ("o TXT nao e a unica forma de lavrar") |
+| veredito | **20/07 e 21/07 barram os dois, e barram com razao** |
+
+**O defeito era a FRASE**: ela dizia *"competencia ja exportada no TXT do Dominio"* para QUALQUER
+janela lavrada. **Eu li isso como fato**, conferi contra `ExportacaoDominio`, nao achei a exportacao e
+**diagnostiquei um off-by-one que nao existe -- duas vezes, aqui no RELATO e para o Ronald.** A frase
+que nomeia a autoridade errada nao e cosmetica: e ela que decide o passo seguinte, porque exportacao
+se reabre por ato com trilha (`apesar_da_lavra`) e **holerite publicado e papel na mao do colaborador**.
+
+**E mentia em DOIS sitios.** A trilha (`evento_kw`) e o texto devolvido em `barrados` montavam a frase
+cada um por conta propria. Na primeira versao desta cura eu arrumei so o `barrados` **e a trilha ficou
+para tras ainda dizendo "ja exportada"** -- a divergencia nasceu dentro do proprio commit que a curava.
+Agora a autoridade sai de UMA derivacao (`autoridade_da_lavra`) que os dois LEEM (LEI-AKITA 2), e um
+selo por AST exige que todo texto com `LAVRADA por` seja alimentado por ela.
+
+A chave `barrados_exportado` da trilha virou **`barrados_dias`**: o NOME tambem afirmava exportacao
+(zero leitor no repo, medido por grep; trilha anterior a 26/09 guarda a contagem sob o nome velho).
+
+**O selo que nasceu vermelho em si mesmo.** A primeira versao varria `inspect.getsource` inteiro e
+ficou VERMELHA **no meu proprio comentario** -- a prosa que EXPLICA a cura citava a frase curada.
+Comentario nao chega a ninguem; o que chega e o literal que a porta formata. A varredura passou a ser
+sobre os literais emitidos, com docstring fora do universo pela mesma razao. **Os dois selos MORDEM**:
+reinserida a frase antiga na trilha, 2 falhas (medido, arquivo restaurado por md5).
+
+**OS 8 DIAS DA emp4 NAO FORAM REGENERADOS — espera `!`.** O aval era condicional ("depois do BUG-B
+curado"), e a condicao se dissolveu: nao havia guarda defeituosa a curar. Eles estao lavrados por
+holerite publicado, e abrir a guarda exige `apesar_da_lavra` com motivo escrito -- **mudanca de dado de
+escala nunca e pre-aprovada (L-009)**. Se o Ronald quiser, a frase e: *"reabrir 08/2026 de col624 e
+col857 apesar do holerite publicado, porque <motivo>"*.
+
+**Achado no caminho, registrado como O55** (`PLACAR-COM-IDADE-RELATIVA`): `bin/tickets_placar.sh`
+grava a IDADE em dias dentro do TICKETS e o selo compara arquivo com mundo -- **a cada meia-noite o
+arquivo apodrece sozinho e o push para**, sem ninguem mexer em nada. Foi ele que bloqueou o push14 as
+00:40. A cura e guardar a DATA e derivar a idade na leitura.
+
+Tambem no caminho, commit `bd70eb74` (arvore verde, nenhum negocio): o mypy acusava `bool | None` numa
+variavel inferida `bool` em `escala/models.py` -- **o tipo frouxo ja estava la; quem o revelou foi a
+cura do O37**, que passou a devolver `None` em vez de inventar trabalho. A docstring declara os tres
+estados desde sempre, entao a cura foi declarar o contrato, nao afrouxar o `mypy.ini`. Mais um
+`import collections` morto meu.
+
+
 ## ESPELHO-VERDADE-E1 — os 54 pela LEI EXISTENTE (propositor + lista unica): 1 aplicado, e um **RED da lista**
 
 Aval Ronald: nenhum criterio novo -- o **PROPOSITOR** (`escala/services/propositor.py`) julga qual
@@ -4963,6 +5016,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 1 vermelho(s) confirmado(s) na arvore viva: core.tests.test_contract_mypy.ContratoMypyTest.test_mypy_zero . Para a admin: nada muda.
+
+
+**ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: chamados.tests.test_contract_crons.ContratoPipelineB6Test.test_todo_command_tem_casa core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero core.tests.test_contract_mypy.ContratoMypyTest.test_mypy_zero . Para a admin: nada muda.
 
 
 **ALARME fabricante** -- arvore VERMELHA: nao fabrico em cima de base quebrada (fatia nova herdaria o vermelho alheio e cairia por culpa que nao e dela). Causa: 3 vermelho(s) confirmado(s) na arvore viva: chamados.tests.test_contract_crons.ContratoPipelineB6Test.test_todo_command_tem_casa core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero core.tests.test_contract_mypy.ContratoMypyTest.test_mypy_zero . Para a admin: nada muda.
