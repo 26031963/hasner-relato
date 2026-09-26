@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 18:10:12.**
+**Medido em 26/09/2026 18:11:31.**
 
 | | |
 |---|---|
@@ -40,43 +40,43 @@ f3ff5818 TICKETS: rodape escrito pelo git (o push cobrou)
 
 ```
 
-  Ran 1 shell command
+● A O65 está no ar e provada. O smoke pós-deploy tem as três testemunhas dizendo o mesmo:
 
-● Deploy OK. Smoke em prod logo após, como a lei manda:
+  ┌─────────────────────────────┬───────────────────────┬──────────────────┐
+  │            fonte            │     col736 11/09      │   col369 23/09   │
+  ├─────────────────────────────┼───────────────────────┼──────────────────┤
+  │ geometria (turnos_do_colab) │ 1 turno, 08:47-16:23  │ 0 turnos na data │
+  ├─────────────────────────────┼───────────────────────┼──────────────────┤
+  │ PDF do cartão               │ 08:47-16:23 = 420 min │ —                │
+  ├─────────────────────────────┼───────────────────────┼──────────────────┤
+  │ rótulo da tela              │ ok                    │ ok               │
+  └─────────────────────────────┴───────────────────────┴──────────────────┘
 
-  Ran 1 shell command
+  Deploy com prova de casca, três cascas juntas, três rotas provadas, importerror_500=0, sobre 8.366 testes OK.
 
-● Smoke confirmado: as três testemunhas concordam. Registrando e medindo a cauda da ordem:
+  A cauda que você pediu — e eu não declaro "09 liberada":
 
-  Ran 4 shell commands
+  - cartao_x_txt de 09 = 0 divergentes (203 colabs no TXT) ✓
+  - recálculo imediatamente antes: zero movimento em 607 colabs × 27 campos, rollback 607/607 — 09 está estável ✓
+  - pdf_x_espelho = não tem medidor. É contador da obra O9 (PDF-E-O-ESPELHO), que está em fila; não existe comando que o calcule. Não afirmo zero sobre o que não medi — inventar
+    esse número seria o oposto de tudo que esta fatia fez hoje.
 
-● Enquanto o push41 roda, a cauda da ordem — os dois contadores de 09:
+  Então a declaração espera, e o que falta tem nome: O9.
 
-  Ran 1 shell command
+  E dois números que o DP vai encontrar de todo jeito: 337 dos 402 retidos do export de 09 são furo_espelho, e há 284 dias em aberto (furo sem decisão) em 23 colaboradores — essa
+  segunda é exatamente a família da O66 que você acabou de pedir.
 
-● cartao_x_txt_divergentes = 0 em 09 (203 colabs no TXT). E dias_em_aberto = 284 dias em 23 colabs. Provando que um recálculo agora não move nada:
+  O66 já tem o começo do censo dos fechadores, com arquivo:linha: as vias em chamados/juizes.py:844-879 e chamados/reconciliador.py:643; quem escreve validada_em em
+  materializacao.py:430,939 e disputa_emissao.py:1361; e a Q2-JA "conversa parada" em arquivar_competencia_encerrada.py e celula_carimbada.py — onde vou conferir contra o
+  DECIDIR-642, que proíbe fechar por idade.
 
-  Ran 1 shell command
+  O push41 está rodando com os commits da O65; te dou o hash quando pousar.
 
-● 09 está estável: recálculo agora move zero em 607 colabs × 27 campos. Registrando a cauda com o que falta:
-
-  Registrar a cauda e commitar · 2s
-  ⎿  $ python3 <<'ENDPY'
-     f='docs/RELATO.md'
-     s=open(f,encoding='utf-8').read()
-     anc='### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando'
-     L=[];A=L.append
-     A('### A cauda da ordem: NAO declaro "09 liberada", e digo exatamente por que')
-     A('')
-     A('| condicao pedida | medido |')
-     A('|---|---|')
-     A('| `c…
-
-✢ Perambulating… (7m 34s · ↓ 7.0k tokens)
+✻ Crunched for 8m 24s · done 6:11 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ O66 agora
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```

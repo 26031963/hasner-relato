@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 18:10:12.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.0 MB). Acoes na janela: **716**.
+**Medido em 26/09/2026 18:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (69.0 MB). Acoes na janela: **717**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:10:10 | Bash | Registrar a cauda e commitar | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() anc='### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando' L=[];A=L.append A('### A cauda da ordem: NAO declaro "09 liberada", e digo exatamente por que') A('') A('\| condicao pedida \| medido \|') A('\|---\|---\|') A('\| `cartao_x_txt` de 09 = 0 \| **0 divergentes** em 203 colabs no TXT \|') A('\| `pdf_x_espelho` de 0 ...` |
 | 18:07:04 | Bash | Provar estabilidade de 09 e ver o push | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o65.py').read())" 2>&1 \| grep -E "ROLLBACK\|processados\|SOMA\|nenhum\|^[a-z_]+ +[-+]" \| head -6; echo "=== push41 ==="; grep -E "rc_push\|origin/main\|ahead\|^Ran \|^(OK\|FAILED)" logs/push41.log 2>/dev/null \| tail -4` |
 | 18:05:05 | Bash | Medir cartao_x_txt de 09 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani 2>&1 \| tail -4; echo "=== pdf_x_espelho ==="; grep -rn "pdf_x_espelho" app/ bin/ 2>/dev/null \| grep -v "\.pyc" \| head -4` |
 | 18:04:59 | Bash | Escrever o rodape e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -1 && git add -- app/docs/TICKETS.md && git commit -q -m "TICKETS: rodape escrito pelo git (o push cobrou) Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && (git push origin HEAD:main > logs/push41.log 2>&1; echo "rc_push=$?" >> logs/push41.log; { git fetch -q origin; echo  ...` |
