@@ -5402,6 +5402,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **26/09 02:10 vigia da esteira (ALARME)** -- a fatia placar_data_fixa caiu por vermelho DELA (esmeril sujo) -- nao relanco.
 
+
+**26/09 02:30 vigia da esteira** -- vigia relancou em_aberto_cartao_tela as 02:30 (baseline divergiu: a arvore andou depois do teste da fatia). Para a admin: nada muda.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
