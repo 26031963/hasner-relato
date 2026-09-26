@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 16:40:31.**
+**Medido em 26/09/2026 16:45:45.**
 
 | | |
 |---|---|
@@ -43,21 +43,6 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● _coletar_dados_espelho é o coletor do PDF, e é só leitura. Escrevendo o smoke das duas fontes:
-
-  Ran 1 shell command
-
-● A cura não está alcançando tela e PDF — o dia segue aberto neles, com a folha já em 420 min. Medindo qual guarda barrou:
-
-  Ran 1 shell command
-
-● Duas instâncias de motor no PDF: a primeira pega a cura (18 dias pelo marco), a segunda não recebe nada — e é dela que saem as linhas. Achando:
-
-  Searched for 3 patterns, ran 1 shell command
-
-● Achei a testemunha: ponto/services/espelho.py::espelho_do_colab — ela é a tela do espelho e a fonte do PDF, e roda um motor próprio sem células e sem colaborador_id. Curando:
-
-  Ran 1 shell command
 
 ● Ainda aberto, e o primeiro motor aplicou a cura 18 vezes — então 11/09 não está entre eles no caminho do PDF. Medindo o dia especificamente nos dois caminhos:
 
@@ -73,9 +58,24 @@ dd0d7d68 [ESPELHO-VERDADE-E3-COMPLETA] PAREI no apply: o dinheiro bate inteiro, 
 
 ● Paro de supor e leio a decisão do dia, dentro do motor do PDF:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Billowing… (31m 37s · ↓ 45.2k tokens)
+● A cura funciona: o motor devolve 08:47 → 16:23 fechado, nos dois motores. Então a linha do dia não vem dos períodos do motor. Lendo de onde ela vem:
+
+  Ran 1 shell command
+
+● A tela lê a lâmpada da célula, não o motor — e a célula foi julgada pelo motor velho. Conferindo:
+
+  Ran 2 shell commands
+
+● A suíte de fundo ainda roda. Rodando as suítes dos leitores que toquei, para commitar e deployar:
+
+  Suites dos leitores tocados · 1m 43s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=leitores bash bin/trava_teste.sh -- docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronal… (1m 42s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Billowing… (36m 51s · ↓ 51.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
