@@ -1,5 +1,78 @@
 # RELATO — esteira saas-hasner
 
+## PAREI no item (6): **85 colabs com diferenca de VALOR, somando 3.268h56** | e os meus dois medidores estavam cegos
+
+Voce disse "o [nome] nao aparece no item (1), e o medidor nao ve plantao que cruza a meia-noite". Refiz
+os dois. **Os dois estavam errados, e de maneiras diferentes.**
+
+### Medidor (1): dois erros meus, e o Jean nao era da classe
+
+1. **UNIVERSO**: eu media "quem ENTRA no TXT". O Jean (**col857**, emp4) esta **`fora` por
+   `furo_espelho`** -- o RED que originou a medida estava excluido por construcao. A ordem dizia FROTA.
+2. **CONTA POR DIA CIVIL**: eu contava as batidas cuja data local == data da celula. No plantao que
+   cruza a meia-noite, tres das quatro caem no dia SEGUINTE. **E o mesmo erro que eu ja tinha curado
+   dentro do motor e repeti no medidor** -- a conta e por PERIODO.
+
+Refeito na FROTA (559 colabs) e por periodo: **336 dias com tipo divergente nao corrigido, em 123
+colaboradores** (219 por dia em aberto, 117 por ata que nao explica o periodo) -- contra os "15 dias em
+9 colabs" que eu tinha reportado. Piores: col788 15 dias, col872 15, col900 13, col923 12.
+
+**E o Jean nao aparece porque ele NAO E dessa classe** -- a autopsia do 11/09 prova:
+
+```
+dna/marcos   hi 21:00 · hii 01:00 · hfi 02:00 · hf 07:00      (o plantao cruza a meia-noite)
+ata          E@21:00 luz 21:01 gravado S   <- INVERTIDO
+             S@01:00 luz 00:59 gravado E   <- INVERTIDO
+             E@02:00 luz 02:07 gravado S   <- INVERTIDO
+             S@07:00 luz 07:00 gravado S
+JUIZ         desalinhado=False  em_aberto=False  entrada 21:01  saida 07:00  intervalo 68
+GEOMETRIA    1 turno: 21:01-07:00                              (ja curado pela O65)
+veredito     discordante, cartorio, julgada 18/09 15:14
+```
+
+**A ata explica o dia dele e o juiz acerta os quatro papeis, com tres tipos invertidos.** O 11/09 nao
+esta quebrado no pareamento: ele esta quebrado no **valor pago**, que e o item (6).
+
+### Medidor (6): o TOPO **E** o FECHAMENTO GRAVADO, e na frota a diferenca e de HORAS
+
+Voce estava certo: mesma pagina, duas fontes. Medido, em TODOS os casos `topo == gravado`, exato.
+
+| classe | colabs | soma das diferencas |
+|---|---:|---|
+| **ARREDONDAMENTO** (< 1 h) | 389 | float acumulado por periodo |
+| **VALOR** (>= 1 h) | **85** | **3.268h56** |
+
+E os de valor nao sao pequenos:
+
+```
+col882  164h36   topo 11h00    coluna 175h36
+col451  154h30   topo 35h57    coluna 190h27
+col416  154h27   topo 0h00     coluna 154h27
+col165  135h18   topo 34h19    coluna 169h37
+col277  107h19   topo 257h04   coluna 149h45   <- topo MAIOR que a coluna
+```
+
+O meu numero anterior ("169 de 202, diferencas de 7-9 min, e arredondamento") estava errado por duas
+razoes: o universo era so quem entra no TXT, e os exemplos que imprimi eram os PEQUENOS. Na frota, a
+classe de VALOR existe e e grande.
+
+E o Jean: **topo 82h44, coluna 83h26, gravado 82h44 -- diferenca 0h42**, nao 7h48. O 7h48 que voce
+citou nao e o total da competencia dele; deve ser do dia ou de outra janela do PDF, e nao vou dizer
+que medi o que nao medi.
+
+### Por que PAREI, e nao "topo = soma das linhas"
+
+A sua regra resolve a EXIBICAO numa linha. Mas o que a medicao mostra e outra coisa: **o topo esta
+igual ao FECHAMENTO GRAVADO, e e a coluna que discorda dele** -- em 85 colabs, por horas. Trocar a
+fonte do topo faria a pagina ficar coerente **escondendo** que o gravado e a apuracao discordam. E ha
+um corte anterior em jogo: o de **23/09** (ESPELHO-TELA-LE-A-FOLHA) mandou o cabecalho ler a FOLHA
+justamente porque e ela que paga.
+
+Entao o que esta em cima da mesa nao e qual fonte mostrar, e **por que 85 fechamentos discordam do
+espelho depois do apply da E3** -- inclusive alguns com gravado `0h00` contra coluna de 154h. Isso e
+dinheiro, e espera o seu `!` com a tabela. Nao toquei em nada.
+
+
 ## 09 antes do DP: as TRES medicoes de frota, com a lista e as horas
 
 Universo das tres: os **202-203 colaboradores que ENTRAM no TXT de 09** pelo juiz
