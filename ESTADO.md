@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:58:31.**
+**Medido em 26/09/2026 16:03:47.**
 
 | | |
 |---|---|
@@ -43,20 +43,6 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
 
 ```
 
-  Ran 1 shell command
-
-● Minha tentativa de bloqueio funcionou e deu 0 nos dois — então a alimentação não é a causa. Isolo o que sobrou: as flags do docker run:
-
-  Ran 1 shell command
-
-● Achei. O diferenciador é --tmpfs /app/logs: com o diretório real, folga = 0; com tmpfs vazio, 84,65. Um cálculo de dinheiro está lendo arquivo de logs/:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● É o --tmpfs /app/logs: com o diretório real, folga = 0; vazio, 84,65. Um cálculo de dinheiro depende de arquivo em app/logs/. Achando qual:
-
-  Listed 2 directories, ran 1 shell command
-
 ● Paro de adivinhar e instrumento o open:
 
   Ran 1 shell command
@@ -69,12 +55,26 @@ c8378cac [HAIKU-A-FABRICA-ESTA-LIGADA] a pergunta ganha DADO -- e sem snapshot a
   escala certa no dia). A sombra roda com --tmpfs /app/logs — o arquivo não existe lá, então a lavra vem vazia, ninguém é excluído e a folga é contada. Prod está certo; meu
   esperado estava errado. Refazendo com a lavra visível:
 
-  Refazer o DIFF com a lavra visivel · 54s
-  ⎿  $ cd /home/ronald/saas-hasner && ls -l app/logs/esmeril_espelho.json && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 com
-     lavra" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-… (53s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Wrangling… (33m 36s · ↓ 53.7k tokens)
+● 608 divergências, e as visíveis são todas do carimbo previsto_em. Agrupando:
+
+  Ran 1 shell command
+
+● Sobrou uma divergência fora do carimbo: col369 inconsistencias 10 (prod) contra 14 (sombra). Medindo a causa:
+
+  Ran 1 shell command
+
+● Nenhuma retratação — as 17 batidas são iguais. Aplico a mesma técnica que funcionou: espiar quais arquivos o recálculo de col369 abre:
+
+● Comparar ausencias e vereditos de col369 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/apply/aus.py <<'PYEOF'
+     """col369: ausencias/justificativas e as inconsistencias que o motor acusa, nos dois bancos."""
+     from colaboradores.models import Colaborador
+     from ponto.janelas import janela_fechamento
+     from ponto.models import Ause…
+
+✢ Wrangling… (38m 52s · ↓ 59.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
