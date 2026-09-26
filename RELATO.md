@@ -1,32 +1,73 @@
 # RELATO — esteira saas-hasner
 
-## PAREI: E3 COMPLETA medida, e ela NAO e cirurgica | espera `!` de criterio (L-082) | O60
+## CORRIJO O QUE PUBLIQUEI AS 14:xx: o DIFF da E3 estava INFLADO por um bug MEU
 
-A cura esta pronta e verde. O DIFF na sombra diz que ela mexe em MUITO mais do que o campo-alvo, e
-por isso nao aplico: o `!` de criterio pede que todo campo fora do alvo de todo colab de zero, e aqui
-nao da. **Nada foi aplicado em prod.**
+A tabela que publiquei hoje a tarde dizia **+443,31 h de cura** no campo-alvo em 09 e **+486,07 h**
+em 08. **Os dois numeros estavam errados, e para cima.** Medido com a guarda que faltava, a cura no
+mesmo campo e **−31,08 h** em 09 e **−22,43 h** em 08: ela nao AUMENTA a indenizacao de intervalo, ela
+a REDUZ. Quem achou o erro foi a AMOSTRA que o Ronald pediu antes do `!` -- o agregado escondia, e o
+dia a dia nao deixou.
 
-### O que a cura faz, e o achado que ela expoe
+### O bug, com nome e numero
 
-O motor parou de decidir o papel da batida pelo campo `tipo` e passou a ler o MARCO que ela cumpriu,
-pelo juiz da ata (`ponto/juiz_batida.py::periodos_do_dia`). O caso col369 de 23/09 era o exemplo;
-medido, ele e uma CLASSE:
+Ao tomar o periodo do juiz da ata, eu fundia o dia num periodo unico **sem carregar o intervalo**.
+Nos dias em que o DNA da celula tem so `hi` e `hf` (sem `hii`/`hfi`), as batidas de ida e volta do
+intervalo ficam SEM MARCO -- e o juiz responde `minutos=0, fonte='escala sem intervalo'`, apesar de o
+CADASTRO declarar 70 min. Resultado no col87 de 30/08: `10:01-13:57` + `14:57-18:19` viravam
+`10:01-18:19`, e os 60 minutos de intervalo **desapareciam** -- mais trabalho do que houve, e o
+minimo inteiro tratado como suprimido e indenizado. Era **~+60 min por dia em 17 dos 20 dias** dele.
 
-| competencia | `turnos_abertos` | colabs com turno que agora FECHA | `horas_trabalhadas` | `horas_extras` |
-|---|---:|---:|---:|---:|
-| 07/2026 | −2 | 1 | +12,47 h | +26,25 h |
-| 08/2026 | **−231** | **101** | **+1.451,44 h** | +199,51 h |
-| 09/2026 | **−175** | **63** | **+948,43 h** | +244,64 h |
+A guarda: **a ata so decide o periodo quando explica TODAS as batidas de dentro dele.** Batida dentro
+de `[entrada, saida]` sem marco correspondente = o dia fica com a autoridade de geometria, que le as
+batidas cruas e por isso ve a ida e a volta. Contado em `_dias_com_orfa_na_ata`.
 
-**164 colaboradores** tinham turno deixado em ABERTO pelo pareamento por tipo gravado, e esses dias
-valiam **+2.399 h** de trabalho nas duas competencias. Nao e ajuste de arredondamento: e jornada
-inteira que nao era contada porque a batida foi gravada com o tipo oposto ao marco que ela cumpriu.
-Em nenhuma competencia o numero anda para o outro lado -- `turnos_abertos` **so cai** (0 colabs em que
-sobe), que e a assinatura de cura e nao de troca de criterio.
+E a 1a versao DA GUARDA tambem estava errada: eu contava as batidas cuja data local era o dia, e no
+12x36 noturno do col255 a saida 06:00 cai no dia seguinte -- a guarda via 1 batida contra 2 lampadas,
+nao disparava, e o bug sobrevivia em 8 dias dele. A conta e por PERIODO, nao por dia civil.
 
-### O DIFF de tres colunas, no campo-alvo `horas_intra_indenizada`
+## PAREI: E3 COMPLETA medida com a amostra | espera `!` de criterio (L-082) | O60
 
-DERIVA = gravado x motor de HEAD (o fechamento esta velho). CURA = motor HEAD x motor novo. TOTAL = soma.
+**Nada aplicado em prod.** A cura esta verde e agora esta MEDIDA DIREITO.
+
+### A amostra que o Ronald pediu: 5 colabs de 09, tres empresas, dia a dia
+
+| colab | emp | escala | trabalhadas | turnos abertos | dias que mudam |
+|---|---|---|---:|---:|---:|
+| col107 | 3 | 6x1 12:50-21:20 | 130,93 -> **151,28 h** | 18 -> 11 | 4 |
+| col736 | 2 | 6x1multi 08:00-17:00 | 124,43 -> **152,92 h** | 15 -> 7 | 4 |
+| col51 | 4 | 6x1 07:00-16:00 (sab 07-11) | 179,47 -> **187,47 h** | 3 -> 0 | 2 |
+| col87 | 3 | 6x1 14:00-22:20 | 133,74 -> 133,74 h | 3 -> 3 | **0** |
+| col255 | 2 | 12x36 18:00-06:00 | 145,18 -> 145,18 h | 2 -> 2 | **0** |
+
+**col87 e col255 ficaram EXATAMENTE neutros**: o ganho que eu havia publicado para eles era, inteiro,
+o bug do intervalo. Os dois valem mais que os outros tres nesta tabela -- eles sao a prova de que a
+guarda morde onde tinha de morder.
+
+Os 10 dias que mudam, todos eles, tem a mesma forma -- e e a prova de dia trabalhado que a ordem
+pediu. Exemplos literais, com as batidas REAIS:
+
+```
+col736 11/09   HEAD: 08:47-ABERTO, 16:23-ABERTO  ->  0 min
+               NOVO: 08:47-16:23                 ->  420 min
+col736 14/09   HEAD: 07:58-ABERTO, 16:49-ABERTO  ->  0 min
+               NOVO: 07:58-16:49                 ->  499 min
+col107 29/08   HEAD: 10:40-ABERTO, 19:25-ABERTO  ->  0 min
+               NOVO: 10:40-19:25                 ->  439 min   (marcos hfi e hf com tipo INVERTIDO)
+col51  19/09   HEAD: 07:12-ABERTO, 11:12-ABERTO  ->  0 min
+               NOVO: 07:12-11:12                 ->  239 min   (sabado curto: 4 h, e a escala diz 07-11)
+```
+
+Duas batidas separadas por HORAS, as duas deixadas abertas pelo pareamento por tipo, e o total
+caindo exatamente onde a escala manda (420, 499, 439 min contra uma jornada de ~440; e 239 min no
+sabado de 4 h). **Nao e batida espuria sendo pareada** -- par espurio apareceria como dois registros
+a poucos minutos de distancia, e esses estao na amostra sendo corretamente IGNORADOS: o col107 tem um
+`21:20:00 S` seguido de `21:20:25 E` (25 segundos!) em 10/09, e o dia fecha 12:56-21:20 sem usa-lo --
+inclusive esse dia CAI 77 min, porque o HEAD contava o par duplicado e perdia o intervalo.
+
+Zero dias com o padrao "mesmo par, mais minutos", que era a assinatura do bug. Antes da guarda eram 8
+so no col255.
+
+### O DIFF de tres colunas, corrigido (`horas_intra_indenizada`)
 
 | competencia | empresa | DERIVA | CURA | TOTAL | colabs der/cura |
 |---|---|---:|---:|---:|---:|
@@ -34,93 +75,49 @@ DERIVA = gravado x motor de HEAD (o fechamento esta velho). CURA = motor HEAD x 
 | 07/2026 | 3 | −45,49 | −3,00 | −48,49 | 125/32 |
 | 07/2026 | 4 | −2,92 | +0,00 | −2,92 | 24/5 |
 | **07/2026** | **total** | **−45,74** | **−3,00** | **−48,74** | |
-| 08/2026 | 2 | −116,69 | +360,62 | +243,93 | 334/188 |
-| 08/2026 | 3 | +23,29 | +83,45 | +106,74 | 86/54 |
-| 08/2026 | 4 | −10,80 | +42,00 | +31,20 | 18/7 |
-| **08/2026** | **total** | **−104,20** | **+486,07** | **+381,87** | |
-| 09/2026 | 2 | −6,26 | +345,53 | +339,27 | 41/156 |
-| 09/2026 | 3 | +16,50 | +61,16 | +77,66 | 11/44 |
-| 09/2026 | 4 | +0,80 | +36,62 | +37,42 | 3/9 |
-| **09/2026** | **total** | **+11,04** | **+443,31** | **+454,35** | |
+| 08/2026 | 2 | −116,69 | −27,98 | −144,67 | 334/131 |
+| 08/2026 | 3 | +23,29 | +4,55 | +27,84 | 86/42 |
+| 08/2026 | 4 | −10,80 | +1,00 | −9,80 | 18/4 |
+| **08/2026** | **total** | **−104,20** | **−22,43** | **−126,63** | |
+| 09/2026 | 2 | −6,26 | −25,92 | −32,18 | 41/113 |
+| 09/2026 | 3 | +16,50 | −3,16 | +13,34 | 11/32 |
+| 09/2026 | 4 | +0,80 | −2,00 | −1,20 | 3/6 |
+| **09/2026** | **total** | **+11,04** | **−31,08** | **−20,04** | |
 
-Colabs sem `FechamentoMensal` que o motor CRIARIA: **93** em 07, **39** em 08, **4** em 09. Eles nao
-aparecem em DIFF por campo (nao tem "antes") e por isso estao nomeados aqui: sem esta linha, quem
-nunca foi medido desapareceria justamente da conta que decide.
+E o que a CURA move nos outros campos, com DIRECAO (soma | sobe em | cai em colabs):
 
-E a metade da JORNADA nao moveu dinheiro nenhum: `horas_falta` e `horas_abono` deram **exatamente
-zero** nas tres competencias. Falta e abono pararam de ser "contagem x jornada do template" e
-passaram a somar o previsto de cada dia -- e nestas competencias as duas contas coincidem. A cura
-esta certa e o efeito e futuro; quem move o numero hoje e a outra metade, a dos periodos.
-
-### Tres bugs MEUS no caminho, os tres medidos e curados antes desta tabela
-
-1. **Tratei "nao ha juiz" como "jornada zero"** e zerei a hora extra de **16 selos** numa rodada.
-   Motor sem colaborador -- e motor com `colaborador_id` que o banco nao conhece -- nao tem
-   autoridade a consultar; isso e `None`, nao `0`. `0` e veredito do juiz (folga, sem escala vigente,
-   template incompleto). A porta `_jornada_do_dia` e o unico sitio que trata o `None`, e os dias
-   assim vao para `_dias_sem_juiz`, que **no caminho do dinheiro tem de ser zero**.
-2. **Curto-circuitei o memo antes de consulta-lo**: dois selos da v3 cairam dizendo "o piso veio do
-   lixo" quando o que eu fazia era jogar fora a resposta do juiz que estava na mao.
-3. **Usei a ata para a ARITMETICA, e ela so serve para o PAPEL.** A `luz` da ata e `HH:MM`; medido na
-   sombra, **96,4% das 27.013 batidas** apuraveis de 09 tem segundo != 0. Calcular com o instante
-   reconstruido truncava ate 59 s por batida e aparecia no DIFF como deslocamento de
-   `horas_trabalhadas` em **426 dos 607** colabs -- vies que parecia cura. Agora a ata diz QUEM e a
-   entrada e QUEM e a saida, e o instante vem da propria `Batida`: o mesmo DIFF caiu para 132 colabs,
-   e o que sobrou tem explicacao (sao os turnos que FECHAM).
-
-### Cobertura declarada, nao suposta
-
-- **turno partido fica FORA** do juiz da ata: nele os marcos `hii`/`hfi` DIVIDEM BLOCOS (o motor
-  declara `AUT_MARCOS_INTERVALO=False`), enquanto o juiz le `hi..hf` como um periodo com intrajornada
-  no meio. Medido: aplicar o juiz la fundiu os blocos e a HE50 do dia caiu de 30 para 0 min. Contado
-  em `_dias_partido_fora_do_juiz`.
-- **dia sem celula, dia desalinhado e dia em aberto** seguem com a autoridade de geometria -- a unica
-  fonte que existe para eles. Nao e fallback: nao ha duas regras para o mesmo dia, ha dias com ata e
-  dias sem ata.
-- **lampada sem a `Batida` correspondente**: o dia nao entra, porque calcular dinheiro com instante
-  truncado e o bug 3 de novo. Contado em `_dias_luz_sem_batida`.
-
-### Cauda HAIKU: o contador da divida e o golden "o motor le a jornada de onde?"
-
-`jornada_de_fonte_lixo` virou snapshot datado (`tenant_command lavrar_jornada_lixo --apply`), e o
-copiloto ganhou o bloco que responde a pergunta em portugues -- porque a resposta que ele daria
-sozinho e a ERRADA e soa certa: o cadastro mostra `minutos_jornada` na tela.
-
-E o censo achou o que o selo de host **nao via**. A lista dele vigiava UM arquivo, entao media a
-divida do motor e chamava aquilo de divida da casa. Varrendo por AST o app inteiro: **11 acessos
-reais em 4 arquivos** --
-
-| arquivo | linhas | o que e |
+| campo | 08/2026 | 09/2026 |
 |---|---|---|
-| `ponto/motor_calculo_v2.py` | 474, 696, 1712, 1713, 1868 | nascimento do atributo, a **porta** `_jornada_do_dia`, e dois overrides que ESCREVEM |
-| `escala/services/cadastro_tipo.py` | 213, 232, 293 | o cadastro que **escreve** o campo -- legitimo |
-| `escala/services/escala_auto_executor.py` | 78 | leitor fora do caminho da E3, **nao tocado** |
-| `ponto/management/commands/gerar_celulas.py` | 66 | leitor fora do caminho da E3, **nao tocado** |
+| `turnos_abertos` | **−137** (0 sobe / 60 cai) | **−114** (0 sobe / 39 cai) |
+| `horas_trabalhadas` | +448,56 h (51/31) | +266,24 h (36/28) |
+| `horas_extras_50` | +131,37 h (121/24) | +191,70 h (107/15) |
+| `horas_reflexo_dsr` | +167,23 h (106/7) | +229,00 h (100/4) |
+| `horas_saida_antecipada` | −149,93 h (2/15) | −125,50 h (2/11) |
+| `saldo_banco_horas` | +239,57 h (30/9) | +205,83 h (23/7) |
 
-Os dois ultimos estao DECLARADOS na lista em vez de ficarem para ser redescobertos: o escopo da ordem
-era o motor, e ampliar por conta propria seria regra de negocio fora do pedido.
+`turnos_abertos` **so cai, em colab nenhum sobe** -- 99 colaboradores (60 em 08, 39 em 09) tinham dia
+trabalhado contado como turno aberto. Essa e a cura, e ela e real. O resto anda porque um dia que
+deixa de ser aberto passa a ter jornada, HE, DSR e banco como qualquer outro dia.
 
-A 1a versao deste contador contou **15** -- e 3 dos 15 eram a prosa DESTE arquivo (a docstring que
-explica o campo e o proprio padrao de busca). Medir codigo lendo texto faz o medidor entrar na
-propria conta; e a segunda vez hoje, e agora vai por AST.
-
-PROVA: `lavrado 2026-09-26: jornada_de_fonte_lixo = 11`; golden da mensageria
-`nucleo.tests.test_jornada_de_onde` + `test_fabrica_ligada` = **10 testes OK**; `HAIKU-DENTES.md em
-sincronia`.
 ### O que espera o `!`
 
-Aplicar em **09/2026** (07 e 08 viram Pauta DP, gravado intocado). O numero do aval, se vier, e
-**+443,31 h de cura** no campo-alvo, e a tabela acima e o escopo literal: a cura tambem move
-`horas_trabalhadas` (+948,43 h), `horas_extras` (+244,64 h) e `turnos_abertos` (−175) em 09 --
-nenhum desses e "campo fora do alvo que deu zero", entao a L-082 nao cobre e a L-009 manda.
+Aplicar em **09/2026** (07 e 08 nao mudam o gravado). A faixa e **−31,08 h** no campo-alvo e
+**+266,24 h** em trabalhadas, com `turnos_abertos` caindo 114 em 39 colabs. Nenhum outro campo da
+zero, entao a L-082 nao cobre e a L-009 manda: o `!` aqui e de DINHEIRO, nao de criterio.
 
 PROVA: DIFF na sombra (carimbo `dia=20260926 tipo=completa diverge=0`), duas corridas -- uma por
-arvore, `origin/main` e a arvore curada --, as duas chamando `recalcular_fechamento_mes` dentro de
-`atomic()` com `raise` no fim. Rollback provado em cada uma: **629/629** linhas de 07, **618/618** de
-08 e **603/603** de 09 identicas ao inicio. Selos: `ponto.tests.test_e3_completa_o_marco_manda` (10
-casos) e `test_selo_motor_nao_pareia_pelo_tipo_gravado` (8, com o par que morde) VERDES; divida
-`dinheiro_le_jornada_lixo` de **18 para 5** linhas de codigo, e a contagem parou de somar comentario.
+arvore (`origin/main` e a curada) --, as duas chamando `recalcular_fechamento_mes` dentro de
+`atomic()` com `raise`. Rollback provado: **629/629**, **618/618** e **603/603**. A amostra rodou o
+motor REAL das duas arvores por colab e a soma dos dias fecha com o delta do `FechamentoMensal`.
 
+### O achado que NAO curei, e por que
+
+`periodos_do_dia` devolve `minutos=0, fonte='escala sem intervalo'` quando o DNA da celula nao tem
+`hii`/`hfi`, **mesmo com `cadastrado_min` = 70**. Quem le esse zero como "esta escala nao tem
+intervalo" erra: a escala tem, a CELULA e que nao congelou os marcos. Nao toquei: mudar o juiz altera
+todos os leitores dele, e o escopo da ordem era o motor -- regra de negocio fora do pedido nao e
+pre-aprovada. Vai para o BACKLOG como obra propria, com este numero: nos 5 colabs da amostra, 3
+tinham dias assim, e em um deles (col87) eram 17 de 20 dias.
 
 ## Pauta DP de 07/08: SUSPENSA por aval (26/09 ~13:5x) | dono Ronald | saida = o DIFF da O60
 

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 15:15:45.**
+**Medido em 26/09/2026 15:21:01.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
@@ -43,44 +44,44 @@ be72e9d5 [FABRICANTE-DESLIGADO] o censo que eu declarei fechado no commit anteri
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● A amostra ainda não fecha porque eu inferia os dias em vez de medir os dois motores. Medindo minuto a minuto, uma corrida por árvore:
-
-  Ran 3 shell commands
-
-● Achei algo grave no meu próprio DIFF. Os dias que ganham +48 a +61 min com o MESMO par (col87 30/08: 10:01-13:57, 14:57-18:19 → 10:01-18:19) perderam o intervalo no meio.
-  Medindo o que o juiz devolve nesses dias:
-
-  Ran 1 shell command
-
-● Confirmado, e é defeito meu: nesses dias o DNA da célula tem só dois marcos (hi, hf), então as batidas de intervalo (13:57/14:57) ficam órfãs na ata — e eu fundia o dia num
-  período só, jogando o intervalo fora. O DIFF que publiquei está inflado por isso. A fronteira honesta:
-
-  Ran 1 shell command
-
-● A orfas da ata vem vazia — o produtor não a preenche nesses dias. Então não confio no campo: conto:
-
-  Ran 2 shell commands
-
-● col255 (12x36 noturno) ainda tem o padrão em 8 dias — minha guarda contava batidas do dia civil, e o turno dele cruza a meia-noite. A pergunta certa é se a ata explica tudo
   dentro do período:
 
   Ran 2 shell commands
 
 ● Agora está limpo: zero dias suspeitos, e dois dos cinco colabs ficaram exatamente neutros — o "ganho" deles era todo o meu bug. Refazendo o DIFF completo, que estava inflado:
 
-  DIFF completo com a guarda · 1m 42s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && . bin/sombra_trava.sh 2>/dev/null; trancar_sombra "diff3 novo v3" && docker run --rm --cpuset-cpus
-     "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=con… (1m 40s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-· Twisting… (16m 10s · ↓ 35.3k tokens)
+● Os números corrigidos são muito diferentes dos que publiquei — e a direção inverteu. Rodando as suítes e corrigindo o RELATO:
+
+  Ran 2 shell commands
+
+● Item (2) da ordem: a Pauta de 08 compara com o que foi pago, não com o nosso gravado. Medindo se existe recibo do Domínio no sistema:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Existe: ExportacaoDominio guarda cópia fiel do TXT entregue com hash. Medindo o que há para 08/2026:
+
+  Ran 1 shell command
+
+● Dois achados que mudam o item (2):
+
+  Ran 1 shell command
+
+● Cuidado: isso é a sombra, que pode ter raspado o campo. Conferindo em prod — só tamanho, sem conteúdo:
+
+● Conferir o conteudo em prod, so tamanho
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from folha.models import ExportacaoDominio as E
+     from collections import Counter
+     c = Counter(len(y.conteudo or '') for y in E.objects.all())
+     print('PROD -- distribuicao do tamanh…
+
+· Twisting… (21m 26s · ↓ 46.4k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
