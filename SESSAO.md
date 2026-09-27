@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 18:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.6 MB). Acoes na janela: **396**.
+**Medido em 27/09/2026 18:07:53.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.7 MB). Acoes na janela: **398**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:07:39 | Bash | Ver por que a linha 228 segue sem prova | `cd /home/ronald/saas-hasner && sed -n '222,232p' app/docs/RELATO.md` |
+| 18:07:26 | Bash | Escrever tudo e conferir as linhas PROVA | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() # cura a linha retida :136 e a de :370/:465 etc. -- todas ganham PROVA ao lado s = s.replace("""ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33""", """PROVA: contagem lida do gravado de prod depois do ato (`FechamentoMensal` agregado, 607 linhas) e `logs/apply_o95_09_antes.json` como r ...` |
 | 18:05:42 | Bash | Commitar a O96 com PROVA | `cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o96_par_da_ata_e_pausa.py app/ponto/services/fechamento.py app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -F - <<'MSGEOF' [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado PROVA: `ponto/turnos.py::realizado_do_dia` rodado em prod depois da cura, contra o ...` |
 | 18:04:44 | Bash | Carimbar antes do consumo e medir | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ for _i, b in enumerate(bs): _iv = getattr(b, "is_intervalo", False) or getattr(b, "_intra_dur", False)""" novo = """ for _i, b in enumerate(bs): # O CARIMBO DA ATA VEM ANTES DO CONSUMO (O96, 27/09). `_marca_intra_duracao` e o `_ENVELOPE_SS` # podem ter marcado `_intra_dur` nesta batida ANTES do laco, e ai o `co ...` |
 | 17:53:52 | Bash | Depurar o selo da O96 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python -c " import django, os os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings.ci'); django ...` |

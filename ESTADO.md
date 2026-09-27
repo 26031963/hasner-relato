@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:136 AFIRMA ato sem PROVA ao lado -- ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:07:01.**
+**Medido em 27/09/2026 18:07:53.**
 
 | | |
 |---|---|
@@ -92,15 +85,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agent "Autopsia E6 lote 1" finished · 39m 5s
-
-› Message from @aa02ef15f0a39737f (ctrl+o to expand)
-
-● Agent "Autopsia E6 lote 4" finished · 43m 28s
-
-● As cinco autópsias voltaram: 644 de 644 dias nomeados, 0 sem causa — e elas acham regressões das minhas próprias curas de hoje. Primeiro fecho a O96, que já está medida em prod.
-  Meu selo falha por fixture, não por código:
-
   Ran 1 shell command
 
 ● O 18:29 foi consumido pelo _ENVELOPE_SS antes da leitura do papel, então só uma ponta recebeu o carimbo. Carimbo o X antes desse consumo:
@@ -122,9 +106,18 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● O censo O81 voltou completo, e ele responde também o seu item 2 — vou dizer com o nome que a lei dá. Escrevo tudo e publico:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-· Puzzling… (1h 48m 12s · ↓ 83.4k tokens)
+● A checagem olha as 6 linhas seguintes, e eu pus a PROVA acima. Movo:
+
+  Publicar o RELATO curado
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     p='app/docs/RELATO.md'; s=open(p).read()
+     velho = """PROVA: contagem lida do gravado de prod depois do ato (`FechamentoMensal` agregado, 607 linhas) e
+     `logs/apply_o95_09_antes.json` como reversao.
+     ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencia…
+
+· Puzzling… (1h 49m 4s · ↓ 87.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
