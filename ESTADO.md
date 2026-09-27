@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:05:49.**
+**Medido em 27/09/2026 09:10:02.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -88,18 +89,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
   Ran 1 shell command
 
-● Agora sei exatamente o que ele escreve. Meço em prod (dry-run) para a linha ter o número de hoje, e pego as rotas do RED da O51b:
-
-  Ran 1 shell command
-
-● reverter_situacao_afastado hoje: 0 para reverter, 0 mentindo — ativá-lo escreveria nada. Acho as rotas do PDF:
-
-  Ran 1 shell command
-
-● col39 existe (emp4) mas o gravado tem saida_antecipada = 0,00 em 08 e 09 — então o RED de 300 min é do motor, não do gravado. Confiro antes de publicar um alvo de clique:
-
-  Ran 1 shell command
-
 ● O RED da O51b não reproduz: a competência 08 vai de 21/07 a 20/08, então 24/08 nem está nela — está na 09 —, e no motor de hoje o col39 tem só 13 min de atraso em 13/09. Busco
   um alvo de clique real, do gravado de hoje:
 
@@ -111,14 +100,26 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● Alvos reais achados (144 colabs têm pontualidade no gravado de 09). Publico as duas linhas que você pediu e registro os pedidos:
 
-● Publicar as duas linhas pedidas
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## O91 -- QUAL escritor o `install` ativaria, e o que ele escreve (voce pediu uma linha; aqui esta com o numero de hoje)
-     **`reverter_situacao_afastado --apply`** escreve **UM campo**: `Colaborador.s…
+  Ran 1 shell command
 
-✶ Shimmying… (6m 28s · ↓ 8.6k tokens)
+● Agora o teto de pontualidade. O motor já consulta a autoridade do previsto — leio o método que a possui:
+
+  Ran 1 shell command
+
+● A autoridade é self._previsto_do_dia(dia) (0 = "nada previsto", None = "sem juiz"). O teto tem de ser o último a falar, senão a zona 5 o desfaz. Vejo os fins dos três
+  calcular_mes:
+
+  Ran 1 shell command
+
+● Há cinco return resultado — o teto precisa ser um método idempotente chamado nos três sítios que recalculam pontualidade. Escrevo a lei, o método e o RED:
+
+  Ran 3 shell commands
+
+● dia_da_jornada existe nos dois escopos. Agora o RED, que afirma a lei e não um número mágico — e o caso que morde é o dia cuja soma está abaixo do teto e não pode ser tocada:
+
+  Running 1 shell command…
+
+✽ Shimmying… (10m 40s · ↓ 17.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
