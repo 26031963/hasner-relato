@@ -69,7 +69,7 @@ lista — ela e o que esta EM PE._
 | **O58** | ESPELHO-COM-HASH-POR-PERIODO-LIVRE | espera aval |
 | **O59** | RESCISAO-LE-O-REGISTRO | **livre na parte de leitura; o hash herd |
 | **O60** | ESPELHO-VERDADE-E3-COMPLETA | HEAD x novo = CURA |
-| **O61** | PAUTA-08-CONTRA-O-QUE-FOI-PAGO | espera `!` |
+| **O61** | CANCELADA 27/09 06:3x pelo corte "competencia paga fora do sistema" | espera `!` |
 | **O62** | JUIZ-DIZ-SEM-INTERVALO-COM-CADASTRO-DE-70 | espera corte |
 | **O63** | A SOMBRA MENTE SOBRE FOLGA TRABALHADA | espera corte |
 | **O64** | col369: `inconsistencias` 10 em prod x 14 na sombra | espera `!` |

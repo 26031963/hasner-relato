@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:534 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:564 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:36:01.**
+**Medido em 27/09/2026 09:41:31.**
 
 | | |
 |---|---|
@@ -39,11 +39,14 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/CORTES.md
  M app/docs/LEIS.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_l093_teto_pontualidade.py
+?? app/ponto/tests/test_o89_motor_nao_escreve_na_batida.py
 ?? esteira.pausada
 ```
 
@@ -91,38 +94,38 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-  Ran 1 shell command
-
-● A cópia tem de valer também nos dois calcular_mes das subclasses — elas usam batidas depois do super(). Completo em cópia:
-
-  Ran 1 shell command
-
-● Agora o selo, que afirma a lei que você enunciou ("o motor nunca altera os objetos que recebe") e por isso morde sem depender de fixture frágil:
-
-  Ran 1 shell command
-
-● Cura e selo da O89 prontos em cópia. Publico a L-093 aplicada enquanto a suíte fecha:
-
-  Ran 1 shell command
-
-❯ corte Ronald: 07/2026 e 08/2026 foram calculadas e pagas A MAO, fora do sistema -- NAO existe acerto retroativo. Cancelar toda Pauta DP e toda lista de ajuste de 07 e 08 (E3
-  metade, O61, O69 07/08 e qualquer outra), com o motivo "competencia paga fora do sistema"; o gravado de 07 e 08 segue intocado (L-092) como historico. A lista de ajuste ao DP e
-  so da 09. !
-
 ● A suíte trouxe uma regressão minha: o selo de performance do calendário. A causa é óbvia — meu teto pergunta o previsto antes de saber se há pontualidade a limitar, e na maioria
   dos dias não há. Inverto a ordem:
 
-● Inverter a ordem e rodar o selo de performance
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/motor_calculo_v2.py'; s=open(p).read()
-     velho = """ for dia, ps in por_dia.items():
-     prev = self._previsto_do_dia(dia)
-     if prev is None:
-     continue # sem juiz do previsto: nao ha teto a aplicar
-     soma = sum(float(p.minutos_atraso or 0) + float(p.minutos_sai…
+  Ran 1 shell command
 
-· Shimmying… (36m 39s · ↓ 49.3k tokens)
+● Selos verdes. Agora a ordem nova: cancelar as listas de 07 e 08. Primeiro acho todas, para não cancelar por memória:
+
+  Ran 1 shell command
+
+● Tenho o mapa. Antes de cancelar, listo o que o corte alcança — cancelar por memória seria o oposto do que a casa manda:
+
+  Ran 1 shell command
+
+● Meu filtro foi largo demais — a maioria cita 07/08 só na linha de prova. Leio os cinco que de fato podem ser Pauta/ajuste de 07 ou 08:
+
+  Ran 1 shell command
+
+● Decisão precisa. O corte alcança quatro coisas, e não as quinze que meu filtro largo pegou:
+
+  Ran 1 shell command
+
+● Cancelado com o motivo, em CORTES, BACKLOG e PENDENTES (148 itens agora). Publico e aplico a cura da O89, que já estava em cópia:
+
+  Ran 1 shell command
+
+● A cura da O89 custou 2 queries no calendário (29 contra teto 27), e o selo exige protocolo: ler o PLANO_PISCADA.md antes de subir teto. Leio e meço de onde vêm:
+
+● Ler o protocolo do teto de performance
+  ⎿  $ cd /home/ronald/saas-hasner && ls PLANO_PISCADA.md 2>/dev/null && grep -nE 'teto|C8|justificativa|subir' PLANO_PISCADA.md | head -12; echo "=== o selo e o teto ==="; grep
+     -n 'calendario' -B 3 -A 8 app/core/tests/test_selo_performance.py | grep -E 'REFERENCIA|27|teto|def test_calendario|=' | head …
+
+✢ Shimmying… (42m 9s · ↓ 59.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
