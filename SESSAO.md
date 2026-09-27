@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 10:14:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.4 MB). Acoes na janela: **711**.
+**Medido em 27/09/2026 10:19:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.4 MB). Acoes na janela: **703**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -713,11 +713,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:20:26 | Bash | Contrato de papel_por_minuto_da_ata | `grep -n "def papel_por_minuto_da_ata" -A 30 ponto/turnos.py \| head -36` |
 | 22:20:19 | Bash | Ler turnos_via_autoridade, o caminho de geometria | `sed -n '237,268p' ponto/motor_calculo_v2.py` |
 | 22:19:43 | Bash | Ver os periodos do motor no 11/09 e o gravado do [nome] | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command plano_b_no_dinheiro --schema=juliani --mes 9 --ano 2026 --colabs 857 --dia 2026-09-11 2>&1 \| grep -vE "objects imported\|^montar_dias:\|sem_celula" > /tmp/red_jean.txt; grep -A 6 "PERIODOS QUE O MOTOR" /tmp/red_jean.txt; echo "=== gravado do [nome] em 09 ==="; docker exec saas_core python manage.py tenant_command s ...` |
-| 22:19:27 | Bash | O RED: o que o motor calcula no 11/09 do [nome] hoje | `python3 - <<'PYEOF' p='ponto/management/commands/plano_b_no_dinheiro.py' s=open(p).read() s=s.replace(""" p.add_argument('--colabs', default=None, help='pks separados por virgula (RED dirigido)')""", """ p.add_argument('--colabs', default=None, help='pks separados por virgula (RED dirigido)') p.add_argument('--dia', default=None, help='AAAA-MM-DD: imprime os PERIODOS que o motor montou nesse dia,  ...` |
-| 22:16:36 | Bash | Corrigir o crons.py e registrar a nova hipotese | `python3 - <<'PYEOF' p='config/crons.py' L=open(p).read().split('\n') alvo = " 'nao se agenda. Medido em 09/2026: 758 de 6.912 dia-colab (11,0%) em 199 colabs, dos quais '" seg = " '614 sao a mesma classe (orfa na ata).'," i = L.index(alvo) assert L[i+1] == seg, L[i+1] L[i:i+2] = [ " 'nao se agenda. CORRIGIDO 26/09: 1.484 de 7.638 dia-colab (19,4%) em 199 colabs -- 723 por DIA '", " '(614 orfa na a ...` |
-| 22:16:19 | Bash | Ver os bytes exatos das linhas | `sed -n '426,428p' config/crons.py \| cat -A \| head -3 \| cut -c1-120` |
-| 22:16:15 | Bash | Onde esta o numero errado no crons.py | `grep -n "758" config/crons.py` |
-| 22:16:07 | Bash | Publicar a correcao no RELATO, TICKETS e na casa do medidor | `cat > /tmp/corr.md <<'EOF' ## CORRECAO: o plano B nao e 758 (11,0%), e **1.484 dia-colab (19,4%)** Eu publiquei `758 / 11,0%` as 21:xx, aqui no RELATO, na linha `O68 PLANO-B-MEDIDO` do TICKETS, na casa do medidor em `config/crons.py` e na mensagem do commit `d39c0696`. **Estava errado, e errado para BAIXO**, por erro de UNIDADE meu -- nao do sistema. `_dias_com_orfa_na_ata` e `_dias_luz_sem_batida ...` |
-| 22:15:26 | Bash | Ler o numero corrigido | `tail -30 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpqtv0ana.output` |
-| 22:14:34 | Monitor | numero corrigido do plano B na frota | `until grep -qE 'PLANO B TOTAL\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpqtv0ana.output 2>/dev/null; do sleep 15; done; echo "NUMERO CORRIGIDO PRONTO"` |
-| 22:14:27 | Bash | Ler o numero corrigido da frota | `tail -28 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpqtv0ana.output 2>/dev/null; echo "--- (vazio = ainda rodando) ---"` |
