@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:07:34.**
+**Medido em 27/09/2026 02:10:45.**
 
 | | |
 |---|---|
@@ -85,21 +85,6 @@ d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ordem da noite registrada. O (1) está feito — deploy às 01:53 com smoke verde no worker servido. Sigo sozinho no resto. Registro o prompt e vejo a suíte:
-
-  Ran 1 shell command
-
-● Suíte rodando (não toco .py). Publico a lista nominal do E1, que a ordem pede:
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● A lavra já vem do BANCO desde a O63, não do arquivo — então o ensaio na sombra a tem (o dump é de agora). Monto a invocação exata:
-
-  Ran 2 shell commands
-
-● Suíte ainda rodando (ela usa os núcleos 4-7; medição em prod usa 0-3, então não briga). Testo a hipótese das fatias por correlação, sem a sombra:
-
-  Ran 1 shell command
 
 ● Isso mata minha hipótese das fatias e revela algo mais simples e mais grave: o col882 tem UM vínculo, EC1059, que termina em 06/09 — a janela vai até 20/09. E o col515 tem
   quatro, incluindo o EC1220 com vigência impossível (está na minha lista dos 10 livres). Testo a aritmética decisiva: as 77 h estão fora da vigência?
@@ -113,16 +98,31 @@ d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do e
 ● Prova completa, não correlação: nos 5 colabs o fora_h é idêntico ao falta_h (col882 77,05 h em 7 dias; col515 39,06 em 4; col375 20,00 em 3; col743 12,05; col935 11,10). 159,25
   h em 16 dias sem vínculo vigente. Publico e confiro a suíte:
 
-  Commitar o E1 e a O85, e publicar · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/escala/models.py app/escala/migrations/0041_ec_vigencia_not_valid.py app/escala/tests/test_vigencia_constraint_e_o_juiz.py
-     app/escala/tests/_vigencia_sem_guarda.py app/escala/tests/test_contador_vigencia_impossivel.py app/core/espelho_verdade.py app/docs…
+  Ran 2 shell commands
 
-✽ Unfurling… (52m 15s · ↓ 170.1k tokens)
+● Publicado (68211a6). Enquanto a suíte fecha, construo a cura da O85 em cópia do HEAD. Leio o início do laço de fatias:
+
+  Ran 3 shell commands
+
+● Enquanto a suíte fecha, escrevo a cura da O85 em cópia do HEAD, espelhando exatamente o precedente da folga (a hora entra em horas_trabalhadas, sem adicional):
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● localizar não existe nesse arquivo — ele usa timezone.localtime. Corrijo a cura antes de aplicá-la:
+
+  Ran 1 shell command
+
+● Cura pronta em /tmp. Escrevo o RED dela enquanto a suíte roda — vejo o idioma de criação de batida:
+
+  Ver como os testes criam batida e chamam o recalculo
+  ⎿  $ sed -n 40,80p ponto/tests/test_fechamento_escopo_colabs.py; echo "=== batida idioma ==="; sed -n 28,40p ponto/tests/test_a_lei_turno_aberto.py
+
+· Unfurling… (55m 26s · ↓ 181.5k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
