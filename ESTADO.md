@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:20:45.**
+**Medido em 27/09/2026 14:25:45.**
 
 | | |
 |---|---|
@@ -87,12 +87,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Sincronizada (md5 26d7f7ea…, o de prod). Agora o selo que o aval pede:
-
-  Ran 1 shell command
-
-● 11 verdes no Django. Meu selo de host tem a asserção de ordem mal escrita — corrijo a checagem, não o código:
-
   Ran 2 shell commands
 
 ● O selo de host morde (removendo a chamada fica vermelho) e voltou a OK. Commito tudo e lanço suíte + DIFF — esta DIFF já sai com a lavra de prod, o que muda o número da folga
@@ -111,16 +105,22 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 
 ● Acrescento a linha da O94 no TICKETS (a régua vai cobrar) e commito os documentos:
 
-● Commitar a O94 e esperar a suite · 5m 22s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/TICKETS.md'; s=open(p).read()
-     i = s.index('| O93 |')
-     nova = ('| O94 | ponto (dinheiro de 09) | turno cuja saida REALMENTE falta fica ABERTO e vale 0 h -- o '
-     'gravado de hoje PAGA essas horas por pareamento velho | **medida, PAROU o apply de 09; codigo ja no '
-     'ar** | … (5m 20s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Committed e652f7c6
 
-· Lollygagging… (26m 48s · ↓ 71.6k tokens)
+● Dois vermelhos, os dois dos meus arquivos novos (relógio solto e .date() de batida). Vejo o que eles cobram:
+
+  Searched for 1 pattern
+
+● Os dois selos morderam código meu e estão certos. Vejo a regra do contrato do .date() para curar na forma certa:
+
+  Ran 1 shell command
+
+● Curo os dois — comparo instantes em vez de extrair data da batida (fica mais estrito, e some o .date()), e congelo o relógio no selo da lavra:
+
+  Running 1 shell command…
+
+· Lollygagging… (31m 48s · ↓ 74.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
