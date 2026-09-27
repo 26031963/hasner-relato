@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:12:31.**
+**Medido em 27/09/2026 18:18:01.**
 
 | | |
 |---|---|
@@ -105,16 +105,16 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● A régua cobra linha para a O96. Acrescento e empurro:
 
-  Linha da O96 e push · 42s
+● Linha da O96 e push · 6m 13s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/TICKETS.md'; s=open(p).read()
      i = s.index('| O95 |')
      nova = ('| O96 | ponto/turnos (pareador) | a pausa que a ATA marcou com `X` voltou a ser PAUSA -- ela entrava '
      'no turno sem carimbo e `_pares_marcados` ficava cego a ela | **no ar (commit `6d3e54b0`); reapply do '
-     … (42s · 4 lines)
+     … (6m 12s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Puzzling… (1h 53m 42s · ↓ 91.4k tokens)
+· Puzzling… (1h 59m 12s · ↓ 91.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
