@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:33:01.**
+**Medido em 27/09/2026 11:38:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -86,43 +87,43 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
-  ≤90 min" contava a S do intervalo, já consumida.
+  E e 12:03 E a 5,07 h, com a ata explicando. Vejo quem passa a alimentação do papel:
 
-  Pushed to main, ran 2 shell commands
+  Searched for 1 pattern
 
-● Push pousou (6060994d). Deploy e entro na classe D, medindo o que o juiz da ata responde hoje para o RED do col904:
+● turnos_do_colab passa papel_por_minuto. A pergunta é se o motor passa. Vejo:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 1 shell command
 
-● Duas respostas muito diferentes, e a primeira é grave:
-
-  - col904 22/08: o juiz da ata responde certo — entrada=18:50, saida=23/08 07:00, desalinhado=False. E o motor produziu 18:50 → aberto. A autoridade responde e o consumidor
-    ignora.
-  - col85 21/08: desalinhado=True, porque='sem marcos no dna' — é a cura (1) da O84.
-
-  Meço por que o motor não usa a resposta:
+● Achei, e é a causa dos 197: o motor chama parear_turnos na linha 269 sem papel_por_minuto. A cura da O65 — "o papel vem da ata quando ela responde" — chegou ao turnos_do_colab e
+  não ao motor. É a pergunta da LEI-AKITA 4: qual leitor não migrou. Leio a alimentação antes de ligá-la:
 
   Ran 1 shell command
 
-❯ Antes de fechar a classe B como "saida nao batida": nos 782 turnos abertos seguidos de outra ENTRADA, medir o intervalo entre as duas entradas: ate 14 h (provavel SAIDA com
-  tipo gravado trocado, em dia que a ata nao explica) x 20 h ou mais (entrada do dia seguinte, saida realmente faltando). Para o primeiro grupo, cruzar com os dias do plano B e
-  com a ata no formato antigo (O81). Tabela com os dois grupos, as horas de cada um e 3 exemplos. Nenhuma lei nova.
+● A alimentação aceita pk, células e batidas do chamador — então ligá-la no motor é alimentação, não consulta, e só quando as células já estão na mão (a mesma guarda que a E3 usa
+  para não fazer N+1 no caminho do dinheiro):
 
-● Sua medição é mais importante que a minha sonda (que tinha um len() num int). Meço os 782 pelo intervalo entre as duas entradas, com os dois cruzamentos:
+  Ran 1 shell command
 
-● Medir os 782 pelo intervalo entre as entradas
-  ⎿  $ cat > /tmp/b_gap_entradas.py <<'PYEOF'
-     """Os 782 turnos ABERTOS seguidos de outra ENTRADA: qual o intervalo entre as duas entradas?
-     <= 14 h = provavel SAIDA com tipo gravado trocado, em dia que a ata nao explica
-     >= 20 h = entrada do dia seguinte, saida realmente faltando
-     Cruza o primeiro grupo co…
+● Meio caminho, e o caminho certo: col51 24/08 agora fecha 06:59 → 16:02 = 9,05 h. O col904 segue aberto porque ali o problema é outro — a batida órfã das 06:57 abre um turno
+  antes de a S das 07:00 poder fechar o plantão. Meço o DIFF da cura:
 
-✢ Zesting… (44m 34s · ↓ 54.7k tokens)
+● DIFF da alimentacao do papel da ata no motor · 1m 25s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
+     horas_trabalhadas,turnos_abertos 2>&1 | grep -vE 'moveu fora do item' | grep -E '^ [a-z_]+ ' | awk 'NR==1 || $2!=$3'; docker exec saas_core … (1m 19s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Zesting… (50m 4s · ↓ 63.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
+
+❯ HANDOFF ANTES DO AUTO-COMPACT (1%): grava no topo do RELATO e no TICKETS: (1) a cura EM CURSO: motor_calculo_v2.py:269 chama parear_turnos SEM papel_por_minuto -- a O65 nao
+  chegou ao motor; 197 casos com a ata explicando e o motor pareando pelo tipo gravado (RED col51 06:59/12:03); falta ligar a alimentacao com a guarda da E3, selo, DIFF pelo
+  criterio do MODO 24H e DEPLOY JA. (2) classe B remedida: 236 ate 14 h (197 esta cura + 39 plano B), 109 entre 14 e 20 h, 437 com 20 h ou mais (saida realmente faltando =
+  cobranca, lista de segunda). (3) FILA depois: classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3. Regras do MODO 24H e da fila sem trava continuam. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
