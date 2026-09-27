@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:16:38.**
+**Medido em 27/09/2026 11:17:01.**
 
 | | |
 |---|---|
@@ -110,7 +110,7 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
   E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
   ≤90 min" contava a S do intervalo, já consumida.
 
-● Publicar a correcao do diagnostico da classe B · 2s
+● Publicar a correcao do diagnostico da classe B
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
@@ -118,7 +118,7 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
      Publiquei uma hora atras que a classe B era "o pareador nao fecha tendo `S` na mao", com **103 casos** e
      **55 d…
 
-✢ Zesting… (28m 12s · ↓ 44.6k tokens)
+✢ Zesting… (28m 34s · ↓ 46.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

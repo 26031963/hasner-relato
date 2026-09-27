@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 11:16:38.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.0 MB). Acoes na janela: **619**.
+**Medido em 27/09/2026 11:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.0 MB). Acoes na janela: **620**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:16:35 | Bash | Publicar a correcao do diagnostico da classe B | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## DERRUBO O MEU PROPRIO DIAGNOSTICO DA CLASSE B: nao e o pareador, e saida nao batida Publiquei uma hora atras que a classe B era "o pareador nao fecha tendo `S` na mao", com **103 casos** e **55 deles a menos de 90 min do marco**. **Esta errado**, e o erro e de medicao minha: eu contei como "`S` di ...` |
 | 11:15:10 | Bash | Medir o universo real da regra do passo final | `cat > /tmp/o68b_universo.py <<'PYEOF' """O universo REAL da regra: turno ABERTO com uma `S` ORFA adiante (o pareador devolve turno com entrada=None), antes da proxima entrada. Nada de contar a S do intervalo, que ja foi consumida. """ from django.apps import apps from django.utils import timezone as tz import datetime as d, collections, json G = lambda n: next(m for m in apps.get_models() if m.__n ...` |
 | 11:14:33 | Bash | Ver as tres batidas e os marcos do col349 em 14/09 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from ponto.models import Batida from escala.models import CelulaDia from django.utils import timezone as tz import datetime as d for ts, tp in Batida.objects.filter(colaborador_id=349, retratada_em__isnull=True, timestamp__gte=tz.make_aware(d.datetime(2026,9,14)), timestamp__lt=t ...` |
 | 11:14:00 | Bash | Ver se o col349 fechou e quem produz os periodos do motor | `cat > /tmp/col349_pos.py <<'PYEOF' from django.apps import apps from django.utils import timezone as tz import datetime as d G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, CD = G('Colaborador'), G('EscalaColaborador'), G('CelulaDia') from django.db.models import Q from core.regua_cct import get_motor_cct from ponto.turnos import batidas_apuraveis, parear_turnos, turno ...` |
