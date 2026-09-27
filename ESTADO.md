@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:58:01.**
+**Medido em 27/09/2026 04:03:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
-| `origin/main` | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## `git status --short`
 
 ```
+ M app/escala/models.py
+?? app/escala/tests/test_o87_intervalo_dentro_do_turno.py
 ?? esteira.pausada
 ```
 
@@ -85,17 +87,6 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Agora está claro, e confirma a cautela. Os piores casos são absurdos dimensionais:
-
-  ┌────────┬─────────────┬───────┬────────────────────┬────────────────────────────┐
-  │ colab  │  cadastro   │  dia  │     trabalhou      │ "saída antecipada" cobrada │
-  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
-  │ col820 │ 19:00–07:00 │ 01/09 │ 16:19→18:38 = 2h19 │ 741 min = 12h21            │
-  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
-  │ col769 │ 10:00–22:00 │ 18/09 │ 07:02→10:12 = 3h10 │ 708 min = 11h48            │
   ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
   │ col872 │ 07:00–19:00 │ 07/09 │ 09:00→12:08 = 3h08 │ 492 min                    │
   └────────┴─────────────┴───────┴────────────────────┴────────────────────────────┘
@@ -110,14 +101,25 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 
 ● mypy no meu código da O73. Vejo a acusação:
 
-● Empurrar com o mypy verde · 6m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/motor_calculo_v2.py && git commit -q -m "[O73] anotacao de tipo que o contrato de mypy cobrou
-     mypy: 'Need type annotation for _por_dia_o73'. Curado na origem (dict anotado), sem afrouxar o
-     mypy.ini -- que e o que aquele contrato exige.
-     Co-Authored-… (6m 49s)
+  Pushed to main, ran 2 shell commands
+
+● Push pousou (b9867ceb). DEPLOY JÁ e smoke da O73 no worker servido:
+
+  Ran 1 shell command
+
+● SMOKE_O73 = OK no worker servido: o atraso do col81 caiu de 44,42 h para 0,00 h, 18 dias com dois blocos, zero com atraso no segundo bloco e zero alertas "Atraso:" restantes.
+  Sigo para a O87, cuja guarda e selo já estão escritos em cópia:
+
+  Ran 1 shell command
+
+● 5 testes OK (o selo morde por construção: sem o método, AttributeError). Confiro se a guarda nova não quebra fixture existente antes de gastar um push:
+
+  Rodar escala e colaboradores com a guarda nova · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:lates… (1m 21s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (1h 3m 43s · ↓ 84.6k tokens)
+· Transmogrifying… (1h 9m 13s · ↓ 87.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
