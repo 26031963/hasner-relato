@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:35:46.**
+**Medido em 27/09/2026 14:40:46.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -87,15 +88,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  calados. Feito com o mecanismo certo: bin/sombra.sh --lavra copia de prod em duas pernas (o container da sombra nunca abre o banco de prod), o --com-a-sombra o faz sozinho, e a
-  recusa com aviso está selada nas duas pontas.
-
-  PLACAR atualizado no mesmo commit: E5 1/2 (O80/L-092), E3 7/10 (plano B/O68b-PAPEL, mais dois itens novos — O84 e O89), E1 com a O91 fechada por corte e o porquê de o contador
-  seguir manual, E6 com a rodada 2 (o oráculo confirmou a O85 sozinho: só a classe C se moveu, −157,7 h). Todo FEITO com linha de PROVA.
-
-  PAREI o apply outra vez, e o motivo é meu. A DIFF fechava bonito nos totais (+393,45 h de trabalhadas contra −321,94 h de folga). Totais não provam por colab, então medi a soma
-  trabalhadas + folga colab a colab: 14 colabs perdem 283,01 h de hora total — col922 −64,41, col297 −60,89, col727 −38,02, col751 −28,10, mais dez. A causa é a que eu declarei de
-  manhã e não quantifiquei: são os colabs em que a ata diz que a batida gravada como S abre o plantão seguinte, então o turno anterior fica aberto e vale 0 h, enquanto o gravado
   de hoje paga essas horas por pareamento velho. Pela doutrina a leitura nova está certa (célula soberana; turno sem saída é cobrança, não pagamento) e por isso o código sobe —
   mas tirar 283 h de 14 pessoas não está em nenhum aval. Virou O94, ! no topo do PENDENTES.
 
@@ -118,9 +110,18 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 
   Ran 1 shell command
 
-●
+● Agora a causa aparece, e é a mesma família da órfã — não do pagamento. Veja o col297: 22:59 a ata chama de E, 01/09 06:56 a ata chama de S (gravado diz E — inversão da O65), e
+  no meio ficam 02:57E 03:57S, que a ata não reivindica. Esse par do miolo tem o tipo gravado invertido, então _marca_intra_duracao não o reconhece e o pareador o lê como borda: o
+  turno de 8 h fica aberto. Testo a cura:
 
-✽ Twisting… (2m 39s · ↓ 10.6k tokens · thought for 42s)
+  Ran 1 shell command
+
+● Recuperação grande: col297 vai de 106,28 para 127,48 h (acima dos 125 h que o gravado paga, coerente com o seu oráculo), col922 de 137,56 para 158,17 h, e col51/col904/col85
+  idênticos. Rodo os selos afetados — um deles afirmava o contrário e tem de ser reescrito pelo resultado, não pelo mapa:
+
+  Running 1 shell command…
+
+✽ Twisting… (7m 39s · ↓ 13.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
