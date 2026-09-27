@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:103 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:141 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:45:29.**
+**Medido em 27/09/2026 02:47:12.**
 
 | | |
 |---|---|
-| `HEAD` local | `3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`` |
+| `HEAD` local | `099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela
 3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
 b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
 64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
 ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
-237c9b16 [O85] o dia com batida e sem vinculo vigente para de desaparecer da folha
 ```
 
 ## `git status --short`
@@ -85,21 +85,6 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern
-
-● Os dois DEFEITO em selo são deliberados: colaboradores/tests/test_bug112_defeito_nao_vira_toast.py:106 os levanta de propósito. Não são meus. Enquanto a suíte fecha, leio o
-  sítio da guarda da O87:
-
-  Ran 2 shell commands
-
-● Existe já um _validar_intervalo_piso_legal(). Leio antes de criar irmão — pode ser que a lei já esteja lá:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● A lei da O87 não existe: _validar_intervalo_piso_legal confere a DURAÇÃO contra o Art.71, nunca se a janela cai dentro do turno (para o col206, jornada 210 min e intervalo 60
-  min passam). Escrevo a guarda irmã em cópia:
-
-  Ran 3 shell commands
 
 ● A suíte segue. Meço a O66 com os juízes reais, não com campo lateral:
 
@@ -112,13 +97,28 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 ● O66 medida: celula_furo_sem_canal = **99** (esperado 0), em 34 colabs, e um sinal limpo — todas as 99 são furo, nenhuma cobrado: a cobrança sempre abre canal, o furo simples
   não. Publico:
 
-  Commitar e publicar a O66
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF'
-     [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
-     LEI-AKITA: origem=medicao (nenhum .py tocado), testemunha=PerguntaDisputa.respondida_em e
-     ChamadoColab…
+  Ran 2 shell commands
 
-* Symbioting… (3m 53s · ↓ 14.7k tokens)
+● A suíte segue. Meço a O73 (próxima da fila) para ela ter tamanho:
+
+  Ran 1 shell command
+
+● Achado importante e que reordena a fila: nesses 6 templates o dano no gravado é ZERO (horas_atraso = 0,00 nos 7 colabs), mas o ensaio mostra col81 com +44,42 h de atraso. Ou
+  seja: a O73 é bug latente, e o que está segurando é o próprio critério de separação:
+
+  Ran 1 shell command
+
+● Confirmado: 5 dos 7 colabs da O73 estão entre os separados, e três por horas_atraso — o campo exato que a O73 infla. Publico a dependência, que muda a ordem da fila:
+
+● Publicar a dependencia O73 -> L-084 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## PAREI a aplicacao da L-084 no gravado: a O73 infla exatamente os campos dela
+     `PAREI: dependencia medida O73 -> L-084 | espera a cura da O73, nao o Ronald`
+     Eu ia aplicar a L-084 corrigida no grava…
+
+✽ Symbioting… (5m 36s · ↓ 19.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
