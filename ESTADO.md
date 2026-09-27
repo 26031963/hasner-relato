@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:54:01.**
+**Medido em 27/09/2026 13:59:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
  M app/docs/BACKLOG.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -88,44 +89,44 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  celulas/folgas):
 
-  O68b-PAPEL — a órfã do col904 fechou (18:50 → 07:00 = 12,16 h), mas a causa era maior: a guarda contava batidas por data de calendário, e num turno que cruza a meia-noite o hf
-  mora em D+1 — a alimentação da O65 nunca alcançava um 12x36 noturno. Minha 1ª versão foi reprovada pela própria PROVA (turnos_abertos 620 → 665) e ganhou três guardas do seu
-  critério: duas pontas, L-084 lida de onde mora, e minuto com duas batidas não se endereça. No ar, com smoke no worker servido (workers 13:22, arquivos 12:52).
+  Ran 1 shell command
 
-  O84 — o juiz aprendeu a forma posicional do intermitente. O col85 21/08 fecha 18:56 → 07:02 = 12,09 h e vai a 0 abertos no mês; o col382 também fechou, porque o leitor passou a
-  ler em_aberto/entrada/saida do juiz em vez de procurar chaves hi/hf — juiz paralelo a menos. A metade que não muda tem selo: sem marco é impossível medir desvio, e sobre desvio
-  o juiz segue calado. Isso é impossibilidade x cobertura parcial, não conveniência.
+● A chamada direta diz folga em todas as formas (sem kw=False | celulas=False | celulas+folgas=False), então a classificação usou outro dia — a herança disparou. Vejo a primeira
+  leva em ordem, casada com os períodos:
 
-  Parei duas vezes para medir, e nas duas o número me derrubou:
+  Ran 1 shell command
 
-  1. PAREI o apply de 09 pelo seu critério da folga trabalhada. Há caso do 2º tipo e o maior não é de 1 h: col616 14/09, célula FOLGA, 05:53 → 18:00 = 11,13 h em hora normal, sem
-     o 100% — enquanto 18/09 e 20/09 do mesmo colab, forma idêntica, são folga trabalhada. Espionei eh_dia_trabalho durante o calcular_mes: nos dias que caem em hora normal o
-     motor pergunta pelo dia (False) e depois pelo dia anterior (True), e em 14/09 não existe período nenhum em 13/09 para a herança vir de. Virou O93, ! no topo do PENDENTES. Os
-     3 casos do col297 são do 1º tipo e estão corretos.
-  2. horas_noturnas de +24,55 para −2,87 na O84 — não sabia explicar, então não deploiei. Isolado nas duas árvores contra o mesmo banco: 4 colabs, todos intermitentes, e o noturno
-     era inventado. O col830 faz turno de DIA (06:48 → 18:50) e tinha 8,00 h de adicional 22h-05h vindas de um turno que ficava aberto e vazava pela noite; fechado, o certo é
-     zero.
+● Background command "Aguardar o veredito da suite da O84" completed (exit code 0)
 
-  Também cai um número que eu havia publicado: as −279 h de folga trabalhada da sombra são artefato do ensaio — o campo depende da lavra do esmeril em logs/, e o container da
-  sombra monta --tmpfs /app/logs. O comentário do próprio sítio já media isso (8 colabs, até 134,71 h).
+  Ran 1 shell command
 
-  Falta fechar: veredito da suíte da O84 → push → deploy → smoke. Depois, classe C residual → E5 fatia 1 → E6 rodada 3. O apply de dinheiro espera seu ! na O93; as curas de código
-  sobem.
+❯ PLACAR: marcar FEITO, com a linha PROVA, o que ja subiu hoje: O80/L-092 (E5), O89, O68b-PAPEL e O84 (E3), O91 fechada; a E6 com a rodada 2 (classe C -157,7 h). O placar anda
+  junto com cada cura, no mesmo commit, e nunca fica atras dela. Nenhuma lei nova.
 
-✻ Worked for 42m 38s · done 1:52 PM · 3 shells still running
+● Suíte da O84 verde: 8452 testes OK. Cura da O93 no disco — rodo o RED do aval antes de tudo:
 
-❯ aval Ronald: O93 e cura: a heranca de dia (periodo que comeca ate 6 h depois do anterior herda o dia dele) so vale quando EXISTE periodo anterior terminando nesse intervalo;
-  sem periodo anterior, o dia e o do inicio (L-085). RED: col616 14/09 (05:53-18:00, celula folga) = folga trabalhada; selos: 18/09 e 20/09 continuam iguais e a volta do almoco
-  do plantao noturno continua herdando. DIFF pelo criterio do MODO 24H. !
-  E a sombra passa a montar a lavra do esmeril (logs/esmeril_espelho.json) em todo ensaio de dinheiro: sem ela o ensaio sai infiel (-279 h e 134,71 h ja foram artefato). Selo:
-  ensaio sem lavra = recusa com aviso.
+  Ran 1 shell command
 
-✢ Lollygagging…
+● O RED do aval não virou: o col616 16/09 12:00 entrou em folga trabalhada, mas o 14/09 05:53 → 18:00 continua fora. Vejo o que precede esse período:
+
+  Ran 1 shell command
+
+● Background command "Esperar e ler o veredito" completed (exit code 0)
+
+● O RED tem segunda causa, medida: o gap do 14/09 é de 35,89 h — herança nenhuma. O que o desloca é o juiz do dia do turno: a entrada das 05:52 casa o marco hf 07:00 do turno
+  noturno do dia anterior (o cadastro prevê 18:59→07:00, e ele trabalha de dia). Leio esse juiz:
+
+● Ler o juiz do dia do turno
+  ⎿  $ grep -n '_dia_do_turno\|def _data_do_turno' ponto/motor_calculo_v2.py ponto/turnos.py | head; echo '=== _data_do_turno ==='; sed -n '/^def _data_do_turno/,/^def /p'
+     ponto/turnos.py | head -45
+
+✢ Lollygagging… (5m 34s · ↓ 17.4k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
