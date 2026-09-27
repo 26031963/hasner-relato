@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 05:32:08.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.4 MB). Acoes na janela: **959**.
+**Medido em 27/09/2026 05:35:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.4 MB). Acoes na janela: **960**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:32:05 | Bash | Publicar a taxonomia da classe C e empurrar | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## Classe C fechada em TAXONOMIA: tres causas, todas nomeadas -- e a O86 vira a maior obra aberta Os 27 colabs da classe C que NAO eram buraco de vinculo, medidos um por um (piso das batidas x soma dos periodos do motor x folha): \| causa \| colabs \| horas \| assinatura \| obra \| \|---\|---:\|---:\ ...` |
 | 05:31:18 | Bash | Medir a causa dos 27 colabs restantes da classe C | `cat > /tmp/classe_c_resto.py <<'PYEOF' """Os 27 colabs da classe C que NAO sao buraco de vinculo: de onde vem a diferenca? Compara, por colab: piso das batidas x soma dos periodos do motor x folha (trab+folga). """ from django.apps import apps from django.utils import timezone as tz import datetime as d, collections, json G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, ...` |
 | 05:30:41 | Bash | Ler a definicao da O51b | `grep -n 'O51b' docs/BACKLOG.md \| cut -c1-500` |
 | 05:29:53 | Bash | Medir o alcance da cura da O73 na frota | `cat > /tmp/o73_alcance.py <<'PYEOF' """Alcance da cura da O73: quantos colabs tem dia com MAIS DE UM bloco e SEM marco de intervalo? E quanto de atraso/antecipada ela tirou de cada um.""" from django.apps import apps from django.utils import timezone as tz import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, FM = G('Colaborador'), G('Escala ...` |
