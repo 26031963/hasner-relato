@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:42:01.**
+**Medido em 26/09/2026 22:47:28.**
 
 | | |
 |---|---|
@@ -32,9 +32,16 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
+ M app/docs/CORTES.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/escala/services/cadastro_tipo.py
  M app/ponto/management/commands/diff_reclassificar_partido.py
+ M app/ponto/management/commands/plano_b_no_dinheiro.py
+ M app/ponto/motor_calculo_v2.py
+ M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 ?? app/ponto/management/commands/dna_x_batida_real.py
 ?? esteira.pausada
 ```
@@ -42,40 +49,40 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  retratada.
+● Tenho tudo. Registro a lei nova (L-084) e o ! antes de codar:
+
+  Ran 2 shell commands
+
+● O selo da LEI-AKITA morde a palavra "fallback" na minha prosa que explica a cura — quarta vez esta noite que selo de texto morde a explicação. Curo a frase e vou ao
+  aplicar_tolerancia, onde a L-084 tem de morar:
+
+  Ran 2 shell commands
+
+● A lista CADASTRO x REALIDADE existe só em docs, não em código. Então ela nasce aqui. Implemento a L-084 no sítio único que serve os dois motores:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Falta anexar a lista ao resultado. Vejo quantos calcular_mes existem — se houver override, anexar num só deixaria a lista muda nos outros:
 
   Ran 1 shell command
 
-❯ corte Ronald (lei nova, pontualidade): dia cujo DNA nao descreve a batida real (marco de entrada ou de saida a mais de 3 h da batida correspondente) NAO gera atraso nem saida
-  antecipada; o dia vai para a lista CADASTRO x REALIDADE com o horario real ao lado do cadastrado. As horas trabalhadas contam normalmente.
-  aval Ronald: reclassificacao dos 37 templates aplica em 09 com esse corte; saldo_banco_horas dos 23 fica fora do apply (campo novo, sem decisao); 07 e 08 nao mudam o gravado; e
-  quem escreve template nao salva "partido" com vao de ate 2 h. !
-
-● Ordem grande. Registro a lei e o ! primeiro — durável antes de implementar — e vou ver o número do DNA que está rodando:
+● Três calcular_mes com 6 pontos de retorno — e o meu self._cadastro_x_realidade = [] está só no MotorBase. Se as subclasses não chamam super(), a lista nunca reseta nem chega ao
+  resultado. Confiro:
 
   Ran 1 shell command
 
-● Background command "Medir os dias com DNA em desacordo com a batida real" completed (exit code 0)
+● Os dois subclasses chamam super().calcular_mes() primeiro e mutam o mesmo objeto. Então anexar uma vez no MotorBase basta — e isso funciona porque é a mesma lista, o que precisa
+  estar escrito:
 
-● Background command "Emendar e empurrar o push49" completed (exit code 0)
+  Ran 3 shell commands
 
-  Ran 1 shell command
+● Agora o medidor do DNA: usa o juiz dos marcos em vez de ler o dna cru, e mede entrada e saída no corte de 3 h da sua lei:
 
-● Duas coisas. push49 caiu com 3 falhas e o número do DNA está em 365 dia-colab / 123 colabs, mas as minhas faixas não casam com o corte de 3 h que você definiu — preciso recontar
-  em 180 min e também medir o marco de saída, que a sua lei inclui e eu não medi.
+  Ruff e os tres selos que caíram no push49 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/saas-hasner/app:/app saas-hasner-core:latest sh -c 'cd
+     /app && ruff check --output-format=concise . 2>&1 | tail -4'; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --…
 
-  Primeiro a árvore:
-
-  Ran 1 shell command
-
-● Três selos, todos meus, e todos são contratos estruturais pegando exatamente o que foram feitos para pegar. O mais sério: meu medidor escreve na família escala fora da porta.
-  Vejo os três:
-
-● O que o selo da tupla literal procura
-  ⎿  $ echo "=== 1. tupla literal de status: plano_b:153 ==="; sed -n '150,156p' ponto/management/commands/plano_b_no_dinheiro.py; echo "=== 2. escrita fora da porta ==="; grep -n
-     "objects.filter(pk=te.pk).update\|\.update(" ponto/management/commands/diff_reclassificar_partido.py; echo "=== o que o selo…
-
-· Marinating… (2m 7s · ↓ 8.5k tokens)
+✽ Marinating… (7m 33s · ↓ 30.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
