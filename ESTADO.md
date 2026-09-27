@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:49:01.**
+**Medido em 27/09/2026 12:54:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca` |
+| `HEAD` local | `42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao
 42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca
 a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
 2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
 6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
-4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/MAPA-JUIZES.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -89,39 +85,39 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file
-
-● O OK: 31 no log não é o veredito do Django (é de um teste que chama selo de host) — meu grep casou cedo. Confiro de verdade:
-
-  Ran 2 shell commands
-
-● Enquanto a suíte fecha: dois selos de host estão VERMELHOS com cura nomeada e bloqueiam o push. Vou ver se são meus:
-
-  Ran 1 shell command
-
-● É meu, do commit de hoje c060e70a. Curo os dois (linha no mapa + hook reinstalado):
-
-  Ran 2 shell commands
-
-● Os dois verdes. Os outros dois vermelhos são anteriores e são fila do Ronald (Pauta de cortes; sorteio do fabricante, que está desligado por corte). Vejo a suíte:
-
-  Ran 1 shell command
-
-● Enquanto roda, respondo a segunda metade da pista — se a cura fecha a O62 também:
-
-  Ran 3 shell commands
-
-● Antes de aplicar dinheiro, consulto — o commit, os selos e o RELATO já estão duráveis:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
 ● Duas correções antes do push. A primeira é um buraco real que o conselho fechou: _todas_luzes só junta os dias emitidos, então a luz de uma vizinha reprovada pela guarda pode
   virar X e apagar a entrada do turno seguinte — silenciando a cobrança:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Hashing… (1h 0m 56s · ↓ 111.5k tokens)
+● Background command "Esperar o Ran da suite" completed (exit code 0)
+
+● Background command "Aguardar o veredito final da suite" completed (exit code 0)
+
+● Leitura decisiva de prod: atraso e antecipada já estão aplicados (prod ≈ base depois), mas horas_folga_trabalhada em prod é 2286,53 — idêntico ao "antes" da sombra: os −279 h
+  são deriva REAL e pendente, de origem não nomeada. Isso sai do apply. Vejo a suíte:
+
+  Read 1 file
+
+● Dois vermelhos, e um deles é o selo estrutural que guarda exatamente a guarda que eu reescrevi. Vou ler os dois:
+
+  Ran 1 shell command
+
+● Duas curas: o import datetime as _dt ficou sem uso, e o selo da O65 ancorava num nome de variável (_acesas), que eu renomeei — é a armadilha do selo que varre texto. Reancoro no
+  que carrega significado e num selo que MORDE:
+
+  Ran 1 shell command
+
+● 23 verdes (ruff, mypy, o selo da O65 e os meus 12). Acrescento o caso que morde o buraco da vizinha e commito:
+
+  Committed 42c85223, ran 1 shell command
+
+❯ Antes de aplicar a O68b: das -279 h de folga trabalhada que a deriva move para horas normais, amostra de 5 colabs com as maiores quedas, dia a dia: o plantao COMECOU em dia
+  previsto e entrou pela folga (vira jornada normal, correto pela L-085/L-086) ou COMECOU no proprio dia de folga (turno extra de verdade, tem que CONTINUAR folga trabalhada)? Se
+  houver um so do segundo tipo, PAREI com a lista. Nenhuma lei nova.
+
+✢ Hashing… (1h 6m 26s · ↓ 120.4k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
