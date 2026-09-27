@@ -16,6 +16,61 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI: a L-086 tira **-642,43 h de HE 100% feriado em 64 colabs**, nao nos 20
+
+Remedicao dos 20 pedida no item (1), em ENSAIO com rollback, depois do selo da L-086. **Nao apliquei**,
+e o motivo esta na primeira linha da tabela.
+
+| campo | antes | depois | delta | colabs |
+|---|---:|---:|---:|---:|
+| **`horas_extras_100_feriado`** | 667,11 | 24,68 | **-642,43 h** | **64** |
+| **`horas_extras_100`** | 865,26 | 211,66 | **-653,60 h** | **65** |
+| **`horas_extras`** | 1.610,80 | 936,97 | **-673,83 h** | **67** |
+| `horas_extras_100_noturna` | 64,84 | 64,32 | **-0,52 h** | 2 |
+| `horas_noturnas` | 18.253,59 | 18.389,20 | +135,61 | 11 |
+| `horas_intra_indenizada` | 2.205,12 | 2.303,29 | +98,17 | 10 |
+| `horas_trabalhadas` | 69.465,34 | 69.541,26 | +75,92 | 13 |
+| `turnos_abertos` | 620 | 590 | -30 | 6 |
+| `inconsistencias` | 1.332 | 1.282 | -50 | 9 |
+| `semanas_dsr_ok` / `perdido` | 1.914 / 809 | 1.899 / 824 | **-15 / +15** | 9 |
+| `horas_reflexo_dsr` | 345,50 | 357,34 | +11,84 | 10 |
+| `mes`, `ano`, `horas_falta`, `minutos_*`, `dias_*`, `saldo_banco_horas` | — | — | **+0,00** | **0** |
+| **colabs com qualquer campo movido** | | | | **71** (eram 51) |
+| **ENTRAM / SAEM do TXT** | | | | **0 / 0** |
+
+### Por que PAREI
+
+O criterio era "aplica se SO os campos do criterio moverem". **A L-086 alcanca 64 colaboradores e tira
+642,43 h de dobra de feriado** -- e o RED do corte nomeava tres (col491, col343, col382). O item (1) da
+ordem falava em **remedir os 20**; o que a lei faz e' muito maior que os 20.
+
+**O alvo foi atingido**: `horas_extras_100_noturna` caiu de **+105,45 h** para **-0,52 h**. Era o que a
+autopsia pediu, e fechou. Mas a mesma regra, aplicada a frota, retira dobra de feriado de **64 pessoas**,
+porque **quase todo feriado de plantonista e' feriado PREVISTO na escala** -- e' exatamente o que a lei
+diz, e a consequencia e' de outra ordem de grandeza.
+
+### O que eu NAO sei, e nao vou supor
+
+Se essas 642,43 h **deviam** estar sendo pagas. A L-086 diz que nao (plantao previsto nunca e HE 100%),
+e o texto da Sumula 146 fala de feriado TRABALHADO. Entre as duas leituras ha uma questao juridica que
+nao e minha: **o vigilante de 12x36/6x1 que trabalha no feriado porque a escala manda recebe dobra?**
+A casa tem parecer para o caso do 12x36 (Art.59-A par.2, parecer de 08/09 -- **nao** dobra), e a L-086
+generaliza isso para todo plantao previsto. Generalizar parecer de um ciclo para todos e' decisao de
+lastro juridico.
+
+**64 colaboradores perdendo 642 h de dobra em uma competencia em fechamento precisa do seu `!` com essa
+frase escrita**, nao do meu "o criterio nao fechou". Se o corte for aplicar, eu aplico com a tabela e a
+lista dos 64.
+
+### O DSR segue igual, e isso confirma a O76
+
+`semanas_dsr_ok -15` / `perdido +15` **nao se moveu um passo** com a cura do feriado -- exatamente o que
+a autopsia previu: DSR nao vem de HE nem de feriado, vem de dia previsto sem trabalho. Dos 15, o col491
+e' falta REAL e o col382 e' o bug da **O76** (entrada 10 min depois da meia-noite jogando o plantao para
+fora da janela). A O76 continua sendo a cura de origem disso.
+
+`col81 (FORA): intacto` e `07 e 08: 0 divergencias` -- as duas exclusoes seguram.
+
 ## AUTOPSIA dos 20 revertidos: a HE 100% noturna e FERIADO TRABALHADO, e o DSR nao e atraso
 
 Ordem Ronald 27/09 01:5x, dia a dia, motor NOVO em rollback (nada gravado).

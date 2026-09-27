@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:01:01.**
+**Medido em 27/09/2026 00:06:31.**
 
 | | |
 |---|---|
@@ -62,44 +62,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Selo da L-086 corrigida: 10 casos, verde. E ele achou um quinto sítio — o texto do motivo dizia "folga semanal" por weekday() in dias_folga cru, o que poderia rotular assim um
+  dia que o juiz considera previsto. Rótulo contradizendo o cálculo é a testemunha mentindo em prosa, então passou pelo mesmo juízo.
+
+  O que o corte mudou, e o que eu tinha errado:
+
+  Feriado saiu da L-086. Volta a seguir só feriado_em_dobra do ciclo, com o dia sendo o de início. Minha primeira versão exigia "dia não previsto" e generalizava o parecer do
+  12x36 para todo plantão — e medido na frota aquilo tirava −642,43 h de 64 colaboradores. Deixei isso escrito na docstring e num caso de teste próprio
+  (test_MORDE_a_versao_ANTIGA_desta_lei_ficaria_VERMELHA), para que ninguém "conserte o teste" em vez da regra se reintroduzir a versão errada.
+
+  Domingo entrou. _folga_pelo_dia_previsto: o folga_dia_semana do template não vence a escala, e o dia é o de início — turno que começa sábado 22:00 e sai domingo 06:00 não é
+  domingo trabalhado.
+
+  Os pares que mordem, em ambas: plantão que começa no feriado dobra × o que começa na véspera e entra pelo feriado não dobra; domingo previsto não é folga × domingo não previsto
+  segue folga — este último importa porque horas_folga_trabalhada é dinheiro, e uma versão que devolvesse sempre False apagaria folga trabalhada de todo mundo.
+
+  Agora remeço os 20 e a frota. O esperado, pela sua ordem: HE 100% noturna dos 20 perto de zero, e dobra de feriado da frota intacta — salvo o que muda por atribuição do dia de
+  início.
+
+✻ Brewed for 2m 35s · done 12:06 AM · 2 shells still running
+
+❯ remede os 20 e a frota
 
   Ran 1 shell command
 
-● Monitor(remedicao dos 20 com os 26 campos apos o selo da L-086)
-  ⎿  Monitor started · task br7751v0p · timeout 1500s
-  ⎿  Allowed by auto mode classifier
+● Remedição em ensaio, com os 26 campos e o col81 fora.
 
-● A remedição ainda está rodando — publico quando o número existir. Monitor armado.
+  Os três números que decidem, e o que cada desvio significa:
 
-  Enquanto ela corre, o que já está fechado da sua lista de prioridades até segunda:
+  horas_extras_100_feriado perto de zero. Se a dobra da frota voltou intacta, o campo não se move — era +667,11 antes da minha versão errada e tem de voltar a ficar parado. Se
+  ainda cair centenas de horas, sobrou resíduo da regra que você revogou.
 
-  O78 — feito. Selo da L-086 verde com 6 casos, e ele achou quatro sítios pagando dobra de feriado, não os dois que eu havia curado lendo o código. Os dois extras estavam em
-  MotorTurnoPartido e MotorComercial, por dia em vez de por período. Sem o selo, a lei estaria "vigente" com metade dos sítios violando-a.
+  horas_extras_100_noturna perto de zero. Esse é o alvo original dos 20. Ele vem de turnos_abertos fechando, não de feriado, então deve permanecer curado.
 
-  Falta da sua lista: a segunda metade do (1), que é esta remedição; o O80, o selo da L-092; e o O51b.
-
-  Sobre o O80, já sei a forma do teste que morde, e quero adiantar porque é a lei mais perigosa sem selo: recalcular competência com ExportacaoDominio confirmada tem de recusar, e
-  o par é competência sem export recalculando normal. O risco que ela cobre não é hipotético — esta noite eu recalculei a 09 pelo menos seis vezes, e se ela estivesse exportada o
-  gravado teria mudado por baixo de um TXT já entregue ao DP, sem nada no código reclamando.
-
-  As 12 perguntas sem lei ficam listadas no RELATO para o seu corte, com fatos_do_dia e eh_feriado no topo como você pediu — as duas são leitura diária do motor, o que as torna as
-  mais caras de deixar sem vocabulário.
-
-✻ Churned for 23s · done 12:00 AM · 2 shells, 1 monitor still running
-
-❯ segue pro O80 enquanto a remedicao roda
-
-● O80. Primeiro os fatos: o que é "exportada", e se já existe trava:
-
-● O que e exportada e se ha trava no recalculo
-  ⎿  $ grep -n "class ExportacaoDominio" -A 22 folha/models.py | grep -nE "= models|def |confirmad|status" | head -14; echo "=== trancar_periodo ==="; sed -n '451,480p'
-     ponto/services/fechamento.py; echo "=== o recalculo tem alguma trava? ==="; grep -n "trancado\|bloqueado\|ExportacaoDominio" ponto/serv…
-
-✢ Whirring… (15s · ↓ 481 tokens · thinking)
+  horas_folga_trabalhada. Campo novo em risco: a regra de domingo agora pode tirar folga trabalhada de quem tem domingo previsto — e isso é dinheiro saindo. Antes era +1,76 h em 1
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
