@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:47:01.**
+**Medido em 27/09/2026 03:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90` |
+| `HEAD` local | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
 | `origin/main` | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
 95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
 9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
 ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
-56475e40 [TICKETS] a linha da vigencia passa a ter o ID E1, que e a tag citada nos commits
 ```
 
 ## `git status --short`
@@ -85,11 +85,6 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● 19 colabs, horas_atraso +5,95 h e horas_saida_antecipada +221,21 h — ou seja ~11,6 h de desconto por pessoa. O critério do MODO 24H diz "aplica", mas o próprio motor avisa
-  (:2049) que a L-084 mascarava esse efeito, e a O88 mostrou que a ata assigna a batida mais próxima e órfana o resto. Não desconto 221 h de 19 pessoas sem saber o que são. Meço
-  quem são:
 
   Ran 1 shell command
 
@@ -111,13 +106,18 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 
 ● Pré-empto as duas barreiras da O90 e empurro:
 
-● Empurrar a O73 · 4m 26s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git add app/docs/TICKETS.md; git
-     diff --cached --quiet || git commit -q -m "[TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
-     C… (4m 25s · 2 lines)
+  Ran 1 shell command
+
+● mypy no meu código da O73. Vejo a acusação:
+
+● Empurrar com o mypy verde · 1m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/motor_calculo_v2.py && git commit -q -m "[O73] anotacao de tipo que o contrato de mypy cobrou
+     mypy: 'Need type annotation for _por_dia_o73'. Curado na origem (dict anotado), sem afrouxar o
+     mypy.ini -- que e o que aquele contrato exige.
+     Co-Authored-… (1m 19s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (52m 43s · ↓ 83.4k tokens)
+✢ Transmogrifying… (58m 13s · ↓ 84.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
