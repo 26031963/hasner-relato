@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/09/2026 23:39:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (75.1 MB). Acoes na janela: **955**.
+**Medido em 26/09/2026 23:40:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (75.1 MB). Acoes na janela: **956**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:39:31 | Bash | Conferir o selo e republicar o RELATO | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md && echo "=== selo da PROVA: VERDE ==="; bash bin/relato.sh 2>&1 \| tail -12` |
 | 23:39:24 | Bash | PROVA na linha retida e cura do efeito colateral | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' p='app/docs/RELATO.md' s=open(p).read() old="""### Item (1) FEITO: a porta nova saiu da arvore""" new="""### Item (1) FEITO: a porta nova saiu da arvore PROVA: `grep -c '_recusa_partido_sem_vao' app/escala/services/cadastro_tipo.py` = **0** -- a funcao que recusava nao existe mais na arvore (foi substituida por `descreve_turno_partido`, que RESPON ...` |
 | 23:38:49 | Bash | Colher as provas exatas que a ordem pede | `cd /home/ronald/saas-hasner && echo "=== as provas, colhidas AGORA ==="; echo "arquivo cadastro_tipo.py mtime : $(stat -c %y app/escala/services/cadastro_tipo.py \| cut -c1-19)"; echo -n "workers saas_ui iniciados em : "; docker exec saas_ui ps -o lstart= -C gunicorn 2>/dev/null \| head -1; echo "grep da chamada comentada:"; grep -n "_recusa_partido_sem_vao\\|A PORTA NAO BARRA POR ROTULO" app/esca ...` |
 | 23:38:41 | Bash | O bloco do selo e a linha acusada | `cd /home/ronald/saas-hasner && sed -n '56,72p' bin/relato.sh; echo "=== a linha acusada ==="; grep -n "Item (1) FEITO" app/docs/RELATO.md` |

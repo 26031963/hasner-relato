@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:39:33.**
+**Medido em 26/09/2026 23:40:41.**
 
 | | |
 |---|---|
@@ -59,20 +59,6 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  parece pronto porque eu já sei o formato dele.
-
-  O monitor está armado e a publicação sai assim que o log fechar. Ela vai ter, na ordem: os 26 campos com antes, depois, delta e colabs; ENTRAM e SAEM do TXT; a conferência de 07
-  e 08 feita no banco; e a linha do col81 dizendo intacto ou MOVEU.
-
-  Se qualquer um dos três números que eu listei vier fora do previsto, a publicação vira PAREI com a reversão pelo snapshot em logs/apply_o68b_09_antes.json — e o que eu publico é
-  a tabela da divergência, não a da vitória.
-
-✻ Cogitated for 16s · done 11:36 PM · 1 shell still running
-
-● Background command "APPLY de 09 sob o corte b, com a prova dos 26 campos" completed (exit code 0)
-
-  Ran 1 shell command
-
 ● O apply pousou. Os três números que eu me comprometi a conferir passaram — mas a tabela de 26 campos mostra três grupos que não estavam no seu critério, e isso vem primeiro.
 
   Ran 1 shell command
@@ -88,15 +74,29 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ● O mtime é 23:21 e os workers subiram 23:35 (02:35 UTC) — o deploy carregou esta versão. E a função nem existe mais: _recusa_partido_sem_vao tem 0 ocorrências. Ponho a PROVA e
   curo o relato.sh:
 
-● Conferir o selo e republicar o RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md && echo "=== selo da PROVA: VERDE ==="; bash
-     bin/relato.sh 2>&1 | tail -12
+  Ran 2 shell commands
 
-✢ Ionizing… (2m 18s · ↓ 9.1k tokens)
+● RELATO republicado — 4dc5cc9, e o selo da prova está verde: 0 afirmação sem prova. A raspagem trocou 188 nomes com 0 vazamento.
+
+  A PROVA que eu tinha deixado de escrever, agora ao lado da linha:
+
+  grep -c '_recusa_partido_sem_vao' = 0 — a função que recusava não existe mais na árvore; foi substituída por descreve_turno_partido, que responde pelo vão em vez de barrar.
+  Chamada ativa: 0. Arquivo com mtime 23:21:22, workers do saas_ui de pé desde 23:35 — os servidos carregaram esta versão, 14 minutos depois de ela existir. E o caso que morde:
+  test_MORDE_a_porta_SALVA_noturno_continuo cadastra um 6x1 noturno contínuo e passa.
+
+  E o efeito colateral está curado. Agora ESTADO e SESSAO publicam sempre, e o topo do ESTADO leva > **RELATO retido:** <linha> com a explicação de que falta uma página.
+
+  O motivo de eu ter escrito isso no código, e não só consertado a linha: um selo que cala o mensageiro inteiro por causa de uma frase deixa a casa muda. O RELATO ficou retido das
+  23:08 até agora, e junto com ele pararam o ESTADO e a SESSÃO — que não afirmam ato nenhum e eram exatamente o que permitiria a alguém de fora ver que a esteira estava andando.
+  Ficar mudo é o que custou 26 dias em 04/09, e o selo tinha acabado de reproduzir a forma em escala menor.
+
+  Falta, na sua sequência: cartao_x_txt e pdf_x_espelho de 09 = 0, depois o template da O74 e o smoke.
+
+✻ Baked for 3m 12s · done 11:40 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ mede cartao_x_txt e pdf_x_espelho de 09
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
