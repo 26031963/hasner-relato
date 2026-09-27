@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:07:56.**
+**Medido em 27/09/2026 17:09:31.**
 
 | | |
 |---|---|
@@ -92,15 +92,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Três coisas minhas erradas (campo da Empresa e o recorte do selo estrutural, que pegou o else). Conserto:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-❯ ID: FILA-2709-A (reordena a fila; nenhuma lei nova)
-  LEIS: L-092, L-009
-  1. RELATO: RELATO.md:54 retido pelo relato.sh (ato sem PROVA:). Acrescentar a linha PROVA: do apply da 09 (snapshot logs/apply_o95_09_antes.json + contagem 620->473) e
-  republicar.
   2. PUSH EM LOTE: daqui ate 00h, 1 push a cada 2-3 commits; nunca push durante regua.
   3. MUTIRAO: gerar o DRY do envio aos 184 colabs de lista_acao_09.csv (dono=COLAB): contagem, 3 textos de amostra por tipo, canal. PROIBIDO enviar. Envio so com ! do Ronald.
   4. FILA NOVA, nesta ordem, substitui a anterior: O81 -> E5 fatia 1 -> dia impar "em aberto" -> curas das autopsias -> E6 rodada 4 + sorteio dos 10. Nao comecar a E5 antes da
@@ -109,15 +100,24 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Ordem nova recebida — ela reordena tudo. Ataco os dois itens de PRONTO primeiro. Vejo a linha retida e a lista do mutirão:
 
-● Publicar o RELATO e abrir o CSV do mutirao
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p='app/docs/RELATO.md'; s=open(p).read()
-     velho = """# APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
-     ## O apply, em prod, com snapshot"""
-     novo = """# APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
-     PROVA: `l…
+  Ran 2 shell commands
 
-✽ Puzzling… (49m 7s · ↓ 50.6k tokens)
+● RELATO publicado (b6d2ca5), não mais retido. Agora o DRY do mutirão — vejo o canal real antes de inventar texto:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+❯ ID: O81-CENSO (so leitura; nenhuma lei nova)
+  LEIS: L-092, P17, P13
+  FONTE: core/espelho.py:352-361 (queda no builder) e :585 (ata agregada de 06/07/08 entrando na 09).
+  MEDIR, em subagente de leitura, em paralelo as autopsias:
+   a. os 235 colabs que caem no builder na 09: causa por colab, agrupada.
+   b. a cura toca o GRAVADO de 06/07/08? sim/nao, com arquivo:linha. Se sim: PARAR, pergunta de LEI ao Ronald (L-092).
+   c. dos 644 dias divergentes das autopsias, quantos sao de colab no builder.
+  PROIBIDO: patch, fallback, "manter o builder por enquanto", curar autopsia antes deste censo.
+  PRONTO: tabela a/b/c no RELATO, com o MUDA proposto (arquivo:linha) e o RED nomeado (colab + dia).
+  LINHA HAIKU: contador colabs_no_builder_09 no payload do copiloto, rotulo "espelho fora da celula".
+
+✢ Puzzling… (50m 42s · ↓ 52.0k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -126,10 +126,10 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Planning probe for col417 parear_turnos drop                                                                                       23m 26s · ↓ 239.3k tokens
-  ◯ general-purpose  Tracing oracle day-keys in probe3_out.json                                                                                         23m 26s · ↓ 181.2k tokens
-  ◯ general-purpose  Measuring frota-wide `_pares_marcados` leak                                                                                        23m 26s · ↓ 221.5k tokens
-  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  23m 26s · ↓ 158.9k tokens
-  ◯ general-purpose  Checking envelope arithmetic against classes.json                                                                                  23m 26s · ↓ 154.5k tokens
+  ◯ general-purpose  Planning probe for col417 parear_turnos drop                                                                                        25m 1s · ↓ 239.6k tokens
+  ◯ general-purpose  Tracing oracle day-keys in probe3_out.json                                                                                          25m 1s · ↓ 181.6k tokens
+  ◯ general-purpose  Measuring frota-wide `_pares_marcados` leak                                                                                         25m 1s · ↓ 221.8k tokens
+  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                   25m 1s · ↓ 159.2k tokens
+  ◯ general-purpose  Tallying interval subtraction in realizado_dos_turnos                                                                               25m 1s · ↓ 155.7k tokens
   ⧉  index
 ```
