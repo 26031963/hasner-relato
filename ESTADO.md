@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:54:54.**
+**Medido em 27/09/2026 05:56:01.**
 
 | | |
 |---|---|
@@ -85,7 +85,6 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Isso faz da O86 a maior obra aberta: 733,7 h da classe B + ~180 h da C. Publico:
 
   Ran 1 shell command
@@ -110,15 +109,16 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ● Tudo pousado (0161a378). A fila tratável está fechada e o que resta tem trava nomeada — escrevo a linha que a regra exige e publico:
 
-● Publicar a linha PAREI com a trava de cada item · 2s
+  Publicar a linha PAREI com a trava de cada item · 1m 9s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      # PAREI: a fila do MODO 24H so tem item com TRAVA NOMEADA | espera o Ronald
      Nao e turno devolvido cedo: os seis itens tratáveis sairam (E1, O85, O73, O87, O66, mais a taxonomia da
-     classe C e a decom…
+     classe C e a decom… (1m 8s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Bloviating… (25m 40s · ↓ 18.0k tokens)
+· Bloviating… (26m 47s · ↓ 18.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
