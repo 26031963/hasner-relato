@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 20:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.3 MB). Acoes na janela: **434**.
+**Medido em 27/09/2026 20:33:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.3 MB). Acoes na janela: **436**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:30:25 | Bash | Ver o fluxo real do passo 2 | `sed -n '/PASSO 2 -- quem sobra dentro do vao/,/out.update(_reiv)/p' ponto/turnos.py \| grep -nE '^\s+(for\|if\|continue\|_orfas\|_resto\|_iv_acesas\|_par_inteiro\|_perna_solta\|out\[\|out\.update\|_ambiguo)' \| head -30` |
+| 20:29:56 | Bash | Replicar a funcao para achar a guarda que dispara | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d from django.utils import timezone as tz from escala.models import CelulaDia, EscalaColaborador from ponto.turnos import batidas_apuraveis from ponto.juiz_batida import periodos_do_dia from colaboradores.models import Colaborador from escala.orfa_classe import ...` |
 | 20:26:33 | Bash | Ver o mapa e o pareamento do col736 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d from django.utils import timezone as tz from escala.models import CelulaDia, EscalaColaborador from ponto.turnos import batidas_apuraveis, papel_por_minuto_da_ata, parear_turnos, marcos_do_template from colaboradores.models import Colaborador pk, DIA = 736, d ...` |
 | 20:26:04 | Bash | Cura R2 e medir alvos e nao-quebrar | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ if _resto: if not (len(_resto) == 2 and 0 <= (_resto[1] - _resto[0]).total_seconds() <= intra_max_s): continue""" novo = """ if _resto: # A PAUSA PODE TER UMA PERNA SO ACESA (R2, 27/09). A guarda exigia o par INTEIRO em `_resto`, e # com isso descartava o dia quando UMA das duas batidas da pausa acendeu o seu m ...` |
 | 20:20:15 | Bash | Commitar o hook e abrir a R2 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' p='app/docs/RELATO.md'; s=open(p).read() velho = "Registrada em\n`.claude/settings.json` (hook `Stop`), com teto de **5** bloqueios sem commit novo" novo = ("Registrada em\n`.claude/settings.json` (hook `Stop`) -- **e esse arquivo esta no `.gitignore` do repo**, entao o registro e\nLOCAL desta maquina e so o SCRIPT (`bin/hook_stop_fila1.py`) e ver ...` |
