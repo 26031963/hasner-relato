@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:45:58.**
+**Medido em 27/09/2026 14:51:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -87,40 +88,40 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  no meio ficam 02:57E 03:57S, que a ata não reivindica. Esse par do miolo tem o tipo gravado invertido, então _marca_intra_duracao não o reconhece e o pareador o lê como borda: o
-  turno de 8 h fica aberto. Testo a cura:
+
+● Agora o col727 mostra o padrão: aberto 01/09 12:00 com um S real às 15:00, a 3,00 h — e ele é jornada partida (07:00-11:00 + 12:00-15:00, que a ata descreve nos dias vizinhos).
+  Pelo seu princípio isso não é cobrança. Lanço a suíte e meço a causa:
 
   Ran 1 shell command
 
-● Recuperação grande: col297 vai de 106,28 para 127,48 h (acima dos 125 h que o gravado paga, coerente com o seu oráculo), col922 de 137,56 para 158,17 h, e col51/col904/col85
-  idênticos. Rodo os selos afetados — um deles afirmava o contrário e tem de ser reescrito pelo resultado, não pelo mapa:
+● O col727 01/09 é decisivo: a célula diz trabalha=False, marcos=None, lampadas=[] — folga — e ele trabalhou o dia completo e coerente (07:00E 11:00S 12:00E 15:00S), com o
+  cadastro deslocado (template 12:00-20:00). Vejo o que o pareador faz com isso:
 
   Ran 1 shell command
 
-● A suíte final ainda ocupa o banco de teste (um run por vez). Vejo o veredito dela:
-
-  Read 1 file
-
-● Preparo as duas correções de selo enquanto a suíte fecha — a que afirmava sobre o mapa passa a afirmar sobre o resultado, e entra o caso do col297:
+● O i no 15:00S é a causa: no dia sem ata (01/09, folga) o _marca_intra_duracao consome a saída das 15:00 como intrajornada e o turno fica aberto; nos dias com ata (31/08, 02/09)
+  o pareamento está certo. Leio o ramo que faz isso:
 
   Ran 1 shell command
 
-● Background command "Aguardar o veredito da suite final" completed (exit code 0)
-
-  Searched for 1 pattern, ran 1 shell command
-
-● A falha é artefato meu: editei a árvore enquanto a suíte rodava, e inspect.getsource passou a ler linhas deslocadas — a lei da casa ("arquivo de fatia só vai para a árvore no
-  ato do commit") existe por isso. Rodo os selos afetados com a árvore parada:
+● A causa final é a mesma família de tudo hoje: o template do col727 declara intervalo 16:00-17:00, e a saída real das 15:00 está a 60 min dele — o pareador a come como "ida ao
+  intervalo" e o turno fica esperando uma volta que nunca vem. Leio o ramo:
 
   Ran 1 shell command
 
-● 40 verdes, incluindo o RED do col297 e o contrato que havia falhado. Commito e meço a L-007 de novo — é o número que responde a sua ordem:
+● A cura pelo mesmo princípio: o intervalo declarado só absorve batida quando o cadastro descreve aquele turno. Implemento e meço:
 
-● Remedir a L-007 depois da cura do miolo
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; cp
-     $SC/probe_l007.py app/probe_l007_tmp.py; timeout 2400 bin/sombra.sh --com-a-sombra l007b -- docker run --rm --cpuset-cpus "$T…
+● Aplicar a guarda e medir os casos
+  ⎿  $ python3 - <<'PYEOF'
+     import py_compile
+     p='ponto/turnos.py'; s=open(p).read()
+     velho = """ _ivm_b = _ivm_de(b)
+     if not _iv and _ivm_b and cur is not None:"""
+     novo = """ _ivm_b = _ivm_de(b)
+     # O94: a pausa DECLARADA so absorve batida de turno que o cadastro descreve (ver
+     # `_cadastro_descreve_o_turno`)…
 
-✻ Twisting… (12m 51s · ↓ 23.6k tokens)
+· Twisting… (17m 54s · ↓ 40.1k tokens · still thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
