@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:27:01.**
+**Medido em 27/09/2026 12:32:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 
 ```
  M app/ponto/management/commands/aplicar_09_corte_b.py
+ M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
  M app/ponto/turnos.py
 ?? esteira.pausada
 ```
@@ -87,39 +88,39 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A L-084 se aplica direto: o papel traz instante_marco e instante_luz, e chave. Ligo o mesmo corte neste leitor — é a pergunta da LEI-AKITA 4, qual leitor não migrou:
+  Ran 1 shell command
+
+● MELHORA −70 contra PIORA +23 = −47, o sentido que o Ronald exige. Mas 23 dias novos abertos ainda é dinheiro no lado errado; vou ver as duas formas que sobraram:
 
   Ran 1 shell command
 
-❯ Criterio para a regressao da alimentacao (L-084 reaproveitada, nenhuma lei nova): no dia em que o DNA NAO descreve o turno real (entrada E saida a mais de 3 h dos marcos, o
-  criterio da L-084), o papel da batida NAO vem da ata -- o dia fica exatamente como estava antes desta cura (zero regressao) e entra na lista CADASTRO x REALIDADE. Nos demais
-  dias, a alimentacao vale. Selo: col382 04/09 nao abre turno novo; os REDs col904 e col300 continuam fechando. Remede: turnos_abertos tem que CAIR em relacao a 620, nunca subir.
-
-● O critério do Ronald é exatamente o que acabei de escrever, mas a medição diz que a guarda não disparou (+151 igual). Vou ver o que o juiz devolve no dia do col382 antes de
-  supor:
+● O col922 e o col297 são a cura certa (a célula soberana diz que as 23:04/22:50 abrem o plantão; o turno do dia fica aberto porque a saída realmente falta — vira cobrança). Mas o
+  col570 é bug meu: duas batidas no mesmo minuto (18:55 S e 18:55 E) colapsam na chave de minuto e as duas recebem o papel E:
 
   Ran 1 shell command
 
-● Achei a causa real, e não é a L-084: no col382 04/09 só o hi está aceso (a saída das 22:58 casou o marco de ENTRADA das 23:50, a 52 min). A ata descreve um ponto, não um turno —
-  e daí sai o papel E para uma saída. O mesmo no col900 (o hf apagado). O vão exige as duas bordas:
+● col570 saiu da piora. Saldo −68 + 21 = −47: cai, como o critério exige. Os 21 que sobram são o col922/col297 — a célula soberana diz que a batida abre o plantão seguinte e o
+  turno anterior fica aberto porque a saída realmente falta (vira cobrança). Acrescento os selos que o Ronald nomeou:
+
+  Ran 2 shell commands
+
+● A suíte de fundo está obsoleta (começou antes dos últimos quatro patches) e ocupa o banco de teste. Mato e relanço limpa, com a DIFF em paralelo:
 
   Ran 1 shell command
 
-● Os dois passos não compartilham escopo — as bordas ficaram no passo 1 e o vão é calculado no passo 2. Carrego o vão no _dias:
+● pkill -f casou o próprio shell (a linha contém o padrão). Verifico o estado e relanço sem essa armadilha:
 
-● Corrigir o escopo do vao e remedir · 9s
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/turnos.py'; s=open(p).read()
-     velho = """ _dias[_d] = (_luzes, _reiv)
-     _todas_luzes |= _luzes"""
-     novo = """ _dias[_d] = (_luzes, _reiv, _minuto(_hi['instante_luz']), _minuto(_hf['instante_luz']))
-     _todas_luzes |= _luzes"""
-     assert s.count(velho)==1
-     s=s.r… (7s · 2 lines)
+  Ran 3 shell commands
+
+● Um único run no banco de teste. Enquanto a suíte roda, a DIFF na sombra (banco lateral, não colide):
+
+● DIFF v2 com a PROVA de 26 campos · 47s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
+     SAI=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o68b_v2.log; timeout 3000 bin/sombra.sh --com-a-sombra o68b_papel --
+     docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2… (47s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hashing… (38m 56s · ↓ 75.6k tokens)
+✢ Hashing… (44m 26s · ↓ 88.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
