@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:17:01.**
+**Medido em 27/09/2026 20:22:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
+| `HEAD` local | `bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG` |
 | `origin/main` | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,18 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
 f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
 0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
-5c8d4240 [O95] rodape e placar do TICKETS antes do push
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
-?? bin/hook_stop_fila1.py
 ?? esteira.pausada
 ```
 
@@ -84,14 +82,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Seis provas passam: bloqueia com o item, conta por HEAD, falha aberto em arquivo faltando, libera com PAREI:, libera com fila vazia, e no 6º libera escrevendo PAREI: hook-teto.
-  Mas a prova revelou um desalinhamento: o hook diz "siga: O1" porque lê o BACKLOG, e a sua fila falada (R2..R5) não está lá. Corrijo isso — senão o hook cobra a fila errada:
-
-  Ran 1 shell command
-
-● O filtro só aceitava id começando com O, então pulou R2..R5. Corrijo:
-
   Ran 1 shell command
 
 ❯ aval Ronald: em paralelo, subagente SO LEITURA: censo do matcher (escala/utils.py::_match_marcos/_alinhar) -- quantos dia-colab da 09 a escolha do marco por distancia da ao
@@ -112,9 +102,17 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Censo do matcher no ar. Commito o hook com as seis provas e ataco R2:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Enchanting… (9m 57s · ↓ 14.1k tokens)
+● .claude está no gitignore do repo, então o registro fica local e só o script é versionado — anoto isso:
+
+● Commitar o hook e abrir a R2
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     p='app/docs/RELATO.md'; s=open(p).read()
+     velho = "Registrada em\n`.claude/settings.json` (hook `Stop`), com teto de **5** bloqueios sem commit novo"
+     novo = ("Registrada em\n`.claude/settings.json` (hook `Stop`) -- **e esse arquivo esta no `.gitig…
+
+✢ Enchanting… (15m 27s · ↓ 17.9k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -122,6 +120,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Dumping col920 ata and batidas                                                                                                       5m 24s · ↓ 89.4k tokens
+  ◯ general-purpose  Cross-tabulating group vs diff in censo3.json                                                                                      10m 54s · ↓ 124.7k tokens
   ⧉  index
 ```

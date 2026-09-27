@@ -51,6 +51,32 @@ prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
 
+# HOOK DE STOP INSTALADO E PROVADO: o turno nao fecha com a fila 1 em pe (28/09 ~00:1x)
+
+PROVA: seis rodadas do `bin/hook_stop_fila1.py`, com a saida de cada uma --
+(1) fila com item e RELATO sem `PAREI:` -> `{"decision": "block", "reason": "siga: R2 -- ..."}`;
+(2) o contador subiu para 1 em `logs/hook_stop_fila1.json`, chaveado pelo HEAD `f029d738`;
+(3) sem `RELATO.md` -> `{"decision": "allow", "reason": "hook falhou aberto: [Errno 2] ..."}`;
+(4) RELATO com `PAREI:` no topo -> `allow` ("o RELATO declara PAREI");
+(5) bloco OBRAS vazio -> `allow` ("fila 1 vazia");
+(6) seis chamadas seguidas sem commit -> `block` x5 e `allow` na 6a, com
+`` `PAREI: hook-teto | espera Ronald` `` escrito no topo do RELATO de teste.
+
+A regra do CLAUDE.md 7b existia em prosa e era cumprida de memoria; agora e porta. Registrada em
+`.claude/settings.json` (hook `Stop`) -- **e esse arquivo esta no `.gitignore` do repo**, entao o registro e
+LOCAL desta maquina e so o SCRIPT (`bin/hook_stop_fila1.py`) e versionado. Quem clonar o repo tem a porta no
+disco e nao instalada; fica dito para nao parecer que ela viaja junto. Teto de **5** bloqueios sem commit novo -- o contador zera a cada
+commit, porque o commit e a prova de que o turno andou. **E ele FALHA ABERTO de proposito**: qualquer
+excecao devolve `allow`. Porta que se fecha por bug proprio para a casa, e ficar parado foi o que custou 26
+dias em 04/09.
+
+**E a prova pegou dois bugs meus no ato, os dois no hook:**
+1. ele apontou `siga: O1` enquanto a ordem viva era `R2` -- porque lia o BACKLOG e **a fila falada nao estava
+   la**. Curado pondo a fila viva no bloco OBRAS: R2, R3, R4, R5, IMPAR, E5, SELO-TXT, e R1/O81 com o estado
+   de parada. Se a fila mora na fala, o hook cobra a fila errada;
+2. depois disso ele apontou `O81` -- o **ultimo** item -- porque meu filtro era `startswith('| O')` e pulava
+   `R2..R5`. Curado com regex de id (`^\|\s*[A-Z][A-Za-z0-9-]*\s*\|`).
+
 # MUTIRAO ENVIADO, reapply da O96 aplicado, e a R1 medida e REJEITADA (27/09 ~23:5x)
 
 ## Mutirao aos colabs: **ENVIADO**
