@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:117 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:160 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:11:31.**
+**Medido em 27/09/2026 01:17:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| `origin/main` | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,6 +40,8 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
 ?? esteira.pausada
@@ -81,44 +83,44 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  parte dos dias que "batem" ou "não batem" está sendo julgada por uma fonte que não é a autoridade nova. Vou contar quantos colabs caem nesse ramo e registrar junto, porque um
-  percentual de concordância medido sobre um espelho degradado vale menos do que parece.
+  seria erro meu.
 
-  Enquanto ele corre, o placar já está ligado e lendo logs/e6_placar.json — hoje ele diz "sem rodada registrada — sem rodada, a etapa E6 não tem piso medido", e é essa frase que
-  vai ser substituída pelo número.
+  (c) O cartório LAVROU — todas as 3.986 estão julgadas, com veredito (3.543 concorde, 261 fato_sem_previsao, 142 nunca_bateu). Então a hipótese "o cartório não lavrou" está
+  descartada: ele lavrou o veredito e deixou a ata na forma agregada antiga, sem lâmpadas. É formato legado, não omissão — e a distribuição confirma: julho 1.396, agosto 2.582,
+  setembro zero, o que datam a mudança de formato.
 
-  E o push52 também está em voo com a suíte. Os dois vão fechar e eu emendo o placar com o número do e6b no mesmo commit, para o ESTADO já sair com a linha preenchida em vez de
-  com o aviso.
+  E só 63 dos 3.986 têm trabalha=True — a esmagadora maioria é dia de folga, o que reduz muito o impacto em dinheiro, embora não o impacto na leitura do espelho.
 
-✻ Sautéed for 19s · done 1:08 AM · 2 shells still running
+  Corrijo a O81 no BACKLOG com esses números: a cura não é "o cartório lavrar" (ele lavrou), é rejulgar com --forcar para reescrever a ata no formato novo, e o contador do
+  builder.
+
+✻ Churned for 1m 29s · done 1:14 AM · 1 shell still running
+
+● Background command "Emendar e empurrar o push52" completed (exit code 0)
+
+  Ran 1 shell command
+
+● push52 POUSOU: origin/main = c6c3785b, ahead = 0, 8.388 testes OK + control-plane 22 OK. Agora o deploy, que é o pendente urgente:
+
+  Ran 1 shell command
 
 ❯ HANDOFF ANTES DO AUTO-COMPACT (2%): grava no topo do RELATO e no TICKETS: push52 (se pousou, o hash; se nao, a causa), DEPLOY JA pendente (a L-084 errada no ar desde 23:35),
   e6b em curso (publicar % de dias que batem, dias comparados, data e quantos colabs caem no builder), placar E3 4/7. FILA MODO 24H depois do deploy: os 30 separados (remedir
   apos O76 e L-086 corrigida) -> O68b plano B -> O70 geradora -> O66 -> O73 -> O51b. Regras que continuam valendo: aplica so o que esta no criterio, separa o resto numa lista
   unica no topo do RELATO; para so em pergunta de LEI ou item da L-009. Nenhuma lei nova.
 
-  Ran 2 shell commands
+● Já recebido 27/09 ~07:xx e gravado — mas três fatos mudaram desde então, então atualizo em vez de só apontar:
 
-● Background command "Rodar o calculador independente do Ronald" completed (exit code 0)
+  Ran 1 shell command
 
-● Persistir o numero e conferir no placar
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import json, datetime
-     d = {
-     'quando': '27/09/2026 07:xx',
-     'pct_bate': 91.5,
-     'dias_comparados': 7536,
-     'bate_ate_10min': 6892,
-     'colabs_divergentes': 160,
-     'colabs_no_builder': 235,
-     'classes': {'esp_zero_e6_trabalho': 77, 'e6_zero_esp_trabalho': 77,
-     …
+● Background command "DEPLOY JA das sete curas" completed (exit code 0)
 
-✢ Synthesizing… (1m 12s · ↓ 4.1k tokens)
-                                                                                                                                                            1% until auto-compact
+✢ Compacting conversation… (1m 43s · ↓ 2.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 50%
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
