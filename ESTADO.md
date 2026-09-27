@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:23:31.**
+**Medido em 27/09/2026 19:29:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
-| `origin/main` | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -82,44 +82,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  (1) Os baldes da O96 — "OUTRO = 0", então não sobra cura.
 
-● Mutirão enviado: 143 entregues de 158 (137 FCM, 6 webpush), 2.521 perguntas cobradas, prazo 28/09 12:00. Dos 15 não entregues, 13 são o próprio juiz recontando ("não há pergunta
-  em aberto" — o CSV estava velho), 1 token morto e 1 o meu teste. Registro tudo e fecho:
+  ┌─────────────────────────────────────────────────────────────────┬────────┬─────────────────────────────────────┐
+  │                              balde                              │ colabs │              pendente               │
+  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
+  │ gravado já igual à leitura                                      │    575 │                             +0,00 h │
+  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
+  │ separado do apply ou fora (col81 + os 3 da CONDICAO_SAIDA_REAL) │     29 │ +136,70 h congeladas por declaração │
+  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
+  │ fora do TXT                                                     │      0 │                             +0,00 h │
+  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
+  │ OUTRO                                                           │      0 │                             +0,00 h │
+  └─────────────────────────────────────────────────────────────────┴────────┴─────────────────────────────────────┘
 
-  Ran 1 shell command
+  A diferença entre os dois números tem duas partes: das 116,1 h do censo, só 50,9 h (11 colabs) foram criadas pela O68b-PAPEL — as outras 65,2 h são o problema antigo (par com
+  gravado S,E falhando o carimbo mais acima), que a O96 não cura e segue em pé com nome. E dessas 50,9 h, a parte que estava em colab do TXT e não separado é exatamente os 7
+  colabs / −18,76 h do reapply. Nenhum colab do TXT tem diferença pendente entre leitura e gravado.
 
-❯ aval Ronald: (1) O96: explicar no RELATO a diferenca entre 116,1 h / 44 colabs do censo e 18,76 h / 7 colabs aplicados, colab a colab por balde (ja aplicado as 19:33 / fora do
-  TXT / CONDICAO_SAIDA_REAL / outro); "outro" > 0 = cura. (2) R1 e regressao de hoje no gravado: a cura mais restritiva e desligar SO o trecho da O68b-PAPEL que a causa, com
-  oraculo e6 nos afetados e as 4 condicoes do aval-de-criterio; nao fica em pe. (3) mutirao: publicar quantos casos vao a mesa da supervisao as 12:00 de 28/09 se ninguem
-  responder.
+  (2) R1: duas curas, as duas rejeitadas pela medição — e é isso que nomeia a origem. A primeira (o vão tem de dar conta do dia) não moveu o col920 e quebrou o col922 (404 →
+  1.015). A segunda, a mais restritiva que existe (a ata corrige só o que o gravado contradiz — sequência que alterna perfeitamente não se corrige), também não moveu o col920 e
+  levou o col922 a zero. As duas revertidas no ato.
 
-● Três medições. Faço as duas de leitura primeiro — os baldes da O96 e a conta da mesa da supervisão:
+  As duas falhas juntas provam que a R1 não está no leitor do papel: _reiv só repete a escolha do matcher. No col920 o matcher deu as 12:21 ao marco 12:00 — a volta do intervalo,
+  tipo E — por distância de 21 min, que é a lei do cluster-guard. A origem é escala/utils.py::_match_marcos/_alinhar, zona com bateria de certificação própria. Não curo por
+  wrapper no leitor (a LEI-AKITA 1 ficou provada na prática, duas vezes) nem mexo na grade agora: R1 fica com origem nomeada, 5 dias, +26,1 h, e a próxima tentativa começa por
+  censo, como na O81.
 
-  Ran 1 shell command
+  (3) Mutirão: 86 casos vão à mesa da supervisão às 12:00 de 28/09 se ninguém responder. Foram 159 chamados que receberam o relógio em 145 colabs; 73 já fecharam entre o envio e
+  esta medição — gente respondendo, que é o efeito que o toque existe para ter.
 
-● 86 casos vão à mesa às 12:00 de 28/09 se ninguém responder (159 chamados com esse prazo em 145 colabs; 73 já fecharam desde o envio). Agora os baldes da O96:
+  E o registro que eu preciso deixar explícito: HORAS_DE_PRAZO = 48 não foi tocada. Nasceu um prazo por ato, informado por quem manda, porque é o mesmo campo do relógio de SLA —
+  encurtá-lo de 48h para ~12h para 158 pessoas é corte seu, e está no RELATO com essa frase.
 
-  Ran 1 shell command
-
-● Balde "OUTRO" = 0, então pela sua regra não sobra cura. Os baldes explicam a diferença inteira: 575 colabs com gravado já igual à leitura, 29 separados/fora com +136,70 h
-  congeladas por declaração (a família horas_extras_100* da dobra, col81, e os 3 da CONDICAO_SAIDA_REAL), zero fora do TXT e zero em "outro". Agora a R1 pelo lado restritivo —
-  desligar só o trecho que a causa:
-
-  Ran 1 shell command
-
-● Segunda tentativa também falha (col920 não cede e col922 vai a zero). Reverto — e isso nomeia a origem: a escolha do marco não está no leitor do papel, está no matcher da grade.
-
-● Commitar e empurrar o fecho · 5m 21s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/RELATO.md
-     app/docs/TICKETS.md app/chamados/services/cobranca.py && git commit -q -F - <<'MSGEOF'
-     [O96] reapply aplicado, mutirao ENVIADO, e… (5m 20s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Crunching… (30m 21s · ↓ 33.0k tokens)
+✻ Cooked for 35m 11s · done 7:28 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ censo do matcher: quantos dias da frota a escolha do marco inverte
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
