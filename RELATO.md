@@ -94,7 +94,35 @@ pausa que estava sendo paga como trabalho), `horas_intra_indenizada` **2.263,24 
 E a `CONDICAO_SAIDA_REAL` separou 3 no ato (col727 -6,03 h, col885 -1,99 h, col789 -0,99 h): ninguem com
 saida real perde hora total.
 
-## R1: cura tentada, **MEDIDA E REJEITADA** -- nao subiu
+## Os BALDES da O96: por que 116,1 h do censo viraram 18,76 h aplicadas
+
+PROVA: leitura pos-O96 contra o gravado de agora, colab a colab, nos 604 fechamentos.
+
+| balde | colabs | `horas_trabalhadas` pendente |
+|---|---:|---:|
+| **gravado JA IGUAL a leitura** | **575** | **+0,00 h** |
+| SEPARADO do apply ou FORA (col81, e os 3 da CONDICAO_SAIDA_REAL) | 29 | **+136,70 h**, congeladas por declaracao |
+| fora do TXT | 0 | +0,00 h |
+| **OUTRO** | **0** | **+0,00 h** |
+
+**"OUTRO" = 0**, entao pela sua regra nao sobra cura. E a diferenca entre os dois numeros tem duas partes,
+as duas medidas: das 116,1 h do censo, **so 50,9 h (11 colabs) foram criadas pela O68b-PAPEL** -- o resto
+(65,2 h) e o problema ANTIGO, par com tipo gravado `S,E` que falha o carimbo mais acima, que a O96 nao cura e
+que segue em pe com nome. E dessas 50,9 h, a parte que estava em colab do TXT e nao separado e exatamente o
+que os 7 colabs / **-18,76 h** do reapply tiraram da folha.
+
+**Nenhum colab do TXT tem hoje diferenca pendente entre a leitura e o gravado.** O unico movimento pendente
+sao as +136,70 h dos 29 congelados -- a familia `horas_extras_100*` (a DOBRA, com pergunta de LEI aberta),
+col81 por ordem sua, e col727/col885/col789 pela CONDICAO_SAIDA_REAL.
+
+## Mutirao: quantos casos vao a mesa as 12:00 de 28/09
+
+PROVA: `ChamadoColaborador` com `prazo_sla` = 28/09 12:00 -- **159 chamados em 145 colabs** receberam o
+relogio; **86 deles em 86 colabs seguem VIVOS agora**. Se ninguem responder ate 12:00, **86 casos vao a mesa
+da supervisao**. Os outros 73 fecharam entre o envio e esta medicao (gente respondendo, que e o efeito que o
+toque existe para ter).
+
+## R1: PRIMEIRA cura tentada, **MEDIDA E REJEITADA** -- nao subiu
 
 A R1 e o papel da ata sobrescrevendo um gravado COERENTE. Tentei a cura pelo lado que a autopsia sugeria --
 exigir que a ata desse conta do DIA INTEIRO, nao so do vao, porque em col920 01/09 o vao `[12:21, 19:04]`
@@ -109,8 +137,37 @@ deixa as `06:50` FORA e a noite de 716 min desaparece. **Medido: falha nas DUAS 
 
 Revertida no ato (`git checkout -- ponto/turnos.py`) e a base reconferida: col922 404, col51 485, col81 423,
 col85 726, col300 730. **Meia-correcao e pior que nenhuma**, e uma que quebra um colab certo para consertar
-outro nao e correcao. A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa
-atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao.
+outro nao e correcao. ## R1: SEGUNDA tentativa, tambem medida e REJEITADA -- e isso NOMEIA a origem
+
+Voce mandou desligar SO o trecho da O68b-PAPEL que causa a R1, pela cura mais restritiva. Tentei a forma mais
+restritiva que existe: **a ata corrige o que o gravado CONTRADIZ, e so isso**. A premissa da O65 e nomeada --
+*"`tipo` e o que foi GRAVADO, o marco e o que foi CUMPRIDO, e quando os dois discordam quem manda e o
+marco"* -- e ela pressupoe que o gravado MINTA. Se a sequencia gravada do dia ALTERNA (`E S E S`, par,
+comecando por `E`), ela nao se contradiz e nao ha o que corrigir.
+
+| colab | esperado | com a 2a cura |
+|---|---:|---:|
+| col920 01/09 (o alvo) | 1.047 | **674** -- nao cedeu |
+| col890 04/09 / 16/09 | 655 / 668 | 594 / 607 -- nao cedeu |
+| **col922 01/09** (que estava certo) | 404 | **0** -- quebrou pior que na 1a |
+| col789 29/08 | 591 | 592 -- curou |
+
+Revertida no ato e a base reconferida (col922 404, col51 485, col81 423, col904 670).
+
+**E as duas falhas juntas dizem onde a R1 NAO esta: no leitor do papel.** `_reiv` apenas REPETE a escolha que
+o matcher fez -- qual marco cada batida acendeu. No col920 o matcher deu as `12:21` ao marco `12:00`, que no
+template e a VOLTA do intervalo (tipo `E`), e ele fez isso por DISTANCIA (21 min), que e a lei do cluster-guard
+("batida so ocupa o marco MAIS PROXIMO dela"). O papel esta repetindo fielmente uma escolha errada.
+
+**A origem e `escala/utils.py::_match_marcos` / `_alinhar`** -- e esse modulo e ZONA declarada: ele tem
+bateria de certificacao propria (diff-zero do swift + fuzz de conservacao) e o proprio `escala/orfa_classe.py`
+abre dizendo *"a GRADE nao e tocada por este modulo"*. Curar a R1 na origem e mexer na escolha do marco para
+**toda** a casa, com a bateria da grade por cima. Nao faco isso as 00:0x no fim de um turno, e nao faco por
+wrapper no leitor (LEI-AKITA 1 -- foi o que as duas tentativas provaram na pratica).
+
+**R1 fica com origem NOMEADA e sem cura**: 5 dias, +26,1 h, `escala/utils.py::_match_marcos`, e a proxima
+tentativa comeca por medir quantos dias da frota a escolha do marco inverte -- censo antes de corte, como na
+O81.
 
 E um numero meu que caiu junto: eu vinha lendo `col904 22/08 = 670 min` como divergencia contra os ~730 do
 oraculo. **Nao e divergencia**: sao os 60 min do intervalo declarado saindo pela lei de 14/09

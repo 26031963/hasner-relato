@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:12:31.**
+**Medido em 27/09/2026 19:16:49.**
 
 | | |
 |---|---|
@@ -84,21 +84,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● HORAS_DE_PRAZO = 48 é constante declarada, e agora + 48h dá 29/09 ~23h, não 28/09 12h. Não mudo a lei: passo o prazo só deste lote, com o default intacto:
-
-  Ran 1 shell command
-
-● O prazo é o mesmo campo do relógio de SLA que leva o caso à supervisão — então encurtá-lo de 48h para ~12h é o seu corte, não parâmetro meu. Obedeço, com o default intacto e a
-  mudança local ao lote:
-
-  Ran 1 shell command
-
-● Primeiro entregue (col909, canal fcm, prazo 28/09 12:00, e o juiz recontou os pendentes no ato). Envio os 157 restantes:
-
-  Ran 1 shell command
-
 ● Mutirão enviado: 143 entregues de 158 (137 FCM, 6 webpush), 2.521 perguntas cobradas, prazo 28/09 12:00. Dos 15 não entregues, 13 são o próprio juiz recontando ("não há pergunta
   em aberto" — o CSV estava velho), 1 token morto e 1 o meu teste. Registro tudo e fecho:
 
@@ -115,9 +100,24 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● 86 casos vão à mesa às 12:00 de 28/09 se ninguém responder (159 chamados com esse prazo em 145 colabs; 73 já fecharam desde o envio). Agora os baldes da O96:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✢ Crunching… (19m 21s · ↓ 23.4k tokens)
+● Balde "OUTRO" = 0, então pela sua regra não sobra cura. Os baldes explicam a diferença inteira: 575 colabs com gravado já igual à leitura, 29 separados/fora com +136,70 h
+  congeladas por declaração (a família horas_extras_100* da dobra, col81, e os 3 da CONDICAO_SAIDA_REAL), zero fora do TXT e zero em "outro". Agora a R1 pelo lado restritivo —
+  desligar só o trecho que a causa:
+
+  Ran 1 shell command
+
+● Segunda tentativa também falha (col920 não cede e col922 vai a zero). Reverto — e isso nomeia a origem: a escolha do marco não está no leitor do papel, está no matcher da grade.
+
+● Publicar baldes, mesa e as duas tentativas da R1 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     velho = """A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa
+     atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao."""
+     novo = """## R1: SEGUNDA tentativa, tambem medid…
+
+· Crunching… (23m 39s · ↓ 29.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
