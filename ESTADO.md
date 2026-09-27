@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:56:08.**
+**Medido em 27/09/2026 11:00:54.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
+?? app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
 ?? esteira.pausada
 ```
 
@@ -85,40 +87,40 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
+❯ O68b, regra do passo final (leis existentes, nenhuma nova): turno que ficou ABERTO fecha com a proxima SAIDA real do colab, mesmo fora da janela do marco, desde que (a) venha
+  ANTES da proxima entrada (nunca rouba batida do turno seguinte) e (b) a duracao seja plausivel (ate a jornada prevista + 4 h). As horas contam normalmente (L-007); a
+  pontualidade desse dia segue a L-084 e a L-093 (turno deslocado nao desconta); o dia entra na lista CADASTRO x REALIDADE. RED: um dos 55 com a saida ate 90 min e um dos com 2-7
+  h. Selos: nao fecha com batida do turno seguinte; turno que ja fechava continua identico. DIFF pelo criterio do MODO 24H.
 
-● Tenho o idioma (R, _ler, _tem_dono). Escrevo a cura e o selo:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● 4 OK, com os dois casos que mordem (sem pausa alarma; pausa anônima alarma). Commito e entro na classe B, começando pelo caso limpo que a decomposição isolou — col529 10/09:
-
-  Ran 1 shell command
-
-● Causa encontrada, e ela reenquadra a classe B. O col529 em 10/09 tem cinco batidas: 06:53 E, 07:00 E, 13:06 S, 14:06 E, 15:25 S — duas entradas a 7 minutos. A ata alinhou certo
-  (concorde, 4 luzes), e o motor produziu dois períodos: um fantasma 06:53 → ABERTO e o dia real 07:00 → 15:25 com 7,42 h. O turno aberto é eco, e a hora está contada. Meço isso
-  na escala:
+● Regra recebida com as duas condições exatas — e ela confirma o desenho que eu estava escrevendo. Turno é namedtuple, então o passo final é limpo. Primeiro nomeio um RED real de
+  cada faixa:
 
   Ran 1 shell command
 
-● A medição corrige minha hipótese: o fantasma é 1 caso, não o padrão. Os 313 se separam em 223 (71%) dias sem período fechado nenhum — esses custam hora — e 89 (28%) batida
-  sobrando em dia já contado. Vou ao maior sub-formato, os 84 "marco apagado sem órfã":
+● Dois REDs reais, e os dois fecham pela sua regra:
+
+  ┌────────┬───────┬─────────────────┬─────────────┬─────────┬─────────┬─────────────┐
+  │  RED   │  dia  │ aberto → S real │   marcos    │  dist   │ duração │ previsto+4h │
+  ├────────┼───────┼─────────────────┼─────────────┼─────────┼─────────┼─────────────┤
+  │ col349 │ 14/09 │ 06:59 → 13:57   │ 07:00–15:20 │ 83 min  │ 6,97 h  │ 8h20+4h ✓   │
+  ├────────┼───────┼─────────────────┼─────────────┼─────────┼─────────┼─────────────┤
+  │ col206 │ 21/08 │ 07:26 → 13:01   │ 07:30–11:00 │ 121 min │ 5,57 h  │ 3h30+4h ✓   │
+  └────────┴───────┴─────────────────┴─────────────┴─────────┴─────────┴─────────────┘
+
+  Escrevo o passo final com as duas condições:
 
   Ran 1 shell command
 
-● Causa da classe B nomeada e dimensionada: dos 103 casos com S real e marco apagado, 55 têm a S a ≤ 90 min do marco — dentro da janela do cluster-guard — e o resto a 2–7 h. O
-  padrão é o turno real deslocado do cadastro: a S cai fora da janela, o marco fica apagado e o turno nunca fecha, perdendo o dia inteiro. Publico:
+● Agora os selos que você pediu — os dois REDs reais e as duas guardas:
 
-  Publicar a causa da classe B · 3s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## Classe B (734 h): causa nomeada, e duas hipoteses minhas caidas no caminho
-     Sua ordem poe a classe B na frente. Fui por ela e derrubei **duas** hipoteses minhas antes de achar a
-     causa.
-     **HIPOTESE …
+● Escrever e rodar os selos do O68b · 3s
+  ⎿  $ cat > ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O68b -- turno ABERTO fecha com a proxima SAIDA real, mesmo fora da janela do marco.
+     regra Ronald 27/09 11:0x: *"turno que ficou ABERTO fecha com a proxima SAIDA real do colab, mesmo fora da
+     janela …
 
-✻ Zesting… (7m 41s · ↓ 20.4k tokens)
+✽ Zesting… (12m 27s · ↓ 32.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
