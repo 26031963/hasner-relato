@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:10:45.**
+**Medido em 27/09/2026 12:16:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
  M app/ponto/motor_calculo_v2.py
  M app/ponto/turnos.py
+?? app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
 ?? esteira.pausada
 ```
 
@@ -87,23 +88,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-❯ Pista para o col51 (leis existentes, nenhuma nova): se o template dele tem intervalo_modo = duracao, o dia nao tem marco de intervalo por construcao, e o par de batidas no MEIO
-  do turno e a PAUSA pela LEI DO MIOLO (HX-MIOLO-POR-DURACAO), nunca orfa. Batida so e orfa se nao casa com nenhuma luz E nao forma o par de pausa dentro do turno. E a mesma
-  familia da O62 (juiz "sem intervalo" com cadastro de 70 min): conferir se a cura fecha as duas.
-
-● A pista fecha o buraco por lei existente, não por critério meu: se o template é intervalo_modo = duracao, o dia não tem marco de intervalo por construção e o par do miolo é a
-  PAUSA. Vou ler a lei do miolo e o cadastro do col51:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● A lei do miolo é declarada e deslizante ("bordas são a lei do template; miolo se auto-ancora por duração"), e o O62 diz que a duração vem do cadastro, não do 60 do Art.71. Vou
-  achar o leitor canônico da duração e o _marca_intra_duracao (o miolo dentro do próprio pareador):
-
-  Ran 1 shell command
-
-● A pista resolve melhor do que meu critério: a lei do miolo (_marca_intra_duracao, corte 08/07 caso Adeilton) já reivindica o par do col51, e a duração vem do cadastro. Vou ver
   onde o pareador consome _intra_dur para o miolo vencer a leitura de órfã:
 
   Ran 1 shell command
@@ -111,16 +95,33 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● O miolo já vence: o bloco de _intra_dur/is_intervalo consome a batida antes da leitura do papel (linha 619), e é por isso que os números do col51 foram idênticos. Escrevo a
   versão final — dois passos, miolo respeitado, janela de cluster reusada:
 
-● Remedir os quatro casos com a versao final
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/motor_calculo_v2.py'; s=open(p).read()
-     velho = """ celulas=_cels_d, batidas=batidas) or None"""
-     novo = """ celulas=_cels_d, batidas=batidas, intra_max_s=motor.AUT_INTRA_MAX_S) or None"""
-     assert s.count(velho)==1
-     s=s.replace(velho,novo); open(p,'w').w…
+  Ran 3 shell commands
 
-· Hashing… (22m 40s · ↓ 39.4k tokens · thinking some more)
+● O miolo entrou: o par do col51 saiu do mapa e o dia segue descrito. Agora o RED primeiro (LEI-AKITA 5) — estou curando por sonda. Vou ver a forma do selo da O68b para reusar a
+  fixture:
+
+  Ran 1 shell command
+
+● O selo tem de correr no caminho REAL (o bug era justamente o motor não chamar). Vou achar a fixture de célula com ata já usada pelos selos da O65/E3:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Selo com os quatro casos que a medição produziu, no caminho real (turnos_via_autoridade, o sítio da ligação):
+
+  Read 1 file
+
+● 8/8 verdes. Agora provo que o selo morde — desligo só o X no leitor e os REDs têm de cair:
+
+  Ran 1 shell command
+
+● Selo morde (com o X desligado o RED do col904 cai) e restaurado. Commito antes de medir, e leio as flags do aplicador:
+
+  Estado do git e flags do aplicador
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/motor_calculo_v2.py app/ponto/tests/test_o68b_papel_da_ata_no_motor.py && git commit -F - <<'MSGEOF'
+     [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
+     LEI-AKITA: origem=ponto/turnos.py::…
+
+✢ Hashing… (27m 56s · ↓ 53.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
