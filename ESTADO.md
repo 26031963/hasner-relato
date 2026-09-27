@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 07:16:31.**
+**Medido em 27/09/2026 07:22:01.**
 
 | | |
 |---|---|
@@ -120,7 +120,7 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
   para os passivos congelados, e o seu smoke de clique para a O51b, que é tela e PDF e eu não deixei meio pronta.
 
 ✻ Churned for 35m 54s · done 6:05 AM · 1 shell still running
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           new task? /clear to save 729.7k tokens
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ corte Ronald: a saida antecipada nunca passa de previsto menos trabalhado. !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
