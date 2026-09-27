@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:25:45.**
+**Medido em 27/09/2026 17:30:45.**
 
 | | |
 |---|---|
@@ -120,11 +120,12 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
   Running 1 shell command…
 
-· Puzzling… (1h 6m 56s · ↓ 69.1k tokens)
+· Puzzling… (1h 11m 56s · ↓ 69.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 › Message from @ae9d376eeecd3e213 (ctrl+o to expand)
 › Message from @ab04a661308c44a3f (ctrl+o to expand)
+› Message from @aa02ef15f0a39737f (ctrl+o to expand)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -132,7 +133,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading minutos_realizados cap in fechamento.py                                                                                    41m 14s · ↓ 208.4k tokens
-  ◯ general-purpose  Grouping offending days from o81forma.out                                                                                          11m 51s · ↓ 126.1k tokens
+  ◯ general-purpose  Patching colabs_muda dump into o81ab.py                                                                                            16m 51s · ↓ 145.3k tokens
   ⧉  index
 ```
