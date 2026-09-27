@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:42:13.**
+**Medido em 27/09/2026 11:44:01.**
 
 | | |
 |---|---|
@@ -85,18 +85,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Achei, e é a causa dos 197: o motor chama parear_turnos na linha 269 sem papel_por_minuto. A cura da O65 — "o papel vem da ata quando ela responde" — chegou ao turnos_do_colab e
-  não ao motor. É a pergunta da LEI-AKITA 4: qual leitor não migrou. Leio a alimentação antes de ligá-la:
-
-  Ran 1 shell command
-
-● A alimentação aceita pk, células e batidas do chamador — então ligá-la no motor é alimentação, não consulta, e só quando as células já estão na mão (a mesma guarda que a E3 usa
-  para não fazer N+1 no caminho do dinheiro):
-
-  Ran 1 shell command
-
-● Meio caminho, e o caminho certo: col51 24/08 agora fecha 06:59 → 16:02 = 9,05 h. O col904 segue aberto porque ali o problema é outro — a batida órfã das 06:57 abre um turno
-  antes de a S das 07:00 poder fechar o plantão. Meço o DIFF da cura:
 
   Ran 1 shell command
 
@@ -107,22 +95,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Handoff gravado agora, com o estado real — que está mais adiante do que o seu resumo assume, porque a alimentação já está ligada e o DIFF já voltou:
 
-  Gravar o handoff no RELATO e no TICKETS · 5s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     # HANDOFF (auto-compact) -- estado exato em 27/09 ~11:5x
-     ## (1) A cura da classe B: **JA LIGADA**, com DIFF medido -- nao esta "faltando ligar"
-     | | |
-     |---|---|
-     | **a causa** | `ponto/motor_calculo_v…
+  Ran 1 shell command
 
-· Zesting… (53m 46s · ↓ 66.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            1% until auto-compact
+● Handoff gravado e publicado no topo do RELATO e no TICKETS (59193e0), com o estado real — que está adiante do seu resumo em dois pontos:
+
+  A cura já está ligada, não está faltando ligar. A causa é a que você escreveu (motor_calculo_v2.py:269 chamava parear_turnos sem papel_por_minuto — a O65 chegou ao
+  turnos_do_colab e não ao motor), e eu liguei a alimentação com a guarda da E3: só alimenta quando celulas_alimentadas está na mão, senão fica None e o pareador segue no tipo.
+  Alimentação, nunca consulta.
+
+  RED provado: col51 24/08 era 06:59 → ABERTO (0 h) e agora fecha 06:59 → 16:02 = 9,05 h.
+
+  DIFF em ensaio (nada aplicado): turnos_abertos 620 → 612 (−8, em 7 colabs), 84 separados, 0 entram/saem do TXT, 07 e 08 em 0 divergências. E uma ressalva que gravei junto,
+  porque ela engana: o horas_trabalhadas +0,00 não significa que a cura não move hora — o comando restaura os separados antes da foto final, e o col51 está entre os 84. O
+  movimento bruto é maior e ainda não foi medido isolado.
+
+  O segundo RED não cedeu, e tem causa nomeada: col904 22/08 segue aberto porque a batida órfã das 06:57 (typada E) abre um turno antes de a S das 07:00 fechar o plantão das
+  18:50. A ata sabe — a 06:57 está em orfas —, mas papel_por_minuto_da_ata só mapeia lâmpada acesa. É o próximo passo da cura.
+
+  Falta, na ordem: selo próprio da alimentação no motor (o de turnos_do_colab não cobre esse caminho), suíte inteira, aplicar os 7 pelo critério, push e DEPLOY JÁ. Depois a fila:
+  classe D → classe C residual → E5 fatia 1 → E6 rodada 3.
+
+✻ Baked for 54m 10s · done 11:42 AM · 1 shell still running
+
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ fecha a orfa tambem, selo, DIFF e aplica
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```

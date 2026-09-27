@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 11:42:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.2 MB). Acoes na janela: **596**.
+**Medido em 27/09/2026 11:44:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.2 MB). Acoes na janela: **594**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:42:06 | Bash | Gravar o handoff no RELATO e no TICKETS | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner # HANDOFF (auto-compact) -- estado exato em 27/09 ~11:5x ## (1) A cura da classe B: **JA LIGADA**, com DIFF medido -- nao esta "faltando ligar" \| \| \| \|---\|---\| \| **a causa** \| `ponto/motor_calculo_v2.py:269` chamava `parear_turnos` **sem `papel_por_minuto`**: a cura da O65 ("o papel vem da at ...` |
 | 11:37:06 | Bash | DIFF da alimentacao do papel da ata no motor | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item horas_trabalhadas,turnos_abertos 2>&1 \| grep -vE 'moveu fora do item' \| grep -E '^ [a-z_]+ ' \| awk 'NR==1 \|\| $2!=$3'; docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do ...` |
 | 11:36:34 | Bash | Ligar a alimentacao e medir os dois REDs | `python3 - <<'PYEOF' import py_compile p='ponto/motor_calculo_v2.py'; s=open(p).read() if 'papel_por_minuto=_papel' in s: print('SKIP'); raise SystemExit(0) velho = """ return parear_turnos(batidas, marcos_intervalo=_mi, marcos_borda=_mb, marcos_por_dia=_mpd, intra_max_s=motor.AUT_INTRA_MAX_S, cont_max_s=motor.AUT_CONT_MAX_S)""" novo = """ # O PAPEL DA ATA TAMBEM ALIMENTA O MOTOR (O68b, 27/09). A c ...` |
 | 11:35:22 | Bash | Ler a alimentacao do papel da ata | `sed -n 726,760p ponto/turnos.py` |
@@ -603,6 +604,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:45:39 | Bash | Campos do PeriodoCalculo para a tabela | `sed -n '130,163p' ponto/motor_calculo_v2.py \| grep -nE "minutos_\|he_\|extra\|noturn\|data" \| head -20` |
 | 23:45:08 | Bash | A condicao completa do dsr_ok | `sed -n '1060,1088p' ponto/motor_calculo_v2.py` |
 | 23:45:03 | Bash | A regra que derruba a semana de DSR | `grep -n "semanas_dsr_perdido += 1" -B 30 ponto/motor_calculo_v2.py \| grep -nE "def \|for \|if \|else\|falta\|dsr\|cursor\|semana" \| head -24` |
-| 23:43:24 | Bash | Publicar a tabela do desvio e a reversao | `cat > /tmp/desvio.md <<'EOF' ## PAREI: o apply moveu 4 campos FORA do criterio, e eu REVERTI os 20 colabs Ordem Ronald 27/09 01:3x. **A tabela primeiro**, porque foi ela que eu devia ter publicado junto com o apply e nao publiquei: \| campo \| colabs \| delta \| causa \| \|---\|---:\|---:\|---\| \| **`horas_extras_100_noturna`** \| **13** \| **+105,45 h** \| HE 100% noturna: hora que estava em tur ...` |
-| 23:42:33 | Bash | Reverter os 20 colabs atingidos, com prova | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command desvio_o68b --schema=juliani --snapshot /app/logs/apply_o68b_09_antes.json --reverter 2>&1 \| grep -v "objects imported" \| tail -8` |
-| 23:42:20 | Bash | Medir quem foi atingido fora do criterio | `cat > ponto/management/commands/desvio_o68b.py <<'PYEOF' """Os campos que o apply da 09 moveu FORA do criterio, e a reversao POR COLAB. -> tabela Ordem Ronald 27/09 01:3x: *"tabela desses tres grupos no topo do RELATO (campo, colabs, horas, causa). Se algum deles e dinheiro fora do criterio da L-082, e PAREI: reverte ESSES colabs pelo snapshot `logs/apply_o68b_09_antes.json`, com prova antes/depoi ...` |
