@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:10:45.**
+**Medido em 27/09/2026 13:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%` |
+| `HEAD` local | `5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
+5e7b56ef [O93] o item vai para a fila como `!`, que e o que ele e -- e o selo das DUAS FILAS estava certo
 2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%
 42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao
 42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca
-a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
-2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
 ```
 
 ## `git status --short`
@@ -85,44 +85,44 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - col85 21/08: segue aberto, e é a O84 (ata ·I sintética; medido agora: dna.marcos=null, o juiz responde desalinhado, porque='sem marcos no dna' e devolve papeis: [])
-
-  A PROVA reprovou a minha 1ª versão — turnos_abertos 620 → 665 (+45), a cura andando contra si mesma. Seu critério virou três guardas: duas bordas acesas (o hf apagado do col382,
-  que fazia a saída das 22:58 virar entrada e o dia abrir duas vezes), L-084 no papel lida de MotorBase.CADASTRO_NAO_DESCREVE_MIN, e minuto com duas batidas não se endereça
-  (col570). Final: 620 → 609, horas_trabalhadas +41,11 h isolando a deriva, inconsistencias −11. 13 selos, e o MORDE provado desligando o X.
-
-  PAREI o apply, pelo seu critério: há caso do 2º tipo, e o maior não é de 1 h — col616 14/09, célula FOLGA, turno 05:53→18:00 de 11,13 h em hora normal, sem o 100%, enquanto
-  18/09 e 20/09 do mesmo colab, forma idêntica, são folga trabalhada. Espionei o juiz: nos dias que caem em hora normal o motor pergunta pelo dia (False) e depois pelo dia
-  anterior (True) — a herança de ≤6 h propagando um dia que não teve turno. Virou O93 e PAROU no topo do PENDENTES. Os 3 casos do col297 são do 1º tipo e estão corretos.
-
-  Também caiu um número meu: as −279 h de folga trabalhada da sombra são artefato do ensaio — o campo depende da lavra do esmeril em logs/, e o container da sombra monta --tmpfs
-  /app/logs.
-
-  Falta: veredito da suíte → push → deploy.sh --sem-migrate (portão do ensaio já verde, carimbo de hoje, diverge=0) → smoke do col904 em tela e PDF. O apply de dinheiro fica
-  parado esperando você na O93; a fila segue em classe D (O84) → classe C residual → E5 fatia 1 → E6 rodada 3.
-
-✻ Churned for 1h 19m 59s · done 1:08 PM · 2 shells still running
-
-● Background command "Aguardar o veredito final da suite v3" completed (exit code 0)
-
-  Read 1 file
-
-● Um vermelho, e é o selo das duas filas: meu item no PENDENTES tem tipo: "PAROU", e a fila só aceita decisão. Vou ler o que ele exige:
-
-  Ran 1 shell command
-
 ● Background command "Aguardar o veredito da suite" completed (exit code 0)
 
 ● O critério é core/fila_pendentes.py. Meu item pede decisão de verdade (dinheiro a 100%), então o que está errado é o tipo, não o lugar:
 
-● Ler o vocabulario de decisao
-  ⎿  $ cat core/fila_pendentes.py
+  Read 1 file
 
-· Warping… (42s · ↓ 998 tokens · thinking)
+● O item é decisão de verdade (a cura da O93 mora em motor_calculo_v2.py e move dinheiro a 100%): o tipo certo é !, não PAROU:
+
+  Ran 1 shell command
+
+● Background command "Conferir a suite apos espera" completed (exit code 0)
+
+● Verde. Corrijo dois erros de digitação meus no item de decisão (a hora do turno e a data da regra) e empurro — o pre-push roda a régua inteira, que é a verificação:
+
+  Committed 5e7b56ef
+
+● 6 commits à frente e o remoto em dia. Antes de gastar 15 min, vejo se o pre-push roda a pasta de selos (dois estão vermelhos de antes):
+
+  Ran 1 shell command
+
+● O pre-push roda o TICKETS, as rotas e a suíte sobre o commit — não a pasta de selos de host, então os dois vermelhos antigos não bloqueiam. Empurro:
+
+  Ran 1 shell command
+
+● A régua cobra linha no TICKETS para a O93 e está certa. Acrescento:
+
+  Empurrar de novo com a linha do TICKETS · 3m 4s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md && git commit -F - <<'MSGEOF'
+     [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
+     Fatia citada em commit tem de ter linha na tabela no MESMO ato ("em voo" quando abre). Eu abri a O93 nos
+     dois commits anteriores e nao abri a li… (3m 3s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Warping… (5m 42s · ↓ 6.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
