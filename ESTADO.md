@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:04:49.**
+**Medido em 27/09/2026 14:10:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente` |
+| `HEAD` local | `0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,23 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
 b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
 73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
 5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
 5e7b56ef [O93] o item vai para a fila como `!`, que e o que ele e -- e o selo das DUAS FILAS estava certo
-2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%
 ```
 
 ## `git status --short`
 
 ```
- M app/core/espelho_verdade.py
  M app/docs/BACKLOG.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
- M app/ponto/motor_calculo_v2.py
- M app/ponto/turnos.py
-?? app/ponto/tests/test_o93_dia_da_jornada.py
 ?? esteira.pausada
 ```
 
@@ -94,40 +90,40 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● O RED virou: o col616 agora tem folga trabalhada em 02, 04, 08, 10, 12, 14/09, 16, 18 e 20/09 — 12 períodos, 81,59 h (eram 14,67 h, e o 14/09 estava fora). Escrevo os selos dos
-  dois sítios:
-
-  Ran 1 shell command
-
-● 6 verdes. Agora as duas ordens pendentes. Primeiro o placar:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Atualizo o placar com as linhas de PROVA do que subiu hoje:
-
-  Ran 1 shell command
-
-● Placar: E3 7/10, E5 1/2, todos os FEITO com prova. Agora a segunda ordem — a lavra na sombra. Leio o leitor e o invocador:
-
-  Ran 1 shell command
-
-● Atenção — a premissa do arquivo não vale mais, e preciso dizer isso antes de construir: o corte O63 (26/09) já tirou a lavra do arquivo (ler_lavra lê o MetricaSnapshot; o
-  logs/esmeril_espelho.json nem existe no host). Meu diagnóstico de "artefato do tmpfs" estava errado no mecanismo. Meço a fidelidade real:
 
   Ran 1 shell command
 
 ● Mesma data_ref e mesmo número de chaves, mas md5 diferente — a lavra da sombra não é a de prod. Vejo onde diverge:
 
-● Diferenca do conteudo da lavra · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && P=$(docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from inteligencia.models import MetricaSnapshot
-     import json
-     s = MetricaSnapshot.objects.filter(chave='esmeril_espelho', escopo='frota').order_by('-data_ref').first()
-     print('…
+  Ran 1 shell command
 
-· Lollygagging… (10m 52s · ↓ 41.2k tokens)
+● Divergência real e nomeável: prod tem colabs_com_anomalia_recorrente: 122 e a sombra 119, e o destino de prod inclui o col154 que a sombra não tem — 3 colabs julgados diferente
+  no ensaio. Sua ordem vale, com o mecanismo corrigido. Implemento:
+
+  Ran 2 shell commands
+
+● Implemento a sincronização da lavra e a recusa, com o marcador que prova que ela ocorreu:
+
+  Ran 3 shell commands
+
+● Sincronizada (md5 26d7f7ea…, o de prod). Agora o selo que o aval pede:
+
+  Ran 1 shell command
+
+● 11 verdes no Django. Meu selo de host tem a asserção de ordem mal escrita — corrijo a checagem, não o código:
+
+  Ran 2 shell commands
+
+● O selo de host morde (removendo a chamada fica vermelho) e voltou a OK. Commito tudo e lanço suíte + DIFF — esta DIFF já sai com a lavra de prod, o que muda o número da folga
+  trabalhada:
+
+  DIFF da O93 com a lavra de prod · 23s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
+     SAI=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o93.log; timeout 3000 bin/sombra.sh --com-a-sombra o93 -- docker run
+     --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network … (22s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Lollygagging… (16m 4s · ↓ 58.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
