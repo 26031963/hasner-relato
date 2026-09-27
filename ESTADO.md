@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:12:49.**
+**Medido em 27/09/2026 10:14:01.**
 
 | | |
 |---|---|
@@ -85,7 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
 ● A O80 agora é o corte de 06:3x virando guarda. Antes de escolher entre "recusar" e "pular", faço o censo de quem chama o escritor:
@@ -111,13 +110,14 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● 2.593 testes OK, nada quebrou. Publico a O80 e atualizo a L-092, que deixa de ser "sem selo":
 
-● Publicar e empurrar a O80 · 2s
+● Publicar e empurrar a O80 · 1m 14s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/LEIS.md'; s=open(p).read()
      s = s.replace("| **SEM SELO** -- nao ha teste que impeca recalculo de competencia com export confirmado: obra O80 | **vigente** |",
-     "| `ponto/tests/test_o80_selo_l092.py` (6 casos) + a guarda em `ponto/services/fechamento.py::recalcular_fecha…
+     "| `ponto/tests/test_o80_selo_l092.py` (6 casos) + a guarda em `ponto/services/fechamento.py::recalcular_fecha… (1m 13s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Shimmying… (1h 13m 27s · ↓ 89.6k tokens)
+· Shimmying… (1h 14m 39s · ↓ 91.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
