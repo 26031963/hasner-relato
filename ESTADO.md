@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:402 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:433 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:40:12.**
+**Medido em 27/09/2026 05:44:00.**
 
 | | |
 |---|---|
-| `HEAD` local | `6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)` |
-| `origin/main` | `6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc` |
+| `HEAD` local | `0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra` |
+| `origin/main` | `6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
 6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)
 6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc
 d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
 47336b0e ERRATA da mensagem de 512030da -- backtick em `git commit -m` e execucao de comando
-512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama
 ```
 
 ## `git status --short`
@@ -85,17 +85,6 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Alcance confirmado e coerente: 27 colabs têm cadastro sem janela de intervalo e dia com 2+ blocos, e depois da cura o motor cobra 4,77 h de atraso neles no total (era 44,42 h só
-  no col81). A cura só remove cobrança falsa. Publico e vejo o último item da sua fila:
-
-  Searched for 1 pattern
-
-● A O51b é fatia de tela e PDF, e a casa exige smoke de clique nas duas cascas — que é seu, não meu. Em vez de deixá-la meio pronta, fecho o que a fila pede primeiro: a causa dos
-  outros 27 colabs da classe C (217 h), que ficou sem nome. É leitura:
-
-  Ran 1 shell command
-
 ● Classe C agora tem taxonomia completa, e ela consolida a fila:
 
   ┌────────────────────────────────────────────────────────┬────────┬──────────┬───────────────────────────────────┐
@@ -110,15 +99,26 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
   Isso faz da O86 a maior obra aberta: 733,7 h da classe B + ~180 h da C. Publico:
 
-● Publicar a taxonomia da classe C e empurrar · 8m 6s
+  Ran 1 shell command
+
+● Push em voo. Enquanto roda, dimensiono a O86 pela forma dos dias — se os 140 casos com S livre forem todos da família da ata, a O86 e a O84 são a mesma obra:
+
+  Ran 1 shell command
+
+● Background command "Publicar a taxonomia da classe C e empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Push pousou (6adad96d). E a decomposição que acabei de medir corrige o que publiquei há dez minutos: a O86 não é uma causa só — são seis formas nomeadas:
+
+  Publicar a correcao e empurrar · 2s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
-     ## Classe C fechada em TAXONOMIA: tres causas, todas nomeadas -- e a O86 vira a maior obra aberta
-     Os 27 colabs da classe C que NAO eram buraco de vinculo, medidos um por um (piso das batidas x soma … (8m 5s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     ## CORRECAO de dez minutos atras: a O86 nao e "uma causa so" -- sao SEIS formas, e cinco ja tem nome
+     Eu acabei de escrever que a O86 e "~900 h numa causa so". **Errado, e a medicao seguinte desmonto…
 
-✽ Bloviating… (10m 58s · ↓ 9.2k tokens)
+✶ Bloviating… (14m 47s · ↓ 14.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
