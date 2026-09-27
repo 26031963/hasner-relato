@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:57:59.**
+**Medido em 27/09/2026 10:03:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
-| `origin/main` | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -85,19 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Decisão precisa. O corte alcança quatro coisas, e não as quinze que meu filtro largo pegou:
-
-  Ran 1 shell command
-
-● Cancelado com o motivo, em CORTES, BACKLOG e PENDENTES (148 itens agora). Publico e aplico a cura da O89, que já estava em cópia:
-
-  Ran 1 shell command
-
-● A cura da O89 custou 2 queries no calendário (29 contra teto 27), e o selo exige protocolo: ler o PLANO_PISCADA.md antes de subir teto. Leio e meço de onde vêm:
-
-  Ran 1 shell command
-
-● O protocolo permite subir o teto com justificativa escrita na tabela do plano, e manda retirar em caso de dúvida. Não tenho dúvida ainda — meço quais são as duas queries:
 
   Ran 1 shell command
 
@@ -114,15 +101,28 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● O DIFF da O89 é zero: colabs com QUALQUER campo movido: 0. A mutação era latente para a folha de 09 — ela mordia na passada órfã da O85, que foi onde eu a encontrei. Publico e
   empurro:
 
-  Publicar e empurrar
-  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -1; timeout 900 git push 2>&1 | tail -5
+  Ran 2 shell commands
 
-✢ Shimmying… (58m 37s · ↓ 71.1k tokens)
+● Push em voo. Enquanto roda, a parte nova do corte da L-086: remedir os 17. A lei já está no código (selo com 10 casos); o que falta é o DIFF com os campos da família 100%:
+
+  Ran 1 shell command
+
+● Background command "Publicar e empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Push pousou (96a8c0d7). A remedição dos 17 resolveu-se sozinha com as curas da noite: sobra 1 colab com +6,00 h em horas_extras_100_noturna. Aplico e publico:
+
+  Aplicar a remedicao da L-086 e publicar as curas
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
+     horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras --aplicar --antes /app/logs/apply_l086_09_antes.json 2>&1 | …
+
+· Shimmying… (1h 3m 39s · ↓ 72.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
