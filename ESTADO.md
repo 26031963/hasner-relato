@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 06:01:31.**
+**Medido em 27/09/2026 06:07:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
-| `origin/main` | `0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -85,22 +85,6 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Isso faz da O86 a maior obra aberta: 733,7 h da classe B + ~180 h da C. Publico:
-
-  Ran 1 shell command
-
-● Push em voo. Enquanto roda, dimensiono a O86 pela forma dos dias — se os 140 casos com S livre forem todos da família da ata, a O86 e a O84 são a mesma obra:
-
-  Ran 1 shell command
-
-● Background command "Publicar a taxonomia da classe C e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push pousou (6adad96d). E a decomposição que acabei de medir corrige o que publiquei há dez minutos: a O86 não é uma causa só — são seis formas nomeadas:
-
-  Ran 2 shell commands
-
 ● Background command "Publicar a correcao e empurrar" completed (exit code 0)
 
 ● Background command "Esperar o push da correcao" completed (exit code 0)
@@ -109,20 +93,36 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ● Tudo pousado (0161a378). A fila tratável está fechada e o que resta tem trava nomeada — escrevo a linha que a regra exige e publico:
 
-● Publicar a linha PAREI com a trava de cada item · 6m 39s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     # PAREI: a fila do MODO 24H so tem item com TRAVA NOMEADA | espera o Ronald
-     Nao e turno devolvido cedo: os seis itens tratáveis sairam (E1, O85, O73, O87, O66, mais a taxonomia da
-     classe C e a decom… (6m 38s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Pushed to main
 
-✢ Bloviating… (32m 17s · ↓ 18.8k tokens)
+● A madrugada fechou. origin/main = 4d8b3ad4, ahead 0, RELATO publicado.
+
+  Seis itens da sua fila saíram, cada um com smoke próprio em prod — não só suíte verde: as sete curas (01:53), E1 com migration (02:30), O85 (03:31), O73 (04:01), O87 (04:28),
+  O66 (05:08). Cinco deploys, todos provados na casca servida.
+
+  Dinheiro: +157,72 h a 5 colabs, em dois atos, com os outros 25 campos em zero e 0 entram/saem do TXT nos dois. A lista do DP caiu para 8 colabs / 248,2 h.
+
+  Onze obras nasceram medidas (O82–O91). As duas descobertas que valem mais que as horas:
+
+  - O89 — o motor mutaciona os objetos Batida que recebe. Provado em três rodadas com entrada idêntica, e o laço de fatias faz isso em 76 de 607 colabs. Foi o smoke comparando
+    folha × espelho que me levou até lá, por 4 h de diferença num colab.
+  - Classe C fechada em taxonomia: 5 colabs eram buraco de vínculo (curado), 23 são "o motor não fecha o par" com motor == folha ao centavo, e 4 são gravado velho. Isto é: a folha
+    não é o problema — o que falta está a montante dela.
+
+  Sete correções de números meus, das quais duas derrubaram coisa que eu já havia publicado — inclusive a de dez minutos antes do fim, quando eu escrevi "~900 h numa causa só" e a
+  medição seguinte mostrou seis formas, cinco delas já com obra. O total não mudou; mudou o que fazer com ele.
+
+  A parada que importa: aplicar a L-084 descontaria 286,12 h de 24 pessoas, e o col820 deveria 12h21 num dia em que trabalhou 2h19. Está no topo do PENDENTES_RONALD.json com a
+  tabela — uma frase sua resolve a forma do corte.
+
+  O que resta na fila tem trava nomeada, item por item, no topo do RELATO: ! de lei (L-084, feriado), ! de desenho (O89), ! de infra (O91 — install ativaria um escritor), L-009
+  para os passivos congelados, e o seu smoke de clique para a O51b, que é tela e PDF e eu não deixei meio pronta.
+
+✻ Churned for 35m 54s · done 6:05 AM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ corte Ronald: a saida antecipada nunca passa de previsto menos trabalhado. !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
