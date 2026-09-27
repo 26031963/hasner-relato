@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:74 AFIRMA ato sem PROVA ao lado -- ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:136 AFIRMA ato sem PROVA ao lado -- ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:15:01.**
+**Medido em 27/09/2026 17:16:40.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/ponto/services/fechamento.py
 ?? app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
@@ -92,22 +94,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-› Message from @a6e97ddda176c5e7d (ctrl+o to expand)
-
-● Agent "Autopsia dia impar com numero" finished · 29m 15s
-
-● Laudo do dia ímpar chegou, e ele traz uma colisão de lei que eu tenho de te devolver. Antes disso, fecho o DRY do mutirão. Meço o canal dos 184 e procuro o texto que o sistema
-  já usa:
-
-  Ran 2 shell commands
-
-❯ ID: O81-CURA -> E5-F1 -> IMPAR-ABERTO (uma fatia por vez, na ordem)
-  LEIS: L-092, L-084, P17
-  O81: MUDA = o do censo aprovado. RED = colabs do censo. SELO colabs_no_builder_09 = 0. PROVA 26 campos com a deriva isolada, 0 entram/0 saem do TXT, 07/08 = 0 divergencias.
-  E5-F1: a 09 lida da celula; fechamento = leitura. Chave so com ! do Ronald.
-  IMPAR-ABERTO: dia de batida impar mostra "em aberto" + o que falta, nunca numero, no leitor unico. SELO: 0 de 327 com numero; TXT inalterado.
-  Depois: autopsias SO dos colabs fora do builder, cura por causa.
   PROIBIDO: fallback, fatia posterior, item proprio, autoridade nova.
   PRONTO por fatia: RED nomeado + commit + relato; sem isso = INCOMPLETO com lista.
   Commit termina com: BUG ENCONTRADO: <o que> | TOTAL serie T: N
@@ -115,21 +101,37 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● Ordem nova anotada — O81-CURA depende do censo, que ainda está medindo. Fecho o DRY do mutirão com o texto real do sistema (cobranca.py::_texto_do_toque, não texto meu) e meço o
   canal dos 184:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✶ Puzzling… (56m 12s · ↓ 57.0k tokens)
+● DRY completo: 184 colabs, 3.153 perguntas, 158 com canal e 26 sem, com o texto real do sistema. Publico isso, o laudo do dia ímpar, e a colisão de lei que preciso te devolver:
+
+  Publicar o DRY, o laudo e a colisao de lei
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     anc = '# APPLY DA 09 FEITO'
+     i = s.index(anc)
+     novo = '''# DRY DO MUTIRAO (nada enviado) e o LAUDO DO DIA IMPAR -- com uma COLISAO DE LEI para voce (27/09 ~21:xx)
+     ## DRY do mutirao aos colabs -- **PROIBIDO enviar, e nada foi enviado**
+     Fonte: …
+
+✶ Puzzling… (57m 51s · ↓ 61.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: (1) O81-CURA so comeca depois do meu corte escrito sobre a tabela a/b/c do censo; censo pronto = PARAR e publicar. (2) RELATO retido de novo em RELATO.md:74:
+  varrer o RELATO inteiro por afirmacao de ato sem PROVA: ao lado, curar todas numa passada e republicar antes do DRY do mutirao. (3) A colisao de lei do dia impar vem ao RELATO
+  como pergunta com as duas leis citadas (L-NNN), sem escolher lado.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Locating 08-29 batidas inside parear_turnos output                                                                                 30m 31s · ↓ 254.4k tokens
-  ◯ general-purpose  Writing LAUDO_lote2.md taxonomy                                                                                                    30m 31s · ↓ 216.5k tokens
-  ◯ general-purpose  Separating X_X gaps in papel_por_minuto_da_ata                                                                                     30m 31s · ↓ 228.5k tokens
-  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  30m 31s · ↓ 161.9k tokens
-  ◯ general-purpose  Reading _celulas_da_ata in leitor_celula.py                                                                                           1m 8s · ↓ 70.2k tokens
+  ◯ general-purpose  Reading test_o68b_fecha_aberto_com_saida_seguinte fixture                                                                          32m 10s · ↓ 254.7k tokens
+  ◯ general-purpose  Inspecting col243 ata lampadas in probe1_out                                                                                       32m 10s · ↓ 218.7k tokens
+  ◯ general-purpose  Persisting taxonomy summary to RELATO_LOTE3.txt                                                                                    32m 10s · ↓ 234.4k tokens
+  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  32m 10s · ↓ 162.7k tokens
+  ◯ general-purpose  Reading montar_dias head in espelho.py                                                                                               2m 47s · ↓ 95.7k tokens
   ⧉  index
 ```
