@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:41 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:74 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:37:01.**
+**Medido em 27/09/2026 02:39:33.**
 
 | | |
 |---|---|
-| `HEAD` local | `64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso` |
+| `HEAD` local | `b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
 64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
 ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 237c9b16 [O85] o dia com batida e sem vinculo vigente para de desaparecer da folha
 c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
-21cb89f7 [TICKETS] placar do topo com o push que pousou (c6c3785b) -- a regua barrou o push por isso
 ```
 
 ## `git status --short`
@@ -85,15 +85,6 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O tail -60 cortou justamente a prova dos 26 campos e as contagens. Refaço o ensaio gravando a saída inteira:
-
-  Ran 1 shell command
-
-● Enquanto refaz, escrevo a observação estrutural que esse DIFF revela — e ela importa para a manhã:
-
-  Ran 1 shell command
-
 ● Número que muda a fila: 60 colabs movem fora de horas_trabalhadas, e o campo mais frequente é horas_saida_antecipada (31), seguido de horas_atraso (16) — essa é a L-084
   corrigida, que está no ar desde 01:53 mas nunca entrou no gravado (o recálculo das 00:50 rodou com a versão errada, "ou"). Publico:
 
@@ -114,11 +105,20 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ● Os 5 aplicados são exatamente os 5 da classe C: col882, col515, col375, col743, col935. Critério satisfeito ponta a ponta (0 entram/0 saem do TXT, 07 e 08 com 0 divergências,
   col81 intacto). Aplico em prod:
 
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
-     horas_trabalhadas --aplicar --antes /app/logs/apply_o85_09_antes.json 2>&1 | grep -vE 'moveu fora do item' | tail -40
+  Ran 1 shell command
 
-✢ Roosting… (6m 46s · ↓ 18.7k tokens)
+● APLICADO em prod: 5 colabs, +153,72 h em horas_trabalhadas, os outros 25 campos em +0,00 com 0 colabs, 0 entram/0 saem do TXT, 07 e 08 com 0 divergências, col81 intacto.
+  Reversão em logs/apply_o85_09_antes.json. Lanço a suíte (portão do deploy) e publico:
+
+  Publicar o apply da O85 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## O85 **APLICADA** em 09: +153,72 h em 5 colabs, e os outros 25 campos em ZERO
+     Ensaio na sombra primeiro, apply em prod depois, os dois com a prova dos 26 campos.
+     PROVA: `logs/apply_o85_09_antes.js…
+
+· Roosting… (9m 18s · ↓ 21.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
