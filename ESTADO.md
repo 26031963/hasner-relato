@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:10:45.**
+**Medido em 27/09/2026 16:15:46.**
 
 | | |
 |---|---|
@@ -114,13 +114,13 @@ c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com
 ● DIFF final: turnos_abertos 620 → 473 (−147), horas_trabalhadas +1.040,82 h, inconsistencias −228, TXT 0/0, 07/08 zero, APLICADOS 198, e a CONDICAO_SAIDA_REAL separa um só
   (col727 −6,03 h). Commito e espero a suíte:
 
-  Commitar e esperar a suite · 3m 57s
+  Commitar e esperar a suite · 8m 58s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py && git commit -F - <<'MSGEOF'
      [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
-     LEI-AKITA: origem=ponto/turnos.py::_fechar_aberto_na_… (3m 56s · 4 lines)
+     LEI-AKITA: origem=ponto/turnos.py::_fechar_aberto_na_… (8m 57s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Slithering… (12m 6s · ↓ 16.7k tokens)
+✽ Slithering… (17m 7s · ↓ 16.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
