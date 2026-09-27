@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 19:10:54.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.0 MB). Acoes na janela: **417**.
+**Medido em 27/09/2026 19:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.0 MB). Acoes na janela: **419**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:12:07 | Bash | Contar os casos que vao a mesa da supervisora | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/baldes.py <<'PYEOF' from django_tenants.utils import schema_context from django.apps import apps from django.utils import timezone as tz import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) with schema_context('juliani'): # (3) casos que vao a ...` |
+| 19:10:51 | Bash | Publicar o RELATO final | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() anc = '# AS REGRESSOES DAS MINHAS CURAS DE HOJE' i = s.index(anc) novo = '''# MUTIRAO ENVIADO, reapply da O96 aplicado, e a R1 medida e REJEITADA (27/09 ~23:5x) ## Mutirao aos colabs: **ENVIADO** PROVA: 158 colabs com canal, **143 entregues** (137 por FCM, 6 por Web Push), **2.521 perguntas cobradas**, prazo `28/09 12:00` gravado em `prazo_s ...` |
 | 19:06:08 | Bash | Enviar o mutirao aos 158 | `cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d, collections from django.utils import timezone as tz from django.contrib.auth import get_user_model from colaboradores.models import Colaborador from core.canal import com_webpush, canal_de_push from chamados.services.cobranca import cobrar_colab ...` |
 | 19:05:40 | Bash | Prazo por ato e enviar o primeiro para conferir | `python3 - <<'PYEOF' import py_compile p='chamados/services/cobranca.py'; s=open(p).read() velho = "def cobrar_colaborador(*, colaborador, autor, request=None):" novo = "def cobrar_colaborador(*, colaborador, autor, request=None, prazo_ate=None):" assert s.count(velho)==1 s=s.replace(velho,novo) velho2 = " prazo = timezone.now() + _dt.timedelta(hours=HORAS_DE_PRAZO)" novo2 = """ # PRAZO DO LOTE (co ...` |
 | 19:04:55 | Bash | Ver o sitio do prazo | `sed -n '160,175p' chamados/services/cobranca.py` |

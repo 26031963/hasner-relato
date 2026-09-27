@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:10:54.**
+**Medido em 27/09/2026 19:12:31.**
 
 | | |
 |---|---|
@@ -102,25 +102,25 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● Mutirão enviado: 143 entregues de 158 (137 FCM, 6 webpush), 2.521 perguntas cobradas, prazo 28/09 12:00. Dos 15 não entregues, 13 são o próprio juiz recontando ("não há pergunta
   em aberto" — o CSV estava velho), 1 token morto e 1 o meu teste. Registro tudo e fecho:
 
-● Publicar o RELATO final
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     anc = '# AS REGRESSOES DAS MINHAS CURAS DE HOJE'
-     i = s.index(anc)
-     novo = '''# MUTIRAO ENVIADO, reapply da O96 aplicado, e a R1 medida e REJEITADA (27/09 ~23:5x)
-     ## Mutirao aos colabs: **ENVIADO**
-     PROVA: 158 colabs com canal, **143 entregues…
-
-✽ Crunching… (17m 44s · ↓ 19.6k tokens)
+  Ran 1 shell command
 
 ❯ aval Ronald: (1) O96: explicar no RELATO a diferenca entre 116,1 h / 44 colabs do censo e 18,76 h / 7 colabs aplicados, colab a colab por balde (ja aplicado as 19:33 / fora do
   TXT / CONDICAO_SAIDA_REAL / outro); "outro" > 0 = cura. (2) R1 e regressao de hoje no gravado: a cura mais restritiva e desligar SO o trecho da O68b-PAPEL que a causa, com
   oraculo e6 nos afetados e as 4 condicoes do aval-de-criterio; nao fica em pe. (3) mutirao: publicar quantos casos vao a mesa da supervisao as 12:00 de 28/09 se ninguem
   responder.
-  ctrl+x ctrl+s to send now
+
+● Três medições. Faço as duas de leitura primeiro — os baldes da O96 e a conta da mesa da supervisão:
+
+  Ran 1 shell command
+
+● 86 casos vão à mesa às 12:00 de 28/09 se ninguém responder (159 chamados com esse prazo em 145 colabs; 73 já fecharam desde o envio). Agora os baldes da O96:
+
+  Running 1 shell command…
+
+✢ Crunching… (19m 21s · ↓ 23.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
