@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:600 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:622 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:03:01.**
+**Medido em 27/09/2026 10:04:13.**
 
 | | |
 |---|---|
-| `HEAD` local | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
+| `HEAD` local | `d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab` |
 | `origin/main` | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
 96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
 bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
 4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
 0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
-6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)
 ```
 
 ## `git status --short`
@@ -85,20 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O diagnóstico não pegou a rota (o selo mede por dentro). Sigo o protocolo do plano: subo o teto com justificativa escrita na tabela, e registro a ressalva de escala que eu não
-  consigo descartar — ela vira obra:
-
-  Ran 1 shell command
-
-● Tudo verde: o contrato da O89, as três passadas iguais, o selo de performance com o teto declarado e a L-093. Agora o DIFF da O89 — rodo o ensaio e leio os 26 campos antes de
-  declarar os campos do item:
-
-  Ran 1 shell command
-
-● O DIFF da O89 é zero: colabs com QUALQUER campo movido: 0. A mutação era latente para a folha de 09 — ela mordia na passada órfã da O85, que foi onde eu a encontrei. Publico e
   empurro:
 
   Ran 2 shell commands
@@ -113,11 +99,25 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● Push pousou (96a8c0d7). A remedição dos 17 resolveu-se sozinha com as curas da noite: sobra 1 colab com +6,00 h em horas_extras_100_noturna. Aplico e publico:
 
-  Aplicar a remedicao da L-086 e publicar as curas
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
-     horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras --aplicar --antes /app/logs/apply_l086_09_antes.json 2>&1 | …
+  Ran 1 shell command
 
-· Shimmying… (1h 3m 39s · ↓ 72.9k tokens)
+● Aplicado (+6,00 h em 1 colab) e deploy no ar. Smoke das duas curas no worker servido:
+
+  Ran 1 shell command
+
+● SMOKE OK no worker servido: zero dias do col820 violam o teto, 0 de 77 batidas do chamador alteradas, e as três passadas dão o mesmo. Publico e sigo para a O80, que a sua regra
+  de fila põe em primeiro — e que agora ganhou razão a mais: ela é o corte de 06:3x virando código.
+
+  Publicar o smoke e comecar a O80 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## Smoke das duas curas no worker servido, e a remedicao dos 17 que se resolveu sozinha
+     | prova, no `saas_ui` | resultado |
+     |---|---|
+     | **L-093** -- dias do col820 que violam o teto | **0** (gravado…
+
+✶ Shimmying… (1h 4m 52s · ↓ 76.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

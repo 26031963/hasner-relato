@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 10:03:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.2 MB). Acoes na janela: **719**.
+**Medido em 27/09/2026 10:04:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.2 MB). Acoes na janela: **718**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:03:35 | Bash | Smoke da L-093 e da O89 no worker servido | `cat > /tmp/smoke_l093_o89.py <<'PYEOF' """SMOKE no worker servido: a L-093 no gravado e a O89 no contrato.""" from django.apps import apps from django.utils import timezone as tz import datetime as d G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, FM = G('Colaborador'), G('EscalaColaborador'), G('FechamentoMensal') from django.db.models import Q from core.regua_cct imp ...` |
 | 10:00:51 | Bash | Aplicar a remedicao da L-086 e publicar as curas | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras --aplicar --antes /app/logs/apply_l086_09_antes.json 2>&1 \| grep -vE 'moveu fora do item' \| grep -E 'horas_extras_100_noturna\|APLICAD\|ENTRAM\|07 e 08\|QUALQUER ...` |
 | 10:00:40 | Bash | Conferir o push | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkfhsoz8x.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD` |
 | 09:58:41 | Bash | Ensaio da remedicao dos 17 com a familia 100% | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item horas_extras_100,horas_extras_100_feriado,horas_extras_100_noturna,horas_extras 2>&1 \| grep -vE 'moveu fora do item' \| grep -E '^ horas_extras\|APLICADOS\|SEPARADOS \(mov\|ENTRAM\|07 e 08\|QUALQUER' \| head -12` |
@@ -727,5 +728,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:08:13 | Bash | Conferir a confirmacao com os proprios olhos | `tail -16 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6djzqznn.output 2>/dev/null; echo "--- (vazio = ainda rodando) ---"` |
 | 22:07:20 | Monitor | confirmacao de quais colabs tem dinheiro na O71 | `until grep -qE 'ENTRAM no TXT\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6djzqznn.output 2>/dev/null; do sleep 15; done; echo "CONFIRMACAO PRONTA"` |
 | 22:07:15 | Bash | Ver quem sao os colabs com dinheiro | `tail -14 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6djzqznn.output 2>/dev/null; echo "--- (vazio = ainda rodando) ---"` |
-| 22:04:04 | Bash | Confirmar se o dinheiro esta nos mesmos 2 colabs que entram | `python3 - <<'PYEOF' p='ponto/management/commands/celula_veredito_velho.py' s=open(p).read() old=""" dl = {} for cid, dep in depois_fech.items(): ant = antes_fech.get(cid) or {} for k, v in dep.items(): av = ant.get(k) if av is None or v is None or av == v: continue d = float(v) - float(av) dl.setdefault(k, [0.0, 0]) dl[k][0] += d dl[k][1] += 1""" new=""" dl = {} por_colab = {} for cid, dep in depo ...` |
-| 22:03:33 | Bash | Ler o baseline de deriva pura em prod | `tail -16 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh6ra3d7h.output` |
