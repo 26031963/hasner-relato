@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:14:41.**
+**Medido em 27/09/2026 02:15:45.**
 
 | | |
 |---|---|
@@ -85,15 +85,6 @@ f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Escrevo o RED da O85 com asserção diferencial — dois colabs idênticos, um com o dia órfão — para morder sem depender do intervalo:
-
-  Ran 1 shell command
-
-● Um ajuste de escopo antes de aplicar: sem ele, a cura também pagaria os 4 colabs de classe A (0 → 217,7 h), que você classificou como cadastro, não código. Limito ao caso da
-  classe C e deixo a A visível:
-
-  Ran 2 shell commands
-
 ● A suíte está trabalhando (container a 80% de CPU). Preparo o ensaio da sombra que responde duas perguntas de uma vez — a remedição dos 30 separados e o DIFF da O85:
 
   Ran 2 shell commands
@@ -114,11 +105,20 @@ f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia
 
 ● Os backticks foram interpretados pelo bash e comeram palavras da mensagem. Reescrevo por heredoc, que é como fiz nos outros:
 
-● Publicar o RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -2; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bad2vo90w.output
+  Ran 3 shell commands
 
-✢ Unfurling… (59m 22s · ↓ 198.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Publicado (944cdc3). A suíte ainda roda, e ela bloqueia push e edição de .py. Uso a espera para a classe B, que é a maior (733,7 h): os turnos abertos têm batida que os
+  fecharia, ou a pessoa não bateu a saída?
+
+  Ran 1 shell command
+
+● Número decisivo para a fila: a classe B é 84% código.
+
+  ┌─────────────────────────────────┬───────┬─────────┐
+  │ o que o turno aberto tem depois │ casos │ leitura │
+  ├─────────────────────────────────┼───────┼─────────┤
+  │ havia um S em                   │       │         │
+  └─────────────────────────────────┴───────┴─────────┘
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
