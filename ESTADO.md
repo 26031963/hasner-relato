@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:25:31.**
+**Medido em 27/09/2026 04:30:45.**
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
+?? app/chamados/management/commands/lavrar_furo_sem_canal.py
+?? app/chamados/services/furo_sem_canal.py
 ?? esteira.pausada
 ```
 
@@ -86,44 +89,44 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O carimbo está REFEITA — o cron das 04:15 acabou de refazer a sombra e o bloco dele deve estar rodando. Confiro antes de fazer nada:
-
-  Ran 1 shell command
-
-● O bloco do cron das 04:15 está em 19/63 com dump de hoje — o deploy da O87 espera ele (é o portão da O82). Uso a espera para escrever o resumo da noite no topo do RELATO, que é
-  o que você lê de manhã:
-
-  Ran 2 shell commands
-
-● A noite fechou assim, e o resumo de uma página já está no topo do RELATO publicado:
-
-  Quatro coisas no ar, cada uma com smoke no worker servido
-  - 01:53 as sete curas (atraso de 4h10 volta a descontar 250 min; col382 com 389 min pousando no 20/09).
-  - 02:30 E1 com migration: convalidated=False, 53 linhas legíveis, INSERT e UPDATE recusados em prod.
-  - 03:31 O85: SMOKE_O85=OK — folha == espelho nos 5.
-  - 04:01 O73: col81 de 44,42 h de atraso para 0,00 h, zero alertas restantes.
-  - O87 empurrada (dfb0418c); o deploy espera o bloco da sombra, que o cron das 04:15 está rodando agora (25/63). Vou publicá-la quando o carimbo ficar verde.
-
-  Dinheiro: aplicadas +157,72 h em 5 colabs, com os outros 25 campos em zero e 0 entram/saem do TXT nos dois atos. A lista do DP caiu para 8 colabs / 248,2 h.
-
-  A parada que importa: o apply da L-084 descontaria 286,12 h de 24 pessoas, e o col820 deveria 12h21 de saída antecipada num dia em que trabalhou 2h19. A causa é a forma do corte
-  — a entrada fica a 161–178 min do marco, logo abaixo dos 180, e a saída a 700+. Está no topo do PENDENTES_RONALD.json com a tabela; não esperei ocioso, saíram O73 e O87 no
-  mesmo turno.
-
-  O achado mais sério é de desenho: o motor mutaciona os objetos Batida que recebe (O89) — provado em três rodadas com entrada idêntica. Curei a passada órfã da O85 com
   re-consulta, mas o laço de fatias faz isso em 76 de 607 colabs, e nenhum deles foi medido contra objetos frescos. Espera seu ! entre "Batida imutável" e "cada passada consulta
   as suas".
 
   E derrubei cinco números meus medindo de novo — inclusive os "40,6% de células sem marco", que são folga, e um fixture meu que passava verde sem reproduzir nada porque a pausa
   tinha 60 min redondos em vez dos 63 reais.
 
-✻ Baked for 1h 27m 45s · done 4:22 AM · 2 shells still running
+✻ Baked for 1h 27m 45s · done 4:22 AM · 1 shell still running
+
+● Background command "Esperar o bloco do cron ficar verde" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Ensaio verde. DEPLOY JÁ da O87 e smoke em prod (escrita dentro de atomic() + raise):
+
+  Ran 1 shell command
+
+● O87 no ar (04:28) e provada em prod: os 7 templates seguem legíveis, salvar um deles é recusado, e um 12x36 legítimo que cruza a meia-noite (te380, 19:00→07:00 com intervalo
+  01:00) continua salvando — a regra é relativa à entrada, não ao relógio, provado em prod e não só em teste.
+
+  Ran 1 shell command
+
+● Existe lavrar_vigencia_impossivel — o contador irmão do E1. Uso como molde para o da O66:
+
+  Listed 1 directory, ran 1 shell command
+
+● Molde claro. Construo o contador da O66 no mesmo desenho — vigia que lê as autoridades, nunca juiz:
+
+  Ran 1 shell command
+
+● Agora o selo, que afirma sobre o mecanismo e morde. Confiro duas assinaturas antes:
+
+  Searching for 1 pattern…
+
+· Harmonizing… (2m 27s · ↓ 8.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ quando o ensaio ficar verde, deploy da O87 e segue a fila
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
