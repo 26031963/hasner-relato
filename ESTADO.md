@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:47:28.**
+**Medido em 26/09/2026 22:52:42.**
 
 | | |
 |---|---|
@@ -49,44 +49,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Tenho tudo. Registro a lei nova (L-084) e o ! antes de codar:
+● Monitor(selos e suite de escala apos a L-084)
+  ⎿  Monitor started · task bxg4l1cu8 · timeout 900s
 
-  Ran 2 shell commands
+❯ No ensaio antes do apply: duas colunas separadas -- (1) efeito da reclassificacao nos 23; (2) efeito da L-084 no RESTO da frota de 09 (colabs e dias em que atraso/saida
+  antecipada deixam de descontar), com a lista. Ninguem sai do TXT; se sair, PAREI. Nenhuma lei nova.
 
-● O selo da LEI-AKITA morde a palavra "fallback" na minha prosa que explica a cura — quarta vez esta noite que selo de texto morde a explicação. Curo a frase e vou ao
-  aplicar_tolerancia, onde a L-084 tem de morar:
-
-  Ran 2 shell commands
-
-● A lista CADASTRO x REALIDADE existe só em docs, não em código. Então ela nasce aqui. Implemento a L-084 no sítio único que serve os dois motores:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Falta anexar a lista ao resultado. Vejo quantos calcular_mes existem — se houver override, anexar num só deixaria a lista muda nos outros:
+● A sua ordem muda o desenho do ensaio, e com razão: a L-084 vale para a frota inteira, não só para os 30 reclassificados. Se eu medisse junto, o número da reclassificação viria
+  inflado pelo efeito da lei em 123 colabs. Separo em duas corridas:
 
   Ran 1 shell command
 
-● Três calcular_mes com 6 pontos de retorno — e o meu self._cadastro_x_realidade = [] está só no MotorBase. Se as subclasses não chamam super(), a lista nunca reseta nem chega ao
-  resultado. Confiro:
+● Duas corridas, como você separou:
 
-  Ran 1 shell command
+  Coluna 2 rodando agora — --sem-reclassificar: recalcula 09 com a guarda da L-084 no ar mas sem trocar nenhum tipo_base. O delta contra o gravado é o efeito da lei sozinha, na
+  frota inteira.
 
-● Os dois subclasses chamam super().calcular_mes() primeiro e mutam o mesmo objeto. Então anexar uma vez no MotorBase basta — e isso funciona porque é a mesma lista, o que precisa
-  estar escrito:
+  Coluna 1 depois — reclassifica sobre esse estado, e o delta entre as duas corridas é o efeito da reclassificação nos 23, limpo.
 
-  Ran 3 shell commands
+  E a lista que você pediu vem da fonte certa: o motor agora expõe dias_cadastro_x_realidade, mas recalcular_fechamento_mes não a persiste — então eu a colho das instâncias de
+  motor que o próprio fechamento criou, com colab, dia, horário cadastrado, horário real e os dois deltas. Contar pela variação de horas_atraso no FechamentoMensal daria o total
+  sem dizer quem, e "quem" é metade do que o DP precisa para tratar o cadastro.
 
-● Agora o medidor do DNA: usa o juiz dos marcos em vez de ler o dna cru, e mede entrada e saída no corte de 3 h da sua lei:
+  Uma coisa que vou conferir com atenção nesse resultado, porque é o risco real da L-084: ela para de descontar, então horas_atraso e horas_saida_antecipada caem e
+  horas_trabalhadas pode subir. Se alguém estava dentro do TXT por ter pouca inconsistência e a lei mexer nisso, ele pode sair — e a sua regra é literal: um único colab saindo =
+  PAREI.
 
-  Ruff e os tres selos que caíram no push49 · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/saas-hasner/app:/app saas-hasner-core:latest sh -c 'cd
-     /app && ruff check --output-format=concise . 2>&1 | tail -4'; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --…
+  O apply já está escrito com as suas quatro condições, incluindo o saldo_banco_horas restaurado ao valor anterior e a conferência de 07 e 08 no banco, depois do commit — não por
+  inferência de que "não recalculei, logo não mudou".
 
-✽ Marinating… (7m 33s · ↓ 30.4k tokens)
+✻ Worked for 1m 29s · done 10:52 PM · 2 shells, 1 monitor still running
+
+● Background command "Usar a autoridade e rodar os selos mais a suite de escala" completed (exit code 0)
+
+* Whirlpooling…
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
