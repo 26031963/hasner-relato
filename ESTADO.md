@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:44:31.**
+**Medido em 27/09/2026 00:50:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
  M CLAUDE.md
  M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/docs/ARQUITETURA.mmd
  M app/docs/LEIS.md
  M app/docs/RELATO.md
  M app/ponto/management/commands/aplicar_09_corte_b.py
@@ -58,44 +59,44 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ col877                         │               134,71 h │        0,00 │ 134,71 h │       13 │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col278                         │                90,27 h │        0,00 │  90,27 h │       15 │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col203                         │                84,65 h │        0,00 │  84,65 h │       12 │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col932                         │                49,59 h │        0,00 │  49,59 h │        7 │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col936                         │                37,98 h │        0,00 │  37,98 h │        5 │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col511, col622, col369, col788 │                      — │        0,00 │   27,4 h │        — │ —      │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col245                         │                 7,03 h │        0,00 │   7,03 h │        1 │ SIM    │
-  ├────────────────────────────────┼────────────────────────┼─────────────┼──────────┼──────────┼────────┤
-  │ col865                         │                26,22 h │       24,46 │   1,76 h │        4 │ —      │
-  └────────────────────────────────┴────────────────────────┴─────────────┴──────────┴──────────┴────────┘
+  E o p not in _ft_certa era um bug latente meu. PeriodoCalculo é @dataclass sem eq=False, então a comparação era por valor — dois períodos com os mesmos campos (mesmo horário em
+  dias diferentes) se confundiriam, e um dia sem escala certa passaria por certo. O silêncio seria a favor de não pagar, que é o pior lado. Troquei por identidade (id()), e é por
+  isso que estou remedindo em vez de aplicar o número de cinco minutos atrás.
 
-  11 colabs, 433,4 h desaparecidas — das quais 7,0 h em 1 colab no TXT de 09 (col245).
+✻ Churned for 57s · done 12:48 AM · 2 shells, 1 monitor still running
 
-  Três coisas que esse número diz:
+❯ aplica se o numero se mantiver
 
-  O col877 com 134,71 h é o mesmo número que aparece no comentário do fechamento.py sobre o apply da E3: "8 colabs, ate 134,71 h de diferenca entre o ensaio (sem o arquivo) e prod
-  (com ele)". É o mesmo colaborador, o mesmo valor — o caso que gerou a O63 é também a maior vítima deste bug, e ninguém tinha notado porque a O63 tratou a lavra faltando, não a
-  hora sumindo quando a lavra diz "errada".
+  Ran 1 shell command
 
-  O col865 é a prova do mecanismo: 26,22 h de folga trabalhada, 24,46 h reconhecidas e 1,76 h sumidas. Ele tem dias com escala certa e dias com escala errada — e só os errados
-  desaparecem. Isso descarta "o campo nunca soma nada" e confirma que o filtro _certa é o que corta.
+● Monitor(numero da cura da folga com comparacao por identidade)
+  ⎿  Monitor started · task bhxffuz5d · timeout 1500s
+  ⎿  Allowed by auto mode classifier
 
-  E o impacto no TXT de 09 é pequeno: 7,0 h em um colab. Os 433 h estão quase todos em gente que já está retida por outro motivo. Isso muda a urgência, não a gravidade — 90 h de
-  uma pessoa não pagas é 90 h, mesmo que ela esteja fora do TXT por furo de espelho.
+● Combinado: se o número se mantiver, aplico sem voltar a perguntar. Monitor armado.
 
-  Vou implementar a cura que você definiu — sem escala certa, a hora entra em horas_trabalhadas sem o 100% — e medir o DIFF pelo critério do MODO 24H.
+  O critério de "se manteve" que vou usar, para não ficar elástico depois de ver o resultado:
 
-✻ Cogitated for 20s · done 12:44 AM · 1 shell still running
+  horas_trabalhadas entre +425 e +440 h em 11 colabs. A comparação por identidade só pode aumentar o conjunto sem-escala-certa (antes, período confundido por valor podia ser
+  tratado como certo), então o número pode subir um pouco. Se subir muito acima disso, a confusão por valor era maior do que eu estimei e eu quero olhar quem entrou.
+
+  HE em zero, nas cinco faixas. Se qualquer uma se mover, paro — é o adicional que o corte nega.
+
+  SAEM do TXT = 0.
+
+  Se os três fecharem, aplico com --aplicar e snapshot de reversão, publico os 26 campos e a lista dos 11 no RELATO, e sigo — ainda devo o DEPLOY JÁ da correção da L-084, que está
+  commitada mas não empurrada, e a árvore acumulou muita coisa desde o último push: corte (b), L-084 corrigida, L-086 corrigida, O72, O76, a cura da folga, a porta de restauração
+  e os selos novos.
+
+  Vale dizer uma coisa sobre esse acúmulo: o push50 falhou e eu não voltei a empurrar. Cada item novo que você mandou entrou na frente, e isso é o MODO 24H funcionando — mas a
+  árvore está com sete curas de dinheiro no disco e o origin/main em d39c0696. Se esta sessão cair agora, o que sobrevive é o commit 708f1524 local e nada mais. Vou empurrar logo
+  depois do apply, antes de pegar o próximo item.
+
+✻ Worked for 25s · done 12:49 AM · 2 shells, 1 monitor still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ aplica a cura e mede o DIFF
+❯ push depois do apply
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · ← for agents · ↓ to manage
   ⧉  index
 ```
