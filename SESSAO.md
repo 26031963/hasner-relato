@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 04:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.1 MB). Acoes na janela: **987**.
+**Medido em 27/09/2026 04:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.1 MB). Acoes na janela: **983**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -993,7 +993,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:54:31 | Bash | Ver as mensagens dos tres selos | `cd /home/ronald/saas-hasner && grep -A 6 "FAIL: test_MORDE_o_limite_do_dia_pergunta_a_regra\\|FAIL: test_ESTRUTURAL_o_motor_LE_o_leitor_unico" logs/o63_suite.log \| grep -E "AssertionError\|assert\|Error" \| head -6` |
 | 16:54:18 | Bash | Ler o selo do limite do dia | `grep -n "def test_MORDE_o_limite_do_dia_pergunta_a_regra" -A 22 ponto/tests/test_turno_meia_noite_comercial.py \| head -26` |
 | 16:54:06 | Bash | Veredito da suite completa da O63 | `cd /home/ronald/saas-hasner && grep -E "^Ran \|^(OK\|FAILED)\|^(FAIL\|ERROR):" logs/o63_suite.log \| tail -6` |
-| 16:44:01 | Bash | Suites dos leitores tocados | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && ESTEIRA_QUEM=leitores bash bin/trava_teste.sh -- docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache --tmpfs /app/.hypothesis -v /home/ronald/saas-hasner/ap ...` |
-| 16:43:40 | Bash | Suite de fundo e quem decide o status da tela | `cd /home/ronald/saas-hasner && grep -E "^Ran \|^(OK\|FAILED)\|^(FAIL\|ERROR):" logs/o63_suite.log 2>/dev/null \| tail -6; echo "--- e o status 'aberto': quem o decide na tela? ---"; grep -n "def _classificar" -A 14 app/colaboradores/services/calendario.py \| head -18` |
-| 16:41:23 | Bash | Ler o veredito das celulas dos dois casos | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as dt from escala.models import CelulaDia for cid, d in ((736, dt.date(2026,9,11)), (369, dt.date(2026,9,23))): c = CelulaDia.objects.filter(colaborador_id=cid, data=d).first() print('col%-4s %s veredito=%-20s tem_entrada=%s tem_saida=%s julgada_em=%s veredito_via ...` |
-| 16:40:52 | Bash | Ver de onde a linha do dia tira os turnos | `sed -n '448,478p' relatorios/pdf_espelho.py` |

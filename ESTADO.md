@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:40:45.**
+**Medido em 27/09/2026 04:45:46.**
 
 | | |
 |---|---|
@@ -112,13 +112,13 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ● [RELATO-NOITE] é a mesma armadilha: tag entre colchetes é lida como fatia. A forma limpa é não usar colchetes em commit que não é fatia:
 
-  Renomear a tag e empurrar · 1m 53s
+● Renomear a tag e empurrar · 6m 54s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/config/crons_duracao.json && git commit -q -m "crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
      bin/crons_duracao.py)
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" && FILTER_BRANCH_SQUELCH_WARNING=1 git filter… (1m 52s · 3 lines)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" && FILTER_BRANCH_SQUELCH_WARNING=1 git filter… (6m 52s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Harmonizing… (12m 27s · ↓ 35.2k tokens)
+✽ Harmonizing… (17m 27s · ↓ 35.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
