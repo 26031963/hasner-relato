@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 20:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.2 MB). Acoes na janela: **429**.
+**Medido em 27/09/2026 20:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.2 MB). Acoes na janela: **430**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:11:35 | Agent | Censo do matcher de marcos | `Você é um CENSISTA SÓ-LEITURA no projeto saas-hasner (ponto eletrônico CLT, tenant `juliani`, competência 09/2026 = 21/08 a 20/09). **PROIBIDO escrever qualquer coisa**: nada de `git commit`/`git push`/`bin/deploy.sh`, nada de `--apply`/`--aplicar`, nada de `.save()`/`.create()`/`.update()`, e **proibido editar arquivo do repositório**. Proibido propor patch, wrapper, fallback ou tolerância — sua  ...` |
 | 20:10:35 | Bash | Corrigir o filtro e reconferir | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' p='bin/hook_stop_fila1.py'; s=open(p).read() velho = """ for ln in bloco.splitlines(): if not ln.startswith('\| O'): continue celulas = ln.split('\|')""" novo = """ # QUALQUER id, nao so os que comecam com `O`. A 1a versao filtrava `\| O` e por isso PULOU R2..R5 e # apontou `O81`, o ultimo da tabela -- o hook cobraria a fila errada. A prova pegou  ...` |
 | 20:10:22 | Bash | Por a fila falada no BACKLOG e reconferir o hook | `cd /home/ronald/saas-hasner && rm -f logs/hook_stop_fila1.json && python3 - <<'PYEOF' p='app/docs/BACKLOG.md'; s=open(p).read() anc = '<!-- OBRAS:INICIO -->' i = s.index(anc) + len(anc) # a fila FALADA do Ronald entra como item, no topo do bloco, para o hook cobrar o que ele pediu nova = ''' <!-- A FILA 1 VIVA (corte Ronald 27/09 ~23:5x e 28/09 ~00:0x). O hook de Stop (`bin/hook_stop_fila1.py`) le ...` |
 | 20:09:21 | Bash | Provar falha aberto, PAREI, fila vazia e o teto | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/hooktest && rm -rf $T && mkdir -p $T/bin $T/app/docs $T/logs && cp bin/hook_stop_fila1.py $T/bin/; echo '=== PROVA 3: falha ABERTO (sem BACKLOG) ==='; echo '{}' \| python3 $T/bin/hook_stop_fila1.py; echo '=== PROVA 4: RELATO com PAREI no topo -> LIBERA ==='; printf '# RELA ...` |

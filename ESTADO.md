@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:11:31.**
+**Medido em 27/09/2026 20:17:01.**
 
 | | |
 |---|---|
@@ -84,15 +84,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Não há settings de projeto — crio um, com o hook à prova de si mesmo (qualquer exceção libera, para um bug meu nunca prender a sessão):
-
-  Ran 1 shell command
-
-● O hook bloqueia com o próximo item da fila e o contador sobe por HEAD. Provo as outras duas pontas — falha aberto e o caminho do PAREI::
-
-  Ran 1 shell command
 
 ● Seis provas passam: bloqueia com o item, conta por HEAD, falha aberto em arquivo faltando, libera com PAREI:, libera com fila vazia, e no 6º libera escrevendo PAREI: hook-teto.
   Mas a prova revelou um desalinhamento: o hook diz "siga: O1" porque lê o BACKLOG, e a sua fila falada (R2..R5) não está lá. Corrijo isso — senão o hook cobra a fila errada:
@@ -109,7 +100,8 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● O hook aponta para R2, correto. Lanço o censo do matcher em paralelo e sigo a fila:
 
-✢ Enchanting… (4m 27s · ↓ 11.9k tokens)
+● Agent(Censo do matcher de marcos)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
 ❯ aval Ronald: EXECUTAR ATE O FIM, sem devolver turno. Fila 1, nesta ordem: R2..R5 (aval-de-criterio: so campos da cura, resto 0, TXT 0, 07/08 0, oraculo sem divergencia nova) ->
   dia impar: EM ABERTO + "falta: <marco>" + "parcial provado: X h" rotulado parcial; dinheiro segue BUG-144; nenhuma lei nova -> E5 decidida: o FechamentoMensal se recalcula por
@@ -117,11 +109,19 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   topo = soma das linhas + O51b lendo o mesmo gravado -> selo tela==PDF==fechamento==TXT no universo do TXT + E6 rodada 4 -> export pronto para meu !. Em paralelo, subagente SO
   LEITURA: censo do matcher (R1, col920 12:21 -> marco 12:00). Instalar hook de Stop: bloqueia encerrar turno se fila 1 tem item e o topo do RELATO nao comeca com "PAREI:"; teto
   5 bloqueios sem commit novo. PAREI so em pergunta de LEI. Nenhuma pergunta de desenho: decidir pela lei existente e registrar no RELATO. !
-  ctrl+x ctrl+s to send now
+
+● Censo do matcher no ar. Commito o hook com as seis provas e ataco R2:
+
+● Running 1 shell command…
+
+· Enchanting… (9m 57s · ↓ 14.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  paste again to expand
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Dumping col920 ata and batidas                                                                                                       5m 24s · ↓ 89.4k tokens
   ⧉  index
 ```
