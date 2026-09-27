@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:40:46.**
+**Medido em 27/09/2026 14:45:58.**
 
 | | |
 |---|---|
-| `HEAD` local | `acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao` |
+| `HEAD` local | `c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
 acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
 0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
 b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
-73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -88,29 +87,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  de hoje paga essas horas por pareamento velho. Pela doutrina a leitura nova está certa (célula soberana; turno sem saída é cobrança, não pagamento) e por isso o código sobe —
-  mas tirar 283 h de 14 pessoas não está em nenhum aval. Virou O94, ! no topo do PENDENTES.
-
-  Dois selos da casa morderam a minha própria cura no caminho (.date() de batida fora do pareador, e relógio solto no selo novo) — os dois tinham razão, e a correção do primeiro
-  deixou a guarda mais estrita, não menos.
-
-✻ Baked for 37m 47s · done 2:31 PM · 2 shells still running
-
-❯ SEGURA o apply da O94. O oraculo independente (E6) contradiz a ata nesses colabs: col297 tem 180 h em pares COMPLETOS de batida e o gravado ja paga 125 h; col727 154 h contra
-  79 h -- a O94 tiraria mais 61 h e 38 h. Antes de qualquer apply: para os 14, dia a dia, a batida que a ata chama de entrada do plantao seguinte -- a que distancia ela esta do
-  marco de ENTRADA que a ata atribuiu e do marco de SAIDA do turno anterior? Se estiver mais perto da saida, a ata errou o papel (mesma familia da guarda 1 da O68b, col382) e a
-  cura e na ata, nao no pagamento. O principio "turno aberto nao paga, vira cobranca" vale so para turno SEM saida real. Nenhuma lei nova.
-
-● Ordem recebida, e o apply já está segurado. O oráculo contra a ata é o teste certo — e é a mesma família da guarda 1 (col382). Meço as duas distâncias, dia a dia, nos 14:
-
-  Ran 1 shell command
-
-● Medido, e o resultado não confirma a hipótese — é outra coisa, e mais útil: nos 13 casos "mais perto da saída" a coluna do marco de entrada é -, isto é a ata não reivindica
-  aquela batida. Onde a ata reivindica (36 casos), ela está a 0–20 min do marco hi: ali ela está certa. Vou ver se há saída real na sequência:
-
-  Ran 1 shell command
-
-● Agora a causa aparece, e é a mesma família da órfã — não do pagamento. Veja o col297: 22:59 a ata chama de E, 01/09 06:56 a ata chama de S (gravado diz E — inversão da O65), e
   no meio ficam 02:57E 03:57S, que a ata não reivindica. Esse par do miolo tem o tipo gravado invertido, então _marca_intra_duracao não o reconhece e o pareador o lê como borda: o
   turno de 8 h fica aberto. Testo a cura:
 
@@ -119,13 +95,36 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ● Recuperação grande: col297 vai de 106,28 para 127,48 h (acima dos 125 h que o gravado paga, coerente com o seu oráculo), col922 de 137,56 para 158,17 h, e col51/col904/col85
   idênticos. Rodo os selos afetados — um deles afirmava o contrário e tem de ser reescrito pelo resultado, não pelo mapa:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✽ Twisting… (7m 39s · ↓ 13.6k tokens)
+● A suíte final ainda ocupa o banco de teste (um run por vez). Vejo o veredito dela:
+
+  Read 1 file
+
+● Preparo as duas correções de selo enquanto a suíte fecha — a que afirmava sobre o mapa passa a afirmar sobre o resultado, e entra o caso do col297:
+
+  Ran 1 shell command
+
+● Background command "Aguardar o veredito da suite final" completed (exit code 0)
+
+  Searched for 1 pattern, ran 1 shell command
+
+● A falha é artefato meu: editei a árvore enquanto a suíte rodava, e inspect.getsource passou a ler linhas deslocadas — a lei da casa ("arquivo de fatia só vai para a árvore no
+  ato do commit") existe por isso. Rodo os selos afetados com a árvore parada:
+
+  Ran 1 shell command
+
+● 40 verdes, incluindo o RED do col297 e o contrato que havia falhado. Commito e meço a L-007 de novo — é o número que responde a sua ordem:
+
+● Remedir a L-007 depois da cura do miolo
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; cp
+     $SC/probe_l007.py app/probe_l007_tmp.py; timeout 2400 bin/sombra.sh --com-a-sombra l007b -- docker run --rm --cpuset-cpus "$T…
+
+✻ Twisting… (12m 51s · ↓ 23.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
