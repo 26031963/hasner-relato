@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:192 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:245 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:36:31.**
+**Medido em 27/09/2026 03:41:39.**
 
 | | |
 |---|---|
@@ -88,39 +88,39 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● RED → GREEN, e o selo da zona 5 (o caso de 14/09 com 250 min) e o contrato do teto temporal seguem verdes. Agora o ensaio em prod dos dois campos — O73 + L-084 corrigida, que é
+  exatamente o par que a dependência travava:
 
   Ran 1 shell command
 
-● Meu fixture não reproduziu: o dia com pausa virou um período de 420 min com atraso 0 — o motor tratou a pausa como intrajornada, corretamente. Então minha hipótese da O73 está
-  sem prova. Tiro o teste da árvore e vou medir o col81 real antes de afirmar:
+● 19 colabs, horas_atraso +5,95 h e horas_saida_antecipada +221,21 h — ou seja ~11,6 h de desconto por pessoa. O critério do MODO 24H diz "aplica", mas o próprio motor avisa
+  (:2049) que a L-084 mascarava esse efeito, e a O88 mostrou que a ata assigna a batida mais próxima e órfana o resto. Não desconto 221 h de 19 pessoas sem saber o que são. Meço
+  quem são:
 
   Ran 1 shell command
 
-● Hipótese CONFIRMADA com dado real. O col81 bate 15:56 E · 17:24 S · 18:27 E · 23:55 S — pausa de 63 min, que é maior que os 60 declarados e por isso parte o dia em dois blocos
-  —, e o segundo bloco leva 147,5 min de atraso contra o marco das 16:00. Meu fixture usava pausa de exatos 60 min, que o motor absorve como intrajornada. Corrijo para a forma
-  real:
+● Agora está claro, e confirma a cautela. Os piores casos são absurdos dimensionais:
 
-  Ran 1 shell command
+  ┌────────┬─────────────┬───────┬────────────────────┬────────────────────────────┐
+  │ colab  │  cadastro   │  dia  │     trabalhou      │ "saída antecipada" cobrada │
+  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
+  │ col820 │ 19:00–07:00 │ 01/09 │ 16:19→18:38 = 2h19 │ 741 min = 12h21            │
+  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
+  │ col769 │ 10:00–22:00 │ 18/09 │ 07:02→10:12 = 3h10 │ 708 min = 11h48            │
+  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
+  │ col872 │ 07:00–19:00 │ 07/09 │ 09:00→12:08 = 3h08 │ 492 min                    │
+  └────────┴─────────────┴───────┴────────────────────┴────────────────────────────┘
 
-● RED em dois lados: a volta da pausa leva 147 min de atraso e a ida para a pausa leva 396 min de saída antecipada. Vejo o texto dos alertas antes de curar, porque a tela os lê:
+  Nesses dias a entrada está a 161–178 min do marco — logo abaixo dos 180 da L-084 — e a saída a 700+ min. Uma ponta escapa por minutos e o dia inteiro é cobrado:
 
-  Searched for 1 pattern, ran 1 shell command
+● Publicar o PAREI com a tabela e a O73 curada
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## PAREI o apply da L-084 no gravado: ele descontaria **286 h** de 24 pessoas, e ha absurdo dimensional
+     `PAREI: pergunta de LEI -- a forma do corte de 3 h | espera uma frase sua. NAO esperei ocioso:…
 
-● A cura não pegou — provavelmente o bloco da zona 5 não é do motor que atende este template. Confiro qual classe é qual:
-
-  Searched for 1 pattern
-
-● A zona 5 vive em MotorTurnoPartido, mas o corte (b) desta noite manda este template para um motor contínuo (o vão não o qualifica como partido) — então minha cura ficou em
-  código morto para o caso. O sítio certo é onde os períodos nascem. Localizo:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O comentário em :1211 confirma o desenho: as subclasses chamam super() primeiro e depois mutam o mesmo resultado. Então o sítio universal é o fim de MotorBase.calcular_mes — e a
-  zona 5 continua podendo recalcular depois. Movo a cura para lá, num sítio só:
-
-● Running 1 shell command…
-
-✢ Transmogrifying… (42m 13s · ↓ 70.4k tokens)
+✶ Transmogrifying… (47m 21s · ↓ 80.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
