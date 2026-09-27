@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:129 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:05:45.**
+**Medido em 27/09/2026 02:07:34.**
 
 | | |
 |---|---|
-| `HEAD` local | `88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437` |
+| `HEAD` local | `f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,25 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome
 88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437
 3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D
 61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
 d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna
-fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA
 ```
 
 ## `git status --short`
 
 ```
- M app/core/espelho_verdade.py
- M app/docs/CORTES.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/escala/models.py
- M app/escala/tests/test_contador_vigencia_impossivel.py
-?? app/escala/migrations/0041_ec_vigencia_not_valid.py
-?? app/escala/tests/_vigencia_sem_guarda.py
-?? app/escala/tests/test_vigencia_constraint_e_o_juiz.py
 ?? esteira.pausada
 ```
 
@@ -94,17 +85,6 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Enquanto a suíte roda, registro o corte e fecho a porta no placar — sem apagar o passivo:
-
-  Read 1 file, ran 1 shell command
-
-❯ Ronald vai dormir. Ordem da noite, sem esperar resposta: (1) se o DEPLOY JA das sete curas ainda nao saiu, sai agora, com o smoke no worker servido; (2) segue a fila do MODO
-  24H (classe C, D, B da E6, O68b, O66, O73, O51b), aplicando pelo criterio e separando o resto; (3) pergunta de LEI ou item da L-009: registra no topo do RELATO e SEGUE para o
-  proximo item, nao espera; (4) a cada item: commit, push ate pousar, DEPLOY JA quando o dinheiro der zero, RELATO publicado. De manha eu leio o RELATO. Nenhuma lei nova.
-
 ● Ordem da noite registrada. O (1) está feito — deploy às 01:53 com smoke verde no worker servido. Sigo sozinho no resto. Registro o prompt e vejo a suíte:
 
   Ran 1 shell command
@@ -124,9 +104,20 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 ● Isso mata minha hipótese das fatias e revela algo mais simples e mais grave: o col882 tem UM vínculo, EC1059, que termina em 06/09 — a janela vai até 20/09. E o col515 tem
   quatro, incluindo o EC1220 com vigência impossível (está na minha lista dos 10 livres). Testo a aritmética decisiva: as 77 h estão fora da vigência?
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Unfurling… (50m 26s · ↓ 163.2k tokens)
+● Medição honesta: o buraco de vínculo explica 159,25 h de 376,44 h (42%) da classe C, concentradas em 5 dos 32 colabs — e 0% das classes D e B. Vejo as linhas da C:
+
+  Ran 1 shell command
+
+● Prova completa, não correlação: nos 5 colabs o fora_h é idêntico ao falta_h (col882 77,05 h em 7 dias; col515 39,06 em 4; col375 20,00 em 3; col743 12,05; col935 11,10). 159,25
+  h em 16 dias sem vínculo vigente. Publico e confiro a suíte:
+
+  Commitar o E1 e a O85, e publicar · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/escala/models.py app/escala/migrations/0041_ec_vigencia_not_valid.py app/escala/tests/test_vigencia_constraint_e_o_juiz.py
+     app/escala/tests/_vigencia_sem_guarda.py app/escala/tests/test_contador_vigencia_impossivel.py app/core/espelho_verdade.py app/docs…
+
+✽ Unfurling… (52m 15s · ↓ 170.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
