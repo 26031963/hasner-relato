@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:28:01.**
+**Medido em 27/09/2026 01:33:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro` |
+| `HEAD` local | `5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,17 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado
 2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro
 c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
 c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas, e o MODO 24H separando por colab
 4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min
-d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -78,40 +77,40 @@ d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O elo que faltava está no vivo: ponto/services/espelho.py:585 — vis_ini = min(piso_visual(colaborador, hoje), apur_ini) e a grade vai de vis_ini até hoje. Então os dias de ata
-  agregada de 07/08, embora fora da competência 09, estão dentro do intervalo do espelho: um único dia deles derruba o mês todo para o builder. Gravo a O81 medida e corrijo os
-  horários que eu escrevi 6 h adiantados:
+  Ran 3 shell commands
 
-  Searched for 1 pattern, read 1 file, ran 3 shell commands
-
-● E6 ficou 2/2 = 100% só porque tirei dois itens dela — isso é o [] de dois sentidos. A porta da E6 é "0 divergência não explicada", e eu medi 8,5% fora de 10 min, 473 dias de
-  batida ímpar e 235 colabs no builder. Declaro esses itens, que são da E6:
-
-  Ran 2 shell commands
-
-● RELATO voltou a publicar (76c1655, sem linha de retenção). Commito o placar verdadeiro e a O81 medida:
+● O carimbo revela: --refazer terminou 01:22 com DIVERGE=1, e --bloco ainda roda. Meço o que divergiu, em vez de supor:
 
   Ran 1 shell command
 
-● --refazer já terminou; --bloco está rodando. Commito enquanto isso:
+● A causa é estrutural, não acidente: bin/sombra.sh:203 faz [ "$dia" = "$HOJE" ] || div=$((div+1)) — o dump é o backup das 04:00 de 26/09, e o de hoje só nasce às 04:00. Entre
+  00:00 e 04:00 o portão do deploy é insatisfazível sem dump novo. Vejo o caminho incremental antes de escolher:
 
   Ran 1 shell command
 
-● Enquanto o bloco da sombra roda, preparo o smoke. Primeiro localizo o caso do selo de 14/09 (entrada 4h10 atrasada, saída no horário):
+● O incremental não recalcula a divergência (mantém SOMBRA_STATUS anterior), então o único caminho para diverge=0 é --refazer --dump-agora. O bloco que roda agora será anulado por
+  esse refazer — vejo o quanto falta antes de decidir:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● A docstring da L-084 ainda diz "OU" enquanto o código já diz _longe_e and _longe_s — doc mentindo sobre o código que vai ao ar. Curo junto:
-
-  Ran 2 shell commands
-
-● Escrevo o smoke agora, para rodar no instante em que o deploy pousar:
+● 17 de 62 comandos em 30 min — o bloco levaria ~1h40 e será anulado pelo refazer com dump novo. Mato o trabalho inútil e relanço pelo caminho certo:
 
   Ran 2 shell commands
 
-● Advising using Fable 5.1
+● Confirmado: container anônimo naughty_tharp com config.settings.sombra / db sombra — é o ensaio, não prod. Mato e relanço:
 
-✢ Unfurling… (12m 43s · ↓ 30.5k tokens)
+  Ran 1 shell command
+
+● Background command "Refazer o ensaio da sombra e rodar o bloco da manha" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Ensaio (rollback) rodando. Enquanto isso, o primeiro item da fila MODO 24H: remedir os 30 separados com o código curado, pela mesma porta, sem gravar:
+
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 2>&1 | tail -60
+
+✶ Unfurling… (18m 5s · ↓ 45.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
