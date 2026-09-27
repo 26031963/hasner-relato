@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:487 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:534 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:20:45.**
+**Medido em 27/09/2026 09:25:45.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ```
  M app/docs/CORTES.md
  M app/docs/LEIS.md
+ M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_l093_teto_pontualidade.py
 ?? esteira.pausada
@@ -90,39 +91,39 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-● Duas passam; a terceira me ensinou o alcance da lei: previsto=660 trabalhado=700 teto=0 — a pessoa chegou 20 min tarde e ficou 40 min além, então nada faltou e o corte zera o
-  desconto. Isso é a lei funcionando, não bug. Refaço o caso que morde com o intervalo batido, onde de fato falta tempo:
-
-  Ran 1 shell command
-
-● 3 OK, e o RED evidenciado é o dado real (col820: 741 min contra 139 trabalhados, medido antes da cura). Agora a remedição dos 24 com o teto, em ensaio:
-
-  Ran 1 shell command
-
-● O teto muda o quadro por inteiro: atraso −59,21 h (71 colabs) e antecipada +48,12 h (57) — a L-084 corrigida caiu de +221,21 h para +48,12 h, porque o desconto passou a parar no
-  que faltou. Confiro o RED que você nomeou antes de aplicar:
-
-  Ran 1 shell command
-
-● O RED está curado, e pela aritmética exata: col820 01/09 trabalhou 139 min de 660 previstos, então o teto é 521 e a antecipada ficou 521 — não mais 741. O col769 caiu de 35,42 h
-  para 0,08 h (o teto é por DIA, e ele trabalhou 655 de 660). Aplico:
-
-  Ran 1 shell command
-
-● Aplicado: 111 colabs, atraso −59,21 h e antecipada +48,12 h, nada mais move. Registro a lei e lanço a suíte:
-
-  Ran 1 shell command
-
-● Suíte rodando (não toco .py). Uso a janela para descobrir qual atributo o motor muta — assim a cópia da O89 nasce provada, rasa ou profunda:
-
-  Ran 1 shell command
-
 ● Achado: o motor grava _intra_dur = True na própria Batida — um marcador de "esta batida é intrajornada por duração". Na segunda passada ele o encontra já marcado e pareia
   diferente. Vejo quem escreve e quem lê:
 
-  Ver quem escreve e le o marcador
+  Searched for 1 pattern
 
-· Shimmying… (21m 23s · ↓ 35.4k tokens)
+● Isto muda a natureza do achado: colaboradores/services/calendario.py:73 já faz n.__dict__.pop('_intra_dur', None) — a casa encontrou este mesmo bug num outro leitor e o curou
+  localmente, deixando a origem de pé. É a LEI-AKITA 1 na veia. Leio a origem:
+
+  Ran 1 shell command
+
+● Agora a cura tem sítio claro: a fronteira do motor. Preparo em cópia enquanto a suíte roda:
+
+  Ran 1 shell command
+
+● A cópia tem de valer também nos dois calcular_mes das subclasses — elas usam batidas depois do super(). Completo em cópia:
+
+  Ran 1 shell command
+
+● Agora o selo, que afirma a lei que você enunciou ("o motor nunca altera os objetos que recebe") e por isso morde sem depender de fixture frágil:
+
+  Ran 1 shell command
+
+● Cura e selo da O89 prontos em cópia. Publico a L-093 aplicada enquanto a suíte fecha:
+
+● Publicar a L-093 e esperar a suite · 46s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## L-093 APLICADA em 09: o teto tirou **59,21 h** de atraso, e a L-084 corrigida entrou por **48,12 h**
+     O seu corte respondeu a pergunta que eu tinha deixado aberta, e escolheu a forma ARITMETICA. N… (45s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Shimmying… (26m 23s · ↓ 47.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
