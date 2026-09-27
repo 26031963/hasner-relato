@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:21:31.**
+**Medido em 27/09/2026 12:27:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 
 ```
  M app/ponto/management/commands/aplicar_09_corte_b.py
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -86,39 +87,39 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● A L-084 se aplica direto: o papel traz instante_marco e instante_luz, e chave. Ligo o mesmo corte neste leitor — é a pergunta da LEI-AKITA 4, qual leitor não migrou:
+
   Ran 1 shell command
 
-● Selo morde (com o X desligado o RED do col904 cai) e restaurado. Commito antes de medir, e leio as flags do aplicador:
+❯ Criterio para a regressao da alimentacao (L-084 reaproveitada, nenhuma lei nova): no dia em que o DNA NAO descreve o turno real (entrada E saida a mais de 3 h dos marcos, o
+  criterio da L-084), o papel da batida NAO vem da ata -- o dia fica exatamente como estava antes desta cura (zero regressao) e entra na lista CADASTRO x REALIDADE. Nos demais
+  dias, a alimentacao vale. Selo: col382 04/09 nao abre turno novo; os REDs col904 e col300 continuam fechando. Remede: turnos_abertos tem que CAIR em relacao a 620, nunca subir.
 
-  Committed a0fb3feb, ran 1 shell command
+● O critério do Ronald é exatamente o que acabei de escrever, mas a medição diz que a guarda não disparou (+151 igual). Vou ver o que o juiz devolve no dia do col382 antes de
+  supor:
 
-● Commitado. Agora a suíte completa em paralelo com a DIFF, e a DIFF com os campos que um plantão fechado necessariamente move (o conselho decisivo: horas_noturnas está dentro de
-  22h-05h por definição):
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● Achei a causa real, e não é a L-084: no col382 04/09 só o hi está aceso (a saída das 22:58 casou o marco de ENTRADA das 23:50, a 52 min). A ata descreve um ponto, não um turno —
+  e daí sai o papel E para uma saída. O mesmo no col900 (o hf apagado). O vão exige as duas bordas:
 
-● O conjunto já é declarado no arquivo, com justificativa escrita — não vou ampliá-lo por conta própria. Rodo a DIFF com o default e leio quem sobra:
+  Ran 1 shell command
 
-  Ran 6 shell commands
+● Os dois passos não compartilham escopo — as bordas ficaram no passo 1 e o vão é calculado no passo 2. Carrego o vão no _dias:
 
-● 163 aplicados (contra 7 antes: os campos estreitos estavam jogando a cura fora), 54 separados, 0 entrando/saindo do TXT. Mas o col904 e o col300 — os REDs que curei — caem em
-  horas_reflexo_dsr. Vou conferir se o reflexo é aritmética da HE (que está no item):
-
-  Searched for 1 pattern
-
-● Confirmado na fonte: reflexo = (HE_semana / dias_trabalhados) * dias_repouso (Súmula 172) — é aritmética da HE, que já está no item. É o mesmo erro que o arquivo documenta para
-  a HE 50%. Acrescento com a justificativa escrita, e a família 100% (a dobra, questão de LEI aberta) fica fora:
-
-● Acrescentar reflexo_dsr e remedir a DIFF com a PROVA salva · 42s
+● Corrigir o escopo do vao e remedir · 9s
   ⎿  $ python3 - <<'PYEOF'
      import py_compile
-     p='ponto/management/commands/aplicar_09_corte_b.py'; s=open(p).read()
-     velho = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna')"""
-     novo = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna',
-     # O REFLEXO DO DSR E ARITMETICA DA HE (… (42s · 2 lines)
+     p='ponto/turnos.py'; s=open(p).read()
+     velho = """ _dias[_d] = (_luzes, _reiv)
+     _todas_luzes |= _luzes"""
+     novo = """ _dias[_d] = (_luzes, _reiv, _minuto(_hi['instante_luz']), _minuto(_hf['instante_luz']))
+     _todas_luzes |= _luzes"""
+     assert s.count(velho)==1
+     s=s.r… (7s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hashing… (33m 26s · ↓ 61.9k tokens)
+✢ Hashing… (38m 56s · ↓ 75.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
