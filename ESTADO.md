@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:50:50.**
+**Medido em 27/09/2026 20:55:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG` |
+| `HEAD` local | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
 | `origin/main` | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
 bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
 f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
 0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
-eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
- M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -85,6 +82,9 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● 43 verdes. Suíte completa e a PROVA da R2 com as quatro condições — DIFF mais oráculo nos afetados:
+
   Ran 1 shell command
 
 › Message from @a9e3f4464a25b8c2d (ctrl+o to expand)
@@ -110,14 +110,11 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● O hook libera corretamente (o RELATO declara PAREI). Falta uma linha de PROVA — acho e curo:
 
-● Curar a prova e publicar · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p='app/docs/RELATO.md'; s=open(p).read()
-     velho = """ENTRAM/SAEM do TXT **0**, 07 e 08 **0 divergencias**, APLICADOS 200, SEPARADOS 34, CONDICAO_SAIDA_REAL 2
-     (col821 -7,76 h, col727 -6,03 h)."""
-     novo = """ENTRAM/SAEM do TXT **0**, 07 e 08 **0 dive…
+● Empurrar e subir a R2 · 2m 32s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 git push origin main 2>&1 | tail -4 && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -4 (2m 31s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Enchanting… (43m 46s · ↓ 43.0k tokens)
+✢ Enchanting… (47m 57s · ↓ 46.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
