@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:30:31.**
+**Medido em 27/09/2026 10:35:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
-| `origin/main` | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -85,7 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   E a O80 fechada pela sua regra de fila: a L-092 deixou de ser promessa — recalcular_fechamento_mes agora recusa antes de escrever, com porta que exige motivo e casca que traduz
   a recusa. 2.593 testes de ponto e folha OK.
 
@@ -106,22 +105,23 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● Esses três são do vigia da esteira, que carimba a própria hora — corretos, e dizem algo que vale uma linha: "trava A vazia" às 05:25, 06:25 e 07:30, enquanto eu trabalhava
   direto. Commito a correção e relanço o oráculo, como sua regra de fila manda:
 
-  Commitar a correcao, relancar o oraculo e empurrar · 5m 20s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     anc = '## Correcao de rotulo de HORA, a segunda da sessao'
-     bloco = """## O vigia da esteira alarma "trava A vazia" desde 05:25, e ele esta certo
-     `27/09 05:25`, `06:25` e `07:30`: **trava A (estrutural) vazia -- nenhuma fatia viva, nova ou p… (5m 19s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Envisioning… (7m 14s · ↓ 6.2k tokens)
+  Pushed to main
 
 ❯ corte Ronald: O91 NAO instala -- hoje escreveria zero e o campo situacao de afastado nao e fonte (o juiz afastado_hoje e); vira obra so se um vigia medir situacao divergente >
   0. !
-  ctrl+x ctrl+s to send now
+
+● Corte recebido. Ele pede uma medição antes de decidir se há obra: situação divergente. Meço as duas direções, porque o comando só mede uma:
+
+  Ran 1 shell command
+
+● afastado_hoje exige para — os dois efeitos, como o próprio reversor faz. Ajusto:
+
+  Running 1 shell command…
+
+· Envisioning… (12m 27s · ↓ 8.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
