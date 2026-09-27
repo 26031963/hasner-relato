@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:15:46.**
+**Medido em 27/09/2026 16:20:57.**
 
 | | |
 |---|---|
-| `HEAD` local | `27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto` |
+| `HEAD` local | `5c8d4240 [O95] rodape e placar do TICKETS antes do push` |
 | `origin/main` | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5c8d4240 [O95] rodape e placar do TICKETS antes do push
 27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
 59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
 037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
 e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
-c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
 ```
 
 ## `git status --short`
@@ -87,43 +87,43 @@ c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Os 11 vermelhos dizem uma lei que eu atropelei, e ela é clara nos nomes: "o intervalo do DNA não fecha turno", "durante o almoço o turno segue ABERTO", "só saída de intervalo
-  abre turno aberto". No momento VIVO do almoço não existe volta nem saída posterior — e meu guarda fechava o turno ali. É a doutrina do teto temporal: vale fato encerrado, não
-  instante. Reverto a absorção e movo a cura para um passo final:
+✻ Cooked for 0s · done 4:17 PM · 1 shell still running
+
+❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
+  E6 rodada 3. Depois publica o relato.
+
+● Login expired · Please run /login
+
+✻ Churned for 0s · done 4:18 PM · 1 shell still running
+
+❯ /login
+  ⎿  Login successful
+
+● Stopped watching 1 artifact watch (the signed-in account changed)
 
   Ran 1 shell command
 
-● A cura vai para um passo final sobre fato encerrado: turno que ficou aberto e cuja última batida é uma S absorvida, e há batida posterior (prova de que o dia acabou e a volta
-  nunca veio), fecha ali. No almoço vivo não há batida posterior, então nada muda:
+● Background command "Commitar e esperar a suite" completed (exit code 0)
+  ⎿  13 skills available
 
-  Ran 2 shell commands
+● Suíte verde: 8471 testes OK. Retomo a sequência — push:
 
-● Os 33 testes dos 11 arquivos que quebraram passam — a lei do almoço vivo está respeitada. Confiro os casos e os selos da O95 (que testavam a absorção, agora revertida):
-
-  Ran 1 shell command
-
-● A frota melhorou mais: col727 163,46 · col107 177,54 (acima do gravado) · col382 e col51 como esperado. Os selos da O95 falham porque testavam a absorção — reescrevo pelo passo
-  final, e entra o caso que os 11 selos me ensinaram:
-
-  Ran 1 shell command
-
-● 9 verdes. Suíte completa e DIFF de frota:
-
-  Ran 1 shell command
-
-● DIFF final: turnos_abertos 620 → 473 (−147), horas_trabalhadas +1.040,82 h, inconsistencias −228, TXT 0/0, 07/08 zero, APLICADOS 198, e a CONDICAO_SAIDA_REAL separa um só
-  (col727 −6,03 h). Commito e espero a suíte:
-
-  Commitar e esperar a suite · 8m 58s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py && git commit -F - <<'MSGEOF'
-     [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
-     LEI-AKITA: origem=ponto/turnos.py::_fechar_aberto_na_… (8m 57s · 4 lines)
+● Empurrar a O95 · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; git add app/docs/TICKETS.md
+     2>/dev/null; git diff --cached --quiet || git commit -q -F - <<'MSGEOF'
+     [O95] rodape e placar do TICKETS antes do push
+     O rodape gu… (4s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Slithering… (17m 7s · ↓ 16.7k tokens)
+* Puzzling… (2m 8s · ↓ 1.4k tokens)
+  ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
+
+❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
+  E6 rodada 3. Depois publica o relato.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
