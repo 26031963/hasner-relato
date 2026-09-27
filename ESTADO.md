@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:13:01.**
+**Medido em 27/09/2026 15:18:02.**
 
 | | |
 |---|---|
@@ -108,13 +108,13 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 
 ● 8465 testes OK. Empurro — atualizo o rodapé/placar antes, que é o que a régua cobra (estamos 6 commits à frente):
 
-● Atualizar rodape e placar e empurrar · 2m 58s
+● Atualizar rodape e placar e empurrar · 7m 58s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; git diff --stat
      app/docs/TICKETS.md | tail -2; git add app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
-     [O95] placar e rodape do TICKETS antes do push -- … (2m 56s · 9 lines)
+     [O95] placar e rodape do TICKETS antes do push -- … (7m 57s · 9 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Grooving… (3m 27s · ↓ 920 tokens)
+✻ Grooving… (8m 28s · ↓ 920 tokens)
 
 ❯ SEQUENCIA ATE O FIM (sem esperar entre passos): smoke -> remede a L-007 (quem perde hora total, colab a colab) -> O95 com DIFF de frota, explicando col51 e col382 antes de
   aplicar -> APPLY DA 09 segurado, pelo criterio do MODO 24H e com uma condicao a mais: NENHUM colab com saida real perde hora total (L-007 = 0 para esses; quem sobrar fica
