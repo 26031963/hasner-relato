@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:26:31.**
+**Medido em 27/09/2026 13:32:01.**
 
 | | |
 |---|---|
@@ -113,12 +113,12 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● O tag [RELATO-O68b] é lido como ID de fatia — mesma fricção de antes. Uso o tag da fatia que já tem linha:
 
-● Atualizar o rodape e empurrar · 1m 32s
+  Atualizar o rodape e empurrar · 7m 1s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2 && git add app/docs/TICKETS.md && git commit --amend --no-edit -q &&
-     bin/regua_tickets.sh 2>&1 | tail -3 && timeout 2400 git push origin main 2>&1 | tail -10 (1m 29s · 5 lines)
+     bin/regua_tickets.sh 2>&1 | tail -3 && timeout 2400 git push origin main 2>&1 | tail -10 (6m 59s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Warping… (16m 29s · ↓ 14.2k tokens)
+✢ Warping… (21m 58s · ↓ 14.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
