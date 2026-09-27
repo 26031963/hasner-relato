@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:25:45.**
+**Medido em 27/09/2026 09:30:46.**
 
 | | |
 |---|---|
@@ -91,11 +91,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-● Achado: o motor grava _intra_dur = True na própria Batida — um marcador de "esta batida é intrajornada por duração". Na segunda passada ele o encontra já marcado e pareia
-  diferente. Vejo quem escreve e quem lê:
-
-  Searched for 1 pattern
-
 ● Isto muda a natureza do achado: colaboradores/services/calendario.py:73 já faz n.__dict__.pop('_intra_dur', None) — a casa encontrou este mesmo bug num outro leitor e o curou
   localmente, deixando a origem de pé. É a LEI-AKITA 1 na veia. Leio a origem:
 
@@ -115,18 +110,23 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● Cura e selo da O89 prontos em cópia. Publico a L-093 aplicada enquanto a suíte fecha:
 
-● Publicar a L-093 e esperar a suite · 46s
+● Publicar a L-093 e esperar a suite · 5m 47s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      ## L-093 APLICADA em 09: o teto tirou **59,21 h** de atraso, e a L-084 corrigida entrou por **48,12 h**
-     O seu corte respondeu a pergunta que eu tinha deixado aberta, e escolheu a forma ARITMETICA. N… (45s · 2 lines)
+     O seu corte respondeu a pergunta que eu tinha deixado aberta, e escolheu a forma ARITMETICA. N… (5m 46s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Shimmying… (26m 23s · ↓ 47.5k tokens)
+✻ Shimmying… (31m 24s · ↓ 47.5k tokens)
+
+❯ corte Ronald: 07/2026 e 08/2026 foram calculadas e pagas A MAO, fora do sistema -- NAO existe acerto retroativo. Cancelar toda Pauta DP e toda lista de ajuste de 07 e 08 (E3
+  metade, O61, O69 07/08 e qualquer outra), com o motivo "competencia paga fora do sistema"; o gravado de 07 e 08 segue intocado (L-092) como historico. A lista de ajuste ao DP e
+  so da 09. !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
