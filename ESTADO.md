@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:36:31.**
+**Medido em 27/09/2026 16:42:01.**
 
 | | |
 |---|---|
@@ -88,42 +88,42 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 
 ```
 
-● Aplicado. Confiro o gravado em prod e a linha da condição nova:
-
-  Ran 1 shell command
-
-❯ CRITERIO DE EXPORT DA 09 (depois do apply): rodar a E6 SO sobre os colabs que entram no TXT (classificar_export status=entra): quantos tem QUALQUER dia com batidas completas em
-  que espelho e oraculo divergem mais de 10 min, com a lista e o valor. Meta: zero. Quem divergir sai do TXT para a lista de ajuste ate a causa ter nome. O numero vai no topo do
-  RELATO como "09 exportavel: N de M colabs certificados". Nenhuma lei nova.
-
-● APPLY DA 09 FEITO — o gravado em prod bate exatamente com a medição: turnos_abertos 620 → 473, horas_trabalhadas +1.040,82 h, inconsistencias −228, snapshot de 468 KB em
-  logs/apply_o95_09_antes.json. Registro e vejo se o oráculo sobreviveu ao wipe do /tmp:
-
-  Ran 1 shell command
-
-● O oráculo sobreviveu. Leio sua interface para construir o critério de export em cima dele:
-
-  Ran 1 shell command
-
-● O oráculo tem tudo que preciso. Vejo os modelos do "canal vivo" para o item 2 da E6:
-
-  Ran 1 shell command
-
 ● Escrevo a medição que serve às duas ordens — critério de export e os dois itens novos da E6:
 
-● Medir o critério de export e os dois itens da E6 · 1m 1s
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/e6_export.py <<'PYEOF'
-     # E6 pela divisao SISTEMA x OPERACAO + criterio de export da 09. READ-ONLY.
+  Ran 1 shell command
+
+❯ DEPOIS DO APPLY DA 09 -- a regua da supervisora: E6 rodada 3 na FROTA INTEIRA (nao so no TXT), com dois numeros no topo do RELATO: (1) % de dias com batidas COMPLETAS em que
+  espelho e oraculo batem (meta perto de 100%; cada divergencia listada com causa); (2) % de dias com batidas IMPARES que aparecem no espelho como "em aberto" com o que falta,
+  nunca com numero (meta 100%). Depois sorteia 10 colabs (5 no TXT, 5 retidos) e publica a lista para eu conferir os cartoes a mao. Nenhuma lei nova.
+
+● E6 medida. 09 exportável: 189 de 203 colabs certificados (14 divergem). Item 1 = 91,4% de 7.521 dias; item 2 pela sua nova definição preciso remedir — se o dia ímpar aparece em
+  aberto sem número. Vejo o que o espelho expõe num dia ímpar:
+
+  Ran 1 shell command
+
+● O espelho expõe o que preciso, e o primeiro dia ímpar que olhei já é uma violação do seu critério: col830 06/09 mostra minutos_realizados=882 (14h42) com duas batidas E e
+  nenhuma saída — número onde devia estar "em aberto". Meço a frota inteira pelos seus dois números e sorteio os 10:
+
+  E6 rodada 3 na frota inteira com os dois numeros e o sorteio · 2m 28s
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/e6_r3.py <<'PYEOF'
+     # E6 RODADA 3 na FROTA INTEIRA, pelos dois numeros do corte de 27/09 ~17:xx. READ-ONLY.
      from django_tenants.utils import schema_context
      from django.apps import apps
-     from django.u… (1m 0s)
+     from … (2m 27s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Puzzling… (17m 42s · ↓ 10.4k tokens)
+✢ Puzzling… (23m 12s · ↓ 17.1k tokens)
   ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
+
+❯ ACELERAR ATE 23:59: (1) A E5 fatia 1 FICA hoje, depois da E6 rodada 3: a 09 lida da celula, o fechamento como LEITURA (espelho e folha passam a ser a mesma conta, sem gravado
+  envelhecendo); DIFF contra o gravado de agora (que acabou de ser aplicado), criterio do MODO 24H, e o ! meu antes de virar a chave. (2) As AUTOPSIAS (divergencias da E6 e
+  classe C residual) vao para SUBAGENTES em paralelo, SO LEITURA, cada um com um lote de colabs, devolvendo causa + arquivo:linha; a sessao principal so cura e aplica, uma de
+  cada vez. (3) Fila da sessao principal: criterio de export da 09 -> E6 rodada 3 na frota (os dois numeros) -> curas do que as autopsias nomearem -> E5 fatia 1 -> sorteio dos 10
+  para a minha conferencia. (4) MUTIRAO DE RESPOSTAS em DRY em paralelo (so leitura); envio so com o meu !. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
