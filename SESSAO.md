@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 20:38:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **440**.
+**Medido em 27/09/2026 20:44:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **441**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:42:21 | Bash | Condicao (d) da R2: oraculo nos afetados | `cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py shell --command "exec(open('/tmp/o96_oraculo.py').read())" 2>&1 \| grep -E 'colabs AFETADOS\|dias comparados\|CUROU\|DIVERGENCIA NOVA\|^ col' \| head -14` |
 | 20:37:03 | Bash | Suite e DIFF da R2 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test $LAB --settings=config.settin ...` |
 | 20:36:17 | Bash | Rodar a familia com o caso corrigido | `python3 - <<'PYEOF' p='ponto/tests/test_o68b_papel_da_ata_no_motor.py'; s=open(p).read() velho = ''' def test_MORDE_perna_solta_LONGE_de_luz_de_intervalo_segue_descartando(self): """A porta continua estreita. Sem NENHUMA luz de intervalo acesa, a batida que sobra nao tem como ser chamada de pausa -- e o dia segue sem papel, como antes da cura.""" cel = _cel(self.D15, {'hi': '08:00', 'hii': None, ' ...` |
 | 20:35:25 | Bash | Selo da R2 e rodar a familia | `cat >> ponto/tests/test_o68b_papel_da_ata_no_motor.py <<'PYEOF' class PernaSoltaDaPausaTest(TestCase): """R2 -- a pausa pode ter UMA perna acesa, e o dia nao se descarta por isso. A guarda do miolo exigia o par INTEIRO em `_resto`. Quando UMA das duas batidas da pausa acendeu o seu marco e a outra nao, o dia nao emitia papel nenhum, o pareador caia no `tipo` GRAVADO -- que nessas frotas tem a ulti ...` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:38:49.**
+**Medido em 27/09/2026 20:44:01.**
 
 | | |
 |---|---|
@@ -85,14 +85,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
 
-● O dia 15/09 continua fora do mapa. Replico a função passo a passo para achar qual guarda ainda dispara:
-
-  Ran 1 shell command
-
-● Todas as guardas passam na replicação, então o código no arquivo não está fazendo o que eu li. Olho a região real:
-
-  Ran 1 shell command
-
 ● Achei: a linha 51 usa _acesos, que é variável do passo 1 — no passo 2 ela guarda o último dia iterado, não o dia corrente. É o mesmo erro de escopo do vão, que já me pegou
   antes. Carrego as luzes de intervalo no _dias:
 
@@ -116,7 +108,15 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Agent "Censo do matcher de marcos" finished · 25m 40s
 
-✶ Enchanting… (31m 45s · ↓ 35.0k tokens)
+● O censo do matcher fecha a R1 com veredito medido: não justifica mexer na grade (dano 24,9–53,1 h contra +115,1 h de benefício do mesmo mecanismo, 1:2,2), e a distância não
+  separa os grupos (medianas 60/60/60) — corte por distância está excluído por medição. Rodo a condição (d) da R2:
+
+● Condicao (d) da R2: oraculo nos afetados · 1m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py shell --command "exec(open('/tmp/o96_oraculo.py').read())" 2>&1 | grep -E 'colabs
+     AFETADOS|dias comparados|CUROU|DIVERGENCIA NOVA|^ col' | head -14 (1m 34s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Enchanting… (36m 57s · ↓ 35.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
