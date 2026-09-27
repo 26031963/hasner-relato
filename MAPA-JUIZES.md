@@ -21,6 +21,7 @@ esperam migrar -- a lista so encolhe).
 | ha turno aberto vivo agora? | `ponto/turnos.py::turno_aberto_de` |
 | o tipo gravado deve virar (flip)? | `ponto/turnos.py::decidir_tipo_estrito` |
 | o turno previsto cruza a meia-noite? | `escala/servico_jornada.py::turno_cruza_meia_noite` |
+| este turno tem dois blocos (e partido)? | `escala/servico_jornada.py::eh_turno_partido` |
 | o vao entre batidas foi intervalo? | `ponto/turnos.py::intervalos_do_turno` |
 | quais sao os marcos previstos do dia? | `escala/models.py::EscalaColaborador.marcos_do_dia` |
 | que marco previsto a batida ocupa? | `escala/utils.py::_match_marcos` |

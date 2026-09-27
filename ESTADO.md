@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:857 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:68 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:38:01.**
+**Medido em 27/09/2026 12:43:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,10 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## `git status --short`
 
 ```
+ M app/docs/MAPA-JUIZES.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -85,44 +89,44 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Um único run no banco de teste. Enquanto a suíte roda, a DIFF na sombra (banco lateral, não colide):
 
   Ran 1 shell command
 
-● turnos_abertos 620 → 609 (−11), horas_trabalhadas +322,82 h, inconsistencias −59. Mas horas_folga_trabalhada −281,46 h é grande e estava igual na rodada anterior — suspeito de
-  deriva, não da minha cura. Meço a linha de base numa cópia do HEAD antes dela (a lição do AVAL-DE-CRITERIO):
+● Background command "Esperar o veredito da suite" completed (exit code 0)
 
-  Read 1 file, ran 2 shell commands
+  Read 1 file
 
-● A isolação contra a base separa a minha cura da deriva (cures já no ar e não aplicadas):
+● O OK: 31 no log não é o veredito do Django (é de um teste que chama selo de host) — meu grep casou cedo. Confiro de verdade:
 
-  ┌────────────────────────┬───────────────┬────────────┬───────────┐
-  │         campo          │ deriva (base) │ com a cura │ só a cura │
-  ├────────────────────────┼───────────────┼────────────┼───────────┤
-  │ horas_trabalhadas      │ +281,71       │ +322,82    │ +41,11    │
-  ├────────────────────────┼───────────────┼────────────┼───────────┤
-  │ horas_folga_trabalhada │ −279,20       │ −281,46    │ −2,26     │
-  ├────────────────────────┼───────────────┼────────────┼───────────┤
-  │ turnos_abertos         │ −13           │ −11        │ +2        │
-  ├────────────────────────┼───────────────┼────────────┼───────────┤
-  │ inconsistencias        │ −48           │ −59        │ −11       │
-  └────────────────────────┴───────────────┴────────────┴───────────┘
+  Ran 2 shell commands
 
-  O −281 h de folga trabalhada era deriva, não minha. Commito e confiro a suíte:
+● Enquanto a suíte fecha: dois selos de host estão VERMELHOS com cura nomeada e bloqueiam o push. Vou ver se são meus:
 
-  Committed 42a8f25a, ran 1 shell command
+  Ran 1 shell command
 
-● Suíte ainda rodando. Uso o tempo para o RELATO e o TICKETS, que é o que o Ronald lê:
+● É meu, do commit de hoje c060e70a. Curo os dois (linha no mapa + hook reinstalado):
 
-● Ler o topo do RELATO
-  ⎿  $ sed -n '1,40p' docs/RELATO.md
+  Ran 2 shell commands
 
-✢ Hashing… (49m 56s · ↓ 98.8k tokens)
+● Os dois verdes. Os outros dois vermelhos são anteriores e são fila do Ronald (Pauta de cortes; sorteio do fabricante, que está desligado por corte). Vejo a suíte:
+
+  Ran 1 shell command
+
+● Enquanto roda, respondo a segunda metade da pista — se a cura fecha a O62 também:
+
+● Registrar a resposta da O62 no RELATO
+  ⎿  $ grep -c "def periodos_do_dia\|'intervalo'" ponto/turnos.py; grep -n "r.get('intervalo')\|\['intervalo'\]" ponto/turnos.py | head -3; python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     anc = '## FILA depois desta cura'
+     assert s.count(anc)==1
+     add = '''## A segunda metade da sua pista: a O62 *…
+
+✢ Hashing… (55m 26s · ↓ 109.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
