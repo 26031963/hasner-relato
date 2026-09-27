@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 09:30:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.9 MB). Acoes na janela: **739**.
+**Medido em 27/09/2026 09:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.0 MB). Acoes na janela: **740**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:35:41 | Bash | Inverter a ordem e rodar o selo de performance | `python3 - <<'PYEOF' import py_compile p='ponto/motor_calculo_v2.py'; s=open(p).read() velho = """ for dia, ps in por_dia.items(): prev = self._previsto_do_dia(dia) if prev is None: continue # sem juiz do previsto: nao ha teto a aplicar soma = sum(float(p.minutos_atraso or 0) + float(p.minutos_saida_antecipada or 0) for p in ps) if soma <= 0: continue trab = sum(float(p.minutos_trabalhados or 0) fo ...` |
 | 09:24:58 | Bash | Publicar a L-093 e esperar a suite | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## L-093 APLICADA em 09: o teto tirou **59,21 h** de atraso, e a L-084 corrigida entrou por **48,12 h** O seu corte respondeu a pergunta que eu tinha deixado aberta, e escolheu a forma ARITMETICA. Nao e um segundo teto de distancia concorrendo com a L-084: a L-084 decide **se** o dia se julga pelo ma ...` |
 | 09:24:17 | Bash | Escrever o selo da O89 em copia | `cat > /tmp/test_o89_motor_nao_escreve_na_batida.py <<'PYEOF' # -*- coding: utf-8 -*- """O89 -- o motor nunca altera os objetos que recebe. aval Ronald 27/09 06:0x: *"O89 e cura, nao desenho: o motor nunca altera os objetos que recebe (trabalha em copia); selo: mesma entrada rodada 3 vezes = mesmo resultado, na amostra dos 76."* A CAUSA, MEDIDA em tres rodadas na sombra (col375, entrada identica):  ...` |
 | 09:23:02 | Bash | Completar a copia nas duas subclasses | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import re, py_compile src = open('/tmp/motor_o89.py', encoding='utf-8').read() alvos = [ (""" def calcular_mes(self, batidas, data_ini, data_fim, tipo_escala=None, escala_colaborador=None, colaborador_id=None): \"\"\" S108.2: Override agrega HE por dia (soma dos periodos), Sumula 146""", 'MotorTurnoPartido'), (""" def calcular_mes(self, batidas, d ...` |
