@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:01:31.**
+**Medido em 27/09/2026 19:07:01.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/chamados/services/cobranca.py
 ?? esteira.pausada
 ```
 
@@ -82,24 +83,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ aval Ronald: (1) DIA IMPAR: as duas leis valem. BUG-144 (14/09) manda no DINHEIRO (pares fechados contam, nunca 0 pela E solta). O corte de 27/09 manda no ESTADO da tela: dia
-  impar = "EM ABERTO -- falta: <marco>" + "parcial provado: X h" rotulado como parcial; topo = soma das linhas inclusive parciais. Nenhuma lei nova. (2) O81: re-lavrar ata
-  exportada VETADO (L-092, HX-REGEN-NAO-TOCA-EXPORTADO); cura = o MUDA de leitura ja cortado; muda 0 dos 644 -> vai para DEPOIS da E5. (3) AVAL-DE-CRITERIO para o reapply da O96
-  e para cada R1..R5: aplica SEM nova parada se (a) o DIFF contra o GRAVADO move so os campos da propria cura, (b) todo outro campo de todo colab = 0, (c) ENTRAM/SAEM do TXT = 0
-  e 07/08 = 0, (d) oraculo e6 nos colabs afetados sem divergencia nova. Violou qualquer um = PAREI com a tabela e segue o proximo item. (4) MUTIRAO: enviar aos 158 com push,
-  prazo 28/09 12h no texto; os 26 sem canal vao para a lista da SUPERVISORA. (5) Turno nao termina com fila 1 nao vazia: seguir AGORA O96 -> R1..R5 -> impar -> E5 -> selo + E6
-  rodada 4 -> export para meu !. !
-
-● DIFF medido, e a contribuição da O96 aparece isolada: horas_trabalhadas +1.019,08 contra os +1.040,82 já aplicados = −21,74 h de pausa que deixa de ser paga. Agora a condição
-  (d) — oráculo nos afetados, sem divergência nova:
-
-  Ran 1 shell command
-
-● Condição (d) verde: divergência nova = 0, e a O96 curou 28 dias que antes divergiam. As quatro condições do AVAL-DE-CRITERIO estão satisfeitas — aplico:
-
-  Ran 1 shell command
-
 ● Aplicado: 7 colabs, horas_trabalhadas 71.095,78 → 71.077,02 (−18,76 h de pausa que era paga) e intra −15,93. A CONDICAO_SAIDA_REAL separou 3. Agora R1 — o papel sobrescrevendo
   gravado coerente. A causa é a ata escolher bordas erradas e deixar batida real fora do vão:
 
@@ -107,15 +90,33 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● A cura R1 falha nas duas direções — não pega o col920 e quebra o col922 (404 → 1015). Reverto: meia-correção é pior que nenhuma.
 
-● Reverter R1 e confirmar a base
-  ⎿  $ cd /home/ronald/saas-hasner && git checkout -- app/ponto/turnos.py && git status --short | head -3; docker exec saas_core python manage.py tenant_command shell
-     --schema=juliani --command "
-     import datetime as d
-     from colaboradores.models import Colaborador
-     from ponto.turnos import realizado_do_dia
-     …
+  Ran 1 shell command
 
-✢ Crunching… (8m 21s · ↓ 11.5k tokens · thinking)
+● Base restaurada (col922 404, col51 485, col81 423). O col904 a 670 não é divergência: é o intervalo declarado saindo pela lei de 14/09, e o oráculo não tem esse conceito. R1
+  fica medida e a cura REJEITADA pela medição. Agora o envio do mutirão, que é ! com prazo no texto — vejo se o prazo é parametrizável:
+
+  Ran 1 shell command
+
+● HORAS_DE_PRAZO = 48 é constante declarada, e agora + 48h dá 29/09 ~23h, não 28/09 12h. Não mudo a lei: passo o prazo só deste lote, com o default intacto:
+
+  Ran 1 shell command
+
+● O prazo é o mesmo campo do relógio de SLA que leva o caso à supervisão — então encurtá-lo de 48h para ~12h é o seu corte, não parâmetro meu. Obedeço, com o default intacto e a
+  mudança local ao lote:
+
+  Ran 1 shell command
+
+● Primeiro entregue (col909, canal fcm, prazo 28/09 12:00, e o juiz recontou os pendentes no ato). Envio os 157 restantes:
+
+● Enviar o mutirao aos 158 · 52s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     import datetime as d, collections
+     from django.utils import timezone as tz
+     from django.contrib.auth import get_user_model
+     from colaboradores.models import Colaborado… (51s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Crunching… (13m 51s · ↓ 18.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
