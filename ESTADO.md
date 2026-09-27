@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:564 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:600 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:47:01.**
+**Medido em 27/09/2026 09:47:59.**
 
 | | |
 |---|---|
-| `HEAD` local | `bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido` |
+| `HEAD` local | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
 | `origin/main` | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,26 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
 bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
 4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
 0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
 6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)
-6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc
 ```
 
 ## `git status --short`
 
 ```
- M PLANO_PISCADA.md
- M app/core/tests/test_selo_performance.py
- M app/docs/BACKLOG.md
- M app/docs/CORTES.md
- M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
-?? app/ponto/tests/test_l093_teto_pontualidade.py
-?? app/ponto/tests/test_o89_motor_nao_escreve_na_batida.py
 ?? esteira.pausada
 ```
 
@@ -95,7 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Decisão precisa. O corte alcança quatro coisas, e não as quinze que meu filtro largo pegou:
 
   Ran 1 shell command
@@ -125,9 +114,10 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● O DIFF da O89 é zero: colabs com QUALQUER campo movido: 0. A mutação era latente para a folha de 09 — ela mordia na passada órfã da O85, que foi onde eu a encontrei. Publico e
   empurro:
 
-● Running 1 shell command…
+  Publicar e empurrar · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -1; timeout 900 git push 2>&1 | tail -5
 
-· Shimmying… (47m 39s · ↓ 67.5k tokens)
+· Shimmying… (48m 37s · ↓ 71.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
