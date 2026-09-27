@@ -89,4 +89,4 @@ lista — ela e o que esta EM PE._
 | **O78** | SELO DA L-086 | **livre** |
 | **O79** | SELO DO VOCABULARIO falta x furo | **livre** |
 | **O80** | SELO DA L-092 | **livre, prioridade** |
-| **O81** | ATA-SEM-LAMPADA | **livre, junto da O70** |
+| **O81** | ATA-SEM-LAMPADA | espera corte |

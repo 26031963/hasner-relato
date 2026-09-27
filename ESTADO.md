@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:160 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:17:01.**
+**Medido em 27/09/2026 01:22:31.**
 
 | | |
 |---|---|
@@ -41,6 +34,7 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ```
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
@@ -83,44 +77,44 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  seria erro meu.
-
-  (c) O cartório LAVROU — todas as 3.986 estão julgadas, com veredito (3.543 concorde, 261 fato_sem_previsao, 142 nunca_bateu). Então a hipótese "o cartório não lavrou" está
-  descartada: ele lavrou o veredito e deixou a ata na forma agregada antiga, sem lâmpadas. É formato legado, não omissão — e a distribuição confirma: julho 1.396, agosto 2.582,
-  setembro zero, o que datam a mudança de formato.
-
-  E só 63 dos 3.986 têm trabalha=True — a esmagadora maioria é dia de folga, o que reduz muito o impacto em dinheiro, embora não o impacto na leitura do espelho.
-
-  Corrijo a O81 no BACKLOG com esses números: a cura não é "o cartório lavrar" (ele lavrou), é rejulgar com --forcar para reescrever a ata no formato novo, e o contador do
-  builder.
-
-✻ Churned for 1m 29s · done 1:14 AM · 1 shell still running
-
-● Background command "Emendar e empurrar o push52" completed (exit code 0)
+● Confirmado no vivo: ponto/services/espelho.py:352-361 — o try envolve grade_da_celula(colaborador, **data_ini, data_fim_mes**) do período INTEIRO, então um dia de ata agregada
+  derruba o espelho do mês todo para o builder. E isso desmente o meu próprio recorte: a competência 09 começa em 21/08, então dias de agosto estão DENTRO dela. Vou medir quantos
+  dos 3.986 caem na janela de 09:
 
   Ran 1 shell command
 
-● push52 POUSOU: origin/main = c6c3785b, ahead = 0, 8.388 testes OK + control-plane 22 OK. Agora o deploy, que é o pendente urgente:
+❯ Depois do compact: rele o topo do RELATO e o TICKETS. Primeiro o SMOKE do deploy das sete curas, provado no worker servido (hora dos workers x hora dos arquivos): atraso de
+  4h10 com saida no horario voltando a descontar (L-084 corrigida) e col382 sem falta no 20/09 (O76). Depois segue a FILA do MODO 24H do handoff. Nenhuma lei nova.
+
+❯ Depois do compact: (1) SMOKE do deploy das sete curas no worker servido (atraso de 4h10 com saida no horario descontando; col382 sem falta no 20/09). (2) PLACAR: o plano B
+  (O68b, 1.484 dias) e os turnos abertos em massa (col788, col923, col880) sao do MOTOR -> etapa E3, nao E6; os 30 separados do corte (b) e a O73 tambem sao E3. A E3 publicada
+  tem que sair com esses itens e o % verdadeiro. A data da rodada da E6 e ~01:10 de 27/09, nao 07:xx. (3) RELATO.md:160 "APLICADOS: 4 colabs" ganha a linha PROVA e o RELATO volta
+  a publicar. Depois segue a fila do MODO 24H. Nenhuma lei nova.
+
+● Dois pedidos registrados. Antes de tudo, o fato que muda a ordem: o deploy das sete curas FALHOU — não por bug, por lei: o carimbo da sombra era de 26/09 e agora é 27/09 01:19,
+  então bin/deploy.sh recusou por falta de ensaio de hoje. Já lancei --refazer && --bloco (não usei --sem-sombra: atalho é L-009). Enquanto roda, meço o que o worker realmente
+  serve:
 
   Ran 1 shell command
 
-❯ HANDOFF ANTES DO AUTO-COMPACT (2%): grava no topo do RELATO e no TICKETS: push52 (se pousou, o hash; se nao, a causa), DEPLOY JA pendente (a L-084 errada no ar desde 23:35),
-  e6b em curso (publicar % de dias que batem, dias comparados, data e quantos colabs caem no builder), placar E3 4/7. FILA MODO 24H depois do deploy: os 30 separados (remedir
-  apos O76 e L-086 corrigida) -> O68b plano B -> O70 geradora -> O66 -> O73 -> O51b. Regras que continuam valendo: aplica so o que esta no criterio, separa o resto numa lista
-  unica no topo do RELATO; para so em pergunta de LEI ou item da L-009. Nenhuma lei nova.
+● Evidência fechada, e ela confirma a urgência: o container roda em UTC — os workers subiram 02:35 UTC = 23:35 -03 de 26/09, e os arquivos das curas têm mtime 00:48 e 01:04 de
+  27/09, depois disso. As sete curas não estão sendo servidas; o smoke no worker servido só pode ser feito depois do deploy, que espera o ensaio. Enquanto a sombra roda, faço os
+  itens (2) e (3):
 
-● Já recebido 27/09 ~07:xx e gravado — mas três fatos mudaram desde então, então atualizo em vez de só apontar:
+  Searched for 2 patterns, ran 3 shell commands
 
-  Ran 1 shell command
+● O elo que faltava está no vivo: ponto/services/espelho.py:585 — vis_ini = min(piso_visual(colaborador, hoje), apur_ini) e a grade vai de vis_ini até hoje. Então os dias de ata
+  agregada de 07/08, embora fora da competência 09, estão dentro do intervalo do espelho: um único dia deles derruba o mês todo para o builder. Gravo a O81 medida e corrijo os
+  horários que eu escrevi 6 h adiantados:
 
-● Background command "DEPLOY JA das sete curas" completed (exit code 0)
+● Ver o json do e6 e como o placar e renderizado
+  ⎿  $ cd /home/ronald/saas-hasner && cat logs/e6_placar.json; echo; sed -n 40,80p bin/gerar_estado.py
 
-✢ Compacting conversation… (1m 43s · ↓ 2.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 50%
-                                                                                                                                                            0% until auto-compact
+· Unfurling… (7m 13s · ↓ 16.0k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

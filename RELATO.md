@@ -1,5 +1,80 @@
 # RELATO — esteira saas-hasner
 
+## E6, o oraculo independente: **91,5% dos dias BATEM** -- e o resto tem nome
+
+Rodada de 27/09 ~07:xx, `/tmp/e6b.py` dentro do `saas_core` sobre PROD, **depois** das sete curas desta
+madrugada (E3, O65, O69, O72, O76, L-084 corrigida, folga). Persistido em `logs/e6_placar.json` e lido
+pelo placar do ESTADO a cada commit.
+
+| | |
+|---|---:|
+| **dias que batem (ate 10 min)** | **6.892 de 7.536 = 91,5%** |
+| dias sem trabalho em ambos | 8.968 |
+| dias isentos ou com ausencia | 1.747 |
+| **erros no espelho** | **0** |
+| colabs com divergencia | **160** |
+
+### As 644 divergencias, por classe
+
+| classe | dias | o que e |
+|---|---:|---|
+| `diverge_acima_60` | **257** | mais de 1 h de diferenca entre espelho e batidas |
+| `diverge_10_60` | 233 | entre 10 e 60 min |
+| `esp_zero_e6_trabalho` | **77** | o espelho diz ZERO e ha batidas completas -- a familia do col880 |
+| `e6_zero_esp_trabalho` | 77 | o espelho conta e as batidas nao fecham par -- turno aberto |
+| (fora da conta) `dia_batida_impar` | 473 | batida impar: o calculador se ABSTEM, e faz certo |
+
+### Duas ressalvas que o numero sozinho esconde
+
+**235 colaboradores caem no BUILDER.** A mensagem `a ata declara N celula(s) e NAO lavrou lampada
+nenhuma (forma agregada)` apareceu para **235 colabs distintos**: nesses periodos o espelho **nao le a
+ata**, segue pelo builder antigo. Ou seja, parte dos 91,5% e concordancia medida contra um espelho
+DEGRADADO -- e concordar com o builder nao e' concordar com a autoridade. O numero e' bom; a cobertura
+dele nao e' total, e isso e' informacao, nao ressalva retorica.
+
+**O "PISO" de 2.713,8 h em 185 colabs segue superestimado por construcao.** Ele compara contra
+`minutos_realizados`, que e CAPADO no previsto por dia e conta so dias `trabalho` -- validado em 27/09:
+o cap vale **1,0 h** no col278 contra um vao de **87 h**. O defeito e real e irrelevante para a
+conclusao, mas o NUMERO nao serve para o DP: contra `horas_trabalhadas` ele e' outro, e a cura da folga
+de hoje (+431,90 h em 11 colabs) ja abateu parte dele.
+
+**O que este 91,5% autoriza dizer**: o espelho e as batidas concordam em 9 de cada 10 dias, com **zero
+erro de espelho** em 950 colaboradores. O que ele NAO autoriza: chamar a E6 de fechada -- 257 dias com
+mais de 1 h de diferenca e 77 dias de espelho-zero-com-trabalho sao populacao nomeada, e a etapa segue
+em **50%** no placar.
+
+## HANDOFF 27/09 ~07:xx -- estado exato antes do auto-compact
+
+| frente | estado |
+|---|---|
+| **push52** | **POUSOU.** `origin/main` = **`c6c3785b`**, `ahead = 0`, **8.388 testes OK** + control-plane 22 OK. A suite esta rodando sobre a arvore do commit. O push51 ANTERIOR caiu por duas falhas minhas, ja curadas: `test_factory_mapeia_todos_tipos` (o desvio do corte b disparava em template sem geometria declarada -- "nao sei" nao vira "nao e partido") e `test_MORDE_6x1_feriado_jornada_exata` (**eu perdi um `continue`** no patch: a dobra caia no limite diario abaixo e era sobrescrita, 11,0 h -> 1,0 h) |
+| **DEPLOY JA** | **EM CURSO agora** (`bin/deploy.sh --sem-migrate`), logo apos o pouso do push52. A **L-084 ERRADA** (entrada **OU** saida a mais de 3 h) esta **no ar desde 26/09 23:35** -- workers de pe desde `02:35:29 UTC`. Ela deixa de descontar atraso legitimo de quem chega tarde com a saida na hora. A corrigida (as DUAS pontas) esta so no disco, junto de: corte (b), L-086 corrigida, O72, O76, a cura da folga (+431,90 h), a porta `restaurar_fechamento` e o placar |
+| **e6b** | **FECHOU: 91,5%** dos dias batem (6.892 de **7.536** comparados), **0 erros no espelho**, 160 colabs com divergencia. Persistido em `logs/e6_placar.json` e no placar do ESTADO. **235 colabs caem no builder** -- e a O81 mediu por que: **3.986 dias** de ata agregada, **todos em 06/07/08 e ZERO em 09**, todos JULGADOS (o cartorio lavrou o veredito e deixou a ata no formato antigo), **0% de intersecao com a O70** e so **63 com `trabalha=True`** |
+| **placar** | **E3 = 4/7 (57%)**, nao 100%. O Ronald pegou o meu recorte: faltavam os itens de dinheiro ABERTOS. Entraram com o numero como prova -- plano B **1.484 dia-colab**, O73 **+44,42 h no col81**, os **30 separados**, O70 **6.848**, O66 **68 sem canal**. Fonte: `app/core/espelho_verdade.py`, lido por `bin/gerar_estado.py` |
+| **gravado de 09** | aplicados hoje: E3 completa, O65, **O69 (654,74 h)**, **4 colabs do corte (b)**, **11 colabs da folga (+431,90 h)**. **30 SEPARADOS** (lista unica no topo do RELATO) e **col81** fora por classe propria (O73) |
+
+### FILA MODO 24H, na ordem, depois do deploy
+
+1. **os 30 separados** -- remedir agora que a **O76** esta curada e a **L-086** corrigida; 21 dos 30 travavam pelo DSR (bug O76) e 17 pela familia 100% (pergunta de LEI: plantao que COMECA no feriado dobra?)
+2. **O68b plano B** -- 1.484 dia-colab (19,4%), dos quais 761 em 28 colabs de cadastro partido falso
+3. **O70 geradora** -- 6.848 dia-colab sem `escala_geradora`
+4. **O66** -- 68 dia-colab com celula acusando e nenhum canal vivo
+5. **O73** -- volta do intervalo cobrada como atraso (6 templates, 9 colabs)
+6. **O51b** -- colunas Atraso e Saida antecipada
+
+### Regras que seguem valendo
+
+Aplica **so o que esta no criterio**, por COLABORADOR; o resto vai SEPARADO para a lista unica no topo do
+RELATO e **o item segue**. Para de verdade so em **pergunta de LEI** (a do feriado esta aberta) ou item
+da **L-009**. Pergunta de desenho: mede, propoe, segue. Commit, push e DEPLOY JA entre itens.
+
+### As duas perguntas de LEI abertas, para o corte do Ronald
+
+- **plantao que COMECA no feriado dobra?** A L-086 corrigida diz que sim, e `horas_extras_100_noturna
+  +110,62 h em 17 colabs` e consequencia dela, nao desvio. Trava 17 dos 30 separados.
+- **as 12 perguntas de dominio sem L-NNN**, a comecar por `fatos_do_dia` e `eh_feriado` -- as duas sao
+  leitura DIARIA do motor.
+
 ## HANDOFF 26/09 — estado exato antes do auto-compact
 
 **O69 APLICADA em 09 e no ar**: 654,74 h de movimento absoluto, reversao em
@@ -15,6 +90,117 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
+
+## E6-PISO: o metodo do calculador erra no CAMPO, e o achado dele fica MAIOR
+
+Ordem Ronald 26/09 ~22:xx, itens (1) e (2). So leitura.
+
+### (1) Validacao do metodo: erro real, mas quantitativamente irrelevante
+
+O calculador compara as batidas contra `minutos_realizados + horas_folga_trabalhada`. **O campo esta
+errado**, e o escritor dele diz por que (`ponto/services/fechamento.py:320`):
+
+    fechamento.minutos_realizados = sum(
+        min((d.get('minutos_realizados') or 0), (d.get('minutos_previstos') or 0))
+        for d in _dt_trab if d.get('tipo_dia') == 'trabalho')
+
+E' **capado no previsto por dia** ("F1 04/08: cap POR DIA -- HE nao tapa furo de outro dia") e conta
+**so dias `trabalho`**. O proprio modelo declara o proposito: *"NAO usar horas_trabalhadas como
+numerador: e hora LIQUIDA DE FOLHA"* -- `minutos_realizados` e' o RELOGIO DA GRADE, para percentual de
+cumprimento, nao para dinheiro.
+
+**MEDIDO, o cap explica 1,0 h no col278 e 0,9 h no col203.** Nao explica o vao. Ou seja: eu achei um
+defeito estrutural no metodo e ele vale ~1 h nos casos onde o vao e' de 87 h. **A conclusao do
+calculador sobrevive a critica**, e contra o campo certo ela fica PIOR.
+
+| colab | batidas_h | espelho_h | **`horas_trabalhadas`** | `folga_trab` | `min_real_h` | previsto_h | turnos_abertos | inconsist. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| **col278** | 185,0 | **178,6** | **91,4** | **0,00** | 82,3 | 112,0 | 1 | 3 |
+| **col203** | 185,9 | **183,6** | **99,0** | **0,00** | 98,0 | 112,0 | **0** | **0** |
+| col788 | 161,4 | 65,0 | 67,0 | 0,00 | 40,1 | 190,3 | **63** | **81** |
+| col880 | 80,9 | 12,4 | 14,4 | 0,00 | 12,4 | 98,0 | 11 | 12 |
+| col923 | 91,5 | 48,4 | 29,8 | 40,2 | 40,2 | 175,0 | **46** | **53** |
+
+### (2) A autopsia separa DUAS causas, e a primeira e a mais grave
+
+**CAUSA B -- o espelho VE e a folha NAO PAGA (col278, col203).** Pareamento em ordem: col203 tem
+`turnos_abertos = 0` e `inconsistencias = 0`. O espelho conta **183,6 h** e o gravado paga **99,0 h**.
+No col278, **178,6 h** contra **91,4 h**. E o dia a dia diz onde:
+
+| col278 | estado | previsto | espelho | batidas | veredito |
+|---|---|---:|---:|---:|---|
+| 11/09 sex | **folga** | **0** | 335 | 405 | folga |
+| 03/09 qui | **folga** | **0** | 368 | 426 | folga |
+| 27/08 qui | trabalho | 420 | 375 | 424 | trabalhou |
+| 21/08 sex | trabalho | 420 | 455 | 456 | trabalhou |
+
+Nos dias de **trabalho** o espelho e as batidas casam (455 x 456, 375 x 424). Nos dias de **FOLGA** ha
+**335 a 426 min trabalhados** -- e **`horas_folga_trabalhada = 0,00`**.
+
+**O trabalho em dia de folga nao esta em campo NENHUM do dinheiro.** Nao em `horas_trabalhadas` (91,4 h
+contra 178,6 h do espelho) e nao em `horas_folga_trabalhada` (zero). col278 tem **16 dias previstos**
+(112 h) e trabalha ~26 -- os ~10 dias de diferenca somam as **87 h** que faltam.
+
+**CAUSA A -- nem o espelho ve (col788, col880, col923).** `turnos_abertos` **63**, 11 e **46**. O
+pareamento nao fecha, e ai a batida nao chega a nenhum dos dois. col880 tem cinco dias com **~710 min
+de batida e espelho ZERO**. E' a familia do plano B e do turno natimorto, nao a da folga.
+
+### O que eu NAO sei ainda
+
+Por que `horas_folga_trabalhada` e' **zero** se o espelho marca o dia como `folga` e ha trabalho nele.
+O motor tem `periodo.folga_trabalhada = True` e o campo soma a partir dai -- entao ou o motor nao esta
+marcando esses dias, ou o dia nao chega ao motor como folga. **Nao vou supor**: e' a proxima medicao, e
+ela decide se o achado e' de ~87 h em 2 colabs ou das **2.713,8 h em 185** que o calculador acusa.
+
+**A conta de 2.713,8 h do calculador esta contra o campo errado; contra `horas_trabalhadas` o numero
+tende a ser MAIOR.** Vou remedir a frota contra `horas_trabalhadas` antes de classificar os 185.
+
+## LISTA UNICA DOS SEPARADOS -- 30 colabs nao aplicados em 09, por campo
+
+MODO 24H (aval Ronald 26/09 21:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
+(`horas_extras +0,92 h`, `horas_extras_50 +0,91 h`). **SEPARADOS: 30** -- restaurados integralmente, o
+gravado deles segue no estado anterior. `col81` fora por classe propria (O73).
+
+PROVA: `logs/apply_modo24h_antes.json` guarda os **26 campos numericos** de `FechamentoMensal` dos
+colabs tocados ANTES do apply; a releitura DEPOIS mostra movimento **so** em `horas_extras` (+0,92 h) e
+`horas_extras_50` (+0,91 h) nos 4 aplicados e **ZERO em todos os 26 campos** nos 30 separados (eles
+foram restaurados pela porta `restaurar_fechamento`). `classificar_export` de 09: **0 entram, 0 saem**;
+competencias 07 e 08 remedidas com **0 divergencias**. Reversao: `restaurar_fechamento` com esse mesmo
+snapshot.
+
+**Os 30 travam por apenas DUAS causas, e nenhuma e do corte (b):**
+
+| causa | colabs | o que espera |
+|---|---:|---|
+| **familia 100% (dobra de feriado)** -- pergunta de LEI aberta | **17** | uma frase sua: plantao que COMECA no feriado dobra? A L-086 corrigida diz que sim, e ai `horas_extras_100_noturna` e consequencia e nao desvio |
+| **DSR / reflexo DSR** -- bug da **O76** misturado com falta real | **21** | a cura da O76 (entrada depois da meia-noite jogando o plantao fora da janela). Sem ela eu nao separo falta REAL (col491) de bug (col382) |
+
+(oito colabs estao nas duas.)
+
+| colab | moveu fora do item |
+|---|---|
+| col174 | `extras_100` `extras_100_feriado` `extras_100_noturna` `dsr_ok` `dsr_perdido` |
+| col923 | `extras_100` `reflexo_dsr` `dsr_ok` `dsr_perdido` |
+| col922 | `extras_100` `extras_100_noturna` `dsr_ok` `dsr_perdido` |
+| col857 ([nome]) | `extras_100` `extras_100_noturna` `reflexo_dsr` |
+| col382, col491, col343, col200 | `extras_100_noturna` + `dsr_ok` `dsr_perdido` |
+| col457 | `extras_100` `extras_100_noturna` |
+| col129, col235, col865, col879 | `extras_100_noturna` + `reflexo_dsr` |
+| col191, col439, col474, col522, col862 | `extras_100_noturna` |
+| col207 | `extras_100` |
+| col217, col218 | `dsr_ok` `dsr_perdido` |
+| col82, col155, col256, col266, col493, col518, col583, col600, col631 | `reflexo_dsr` |
+
+### O que esta lista diz sobre a FILA
+
+O valor grande do corte (b) -- `noturnas +135,61 h`, `inconsistencias -50`, `turnos_abertos -30` -- esta
+**inteiro dentro desses 30**. Nenhum dos 4 aplicados o carrega. Ou seja: **o corte (b) esta medido,
+provado, no ar em codigo, e o gravado dele ainda nao chegou a quase ninguem**, porque cada colab que o
+corte melhora tambem toca um dos dois bloqueios.
+
+E os dois bloqueios nao tem o mesmo peso: **21 dos 30 travam por DSR** e **17 por feriado**. A cura da
+**O76** e' o que desbloqueia mais gente -- e ela nao esta na fila do MODO 24H. Nao a promovi por conta
+propria; fica dito com o numero, e a ordem e' sua.
 
 ## PAREI: a dobra de feriado voltou intacta, mas a HE 100% NOTURNA **nao** foi a zero -- e as duas coisas sao a mesma
 
@@ -8161,6 +8347,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **27/09 00:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**27/09 01:15 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
