@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 08:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **875**.
+**Medido em 27/09/2026 08:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **873**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -883,5 +883,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:14:04 | Bash | Achar onde a chave mora agora | `cd /home/ronald/saas-hasner && grep -n "lavrar_jornada_lixo" app/config/crons.py \| head -3` |
 | 20:13:53 | Bash | Curar o ruff e a casa do comando | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' f='app/relatorios/management/commands/pdf_x_espelho_divergentes.py' s=open(f,encoding='utf-8').read() v = " import datetime\n\n from django.utils import timezone\n\n from colaboradores.models import Colaborador, Empresa" n = " import datetime\n\n from colaboradores.models import Colaborador, Empresa" assert s.count(v)==1, 'ancora do import' s=s.re ...` |
 | 20:13:36 | Bash | Ver o que o ruff acusa | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && docker run --rm $TESTE_DOCKER -v /home/ronald/saas-hasner/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest sh -c "cd /app && ruff check . 2>&1 \| tail -14"` |
-| 20:08:57 | Bash | Esperar a suite terminar | `cd /home/ronald/saas-hasner && until grep -qE "^Ran [0-9]+ tests" logs/o69_suite.log 2>/dev/null; do sleep 30; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite.log \| tail -8` |
-| 20:08:49 | Bash | Conferir a suite | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o69_suite.log \| tail -8; echo "--- vivo? ---"; docker ps --format '{{.Names}} {{.Status}}' \| grep -v "saas_\\|juliani_db\\|mensageria" \| head -2` |
