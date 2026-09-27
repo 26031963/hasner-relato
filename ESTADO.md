@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 08:59:01.**
+**Medido em 27/09/2026 09:04:31.**
 
 | | |
 |---|---|
@@ -86,44 +86,44 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Publicar a correcao e empurrar" completed (exit code 0)
+  O91: antes de eu decidir, uma linha no topo do RELATO dizendo QUAL escritor o install ativaria e o que ele escreve.
+  O51b: publica no topo do RELATO onde eu clico (tela e PDF) para o smoke, com o colab e o dia do RED.
+  Depois disso segue a fila sem esperar. Nenhuma lei nova alem dos cortes acima.
 
-● Background command "Esperar o push da correcao" completed (exit code 0)
+● Seis pedidos. Registro todos e começo pelos dois que são uma linha cada. Primeiro leio o que o escritor da O91 realmente escreve:
 
   Ran 1 shell command
 
-● Tudo pousado (0161a378). A fila tratável está fechada e o que resta tem trava nomeada — escrevo a linha que a regra exige e publico:
+● Agora sei exatamente o que ele escreve. Meço em prod (dry-run) para a linha ter o número de hoje, e pego as rotas do RED da O51b:
 
-  Pushed to main
+  Ran 1 shell command
 
-● A madrugada fechou. origin/main = 4d8b3ad4, ahead 0, RELATO publicado.
+● reverter_situacao_afastado hoje: 0 para reverter, 0 mentindo — ativá-lo escreveria nada. Acho as rotas do PDF:
 
-  Seis itens da sua fila saíram, cada um com smoke próprio em prod — não só suíte verde: as sete curas (01:53), E1 com migration (02:30), O85 (03:31), O73 (04:01), O87 (04:28),
-  O66 (05:08). Cinco deploys, todos provados na casca servida.
+  Ran 1 shell command
 
-  Dinheiro: +157,72 h a 5 colabs, em dois atos, com os outros 25 campos em zero e 0 entram/saem do TXT nos dois. A lista do DP caiu para 8 colabs / 248,2 h.
+● col39 existe (emp4) mas o gravado tem saida_antecipada = 0,00 em 08 e 09 — então o RED de 300 min é do motor, não do gravado. Confiro antes de publicar um alvo de clique:
 
-  Onze obras nasceram medidas (O82–O91). As duas descobertas que valem mais que as horas:
+  Conferir o RED do col39 no motor
+  ⎿  $ cat > /tmp/col39.py <<'PYEOF'
+     from django.apps import apps
+     from django.utils import timezone as tz
+     import datetime as d
+     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
+     Col, EC, B = G('Colaborador'), G('EscalaColaborador'), G('Batida')
+     from django.db.models import Q
+     from core.r…
 
-  - O89 — o motor mutaciona os objetos Batida que recebe. Provado em três rodadas com entrada idêntica, e o laço de fatias faz isso em 76 de 607 colabs. Foi o smoke comparando
-    folha × espelho que me levou até lá, por 4 h de diferença num colab.
-  - Classe C fechada em taxonomia: 5 colabs eram buraco de vínculo (curado), 23 são "o motor não fecha o par" com motor == folha ao centavo, e 4 são gravado velho. Isto é: a folha
-    não é o problema — o que falta está a montante dela.
+· Shimmying… (5m 9s · ↓ 5.8k tokens · thinking)
 
-  Sete correções de números meus, das quais duas derrubaram coisa que eu já havia publicado — inclusive a de dez minutos antes do fim, quando eu escrevi "~900 h numa causa só" e a
-  medição seguinte mostrou seis formas, cinco delas já com obra. O total não mudou; mudou o que fazer com ele.
-
-  A parada que importa: aplicar a L-084 descontaria 286,12 h de 24 pessoas, e o col820 deveria 12h21 num dia em que trabalhou 2h19. Está no topo do PENDENTES_RONALD.json com a
-  tabela — uma frase sua resolve a forma do corte.
-
-  O que resta na fila tem trava nomeada, item por item, no topo do RELATO: ! de lei (L-084, feriado), ! de desenho (O89), ! de infra (O91 — install ativaria um escritor), L-009
-  para os passivos congelados, e o seu smoke de clique para a O51b, que é tela e PDF e eu não deixei meio pronta.
-
-✻ Churned for 35m 54s · done 6:05 AM · 1 shell still running
-                                                                                                                                           new task? /clear to save 729.7k tokens
+❯ REGRA DE FILA: quando so restar item esperando o Ronald, NAO para -- puxa trabalho sem trava, nesta ordem: O80 (selo da L-092), O81 (ata no formato antigo: rejulgar com
+  --forcar e o espelho cair no builder so no dia degradado), E5 fatia 1 (a 09 lida da celula; so depois da O89), E6 rodada de novo apos cada cura. So fica parado se nem isso
+  houver.
+  ctrl+x ctrl+s to send now
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ corte Ronald: a saida antecipada nunca passa de previsto menos trabalhado. !
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
