@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:01:31.**
+**Medido em 27/09/2026 18:07:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
+| `HEAD` local | `6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado` |
 | `origin/main` | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 5c8d4240 [O95] rodape e placar do TICKETS antes do push
 27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
 59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
-037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
 ```
 
 ## `git status --short`
@@ -42,10 +42,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
- M app/ponto/services/fechamento.py
- M app/ponto/turnos.py
-?? app/ponto/tests/test_e5_fechamento_como_leitura.py
-?? app/ponto/tests/test_o96_par_da_ata_e_pausa.py
 ?? esteira.pausada
 ```
 
@@ -96,14 +92,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-› Message from @ae9d376eeecd3e213 (ctrl+o to expand)
-
-● Agent "Autopsia E6 lote 2" finished · 34m 34s
-
-› Message from @ab04a661308c44a3f (ctrl+o to expand)
-
 ● Agent "Autopsia E6 lote 1" finished · 39m 5s
 
 › Message from @aa02ef15f0a39737f (ctrl+o to expand)
@@ -117,23 +105,31 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● O 18:29 foi consumido pelo _ENVELOPE_SS antes da leitura do papel, então só uma ponta recebeu o carimbo. Carimbo o X antes desse consumo:
 
-● Running 1 shell command…
-
-✢ Puzzling… (1h 42m 42s · ↓ 76.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
 
 ❯ aval Ronald: (1) fechar a O96 com commit e PROVA propria; depois listar no RELATO TODAS as regressoes das curas de hoje que as autopsias acharam, com o numero de cada uma no
   gravado de 09, e curar uma por uma antes da O81. (2) o subagente "per-day tolerant remapear_na_regua wrapper": dizer no RELATO o que e; se for cura por wrapper/tolerancia =
   PROIBIDO (LEI-AKITA 1), vira censo de origem. (3) onde esta o resultado do censo O81? publicar a tabela a/b/c. (4) publicar DRY do mutirao + laudos 1-4 e curar o RELATO.md:136
   retido.
-  ctrl+x ctrl+s to send now
+
+● O96 verde: 30 testes OK e os quatro REDs batem o oráculo — col81 423 (422), col327 406=406, col51 485=485, col922 404=404. Commito com PROVA própria:
+
+  Committed 6d3e54b0
+
+› Message from @a950c731c8720b7cb (ctrl+o to expand)
+
+● Agent "Censo O81 do builder" finished · 51m 21s
+
+● O censo O81 voltou completo, e ele responde também o seu item 2 — vou dizer com o nome que a lei dá. Escrevo tudo e publico:
+
+● Running 1 shell command…
+
+· Puzzling… (1h 48m 12s · ↓ 83.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Extracting tem_furo examples from o81ab3.out                                                                                       47m 37s · ↓ 183.1k tokens
   ⧉  index
 ```
