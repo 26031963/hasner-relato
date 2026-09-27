@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:27:31.**
+**Medido em 26/09/2026 21:33:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `3783cc55 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias` |
+| `HEAD` local | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
 | `origin/main` | `068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,67 +22,61 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-3783cc55 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias
+d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga
+a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias
 068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou
 a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam de 116h para 7 minutos
 9b67131e [O69 VINCULO-DO-DIA] o fechamento pergunta a CELULA qual vinculo vale no dia -- sobreposicao para de dobrar
-28c7c62c [O69 VINCULO-DO-DIA] PAREI: DIFF medido -- dinheiro move -399,76 h em 7 colabs, e so 1 dos 9 do TXT
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
- M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
-?? app/ponto/management/commands/plano_b_no_dinheiro.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  └─────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
 
-  Achado no caminho (LEI-AKITA 6): bin/sombra.sh não menciona esmeril nenhuma vez — a sombra não monta a lavra. Enquanto não montar, todo ensaio de dinheiro que dependa de folga
-  trabalhada sai incompleto na sombra, e sai incompleto calado para quem não ler 7 avisos no meio de 900 linhas de log. Registro como item próprio, não como nota de rodapé — foi
-  exatamente esse padrão ("ausência de sinal lida como sinal bom") que custou 134,71 h em 8 colabs há duas horas.
+  O B023 merece destaque porque não era pedantismo: num medidor de dinheiro, closure sobre variável de laço é a receita do número do colab errado. Curei com argumentos explícitos,
+  congelei o relógio em 2026-09-16, e declarei a casa dos dois medidores. Rodando a verificação agora.
 
-  O push47 ainda está na suíte. O DEPLOY JÁ da fatia do espelho sai no momento em que ele pousar, e só dela.
+✻ Baked for 2m 17s · done 9:28 PM · 2 shells still running
 
-✻ Cooked for 1m 47s · done 9:24 PM · 1 shell still running
+● Background command "Ruff limpo e os tres selos que caíram" completed (exit code 0)
 
-● Background command "Push 47 com o banco de teste limpo" completed (exit code 0)
+  Read 1 file
 
-  Ran 1 shell command
+● Ruff limpo, 35 testes OK. Vou em dois commits — o medidor do plano B é da O68, não da fatia do espelho. Confiro se a O68 tem linha na tabela antes de citá-la:
 
-● Três falhas, todas minhas, e todas são selos funcionando. Vou ver cada uma:
+  Searched for 1 pattern, ran 3 shell commands
 
-  Ran 1 shell command
+● Ruff limpo, 35 testes OK, régua de tickets OK. push48 em voo com dois commits:
 
-● Monitor "veredito do push47 da fatia do espelho" stream ended
+  - a497ed37 — a fatia do espelho (O69), com as três curas de selo
+  - d39c0696 — o medidor do plano B em fatia própria (O68), com o número e a linha no TICKETS
 
-● Todas as três são minhas: comando sem casa declarada, ruff, e relógio solto no meu teste novo — o selo MORDE pegou. Curo as três:
+  Separei em dois porque o medidor é da O68, não da fatia do espelho, e misturar fatia é o tipo de coisa que fica barata hoje e cara quando alguém precisar reverter uma só.
 
-  Ran 3 shell commands
+  Enquanto a suíte roda, o que está em pé e em que ordem, pela sua determinação:
 
-● Curo as três na origem. Primeiro vejo o que o selo do relógio exige:
+  1. O71 REJULGAR-09 — contador celula_veredito_velho, rejulgar pelo cartório, DIFF com quem entra e quem sai do classificar_export. Assimetria literal: um único colab saindo =
+     PAREI.
+  2. O68 — a cura do plano B (os 758 dias) + DIFF + o seu !.
+  3. O70 GERADORA-EM-TODA-CELULA — os 6.848 dias sem geradora.
 
-● Limpar import morto e ver o FORA_DE_PIPELINE
-  ⎿  $ sed -n '410,420p' config/crons.py
+  E um achado desta medição que vai virar item próprio, porque não é nota de rodapé: bin/sombra.sh não monta a lavra do esmeril. Sete colabs recusaram o recálculo — o que é a O63
+  funcionando, não um bug — mas isso faz de todo ensaio de dinheiro que dependa de folga trabalhada um ensaio incompleto na sombra, e incompleto em silêncio para quem não ler sete
+  avisos no meio de novecentas linhas de log. É a mesma forma que custou 134,71 h em 8 colabs há poucas horas.
 
-✢ Lollygagging… (1m 30s · ↓ 4.8k tokens)
-
-❯ REJULGAR-09 (O67 item 2, antes da O68): contador celula_veredito_velho em 09 (veredito gravado x juiz de hoje); rejulgar as celulas de 09 pelo cartorio (porta canonica, com
-  trilha). DIFF antes: celulas que mudam de veredito e, principalmente, colabs que ENTRAM e que SAEM do classificar_export de 09, com a lista. So entram -> aplica e DEPLOY JA.
-  Alguem sai -> PAREI com a lista para o meu !. Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
+✻ Baked for 1m 19s · done 9:29 PM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ deploy ja do espelho quando o push48 pousar
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
