@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:85 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:117 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:06:01.**
+**Medido em 27/09/2026 01:11:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,8 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -74,49 +76,49 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 | E6 | dia que a ata nao explica nao e pago em silencio | em curso | medido: 1.484 dia-colab (19,4%), 723 por dia + 761 de 28 colabs de cadastro partido falso |
 | E6 | colab com turno aberto em massa (o espelho tambem nao ve) | **FALTA** | medido: col788 63 turnos abertos, col923 46, col880 11 |
 
-**E6 -- calculador independente:** _sem rodada registrada_ (`logs/e6_placar.json` ausente). Sem rodada, a etapa E6 nao tem piso medido.
+**E6 -- calculador independente (`/tmp/e6b.py`), ultima rodada 27/09/2026 07:xx:** **91.5% dos dias BATEM** (ate 10 min) em 7536 dias comparados; 160 colabs com divergencia.
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  parte dos dias que "batem" ou "não batem" está sendo julgada por uma fonte que não é a autoridade nova. Vou contar quantos colabs caem nesse ramo e registrar junto, porque um
+  percentual de concordância medido sobre um espelho degradado vale menos do que parece.
 
-  E o ramo certo do elif é sem continue: feriado previsto significa horas simples, então o dia segue para o limite diário e a HE normal como qualquer dia de trabalho. Deixei isso
-  escrito, porque a diferença entre os dois ramos é exatamente o que eu confundi.
+  Enquanto ele corre, o placar já está ligado e lendo logs/e6_placar.json — hoje ele diz "sem rodada registrada — sem rodada, a etapa E6 não tem piso medido", e é essa frase que
+  vai ser substituída pelo número.
 
-  Agora emendo o commit e empurro — o push51 falhou por essas duas, e a L-084 errada continua no ar.
+  E o push52 também está em voo com a suíte. Os dois vão fechar e eu emendo o placar com o número do e6b no mesmo commit, para o ESTADO já sair com a linha preenchida em vez de
+  com o aviso.
 
-  Ran 1 shell command
+✻ Sautéed for 19s · done 1:08 AM · 2 shells still running
 
-● push52 em voo, com a suíte inteira sobre a árvore do commit. Vou até pousar.
+❯ HANDOFF ANTES DO AUTO-COMPACT (2%): grava no topo do RELATO e no TICKETS: push52 (se pousou, o hash; se nao, a causa), DEPLOY JA pendente (a L-084 errada no ar desde 23:35),
+  e6b em curso (publicar % de dias que batem, dias comparados, data e quantos colabs caem no builder), placar E3 4/7. FILA MODO 24H depois do deploy: os 30 separados (remedir
+  apos O76 e L-086 corrigida) -> O68b plano B -> O70 geradora -> O66 -> O73 -> O51b. Regras que continuam valendo: aplica so o que esta no criterio, separa o resto numa lista
+  unica no topo do RELATO; para so em pergunta de LEI ou item da L-009. Nenhuma lei nova.
 
-  Sobre o item (2) do seu prompt — você estava certo e eu já corrigi: o E3 não estava 100%, estava com o meu recorte. Acrescentei os itens de dinheiro abertos que faltavam, com o
-  número medido como prova:
+  Ran 2 shell commands
 
-  ┌───────────────────────────────┬───────┬──────────┬──────────────────────────────────────────────┐
-  │             item              │ etapa │  estado  │                    medido                    │
-  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
-  │ plano B (O68b)                │ E3    │ FALTA    │ 1.484 dia-colab (19,4%)                      │
-  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
-  │ volta do intervalo (O73)      │ E3    │ FALTA    │ 6 templates, 9 colabs, +44,42 h no col81     │
-  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
-  │ o gravado recebeu o corte (b) │ E3    │ em curso │ 4 aplicados, 30 separados                    │
-  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
-  │ geradora em toda célula (O70) │ E1    │ FALTA    │ 6.848 dia-colab                              │
-  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
-  │ célula com canal (O66)        │ E4    │ FALTA    │ 68 sem canal, 509 chamados fechados acusando │
-  └───────────────────────────────┴───────┴──────────┴──────────────────────────────────────────────┘
+● Background command "Rodar o calculador independente do Ronald" completed (exit code 0)
 
-  O E3 caiu de 100% para 4/7 = 57%, que é a verdade. E a sua frase — "a lista de itens sai do BACKLOG e do RELATO, não do recorte de quem escreve o placar; item de dinheiro aberto
-  nunca fica fora" — é a regra que faltava no arquivo, porque sem ela o placar mede a honestidade de quem o preenche em vez do estado do programa.
+● Persistir o numero e conferir no placar
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import json, datetime
+     d = {
+     'quando': '27/09/2026 07:xx',
+     'pct_bate': 91.5,
+     'dias_comparados': 7536,
+     'bate_ate_10min': 6892,
+     'colabs_divergentes': 160,
+     'colabs_no_builder': 235,
+     'classes': {'esp_zero_e6_trabalho': 77, 'e6_zero_esp_trabalho': 77,
+     …
 
-  Falta ainda, na sua ordem: o DEPLOY JÁ com smoke assim que o push pousar, e rodar o e6b para persistir o percentual do calculador — hoje a linha do E6 diz "sem rodada registrada
-  — sem rodada, a etapa E6 não tem piso medido", o que é honesto mas é um buraco no placar.
-
-✻ Churned for 5m 18s · done 1:05 AM · 2 shells still running
-                                                                                                                                           ✔ Update installed · Restart to update
+✢ Synthesizing… (1m 12s · ↓ 4.1k tokens)
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ roda o e6b e persiste o numero
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
