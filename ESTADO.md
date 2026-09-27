@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:57:54.**
+**Medido em 26/09/2026 23:03:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/services/cadastro_tipo.py
+ M app/escala/tests/test_jm_derivado.py
  M app/ponto/management/commands/diff_reclassificar_partido.py
  M app/ponto/management/commands/plano_b_no_dinheiro.py
  M app/ponto/motor_calculo_v2.py
@@ -51,44 +52,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Churned for 1m 6s · done 10:56 PM · 2 shells, 1 monitor still running
+  Assim que as duas fecharem, aplico com as quatro condições e publico o gravado antes e depois.
 
-❯ remede as duas colunas com a O72 curada
+✻ Crunched for 1m 31s · done 11:02 PM · 3 shells, 1 monitor still running
 
-  Read 1 file
-
-● A suíte está lendo a árvore que eu acabei de mudar com a O72 — cometi o mesmo erro de método outra vez, e o veredito dela não vale. Vou relançá-la depois. As medições rodam no
-  banco de prod, não no de teste, então podem ir agora:
+❯ confere se os 18 do atraso estao nos 30
 
   Ran 1 shell command
 
-● As duas colunas estão rodando em sequência sobre o banco de prod, com a O72 curada.
+● Tenho os 30. Agora preciso da lista real dos 18 — rodo a coluna combinada com --json para ter por_colab, em vez de inferir da amostra dos 20 maiores:
 
-  Antes que o resultado chegue, registro uma coisa sobre mim que já aconteceu duas vezes nesta madrugada: editei .py enquanto uma suíte lia a árvore montada. A primeira vez eu
-  matei o run e refiz; agora repeti. A LEI-AKITA 10 existe exatamente contra isso, e a razão prática é que o verde daquela suíte não prova nada sobre nenhuma das duas versões da
-  árvore — nem a que ela começou lendo, nem a que está lá agora.
+  Ran 1 shell command
 
-  Não é falta de conhecer a regra: é que medir e codar ao mesmo tempo, com o banco de teste ocupado por minutos, cria a tentação de aproveitar a espera. A disciplina certa é usar
-  a espera para medir (que roda em outro banco) e não para editar. Vou relançar a suíte depois das medições e antes do apply — o portão do ! inclui árvore verde, e eu não vou
-  declarar verde com base num run que leu duas árvores.
+● Rodando. Os 30 são:
 
-  O que espero das duas colunas, para você comparar com o que vier:
+  49  81  129 155 174 200 212 217 218 235 256 257 266 316 343 369
+  382 474 491 493 522 598 648 819 857 865 879 880 922 923
 
-  A coluna 2 deve encolher em relação aos 110 dia-colab / −671,88 h de antes, porque o col704 e os casos da mesma classe saem da lista CADASTRO x REALIDADE — o delta deles deixa
-  de ser impossível e volta a caber no julgamento normal. Se ela não encolher, a minha cura não pegou, e aí o problema é outro.
+  A conferência responde duas perguntas, não uma — e a segunda é a que importa mais para o seu critério:
 
-  A coluna 1 deve ficar próxima dos números que já medi para a reclassificação (inconsistencias −50, turnos_abertos −30, noturnas +135,61 h, intra +100,17 h), mas agora sem os
-  +253,42 h de saída antecipada — que era o artefato que a sua lei mata.
+  Os 18 do horas_atraso estão nos 30? Se sim, o desconto novo cai só em quem tem o cadastro errado, e é consequência direta da cura. Se algum estiver fora, o critério "nenhum
+  outro colab" não fecha e eu paro com a lista.
 
-✻ Cooked for 35s · done 10:57 PM · 2 shells, 1 monitor still running
+  E o conjunto inteiro de colabs movidos está nos 30? Porque atraso é só um campo. A corrida combinada move 51 colabs, mas ela inclui o efeito da L-084 em 29 — e esses 29 são a
+  frota toda, por desenho da lei, não da reclassificação. O que o seu critério protege é que a reclassificação não vaze para fora dos 30. Então estou imprimindo os dois conjuntos
+  separados, com quanto cada colab de fora move.
 
-● Background command "Mover a guarda e rodar a suite de escala inteira" completed (exit code 0)
+  Da amostra dos 20 maiores que eu já vi, os nomes com horas_atraso eram col879, col174, col923, col129, col382, col865, col648, col200, col217 — todos nos 30. Mas nove nomes de
+  uma amostra não são dezoito de um conjunto, e a diferença entre esses dois é exatamente onde eu errei mais de uma vez esta noite.
 
-✻ Gesticulating…
+✻ Churned for 36s · done 11:02 PM · 3 shells, 1 monitor still running
+
+❯ se estiverem todos dentro, aplica
+
+✢ Puttering…
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

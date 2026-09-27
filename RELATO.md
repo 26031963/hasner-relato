@@ -16,6 +16,74 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## AS DUAS COLUNAS, separadas como a ordem pediu (e a segunda alcanca 4x mais gente)
+
+Ordem Ronald 27/09 00:xx: *"duas colunas separadas -- (1) efeito da reclassificacao nos 23; (2) efeito
+da L-084 no RESTO da frota de 09, com a lista. Ninguem sai do TXT; se sair, PAREI."*
+
+Separar era o ponto: a **L-084 alcanca a frota inteira** e a reclassificacao alcanca 30 colabs. Medido
+junto, o numero de uma apareceria como se fosse da outra. Duas corridas em PROD, ambas em `atomic()`
+com `raise`, ambas com a **O72 ja curada** (o marco do dia seguinte).
+
+### COLUNA 2 -- so a L-084, sem trocar nenhum `tipo_base`
+
+| campo | delta | colabs |
+|---|---:|---:|
+| `horas_saida_antecipada` | **-671,88 h** | 29 |
+| `horas_atraso` | **-5,95 h** | 6 |
+| `horas_trabalhadas` | **nao move** | — |
+| **ENTRAM / SAEM do TXT** | **0 / 0** | |
+| CADASTRO x REALIDADE | **110 dia-colab** | **46** |
+
+**Nenhum outro campo se move**, e isso confirma a lei ao pe da letra: as horas trabalhadas contam
+normalmente; o que se cala e' o JUIZO DE PONTUALIDADE. **-671,88 h que deixam de descontar** de 29
+pessoas.
+
+A lista nomeia o cadastro, nao a pessoa: **col820** cadastro `19:00->07:00`, real `14:00->16:31`, 14
+dias assim. **col616** cadastro `19:00->07:00`, real `05:55->18:01`. **col255** cadastro
+`18:00->06:00`, real `00:20->06:01` -- saida certa e entrada 17 h fora, assinatura de turno TROCADO.
+
+### COLUNA 1 -- a reclassificacao, isolada (a diferenca entre as duas corridas)
+
+| campo | efeito da reclassificacao | colabs na corrida cheia |
+|---|---:|---:|
+| `inconsistencias` | **-50** | 9 |
+| `turnos_abertos` | **-30** | 6 |
+| `horas_noturnas` | **+135,61 h** | 11 |
+| `horas_intra_indenizada` | **+100,17 h** | 11 |
+| `horas_trabalhadas` | **+74,92 h** | 14 |
+| `horas_extras` | **-29,04 h** | 12 |
+| **`horas_atraso`** | **+33,37 h** | 18 |
+| `horas_saida_antecipada` | -27,96 h | 39 (cheia) |
+| `horas_folga_trabalhada` | +1,76 h | 1 |
+| **`saldo_banco_horas`** | **-305,37 h** | 6 -- **FORA do apply** |
+| CADASTRO x REALIDADE | **+55 dia-colab** | +8 colabs |
+| **ENTRAM / SAEM do TXT** | **0 / 0** | |
+
+**A L-084 matou o artefato que era o problema**: a saida antecipada da reclassificacao caiu de
+**+253,42 h** (medido antes da lei) para **-27,96 h**. O que era 12 colabs cobrados por sair cedo de um
+turno que nao e' o deles virou desconto que nao acontece.
+
+**A linha que eu NAO vou apresentar como boa notica**: `horas_atraso` **+33,37 h em 18 colabs**. E'
+desconto, e cresce. A causa provavel e' simetrica a da saida antecipada -- com o regime certo, o atraso
+passa a ser CALCULADO onde `MotorTurnoPartido` so o calculava quando a entrada casava com a hora de um
+marco. Mas **provavel nao e medido**, e antes de aplicar eu devo conferir se esses 18 estao contidos
+nos 30 com o cadastro errado. Se nao estiverem, o criterio do `!` ("nenhum outro colab") nao fecha.
+
+**Ninguem sai do TXT em nenhuma das duas colunas.** Essa metade do criterio esta fechada nas duas.
+
+### O que a O72 mudou nestes numeros
+
+`horas_atraso` da coluna 2 foi de **-7,17 h / 7 colabs** para **-5,95 h / 6**, e o **col704 saiu** da
+lista CADASTRO x REALIDADE -- o delta dele deixou de ser os **1.370 min** impossiveis e voltou a caber
+no julgamento normal, como saida ATRASADA. E' a prova de que a cura pegou: se ela fosse muda, o numero
+e a lista seriam identicos.
+
+**Caso novo para medir depois, nao agora**: o **col727**, cadastro sem `hi` e com `hf` as `15:00`, real
+`15:01 -> 07:03`, delta de saida **-963 min**. Entrada em cima da hora e saida 16 h depois do marco.
+Nao parece cadastro trocado; parece a MESMA familia da O72 num template que declara so a saida. Fica
+protegido pela L-084 e entra na fila com nome.
+
 ## AUTOPSIA das duas linhas: uma e CAMPO QUE NASCE, a outra e MARCO QUE NAO DESCREVE O DIA
 
 As duas linhas que eu disse que nao sabia explicar agora tem causa, e as causas sao DIFERENTES.
