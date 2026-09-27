@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:34:01.**
+**Medido em 27/09/2026 15:39:31.**
 
 | | |
 |---|---|
@@ -121,7 +121,7 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 
 ● Running 1 shell command…
 
-✢ Grooving… (24m 27s · ↓ 21.4k tokens)
+· Grooving… (29m 57s · ↓ 22.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
