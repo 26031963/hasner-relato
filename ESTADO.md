@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:05:31.**
+**Medido em 27/09/2026 13:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao` |
+| `HEAD` local | `2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%
 42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao
 42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca
 a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
 2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
-6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -88,44 +85,44 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - col85 21/08: segue aberto, e é a O84 (ata ·I sintética; medido agora: dna.marcos=null, o juiz responde desalinhado, porque='sem marcos no dna' e devolve papeis: [])
+
+  A PROVA reprovou a minha 1ª versão — turnos_abertos 620 → 665 (+45), a cura andando contra si mesma. Seu critério virou três guardas: duas bordas acesas (o hf apagado do col382,
+  que fazia a saída das 22:58 virar entrada e o dia abrir duas vezes), L-084 no papel lida de MotorBase.CADASTRO_NAO_DESCREVE_MIN, e minuto com duas batidas não se endereça
+  (col570). Final: 620 → 609, horas_trabalhadas +41,11 h isolando a deriva, inconsistencias −11. 13 selos, e o MORDE provado desligando o X.
+
+  PAREI o apply, pelo seu critério: há caso do 2º tipo, e o maior não é de 1 h — col616 14/09, célula FOLGA, turno 05:53→18:00 de 11,13 h em hora normal, sem o 100%, enquanto
+  18/09 e 20/09 do mesmo colab, forma idêntica, são folga trabalhada. Espionei o juiz: nos dias que caem em hora normal o motor pergunta pelo dia (False) e depois pelo dia
+  anterior (True) — a herança de ≤6 h propagando um dia que não teve turno. Virou O93 e PAROU no topo do PENDENTES. Os 3 casos do col297 são do 1º tipo e estão corretos.
+
+  Também caiu um número meu: as −279 h de folga trabalhada da sombra são artefato do ensaio — o campo depende da lavra do esmeril em logs/, e o container da sombra monta --tmpfs
+  /app/logs.
+
+  Falta: veredito da suíte → push → deploy.sh --sem-migrate (portão do ensaio já verde, carimbo de hoje, diverge=0) → smoke do col904 em tela e PDF. O apply de dinheiro fica
+  parado esperando você na O93; a fila segue em classe D (O84) → classe C residual → E5 fatia 1 → E6 rodada 3.
+
+✻ Churned for 1h 19m 59s · done 1:08 PM · 2 shells still running
+
+● Background command "Aguardar o veredito final da suite v3" completed (exit code 0)
+
+  Read 1 file
+
+● Um vermelho, e é o selo das duas filas: meu item no PENDENTES tem tipo: "PAROU", e a fila só aceita decisão. Vou ler o que ele exige:
+
   Ran 1 shell command
 
-● O col297 se explica: o motor perguntou pelo dia anterior (31/08, 07/09, 14/09 = trabalho) para as caudas de 1 h da madrugada — é o 1º tipo, correto. O col616 não: três períodos
-  num dia de folga ao meio-dia. Confiro a cadeia dele:
+● Background command "Aguardar o veredito da suite" completed (exit code 0)
 
-  Ran 1 shell command
+● O critério é core/fila_pendentes.py. Meu item pede decisão de verdade (dinheiro a 100%), então o que está errado é o tipo, não o lugar:
 
-● Agora é inequívoco e maior que 1 h: no col616 a célula de 14/09 é folga e o turno 05:53 → 18:00 de 11,13 h não está em periodos_ft, enquanto 18/09 e 20/09 do mesmo colab estão.
-  Vejo o filtro que separa os dois:
+● Ler o vocabulario de decisao
+  ⎿  $ cat core/fila_pendentes.py
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Não há período em 13/09, então a herança de ≤6 h não explica o col616. Capturo todas as perguntas do motor nele:
-
-  Ran 1 shell command
-
-● Padrão medido e inequívoco: nos dias pares (folga) o motor pergunta o dia (False) e depois o dia anterior (True) e o período cai em horas normais; em 18/09 e 20/09 — mesma
-  forma, mesmo colab — pergunta só o próprio dia e marca folga trabalhada. É o 2º tipo. PAREI:
-
-  Ran 1 shell command
-
-● Escrevo o PAREI enquanto a suíte fecha. Primeiro o formato da fila de decisão:
-
-● Commitar o PAREI, a O93 e a fila de decisao
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     anc='# PAREI: o apply da O68b'
-     s = s.replace('# RELATO — esteira saas-hasner\n',
-     '# RELATO — esteira saas-hasner\n\n'
-     '`PAREI: apply de dinheiro de 09 (O93, folga trabalhada do 2o tipo -- 11,13 h a 100% no col616 14/09) '
-     '| espera Ronald`.…
-
-✢ Hashing… (1h 17m 26s · ↓ 157.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+· Warping… (42s · ↓ 998 tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
