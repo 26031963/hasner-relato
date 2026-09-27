@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:06:01.**
+**Medido em 27/09/2026 20:11:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,8 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+?? bin/hook_stop_fila1.py
 ?? esteira.pausada
 ```
 
@@ -82,44 +84,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (1) Os baldes da O96 — "OUTRO = 0", então não sobra cura.
+  Ran 1 shell command
 
-  ┌─────────────────────────────────────────────────────────────────┬────────┬─────────────────────────────────────┐
-  │                              balde                              │ colabs │              pendente               │
-  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
-  │ gravado já igual à leitura                                      │    575 │                             +0,00 h │
-  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
-  │ separado do apply ou fora (col81 + os 3 da CONDICAO_SAIDA_REAL) │     29 │ +136,70 h congeladas por declaração │
-  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
-  │ fora do TXT                                                     │      0 │                             +0,00 h │
-  ├─────────────────────────────────────────────────────────────────┼────────┼─────────────────────────────────────┤
-  │ OUTRO                                                           │      0 │                             +0,00 h │
-  └─────────────────────────────────────────────────────────────────┴────────┴─────────────────────────────────────┘
+● Não há settings de projeto — crio um, com o hook à prova de si mesmo (qualquer exceção libera, para um bug meu nunca prender a sessão):
 
-  A diferença entre os dois números tem duas partes: das 116,1 h do censo, só 50,9 h (11 colabs) foram criadas pela O68b-PAPEL — as outras 65,2 h são o problema antigo (par com
-  gravado S,E falhando o carimbo mais acima), que a O96 não cura e segue em pé com nome. E dessas 50,9 h, a parte que estava em colab do TXT e não separado é exatamente os 7
-  colabs / −18,76 h do reapply. Nenhum colab do TXT tem diferença pendente entre leitura e gravado.
+  Ran 1 shell command
 
-  (2) R1: duas curas, as duas rejeitadas pela medição — e é isso que nomeia a origem. A primeira (o vão tem de dar conta do dia) não moveu o col920 e quebrou o col922 (404 →
-  1.015). A segunda, a mais restritiva que existe (a ata corrige só o que o gravado contradiz — sequência que alterna perfeitamente não se corrige), também não moveu o col920 e
-  levou o col922 a zero. As duas revertidas no ato.
+● O hook bloqueia com o próximo item da fila e o contador sobe por HEAD. Provo as outras duas pontas — falha aberto e o caminho do PAREI::
 
-  As duas falhas juntas provam que a R1 não está no leitor do papel: _reiv só repete a escolha do matcher. No col920 o matcher deu as 12:21 ao marco 12:00 — a volta do intervalo,
-  tipo E — por distância de 21 min, que é a lei do cluster-guard. A origem é escala/utils.py::_match_marcos/_alinhar, zona com bateria de certificação própria. Não curo por
-  wrapper no leitor (a LEI-AKITA 1 ficou provada na prática, duas vezes) nem mexo na grade agora: R1 fica com origem nomeada, 5 dias, +26,1 h, e a próxima tentativa começa por
-  censo, como na O81.
+  Ran 1 shell command
 
-  (3) Mutirão: 86 casos vão à mesa da supervisão às 12:00 de 28/09 se ninguém responder. Foram 159 chamados que receberam o relógio em 145 colabs; 73 já fecharam entre o envio e
-  esta medição — gente respondendo, que é o efeito que o toque existe para ter.
+● Seis provas passam: bloqueia com o item, conta por HEAD, falha aberto em arquivo faltando, libera com PAREI:, libera com fila vazia, e no 6º libera escrevendo PAREI: hook-teto.
+  Mas a prova revelou um desalinhamento: o hook diz "siga: O1" porque lê o BACKLOG, e a sua fila falada (R2..R5) não está lá. Corrijo isso — senão o hook cobra a fila errada:
 
-  E o registro que eu preciso deixar explícito: HORAS_DE_PRAZO = 48 não foi tocada. Nasceu um prazo por ato, informado por quem manda, porque é o mesmo campo do relógio de SLA —
-  encurtá-lo de 48h para ~12h para 158 pessoas é corte seu, e está no RELATO com essa frase.
+  Ran 1 shell command
 
-✻ Cooked for 35m 11s · done 7:28 PM · 1 shell still running
+● O filtro só aceitava id começando com O, então pulou R2..R5. Corrijo:
+
+  Ran 1 shell command
+
+❯ aval Ronald: em paralelo, subagente SO LEITURA: censo do matcher (escala/utils.py::_match_marcos/_alinhar) -- quantos dia-colab da 09 a escolha do marco por distancia da ao
+  tipo errado, com a causa R1 (col920 12:21 -> marco 12:00) como RED; publicar. Sessao principal segue a fila sem parar: R2..R5 -> impar -> E5 -> selo + E6 rodada 4 -> export
+  para meu !. PAREI so em lei ou !.
+
+● O hook aponta para R2, correto. Lanço o censo do matcher em paralelo e sigo a fila:
+
+✢ Enchanting… (4m 27s · ↓ 11.9k tokens)
+
+❯ aval Ronald: EXECUTAR ATE O FIM, sem devolver turno. Fila 1, nesta ordem: R2..R5 (aval-de-criterio: so campos da cura, resto 0, TXT 0, 07/08 0, oraculo sem divergencia nova) ->
+  dia impar: EM ABERTO + "falta: <marco>" + "parcial provado: X h" rotulado parcial; dinheiro segue BUG-144; nenhuma lei nova -> E5 decidida: o FechamentoMensal se recalcula por
+  colab no EVENTO (batida, resposta validada, cura aplicada) pelo escritor unico ponto/services/fechamento.py:382/541, leitores intactos; competencia exportada recusa (L-092);
+  topo = soma das linhas + O51b lendo o mesmo gravado -> selo tela==PDF==fechamento==TXT no universo do TXT + E6 rodada 4 -> export pronto para meu !. Em paralelo, subagente SO
+  LEITURA: censo do matcher (R1, col920 12:21 -> marco 12:00). Instalar hook de Stop: bloqueia encerrar turno se fila 1 tem item e o topo do RELATO nao comeca com "PAREI:"; teto
+  5 bloqueios sem commit novo. PAREI so em pergunta de LEI. Nenhuma pergunta de desenho: decidir pela lei existente e registrar no RELATO. !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ censo do matcher: quantos dias da frota a escolha do marco inverte
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  paste again to expand
   ⧉  index
 ```
