@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:58:31.**
+**Medido em 27/09/2026 17:04:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
  M app/ponto/services/fechamento.py
+?? app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
 ```
 
@@ -90,44 +91,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-   ├ Autopsia E6 lote 4
-   └ Autopsia dia impar com numero
 
-● Cinco autópsias no ar. Enquanto elas medem, publico os números e redefino o placar da E6 pela sua divisão:
+  Escrevo o selo que prova que o modo não escreve, e publico:
 
   Ran 1 shell command
 
-● Placar E6 agora 2/8 com os três itens novos. Commito e empurro, e começo a E5 fatia 1 (leitura, enquanto as autópsias medem):
+● Três coisas minhas erradas (campo da Empresa e o recorte do selo estrutural, que pegou o else). Conserto:
 
-  Pushed to main
+● Corrigir e rodar o selo da E5
+  ⎿  $ python3 - <<'PYEOF'
+     p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read()
+     s = s.replace("emp = Empresa.objects.create(nome='E5', cnpj='00000000000191', ativa=True)",
+     "emp = Empresa.objects.create(razao_social='E5 LTDA', cnpj='00000000000191', ativa=True)")
+     s = s.replace(""" _i = fo…
 
-● Push pousou (5c8d4240..eb87a7c2). E5 fatia 1 — o momento é o melhor possível, porque o gravado acabou de ser recalculado da célula. Leio o sítio para separar leitura de escrita:
-
-  Ran 2 shell commands
-
-● A mudança é aditiva (parâmetro novo com default que não muda nada), então não perturba as autópsias. Implemento o modo LEITURA do fechamento:
-
-  Ran 3 shell commands
-
-● Agora a DIFF leitura x gravado. Antes de rodar em prod, confiro que o modo não escreve mais nada no caminho:
-
-● Procurar outras escritas no caminho
-  ⎿  $ sed -n '19,120p' ponto/services/fechamento.py | grep -n 'save()\|create(\|update(\|delete(\|abrir(' ; echo '--- no corpo do laco (120-580) ---'; sed -n '120,580p'
-     ponto/services/fechamento.py | grep -n 'save()\|objects.create\|get_or_create\|\.update(\|delete(\|abrir(' | head
-
-✢ Puzzling… (39m 42s · ↓ 39.9k tokens)
+✢ Puzzling… (45m 12s · ↓ 48.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ ID: FILA-2709-A (reordena a fila; nenhuma lei nova)
+  LEIS: L-092, L-009
+  1. RELATO: RELATO.md:54 retido pelo relato.sh (ato sem PROVA:). Acrescentar a linha PROVA: do apply da 09 (snapshot logs/apply_o95_09_antes.json + contagem 620->473) e
+  republicar.
+  2. PUSH EM LOTE: daqui ate 00h, 1 push a cada 2-3 commits; nunca push durante regua.
+  3. MUTIRAO: gerar o DRY do envio aos 184 colabs de lista_acao_09.csv (dono=COLAB): contagem, 3 textos de amostra por tipo, canal. PROIBIDO enviar. Envio so com ! do Ronald.
+  4. FILA NOVA, nesta ordem, substitui a anterior: O81 -> E5 fatia 1 -> dia impar "em aberto" -> curas das autopsias -> E6 rodada 4 + sorteio dos 10. Nao comecar a E5 antes da
+  O81 provada.
+     PRONTO: RELATO publicado (nao retido) + DRY do mutirao no RELATO.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Printing class buckets from clas2.txt                                                                                               14m 0s · ↓ 219.5k tokens
-  ◯ general-purpose  Reading marcos_dna_periodo in escala/utils.py                                                                                       14m 0s · ↓ 131.1k tokens
-  ◯ general-purpose  Writing taxonomy into RELATO_LOTE3.txt                                                                                              14m 0s · ↓ 206.5k tokens
-  ◯ general-purpose  Grepping PISO_INTERVALO_SEGUNDOS in turnos.py                                                                                       14m 0s · ↓ 156.8k tokens
-  ◯ general-purpose  Writing classes.json taxonomy counts                                                                                                14m 0s · ↓ 150.7k tokens
+  ◯ general-purpose  Writing LAUDO.txt taxonomy summary                                                                                                 19m 31s · ↓ 238.7k tokens
+  ◯ general-purpose  Tracing folga-day marcos in turnos_do_colab                                                                                        19m 30s · ↓ 133.7k tokens
+  ◯ general-purpose  Measuring Motor12x36.calcular_periodo for col81                                                                                    19m 30s · ↓ 219.9k tokens
+  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  19m 30s · ↓ 158.2k tokens
+  ◯ general-purpose  Reclassifying G rows by per-turno parity                                                                                           19m 30s · ↓ 152.6k tokens
   ⧉  index
 ```
