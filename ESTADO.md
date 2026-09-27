@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:01:02.**
+**Medido em 26/09/2026 21:06:03.**
 
 | | |
 |---|---|
@@ -33,11 +33,14 @@ fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M app/escala/alimentacao.py
  M app/ponto/services/espelho.py
+ M app/relatorios/pdf_espelho.py
 ?? app/ponto/tests/test_vinculo_do_dia_pela_celula.py
+?? app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 ?? esteira.pausada
 ```
 
@@ -45,43 +48,43 @@ fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO
 
 ```
 
-● Enquanto a suíte roda: apago o selo bash cego e ponho o censo em AST, como a memória manda, com a lista que só encolhe.
-
-  Read 2 files, ran 6 shell commands
-
-● Preparo o DIFF na sombra enquanto a suíte roda — o advisor manda a lista ir ao RELATO antes do DEPLOY JÁ, porque a 09 é CONDICIONAL.
-
-  Ran 3 shell commands
-
-● Background command "GREEN do RED mais os vizinhos do espelho e da escala" completed (exit code 0)
-
-● Background command "Esperar o veredito da suite do espelho e da escala" completed (exit code 0)
-
-  Read 1 file
-
-● GREEN: 835 testes OK. Mas o censo AST eu escrevi depois desse run começar — rodo o arquivo sozinho para não declarar verde por acidente:
+● O carimbo diz dia=20260926. Eu escrevi "27/09" em código e docs — confiro a data real antes de deixar isso na árvore:
 
   Ran 1 shell command
 
-● O censo achou 2 em ponto/turnos.py, não 1 — eu declarei de leitura parcial. Vou ver o segundo antes de escrever o número:
+● Errei a data em tudo: são 26/09 21:03, não 27/09. Corrijo antes de qualquer commit — data errada quebra a forense da casa:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● O segundo é o meu próprio papel_por_minuto_da_ata da O65 (turnos.py:670) — mesma forma, por janela, não por dia. Declaro os dois com a razão de cada:
+● Agora o DIFF na sombra, com o medidor chamando as funções reais:
 
-● Declarar os 2 e rodar o selo inteiro
-  ⎿  $ python3 - <<'PYEOF'
-     p = 'ponto/tests/test_vinculo_do_dia_pela_celula.py'
-     s = open(p).read()
-     old = """ # `realizado_do_dia` sem `livre`/`intervalo` pergunta ao banco com
-     # `order_by('-ativa', '-data_inicio')`. O espelho JA nao cai aqui (alimenta os dois),
-     # e os outros chamadores sao de EXIBICAO. …
+  Read 1 file, ran 2 shell commands
 
-✻ Slithering… (24m 39s · ↓ 41.4k tokens)
+● Background command "Medir na sombra a exposicao da cura do vinculo do dia" completed (exit code 0)
+
+  Read 1 file
+
+● minutos volta None quando o dia não tem turno (o --). Curo o medidor — None não é zero:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Background command "Rodar o DIFF do espelho na sombra outra vez" completed (exit code 0)
+
+  Read 1 file
+
+● Medido e é pequeno e nomeado. Agora a guarda que importa: tela == PDF, que é o que a cura poderia ter quebrado.
+
+  Pdf_x_espelho na sombra depois da cura
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file .env
+     \
+     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
+     -e HTTP_PROXY=http://127.0…
+
+· Slithering… (29m 40s · ↓ 55.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
