@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 07:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **888**.
+**Medido em 27/09/2026 07:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **887**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -897,4 +897,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:44:12 | Bash | Ver como escalas_periodo e montado | `grep -n "escalas_periodo" -B 6 -A 4 ponto/services/fechamento.py \| head -22` |
 | 19:44:06 | Bash | Ver como o fechamento escolhe a escala | `grep -n "ativa=True\\|esc =\\|for esc\\|fatia" ponto/services/fechamento.py \| sed -n '1,18p'` |
 | 19:43:47 | Bash | Medir a cobertura da escala_geradora | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import collections from colaboradores.models import Colaborador, Empresa from escala.models import CelulaDia from ponto.janelas import janela_fechamento OS25 = [924,866,391,43,942,935,400,245,648,877,277,899,278,203,882,107,932,736,936,727,51,511,49,415,859] tot = collections.Cou ...` |
-| 19:28:07 | Bash | Registrar o medir antes e commitar | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() cab='# RELATO — esteira saas-hasner\n' L=[];A=L.append A('') A('## VINCULO-DO-DIA (O69): o "MEDIR ANTES" respondido -- e 85 viraram 25') A('') A('### Primeiro: 85 -> 25, e 60 eram erro da MINHA sonda') A('') A('A coluna do cartao soma **todos** os periodos; no fechamento a **folga trabalhada e campo separado**') A('(`horas_folg ...` |
