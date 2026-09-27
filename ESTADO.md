@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:245 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:264 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:09:01.**
+**Medido em 27/09/2026 04:14:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
+| `HEAD` local | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
 | `origin/main` | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca
 b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
 95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
 9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
-ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/escala/models.py
- M app/escala/tests/test_abertura_dna.py
-?? app/escala/tests/test_o87_intervalo_dentro_do_turno.py
 ?? esteira.pausada
 ```
 
@@ -89,7 +86,6 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Push pousou (b9867ceb). DEPLOY JÁ e smoke da O73 no worker servido:
 
   Ran 1 shell command
@@ -113,15 +109,16 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 
 ● 7 OK. Publico e empurro a O87 (dinheiro zero — é guarda de cadastro):
 
-● Running 1 shell command…
+● Commitar e empurrar a O87 · 5m 29s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      ## O87 no disco: o cadastro nao aceita mais intervalo FORA do turno (dinheiro zero)
      Guarda irma da que ja existe para o Art.71: aquela julga a DURACAO do intervalo, esta julga o LUGAR.
-     `escala/model…
+     `escala/model… (5m 28s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (1h 14m 43s · ↓ 91.1k tokens)
+· Transmogrifying… (1h 20m 13s · ↓ 92.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
