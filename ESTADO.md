@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:31:01.**
+**Medido em 27/09/2026 03:36:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
-| `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **13** |
+| `origin/main` | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,6 +40,8 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+?? app/ponto/tests/test_o73_volta_do_intervalo.py
 ?? esteira.pausada
 ```
 
@@ -86,40 +88,40 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Agora o push (a suíte roda no hook) e o deploy em seguida:
 
   Ran 1 shell command
 
-● Mesma barreira: a linha do placar guarda o hash do último push, então ela nasce velha logo depois de cada push — friction estrutural, não acidente. Curo o mecânico agora e
-  registro a causa:
-
-  Ran 4 shell commands
-
-● A casa já decidiu que a cura não é engordar o META (regua_tickets.sh:42). Então o errado é minha tag: [RELATO] não é fatia. Abro as linhas reais e renomeio aquela tag nos
-  commits locais:
-
-  Ran 3 shell commands
-
-● Mesma família da O90, agora no rodapé. Curo e empurro:
+● Meu fixture não reproduziu: o dia com pausa virou um período de 420 min com atraso 0 — o motor tratou a pausa como intrajornada, corretamente. Então minha hipótese da O73 está
+  sem prova. Tiro o teste da árvore e vou medir o col81 real antes de afirmar:
 
   Ran 1 shell command
 
-● O selo test_selo_pendentes_so_decisao recusou meu item — ele existe justamente para o PENDENTES guardar só decisão. Leio o que ele exige:
+● Hipótese CONFIRMADA com dado real. O col81 bate 15:56 E · 17:24 S · 18:27 E · 23:55 S — pausa de 63 min, que é maior que os 60 declarados e por isso parte o dia em dois blocos
+  —, e o segundo bloco leva 147,5 min de atraso contra o marco das 16:00. Meu fixture usava pausa de exatos 60 min, que o motor absorve como intrajornada. Corrijo para a forma
+  real:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● O vocabulário é {aval, !, corte, corte-dado, smoke} e eu usei corte-de-desenho. O que a O89 espera é o !:
+● RED em dois lados: a volta da pausa leva 147 min de atraso e a ida para a pausa leva 396 min de saída antecipada. Vejo o texto dos alertas antes de curar, porque a tela os lê:
 
-● Empurrar com o selo verde · 9m 29s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/PENDENTES_RONALD.json && git commit -q -m "[O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e
-     esta certo)
-     core/fila_pendentes.py::DECISAO e {aval, !, corte, corte-dado, smoke}; eu havia escrito
-     'corte-de-desenho', que nao … (9m 27s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 1 shell command
 
-✢ Transmogrifying… (36m 43s · ↓ 53.6k tokens)
+● A cura não pegou — provavelmente o bloco da zona 5 não é do motor que atende este template. Confiro qual classe é qual:
+
+  Searched for 1 pattern
+
+● A zona 5 vive em MotorTurnoPartido, mas o corte (b) desta noite manda este template para um motor contínuo (o vão não o qualifica como partido) — então minha cura ficou em
+  código morto para o caso. O sítio certo é onde os períodos nascem. Localizo:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O comentário em :1211 confirma o desenho: as subclasses chamam super() primeiro e depois mutam o mesmo resultado. Então o sítio universal é o fim de MotorBase.calcular_mes — e a
+  zona 5 continua podendo recalcular depois. Movo a cura para lá, num sítio só:
+
+● Running 1 shell command…
+
+✢ Transmogrifying… (42m 13s · ↓ 70.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
