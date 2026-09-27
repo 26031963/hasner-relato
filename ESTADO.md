@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:41:39.**
+**Medido em 27/09/2026 03:42:09.**
 
 | | |
 |---|---|
-| `HEAD` local | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
+| `HEAD` local | `95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa` |
 | `origin/main` | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
 9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
 ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 56475e40 [TICKETS] a linha da vigencia passa a ter o ID E1, que e a tag citada nos commits
 ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
-f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce velho -- barrou dois pushes hoje
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
-?? app/ponto/tests/test_o73_volta_do_intervalo.py
 ?? esteira.pausada
 ```
 
@@ -88,10 +85,6 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● RED → GREEN, e o selo da zona 5 (o caso de 14/09 com 250 min) e o contrato do teto temporal seguem verdes. Agora o ensaio em prod dos dois campos — O73 + L-084 corrigida, que é
-  exatamente o par que a dependência travava:
-
-  Ran 1 shell command
 
 ● 19 colabs, horas_atraso +5,95 h e horas_saida_antecipada +221,21 h — ou seja ~11,6 h de desconto por pessoa. O critério do MODO 24H diz "aplica", mas o próprio motor avisa
   (:2049) que a L-084 mascarava esse efeito, e a O88 mostrou que a ata assigna a batida mais próxima e órfana o resto. Não desconto 221 h de 19 pessoas sem saber o que são. Meço
@@ -113,14 +106,18 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 
   Nesses dias a entrada está a 161–178 min do marco — logo abaixo dos 180 da L-084 — e a saída a 700+ min. Uma ponta escapa por minutos e o dia inteiro é cobrado:
 
-● Publicar o PAREI com a tabela e a O73 curada
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## PAREI o apply da L-084 no gravado: ele descontaria **286 h** de 24 pessoas, e ha absurdo dimensional
-     `PAREI: pergunta de LEI -- a forma do corte de 3 h | espera uma frase sua. NAO esperei ocioso:…
+● Commitar a O73 e a parada da L-084
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import json
+     p='app/docs/PENDENTES_RONALD.json'; d=json.load(open(p))
+     alvo = d if isinstance(d, list) else d.setdefault('itens', [])
+     item = {
+     "id": "L-084-FORMA-DO-CORTE",
+     "tipo": "corte",
+     "quando": "27/09 03:5x",
+     "o_que": ("L-084: alem das duas p…
 
-✶ Transmogrifying… (47m 21s · ↓ 80.3k tokens · thinking)
+✶ Transmogrifying… (47m 52s · ↓ 81.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

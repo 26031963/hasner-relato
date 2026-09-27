@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 03:41:39.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.5 MB). Acoes na janela: **1015**.
+**Medido em 27/09/2026 03:42:09.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.5 MB). Acoes na janela: **1014**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1024,4 +1024,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:43:08 | Bash | Descobrir qual settings cada contexto usa | `cd /home/ronald/saas-hasner && grep -n "DJANGO_SETTINGS_MODULE" app/manage.py \| head -3; grep -n "DJANGO_SETTINGS_MODULE" .env docker-compose.yml 2>/dev/null \| head -5; echo "=== qual settings cada um usa ==="; docker exec saas_core python -c "import os;print('saas_core:', os.environ.get('DJANGO_SETTINGS_MODULE'))"; source bin/recursos.sh >/dev/null 2>&1; docker run --rm --env-file /home/ronald/ ...` |
 | 15:42:43 | Bash | Arvore curada, docker run, banco de prod | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && echo "### ARVORE CURADA + docker run + banco de PROD" && docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 1 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e TZ=America/Sao_Paulo -v /home/ronald/saas-hasner/app:/app:ro --tmpfs /app/logs --tmpfs /app/media -v /tmp/claude-1001/pauta/apply:/simular sa ...` |
 | 15:42:21 | Bash | Comparar HEAD contra prod para os mesmos colabs | `cd /tmp/claude-1001/pauta/saida && python3 -c " import json H=json.load(open('diff_head.json')); N=json.load(open('diff_novo.json')) g=H['comp']['09']['gravado']; mh=H['comp']['09']['motor']; mn=N['comp']['09']['motor'] for cid in ('203','877','278'): print('col%s SOMBRA: gravado=%s motorHEAD=%s motorNOVO=%s' % (cid, g.get(cid,{}).get('horas_folga_trabalhada'), mh.get(cid,{}).get('horas_folga_trab ...` |
-| 15:41:54 | Bash | Qual motor cada banco escolhe | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/pauta/saida/mot.py <<'PYEOF' """Qual CLASSE de motor cada banco escolhe para os 8? E com quais parametros de CCT?""" from colaboradores.models import Colaborador from core.regua_cct import get_motor_cct from escala.models import EscalaColaborador from ponto.janelas import janela_fechamento IDS = [203, 877, 278] for cid in IDS: c = Colaborador.o ...` |
