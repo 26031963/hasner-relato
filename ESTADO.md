@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:55:01.**
+**Medido em 27/09/2026 02:00:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D` |
+| `HEAD` local | `88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,16 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437
 3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D
 61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
 d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna
 fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA
-5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado
 ```
 
 ## `git status --short`
 
 ```
+ M app/escala/models.py
+?? app/escala/migrations/0041_ec_vigencia_not_valid.py
+?? app/escala/tests/_vigencia_sem_guarda.py
+?? app/escala/tests/test_vigencia_constraint_e_o_juiz.py
 ?? esteira.pausada
 ```
 
@@ -77,39 +88,39 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  DEPLOY JÁ:
+
+  Searched for 1 pattern
+
+● O juiz é exatamente data_fim is None or data_inicio is None or data_fim >= data_inicio, e existe selo de AST cobrando que os 9 escritores o chamem. Então a constraint entra como
+  execução dele, com selo que morde se as duas leituras divergirem:
+
+  Ran 2 shell commands
+
+● Agora o RED. Leio o idioma de fixture dos selos de vigência que já existem, para não inventar:
+
+  Read 1 file
+
+● Colateral achado antes de quebrar: o próprio selo test_contador_vigencia_impossivel.py cria uma linha ruim no fixture (data_inicio=10/08, data_fim=01/08) — com a CHECK no banco
+  de teste, ele passa a estourar. E ali está a origem do seu 38: aquele arquivo diz "38 cruzando competência lavrada", enquanto eu medi 43 cruzando exportada. Varro a suíte por
+  outros fixtures na mesma situação:
 
   Ran 1 shell command
 
-❯ corte Ronald (E1): CheckConstraint da vigencia (data_fim >= data_inicio) entra como NOT VALID -- vale para toda escrita nova ou alterada a partir de agora; os registros antigos
-  NAO sao validados nem tocados. Os 38 que cruzam competencia exportada ficam como estao (L-092), listados e congelados; os demais seguem pelo propositor com ! caso a caso. RED:
-  tentar gravar vinculo com fim < inicio e recusado pelo banco; os 38 continuam legiveis. Com isso a porta da E1 fecha. !
-
-● Deploy pousou: três cascas reiniciadas juntas, três rotas provadas, importerror_500=0. Agora o smoke, no worker servido e na casca que serve o espelho:
+● Só um fixture com datas invertidas literais. Escrevo o selo e a ferramenta que o fixture antigo vai usar para seguir nascendo ruim de propósito:
 
   Ran 1 shell command
 
-● SMOKE VERDE no worker servido (workers de 04:53:35/36 UTC, zero .py mais novos que eles), pela casca que serve o espelho:
+● Agora conserto o fixture antigo para seguir nascendo ruim de propósito, com a suspensão explícita:
 
-  ┌─────────────────────────────────────────────────────┬────────────────────────────────────────┬──────────┐
-  │                        prova                        │                 obtido                 │ esperado │
-  ├─────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────┤
-  │ atraso de 4h10 com saída no marco (L-084 corrigida) │ 250 min                                │ 250      │
-  ├─────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────┤
-  │ saída antecipada no mesmo dia                       │ 0                                      │ 0        │
-  ├─────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────┤
-  │ as DUAS pontas longe → não julga pontualidade       │ (0, 0) + 1 dia em CADASTRO x REALIDADE │ (0,0)    │
-  ├─────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────┤
-  │ col382 com furo em 20/09 (O76)                      │ não                                    │ não      │
-  ├─────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────┤
-  │ o turno POUSA em 20/09                              │ 389 min                                │ > 0      │
-  └─────────────────────────────────────────────────────┴────────────────────────────────────────┴──────────┘
+  Ver o trecho exato do fixture
+  ⎿  $ python3 - <<'PYEOF'
+     p='escala/tests/test_contador_vigencia_impossivel.py'; s=open(p).read()
+     velho = """ cls.ruim = EscalaColaborador.objects.create(
+     colaborador=cls.c, posto=po, tipo_escala=te, ativa=False,
+     data_inicio=datetime.date(2026, 8, 10), data_fim=datetime.date(2026, 8, 1))"""
+     novo = """ …
 
-  Publico isso junto da correção de um número meu que o recorte por marco derrubou:
-
-● Running 1 shell command…
-
-✻ Unfurling… (39m 43s · ↓ 120.2k tokens)
+✢ Unfurling… (45m 13s · ↓ 143.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
