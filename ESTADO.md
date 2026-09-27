@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:22:31.**
+**Medido em 27/09/2026 20:28:01.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -82,16 +83,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-❯ aval Ronald: em paralelo, subagente SO LEITURA: censo do matcher (escala/utils.py::_match_marcos/_alinhar) -- quantos dia-colab da 09 a escolha do marco por distancia da ao
-  tipo errado, com a causa R1 (col920 12:21 -> marco 12:00) como RED; publicar. Sessao principal segue a fila sem parar: R2..R5 -> impar -> E5 -> selo + E6 rodada 4 -> export
-  para meu !. PAREI so em lei ou !.
-
-● O hook aponta para R2, correto. Lanço o censo do matcher em paralelo e sigo a fila:
-
-● Agent(Censo do matcher de marcos)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
 ❯ aval Ronald: EXECUTAR ATE O FIM, sem devolver turno. Fila 1, nesta ordem: R2..R5 (aval-de-criterio: so campos da cura, resto 0, TXT 0, 07/08 0, oraculo sem divergencia nova) ->
   dia impar: EM ABERTO + "falta: <marco>" + "parcial provado: X h" rotulado parcial; dinheiro segue BUG-144; nenhuma lei nova -> E5 decidida: o FechamentoMensal se recalcula por
@@ -106,13 +97,23 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● .claude está no gitignore do repo, então o registro fica local e só o script é versionado — anoto isso:
 
-● Commitar o hook e abrir a R2
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p='app/docs/RELATO.md'; s=open(p).read()
-     velho = "Registrada em\n`.claude/settings.json` (hook `Stop`), com teto de **5** bloqueios sem commit novo"
-     novo = ("Registrada em\n`.claude/settings.json` (hook `Stop`) -- **e esse arquivo esta no `.gitig…
+  Ran 1 shell command
 
-✢ Enchanting… (15m 27s · ↓ 17.9k tokens · deep in thought)
+● R2 está inteira à vista: o 12:30 é a ida ao intervalo que não acendeu o hii (30 min do marco), a volta das 13:00 acendeu o hfi, e minha guarda exige o par completo — então
+  descarta o dia e o gravado (16:46 E, errado) deixa a tarde aberta. Envelope 477 − pausa 30 = 447, que é o número do oráculo. Curo:
+
+  Ran 1 shell command
+
+● Nada mudou — então o dia ainda não está sendo emitido, ou o papel não conserta o pareamento. Meço o mapa:
+
+● Ver o mapa e o pareamento do col736
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     import datetime as d
+     from django.utils import timezone as tz
+     from escala.models import CelulaDia, EscalaColaborador
+     from ponto.turnos import batidas_apuraveis, papel_por_minuto_…
+
+✢ Enchanting… (20m 57s · ↓ 23.0k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -120,6 +121,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Cross-tabulating group vs diff in censo3.json                                                                                      10m 54s · ↓ 124.7k tokens
+  ◯ general-purpose  Writing census findings to scratchpad                                                                                              16m 24s · ↓ 149.1k tokens
   ⧉  index
 ```
