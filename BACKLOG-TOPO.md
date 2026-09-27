@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**92 obras abertas.**
+**93 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -101,3 +101,4 @@ lista — ela e o que esta EM PE._
 | **O90** | O PLACAR DO TICKETS GUARDA O HASH DO ULTIMO PUSH, ENTAO NASCE VELHO | **livre, pequena** |
 | **O91** | FECHADA 27/09 10:3x pelo corte "nao instala" | espera `!` |
 | **O92** | PREVISTO DO DIA EM LOTE | **livre, pequena e de caminho quente** |
+| **O93** | FOLGA-TRABALHADA-HERDA-O-DIA-ANTERIOR | espera aval |
