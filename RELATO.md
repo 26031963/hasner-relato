@@ -16,6 +16,70 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI: a dobra de feriado voltou intacta, mas a HE 100% NOTURNA **nao** foi a zero -- e as duas coisas sao a mesma
+
+Remedicao em ensaio com a L-086 corrigida (feriado fora, domingo dentro). `col81` fora, banco restaurado.
+
+| campo | antes | depois | delta | colabs | o corte esperava |
+|---|---:|---:|---:|---:|---|
+| **`horas_extras_100_feriado`** | 667,11 | 670,44 | **+3,33** | **1** | **intacta, salvo atribuicao do dia** -- **FECHOU** |
+| **`horas_extras_100_noturna`** | 64,84 | 175,46 | **+110,62** | **17** | **perto de zero** -- **NAO fechou** |
+| `horas_folga_trabalhada` | 2.286,82 | 2.288,58 | +1,76 | 1 | (a regra do domingo nao tirou folga de ninguem) |
+| `horas_extras` | 1.610,80 | 1.576,98 | -33,82 | 25 | |
+| `horas_extras_100` | 865,26 | 841,44 | -23,82 | 6 | |
+| `horas_noturnas` | 18.253,59 | 18.389,20 | +135,61 | 11 | do criterio |
+| `horas_intra_indenizada` | 2.205,12 | 2.303,29 | +98,17 | 10 | do criterio |
+| `horas_trabalhadas` | 69.465,34 | 69.541,26 | +75,92 | 13 | do criterio |
+| `turnos_abertos` | 620 | 590 | -30 | 6 | do criterio |
+| `inconsistencias` | 1.332 | 1.282 | -50 | 9 | do criterio |
+| `semanas_dsr_ok` / `perdido` | 1.914 / 809 | 1.899 / 824 | -15 / +15 | 9 | O76 (col382) + falta real (col491) |
+| `horas_reflexo_dsr` | 345,50 | 357,98 | +12,48 | 15 | acompanha a HE da semana |
+| `mes`, `ano`, `horas_falta`, `minutos_*`, `dias_*`, `saldo_banco_horas` | — | — | **+0,00** | **0** | |
+| **colabs movidos** | | | | **34** | (eram 71 na versao errada) |
+| **ENTRAM / SAEM** | | | | **0 / 0** | |
+
+### As duas expectativas do corte se anulam, e o numero mostra por que
+
+O corte pediu, na mesma frase: *"a HE 100% noturna dos 20 perto de zero E a dobra de feriado da frota
+intacta"*. **Medido, as duas nao podem valer juntas** -- porque, nesses colaboradores, **a HE 100%
+noturna E a dobra de feriado**:
+
+| colab | dia | turno | o dia de INICIO e |
+|---|---|---|---|
+| col491 | 07/09 | **22:50** -> 06:50 | **FERIADO** (Independencia) -- 7,01 h |
+| col491 | 08/09 | **22:51** -> 06:50 | **FERIADO** -- 6,98 h |
+| col382 | 07/09 | **23:54** -> 07:50 | **FERIADO** -- 7,04 h |
+| col343 | 08/09 | **22:50** -> 06:50 | **FERIADO** -- 7,00 h |
+
+Pela regra que o proprio corte restabeleceu -- *"plantao que COMECA no feriado dobra, salvo ciclo sem
+dobra"* -- esses turnos **comecam no feriado** e **devem dobrar**. E como sao turnos noturnos, a dobra
+cai na faixa noturna (Sumula 264). Logo a HE 100% noturna **nao pode ser zero** sem revogar a dobra
+que o corte acabou de devolver ao cadastro do ciclo.
+
+**O "perto de zero" vinha da versao ANTERIOR da lei** (feriado previsto nao dobra), que o corte
+revogou. Com a lei corrigida, o valor certo desses dias e' a dobra -- e ela e' noturna.
+
+### O que fechou, e e' o resultado que importa
+
+- **dobra de feriado da frota: INTACTA.** `+3,33 h em 1 colaborador` -- exatamente o *"salvo a
+  atribuicao do dia de inicio"* que o corte previu. Os **-642,43 h em 64 colabs** da minha versao errada
+  desapareceram.
+- **a regra do domingo nao tirou folga de ninguem**: `horas_folga_trabalhada +1,76 h em 1`. Era o risco
+  que eu nomeei antes de medir (tirar folga trabalhada de quem tem domingo previsto) e ele nao se
+  materializou em 09.
+- **colabs movidos caiu de 71 para 34.**
+- **0 entram, 0 saem do TXT; 07 e 08 com 0 divergencias; col81 intacto.**
+
+### Por que nao aplico
+
+O criterio e "so os campos do criterio moverem", e `horas_extras_100_noturna +110,62 h em 17 colabs`
+esta fora dele -- mesmo sendo, pela leitura acima, o valor CERTO. **Dinheiro que eu acho certo tambem
+espera o `!`**: foi exatamente por "achar certo" que eu apliquei +105,45 h sem aval as 00:3x.
+
+**O que eu preciso do corte, em uma frase**: se a dobra de feriado em plantao que COMECA no feriado e'
+devida -- e a L-086 corrigida diz que e' --, entao `horas_extras_100_noturna +110,62 h em 17 colabs`
+e' consequencia dela e nao desvio, e o criterio precisa nomear esse campo. Com o campo nomeado, aplico.
+
 ## PAREI: a L-086 tira **-642,43 h de HE 100% feriado em 64 colabs**, nao nos 20
 
 Remedicao dos 20 pedida no item (1), em ENSAIO com rollback, depois do selo da L-086. **Nao apliquei**,
@@ -8094,6 +8158,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 23:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**27/09 00:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

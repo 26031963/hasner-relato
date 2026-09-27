@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:06:31.**
+**Medido em 27/09/2026 00:12:01.**
 
 | | |
 |---|---|
@@ -62,44 +62,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo da L-086 corrigida: 10 casos, verde. E ele achou um quinto sítio — o texto do motivo dizia "folga semanal" por weekday() in dias_folga cru, o que poderia rotular assim um
-  dia que o juiz considera previsto. Rótulo contradizendo o cálculo é a testemunha mentindo em prosa, então passou pelo mesmo juízo.
+✻ Crunched for 1m 8s · done 12:09 AM · 2 shells still running
 
-  O que o corte mudou, e o que eu tinha errado:
+❯ MODO 24H (aval Ronald, ate domingo 24:00): fila na ordem: L-086 corrigida + os 20 -> O80 trava -> O68b aposentar plano B nos ~720 dias -> O70 geradora -> O66 fechadores -> O51b
+  -> E5 fechamento online (fatia 1: a 09 lida da celula, sem gravado envelhecendo). Criterio de apply para TODO item de dinheiro: aplica sem parar os colabs cujo movimento esta
+  so nos campos do item, com os 26 campos medidos contra o GRAVADO e ninguem saindo do TXT; colab fora disso fica SEPARADO (nao aplicado) numa lista unica no topo do RELATO; o
+  item segue. So PARA de verdade em pergunta de LEI (como a do feriado) ou item da L-009. Pergunta de desenho: mede, propoe, segue. Commit, push e DEPLOY JA entre itens. Nenhuma
+  lei nova. !
 
-  Feriado saiu da L-086. Volta a seguir só feriado_em_dobra do ciclo, com o dia sendo o de início. Minha primeira versão exigia "dia não previsto" e generalizava o parecer do
-  12x36 para todo plantão — e medido na frota aquilo tirava −642,43 h de 64 colaboradores. Deixei isso escrito na docstring e num caso de teste próprio
-  (test_MORDE_a_versao_ANTIGA_desta_lei_ficaria_VERMELHA), para que ninguém "conserte o teste" em vez da regra se reintroduzir a versão errada.
-
-  Domingo entrou. _folga_pelo_dia_previsto: o folga_dia_semana do template não vence a escala, e o dia é o de início — turno que começa sábado 22:00 e sai domingo 06:00 não é
-  domingo trabalhado.
-
-  Os pares que mordem, em ambas: plantão que começa no feriado dobra × o que começa na véspera e entra pelo feriado não dobra; domingo previsto não é folga × domingo não previsto
-  segue folga — este último importa porque horas_folga_trabalhada é dinheiro, e uma versão que devolvesse sempre False apagaria folga trabalhada de todo mundo.
-
-  Agora remeço os 20 e a frota. O esperado, pela sua ordem: HE 100% noturna dos 20 perto de zero, e dobra de feriado da frota intacta — salvo o que muda por atribuição do dia de
-  início.
-
-✻ Brewed for 2m 35s · done 12:06 AM · 2 shells still running
-
-❯ remede os 20 e a frota
+● MODO 24H entendido, e o critério muda a mecânica: por colaborador, não por fatia. Implemento a separação automática:
 
   Ran 1 shell command
 
-● Remedição em ensaio, com os 26 campos e o col81 fora.
+● MODO 24H implementado. O critério agora é por colaborador, e a separação é automática — o item não para por causa de um colab.
 
-  Os três números que decidem, e o que cada desvio significa:
+  Os campos do item, e o que ficou de fora com o motivo no código:
 
-  horas_extras_100_feriado perto de zero. Se a dobra da frota voltou intacta, o campo não se move — era +667,11 antes da minha versão errada e tem de voltar a ficar parado. Se
-  ainda cair centenas de horas, sobrou resíduo da regra que você revogou.
+  Entram: horas_trabalhadas, horas_noturnas, horas_intra_indenizada, turnos_abertos, inconsistencias, horas_saida_antecipada, horas_atraso, horas_folga_trabalhada.
 
-  horas_extras_100_noturna perto de zero. Esse é o alvo original dos 20. Ele vem de turnos_abertos fechando, não de feriado, então deve permanecer curado.
+  Ficam fora, e cada um por uma razão diferente:
 
-  horas_folga_trabalhada. Campo novo em risco: a regra de domingo agora pode tirar folga trabalhada de quem tem domingo previsto — e isso é dinheiro saindo. Antes era +1,76 h em 1
+  horas_extras* — a dobra de plantão que começa no feriado é pergunta de lei aberta (+110,62 h em 17 colabs), e você determinou que pergunta de lei para. Esses 17 ficam separados
+  até a sua frase.
+
+  semanas_dsr_* e horas_reflexo_dsr — o DSR se move por dois motivos distintos: falta real (col491, legítimo) e o bug da O76 (col382, entrada 10 min depois da meia-noite jogando o
+  plantão fora da janela). Enquanto a O76 não cura, não consigo distinguir os dois automaticamente, então quem tem DSR movido fica separado.
+
+  saldo_banco_horas — fora do escopo do seu ! de ontem, restaurado sempre.
+
+  A separação restaura o colab inteiro, não o campo: campo a campo deixaria a pessoa em metade motor novo e metade velho, um estado que nunca existiu.
+
+  Rodando. Quando voltar, aplico os que passarem, publico a lista única dos separados no topo do RELATO, e sigo para o O80 — commit, push e DEPLOY JÁ entre os itens, como você
+  definiu.
+
+✻ Cogitated for 1m 0s · done 12:10 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ aplica os que passarem e publica os separados
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
