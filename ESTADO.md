@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:18:01.**
+**Medido em 27/09/2026 19:23:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
+| `HEAD` local | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
 | `origin/main` | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,18 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
 0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 5c8d4240 [O95] rodape e placar do TICKETS antes do push
-27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/services/cobranca.py
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -84,6 +82,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● Mutirão enviado: 143 entregues de 158 (137 FCM, 6 webpush), 2.521 perguntas cobradas, prazo 28/09 12:00. Dos 15 não entregues, 13 são o próprio juiz recontando ("não há pergunta
   em aberto" — o CSV estava velho), 1 token morto e 1 o meu teste. Registro tudo e fecho:
 
@@ -110,14 +109,13 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Segunda tentativa também falha (col920 não cede e col922 vai a zero). Reverto — e isso nomeia a origem: a escolha do marco não está no leitor do papel, está no matcher da grade.
 
-● Publicar baldes, mesa e as duas tentativas da R1
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     velho = """A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa
-     atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao."""
-     novo = """## R1: SEGUNDA tentativa, tambem medid…
+● Commitar e empurrar o fecho · 5m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/RELATO.md
+     app/docs/TICKETS.md app/chamados/services/cobranca.py && git commit -q -F - <<'MSGEOF'
+     [O96] reapply aplicado, mutirao ENVIADO, e… (5m 20s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Crunching… (24m 51s · ↓ 31.7k tokens)
+· Crunching… (30m 21s · ↓ 33.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
