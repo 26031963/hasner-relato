@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:17:01.**
+**Medido em 27/09/2026 11:22:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B` |
+| `HEAD` local | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
 | `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
 4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
 5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
 9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
 c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
-4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -85,6 +86,7 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● O pareador devolve um turno aberto, não dois — logo não há S órfã. Com 3 batidas no dia, a S foi absorvida como intrajornada e o retorno nunca veio. Confirmo:
 
   Ran 1 shell command
@@ -110,15 +112,14 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
   E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
   ≤90 min" contava a S do intervalo, já consumida.
 
-● Publicar a correcao do diagnostico da classe B
+● Abrir as linhas e empurrar · 4m 54s
   ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## DERRUBO O MEU PROPRIO DIAGNOSTICO DA CLASSE B: nao e o pareador, e saida nao batida
-     Publiquei uma hora atras que a classe B era "o pareador nao fecha tendo `S` na mao", com **103 casos** e
-     **55 d…
+     p='docs/TICKETS.md'; s=open(p).read()
+     anc='|----|--------|-------|--------|--------|------|------|-------------|------|\n'
+     linhas=("| O68b | ponto/geometria | turno ABERTO fecha com a proxima SAIDA real, antes da proxima entrada e com duracao plausivel | **no ar, DIFF zero** |… (4m 52s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zesting… (28m 34s · ↓ 46.4k tokens)
+✢ Zesting… (34m 4s · ↓ 47.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
