@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:50:31.**
+**Medido em 27/09/2026 18:56:01.**
 
 | | |
 |---|---|
@@ -82,31 +82,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: fatias (4) e (5) do bloco META viram UMA: E5. FONTE: topo = relatorios/cartao_pela_celula.py:138-172 (gravado); linhas = ponto/services/espelho.py:600 (motor ao
-  vivo, escala ativa unica :589-592) x fechamento por fatia de vinculo (fechamento.py:160-236). SELO da E5 no universo do TXT: topo == soma das linhas em todas as chaves,
-  inclusive total_atraso e total_saida_antecipada (O51b entra aqui, lendo a mesma computacao, nunca conta propria). ANTES: re-medir E4-topo-igual-coluna depois da O96 (a prova do
-  placar e de 02:1x) e separar divergencia por causa: gravado envelhecido / escala unica x fatia / cadastro (col515 EC1220 vigencia impossivel = L-009, lista para meu !).
-  Nenhuma lei nova.
-
-● Push pousou (eb87a7c2..0a22e208), suíte verde sobre o commit. Estado do turno e a fila como você a deixou:
-
-  No ar hoje, com PROVA própria: O68b-PAPEL · O84 · O93 · O95 · O96 · a lavra de prod na sombra · placar E1/E3/E5/E6 atualizado. Apply da 09 FEITO: turnos_abertos 620 → 473,
-  horas_trabalhadas +1.040,82 h, inconsistencias −228, snapshot de 468 KB, 0 entram/saem do TXT, 07/08 em zero.
-
-  As cinco autópsias + o censo O81 voltaram: 644 de 644 dias nomeados, 0 sem causa. E elas acharam o que eu não tinha visto:
-
-  - O96 curada e commitada — o X da minha própria cura entrava no turno sem carimbo e a pausa era paga como trabalho: 116,1 h em 44 colabs, 50,9 h delas criadas por mim hoje.
-    PROVA contra o oráculo: col327 406=406, col51 485=485, col922 404=404. O número inflado está no gravado — o reapply é o próximo item.
-  - R1–R5, minhas regressões, com número no RELATO: o papel da ata sobrescrevendo gravado coerente (col920 perde uma noite de 716 min), a guarda do par da pausa descartando o dia
-    inteiro (7 dias), o posicional invertido (col146, 900 min de descanso como turno), o resíduo da O84 no leitor (col610, 11 dias), e o selo da O68b vazio (fixture sem hii/hfi
-    prova forma que prod não tem).
-  - Censo O81 a/b/c publicado: 235 confirmado exato, causa única = ata agregada de 08/2026 (3.046 dias, zero em 09); (b) NÃO toca o gravado de 06/07/08; (c) a cura muda ZERO dos
-    644 — minha hipótese de que os 644 eram artefato do builder caiu.
-  - O MUDA que o censo propôs é band-aid e eu não o apliquei (LEI-AKITA 1). Seu corte trocou por outro: célula em [max(data_ini,apur_ini)..data_fim_mes], builder só antes do
-    apur_ini, sem tocar 06/07/08.
-
-  Duas coisas esperando seu corte, e só elas: a colisão de lei do dia ímpar (seu corte de hoje × turnos.py:329-336 de 14/09 — 55 dos 159 dias são o código obedecendo a lei antiga)
-  e a origem da O81 (re-lavrar ata exportada = L-092).
 
   E a sua regra (b) de agora chegou pelo caminho mais caro: acabei de queimar tempo montando fixture de TipoEscala/Posto do zero no selo da E5 em vez de copiar de um selo da mesma
   família — o selo ficou com a parte estrutural e o limite de cobertura declarado, com o A/B de prod (518/604 idênticas, 86 explicadas, zero sem explicação) como prova
@@ -116,10 +91,35 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   tela==PDF==fechamento==TXT + E6 rodada 4 → export com o seu !.
 
 ✻ Cogitated for 2h 15m 48s · done 6:34 PM · 1 shell still running
+
+❯ aval Ronald: (1) DIA IMPAR: as duas leis valem. BUG-144 (14/09) segue mandando no DINHEIRO (pares fechados contam, nunca 0 pela E solta). O corte de 27/09 manda no ESTADO da
+  tela: dia impar = "EM ABERTO -- falta: <marco>" + "parcial provado: X h" rotulado como parcial, nunca como total do dia; topo = soma das linhas inclusive parciais. Nenhuma lei
+  nova. (2) O81: re-lavrar ata exportada VETADO (L-092, HX-REGEN-NAO-TOCA-EXPORTADO); cura = o MUDA de leitura ja cortado; como muda 0 dos 644, vai para DEPOIS da E5. (3)
+  MUTIRAO: enviar aos 158 com push, prazo 28/09 12h no texto; os 26 sem canal vao para a lista da SUPERVISORA. (4) Turno nao termina com fila 1 nao vazia: seguir AGORA reapply
+  O96 -> R1..R5 -> impar -> E5 -> selo + E6 rodada 4 -> export para meu !. !
+
+● Colisão resolvida — as duas leis valem, cada uma no seu domínio. Começo pelo reapply da O96, com a regra (a): oráculo nos afetados dentro da PROVA, antes do apply.
+
+  Ran 1 shell command
+
+❯ aval Ronald: (1) DIA IMPAR: as duas leis valem. BUG-144 (14/09) manda no DINHEIRO (pares fechados contam, nunca 0 pela E solta). O corte de 27/09 manda no ESTADO da tela: dia
+  impar = "EM ABERTO -- falta: <marco>" + "parcial provado: X h" rotulado como parcial; topo = soma das linhas inclusive parciais. Nenhuma lei nova. (2) O81: re-lavrar ata
+  exportada VETADO (L-092, HX-REGEN-NAO-TOCA-EXPORTADO); cura = o MUDA de leitura ja cortado; muda 0 dos 644 -> vai para DEPOIS da E5. (3) AVAL-DE-CRITERIO para o reapply da O96
+  e para cada R1..R5: aplica SEM nova parada se (a) o DIFF contra o GRAVADO move so os campos da propria cura, (b) todo outro campo de todo colab = 0, (c) ENTRAM/SAEM do TXT = 0
+  e 07/08 = 0, (d) oraculo e6 nos colabs afetados sem divergencia nova. Violou qualquer um = PAREI com a tabela e segue o proximo item. (4) MUTIRAO: enviar aos 158 com push,
+  prazo 28/09 12h no texto; os 26 sem canal vao para a lista da SUPERVISORA. (5) Turno nao termina com fila 1 nao vazia: seguir AGORA O96 -> R1..R5 -> impar -> E5 -> selo + E6
+  rodada 4 -> export para meu !. !
+
+● DIFF medido, e a contribuição da O96 aparece isolada: horas_trabalhadas +1.019,08 contra os +1.040,82 já aplicados = −21,74 h de pausa que deixa de ser paga. Agora a condição
+  (d) — oráculo nos afetados, sem divergência nova:
+
+● Running 1 shell command…
+
+· Crunching… (2m 51s · ↓ 3.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

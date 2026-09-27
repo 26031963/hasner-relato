@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 18:50:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.8 MB). Acoes na janela: **408**.
+**Medido em 27/09/2026 18:56:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.8 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:53:31 | Bash | DIFF do reapply da O96 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; SAI=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o96.log; timeout 3000 bin/sombra.sh --com-a-sombra o96 -- docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=config.settings. ...` |
 | 18:24:18 | Bash | Empurrar com a suite verde | `cd /home/ronald/saas-hasner && git add app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -q --amend --no-edit && timeout 2400 git push origin main 2>&1 \| tail -6` |
 | 18:23:11 | Bash | Selo da E5 estrutural e rodar | `python3 - <<'PYEOF' p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read() i = s.index('import datetime') cab = s[:i] cab = cab.replace('''O QUE ESTE SELO GUARDA, e e a parte que morde: o modo leitura **nao escreve**.''', '''LIMITE DE COBERTURA, DECLARADO (nao e descuido): este selo prova a parte ESTRUTURAL -- que o modo leitura nao monta linha no banco -- e NAO monta cenario proprio ...` |
 | 18:22:07 | Bash | Ver o modelo Posto | `python3 -c " import re s=open('colaboradores/models.py').read() i=s.find('class Posto') if i<0: import subprocess; print(subprocess.run(['grep','-rn','class Posto','--include=*.py','.'],capture_output=True,text=True).stdout[:300]) else: for m in re.finditer(r'^ (\w+) = models\.(\w+)\(([^\n]*)', s[i:i+2500], re.M): req = 'blank' not in m.group(3) and 'null' not in m.group(3) and 'default' not in m. ...` |
