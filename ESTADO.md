@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:05:45.**
+**Medido em 27/09/2026 12:10:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/ponto/motor_calculo_v2.py
  M app/ponto/turnos.py
 ?? esteira.pausada
 ```
@@ -86,21 +87,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● A casa já tem esse juiz: escala/orfa_classe.py classifica órfã em eco_cluster (rajada ≤ 15 min de outra marca) x geometria. É ele que separa o col904 do col51. Vou lê-lo para
-  reusar, não reimplementar:
-
-  Read 1 file
-
-● A casa tem o vocabulário (JANELA_CLUSTER_MIN = 15, rajada) mas o classificar_orfas só vê rajada entre órfãs — a do col904 é rajada com uma luz acesa, que é o cluster-guard
-  ("batida só ocupa o marco mais próximo"). Vou consultar antes de fixar essa semântica, porque ela mexe em dinheiro:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Aviso decisivo: os campos do item estavam estreitos demais — fechar plantão noturno move horas_noturnas por definição, e a DIFF anterior estava separando exatamente a cura.
-  Aplico as três correções no mesmo patch:
-
   Ran 1 shell command
 
 ❯ Pista para o col51 (leis existentes, nenhuma nova): se o template dele tem intervalo_modo = duracao, o dia nao tem marco de intervalo por construcao, e o par de batidas no MEIO
@@ -115,11 +101,26 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● A lei do miolo é declarada e deslizante ("bordas são a lei do template; miolo se auto-ancora por duração"), e o O62 diz que a duração vem do cadastro, não do 60 do Art.71. Vou
   achar o leitor canônico da duração e o _marca_intra_duracao (o miolo dentro do próprio pareador):
 
-  Achar o leitor canonico da duracao do intervalo
-  ⎿  $ echo '=== juizes.py:775-800 ==='; sed -n '775,800p' core/juizes.py; echo; echo '=== leitores de intervalo_duracao_min ==='; grep -rn 'intervalo_duracao_min' --include=*.py
-     . | grep -v '/tests/\|migrations' | head -20; echo; echo '=== _marca_intra_duracao ==='; sed -n '125,165p' ponto/turnos.py
+  Ran 1 shell command
 
-· Hashing… (17m 40s · ↓ 28.5k tokens · still thinking)
+● A pista resolve melhor do que meu critério: a lei do miolo (_marca_intra_duracao, corte 08/07 caso Adeilton) já reivindica o par do col51, e a duração vem do cadastro. Vou ver
+  onde o pareador consome _intra_dur para o miolo vencer a leitura de órfã:
+
+  Ran 1 shell command
+
+● O miolo já vence: o bloco de _intra_dur/is_intervalo consome a batida antes da leitura do papel (linha 619), e é por isso que os números do col51 foram idênticos. Escrevo a
+  versão final — dois passos, miolo respeitado, janela de cluster reusada:
+
+● Remedir os quatro casos com a versao final
+  ⎿  $ python3 - <<'PYEOF'
+     import py_compile
+     p='ponto/motor_calculo_v2.py'; s=open(p).read()
+     velho = """ celulas=_cels_d, batidas=batidas) or None"""
+     novo = """ celulas=_cels_d, batidas=batidas, intra_max_s=motor.AUT_INTRA_MAX_S) or None"""
+     assert s.count(velho)==1
+     s=s.replace(velho,novo); open(p,'w').w…
+
+· Hashing… (22m 40s · ↓ 39.4k tokens · thinking some more)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
