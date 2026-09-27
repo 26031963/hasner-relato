@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 20:56:01.**
+**Medido em 26/09/2026 21:01:02.**
 
 | | |
 |---|---|
@@ -38,8 +38,6 @@ fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO
  M app/escala/alimentacao.py
  M app/ponto/services/espelho.py
 ?? app/ponto/tests/test_vinculo_do_dia_pela_celula.py
-?? bin/tests/test_vinculo_pela_celula.sh
-?? bin/tests/vinculo_sem_perguntar_a_celula.txt
 ?? esteira.pausada
 ```
 
@@ -47,39 +45,39 @@ fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO
 
 ```
 
+● Enquanto a suíte roda: apago o selo bash cego e ponho o censo em AST, como a memória manda, com a lista que só encolhe.
+
+  Read 2 files, ran 6 shell commands
+
+● Preparo o DIFF na sombra enquanto a suíte roda — o advisor manda a lista ir ao RELATO antes do DEPLOY JÁ, porque a 09 é CONDICIONAL.
+
+  Ran 3 shell commands
+
+● Background command "GREEN do RED mais os vizinhos do espelho e da escala" completed (exit code 0)
+
+● Background command "Esperar o veredito da suite do espelho e da escala" completed (exit code 0)
+
+  Read 1 file
+
+● GREEN: 835 testes OK. Mas o censo AST eu escrevi depois desse run começar — rodo o arquivo sozinho para não declarar verde por acidente:
+
   Ran 1 shell command
 
-● Chave confirmada (colaborador_id, data). Agora o export.py:208 — o advisor manda dizer qual pergunta ele faz.
-
-  Ran 1 shell command
-
-● _ciclo_do_colab (folha/export.py:206-209) pergunta por colaborador ("em que ciclo esta pessoa está", regra 59-A), não "qual vínculo vale neste dia" — fora do escopo da ordem.
-  Agora o RED primeiro:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Fatos fechados. O que a escolha do vínculo realmente muda na linha 186 é livre=te._intervalo_livre() e o template de fallback — o intervalo em si já vem da célula. Escrevo o RED
-  com essa mordida:
+● O censo achou 2 em ponto/turnos.py, não 1 — eu declarei de leitura parcial. Vou ver o segundo antes de escrever o número:
 
   Searched for 1 pattern, ran 2 shell commands
 
-● O realizado_do_dia:400-401 é uma terceira cópia da regra. Escrevo o RED com a guarda que MORDE (se as duas respostas não diferirem, a fixture é inútil):
+● O segundo é o meu próprio papel_por_minuto_da_ata da O65 (turnos.py:670) — mesma forma, por janela, não por dia. Declaro os dois com a razão de cada:
 
-  Ran 2 shell commands
+● Declarar os 2 e rodar o selo inteiro
+  ⎿  $ python3 - <<'PYEOF'
+     p = 'ponto/tests/test_vinculo_do_dia_pela_celula.py'
+     s = open(p).read()
+     old = """ # `realizado_do_dia` sem `livre`/`intervalo` pergunta ao banco com
+     # `order_by('-ativa', '-data_inicio')`. O espelho JA nao cai aqui (alimenta os dois),
+     # e os outros chamadores sao de EXIBICAO. …
 
-● A guarda MORDE fez exatamente o trabalho dela: pegou que a minha fixture não morde — livre sozinho dá 450 nos dois, e o teste do espelho passava por vazio. Troco a mordida para
-  o intervalo declarado:
-
-  Ran 2 shell commands
-
-● RED evidenciado: 480 min (vínculo ativo) contra 420 (a geradora da célula) — e a guarda MORDE passou, então a fixture prende. Agora a cura:
-
-● GREEN do RED mais os vizinhos do espelho e da escala · 1m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:lates… (1m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Slithering… (19m 38s · ↓ 30.6k tokens)
+✻ Slithering… (24m 39s · ↓ 41.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

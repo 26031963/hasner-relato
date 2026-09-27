@@ -4,9 +4,9 @@
 
 **O69 APLICADA em 09 e no ar**: 654,74 h de movimento absoluto, reversao em
 `logs/apply_o69_09_antes.json` + `git revert 9b67131e`. **push43 NAO POUSOU** -- foi rejeitado pela
-`regua_tickets` (O67 e O69 citadas em commit sem linha na tabela), curado em `068e830b`; `push44` esta
-na suite com esse commit. Ultimo hash POUSADO em `origin/main`: **`af7a6425`**, `ahead = 9`. Nao invento
-hash de push43 porque ele nao existe.
+`regua_tickets` (O67 e O69 citadas em commit sem linha na tabela), curado em `068e830b`. **O push44
+POUSOU**: `origin/main = 068e830b`, `ahead = 0`, suite 8.345 OK + control-plane 22 OK. Nao ha hash de
+push43 porque ele nao pousou -- o hash que situa um chat novo e' **`068e830b`**.
 
 **FILA NA ORDEM** (ordem do Ronald 27/09, nenhuma lei nova): **(1)** O69 lado do espelho -- `espelho_do_colab`
 le `CelulaDia.escala_geradora` + selo do leitor que escolhe vinculo sem perguntar a celula; **(2)** O68 --
