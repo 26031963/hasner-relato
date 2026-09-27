@@ -16,6 +16,60 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## CORRECAO: o plano B nao e 758 (11,0%), e **1.484 dia-colab (19,4%)**
+
+Eu publiquei `758 / 11,0%` as 21:xx, aqui no RELATO, na linha `O68 PLANO-B-MEDIDO` do TICKETS, na
+casa do medidor em `config/crons.py` e na mensagem do commit `d39c0696`. **Estava errado, e errado
+para BAIXO**, por erro de UNIDADE meu -- nao do sistema.
+
+`_dias_com_orfa_na_ata` e `_dias_luz_sem_batida` sao incrementados DENTRO do laco de dias: um por
+dia-colab. `_dias_partido_fora_do_juiz` NAO -- ele e incrementado UMA vez por chamada de
+`_periodos_pelo_marco` (`ponto/motor_calculo_v2.py:314`) e a funcao **retorna ali mesmo**, porque o
+regime de turno partido nao e coberto pelo juiz da ata. Somar 35 daquilo com 614 dias foi somar motor
+com dia, e cada unidade daquele 35 esconde um MES de um colaborador.
+
+**Quem denunciou foi o RED que a ordem manda usar.** O [nome] (col857) deu `pelo marco = 0` e
+`partido = 1`: um mes inteiro em que o juiz da ata nunca foi consultado, aparecendo como "1". Medido:
+**22 dias de trabalho dele**, todos fora do juiz. Sem o RED dirigido, o 758 teria ido para o DP.
+
+### O numero, agora em duas unidades que NAO se somam
+
+| | |
+|---|---:|
+| dia-colab PELO MARCO (a ata explica) | **6.154** |
+| (1) plano B por DIA-COLAB | **723** |
+| &nbsp;&nbsp;`_dias_com_orfa_na_ata` | 614 |
+| &nbsp;&nbsp;`_dias_luz_sem_batida` | 109 |
+| &nbsp;&nbsp;`_dias_sem_juiz` | 0 |
+| (2) plano B por COLABORADOR-FATIA (regime inteiro fora do juiz) | **35** fatias em **28** colabs |
+| &nbsp;&nbsp;dias de trabalho desses 28 na janela, pela celula | **761** |
+| **PLANO B TOTAL em dia-colab** | **1.484 de 7.638 = 19,4%** |
+
+Um de cada cinco dias que o motor tocou em 09 foi julgado SEM a ata. Metade disso (**761**) e uma
+populacao que nenhum contador do motor enxergava: 28 colaboradores de turno PARTIDO cujos dias nunca
+chegam ao juiz.
+
+### E o achado de DESENHO da parte (a), que muda o que ela e
+
+O 11/09 do [nome] -- o RED da ordem -- **a ata explica perfeitamente**: 4 lampadas todas `acesa`, zero
+orfas, entrada `2026-09-11 21:01` -> saida `2026-09-12 07:00`, `em_aberto=False`,
+`desalinhado=False`, e os `tipo_real` ja NOMEANDO a inversao (a lampada `E` das 21:00 tem
+`tipo_real='S'`). O juiz atravessa a meia-noite e sabe a verdade.
+
+O que acontece e que **o motor dele nunca pergunta**: `AUT_MARCOS_INTERVALO=False` desvia em
+`motor_calculo_v2.py:305-314` antes de qualquer leitura de ata.
+
+Entao a parte (a) nao e "ensinar o juiz a cruzar a meia-noite" -- ele ja cruza. E' **o juiz aprender a
+falar de DOIS BLOCOS**, que e a fronteira que o proprio codigo declara: *"enquanto o juiz nao souber
+falar de dois blocos, o partido segue com a autoridade de geometria -- que e a unica que descreve o
+regime dele"*. O comentario tambem registra o preco de fazer errado: aplicar o juiz de um bloco no
+partido funde os blocos e o vao de 7 h vira intervalo, e o selo
+`test_MORDE_marcos_do_dia_vem_do_dna_alimentado` caiu de 30 para 0 min de HE50 quando isso foi
+tentado.
+
+Reproduzir: `tenant_command plano_b_no_dinheiro --schema=juliani --mes 9 --ano 2026`
+(e `--colabs 857` para o RED dirigido).
+
 ## PAREI na O71: o dinheiro NAO cai nos dois colabs que a cura visa
 
 A condicao era "se forem os mesmos 2, aplica". **Nao sao.** Medido em PROD, ensaio em `atomic()` com
