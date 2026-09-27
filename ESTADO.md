@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:06:01.**
+**Medido em 27/09/2026 11:11:31.**
 
 | | |
 |---|---|
@@ -87,10 +87,6 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  h. Selos: nao fecha com batida do turno seguinte; turno que ja fechava continua identico. DIFF pelo criterio do MODO 24H.
-
-● Regra recebida com as duas condições exatas — e ela confirma o desenho que eu estava escrevendo. Turno é namedtuple, então o passo final é limpo. Primeiro nomeio um RED real de
-  cada faixa:
 
   Ran 1 shell command
 
@@ -115,12 +111,16 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ● 6 OK, e o len(ts) == 1 é exatamente o que morde (sem o passo final voltariam dois turnos). Agora a checagem que importa: o pareador tem dezenas de selos. Rodo os apps que o
   consomem:
 
-● Rodar os apps que consomem o pareador · 4m 53s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:lates… (4m 51s)
+  Ran 1 shell command
+
+● 5.272 testes OK em ponto, escala e chamados — o pareador não regrediu. Agora o DIFF:
+
+● DIFF do passo final do O68b · 1m 12s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
+     horas_trabalhadas,turnos_abertos 2>&1 | grep -vE 'moveu fora do item' | grep -E '^ [a-z_]+ ' | awk '$2!=$3' ; echo "---"; docker exec saas_c… (1m 10s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zesting… (17m 34s · ↓ 35.3k tokens)
+✢ Zesting… (23m 4s · ↓ 35.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
