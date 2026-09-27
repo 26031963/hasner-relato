@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:45:46.**
+**Medido em 27/09/2026 04:51:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## `git status --short`
 
 ```
+ M app/config/crons.py
 ?? esteira.pausada
 ```
 
@@ -86,17 +87,6 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ```
 
-● A forma renderizada envolve com cron_run.sh (que dá trilha e duração ao placar) — mesmo comando, mais a trilha. Confirmo que esse envelope já é o usado pelos outros de host
-  antes de instalar:
-
-  Ran 1 shell command
-
-● Confirmado, e muda a decisão: o envelope cron_run.sh é o padrão instalado, mas os cinco contadores declarados não estão no crontab — zero ocorrências cada. E um dos seis é
-  reverter_situacao_afastado, que escreve (reverte situação de colaborador). Então install não é neutro: ativaria um escritor que nunca rodou. Não instalo; lavro o meu contador
-  uma vez e registro:
-
-  Ran 1 shell command
-
 ● O contador na competência aberta (21/09–20/10) dá 13 em 459 células — e ali há 1 cobrado sem canal, então meu "todas são furo" valia só para a janela de 09. E o --apply estourou
   por coluna obrigatória. Vejo como o irmão grava:
 
@@ -112,13 +102,24 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ● [RELATO-NOITE] é a mesma armadilha: tag entre colchetes é lida como fatia. A forma limpa é não usar colchetes em commit que não é fatia:
 
-● Renomear a tag e empurrar · 6m 54s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/config/crons_duracao.json && git commit -q -m "crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
-     bin/crons_duracao.py)
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" && FILTER_BRANCH_SQUELCH_WARNING=1 git filter… (6m 52s · 3 lines)
+  Ran 2 shell commands
+
+● A casa cobra que todo cron declare o papel (a lei do tabuleiro). Vejo o selo e as outras quebras:
+
+  Listed 1 directory, ran 2 shell commands
+
+● Declaro o papel dos três (a lei do tabuleiro) e vejo o que sobra:
+
+● Declarar os papeis e rodar core e chamados · 3m 15s
+  ⎿  $ python3 - <<'PYEOF'
+     import py_compile
+     p='config/crons.py'; s=open(p).read()
+     velho = "'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',)},"
+     novo = ("'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',\n"
+     " # O66 (27/… (3m 14s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Harmonizing… (17m 27s · ↓ 35.2k tokens)
+✢ Harmonizing… (22m 43s · ↓ 38.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
