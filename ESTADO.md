@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:21:01.**
+**Medido em 27/09/2026 13:26:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa` |
-| `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **7** |
+| `HEAD` local | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
+| `origin/main` | `5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
 5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
 5e7b56ef [O93] o item vai para a fila como `!`, que e o que ele e -- e o selo das DUAS FILAS estava certo
 2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%
 42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao
-42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca
 ```
 
 ## `git status --short`
@@ -85,25 +85,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Aguardar o veredito da suite" completed (exit code 0)
-
-● O critério é core/fila_pendentes.py. Meu item pede decisão de verdade (dinheiro a 100%), então o que está errado é o tipo, não o lugar:
-
-  Read 1 file
-
-● O item é decisão de verdade (a cura da O93 mora em motor_calculo_v2.py e move dinheiro a 100%): o tipo certo é !, não PAROU:
-
-  Ran 1 shell command
-
-● Background command "Conferir a suite apos espera" completed (exit code 0)
-
-● Verde. Corrijo dois erros de digitação meus no item de decisão (a hora do turno e a data da regra) e empurro — o pre-push roda a régua inteira, que é a verificação:
-
-  Committed 5e7b56ef
-
-● 6 commits à frente e o remoto em dia. Antes de gastar 15 min, vejo se o pre-push roda a pasta de selos (dois estão vermelhos de antes):
-
-  Ran 1 shell command
 
 ● O pre-push roda o TICKETS, as rotas e a suíte sobre o commit — não a pasta de selos de host, então os dois vermelhos antigos não bloqueiam. Empurro:
 
@@ -111,14 +92,33 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● A régua cobra linha no TICKETS para a O93 e está certa. Acrescento:
 
-● Empurrar de novo com a linha do TICKETS · 8m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md && git commit -F - <<'MSGEOF'
-     [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
-     Fatia citada em commit tem de ter linha na tabela no MESMO ato ("em voo" quando abre). Eu abri a O93 nos
-     dois commits anteriores e nao abri a li… (8m 19s · 3 lines)
+  Committed 5215187e, pushed to main, ran 1 shell command
+
+● Push pousou (6060994d..5215187e), suíte verde sobre o commit empurrado (8447 + 22 do control-plane). DEPLOY JÁ — nenhum modelo tocado:
+
+  Ran 1 shell command
+
+● Subiu. Smoke no worker servido — hora dos workers contra a hora dos arquivos, e o caso pelo motor que está no ar:
+
+  Ran 1 shell command
+
+● Workers de 16:22:43 UTC (13:22 local), arquivos de 12:52 e 12:10 — o worker servido é mais novo que o código, e os três casos provam no ar. Publico onde você clica e fecho o
+  RELATO:
+
+  Committed 64181020, searched for 2 patterns, ran 2 shell commands
+
+● O placar do topo guarda o hash do último push — é a O90 outra vez. Cura nomeada pelo próprio selo:
+
+  Ran 1 shell command
+
+● O tag [RELATO-O68b] é lido como ID de fatia — mesma fricção de antes. Uso o tag da fatia que já tem linha:
+
+● Atualizar o rodape e empurrar · 1m 32s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2 && git add app/docs/TICKETS.md && git commit --amend --no-edit -q &&
+     bin/regua_tickets.sh 2>&1 | tail -3 && timeout 2400 git push origin main 2>&1 | tail -10 (1m 29s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Warping… (10m 58s · ↓ 6.7k tokens)
+✢ Warping… (16m 29s · ↓ 14.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
