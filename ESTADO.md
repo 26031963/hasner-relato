@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:28:41.**
+**Medido em 27/09/2026 18:34:01.**
 
 | | |
 |---|---|
@@ -102,12 +102,12 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ❯ aval Ronald: regras de execucao ate o fim da meta: (a) toda cura roda o oraculo e6 nos colabs afetados ANTES do apply, dentro da PROVA; divergencia nova = nao aplica e vira
   cura; (b) fixture de selo sempre copiada de selo existente da mesma familia; (c) PROVA: sempre nas 6 linhas seguintes a afirmacao de ato.
 
-  Empurrar com a suite verde · 4m 22s
+● Empurrar com a suite verde · 9m 42s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -q --amend --no-edit && timeout 2400 git push origin main 2>&1 |
-     tail -6 (4m 17s)
+     tail -6 (9m 37s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Puzzling… (2h 9m 52s · ↓ 97.2k tokens)
+✢ Puzzling… (2h 15m 12s · ↓ 97.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: fatias (4) e (5) do bloco META viram UMA: E5. FONTE: topo = relatorios/cartao_pela_celula.py:138-172 (gravado); linhas = ponto/services/espelho.py:600 (motor ao
