@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:24:01.**
+**Medido em 27/09/2026 05:29:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc` |
-| `origin/main` | `d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -85,40 +86,40 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O core.tests.test_contract_crons não existe (é chamados.) — erro meu de label. Restam os selos do diagrama; vejo o que eles cobram:
-
-  Ran 1 shell command
-
-● O selo nomeia bin/gerar_diagrama.py (script de host), e eu rodei o manage.py gerar_diagrama — são dois geradores. Rodo o que o selo cobra:
-
-  Ran 1 shell command
-
-● Selo do diagrama verde (era a mudança do cron depois da primeira regeneração). Empurro:
-
-  Pushed to main
-
-● Push pousou (512030da), mas os backticks na -m foram interpretados pelo bash e comeram palavras — segunda vez na noite. Não reescrevo histórico já empurrado; corrijo com um
-  commit de errata e gravo a lição:
-
-  Ran 1 shell command
-
-● O backtick não só comeu palavras: ele executou bin/gerar_diagrama.py e colou a saída dentro da mensagem. Foi inofensivo porque era um gerador — com um rm teria rodado. Errata e
-  lição gravada:
-
-  Pushed to main, ran 2 shell commands
-
 ● Push pousou (d070cf9d) e o deploy está no ar. Fecho o resumo da noite com os últimos itens e publico:
 
-● Fechar e publicar o resumo da noite · 5m 5s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     s=s.replace("""| **04:28** | **O87** -- o cadastro recusa intervalo fora do turno |""",
-     """| **05:08** | **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados | selo com 7 casos verde; snapshot lavrado a mao… (5m 4s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Harmonizing… (55m 43s · ↓ 47.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Push em voo com o resumo final. O que esta madrugada entregou, em números:
+
+  No ar e provado no worker servido — sete curas (01:53), E1 com migration (02:30), O85 (03:31), O73 (04:01), O87 (04:28), O66 (05:08). Cada uma com smoke próprio em prod, não só
+  suíte verde.
+
+  Dinheiro: +157,72 h aplicadas a 5 colabs, em dois atos, com os outros 25 campos em zero e 0 entram/saem do TXT nos dois. Verificado por leitura independente do gravado. A lista
+  do DP caiu para 8 colabs / 248,2 h.
+
+  Onze obras nasceram medidas (O82 a O91), nenhuma como palpite. As três que mais importam para você:
+
+  - O89 — o motor mutaciona os objetos Batida que recebe. Provado em três rodadas com entrada idêntica. Alcança 76 de 607 colabs pelo laço de fatias. É desenho e espera seu !.
+  - L-084 — aplicá-la descontaria 286,12 h de 24 pessoas, e o col820 deveria 12h21 num dia em que trabalhou 2h19. Parei com a tabela; uma frase sua resolve.
+  - O91 — cinco vigias declarados e nunca instalados, entre eles o contador da porta do E1. Curei metade (os dois crons de host viraram RAW(), então install não apaga mais nada);
+    não instalei porque ativaria reverter_situacao_afastado, que escreve.
+
+  Seis números meus que eu derrubei medindo de novo, incluindo dois que já estavam publicados — e o último foi o contador novo da O66 me desmentindo no primeiro uso, que é
+  exatamente para isso que ele existe.
+
+  E uma lição de conduta gravada na memória: mensagem de commit só por heredoc. Duas vezes hoje o -m com backticks comeu palavras e, na segunda, executou bin/gerar_diagrama.py —
+  inofensivo por sorte, porque era um gerador.
+
+✻ Baked for 1h 0m 55s · done 5:29 AM · 1 shell still running
+
+● Background command "Fechar e publicar o resumo da noite" completed (exit code 0)
+
+● Conferir o push do resumo
+  ⎿  $ tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg13o0d60.output; cd /home/ronald/saas-hasner && git rev-list --count
+     origin/main..HEAD; date '+%H:%M'
+
+✢ Bloviating… (17s · ↓ 191 tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
