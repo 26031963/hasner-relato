@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:03:01.**
+**Medido em 26/09/2026 23:08:10.**
 
 | | |
 |---|---|
@@ -52,44 +52,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Assim que as duas fecharem, aplico com as quatro condições e publico o gravado antes e depois.
+  usar turno_partido. Ou seja: o cadastro que você identificou como errado é, hoje, o único que o sistema aceita para plantão noturno contínuo.
 
-✻ Crunched for 1m 31s · done 11:02 PM · 3 shells, 1 monitor still running
+  Isso reposiciona a O68 inteira. Reclassificar 32 templates para 12x36 pode passar por essa validação, mas a minha correção de fixture para comercial num turno 21:00–05:00 é
+  inválida por regra do modelo — e o mais importante: significa que a casa já sabia que comercial quebra turno que cruza, e resolveu isso rotulando de "partido", o que criou os
+  761 dias fora do juiz.
 
-❯ confere se os 18 do atraso estao nos 30
+  Não aplico. Duas razões, e nenhuma é a suíte por si: a condição literal que você deu não fechou, e o alvo da reclassificação precisa ser revisto contra uma validação do modelo
+  que eu desconhecia quando propus o mapeamento.
+
+✻ Brewed for 1m 12s · done 11:05 PM · 1 shell, 2 monitors still running
+
+❯ (1) A porta nova (recusa "partido" com vao ate 2 h) NAO vai ao ar enquanto a base do plantao noturno continuo nao for decidida: junto com a validacao antiga (comercial nao
+  cruza a meia-noite) ela impede cadastrar 5x2/6x1 noturno. Garantir que nao esta na arvore servida antes do reload das 03:30; se estiver, tirar com trilha.
+  (2) MEDIR, sem mudar nada: o que TipoEscala.tipo_base comanda alem de MOTOR_POR_BASE (gerador de celulas/ciclo, tela, relatorios, export) -- arquivo:linha. E se
+  Motor12x36ComEscala serve para plantao continuo que cruza a meia-noite fora do ciclo 12x36.
+  (3) Com isso, trazer as opcoes para eu decidir: (a) base de 12x36 para esses 37; (b) o motor escolhido pelo vao entre blocos, sem mexer no cadastro; (c) o motor comercial
+  aprender a nao partir o turno na meia-noite. Reclassificacao em 09 fica suspensa ate o corte. Seguem sem esperar os itens de dinheiro zero (O70, O51b). Nenhuma lei nova.
+
+● Item (1) é urgente e vou primeiro. A guarda está na árvore viva e o reload das 03:30 a poria no ar:
 
   Ran 1 shell command
 
-● Tenho os 30. Agora preciso da lista real dos 18 — rodo a coluna combinada com --json para ter por_colab, em vez de inferir da amostra dos 20 maiores:
+● Correção importante do meu próprio método: docker exec ... python -c abre processo novo e lê o disco, não o worker servido. Isso responde "está na árvore", não "está no ar". O
+  que vale é a hora: arquivo escrito ~22:5x, workers de pé desde 21:39 — a guarda não está servida, e o reload das 03:30 a poria. Tiro agora, com trilha:
 
-  Ran 1 shell command
+  Testar a regra pausada direto na funcao
+  ⎿  $ python3 - <<'PYEOF'
+     p='escala/tests/test_jm_derivado.py'
+     s=open(p).read()
+     old=''' def test_MORDE_a_porta_recusa_partido_com_vao_de_intrajornada(self):
+     """`!` Ronald 26/09: vao de ate 2 h nao e turno partido. Sem este caso, a guarda poderia
+     sumir da porta e os tres testes acima seguiriam verdes --…
 
-● Rodando. Os 30 são:
-
-  49  81  129 155 174 200 212 217 218 235 256 257 266 316 343 369
-  382 474 491 493 522 598 648 819 857 865 879 880 922 923
-
-  A conferência responde duas perguntas, não uma — e a segunda é a que importa mais para o seu critério:
-
-  Os 18 do horas_atraso estão nos 30? Se sim, o desconto novo cai só em quem tem o cadastro errado, e é consequência direta da cura. Se algum estiver fora, o critério "nenhum
-  outro colab" não fecha e eu paro com a lista.
-
-  E o conjunto inteiro de colabs movidos está nos 30? Porque atraso é só um campo. A corrida combinada move 51 colabs, mas ela inclui o efeito da L-084 em 29 — e esses 29 são a
-  frota toda, por desenho da lei, não da reclassificação. O que o seu critério protege é que a reclassificação não vaze para fora dos 30. Então estou imprimindo os dois conjuntos
-  separados, com quanto cada colab de fora move.
-
-  Da amostra dos 20 maiores que eu já vi, os nomes com horas_atraso eram col879, col174, col923, col129, col382, col865, col648, col200, col217 — todos nos 30. Mas nove nomes de
-  uma amostra não são dezoito de um conjunto, e a diferença entre esses dois é exatamente onde eu errei mais de uma vez esta noite.
-
-✻ Churned for 36s · done 11:02 PM · 3 shells, 1 monitor still running
-
-❯ se estiverem todos dentro, aplica
-
-✢ Puttering…
+✽ Undulating… (1m 41s · ↓ 5.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
