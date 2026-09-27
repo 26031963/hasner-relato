@@ -16,6 +16,80 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## O68 (a): a alimentacao da ata no motor RECUPERA o pareamento -- e move dinheiro em 96 colabs
+
+Hipotese do Ronald (26/09 23:2x): antes de ensinar o juiz da ata a falar de dois blocos, testar se o
+caminho de GEOMETRIA do motor -- o que `AUT_MARCOS_INTERVALO=False` escolhe -- recebe a mesma
+alimentacao `papel_por_minuto` que a O65 deu ao `turnos_do_colab`. Testado em copia da arvore, na
+sombra. **Ela corta a obra ao meio: nenhum juiz nasce.**
+
+### RED, com os dois valores medidos
+
+`col857` ([nome], 5x2 noturno 21:00-07:00), dia **11/09**. A ata explica o dia INTEIRO: 4 lampadas
+`acesa`, zero orfas, `21:01 -> 12/09 07:00`, `em_aberto=False`, e os `tipo_real` **ja nomeando a
+inversao** (a lampada `E` das 21:00 tem `tipo_real='S'`).
+
+| arvore | periodos que o motor montou em 11/09 |
+|---|---|
+| HEAD | **1**: `02:00 -> 07:00` = **5,01 h** |
+| com a alimentacao | **2**: `02:00 -> 07:00` (5,01 h) **+ `21:01 -> 12/09 00:59` (3,96 h)** |
+
+**A entrada das 21:01 voltou, e cruzando a meia-noite.** Ela era descartada porque o pareador lia o
+`tipo` GRAVADO -- que diz `E` onde a ata diz `S` -- e este motor nunca chega ao juiz da ata. E' o bug
+da O65 num sitio que a O65 nao alcancou, e a cura tem a mesma forma: papel da ata, instante da
+`Batida`, pareador inalterado.
+
+**O que a hipotese NAO resolve**, e vale a precisao: o 11/09 segue somando a CAUDA do plantao do dia
+10 (`02:00->07:00`) com o INICIO do dia 11. Isso nao e falha da alimentacao -- e a atribuicao do dia
+pela data civil da entrada, num regime que divide no intervalo por desenho. **Sao duas perguntas**, e
+so a segunda pediria o juiz de dois blocos.
+
+### O numero da FROTA: o efeito ISOLADO da alimentacao
+
+Duas corridas na MESMA sombra, `--so-recalculo` (sem rejulgar nada), as duas contra o GRAVADO. A
+diferenca entre elas e o efeito da alimentacao, e nada mais:
+
+| campo | HEAD | com alimentacao | **efeito da alimentacao** | colabs |
+|---|---:|---:|---:|---:|
+| `turnos_abertos` | -80 (36) | **-90** (46) | **-10 turnos abertos** | 36 -> 46 |
+| `inconsistencias` | -7 (14) | **-20** (40) | **-13 inconsistencias** | 14 -> 40 |
+| `horas_trabalhadas` | +142,14 (56) | +117,03 (64) | **-25,11 h** | 56 -> 64 |
+| `horas_extras` | +83,33 (95) | +51,51 (96) | **-31,82 h** | 95 -> 96 |
+| `horas_noturnas` | +49,06 (17) | +71,41 (22) | **+22,35 h** | 17 -> 22 |
+| `horas_intra_indenizada` | -24,68 (47) | -25,68 (48) | -1,00 h | 47 -> 48 |
+| `horas_folga_trabalhada` | 0 | -0,04 (1) | -0,04 h | 1 |
+| ENTRAM / SAEM do TXT | 4 / **0** | 4 / **0** | **nenhuma mudanca** | os mesmos col964-967 |
+
+**A direcao dos dois primeiros e o veredito**: 10 turnos abertos a menos e 13 inconsistencias a menos,
+em 46 e 40 colabs. Batida que estava orfa passou a parear. E' pareamento melhor, nao numero melhor --
+e por isso o dinheiro anda nos DOIS sentidos (trabalhadas -25,11 h, HE -31,82 h, noturnas +22,35 h):
+par que fecha tira hora extra de turno aberto e poe hora normal, inclusive noturna.
+
+### PAREI para o apply, e a razao e o SEU criterio
+
+O `!` de 26/09 22:0x autoriza a parte (a) **se e so se** "so dias do plano B mudam, nenhum outro campo
+e nenhum outro colab". Medido: o dinheiro se move em ate **96 colabs** (`horas_extras`), e o plano B
+por dia tem **199**. Os 96 podem estar contidos nos 199 -- **eu nao medi isso**, e "podem estar" nao e'
+medicao. Enquanto nao houver a conferencia colab a colab, o criterio nao esta provado e o apply nao sai.
+
+**CURA MAIS RESTRITIVA disponivel (L-081)**: eu alimentei o pareador em TODOS os motores, e por isso a
+mudanca alcanca 96 colabs. Restringir a alimentacao ao ramo `AUT_MARCOS_INTERVALO=False` -- os **28**
+colabs de turno partido, que sao os unicos que nunca chegam ao juiz -- e a versao mais restritiva da
+mesma cura, e provavelmente a que fecha no criterio. E' o proximo passo, antes de qualquer apply.
+
+### Dois erros de metodo que o teste expos
+
+**(1)** A copia da arvore nao subia: `docker` falhava com `create mountpoint for /app/media ...
+read-only file system`, porque eu excluira `media` do tar e `/app` monta `:ro`. E' a **mesma classe** do
+bug do `staticfiles` que eu curei hoje as 11:xx no `arvore_do_push.sh` -- arvore de trabalho sem o
+PONTO DE MONTAGEM. Duas vezes no mesmo dia: o selo daquele script deveria cobrar os tres
+(`staticfiles`, `media`, `logs`), e hoje cobra um.
+
+**(2)** `papel_por_minuto_da_ata` chaveia `celulas` por **`c.data`**; `motor.celulas_alimentadas` chaveia
+por **`(colab_id, data)`**. Passar o dict direto **nao estoura** -- devolve mapa VAZIO -- e a cura ficaria
+MUDA parecendo aplicada. Foi exatamente assim que a O65 me enganou uma vez (chave naive contra busca
+aware). Convertido, com o porque no comentario do patch.
+
 ## CORRECAO: o plano B nao e 758 (11,0%), e **1.484 dia-colab (19,4%)**
 
 Eu publiquei `758 / 11,0%` as 21:xx, aqui no RELATO, na linha `O68 PLANO-B-MEDIDO` do TICKETS, na

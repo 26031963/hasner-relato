@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:20:45.**
+**Medido em 26/09/2026 22:25:45.**
 
 | | |
 |---|---|
@@ -47,40 +47,40 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  nomeando a inversão E/S, período 11/09 21:01 → 12/09 07:00. O que falta é essa informação chegar ao caminho de geometria, que hoje pareia pelo tipo gravado e portanto vê E onde
-  a ata diz S. É literalmente o mesmo bug da O65, num sítio que a O65 não alcançou.
+✻ Cooked for 23s · done 10:23 PM · 1 shell still running
 
-  Vou montar o RED com os ~9h do Jean no 11/09 e testar a alimentação antes de escrever qualquer juiz.
+● Background command "DIFF da frota com a alimentacao, contra a baseline da sombra" completed (exit code 0)
 
-✻ Crunched for 1m 30s · done 10:16 PM · 1 shell still running
+  Read 1 file
 
-❯ monta o RED e testa a alimentacao!
-
-● Monto o RED. Acrescento ao medidor a capacidade de mostrar o que o motor de fato calcula num dia, interceptando calcular_mes no motor que o fechamento criou:
+● O DIFF veio. Isolando contra a baseline da sombra que eu já tinha, o efeito próprio da alimentação:
 
   Ran 1 shell command
 
-● O bloco dos períodos ficou acima do corte do tail. Pego a parte que importa:
+● Monitor "DIFF da frota com a alimentacao da ata" stream ended
 
-  Ran 1 shell command
+❯ (1) O68: o [nome] (col857) nao e turno partido -- plantao continuo 21:00-07:00 com intervalo de 1 h. Medir o CRITERIO que classifica "partido" nos 28 colabs: vao entre blocos de
+  cada um (1 h x 7 h). Se o criterio for o flag AUT_MARCOS_INTERVALO e nao o vao, a raiz e a classificacao: partido de verdade (vao acima do limite do Art.71, 2 h) segue pela
+  geometria alimentada pela ata; o resto vai ao juiz como qualquer dia. Tabela dos 28 com o vao, antes do patch.
+  (2) O71: col107 com turnos_abertos +2 e -7,33 h e a assinatura contraria a da cura -- autopsia dia a dia antes do !; col499 junto. Nao aplica o recalculo de nenhum dos dois ate
+  a causa ter nome. Nenhuma lei nova.
 
-● RED evidenciado, e é maior do que a ordem previa. O motor no 11/09 do Jean:
+● Sua correção é a raiz e derruba a minha premissa: eu tratei o Jean como turno partido porque o motor dele diz AUT_MARCOS_INTERVALO=False, e nunca perguntei se ele é partido. Um
+  plantão 21:00–07:00 com 1 h de intervalo não é partido. Registro as duas ordens e vou ao critério:
 
-  col857   11/09 02:00:00 -> 11/09 07:00:00   min=300,5   horas=5,01   aberto=False
-           alerta: "Intrajornada suprimida — 23min pagos como HE. Gap real: 36min."
+  Ran 3 shell commands
 
-  Um período de 5,01 h, começando às 02:00 do dia 11 — que são marcos do plantão do dia 10. A ata diz que o dia 11 é 21:01 → 12/09 07:00 com intervalo 01:00–02:00, ou seja ~9h. O
-  motor perdeu a entrada das 21:01 e montou o dia com as batidas da madrugada, que pertencem ao turno anterior. Gravado do mês: 82,73 h.
+● MOTOR_POR_BASE[tipo_base] — o critério é o campo de cadastro TipoEscala.tipo_base, não o vão. Sua hipótese está certa. Monto a tabela dos 28 com o vão:
 
-  Agora testo a alimentação. Leio o sítio e trabalho em cópia do HEAD, não na árvore viva:
+● Tabela dos colabs de cadastro partido com o vao entre blocos
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     import datetime
+     from escala.models import EscalaColaborador, TipoEscala, CelulaDia
+     from colaboradores.models import Empresa
+     from ponto.janelas import janela_fechamento
+     from esca…
 
-  Ran 1 shell command
-
-● O patch é pequeno e tem exatamente a forma da O65. Confiro o contrato de papel_por_minuto_da_ata antes:
-
-● Contrato de papel_por_minuto_da_ata
-
-· Finagling… (2m 0s · ↓ 6.6k tokens · still thinking)
+* Cascading… (1m 54s · ↓ 7.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
