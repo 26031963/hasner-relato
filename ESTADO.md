@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:47:59.**
+**Medido em 27/09/2026 09:52:31.**
 
 | | |
 |---|---|
@@ -85,7 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Decisão precisa. O corte alcança quatro coisas, e não as quinze que meu filtro largo pegou:
 
   Ran 1 shell command
 
@@ -114,10 +113,11 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● O DIFF da O89 é zero: colabs com QUALQUER campo movido: 0. A mutação era latente para a folha de 09 — ela mordia na passada órfã da O85, que foi onde eu a encontrei. Publico e
   empurro:
 
-  Publicar e empurrar · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -1; timeout 900 git push 2>&1 | tail -5
+● Publicar e empurrar · 4m 34s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -1; timeout 900 git push 2>&1 | tail -5 (4m 33s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Shimmying… (48m 37s · ↓ 71.0k tokens)
+✢ Shimmying… (53m 9s · ↓ 71.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
