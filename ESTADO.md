@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:50:45.**
+**Medido em 27/09/2026 10:55:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
+| `HEAD` local | `9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono` |
 | `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
 c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
 4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
 ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
 d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
-96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -86,40 +85,40 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - E6 rodado de novo — e o oráculo, que não passa pelo motor, confirmou a O85 sozinho: só a classe C moveu, exatamente −157,7 h.
-
-  Duas coisas que eu corrigi em mim e gravei na memória: mensagem de commit só por heredoc (o -m com backtick executou um script) e ler date no ato de cada rótulo (errei 6 h e
-  depois 3 h no mesmo dia).
-
-  E uma que fica na sua mesa, declarada e não consertada por mim: o vigia da esteira alarma "trava A vazia" desde 05:25 e está certo — o fabricante não produziu nada nesta
-  madrugada, porque o que andou foi trabalho direto. Religar aquele mecanismo é decisão sua.
-
-✻ Cogitated for 25m 9s · done 10:48 AM · 1 shell still running
-
-● Background command "Publicar a O91 fechada e a rodada 2 do oraculo" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push pousou (c5337c0f). Sigo para a O81 parte (b) — o espelho cair no builder só no dia degradado. Leio o sítio que levanta a exceção, para ver se ela sabe QUAL dia:
-
-  Ran 1 shell command
-
-● A exceção sabe o dia mas não o expõe. A cura é deixar remapear_na_regua marcar o dia agregado em vez de derrubar o período — mantendo o fail-loud como default. Leio o bloco do
-  espelho para ancorar:
-
-  Ran 1 shell command
-
-❯ corte Ronald: o vigia NAO alarma "trava A vazia" enquanto o fabricante estiver DESLIGADO com dono (esteira.pausada declarada); nesse estado ele vigia a sessao ociosa (item 8),
-  e volta a vigiar a trava A so quando o fabricante for religado por corte meu. O fabricante segue desligado. Depois segue a fila sem parar: O68b (classe B, turno aberto, 27
-  colabs, 734 h) -> classe D (21, 274 h) -> classe C residual -> E5 fatia 1 -> E6 rodada 3. !
 
 ● Corte recebido, e ele reordena a fila — a O81 sai e a classe B entra na frente. Primeiro conserto o vigia, que é pedido explícito. Acho-o:
 
-● Ler o contexto do alarme no vigia
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rln 'trava A (estrutural) vazia' bin/ app/ 2>/dev/null | head -3; grep -rn 'trava A (estrutural) vazia' bin/*.py bin/*.sh 2>/dev/null |
-     head -3
+  Searched for 1 pattern, ran 3 shell commands
 
-* Zesting… (2m 18s · ↓ 3.4k tokens)
+● core/esteira_vigia.py:492-499. Vejo como o módulo acha a raiz e se já existe leitor de pausa:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Tenho o idioma (R, _ler, _tem_dono). Escrevo a cura e o selo:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● 4 OK, com os dois casos que mordem (sem pausa alarma; pausa anônima alarma). Commito e entro na classe B, começando pelo caso limpo que a decomposição isolou — col529 10/09:
+
+  Ran 1 shell command
+
+● Causa encontrada, e ela reenquadra a classe B. O col529 em 10/09 tem cinco batidas: 06:53 E, 07:00 E, 13:06 S, 14:06 E, 15:25 S — duas entradas a 7 minutos. A ata alinhou certo
+  (concorde, 4 luzes), e o motor produziu dois períodos: um fantasma 06:53 → ABERTO e o dia real 07:00 → 15:25 com 7,42 h. O turno aberto é eco, e a hora está contada. Meço isso
+  na escala:
+
+  Ran 1 shell command
+
+● A medição corrige minha hipótese: o fantasma é 1 caso, não o padrão. Os 313 se separam em 223 (71%) dias sem período fechado nenhum — esses custam hora — e 89 (28%) batida
+  sobrando em dia já contado. Vou ao maior sub-formato, os 84 "marco apagado sem órfã":
+
+  Ran 1 shell command
+
+● Causa da classe B nomeada e dimensionada: dos 103 casos com S real e marco apagado, 55 têm a S a ≤ 90 min do marco — dentro da janela do cluster-guard — e o resto a 2–7 h. O
+  padrão é o turno real deslocado do cadastro: a S cai fora da janela, o marco fica apagado e o turno nunca fecha, perdendo o dia inteiro. Publico:
+
+  Running 1 shell command…
+
+✽ Zesting… (7m 19s · ↓ 19.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
