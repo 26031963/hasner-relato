@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:20:31.**
+**Medido em 27/09/2026 17:25:45.**
 
 | | |
 |---|---|
@@ -95,6 +95,8 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+❯ aval Ronald: (1) O81-CURA so comeca depois do meu corte escrito sobre a tabela a/b/c do censo; censo pronto = PARAR e publicar. (2) RELATO retido de novo em RELATO.md:74:
+  varrer o RELATO inteiro por afirmacao de ato sem PROVA: ao lado, curar todas numa passada e republicar antes do DRY do mutirao. (3) A colisao de lei do dia impar vem ao RELATO
   como pergunta com as duas leis citadas (L-NNN), sem escolher lado.
 
 ● Ordem recebida. Vejo o que o relato.sh cobra e varro o RELATO inteiro numa passada:
@@ -112,18 +114,17 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Mais fundo do que o carimbo: _pares_marcados também exige S→E do tipo gravado — e o X existe justamente porque a ata desmente o gravado. Curo as duas pontas:
 
-● Curar o X nao carimbado e medir os REDs
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/turnos.py'; s=open(p).read()
-     velho = """ if t == "X":
-     # A ATA DISSE QUE ESTA BATIDA NAO E BORDA (O68b): ela esta DENTRO do vao da ata e nenhum
-     # marco a reivindicou. Entra no turno como batida interna -- nao abre, nao fecha, e nao se
-     # perde (a marca…
+  Ran 1 shell command
 
-✻ Waiting for API response · will retry in 2m 34s · check your network
+● Curado: col81 21/08 vai de 488 → 423 min (oráculo 422) e col327 22/08 de 466 → 406 (oráculo 406, exato). Selo e medição de frota:
+
+  Running 1 shell command…
+
+· Puzzling… (1h 6m 56s · ↓ 69.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 › Message from @ae9d376eeecd3e213 (ctrl+o to expand)
+› Message from @ab04a661308c44a3f (ctrl+o to expand)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -131,8 +132,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Writing taxonomy summary to LAUDO.txt                                                                                               36m 0s · ↓ 260.6k tokens
-  ◯ general-purpose  Auditing ORA_SEM_TURNO rows in e6b.py                                                                                               36m 0s · ↓ 176.0k tokens
-  ◯ general-purpose  Listing janela helpers in ponto/janelas.py                                                                                          6m 37s · ↓ 104.6k tokens
+  ◯ general-purpose  Reading minutos_realizados cap in fechamento.py                                                                                    41m 14s · ↓ 208.4k tokens
+  ◯ general-purpose  Grouping offending days from o81forma.out                                                                                          11m 51s · ↓ 126.1k tokens
   ⧉  index
 ```
