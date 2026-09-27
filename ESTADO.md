@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:15:31.**
+**Medido em 27/09/2026 09:20:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M app/docs/CORTES.md
+ M app/docs/LEIS.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_l093_teto_pontualidade.py
 ?? esteira.pausada
@@ -88,27 +90,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-● Agora o teto de pontualidade. O motor já consulta a autoridade do previsto — leio o método que a possui:
-
-  Ran 1 shell command
-
-● A autoridade é self._previsto_do_dia(dia) (0 = "nada previsto", None = "sem juiz"). O teto tem de ser o último a falar, senão a zona 5 o desfaz. Vejo os fins dos três
-  calcular_mes:
-
-  Ran 1 shell command
-
-● Há cinco return resultado — o teto precisa ser um método idempotente chamado nos três sítios que recalculam pontualidade. Escrevo a lei, o método e o RED:
-
-  Ran 3 shell commands
-
-● dia_da_jornada existe nos dois escopos. Agora o RED, que afirma a lei e não um número mágico — e o caso que morde é o dia cuja soma está abaixo do teto e não pode ser tocada:
-
-  Ran 1 shell command
-
-● trab = 0: no meu fixture o 01/09 é folga para o ciclo 12x36 com âncora 01/08 — o período foi para periodos_ft. Escolho os dias perguntando ao vínculo, em vez de cravar data:
-
-  Ran 1 shell command
-
 ● Duas passam; a terceira me ensinou o alcance da lei: previsto=660 trabalhado=700 teto=0 — a pessoa chegou 20 min tarde e ficou 40 min além, então nada faltou e o corte zera o
   desconto. Isso é a lei funcionando, não bug. Refaço o caso que morde com o intervalo batido, onde de fato falta tempo:
 
@@ -116,11 +97,32 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● 3 OK, e o RED evidenciado é o dado real (col820: 741 min contra 139 trabalhados, medido antes da cura). Agora a remedição dos 24 com o teto, em ensaio:
 
-● Ensaio da remedicao dos 24 com o teto
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
-     horas_atraso,horas_saida_antecipada 2>&1 | grep -vE 'moveu fora do item' | grep -E 'horas_atraso|horas_saida_ant|APLICADOS|SEPARADOS \(mov|E…
+  Ran 1 shell command
 
-· Shimmying… (16m 9s · ↓ 26.8k tokens)
+● O teto muda o quadro por inteiro: atraso −59,21 h (71 colabs) e antecipada +48,12 h (57) — a L-084 corrigida caiu de +221,21 h para +48,12 h, porque o desconto passou a parar no
+  que faltou. Confiro o RED que você nomeou antes de aplicar:
+
+  Ran 1 shell command
+
+● O RED está curado, e pela aritmética exata: col820 01/09 trabalhou 139 min de 660 previstos, então o teto é 521 e a antecipada ficou 521 — não mais 741. O col769 caiu de 35,42 h
+  para 0,08 h (o teto é por DIA, e ele trabalhou 655 de 660). Aplico:
+
+  Ran 1 shell command
+
+● Aplicado: 111 colabs, atraso −59,21 h e antecipada +48,12 h, nada mais move. Registro a lei e lanço a suíte:
+
+  Ran 1 shell command
+
+● Suíte rodando (não toco .py). Uso a janela para descobrir qual atributo o motor muta — assim a cópia da O89 nasce provada, rasa ou profunda:
+
+  Ran 1 shell command
+
+● Achado: o motor grava _intra_dur = True na própria Batida — um marcador de "esta batida é intrajornada por duração". Na segunda passada ele o encontra já marcado e pareia
+  diferente. Vejo quem escreve e quem lê:
+
+  Ver quem escreve e le o marcador
+
+· Shimmying… (21m 23s · ↓ 35.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
