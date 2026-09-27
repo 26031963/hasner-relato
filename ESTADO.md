@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:45:45.**
+**Medido em 27/09/2026 10:50:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| `origin/main` | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -86,40 +86,40 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - E6 rodado de novo — e o oráculo, que não passa pelo motor, confirmou a O85 sozinho: só a classe C moveu, exatamente −157,7 h.
 
-● A segunda rodada: 84 colabs / 1.602,2 h → 80 / 1.444,5 h, ou seja −157,7 h, que é quase exatamente as +157,72 h da O85. Mas o comparativo por classe seria maçã com laranja — o
-  log usa a tolerância de 1 h e meu número publicado usa max(3h, 5%). Reclassifico com a mesma régua:
+  Duas coisas que eu corrigi em mim e gravei na memória: mensagem de commit só por heredoc (o -m com backtick executou um script) e ler date no ato de cada rótulo (errei 6 h e
+  depois 3 h no mesmo dia).
+
+  E uma que fica na sua mesa, declarada e não consertada por mim: o vigia da esteira alarma "trava A vazia" desde 05:25 e está certo — o fabricante não produziu nada nesta
+  madrugada, porque o que andou foi trabalho direto. Religar aquele mecanismo é decisão sua.
+
+✻ Cogitated for 25m 9s · done 10:48 AM · 1 shell still running
+
+● Background command "Publicar a O91 fechada e a rodada 2 do oraculo" completed (exit code 0)
 
   Ran 1 shell command
 
-● Comparação limpa, e ela confirma a cura por via independente:
+● Push pousou (c5337c0f). Sigo para a O81 parte (b) — o espelho cair no builder só no dia degradado. Leio o sítio que levanta a exceção, para ver se ela sabe QUAL dia:
 
-  ┌─────────────────────────┬────────────────┬────────────────┬──────────┐
-  │         classe          │    rodada 1    │    rodada 2    │  delta   │
-  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
-  │ A cadastro              │ 4 c / 217,7 h  │ 4 c / 217,7 h  │ —        │
-  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
-  │ B turno aberto          │ 27 c / 733,7 h │ 27 c / 733,7 h │ —        │
-  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
-  │ C espelho vê, folha não │ 32 c / 376,4 h │ 28 c / 218,7 h │ −157,7 h │
-  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
-  │ D nem o espelho vê      │ 21 c / 274,3 h │ 21 c / 274,3 h │ —        │
-  └─────────────────────────┴────────────────┴────────────────┴──────────┘
+  Ran 1 shell command
 
-  Só a classe C moveu, e exatamente as −157,7 h que a O85 aplicou. Saíram da lista col375, col743, col882 e col935; o col515 fica com resíduo de 1,54 h. A, B e D intactas, como a
-  taxonomia previa.
+● A exceção sabe o dia mas não o expõe. A cura é deixar remapear_na_regua marcar o dia agregado em vez de derrubar o período — mantendo o fail-loud como default. Leio o bloco do
+  espelho para ancorar:
 
-  Publicar a O91 fechada e a rodada 2 do oraculo · 7m 47s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## E6 rodado de novo (sua regra de fila): o oraculo confirma a O85 por via independente
-     | classe | rodada 1 (03:xx) | rodada 2 (10:3x) | delta |
-     |---|---|---|---:|
-     | **A** fechamento zero (cadastro)… (7m 44s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Envisioning… (22m 27s · ↓ 17.0k tokens)
+❯ corte Ronald: o vigia NAO alarma "trava A vazia" enquanto o fabricante estiver DESLIGADO com dono (esteira.pausada declarada); nesse estado ele vigia a sessao ociosa (item 8),
+  e volta a vigiar a trava A so quando o fabricante for religado por corte meu. O fabricante segue desligado. Depois segue a fila sem parar: O68b (classe B, turno aberto, 27
+  colabs, 734 h) -> classe D (21, 274 h) -> classe C residual -> E5 fatia 1 -> E6 rodada 3. !
+
+● Corte recebido, e ele reordena a fila — a O81 sai e a classe B entra na frente. Primeiro conserto o vigia, que é pedido explícito. Acho-o:
+
+● Ler o contexto do alarme no vigia
+  ⎿  $ cd /home/ronald/saas-hasner && grep -rln 'trava A (estrutural) vazia' bin/ app/ 2>/dev/null | head -3; grep -rn 'trava A (estrutural) vazia' bin/*.py bin/*.sh 2>/dev/null |
+     head -3
+
+* Zesting… (2m 18s · ↓ 3.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
