@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:05:45.**
+**Medido em 27/09/2026 16:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464` |
+| `HEAD` local | `27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto` |
 | `origin/main` | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
 59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
 037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
 e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
 c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
-acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py
- M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -89,12 +87,6 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file
-
-● 11 vermelhos — a cura mexeu na absorção de intervalo e os selos da casa objetaram. Vejo todos antes de decidir:
-
-  Searched for 1 pattern
-
 ● Os 11 vermelhos dizem uma lei que eu atropelei, e ela é clara nos nomes: "o intervalo do DNA não fecha turno", "durante o almoço o turno segue ABERTO", "só saída de intervalo
   abre turno aberto". No momento VIVO do almoço não existe volta nem saída posterior — e meu guarda fechava o turno ali. É a doutrina do teto temporal: vale fato encerrado, não
   instante. Reverto a absorção e movo a cura para um passo final:
@@ -117,12 +109,18 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 
 ● 9 verdes. Suíte completa e DIFF de frota:
 
-  Suite e DIFF com o passo final da O95 · 1m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=… (1m 13s)
+  Ran 1 shell command
+
+● DIFF final: turnos_abertos 620 → 473 (−147), horas_trabalhadas +1.040,82 h, inconsistencias −228, TXT 0/0, 07/08 zero, APLICADOS 198, e a CONDICAO_SAIDA_REAL separa um só
+  (col727 −6,03 h). Commito e espero a suíte:
+
+  Commitar e esperar a suite · 3m 57s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py && git commit -F - <<'MSGEOF'
+     [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
+     LEI-AKITA: origem=ponto/turnos.py::_fechar_aberto_na_… (3m 56s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Slithering… (7m 6s · ↓ 14.5k tokens)
+· Slithering… (12m 6s · ↓ 16.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
