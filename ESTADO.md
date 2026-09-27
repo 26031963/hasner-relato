@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:49:31.**
+**Medido em 27/09/2026 11:55:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -85,28 +86,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  criterio do MODO 24H e DEPLOY JA. (2) classe B remedida: 236 ate 14 h (197 esta cura + 39 plano B), 109 entre 14 e 20 h, 437 com 20 h ou mais (saida realmente faltando =
-  cobranca, lista de segunda). (3) FILA depois: classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3. Regras do MODO 24H e da fila sem trava continuam. Nenhuma lei nova.
-
-● Handoff gravado agora, com o estado real — que está mais adiante do que o seu resumo assume, porque a alimentação já está ligada e o DIFF já voltou:
-
-  Ran 1 shell command
-
-● Handoff gravado e publicado no topo do RELATO e no TICKETS (59193e0), com o estado real — que está adiante do seu resumo em dois pontos:
-
-  A cura já está ligada, não está faltando ligar. A causa é a que você escreveu (motor_calculo_v2.py:269 chamava parear_turnos sem papel_por_minuto — a O65 chegou ao
-  turnos_do_colab e não ao motor), e eu liguei a alimentação com a guarda da E3: só alimenta quando celulas_alimentadas está na mão, senão fica None e o pareador segue no tipo.
-  Alimentação, nunca consulta.
-
-  RED provado: col51 24/08 era 06:59 → ABERTO (0 h) e agora fecha 06:59 → 16:02 = 9,05 h.
-
-  DIFF em ensaio (nada aplicado): turnos_abertos 620 → 612 (−8, em 7 colabs), 84 separados, 0 entram/saem do TXT, 07 e 08 em 0 divergências. E uma ressalva que gravei junto,
-  porque ela engana: o horas_trabalhadas +0,00 não significa que a cura não move hora — o comando restaura os separados antes da foto final, e o col51 está entre os 84. O
-  movimento bruto é maior e ainda não foi medido isolado.
-
-  O segundo RED não cedeu, e tem causa nomeada: col904 22/08 segue aberto porque a batida órfã das 06:57 (typada E) abre um turno antes de a S das 07:00 fechar o plantão das
-  18:50. A ata sabe — a 06:57 está em orfas —, mas papel_por_minuto_da_ata só mapeia lâmpada acesa. É o próximo passo da cura.
-
   Falta, na ordem: selo próprio da alimentação no motor (o de turnos_do_colab não cobre esse caminho), suíte inteira, aplicar os 7 pelo critério, push e DEPLOY JÁ. Depois a fila:
   classe D → classe C residual → E5 fatia 1 → E6 rodada 3.
 
@@ -115,11 +94,33 @@ RELATO, com a lista de nomes do banco como autoridade._
 ❯ fecha a orfa tambem, selo, DIFF e aplica
 
   Ran 1 shell command
-  ⎿  $ sed -n 760,800p ponto/turnos.py
-●
 
-· Hashing… (1m 26s · ↓ 3.1k tokens · thought for 21s)
-                                                                                                                                                            0% until auto-compact
+● Agora a causa da órfã aparece inteira, e ela é maior do que eu pensava: o guarda compara batidas por data de calendário com as lâmpadas acesas da célula — e num turno que cruza
+  a meia-noite o hf mora em D+1, então 1 != 2 e o dia é descartado sempre. Isso exclui todo 12x36 noturno da alimentação. Curo o guarda pelo vão da ata e trato a órfã:
+
+● Curar o guarda e a orfa, e medir os tres REDs
+  ⎿  $ python3 - <<'PYEOF'
+     import py_compile
+     p='ponto/turnos.py'; s=open(p).read()
+     velho = """ out = {}
+     for _d, cel in celulas.items():
+     try:
+     r = periodos_do_dia(cel, te)
+     except Exception: # noqa: BLE001 -- juiz que levanta nao vira papel chutado
+     continue
+     if r.get('desalinhado'):
+     continue
+     _acesas = sum(1…
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/by9f1jfu0.output (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfvvg2sl2.output (4 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blxp79ab4.output (63 lines)
+  ⎿  Referenced file escala/models.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bad2vo90w.output (11 lines)
+
+● Task "Esperar o veredito da suite completa" still running in background
+
+✢ Hashing… (6m 56s · ↓ 6.4k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
