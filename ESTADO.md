@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:10:02.**
+**Medido em 27/09/2026 09:15:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
  M app/ponto/motor_calculo_v2.py
+?? app/ponto/tests/test_l093_teto_pontualidade.py
 ?? esteira.pausada
 ```
 
@@ -87,21 +88,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-  Ran 1 shell command
-
-● O RED da O51b não reproduz: a competência 08 vai de 21/07 a 20/08, então 24/08 nem está nela — está na 09 —, e no motor de hoje o col39 tem só 13 min de atraso em 13/09. Busco
-  um alvo de clique real, do gravado de hoje:
-
-  Ran 1 shell command
-
-❯ REGRA DE FILA: quando so restar item esperando o Ronald, NAO para -- puxa trabalho sem trava, nesta ordem: O80 (selo da L-092), O81 (ata no formato antigo: rejulgar com
-  --forcar e o espelho cair no builder so no dia degradado), E5 fatia 1 (a 09 lida da celula; so depois da O89), E6 rodada de novo apos cada cura. So fica parado se nem isso
-  houver.
-
-● Alvos reais achados (144 colabs têm pontualidade no gravado de 09). Publico as duas linhas que você pediu e registro os pedidos:
-
-  Ran 1 shell command
-
 ● Agora o teto de pontualidade. O motor já consulta a autoridade do previsto — leio o método que a possui:
 
   Ran 1 shell command
@@ -117,9 +103,24 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● dia_da_jornada existe nos dois escopos. Agora o RED, que afirma a lei e não um número mágico — e o caso que morde é o dia cuja soma está abaixo do teto e não pode ser tocada:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✽ Shimmying… (10m 40s · ↓ 17.9k tokens)
+● trab = 0: no meu fixture o 01/09 é folga para o ciclo 12x36 com âncora 01/08 — o período foi para periodos_ft. Escolho os dias perguntando ao vínculo, em vez de cravar data:
+
+  Ran 1 shell command
+
+● Duas passam; a terceira me ensinou o alcance da lei: previsto=660 trabalhado=700 teto=0 — a pessoa chegou 20 min tarde e ficou 40 min além, então nada faltou e o corte zera o
+  desconto. Isso é a lei funcionando, não bug. Refaço o caso que morde com o intervalo batido, onde de fato falta tempo:
+
+  Ran 1 shell command
+
+● 3 OK, e o RED evidenciado é o dado real (col820: 741 min contra 139 trabalhados, medido antes da cura). Agora a remedição dos 24 com o teto, em ensaio:
+
+● Ensaio da remedicao dos 24 com o teto
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
+     horas_atraso,horas_saida_antecipada 2>&1 | grep -vE 'moveu fora do item' | grep -E 'horas_atraso|horas_saida_ant|APLICADOS|SEPARADOS \(mov|E…
+
+· Shimmying… (16m 9s · ↓ 26.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
