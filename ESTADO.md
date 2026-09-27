@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:52:31.**
+**Medido em 27/09/2026 03:58:01.**
 
 | | |
 |---|---|
@@ -110,14 +110,14 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 
 ● mypy no meu código da O73. Vejo a acusação:
 
-● Empurrar com o mypy verde · 1m 20s
+● Empurrar com o mypy verde · 6m 50s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/motor_calculo_v2.py && git commit -q -m "[O73] anotacao de tipo que o contrato de mypy cobrou
      mypy: 'Need type annotation for _por_dia_o73'. Curado na origem (dict anotado), sem afrouxar o
      mypy.ini -- que e o que aquele contrato exige.
-     Co-Authored-… (1m 19s)
+     Co-Authored-… (6m 49s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (58m 13s · ↓ 84.6k tokens)
+✢ Transmogrifying… (1h 3m 43s · ↓ 84.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
