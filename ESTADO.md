@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:03:31.**
+**Medido em 27/09/2026 04:09:01.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## `git status --short`
 
 ```
+ M app/config/crons_duracao.json
  M app/escala/models.py
+ M app/escala/tests/test_abertura_dna.py
 ?? app/escala/tests/test_o87_intervalo_dentro_do_turno.py
 ?? esteira.pausada
 ```
@@ -87,21 +89,6 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────┼─────────────┼───────┼────────────────────┼────────────────────────────┤
-  │ col872 │ 07:00–19:00 │ 07/09 │ 09:00→12:08 = 3h08 │ 492 min                    │
-  └────────┴─────────────┴───────┴────────────────────┴────────────────────────────┘
-
-  Nesses dias a entrada está a 161–178 min do marco — logo abaixo dos 180 da L-084 — e a saída a 700+ min. Uma ponta escapa por minutos e o dia inteiro é cobrado:
-
-  Ran 2 shell commands
-
-● Pré-empto as duas barreiras da O90 e empurro:
-
-  Ran 1 shell command
-
-● mypy no meu código da O73. Vejo a acusação:
-
-  Pushed to main, ran 2 shell commands
 
 ● Push pousou (b9867ceb). DEPLOY JÁ e smoke da O73 no worker servido:
 
@@ -114,12 +101,27 @@ ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 
 ● 5 testes OK (o selo morde por construção: sem o método, AttributeError). Confiro se a guarda nova não quebra fixture existente antes de gastar um push:
 
-  Rodar escala e colaboradores com a guarda nova · 1m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:lates… (1m 21s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-· Transmogrifying… (1h 9m 13s · ↓ 87.7k tokens)
+● A guarda pegou um fixture que declara turno 17:00–23:00 com intervalo 11:00–12:00 — geometria impossível de verdade. Leio o que aquele teste afirma antes de mexer:
+
+  Ran 1 shell command
+
+● O ponto daquele teste é que o DNA congelado manda mesmo com o template editado — o intervalo impossível era incidental. Movo-o para dentro do turno novo, preservando a intenção:
+
+  Ran 1 shell command
+
+● 7 OK. Publico e empurro a O87 (dinheiro zero — é guarda de cadastro):
+
+● Running 1 shell command…
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## O87 no disco: o cadastro nao aceita mais intervalo FORA do turno (dinheiro zero)
+     Guarda irma da que ja existe para o Art.71: aquela julga a DURACAO do intervalo, esta julga o LUGAR.
+     `escala/model…
+
+✢ Transmogrifying… (1h 14m 43s · ↓ 91.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
