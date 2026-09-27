@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:05:31.**
+**Medido em 26/09/2026 22:10:45.**
 
 | | |
 |---|---|
@@ -44,44 +44,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ┌────────┬──────────────────────────────────────────────────────────────┬─────────────────────────────────┐
+  │  quem  │                            efeito                            │       muda status no TXT?       │
+  ├────────┼──────────────────────────────────────────────────────────────┼─────────────────────────────────┤
+  │ col830 │ —                                                            │ ENTRA (era fora / furo_espelho) │
+  ├────────┼──────────────────────────────────────────────────────────────┼─────────────────────────────────┤
+  │ col56  │ —                                                            │ ENTRA (era fora / furo_espelho) │
+  ├────────┼──────────────────────────────────────────────────────────────┼─────────────────────────────────┤
+  │ col107 │ horas_trabalhadas −7,33 h, turnos_abertos +2                 │ não                             │
+  ├────────┼──────────────────────────────────────────────────────────────┼─────────────────────────────────┤
+  │ col499 │ horas_extras +1,00 h, trabalhadas +1,00 h, turnos_abertos −1 │ não                             │
+  └────────┴──────────────────────────────────────────────────────────────┴─────────────────────────────────┘
 
-  A diferença de dinheiro entre os dois bancos é a prova de que a deriva de +142,14 h era da sombra estar desatualizada: prod já absorveu a E3 e a O69 hoje.
+  SAEM do TXT: 0 — essa metade do critério fechou. Mas os dois que entram não movem dinheiro, e os dois em que o dinheiro move não mudam de status.
 
-  Mas apareceu um número que na sombra era zero: −6,33 h em 2 colabs. Preciso saber se é da rejulga ou deriva residual, e essa distinção tem consequência — é o número que o DP vai
-  ver quando o recálculo acontecer. Estou medindo o baseline de recálculo puro em prod antes de aplicar, porque depois do apply esse baseline não existe mais.
+  E o mais importante: é da rejulga, não é deriva, e isso está provado. O baseline de recálculo puro em prod move nenhum campo — o gravado de 09 já está em sincronia com o motor
+  de HEAD depois dos applies de hoje. A causa é a ata relavrada: 5.078 lavras para 158 mudanças de veredito, porque a porta lavra a ata também e o motor lê a ata.
 
-  O apply em si continua sendo dinheiro literalmente zero: ele não recalcula, então o gravado não se move. O −6,33 h é efeito futuro, do próximo recálculo — e vou reportá-lo
-  separado em vez de deixá-lo embutido num total.
+  Não apliquei. O critério nomeava os colabs do alvo, e dinheiro que se move em colaborador que a cura não visa é a forma exata que a L-082 nasceu proibindo — de manhã o ! era
+  +12,29 h num campo e o gravado moveu +13,29 h com 10 campos fora do alvo. Aqui é menor e tem causa conhecida, mas é a mesma forma, então o número fica na mesa em vez de entrar
+  por analogia.
 
-✻ Cogitated for 36s · done 10:02 PM · 2 shells still running
+  Registrei em PENDENTES_RONALD.json com o comando de reprodução e o de apply, caso o ! venha: --aplicar --antes logs/apply_o71_antes.json, revertível pelo snapshot das 17.332
+  células.
 
-● Background command "Baseline da deriva pura em prod" completed (exit code 0)
+  Uma observação que vale o ponteiro: col107 aparece pela segunda vez hoje — ele foi um dos dois colabs do DIFF da O69 (23/08, 374→349 min). Não afirmo que seja a mesma causa,
+  porque não medi isso. Mas duas aparições no mesmo dia em fatias diferentes é padrão, não acidente.
 
-  Read 1 file
+  A esteira não para. Sigo para a O68, onde o seu ! de critério para a parte (a) já está dado.
 
-● Separação perfeita em prod: recálculo puro move nenhum campo, 0 entram, 0 saem — o gravado está em sincronia com o motor de HEAD, efeito dos applies da E3 e da O69 hoje.
+✻ Sautéed for 1m 22s · done 10:10 PM · 1 shell still running
 
-  Logo o −6,33 h é 100% da O71. Confirmo se são os mesmos 2 colabs que entram, em vez de supor:
+❯ segue pra O68
 
-  Ran 1 shell command
-
-● O baseline fechou a questão: recálculo puro em prod não move nada — nem um campo, nem uma entrada, nem uma saída. O gravado está em sincronia com o motor de HEAD, resultado dos
-  applies de hoje.
-
-  Portanto o −6,33 h é inteiramente da O71, não deriva. Isso é bom: significa que o número tem dono.
-
-  Falta uma pergunta que eu não vou responder por dedução: o dinheiro se moveu nos mesmos 2 colabs que entram no TXT, ou em outros 2? A saída só dizia "2 colabs" nas duas linhas,
-  e "dois aqui, dois ali" não é a mesma coisa que "os mesmos dois". Se forem os mesmos, o movimento está exatamente onde a cura mira — a forma que a L-082 pede. Se forem outros, é
-  dinheiro fora do alvo e eu paro.
-
-  Acrescentei ao medidor a lista por colaborador quando são poucos, marcando quem entra/sai e quem só tem dinheiro. Sem o nome ao lado do número não se sabe qual dos dois casos é
-  — e essa foi a diferença entre o ! de manhã ter sido cumprido ou violado.
-
-✻ Worked for 44s · done 10:04 PM · 2 shells still running
+· Creating…
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ se forem os mesmos 2, aplica e segue pra O68
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

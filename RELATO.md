@@ -16,6 +16,43 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI na O71: o dinheiro NAO cai nos dois colabs que a cura visa
+
+A condicao era "se forem os mesmos 2, aplica". **Nao sao.** Medido em PROD, ensaio em `atomic()` com
+rollback:
+
+| quem | efeito | entra/sai do TXT? |
+|---|---|---|
+| **col830** | — | **ENTRA** (era `fora / furo_espelho`) |
+| **col56** | — | **ENTRA** (era `fora / furo_espelho`) |
+| **col107** | `horas_trabalhadas` **-7,33 h**, `turnos_abertos` **+2** | **nao muda de status** |
+| **col499** | `horas_extras` +1,00 h, `horas_trabalhadas` +1,00 h, `turnos_abertos` -1 | **nao muda de status** |
+
+Os dois que ENTRAM nao movem dinheiro; os dois em que o dinheiro move NAO entram nem saem. Total
+liquido -6,33 h em `horas_trabalhadas`. **SAEM do TXT: 0** -- essa metade do criterio fechou.
+
+**E DA REJULGA, nao e deriva**, e isso esta provado e nao suposto: o baseline de recalculo PURO em
+prod (`--so-recalculo`, sem rejulgar nada) move **nenhum campo, 0 entram, 0 saem**. O gravado de 09
+esta em sincronia com o motor de HEAD -- efeito dos applies da E3 e da O69 de hoje. Logo o -6,33 h
+tem dono: e a ata relavrada (5.078 lavras para 158 mudancas de veredito; a porta lavra a ata tambem,
+e o motor le a ata).
+
+**Por que isso PARA em vez de seguir**: o criterio nomeava os colabs do alvo. Dinheiro que se move em
+colaborador que a cura nao visa e' a forma exata que a L-082 nasceu proibindo -- na manha de 26/09 o
+`!` era +12,29 h num campo e o gravado moveu +13,29 h com 10 campos fora do alvo em 2 colabs. Aqui e'
+menor e tem causa conhecida, mas e' a MESMA forma, e o numero fica na mesa em vez de entrar por
+analogia.
+
+**O col107 aparece pela segunda vez hoje**: ele foi um dos 2 colabs do DIFF da O69 (23/08, 374 -> 349
+min). Nao afirmo que seja a mesma causa -- nao medi isso --, mas registro a coincidencia porque duas
+apariçoes no mesmo dia em duas fatias diferentes e' padrao, nao acidente, e quem olhar amanha merece
+o ponteiro.
+
+**Estado da O71**: nada gravado, nada revertido a fazer. Os 158 vereditos e as 5.078 lavras seguem
+medidos e reproduziveis por
+`tenant_command celula_veredito_velho --schema=juliani --mes 9 --ano 2026`. Espera o `!` do Ronald
+sobre o -6,33 h em col107/col499. **A esteira nao para**: sigo para a O68.
+
 ## PAREI: a 09 tem +142,14 h de DERIVA esperando qualquer recalculo -- e ela NAO e' da O71
 
 A O71 foi medida em duas corridas na sombra, e a segunda existe porque a primeira nao sabia responder
@@ -7343,6 +7380,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 21:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**26/09 22:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
