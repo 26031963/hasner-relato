@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:45:41.**
+**Medido em 27/09/2026 05:50:45.**
 
 | | |
 |---|---|
@@ -110,15 +110,15 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ● Push pousou (6adad96d). E a decomposição que acabei de medir corrige o que publiquei há dez minutos: a O86 não é uma causa só — são seis formas nomeadas:
 
-  Publicar a correcao e empurrar · 1m 43s
+● Publicar a correcao e empurrar · 6m 47s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      ## CORRECAO de dez minutos atras: a O86 nao e "uma causa so" -- sao SEIS formas, e cinco ja tem nome
-     Eu acabei de escrever que a O86 e "~900 h numa causa so". **Errado, e a medicao seguinte desmonto… (1m 42s · 3 lines)
+     Eu acabei de escrever que a O86 e "~900 h numa causa so". **Errado, e a medicao seguinte desmonto… (6m 46s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (16m 28s · ↓ 15.9k tokens)
+· Bloviating… (21m 31s · ↓ 15.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
