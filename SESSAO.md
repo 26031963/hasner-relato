@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 05:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.3 MB). Acoes na janela: **956**.
+**Medido em 27/09/2026 05:32:08.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.4 MB). Acoes na janela: **959**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:31:18 | Bash | Medir a causa dos 27 colabs restantes da classe C | `cat > /tmp/classe_c_resto.py <<'PYEOF' """Os 27 colabs da classe C que NAO sao buraco de vinculo: de onde vem a diferenca? Compara, por colab: piso das batidas x soma dos periodos do motor x folha (trab+folga). """ from django.apps import apps from django.utils import timezone as tz import datetime as d, collections, json G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, ...` |
+| 05:30:41 | Bash | Ler a definicao da O51b | `grep -n 'O51b' docs/BACKLOG.md \| cut -c1-500` |
+| 05:29:53 | Bash | Medir o alcance da cura da O73 na frota | `cat > /tmp/o73_alcance.py <<'PYEOF' """Alcance da cura da O73: quantos colabs tem dia com MAIS DE UM bloco e SEM marco de intervalo? E quanto de atraso/antecipada ela tirou de cada um.""" from django.apps import apps from django.utils import timezone as tz import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, FM = G('Colaborador'), G('Escala ...` |
 | 05:29:19 | Bash | Conferir o push do resumo | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg13o0d60.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD; date '+%H:%M'` |
 | 05:18:55 | Bash | Fechar e publicar o resumo da noite | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() s=s.replace("""\| **04:28** \| **O87** -- o cadastro recusa intervalo fora do turno \|""", """\| **05:08** \| **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados \| selo com 7 casos verde; snapshot lavrado a mao (13 em 459 na competencia aberta). Push `d070cf9d` \| \| **04:28** \| **O87** -- o cadastro recu ...` |
 | 05:08:47 | Bash | Curar o placar e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -F - <<'EOF' [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com> EOF timeout 1700 git push 2>&1 \| tail -3; gi ...` |
