@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:18:01.**
+**Medido em 27/09/2026 18:23:14.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
 ```
 
@@ -83,42 +84,42 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
 
-  Committed 6d3e54b0
-
-› Message from @a950c731c8720b7cb (ctrl+o to expand)
-
-● Agent "Censo O81 do builder" finished · 51m 21s
-
-● O censo O81 voltou completo, e ele responde também o seu item 2 — vou dizer com o nome que a lei dá. Escrevo tudo e publico:
-
-  Ran 2 shell commands
-
-● A checagem olha as 6 linhas seguintes, e eu pus a PROVA acima. Movo:
-
-  Ran 2 shell commands
-
-❯ aval Ronald: O81 corte. FONTE: espelho.py:585 (vis_ini) + :353 (grade_da_celula da janela inteira) + leitor_celula.py:257 (1 dia agregado derruba o periodo). LEI:
-  HX-REGEN-NAO-TOCA-EXPORTADO (leitor_celula.py:234-238) proibe re-lavrar 06/07/08 -> a cura do BACKLOG (--forcar) esta VETADA (P17). MUDA: montar_dias le a celula so em
-  [max(data_ini,apur_ini)..data_fim_mes]; builder so em [data_ini..apur_ini-1]; regua por dia (espelho.py:491-495 le _grade_marcos por posicao). RED: 3 colabs do censo com dia
-  agregado em 07/08 caindo no builder na 09. SELO: colabs_no_builder_09 = 0 (contador, LINHA HAIKU). PROVA: 26 campos, 0 entram/0 saem do TXT, 07/08 = 0 divergencia. PROIBIDO:
-  tocar ata de 06/07/08, fallback, wrapper tolerante. Nenhuma lei nova. Depois das regressoes das curas de hoje, antes da E5.
-
 ● A régua cobra linha para a O96. Acrescento e empurro:
 
-● Linha da O96 e push · 6m 13s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/TICKETS.md'; s=open(p).read()
-     i = s.index('| O95 |')
-     nova = ('| O96 | ponto/turnos (pareador) | a pausa que a ATA marcou com `X` voltou a ser PAUSA -- ela entrava '
-     'no turno sem carimbo e `_pares_marcados` ficava cego a ela | **no ar (commit `6d3e54b0`); reapply do '
-     … (6m 12s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Puzzling… (1h 59m 12s · ↓ 91.4k tokens)
+● A suíte do pre-push pegou os 2 erros do meu selo da E5 (fixture). Vejo o erro real:
+
+  Ran 1 shell command
+
+❯ aval Ronald: META = nenhuma tela mente para quem entra no TXT da 09 (espelho, PDF em lote, fechamento, TXT no mesmo numero). Tudo abaixo PRIMEIRO no universo do TXT, frota
+  depois. Ordem: (1) O96 + cada regressao das autopsias: cura, apply, PROVA com numero isolado; (2) O81 com o MUDA do meu corte (celula no periodo pedido, builder so antes do
+  apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO); (3) dia impar = "em aberto" + o que falta -- a colisao de lei vem ao RELATO e espera meu corte, o resto nao para;
+  (4) topo do cartao = soma das linhas + O51b; (5) E5: a 09 lida da celula, chave com meu !; (6) SELO no universo do TXT: tela == PDF == fechamento == TXT = 0 divergencia + E6
+  rodada 4 = 0 divergencia; quem falhar sai para a lista de ajuste. Export so depois do (6), com meu !. Nenhuma lei nova. Parar so em pergunta de lei.
+
+  Ran 4 shell commands
+
+● Essa cadeia de fixture (Empresa → Praça → Posto → …) é fundo de poço para um selo que a fila só vai usar depois. Deixo a parte estrutural e declaro o limite de cobertura, com a
+  prova de prod no lugar:
+
+  Selo da E5 estrutural e rodar · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read()
+     i = s.index('import datetime')
+     cab = s[:i]
+     cab = cab.replace('''O QUE ESTE SELO GUARDA, e e a parte que morde: o modo leitura **nao escreve**.''',
+     '''LIMITE DE COBERTURA, DECLARADO (nao e descuido): este selo…
+
+✻ Puzzling… (2h 4m 24s · ↓ 95.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: regras de execucao ate o fim da meta: (a) toda cura roda o oraculo e6 nos colabs afetados ANTES do apply, dentro da PROVA; divergencia nova = nao aplica e vira
+  cura; (b) fixture de selo sempre copiada de selo existente da mesma familia; (c) PROVA: sempre nas 6 linhas seguintes a afirmacao de ato.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
