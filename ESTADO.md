@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:07:31.**
+**Medido em 27/09/2026 15:13:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje` |
+| `HEAD` local | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
 e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
 c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
 acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
-0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
 ```
 
 ## `git status --short`
@@ -87,44 +87,44 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  A medição (49 turnos abertos nos 14): onde a ata reivindica a batida (36 casos) ela está a 0–20 min do marco hi — ali a ata está certa e o turno anterior realmente não tem
-  saída. Nos outros 13 a coluna do marco de entrada é -: não é "errou o papel", é silêncio, e o pareador caía no tipo gravado.
+  Read 1 file
 
-  O seu oráculo estava apontando para algo real, e a sequência o entregou. No col297 a ata diz 22:59 = ENTRADA e 06:56 = SAÍDA — e o gravado diz E nas duas (inversão da O65).
-  Entre elas ficam 02:57E 03:57S da ronda, que a ata não reivindica e cujo gravado está invertido: _marca_intra_duracao exige S depois E para reconhecer pausa, não reconhece, e o
-  pareador leu as duas como borda — o turno de 8 h que a ata descreve inteiro ficava aberto valendo 0 h.
+● Anotado: smoke depois do deploy, no worker servido.
 
-  Curado (mesma família da guarda 1): quando a ata descreve o turno pelas duas pontas, o par do miolo também é X, com o teto continuando no cadastro. col297 106,28 → 127,48 h
-  (acima dos 125 h que o gravado paga), col922 137,56 → 158,17 h, col51/col904/col85 idênticos. A L-007 foi de −283,01 h em 14 colabs para −219,02 h em 12: devolveu 64 h. E eu não
-  havia feito assim porque protegia o almoço do col51 — medido agora, quem o protege é o _marca_intra_duracao, e a minha guarda protegia por acidente e custava o col297.
+  Sequência que vou executar quando o Ran aparecer:
+  1. push pela régua (ela roda a suíte sobre o commit empurrado)
+  2. bin/deploy.sh --sem-migrate
+  3. smoke: hora dos workers contra a hora dos arquivos, e os casos pelo código no ar — col85 21/08 (18:56→07:02 = 12,09 h, a O84), col616 14/09 (11,13 h como folga trabalhada, a
+     O93), col297 (127,48 h, o miolo invertido), e os três que não podem mudar (col904 12,16 h · col300 12,17 h · col51 195,24 h)
+  4. bin/sombra.sh --lavra conferido no ato, e o resultado do smoke no RELATO
 
-  Aplicando o seu princípio ao que sobrou: 23 dos 44 casos TÊM saída real, então não podem virar cobrança. O mais limpo é o col727: template 12:00-20:00 com intervalo declarado
-  16:00-17:00, trabalho real 07:00-11:00 + 12:00-15:00, e a saída das 15:00 fica a 60 min do marco de intervalo contra 180 da borda — é comida como "ida ao intervalo" e o turno
-  espera uma volta que nunca vem. −38,02 h em 7 dias, e nos dias em que a ata existe o mesmo dia fecha certo. A assimetria tem nome: _marca_intra_duracao exige prova de
-  continuidade; a absorção por marco não exige nada.
+  Suíte ainda rodando; árvore parada.
 
-  A cura candidata (exigir volta em intra_max_s) recupera o col727 para 159,49 h — mas eu a reverti: ela também moveu col51 (+3,99 h) e col382 (−1,28 h) sem que eu saiba por quê,
-  e absorção de pausa é caminho quente. Virou O95, sobe com DIFF de frota; não foi para o seu PENDENTES porque a medição que falta é minha, não a sua decisão.
+✻ Baked for 30s · done 3:09 PM · 1 shell still running
 
-  Suíte final rodando com a árvore parada — editei-a com a suíte rodando duas vezes hoje, e a primeira me custou um vermelho falso (inspect.getsource lendo linhas deslocadas).
-  Quando fechar: push e deploy das curas commitadas. O apply de 09 segue segurado.
-
-✻ Cooked for 21m 24s · done 2:54 PM · 2 shells still running
-
-❯ quando a suite fechar, push e deploy
+● Background command "Aguardar o veredito com a arvore parada" completed (exit code 0)
 
   Read 1 file
 
-● Suíte ainda rodando (árvore parada, nada tocado). O esperador está armado — quando o Ran aparecer eu empurro e subo na sequência: push pela régua → bin/deploy.sh --sem-migrate →
-  smoke no worker servido.
+● 8465 testes OK. Empurro — atualizo o rodapé/placar antes, que é o que a régua cobra (estamos 6 commits à frente):
 
-  Fila do push (6 commits desde 73322ebd): O84, O93 + lavra de prod + placar, os dois selos que morderam minha cura, O94/miolo invertido, O95.
+● Atualizar rodape e placar e empurrar · 2m 58s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; git diff --stat
+     app/docs/TICKETS.md | tail -2; git add app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
+     [O95] placar e rodape do TICKETS antes do push -- … (2m 56s · 9 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Churned for 24s · done 3:02 PM · 2 shells still running
+✢ Grooving… (3m 27s · ↓ 920 tokens)
+
+❯ SEQUENCIA ATE O FIM (sem esperar entre passos): smoke -> remede a L-007 (quem perde hora total, colab a colab) -> O95 com DIFF de frota, explicando col51 e col382 antes de
+  aplicar -> APPLY DA 09 segurado, pelo criterio do MODO 24H e com uma condicao a mais: NENHUM colab com saida real perde hora total (L-007 = 0 para esses; quem sobrar fica
+  separado e listado) -> classe C residual -> E5 fatia 1 -> E6 rodada 3 com o numero final no placar. Commit, push, deploy e smoke entre os passos; PAREI so em pergunta de lei ou
+  numero fora do criterio. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ smoke depois do deploy
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
