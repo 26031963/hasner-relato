@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 10:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.7 MB). Acoes na janela: **640**.
+**Medido em 27/09/2026 10:56:08.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.7 MB). Acoes na janela: **638**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -648,5 +648,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:57:58 | Bash | Veredito da suite de escala e estado das colunas | `tail -10 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bm82uxv1j.output; echo "=== colunas ==="; tail -3 /home/ronald/saas-hasner/logs/o68/duas_colunas.log 2>/dev/null; echo "--- (rodando) ---"` |
 | 22:57:31 | Bash | Remedir as duas colunas com a O72 curada | `cd /home/ronald/saas-hasner && (echo "=========== COLUNA 2: SO a L-084 (sem reclassificar), com a O72 curada ==========="; docker exec saas_core python manage.py tenant_command diff_reclassificar_partido --schema=juliani --mes 9 --ano 2026 --sem-reclassificar 2>&1 \| grep -vE "objects imported\|^montar_dias:\|sem_celula\|recalcular_fechamento erro\|^ te#"; echo; echo "=========== COLUNA 1+2: recla ...` |
 | 22:57:14 | Bash | Conferir se a suite liberou | `tail -8 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bm82uxv1j.output 2>/dev/null; echo "--- (vazio = suite ainda rodando; o banco de teste esta ocupado) ---"` |
-| 22:56:07 | Bash | Curar a O72 no motor | `python3 - <<'PYEOF' p='ponto/motor_calculo_v2.py' s=open(p).read() old=""" if hora_prev_saida < hora_prev: # determina o dia do início previsto mais próximo anterior à entrada real e = localizar(entrada) # se entrada real é antes da hora_fim (ex: 00h30 < 06h), o turno # começou no dia anterior if e.time() < hora_prev_saida: data_inicio_previsto = e.date() - datetime.timedelta(days=1) else: data_in ...` |
-| 22:55:46 | Bash | Ler o sitio do data_ref para curar | `sed -n '1888,1908p' ponto/motor_calculo_v2.py` |

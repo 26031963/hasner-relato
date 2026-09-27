@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:728 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:774 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:55:46.**
+**Medido em 27/09/2026 10:56:08.**
 
 | | |
 |---|---|
-| `HEAD` local | `9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono` |
+| `HEAD` local | `5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho` |
 | `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
 9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
 c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
 4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
 ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
-d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
 ```
 
 ## `git status --short`
@@ -85,13 +85,6 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Corte recebido, e ele reordena a fila — a O81 sai e a classe B entra na frente. Primeiro conserto o vigia, que é pedido explícito. Acho-o:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● core/esteira_vigia.py:492-499. Vejo como o módulo acha a raiz e se já existe leitor de pausa:
-
   Searched for 1 pattern, ran 1 shell command
 
 ● Tenho o idioma (R, _ler, _tem_dono). Escrevo a cura e o selo:
@@ -116,9 +109,16 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
 ● Causa da classe B nomeada e dimensionada: dos 103 casos com S real e marco apagado, 55 têm a S a ≤ 90 min do marco — dentro da janela do cluster-guard — e o resto a 2–7 h. O
   padrão é o turno real deslocado do cadastro: a S cai fora da janela, o marco fica apagado e o turno nunca fecha, perdendo o dia inteiro. Publico:
 
-  Running 1 shell command…
+  Publicar a causa da classe B · 3s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## Classe B (734 h): causa nomeada, e duas hipoteses minhas caidas no caminho
+     Sua ordem poe a classe B na frente. Fui por ela e derrubei **duas** hipoteses minhas antes de achar a
+     causa.
+     **HIPOTESE …
 
-✽ Zesting… (7m 19s · ↓ 19.7k tokens)
+✻ Zesting… (7m 41s · ↓ 20.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
