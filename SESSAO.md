@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 09:52:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.2 MB). Acoes na janela: **721**.
+**Medido em 27/09/2026 09:57:59.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (83.2 MB). Acoes na janela: **718**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -728,6 +728,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:03:33 | Bash | Ler o baseline de deriva pura em prod | `tail -16 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh6ra3d7h.output` |
 | 22:02:00 | Bash | Baseline da deriva pura em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command celula_veredito_velho --schema=juliani --mes 9 --ano 2026 --so-recalculo 2>&1 \| grep -vE "^montar_dias:\|sem_celula\|^\[DRY\]\|recalcular_fechamento erro\|NoneType" \| tail -16` |
 | 22:01:38 | Bash | Ler o ensaio da O71 em prod | `tail -32 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bo2jismk5.output` |
-| 21:56:20 | Bash | Ensaio da O71 em PROD, com rollback | `python3 - <<'PYEOF' p='ponto/management/commands/celula_veredito_velho.py' s=open(p).read() s=s.replace(""" p.add_argument('--so-recalculo', action='store_true',""", """ p.add_argument('--aplicar', action='store_true', help='GRAVA a rejulga da janela pela porta canonica e NAO recalcula o ' 'fechamento -- por isso o dinheiro gravado nao se move. Salva o estado ' 'ANTES de todas as celulas da janela ...` |
-| 21:54:46 | Bash | Gravar o PAREI com a tabela no topo do RELATO | `cat > /tmp/o71.md <<'EOF' ## PAREI: a 09 tem +142,14 h de DERIVA esperando qualquer recalculo -- e ela NAO e' da O71 A O71 foi medida em duas corridas na sombra, e a segunda existe porque a primeira nao sabia responder de quem era o dinheiro. O par de numeros e o achado: \| corrida \| lavras \| veredito velho \| dinheiro (`horas_trabalhadas`) \| ENTRAM \| SAEM \| \|---\|---:\|---:\|---:\|---:\|--- ...` |
-| 21:53:46 | Bash | Ler a deriva pura do recalculo | `tail -26 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/biam7zpir.output` |
