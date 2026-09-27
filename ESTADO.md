@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:35:49.**
+**Medido em 27/09/2026 02:37:01.**
 
 | | |
 |---|---|
@@ -85,21 +85,6 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Enquanto o ensaio roda, commito a cura (o ensaio lê a árvore; commit não a altera):
-
-  Ran 1 shell command
-
-● Commitado (237c9b16). Publico o smoke do E1 em prod e o RED da O85 enquanto o ensaio roda:
-
-  Ran 2 shell commands
-
-● O ensaio roda (container a 70% de CPU). Enquanto isso, remeço a O66, próxima da fila, que pode ter mudado com as curas desta noite:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Background command "Rodar o DIFF da O85 na sombra" completed (exit code 0)
-
-  Read 2 files, ran 1 shell command
 
 ● O tail -60 cortou justamente a prova dos 26 campos e as contagens. Refaço o ensaio gravando a saída inteira:
 
@@ -112,17 +97,32 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ● Número que muda a fila: 60 colabs movem fora de horas_trabalhadas, e o campo mais frequente é horas_saida_antecipada (31), seguido de horas_atraso (16) — essa é a L-084
   corrigida, que está no ar desde 01:53 mas nunca entrou no gravado (o recálculo das 00:50 rodou com a versão errada, "ou"). Publico:
 
-● Commitar e publicar a divida da L-084
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -F - <<'EOF'
-     [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
-     LEI-AKITA: origem=a ordem dos fatos (recalculo 00:50, cura da L-084 no motor 01:04, no ar 01:53),
-     testemunha=o DIFF na som…
+  Ran 2 shell commands
 
-· Roosting… (5m 34s · ↓ 15.4k tokens)
+● O ensaio segue na fase inicial. Uso a espera para medir a O66, próxima da fila (leitura pura):
+
+  Ran 1 shell command
+
+● Background command "Refazer o ensaio gravando a saida inteira" completed (exit code 0)
+
+  Ran 1 shell command
+
+● DIFF perfeito pelo critério: 5 colabs, +153,72 h, e todos os outros 25 campos em +0,00 com 0 colabs. 61 separados, restaurados íntegros. Vejo quem são os 5 e aplico:
+
+  Ran 2 shell commands
+
+● Os 5 aplicados são exatamente os 5 da classe C: col882, col515, col375, col743, col935. Critério satisfeito ponta a ponta (0 entram/0 saem do TXT, 07 e 08 com 0 divergências,
+  col81 intacto). Aplico em prod:
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
+     horas_trabalhadas --aplicar --antes /app/logs/apply_o85_09_antes.json 2>&1 | grep -vE 'moveu fora do item' | tail -40
+
+✢ Roosting… (6m 46s · ↓ 18.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
