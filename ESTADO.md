@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 06:23:31.**
+**Medido em 27/09/2026 06:29:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
