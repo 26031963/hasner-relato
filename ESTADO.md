@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:43:51.**
+**Medido em 26/09/2026 21:49:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,8 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
 ?? app/ponto/management/commands/celula_veredito_velho.py
 ?? esteira.pausada
@@ -41,44 +43,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Churned for 1m 10s · done 9:40 PM · 2 shells still running
+  Sobre a O71, um erro meu que vale mais que o número: a primeira versão do medidor deu celula_veredito_velho = 1504, e eu não publiquei porque a matriz denunciava a conta. Das
+  1.504, ~1.350 eram nunca_bateu → concorde, cobrado → concorde, trabalhou → concorde. Fui olhar: esses valores não existem em _MAPA_VEREDITO — derivar_veredito nunca os produz. O
+  cartório tem um ramo que escreve veredito='nunca_bateu' direto, sem código nenhum (ponto/services/cartorio.py:470).
 
-❯ NAO ENCERRE O TURNO ate segunda: O71 REJULGAR-09 -> O68 (plano B, 758 dias) -> O70 GERADORA-EM-TODA-CELULA -> O51b (Atraso e Saida antecipada) -> O66. So para em PAREI com a
-  tabela (dinheiro que move, ou colab que SAI do export) ou em item da L-009. Entre um item e outro: commit, push pela regua, DEPLOY JA quando o dinheiro der zero, RELATO
-  publicado. A cada PAREI, o numero no topo do RELATO. Nenhuma lei nova.
+  Ou seja: eu derivei o veredito dos códigos e chamei isso de "o juiz de hoje". Reproduzi parte do juiz em vez de perguntar a ele — a lei que eu tinha citado na própria docstring
+  do medidor. Refiz interceptando ponto.portas.celula.lavrar_veredito, o escritor único, com apply_=True dentro de atomic() e rollback: agora o que o medidor reporta é o que o
+  sistema gravaria, não o que eu acho que ele gravaria.
 
-● Registro a ordem e começo a O71 pelo que a lei manda antes de tudo: quem é o juiz do veredito e quem o escreve.
+  O ensaio completo está rodando — veredito, recálculo, e o classificar_export antes e depois, que é onde mora a sua assimetria de "entra × sai".
 
-  Ran 2 shell commands
+✻ Crunched for 2m 46s · done 9:47 PM · 2 shells, 1 monitor still running
 
-● O veredito deriva de codigos por mapa fechado, e o escritor único é a porta ponto/portas/celula.py::lavrar_veredito. Então "o juiz de hoje" é o cartório. Leio o que ele já
-  oferece em dry:
+❯ NAO ENCERRE O TURNO ate segunda: O71 REJULGAR-09 -> O68 (plano B, 758 dias, com o ! de criterio ja dado para a parte a) -> O70 GERADORA-EM-TODA-CELULA -> O51b (Atraso e Saida
+  antecipada) -> O66. So para em PAREI com a tabela (dinheiro que move fora do criterio, ou colab que SAI do export) ou em item da L-009. Entre um item e outro: commit, push pela
+  regua, DEPLOY JA quando o dinheiro der zero, RELATO publicado. A cada PAREI, o numero no topo do RELATO. Nenhuma lei nova.
 
-  Searched for 1 pattern, read 1 file, ran 1 shell command
+● Já recebido 26/09 21:5x (PROMPTS, linha "NAO ENCERRE O TURNO ATE SEGUNDA") — estado: O71 em ensaio na sombra, fila O71→O68→O70→O51b→O66 inalterada, ! da O68(a) já registrado em
+  PENDENTES_RONALD.json::o68-aval-de-criterio-parte-a. Não refaço nada; anoto a repetição:
 
-● O ponto central: o cartório rejulga quando a impressão dos insumos muda — mas as minhas curas de hoje mudaram o juiz, não os insumos. Por isso o --forcar existe. Leio o juiz
-  puro:
+  Ran 1 shell command
 
-  Searched for 1 pattern
+● Monitor(ensaio da O71 na sombra)
+  ⎿  Monitor started · task bagtqrd8f · timeout 1800s
 
-● julgar_colab com apply_=False, forcar=True preenche out['cods'][data] sem escrever — é o juiz de hoje, chamado de verdade. Agora o outro lado, quem entra no TXT:
+● prompts_repetidos foi a 4.
 
-  Searched for 1 pattern, ran 1 shell command
+  O ensaio da O71 está rodando na sombra e é pesado por construção — ele rejulga as 17.332 células da janela, recalcula o fechamento das quatro empresas e roda o
+  classificar_export antes e depois, tudo dentro de um atomic() que termina em raise. Monitor armado.
 
-● A cadeia é mais longa do que "veredito → TXT": classificar_export lê FechamentoMensal, e o que a rejulga muda é a ata, que o motor lê. Então faço em dois estágios. Primeiro o
-  contador (a), que é leitura pura:
+  Enquanto ele responde, o que já está resolvido e o que o ensaio vai decidir:
 
-● Medir celula_veredito_velho em 09 na sombra
-  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/o71 && source bin/recursos.sh >/dev/null 2>&1; docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network
-     saas-hasner_default --env-file .env \
-     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
-     -e HT…
+  Resolvido: o contador (a) deixou de ser derivado por mim e passa a ser o que a porta lavrar_veredito gravaria. Isso mata os ~1.350 falsos nunca_bateu → concorde da primeira
+  versão.
 
-✶ Lollygagging… (2m 11s · ↓ 8.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

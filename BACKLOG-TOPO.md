@@ -76,7 +76,7 @@ lista — ela e o que esta EM PE._
 | **O65** | O JUIZ DE GEOMETRIA AINDA PAREIA PELO TIPO GRAVADO | PAREI |
 | **O66** | BECO-FIO-FECHADO-CELULA-ABERTA | espera `!` |
 | **O67** | CASO [nome] -> QUATRO CLASSES DE FROTA | **livre** -- entra junto da O66 |
-| **O68** | APOSENTAR O PLANO B NO DINHEIRO | espera corte |
+| **O68** | APOSENTAR O PLANO B NO DINHEIRO | espera `!` |
 | **O69** | VINCULO-DO-DIA | **FEITA 26/09 -- as duas metades**: dinh |
 | **O70** | GERADORA-EM-TODA-CELULA | **livre** -- entra APOS a O68 |
 | **O71** | REJULGAR-09 | espera `!` |
