@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:39:31.**
+**Medido em 27/09/2026 15:44:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## `git status --short`
 
 ```
+ M app/ponto/management/commands/aplicar_09_corte_b.py
  M app/ponto/turnos.py
+?? app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py
 ?? esteira.pausada
 ```
 
@@ -88,17 +90,6 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Passo 2 medido: 12 colabs, −219,01 h, e 9 deles têm saída real (col727 com 12 turnos, col107 com 7, col297 com 4…). Só 3 não têm nenhuma (col751, col306, col200) — esses são
-  cobrança legítima. Então o passo 4 depende da O95. Passo 3 — reaplico a O95 e explico col51 e col382:
-
-  Ran 1 shell command
-
-● col51 explicado, e é a cura funcionando: o +3,99 h é 07/09 (feriado, célula folga), 07:58 → 11:58. A saída das 11:58 está a 3 min do marco de intervalo 12:01 do template — era
-  comida como ida ao intervalo e o turno ficava aberto valendo 0 h. Agora fecha: 4 h trabalhadas num feriado que estavam sendo perdidas. Vejo o dia do col382:
-
-  Ran 1 shell command
-
-● O dur < 7.5 não mostra de onde saem os 77 min. Comparo o col382 nas duas árvores, direto:
 
   Ran 1 shell command
 
@@ -119,9 +110,20 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ● −219,01 → −189,72 h, mas o número de colabs subiu de 12 para 15 (entraram col890, col104, col450, col946). Dos 15, 9 têm saída real — exatamente o que o seu passo 4 proíbe.
   Escrevo os selos da O95 e implemento a condição a mais no aplicador:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-· Grooving… (29m 57s · ↓ 22.7k tokens)
+● Integro a condição no laço de separação, usando as fotos que o comando já tem:
+
+  Ran 1 shell command
+
+● 34 verdes (6 selos novos da O95, ruff e mypy). Lanço a suíte e a DIFF de frota com a condição ligada:
+
+● Suite e DIFF de frota da O95
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=…
+
+✻ Grooving… (35m 12s · ↓ 29.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
