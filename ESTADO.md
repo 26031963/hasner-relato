@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:141 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:192 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:09:01.**
+**Medido em 27/09/2026 03:10:05.**
 
 | | |
 |---|---|
-| `HEAD` local | `d4548ad8 [O73] plano medido: o sitio e calcular_periodo (:1950), que julga pontualidade sem saber se e o primeiro bloco do dia` |
+| `HEAD` local | `42224680 [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+42224680 [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h
 d4548ad8 [O73] plano medido: o sitio e calcular_periodo (:1950), que julga pontualidade sem saber se e o primeiro bloco do dia
 099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela
 3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
 b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
-64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/services/fechamento.py
- M app/ponto/tests/test_o85_buraco_de_vinculo.py
 ?? esteira.pausada
 ```
 
@@ -87,14 +85,6 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O envelope também não. Resta o datas_justificadas, que o laço das fatias mutaciona com as datas cobertas por ausência — e a célula de 21/08 do col375 diz fato_em_ausencia.
-  Testo:
-
-  Ran 1 shell command
-
 ● Nenhuma hipótese fecha. Paro de adivinhar e faço o espião imprimir os argumentos exatos que a cura passa:
 
   Ran 1 shell command
@@ -118,9 +108,17 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 
   Ran 1 shell command
 
-●
+● SMOKE_O85 = OK — os cinco com folha == espelho (col375 agora 28,00 = 28,00). Total da O85: +157,72 h. Registro a O89, que é classe de bug nova e de desenho:
 
-✢ Transmogrifying… (14m 43s · ↓ 37.2k tokens · thought for 7s)
+● Registrar a O89 e publicar a O85 fechada · 5s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## O89 (CLASSE DE BUG NOVA, de DESENHO): **o motor MUTACIONA os objetos `Batida` que recebe**
+     `PAREI: nada -- registro no topo e SIGO, como a ordem da noite manda. Mas isto e DESENHO e voce precisa … (3s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Transmogrifying… (15m 47s · ↓ 42.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
