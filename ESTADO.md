@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:18:59.**
+**Medido em 27/09/2026 05:24:01.**
 
 | | |
 |---|---|
@@ -85,7 +85,6 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
 
 ● O core.tests.test_contract_crons não existe (é chamados.) — erro meu de label. Restam os selos do diagrama; vejo o que eles cobram:
 
@@ -111,13 +110,14 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 
 ● Push pousou (d070cf9d) e o deploy está no ar. Fecho o resumo da noite com os últimos itens e publico:
 
-● Fechar e publicar o resumo da noite · 2s
+● Fechar e publicar o resumo da noite · 5m 5s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      s=s.replace("""| **04:28** | **O87** -- o cadastro recusa intervalo fora do turno |""",
-     """| **05:08** | **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados | selo com 7 casos verde; snapshot lavrado a mao…
+     """| **05:08** | **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados | selo com 7 casos verde; snapshot lavrado a mao… (5m 4s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Harmonizing… (50m 40s · ↓ 47.3k tokens)
+· Harmonizing… (55m 43s · ↓ 47.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
