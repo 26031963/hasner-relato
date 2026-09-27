@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:25:31.**
+**Medido em 27/09/2026 03:31:01.**
 
 | | |
 |---|---|
@@ -112,14 +112,14 @@ f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce
 
 ● O vocabulário é {aval, !, corte, corte-dado, smoke} e eu usei corte-de-desenho. O que a O89 espera é o !:
 
-  Empurrar com o selo verde · 3m 59s
+● Empurrar com o selo verde · 9m 29s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/PENDENTES_RONALD.json && git commit -q -m "[O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e
      esta certo)
      core/fila_pendentes.py::DECISAO e {aval, !, corte, corte-dado, smoke}; eu havia escrito
-     'corte-de-desenho', que nao … (3m 57s)
+     'corte-de-desenho', que nao … (9m 27s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Transmogrifying… (31m 13s · ↓ 53.6k tokens)
+✢ Transmogrifying… (36m 43s · ↓ 53.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
