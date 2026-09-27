@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:00:54.**
+**Medido em 27/09/2026 11:06:01.**
 
 | | |
 |---|---|
@@ -87,9 +87,6 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ O68b, regra do passo final (leis existentes, nenhuma nova): turno que ficou ABERTO fecha com a proxima SAIDA real do colab, mesmo fora da janela do marco, desde que (a) venha
-  ANTES da proxima entrada (nunca rouba batida do turno seguinte) e (b) a duracao seja plausivel (ate a jornada prevista + 4 h). As horas contam normalmente (L-007); a
-  pontualidade desse dia segue a L-084 e a L-093 (turno deslocado nao desconta); o dia entra na lista CADASTRO x REALIDADE. RED: um dos 55 com a saida ate 90 min e um dos com 2-7
   h. Selos: nao fecha com batida do turno seguinte; turno que ja fechava continua identico. DIFF pelo criterio do MODO 24H.
 
 ● Regra recebida com as duas condições exatas — e ela confirma o desenho que eu estava escrevendo. Turno é namedtuple, então o passo final é limpo. Primeiro nomeio um RED real de
@@ -113,14 +110,17 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 
 ● Agora os selos que você pediu — os dois REDs reais e as duas guardas:
 
-● Escrever e rodar os selos do O68b · 3s
-  ⎿  $ cat > ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O68b -- turno ABERTO fecha com a proxima SAIDA real, mesmo fora da janela do marco.
-     regra Ronald 27/09 11:0x: *"turno que ficou ABERTO fecha com a proxima SAIDA real do colab, mesmo fora da
-     janela …
+  Ran 1 shell command
 
-✽ Zesting… (12m 27s · ↓ 32.9k tokens)
+● 6 OK, e o len(ts) == 1 é exatamente o que morde (sem o passo final voltariam dois turnos). Agora a checagem que importa: o pareador tem dezenas de selos. Rodo os apps que o
+  consomem:
+
+● Rodar os apps que consomem o pareador · 4m 53s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:lates… (4m 51s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Zesting… (17m 34s · ↓ 35.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
