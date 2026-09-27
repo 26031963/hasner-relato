@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 07:11:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **893**.
+**Medido em 27/09/2026 07:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **892**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -902,4 +902,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:27:08 | Bash | Ler o contrato do censo | `cd /home/ronald/saas-hasner && grep -n "def vigencias_impossiveis" -A 16 app/colaboradores/services/vinculo.py \| head -20` |
 | 19:26:58 | Bash | Ver a forma real do censo de vigencias | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from colaboradores.services.vinculo import vigencias_impossiveis imp = vigencias_impossiveis() print('tipo:', type(imp).__name__, '\| len:', len(imp)) x = imp[0] if imp else None print('1o registro tipo:', type(x).__name__) print(' chaves/atributos:', sorted(x.keys())[:12] if isi ...` |
 | 19:26:41 | Bash | Medir se os 4 estao entre os 53 da E1 | `python3 - <<'ENDPY' import re f='docs/BACKLOG.md' s=open(f,encoding='utf-8').read() m=re.search(r'^\\| O51b .*$', s, re.M) add = ('\| O69 \| **VINCULO-DO-DIA** (L-002, L-021; pedido 27/09 00:xx) -- a pergunta "qual vinculo vale NESTE DIA" tem **UM ' 'juiz: `CelulaDia.escala_geradora`**. O fechamento e o espelho passam a ler o vinculo do dia pela CELULA; nenhum dos dois ' 'tem regra propria -- nem  ...` |
-| 19:15:34 | Bash | Listar os 9 do TXT por causa | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' p='/tmp/claude-1001/pauta/apply/os85.py' s=open(p).read() s=s.replace("""print('\\n--- LISTA (dif, topo, coluna, TXT?, vinculos: total/ativos/sobrepostos/trocas)') for x in sorted(linhas, key=lambda y: -abs(y['dif']))[:20]:""", """print('\\n--- OS QUE ENTRAM NO TXT: o dinheiro (lista completa, por causa)') def _causa(x): if x['sobre']: return 'vin ...` |
