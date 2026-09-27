@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:55:01.**
+**Medido em 27/09/2026 12:00:31.**
 
 | | |
 |---|---|
@@ -86,40 +86,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Falta, na ordem: selo próprio da alimentação no motor (o de turnos_do_colab não cobre esse caminho), suíte inteira, aplicar os 7 pelo critério, push e DEPLOY JÁ. Depois a fila:
-  classe D → classe C residual → E5 fatia 1 → E6 rodada 3.
-
-✻ Baked for 54m 10s · done 11:42 AM · 1 shell still running
-
-❯ fecha a orfa tambem, selo, DIFF e aplica
-
-  Ran 1 shell command
-
-● Agora a causa da órfã aparece inteira, e ela é maior do que eu pensava: o guarda compara batidas por data de calendário com as lâmpadas acesas da célula — e num turno que cruza
-  a meia-noite o hf mora em D+1, então 1 != 2 e o dia é descartado sempre. Isso exclui todo 12x36 noturno da alimentação. Curo o guarda pelo vão da ata e trato a órfã:
-
-● Curar o guarda e a orfa, e medir os tres REDs
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/turnos.py'; s=open(p).read()
-     velho = """ out = {}
-     for _d, cel in celulas.items():
-     try:
-     r = periodos_do_dia(cel, te)
-     except Exception: # noqa: BLE001 -- juiz que levanta nao vira papel chutado
-     continue
-     if r.get('desalinhado'):
-     continue
-     _acesas = sum(1…
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/by9f1jfu0.output (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfvvg2sl2.output (4 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blxp79ab4.output (63 lines)
-  ⎿  Referenced file escala/models.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bad2vo90w.output (11 lines)
 
 ● Task "Esperar o veredito da suite completa" still running in background
 
-✢ Hashing… (6m 56s · ↓ 6.4k tokens)
+● Os dois REDs cross-meia-noite seguem abertos — o X não chegou ao pareador. Vou medir o mapa em si antes de supor:
+
+  Ran 1 shell command
+
+● _papel_da_ata filtra p in ('E','S') — meu X era descartado e a batida voltava ao tipo gravado. Uma linha:
+
+  Ran 1 shell command
+
+● col904 fecha 18:50 → 07:00 = 12,16 h e o col300 (RED da classe D) fecha 17:53 → 06:03 = 12,17 h — o guarda de calendário era a causa dos dois. Mas o mapa do col51 mostra um
+  efeito colateral que eu não quero: as batidas de intervalo (12:03/13:01) viraram X porque o juiz não lhes dá tipo, embora a ata as tenha ACENDIDO num marco. Aplico a versão mais
+  restritiva (L-081) — só é órfã a batida que não casa com nenhuma luz:
+
+  Ran 2 shell commands
+
+● Antes de fixar a semântica do X preciso ver o DNA do dia do col51 — se o dia tem marco de intervalo, aquelas duas batidas não são órfãs, são almoço:
+
+  Ran 2 shell commands
+
+● O DNA decide: o col51 não tem marco de intervalo (hii/hfi: null, n_missing=0) — suas 12:03/13:01 são almoço real, e marcá-las X pagaria o almoço de ~197 dias. O col904 tem a
+  órfã a 3 min da luz que fecha o plantão. Vou ler a lei de cluster/eco que já existe antes de inventar critério:
+
+  Ran 1 shell command
+
+● A casa já tem esse juiz: escala/orfa_classe.py classifica órfã em eco_cluster (rajada ≤ 15 min de outra marca) x geometria. É ele que separa o col904 do col51. Vou lê-lo para
+  reusar, não reimplementar:
+
+● Ler o classificador de orfa existente
+  ⎿  $ cat escala/orfa_classe.py
+
+✢ Hashing… (12m 26s · ↓ 24.0k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
