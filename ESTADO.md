@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:56:31.**
+**Medido em 27/09/2026 15:02:01.**
 
 | | |
 |---|---|
@@ -87,17 +87,6 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A prova da volta recupera o col727 (133,47 → 159,49 h) mas move col51 (+3,99 h de folga trabalhada) e col382 (−1,28) sem que eu saiba por quê — e eu editei a árvore com a suíte
-  rodando outra vez. Reverto o que não está commitado, registro a causa e fecho limpo:
-
-  Ran 1 shell command
-
-● Revertido limpo (col727 135,47 · col51 195,24, o estado commitado). Registro a causa como obra e escrevo a resposta à sua ordem:
-
-  Committed e2753835, ran 2 shell commands
-
-● Sua ordem cumprida, e a hipótese não se confirmou — mas ela levou ao que faltava.
-
   A medição (49 turnos abertos nos 14): onde a ata reivindica a batida (36 casos) ela está a 0–20 min do marco hi — ali a ata está certa e o turno anterior realmente não tem
   saída. Nos outros 13 a coluna do marco de entrada é -: não é "errou o papel", é silêncio, e o pareador caía no tipo gravado.
 
@@ -121,9 +110,20 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
   Quando fechar: push e deploy das curas commitadas. O apply de 09 segue segurado.
 
 ✻ Cooked for 21m 24s · done 2:54 PM · 2 shells still running
+
+❯ quando a suite fechar, push e deploy
+
+  Read 1 file
+
+● Suíte ainda rodando (árvore parada, nada tocado). O esperador está armado — quando o Ran aparecer eu empurro e subo na sequência: push pela régua → bin/deploy.sh --sem-migrate →
+  smoke no worker servido.
+
+  Fila do push (6 commits desde 73322ebd): O84, O93 + lavra de prod + placar, os dois selos que morderam minha cura, O94/miolo invertido, O95.
+
+✻ Churned for 24s · done 3:02 PM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ quando a suite fechar, push e deploy
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
