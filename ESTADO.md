@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:22:31.**
+**Medido em 27/09/2026 11:28:00.**
 
 | | |
 |---|---|
 | `HEAD` local | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -86,12 +86,6 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O pareador devolve um turno aberto, não dois — logo não há S órfã. Com 3 batidas no dia, a S foi absorvida como intrajornada e o retorno nunca veio. Confirmo:
-
-  Ran 1 shell command
-
-● Isto derruba meu diagnóstico e eu preciso dizer antes de qualquer outra coisa: o col349 em 14/09 tem três batidas — 06:59 E, 13:57 S, 14:02 E — e o hf 15:20 está apagado. A
   pessoa voltou do almoço e nunca bateu a saída. A S que meu script achou "disponível" era a do intervalo, já consumida. Meço o universo real da sua regra, pelo que o próprio
   pareador devolve:
 
@@ -112,14 +106,20 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
   E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
   ≤90 min" contava a S do intervalo, já consumida.
 
-● Abrir as linhas e empurrar · 4m 54s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/TICKETS.md'; s=open(p).read()
-     anc='|----|--------|-------|--------|--------|------|------|-------------|------|\n'
-     linhas=("| O68b | ponto/geometria | turno ABERTO fecha com a proxima SAIDA real, antes da proxima entrada e com duracao plausivel | **no ar, DIFF zero** |… (4m 52s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Pushed to main, ran 2 shell commands
 
-✢ Zesting… (34m 4s · ↓ 47.7k tokens)
+● Push pousou (6060994d). Deploy e entro na classe D, medindo o que o juiz da ata responde hoje para o RED do col904:
+
+  Deploying e medir o juiz da ata nos REDs da classe D · 7s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -3; cat > /tmp/d_col904.py <<'PYEOF'
+     from django.apps import apps
+     from django.utils import timezone as tz
+     import datetime as d
+     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
+     Col, EC, CD = G('Colaborador'),…
+
+✻ Zesting… (39m 33s · ↓ 48.9k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
