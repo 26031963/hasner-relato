@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 17:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.3 MB). Acoes na janela: **400**.
+**Medido em 27/09/2026 17:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.3 MB). Acoes na janela: **398**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -408,5 +408,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:43:57 | Bash | Publicar a correcao e empurrar | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## CORRECAO de dez minutos atras: a O86 nao e "uma causa so" -- sao SEIS formas, e cinco ja tem nome Eu acabei de escrever que a O86 e "~900 h numa causa so". **Errado, e a medicao seguinte desmontou**: classifiquei os **205** turnos abertos que tinham um `S` disponivel pelo que a CELULA daquele dia  ...` |
 | 05:43:13 | Bash | Conferir o push da taxonomia | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5wiqmfw2.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD` |
 | 05:42:37 | Bash | Classificar os turnos abertos pela forma da celula | `cat > /tmp/o86_forma.py <<'PYEOF' """Os turnos abertos com `S` LIVRE: o que a celula daquele dia diz? A O86 e a O84/O88 ou outra coisa?""" from django.apps import apps from django.utils import timezone as tz import datetime as d, collections, json G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, B, CD = G('Colaborador'), G('Batida'), G('CelulaDia') from ponto import janelas ...` |
-| 05:32:05 | Bash | Publicar a taxonomia da classe C e empurrar | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## Classe C fechada em TAXONOMIA: tres causas, todas nomeadas -- e a O86 vira a maior obra aberta Os 27 colabs da classe C que NAO eram buraco de vinculo, medidos um por um (piso das batidas x soma dos periodos do motor x folha): \| causa \| colabs \| horas \| assinatura \| obra \| \|---\|---:\|---:\ ...` |
-| 05:31:18 | Bash | Medir a causa dos 27 colabs restantes da classe C | `cat > /tmp/classe_c_resto.py <<'PYEOF' """Os 27 colabs da classe C que NAO sao buraco de vinculo: de onde vem a diferenca? Compara, por colab: piso das batidas x soma dos periodos do motor x folha (trab+folga). """ from django.apps import apps from django.utils import timezone as tz import datetime as d, collections, json G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, ...` |
