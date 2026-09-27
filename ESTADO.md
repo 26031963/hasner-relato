@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:44:01.**
+**Medido em 27/09/2026 20:49:31.**
 
 | | |
 |---|---|
@@ -84,18 +84,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Achei: a linha 51 usa _acesos, que é variável do passo 1 — no passo 2 ela guarda o último dia iterado, não o dia corrente. É o mesmo erro de escopo do vão, que já me pegou
-  antes. Carrego as luzes de intervalo no _dias:
-
-  Ran 1 shell command
-
-● R2 cura 3 dos 7 e não quebra nada: col736 15/09 447 = 447 exato, col518 27/08 e 11/09 também; os 8 casos de controle idênticos. Os outros 4 são outra forma. Selo, reusando a
-  fixture da mesma família (sua regra b):
-
-  Ran 1 shell command
-
-● O selo achou coisa certa: com hii/hfi nulos as duas sobras formam par de pausa por duração (a lei do miolo), então o dia É descrito — minha expectativa estava errada, não o
   código. Corrijo o caso para ter uma sobra:
 
   Ran 1 shell command
@@ -111,12 +99,24 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● O censo do matcher fecha a R1 com veredito medido: não justifica mexer na grade (dano 24,9–53,1 h contra +115,1 h de benefício do mesmo mecanismo, 1:2,2), e a distância não
   separa os grupos (medianas 60/60/60) — corte por distância está excluído por medição. Rodo a condição (d) da R2:
 
-● Condicao (d) da R2: oraculo nos afetados · 1m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py shell --command "exec(open('/tmp/o96_oraculo.py').read())" 2>&1 | grep -E 'colabs
-     AFETADOS|dias comparados|CUROU|DIVERGENCIA NOVA|^ col' | head -14 (1m 34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Enchanting… (36m 57s · ↓ 35.9k tokens)
+● Condição (d) violada: 1 divergência nova — col843 25/08 (esp 181, oráculo 0). Pela sua regra, não aplico. Mas preciso saber se é dano meu ou artefato do instrumento:
+
+  Ran 1 shell command
+
+● É artefato do instrumento, não dano meu. O oráculo agrupa 24/08 18:56 · 22:59 · 23:59 · 25/08 03:00 · 07:01 em 5 batidas (ímpar) chaveadas em 24/08 — então ele pontua zero no
+  dia 25 e nem julga o grupo. No dia 26/08, com 4 batidas (par), os dois concordam exatamente (665 = 665). É o artefato da regra de paridade que quatro das cinco autópsias
+  nomearam sozinhas.
+
+  Pela sua regra, a R2 não aplica. Registro e fecho:
+
+● Ver a suite da R2
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E '^Ran [0-9]+ tests|^OK$|^OK \(|^FAILED|^(FAIL|ERROR):'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_r2.log 2>/dev/null | grep -v '^OK: ' | tail -4; echo "procs=$(ps aux |
+     grep -c '[m]anage.py test')"
+
+✢ Enchanting… (42m 27s · ↓ 40.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

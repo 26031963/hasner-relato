@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 20:44:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **441**.
+**Medido em 27/09/2026 20:49:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **443**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:45:06 | Bash | Ver a suite da R2 | `cd /home/ronald/saas-hasner && grep -E '^Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_r2.log 2>/dev/null \| grep -v '^OK: ' \| tail -4; echo "procs=$(ps aux \| grep -c '[m]anage.py test')"` |
+| 20:44:45 | Bash | Medir se o zero do oraculo no col843 e artefato | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d, collections from django.utils import timezone as tz from colaboradores.models import Colaborador from ponto.turnos import batidas_apuraveis, realizado_do_dia from ponto import janelas pk = 843 col = Colaborador.objects.get(pk=pk) ini, fim = janelas.janela_fe ...` |
 | 20:42:21 | Bash | Condicao (d) da R2: oraculo nos afetados | `cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py shell --command "exec(open('/tmp/o96_oraculo.py').read())" 2>&1 \| grep -E 'colabs AFETADOS\|dias comparados\|CUROU\|DIVERGENCIA NOVA\|^ col' \| head -14` |
 | 20:37:03 | Bash | Suite e DIFF da R2 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test $LAB --settings=config.settin ...` |
 | 20:36:17 | Bash | Rodar a familia com o caso corrigido | `python3 - <<'PYEOF' p='ponto/tests/test_o68b_papel_da_ata_no_motor.py'; s=open(p).read() velho = ''' def test_MORDE_perna_solta_LONGE_de_luz_de_intervalo_segue_descartando(self): """A porta continua estreita. Sem NENHUMA luz de intervalo acesa, a batida que sobra nao tem como ser chamada de pausa -- e o dia segue sem papel, como antes da cura.""" cel = _cel(self.D15, {'hi': '08:00', 'hii': None, ' ...` |
