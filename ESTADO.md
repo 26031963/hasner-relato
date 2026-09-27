@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:237 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:54 AFIRMA ato sem PROVA ao lado -- # APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:42:01.**
+**Medido em 27/09/2026 16:47:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `5c8d4240 [O95] rodape e placar do TICKETS antes do push` |
+| `HEAD` local | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
 | `origin/main` | `5c8d4240 [O95] rodape e placar do TICKETS antes do push` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 5c8d4240 [O95] rodape e placar do TICKETS antes do push
 27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
 59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
 037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
-e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
 ```
 
 ## `git status --short`
@@ -50,7 +50,7 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 | **E3** MOTOR PELO JUIZ | **7/10 = 70%** | o motor le periodos do juiz da batida e jornada do juiz do previsto; DIFF no RELATO + `!` |
 | **E4** LEITORES NO MESMO NUMERO | **2/5 = 40%** | selo tela == PDF == fechamento == TXT na frota, 0 divergencia |
 | **E5** FECHAMENTO ONLINE | **1/2 = 50%** | fechamento = LEITURA; `recalcular` deixa de existir; so atos persistem |
-| **E6** CERTIFICACAO POR ORACULO INDEPENDENTE | **2/6 = 33%** | 0 divergencia nao explicada + 0 dia sem previsao + 0 periodo fora do juiz |
+| **E6** CERTIFICACAO POR ORACULO INDEPENDENTE | **2/8 = 25%** | 0 divergencia nao explicada + 0 dia sem previsao + 0 periodo fora do juiz |
 
 | etapa | item | estado | prova |
 |---|---|---|---|
@@ -76,7 +76,9 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 | E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
 | E5 | competencia exportada nao muda o gravado (L-092) | FEITO | O80 no ar 27/09 10:1x: `ponto/services/fechamento.py::CompetenciaExportada` + `empresas_exportadas_no_escopo` (le `marcos_da_competencia`), conferido  |
 | E6 | calculador independente do motor, dia a dia | FEITO | `/tmp/e6b.py` roda e publica CSV; metodo VALIDADO em 27/09 (erro real no campo comparado, medido em 1,0 h contra vao de 87 h) |
-| E6 | ZERO divergencia nao explicada entre oraculo e espelho | **FALTA** | MEDIDO o contrario em 27/09 ~01:10: 644 de 7.536 dias (8,5%) fora de 10 min -- 257 acima de 60 min, 233 entre 10 e 60, 77 com espelho zero e trabalho  |
+| E6 | com batidas COMPLETAS, espelho e oraculo batem (divergencia aqui e bug nosso | em curso | MEDIDO 27/09 19:3x na FROTA, depois do apply: **91,4%** (6.877 de 7.521 dia-colab). Divergem 644 em 153 colabs -- 247 entre 10 e 60 min, 272 acima de  |
+| E6 | dia de batidas IMPARES aparece EM ABERTO com o que falta, nunca com numero | **FALTA** | MEDIDO 27/09 19:3x: **30,9%** (146 de 473 dia-colab). **327 dias em 167 colabs mostram um NUMERO** onde devia estar "em aberto". Caso calibrado a mao: |
+| E6 | a 09 so exporta colab certificado pelo oraculo | em curso | MEDIDO 27/09 19:3x: **189 de 203 colabs certificados**. 14 divergem em algum dia de batidas completas e saem para a lista de ajuste ate a causa ter no |
 | E6 | o oraculo compara contra espelho INTEGRO, nao contra o builder | **FALTA** | MEDIDO: 235 dos colabs caem no builder (espelho.py:352-361). Causa = O81 (3.986 dias de ata agregada em 06/07/08 arrastando 09 via espelho.py:585) |
 | E6 | dia de batida impar nao fica fora da certificacao em silencio | **FALTA** | MEDIDO: 473 dias saem da comparacao por batida impar -- o oraculo nao os julga e ninguem mais responde por eles |
 | E6 | o piso de horas que o oraculo acusa tem causa por colab | em curso | CLASSIFICADO em 27/09 02:1x (O83): 84 colabs / 1.602,2 h em 4 classes (B 27/733,7 · C 32/376,4 · D 21/274,3 · A 4/217,7); 9 no TXT = 259,3 h. RODADA 2 |
@@ -87,44 +89,44 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Escrevo a medição que serve às duas ordens — critério de export e os dois itens novos da E6:
-
-  Ran 1 shell command
-
-❯ DEPOIS DO APPLY DA 09 -- a regua da supervisora: E6 rodada 3 na FROTA INTEIRA (nao so no TXT), com dois numeros no topo do RELATO: (1) % de dias com batidas COMPLETAS em que
-  espelho e oraculo batem (meta perto de 100%; cada divergencia listada com causa); (2) % de dias com batidas IMPARES que aparecem no espelho como "em aberto" com o que falta,
-  nunca com numero (meta 100%). Depois sorteia 10 colabs (5 no TXT, 5 retidos) e publica a lista para eu conferir os cartoes a mao. Nenhuma lei nova.
-
-● E6 medida. 09 exportável: 189 de 203 colabs certificados (14 divergem). Item 1 = 91,4% de 7.521 dias; item 2 pela sua nova definição preciso remedir — se o dia ímpar aparece em
-  aberto sem número. Vejo o que o espelho expõe num dia ímpar:
+● E6 rodada 3 medida na frota. Publico os números e lanço as autópsias em subagentes paralelos, como você mandou:
 
   Ran 1 shell command
 
-● O espelho expõe o que preciso, e o primeiro dia ímpar que olhei já é uma violação do seu critério: col830 06/09 mostra minutos_realizados=882 (14h42) com duas batidas E e
-  nenhuma saída — número onde devia estar "em aberto". Meço a frota inteira pelos seus dois números e sorteio os 10:
+● Lotes prontos. Lanço os cinco subagentes em paralelo, só leitura:
 
-  E6 rodada 3 na frota inteira com os dois numeros e o sorteio · 2m 28s
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/e6_r3.py <<'PYEOF'
-     # E6 RODADA 3 na FROTA INTEIRA, pelos dois numeros do corte de 27/09 ~17:xx. READ-ONLY.
-     from django_tenants.utils import schema_context
-     from django.apps import apps
-     from … (2m 27s)
+● 5 background agents launched (↓ to manage)
+   ├ Autopsia E6 lote 1
+   ├ Autopsia E6 lote 2
+   ├ Autopsia E6 lote 3
+   ├ Autopsia E6 lote 4
+   └ Autopsia dia impar com numero
+
+● Cinco autópsias no ar. Enquanto elas medem, publico os números e redefino o placar da E6 pela sua divisão:
+
+  Ran 1 shell command
+
+● Placar E6 agora 2/8 com os três itens novos. Commito e empurro, e começo a E5 fatia 1 (leitura, enquanto as autópsias medem):
+
+● Commitar e empurrar os documentos · 1m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/RELATO.md
+     app/core/espelho_verdade.py app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
+     [O95] apply da 09 FEITO, E6 rodada 3 na frota, e… (1m 19s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Puzzling… (23m 12s · ↓ 17.1k tokens)
+✢ Puzzling… (28m 42s · ↓ 34.5k tokens)
   ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
-
-❯ ACELERAR ATE 23:59: (1) A E5 fatia 1 FICA hoje, depois da E6 rodada 3: a 09 lida da celula, o fechamento como LEITURA (espelho e folha passam a ser a mesma conta, sem gravado
-  envelhecendo); DIFF contra o gravado de agora (que acabou de ser aplicado), criterio do MODO 24H, e o ! meu antes de virar a chave. (2) As AUTOPSIAS (divergencias da E6 e
-  classe C residual) vao para SUBAGENTES em paralelo, SO LEITURA, cada um com um lote de colabs, devolvendo causa + arquivo:linha; a sessao principal so cura e aplica, uma de
-  cada vez. (3) Fila da sessao principal: criterio de export da 09 -> E6 rodada 3 na frota (os dois numeros) -> curas do que as autopsias nomearem -> E5 fatia 1 -> sorteio dos 10
-  para a minha conferencia. (4) MUTIRAO DE RESPOSTAS em DRY em paralelo (so leitura); envio so com o meu !. Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading realizado_dos_turnos interval logic                                                                                           3m 0s · ↓ 93.9k tokens
+  ◯ general-purpose  Inspecting intervalos_do_turno piso logic                                                                                             3m 0s · ↓ 72.6k tokens
+  ◯ general-purpose  Classifying 186 days by janela_declarada pausa                                                                                        3m 0s · ↓ 90.8k tokens
+  ◯ general-purpose  Grepping TipoEscala fields in escala/models.py                                                                                        3m 0s · ↓ 84.2k tokens
+  ◯ general-purpose  Reading montar_dias in espelho.py                                                                                                     3m 0s · ↓ 76.9k tokens
   ⧉  index
 ```
