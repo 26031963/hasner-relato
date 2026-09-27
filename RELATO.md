@@ -16,6 +16,73 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI: o apply moveu 4 campos FORA do criterio, e eu REVERTI os 20 colabs
+
+Ordem Ronald 27/09 01:3x. **A tabela primeiro**, porque foi ela que eu devia ter publicado junto com o
+apply e nao publiquei:
+
+| campo | colabs | delta | causa |
+|---|---:|---:|---|
+| **`horas_extras_100_noturna`** | **13** | **+105,45 h** | HE 100% noturna: hora que estava em turno ABERTO passou a fechar e caiu na faixa noturna. **Hipotese** coerente com `turnos_abertos -30`; **nao medida** |
+| **`semanas_dsr_ok`** | **9** | **-15** | fechar turno muda a contagem semanal de dias trabalhados |
+| **`semanas_dsr_perdido`** | **9** | **+15** | o espelho do de cima: **15 semanas passaram de OK para PERDIDO** |
+| **`horas_reflexo_dsr`** | **10** | **+11,84 h** | reflexo de extras no DSR (Sumula 172): muda quando a HE da semana muda |
+
+**Dois deles sao DINHEIRO**: `horas_extras_100_noturna` (+105,45 h) e `horas_reflexo_dsr` (+11,84 h). O
+par do DSR nao e hora, mas comanda direito de descanso semanal. Nenhum dos quatro estava na lista do
+`!`. Pela ordem: **PAREI e reverti.**
+
+### Os 20 colabs revertidos, e o que cada um tinha ganhado
+
+Todos os 20 estao DENTRO dos 30 com o cadastro partido -- a populacao era a do alvo; os CAMPOS e que
+estavam fora.
+
+| colab | o que havia mudado |
+|---|---|
+| col491 | `extras_100_noturna` 0 -> **13,99 h**; `dsr_ok` 5 -> **1**; `dsr_perdido` 1 -> **5** |
+| col382 | `extras_100_noturna` 0 -> **14,04 h**; `dsr_ok` 3 -> 1; `dsr_perdido` 3 -> 5 |
+| col922 | `extras_100_noturna` 4,40 -> **15,96 h**; `dsr_ok` 2 -> 1 |
+| col200 | `extras_100_noturna` 0 -> **13,78 h**; `dsr_ok` 4 -> 3 |
+| col343 | `extras_100_noturna` 0 -> 7,00 h; `dsr_ok` 5 -> **2**; `dsr_perdido` 1 -> **4** |
+| col879 | `extras_100_noturna` 2,05 -> 10,05 h; `reflexo_dsr` 0 -> 2,95 h |
+| col129 | `extras_100_noturna` 8,40 -> 16,90 h; `reflexo_dsr` 0 -> 1,46 h |
+| col865 | `extras_100_noturna` 0 -> 7,31 h; `reflexo_dsr` 0 -> 2,22 h |
+| col174 | `extras_100_noturna` 0 -> 6,95 h; `dsr_ok` 1 -> **0** |
+| col235, col474, col522, col857 | `extras_100_noturna` (6,99 / 6,00 / 1,75 / -0,42 h) |
+| col217, col218, col923 | DSR: 1 semana de OK para PERDIDO cada |
+| col155, col256, col266, col493 | `reflexo_dsr` (2,70 / 0,07 / 0,46 / 0,17 h) |
+
+### A reversao, com prova
+
+| prova | resultado |
+|---|---|
+| fechamentos revertidos aos 26 campos do snapshot | **20** |
+| campos que AINDA divergem do snapshot nesses colabs | **0** |
+| mudancas de status no TXT apos a reversao | **0** |
+
+Reverti o COLAB inteiro, nao os quatro campos -- e a razao esta no codigo: reverter campo a campo
+deixaria a pessoa num estado que **nunca existiu**, metade do motor novo e metade do velho. O ganho
+aprovado desses 20 (`noturnas`, `intra`, `trabalhadas`) voltou junto, e isso e' consequencia da ordem,
+nao efeito colateral: o aval nomeava campos, e nesses 20 o ato saiu do aval.
+
+### O que fica valendo em 09, depois da reversao
+
+Os outros **31** colabs movidos seguem com o apply -- eles moveram SO campos do criterio. O efeito da
+**L-084** na frota (`saida_antecipada -699,84 h` em 39 colabs, `atraso -17,00 h` em 17) tambem segue: ele
+nao e' da reclassificacao, e' a lei nova de pontualidade, e nenhum dos 20 revertidos a perde na tela --
+so no gravado deles, que voltou ao estado anterior ao ato.
+
+### A causa do desvio, sem atenuante
+
+**O meu DIFF imprimia 10 campos.** As corridas da (a) e da (b) usaram a mesma lista curta, entao esses
+quatro campos **sempre se moveram** e eu nunca os mostrei. Quando escrevi "o que move e' o medido", o
+medido era menor que o que move -- por minha causa, nao do motor.
+
+E' a MESMA CLASSE do incidente que criou a L-082 na manha de 26/09: *"o DIFF motor-x-motor dava
++12,29 h e escondia os 10 campos"*. **Doze horas depois eu repeti a forma**, com outro corte e outra
+lista curta. A cura estrutural nao e "lembrar de olhar": e o medidor imprimir o UNIVERSO de campos por
+padrao, e a lista curta ser a excecao declarada. Vai para a fila como item, nao como boa intencao.
+
 ## APLICADO em 09 sob o corte (b) -- e TRES grupos de campos que o criterio NAO nomeava
 
 **O ato**: deploy (corte b + L-084 + O72 + descritor da O74) e, no mesmo ato, recalculo de 09 com

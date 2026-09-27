@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:40:41.**
+**Medido em 26/09/2026 23:45:45.**
 
 | | |
 |---|---|
@@ -52,6 +52,7 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
  M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
  M bin/relato.sh
 ?? app/ponto/management/commands/aplicar_09_corte_b.py
+?? app/ponto/management/commands/desvio_o68b.py
 ?? app/ponto/management/commands/dna_x_batida_real.py
 ?? esteira.pausada
 ```
@@ -59,44 +60,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O apply pousou. Os três números que eu me comprometi a conferir passaram — mas a tabela de 26 campos mostra três grupos que não estavam no seu critério, e isso vem primeiro.
+  20 colabs revertidos aos 26 campos do snapshot. Prova: 0 campos ainda divergentes, 0 mudanças de status no TXT. Os outros 31 colabs movidos seguem com o apply — eles moveram só
+  campos do critério.
 
-  Ran 1 shell command
+  Revertí o colab inteiro, não os quatro campos: campo a campo deixaria a pessoa num estado que nunca existiu, metade motor novo e metade velho. O ganho aprovado desses 20 voltou
+  junto, e isso é consequência da sua ordem, não efeito colateral — o aval nomeava campos, e nesses 20 o ato saiu do aval.
 
-❯ RELATO bloqueado desde 23:08: RELATO.md:23 "Item (1) FEITO: a porta nova saiu da arvore" sem linha PROVA -- ponha a PROVA (hora dos workers x hora do arquivo, e o grep da
-  chamada comentada em cadastro_tipo.py:324) e republique. E cura o efeito colateral do selo: afirmacao sem prova barra so o RELATO; ESTADO e SESSAO publicam sempre, com um aviso
-  no topo do ESTADO dizendo "RELATO retido: <linha>". Nenhuma lei nova.
+  Os piores eram concentrados: col491 ganhava 13,99 h de HE 100% noturna e passava de 5 para 1 semana de DSR OK; col343 de 5 para 2; col382 ganhava 14,04 h e ia de 3 para 1.
 
-● RELATO retido, e o selo está certo — eu escrevi "FEITO" sem prova ao lado. Ponho a prova e curo o efeito colateral:
+  A causa é minha, sem atenuante. Meu DIFF imprimia 10 campos, e as duas corridas de comparação — a (a) e a (b) — usaram a mesma lista curta. Então esses quatro campos sempre se
+  moveram e eu nunca os mostrei: quando escrevi "o que move é o medido", o medido era menor que o que move.
 
-  Ran 3 shell commands
+  É a mesma classe do incidente que criou a L-082 doze horas antes — "o DIFF motor-x-motor dava +12,29 h e escondia os 10 campos". Repeti a forma no mesmo dia, com outro corte e
+  outra lista curta. Por isso registrei a O75: a cura não pode ser disciplina minha, tem de ser default do medidor — imprimir os 26 campos sempre, lista curta só como exceção
+  declarada, com selo.
 
-● O mtime é 23:21 e os workers subiram 23:35 (02:35 UTC) — o deploy carregou esta versão. E a função nem existe mais: _recusa_partido_sem_vao tem 0 ocorrências. Ponho a PROVA e
-  curo o relato.sh:
+  Agora, na sua sequência: cartao_x_txt e pdf_x_espelho de 09.
 
-  Ran 2 shell commands
+✻ Crunched for 2m 6s · done 11:43 PM · 1 shell still running
 
-● RELATO republicado — 4dc5cc9, e o selo da prova está verde: 0 afirmação sem prova. A raspagem trocou 188 nomes com 0 vazamento.
+❯ OS 20 REVERTIDOS (O68b): autopsia do col491, col343 e col382, dia a dia: (1) a HE 100% noturna nova -- quais dias, se e domingo ou feriado trabalhado dentro da escala dele, e
+  qual regra a produz; (2) cada semana de DSR que vira "perdido": qual atraso a derruba, se o atraso esta dentro da regua das 3 h e se o cadastro descreve o dia. Tabela por
+  colab. Ate o meu corte, os 20 ficam no motor velho no gravado e entram na lista de ajuste ao DP com os dois numeros (velho e novo). Nenhuma lei nova.
 
-  A PROVA que eu tinha deixado de escrever, agora ao lado da linha:
+● Preciso saber o que derruba a semana antes de tabular. Leio a regra do DSR:
 
-  grep -c '_recusa_partido_sem_vao' = 0 — a função que recusava não existe mais na árvore; foi substituída por descreve_turno_partido, que responde pelo vão em vez de barrar.
-  Chamada ativa: 0. Arquivo com mtime 23:21:22, workers do saas_ui de pé desde 23:35 — os servidos carregaram esta versão, 14 minutos depois de ela existir. E o caso que morde:
-  test_MORDE_a_porta_SALVA_noturno_continuo cadastra um 6x1 noturno contínuo e passa.
+  Searched for 1 pattern, ran 1 shell command
 
-  E o efeito colateral está curado. Agora ESTADO e SESSAO publicam sempre, e o topo do ESTADO leva > **RELATO retido:** <linha> com a explicação de que falta uma página.
+● Achado que derruba a premissa da sua pergunta (2), e é mais sério do que atraso: dsr_ok = not faltas_injustificadas — atraso não entra na conta do DSR. Quem derruba a semana é
+  dia previsto sem trabalho e sem justificativa. Confiro os campos do período para montar a tabela:
 
-  O motivo de eu ter escrito isso no código, e não só consertado a linha: um selo que cala o mensageiro inteiro por causa de uma frase deixa a casa muda. O RELATO ficou retido das
-  23:08 até agora, e junto com ele pararam o ESTADO e a SESSÃO — que não afirmam ato nenhum e eram exatamente o que permitiria a alguém de fora ver que a esteira estava andando.
-  Ficar mudo é o que custou 26 dias em 04/09, e o selo tinha acabado de reproduzir a forma em escala menor.
+  Campos do PeriodoCalculo para a tabela
+  ⎿  $ sed -n '130,163p' ponto/motor_calculo_v2.py | grep -nE "minutos_|he_|extra|noturn|data" | head -20
 
-  Falta, na sua sequência: cartao_x_txt e pdf_x_espelho de 09 = 0, depois o template da O74 e o smoke.
-
-✻ Baked for 3m 12s · done 11:40 PM · 1 shell still running
+· Nucleating… (53s · ↓ 3.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ mede cartao_x_txt e pdf_x_espelho de 09
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
