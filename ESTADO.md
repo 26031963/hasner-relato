@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:50:45.**
+**Medido em 26/09/2026 23:55:45.**
 
 | | |
 |---|---|
@@ -60,40 +60,40 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ colab  │       DSR novo       │                                                                é legítimo?                                                                 │
+  ├────────┼──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ col491 │ perdido=1, falta     │ sim — ele não tem entrada no 20/09. O motor velho contava a cauda do plantão do dia 19 como trabalho do dia 20, e isso é exatamente o que  │
+  │        │ 20/09                │ o seu corte proíbe                                                                                                                         │
+  ├────────┼──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ col343 │ ok=1                 │ sim — entrou 20/09 23:00, na hora                                                                                                          │
+  ├────────┼──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ col382 │ perdido=1, falta     │ não — ele trabalhou. Entrou 21/09 00:00, dez minutos depois do marco 23:50, e o período migrou para fora da janela                         │
+  │        │ 20/09                │                                                                                                                                            │
+  └────────┴──────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Os dois sítios já usam e.date() — o dia da entrada, que é o dia de início. Então o que falta é a condição "dia NÃO previsto". Vejo como o DSR monta datas_trabalho:
+  Então, pela sua ressalva "salvo falta real": col491 e col343 estão conformes; col382 é bug, e é a mesma família da O72 — agora na entrada em vez da saída. Registrei como O76,
+  com a causa nomeada: a pergunta "a que turno pertence a batida?" tem juiz (turnos_do_colab, core/juizes.py:151), e o motor a responde por conta própria fazendo data_jornada =
+  entrada.date(); o periodos_de_turnos descarta o data_turno que o juiz já calculou.
 
-  Ran 2 shell commands
+  Não vou remedir os 20 e aplicar ainda, e o motivo é o seu próprio critério: com o col382 nessa condição, a remedição traria uma semana de DSR perdida por bug, não por falta — e
+  isso é campo fora do critério outra vez. A O76 vem antes. Se você preferir aplicar os 20 aceitando o col382 como conhecido-e-listado, eu faço — mas não escolho isso sozinho,
+  porque é uma semana de descanso de uma pessoa que trabalhou.
 
-● datas_trabalho já usa o dia da entrada. Então achei a mecânica do DSR: sob MotorTurnoPartido, a cauda depois da meia-noite era um período próprio com entrada em 20/09 — e
-  contava como trabalho naquele dia. Com o motor contínuo ela se funde ao 19/09, e o 20/09 fica vazio. Implemento o 100% e meço se o 20/09 é falta real:
+✻ Worked for 2m 54s · done 11:51 PM · 1 shell still running
 
-  Ran 2 shell commands
+❯ corte Ronald (leis de dominio): as 8 regras abaixo entram no LEIS.md como L-NNN, cada uma com dono (arquivo::funcao que a aplica) e selo que morde; onde nao houver selo, a
+  linha diz "SEM SELO" e vira obra no BACKLOG. (1) jornada pertence ao dia de inicio, inclusive domingo, feriado, semana e DSR; (2) plantao previsto nunca e HE 100%; (3) batida =
+  instante contra marco, o tipo gravado nao decide; (4) falta tem um significado so, furo e "em aberto"; (5) atestado so tem efeito em dia de trabalho; (6) competencia 21-20,
+  nunca mes civil; (7) a definicao da escala decide o regime, o rotulo e texto; (8) competencia exportada nao muda o gravado, diferenca vira Pauta DP. Depois disso, censo: regra
+  de dominio que o codigo aplica e nao tem L-NNN = lista para mim. !
 
-● A medição do 20/09 separa três casos, e o terceiro é um bug novo:
+● Ordem grande e de vocabulário. Primeiro o formato do LEIS.md e o último número:
 
-  ┌────────┬────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────┐
-  │ colab  │                    batidas no 20/09                    │                                    leitura                                     │
-  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
-  │ col491 │ 01:17S 02:17E 06:50S — só a cauda do plantão do dia 19 │ falta real: não há entrada para o plantão do dia 20. DSR perdido é correto     │
-  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
-  │ col343 │ cauda + 20/09 23:00E                                   │ começou o plantão do dia 20 na hora → DSR ok. Caso de controle                 │
-  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
-  │ col382 │ 21/09 00:00E 03:56S 05:18E 07:51S                      │ trabalhou, mas entrou 10 min depois do marco 23:50 — e a entrada caiu em 21/09 │
-  └────────┴────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────┘
+● Selos existentes por tema das 8 leis
+  ⎿  $ echo "1 dia de inicio:"; ls ponto/tests/ | grep -iE "dia20|dupla_contagem|dia_da_jornada" ; echo "3 instante x tipo:"; ls ponto/tests/ | grep -iE
+     "tipo_gravado|marco_manda|juiz_batida"; echo "4 falta/furo:"; ls ponto/tests/ escala/tests/ relatorios/tests/ 2>/dev/null | grep -iE "falta|furo" | hea…
 
-  O col382 não tem falta: o plantão dele do dia 20 começou às 00:00 do dia 21, dez minutos atrasado. Como o motor atribui o dia pela data civil da entrada, o período foi para
-  21/09 — fora da janela — e o 20/09 virou falta. É a mesma família da O72, agora na entrada em vez da saída.
-
-  Running 1 shell command…
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/BACKLOG.md'
-     s=open(p).read()
-     anc="<!-- OBRAS:FIM -->"
-     item=("| O76 | **DIA DO PLANTAO VEM DO MARCO, NAO DA DATA CIVIL DA ENTRADA** (P7.1; achado 27/09 02:0x na "
-     "autopsia do corte do feriado) -- `MotorBase.calcular_mes` faz `data_jornada = localizar(entrada).date()`. …
-
-· Catapulting… (2m 39s · ↓ 9.8k tokens)
+✶ Booping… (1m 18s · ↓ 3.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
