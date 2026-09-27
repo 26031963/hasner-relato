@@ -24,6 +24,63 @@ Nao e cura de codigo -- e cadastro, e vai tambem para a lista da supervisora.
 Os outros **75** dos 84 estao **fora** do TXT: a diferenca deles nao entrega numero errado ao DP em
 09, mas continua sendo hora nao paga.
 
+## Classe D tem CAUSA, com arquivo:linha: a ata nomeia a inversao e o juiz devolve "nao sei"
+
+Autopsia dos dois REDs, dia a dia, lendo a ata crua. **A ata ja tinha a resposta nos dois casos.**
+
+**col85, 21/08** (1o dia da janela). Tres batidas seguidas gravadas como **E**: 20/08 07:00 E,
+21/08 18:56 E, 22/08 07:02 E -- nenhuma S. A ata daquele dia, porem, diz:
+`lampadas: [{luz 18:56, tipo E, tipo_real E}, {luz 07:02, tipo **S**, tipo_real **E**}]`,
+`n_missing: 0`, veredito **concorde**. Isto e, a ata NOMEOU que a batida das 07:02 cumpre o papel de
+SAIDA embora tenha sido gravada como entrada. O motor produziu **3 periodos ABERTOS, 0,00 h**.
+
+**col904, 22/08** (12x36 19:00->07:00 com intervalo 01:00-02:00). A ata acende `luz 18:50` no marco
+`19:00` e `luz 07:00` no marco `hf 07:00` (tipo S, tipo_real S), com `n_missing: 2` -- o par do
+intervalo nao bateu. O motor deixou **18:50 aberto** e pareou as duas batidas de 23/08 entre si:
+**06:57 -> 07:00 = 0,04 h**. O plantao de 12,1 h nao existe em nenhuma testemunha.
+
+**A LINHA EXATA**: `ponto/juiz_batida.py:150-157` --
+`if not esperados or not lamps or len(esperados) != len(lamps): desalinhado = True`, com
+`porque = 'sem marcos no dna'` ou `'ata com N lampadas para M marcos'`. E `esperados` sai de
+`montar_lampadas(..., marcos['hi'], marcos['hf'], marcos['hii'], marcos['hfi'])`, com
+`marcos = dna['marcos'] if isinstance(dna['marcos'], dict) else {}`. Com `dna.marcos = null`,
+`marcos` fica `{}` e o juiz sai pela porta do "nao sei" ANTES de chegar as linhas 181-183 -- onde o
+proprio codigo escreve: *"O SINTOMA DO col369, NOMEADO: a batida cumpriu o marco mas foi GRAVADA com
+o tipo oposto. Quem pareia pelo tipo gravado perde o dia inteiro; quem le o marco, nao."* O dia sai
+pela porta do "nao sei" e cai na geometria, e a geometria pareia **pelo tipo gravado** -- o mesmo
+erro que a cura da E3 nomeia, no ramo que a cura declara nao cobrir.
+
+### O universo, MEDIDO na janela 09 (17.332 celulas)
+
+| assinatura | dias | colabs | dos 21 da classe D |
+|---|---:|---:|---:|
+| **`dna.marcos` nulo** (o juiz nao tem contra o que alinhar) | **7.035** | **517** | **18** |
+| ata com `n_missing > 0` (lampada faltando) | 2.716 | 394 | 20 |
+| **a ata NOMEIA a inversao** (lampada acesa com `tipo != tipo_real`) | **437** | **153** | **14** |
+| veredito `discordante` | 79 | 46 | 5 |
+
+**40,6% das celulas da competencia aberta nao tem marco congelado.** E nos 437 dias em que a ata
+nomeia a inversao o papel certo esta escrito e e ignorado -- a maioria deles com veredito
+**concorde**, o que quer dizer que nao ha conflito a resolver: ha leitura que nao acontece.
+
+### PROPOSTA (pergunta de desenho: mede, propoe, segue -- MODO 24H)
+
+Nao e regra nova, e "qual leitor nao migrou" (LEI-AKITA 4). Duas curas, nao conflitantes:
+
+1. **A forma INTERMITENTE da ata tem par e o juiz nao a le.** No col85 a ata usa slots sinteticos
+   (`hora: "·I1"`, `"·I2"`) porque o ciclo intermitente nao tem horario fixo -- e com `n_missing: 0` e
+   dois slots, o par esta completo: `·I1` e a entrada, `·I2` a saida, e as luzes carregam os
+   instantes. Ensinar `periodos_do_dia` a responder nessa forma NAO inventa marco: le o que a ata
+   escreveu. **Nao** proponho congelar `marcos` de template no intermitente -- ali `eh_dia_trabalho`
+   e False e inventar 19:00->07:00 seria fabricar previsto.
+2. **Tres batidas `E` seguidas e impossivel**, e a geometria devia recusar: ninguem entra duas vezes
+   sem sair. Hoje ela aceita e abre tres turnos. Esta cura e independente da primeira e vale para
+   todo dia sem ata legivel.
+
+Fica REGISTRADO como **O84**, com o DIFF a medir na sombra pelo criterio do MODO 24H. Nao apliquei
+nada: o deploy das sete curas ainda nao pousou, e dinheiro novo em cima de codigo nao servido seria
+somar dois desalinhamentos.
+
 ## E6-CLASSES: **84 colabs, 1.602,2 h** -- as quatro classes MEDIDAS, com as listas
 
 Regua do pedido, frota de 09, oraculo `/tmp/e6c.py` (le `espelho_do_colab`, `FechamentoMensal` e

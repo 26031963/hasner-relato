@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:44:01.**
+**Medido em 27/09/2026 01:49:37.**
 
 | | |
 |---|---|
-| `HEAD` local | `d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna` |
+| `HEAD` local | `61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
 d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna
 fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA
 5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado
 2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro
-c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
 ```
 
 ## `git status --short`
@@ -77,40 +77,40 @@ c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Enquanto roda, sigo a pista que o número aponta — 77 h que não estão em nenhum dos 26 campos, num colab com dias_previstos=9. Leio o bloco da folga, vizinhança da minha própria
-  cura:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O mecanismo aparece: a folha roda o motor por FATIA de escala e acumula (resultado.periodos_ft += r_fatia.periodos_ft, :231), enquanto o espelho roda uma vez com a escala ativa.
-  Leio o laço das fatias:
+● Classe D tem causa visível, e é outra: o tipo das batidas. O col85 tem três batidas seguidas tipo=E (20/08 07:00, 21/08 18:56, 22/08 07:02) — nenhuma S —, e o col904 tem E onde
+  devia ter S às 06:57. O motor abre turno e nunca fecha; o oráculo pareia por cronologia. Confirmo a chave que falta antes de afirmar a causa:
 
   Ran 1 shell command
 
-● Background command "Rodar o calculador das quatro classes" completed (exit code 0)
+● Agora a causa da classe D está inteira, e é a mais grave do turno: a ata já tem a resposta e o motor não a lê.
 
-  Read 1 file
+  - col85: a lâmpada 2 diz luz 07:02, tipo=**S**, tipo_real=**E** — a ata julgou que aquela batida ocupa o marco de SAÍDA. O dna.marcos é null (ciclo intermitente) e o motor caiu
+    no tipo gravado (E,E,E) → três turnos abertos, 12,1 h desaparecidas.
+  - col904: a ata tem luz 07:00, tipo=S, tipo_real=S fechando o plantão de 22/08, e o motor pareou as duas batidas de 23/08 entre si (0,04 h) deixando 18:50 aberto.
 
-● O calculador reproduz a ordem: 84 colabs / 1.602,2 h, A=4 (217,7 h), B=27 (733,7 h), e a lista do DP = 9 colabs / 259,3 h. Minha fronteira C/D ficou diferente da sua (C=26/D=27
-  contra C=33/D=20) porque usei tolerância absoluta de 1 h — o col515, que você chamou de C, caiu em D por 2,51 h em 94,81. Corrijo a régua da fronteira e publico:
+  Localizo o juiz que devia ter sido lido:
+
+  Searched for 1 pattern
+
+● A causa é precisa e não é "a cura E3 não chegou": é o ramo declarado "não sei" dela. O juiz responde desalinhado quando a ata não casa com o DNA (col85: dna.marcos = null;
+  col904: n_missing=2 em 4 marcos), o dia cai no pareamento por geometria — e a geometria confia no tipo gravado. Meço o universo dessa assinatura:
 
   Ran 1 shell command
 
-● Agora as classes batem com a ordem (C=32, D=21, A=4, B=27) e cada RED cai na sua classe — exceto o col300, que não aparece entre os 84. Meço o col300 antes de dizer o que é:
+● Número estrutural: 7.035 dias (517 colabs, 40,6% da janela) com dna.marcos nulo, e 437 dias em que a ata NOMEIA a inversão — a maioria com veredito concorde. Leio o guarda do
+  juiz para ter o arquivo:linha:
 
   Ran 1 shell command
 
-● col300 está exato: folha 180,47 h == oráculo 180,47 h, vão −0,00 h — o plantão 02/09 17:53→06:03 é pago. Esse RED já morreu, curado pelo recálculo das 00:50 desta noite. Publico
-  tudo no RELATO, com a lista do DP no topo:
+● Causa fechada com arquivo:linha. Publico a classe D e a obra que ela abre:
 
-● Commitar a O83 e publicar o RELATO · 15s
-  ⎿  $ grep -n 'E6-CLASSES\|SMOKE+PLACAR' docs/PROMPTS.md | cut -c1-100; cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PROMPTS.md
-     app/core/espelho_verdade.py && git commit -q -F - <<'EOF'
-     [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espel… (15s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Commitar a O84 e publicar
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF'
+     [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
+     LEI-AKITA: origem=ponto/juiz_batida.py:150-157 (o guarda do desalinhado), testemunha=a a…
 
-· Unfurling… (28m 43s · ↓ 84.6k tokens)
+· Unfurling… (34m 19s · ↓ 105.5k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
