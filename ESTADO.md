@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:55:31.**
+**Medido em 27/09/2026 01:00:45.**
 
 | | |
 |---|---|
@@ -40,50 +40,85 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
  M app/config/crons_duracao.json
+ M bin/gerar_estado.py
+?? app/core/espelho_verdade.py
 ?? esteira.pausada
 ```
+
+## PLACAR ESPELHO-VERDADE
+
+| etapa | feitos | itens do programa |
+|---|---:|---|
+| **E1** PREVISAO INTEGRA | **1/3 = 33%** | selos de frota = 0: vinculo com fim<inicio; 12x36 com 3+ trabalha seguidos; dia de colab ativo sem previsao ou |
+| **E3** MOTOR PELO JUIZ | **4/4 = 100%** | o motor le periodos do juiz da batida e jornada do juiz do previsto; DIFF no RELATO + `!` |
+| **E4** LEITORES NO MESMO NUMERO | **2/5 = 40%** | selo tela == PDF == fechamento == TXT na frota, 0 divergencia |
+| **E5** FECHAMENTO ONLINE | **0/2 = 0%** | fechamento = LEITURA; `recalcular` deixa de existir; so atos persistem |
+| **E6** CERTIFICACAO POR ORACULO INDEPENDENTE | **2/4 = 50%** | 0 divergencia nao explicada + 0 dia sem previsao + 0 periodo fora do juiz |
+
+| etapa | item | estado | prova |
+|---|---|---|---|
+| E1 | vinculo com data_fim < data_inicio (escritor unico + saneamento) | **espera Ronald** | medido: 51 colabs com vigencia impossivel (lavrar_vigencia_impossivel); restauracao pelo propositor espera o `!` |
+| E1 | celula de trabalho sem previsao valida | em curso | medido: 4 colabs com zero vinculo E zero celula (col924/391/43/942, ~221 h) |
+| E1 | qual vinculo vale no dia tem UM juiz (CelulaDia.escala_geradora) | FEITO | O69 aplicada em 09: 654,74 h; `escala/alimentacao.py::vinculo_do_dia`; selo `ponto.tests.test_vinculo_do_dia_pela_celula` (8 casos) |
+| E3 | o MARCO manda, nunca o tipo gravado | FEITO | selo `ponto.tests.test_e3_completa_o_marco_manda` + `test_selo_motor_nao_pareia_pelo_tipo_gravado`; aplicada em 09 |
+| E3 | jornada do dia vem de minutos_previstos_do_dia, nunca de minutos_jornada | FEITO | HAIKU `jornada_de_fonte_lixo` (lavrar_jornada_lixo, 11 acessos em 4 arquivos) |
+| E3 | os leitores de turno tambem perguntam ao juiz da batida (O65) | FEITO | O65 aplicada: dinheiro ZERO, turnos abertos 806 -> 744; selo `SeloLeitorDeTurnoTambemLeAAtaTest` |
+| E3 | a jornada pertence ao dia de INICIO, nas tres derivacoes (O76) | FEITO | O76: `MotorBase._dia_do_turno` passa a servir o MotorBase; RED col382 DSR perdido=1 -> ok=1; aplicada 27/09 |
+| E4 | o cartao PDF desenha o mesmo que a tela | FEITO | `pdf_x_espelho_divergentes` = 0 em 199 colabs (sombra, pos-O69) |
+| E4 | o cartao e o TXT no mesmo numero | FEITO | `cartao_x_txt_divergentes` = 0 na competencia 09 |
+| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | MEDIDO o contrario: topo x coluna diverge em 7 casos conferidos (col515 11,13 x 92,30 h). Item (6) do [nome], obra aberta |
+| E4 | colunas Atraso e Saida antecipada lendo a folha (O51b) | **FALTA** | (sem prova) |
+| E4 | o tipo de escala exibido sai da DEFINICAO, nao do rotulo gravado | em curso | O74: `rotulo_do_desenho` + filtro `desenho_do_turno`; ficha no ar, lista de tipos espera o deploy |
+| E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
+| E5 | competencia exportada nao muda o gravado (L-092) | **FALTA** | SEM SELO -- obra O80. MEDIDO o risco: 18 exports em prod, incluindo emp2 08/2026 com 352 linhas entregues |
+| E6 | calculador independente do motor, dia a dia | FEITO | `/tmp/e6b.py` roda e publica CSV; metodo VALIDADO em 27/09 (erro real no campo comparado, medido em 1,0 h contra vao de 87 h) |
+| E6 | hora de folga trabalhada sem escala certa entra em horas_trabalhadas | FEITO | aplicada em 09: +431,90 h em 11 colabs, HE em zero, 0 saem do TXT; reversao logs/apply_folga_antes.json |
+| E6 | dia que a ata nao explica nao e pago em silencio | em curso | medido: 1.484 dia-colab (19,4%), 723 por dia + 761 de 28 colabs de cadastro partido falso |
+| E6 | colab com turno aberto em massa (o espelho tambem nao ve) | **FALTA** | medido: col788 63 turnos abertos, col923 46, col880 11 |
+
+**E6 -- calculador independente:** _sem rodada registrada_ (`logs/e6_placar.json` ausente). Sem rodada, a etapa E6 nao tem piso medido.
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├─────────────────────────────┼────────────┤
+  │ E6 CERTIFICAÇÃO             │  2/4 = 50% │
+  └─────────────────────────────┴────────────┘
 
-● Monitor "apply da cura da folga em 09" stream ended
+  Três decisões de desenho, e a primeira foi obrigatória:
 
-  Ran 1 shell command
+  As etapas viraram DADO. O programa ESPELHO-VERDADE está em prosa, dentro de uma célula da tabela do BACKLOG — e prosa não dá placar. Criei app/core/espelho_verdade.py seguindo o
+  precedente que a casa já tem: core/contratos_estruturais.py declara a matriz dos 22 contratos e o placar do TICKETS a lê.
 
-● Background command "Aplicar a cura da folga e conferir no banco" completed (exit code 0)
+  "Item sem prova não conta" está no código, não na minha disciplina. O placar() rebaixa FEITO sem linha de prova para em curso e marca PROVA FALTANDO -- nao conta como feito.
+  Mentir no percentual seria pior que não ter placar.
 
-● Aplicado: 11 colabs, +431,90 h. No banco: col278 de 91,42 → 181,69 h, col203 de 98,96 → 183,61 h, col877 com 134,71 h. E o col865 preservou as 24,46 h de folga com escala certa,
-  provando que a cura acrescenta o ramo em vez de trocar o critério. Zero entram ou saem do TXT; 07 e 08 intactos.
+  O ESTADO nunca cai por causa do placar. Se o módulo quebrar, o bloco imprime o motivo e o resto do ESTADO segue — o mensageiro não pode morrer pela mensagem, que foi a lição do
+  RELATO retido às 23:08.
 
-  Agora push até pousar:
+  A linha do E6 com o percentual do calculador está escrita mas sem rodada registrada: ela lê logs/e6_placar.json e hoje diz "sem rodada registrada — sem rodada, a etapa E6 não
+  tem piso medido". Vou rodar o /tmp/e6b.py e persistir o número, para o placar ter o piso.
 
-  Ran 3 shell commands
+  E o E3 = 100% merece uma ressalva honesta: são os quatro itens que eu declarei para a etapa. A porta original da E3 pedia o ! do Ronald sobre o DIFF — esse existe e foi dado.
+  Mas se faltar item na minha lista, o 100% é do meu recorte, não do programa.
 
-● Commit 75d4e150, push51 em voo com a suíte completa sobre a árvore do commit. Vou até pousar — se cair, volto com a causa em uma linha e reempurro, sem pegar item novo no meio.
+✻ Cooked for 2m 43s · done 12:59 AM · 2 shells still running
 
-  O que esse commit carrega, e o que muda para as pessoas:
+❯ (1) PUSH51 e DEPLOY JA com smoke ANTES de qualquer outra coisa: a L-084 errada segue no ar e origin esta em d39c0696. (2) PLACAR: a E3 nao esta 100% -- faltam na lista do
+  espelho_verdade.py: O68b plano B (~720 dias), O70 geradora (6.848), O66 dias sem canal (68), os 30 separados do modo 24h, O73 col81. A lista de itens de cada etapa sai do
+  BACKLOG e do RELATO desta noite, nao do recorte de quem escreve o placar; item de dinheiro aberto nunca fica fora. Depois roda o e6b e persiste o numero. Nenhuma lei nova.
 
-  +431,90 h voltam para 11 colaboradores. col278 de 91,42 para 181,69 h. col203 de 98,96 para 183,61 h. col877 ganha 134,71 h que estavam em campo nenhum. E a HE ficou em zero — o
-  adicional de 100% que o corte nega não veio de graça junto.
+● Item (1) primeiro. Vejo o push51:
 
-  O col382 deixa de ter falta no 20/09 e recupera a semana de DSR. Ele entrou dez minutos depois da meia-noite e o sistema o registrava como ausente.
+  O push51 terminou ou morreu?
+  ⎿  $ cd /home/ronald/saas-hasner && tail -6 logs/push51.log; echo "=== o processo do push51 ainda vive? ==="; pgrep -fa "git push origin HEAD:main" | head -2 || echo "nenhum
+     push em curso"
 
-  A L-084 errada sai do ar. Desde 23:35 ela deixava de descontar atraso de quem chega mais de 3 h tarde com a saída na hora — o oposto do que a lei quer.
-
-  Duas coisas que eu curei em mim antes de aplicar, e que ficam no commit porque valem mais que o número:
-
-  O p not in _ft_certa comparava @dataclass por valor. Dois períodos com os mesmos campos se confundiriam, e o silêncio caía do lado de não pagar. Se eu tivesse aplicado antes de
-  olhar, teria criado um bug novo dentro da cura de um bug de hora não paga.
-
-  E eu criei um segundo mapa do dia do turno antes de procurar o primeiro — que existia, com a docstring dizendo "só o dia sai daqui". Passei a noite arrancando segundas regras de
-  quatro lugares e quase plantei uma.
-
-✻ Cooked for 1m 27s · done 12:53 AM · 2 shells still running
+· Newspapering… (23s · ↓ 639 tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ DEPLOY JA com smoke quando pousar
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
