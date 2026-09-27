@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:38:01.**
+**Medido em 27/09/2026 10:40:45.**
 
 | | |
 |---|---|
@@ -85,7 +85,6 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
 
 ● A segunda rodada: 84 colabs / 1.602,2 h → 80 / 1.444,5 h, ou seja −157,7 h, que é quase exatamente as +157,72 h da O85. Mas o comparativo por classe seria maçã com laranja — o
   log usa a tolerância de 1 h e meu número publicado usa max(3h, 5%). Reclassifico com a mesma régua:
@@ -109,16 +108,17 @@ d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 s
   Só a classe C moveu, e exatamente as −157,7 h que a O85 aplicou. Saíram da lista col375, col743, col882 e col935; o col515 fica com resíduo de 1,54 h. A, B e D intactas, como a
   taxonomia previa.
 
-  Publicar a O91 fechada e a rodada 2 do oraculo · 3s
+  Publicar a O91 fechada e a rodada 2 do oraculo · 2m 47s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      ## E6 rodado de novo (sua regra de fila): o oraculo confirma a O85 por via independente
      | classe | rodada 1 (03:xx) | rodada 2 (10:3x) | delta |
      |---|---|---|---:|
-     | **A** fechamento zero (cadastro)…
+     | **A** fechamento zero (cadastro)… (2m 45s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Envisioning… (14m 44s · ↓ 15.7k tokens)
+· Envisioning… (17m 27s · ↓ 17.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
