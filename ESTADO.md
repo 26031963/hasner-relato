@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:320 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:364 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:35:45.**
+**Medido em 27/09/2026 04:40:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `922f3aec [RELATO-NOITE] a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald` |
+| `HEAD` local | `da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)` |
 | `origin/main` | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-922f3aec [RELATO-NOITE] a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald
+da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)
+4a6bc47b [O66+O91] o contador do beco nasce -- e no primeiro uso desmente a minha propria frase
+9060f899 RELATO da noite: a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald
 dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca
 b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
-0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
-95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons.py
- M app/config/crons_duracao.json
- M app/docs/RELATO.md
-?? app/chamados/management/commands/lavrar_furo_sem_canal.py
-?? app/chamados/services/furo_sem_canal.py
-?? app/chamados/tests/test_o66_furo_sem_canal.py
 ?? esteira.pausada
 ```
 
@@ -92,39 +86,39 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ```
 
-  Searched for 2 patterns, ran 1 shell command
-
-● DisputaSupervisao exige um chamado. Aproveito para isolar melhor: o caso da pergunta ganha um chamado terminal, então o único canal vivo é a pergunta:
-
-  Ran 1 shell command
-
-● universo=1: os vereditos não sobreviveram à criação — o cartório julga no save (B5.2). Fixo o estado com update(), que é a forma honesta de montar o cenário que o contador tem
-  de ver:
+● A forma renderizada envolve com cron_run.sh (que dá trilha e duração ao placar) — mesmo comando, mais a trilha. Confirmo que esse envelope já é o usado pelos outros de host
+  antes de instalar:
 
   Ran 1 shell command
 
-● Ainda 1. Paro de supor e imprimo o estado:
+● Confirmado, e muda a decisão: o envelope cron_run.sh é o padrão instalado, mas os cinco contadores declarados não estão no crontab — zero ocorrências cada. E um dos seis é
+  reverter_situacao_afastado, que escreve (reverte situação de colaborador). Então install não é neutro: ativaria um escritor que nunca rodou. Não instalo; lavro o meu contador
+  uma vez e registro:
 
   Ran 1 shell command
 
-● Os canais re-julgam a célula ao nascer (B5.2) e apagaram meu veredito — pk2/3/4 viraram nunca_bateu. Fixo o veredito depois dos canais:
+● O contador na competência aberta (21/09–20/10) dá 13 em 459 células — e ali há 1 cobrado sem canal, então meu "todas são furo" valia só para a janela de 09. E o --apply estourou
+  por coluna obrigatória. Vejo como o irmão grava:
 
   Ran 1 shell command
 
-● 7 OK, incluindo o MORDE (chamado terminal não é canal). Declaro o cron com o papel de vigia:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O crons.sh check mostra divergência pré-existente: há linhas no crontab do host que config/crons.py não declara. Instalar agora as removeria. Meço antes de tocar:
+● data_ini é obrigatório e eu não o passei. Espelho o irmão e corrijo também minha afirmação sobre "todas furo", que valia só para a janela de 09:
 
   Ran 1 shell command
 
-● Achado importante: seriam 6 linhas adicionadas — e cinco delas são contadores declarados que nunca foram instalados (lavrar_fase_conflitante, lavrar_vigencia_sem_trilha,
-  lavrar_vigencia_impossivel, lavrar_jornada_lixo, reverter_situacao_afastado) — e 2 removidas, que são scripts do host não declarados. Vejo se crons.py sabe declarar host:
+● Lavrado. Corrijo o RELATO com os dois recortes e empurro:
 
-  Ver se o crons.py declara cron de host
+  Ran 1 shell command
 
-· Harmonizing… (7m 27s · ↓ 23.1k tokens · thinking)
+● [RELATO-NOITE] é a mesma armadilha: tag entre colchetes é lida como fatia. A forma limpa é não usar colchetes em commit que não é fatia:
+
+  Renomear a tag e empurrar · 1m 53s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/config/crons_duracao.json && git commit -q -m "crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
+     bin/crons_duracao.py)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" && FILTER_BRANCH_SQUELCH_WARNING=1 git filter… (1m 52s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Harmonizing… (12m 27s · ↓ 35.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
