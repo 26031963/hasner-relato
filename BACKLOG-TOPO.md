@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**89 obras abertas.**
+**90 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -98,3 +98,4 @@ lista — ela e o que esta EM PE._
 | **O87** | NAO HA GUARDA CONTRA INTERVALO FORA DO TURNO | **livre, depois do push do E1** |
 | **O88** | O PAREAMENTO NAO SABE O QUE A L-084 JA SABE | **livre, com a O86** |
 | **O89** | O MOTOR MUTACIONA A `Batida` QUE RECEBE | espera `!` |
+| **O90** | O PLACAR DO TICKETS GUARDA O HASH DO ULTIMO PUSH, ENTAO NASCE VELHO | **livre, pequena** |

@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:10:05.**
+**Medido em 27/09/2026 03:14:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `42224680 [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h` |
+| `HEAD` local | `ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-42224680 [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h
-d4548ad8 [O73] plano medido: o sitio e calcular_periodo (:1950), que julga pontualidade sem saber se e o primeiro bloco do dia
-099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela
-3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
-b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
+ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
+56475e40 [TICKETS] a linha da vigencia passa a ter o ID E1, que e a tag citada nos commits
+ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
+f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce velho -- barrou dois pushes hoje
+f1afcead [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h
 ```
 
 ## `git status --short`
@@ -85,21 +85,6 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Nenhuma hipótese fecha. Paro de adivinhar e faço o espião imprimir os argumentos exatos que a cura passa:
-
-  Ran 1 shell command
-
-● Achei, e é revelador: com tipo_escala=None a fábrica devolve Motor12x36 — não existe motor neutro. A fatia usou MotorComercial (6x1); o meu passe órfão pediu "nenhum template" e
-  recebeu o motor de 12x36, que não fecha um par de 4 h. Testo a cura certa — o último template conhecido:
-
-  Ran 1 shell command
-
-● A saída é o oposto do que eu supunha: None → Motor12x36 fecha o par; o template 6x1 → MotorComercial não. Mas a cura usa None e não fecha. Sobrou uma hipótese: o motor da fatia
-  mutaciona os objetos Batida que a passada órfã reaproveita. Testo:
-
-  Ran 1 shell command
-
-● PROVADO, e é maior que a minha cura: o motor mutaciona os objetos Batida que recebe. A mesma passada órfã dá 4,0 h com objetos frescos e ABERTO com os objetos que a fatia já
   tocou (o tipo continua E/S — a mutação é em outro atributo). Curo com re-consulta e faço o RED morder:
 
   Ran 2 shell commands
@@ -110,15 +95,30 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 
 ● SMOKE_O85 = OK — os cinco com folha == espelho (col375 agora 28,00 = 28,00). Total da O85: +157,72 h. Registro a O89, que é classe de bug nova e de desenho:
 
-● Registrar a O89 e publicar a O85 fechada · 5s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## O89 (CLASSE DE BUG NOVA, de DESENHO): **o motor MUTACIONA os objetos `Batida` que recebe**
-     `PAREI: nada -- registro no topo e SIGO, como a ordem da noite manda. Mas isto e DESENHO e voce precisa … (3s · 4 lines)
+  Ran 1 shell command
+
+● Agora o push (a suíte roda no hook) e o deploy em seguida:
+
+  Ran 1 shell command
+
+● Mesma barreira: a linha do placar guarda o hash do último push, então ela nasce velha logo depois de cada push — friction estrutural, não acidente. Curo o mecânico agora e
+  registro a causa:
+
+  Ran 4 shell commands
+
+● A casa já decidiu que a cura não é engordar o META (regua_tickets.sh:42). Então o errado é minha tag: [RELATO] não é fatia. Abro as linhas reais e renomeio aquela tag nos
+  commits locais:
+
+  Ran 3 shell commands
+
+● Mesma família da O90, agora no rodapé. Curo e empurro:
+
+● Curar o rodape e empurrar · 1m 33s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2; sed -i 's/barrou DOIS pushes na mesma noite. Cura: valor cuja fonte e o git nao se
+     guarda em arquivo/barrou TRES pushes na mesma noite -- duas vezes o placar do topo (linha 82) e uma o RODAPE (`bin\/tickets_rodap… (1m 31s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (15m 47s · ↓ 42.4k tokens)
+· Transmogrifying… (20m 13s · ↓ 51.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
