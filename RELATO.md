@@ -16,6 +16,75 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## AUTOPSIA das duas linhas: uma e CAMPO QUE NASCE, a outra e MARCO QUE NAO DESCREVE O DIA
+
+As duas linhas que eu disse que nao sabia explicar agora tem causa, e as causas sao DIFERENTES.
+
+### `saldo_banco_horas` -305,37 h: o campo passou a EXISTIR
+
+`saldo_banco_horas` tem **um unico sitio de calculo** em toda a arvore, e ele mora dentro de
+`MotorComercial` (`motor_calculo_v2.py:1685`, varrido por AST). Quem era `turno_partido` **nunca teve
+banco calculado** -- o campo ficava em zero por AUSENCIA DE CALCULO, nao por saldo nulo. Os 5 templates
+diurnos que passam a `comercial` ganham banco, e ele nasce negativo.
+
+Ou seja: **-305,37 h nao e gente perdendo hora**, e o campo comecando a existir para 6 pessoas.
+Apresentar aquele numero como perda seria ler ausencia de sinal como sinal -- o erro que a casa nomeia.
+Se o deficit esta CERTO e' outra pergunta, e ela e' legitima: um 07:15-17:15 com 70 min de intervalo da
+8h50 liquidas, e a referencia do `MotorComercial` e 44 h semanais / 8 h diarias
+(`JORNADA_SEMANAL_MINUTOS`, `JORNADA_DIARIA_MINUTOS`). **Fica como pergunta aberta**, nao como numero
+do apply.
+
+### `horas_saida_antecipada` +253,42 h: ARTEFATO, e a pista do Ronald acertou
+
+`minutos_saida_antecipada` e' calculado nos **dois** regimes -- `MotorTurnoPartido:1396` (contra o
+previsto do 2o bloco) e `Motor12x36ComEscala:1879` -- entao nao e campo nascendo. E' o mesmo campo com
+outro marco de referencia. Autopsia do **col382**, dia a dia, com o marco lido do ALERTA que o proprio
+motor escreve:
+
+| dia | periodo que o motor montou | previsto de saida USADO | saida antecipada |
+|---|---|---|---:|
+| 23/08 | `23:49 -> 24/08 07:50` | 07:50 | **0** |
+| 24/08 | `23:49 -> 25/08 07:51` | 07:50 | **0** |
+| 25/08 | `23:53 -> 26/08 07:50` | 07:50 | **0** |
+| **21/08** | `14:53 -> 22:59` | **07:50** | **530 min** |
+| **22/08** | `14:56 -> 22:58` | **07:50** | **531 min** |
+| **28/08** | `14:54 -> 22:58` | **07:50** | **531 min** |
+| **29/08** | `14:56 -> 22:57` | **07:50** | **532 min** |
+
+**O col382 trabalha DOIS turnos diferentes**: noites `23:49->07:50` e tardes `14:53->22:59`. Nas noites
+a saida antecipada e **ZERO** -- o marco esta certo, e o tratamento cross-meia-noite de
+`Motor12x36ComEscala:1846-1861` funciona (`data_ref` sai do inicio previsto do turno + 1 dia, nao da
+entrada real). Nas **TARDES**, o motor compara a saida das 22:59 contra o marco `07:50` do template
+NOTURNO e cobra **8,8 h de saida antecipada de quem trabalhou um turno inteiro**.
+
+Antes: **1** periodo com antecipada, 141,7 min. Depois: **10** periodos, **5.328,7 min**.
+
+**A raiz nao e o motor: e o dia que nao cabe no cadastro.** O marco vem do `_hf_d`, o DNA do DIA, e o
+DNA diz `23:50-07:50` num dia em que a pessoa trabalhou `14:53-22:59`. O regime "partido" ESCONDIA
+isso: em `MotorTurnoPartido` o periodo so ganha previsto se a entrada casar com a hora de um marco
+(`_periodo_do_marco`), e o periodo das 14:53 nao casava com nada -- ficava sem previsto e sem cobranca.
+A reclassificacao nao criou o problema; ela **parou de calar sobre ele**.
+
+**O que a autopsia PROVA de bom**: no 21/08 o regime velho montava DOIS periodos
+(`14:53->20:10` = 317,5 min e `21:03->22:59` = 115,2 min, soma **432,7**) e o novo monta **UM**
+(`14:53->22:59` = **432,7 min**), com o vao de 53 min como intrajornada. **O total de horas trabalhadas
+e IDENTICO** -- a fusao dos blocos e' neutra. O que muda e' so o julgamento de pontualidade.
+
+### Consequencia para o `!`
+
+O **+253,42 h de saida antecipada NAO deve ser aplicado**: sao 12 colabs sendo cobrados por sair cedo
+de um turno que nao e' o deles. E o **-305,37 h de banco** e' campo estreando, nao perda. Os dois
+numeros sao CONSEQUENCIA da reclassificacao estar certa e o CADASTRO DO DIA estar errado -- e a cura
+desses dois nao e no `tipo_base`, e' na escala que diz noite para quem trabalhou tarde.
+
+**Reformulo o que peco no `!`**, com o escopo que a autopsia permite: reclassificar os 37 `tipo_base`
+resolve os **761 dias fora do juiz** e entrega `inconsistencias -50`, `turnos_abertos -30`,
+`noturnas +135,61 h` e `intra_indenizada +100,17 h`. Mas leva junto `saida_antecipada +253,42 h` e
+`banco -305,37 h`, que sao artefato e estreia. **Aplicar os quatro primeiros sem os dois ultimos exige
+separar as coisas** -- e por isso o proximo passo e medir quantos dos dias de 09 tem o DNA em desacordo
+com a batida real (o caso do col382), que e uma classe propria e provavelmente a raiz de mais de uma
+fatia desta noite.
+
 ## O DIFF DA RECLASSIFICACAO, medido em PROD: 23 colabs, **SAEM do TXT = 0**
 
 Plano: **37 de 37** templates reclassificam -- **32 para `12x36`** (a geometria que cruza a
@@ -7630,6 +7699,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 22:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**26/09 22:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 00:00.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

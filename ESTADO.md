@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:36:31.**
+**Medido em 26/09/2026 22:42:01.**
 
 | | |
 |---|---|
@@ -34,50 +34,52 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/ponto/management/commands/diff_reclassificar_partido.py
+?? app/ponto/management/commands/dna_x_batida_real.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  chamou atenção:
-
-  Searched for 1 pattern
-
-● Duas pistas fortes: saldo_banco_horas é calculado numa única linha (1685) e horas_saida_antecipada em 1879/1396. Vejo em que classe cada linha mora — se forem exclusivas de
-  certos motores, a explicação é outra:
+  retratada.
 
   Ran 1 shell command
 
-❯ Pista para a autopsia do col382 (saida antecipada ~4 h por dia) e do banco -305 h: conferir, dia a dia, o marco de SAIDA que o motor usa depois da troca de regime -- se o
-  template "partido" tem a saida do 2o bloco depois da meia-noite e o motor passa a compara-la na data da entrada, a saida antecipada e artefato de data, nao fato. Mostrar 3 dias
-  do col382: marco de saida usado, batida de saida real, minutos descontados. Nenhuma lei nova.
+❯ corte Ronald (lei nova, pontualidade): dia cujo DNA nao descreve a batida real (marco de entrada ou de saida a mais de 3 h da batida correspondente) NAO gera atraso nem saida
+  antecipada; o dia vai para a lista CADASTRO x REALIDADE com o horario real ao lado do cadastrado. As horas trabalhadas contam normalmente.
+  aval Ronald: reclassificacao dos 37 templates aplica em 09 com esse corte; saldo_banco_horas dos 23 fica fora do apply (campo novo, sem decisao); 07 e 08 nao mudam o gravado; e
+  quem escreve template nao salva "partido" com vao de ate 2 h. !
 
-● A AST já derruba metade da minha hipótese e confirma a outra:
+● Ordem grande. Registro a lei e o ! primeiro — durável antes de implementar — e vou ver o número do DNA que está rodando:
 
-  ┌─────────────────────────────────┬─────────────────────────────────────────┐
-  │             cálculo             │                 mora em                 │
-  ├─────────────────────────────────┼─────────────────────────────────────────┤
-  │ saldo_banco_horas (único sítio) │ MotorComercial                          │
-  ├─────────────────────────────────┼─────────────────────────────────────────┤
-  │ minutos_saida_antecipada        │ MotorTurnoPartido e Motor12x36ComEscala │
-  └─────────────────────────────────┴─────────────────────────────────────────┘
+  Ran 1 shell command
 
-  Então o banco não existia para quem era turno_partido — os −305,37 h são o campo passando a ser calculado, não gente perdendo hora. Já a saída antecipada existe nos dois, e é aí
-  que a sua pista entra. Leio o cálculo:
+● Background command "Medir os dias com DNA em desacordo com a batida real" completed (exit code 0)
 
-  Ran 2 shell commands
+● Background command "Emendar e empurrar o push49" completed (exit code 0)
 
-● Motor12x36ComEscala trata o cross-meia-noite: se hora_fim < hora_inicio, data_ref = dia do início previsto + 1. Então a data do marco parece certa — mas o alerta do motor
-  carrega o marco que ele usou, e é isso que vou ler em vez de deduzir:
+  Ran 1 shell command
 
-● Running 1 shell command…
+● Duas coisas. push49 caiu com 3 falhas e o número do DNA está em 365 dia-colab / 123 colabs, mas as minhas faixas não casam com o corte de 3 h que você definiu — preciso recontar
+  em 180 min e também medir o marco de saída, que a sua lei inclui e eu não medi.
 
-✢ Fiddle-faddling… (1m 41s · ↓ 6.3k tokens)
+  Primeiro a árvore:
+
+  Ran 1 shell command
+
+● Três selos, todos meus, e todos são contratos estruturais pegando exatamente o que foram feitos para pegar. O mais sério: meu medidor escreve na família escala fora da porta.
+  Vejo os três:
+
+● O que o selo da tupla literal procura
+  ⎿  $ echo "=== 1. tupla literal de status: plano_b:153 ==="; sed -n '150,156p' ponto/management/commands/plano_b_no_dinheiro.py; echo "=== 2. escrita fora da porta ==="; grep -n
+     "objects.filter(pk=te.pk).update\|\.update(" ponto/management/commands/diff_reclassificar_partido.py; echo "=== o que o selo…
+
+· Marinating… (2m 7s · ↓ 8.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
