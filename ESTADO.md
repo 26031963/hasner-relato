@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:182 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:237 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:51:01.**
+**Medido em 27/09/2026 14:56:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno` |
+| `HEAD` local | `e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
 c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
 acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
 0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
-b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -88,44 +87,44 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Agora o col727 mostra o padrão: aberto 01/09 12:00 com um S real às 15:00, a 3,00 h — e ele é jornada partida (07:00-11:00 + 12:00-15:00, que a ata descreve nos dias vizinhos).
-  Pelo seu princípio isso não é cobrança. Lanço a suíte e meço a causa:
-
-  Ran 1 shell command
-
-● O col727 01/09 é decisivo: a célula diz trabalha=False, marcos=None, lampadas=[] — folga — e ele trabalhou o dia completo e coerente (07:00E 11:00S 12:00E 15:00S), com o
-  cadastro deslocado (template 12:00-20:00). Vejo o que o pareador faz com isso:
+● A prova da volta recupera o col727 (133,47 → 159,49 h) mas move col51 (+3,99 h de folga trabalhada) e col382 (−1,28) sem que eu saiba por quê — e eu editei a árvore com a suíte
+  rodando outra vez. Reverto o que não está commitado, registro a causa e fecho limpo:
 
   Ran 1 shell command
 
-● O i no 15:00S é a causa: no dia sem ata (01/09, folga) o _marca_intra_duracao consome a saída das 15:00 como intrajornada e o turno fica aberto; nos dias com ata (31/08, 02/09)
-  o pareamento está certo. Leio o ramo que faz isso:
+● Revertido limpo (col727 135,47 · col51 195,24, o estado commitado). Registro a causa como obra e escrevo a resposta à sua ordem:
 
-  Ran 1 shell command
+  Committed e2753835, ran 2 shell commands
 
-● A causa final é a mesma família de tudo hoje: o template do col727 declara intervalo 16:00-17:00, e a saída real das 15:00 está a 60 min dele — o pareador a come como "ida ao
-  intervalo" e o turno fica esperando uma volta que nunca vem. Leio o ramo:
+● Sua ordem cumprida, e a hipótese não se confirmou — mas ela levou ao que faltava.
 
-  Ran 1 shell command
+  A medição (49 turnos abertos nos 14): onde a ata reivindica a batida (36 casos) ela está a 0–20 min do marco hi — ali a ata está certa e o turno anterior realmente não tem
+  saída. Nos outros 13 a coluna do marco de entrada é -: não é "errou o papel", é silêncio, e o pareador caía no tipo gravado.
 
-● A cura pelo mesmo princípio: o intervalo declarado só absorve batida quando o cadastro descreve aquele turno. Implemento e meço:
+  O seu oráculo estava apontando para algo real, e a sequência o entregou. No col297 a ata diz 22:59 = ENTRADA e 06:56 = SAÍDA — e o gravado diz E nas duas (inversão da O65).
+  Entre elas ficam 02:57E 03:57S da ronda, que a ata não reivindica e cujo gravado está invertido: _marca_intra_duracao exige S depois E para reconhecer pausa, não reconhece, e o
+  pareador leu as duas como borda — o turno de 8 h que a ata descreve inteiro ficava aberto valendo 0 h.
 
-● Aplicar a guarda e medir os casos
-  ⎿  $ python3 - <<'PYEOF'
-     import py_compile
-     p='ponto/turnos.py'; s=open(p).read()
-     velho = """ _ivm_b = _ivm_de(b)
-     if not _iv and _ivm_b and cur is not None:"""
-     novo = """ _ivm_b = _ivm_de(b)
-     # O94: a pausa DECLARADA so absorve batida de turno que o cadastro descreve (ver
-     # `_cadastro_descreve_o_turno`)…
+  Curado (mesma família da guarda 1): quando a ata descreve o turno pelas duas pontas, o par do miolo também é X, com o teto continuando no cadastro. col297 106,28 → 127,48 h
+  (acima dos 125 h que o gravado paga), col922 137,56 → 158,17 h, col51/col904/col85 idênticos. A L-007 foi de −283,01 h em 14 colabs para −219,02 h em 12: devolveu 64 h. E eu não
+  havia feito assim porque protegia o almoço do col51 — medido agora, quem o protege é o _marca_intra_duracao, e a minha guarda protegia por acidente e custava o col297.
 
-· Twisting… (17m 54s · ↓ 40.1k tokens · still thinking)
+  Aplicando o seu princípio ao que sobrou: 23 dos 44 casos TÊM saída real, então não podem virar cobrança. O mais limpo é o col727: template 12:00-20:00 com intervalo declarado
+  16:00-17:00, trabalho real 07:00-11:00 + 12:00-15:00, e a saída das 15:00 fica a 60 min do marco de intervalo contra 180 da borda — é comida como "ida ao intervalo" e o turno
+  espera uma volta que nunca vem. −38,02 h em 7 dias, e nos dias em que a ata existe o mesmo dia fecha certo. A assimetria tem nome: _marca_intra_duracao exige prova de
+  continuidade; a absorção por marco não exige nada.
+
+  A cura candidata (exigir volta em intra_max_s) recupera o col727 para 159,49 h — mas eu a reverti: ela também moveu col51 (+3,99 h) e col382 (−1,28 h) sem que eu saiba por quê,
+  e absorção de pausa é caminho quente. Virou O95, sobe com DIFF de frota; não foi para o seu PENDENTES porque a medição que falta é minha, não a sua decisão.
+
+  Suíte final rodando com a árvore parada — editei-a com a suíte rodando duas vezes hoje, e a primeira me custou um vermelho falso (inspect.getsource lendo linhas deslocadas).
+  Quando fechar: push e deploy das curas commitadas. O apply de 09 segue segurado.
+
+✻ Cooked for 21m 24s · done 2:54 PM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ quando a suite fechar, push e deploy
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
