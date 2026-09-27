@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:16:49.**
+**Medido em 27/09/2026 19:18:01.**
 
 | | |
 |---|---|
@@ -110,14 +110,14 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Segunda tentativa também falha (col920 não cede e col922 vai a zero). Reverto — e isso nomeia a origem: a escolha do marco não está no leitor do papel, está no matcher da grade.
 
-● Publicar baldes, mesa e as duas tentativas da R1 · 2s
+● Publicar baldes, mesa e as duas tentativas da R1
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      velho = """A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa
      atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao."""
      novo = """## R1: SEGUNDA tentativa, tambem medid…
 
-· Crunching… (23m 39s · ↓ 29.9k tokens)
+✢ Crunching… (24m 51s · ↓ 31.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

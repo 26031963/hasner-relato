@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 19:16:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.0 MB). Acoes na janela: **422**.
+**Medido em 27/09/2026 19:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.1 MB). Acoes na janela: **423**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:16:46 | Bash | Publicar baldes, mesa e as duas tentativas da R1 | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() velho = """A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao.""" novo = """## R1: SEGUNDA tentativa, tambem medida e REJEITADA -- e isso NOMEIA a origem Voce mandou desligar SO o trecho da O68b-PAPEL que causa a R1,  ...` |
 | 19:16:03 | Bash | Reverter e localizar a origem real da R1 | `cd /home/ronald/saas-hasner && git checkout -- app/ponto/turnos.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d from colaboradores.models import Colaborador from ponto.turnos import realizado_do_dia for pk, DIA, esp in ((922, d.date(2026,9,1), 404), (51, d.date(2026,8,24), 485), (81, d.date(2026,8,21), 423), (904, d.date(2026,8,22 ...` |
 | 19:14:56 | Bash | Cura R1 pela alternancia e medir todos | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ if _ambiguo: continue""" novo = """ if _ambiguo: continue # A ATA CORRIGE O QUE O GRAVADO CONTRADIZ -- E SO ISSO (R1, 27/09). A O65 nasceu de uma premissa # nomeada: *"`tipo` e o que foi GRAVADO, o marco e o que foi CUMPRIDO, e quando os dois discordam quem # manda e o marco"*. A premissa pressupoe que o gravad ...` |
 | 19:12:39 | Bash | Baldes da diferenca da O96 | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/o96_baldes.py <<'PYEOF' # Os BALDES da O96: por que 116,1 h do censo viraram 18,76 h aplicadas. READ-ONLY. from django_tenants.utils import schema_context from django.apps import apps import collections, json G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) SEP = {92,94,10 ...` |
