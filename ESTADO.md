@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:02:01.**
+**Medido em 27/09/2026 05:07:31.**
 
 | | |
 |---|---|
@@ -113,12 +113,12 @@ dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda 
 
 ● Selo do diagrama verde (era a mudança do cron depois da primeira regeneração). Empurro:
 
-● Commitar as quatro curas de selo e empurrar · 4m 18s
+● Commitar as quatro curas de selo e empurrar · 9m 48s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/config/crons.py
-     app/config/crons_duracao.json app/chamados/tests/test_o66_furo_sem_canal.py app/docs/ARQUITETURA.mmd app/docs/MAPA.md app/docs/T… (4m 16s · 6 lines)
+     app/config/crons_duracao.json app/chamados/tests/test_o66_furo_sem_canal.py app/docs/ARQUITETURA.mmd app/docs/MAPA.md app/docs/T… (9m 46s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Harmonizing… (33m 43s · ↓ 43.2k tokens)
+✢ Harmonizing… (39m 13s · ↓ 43.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
