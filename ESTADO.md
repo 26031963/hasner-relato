@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:30:45.**
+**Medido em 27/09/2026 14:35:46.**
 
 | | |
 |---|---|
@@ -87,44 +87,44 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  mudar:
+  calados. Feito com o mecanismo certo: bin/sombra.sh --lavra copia de prod em duas pernas (o container da sombra nunca abre o banco de prod), o --com-a-sombra o faz sozinho, e a
+  recusa com aviso está selada nas duas pontas.
+
+  PLACAR atualizado no mesmo commit: E5 1/2 (O80/L-092), E3 7/10 (plano B/O68b-PAPEL, mais dois itens novos — O84 e O89), E1 com a O91 fechada por corte e o porquê de o contador
+  seguir manual, E6 com a rodada 2 (o oráculo confirmou a O85 sozinho: só a classe C se moveu, −157,7 h). Todo FEITO com linha de PROVA.
+
+  PAREI o apply outra vez, e o motivo é meu. A DIFF fechava bonito nos totais (+393,45 h de trabalhadas contra −321,94 h de folga). Totais não provam por colab, então medi a soma
+  trabalhadas + folga colab a colab: 14 colabs perdem 283,01 h de hora total — col922 −64,41, col297 −60,89, col727 −38,02, col751 −28,10, mais dez. A causa é a que eu declarei de
+  manhã e não quantifiquei: são os colabs em que a ata diz que a batida gravada como S abre o plantão seguinte, então o turno anterior fica aberto e vale 0 h, enquanto o gravado
+  de hoje paga essas horas por pareamento velho. Pela doutrina a leitura nova está certa (célula soberana; turno sem saída é cobrança, não pagamento) e por isso o código sobe —
+  mas tirar 283 h de 14 pessoas não está em nenhum aval. Virou O94, ! no topo do PENDENTES.
+
+  Dois selos da casa morderam a minha própria cura no caminho (.date() de batida fora do pareador, e relógio solto no selo novo) — os dois tinham razão, e a correção do primeiro
+  deixou a guarda mais estrita, não menos.
+
+✻ Baked for 37m 47s · done 2:31 PM · 2 shells still running
+
+❯ SEGURA o apply da O94. O oraculo independente (E6) contradiz a ata nesses colabs: col297 tem 180 h em pares COMPLETOS de batida e o gravado ja paga 125 h; col727 154 h contra
+  79 h -- a O94 tiraria mais 61 h e 38 h. Antes de qualquer apply: para os 14, dia a dia, a batida que a ata chama de entrada do plantao seguinte -- a que distancia ela esta do
+  marco de ENTRADA que a ata atribuiu e do marco de SAIDA do turno anterior? Se estiver mais perto da saida, a ata errou o papel (mesma familia da guarda 1 da O68b, col382) e a
+  cura e na ata, nao no pagamento. O principio "turno aberto nao paga, vira cobranca" vale so para turno SEM saida real. Nenhuma lei nova.
+
+● Ordem recebida, e o apply já está segurado. O oráculo contra a ata é o teste certo — e é a mesma família da guarda 1 (col382). Meço as duas distâncias, dia a dia, nos 14:
 
   Ran 1 shell command
 
-● PAREI de novo, e por outro motivo — este é maior. A checagem da L-007 diz que 14 colabs perdem hora total: −283,01 h:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Acrescento a linha da O94 no TICKETS (a régua vai cobrar) e commito os documentos:
-
-  Committed e652f7c6
-
-● Dois vermelhos, os dois dos meus arquivos novos (relógio solto e .date() de batida). Vejo o que eles cobram:
-
-  Searched for 1 pattern
-
-● Os dois selos morderam código meu e estão certos. Vejo a regra do contrato do .date() para curar na forma certa:
+● Medido, e o resultado não confirma a hipótese — é outra coisa, e mais útil: nos 13 casos "mais perto da saída" a coluna do marco de entrada é -, isto é a ata não reivindica
+  aquela batida. Onde a ata reivindica (36 casos), ela está a 0–20 min do marco hi: ali ela está certa. Vou ver se há saída real na sequência:
 
   Ran 1 shell command
 
-● Curo os dois — comparo instantes em vez de extrair data da batida (fica mais estrito, e some o .date()), e congelo o relógio no selo da lavra:
+●
 
-  Searched for 1 pattern, ran 2 shell commands
-
-● O today() restante é na minha própria prosa — o selo passou (35 OK). Reescrevo o comentário para não virar isca e lanço a suíte completa:
-
-  Committed acfa037f
-
-● Confirmo que a cura segue medindo o mesmo depois da troca para instantes, enquanto a suíte roda:
-
-  Running 1 shell command…
-
-· Lollygagging… (36m 48s · ↓ 77.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✽ Twisting… (2m 39s · ↓ 10.6k tokens · thought for 42s)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
