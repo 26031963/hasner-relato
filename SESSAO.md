@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 04:20:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.7 MB). Acoes na janela: **979**.
+**Medido em 27/09/2026 04:21:25.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.7 MB). Acoes na janela: **982**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:20:39 | Bash | Ver se o bloco do cron esta rodando | `cd /home/ronald/saas-hasner && pgrep -af 'sombra.sh' \| grep -v pgrep \| head -3; cat .sombra_stamp \| grep -E 'SOMBRA_(DIA\|DUMP\|BLOCO\|STATUS\|REFEITA)'; wc -l logs/sombra/resultado.tsv 2>/dev/null; date '+%H:%M'` |
+| 04:20:26 | Bash | Deploy da guarda da O87 | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -5` |
+| 04:20:17 | Bash | Ler o resultado do push da O87 | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bu8atw5im.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD` |
 | 04:19:53 | Bash | Publicar o RELATO | `cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 \| tail -2; date '+%H:%M'; git log --oneline -1` |
 | 04:09:01 | Bash | Commitar e empurrar a O87 | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## O87 no disco: o cadastro nao aceita mais intervalo FORA do turno (dinheiro zero) Guarda irma da que ja existe para o Art.71: aquela julga a DURACAO do intervalo, esta julga o LUGAR. `escala/models.py::TipoEscala._validar_intervalo_dentro_do_turno`, chamada por `clean()`. \| \| \| \|---\|---\| \| * ...` |
 | 04:08:00 | Bash | Conferir o fixture curado, o selo da O87 e o mypy | `python3 - <<'PYEOF' import py_compile p='escala/tests/test_abertura_dna.py'; s=open(p).read() velho = """ self.te.hora_inicio = datetime.time(17, 0) # template deslocado DEPOIS self.te.hora_fim = datetime.time(23, 0) self.te.hora_inicio_intervalo = datetime.time(11, 0) self.te.hora_fim_intervalo = datetime.time(12, 0) self.te.save()""" novo = """ self.te.hora_inicio = datetime.time(17, 0) # templa ...` |

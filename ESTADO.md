@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:264 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:320 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:20:01.**
+**Medido em 27/09/2026 04:21:25.**
 
 | | |
 |---|---|
-| `HEAD` local | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
+| `HEAD` local | `922f3aec [RELATO-NOITE] a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald` |
 | `origin/main` | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+922f3aec [RELATO-NOITE] a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald
 dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca
 b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
 95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
-9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
 ```
 
 ## `git status --short`
@@ -87,38 +87,38 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ```
 
-● Push pousou (b9867ceb). DEPLOY JÁ e smoke da O73 no worker servido:
-
-  Ran 1 shell command
-
-● SMOKE_O73 = OK no worker servido: o atraso do col81 caiu de 44,42 h para 0,00 h, 18 dias com dois blocos, zero com atraso no segundo bloco e zero alertas "Atraso:" restantes.
-  Sigo para a O87, cuja guarda e selo já estão escritos em cópia:
-
-  Ran 1 shell command
-
-● 5 testes OK (o selo morde por construção: sem o método, AttributeError). Confiro se a guarda nova não quebra fixture existente antes de gastar um push:
-
-  Ran 2 shell commands
-
-● A guarda pegou um fixture que declara turno 17:00–23:00 com intervalo 11:00–12:00 — geometria impossível de verdade. Leio o que aquele teste afirma antes de mexer:
-
-  Ran 1 shell command
-
-● O ponto daquele teste é que o DNA congelado manda mesmo com o template editado — o intervalo impossível era incidental. Movo-o para dentro do turno novo, preservando a intenção:
-
-  Ran 1 shell command
-
-● 7 OK. Publico e empurro a O87 (dinheiro zero — é guarda de cadastro):
-
   Ran 1 shell command
 
 ● Push em voo com a suíte. Publico o RELATO (só docs) e aguardo:
 
-● Publicar o RELATO · 7s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -2; date '+%H:%M'; git log --oneline -1 (4s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Transmogrifying… (1h 25m 43s · ↓ 92.9k tokens)
+● Background command "Commitar e empurrar a O87" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Push pousou (dfb0418c). DEPLOY JÁ:
+
+  Ran 1 shell command
+
+● O carimbo está REFEITA — o cron das 04:15 acabou de refazer a sombra e o bloco dele deve estar rodando. Confiro antes de fazer nada:
+
+  Ran 1 shell command
+
+● O bloco do cron das 04:15 está em 19/63 com dump de hoje — o deploy da O87 espera ele (é o portão da O82). Uso a espera para escrever o resumo da noite no topo do RELATO, que é
+  o que você lê de manhã:
+
+● Escrever o resumo da noite no topo do RELATO · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     # A NOITE DE 27/09 EM UMA PAGINA (00:50 -> 04:20)
+     ## O que foi ao ar, provado no worker servido
+     | hora | o que | prova |
+     |---|---|---|
+     | **01:53** | as **sete curas** da madrugada (E3, O65, O69, O72…
+
+· Transmogrifying… (1h 27m 7s · ↓ 95.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
