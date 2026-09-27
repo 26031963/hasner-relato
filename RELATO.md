@@ -16,6 +16,64 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI: a 09 tem +142,14 h de DERIVA esperando qualquer recalculo -- e ela NAO e' da O71
+
+A O71 foi medida em duas corridas na sombra, e a segunda existe porque a primeira nao sabia responder
+de quem era o dinheiro. O par de numeros e o achado:
+
+| corrida | lavras | veredito velho | dinheiro (`horas_trabalhadas`) | ENTRAM | SAEM |
+|---|---:|---:|---:|---:|---:|
+| rejulga + recalculo | 5.081 | **158** | **+142,14 h** em 56 colabs | 6 | **0** |
+| **so recalculo, SEM rejulgar** | **0** | **0** | **+142,14 h** em 56 colabs | 4 | **0** |
+
+**O dinheiro e IDENTICO nas duas, ao ultimo digito** -- e tambem `horas_extras` +83,33 h em 95 colabs,
+`turnos_abertos` -80, `horas_noturnas` +49,06 h, `horas_intra_indenizada` -24,68 h, `inconsistencias`
+-7. Logo:
+
+- **a rejulga de 09 move dinheiro ZERO.** Os 158 vereditos e as 5.081 lavras de ata nao mudam um
+  centavo do gravado.
+- **os +142,14 h sao DERIVA PURA**: o `FechamentoMensal` de 09 esta desatualizado em relacao ao motor
+  de HEAD, e qualquer recalculo -- com O71 ou sem ela, hoje ou segunda -- o traz para o presente.
+- **o efeito proprio da O71 no TXT sao +2 colabs**: `col830` e `col56`, que saiam por `furo_espelho` e
+  passam a entrar. Os outros 4 (`col964`, `col965`, `col966`, `col967`) entram pelo recalculo, nao pela
+  rejulga: eles nao tinham `FechamentoMensal` e o recalculo criou um.
+
+**PAREI, e a trava tem nome**: a deriva de **+142,14 h / +83,33 h de HE** nao esta em aval nenhum. O `!`
+de criterio de 26/09 22:0x cobre a parte (a) da **O68** (dias do plano B), e este numero nao e' dela --
+e o passivo dos `FechamentoMensal` velhos, que o HANDOFF ja registrava como "67 de 603 divergem do
+motor de HEAD". Espera o `!` do Ronald com esta tabela.
+
+**A O71 em si NAO esta travada** e segue: dinheiro gravado zero, ninguem sai, condicao do aval fechada.
+O que fica dito e que o ganho dela no TXT so aparece QUANDO houver recalculo -- e nesse momento a
+deriva vem junto, porque e' o mesmo ato. Aplicar a O71 nao dispara recalculo nenhum.
+
+### O contador, e o meu erro de 10x
+
+`celula_veredito_velho = 158` (0,91% de 17.332 celulas) em 56 colabs, das quais 2 sem carimbo.
+
+| gravado -> de hoje | celulas |
+|---|---:|
+| `indefinida` -> `concorde` | 40 |
+| `concorde` -> `fato_sem_previsao` | 37 |
+| `furo` -> `cobrado` | 22 |
+| `furo` -> `concorde` | 15 |
+| `concorde` -> `furo` | 11 |
+| `discordante` -> `concorde` | 11 |
+| `fato_sem_previsao` -> `concorde` | 9 |
+| outras 8 transicoes | 13 |
+
+A **primeira** versao deste contador disse **1.504**, dez vezes mais, e eu nao publiquei porque a
+matriz se denunciava: 822 `nunca_bateu -> concorde` e 439 `cobrado -> concorde`. Fui olhar e
+`nunca_bateu` **nao existe** no `_MAPA_VEREDITO` -- `derivar_veredito` nunca o produz. O cartorio tem
+um ramo que escreve `veredito='nunca_bateu'` DIRETO (`ponto/services/cartorio.py:470`). Ou seja: eu
+derivei o veredito dos codigos e chamei aquilo de "o juiz de hoje", reproduzindo METADE do juiz --
+exatamente a lei que eu havia citado na docstring do proprio medidor. A versao que vale intercepta
+`ponto.portas.celula.lavrar_veredito`, o escritor unico P13, com `apply_=True` dentro de `atomic()`:
+reporta o que o sistema GRAVARIA, nao o que eu acho que ele gravaria.
+
+**Cobertura**: 7 colabs recusaram o recalculo por falta da lavra do esmeril na sombra -- a O63
+funcionando --, entao os numeros de dinheiro sao PISO.
+
 ## O PLANO B NO DINHEIRO TEM TAMANHO: 758 dia-colab, 11,0% do que o motor julga
 
 Ordem de 26/09 21:2x: rodar o medidor na frota de 09 e publicar o numero. Medido na SOMBRA (o

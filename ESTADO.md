@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:54:31.**
+**Medido em 26/09/2026 22:00:02.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? app/ponto/management/commands/celula_veredito_velho.py
 ?? esteira.pausada
 ```
@@ -43,44 +44,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────────────────┼──────────────────────────┤
-  │ SAEM do TXT                    │                        0 │
-  ├────────────────────────────────┼──────────────────────────┤
-  │ trocam de motivo (seguem fora) │                        0 │
-  └────────────────────────────────┴──────────────────────────┘
+  Três conclusões que só existem porque a segunda corrida foi feita:
 
-  O número da minha primeira versão era 1.504 — dez vezes maior, e falso. A matriz dela era dominada por nunca_bateu → concorde, que é artefato de eu derivar o veredito dos
-  códigos quando o cartório escreve esse valor direto. O 158 vem da porta escritora.
+  A rejulga de 09 move dinheiro zero. Os 158 vereditos e as 5.081 lavras de ata não mudam um centavo do gravado.
 
-  Os seis que entram: col830 e col56 saíam por furo_espelho e passam a entrar; col964, col965, col966, col967 estavam em (None, None) — não tinham FechamentoMensal — e o recálculo
+  Os +142,14 h são deriva pura — o FechamentoMensal de 09 está atrasado em relação ao motor de HEAD, e qualquer recálculo o traz ao presente, com O71 ou sem ela, hoje ou segunda.
+  É o passivo que o handoff já registrava como "67 de 603 divergem".
+
+  O efeito próprio da O71 no TXT são +2 colabs: col830 e col56, que saíam por furo_espelho. Os outros quatro (col964–967) entram pelo recálculo — não tinham FechamentoMensal e ele
   criou um.
 
-  A sua condição fechou: ninguém sai. Mas encontrei um fato que o aval não contemplava, e por isso não aplico ainda:
+  O que espera o seu ! é a deriva de +142,14 h / +83,33 h de HE. Ela não está em aval nenhum: o seu ! de critério cobre a parte (a) da O68, e este número não é dela.
 
-  O dinheiro move +142,14 h em horas_trabalhadas (56 colabs) e +83,33 h em horas_extras — este em 95 colabs. E a porta fez 5.081 lavras para apenas 158 mudanças de veredito: ela
-  lavra a ata também, e a ata é o que o motor lê. Então o movimento pode ser a cura chegando ao dinheiro, ou pode ser a deriva do FechamentoMensal velho sendo trazido ao presente
-  — a mesma coisa que de manhã moveu 10 campos fora do alvo em 2 colabs e fez você escrever a L-082.
+  A O71 não está travada e eu sigo com ela: dinheiro gravado zero, ninguém sai, sua condição fechada. Fica dito apenas que o ganho dela no TXT só se materializa quando houver
+  recálculo — e nesse instante a deriva vem no mesmo ato, porque é o mesmo ato.
 
-  Eu não sei de quem é o +142,14 h, e "não sei" aqui não é cobertura parcial: é a diferença entre aplicar a cura e aplicar uma deriva junto. Então estou medindo a deriva pura —
-  recálculo sem rejulgar, contra o gravado — para que o ! que você receber tenha as duas colunas separadas em vez de um total ambíguo.
+  Sobre o contador: 158, contra as 1.504 da minha primeira versão. Não publiquei aquele número porque a matriz se denunciava — 822 nunca_bateu → concorde, e nunca_bateu não existe
+  no _MAPA_VEREDITO. Eu havia derivado o veredito dos códigos e chamado aquilo de "o juiz de hoje", reproduzindo metade do juiz: a lei que eu tinha citado na docstring do próprio
+  medidor. A versão que vale intercepta o escritor único.
 
-  Também registro que o número é um piso: 7 colabs recusaram o recálculo por falta da lavra do esmeril na sombra.
+✻ Worked for 1m 17s · done 9:55 PM · 2 shells still running
 
-✻ Sautéed for 1m 19s · done 9:52 PM · 1 shell still running
+❯ aplica a O71 em prod (dinheiro zero) e segue pra O68
 
-● Background command "Medir a deriva pura do recalculo, sem rejulgar" completed (exit code 0)
+● Antes de aplicar: a sombra é de 04:15 e os applies da E3 e da O69 foram depois disso, então os números de prod podem não ser os mesmos. Rodo o ensaio em prod e só então aplico:
 
-  Read 1 file
+  Ran 1 shell command
 
-● Separação limpa e decisiva. Com zero rejulga — 0 lavras, 0 vereditos — o dinheiro move exatamente o mesmo, até o último dígito:
+● Ensaio em prod rodando (dentro de atomic() com raise — o mesmo padrão do apply da O69). Não toco em .py enquanto ele lê a árvore montada.
 
-● Running 1 shell command…
+  O --aplicar que escrevi tem uma trava embutida que vale explicitar: ele desliga o recálculo à força. Se alguém (eu, amanhã, com menos contexto) passar --aplicar esperando ver o
+  TXT mudar, o comando responde que o recálculo está desligado e por quê — porque o dinheiro gravado só fica em zero enquanto não há recálculo, e juntar os dois atos aplicaria sem
+  aval os +142,14 h que o aval não cobre. E ele exige --antes, o snapshot das 17.332 células, que é a frase de reversão: sem arquivo, não aplica.
 
-✢ Herding… (48s · ↓ 2.5k tokens)
+✻ Worked for 47s · done 9:56 PM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
