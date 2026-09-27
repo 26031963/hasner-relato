@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:33:31.**
+**Medido em 27/09/2026 20:38:49.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
  M app/ponto/turnos.py
 ?? esteira.pausada
 ```
@@ -83,22 +84,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Censo do matcher no ar. Commito o hook com as seis provas e ataco R2:
-
-  Ran 1 shell command
-
-● .claude está no gitignore do repo, então o registro fica local e só o script é versionado — anoto isso:
-
-  Ran 1 shell command
-
-● R2 está inteira à vista: o 12:30 é a ida ao intervalo que não acendeu o hii (30 min do marco), a volta das 13:00 acendeu o hfi, e minha guarda exige o par completo — então
-  descarta o dia e o gravado (16:46 E, errado) deixa a tarde aberta. Envelope 477 − pausa 30 = 447, que é o número do oráculo. Curo:
-
-  Ran 1 shell command
-
-● Nada mudou — então o dia ainda não está sendo emitido, ou o papel não conserta o pareamento. Meço o mapa:
-
-  Ran 1 shell command
 
 ● O dia 15/09 continua fora do mapa. Replico a função passo a passo para achar qual guarda ainda dispara:
 
@@ -111,16 +96,32 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● Achei: a linha 51 usa _acesos, que é variável do passo 1 — no passo 2 ela guarda o último dia iterado, não o dia corrente. É o mesmo erro de escopo do vão, que já me pegou
   antes. Carrego as luzes de intervalo no _dias:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Enchanting… (26m 27s · ↓ 27.3k tokens)
+● R2 cura 3 dos 7 e não quebra nada: col736 15/09 447 = 447 exato, col518 27/08 e 11/09 também; os 8 casos de controle idênticos. Os outros 4 são outra forma. Selo, reusando a
+  fixture da mesma família (sua regra b):
+
+  Ran 1 shell command
+
+● O selo achou coisa certa: com hii/hfi nulos as duas sobras formam par de pausa por duração (a lei do miolo), então o dia É descrito — minha expectativa estava errada, não o
+  código. Corrijo o caso para ter uma sobra:
+
+  Ran 1 shell command
+
+● 43 verdes. Suíte completa e a PROVA da R2 com as quatro condições — DIFF mais oráculo nos afetados:
+
+  Ran 1 shell command
+
+› Message from @a9e3f4464a25b8c2d (ctrl+o to expand)
+
+● Agent "Censo do matcher de marcos" finished · 25m 40s
+
+✶ Enchanting… (31m 45s · ↓ 35.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Reclassifying groups via batidas_apuraveis in c11.py                                                                               21m 54s · ↓ 169.5k tokens
   ⧉  index
 ```
