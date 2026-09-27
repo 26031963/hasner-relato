@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:31:02.**
+**Medido em 27/09/2026 16:36:31.**
 
 | | |
 |---|---|
@@ -87,39 +87,39 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Login expired · Please run /login
 
-✻ Churned for 0s · done 4:18 PM · 1 shell still running
-
-❯ /login
-  ⎿  Login successful
-
-● Stopped watching 1 artifact watch (the signed-in account changed)
+● Aplicado. Confiro o gravado em prod e a linha da condição nova:
 
   Ran 1 shell command
 
-● Background command "Commitar e esperar a suite" completed (exit code 0)
-  ⎿  13 skills available
+❯ CRITERIO DE EXPORT DA 09 (depois do apply): rodar a E6 SO sobre os colabs que entram no TXT (classificar_export status=entra): quantos tem QUALQUER dia com batidas completas em
+  que espelho e oraculo divergem mais de 10 min, com a lista e o valor. Meta: zero. Quem divergir sai do TXT para a lista de ajuste ate a causa ter nome. O numero vai no topo do
+  RELATO como "09 exportavel: N de M colabs certificados". Nenhuma lei nova.
 
-● Suíte verde: 8471 testes OK. Retomo a sequência — push:
+● APPLY DA 09 FEITO — o gravado em prod bate exatamente com a medição: turnos_abertos 620 → 473, horas_trabalhadas +1.040,82 h, inconsistencias −228, snapshot de 468 KB em
+  logs/apply_o95_09_antes.json. Registro e vejo se o oráculo sobreviveu ao wipe do /tmp:
 
-  Pushed to main
+  Ran 1 shell command
 
-❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
-  E6 rodada 3. Depois publica o relato.
+● O oráculo sobreviveu. Leio sua interface para construir o critério de export em cima dele:
 
-❯ PLACAR E6, redefinir os itens pela divisao sistema x operacao: (1) com batidas COMPLETAS, % de dias em que espelho e oraculo batem (a meta e perto de 100%; divergencia aqui e
-  bug nosso); (2) com batidas IMPARES, % de dias com canal vivo (pergunta ao colab ou pendencia do admin; a meta e 100%, e o dia nunca e pago por palpite). Dia impar deixa de
-  contar como "nao julgado". Nenhuma lei nova.
+  Ran 1 shell command
 
-● Push pousou (037180cd..5c8d4240). A sequência já é a que estou executando — sigo dela. E a redefinição dos itens da E6 entra no passo 7, com a divisão sistema × operação que
-  você deu. Deploy:
+● O oráculo tem tudo que preciso. Vejo os modelos do "canal vivo" para o item 2 da E6:
 
-● Deploying da O95 · 4s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -12 (3s)
+  Ran 1 shell command
+
+● Escrevo a medição que serve às duas ordens — critério de export e os dois itens novos da E6:
+
+● Medir o critério de export e os dois itens da E6 · 1m 1s
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/e6_export.py <<'PYEOF'
+     # E6 pela divisao SISTEMA x OPERACAO + criterio de export da 09. READ-ONLY.
+     from django_tenants.utils import schema_context
+     from django.apps import apps
+     from django.u… (1m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Puzzling… (12m 13s · ↓ 1.9k tokens)
+· Puzzling… (17m 42s · ↓ 10.4k tokens)
   ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
