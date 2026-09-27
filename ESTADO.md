@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:677 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:728 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:35:45.**
+**Medido em 27/09/2026 10:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
+| `HEAD` local | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
 | `origin/main` | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
 4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
 ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
 d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
 96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
-bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
 ```
 
 ## `git status --short`
@@ -85,40 +85,40 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E a O80 fechada pela sua regra de fila: a L-092 deixou de ser promessa — recalcular_fechamento_mes agora recusa antes de escrever, com porta que exige motivo e casca que traduz
-  a recusa. 2.593 testes de ponto e folha OK.
+  Ran 3 shell commands
 
-✻ Brewed for 1h 23m 55s · done 10:23 AM · 1 shell still running
-
-● Background command "Publicar e empurrar a O80" completed (exit code 0)
+● A segunda rodada: 84 colabs / 1.602,2 h → 80 / 1.444,5 h, ou seja −157,7 h, que é quase exatamente as +157,72 h da O85. Mas o comparativo por classe seria maçã com laranja — o
+  log usa a tolerância de 1 h e meu número publicado usa max(3h, 5%). Reclassifico com a mesma régua:
 
   Ran 1 shell command
 
-● Push pousou (ae058f68). Mas o relógio me surpreendeu — confiro antes de datar mais nada:
+● Comparação limpa, e ela confirma a cura por via independente:
 
-  Ran 1 shell command
+  ┌─────────────────────────┬────────────────┬────────────────┬──────────┐
+  │         classe          │    rodada 1    │    rodada 2    │  delta   │
+  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
+  │ A cadastro              │ 4 c / 217,7 h  │ 4 c / 217,7 h  │ —        │
+  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
+  │ B turno aberto          │ 27 c / 733,7 h │ 27 c / 733,7 h │ —        │
+  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
+  │ C espelho vê, folha não │ 32 c / 376,4 h │ 28 c / 218,7 h │ −157,7 h │
+  ├─────────────────────────┼────────────────┼────────────────┼──────────┤
+  │ D nem o espelho vê      │ 21 c / 274,3 h │ 21 c / 274,3 h │ —        │
+  └─────────────────────────┴────────────────┴────────────────┴──────────┘
 
-● O relógio real é 10:23 -03 — eu datei os últimos itens como 06:0x/07:1x, e eles aconteceram entre 09h e 10h20. Corrijo os rótulos e gravo a lição, porque é a segunda vez hoje:
+  Só a classe C moveu, e exatamente as −157,7 h que a O85 aplicou. Saíram da lista col375, col743, col882 e col935; o col515 fica com resíduo de 1,54 h. A, B e D intactas, como a
+  taxonomia previa.
 
-  Searched for 1 pattern, ran 2 shell commands
+  Publicar a O91 fechada e a rodada 2 do oraculo · 3s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## E6 rodado de novo (sua regra de fila): o oraculo confirma a O85 por via independente
+     | classe | rodada 1 (03:xx) | rodada 2 (10:3x) | delta |
+     |---|---|---|---:|
+     | **A** fechamento zero (cadastro)…
 
-● Esses três são do vigia da esteira, que carimba a própria hora — corretos, e dizem algo que vale uma linha: "trava A vazia" às 05:25, 06:25 e 07:30, enquanto eu trabalhava
-  direto. Commito a correção e relanço o oráculo, como sua regra de fila manda:
-
-  Pushed to main
-
-❯ corte Ronald: O91 NAO instala -- hoje escreveria zero e o campo situacao de afastado nao e fonte (o juiz afastado_hoje e); vira obra so se um vigia medir situacao divergente >
-  0. !
-
-● Corte recebido. Ele pede uma medição antes de decidir se há obra: situação divergente. Meço as duas direções, porque o comando só mede uma:
-
-  Ran 1 shell command
-
-● afastado_hoje exige para — os dois efeitos, como o próprio reversor faz. Ajusto:
-
-  Running 1 shell command…
-
-· Envisioning… (12m 27s · ↓ 8.8k tokens)
+✶ Envisioning… (14m 44s · ↓ 15.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

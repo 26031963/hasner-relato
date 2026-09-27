@@ -99,5 +99,5 @@ lista — ela e o que esta EM PE._
 | **O88** | O PAREAMENTO NAO SABE O QUE A L-084 JA SABE | **livre, com a O86** |
 | **O89** | O MOTOR MUTACIONA A `Batida` QUE RECEBE | espera `!` |
 | **O90** | O PLACAR DO TICKETS GUARDA O HASH DO ULTIMO PUSH, ENTAO NASCE VELHO | **livre, pequena** |
-| **O91** | CINCO VIGIAS DECLARADOS QUE NUNCA FORAM INSTALADOS | espera `!` |
+| **O91** | FECHADA 27/09 10:3x pelo corte "nao instala" | espera `!` |
 | **O92** | PREVISTO DO DIA EM LOTE | **livre, pequena e de caminho quente** |
