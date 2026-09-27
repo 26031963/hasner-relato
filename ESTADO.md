@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:56:01.**
+**Medido em 27/09/2026 19:01:31.**
 
 | | |
 |---|---|
@@ -83,25 +83,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
 
-  E a sua regra (b) de agora chegou pelo caminho mais caro: acabei de queimar tempo montando fixture de TipoEscala/Posto do zero no selo da E5 em vez de copiar de um selo da mesma
-  família — o selo ficou com a parte estrutural e o limite de cobertura declarado, com o A/B de prod (518/604 idênticas, 86 explicadas, zero sem explicação) como prova
-  comportamental.
-
-  Fila, na sua ordem: reapply da O96 → R1..R5 uma por uma → O81 com o seu MUDA → dia ímpar (a metade que é bug puro) → E5 (topo == soma das linhas, com O51b) → selo
-  tela==PDF==fechamento==TXT + E6 rodada 4 → export com o seu !.
-
-✻ Cogitated for 2h 15m 48s · done 6:34 PM · 1 shell still running
-
-❯ aval Ronald: (1) DIA IMPAR: as duas leis valem. BUG-144 (14/09) segue mandando no DINHEIRO (pares fechados contam, nunca 0 pela E solta). O corte de 27/09 manda no ESTADO da
-  tela: dia impar = "EM ABERTO -- falta: <marco>" + "parcial provado: X h" rotulado como parcial, nunca como total do dia; topo = soma das linhas inclusive parciais. Nenhuma lei
-  nova. (2) O81: re-lavrar ata exportada VETADO (L-092, HX-REGEN-NAO-TOCA-EXPORTADO); cura = o MUDA de leitura ja cortado; como muda 0 dos 644, vai para DEPOIS da E5. (3)
-  MUTIRAO: enviar aos 158 com push, prazo 28/09 12h no texto; os 26 sem canal vao para a lista da SUPERVISORA. (4) Turno nao termina com fila 1 nao vazia: seguir AGORA reapply
-  O96 -> R1..R5 -> impar -> E5 -> selo + E6 rodada 4 -> export para meu !. !
-
-● Colisão resolvida — as duas leis valem, cada uma no seu domínio. Começo pelo reapply da O96, com a regra (a): oráculo nos afetados dentro da PROVA, antes do apply.
-
-  Ran 1 shell command
-
 ❯ aval Ronald: (1) DIA IMPAR: as duas leis valem. BUG-144 (14/09) manda no DINHEIRO (pares fechados contam, nunca 0 pela E solta). O corte de 27/09 manda no ESTADO da tela: dia
   impar = "EM ABERTO -- falta: <marco>" + "parcial provado: X h" rotulado como parcial; topo = soma das linhas inclusive parciais. Nenhuma lei nova. (2) O81: re-lavrar ata
   exportada VETADO (L-092, HX-REGEN-NAO-TOCA-EXPORTADO); cura = o MUDA de leitura ja cortado; muda 0 dos 644 -> vai para DEPOIS da E5. (3) AVAL-DE-CRITERIO para o reapply da O96
@@ -113,9 +94,28 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● DIFF medido, e a contribuição da O96 aparece isolada: horas_trabalhadas +1.019,08 contra os +1.040,82 já aplicados = −21,74 h de pausa que deixa de ser paga. Agora a condição
   (d) — oráculo nos afetados, sem divergência nova:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Crunching… (2m 51s · ↓ 3.3k tokens)
+● Condição (d) verde: divergência nova = 0, e a O96 curou 28 dias que antes divergiam. As quatro condições do AVAL-DE-CRITERIO estão satisfeitas — aplico:
+
+  Ran 1 shell command
+
+● Aplicado: 7 colabs, horas_trabalhadas 71.095,78 → 71.077,02 (−18,76 h de pausa que era paga) e intra −15,93. A CONDICAO_SAIDA_REAL separou 3. Agora R1 — o papel sobrescrevendo
+  gravado coerente. A causa é a ata escolher bordas erradas e deixar batida real fora do vão:
+
+  Ran 1 shell command
+
+● A cura R1 falha nas duas direções — não pega o col920 e quebra o col922 (404 → 1015). Reverto: meia-correção é pior que nenhuma.
+
+● Reverter R1 e confirmar a base
+  ⎿  $ cd /home/ronald/saas-hasner && git checkout -- app/ponto/turnos.py && git status --short | head -3; docker exec saas_core python manage.py tenant_command shell
+     --schema=juliani --command "
+     import datetime as d
+     from colaboradores.models import Colaborador
+     from ponto.turnos import realizado_do_dia
+     …
+
+✢ Crunching… (8m 21s · ↓ 11.5k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
