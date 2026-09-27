@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:774 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:812 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:11:31.**
+**Medido em 27/09/2026 11:16:38.**
 
 | | |
 |---|---|
-| `HEAD` local | `5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho` |
+| `HEAD` local | `4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B` |
 | `origin/main` | `c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
 5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
 9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
 c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
 4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
-ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/turnos.py
-?? app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
 ?? esteira.pausada
 ```
 
@@ -87,40 +85,40 @@ ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O pareador devolve um turno aberto, não dois — logo não há S órfã. Com 3 batidas no dia, a S foi absorvida como intrajornada e o retorno nunca veio. Confirmo:
 
   Ran 1 shell command
 
-● Dois REDs reais, e os dois fecham pela sua regra:
-
-  ┌────────┬───────┬─────────────────┬─────────────┬─────────┬─────────┬─────────────┐
-  │  RED   │  dia  │ aberto → S real │   marcos    │  dist   │ duração │ previsto+4h │
-  ├────────┼───────┼─────────────────┼─────────────┼─────────┼─────────┼─────────────┤
-  │ col349 │ 14/09 │ 06:59 → 13:57   │ 07:00–15:20 │ 83 min  │ 6,97 h  │ 8h20+4h ✓   │
-  ├────────┼───────┼─────────────────┼─────────────┼─────────┼─────────┼─────────────┤
-  │ col206 │ 21/08 │ 07:26 → 13:01   │ 07:30–11:00 │ 121 min │ 5,57 h  │ 3h30+4h ✓   │
-  └────────┴───────┴─────────────────┴─────────────┴─────────┴─────────┴─────────────┘
-
-  Escrevo o passo final com as duas condições:
+● Isto derruba meu diagnóstico e eu preciso dizer antes de qualquer outra coisa: o col349 em 14/09 tem três batidas — 06:59 E, 13:57 S, 14:02 E — e o hf 15:20 está apagado. A
+  pessoa voltou do almoço e nunca bateu a saída. A S que meu script achou "disponível" era a do intervalo, já consumida. Meço o universo real da sua regra, pelo que o próprio
+  pareador devolve:
 
   Ran 1 shell command
 
-● Agora os selos que você pediu — os dois REDs reais e as duas guardas:
+● Medição decisiva, e ela derruba o meu diagnóstico da classe B — preciso dizer isso com clareza:
 
-  Ran 1 shell command
+  ┌──────────────────────────────────────────────┬───────┬─────┐
+  │       o que vem depois do turno aberto       │ casos │  %  │
+  ├──────────────────────────────────────────────┼───────┼─────┤
+  │ outra ENTRADA (não há S nenhuma para fechar) │   782 │ 94% │
+  ├──────────────────────────────────────────────┼───────┼─────┤
+  │ aberto e último da lista                     │    35 │ 4%  │
+  ├──────────────────────────────────────────────┼───────┼─────┤
+  │ S órfã adiante — o universo da sua regra     │    16 │ 2%  │
+  └──────────────────────────────────────────────┴───────┴─────┘
 
-● 6 OK, e o len(ts) == 1 é exatamente o que morde (sem o passo final voltariam dois turnos). Agora a checagem que importa: o pareador tem dezenas de selos. Rodo os apps que o
-  consomem:
+  E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
+  ≤90 min" contava a S do intervalo, já consumida.
 
-  Ran 1 shell command
+● Publicar a correcao do diagnostico da classe B · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## DERRUBO O MEU PROPRIO DIAGNOSTICO DA CLASSE B: nao e o pareador, e saida nao batida
+     Publiquei uma hora atras que a classe B era "o pareador nao fecha tendo `S` na mao", com **103 casos** e
+     **55 d…
 
-● 5.272 testes OK em ponto, escala e chamados — o pareador não regrediu. Agora o DIFF:
-
-● DIFF do passo final do O68b · 1m 12s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
-     horas_trabalhadas,turnos_abertos 2>&1 | grep -vE 'moveu fora do item' | grep -E '^ [a-z_]+ ' | awk '$2!=$3' ; echo "---"; docker exec saas_c… (1m 10s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Zesting… (23m 4s · ↓ 35.9k tokens)
+✢ Zesting… (28m 12s · ↓ 44.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
