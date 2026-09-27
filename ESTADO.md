@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:28:51.**
+**Medido em 27/09/2026 15:34:01.**
 
 | | |
 |---|---|
@@ -88,9 +88,6 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
 ● Passo 2 medido: 12 colabs, −219,01 h, e 9 deles têm saída real (col727 com 12 turnos, col107 com 7, col297 com 4…). Só 3 não têm nenhuma (col751, col306, col200) — esses são
   cobrança legítima. Então o passo 4 depende da O95. Passo 3 — reaplico a O95 e explico col51 e col382:
 
@@ -117,11 +114,14 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ● Com as duas provas: col382 volta a 176,79 (a regressão sumiu), col51 +3,99 h (feriado), col727 135,47 → 162,47, col107 +8,29, col945 +2,06, e col904/col85/col300/col616
   intactos. Remedimento da L-007:
 
-  L-007 depois da O95 completa
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; cp
-     $SC/probe_l007b.py app/probe_tmp.py; timeout 2400 bin/sombra.sh --com-a-sombra o95 -- docker run --rm --cpuset-cpus "$TESTE_C…
+  Ran 1 shell command
 
-· Grooving… (19m 17s · ↓ 20.1k tokens · still thinking)
+● −219,01 → −189,72 h, mas o número de colabs subiu de 12 para 15 (entraram col890, col104, col450, col946). Dos 15, 9 têm saída real — exatamente o que o seu passo 4 proíbe.
+  Escrevo os selos da O95 e implemento a condição a mais no aplicador:
+
+● Running 1 shell command…
+
+✢ Grooving… (24m 27s · ↓ 21.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

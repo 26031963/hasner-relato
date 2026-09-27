@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 15:28:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.0 MB). Acoes na janela: **422**.
+**Medido em 27/09/2026 15:34:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.0 MB). Acoes na janela: **416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -426,9 +426,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:35:16 | Bash | Aplicar a cura da O73 e rodar o RED | `python3 - <<'PYEOF' import py_compile p='ponto/motor_calculo_v2.py'; s=open(p).read() if 'O73' in s: print('SKIP: O73 ja esta no arquivo'); raise SystemExit(0) velho = """ hi_d, hf_d, hii_d, hfi_d = _md(dia) if not (hi_d and hii_d and hfi_d and hf_d): continue""" novo = """ hi_d, hf_d, hii_d, hfi_d = _md(dia) if not (hi_d and hii_d and hfi_d and hf_d): # O73 (27/09): SEM os marcos de intervalo, a  ...` |
 | 03:34:56 | Bash | Ver os textos dos alertas de pontualidade | `grep -n 'alertas.append' ponto/motor_calculo_v2.py \| head -8; grep -n 'Saída antecipada\\|Saida antecipada' ponto/motor_calculo_v2.py \| head -4` |
 | 03:34:25 | Bash | Rodar o RED com a forma real do col81 | `python3 - <<'PYEOF' p='/tmp/test_o73_volta_do_intervalo.py.pendente'; s=open(p).read() s=s.replace(""" # DIA COM PAUSA: entra no horario, pausa das 18:29 as 19:29, sai a meia-noite bate(cls.DIA, 16, 0, 'E') bate(cls.DIA, 18, 29, 'S') bate(cls.DIA, 19, 29, 'E') bate(cls.DIA + datetime.timedelta(days=1), 0, 0, 'S')""", """ # DIA COM PAUSA, NA FORMA REAL DO col81: 15:56 / 17:24 / 18:27 / 23:55. # A P ...` |
-| 03:33:53 | Bash | Medir quais dias do col81 ganham atraso e com que batidas | `mv ponto/tests/test_o73_volta_do_intervalo.py /tmp/test_o73_volta_do_intervalo.py.pendente && cat > /tmp/col81_atraso.py <<'PYEOF' """O73 sem hipotese: QUAIS dias do col81 ganham atraso no recalculo, e com que batidas?""" from django.apps import apps from django.utils import timezone as tz import datetime as d G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, B, FM = G(' ...` |
-| 03:33:02 | Bash | Escrever e rodar o RED da O73 | `cat > /tmp/test_o73.py <<'PYEOF' # -*- coding: utf-8 -*- """O73 -- no turno sem janela de intervalo declarada, a VOLTA da pausa nao e atraso. MEDIDO em 27/09: 6 templates `turno_partido` com `intervalo_modo='duracao'` (te189 `16:00->00:00`, te226, te292, te198, te500, te468) nao declaram `hii`/`hfi`. A "zona 5" do motor, que e quem casa marco com bloco, **pula** o dia nesse caso (`if not (hi_d and ...` |
-| 03:32:13 | Bash | Ler a guarda da zona 5 | `sed -n 1474,1500p ponto/motor_calculo_v2.py` |
-| 03:31:56 | Bash | Ler o unico chamador de calcular_periodo | `sed -n 1055,1085p ponto/motor_calculo_v2.py` |
-| 03:31:51 | Bash | Achar os chamadores de calcular_periodo | `grep -rn 'calcular_periodo(' --include=*.py \| grep -v tests \| head; echo "=== as duas definicoes ==="; sed -n 1934,1960p ponto/motor_calculo_v2.py` |
-| 03:31:27 | Bash | Deploy da cura com batida fresca | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -8` |
