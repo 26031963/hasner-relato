@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:21 AFIRMA ato sem PROVA ao lado -- MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:12:01.**
+**Medido em 27/09/2026 00:17:31.**
 
 | | |
 |---|---|
@@ -33,73 +40,73 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 
 ```
  M CLAUDE.md
- M app/config/crons.py
+M  app/config/crons.py
  M app/config/crons_duracao.json
- M app/core/juizes.py
- M app/core/templatetags/hasner_filters.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
- M app/docs/CORTES.md
- M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/escala/services/cadastro_tipo.py
- M app/escala/servico_jornada.py
- M app/escala/tests/test_jm_derivado.py
+M  app/core/juizes.py
+M  app/core/templatetags/hasner_filters.py
+M  app/docs/ARQUITETURA.mmd
+M  app/docs/BACKLOG.md
+M  app/docs/CORTES.md
+M  app/docs/LEIS.md
+M  app/docs/PENDENTES_RONALD.json
+M  app/docs/PROMPTS.md
+M  app/docs/RELATO.md
+M  app/escala/services/cadastro_tipo.py
+M  app/escala/servico_jornada.py
+M  app/escala/tests/test_jm_derivado.py
+A  app/ponto/management/commands/aplicar_09_corte_b.py
+A  app/ponto/management/commands/desvio_o68b.py
  M app/ponto/management/commands/diff_reclassificar_partido.py
  M app/ponto/management/commands/plano_b_no_dinheiro.py
- M app/ponto/motor_calculo_v2.py
+M  app/ponto/motor_calculo_v2.py
+A  app/ponto/tests/test_selo_l086_feriado_previsto_nao_dobra.py
  M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
  M bin/relato.sh
-?? app/ponto/management/commands/aplicar_09_corte_b.py
-?? app/ponto/management/commands/desvio_o68b.py
 ?? app/ponto/management/commands/dna_x_batida_real.py
-?? app/ponto/tests/test_selo_l086_feriado_previsto_nao_dobra.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Crunched for 1m 8s · done 12:09 AM · 2 shells still running
+  O bug da O76 — a entrada que escorrega para depois da meia-noite. Ele trava os que têm DSR movido, porque eu não consigo distinguir automaticamente falta real (col491) de bug
+  (col382).
 
-❯ MODO 24H (aval Ronald, ate domingo 24:00): fila na ordem: L-086 corrigida + os 20 -> O80 trava -> O68b aposentar plano B nos ~720 dias -> O70 geradora -> O66 fechadores -> O51b
-  -> E5 fechamento online (fatia 1: a 09 lida da celula, sem gravado envelhecendo). Criterio de apply para TODO item de dinheiro: aplica sem parar os colabs cujo movimento esta
-  so nos campos do item, com os 26 campos medidos contra o GRAVADO e ninguem saindo do TXT; colab fora disso fica SEPARADO (nao aplicado) numa lista unica no topo do RELATO; o
-  item segue. So PARA de verdade em pergunta de LEI (como a do feriado) ou item da L-009. Pergunta de desenho: mede, propoe, segue. Commit, push e DEPLOY JA entre itens. Nenhuma
-  lei nova. !
+  Isso me dá uma leitura de prioridade que não é minha opinião, é aritmética: a O76 é o que desbloqueia mais dinheiro na fila. Ela não está na sua lista do MODO 24H, mas sem ela
+  os separados por DSR não voltam nunca — e eles são a maior parte dos 30.
 
-● MODO 24H entendido, e o critério muda a mecânica: por colaborador, não por fatia. Implemento a separação automática:
+  Vou publicar a lista única dos 30 no topo do RELATO com o que moveu em cada um, commitar, empurrar, fazer o DEPLOY JÁ, e seguir para o O80. Se você quiser inverter e pôr a O76
+  antes do O80, é uma frase — mas não troco a sua ordem por conta própria.
 
-  Ran 1 shell command
+✻ Brewed for 35s · done 12:14 AM · 1 shell still running
 
-● MODO 24H implementado. O critério agora é por colaborador, e a separação é automática — o item não para por causa de um colab.
+● Background command "Aplicar os 4 e separar os 30" completed (exit code 0)
 
-  Os campos do item, e o que ficou de fora com o motivo no código:
+  Ran 2 shell commands
 
-  Entram: horas_trabalhadas, horas_noturnas, horas_intra_indenizada, turnos_abertos, inconsistencias, horas_saida_antecipada, horas_atraso, horas_folga_trabalhada.
+● Aplicado: 4 colabs. Separados: 30, restaurados integralmente. Zero entram, zero saem do TXT; 07 e 08 com 0 divergências; col81 intacto. Reversão em
+  logs/apply_modo24h_antes.json.
 
-  Ficam fora, e cada um por uma razão diferente:
+  A lista única está no topo do RELATO, e ela revela algo que eu não esperava ao começar:
 
-  horas_extras* — a dobra de plantão que começa no feriado é pergunta de lei aberta (+110,62 h em 17 colabs), e você determinou que pergunta de lei para. Esses 17 ficam separados
-  até a sua frase.
+  Os 30 travam por apenas duas causas, e nenhuma é do corte (b). Dezessete pela família 100% — a pergunta de lei do feriado. Vinte e um pelo DSR — o bug da O76 misturado com falta
+  real. Oito estão nas duas.
 
-  semanas_dsr_* e horas_reflexo_dsr — o DSR se move por dois motivos distintos: falta real (col491, legítimo) e o bug da O76 (col382, entrada 10 min depois da meia-noite jogando o
-  plantão fora da janela). Enquanto a O76 não cura, não consigo distinguir os dois automaticamente, então quem tem DSR movido fica separado.
+  E a consequência é desconfortável: o valor grande do corte (b) está inteiro dentro desses 30. As noturnas +135,61 h, as inconsistencias −50, os turnos_abertos −30 — nenhum dos 4
+  aplicados carrega isso. O corte está medido, provado, no ar em código, e o gravado dele ainda não chegou a quase ninguém, porque todo colaborador que ele melhora também toca um
+  dos dois bloqueios.
 
-  saldo_banco_horas — fora do escopo do seu ! de ontem, restaurado sempre.
+  Os dois bloqueios não pesam igual: 21 dos 30 travam por DSR, 17 por feriado. Então a cura da O76 é o que desbloqueia mais gente — e ela não está na fila do MODO 24H. Não a
+  promovi sozinho; fica dito com o número.
 
-  A separação restaura o colab inteiro, não o campo: campo a campo deixaria a pessoa em metade motor novo e metade velho, um estado que nunca existiu.
+  Sigo commitando e empurrando, depois DEPLOY JÁ e o O80, na sua ordem. Uma coisa que vou conferir antes do commit: CLAUDE.md aparece modificado e eu não me lembro de tê-lo tocado
+  nesta última hora — vou olhar o diff antes de incluir, porque commitar mudança que eu não sei explicar é o oposto do que esta noite ensinou.
 
-  Rodando. Quando voltar, aplico os que passarem, publico a lista única dos separados no topo do RELATO, e sigo para o O80 — commit, push e DEPLOY JÁ entre os itens, como você
-  definiu.
-
-✻ Cogitated for 1m 0s · done 12:10 AM · 2 shells still running
+✻ Worked for 43s · done 12:16 AM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ aplica os que passarem e publica os separados
+❯ olha o diff do CLAUDE.md antes de commitar
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
