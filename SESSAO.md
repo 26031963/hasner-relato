@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 01:22:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (77.8 MB). Acoes na janela: **895**.
+**Medido em 27/09/2026 01:23:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (77.9 MB). Acoes na janela: **894**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:23:35 | Bash | Conferir o placar verdadeiro e o andamento da sombra | `python3 - <<'PYEOF' p='core/espelho_verdade.py'; s=open(p).read() alvo = """ {'id': 'E6-folga-que-sumia', 'o_que': 'hora de folga trabalhada sem escala certa entra em horas_trabalhadas',""" novo = """ {'id': 'E6-divergencia-explicada', 'o_que': 'ZERO divergencia nao explicada entre oraculo e espelho', 'estado': FALTA, 'prova': 'MEDIDO o contrario em 27/09 ~01:10: 644 de 7.536 dias (8,5%) fora de 1 ...` |
+| 01:23:06 | Bash | Reclassificar os itens para a E3 e corrigir a data da rodada | `python3 - <<'PYEOF' p='core/espelho_verdade.py'; s=open(p).read() s=s.replace("corte Ronald 27/09 06:xx:", "corte Ronald 27/09 00:xx:") # tira os dois itens que sao do MOTOR da E6 velho_e6 = """ {'id': 'E6-plano-b', 'o_que': 'dia que a ata nao explica nao e pago em silencio', 'estado': EM_CURSO, 'prova': 'medido: 1.484 dia-colab (19,4%), 723 por dia + 761 de 28 colabs ' 'de cadastro partido falso' ...` |
+| 01:22:43 | Bash | Ler as linhas O73 e O68 do BACKLOG | `grep -n '\| O73 \|\\|\| O68b\\|\| O68 ' docs/BACKLOG.md \| cut -c1-400` |
 | 01:22:29 | Bash | Ver o json do e6 e como o placar e renderizado | `cd /home/ronald/saas-hasner && cat logs/e6_placar.json; echo; sed -n 40,80p bin/gerar_estado.py` |
 | 01:22:17 | Bash | Ler o placar espelho-verdade | `cat core/espelho_verdade.py` |
 | 01:22:12 | Bash | Regravar a O81 medida e corrigir os horarios | `python3 - <<'PYEOF' import re p='docs/BACKLOG.md'; s=open(p).read() i=s.index('\| O81 \|'); j=s.index('\n', i) novo = ("\| O81 \| **ATA-SEM-LAMPADA** (pedido 27/09 01:1x; entra JUNTO da O70) -- a ata na **forma agregada** " "(`n_celulas > 0` com `lampadas: []`) sabe QUANTAS celulas o dia tem e nao sabe QUAIS, e ai o espelho **do periodo " "inteiro** cai no builder antigo (`ponto/services/espelho.p ...` |
@@ -901,7 +904,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:24:06 | Bash | Ver a forma de celulas_alimentadas e quem alimenta | `sed -n '510,518p' colaboradores/services/calendario.py; echo "=== quem mais alimenta? o fechamento ==="; grep -rn "celulas_alimentadas\\|_cels" ponto/services/fechamento.py \| head -5` |
 | 13:24:01 | Bash | Ver o que e celulas_alimentadas | `grep -rn "celulas_alimentadas" --include=*.py . \| grep -v test \| head -6` |
 | 13:23:51 | Bash | Ver o que o juiz devolve em intervalo | `sed -n '215,240p' ponto/juiz_batida.py` |
-| 13:23:44 | Bash | Ler o adaptador de turnos para periodos | `grep -n "def periodos_de_turnos" -A 30 ponto/adaptador_motor.py \| head -36` |
-| 13:23:06 | Bash | Ler turnos_via_autoridade | `cd /home/ronald/saas-hasner && D=$(cat /tmp/claude-1001/arvore_o60) && sed -n '239,268p' "$D/app/ponto/motor_calculo_v2.py"` |
-| 13:23:01 | Bash | Ler o pareamento via autoridade | `cd /home/ronald/saas-hasner && D=$(cat /tmp/claude-1001/arvore_o60) && sed -n '269,300p' "$D/app/ponto/motor_calculo_v2.py"` |
-| 13:22:34 | Bash | Conferir orfao e os usos restantes | `cd /home/ronald/saas-hasner && D=$(cat /tmp/claude-1001/arvore_o60) && grep -n "jornada_diaria" "$D/app/ponto/motor_calculo_v2.py"; echo "--- os 10 restantes ---"; grep -n "self\.jornada_minutos\\|\.minutos_jornada" "$D/app/ponto/motor_calculo_v2.py"` |
