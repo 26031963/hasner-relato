@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**71 obras abertas.**
+**72 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -80,3 +80,4 @@ lista — ela e o que esta EM PE._
 | **O69** | VINCULO-DO-DIA | **FEITA 26/09 -- as duas metades**: dinh |
 | **O70** | GERADORA-EM-TODA-CELULA | **livre** -- entra APOS a O68 |
 | **O71** | REJULGAR-09 | espera `!` |
+| **O72** | COL704-MARCO-DO-DIA-SEGUINTE | **P7.1 -- fura a fila, antes do apply da |

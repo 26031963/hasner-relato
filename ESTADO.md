@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:52:42.**
+**Medido em 26/09/2026 22:57:54.**
 
 | | |
 |---|---|
@@ -34,8 +34,10 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ```
  M CLAUDE.md
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/CORTES.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/services/cadastro_tipo.py
  M app/ponto/management/commands/diff_reclassificar_partido.py
@@ -49,40 +51,40 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Monitor(selos e suite de escala apos a L-084)
-  ⎿  Monitor started · task bxg4l1cu8 · timeout 900s
+✻ Churned for 1m 6s · done 10:56 PM · 2 shells, 1 monitor still running
 
-❯ No ensaio antes do apply: duas colunas separadas -- (1) efeito da reclassificacao nos 23; (2) efeito da L-084 no RESTO da frota de 09 (colabs e dias em que atraso/saida
-  antecipada deixam de descontar), com a lista. Ninguem sai do TXT; se sair, PAREI. Nenhuma lei nova.
+❯ remede as duas colunas com a O72 curada
 
-● A sua ordem muda o desenho do ensaio, e com razão: a L-084 vale para a frota inteira, não só para os 30 reclassificados. Se eu medisse junto, o número da reclassificação viria
-  inflado pelo efeito da lei em 123 colabs. Separo em duas corridas:
+  Read 1 file
+
+● A suíte está lendo a árvore que eu acabei de mudar com a O72 — cometi o mesmo erro de método outra vez, e o veredito dela não vale. Vou relançá-la depois. As medições rodam no
+  banco de prod, não no de teste, então podem ir agora:
 
   Ran 1 shell command
 
-● Duas corridas, como você separou:
+● As duas colunas estão rodando em sequência sobre o banco de prod, com a O72 curada.
 
-  Coluna 2 rodando agora — --sem-reclassificar: recalcula 09 com a guarda da L-084 no ar mas sem trocar nenhum tipo_base. O delta contra o gravado é o efeito da lei sozinha, na
-  frota inteira.
+  Antes que o resultado chegue, registro uma coisa sobre mim que já aconteceu duas vezes nesta madrugada: editei .py enquanto uma suíte lia a árvore montada. A primeira vez eu
+  matei o run e refiz; agora repeti. A LEI-AKITA 10 existe exatamente contra isso, e a razão prática é que o verde daquela suíte não prova nada sobre nenhuma das duas versões da
+  árvore — nem a que ela começou lendo, nem a que está lá agora.
 
-  Coluna 1 depois — reclassifica sobre esse estado, e o delta entre as duas corridas é o efeito da reclassificação nos 23, limpo.
+  Não é falta de conhecer a regra: é que medir e codar ao mesmo tempo, com o banco de teste ocupado por minutos, cria a tentação de aproveitar a espera. A disciplina certa é usar
+  a espera para medir (que roda em outro banco) e não para editar. Vou relançar a suíte depois das medições e antes do apply — o portão do ! inclui árvore verde, e eu não vou
+  declarar verde com base num run que leu duas árvores.
 
-  E a lista que você pediu vem da fonte certa: o motor agora expõe dias_cadastro_x_realidade, mas recalcular_fechamento_mes não a persiste — então eu a colho das instâncias de
-  motor que o próprio fechamento criou, com colab, dia, horário cadastrado, horário real e os dois deltas. Contar pela variação de horas_atraso no FechamentoMensal daria o total
-  sem dizer quem, e "quem" é metade do que o DP precisa para tratar o cadastro.
+  O que espero das duas colunas, para você comparar com o que vier:
 
-  Uma coisa que vou conferir com atenção nesse resultado, porque é o risco real da L-084: ela para de descontar, então horas_atraso e horas_saida_antecipada caem e
-  horas_trabalhadas pode subir. Se alguém estava dentro do TXT por ter pouca inconsistência e a lei mexer nisso, ele pode sair — e a sua regra é literal: um único colab saindo =
-  PAREI.
+  A coluna 2 deve encolher em relação aos 110 dia-colab / −671,88 h de antes, porque o col704 e os casos da mesma classe saem da lista CADASTRO x REALIDADE — o delta deles deixa
+  de ser impossível e volta a caber no julgamento normal. Se ela não encolher, a minha cura não pegou, e aí o problema é outro.
 
-  O apply já está escrito com as suas quatro condições, incluindo o saldo_banco_horas restaurado ao valor anterior e a conferência de 07 e 08 no banco, depois do commit — não por
-  inferência de que "não recalculei, logo não mudou".
+  A coluna 1 deve ficar próxima dos números que já medi para a reclassificação (inconsistencias −50, turnos_abertos −30, noturnas +135,61 h, intra +100,17 h), mas agora sem os
+  +253,42 h de saída antecipada — que era o artefato que a sua lei mata.
 
-✻ Worked for 1m 29s · done 10:52 PM · 2 shells, 1 monitor still running
+✻ Cooked for 35s · done 10:57 PM · 2 shells, 1 monitor still running
 
-● Background command "Usar a autoridade e rodar os selos mais a suite de escala" completed (exit code 0)
+● Background command "Mover a guarda e rodar a suite de escala inteira" completed (exit code 0)
 
-* Whirlpooling…
+✻ Gesticulating…
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
