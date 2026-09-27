@@ -65,17 +65,51 @@ O col515 e a classe inteira em um caso: a regra velha nao achava vinculo cobrind
 `intervalo=(None, None)` e **nao descontava intervalo nenhum** -- 593 min. A celula sabia quem gerou
 o dia desde sempre.
 
-**Dinheiro nao se move**: o gravado e' do fechamento, que ja obedece a celula. Os -85 min sao a
-testemunha andando PARA a folha, nao para longe dela. Prova: **`pdf_x_espelho_divergentes = 0`** em
-**199** colabs na sombra depois da cura.
+**Dinheiro nao se move**: o gravado e' do fechamento, que ja obedece a celula. Prova de coerencia
+entre as duas testemunhas: **`pdf_x_espelho_divergentes = 0`** em **199** colabs na sombra depois da
+cura -- tela e cartao dizem a mesma coisa.
 
-### O que NAO fechou, com o universo medido
+O `pk__in` das geradoras foi **no-op em 09** (0 geradoras fora da janela). Ele fica porque em 07/08,
+onde a vigencia impossivel e' mais antiga, pode nao ser -- e a alternativa e um `None` calado.
 
-O **topo** do espelho (`espelho.py:~598`) roda o motor UMA vez para a janela com o `tipo_escala` do
-vinculo ATIVO. Nao e a coluna, e so muda numero para quem TROCA de vinculo no meio da competencia
-com tipos diferentes: **8 colabs** em 09/2026, a classe que a O67 deixou aberta. E' escolha por
-PERIODO, mesma forma de `papel_por_minuto_da_ata` -- as duas estao DECLARADAS no censo, com teto que
-so encolhe, e vao na O68.
+### MEDIDO, porque eu ia INFERIR: topo x coluna x gravado, em PROD
+
+Eu havia escrito aqui que "os -85 min sao a testemunha andando PARA a folha". Isso era **inferencia**:
+`pdf_x_espelho = 0` prova tela == cartao, nao coluna == topo == gravado -- tres contas, tres
+leitores. A L-008 nao aceita isso, entao o medidor virou codigo
+(`vinculo_do_dia_divergentes --topo-x-coluna`) e rodou em PROD, leitura pura:
+
+| colab | topo (h) | soma da coluna (h) | GRAVADO (h) | topo-coluna |
+|---|---:|---:|---:|---:|
+| col515 | 11,13 | 92,30 | **11,13** | -81,17 |
+| col107 | 157,67 | 192,95 | **157,67** | -35,28 |
+| col866 | 156,01 | 156,02 | **156,01** | -0,01 |
+| col935 | 77,06 | 88,15 | **77,06** | -11,09 |
+| col648 | 182,63 | 181,70 | **182,63** | +0,93 |
+| col400 | 156,94 | 148,43 | **156,94** | +8,51 |
+| col245 | 13,98 | 21,00 | **13,98** | -7,02 |
+
+**O topo bate com o gravado nos SETE, ao centavo.** Isso derruba a hipotese que eu estava a ponto de
+declarar: o `tipo_escala` do vinculo ativo no motor do topo **nao** produz divergencia aqui -- o topo
+e o gravado sao o MESMO motor e concordam. Quem discorda dos dois e' a **COLUNA**, que soma
+`realizado_do_dia` dia a dia. Ou seja: o que sobra nao e' "o topo escolhe vinculo errado", e' o
+**item (6) do [nome]** -- "topo = soma das linhas ou PAREI" -- e agora ele tem sete casos com numero.
+
+E o efeito da cura de hoje sobre isso, sem enfeite: no col515 a coluna era 93,30 e passou a 92,30
+contra um topo de 11,13. **Andou 1 h na direcao certa num vao de 81 h.** A cura do vinculo do dia era
+necessaria e nao e' suficiente; quem fecha esse vao e' o item (6).
+
+### O que NAO fechou
+
+A escolha de vinculo por **PERIODO** (o `tipo_escala` unico do motor em `espelho.py:~598`, e
+`papel_por_minuto_da_ata` em `turnos.py:670`) segue de pe. Nao ha numero medido contra ela -- a
+tabela acima mostra o topo coerente com o gravado --, entao ela fica DECLARADA no censo com teto que
+so encolhe, sem eu lhe atribuir exposicao que nao medi. Os **8 colabs** que trocam de vinculo no meio
+de 09 sao o universo **CANDIDATO**, nao um efeito provado.
+
+Os **6.848** dia-colab sem geradora na celula **NAO estao no DIFF**: o medidor os pula. Ali o
+fechamento (que herda o vinculo da fatia julgada) e o espelho (que cai na aritmetica do vinculo)
+podem ainda escolher vinculos DIFERENTES. E' o plano B no dinheiro, e e' o item (b) da O68.
 
 ### O selo, e por que o primeiro nasceu cego
 

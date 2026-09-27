@@ -77,4 +77,4 @@ lista — ela e o que esta EM PE._
 | **O66** | BECO-FIO-FECHADO-CELULA-ABERTA | espera `!` |
 | **O67** | CASO [nome] -> QUATRO CLASSES DE FROTA | **livre** -- entra junto da O66 |
 | **O68** | APOSENTAR O PLANO B NO DINHEIRO | espera corte |
-| **O69** | VINCULO-DO-DIA | **livre** |
+| **O69** | VINCULO-DO-DIA | **FEITA 26/09 -- as duas metades**: dinh |
