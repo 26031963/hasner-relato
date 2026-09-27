@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:23:45.**
+**Medido em 27/09/2026 01:28:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
+| `HEAD` local | `2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,23 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro
 c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
 c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas, e o MODO 24H separando por colab
 4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min
 d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga
-a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons_duracao.json
- M app/core/espelho_verdade.py
- M app/docs/BACKLOG.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -84,26 +78,6 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ Depois do compact: rele o topo do RELATO e o TICKETS. Primeiro o SMOKE do deploy das sete curas, provado no worker servido (hora dos workers x hora dos arquivos): atraso de
-  4h10 com saida no horario voltando a descontar (L-084 corrigida) e col382 sem falta no 20/09 (O76). Depois segue a FILA do MODO 24H do handoff. Nenhuma lei nova.
-
-❯ Depois do compact: (1) SMOKE do deploy das sete curas no worker servido (atraso de 4h10 com saida no horario descontando; col382 sem falta no 20/09). (2) PLACAR: o plano B
-  (O68b, 1.484 dias) e os turnos abertos em massa (col788, col923, col880) sao do MOTOR -> etapa E3, nao E6; os 30 separados do corte (b) e a O73 tambem sao E3. A E3 publicada
-  tem que sair com esses itens e o % verdadeiro. A data da rodada da E6 e ~01:10 de 27/09, nao 07:xx. (3) RELATO.md:160 "APLICADOS: 4 colabs" ganha a linha PROVA e o RELATO volta
-  a publicar. Depois segue a fila do MODO 24H. Nenhuma lei nova.
-
-● Dois pedidos registrados. Antes de tudo, o fato que muda a ordem: o deploy das sete curas FALHOU — não por bug, por lei: o carimbo da sombra era de 26/09 e agora é 27/09 01:19,
-  então bin/deploy.sh recusou por falta de ensaio de hoje. Já lancei --refazer && --bloco (não usei --sem-sombra: atalho é L-009). Enquanto roda, meço o que o worker realmente
-  serve:
-
-  Ran 1 shell command
-
-● Evidência fechada, e ela confirma a urgência: o container roda em UTC — os workers subiram 02:35 UTC = 23:35 -03 de 26/09, e os arquivos das curas têm mtime 00:48 e 01:04 de
-  27/09, depois disso. As sete curas não estão sendo servidas; o smoke no worker servido só pode ser feito depois do deploy, que espera o ensaio. Enquanto a sombra roda, faço os
-  itens (2) e (3):
-
-  Searched for 2 patterns, ran 3 shell commands
-
 ● O elo que faltava está no vivo: ponto/services/espelho.py:585 — vis_ini = min(piso_visual(colaborador, hoje), apur_ini) e a grade vai de vis_ini até hoje. Então os dias de ata
   agregada de 07/08, embora fora da competência 09, estão dentro do intervalo do espelho: um único dia deles derruba o mês todo para o builder. Gravo a O81 medida e corrijo os
   horários que eu escrevi 6 h adiantados:
@@ -113,11 +87,31 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ● E6 ficou 2/2 = 100% só porque tirei dois itens dela — isso é o [] de dois sentidos. A porta da E6 é "0 divergência não explicada", e eu medi 8,5% fora de 10 min, 473 dias de
   batida ímpar e 235 colabs no builder. Declaro esses itens, que são da E6:
 
-  Publicar o RELATO e conferir a sombra
-  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -20; echo "=== sombra ==="; wc -l
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4ga0aj4r.output; ps -o etime,cmd -C bash 2>/dev/null | grep -c sombra
+  Ran 2 shell commands
 
-✢ Unfurling… (8m 27s · ↓ 21.1k tokens)
+● RELATO voltou a publicar (76c1655, sem linha de retenção). Commito o placar verdadeiro e a O81 medida:
+
+  Ran 1 shell command
+
+● --refazer já terminou; --bloco está rodando. Commito enquanto isso:
+
+  Ran 1 shell command
+
+● Enquanto o bloco da sombra roda, preparo o smoke. Primeiro localizo o caso do selo de 14/09 (entrada 4h10 atrasada, saída no horário):
+
+  Searched for 1 pattern
+
+● A docstring da L-084 ainda diz "OU" enquanto o código já diz _longe_e and _longe_s — doc mentindo sobre o código que vai ao ar. Curo junto:
+
+  Ran 2 shell commands
+
+● Escrevo o smoke agora, para rodar no instante em que o deploy pousar:
+
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+
+✢ Unfurling… (12m 43s · ↓ 30.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
