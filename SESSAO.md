@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 02:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (79.7 MB). Acoes na janela: **982**.
+**Medido em 27/09/2026 02:16:23.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (79.7 MB). Acoes na janela: **981**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -991,4 +991,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:22:11 | Bash | Rodar o DIFF do motor de HEAD | `cd /home/ronald/saas-hasner && python3 - <<'ENDPY' p='/tmp/claude-1001/pauta/saida/diff3.py' s=open(p).read() s=s.replace(""" out[str(r['colaborador_id'])] = {k: (float(v) if isinstance(v, (int, float)) or hasattr(v, 'is_finite') else v) for k, v in r.items() if k != 'colaborador_id'}""", """ out[str(r['colaborador_id'])] = {k: _json_ok(v) for k, v in r.items() if k != 'colaborador_id'}""") s=s.re ...` |
 | 14:18:02 | Bash | DIFF: corrida do motor de HEAD | `cat > /tmp/claude-1001/pauta/saida/diff3.py <<'PYEOF' """DIFF de TRES COLUNAS (O60). Uma corrida por MOTOR; o combinador junta depois. Chama a FUNCAO REAL (`recalcular_fechamento_mes`) dentro de atomic() com raise no fim. Dump em JSON para que gravado / motor-HEAD / motor-novo sejam comparados sem eu reconstruir a conta em sonda. """ import json import os from django.db import transaction from dja ...` |
 | 14:17:07 | Bash | Selo do pareamento com o caso que morde | `cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py <<'PYEOF' """SELO: motor que decide o papel da batida pelo TIPO GRAVADO = VERMELHO (O60, 26/09). O QUE ELE GUARDA, com o caso que o gerou: em 23/09 o col369 bateu 07:01 E, 13:00 S, 13:59 S, 14:59 E. A ultima batida foi gravada como ENTRADA sendo a saida do dia. Pareando pelo campo `tipo` isso e `E  ...` |
-| 14:16:16 | Bash | Aplicar a cura na arvore e conferir o selo | `cd /home/ronald/saas-hasner && D=$(cat /tmp/claude-1001/arvore_o60) && for f in ponto/motor_calculo_v2.py ponto/services/fechamento.py escala/utils.py ponto/tests/test_e3_completa_o_marco_manda.py; do cp "$D/app/$f" "app/$f" && echo "aplicado: app/$f"; done && bash bin/tests/test_dinheiro_nao_le_jornada_lixo.sh 2>&1 \| tail -2 && git status --short \| head -8` |

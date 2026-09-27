@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:188 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:15:45.**
+**Medido em 27/09/2026 02:16:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro` |
+| `HEAD` local | `4715f757 [O86] a classe B e 84% CODIGO: em 151 dos 313 turnos abertos havia um S na mao e o pareador nao fechou` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4715f757 [O86] a classe B e 84% CODIGO: em 151 dos 313 turnos abertos havia um S na mao e o pareador nao fechou
 18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro
 f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome
 88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437
 3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D
-61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
 ```
 
 ## `git status --short`
@@ -85,23 +85,6 @@ f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A suíte está trabalhando (container a 80% de CPU). Preparo o ensaio da sombra que responde duas perguntas de uma vez — a remedição dos 30 separados e o DIFF da O85:
-
-  Ran 2 shell commands
-
-● Preciso esperar a suíte antes de empurrar (push conta como run no juliani_db_test). Uso a espera para preparar a cura da O84, lendo quem produz os slots ·I:
-
-  Searched for 1 pattern
-
-● Isto corrige um número meu: montar_dna só congela marcos quando trabalha is True (gerar_celulas.py:55-59), então dna.marcos nulo significa "não é dia de trabalho" — não "falta
-  cadastro". Meço para confirmar antes de corrigir o RELATO:
-
-  Ran 1 shell command
-
-● Confirmado, e corrige meu número: dos 7.035 sem marcos, 6.522 são folga e 402 ausência — normal, não defeito. O que é anômalo é pequeno e nomeável: 109 dias com
-  tipo_dia='trabalho' e sem marcos, e 81 dias sem marco com luz acesa (folga trabalhada), dos quais 18 com a ata nomeando inversão. Corrijo:
-
-  Ran 1 shell command
 
 ● Os backticks foram interpretados pelo bash e comeram palavras da mensagem. Reescrevo por heredoc, que é como fiz nos outros:
 
@@ -114,11 +97,28 @@ f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia
 
 ● Número decisivo para a fila: a classe B é 84% código.
 
-  ┌─────────────────────────────────┬───────┬─────────┐
-  │ o que o turno aberto tem depois │ casos │ leitura │
-  ├─────────────────────────────────┼───────┼─────────┤
-  │ havia um S em                   │       │         │
-  └─────────────────────────────────┴───────┴─────────┘
+  ┌────────────────────────────────────────────────┬───────────┬───────────────────────────────────────┐
+  │        o que o turno aberto tem depois         │   casos   │                leitura                │
+  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
+  │ havia um S em até 16 h e o pareador não fechou │ 151 (48%) │ código — bug próprio, ainda sem causa │
+  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
+  │ a batida seguinte é outro E                    │ 112 (36%) │ a família da O84 (E consecutivos)     │
+  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
+  │ nenhuma batida em 16 h                         │  50 (16%) │ furo real, comportamento              │
+  └────────────────────────────────────────────────┴───────────┴───────────────────────────────────────┘
+
+  O col788 (63 abertos) é uma cadeia de E seguidos — alvo exato da cura (2) da O84. Publico:
+
+  Registrar a O86 e publicar · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## Classe B (733,7 h, a maior) e **84% CODIGO**, e 36% dela e a cura da O84
+     Pergunta que decide se a classe B e bug ou comportamento: o turno que ficou ABERTO tem, depois dele,
+     uma batida que o fech…
+
+✢ Unfurling… (1h 1m 5s · ↓ 202.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

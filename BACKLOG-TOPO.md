@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**85 obras abertas.**
+**86 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -94,3 +94,4 @@ lista — ela e o que esta EM PE._
 | **O83** | E6-CLASSES | **em curso** |
 | **O84** | A ATA NOMEIA A INVERSAO E O JUIZ DEVOLVE "NAO SEI" | **livre, depois do deploy** |
 | **O85** | BURACO DE VINCULO: dia com batida e sem escala vigente nao entra em soma nenhuma | **proxima da fila** |
+| **O86** | O PAREADOR NAO FECHA TENDO `S` NA MAO | **livre, depois da O85 e da O84** |
