@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:55:31.**
+**Medido em 27/09/2026 16:00:45.**
 
 | | |
 |---|---|
@@ -87,40 +87,40 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Meu patch fechou a docstring e deixou o resto dela como código. Reparo:
-
-  Ran 2 shell commands
-
-● Com as duas provas: col382 volta a 176,79 (a regressão sumiu), col51 +3,99 h (feriado), col727 135,47 → 162,47, col107 +8,29, col945 +2,06, e col904/col85/col300/col616
-  intactos. Remedimento da L-007:
-
-  Ran 1 shell command
-
-● −219,01 → −189,72 h, mas o número de colabs subiu de 12 para 15 (entraram col890, col104, col450, col946). Dos 15, 9 têm saída real — exatamente o que o seu passo 4 proíbe.
-  Escrevo os selos da O95 e implemento a condição a mais no aplicador:
-
-  Ran 2 shell commands
-
-● Integro a condição no laço de separação, usando as fotos que o comando já tem:
-
-  Ran 1 shell command
-
-● 34 verdes (6 selos novos da O95, ruff e mypy). Lanço a suíte e a DIFF de frota com a condição ligada:
-
-  Ran 1 shell command
-
-● A O95 tem efeito grande e coerente: turnos_abertos 620 → 464 (−156), horas_trabalhadas +1069,99 h, inconsistencias −237, e a CONDICAO_SAIDA_REAL separou 2 (col890, col450) — os
   outros 7 com saída real já caíam pelo critério de campos, então nenhum colab com saída real perde hora total. Commito (sem tocar arquivos, a suíte está rodando):
 
-● Commitar a O95 e esperar a suite · 9m 52s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py app/ponto/management/commands/aplicar_09_corte_b.py &&
-     git commit -F - <<'MSGEOF'
-     [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 6… (9m 51s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Grooving… (45m 57s · ↓ 33.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Commitado 59cf0bbe; a suíte está rodando e o esperador está armado. Estado da sequência:
+
+  ┌───────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │         passo         │                                                                       estado                                                                       │
+  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 1. smoke do deploy    │ feito — worker servido 15:21, sete casos verdes                                                                                                    │
+  │ anterior              │                                                                                                                                                    │
+  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 2. remedir L-007      │ feito — 12 colabs / −219,01 h, 9 com saída real                                                                                                    │
+  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 3. O95 com DIFF de    │ feito — turnos_abertos 620 → 464, horas_trabalhadas +1.069,99 h, inconsistencias −237; col51 e col382 explicados (col51 = 3,99 h de feriado        │
+  │ frota                 │ recuperadas; col382 = a minha 1ª versão cortava 2,37 h e 3,56 h dele, e a prova do _ENVELOPE_SS corrigiu)                                          │
+  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 4. condição a mais no │ escrita e medida — CONDICAO_SAIDA_REAL separa quem perde hora total tendo saída real; dos 9, 7 já caíam por campos e ela pega os 2 restantes       │
+  │  aplicador            │ (col890, col450)                                                                                                                                   │
+  └───────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Falta na fila: suíte → push → deploy → smoke → apply da 09 → classe C residual → E5 fatia 1 → E6 rodada 3 com o número final no placar.
+
+✻ Baked for 46m 31s · done 3:56 PM · 1 shell still running
+
+● Background command "Commitar a O95 e esperar a suite" completed (exit code 0)
+
+  Read 1 file
+
+● 11 vermelhos — a cura mexeu na absorção de intervalo e os selos da casa objetaram. Vejo todos antes de decidir:
+
+  Listar os 11 vermelhos
+
+· Slithering… (2m 6s · ↓ 508 tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
