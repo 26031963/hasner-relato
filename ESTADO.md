@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:25:45.**
+**Medido em 27/09/2026 14:30:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso` |
+| `HEAD` local | `acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
 0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
 b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
 73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
-5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
 ```
 
 ## `git status --short`
@@ -87,14 +87,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● O selo de host morde (removendo a chamada fica vermelho) e voltou a OK. Commito tudo e lanço suíte + DIFF — esta DIFF já sai com a lavra de prod, o que muda o número da folga
-  trabalhada:
-
-  Committed 0a657eb0, ran 1 shell command
-
-● A DIFF saiu com a lavra de prod (lavra_de_prod=OK md5=26d7f7ea…). Antes de aplicar, a checagem que a L-007 exige — nenhuma hora pode desaparecer, só o adicional de 100% pode
   mudar:
 
   Ran 1 shell command
@@ -117,9 +109,17 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 
 ● Curo os dois — comparo instantes em vez de extrair data da batida (fica mais estrito, e some o .date()), e congelo o relógio no selo da lavra:
 
+  Searched for 1 pattern, ran 2 shell commands
+
+● O today() restante é na minha própria prosa — o selo passou (35 OK). Reescrevo o comentário para não virar isca e lanço a suíte completa:
+
+  Committed acfa037f
+
+● Confirmo que a cura segue medindo o mesmo depois da troca para instantes, enquanto a suíte roda:
+
   Running 1 shell command…
 
-· Lollygagging… (31m 48s · ↓ 74.3k tokens)
+· Lollygagging… (36m 48s · ↓ 77.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
