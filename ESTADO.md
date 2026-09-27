@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:50:02.**
+**Medido em 27/09/2026 15:55:31.**
 
 | | |
 |---|---|
@@ -113,13 +113,13 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ● A O95 tem efeito grande e coerente: turnos_abertos 620 → 464 (−156), horas_trabalhadas +1069,99 h, inconsistencias −237, e a CONDICAO_SAIDA_REAL separou 2 (col890, col450) — os
   outros 7 com saída real já caíam pelo critério de campos, então nenhum colab com saída real perde hora total. Commito (sem tocar arquivos, a suíte está rodando):
 
-  Commitar a O95 e esperar a suite · 4m 23s
+● Commitar a O95 e esperar a suite · 9m 52s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py app/ponto/management/commands/aplicar_09_corte_b.py &&
      git commit -F - <<'MSGEOF'
-     [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 6… (4m 21s · 5 lines)
+     [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 6… (9m 51s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Grooving… (40m 28s · ↓ 33.1k tokens)
+✢ Grooving… (45m 57s · ↓ 33.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
