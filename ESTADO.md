@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:33:45.**
+**Medido em 27/09/2026 00:39:01.**
 
 | | |
 |---|---|
@@ -48,46 +48,48 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
  M app/ponto/management/commands/diff_reclassificar_partido.py
  M app/ponto/motor_calculo_v2.py
  M app/ponto/services/fechamento.py
+ M app/ponto/tests/test_motor_dna_m3.py
+?? app/ponto/management/commands/e6_piso_autopsia.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Incluir o relato.sh curado e empurrar" completed (exit code 0)
+● O método está legível. O ponto crítico da validação é contra o que ele compara: minutos_realizados + horas_folga_trabalhada. Vejo o que esse campo guarda:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Achei o erro do método, e ele é estrutural. minutos_realizados não é "horas trabalhadas":
+
+  fechamento.minutos_realizados = sum(
+      min((d.get('minutos_realizados') or 0), (d.get('minutos_previstos') or 0))
+      for d in _dt_trab if d.get('tipo_dia') == 'trabalho')
+
+  Três coisas o tornam incomparável com batidas completas: ele é capado no previsto por dia ("cap POR DIA: HE nao tapa furo de outro dia"), só conta dias tipo_dia == 'trabalho', e
+  o próprio modelo diz que ele existe para percentual de cumprimento, não para dinheiro. Escrevo a autópsia que mede isso:
 
   Ran 1 shell command
 
-● 7 falhas, todas minhas. Vejo as sete:
-
-  Ran 1 shell command
-
-● Cinco distintas, e as duas primeiras são graves: um selo da casa diz que entrada 4h10 atrasada É atraso de 250 min, e a minha L-084 (corte de 3 h) agora devolve zero. Leio os
-  dois selos:
-
-  Ran 1 shell command
-
-● Agora o conflito está preciso, e é pergunta de lei, com consequência viva em prod. Vou consertar as três falhas mecânicas e te trazer a pergunta com os números. Primeiro as
-  mecânicas:
+● Duas coisas: o padrão já é informativo, mas a minha sonda tem bug — tipo_dia vem None e prev vem 0 em todos, então a coluna cap_h está não medida, não zero. Vejo as chaves reais
+  do dia:
 
   Ran 2 shell commands
 
-● A porta do FechamentoMensal é ponto/services/fechamento.py. Crio a operação de restauração lá — restaurar snapshot é uma operação nomeada, com trilha:
+● As chaves são previsto, folga, ausencia, feriado — não existe tipo_dia nem minutos_previstos no dict do espelho. Refaço a sonda perguntando ao juiz do previsto:
 
-  Searched for 1 pattern, ran 3 shell commands
+  Ran 1 shell command
 
-❯ corte Ronald (corrige a L-084): o dia so sai do juizo de pontualidade quando ENTRADA E SAIDA estao, as DUAS, a mais de 3 h dos seus marcos (o turno inteiro esta em outro
-  horario = cadastro que nao descreve o dia -> nao desconta, vai para CADASTRO x REALIDADE). Se so UMA ponta esta longe, e atraso ou saida antecipada real e desconta normalmente,
-  com a tolerancia de sempre. O selo antigo (entrada 4h10 atrasada = 250 min de atraso) volta a valer como caso que morde, e a L-084 ganha o par: turno inteiro deslocado nao
-  desconta. Remede a coluna 2 com a regra corrigida e DEPLOY JA, porque a versao atual esta no ar. !
+● Agora os números são reais, e eles corrigem a minha própria crítica ao método:
 
-● Corte recebido — é exatamente a distinção que o conflito dos selos apontava: "ou" vira "E". Implemento, e há um caso que eu preciso te mostrar depois de medir:
+● Os campos que explicam a diferenca
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from ponto.models import FechamentoMensal
+     print('colab | trabalhadas | folga_trab | min_real(h) | intra_ind | atraso | extras | previstos(h)')
+     for pk in (278,203,788,880,923):
+     f…
 
-● Fechar o import e rodar os selos do conflito
-  ⎿  $ sed -i '142a\ from ponto.services.fechamento import restaurar_fechamento' ponto/management/commands/desvio_o68b.py && python3 -c "import ast;
-     ast.parse(open('ponto/management/commands/desvio_o68b.py').read())" && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --…
-
-✢ Canoodling… (3m 43s · ↓ 11.9k tokens)
+✢ Harmonizing… (3m 16s · ↓ 13.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
