@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:54:31.**
+**Medido em 27/09/2026 13:00:01.**
 
 | | |
 |---|---|
@@ -85,39 +85,39 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Duas correções antes do push. A primeira é um buraco real que o conselho fechou: _todas_luzes só junta os dias emitidos, então a luz de uma vizinha reprovada pela guarda pode
-  virar X e apagar a entrada do turno seguinte — silenciando a cobrança:
-
-  Ran 1 shell command
-
-● Background command "Esperar o Ran da suite" completed (exit code 0)
-
-● Background command "Aguardar o veredito final da suite" completed (exit code 0)
-
-● Leitura decisiva de prod: atraso e antecipada já estão aplicados (prod ≈ base depois), mas horas_folga_trabalhada em prod é 2286,53 — idêntico ao "antes" da sombra: os −279 h
-  são deriva REAL e pendente, de origem não nomeada. Isso sai do apply. Vejo a suíte:
-
-  Read 1 file
-
-● Dois vermelhos, e um deles é o selo estrutural que guarda exatamente a guarda que eu reescrevi. Vou ler os dois:
-
-  Ran 1 shell command
-
-● Duas curas: o import datetime as _dt ficou sem uso, e o selo da O65 ancorava num nome de variável (_acesas), que eu renomeei — é a armadilha do selo que varre texto. Reancoro no
-  que carrega significado e num selo que MORDE:
-
-  Ran 1 shell command
-
-● 23 verdes (ruff, mypy, o selo da O65 e os meus 12). Acrescento o caso que morde o buraco da vizinha e commito:
-
-  Committed 42c85223, ran 1 shell command
-
-❯ Antes de aplicar a O68b: das -279 h de folga trabalhada que a deriva move para horas normais, amostra de 5 colabs com as maiores quedas, dia a dia: o plantao COMECOU em dia
-  previsto e entrou pela folga (vira jornada normal, correto pela L-085/L-086) ou COMECOU no proprio dia de folga (turno extra de verdade, tem que CONTINUAR folga trabalhada)? Se
   houver um so do segundo tipo, PAREI com a lista. Nenhuma lei nova.
 
-✢ Hashing… (1h 6m 26s · ↓ 120.4k tokens · still thinking)
+● Ordem recebida e ela decide o apply. Lanço a suíte em segundo plano e vou medir dia a dia — primeiro onde o motor soma folga trabalhada:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● O sítio responde metade da pergunta por construção: folga_trabalhada = (eh_dia_trabalho(data_jornada) is False), e data_jornada é o dia de início. Mas isso é raciocínio; vou
+  medir os 5 maiores, dia a dia:
+
+  Ran 1 shell command
+
+● A resposta ao seu critério é zero do 2º tipo nesses 5 — mas a seleção dos 5 saiu de uma conta MINHA, e isso é sonda própria. Vou ler como o campo é realmente calculado antes de
+  afirmar:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Minha sonda era inválida e a resposta "zero" não vale: os períodos de folga vivem em resultado.periodos_ft, fora de resultado.periodos — por isso deu 0,00 para todos. E o
+  comentário do sítio entrega outra coisa grave: o campo depende da lavra do esmeril (logs/esmeril_espelho.json), e o container da sombra monta --tmpfs /app/logs:
+
+  Ran 1 shell command
+
+● Atenção: minha coluna inicio_trab usou a data de calendário da entrada, não o dia do turno pelo juiz (O76: "o dia do turno vem do juiz"). Os 10 suspeitos são todos períodos de
+  1,00 h de madrugada — exatamente o caso em que o dia do turno é o anterior. Refaço com o juiz antes de declarar PAREI:
+
+  Ran 1 shell command
+
+● Com o juiz do dia do turno sobram 4 — e um só basta. É PAREI. Vou nomear a causa antes de publicar:
+
+  Ran 1 shell command
+
+● dias_folga=None nos dois, então a primeira ramificação é que devia marcar. Suspeito de is False lendo "não sei" como "é dia de trabalho" — confiro chamando com e sem a
+
+* Hashing… (1h 11m 57s · ↓ 139.1k tokens · thought for 10s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
