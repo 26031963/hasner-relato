@@ -16,6 +16,67 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## PAREI: NENHUM dos 37 cadastros "turno_partido" e turno partido. O maior vao e' 70 MINUTOS
+
+Ordem do Ronald (26/09 23:4x): *"o [nome] nao e turno partido -- plantao continuo 21:00-07:00 com
+intervalo de 1 h. Medir o CRITERIO que classifica 'partido' nos 28 colabs: vao entre blocos de cada um
+(1 h x 7 h). Se o criterio for o flag e nao o vao, a raiz e a classificacao."*
+
+**O criterio e o flag.** Medido no codigo: `get_motor` (`ponto/motor_calculo_v2.py:1955`) escolhe a
+classe por `MOTOR_POR_BASE[tipo_escala.tipo_base]`, e `tipo_base='turno_partido'` da
+`MotorTurnoPartido`, que declara `AUT_MARCOS_INTERVALO=False` e `AUT_INTRA_MAX_S=0`. **Nada no
+caminho olha o vao.** A classificacao e' um campo de CADASTRO, e o motor obedece.
+
+### A tabela do vao (competencia 09/2026)
+
+| | |
+|---|---:|
+| colabs com dia trabalhado em 09 e cadastro `turno_partido*` | **30** |
+| templates distintos entre eles | **31** |
+| templates com vao de **60 min** | **25** |
+| templates com vao de **70 min** | 1 |
+| templates **sem intervalo declarado** (`intervalo_modo=duracao`) | 5 |
+| **templates com vao acima de 120 min** (o limite do Art.71) | **0** |
+| **MAIOR vao da frota** | **70 min** |
+| `TipoEscala` com `tipo_base='turno_partido*'` na base inteira | **37 de 338** |
+
+**Nenhum e' turno partido.** Sao jornadas CONTINUAS -- quase todas noturnas de 8 a 10 h -- com
+intrajornada normal de 1 h. O [nome] e o caso exemplar e nao a excecao: `21:00-07:00`, intervalo
+`01:00-02:00`, **60 min**, em quatro templates diferentes (te#318, #328, #467, #468).
+
+Amostra, para a forma ficar visivel: col49 `21:00-07:00 / 01:00-02:00`; col200 `22:00-06:00 /
+02:00-03:00`; col343 `23:00-07:00 / 02:00-03:00`; col382 `23:50-07:50 / 03:50-04:50`; col474
+`17:00-01:00 / 21:00-22:00`; col256/257/266/493 `07:15-17:15 / 12:00-13:10` (70 min, diurno).
+
+### O que esse cadastro errado CUSTA, medido
+
+1. **761 dias de trabalho em 09 nunca chegam ao juiz da ata** -- `_periodos_pelo_marco` retorna na
+   linha 314 antes de qualquer leitura. Metade do plano B (1.484) e' isto.
+2. **O gap S->E deixa de ser intrajornada**: `AUT_INTRA_MAX_S=0` diz "todo gap e' jornada partida".
+   Num 21:00-07:00 com 1 h de intervalo, o dia vira dois blocos independentes -- e o RED do [nome]
+   mostra o efeito: o motor montava UM periodo de **5,01 h** num dia de ~9 h.
+3. **A alimentacao da ata nao basta**: com ela o [nome] recupera a entrada das 21:01 (+3,96 h) mas o dia
+   segue partido em dois, porque o regime declarado divide no intervalo. Curar por alimentacao e'
+   tratar sintoma de um cadastro que mente.
+
+### Por que PAREI, e nao "aplico a cura mais restritiva"
+
+A cura de ORIGEM (L-001) e' o **cadastro**: `tipo_base` de 37 templates. Isso e **dado de ESCALA**, e a
+L-009 nao admite pre-aprovacao -- "mudanca de dado de ESCALA ou VINCULO: sempre o `!` do Ronald". Nao
+e' zelo: reclassificar muda o MOTOR de 30 colabs, e com ele a geometria, a intrajornada e o adicional
+noturno de 761 dias de uma competencia que esta em fechamento.
+
+Tambem nao aplico o patch de alimentacao como paliativo. Ele esta medido e guardado
+(`scratchpad/o68a`, 22 linhas em `turnos_via_autoridade`), e o numero dele esta publicado acima --
+mas com o cadastro certo ele provavelmente vira desnecessario nesses 30, porque o dia passa a ir ao
+juiz como qualquer outro. Aplicar os dois seria curar duas vezes a mesma coisa e depois nao saber qual
+numero foi de qual.
+
+**O que espera o `!`**: reclassificar os 37 templates de `turno_partido` para a base que descreve o
+turno de verdade (continuo com intrajornada), com o DIFF de 09 medido antes. **Proximo passo meu, sem
+esperar**: medir esse DIFF na sombra -- quantos dos 761 dias saem do plano B, quanto dinheiro move, e
+se algum colab sai do TXT.
+
 ## O68 (a): a alimentacao da ata no motor RECUPERA o pareamento -- e move dinheiro em 96 colabs
 
 Hipotese do Ronald (26/09 23:2x): antes de ensinar o juiz da ata a falar de dois blocos, testar se o

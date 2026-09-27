@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:25:45.**
+**Medido em 26/09/2026 22:31:01.**
 
 | | |
 |---|---|
@@ -41,46 +41,47 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
  M app/docs/TICKETS.md
  M app/ponto/management/commands/plano_b_no_dinheiro.py
 ?? app/ponto/management/commands/celula_veredito_velho.py
+?? app/ponto/management/commands/diff_reclassificar_partido.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Cooked for 23s · done 10:23 PM · 1 shell still running
+  de intervalo. O motor obedeceu corretamente a um cadastro errado — e a L-012 da casa é exatamente isso: regra que varia por cliente nasce como cadastro, com nome e leitor. Aqui
+  o leitor existe e funciona; o nome está errado.
 
-● Background command "DIFF da frota com a alimentacao, contra a baseline da sombra" completed (exit code 0)
+  E é por isso que o paliativo da alimentação, que eu havia medido antes da sua correção, era tratamento de sintoma. Com a base certa esses 761 dias passam a ir ao juiz da ata
+  como qualquer outro dia, sem patch nenhum no motor — o que também significa que o número da alimentação (−25,11 h trabalhadas, −10 turnos abertos) provavelmente se sobrepõe a
+  este, e somar os dois seria contar a mesma cura duas vezes.
 
-  Read 1 file
+✻ Worked for 27s · done 10:29 PM · 1 shell still running
 
-● O DIFF veio. Isolando contra a baseline da sombra que eu já tinha, o efeito próprio da alimentação:
+❯ publica o numero quando o recalculo acabar
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Monitor "DIFF da frota com a alimentacao da ata" stream ended
+● Combinado — o monitor está armado e publico no RELATO assim que o recálculo fechar, sem precisar de novo pedido seu.
 
-❯ (1) O68: o [nome] (col857) nao e turno partido -- plantao continuo 21:00-07:00 com intervalo de 1 h. Medir o CRITERIO que classifica "partido" nos 28 colabs: vao entre blocos de
-  cada um (1 h x 7 h). Se o criterio for o flag AUT_MARCOS_INTERVALO e nao o vao, a raiz e a classificacao: partido de verdade (vao acima do limite do Art.71, 2 h) segue pela
-  geometria alimentada pela ata; o resto vai ao juiz como qualquer dia. Tabela dos 28 com o vao, antes do patch.
-  (2) O71: col107 com turnos_abertos +2 e -7,33 h e a assinatura contraria a da cura -- autopsia dia a dia antes do !; col499 junto. Nao aplica o recalculo de nenhum dos dois ate
-  a causa ter nome. Nenhuma lei nova.
+  O recálculo está lento porque é o caso mais pesado da noite: as quatro empresas inteiras recalculadas com 37 motores trocados, ou seja 30 colaboradores mudando de geometria, e
+  tudo dentro de um atomic() que termina em raise. Os ensaios anteriores trocavam dado; este troca o motor.
 
-● Sua correção é a raiz e derruba a minha premissa: eu tratei o Jean como turno partido porque o motor dele diz AUT_MARCOS_INTERVALO=False, e nunca perguntei se ele é partido. Um
-  plantão 21:00–07:00 com 1 h de intervalo não é partido. Registro as duas ordens e vou ao critério:
+  O bloco que vai ao RELATO já está definido: o plano dos 37 template por template com o vão, o DIFF por campo incluindo horas_atraso, horas_saida_antecipada e saldo_banco_horas,
+  os vinte maiores por horas_trabalhadas, e — o que decide — quem entra e quem sai do classificar_export.
 
-  Ran 3 shell commands
+  Sobre esse último, adianto qual vai ser a minha leitura, para você saber o critério antes do número: se qualquer colaborador sair do TXT, isso vira PAREI com a lista, sem
+  exceção. A reclassificação é dado de escala e já exige o seu ! pela L-009 de qualquer forma — mas a diferença entre "o ! é sobre horas que mudam" e "o ! é sobre alguém que deixa
+  de receber" é grande o suficiente para merecer estar na primeira linha do que eu te entrego, não no meio da tabela.
 
-● MOTOR_POR_BASE[tipo_base] — o critério é o campo de cadastro TipoEscala.tipo_base, não o vão. Sua hipótese está certa. Monto a tabela dos 28 com o vão:
+✻ Baked for 16s · done 10:30 PM · 1 shell still running
 
-● Tabela dos colabs de cadastro partido com o vao entre blocos
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     import datetime
-     from escala.models import EscalaColaborador, TipoEscala, CelulaDia
-     from colaboradores.models import Empresa
-     from ponto.janelas import janela_fechamento
-     from esca…
+❯ commit e push o que ja esta medido
 
-* Cascading… (1m 54s · ↓ 7.3k tokens)
+● Antes do commit: os dois comandos novos precisam de casa em FORA_DE_PIPELINE, senão o selo test_todo_command_tem_casa derruba o push — foi assim que o push47 caiu.
+
+● Running 1 shell command…
+
+· Befuddling… (36s · ↓ 1.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
