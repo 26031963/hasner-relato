@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 17:16:40.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.1 MB). Acoes na janela: **399**.
+**Medido em 27/09/2026 17:20:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.3 MB). Acoes na janela: **403**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:18:28 | Bash | Curar o X nao carimbado e medir os REDs | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ if t == "X": # A ATA DISSE QUE ESTA BATIDA NAO E BORDA (O68b): ela esta DENTRO do vao da ata e nenhum # marco a reivindicou. Entra no turno como batida interna -- nao abre, nao fecha, e nao se # perde (a marcacao continua no dia, que e o que a Portaria 671 exige da EXIBICAO). if cur is not None: cur["batidas"]. ...` |
+| 17:17:52 | Bash | Ler a cadeia do bug que eu introduzi | `sed -n '700,715p' ponto/turnos.py; echo '=== _pares_marcados ==='; sed -n '434,450p' ponto/turnos.py; echo '=== realizado_dos_turnos, o bruto ==='; sed -n '396,410p' ponto/turnos.py` |
+| 17:17:14 | Bash | Listar TODAS as afirmacoes sem prova | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md 2>&1 \| head -20; echo "rc=$?"` |
+| 17:16:59 | Bash | Ler a regra exata do relato.sh | `cd /home/ronald/saas-hasner && sed -n '55,90p' bin/relato.sh` |
+| 17:16:38 | Bash | Publicar o DRY, o laudo e a colisao de lei | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() anc = '# APPLY DA 09 FEITO' i = s.index(anc) novo = '''# DRY DO MUTIRAO (nada enviado) e o LAUDO DO DIA IMPAR -- com uma COLISAO DE LEI para voce (27/09 ~21:xx) ## DRY do mutirao aos colabs -- **PROIBIDO enviar, e nada foi enviado** Fonte: `relatorios/2709/lista_acao_09.csv`, linhas com `quem=COLAB`. **184 colabs**, todos com a mesma acao (" ...` |
 | 17:15:45 | Bash | Pegar o total da serie T | `cd /home/ronald/saas-hasner && grep -oP 'serie T \K[0-9]+' <(bash bin/tickets_rodape.sh --escrever 2>&1) \| head -1` |
 | 17:15:17 | Bash | DRY do mutirao com o texto real e o canal | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/mutirao_dry.py <<'PYEOF' # DRY do mutirao: quem, quantas perguntas, canal, e o TEXTO REAL que o sistema manda. NAO ENVIA NADA. from django_tenants.utils import schema_context from django.apps import apps import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m._ ...` |
 | 17:14:37 | Bash | Ler o texto real da cobranca | `sed -n '120,150p' chamados/services/cobranca.py; echo '=== ha comando de mutirao/cobranca em lote? ==='; ls chamados/management/commands/ \| grep -iE 'cobran\|mutir\|lembr\|avis' \| head` |
@@ -408,4 +413,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:30:41 | Bash | Ler a definicao da O51b | `grep -n 'O51b' docs/BACKLOG.md \| cut -c1-500` |
 | 05:29:53 | Bash | Medir o alcance da cura da O73 na frota | `cat > /tmp/o73_alcance.py <<'PYEOF' """Alcance da cura da O73: quantos colabs tem dia com MAIS DE UM bloco e SEM marco de intervalo? E quanto de atraso/antecipada ela tirou de cada um.""" from django.apps import apps from django.utils import timezone as tz import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) Col, EC, FM = G('Colaborador'), G('Escala ...` |
 | 05:29:19 | Bash | Conferir o push do resumo | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg13o0d60.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD; date '+%H:%M'` |
-| 05:18:55 | Bash | Fechar e publicar o resumo da noite | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() s=s.replace("""\| **04:28** \| **O87** -- o cadastro recusa intervalo fora do turno \|""", """\| **05:08** \| **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados \| selo com 7 casos verde; snapshot lavrado a mao (13 em 459 na competencia aberta). Push `d070cf9d` \| \| **04:28** \| **O87** -- o cadastro recu ...` |

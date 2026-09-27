@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:16:40.**
+**Medido em 27/09/2026 17:20:31.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M app/ponto/services/fechamento.py
+ M app/ponto/turnos.py
 ?? app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
 ```
@@ -94,44 +95,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PROIBIDO: fallback, fatia posterior, item proprio, autoridade nova.
-  PRONTO por fatia: RED nomeado + commit + relato; sem isso = INCOMPLETO com lista.
-  Commit termina com: BUG ENCONTRADO: <o que> | TOTAL serie T: N
+  como pergunta com as duas leis citadas (L-NNN), sem escolher lado.
 
-● Ordem nova anotada — O81-CURA depende do censo, que ainda está medindo. Fecho o DRY do mutirão com o texto real do sistema (cobranca.py::_texto_do_toque, não texto meu) e meço o
-  canal dos 184:
+● Ordem recebida. Vejo o que o relato.sh cobra e varro o RELATO inteiro numa passada:
+
+  Ran 2 shell commands
+
+› Message from @a383d3bbe278fc59f (ctrl+o to expand)
+
+● Agent "Autopsia E6 lote 3" finished · 32m 42s
+
+● A autópsia do lote 3 achou uma regressão minha, de hoje, em produção, inflando pagamento — isso fura a fila pela LEI-AKITA 6. O X que eu introduzi entra no turno sem carimbar
+  _intra_dur, então _pares_marcados fica cego a ele e a pausa é paga como trabalho:
 
   Ran 1 shell command
 
-● DRY completo: 184 colabs, 3.153 perguntas, 158 com canal e 26 sem, com o texto real do sistema. Publico isso, o laudo do dia ímpar, e a colisão de lei que preciso te devolver:
+● Mais fundo do que o carimbo: _pares_marcados também exige S→E do tipo gravado — e o X existe justamente porque a ata desmente o gravado. Curo as duas pontas:
 
-  Publicar o DRY, o laudo e a colisao de lei
+● Curar o X nao carimbado e medir os REDs
   ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     anc = '# APPLY DA 09 FEITO'
-     i = s.index(anc)
-     novo = '''# DRY DO MUTIRAO (nada enviado) e o LAUDO DO DIA IMPAR -- com uma COLISAO DE LEI para voce (27/09 ~21:xx)
-     ## DRY do mutirao aos colabs -- **PROIBIDO enviar, e nada foi enviado**
-     Fonte: …
+     import py_compile
+     p='ponto/turnos.py'; s=open(p).read()
+     velho = """ if t == "X":
+     # A ATA DISSE QUE ESTA BATIDA NAO E BORDA (O68b): ela esta DENTRO do vao da ata e nenhum
+     # marco a reivindicou. Entra no turno como batida interna -- nao abre, nao fecha, e nao se
+     # perde (a marca…
 
-✶ Puzzling… (57m 51s · ↓ 61.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Waiting for API response · will retry in 2m 34s · check your network
 
-❯ aval Ronald: (1) O81-CURA so comeca depois do meu corte escrito sobre a tabela a/b/c do censo; censo pronto = PARAR e publicar. (2) RELATO retido de novo em RELATO.md:74:
-  varrer o RELATO inteiro por afirmacao de ato sem PROVA: ao lado, curar todas numa passada e republicar antes do DRY do mutirao. (3) A colisao de lei do dia impar vem ao RELATO
-  como pergunta com as duas leis citadas (L-NNN), sem escolher lado.
-  ctrl+x ctrl+s to send now
+› Message from @ae9d376eeecd3e213 (ctrl+o to expand)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading test_o68b_fecha_aberto_com_saida_seguinte fixture                                                                          32m 10s · ↓ 254.7k tokens
-  ◯ general-purpose  Inspecting col243 ata lampadas in probe1_out                                                                                       32m 10s · ↓ 218.7k tokens
-  ◯ general-purpose  Persisting taxonomy summary to RELATO_LOTE3.txt                                                                                    32m 10s · ↓ 234.4k tokens
-  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  32m 10s · ↓ 162.7k tokens
-  ◯ general-purpose  Reading montar_dias head in espelho.py                                                                                               2m 47s · ↓ 95.7k tokens
+  ◯ general-purpose  Writing taxonomy summary to LAUDO.txt                                                                                               36m 0s · ↓ 260.6k tokens
+  ◯ general-purpose  Auditing ORA_SEM_TURNO rows in e6b.py                                                                                               36m 0s · ↓ 176.0k tokens
+  ◯ general-purpose  Listing janela helpers in ponto/janelas.py                                                                                          6m 37s · ↓ 104.6k tokens
   ⧉  index
 ```
