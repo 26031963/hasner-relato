@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:16:23.**
+**Medido em 27/09/2026 02:21:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4715f757 [O86] a classe B e 84% CODIGO: em 151 dos 313 turnos abertos havia um S na mao e o pareador nao fechou` |
+| `HEAD` local | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
+21cb89f7 [TICKETS] placar do topo com o push que pousou (c6c3785b) -- a regua barrou o push por isso
+31790c43 [E1] o colateral que a suite achou: dois fixtures mais nasciam invertidos, e o argumento e `condition`
 4715f757 [O86] a classe B e 84% CODIGO: em 151 dos 313 turnos abertos havia um S na mao e o pareador nao fechou
 18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro
-f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome
-88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437
-3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D
 ```
 
 ## `git status --short`
@@ -85,44 +85,44 @@ f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Rodar a suite inteira antes da migration" completed (exit code 0)
 
-● Os backticks foram interpretados pelo bash e comeram palavras da mensagem. Reescrevo por heredoc, que é como fiz nos outros:
+● Background command "Esperar o veredito da suite do E1" completed (exit code 0)
 
-  Ran 3 shell commands
+  Read 1 file
 
-● Publicado (944cdc3). A suíte ainda roda, e ela bloqueia push e edição de .py. Uso a espera para a classe B, que é a maior (733,7 h): os turnos abertos têm batida que os
-  fecharia, ou a pessoa não bateu a saída?
+● Três quebras, e as duas primeiras são exatamente o colateral que meu censo AST não pegou (datas não literais). A terceira é o mypy no meu código novo. Vejo as três:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● mypy pegou o certo: nesta versão do Django o argumento é condition, não check (check está depreciado). Curo na origem, nos dois sítios:
+
+  Ran 2 shell commands
+
+● 33 OK, mypy incluído. Commito as curas do colateral e empurro — o pre-push roda a suíte inteira, que é o portão da migration:
 
   Ran 1 shell command
 
-● Número decisivo para a fila: a classe B é 84% código.
+● Push barrado pela régua: a linha de placar do TICKETS está velha (diz d39c0696, o mundo diz c6c3785b). A própria régua dá a cura:
 
-  ┌────────────────────────────────────────────────┬───────────┬───────────────────────────────────────┐
-  │        o que o turno aberto tem depois         │   casos   │                leitura                │
-  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
-  │ havia um S em até 16 h e o pareador não fechou │ 151 (48%) │ código — bug próprio, ainda sem causa │
-  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
-  │ a batida seguinte é outro E                    │ 112 (36%) │ a família da O84 (E consecutivos)     │
-  ├────────────────────────────────────────────────┼───────────┼───────────────────────────────────────┤
-  │ nenhuma batida em 16 h                         │  50 (16%) │ furo real, comportamento              │
-  └────────────────────────────────────────────────┴───────────┴───────────────────────────────────────┘
+  Ran 1 shell command
 
-  O col788 (63 abertos) é uma cadeia de E seguidos — alvo exato da cura (2) da O84. Publico:
+● A régua agora cobra linha no TICKETS para as fatias que citei. Vejo o formato da tabela e abro as linhas:
 
-  Registrar a O86 e publicar · 2s
+● Abrir as linhas no TICKETS e empurrar · 29s
   ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## Classe B (733,7 h, a maior) e **84% CODIGO**, e 36% dela e a cura da O84
-     Pergunta que decide se a classe B e bug ou comportamento: o turno que ficou ABERTO tem, depois dele,
-     uma batida que o fech…
+     p='docs/TICKETS.md'; s=open(p).read()
+     anc = '|----|--------|-------|--------|--------|------|------|-------------|------|\n'
+     linhas = (
+     "| O82 | infra/deploy | o portao do ensaio e cego entre 00:00 e 04:00: `sombra.sh:203` soma +1 a divergencia quando o dump nao e do DIA, e o … (28s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (1h 1m 5s · ↓ 202.1k tokens)
+✢ Unfurling… (1h 5m 43s · ↓ 214.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
