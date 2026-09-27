@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:56:31.**
+**Medido em 27/09/2026 05:02:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)` |
+| `HEAD` local | `512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama` |
 | `origin/main` | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama
 da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)
 4a6bc47b [O66+O91] o contador do beco nasce -- e no primeiro uso desmente a minha propria frase
 9060f899 RELATO da noite: a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald
 dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca
-b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_o66_furo_sem_canal.py
- M app/config/crons.py
- M app/docs/ARQUITETURA.mmd
 ?? esteira.pausada
 ```
 
@@ -88,15 +85,6 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● data_ini é obrigatório e eu não o passei. Espelho o irmão e corrijo também minha afirmação sobre "todas furo", que valia só para a janela de 09:
-
-  Ran 1 shell command
-
-● Lavrado. Corrijo o RELATO com os dois recortes e empurro:
-
   Ran 1 shell command
 
 ● [RELATO-NOITE] é a mesma armadilha: tag entre colchetes é lida como fatia. A forma limpa é não usar colchetes em commit que não é fatia:
@@ -113,15 +101,24 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ● Quatro quebras, todas minhas e todas com cura óbvia. Vejo as três primeiras:
 
-● Mover o cron para 07:36 e rodar os selos · 2m 24s
-  ⎿  $ python3 - <<'PYEOF'
-     p='config/crons.py'; s=open(p).read()
-     velho = " C('23 7 * * *', 'lavrar_furo_sem_canal', '--apply',"
-     novo = (" # 07:36 e nao 07:19/07:23: o bloco das 07h e denso e o selo `test_sem_sobreposicao_no_bloco_diario`\n"
-     " # cobra folga contra a DURACAO medida (crons_duracao.json). 0… (2m 23s · 2 lines)
+  Ran 4 shell commands
+
+● O core.tests.test_contract_crons não existe (é chamados.) — erro meu de label. Restam os selos do diagrama; vejo o que eles cobram:
+
+  Ran 1 shell command
+
+● O selo nomeia bin/gerar_diagrama.py (script de host), e eu rodei o manage.py gerar_diagrama — são dois geradores. Rodo o que o selo cobra:
+
+  Ran 1 shell command
+
+● Selo do diagrama verde (era a mudança do cron depois da primeira regeneração). Empurro:
+
+● Commitar as quatro curas de selo e empurrar · 4m 18s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/config/crons.py
+     app/config/crons_duracao.json app/chamados/tests/test_o66_furo_sem_canal.py app/docs/ARQUITETURA.mmd app/docs/MAPA.md app/docs/T… (4m 16s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Harmonizing… (28m 13s · ↓ 41.1k tokens)
+✢ Harmonizing… (33m 43s · ↓ 43.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
