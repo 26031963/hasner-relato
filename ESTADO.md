@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:06:03.**
+**Medido em 26/09/2026 21:11:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou` |
+| `HEAD` local | `d08dd6d8 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias` |
 | `origin/main` | `068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,48 +22,24 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d08dd6d8 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias
 068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou
 a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam de 116h para 7 minutos
 9b67131e [O69 VINCULO-DO-DIA] o fechamento pergunta a CELULA qual vinculo vale no dia -- sobreposicao para de dobrar
 28c7c62c [O69 VINCULO-DO-DIA] PAREI: DIFF medido -- dinheiro move -399,76 h em 7 colabs, e so 1 dos 9 do TXT
-fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO sao da E1, mas 3 dos 25 sao
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/escala/alimentacao.py
- M app/ponto/services/espelho.py
- M app/relatorios/pdf_espelho.py
-?? app/ponto/tests/test_vinculo_do_dia_pela_celula.py
-?? app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O carimbo diz dia=20260926. Eu escrevi "27/09" em código e docs — confiro a data real antes de deixar isso na árvore:
-
-  Ran 1 shell command
-
-● Errei a data em tudo: são 26/09 21:03, não 27/09. Corrijo antes de qualquer commit — data errada quebra a forense da casa:
-
-  Ran 1 shell command
-
-● Agora o DIFF na sombra, com o medidor chamando as funções reais:
-
-  Read 1 file, ran 2 shell commands
-
-● Background command "Medir na sombra a exposicao da cura do vinculo do dia" completed (exit code 0)
-
-  Read 1 file
-
 ● minutos volta None quando o dia não tem turno (o --). Curo o medidor — None não é zero:
 
   Searched for 1 pattern, ran 3 shell commands
@@ -74,13 +50,30 @@ fac5f59c [O69 VINCULO-DO-DIA] o MEDIR ANTES respondido: os 4 de zero vinculo NAO
 
 ● Medido e é pequeno e nomeado. Agora a guarda que importa: tela == PDF, que é o que a cura poderia ter quebrado.
 
-  Pdf_x_espelho na sombra depois da cura
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file .env
-     \
-     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
-     -e HTTP_PROXY=http://127.0…
+  Listed 1 directory, ran 2 shell commands
 
-· Slithering… (29m 40s · ↓ 55.7k tokens)
+● Background command "pdf_x_espelho na sombra depois da cura" completed (exit code 0)
+
+  Read 1 file
+
+● pdf_x_espelho_divergentes = 0 em 199 colabs: tela e PDF concordam depois da cura nos dois. Gravo a medição e commito:
+
+  Ran 3 shell commands
+
+● Commitado d08dd6d8. Agora a suíte completa, que é o portão do DEPLOY JÁ:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● #2 do advisor procede: escrevi "andou PARA a folha" sem medidor. Meço os dois colabs e os 8, em vez de suavizar a frase:
+
+● Chaves do retorno e do dia
+  ⎿  $ sed -n '645,652p' ponto/services/espelho.py; echo "=== como o dia guarda o realizado ==="; grep -n "_real_dia" ponto/services/espelho.py | head
+
+✢ Slithering… (35m 8s · ↓ 64.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

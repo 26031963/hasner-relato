@@ -16,6 +16,82 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## O69 LADO DO ESPELHO: a regra propria tinha QUATRO copias, e o numero e -85 min
+
+O fechamento foi curado e aplicado hoje (654,74 h). Faltava a TESTEMUNHA -- e a LEI-AKITA 2 nao
+admite a tela respondendo "qual vinculo vale neste dia" com regra diferente da folha.
+
+**RED evidenciado antes da cura** (`ponto.tests.test_vinculo_do_dia_pela_celula`): dia com celula
+gerada pelo vinculo B (intervalo de 2 h) e o vinculo A ATIVO por cima (intervalo de 1 h). A coluna
+Realizado dizia **480 min**; a folha, **420 min**. Uma hora por dia de mentira, e o documento do
+Art.74 §2 desenhando o numero errado.
+
+### Onde a regra morava -- eu tinha dito TRES sitios, e eram QUATRO
+
+| sitio | a regra | estado |
+|---|---|---|
+| `ponto/services/fechamento.py` | exigia vinculo ATIVO, somava por escala | **curado e aplicado** (654,74 h) |
+| `ponto/services/espelho.py:186` | `max(vig, key=(e.ativa, e.data_inicio))` | **curado agora** |
+| `relatorios/pdf_espelho.py:539` | a MESMA linha, copiada | **curado agora** |
+| `ponto/turnos.py:400` | `order_by('-ativa','-data_inicio')` sem alimentacao | declarado: EXIBICAO |
+| `ponto/turnos.py:670` | `papel_por_minuto_da_ata`, por JANELA | declarado: fila da O68 |
+
+O `pdf_espelho.py:539` eu **nao tinha visto** -- quem o achou foi o censo em AST, nao a minha
+leitura. E ele nao era opcional: curar a tela e deixar o cartao poria `pdf_x_espelho` fora de zero,
+que e meia-correcao com nome proprio.
+
+Juiz unico: `escala/alimentacao.py::vinculo_do_dia` (puro, sem query, delega a
+`CelulaDia.escala_geradora`). Quem alimenta passou a carregar o vinculo que a celula NOMEIA
+(`pk__in` das geradoras): sem isso, geradora com vigencia impossivel -- 51 colabs medidos -- ficaria
+fora da janela e o dia perderia o intervalo CALADO.
+
+### MEDIDO na sombra (`vinculo_do_dia_divergentes`, competencia 09/2026, 870 colabs)
+
+| o que | numero |
+|---|---:|
+| dia-colab em que a celula DISCORDA da regra propria | **1.029** (em 55 colabs) |
+| desses, que MUDAM o numero do dia | **2** |
+| delta total | **-85 min (-1,42 h)** |
+| um lado diz "--" e o outro da numero | 0 |
+| geradora que a janela nao carregava (curada pelo `pk__in`) | 0 |
+| dia-colab SEM geradora na celula (fallback declarado) | **6.848** |
+
+| colab | dia | vinculo velho -> celula | min |
+|---|---|---|---|
+| col515 | 11/09 | **nenhum** -> 1220 | 593 -> 533 (**-60**) |
+| col107 | 23/08 | 1201 -> 1204 | 374 -> 349 (**-25**) |
+
+O col515 e a classe inteira em um caso: a regra velha nao achava vinculo cobrindo o dia, caia no
+`intervalo=(None, None)` e **nao descontava intervalo nenhum** -- 593 min. A celula sabia quem gerou
+o dia desde sempre.
+
+**Dinheiro nao se move**: o gravado e' do fechamento, que ja obedece a celula. Os -85 min sao a
+testemunha andando PARA a folha, nao para longe dela. Prova: **`pdf_x_espelho_divergentes = 0`** em
+**199** colabs na sombra depois da cura.
+
+### O que NAO fechou, com o universo medido
+
+O **topo** do espelho (`espelho.py:~598`) roda o motor UMA vez para a janela com o `tipo_escala` do
+vinculo ATIVO. Nao e a coluna, e so muda numero para quem TROCA de vinculo no meio da competencia
+com tipos diferentes: **8 colabs** em 09/2026, a classe que a O67 deixou aberta. E' escolha por
+PERIODO, mesma forma de `papel_por_minuto_da_ata` -- as duas estao DECLARADAS no censo, com teto que
+so encolhe, e vao na O68.
+
+### O selo, e por que o primeiro nasceu cego
+
+A 1a versao era `grep` em bash e estava cega por **tres** motivos ao mesmo tempo: `filter(` quebrado
+em duas linhas fugia do `[^)]*`; a regra de verdade (`max(vig, key=...)`) nao tem `objects.filter`
+nenhum para casar; e os 6 arquivos que ela acusava eram vigias e telas respondendo "quem esta ativo
+HOJE", que e outra pergunta. Foi trocada por censo em **AST** sobre os 6 modulos de dinheiro e
+testemunha, com teto declarado por arquivo. Ele achou dois sitios que eu nao tinha lido
+(`turnos.py:670`, meu, de ontem; e `pdf_espelho.py:539`) e um erro meu de contagem (declarei 1 em
+`turnos.py`, sao 2).
+
+E a guarda anti-vacuidade fez o trabalho dela **contra mim**: a 1a fixture do RED dava 450 min pelos
+DOIS vinculos -- a celula congelada entrega os mesmos marcos para qualquer vinculo, porque ela e do
+COLABORADOR -- e o teste do espelho passava VAZIO. Quem denunciou foi
+`test_MORDE_os_dois_vinculos_dao_realizados_DIFERENTES`.
+
 ## APLICADA a O69 (654,74 h) -- e os sobrepostos cairam de 116h para 7 minutos
 
 607 colabs recalculados em 09/2026, e a **conferencia pos-apply de 607 x 27 campos contra o previsto
@@ -7132,6 +7208,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 20:05 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
+
+
+**26/09 21:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
