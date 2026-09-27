@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:32:01.**
+**Medido em 27/09/2026 13:37:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| `origin/main` | `5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/ponto/juiz_batida.py
 ?? esteira.pausada
 ```
 
@@ -86,22 +87,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
-● O pre-push roda o TICKETS, as rotas e a suíte sobre o commit — não a pasta de selos de host, então os dois vermelhos antigos não bloqueiam. Empurro:
-
-  Ran 1 shell command
-
-● A régua cobra linha no TICKETS para a O93 e está certa. Acrescento:
-
-  Committed 5215187e, pushed to main, ran 1 shell command
-
-● Push pousou (6060994d..5215187e), suíte verde sobre o commit empurrado (8447 + 22 do control-plane). DEPLOY JÁ — nenhum modelo tocado:
-
-  Ran 1 shell command
-
-● Subiu. Smoke no worker servido — hora dos workers contra a hora dos arquivos, e o caso pelo motor que está no ar:
-
-  Ran 1 shell command
-
 ● Workers de 16:22:43 UTC (13:22 local), arquivos de 12:52 e 12:10 — o worker servido é mais novo que o código, e os três casos provam no ar. Publico onde você clica e fecho o
   RELATO:
 
@@ -113,12 +98,28 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● O tag [RELATO-O68b] é lido como ID de fatia — mesma fricção de antes. Uso o tag da fatia que já tem linha:
 
-  Atualizar o rodape e empurrar · 7m 1s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2 && git add app/docs/TICKETS.md && git commit --amend --no-edit -q &&
-     bin/regua_tickets.sh 2>&1 | tail -3 && timeout 2400 git push origin main 2>&1 | tail -10 (6m 59s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Amended commit fdbf32d8, pushed to main
 
-✢ Warping… (21m 58s · ↓ 14.2k tokens)
+● Push pousou (5215187e..73322ebd). O item está fechado: órfã curada, 13 selos, PROVA com a deriva isolada, apply PAREI pelo seu critério, código no ar e provado no worker
+  servido. A fila 1 não está vazia, então sigo no mesmo turno para a classe D / O84. Leio quem produz a forma ·I:
+
+  Ran 2 shell commands
+
+● A forma ·I não tem instante de marco, então a luz não tem âncora de data — e é aí que o juiz trava. Vejo se o leitor_celula já resolve isso (pode haver autoridade para ler, em
+  vez de derivar):
+
+  Ran 1 shell command
+
+● A casa já tem posição declarada sobre a forma ·I: "Sem marco nao ha desvio a medir" — e ela está certa sobre desvio. Mas a pergunta da classe D é outra: qual o papel desta
+  batida, e o rótulo ·In o carrega posicionalmente (escala/utils.py:962). É a distinção da minha memória: calar o juízo só quando o dado ausente o torna impossível.
+
+● Provar o RED do col85 pelo juiz
+  ⎿  $ grep -n '^import \|^from ' ponto/juiz_batida.py | head -6; echo '--- RED do col85, pelo juiz ---'; cd /home/ronald/saas-hasner && docker exec saas_core python manage.py
+     tenant_command shell --schema=juliani --command "
+     from escala.models import CelulaDia, EscalaColaborador
+     from ponto.juiz_batida …
+
+· Warping… (27m 28s · ↓ 23.0k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
