@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:00:02.**
+**Medido em 26/09/2026 22:05:31.**
 
 | | |
 |---|---|
@@ -44,43 +44,43 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Três conclusões que só existem porque a segunda corrida foi feita:
 
-  A rejulga de 09 move dinheiro zero. Os 158 vereditos e as 5.081 lavras de ata não mudam um centavo do gravado.
+  A diferença de dinheiro entre os dois bancos é a prova de que a deriva de +142,14 h era da sombra estar desatualizada: prod já absorveu a E3 e a O69 hoje.
 
-  Os +142,14 h são deriva pura — o FechamentoMensal de 09 está atrasado em relação ao motor de HEAD, e qualquer recálculo o traz ao presente, com O71 ou sem ela, hoje ou segunda.
-  É o passivo que o handoff já registrava como "67 de 603 divergem".
+  Mas apareceu um número que na sombra era zero: −6,33 h em 2 colabs. Preciso saber se é da rejulga ou deriva residual, e essa distinção tem consequência — é o número que o DP vai
+  ver quando o recálculo acontecer. Estou medindo o baseline de recálculo puro em prod antes de aplicar, porque depois do apply esse baseline não existe mais.
 
-  O efeito próprio da O71 no TXT são +2 colabs: col830 e col56, que saíam por furo_espelho. Os outros quatro (col964–967) entram pelo recálculo — não tinham FechamentoMensal e ele
-  criou um.
+  O apply em si continua sendo dinheiro literalmente zero: ele não recalcula, então o gravado não se move. O −6,33 h é efeito futuro, do próximo recálculo — e vou reportá-lo
+  separado em vez de deixá-lo embutido num total.
 
-  O que espera o seu ! é a deriva de +142,14 h / +83,33 h de HE. Ela não está em aval nenhum: o seu ! de critério cobre a parte (a) da O68, e este número não é dela.
+✻ Cogitated for 36s · done 10:02 PM · 2 shells still running
 
-  A O71 não está travada e eu sigo com ela: dinheiro gravado zero, ninguém sai, sua condição fechada. Fica dito apenas que o ganho dela no TXT só se materializa quando houver
-  recálculo — e nesse instante a deriva vem no mesmo ato, porque é o mesmo ato.
+● Background command "Baseline da deriva pura em prod" completed (exit code 0)
 
-  Sobre o contador: 158, contra as 1.504 da minha primeira versão. Não publiquei aquele número porque a matriz se denunciava — 822 nunca_bateu → concorde, e nunca_bateu não existe
-  no _MAPA_VEREDITO. Eu havia derivado o veredito dos códigos e chamado aquilo de "o juiz de hoje", reproduzindo metade do juiz: a lei que eu tinha citado na docstring do próprio
-  medidor. A versão que vale intercepta o escritor único.
+  Read 1 file
 
-✻ Worked for 1m 17s · done 9:55 PM · 2 shells still running
+● Separação perfeita em prod: recálculo puro move nenhum campo, 0 entram, 0 saem — o gravado está em sincronia com o motor de HEAD, efeito dos applies da E3 e da O69 hoje.
 
-❯ aplica a O71 em prod (dinheiro zero) e segue pra O68
-
-● Antes de aplicar: a sombra é de 04:15 e os applies da E3 e da O69 foram depois disso, então os números de prod podem não ser os mesmos. Rodo o ensaio em prod e só então aplico:
+  Logo o −6,33 h é 100% da O71. Confirmo se são os mesmos 2 colabs que entram, em vez de supor:
 
   Ran 1 shell command
 
-● Ensaio em prod rodando (dentro de atomic() com raise — o mesmo padrão do apply da O69). Não toco em .py enquanto ele lê a árvore montada.
+● O baseline fechou a questão: recálculo puro em prod não move nada — nem um campo, nem uma entrada, nem uma saída. O gravado está em sincronia com o motor de HEAD, resultado dos
+  applies de hoje.
 
-  O --aplicar que escrevi tem uma trava embutida que vale explicitar: ele desliga o recálculo à força. Se alguém (eu, amanhã, com menos contexto) passar --aplicar esperando ver o
-  TXT mudar, o comando responde que o recálculo está desligado e por quê — porque o dinheiro gravado só fica em zero enquanto não há recálculo, e juntar os dois atos aplicaria sem
-  aval os +142,14 h que o aval não cobre. E ele exige --antes, o snapshot das 17.332 células, que é a frase de reversão: sem arquivo, não aplica.
+  Portanto o −6,33 h é inteiramente da O71, não deriva. Isso é bom: significa que o número tem dono.
 
-✻ Worked for 47s · done 9:56 PM · 2 shells still running
+  Falta uma pergunta que eu não vou responder por dedução: o dinheiro se moveu nos mesmos 2 colabs que entram no TXT, ou em outros 2? A saída só dizia "2 colabs" nas duas linhas,
+  e "dois aqui, dois ali" não é a mesma coisa que "os mesmos dois". Se forem os mesmos, o movimento está exatamente onde a cura mira — a forma que a L-082 pede. Se forem outros, é
+  dinheiro fora do alvo e eu paro.
+
+  Acrescentei ao medidor a lista por colaborador quando são poucos, marcando quem entra/sai e quem só tem dinheiro. Sem o nome ao lado do número não se sabe qual dos dois casos é
+  — e essa foi a diferença entre o ! de manhã ter sido cumprido ou violado.
+
+✻ Worked for 44s · done 10:04 PM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ se forem os mesmos 2, aplica e segue pra O68
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
