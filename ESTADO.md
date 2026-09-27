@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:33:23.**
+**Medido em 27/09/2026 01:38:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado` |
+| `HEAD` local | `fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA
 5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado
 2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro
 c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
 c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas, e o MODO 24H separando por colab
-4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min
 ```
 
 ## `git status --short`
@@ -77,40 +77,40 @@ c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
+  (1) C -- o espelho ve e o fechamento nao: 33 colabs, 442 h. RED col882 (77 h) e col515 (39 h). Classe nova: mesma fonte, dois numeros. Autopsia dia a dia (dia do espelho x
+  periodo do fechamento), causa por arquivo:linha, cura na origem, DIFF pelo criterio do MODO 24H.
+  (2) D -- nem o espelho ve plantao completo: 20 colabs, 209 h. RED col300 02/09 (17:53-06:03), col904 22/08 (18:50-06:57), col85 21/08 (18:56-07:02). Mesma receita.
+  (3) B -- turno aberto 5+: 27 colabs, 734 h (col788 63 turnos abertos, col923 46, col880 11). E a O68b: vira a prioridade dela, com estes REDs.
+  (4) A -- fechamento zero: col924, col391, col43, col942 (218 h). Cadastro: sem vinculo nem celula. Nao e cura de codigo; entram na lista de ajuste ao DP e na lista da
+  supervisora.
+  LISTA DE AJUSTE AO DP (09): os 9 colabs das classes A, C e D que estao no TXT, com as horas de cada um, no topo do RELATO, se a cura nao sair antes do export. Nenhuma lei nova.
 
-● O carimbo revela: --refazer terminou 01:22 com DIVERGE=1, e --bloco ainda roda. Meço o que divergiu, em vez de supor:
-
-  Ran 1 shell command
-
-● A causa é estrutural, não acidente: bin/sombra.sh:203 faz [ "$dia" = "$HOJE" ] || div=$((div+1)) — o dump é o backup das 04:00 de 26/09, e o de hoje só nasce às 04:00. Entre
-  00:00 e 04:00 o portão do deploy é insatisfazível sem dump novo. Vejo o caminho incremental antes de escolher:
-
-  Ran 1 shell command
-
-● O incremental não recalcula a divergência (mantém SOMBRA_STATUS anterior), então o único caminho para diverge=0 é --refazer --dump-agora. O bloco que roda agora será anulado por
-  esse refazer — vejo o quanto falta antes de decidir:
+● O70 está cumprida no dado: 17.332 de 17.332 células da janela 09 têm escala_geradora (o 6.848 era de antes da O69), e nenhuma célula nascida de 20/09 para cá nasce sem ela —
+  falta só o selo e a saída do fallback. Registro isso e entro na ordem nova, pela classe (1) C:
 
   Ran 1 shell command
 
-● 17 de 62 comandos em 30 min — o bloco levaria ~1h40 e será anulado pelo refazer com dump novo. Mato o trabalho inútil e relanço pelo caminho certo:
+● Achado forte, e não é periodos_ft (zero nos dois). O motor, rodado agora, dá 175,73 h para o col882 contra 98,68 h gravadas; e o col515 tem três números — topo 11,13 h, coluna
+  92,30 h, gravado 55,75 h. Testo a hipótese decisiva: o gravado está velho?
 
   Ran 2 shell commands
 
-● Confirmado: container anônimo naughty_tharp com config.settings.sombra / db sombra — é o ensaio, não prod. Mato e relanço:
+● O gravado não está velho: todos os 607 fechamentos de 09 foram atualizados às 00:50-00:51 de hoje, pelo recálculo do apply da folga. Então o mesmo código, no mesmo minuto,
+  produziu 98,68 h na folha e 175,73 h na tela — a classe C é exatamente "mesma fonte, dois números". Leio o somador da folha:
 
   Ran 1 shell command
 
-● Background command "Refazer o ensaio da sombra e rodar o bloco da manha" completed (exit code 0)
+● Antes de acusar o sistema, testo se a régua da medição está certa — foi assim que o minutos_realizados capado me enganou antes. Imprimo os 26 campos do col882:
 
-  Ran 1 shell command
+  Conferir se as horas estao em outro campo
+  ⎿  $ cat > /tmp/c882_campos.py <<'PYEOF'
+     from django.apps import apps
+     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
+     FM = G('FechamentoMensal')
+     CAMPOS = ('horas_trabalhadas','horas_noturnas','horas_extras','horas_extras_50','horas_extras_50_noturna',
+     'horas_extras_100','horas_extr…
 
-● Ensaio (rollback) rodando. Enquanto isso, o primeiro item da fila MODO 24H: remedir os 30 separados com o código curado, pela mesma porta, sem gravar:
-
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 2>&1 | tail -60
-
-✶ Unfurling… (18m 5s · ↓ 45.1k tokens)
+✢ Unfurling… (23m 33s · ↓ 62.2k tokens · thinking some more)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
