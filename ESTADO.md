@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:39:33.**
+**Medido em 27/09/2026 02:42:31.**
 
 | | |
 |---|---|
@@ -85,44 +85,44 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Número que muda a fila: 60 colabs movem fora de horas_trabalhadas, e o campo mais frequente é horas_saida_antecipada (31), seguido de horas_atraso (16) — essa é a L-084
-  corrigida, que está no ar desde 01:53 mas nunca entrou no gravado (o recálculo das 00:50 rodou com a versão errada, "ou"). Publico:
+  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ E1 vigência                       │ no ar 02:30 com migration, smoke em prod: convalidated=False, 53 legíveis, INSERT e UPDATE recusados        │
+  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O85 buraco de vínculo             │ aplicada: +153,72 h em 5 colabs, outros 25 campos em zero, 0 entram/saem do TXT — falta só o deploy da cura │
+  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ push                              │ c35dbe8c pousado (8.393 testes)                                                                             │
+  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O82 · O83 · O84 · O86 · O87 · O88 │ medidas, com causa e arquivo:linha, linhas abertas no TICKETS                                               │
+  └───────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Duas dívidas nomeadas no topo do RELATO para você ler: a L-084 corrigida não está no gravado (31 colabs em horas_saida_antecipada, 16 em horas_atraso — é apply, não pergunta) e
+  os 7 templates com intervalo fora do turno (O87), cuja correção de cadastro é L-009 e espera seu !.
+
+✻ Brewed for 10m 15s · done 2:40 AM · 2 shells still running
+
+● Background command "Esperar o veredito da suite da O85" completed (exit code 0)
+
+  Read 1 file
+
+● O until casou com uma linha de saída de teste ("OK: 31"), não com o veredito. Confiro direito:
 
   Ran 2 shell commands
 
-● O ensaio segue na fase inicial. Uso a espera para medir a O66, próxima da fila (leitura pura):
+● Duas linhas DEFEITO em selo apareceram na suíte. Vejo quem as emite e se são minhas:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Background command "Refazer o ensaio gravando a saida inteira" completed (exit code 0)
+● Os dois DEFEITO em selo são deliberados: colaboradores/tests/test_bug112_defeito_nao_vira_toast.py:106 os levanta de propósito. Não são meus. Enquanto a suíte fecha, leio o
+  sítio da guarda da O87:
 
-  Ran 1 shell command
+● Ler o clean do TipoEscala
+  ⎿  $ grep -n 'def clean' -A 40 escala/models.py | sed -n 1,60p | grep -n 'def clean\|ValidationError\|raise\|if \|#' | head -24
 
-● DIFF perfeito pelo critério: 5 colabs, +153,72 h, e todos os outros 25 campos em +0,00 com 0 colabs. 61 separados, restaurados íntegros. Vejo quem são os 5 e aplico:
-
-  Ran 2 shell commands
-
-● Os 5 aplicados são exatamente os 5 da classe C: col882, col515, col375, col743, col935. Critério satisfeito ponta a ponta (0 entram/0 saem do TXT, 07 e 08 com 0 divergências,
-  col81 intacto). Aplico em prod:
-
-  Ran 1 shell command
-
-● APLICADO em prod: 5 colabs, +153,72 h em horas_trabalhadas, os outros 25 campos em +0,00 com 0 colabs, 0 entram/0 saem do TXT, 07 e 08 com 0 divergências, col81 intacto.
-  Reversão em logs/apply_o85_09_antes.json. Lanço a suíte (portão do deploy) e publico:
-
-  Publicar o apply da O85 · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## O85 **APLICADA** em 09: +153,72 h em 5 colabs, e os outros 25 campos em ZERO
-     Ensaio na sombra primeiro, apply em prod depois, os dois com a prova dos 26 campos.
-     PROVA: `logs/apply_o85_09_antes.js…
-
-· Roosting… (9m 18s · ↓ 21.6k tokens)
+· Symbioting… (55s · ↓ 1.9k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
