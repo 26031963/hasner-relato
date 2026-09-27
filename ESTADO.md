@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:48:31.**
+**Medido em 27/09/2026 13:54:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -85,44 +88,44 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O juiz agora responde o col85: entrada 21/08 18:56, saída 22/08 07:02, e o ·I2 sai com tipo='S' contra tipo_real='E' — a ata nomeando a inversão. Falta o leitor deixar de
-  procurar hi/hf e passar a ler o veredito do juiz, que é mais forte e serve as duas formas:
 
-  Ran 1 shell command
+  O68b-PAPEL — a órfã do col904 fechou (18:50 → 07:00 = 12,16 h), mas a causa era maior: a guarda contava batidas por data de calendário, e num turno que cruza a meia-noite o hf
+  mora em D+1 — a alimentação da O65 nunca alcançava um 12x36 noturno. Minha 1ª versão foi reprovada pela própria PROVA (turnos_abertos 620 → 665) e ganhou três guardas do seu
+  critério: duas pontas, L-084 lida de onde mora, e minuto com duas batidas não se endereça. No ar, com smoke no worker servido (workers 13:22, arquivos 12:52).
 
-● col85 fecha 18:56 → 07:02 = 12,09 h e o mês vai a 0 abertos — o RED da classe D caiu. E o col382 fechou também (14:56 → 22:58, 0 abertos): ler em_aberto do juiz resolve o que a
-  minha guarda de chaves resolvia por acidente. Atualizo os selos:
+  O84 — o juiz aprendeu a forma posicional do intermitente. O col85 21/08 fecha 18:56 → 07:02 = 12,09 h e vai a 0 abertos no mês; o col382 também fechou, porque o leitor passou a
+  ler em_aberto/entrada/saida do juiz em vez de procurar chaves hi/hf — juiz paralelo a menos. A metade que não muda tem selo: sem marco é impossível medir desvio, e sobre desvio
+  o juiz segue calado. Isso é impossibilidade x cobertura parcial, não conveniência.
 
-  Ran 1 shell command
+  Parei duas vezes para medir, e nas duas o número me derrubou:
 
-● 26 verdes. Commito e lanço a suíte completa com a DIFF em paralelo:
+  1. PAREI o apply de 09 pelo seu critério da folga trabalhada. Há caso do 2º tipo e o maior não é de 1 h: col616 14/09, célula FOLGA, 05:53 → 18:00 = 11,13 h em hora normal, sem
+     o 100% — enquanto 18/09 e 20/09 do mesmo colab, forma idêntica, são folga trabalhada. Espionei eh_dia_trabalho durante o calcular_mes: nos dias que caem em hora normal o
+     motor pergunta pelo dia (False) e depois pelo dia anterior (True), e em 14/09 não existe período nenhum em 13/09 para a herança vir de. Virou O93, ! no topo do PENDENTES. Os
+     3 casos do col297 são do 1º tipo e estão corretos.
+  2. horas_noturnas de +24,55 para −2,87 na O84 — não sabia explicar, então não deploiei. Isolado nas duas árvores contra o mesmo banco: 4 colabs, todos intermitentes, e o noturno
+     era inventado. O col830 faz turno de DIA (06:48 → 18:50) e tinha 8,00 h de adicional 22h-05h vindas de um turno que ficava aberto e vazava pela noite; fechado, o certo é
+     zero.
 
-  Committed b93b05b0, ran 1 shell command
+  Também cai um número que eu havia publicado: as −279 h de folga trabalhada da sombra são artefato do ensaio — o campo depende da lavra do esmeril em logs/, e o container da
+  sombra monta --tmpfs /app/logs. O comentário do próprio sítio já media isso (8 colabs, até 134,71 h).
 
-● turnos_abertos 620 → 605 e horas_trabalhadas +324,79. Mas isolando contra a rodada anterior, a O84 traz um número que eu não sei explicar: horas_noturnas de +24,55 para −2,87
-  (swing de −27,42 h, adicional de 20%). Não deploio número não medido — vou nomeá-lo:
+  Falta fechar: veredito da suíte da O84 → push → deploy → smoke. Depois, classe C residual → E5 fatia 1 → E6 rodada 3. O apply de dinheiro espera seu ! na O93; as curas de código
+  sobem.
 
-  Ran 2 shell commands
+✻ Worked for 42m 38s · done 1:52 PM · 3 shells still running
 
-● Erro meu: a primeira medição foi no banco de prod e a segunda na sombra — não comparáveis. Refaço a atual na sombra:
+❯ aval Ronald: O93 e cura: a heranca de dia (periodo que comeca ate 6 h depois do anterior herda o dia dele) so vale quando EXISTE periodo anterior terminando nesse intervalo;
+  sem periodo anterior, o dia e o do inicio (L-085). RED: col616 14/09 (05:53-18:00, celula folga) = folga trabalhada; selos: 18/09 e 20/09 continuam iguais e a volta do almoco
+  do plantao noturno continua herdando. DIFF pelo criterio do MODO 24H. !
+  E a sombra passa a montar a lavra do esmeril (logs/esmeril_espelho.json) em todo ensaio de dinheiro: sem ela o ensaio sai infiel (-279 h e 134,71 h ja foram artefato). Selo:
+  ensaio sem lavra = recusa com aviso.
 
-  Ran 1 shell command
-
-● O swing está isolado em 4 colabs, e três perdem noturno ganhando hora trabalhada. Vejo se são intermitentes (aí a causa é a própria O84) e olho um dia:
-
-● Conferir se os 4 sao intermitentes com celula posicional
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from escala.models import EscalaColaborador, CelulaDia
-     import datetime as d, re, json
-     for pk in (146, 76, 830, 85):
-     ec = EscalaColaborador.objects.filter(colaborador_id=pk).sele…
-
-· Warping… (38m 28s · ↓ 41.2k tokens · deep in thought)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✢ Lollygagging…
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

@@ -92,7 +92,7 @@ lista — ela e o que esta EM PE._
 | **O81** | ATA-SEM-LAMPADA | espera corte |
 | **O82** | PORTAO-DA-SOMBRA-CEGO-ENTRE-00-E-04 | espera aval |
 | **O83** | E6-CLASSES | **em curso** |
-| **O84** | A ATA NOMEIA A INVERSAO E O JUIZ DEVOLVE "NAO SEI" | **livre, depois do deploy** |
+| **O84** | FECHADA 27/09 ~14:5x | **livre, depois do deploy** |
 | **O85** | BURACO DE VINCULO: dia com batida e sem escala vigente nao entra em soma nenhuma | **proxima da fila** |
 | **O86** | O PAREADOR NAO FECHA TENDO `S` NA MAO | **livre, depois da O85 e da O84** |
 | **O87** | NAO HA GUARDA CONTRA INTERVALO FORA DO TURNO | **livre, depois do push do E1** |
