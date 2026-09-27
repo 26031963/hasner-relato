@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:48:01.**
+**Medido em 27/09/2026 02:53:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela` |
+| `HEAD` local | `d4548ad8 [O73] plano medido: o sitio e calcular_periodo (:1950), que julga pontualidade sem saber se e o primeiro bloco do dia` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d4548ad8 [O73] plano medido: o sitio e calcular_periodo (:1950), que julga pontualidade sem saber se e o primeiro bloco do dia
 099c8a21 [O73->L-084] parei o apply da L-084: a O73 infla `horas_atraso`, que e o campo dela
 3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
 b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
 64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
-ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 ```
 
 ## `git status --short`
@@ -85,28 +85,6 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-
-● A suíte segue. Meço a O66 com os juízes reais, não com campo lateral:
-
-  Ran 1 shell command
-
-● ChamadoColaborador tem status_local e — melhor ainda — FK direta para celula. Corrijo:
-
-  Ran 1 shell command
-
-● O66 medida: celula_furo_sem_canal = **99** (esperado 0), em 34 colabs, e um sinal limpo — todas as 99 são furo, nenhuma cobrado: a cobrança sempre abre canal, o furo simples
-  não. Publico:
-
-  Ran 2 shell commands
-
-● A suíte segue. Meço a O73 (próxima da fila) para ela ter tamanho:
-
-  Ran 1 shell command
-
-● Achado importante e que reordena a fila: nesses 6 templates o dano no gravado é ZERO (horas_atraso = 0,00 nos 7 colabs), mas o ensaio mostra col81 com +44,42 h de atraso. Ou
-  seja: a O73 é bug latente, e o que está segurando é o próprio critério de separação:
-
   Ran 1 shell command
 
 ● Confirmado: 5 dos 7 colabs da O73 estão entre os separados, e três por horas_atraso — o campo exato que a O73 infla. Publico a dependência, que muda a ordem da fila:
@@ -115,14 +93,36 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 
 ● A suíte segue. Preparo a O73 entendendo o mecanismo — quem chama aplicar_tolerancia e com quais marcos:
 
-● Ler a zona 5 que casa marco com periodo
-  ⎿  $ sed -n 1500,1560p ponto/motor_calculo_v2.py
+  Searched for 2 patterns, ran 3 shell commands
 
-✢ Symbioting… (6m 25s · ↓ 22.3k tokens · thinking)
+● Escrevo o plano da O73 no BACKLOG, com o sítio exato e a advertência da zona inviolável:
+
+  Ran 1 shell command
+
+● Estado da noite, enquanto a suíte fecha o portão do deploy da O85:
+
+  Aplicado em prod
+  - Sete curas no ar 01:53 com smoke verde no worker servido.
+  - E1 no ar 02:30 com migration, e provada em prod: convalidated=False, 53 linhas legíveis, INSERT e UPDATE recusados.
+  - O85 aplicada: +153,72 h em 5 colabs (col882 11,00→88,05 · col515 11,13→48,65 · col375 8,00→24,00 · col743 47,93→59,98 · col935 77,06→88,16), outros 25 campos em zero, 0
+    entram/saem do TXT, verificado por leitura independente. A lista do DP caiu de 9/259,3 h para 8/248,2 h.
+
+  Medido com causa e arquivo:linha — O82 (portão cego 00:00–04:00), O83 (as 4 classes, 84 colabs/1.602,2 h), O84 (ata nomeia a inversão, juiz_batida.py:150-157), O85, O86 (151 de
+  313 turnos abertos com S na mão), O87 (7 templates com intervalo fora do turno), O88 (órfã-x-apagado, 476 dias), O66 = 99 (todas furo, nenhuma cobrado), O73 com plano e sítio
+  (calcular_periodo:1950).
+
+  Duas paradas nomeadas, as duas por medição e não por dúvida
+  - PAREI: dependência O73 → L-084. A L-084 corrigida está no ar e não no gravado (31 colabs em horas_saida_antecipada, 16 em horas_atraso), mas aplicá-la liberaria o atraso falso
+    da O73 — que hoje dá zero no gravado só porque 5 dos 7 colabs estão entre os separados. Curar O73 primeiro.
+  - O que isso ensinou e que vale para a série: a lista dos separados não é só deriva, ela está contendo bug. O critério do MODO 24H virou filtro de defeito.
+
+  Esperando seu ! (registrados, sem travar a esteira): os 7 templates da O87 (dado de escala, L-009), os 43 vínculos congelados, e a pergunta do feriado que segura 17 dos 30.
+
+✻ Crunched for 7m 40s · done 2:49 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ cura a O73 e depois aplica a L-084 no gravado
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
