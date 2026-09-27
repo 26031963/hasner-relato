@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:129 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:10:45.**
+**Medido em 27/09/2026 02:14:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome` |
+| `HEAD` local | `18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro
 f1cc7f13 [E1+O85] a vigencia impossivel passa a ser recusada pelo BANCO, e o dia sem vinculo que ninguem somava tem nome
 88c108e1 [DEPLOY+O84] as sete curas no ar as 01:53 com smoke no worker servido, e a inversao em PONTA e 276 dias e nao 437
 3303697a [O84] a assinatura da ata aparece em 85% da classe B e 67% da D: uma medicao responde por B, C e D
 61f84e0a [O84] a ata escreveu "esta batida e a SAIDA" e o juiz saiu pela porta do "nao sei" tres linhas antes
-d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna
 ```
 
 ## `git status --short`
@@ -85,39 +85,39 @@ d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Isso mata minha hipótese das fatias e revela algo mais simples e mais grave: o col882 tem UM vínculo, EC1059, que termina em 06/09 — a janela vai até 20/09. E o col515 tem
-  quatro, incluindo o EC1220 com vigência impossível (está na minha lista dos 10 livres). Testo a aritmética decisiva: as 77 h estão fora da vigência?
+● Escrevo o RED da O85 com asserção diferencial — dois colabs idênticos, um com o dia órfão — para morder sem depender do intervalo:
 
   Ran 1 shell command
 
-● Medição honesta: o buraco de vínculo explica 159,25 h de 376,44 h (42%) da classe C, concentradas em 5 dos 32 colabs — e 0% das classes D e B. Vejo as linhas da C:
-
-  Ran 1 shell command
-
-● Prova completa, não correlação: nos 5 colabs o fora_h é idêntico ao falta_h (col882 77,05 h em 7 dias; col515 39,06 em 4; col375 20,00 em 3; col743 12,05; col935 11,10). 159,25
-  h em 16 dias sem vínculo vigente. Publico e confiro a suíte:
+● Um ajuste de escopo antes de aplicar: sem ele, a cura também pagaria os 4 colabs de classe A (0 → 217,7 h), que você classificou como cadastro, não código. Limito ao caso da
+  classe C e deixo a A visível:
 
   Ran 2 shell commands
 
-● Publicado (68211a6). Enquanto a suíte fecha, construo a cura da O85 em cópia do HEAD. Leio o início do laço de fatias:
+● A suíte está trabalhando (container a 80% de CPU). Preparo o ensaio da sombra que responde duas perguntas de uma vez — a remedição dos 30 separados e o DIFF da O85:
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Enquanto a suíte fecha, escrevo a cura da O85 em cópia do HEAD, espelhando exatamente o precedente da folga (a hora entra em horas_trabalhadas, sem adicional):
+● Preciso esperar a suíte antes de empurrar (push conta como run no juliani_db_test). Uso a espera para preparar a cura da O84, lendo quem produz os slots ·I:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Searched for 1 pattern
 
-● localizar não existe nesse arquivo — ele usa timezone.localtime. Corrijo a cura antes de aplicá-la:
+● Isto corrige um número meu: montar_dna só congela marcos quando trabalha is True (gerar_celulas.py:55-59), então dna.marcos nulo significa "não é dia de trabalho" — não "falta
+  cadastro". Meço para confirmar antes de corrigir o RELATO:
 
   Ran 1 shell command
 
-● Cura pronta em /tmp. Escrevo o RED dela enquanto a suíte roda — vejo o idioma de criação de batida:
+● Confirmado, e corrige meu número: dos 7.035 sem marcos, 6.522 são folga e 402 ausência — normal, não defeito. O que é anômalo é pequeno e nomeável: 109 dias com
+  tipo_dia='trabalho' e sem marcos, e 81 dias sem marco com luz acesa (folga trabalhada), dos quais 18 com a ata nomeando inversão. Corrijo:
 
-  Ver como os testes criam batida e chamam o recalculo
-  ⎿  $ sed -n 40,80p ponto/tests/test_fechamento_escopo_colabs.py; echo "=== batida idioma ==="; sed -n 28,40p ponto/tests/test_a_lei_turno_aberto.py
+  Ran 1 shell command
 
-· Unfurling… (55m 26s · ↓ 181.5k tokens · still thinking)
+● Os backticks foram interpretados pelo bash e comeram palavras da mensagem. Reescrevo por heredoc, que é como fiz nos outros:
+
+● Publicar o RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -2; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bad2vo90w.output
+
+✢ Unfurling… (59m 22s · ↓ 198.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
