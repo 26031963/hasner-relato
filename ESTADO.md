@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:07:53.**
+**Medido em 27/09/2026 18:12:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado` |
+| `HEAD` local | `7219a482 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
 | `origin/main` | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7219a482 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 5c8d4240 [O95] rodape e placar do TICKETS antes do push
 27c2dd85 [O95] a cura muda de lugar: 11 selos da casa me ensinaram que no almoco VIVO o turno segue aberto
-59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -85,18 +82,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O 18:29 foi consumido pelo _ENVELOPE_SS antes da leitura do papel, então só uma ponta recebeu o carimbo. Carimbo o X antes desse consumo:
-
-  Ran 1 shell command
-
-❯ aval Ronald: (1) fechar a O96 com commit e PROVA propria; depois listar no RELATO TODAS as regressoes das curas de hoje que as autopsias acharam, com o numero de cada uma no
-  gravado de 09, e curar uma por uma antes da O81. (2) o subagente "per-day tolerant remapear_na_regua wrapper": dizer no RELATO o que e; se for cura por wrapper/tolerancia =
-  PROIBIDO (LEI-AKITA 1), vira censo de origem. (3) onde esta o resultado do censo O81? publicar a tabela a/b/c. (4) publicar DRY do mutirao + laudos 1-4 e curar o RELATO.md:136
-  retido.
-
-● O96 verde: 30 testes OK e os quatro REDs batem o oráculo — col81 423 (422), col327 406=406, col51 485=485, col922 404=404. Commito com PROVA própria:
 
   Committed 6d3e54b0
 
@@ -110,14 +95,26 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● A checagem olha as 6 linhas seguintes, e eu pus a PROVA acima. Movo:
 
-  Publicar o RELATO curado
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     p='app/docs/RELATO.md'; s=open(p).read()
-     velho = """PROVA: contagem lida do gravado de prod depois do ato (`FechamentoMensal` agregado, 607 linhas) e
-     `logs/apply_o95_09_antes.json` como reversao.
-     ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencia…
+  Ran 2 shell commands
 
-· Puzzling… (1h 49m 4s · ↓ 87.8k tokens)
+❯ aval Ronald: O81 corte. FONTE: espelho.py:585 (vis_ini) + :353 (grade_da_celula da janela inteira) + leitor_celula.py:257 (1 dia agregado derruba o periodo). LEI:
+  HX-REGEN-NAO-TOCA-EXPORTADO (leitor_celula.py:234-238) proibe re-lavrar 06/07/08 -> a cura do BACKLOG (--forcar) esta VETADA (P17). MUDA: montar_dias le a celula so em
+  [max(data_ini,apur_ini)..data_fim_mes]; builder so em [data_ini..apur_ini-1]; regua por dia (espelho.py:491-495 le _grade_marcos por posicao). RED: 3 colabs do censo com dia
+  agregado em 07/08 caindo no builder na 09. SELO: colabs_no_builder_09 = 0 (contador, LINHA HAIKU). PROVA: 26 campos, 0 entram/0 saem do TXT, 07/08 = 0 divergencia. PROIBIDO:
+  tocar ata de 06/07/08, fallback, wrapper tolerante. Nenhuma lei nova. Depois das regressoes das curas de hoje, antes da E5.
+
+● A régua cobra linha para a O96. Acrescento e empurro:
+
+  Linha da O96 e push · 42s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/TICKETS.md'; s=open(p).read()
+     i = s.index('| O95 |')
+     nova = ('| O96 | ponto/turnos (pareador) | a pausa que a ATA marcou com `X` voltou a ser PAUSA -- ela entrava '
+     'no turno sem carimbo e `_pares_marcados` ficava cego a ela | **no ar (commit `6d3e54b0`); reapply do '
+     … (42s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Puzzling… (1h 53m 42s · ↓ 91.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
