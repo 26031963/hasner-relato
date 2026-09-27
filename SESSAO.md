@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 16:47:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.7 MB). Acoes na janela: **390**.
+**Medido em 27/09/2026 16:53:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.7 MB). Acoes na janela: **389**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -399,4 +399,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:53:55 | Bash | Achar um minuto livre no bloco das 07h | `python3 -c " import sys; sys.path.insert(0,'.') import re s=open('config/crons.py').read() ocupados=sorted(set(re.findall(r\"C\(&#39;\", s))) " 2>/dev/null; grep -oE "(RAW\|C)\('([0-9]+) 7 \* \* \*'" config/crons.py \| grep -oE "'[0-9]+ 7" \| tr -d "'" \| awk '{print $1}' \| sort -n \| uniq -c \| awk '{printf "07:%02d ", $2}'; echo; echo "--- minutos livres entre 07:00 e 07:59 ---"; python3 - <<'P ...` |
 | 04:53:33 | Bash | Curar o ruff, mover o cron e regenerar o diagrama | `sed -i '/^from django.utils import timezone$/d' chamados/tests/test_o66_furo_sem_canal.py && python3 -c "import py_compile;py_compile.compile('chamados/tests/test_o66_furo_sem_canal.py',doraise=True);print('import morto fora')" && python3 - <<'PYEOF' p='config/crons.py'; s=open(p).read() s=s.replace(" C('19 7 * * *', 'lavrar_furo_sem_canal', '--apply',", " C('23 7 * * *', 'lavrar_furo_sem_canal',  ...` |
 | 04:53:14 | Bash | Ver o ruff e a sobreposicao de cron | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test core.tests.test_contract_esmeril chamados.tests.test_contract_crons --settings= ...` |
-| 04:47:45 | Bash | Declarar os papeis e rodar core e chamados | `python3 - <<'PYEOF' import py_compile p='config/crons.py'; s=open(p).read() velho = "'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',)}," novo = ("'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',\n" " # O66 (27/09): celula de competencia ABERTA com furo/cobrado e SEM canal vivo. LAVRA:\n" " # le a celula (soberan ...` |

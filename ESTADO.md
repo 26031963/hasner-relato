@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:47:31.**
+**Medido em 27/09/2026 16:53:01.**
 
 | | |
 |---|---|
@@ -108,13 +108,13 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Placar E6 agora 2/8 com os três itens novos. Commito e empurro, e começo a E5 fatia 1 (leitura, enquanto as autópsias medem):
 
-● Commitar e empurrar os documentos · 1m 21s
+● Commitar e empurrar os documentos · 6m 51s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/RELATO.md
      app/core/espelho_verdade.py app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
-     [O95] apply da 09 FEITO, E6 rodada 3 na frota, e… (1m 19s · 3 lines)
+     [O95] apply da 09 FEITO, E6 rodada 3 na frota, e… (6m 49s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Puzzling… (28m 42s · ↓ 34.5k tokens)
+✢ Puzzling… (34m 12s · ↓ 34.5k tokens)
   ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -123,10 +123,10 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading realizado_dos_turnos interval logic                                                                                           3m 0s · ↓ 93.9k tokens
-  ◯ general-purpose  Inspecting intervalos_do_turno piso logic                                                                                             3m 0s · ↓ 72.6k tokens
-  ◯ general-purpose  Classifying 186 days by janela_declarada pausa                                                                                        3m 0s · ↓ 90.8k tokens
-  ◯ general-purpose  Grepping TipoEscala fields in escala/models.py                                                                                        3m 0s · ↓ 84.2k tokens
-  ◯ general-purpose  Reading montar_dias in espelho.py                                                                                                     3m 0s · ↓ 76.9k tokens
+  ◯ general-purpose  Dumping oraculo_zero batidas from probe_out.json                                                                                    8m 30s · ↓ 171.6k tokens
+  ◯ general-purpose  Running probe2.py in tenant shell                                                                                                   8m 30s · ↓ 111.2k tokens
+  ◯ general-purpose  Grouping p5.json divergences by signature                                                                                           8m 30s · ↓ 160.5k tokens
+  ◯ general-purpose  Inspecting batida tipos in probe_out.json                                                                                           8m 30s · ↓ 142.8k tokens
+  ◯ general-purpose  Grepping em_aberto in dia_decidido.py                                                                                               8m 30s · ↓ 123.7k tokens
   ⧉  index
 ```
