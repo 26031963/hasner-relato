@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:26:01.**
+**Medido em 27/09/2026 16:31:02.**
 
 | | |
 |---|---|
 | `HEAD` local | `5c8d4240 [O95] rodape e placar do TICKETS antes do push` |
-| `origin/main` | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `5c8d4240 [O95] rodape e placar do TICKETS antes do push` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -87,11 +87,6 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Cooked for 0s · done 4:17 PM · 1 shell still running
-
-❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
-  E6 rodada 3. Depois publica o relato.
-
 ● Login expired · Please run /login
 
 ✻ Churned for 0s · done 4:18 PM · 1 shell still running
@@ -108,22 +103,27 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 
 ● Suíte verde: 8471 testes OK. Retomo a sequência — push:
 
-● Empurrar a O95 · 5m 9s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; git add app/docs/TICKETS.md
-     2>/dev/null; git diff --cached --quiet || git commit -q -F - <<'MSGEOF'
-     [O95] rodape e placar do TICKETS antes do push
-     O rodape gu… (5m 8s · 6 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Puzzling… (7m 12s · ↓ 1.4k tokens)
-  ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
+  Pushed to main
 
 ❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
   E6 rodada 3. Depois publica o relato.
-  ctrl+x ctrl+s to send now
+
+❯ PLACAR E6, redefinir os itens pela divisao sistema x operacao: (1) com batidas COMPLETAS, % de dias em que espelho e oraculo batem (a meta e perto de 100%; divergencia aqui e
+  bug nosso); (2) com batidas IMPARES, % de dias com canal vivo (pergunta ao colab ou pendencia do admin; a meta e 100%, e o dia nunca e pago por palpite). Dia impar deixa de
+  contar como "nao julgado". Nenhuma lei nova.
+
+● Push pousou (037180cd..5c8d4240). A sequência já é a que estou executando — sigo dela. E a redefinição dos itens da E6 entra no passo 7, com a divisão sistema × operação que
+  você deu. Deploy:
+
+● Deploying da O95 · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -12 (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Puzzling… (12m 13s · ↓ 1.9k tokens)
+  ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
