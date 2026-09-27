@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:43:01.**
+**Medido em 27/09/2026 13:48:31.**
 
 | | |
 |---|---|
@@ -85,12 +85,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● A casa já tem posição declarada sobre a forma ·I: "Sem marco nao ha desvio a medir" — e ela está certa sobre desvio. Mas a pergunta da classe D é outra: qual o papel desta
-  batida, e o rótulo ·In o carrega posicionalmente (escala/utils.py:962). É a distinção da minha memória: calar o juízo só quando o dado ausente o torna impossível.
-
-  Ran 2 shell commands
-
 ● O juiz agora responde o col85: entrada 21/08 18:56, saída 22/08 07:02, e o ·I2 sai com tipo='S' contra tipo_real='E' — a ata nomeando a inversão. Falta o leitor deixar de
   procurar hi/hf e passar a ler o veredito do juiz, que é mais forte e serve as duas formas:
 
@@ -108,16 +102,22 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ● turnos_abertos 620 → 605 e horas_trabalhadas +324,79. Mas isolando contra a rodada anterior, a O84 traz um número que eu não sei explicar: horas_noturnas de +24,55 para −2,87
   (swing de −27,42 h, adicional de 20%). Não deploio número não medido — vou nomeá-lo:
 
-● Medir noturnas por colab na arvore atual · 10s
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_not.py <<'PYEOF'
-     import datetime as d, json, os
-     from django.utils import timezone as tz
-     from django.db.models import Q
-     from colaboradores.models import Colaborador
-     from escala.models … (9s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Warping… (32m 58s · ↓ 37.8k tokens)
+● Erro meu: a primeira medição foi no banco de prod e a segunda na sombra — não comparáveis. Refaço a atual na sombra:
+
+  Ran 1 shell command
+
+● O swing está isolado em 4 colabs, e três perdem noturno ganhando hora trabalhada. Vejo se são intermitentes (aí a causa é a própria O84) e olho um dia:
+
+● Conferir se os 4 sao intermitentes com celula posicional
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from escala.models import EscalaColaborador, CelulaDia
+     import datetime as d, re, json
+     for pk in (146, 76, 830, 85):
+     ec = EscalaColaborador.objects.filter(colaborador_id=pk).sele…
+
+· Warping… (38m 28s · ↓ 41.2k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
