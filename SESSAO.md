@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 15:44:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.1 MB). Acoes na janela: **408**.
+**Medido em 27/09/2026 15:50:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.1 MB). Acoes na janela: **409**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:45:39 | Bash | Commitar a O95 e esperar a suite | `cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py app/ponto/management/commands/aplicar_09_corte_b.py && git commit -F - <<'MSGEOF' [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464 LEI-AKITA: origem=ponto/turnos.py (a absorcao por MARCO no laco de parear_turnos), testemunha ...` |
 | 15:43:00 | Bash | Suite e DIFF de frota da O95 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test $LAB --settings=config.settin ...` |
 | 15:42:12 | Bash | Ligar a condicao e rodar os selos | `python3 - <<'PYEOF' import py_compile p='ponto/management/commands/aplicar_09_corte_b.py'; s=open(p).read() # troca o metodo que eu havia escrito (referenciava _motor_para, que nao existe) ini = s.index(' # CONDICAO_SAIDA_REAL (ordem Ronald') fim = s.index(' def add_arguments(self, p):') novo = ''' # CONDICAO_SAIDA_REAL (ordem Ronald 27/09 ~17:xx, passo 4 da sequencia): **nenhum colab com SAIDA #  ...` |
 | 15:41:39 | Bash | Ler o laco do aplicador | `sed -n '119,180p' ponto/management/commands/aplicar_09_corte_b.py` |

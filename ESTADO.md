@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:44:45.**
+**Medido em 27/09/2026 15:50:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
+| `HEAD` local | `59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464` |
 | `origin/main` | `037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+59cf0bbe [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 620 -> 464
 037180cd [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa
 e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia da O94, medida e revertida hoje
 c286981e [O94] o oraculo estava certo contra a minha leitura: o par do miolo com tipo INVERTIDO partia o turno
 acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
-e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/aplicar_09_corte_b.py
- M app/ponto/turnos.py
-?? app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py
 ?? esteira.pausada
 ```
 
@@ -91,13 +88,6 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 
 ```
 
-  Ran 1 shell command
-
-● col382 explicado, e a minha O95 estava errada nele: em 25/08 23:53→07:50 (7,94 h) virava 23:53→05:28 (5,57 h) — a batida das 05:28 era absorvida e deixava o turno seguir até a
-  saída real das 07:50, que casa o marco hf exatamente. Falta a segunda prova, que a casa já declara no _ENVELOPE_SS:
-
-  Ran 1 shell command
-
 ● Meu patch fechou a docstring e deixou o resto dela como código. Reparo:
 
   Ran 2 shell commands
@@ -118,11 +108,18 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 
 ● 34 verdes (6 selos novos da O95, ruff e mypy). Lanço a suíte e a DIFF de frota com a condição ligada:
 
-● Suite e DIFF de frota da O95
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=…
+  Ran 1 shell command
 
-✻ Grooving… (35m 12s · ↓ 29.7k tokens)
+● A O95 tem efeito grande e coerente: turnos_abertos 620 → 464 (−156), horas_trabalhadas +1069,99 h, inconsistencias −237, e a CONDICAO_SAIDA_REAL separou 2 (col890, col450) — os
+  outros 7 com saída real já caíam pelo critério de campos, então nenhum colab com saída real perde hora total. Commito (sem tocar arquivos, a suíte está rodando):
+
+  Commitar a O95 e esperar a suite · 4m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py app/ponto/management/commands/aplicar_09_corte_b.py &&
+     git commit -F - <<'MSGEOF'
+     [O95] a pausa declarada so absorve quem VOLTOU (ou quem tem saida real adiante) -- turnos abertos 6… (4m 21s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Grooving… (40m 28s · ↓ 33.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
