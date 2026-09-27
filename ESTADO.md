@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:00:45.**
+**Medido em 27/09/2026 01:06:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `75d4e150 [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
+| `HEAD` local | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
 | `origin/main` | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
 | commits a subir (`ahead`) | **3** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-75d4e150 [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
+c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
 c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas, e o MODO 24H separando por colab
 4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min
 d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga
@@ -40,8 +40,6 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
  M app/config/crons_duracao.json
- M bin/gerar_estado.py
-?? app/core/espelho_verdade.py
 ?? esteira.pausada
 ```
 
@@ -81,44 +79,44 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────────────────┼────────────┤
-  │ E6 CERTIFICAÇÃO             │  2/4 = 50% │
-  └─────────────────────────────┴────────────┘
 
-  Três decisões de desenho, e a primeira foi obrigatória:
+  E o ramo certo do elif é sem continue: feriado previsto significa horas simples, então o dia segue para o limite diário e a HE normal como qualquer dia de trabalho. Deixei isso
+  escrito, porque a diferença entre os dois ramos é exatamente o que eu confundi.
 
-  As etapas viraram DADO. O programa ESPELHO-VERDADE está em prosa, dentro de uma célula da tabela do BACKLOG — e prosa não dá placar. Criei app/core/espelho_verdade.py seguindo o
-  precedente que a casa já tem: core/contratos_estruturais.py declara a matriz dos 22 contratos e o placar do TICKETS a lê.
+  Agora emendo o commit e empurro — o push51 falhou por essas duas, e a L-084 errada continua no ar.
 
-  "Item sem prova não conta" está no código, não na minha disciplina. O placar() rebaixa FEITO sem linha de prova para em curso e marca PROVA FALTANDO -- nao conta como feito.
-  Mentir no percentual seria pior que não ter placar.
+  Ran 1 shell command
 
-  O ESTADO nunca cai por causa do placar. Se o módulo quebrar, o bloco imprime o motivo e o resto do ESTADO segue — o mensageiro não pode morrer pela mensagem, que foi a lição do
-  RELATO retido às 23:08.
+● push52 em voo, com a suíte inteira sobre a árvore do commit. Vou até pousar.
 
-  A linha do E6 com o percentual do calculador está escrita mas sem rodada registrada: ela lê logs/e6_placar.json e hoje diz "sem rodada registrada — sem rodada, a etapa E6 não
-  tem piso medido". Vou rodar o /tmp/e6b.py e persistir o número, para o placar ter o piso.
+  Sobre o item (2) do seu prompt — você estava certo e eu já corrigi: o E3 não estava 100%, estava com o meu recorte. Acrescentei os itens de dinheiro abertos que faltavam, com o
+  número medido como prova:
 
-  E o E3 = 100% merece uma ressalva honesta: são os quatro itens que eu declarei para a etapa. A porta original da E3 pedia o ! do Ronald sobre o DIFF — esse existe e foi dado.
-  Mas se faltar item na minha lista, o 100% é do meu recorte, não do programa.
+  ┌───────────────────────────────┬───────┬──────────┬──────────────────────────────────────────────┐
+  │             item              │ etapa │  estado  │                    medido                    │
+  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
+  │ plano B (O68b)                │ E3    │ FALTA    │ 1.484 dia-colab (19,4%)                      │
+  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
+  │ volta do intervalo (O73)      │ E3    │ FALTA    │ 6 templates, 9 colabs, +44,42 h no col81     │
+  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
+  │ o gravado recebeu o corte (b) │ E3    │ em curso │ 4 aplicados, 30 separados                    │
+  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
+  │ geradora em toda célula (O70) │ E1    │ FALTA    │ 6.848 dia-colab                              │
+  ├───────────────────────────────┼───────┼──────────┼──────────────────────────────────────────────┤
+  │ célula com canal (O66)        │ E4    │ FALTA    │ 68 sem canal, 509 chamados fechados acusando │
+  └───────────────────────────────┴───────┴──────────┴──────────────────────────────────────────────┘
 
-✻ Cooked for 2m 43s · done 12:59 AM · 2 shells still running
+  O E3 caiu de 100% para 4/7 = 57%, que é a verdade. E a sua frase — "a lista de itens sai do BACKLOG e do RELATO, não do recorte de quem escreve o placar; item de dinheiro aberto
+  nunca fica fora" — é a regra que faltava no arquivo, porque sem ela o placar mede a honestidade de quem o preenche em vez do estado do programa.
 
-❯ (1) PUSH51 e DEPLOY JA com smoke ANTES de qualquer outra coisa: a L-084 errada segue no ar e origin esta em d39c0696. (2) PLACAR: a E3 nao esta 100% -- faltam na lista do
-  espelho_verdade.py: O68b plano B (~720 dias), O70 geradora (6.848), O66 dias sem canal (68), os 30 separados do modo 24h, O73 col81. A lista de itens de cada etapa sai do
-  BACKLOG e do RELATO desta noite, nao do recorte de quem escreve o placar; item de dinheiro aberto nunca fica fora. Depois roda o e6b e persiste o numero. Nenhuma lei nova.
+  Falta ainda, na sua ordem: o DEPLOY JÁ com smoke assim que o push pousar, e rodar o e6b para persistir o percentual do calculador — hoje a linha do E6 diz "sem rodada registrada
+  — sem rodada, a etapa E6 não tem piso medido", o que é honesto mas é um buraco no placar.
 
-● Item (1) primeiro. Vejo o push51:
-
-  O push51 terminou ou morreu?
-  ⎿  $ cd /home/ronald/saas-hasner && tail -6 logs/push51.log; echo "=== o processo do push51 ainda vive? ==="; pgrep -fa "git push origin HEAD:main" | head -2 || echo "nenhum
-     push em curso"
-
-· Newspapering… (23s · ↓ 639 tokens · thinking)
+✻ Churned for 5m 18s · done 1:05 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ roda o e6b e persiste o numero
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
