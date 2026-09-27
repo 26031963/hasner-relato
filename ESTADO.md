@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:49:01.**
+**Medido em 26/09/2026 21:54:31.**
 
 | | |
 |---|---|
@@ -43,44 +43,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Sobre a O71, um erro meu que vale mais que o número: a primeira versão do medidor deu celula_veredito_velho = 1504, e eu não publiquei porque a matriz denunciava a conta. Das
-  1.504, ~1.350 eram nunca_bateu → concorde, cobrado → concorde, trabalhou → concorde. Fui olhar: esses valores não existem em _MAPA_VEREDITO — derivar_veredito nunca os produz. O
-  cartório tem um ramo que escreve veredito='nunca_bateu' direto, sem código nenhum (ponto/services/cartorio.py:470).
+  ├────────────────────────────────┼──────────────────────────┤
+  │ SAEM do TXT                    │                        0 │
+  ├────────────────────────────────┼──────────────────────────┤
+  │ trocam de motivo (seguem fora) │                        0 │
+  └────────────────────────────────┴──────────────────────────┘
 
-  Ou seja: eu derivei o veredito dos códigos e chamei isso de "o juiz de hoje". Reproduzi parte do juiz em vez de perguntar a ele — a lei que eu tinha citado na própria docstring
-  do medidor. Refiz interceptando ponto.portas.celula.lavrar_veredito, o escritor único, com apply_=True dentro de atomic() e rollback: agora o que o medidor reporta é o que o
-  sistema gravaria, não o que eu acho que ele gravaria.
+  O número da minha primeira versão era 1.504 — dez vezes maior, e falso. A matriz dela era dominada por nunca_bateu → concorde, que é artefato de eu derivar o veredito dos
+  códigos quando o cartório escreve esse valor direto. O 158 vem da porta escritora.
 
-  O ensaio completo está rodando — veredito, recálculo, e o classificar_export antes e depois, que é onde mora a sua assimetria de "entra × sai".
+  Os seis que entram: col830 e col56 saíam por furo_espelho e passam a entrar; col964, col965, col966, col967 estavam em (None, None) — não tinham FechamentoMensal — e o recálculo
+  criou um.
 
-✻ Crunched for 2m 46s · done 9:47 PM · 2 shells, 1 monitor still running
+  A sua condição fechou: ninguém sai. Mas encontrei um fato que o aval não contemplava, e por isso não aplico ainda:
 
-❯ NAO ENCERRE O TURNO ate segunda: O71 REJULGAR-09 -> O68 (plano B, 758 dias, com o ! de criterio ja dado para a parte a) -> O70 GERADORA-EM-TODA-CELULA -> O51b (Atraso e Saida
-  antecipada) -> O66. So para em PAREI com a tabela (dinheiro que move fora do criterio, ou colab que SAI do export) ou em item da L-009. Entre um item e outro: commit, push pela
-  regua, DEPLOY JA quando o dinheiro der zero, RELATO publicado. A cada PAREI, o numero no topo do RELATO. Nenhuma lei nova.
+  O dinheiro move +142,14 h em horas_trabalhadas (56 colabs) e +83,33 h em horas_extras — este em 95 colabs. E a porta fez 5.081 lavras para apenas 158 mudanças de veredito: ela
+  lavra a ata também, e a ata é o que o motor lê. Então o movimento pode ser a cura chegando ao dinheiro, ou pode ser a deriva do FechamentoMensal velho sendo trazido ao presente
+  — a mesma coisa que de manhã moveu 10 campos fora do alvo em 2 colabs e fez você escrever a L-082.
 
-● Já recebido 26/09 21:5x (PROMPTS, linha "NAO ENCERRE O TURNO ATE SEGUNDA") — estado: O71 em ensaio na sombra, fila O71→O68→O70→O51b→O66 inalterada, ! da O68(a) já registrado em
-  PENDENTES_RONALD.json::o68-aval-de-criterio-parte-a. Não refaço nada; anoto a repetição:
+  Eu não sei de quem é o +142,14 h, e "não sei" aqui não é cobertura parcial: é a diferença entre aplicar a cura e aplicar uma deriva junto. Então estou medindo a deriva pura —
+  recálculo sem rejulgar, contra o gravado — para que o ! que você receber tenha as duas colunas separadas em vez de um total ambíguo.
 
-  Ran 1 shell command
+  Também registro que o número é um piso: 7 colabs recusaram o recálculo por falta da lavra do esmeril na sombra.
 
-● Monitor(ensaio da O71 na sombra)
-  ⎿  Monitor started · task bagtqrd8f · timeout 1800s
+✻ Sautéed for 1m 19s · done 9:52 PM · 1 shell still running
 
-● prompts_repetidos foi a 4.
+● Background command "Medir a deriva pura do recalculo, sem rejulgar" completed (exit code 0)
 
-  O ensaio da O71 está rodando na sombra e é pesado por construção — ele rejulga as 17.332 células da janela, recalcula o fechamento das quatro empresas e roda o
-  classificar_export antes e depois, tudo dentro de um atomic() que termina em raise. Monitor armado.
+  Read 1 file
 
-  Enquanto ele responde, o que já está resolvido e o que o ensaio vai decidir:
+● Separação limpa e decisiva. Com zero rejulga — 0 lavras, 0 vereditos — o dinheiro move exatamente o mesmo, até o último dígito:
 
-  Resolvido: o contador (a) deixou de ser derivado por mim e passa a ser o que a porta lavrar_veredito gravaria. Isso mata os ~1.350 falsos nunca_bateu → concorde da primeira
-  versão.
+● Running 1 shell command…
 
+✢ Herding… (48s · ↓ 2.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
