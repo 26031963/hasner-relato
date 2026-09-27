@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:285 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:31:33.**
+**Medido em 27/09/2026 02:33:15.**
 
 | | |
 |---|---|
-| `HEAD` local | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
+| `HEAD` local | `ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
+237c9b16 [O85] o dia com batida e sem vinculo vigente para de desaparecer da folha
 c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 21cb89f7 [TICKETS] placar do topo com o push que pousou (c6c3785b) -- a regua barrou o push por isso
 31790c43 [E1] o colateral que a suite achou: dois fixtures mais nasciam invertidos, e o argumento e `condition`
-4715f757 [O86] a classe B e 84% CODIGO: em 151 dos 313 turnos abertos havia um S na mao e o pareador nao fechou
-18034517 [O84] corrijo meu proprio universo: "dna.marcos nulo" e dia de FOLGA, nao falta de cadastro
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
-?? app/ponto/tests/test_o85_buraco_de_vinculo.py
 ?? esteira.pausada
 ```
 
@@ -89,27 +86,6 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 
 ```
 
-  Medido esta madrugada (as quatro classes com listas, no RELATO): 84 colabs / 1.602,2 h. Causas nomeadas: O85 buraco de vínculo (159,25 h, identidade ao centavo em 5 colabs), O84
-  a ata nomeia a inversão e o juiz sai por "não sei", O86 o pareador com S na mão (151 de 313), O87 7 templates com intervalo fora do turno, O88 órfã-x-apagado (476 dias / 118
-  colabs).
-
-  Três números meus que eu derrubei medindo de novo: "40,6% das células sem marco" (é folga, não falta de cadastro), "85% da classe B" (é 74% quando se separa ponta de intervalo),
-  e o critério das duas pontas da O88 (mediu zero, porque a ata órfã esconde o desvio).
-
-  A O85 está com cura e RED escritos em /tmp, esperando o push para entrar na árvore, rodar o RED, medir o DIFF na sombra e aplicar pelo critério do MODO 24H.
-
-✻ Cogitated for 1h 12m 4s · done 2:27 AM · 1 shell still running
-
-● Background command "Abrir as linhas no TICKETS e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push pousou: c35dbe8c, 8.393 testes OK + 22 do control-plane. Agora o deploy com migrate (a CHECK NOT VALID do E1):
-
-  Ran 1 shell command
-
-● Migration aplicada (escala.0041) e as três cascas no ar. Smoke do E1 em prod, com a escrita dentro de atomic() + raise (a lei da casa):
-
   Ran 1 shell command
 
 ● E1 fechada e provada em PROD: convalidated=False no schema juliani (passado intocado), as 53 linhas legíveis, e o banco recusou tanto o INSERT invertido quanto o UPDATE numa
@@ -117,15 +93,36 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 
   Próximo item da fila: O85. RED primeiro, com a cura ainda fora da árvore:
 
-● Rodar o RED da O85 sem a cura
-  ⎿  $ cp /tmp/test_o85_buraco_de_vinculo.py ponto/tests/test_o85_buraco_de_vinculo.py && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile
-     >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENV…
+  Ran 1 shell command
 
-· Roosting… (1m 18s · ↓ 3.4k tokens)
+● RED evidenciado: delta = 0,0 — o colab com o dia órfão recebe exatamente as mesmas 8,00 h do que não tem. As 8 h desaparecem. Aplico a cura:
+
+  Ran 1 shell command
+
+● RED → GREEN (8 testes). Agora o DIFF na sombra, que responde as duas perguntas de uma vez — a O85 e a remedição dos 30 separados:
+
+  Ran 1 shell command
+
+● Enquanto o ensaio roda, commito a cura (o ensaio lê a árvore; commit não a altera):
+
+  Ran 1 shell command
+
+● Commitado (237c9b16). Publico o smoke do E1 em prod e o RED da O85 enquanto o ensaio roda:
+
+● Publicar o estado e ver o ensaio · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+     | | |
+     |---|---|
+     | **push** | **pousou**: `c35dbe8c`, **8.393 testes OK** + 22 do control-plane. Barrou duas vezes antes, e a…
+
+✢ Roosting… (3m 1s · ↓ 7.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
