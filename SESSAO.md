@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 16:20:57.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.4 MB). Acoes na janela: **407**.
+**Medido em 27/09/2026 16:26:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (88.4 MB). Acoes na janela: **405**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -415,5 +415,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:29:28 | Bash | Publicar a O87 e ver como se lavra contador | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() s=s.replace("\| espera o bloco da sombra \| **O87** -- o cadastro recusa intervalo fora do turno \| selo com 11 geometrias verde; push `dfb0418c` pousado \|", "\| **04:28** \| **O87** -- o cadastro recusa intervalo fora do turno \| em prod: os 7 templates seguem LEGIVEIS, salvar um deles e **recusado** (congelado), e o `te380` legitimo (`19: ...` |
 | 04:28:40 | Bash | Deploy e smoke da O87 em prod | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -4; echo "=== smoke O87 ==="; cat > /tmp/smoke_o87.py <<'PYEOF' from django.apps import apps from django.core.exceptions import ValidationError from django.db import transaction import datetime as d G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) TE = G('TipoEscala') class _Volta(Exception): pass print('1)  ...` |
 | 04:28:24 | Bash | Conferir o carimbo verde | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/by7o1t734.output; date '+%H:%M'` |
-| 04:21:47 | Bash | Esperar o bloco do cron ficar verde | `until grep -q '^SOMBRA_STATUS=OK$' /home/ronald/saas-hasner/.sombra_stamp 2>/dev/null; do sleep 30; done; echo "ensaio verde:"; /home/ronald/saas-hasner/bin/sombra.sh --conferir` |
-| 04:21:22 | Bash | Escrever o resumo da noite no topo do RELATO | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner # A NOITE DE 27/09 EM UMA PAGINA (00:50 -> 04:20) ## O que foi ao ar, provado no worker servido \| hora \| o que \| prova \| \|---\|---\|---\| \| **01:53** \| as **sete curas** da madrugada (E3, O65, O69, O72, O76, L-084 corrigida, folga) \| smoke no `saas_ui`: atraso de 4h10 com saida no marco volta ...` |

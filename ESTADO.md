@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:20:57.**
+**Medido em 27/09/2026 16:26:01.**
 
 | | |
 |---|---|
@@ -108,14 +108,14 @@ e2753835 [O95] a pausa DECLARADA absorve quem nao voltou -- achada na autopsia d
 
 ● Suíte verde: 8471 testes OK. Retomo a sequência — push:
 
-● Empurrar a O95 · 5s
+● Empurrar a O95 · 5m 9s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; git add app/docs/TICKETS.md
      2>/dev/null; git diff --cached --quiet || git commit -q -F - <<'MSGEOF'
      [O95] rodape e placar do TICKETS antes do push
-     O rodape gu… (4s · 6 lines)
+     O rodape gu… (5m 8s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-* Puzzling… (2m 8s · ↓ 1.4k tokens)
+· Puzzling… (7m 12s · ↓ 1.4k tokens)
   ⎿  Tip: Say "fan out subagents" and Claude sends a team. Each one digs deep so nothing gets missed.
 
 ❯ Login refeito. Retoma de onde parou: veredito da suite da O95 -> push -> deploy -> smoke -> apply da 09 (198 aplicados, col727 separado) -> classe C residual -> E5 fatia 1 ->
