@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:44:01.**
+**Medido em 27/09/2026 11:49:31.**
 
 | | |
 |---|---|
@@ -85,11 +85,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-❯ HANDOFF ANTES DO AUTO-COMPACT (1%): grava no topo do RELATO e no TICKETS: (1) a cura EM CURSO: motor_calculo_v2.py:269 chama parear_turnos SEM papel_por_minuto -- a O65 nao
-  chegou ao motor; 197 casos com a ata explicando e o motor pareando pelo tipo gravado (RED col51 06:59/12:03); falta ligar a alimentacao com a guarda da E3, selo, DIFF pelo
   criterio do MODO 24H e DEPLOY JA. (2) classe B remedida: 236 ate 14 h (197 esta cura + 39 plano B), 109 entre 14 e 20 h, 437 com 20 h ou mais (saida realmente faltando =
   cobranca, lista de segunda). (3) FILA depois: classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3. Regras do MODO 24H e da fila sem trava continuam. Nenhuma lei nova.
 
@@ -117,12 +112,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ✻ Baked for 54m 10s · done 11:42 AM · 1 shell still running
 
-● How is Claude doing this session? (optional)
-  1: Bad    2: Fine   3: Good   0: Dismiss
+❯ fecha a orfa tambem, selo, DIFF e aplica
+
+  Ran 1 shell command
+  ⎿  $ sed -n 760,800p ponto/turnos.py
+●
+
+· Hashing… (1m 26s · ↓ 3.1k tokens · thought for 21s)
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ fecha a orfa tambem, selo, DIFF e aplica
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
