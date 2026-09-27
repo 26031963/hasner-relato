@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:15:31.**
+**Medido em 27/09/2026 14:20:45.**
 
 | | |
 |---|---|
@@ -111,16 +111,16 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 
 ● Acrescento a linha da O94 no TICKETS (a régua vai cobrar) e commito os documentos:
 
-● Commitar a O94 e esperar a suite · 7s
+● Commitar a O94 e esperar a suite · 5m 22s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/TICKETS.md'; s=open(p).read()
      i = s.index('| O93 |')
      nova = ('| O94 | ponto (dinheiro de 09) | turno cuja saida REALMENTE falta fica ABERTO e vale 0 h -- o '
      'gravado de hoje PAGA essas horas por pareamento velho | **medida, PAROU o apply de 09; codigo ja no '
-     'ar** | … (7s · 5 lines)
+     'ar** | … (5m 20s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Lollygagging… (21m 34s · ↓ 71.6k tokens)
+· Lollygagging… (26m 48s · ↓ 71.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
