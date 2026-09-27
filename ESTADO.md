@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:664 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:677 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:25:01.**
+**Medido em 27/09/2026 10:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
+| `HEAD` local | `4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado` |
 | `origin/main` | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,25 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4d1c1a65 rotulos de hora corrigidos (19), e o alarme do vigia declarado
 ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
 d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
 96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
 bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
-4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/CORTES.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
- M app/ponto/services/fechamento.py
- M app/ponto/tests/test_l093_teto_pontualidade.py
- M app/ponto/tests/test_o89_motor_nao_escreve_na_batida.py
 ?? esteira.pausada
 ```
 
@@ -94,16 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ L-086, remedir os   │ sobrou 1 colab, +6,00 h — os outros 16 saíram pelas curas da noite. Aplicado                                                                         │
-  │ 17 (!)              │                                                                                                                                                      │
-  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O91: qual escritor  │ reverter_situacao_afastado escreve um campo (situacao), e hoje escreveria 0. No topo do RELATO                                                       │
-  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O51b: onde clicar   │ o RED do col39 não reproduz (24/08 não está na competência 08) — publiquei três alvos reais: col104, col217, col889                                  │
-  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ cancelar 07/08 (!)  │ O61 inteira, a cláusula da O60, dois itens do PENDENTES (150→148) e o item (3) do col650. E isso resolveu uma dívida que não existia: os 99% e 81%   │
-  │                     │ de "divergência" em 07 e 08 nunca foram deriva                                                                                                       │
-  └─────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   E a O80 fechada pela sua regra de fila: a L-092 deixou de ser promessa — recalcular_fechamento_mes agora recusa antes de escrever, com porta que exige motivo e casca que traduz
   a recusa. 2.593 testes de ponto e folha OK.
@@ -125,12 +106,22 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● Esses três são do vigia da esteira, que carimba a própria hora — corretos, e dizem algo que vale uma linha: "trava A vazia" às 05:25, 06:25 e 07:30, enquanto eu trabalhava
   direto. Commito a correção e relanço o oráculo, como sua regra de fila manda:
 
-● Running 1 shell command…
+  Commitar a correcao, relancar o oraculo e empurrar · 5m 20s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     anc = '## Correcao de rotulo de HORA, a segunda da sessao'
+     bloco = """## O vigia da esteira alarma "trava A vazia" desde 05:25, e ele esta certo
+     `27/09 05:25`, `06:25` e `07:30`: **trava A (estrutural) vazia -- nenhuma fatia viva, nova ou p… (5m 19s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Envisioning… (1m 44s · ↓ 5.0k tokens)
+✢ Envisioning… (7m 14s · ↓ 6.2k tokens)
+
+❯ corte Ronald: O91 NAO instala -- hoje escreveria zero e o campo situacao de afastado nao e fonte (o juiz afastado_hoje e); vira obra so se um vigia medir situacao divergente >
+  0. !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
