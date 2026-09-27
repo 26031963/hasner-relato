@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:37:31.**
+**Medido em 27/09/2026 13:43:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
+| `HEAD` local | `b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
 73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
 5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
 5e7b56ef [O93] o item vai para a fila como `!`, que e o que ele e -- e o selo das DUAS FILAS estava certo
 2c0f8fd4 [O93] PAREI o apply de 09: ha folga trabalhada do 2o tipo, e o maior caso e de 11,13 h a 100%
-42c85223 [O68b-PAPEL] a luz da vizinha REPROVADA tambem protege, e o selo da O65 deixa de morder renomeacao
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/juiz_batida.py
 ?? esteira.pausada
 ```
 
@@ -87,39 +86,39 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
-● Workers de 16:22:43 UTC (13:22 local), arquivos de 12:52 e 12:10 — o worker servido é mais novo que o código, e os três casos provam no ar. Publico onde você clica e fecho o
-  RELATO:
-
-  Committed 64181020, searched for 2 patterns, ran 2 shell commands
-
-● O placar do topo guarda o hash do último push — é a O90 outra vez. Cura nomeada pelo próprio selo:
-
-  Ran 1 shell command
-
-● O tag [RELATO-O68b] é lido como ID de fatia — mesma fricção de antes. Uso o tag da fatia que já tem linha:
-
-  Amended commit fdbf32d8, pushed to main
-
-● Push pousou (5215187e..73322ebd). O item está fechado: órfã curada, 13 selos, PROVA com a deriva isolada, apply PAREI pelo seu critério, código no ar e provado no worker
-  servido. A fila 1 não está vazia, então sigo no mesmo turno para a classe D / O84. Leio quem produz a forma ·I:
-
-  Ran 2 shell commands
-
-● A forma ·I não tem instante de marco, então a luz não tem âncora de data — e é aí que o juiz trava. Vejo se o leitor_celula já resolve isso (pode haver autoridade para ler, em
-  vez de derivar):
-
-  Ran 1 shell command
-
 ● A casa já tem posição declarada sobre a forma ·I: "Sem marco nao ha desvio a medir" — e ela está certa sobre desvio. Mas a pergunta da classe D é outra: qual o papel desta
   batida, e o rótulo ·In o carrega posicionalmente (escala/utils.py:962). É a distinção da minha memória: calar o juízo só quando o dado ausente o torna impossível.
 
-● Provar o RED do col85 pelo juiz
-  ⎿  $ grep -n '^import \|^from ' ponto/juiz_batida.py | head -6; echo '--- RED do col85, pelo juiz ---'; cd /home/ronald/saas-hasner && docker exec saas_core python manage.py
-     tenant_command shell --schema=juliani --command "
-     from escala.models import CelulaDia, EscalaColaborador
-     from ponto.juiz_batida …
+  Ran 2 shell commands
 
-· Warping… (27m 28s · ↓ 23.0k tokens · thinking)
+● O juiz agora responde o col85: entrada 21/08 18:56, saída 22/08 07:02, e o ·I2 sai com tipo='S' contra tipo_real='E' — a ata nomeando a inversão. Falta o leitor deixar de
+  procurar hi/hf e passar a ler o veredito do juiz, que é mais forte e serve as duas formas:
+
+  Ran 1 shell command
+
+● col85 fecha 18:56 → 07:02 = 12,09 h e o mês vai a 0 abertos — o RED da classe D caiu. E o col382 fechou também (14:56 → 22:58, 0 abertos): ler em_aberto do juiz resolve o que a
+  minha guarda de chaves resolvia por acidente. Atualizo os selos:
+
+  Ran 1 shell command
+
+● 26 verdes. Commito e lanço a suíte completa com a DIFF em paralelo:
+
+  Committed b93b05b0, ran 1 shell command
+
+● turnos_abertos 620 → 605 e horas_trabalhadas +324,79. Mas isolando contra a rodada anterior, a O84 traz um número que eu não sei explicar: horas_noturnas de +24,55 para −2,87
+  (swing de −27,42 h, adicional de 20%). Não deploio número não medido — vou nomeá-lo:
+
+● Medir noturnas por colab na arvore atual · 10s
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_not.py <<'PYEOF'
+     import datetime as d, json, os
+     from django.utils import timezone as tz
+     from django.db.models import Q
+     from colaboradores.models import Colaborador
+     from escala.models … (9s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Warping… (32m 58s · ↓ 37.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
