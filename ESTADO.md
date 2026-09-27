@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:50:51.**
+**Medido em 27/09/2026 17:56:01.**
 
 | | |
 |---|---|
@@ -96,44 +96,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-› Message from @a383d3bbe278fc59f (ctrl+o to expand)
-
-● Agent "Autopsia E6 lote 3" finished · 32m 42s
-
-● A autópsia do lote 3 achou uma regressão minha, de hoje, em produção, inflando pagamento — isso fura a fila pela LEI-AKITA 6. O X que eu introduzi entra no turno sem carimbar
-  _intra_dur, então _pares_marcados fica cego a ele e a pausa é paga como trabalho:
-
-  Ran 1 shell command
-
-● Mais fundo do que o carimbo: _pares_marcados também exige S→E do tipo gravado — e o X existe justamente porque a ata desmente o gravado. Curo as duas pontas:
-
-  Ran 1 shell command
-
 ● Curado: col81 21/08 vai de 488 → 423 min (oráculo 422) e col327 22/08 de 466 → 406 (oráculo 406, exato). Selo e medição de frota:
 
-● Selo da O96
-  ⎿  $ cat > ponto/tests/test_o96_par_da_ata_e_pausa.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O96 -- o par que a ATA marcou como miolo e PAUSA, nao trabalho. Regressao minha, de hoje.
-     O QUE EU QUEBREI HOJE. A O68b-PAPEL passou a marcar como `X` a batida que esta DENTRO do vao da ata e que
-     nenhum marco re…
-
-✶ Puzzling… (1h 32m 2s · ↓ 70.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
 
 › Message from @ae9d376eeecd3e213 (ctrl+o to expand)
+
+● Agent "Autopsia E6 lote 2" finished · 34m 34s
+
 › Message from @ab04a661308c44a3f (ctrl+o to expand)
+
+● Agent "Autopsia E6 lote 1" finished · 39m 5s
+
 › Message from @aa02ef15f0a39737f (ctrl+o to expand)
+
+● Agent "Autopsia E6 lote 4" finished · 43m 28s
+
+● As cinco autópsias voltaram: 644 de 644 dias nomeados, 0 sem causa — e elas acham regressões das minhas próprias curas de hoje. Primeiro fecho a O96, que já está medida em prod.
+  Meu selo falha por fixture, não por código:
+
+● Depurar o selo da O96
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
+
+✢ Puzzling… (1h 37m 12s · ↓ 74.9k tokens · deep in thought)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: (1) fechar a O96 com commit e PROVA propria; depois listar no RELATO TODAS as regressoes das curas de hoje que as autopsias acharam, com o numero de cada uma no
+  gravado de 09, e curar uma por uma antes da O81. (2) o subagente "per-day tolerant remapear_na_regua wrapper": dizer no RELATO o que e; se for cura por wrapper/tolerancia =
+  PROIBIDO (LEI-AKITA 1), vira censo de origem. (3) onde esta o resultado do censo O81? publicar a tabela a/b/c. (4) publicar DRY do mutirao + laudos 1-4 e curar o RELATO.md:136
+  retido.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Writing O81_CENSO_ENTREGA.md to scratchpad                                                                                         36m 57s · ↓ 173.1k tokens
+  ◯ general-purpose  Planning per-day tolerant remapear_na_regua wrapper                                                                                 42m 7s · ↓ 175.0k tokens
   ⧉  index
 ```
