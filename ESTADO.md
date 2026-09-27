@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:43:31.**
+**Medido em 27/09/2026 12:49:01.**
 
 | | |
 |---|---|
@@ -89,11 +89,6 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Background command "Esperar o veredito da suite" completed (exit code 0)
-
   Read 1 file
 
 ● O OK: 31 no log não é o veredito do Django (é de um teste que chama selo de host) — meu grep casou cedo. Confiro de verdade:
@@ -114,19 +109,24 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 
 ● Enquanto roda, respondo a segunda metade da pista — se a cura fecha a O62 também:
 
-● Registrar a resposta da O62 no RELATO
-  ⎿  $ grep -c "def periodos_do_dia\|'intervalo'" ponto/turnos.py; grep -n "r.get('intervalo')\|\['intervalo'\]" ponto/turnos.py | head -3; python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     anc = '## FILA depois desta cura'
-     assert s.count(anc)==1
-     add = '''## A segunda metade da sua pista: a O62 *…
+  Ran 3 shell commands
 
-✢ Hashing… (55m 26s · ↓ 109.6k tokens)
+● Antes de aplicar dinheiro, consulto — o commit, os selos e o RELATO já estão duráveis:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Duas correções antes do push. A primeira é um buraco real que o conselho fechou: _todas_luzes só junta os dias emitidos, então a luz de uma vizinha reprovada pela guarda pode
+  virar X e apagar a entrada do turno seguinte — silenciando a cobrança:
+
+● Running 1 shell command…
+
+· Hashing… (1h 0m 56s · ↓ 111.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
