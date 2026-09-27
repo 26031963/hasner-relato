@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:14:31.**
+**Medido em 27/09/2026 04:20:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
-| `origin/main` | `b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -86,6 +86,7 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● Push pousou (b9867ceb). DEPLOY JÁ e smoke da O73 no worker servido:
 
   Ran 1 shell command
@@ -109,16 +110,15 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ● 7 OK. Publico e empurro a O87 (dinheiro zero — é guarda de cadastro):
 
-● Commitar e empurrar a O87 · 5m 29s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## O87 no disco: o cadastro nao aceita mais intervalo FORA do turno (dinheiro zero)
-     Guarda irma da que ja existe para o Art.71: aquela julga a DURACAO do intervalo, esta julga o LUGAR.
-     `escala/model… (5m 28s · 2 lines)
+  Ran 1 shell command
+
+● Push em voo com a suíte. Publico o RELATO (só docs) e aguardo:
+
+● Publicar o RELATO · 7s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/relato.sh 2>&1 | tail -2; date '+%H:%M'; git log --oneline -1 (4s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Transmogrifying… (1h 20m 13s · ↓ 92.1k tokens)
+✢ Transmogrifying… (1h 25m 43s · ↓ 92.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
