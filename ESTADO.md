@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:56:01.**
+**Medido em 27/09/2026 18:01:31.**
 
 | | |
 |---|---|
@@ -96,8 +96,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Curado: col81 21/08 vai de 488 → 423 min (oráculo 422) e col327 22/08 de 466 → 406 (oráculo 406, exato). Selo e medição de frota:
-
   Ran 1 shell command
 
 › Message from @ae9d376eeecd3e213 (ctrl+o to expand)
@@ -115,11 +113,13 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● As cinco autópsias voltaram: 644 de 644 dias nomeados, 0 sem causa — e elas acham regressões das minhas próprias curas de hoje. Primeiro fecho a O96, que já está medida em prod.
   Meu selo falha por fixture, não por código:
 
-● Depurar o selo da O96
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
+  Ran 1 shell command
 
-✢ Puzzling… (1h 37m 12s · ↓ 74.9k tokens · deep in thought)
+● O 18:29 foi consumido pelo _ENVELOPE_SS antes da leitura do papel, então só uma ponta recebeu o carimbo. Carimbo o X antes desse consumo:
+
+● Running 1 shell command…
+
+✢ Puzzling… (1h 42m 42s · ↓ 76.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: (1) fechar a O96 com commit e PROVA propria; depois listar no RELATO TODAS as regressoes das curas de hoje que as autopsias acharam, com o numero de cada uma no
@@ -134,6 +134,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Planning per-day tolerant remapear_na_regua wrapper                                                                                 42m 7s · ↓ 175.0k tokens
+  ◯ general-purpose  Extracting tem_furo examples from o81ab3.out                                                                                       47m 37s · ↓ 183.1k tokens
   ⧉  index
 ```
