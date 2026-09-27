@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:45:45.**
+**Medido em 26/09/2026 23:50:45.**
 
 | | |
 |---|---|
@@ -60,40 +60,40 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  20 colabs revertidos aos 26 campos do snapshot. Prova: 0 campos ainda divergentes, 0 mudanças de status no TXT. Os outros 31 colabs movidos seguem com o apply — eles moveram só
-  campos do critério.
 
-  Revertí o colab inteiro, não os quatro campos: campo a campo deixaria a pessoa num estado que nunca existiu, metade motor novo e metade velho. O ganho aprovado desses 20 voltou
-  junto, e isso é consequência da sua ordem, não efeito colateral — o aval nomeava campos, e nesses 20 o ato saiu do aval.
+● Os dois sítios já usam e.date() — o dia da entrada, que é o dia de início. Então o que falta é a condição "dia NÃO previsto". Vejo como o DSR monta datas_trabalho:
 
-  Os piores eram concentrados: col491 ganhava 13,99 h de HE 100% noturna e passava de 5 para 1 semana de DSR OK; col343 de 5 para 2; col382 ganhava 14,04 h e ia de 3 para 1.
+  Ran 2 shell commands
 
-  A causa é minha, sem atenuante. Meu DIFF imprimia 10 campos, e as duas corridas de comparação — a (a) e a (b) — usaram a mesma lista curta. Então esses quatro campos sempre se
-  moveram e eu nunca os mostrei: quando escrevi "o que move é o medido", o medido era menor que o que move.
+● datas_trabalho já usa o dia da entrada. Então achei a mecânica do DSR: sob MotorTurnoPartido, a cauda depois da meia-noite era um período próprio com entrada em 20/09 — e
+  contava como trabalho naquele dia. Com o motor contínuo ela se funde ao 19/09, e o 20/09 fica vazio. Implemento o 100% e meço se o 20/09 é falta real:
 
-  É a mesma classe do incidente que criou a L-082 doze horas antes — "o DIFF motor-x-motor dava +12,29 h e escondia os 10 campos". Repeti a forma no mesmo dia, com outro corte e
-  outra lista curta. Por isso registrei a O75: a cura não pode ser disciplina minha, tem de ser default do medidor — imprimir os 26 campos sempre, lista curta só como exceção
-  declarada, com selo.
+  Ran 2 shell commands
 
-  Agora, na sua sequência: cartao_x_txt e pdf_x_espelho de 09.
+● A medição do 20/09 separa três casos, e o terceiro é um bug novo:
 
-✻ Crunched for 2m 6s · done 11:43 PM · 1 shell still running
+  ┌────────┬────────────────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────┐
+  │ colab  │                    batidas no 20/09                    │                                    leitura                                     │
+  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+  │ col491 │ 01:17S 02:17E 06:50S — só a cauda do plantão do dia 19 │ falta real: não há entrada para o plantão do dia 20. DSR perdido é correto     │
+  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+  │ col343 │ cauda + 20/09 23:00E                                   │ começou o plantão do dia 20 na hora → DSR ok. Caso de controle                 │
+  ├────────┼────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────┤
+  │ col382 │ 21/09 00:00E 03:56S 05:18E 07:51S                      │ trabalhou, mas entrou 10 min depois do marco 23:50 — e a entrada caiu em 21/09 │
+  └────────┴────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────┘
 
-❯ OS 20 REVERTIDOS (O68b): autopsia do col491, col343 e col382, dia a dia: (1) a HE 100% noturna nova -- quais dias, se e domingo ou feriado trabalhado dentro da escala dele, e
-  qual regra a produz; (2) cada semana de DSR que vira "perdido": qual atraso a derruba, se o atraso esta dentro da regua das 3 h e se o cadastro descreve o dia. Tabela por
-  colab. Ate o meu corte, os 20 ficam no motor velho no gravado e entram na lista de ajuste ao DP com os dois numeros (velho e novo). Nenhuma lei nova.
+  O col382 não tem falta: o plantão dele do dia 20 começou às 00:00 do dia 21, dez minutos atrasado. Como o motor atribui o dia pela data civil da entrada, o período foi para
+  21/09 — fora da janela — e o 20/09 virou falta. É a mesma família da O72, agora na entrada em vez da saída.
 
-● Preciso saber o que derruba a semana antes de tabular. Leio a regra do DSR:
+  Running 1 shell command…
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/BACKLOG.md'
+     s=open(p).read()
+     anc="<!-- OBRAS:FIM -->"
+     item=("| O76 | **DIA DO PLANTAO VEM DO MARCO, NAO DA DATA CIVIL DA ENTRADA** (P7.1; achado 27/09 02:0x na "
+     "autopsia do corte do feriado) -- `MotorBase.calcular_mes` faz `data_jornada = localizar(entrada).date()`. …
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Achado que derruba a premissa da sua pergunta (2), e é mais sério do que atraso: dsr_ok = not faltas_injustificadas — atraso não entra na conta do DSR. Quem derruba a semana é
-  dia previsto sem trabalho e sem justificativa. Confiro os campos do período para montar a tabela:
-
-  Campos do PeriodoCalculo para a tabela
-  ⎿  $ sed -n '130,163p' ponto/motor_calculo_v2.py | grep -nE "minutos_|he_|extra|noturn|data" | head -20
-
-· Nucleating… (53s · ↓ 3.0k tokens)
+· Catapulting… (2m 39s · ↓ 9.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

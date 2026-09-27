@@ -16,6 +16,58 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## AUTOPSIA dos 20 revertidos: a HE 100% noturna e FERIADO TRABALHADO, e o DSR nao e atraso
+
+Ordem Ronald 27/09 01:5x, dia a dia, motor NOVO em rollback (nada gravado).
+
+### (1) A HE 100% noturna nova: **todos os dias sao FERIADO**
+
+| colab | dia | turno | HE 100% noturna | o dia e |
+|---|---|---|---:|---|
+| **col491** | 07/09 seg | 22:50 -> 06:50 | **7,01 h** | **FERIADO** (Independencia) |
+| col491 | 08/09 ter | 22:51 -> 06:50 | **6,98 h** | **FERIADO** |
+| **col343** | 08/09 ter | 22:50 -> 06:50 | **7,00 h** | **FERIADO** |
+| **col382** | 07/09 seg | 23:54 -> 07:50 | **7,04 h** | **FERIADO** |
+| col382 | 08/09 ter | 23:45 -> 07:51 | **7,00 h** | **FERIADO** |
+
+**Nao ha um unico domingo, e nao ha um unico dia comum.** Os 100% saem de `minutos_extra_100_feriado`
+e a parte noturna da Sumula 264 TST (HE realizada em janela noturna). **A regra e' legitima**: feriado
+trabalhado em turno noturno gera HE 100%, e ela e' noturna porque o turno e'.
+
+**Por que nao existia antes**: com `MotorTurnoPartido` o dia quebrava em blocos e a hora nao chegava a
+faixa. Com o motor continuo o par fecha e a hora cai onde deve. Ou seja: **o valor novo parece o
+CERTO**, e o que estava errado era o anterior. Isso NAO autoriza o apply -- o aval nomeava campos --,
+mas muda a leitura: nao e' invencao do motor, e' feriado que nao era pago.
+
+### (2) O DSR: a pergunta "qual atraso a derruba" NAO tem resposta, porque nao e atraso
+
+`MotorBase.calcular_mes:1063` diz `dsr_ok = not faltas_injustificadas`, e o ramo sem dia obrigatorio diz
+`dsr_ok = trabalhou or todos_justificados`. **Atraso nao entra na conta do DSR em lugar nenhum.** Quem
+derruba a semana e' DIA PREVISTO SEM TRABALHO E SEM JUSTIFICATIVA.
+
+| colab | DSR | dias_falta | datas_falta | ultimo dia com periodo |
+|---|---|---:|---|---|
+| col491 | ok=0 **perdido=1** | 1 | **20/09** | **19/09** |
+| col382 | ok=0 **perdido=1** | 1 | **20/09** | **19/09** |
+| col343 | **ok=1** perdido=0 | 0 | — | **20/09** |
+
+O padrao aparece sozinho: **quem perde a semana e' quem nao tem periodo no 20/09**, o ULTIMO dia da
+competencia. O col343 trabalhou no 20/09 e nao perde.
+
+**O que eu NAO sei, e nao vou preencher com hipotese**: `horas_falta` da frota deu **+0,00** no apply,
+com **0 colabs** movidos -- ou seja, nenhuma falta NOVA foi lavrada. Mas `semanas_dsr_perdido` subiu
+**+15**. Falta inalterada com DSR mudando significa que o que mudou foi a COMPOSICAO da semana
+(`dias_periodo` / `trabalhou`), nao a falta -- provavelmente porque o turno que entra 19/09 22:50 e sai
+20/09 06:50 passou a pertencer ao dia da ENTRADA. **Provavelmente nao e medicao.** Proximo passo:
+instrumentar o laco do DSR e imprimir, por semana, `dias_periodo`, `datas_trabalho` e
+`dias_obrigatorios` nos dois motores.
+
+### Enquanto nao houver corte: os 20 ficam no motor VELHO no gravado
+
+E' o estado atual -- revertidos, com prova de 0 divergencia contra o snapshot e 0 mudanca no TXT. Eles
+entram na **lista de ajuste ao DP com os dois numeros**, velho e novo, para a decisao ser tomada sobre
+numero e nao sobre descricao.
+
 ## PAREI: o apply moveu 4 campos FORA do criterio, e eu REVERTI os 20 colabs
 
 Ordem Ronald 27/09 01:3x. **A tabela primeiro**, porque foi ela que eu devia ter publicado junto com o
