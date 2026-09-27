@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:364 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:376 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:18:31.**
+**Medido em 27/09/2026 05:18:59.**
 
 | | |
 |---|---|
-| `HEAD` local | `d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje` |
-| `origin/main` | `512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc` |
+| `origin/main` | `d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc
 d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
 47336b0e ERRATA da mensagem de 512030da -- backtick em `git commit -m` e execucao de comando
 512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama
 da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)
-4a6bc47b [O66+O91] o contador do beco nasce -- e no primeiro uso desmente a minha propria frase
 ```
 
 ## `git status --short`
@@ -85,9 +85,6 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Quatro quebras, todas minhas e todas com cura óbvia. Vejo as três primeiras:
-
   Ran 4 shell commands
 
 ● O core.tests.test_contract_crons não existe (é chamados.) — erro meu de label. Restam os selos do diagrama; vejo o que eles cobram:
@@ -110,14 +107,17 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ● O backtick não só comeu palavras: ele executou bin/gerar_diagrama.py e colou a saída dentro da mensagem. Foi inofensivo porque era um gerador — com um rm teria rodado. Errata e
   lição gravada:
 
-● Curar o placar e empurrar · 9m 44s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
-     git commit -q -F - <<'EOF'
-     [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
-     Co-Author… (9m 42s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Pushed to main, ran 2 shell commands
 
-✢ Harmonizing… (50m 13s · ↓ 46.4k tokens)
+● Push pousou (d070cf9d) e o deploy está no ar. Fecho o resumo da noite com os últimos itens e publico:
+
+● Fechar e publicar o resumo da noite · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     s=s.replace("""| **04:28** | **O87** -- o cadastro recusa intervalo fora do turno |""",
+     """| **05:08** | **O66** -- o contador do beco (`celula_furo_sem_canal`) + os papeis de cron declarados | selo com 7 casos verde; snapshot lavrado a mao…
+
+✢ Harmonizing… (50m 40s · ↓ 47.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

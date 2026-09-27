@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 05:18:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.3 MB). Acoes na janela: **968**.
+**Medido em 27/09/2026 05:18:59.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.3 MB). Acoes na janela: **966**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -976,5 +976,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:19:38 | Bash | Smoke: tela, PDF e folha nos dois casos | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/smoke2.py').read())" 2>&1 \| grep -E "^col\|^ FOLHA\|^ PDF\|^ TELA\|Error" \| head -12` |
 | 17:19:28 | Bash | Normalizar as chaves e remedir o RED | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ if not papel_por_minuto or getattr(b, 'timestamp', None) is None: return None from django.utils import timezone as _tz _m = _tz.localtime(b.timestamp).replace(second=0, microsecond=0) p = papel_por_minuto.get(_m)""" n = """ if not papel_por_minuto or getattr(b, 'timestamp', None) is N ...` |
 | 17:19:04 | Bash | Alimentar o turno vivo e medir o RED dos dois casos | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ _marca_ecos_flush(bs) return turno_aberto_vivo(parear_turnos(bs, marcos_intervalo=mi, marcos_borda=mb), agora, tipo_escala=te)""" n = """ _marca_ecos_flush(bs) # O TURNO VIVO TAMBEM LE A ATA (O65). Este e o miolo do "turno aberto agora", e dele nascem o # chamado e a pergunta de turno ...` |
-| 17:18:46 | Bash | Ler a janela do turno aberto vivo | `cd /home/ronald/saas-hasner && sed -n '781,800p' app/ponto/turnos.py` |
-| 17:18:38 | Bash | Alimentar o ramo multi-escala e ver a terceira chamada | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ out.extend(t for t in parear_turnos(seg_bs, marcos_intervalo=mi, marcos_borda=mb, marcos_por_dia=_mpd_seg)""" n = """ # o ramo MULTI-ESCALA recebe a mesma alimentacao do ramo simples: papel meio-alimentado seria # meia-correcao, e o colab com troca de escala no mes e' justamente quem  ...` |
