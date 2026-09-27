@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:14:31.**
+**Medido em 27/09/2026 03:20:01.**
 
 | | |
 |---|---|
@@ -113,12 +113,12 @@ f1afcead [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres roda
 
 ● Mesma família da O90, agora no rodapé. Curo e empurro:
 
-● Curar o rodape e empurrar · 1m 33s
+● Curar o rodape e empurrar · 7m 2s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2; sed -i 's/barrou DOIS pushes na mesma noite. Cura: valor cuja fonte e o git nao se
-     guarda em arquivo/barrou TRES pushes na mesma noite -- duas vezes o placar do topo (linha 82) e uma o RODAPE (`bin\/tickets_rodap… (1m 31s · 2 lines)
+     guarda em arquivo/barrou TRES pushes na mesma noite -- duas vezes o placar do topo (linha 82) e uma o RODAPE (`bin\/tickets_rodap… (7m 1s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Transmogrifying… (20m 13s · ↓ 51.7k tokens)
+✢ Transmogrifying… (25m 43s · ↓ 51.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
