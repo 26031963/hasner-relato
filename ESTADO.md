@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:58:33.**
+**Medido em 27/09/2026 03:03:41.**
 
 | | |
 |---|---|
@@ -88,39 +88,39 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 
 ```
 
-● Deploy OK. Smoke da O85: as duas testemunhas têm de dar o mesmo número agora — folha (trabalhadas + folga) contra a soma dos períodos do espelho:
+● 0 colabs movem — o horas_trabalhadas total não mudou. Então minha correção não pegou. Meço com o espião, que agora lê a árvore corrigida:
 
   Ran 1 shell command
 
-● 4 de 5 batem exatamente. O col375 diverge em 4,00 h (folha 24,00, espelho 28,00) — resíduo real. Meço antes de afirmar qualquer coisa:
+● O pad funcionou (as batidas de 21/08 viajam) e o par ainda não fecha. A diferença entre a minha sonda e a cura são dois argumentos. Testo qual deles inverte:
 
   Ran 1 shell command
 
-● O col375 tem um vínculo que termina em 21/08, e batidas em 21, 22, 24 e 25/08 (8+4+8+8 = 28 h). O gravado ficou 24 — faltam as 4 h do 22/08. Minha cura loga o que contou; leio o
-  log de prod:
+● Nenhum dos dois. Resta a alimentação de células: a cura passa o envelope inteiro (02/08–28/08), a minha sonda passou só 20–27/08. Testo:
 
   Ran 1 shell command
 
-● A trilha não está em arquivo. Uso o espião na sombra, que intercepta a chamada real — um colab só, é rápido:
+● O envelope também não. Resta o datas_justificadas, que o laço das fatias mutaciona com as datas cobertas por ausência — e a célula de 21/08 do col375 diz fato_em_ausencia.
+  Testo:
 
   Ran 1 shell command
 
-● Causa isolada: na passada órfã, o 22/08 ficou aberto com 0,0 h enquanto 24/08 e 25/08 fecharam 8 h cada. O 22/08 é o primeiro dia da janela que eu passei ao motor. Testo se é a
-  janela:
+● Nenhuma hipótese fecha. Paro de adivinhar e faço o espião imprimir os argumentos exatos que a cura passa:
 
   Ran 1 shell command
 
-● Causa achada, e o bug é meu: com as batidas de 21/08 presentes o par de 22/08 fecha (4,0 h); sem elas, fica aberto. Meu filtro _bat_orfas tem pad só para o dia seguinte (saída
-  cruzando a meia-noite) e não para o anterior — a fatia usa fatia_ini - 1. E ao alargar a entrada eu preciso restringir a SAÍDA, senão conto 21/08 duas vezes:
+● Achei, e é revelador: com tipo_escala=None a fábrica devolve Motor12x36 — não existe motor neutro. A fatia usou MotorComercial (6x1); o meu passe órfão pediu "nenhum template" e
+  recebeu o motor de 12x36, que não fecha um par de 4 h. Testo a cura certa — o último template conhecido:
 
-● Rodar o RED do dia colado · 3s
-  ⎿  $ python3 - <<'PYEOF'
-     p='ponto/tests/test_o85_buraco_de_vinculo.py'; s=open(p).read()
-     s=s.replace(" te = TipoEscala.objects.get(codigo='O85-6x1')\n po = self.po",
-     " from colaboradores.models import Posto\n te = TipoEscala.objects.get(codigo='O85-6x1')\n po = Posto.objects.get(nome='O85 POSTO')")
-     op…
+  Comparar o motor None com o ultimo template conhecido
+  ⎿  $ cat > /home/ronald/saas-hasner/logs/sombra/col375_motor.py <<'PYEOF'
+     """Qual motor a fabrica entrega e qual fecha o par: None x ultimo template conhecido."""
+     import datetime as d
+     from django.utils import timezone as tz
+     from django.apps import apps
+     G = lambda n: next(m for m in apps.get_models() i…
 
-✢ Transmogrifying… (4m 15s · ↓ 16.0k tokens)
+✢ Transmogrifying… (9m 23s · ↓ 28.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
