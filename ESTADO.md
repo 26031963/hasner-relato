@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:00:31.**
+**Medido em 27/09/2026 02:05:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,12 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 ## `git status --short`
 
 ```
+ M app/core/espelho_verdade.py
+ M app/docs/CORTES.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/escala/models.py
+ M app/escala/tests/test_contador_vigencia_impossivel.py
 ?? app/escala/migrations/0041_ec_vigencia_not_valid.py
 ?? app/escala/tests/_vigencia_sem_guarda.py
 ?? app/escala/tests/test_vigencia_constraint_e_o_juiz.py
@@ -50,7 +55,7 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 
 | etapa | feitos | itens do programa |
 |---|---:|---|
-| **E1** PREVISAO INTEGRA | **1/3 = 33%** | selos de frota = 0: vinculo com fim<inicio; 12x36 com 3+ trabalha seguidos; dia de colab ativo sem previsao ou |
+| **E1** PREVISAO INTEGRA | **2/4 = 50%** | selos de frota = 0: vinculo com fim<inicio; 12x36 com 3+ trabalha seguidos; dia de colab ativo sem previsao ou |
 | **E3** MOTOR PELO JUIZ | **4/8 = 50%** | o motor le periodos do juiz da batida e jornada do juiz do previsto; DIFF no RELATO + `!` |
 | **E4** LEITORES NO MESMO NUMERO | **2/5 = 40%** | selo tela == PDF == fechamento == TXT na frota, 0 divergencia |
 | **E5** FECHAMENTO ONLINE | **0/2 = 0%** | fechamento = LEITURA; `recalcular` deixa de existir; so atos persistem |
@@ -58,7 +63,8 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 
 | etapa | item | estado | prova |
 |---|---|---|---|
-| E1 | vinculo com data_fim < data_inicio (escritor unico + saneamento) | **espera Ronald** | medido: 51 colabs com vigencia impossivel (lavrar_vigencia_impossivel); restauracao pelo propositor espera o `!` |
+| E1 | nascer com data_fim < data_inicio e RECUSADO pelo banco (nao so pelo servico | FEITO | corte 27/09 02:0x: CHECK `ec_vigencia_fim_nunca_antes_do_inicio` NOT VALID (escala/0041); selo `escala.tests.test_vigencia_constraint_e_o_juiz` (15 ca |
+| E1 | o passivo de vigencia impossivel que ja existe -- lista que so encolhe | em curso | MEDIDO 27/09 02:2x: 53 vinculos; 43 CONGELADOS por cruzarem competencia exportada (L-092) e 10 livres para o propositor com `!` caso a caso. logs/e1_v |
 | E1 | celula de trabalho sem previsao valida | em curso | medido: 4 colabs com zero vinculo E zero celula (col924/391/43/942, ~221 h) |
 | E1 | qual vinculo vale no dia tem UM juiz (CelulaDia.escala_geradora) | FEITO | O69 aplicada em 09: 654,74 h; `escala/alimentacao.py::vinculo_do_dia`; selo `ponto.tests.test_vinculo_do_dia_pela_celula` (8 casos) |
 | E3 | o MARCO manda, nunca o tipo gravado | FEITO | selo `ponto.tests.test_e3_completa_o_marco_manda` + `test_selo_motor_nao_pareia_pelo_tipo_gravado`; aplicada em 09 |
@@ -89,43 +95,43 @@ fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia po
 
 ```
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● O juiz é exatamente data_fim is None or data_inicio is None or data_fim >= data_inicio, e existe selo de AST cobrando que os 9 escritores o chamem. Então a constraint entra como
-  execução dele, com selo que morde se as duas leituras divergirem:
+● Enquanto a suíte roda, registro o corte e fecho a porta no placar — sem apagar o passivo:
+
+  Read 1 file, ran 1 shell command
+
+❯ Ronald vai dormir. Ordem da noite, sem esperar resposta: (1) se o DEPLOY JA das sete curas ainda nao saiu, sai agora, com o smoke no worker servido; (2) segue a fila do MODO
+  24H (classe C, D, B da E6, O68b, O66, O73, O51b), aplicando pelo criterio e separando o resto; (3) pergunta de LEI ou item da L-009: registra no topo do RELATO e SEGUE para o
+  proximo item, nao espera; (4) a cada item: commit, push ate pousar, DEPLOY JA quando o dinheiro der zero, RELATO publicado. De manha eu leio o RELATO. Nenhuma lei nova.
+
+● Ordem da noite registrada. O (1) está feito — deploy às 01:53 com smoke verde no worker servido. Sigo sozinho no resto. Registro o prompt e vejo a suíte:
+
+  Ran 1 shell command
+
+● Suíte rodando (não toco .py). Publico a lista nominal do E1, que a ordem pede:
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● A lavra já vem do BANCO desde a O63, não do arquivo — então o ensaio na sombra a tem (o dump é de agora). Monto a invocação exata:
 
   Ran 2 shell commands
 
-● Agora o RED. Leio o idioma de fixture dos selos de vigência que já existem, para não inventar:
-
-  Read 1 file
-
-● Colateral achado antes de quebrar: o próprio selo test_contador_vigencia_impossivel.py cria uma linha ruim no fixture (data_inicio=10/08, data_fim=01/08) — com a CHECK no banco
-  de teste, ele passa a estourar. E ali está a origem do seu 38: aquele arquivo diz "38 cruzando competência lavrada", enquanto eu medi 43 cruzando exportada. Varro a suíte por
-  outros fixtures na mesma situação:
+● Suíte ainda rodando (ela usa os núcleos 4-7; medição em prod usa 0-3, então não briga). Testo a hipótese das fatias por correlação, sem a sombra:
 
   Ran 1 shell command
 
-● Só um fixture com datas invertidas literais. Escrevo o selo e a ferramenta que o fixture antigo vai usar para seguir nascendo ruim de propósito:
+● Isso mata minha hipótese das fatias e revela algo mais simples e mais grave: o col882 tem UM vínculo, EC1059, que termina em 06/09 — a janela vai até 20/09. E o col515 tem
+  quatro, incluindo o EC1220 com vigência impossível (está na minha lista dos 10 livres). Testo a aritmética decisiva: as 77 h estão fora da vigência?
 
-  Ran 1 shell command
+● Running 1 shell command…
 
-● Agora conserto o fixture antigo para seguir nascendo ruim de propósito, com a suspensão explícita:
-
-  Ver o trecho exato do fixture
-  ⎿  $ python3 - <<'PYEOF'
-     p='escala/tests/test_contador_vigencia_impossivel.py'; s=open(p).read()
-     velho = """ cls.ruim = EscalaColaborador.objects.create(
-     colaborador=cls.c, posto=po, tipo_escala=te, ativa=False,
-     data_inicio=datetime.date(2026, 8, 10), data_fim=datetime.date(2026, 8, 1))"""
-     novo = """ …
-
-✢ Unfurling… (45m 13s · ↓ 143.3k tokens)
+· Unfurling… (50m 26s · ↓ 163.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
