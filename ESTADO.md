@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:188 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:267 AFIRMA ato sem PROVA ao lado -- ## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:21:01.**
+**Medido em 27/09/2026 02:26:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -85,44 +87,44 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Rodar a suite inteira antes da migration" completed (exit code 0)
+  Ran 1 shell command
 
-● Background command "Esperar o veredito da suite do E1" completed (exit code 0)
-
-  Read 1 file
-
-● Três quebras, e as duas primeiras são exatamente o colateral que meu censo AST não pegou (datas não literais). A terceira é o mypy no meu código novo. Vejo as três:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● mypy pegou o certo: nesta versão do Django o argumento é condition, não check (check está depreciado). Curo na origem, nos dois sítios:
-
-  Ran 2 shell commands
-
-● 33 OK, mypy incluído. Commito as curas do colateral e empurro — o pre-push roda a suíte inteira, que é o portão da migration:
+● 7 templates com geometria impossível (intervalo fora do turno), 10 vínculos, 1 ativo — e um deles é o do col206, que sozinho perde 64,55 h. Publico a causa e abro a obra:
 
   Ran 1 shell command
 
-● Push barrado pela régua: a linha de placar do TICKETS está velha (diz d39c0696, o mundo diz c6c3785b). A própria régua dá a cura:
+● Push em voo. Enquanto ele roda (não commito por cima dele), caço a segunda causa da O86 — o col599, cuja ata é impecável e tem 10 turnos abertos:
 
   Ran 1 shell command
 
-● A régua agora cobra linha no TICKETS para as fatias que citei. Vejo o formato da tabela e abro as linhas:
+● Segunda causa da O86 encontrada, e é a L-084 no pareamento: o col599 trabalha 11:26→18:02 e 19:05→23:32, e o cadastro diz 19:00→07:00. A ata então alinha a S das 18:02 ao marco
+  de ENTRADA, a E das 19:05 ao marco de saída do intervalo, e o marco hf fica apagado — turno aberto com quatro batidas e dois pares completos na mão:
 
-● Abrir as linhas no TICKETS e empurrar · 29s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/TICKETS.md'; s=open(p).read()
-     anc = '|----|--------|-------|--------|--------|------|------|-------------|------|\n'
-     linhas = (
-     "| O82 | infra/deploy | o portao do ensaio e cego entre 00:00 e 04:00: `sombra.sh:203` soma +1 a divergencia quando o dump nao e do DIA, e o … (28s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Unfurling… (1h 5m 43s · ↓ 214.4k tokens)
+● A O88 pede um universo. Meço agora, para a obra nascer com número:
+
+  Ran 1 shell command
+
+● Zero — e isso corrige minha própria proposta. O critério da L-084 não pode ver o col599, porque a ata já assignou as batidas mais próximas (a S das 18:02 ficou a 58 min do marco
+  19:00) e a entrada real das 11:29 virou órfã. Meço o sinal certo:
+
+● Medir o sinal certo: batida orfa com marco apagado
+  ⎿  $ cat > /tmp/o88_orfas.py <<'PYEOF'
+     from django.apps import apps
+     import collections, json
+     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
+     CD, E = G('CelulaDia'), G('Empresa')
+     from ponto import janelas
+     ini, fim = janelas.janela_fechamento(9, 2026, E.objects.get(pk=2))
+     t = collect…
+
+✢ Unfurling… (1h 11m 13s · ↓ 230.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
