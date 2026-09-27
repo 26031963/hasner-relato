@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 15:23:25.**
+**Medido em 27/09/2026 15:28:51.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 ## `git status --short`
 
 ```
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -88,39 +89,39 @@ e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora 
 
 ```
 
-❯ SEQUENCIA ATE O FIM (sem esperar entre passos): smoke -> remede a L-007 (quem perde hora total, colab a colab) -> O95 com DIFF de frota, explicando col51 e col382 antes de
-  aplicar -> APPLY DA 09 segurado, pelo criterio do MODO 24H e com uma condicao a mais: NENHUM colab com saida real perde hora total (L-007 = 0 para esses; quem sobrar fica
-  separado e listado) -> classe C residual -> E5 fatia 1 -> E6 rodada 3 com o numero final no placar. Commit, push, deploy e smoke entre os passos; PAREI so em pergunta de lei ou
-  numero fora do criterio. Nenhuma lei nova.
+  Ran 1 shell command
 
-● Push pousou (73322ebd..037180cd, suíte verde sobre o commit). Sequência recebida — executo até o fim. Deploy agora:
+● Passo 2 medido: 12 colabs, −219,01 h, e 9 deles têm saída real (col727 com 12 turnos, col107 com 7, col297 com 4…). Só 3 não têm nenhuma (col751, col306, col200) — esses são
+  cobrança legítima. Então o passo 4 depende da O95. Passo 3 — reaplico a O95 e explico col51 e col382:
+
+  Ran 1 shell command
+
+● col51 explicado, e é a cura funcionando: o +3,99 h é 07/09 (feriado, célula folga), 07:58 → 11:58. A saída das 11:58 está a 3 min do marco de intervalo 12:01 do template — era
+  comida como ida ao intervalo e o turno ficava aberto valendo 0 h. Agora fecha: 4 h trabalhadas num feriado que estavam sendo perdidas. Vejo o dia do col382:
+
+  Ran 1 shell command
+
+● O dur < 7.5 não mostra de onde saem os 77 min. Comparo o col382 nas duas árvores, direto:
+
+  Ran 1 shell command
+
+● col382 explicado, e a minha O95 estava errada nele: em 25/08 23:53→07:50 (7,94 h) virava 23:53→05:28 (5,57 h) — a batida das 05:28 era absorvida e deixava o turno seguir até a
+  saída real das 07:50, que casa o marco hf exatamente. Falta a segunda prova, que a casa já declara no _ENVELOPE_SS:
+
+  Ran 1 shell command
+
+● Meu patch fechou a docstring e deixou o resto dela como código. Reparo:
 
   Ran 2 shell commands
 
-● Smoke verde no worker servido (workers 18:21 UTC = 15:21 local, arquivos 14:52/13:37/13:56):
+● Com as duas provas: col382 volta a 176,79 (a regressão sumiu), col51 +3,99 h (feriado), col727 135,47 → 162,47, col107 +8,29, col945 +2,06, e col904/col85/col300/col616
+  intactos. Remedimento da L-007:
 
-  ┌──────────────────────────────────┬──────────────────────────────────────────────────┐
-  │               caso               │                    resultado                     │
-  ├──────────────────────────────────┼──────────────────────────────────────────────────┤
-  │ col85 21/08 (O84)                │ 18:56 → 07:02 = 12,09 h                          │
-  ├──────────────────────────────────┼──────────────────────────────────────────────────┤
-  │ col616 14/09 (O93)               │ 05:53 → 18:00 = 11,13 h, FOLGA TRABALHADA        │
-  ├──────────────────────────────────┼──────────────────────────────────────────────────┤
-  │ col297 (O94 miolo)               │ 127,47 h                                         │
-  ├──────────────────────────────────┼──────────────────────────────────────────────────┤
-  │ col904 · col300 · col51 · col382 │ 12,16 · 12,17 · 9,05 · 7,06 — todos como medidos │
-  └──────────────────────────────────┴──────────────────────────────────────────────────┘
+  L-007 depois da O95 completa
+  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; cp
+     $SC/probe_l007b.py app/probe_tmp.py; timeout 2400 bin/sombra.sh --com-a-sombra o95 -- docker run --rm --cpuset-cpus "$TESTE_C…
 
-  Passo 2 — remedir a L-007, já juntando o que o passo 4 vai exigir (quem tem saída real):
-
-  Remedir a L-007 com o split de saida real
-  ⎿  $ SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_l007b.py <<'PYEOF'
-     # L-007 por colab + se os turnos abertos dele tem SAIDA REAL disponivel (condicao do passo 4).
-     import datetime as d, json
-     from django.utils import timezone as tz
-     fr…
-
-✶ Grooving… (13m 51s · ↓ 6.1k tokens)
+· Grooving… (19m 17s · ↓ 20.1k tokens · still thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
