@@ -1,5 +1,245 @@
 # RELATO — esteira saas-hasner
 
+`09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# PAREI: o apply da O68b em 09 esta PARADO -- ha caso do 2o TIPO na folga trabalhada (27/09 ~14:xx)
+
+**Seu criterio, cumprido ao pe da letra**: "se houver um so do segundo tipo, PAREI com a lista". Ha, e o
+maior nao e de 1 h -- e de **11,13 h**. **Nada foi aplicado; o gravado de 09 esta intocado.** A cura de
+codigo da O68b-PAPEL esta commitada e sobe (ela nao move dinheiro por si).
+
+## A lista
+
+| colab | dia | o que a celula diz | o turno | como esta contado | tipo |
+|---|---|---|---|---|---|
+| **col616** | **14/09** | **FOLGA** | `05:53 -> 18:00` = **11,13 h** | hora NORMAL, sem o 100% | **2o** |
+| col616 | 16/09 | FOLGA | `12:00 -> 13:00` = 1,01 h (+ 2 turnos abertos no mesmo dia) | hora normal | **2o** |
+| col616 | 02, 04, 08, 10, 12/09 | FOLGA | mesmo padrao (entradas 12:00 e 18:00) | hora normal | **2o** |
+| col616 | **18 e 20/09** | FOLGA | **forma IDENTICA** aos de cima | **folga trabalhada, com o 100%** | — |
+| col297 | 01, 08, 15/09 | FOLGA | caudas de 1 h as `02:5x`/`03:0x` | hora normal | **1o, correto** |
+
+As duas ultimas linhas sao o que fecha o diagnostico. O col616 da **duas respostas para o mesmo fato no
+mesmo mes**: 14/09 e 18/09 tem a mesma forma e caem em lados opostos. E o col297 mostra o 1o tipo
+funcionando: aquelas caudas herdam o dia ANTERIOR, que e previsto -- e a regra de 29/07 ("cauda
+pos-intervalo de turno noturno nao e turno novo") fazendo exatamente o que deve.
+
+## O mecanismo, medido -- nao inferido
+
+Espionei `EscalaColaborador.eh_dia_trabalho` durante `calcular_mes` e li a sequencia de perguntas. Nos
+dias que caem em hora normal o motor pergunta **duas vezes**: primeiro pelo dia (`False` = folga), depois
+pelo dia **ANTERIOR** (`True` = trabalho) -- e o periodo vai para `resultado.periodos`. Nos dias que
+viram folga trabalhada ele pergunta **so pelo proprio dia** e o periodo vai para `resultado.periodos_ft`.
+O que troca a resposta e a **heranca do dia da jornada** (`<=6 h` apos a saida do periodo anterior, o fix
+de 29/07). No col616 14/09 **nao existe periodo nenhum em 13/09** para a heranca vir de, e ainda assim o
+dia anterior foi consultado: a cadeia propaga um dia que nao teve turno.
+
+E ha o agravante de cadastro que explica o tamanho: **o col616 trabalha nos dias PARES e a escala preve os
+IMPARES** (ancora deslocada). Logo TODO dia trabalhado dele e folga, e a heranca converte jornada inteira
+em hora normal.
+
+Virou **O93 FOLGA-TRABALHADA-HERDA-O-DIA-ANTERIOR** no BACKLOG e **PAROU** no topo do PENDENTES, com a
+cura candidata escrita (a heranca so vale quando existe periodo anterior REAL cuja saida esta a <=6 h
+desta entrada). Nao apliquei a cura: e `motor_calculo_v2.py` decidindo dinheiro a 100% e nenhum aval a
+nomeia.
+
+## Um numero que eu publiquei e que se revelou artefato do ensaio
+
+As `-279 h` de folga trabalhada que eu vi na PROVA da sombra **nao sao o mesmo numero** que prod da. O
+campo depende da LAVRA do esmeril (`logs/esmeril_espelho.json`, `ponto/services/fechamento.py:400`), e o
+container da sombra monta `--tmpfs /app/logs`: sem o arquivo, `escala_certa_no_dia` exclui dias que em
+prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,71 h de diferenca entre o
+ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
+`logs` em tmpfs esta contaminada, e a minha estava.
+
+# APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
+
+PROVA: `logs/apply_o95_09_antes.json` (468.086 bytes, 26 campos x 607 fechamentos, gravado 27/09 19:33) e o
+gravado de prod relido depois do ato -- `turnos_abertos` **620 -> 473**, `horas_trabalhadas` **70.054,96 ->
+71.095,78**, `inconsistencias` **1.332 -> 1.104**, ENTRAM/SAEM do TXT 0, 07 e 08 com 0 divergencias.
+
+## O apply, em prod, com snapshot
+
+`aplicar_09_corte_b --aplicar --antes logs/apply_o95_09_antes.json` (468 KB). O gravado bate EXATAMENTE
+com a medicao da sombra:
+
+| campo | antes | depois | |
+|---|---:|---:|---|
+| `turnos_abertos` | 620 | **473** | **-147** em 68 colabs |
+| `horas_trabalhadas` | 70.054,96 | **71.095,78** | **+1.040,82 h** em 75 |
+| `inconsistencias` | 1.332 | **1.104** | **-228** em 86 |
+| `horas_folga_trabalhada` | 2.286,53 | 2.006,98 | -279,55 em 17 |
+| atraso / antecipada | 132,66 / 198,40 | 73,27 / 228,96 | -59,39 / +30,56 |
+| noturnas / intra | 18.253,59 / 2.205,12 | 18.278,80 / 2.263,24 | +25,21 / +58,12 |
+
+ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33
+(quase todos por `horas_extras_100*` -- a familia da DOBRA de feriado, que segue com pergunta de LEI aberta)
+· **CONDICAO_SAIDA_REAL**: nenhum colab com saida real perde hora total.
+**Reversao**: `logs/apply_o95_09_antes.json` tem os 26 campos de cada colab antes do ato.
+
+## Criterio de export da 09: **189 de 203 colabs certificados**
+
+Rodei o oraculo SO sobre quem entra no TXT (`classificar_export status='entra'`) e contei quem tem QUALQUER
+dia de batidas COMPLETAS divergindo mais de 10 min. **14 colabs divergem** e saem para a lista de ajuste
+ate a causa ter nome:
+
+| colab | dias | pior dia | espelho | oraculo | dif |
+|---|---:|---|---:|---:|---:|
+| col146 | 4 | 13/09 | 0 | 787 | **+787** |
+| col227 | 5 | 22/08 | 0 | 660 | **+660** |
+| col902 | 1 | 21/08 | 547 | 0 | **-547** |
+| col306 | 2 | 01/09 | 252 | 660 | +408 |
+| col920 | 1 | 01/09 | 674 | 1.047 | +373 |
+| col843 | 1 | 23/08 | 359 | 0 | -359 |
+| col594 | 2 | 12/09 | 304 | 532 | +228 |
+| col512 / col60 / col919 | 1 cada | — | — | — | +61 / +60 / +59 |
+| col905 / col80 / col189 / col639 | 1 cada | — | — | — | +21 / +16 / +13 / -11 |
+
+## E6 rodada 3, FROTA INTEIRA, pelos dois numeros da sua regua
+
+**(1) SISTEMA -- dias com batidas COMPLETAS em que espelho e oraculo batem: 91,4%** (6.877 de 7.521).
+Divergem **644 dia-colab em 153 colabs**: 247 entre 10 e 60 min, **272 acima de 60 min**, 63 com espelho
+zero e trabalho no oraculo, 62 o inverso. Divergencia aqui e **bug nosso**, e as causas estao sendo
+levantadas agora por **cinco autopsias em paralelo** (so leitura, um lote de colabs cada, devolvendo causa +
+`arquivo:linha`).
+
+**(2) OPERACAO -- dias com batidas IMPARES que aparecem em aberto SEM numero: 30,9%** (146 de 473).
+**327 dia-colab em 167 colabs mostram um NUMERO** onde devia estar "em aberto, falta a saida" -- e a meta e
+100%. O caso que calibrei a mao: **col830 06/09** mostra `minutos_realizados=882` (14h42) com **duas batidas
+gravadas `E`** e nenhuma saida; `inconsistente=True`, mas o numero esta la. O sistema fechou o turno lendo o
+papel da ATA posicional do intermitente (que diz que o 2o marco e SAIDA) enquanto o oraculo quebra o dia em
+dois pedacos impares porque o vao passa de 14 h. A 5a autopsia esta medindo se as outras 326 sao desta
+familia.
+
+Os 8.982 dias sem trabalho em ambos e os 1.748 isentos/ausencia ficam fora das duas contas, por construcao.
+
+## Sorteio para a sua conferencia a mao (seed 20260927)
+
+| | colabs |
+|---|---|
+| **no TXT** | col196 · col475 · col280 · col109 · col78 |
+| **retidos** | col154 · col707 · col575 · col502 · col885 |
+
+Cartao de cada um: `https://juliani.hasner.com.br/colaboradores/<id>/calendario/?mes=9&ano=2026` (e o PDF em
+`/relatorios/espelho/avulso/`, 09/2026).
+
+# A sua ordem da O94, cumprida: a hipotese NAO se confirmou, e o que apareceu foi melhor (27/09 ~17:xx)
+
+**Apply segurado**, como voce mandou. Medi, nos 14 colabs, a distancia da batida que a ata chama de entrada
+do plantao seguinte ao marco de ENTRADA e ao marco de SAIDA do turno anterior. **49 turnos abertos
+examinados:**
+
+| | |
+|---|---|
+| a ata REIVINDICA a batida (36 casos) | ela esta a **0-20 min** do marco `hi`. **Ali a ata esta certa** -- a batida e mesmo a entrada do plantao seguinte, e o turno anterior nao tem saida |
+| a ata NAO reivindica (13 casos) | a coluna do marco de entrada e `-`. Nao e "errou o papel", e **SILENCIO** -- e o pareador caia no tipo GRAVADO |
+
+Ou seja: a ata nao errou o papel do jeito que a hipotese supunha. Mas o seu oraculo estava apontando para
+algo real, e olhando a SEQUENCIA ele apareceu.
+
+## Cura 1, que subiu: o par do miolo com tipo INVERTIDO partia o turno
+
+No col297 a ata diz que `22:59` e ENTRADA e que `06:56` e SAIDA -- e o **gravado diz `E` nas DUAS**
+(inversao da O65). Entre elas ficam as batidas da ronda, `02:57 E` e `03:57 S`, que a ata nao reivindica e
+cujo gravado esta **invertido**: `_marca_intra_duracao` exige `S` e depois `E` para reconhecer pausa, nao
+reconhece, e o pareador leu as duas como **borda**. O turno de ~8 h que a ata descreve INTEIRO ficava
+ABERTO e valia 0 h.
+
+Cura (mesma familia da guarda 1 da O68b): quando a ata descreve o turno pelas duas pontas, o par do miolo
+tambem e `X`. O teto continua sendo o cadastro -- par com vao maior que `intra_max_s` nao e pausa, e o dia
+segue sem papel (ausencia de 4 h no meio do turno nao passa a ser paga, e tem selo).
+
+**col297 106,28 -> 127,48 h** (acima dos 125 h que o gravado paga, que e o seu numero) · **col922 137,56 ->
+158,17 h** · col51, col904 e col85 **identicos**. A L-007 foi de **14 colabs / -283,01 h** para
+**12 / -219,02 h**: a cura devolveu **64 h**.
+
+Eu nao havia feito assim porque deixava o par intocado para nao "pagar o almoco" do col51 -- e medido
+agora, o col51 e protegido por `_marca_intra_duracao` (o gravado DELE e coerente), com `X` ou sem ele o
+resultado e identico. **A minha guarda protegia por acidente e custava o col297.**
+
+## Cura 2, achada, medida e REVERTIDA hoje: a pausa declarada absorve quem nao voltou (O95)
+
+Aplicando o seu principio ("turno aberto nao paga vale so para turno SEM saida real") aos 44 casos que
+sobraram: **23 tem uma `S` gravada ANTES da proxima `E`** -- ou seja, **ha saida real**, e pelo seu corte
+esses nao podem virar cobranca. O mais limpo e o **col727**:
+
+* template `12:00-20:00` com intervalo declarado `16:00-17:00`; ele trabalha `07:00-11:00 + 12:00-15:00`;
+* a **saida real das 15:00** fica a **60 min** do marco de intervalo `16:00` e a **180 min** da borda
+  `12:00` -- o marco mais proximo dela e o de INTERVALO, e ela e **absorvida como "ida ao intervalo"**. O
+  turno fica esperando uma volta que nunca vem: **-38,02 h**, em 7 dias da mesma forma;
+* nos dias em que a **ata existe** (31/08, 02/09) o mesmo dia fecha certo -- o problema e a geometria do
+  cadastro, nao a batida.
+
+A assimetria e nomeavel: `_marca_intra_duracao` **exige prova de continuidade** para absorver (o comentario
+dela de 25/07 diz isso com todas as letras), e a absorcao por **marco** nao exige nada.
+
+A cura candidata -- exigir volta (`E`) dentro de `intra_max_s` -- recupera o col727 (**135,47 -> 159,49 h**).
+**Mas eu a REVERTI**: ela tambem moveu col51 (+3,99 h de folga trabalhada) e col382 (-1,28 h) sem que eu
+saiba por que, e mexer na absorcao de pausa e caminho quente. Vai subir com DIFF de frota, como **O95** --
+nao entrou no seu PENDENTES porque nao e decisao sua, e medicao minha que falta.
+
+# PAREI (2): a O93 fechou, e a checagem da L-007 mostrou o numero que segura o apply (27/09 ~16:xx)
+
+## Primeiro, o seu aval cumprido: a O93 esta curada e o RED virou
+
+Mas o aval nomeou UMA porta e o RED estava em OUTRA -- as duas existiam, e as duas foram curadas:
+
+| # | porta | o que era | o caso |
+|---|---|---|---|
+| 1 | **heranca da cauda** (`motor_calculo_v2.py`) | periodo ABERTO entregava um fim FALSO (a propria entrada), e o seguinte media as 6 h contra um instante que nao e fim de nada | col616 **16/09**: `12:00->13:00` a 5h45 da ENTRADA do aberto das `06:15`, herdando dele. Curado: sem saida, sem fim |
+| 2 | **vespera** (`turnos.py::_data_do_turno`) | entrada antes do `hf` e longe do `hi` da vespera ia para o dia anterior | col616 **14/09** -- **era esta a porta do RED**, e o numero provou: o gap do fim anterior ali e de **35,89 h**, heranca nenhuma. O cadastro preve `18:59->07:00` e ele trabalha DE DIA `05:52->18:00`, entao a entrada ia para um dia IMPAR, que no cadastro dele e previsto. Curado pelo seu principio (L-085): **a vespera so leva o turno que CABE nela** |
+
+**RED virado**: col616 vai de 14,67 h para **81,59 h** de folga trabalhada, com o **14/09 (11,13 h) dentro**.
+Seus tres selos estao verdes: 18/09 e 20/09 continuam folga trabalhada; a volta do intervalo do plantao
+noturno (`02:00->07:00`) continua herdando; e a entrada ATRASADA do col382 da O76 (`00:00->07:50` contra
+marco `23:50`) continua indo para a vespera -- se deixasse, o 20/09 voltaria a ser FALTA e a semana perderia
+o DSR, que e o dano que a O76 curou.
+
+## E a lavra: eu estava errado no MECANISMO, e o numero era real
+
+Publiquei que o desvio da folga trabalhada era "artefato do tmpfs". **A O63 (26/09) ja tirou a lavra do
+arquivo** -- a autoridade e o snapshot `esmeril_espelho`, e `logs/esmeril_espelho.json` nem existe no host.
+A causa e o **ENVELHECIMENTO**: a lavra da sombra e a do dump das 04:00. Medido comparando os dois bancos:
+prod diz `colabs_com_anomalia_recorrente: 122` e a sombra **119**, e o `destino` de prod tem o col154 que a
+sombra nao tem -- **tres colabs julgados diferente**, em silencio.
+
+Feito o que voce pediu, com o mecanismo certo: **`bin/sombra.sh --lavra`** copia a lavra de PROD para a
+sombra em DUAS pernas (o host le de prod e escreve um arquivo; a sombra importa) -- o container da sombra
+**nunca** abre o banco de prod, que e a barreira do E2. E **`--com-a-sombra` o faz sozinho**, porque copiar
+um snapshot custa nada e a alternativa e medir outra folha. **Recusa com aviso**: na sombra, lavra sem
+marcador ou com md5 de outra lavra levanta `SemLavra` dizendo o que esta em jogo e qual o comando da cura.
+Selo Django (6 casos, inclusive o VERDE, que impede o selo de travar todo ensaio) e selo de host
+(`bin/tests/test_ensaio_de_dinheiro_sincroniza_lavra.sh`, MORDE provado removendo a chamada).
+
+## O que segura o apply agora -- e e um numero que eu mesmo fui buscar
+
+Com a lavra certa, a DIFF ficou: `horas_trabalhadas` **+393,45 h** (24) · `horas_folga_trabalhada`
+**-321,94 h** (13) · `turnos_abertos` **620 -> 606** · `inconsistencias` **-61** · TXT **0/0** · 07 e 08
+**0 divergencias** · APLICADOS 155, SEPARADOS 25. Os totais fecham no sentido "a hora nao some, o adicional
+de 100% muda" -- mas **totais nao provam isso por colab**, entao medi por colab a soma
+`trabalhadas + folga`:
+
+**14 colabs PERDEM hora total, somando -283,01 h.**
+
+| colab | total gravado -> recalculado | |
+|---|---|---|
+| col922 | 201,97 -> 137,56 | **-64,41 h** |
+| col297 | 167,17 -> 106,28 | **-60,89 h** |
+| col727 | 173,49 -> 135,47 | **-38,02 h** |
+| col751 | 56,48 -> 28,38 | **-28,10 h** |
+| + 10 outros (col457, col945, col468, col107, col174, col493, col375, col306, col200, col926) | | -91,59 h |
+
+**A causa e a que eu declarei de manha e nao quantifiquei.** Sao os 12 colabs em que a ata diz que a batida
+gravada como `S` acendeu o marco de **ENTRADA do plantao seguinte** -- e ai o turno anterior fica ABERTO
+porque a saida REALMENTE falta. Turno aberto vale **0 h**, e o gravado de hoje PAGA essas horas porque o
+pareamento velho fechava o turno com uma batida que e de outro turno.
+
+Pela doutrina da casa a leitura nova esta certa (a celula e soberana, e turno sem saida vira **cobranca**,
+nao pagamento). Mas **isso tira 283 h de hora paga de 14 pessoas**, e nenhum aval nomeia essa perda: o seu
+`!` da O93 cobre a heranca de dia, nao "os turnos abertos deixam de ser pagos". Entao **PAREI**, com a lista.
+Virou **O94** no BACKLOG e `!` no topo do PENDENTES. **Nada aplicado; o gravado de 09 esta intocado.**
+
+As curas de codigo (O68b-PAPEL, O84, O93, a lavra) sobem -- nenhuma delas move dinheiro por si.
+
 # O68b-PAPEL -- a orfa fechada, o 12x36 noturno destravado, e a regressao que a PROVA pegou (27/09 ~13:xx)
 
 A cura da classe B esta **completa e commitada** (`a0fb3feb` + `42a8f25a`), com selo que morde e a PROVA
@@ -89,11 +329,84 @@ que a ata nao descreve**, e a pausa vai para `_marca_intra_duracao`, que a mede 
 cadastro. Quem ainda le o `minutos=0` do juiz como "esta escala nao tem intervalo" segue errando, e a O62
 segue aberta com o mesmo corte de 26/09.
 
-## FILA depois desta cura
-classe **D** (21 colabs, 274 h -- o RED col85 espera a cura (1) da **O84**: a ata em forma sintetica `.I`,
-que o juiz le como desalinhada) -> classe **C residual** (col515, 1,54 h) -> **E5 fatia 1** (desbloqueada
-pela O89) -> **E6 rodada 3**. A lista de **cobranca** dos 437 turnos com vao >= 20 h (saida realmente
-faltando) segue para segunda.
+## NO AR, com smoke no worker SERVIDO (27/09 13:2x)
+
+`bin/deploy.sh --sem-migrate` (nenhum modelo tocado). Portao do ensaio verde antes (carimbo de hoje,
+completa, diverge=0), collectstatic rodado, prova de casca com 16 estaticos e 5 paginas, as tres cascas
+recarregadas juntas e as tres rotas provadas; selo BUG 128 verde; `importerror_500=0` na janela.
+
+**O worker servido e mais novo que o codigo**, que e a pergunta que importa: gunicorn de `saas_core` e
+`saas_ui` subiu **16:22:43 UTC (13:22 local)** e os arquivos sao de **12:52** (`turnos.py`) e **12:10**
+(`motor_calculo_v2.py`). Pelo codigo que esta no ar:
+
+| | |
+|---|---|
+| col904 22/08 | `18:50 -> 07:00` = **12,16 h** |
+| col300 02/09 | `17:53 -> 06:03` = **12,17 h** |
+| col51 24/08 | `06:59 -> 16:02` = **9,05 h** (identico ao de antes, com o almoco como intervalo) |
+
+Push: `6060994d..5215187e`, suite verde SOBRE o commit empurrado (8.447 testes + 22 do control-plane).
+
+## Onde voce clica, se quiser ver com o olho
+
+* **tela**: `https://juliani.hasner.com.br/colaboradores/904/calendario/?mes=8&ano=2026` -- o dia **22/08**
+  tem de mostrar o plantao FECHADO `18:50 -> 07:00` (era "aberto", 0 h). O mesmo em
+  `/colaboradores/300/calendario/?mes=9&ano=2026`, dia **02/09**.
+* **PDF**: espelho avulso (`/relatorios/espelho/avulso/`), col904, **08/2026** -- o 22/08 tem de trazer as
+  12,16 h. A tela e o PDF leem a MESMA autoridade agora; se divergirem, e regressao e quero saber.
+* o dia **14/09 do col616** e o contrario: nao clique esperando cura, e o caso da **O93** que PAROU o
+  apply -- ele mostra 11,13 h como hora normal, e a pergunta e se isso vira folga trabalhada.
+
+## O84 fechada no mesmo turno -- a ata NOMEIA a inversao e o juiz devolvia "nao sei"
+
+`montar_lampadas` devolve None sem `hi`/`hf`, e o INTERMITENTE nao tem marco por construcao:
+`escala/utils.py:962` rotula a coluna por POSICAO (`.I1`, `.I2`, ...) e **ja grava nela o papel** alternado
+`E`/`S`, porque "a convocacao define a jornada". O juiz saia pela porta do `desalinhado` ANTES das linhas
+em que ele mesmo nomeia o sintoma do col369, e o dia caia na GEOMETRIA -- que pareia pelo TIPO GRAVADO.
+
+**A distincao que autoriza a cura, e ela nao e nova aqui: impossibilidade nao e cobertura parcial.** Sem
+marco e impossivel medir **desvio**, e sobre desvio o juiz continua **calado** (`instante_marco` fica None
+em todo papel, com selo proprio). Nao e impossivel saber o **papel**: a ata o declara.
+
+| | |
+|---|---|
+| **col85 21/08** (o RED da classe D) | era `18:56 -> ABERTO` (0 h) -> **`18:56 -> 07:02` = 12,09 h**, e os turnos abertos do mes vao de **2 a ZERO**. A ata dizia `.I1/E/18:56` e `.I2/S/07:02` com `tipo_real='E'` na saida -- ela sabia da inversao |
+| **col382 04/09** | fecha `14:56 -> 22:58` = **7,06 h**, 0 abertos no mes. O `em_aberto` do juiz resolve **pela lei** o que a minha guarda de chaves `hi`/`hf` resolvia por acidente |
+| col904 / col300 / col51 | **identicos** (12,16 / 12,17 / 9,05 h) |
+
+E o leitor deixou de ter juiz paralelo: `papel_por_minuto_da_ata` procurava as chaves `hi`/`hf` para saber
+se a ata descrevia um TURNO. Agora le `em_aberto`, `entrada` e `saida`, que sao do `periodos_do_dia`.
+
+### O numero que me obrigou a parar e medir: `horas_noturnas` de +24,55 para **-2,87**
+
+Um swing de **-27,42 h** de adicional noturno (20%) que eu nao sabia explicar. Nao deploiei sem medir.
+Isolado colab a colab, nas DUAS arvores contra o MESMO banco, sao **4 colabs, todos intermitentes com
+celula posicional** -- ou seja, a causa e' esta cura, e nao outra coisa:
+
+| colab | noturnas | trabalhadas | abertos |
+|---|---:|---:|---:|
+| col146 | 78,23 -> 58,77 (**-19,46**) | 84,25 -> **96,15** (+11,90) | 0 -> 0 |
+| col76 | 51,50 -> 41,21 (-10,29) | +0,65 | 1 -> 0 |
+| col830 | 8,00 -> **0,00** (-8,00) | +5,43 | 1 -> 0 |
+| col85 | 51,50 -> 61,83 (**+10,33**) | +12,09 | 2 -> 0 |
+
+**O noturno que desapareceu era INVENTADO.** O col830 e a prova mais limpa: os turnos dele sao de DIA
+(`06:48 -> 18:50`, `06:51 -> 18:53`), e um turno que ficava ABERTO vazava pela noite e produzia 8,00 h de
+adicional 22h-05h. Fechado o turno, a janela noturna nao e tocada e o valor certo e **zero**. O col146
+segue o mesmo fio: ganhou 11,90 h de trabalho REAL e perdeu 19,46 h de noturno que vinham do mesmo vazamento.
+
+### DIFF acumulada (O68b-PAPEL + O84), pelos campos declarados do item
+
+`turnos_abertos` **620 -> 605 (-15, em 17 colabs)** · `horas_trabalhadas` **+324,79 h (21)** ·
+`inconsistencias` **-61 (38)** · noturnas **-2,87** · intra **+31,17** · HE **+2,57** · reflexo **+6,24** ·
+atraso **-59,84** · antecipada **+38,40**. ENTRAM/SAEM do TXT: **0**. 07 e 08: **0 divergencias**.
+APLICADOS 153, SEPARADOS 31. **Nada aplicado**: o apply de 09 segue PARADO pela O93.
+
+## FILA depois destas duas curas
+classe **C residual** (col515, 1,54 h) -> **E5 fatia 1** (desbloqueada pela O89) -> **E6 rodada 3**.
+A classe **D** fechou com a O84 (o RED col85 era ela). A lista de **cobranca** dos 437 turnos com vao
+>= 20 h (saida realmente faltando) segue para segunda. E o **apply de dinheiro de 09 esta PARADO pela
+O93** -- as curas de codigo sobem, o gravado espera voce.
 
 ## O que ficou no ar nesta sessao (todos com smoke proprio em prod)
 sete curas (01:53) · **E1** com migration (02:30) · **O85** (03:31) · **O73** (04:01) · **O87** (04:28) ·
