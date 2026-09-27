@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:455 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:487 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:04:31.**
+**Medido em 27/09/2026 09:05:49.**
 
 | | |
 |---|---|
-| `HEAD` local | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
+| `HEAD` local | `bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido` |
 | `origin/main` | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
 4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
 0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
 6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)
 6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc
-d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -86,11 +85,6 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O91: antes de eu decidir, uma linha no topo do RELATO dizendo QUAL escritor o install ativaria e o que ele escreve.
-  O51b: publica no topo do RELATO onde eu clico (tela e PDF) para o smoke, com o colab e o dia do RED.
-  Depois disso segue a fila sem esperar. Nenhuma lei nova alem dos cortes acima.
-
-● Seis pedidos. Registro todos e começo pelos dois que são uma linha cada. Primeiro leio o que o escritor da O91 realmente escreve:
 
   Ran 1 shell command
 
@@ -104,25 +98,30 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ● col39 existe (emp4) mas o gravado tem saida_antecipada = 0,00 em 08 e 09 — então o RED de 300 min é do motor, não do gravado. Confiro antes de publicar um alvo de clique:
 
-  Conferir o RED do col39 no motor
-  ⎿  $ cat > /tmp/col39.py <<'PYEOF'
-     from django.apps import apps
-     from django.utils import timezone as tz
-     import datetime as d
-     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
-     Col, EC, B = G('Colaborador'), G('EscalaColaborador'), G('Batida')
-     from django.db.models import Q
-     from core.r…
+  Ran 1 shell command
 
-· Shimmying… (5m 9s · ↓ 5.8k tokens · thinking)
+● O RED da O51b não reproduz: a competência 08 vai de 21/07 a 20/08, então 24/08 nem está nela — está na 09 —, e no motor de hoje o col39 tem só 13 min de atraso em 13/09. Busco
+  um alvo de clique real, do gravado de hoje:
+
+  Ran 1 shell command
 
 ❯ REGRA DE FILA: quando so restar item esperando o Ronald, NAO para -- puxa trabalho sem trava, nesta ordem: O80 (selo da L-092), O81 (ata no formato antigo: rejulgar com
   --forcar e o espelho cair no builder so no dia degradado), E5 fatia 1 (a 09 lida da celula; so depois da O89), E6 rodada de novo apos cada cura. So fica parado se nem isso
   houver.
-  ctrl+x ctrl+s to send now
+
+● Alvos reais achados (144 colabs têm pontualidade no gravado de 09). Publico as duas linhas que você pediu e registro os pedidos:
+
+● Publicar as duas linhas pedidas
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     ## O91 -- QUAL escritor o `install` ativaria, e o que ele escreve (voce pediu uma linha; aqui esta com o numero de hoje)
+     **`reverter_situacao_afastado --apply`** escreve **UM campo**: `Colaborador.s…
+
+✶ Shimmying… (6m 28s · ↓ 8.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
