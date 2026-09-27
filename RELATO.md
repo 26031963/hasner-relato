@@ -1,5 +1,47 @@
 # RELATO — esteira saas-hasner
 
+## DEPLOY JA das sete curas: **NO AR as 01:53**, com smoke verde no worker servido
+
+| | |
+|---|---|
+| **deploy** | `bin/deploy.sh --sem-migrate` OK -- collectstatic, prova de casca (16 estaticos, 5 paginas), tres cascas reiniciadas JUNTAS, tres rotas provadas, selo BUG 128 verde, `importerror_500=0` |
+| **worker servido** | saas_ui e saas_core subiram **04:53:35/36 UTC = 01:53 -03**. `find app -name '*.py' -newermt <inicio do worker>` = **0 arquivos** nas duas cascas. ANTES do deploy a mesma conta listava `motor_calculo_v2.py` e `fechamento.py`: e a prova de que as curas nao eram servidas e agora sao |
+| **ensaio** | carimbo `dia=20260927 status=OK diverge=0`, bloco **63/63 comandos, erro=0**. Precisou de `--refazer --dump-agora` -- ver O82 |
+
+**SMOKE, rodado no `saas_ui` (a casca que serve o espelho), pela funcao real:**
+
+| prova | obtido | esperado |
+|---|---|---|
+| L-084 corrigida -- entrada 4h10 atrasada com saida NO MARCO volta a descontar (selo de 14/09) | **250 min** | 250 |
+| saida antecipada no mesmo dia | 0 | 0 |
+| contraprova -- as DUAS pontas longe (caso col382) nao gera pontualidade | **(0, 0)** + 1 dia em CADASTRO x REALIDADE | (0,0) |
+| O76 -- col382 com furo apurado em 20/09 | **nao** | nao |
+| O76 -- o turno POUSA no 20/09 (o selo que MORDE: "nao esta na lista" passaria por ausencia de sinal) | **389 min** | > 0 |
+
+`SMOKE_SETE_CURAS=OK`. A L-084 errada esteve no ar de 23:35 a 01:53 -- **2h18**.
+
+## CORRECAO de um numero que eu publiquei 10 min antes: a inversao em PONTA e 276 dias, nao 437
+
+Eu havia publicado "a ata nomeia a inversao em 437 dias / 153 colabs" e "85% da classe B". Separei as
+437 pelo MARCO em que a inversao cai, e a severidade nao e a mesma:
+
+| onde cai a inversao | dias | colabs | o que significa |
+|---|---:|---:|---|
+| **PONTA (`hi`/`hf`)** | **276** | **104** | grave: o papel de ENTRADA ou SAIDA esta invertido, e e isso que impede o turno de fechar |
+| so no INTERVALO (`hii`/`hfi`) | 143 | 81 | menor: erra a intrajornada, nao a jornada |
+| slot sintetico `·I` (intermitente) | 17 | 4 | e o caso do col85 |
+| nao classificado | 1 | 1 | |
+
+Por `tipo_ciclo`: 6x1 **276**, 12x36 **123**, intermitente 17, personalizado 10, 5x2 11 -- **nenhum
+`turno_partido`**, o que afasta a duvida de que parte disso fosse o vao dos blocos do partido (ali
+`AUT_MARCOS_INTERVALO=False` e o juiz nem e aplicado).
+
+**O cruzamento com as classes, refeito so com a inversao em PONTA:** classe B **20 de 27 (74%)**,
+classe D 10 de 21 (48%) -- 11 (52%) somando o sintetico --, classe C 9 de 32 (28%), classe A **0**.
+Os 85% da classe B contavam inversao de intervalo; o numero que sustenta a O84 e **74%**. Tres colabs
+da B (col564, col869, col880) so tem inversao de INTERVALO: se a cura nao os alcancar, e esperado.
+
+
 ## LISTA DE AJUSTE AO DP (09/2026): **9 colabs no TXT, 259,3 h** que as batidas provam e a folha nao paga
 
 Pedido de 27/09 02:0x. Regua = `horas_trabalhadas + horas_folga_trabalhada` do `FechamentoMensal`
@@ -62,6 +104,27 @@ erro que a cura da E3 nomeia, no ramo que a cura declara nao cobrir.
 **40,6% das celulas da competencia aberta nao tem marco congelado.** E nos 437 dias em que a ata
 nomeia a inversao o papel certo esta escrito e e ignorado -- a maioria deles com veredito
 **concorde**, o que quer dizer que nao ha conflito a resolver: ha leitura que nao acontece.
+
+### A assinatura e COMPARTILHADA pelas tres classes de codigo (e a classe A e limpa)
+
+Cruzei as quatro assinaturas com as quatro classes. **Co-ocorrencia nao e causalidade** -- quem
+prova quanto a cura move e o DIFF, nao esta tabela --, mas ela diz onde olhar:
+
+| classe | colabs | `dna.marcos` nulo | ata com `n_missing` | **a ata NOMEIA a inversao** | discordante |
+|---|---:|---:|---:|---:|---:|
+| **B** turno aberto 5+ | 27 | 20 (74%) | **27 (100%)** | **23 (85%)** | 7 (26%) |
+| **C** espelho ve, folha nao | 32 | 24 (75%) | 28 (88%) | 11 (34%) | 6 (19%) |
+| **D** nem o espelho ve | 21 | 18 (86%) | 20 (95%) | **14 (67%)** | 5 (24%) |
+| **A** fechamento zero | 4 | **0 (0%)** | **0 (0%)** | **0 (0%)** | 0 (0%) |
+
+A classe A dar **zero em todas** e a confirmacao de que ela e de outra natureza: sem vinculo e sem
+celula, nao ha ata para ter assinatura -- e por isso ela e cadastro e nao codigo, como voce disse.
+Os 4 da classe B sem a assinatura sao col224, col307, col371 e col787: se a cura da O84 nao os
+alcancar, eles sao o resto que sobra e tem de ter nome proprio.
+
+**Consequencia para a fila**: a O84 nao e cura da classe D -- e a cura candidata da assinatura que
+aparece em **B, C e D**, isto e, 80 colabs e 1.384,4 h. Isso NAO promete 1.384 h de movimento; promete
+que uma medicao so responde pelas tres, e por isso ela vem antes de tres receitas separadas.
 
 ### PROPOSTA (pergunta de desenho: mede, propoe, segue -- MODO 24H)
 
