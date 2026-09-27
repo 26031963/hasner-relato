@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 06:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **936**.
+**Medido em 27/09/2026 06:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.5 MB). Acoes na janela: **934**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -944,5 +944,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:15:53 | Bash | Ver VEREDITOS_ACUSAM e a vida da pergunta | `sed -n '1386,1400p' escala/models.py; echo "=== PerguntaDisputa: campos de vida ==="; grep -n "respondida_em\\|validada_em\\|fechada\\|encerrada\\|via\s*=\\|data_turno\\|celula" chamados/models.py \| sed -n '1,14p'` |
 | 18:15:15 | Bash | Achar veredito, pergunta e o elo com a celula | `grep -n "veredito\s*=\\|VEREDITO" escala/models.py \| head -6; echo "=== o que e pergunta / canal ==="; grep -rn "class Pergunta\\|class ChamadoColaborador" --include=models.py chamados/ \| head -3; echo "=== a celula aponta perguntas/chamados? ==="; grep -n "perguntas\\|chamados\\|protestos" escala/models.py \| grep -i "related\\|ManyTo\\|ForeignKey\\|JSON" \| head -4` |
 | 18:14:58 | Bash | Veredito do push41 | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)\|rc_push\|origin/main\|ahead" logs/push41.log \| tail -7` |
-| 18:10:10 | Bash | Registrar a cauda e commitar | `python3 <<'ENDPY' f='docs/RELATO.md' s=open(f,encoding='utf-8').read() anc='### SMOKE POS-DEPLOY (L-083), as tres testemunhas concordando' L=[];A=L.append A('### A cauda da ordem: NAO declaro "09 liberada", e digo exatamente por que') A('') A('\| condicao pedida \| medido \|') A('\|---\|---\|') A('\| `cartao_x_txt` de 09 = 0 \| **0 divergentes** em 203 colabs no TXT \|') A('\| `pdf_x_espelho` de 0 ...` |
-| 18:07:04 | Bash | Provar estabilidade de 09 e ver o push | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o65.py').read())" 2>&1 \| grep -E "ROLLBACK\|processados\|SOMA\|nenhum\|^[a-z_]+ +[-+]" \| head -6; echo "=== push41 ==="; grep -E "rc_push\|origin/main\|ahead\|^Ran \|^(OK\|FAILED)" logs/push41.log 2>/dev/null \| tail -4` |
