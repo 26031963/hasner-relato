@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:28:31.**
+**Medido em 27/09/2026 00:33:45.**
 
 | | |
 |---|---|
@@ -39,52 +39,59 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 ## `git status --short`
 
 ```
+ M CLAUDE.md
+ M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/docs/LEIS.md
+ M app/ponto/management/commands/aplicar_09_corte_b.py
+ M app/ponto/management/commands/desvio_o68b.py
+ M app/ponto/management/commands/diff_reclassificar_partido.py
  M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/fechamento.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 1 shell command
-
-● _dia_do_turno já existe e a docstring diz "So o dia sai daqui" — e ele é usado no MotorTurnoPartido e no MotorComercial, mas não no MotorBase, que é onde o col382 roda. Eu criei
-  um segundo mapa para a mesma pergunta. Removo o meu e uso o declarado:
+● Background command "Incluir o relato.sh curado e empurrar" completed (exit code 0)
 
   Ran 1 shell command
 
-● O76 curada, e o RED fechou exatamente como a sua ordem previa:
+● 7 falhas, todas minhas. Vejo as sete:
 
-  ┌────────┬────────────────────────┬────────────────────────┬───────────────────────────────────────────────────────────────────────────────────────┐
-  │ colab  │         antes          │         agora          │                                        leitura                                        │
-  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ col382 │ perdido=1, falta 20/09 │ ok=1, sem falta        │ ele não faltou — entrou 10 min depois da meia-noite e o motor o jogava fora da janela │
-  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ col491 │ perdido=1, falta 20/09 │ perdido=1, falta 20/09 │ falta real — segue perdido, e está certo                                              │
-  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ col343 │ ok=1                   │ ok=1                   │ controle, inalterado                                                                  │
-  └────────┴────────────────────────┴────────────────────────┴───────────────────────────────────────────────────────────────────────────────────────┘
+  Ran 1 shell command
 
-  A cura foi menor e mais funda do que eu tinha escrito na primeira tentativa. Três coisas que valem registro:
+● Cinco distintas, e as duas primeiras são graves: um selo da casa diz que entrada 4h10 atrasada É atraso de 250 min, e a minha L-084 (corte de 3 h) agora devolve zero. Leio os
+  dois selos:
 
-  O mapa já existia. MotorBase._dia_do_turno, cuja docstring diz literalmente "So o dia sai daqui". O MotorTurnoPartido e o MotorComercial já o usavam; o MotorBase era o único dos
-  três que derivava por conta própria — e é nele que roda o Motor12x36ComEscala, ou seja o plantão noturno, exatamente quem sofre o problema.
+  Ran 1 shell command
 
-  Eu criei um segundo mapa antes de procurar o primeiro. Chaveado pelo timestamp cru, enquanto o declarado chaveia por localizar(...). Apaguei o meu. Um segundo mapa para a mesma
-  pergunta é o que esta noite inteira arrancou de quatro lugares — e eu quase plantei outro.
+● Agora o conflito está preciso, e é pergunta de lei, com consequência viva em prod. Vou consertar as três falhas mecânicas e te trazer a pergunta com os números. Primeiro as
+  mecânicas:
 
-  Havia uma terceira derivação, no DSR. datas_trabalho.add(localizar(p.entrada).date()) — e era ela que derrubava a semana do col382. Curar só o data_jornada não bastava; o laço
-  do DSR tinha a sua própria conta. Agora ele lê o dia da jornada que classificou o período.
+  Ran 2 shell commands
 
-  Agora remeço os 30 pelo critério do MODO 24H e aplico os que passarem.
+● A porta do FechamentoMensal é ponto/services/fechamento.py. Crio a operação de restauração lá — restaurar snapshot é uma operação nomeada, com trilha:
 
-✻ Cooked for 3m 1s · done 12:25 AM · 2 shells still running
+  Searched for 1 pattern, ran 3 shell commands
+
+❯ corte Ronald (corrige a L-084): o dia so sai do juizo de pontualidade quando ENTRADA E SAIDA estao, as DUAS, a mais de 3 h dos seus marcos (o turno inteiro esta em outro
+  horario = cadastro que nao descreve o dia -> nao desconta, vai para CADASTRO x REALIDADE). Se so UMA ponta esta longe, e atraso ou saida antecipada real e desconta normalmente,
+  com a tolerancia de sempre. O selo antigo (entrada 4h10 atrasada = 250 min de atraso) volta a valer como caso que morde, e a L-084 ganha o par: turno inteiro deslocado nao
+  desconta. Remede a coluna 2 com a regra corrigida e DEPLOY JA, porque a versao atual esta no ar. !
+
+● Corte recebido — é exatamente a distinção que o conflito dos selos apontava: "ou" vira "E". Implemento, e há um caso que eu preciso te mostrar depois de medir:
+
+● Fechar o import e rodar os selos do conflito
+  ⎿  $ sed -i '142a\ from ponto.services.fechamento import restaurar_fechamento' ponto/management/commands/desvio_o68b.py && python3 -c "import ast;
+     ast.parse(open('ponto/management/commands/desvio_o68b.py').read())" && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --…
+
+✢ Canoodling… (3m 43s · ↓ 11.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ remede os 30 e aplica os que passarem
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
