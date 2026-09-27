@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 05:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.3 MB). Acoes na janela: **976**.
+**Medido em 27/09/2026 05:18:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.3 MB). Acoes na janela: **968**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -978,11 +978,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:19:04 | Bash | Alimentar o turno vivo e medir o RED dos dois casos | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ _marca_ecos_flush(bs) return turno_aberto_vivo(parear_turnos(bs, marcos_intervalo=mi, marcos_borda=mb), agora, tipo_escala=te)""" n = """ _marca_ecos_flush(bs) # O TURNO VIVO TAMBEM LE A ATA (O65). Este e o miolo do "turno aberto agora", e dele nascem o # chamado e a pergunta de turno ...` |
 | 17:18:46 | Bash | Ler a janela do turno aberto vivo | `cd /home/ronald/saas-hasner && sed -n '781,800p' app/ponto/turnos.py` |
 | 17:18:38 | Bash | Alimentar o ramo multi-escala e ver a terceira chamada | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ out.extend(t for t in parear_turnos(seg_bs, marcos_intervalo=mi, marcos_borda=mb, marcos_por_dia=_mpd_seg)""" n = """ # o ramo MULTI-ESCALA recebe a mesma alimentacao do ramo simples: papel meio-alimentado seria # meia-correcao, e o colab com troca de escala no mes e' justamente quem  ...` |
-| 17:18:24 | Bash | Ver o contexto das outras chamadas | `cd /home/ronald/saas-hasner && sed -n '640,650p;750,760p;818,826p' app/ponto/turnos.py` |
-| 17:18:19 | Bash | Listar todas as chamadas ao pareador | `grep -n "parear_turnos(" ponto/turnos.py` |
-| 17:18:13 | Bash | Achar as duas chamadas ao pareador | `awk '/^def turnos_do_colab/,/^def [a-z_]+\(/{if (/parear_turnos\(/) print NR": "$0}' ponto/turnos.py` |
-| 17:18:06 | Bash | Chamador le a ata e alimenta o pareador | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() v = """ bs = list(bs) # explicito: ecos marcados nas MESMAS instancias que o pareador consome _marca_ecos_flush(bs)""" n = ''' bs = list(bs) # explicito: ecos marcados nas MESMAS instancias que o pareador consome _marca_ecos_flush(bs) # O PAPEL SAI DA ATA, PELO MESMO JUIZ DO MOTOR (O65, corte ...` |
-| 17:17:44 | Bash | Alimentacao de papel no juiz de geometria | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/turnos.py' s=open(f,encoding='utf-8').read() # (1) a assinatura recebe a alimentacao de PAPEL v1 = """def parear_turnos(batidas, marcos_intervalo=None, marcos_borda=None, marcos_por_dia=None, intra_max_s=3 * 3600, cont_max_s=14 * 3600): \"\"\"Pareia batidas cruas (objs com .timestamp aware e .tipo E/S) em turnos. E abre turno; S fecha o ...` |
-| 17:17:15 | Bash | Ler turnos_do_colab | `grep -n "def turnos_do_colab" -A 26 ponto/turnos.py \| head -30` |
-| 17:17:03 | Bash | Ler onde o tipo decide a borda do turno | `sed -n '462,520p' ponto/turnos.py` |
-| 17:16:57 | Bash | Registrar a ordem e ler parear_turnos | `python3 - <<'ENDPY' f='docs/PROMPTS.md' s=open(f,encoding='utf-8').read() linha = ('\| 26/09 21:xx \| **O65-AGORA** (coerencia tela = PDF) \| `parear_turnos`/`turnos_do_colab` passam a perguntar ao juiz ' 'da batida, o mesmo do motor; nenhum leitor de turno pareia pelo tipo gravado e o selo da E3 se estende a eles. RED: ' 'col736 11/09 e col369 23/09 com rotulo da tela = PDF = motor. DIFF por LEIT ...` |

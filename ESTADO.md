@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:13:01.**
+**Medido em 27/09/2026 05:18:31.**
 
 | | |
 |---|---|
@@ -110,14 +110,14 @@ da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por
 ● O backtick não só comeu palavras: ele executou bin/gerar_diagrama.py e colou a saída dentro da mensagem. Foi inofensivo porque era um gerador — com um rm teria rodado. Errata e
   lição gravada:
 
-● Curar o placar e empurrar · 4m 14s
+● Curar o placar e empurrar · 9m 44s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
      git commit -q -F - <<'EOF'
      [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
-     Co-Author… (4m 12s)
+     Co-Author… (9m 42s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Harmonizing… (44m 43s · ↓ 46.4k tokens)
+✢ Harmonizing… (50m 13s · ↓ 46.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
