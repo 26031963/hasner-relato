@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 04:21:25.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.7 MB). Acoes na janela: **982**.
+**Medido em 27/09/2026 04:25:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (81.7 MB). Acoes na janela: **983**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:21:47 | Bash | Esperar o bloco do cron ficar verde | `until grep -q '^SOMBRA_STATUS=OK$' /home/ronald/saas-hasner/.sombra_stamp 2>/dev/null; do sleep 30; done; echo "ensaio verde:"; /home/ronald/saas-hasner/bin/sombra.sh --conferir` |
+| 04:21:22 | Bash | Escrever o resumo da noite no topo do RELATO | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner # A NOITE DE 27/09 EM UMA PAGINA (00:50 -> 04:20) ## O que foi ao ar, provado no worker servido \| hora \| o que \| prova \| \|---\|---\|---\| \| **01:53** \| as **sete curas** da madrugada (E3, O65, O69, O72, O76, L-084 corrigida, folga) \| smoke no `saas_ui`: atraso de 4h10 com saida no marco volta ...` |
 | 04:20:39 | Bash | Ver se o bloco do cron esta rodando | `cd /home/ronald/saas-hasner && pgrep -af 'sombra.sh' \| grep -v pgrep \| head -3; cat .sombra_stamp \| grep -E 'SOMBRA_(DIA\|DUMP\|BLOCO\|STATUS\|REFEITA)'; wc -l logs/sombra/resultado.tsv 2>/dev/null; date '+%H:%M'` |
 | 04:20:26 | Bash | Deploy da guarda da O87 | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -5` |
 | 04:20:17 | Bash | Ler o resultado do push da O87 | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bu8atw5im.output; cd /home/ronald/saas-hasner && git rev-list --count origin/main..HEAD` |
@@ -991,4 +993,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:33:05 | Bash | Registrar a lei nova nos tres lugares | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' # 1. CORTES.md -- a frase que faz a lei nascer f='app/docs/CORTES.md' s=open(f,encoding='utf-8').read() bloco = ''' ## corte Ronald 26/09 ~19:xx — "DEPLOY JA" (lei nova) > corte Ronald (lei nova, "DEPLOY JA"): cura commitada e com a suite verde vai ao ar NA HORA pelo > bin/deploy.sh (reload gracioso + prova de casca + collectstatic), a qualquer hora ...` |
 | 16:32:23 | Bash | Atualizar o selo e rodar | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/tests/test_lavra_fora_da_regua.py' s=open(f,encoding='utf-8').read() velho = ''' def test_MORDE_lavra_de_prod_presente_nao_chega_a_pauta(self): import tempfile from django.test import override_settings from ponto.services.esmeril_espelho import LAVRA, linhas_para_a_pauta with tempfile.TemporaryDirectory() as tmp: os.makedirs(os.path.joi ...` |
 | 16:31:47 | Bash | Ler o selo que quebrou | `sed -n '1,45p' ponto/tests/test_lavra_fora_da_regua.py` |
-| 16:24:55 | Bash | Exigir a lavra so quando ha folga trabalhada | `cd /home/ronald/saas-hasner && python3 <<'ENDPY' f='app/ponto/services/fechamento.py' s=open(f,encoding='utf-8').read() velho = """ from ponto.services.esmeril_espelho import ler_lavra as _ler_lavra _lavra = _ler_lavra(exigir=True) fechamento.horas_folga_trabalhada = round(sum( p.minutos_trabalhados for p in resultado.periodos_ft if _certa(colab.id, timezone.localtime(p.entrada).date(), _lavra)) / ...` |

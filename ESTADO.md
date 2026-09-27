@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:21:25.**
+**Medido em 27/09/2026 04:25:31.**
 
 | | |
 |---|---|
@@ -86,19 +86,6 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Push em voo com a suíte. Publico o RELATO (só docs) e aguardo:
-
-  Ran 1 shell command
-
-● Background command "Commitar e empurrar a O87" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push pousou (dfb0418c). DEPLOY JÁ:
-
   Ran 1 shell command
 
 ● O carimbo está REFEITA — o cron das 04:15 acabou de refazer a sombra e o bloco dele deve estar rodando. Confiro antes de fazer nada:
@@ -108,22 +95,35 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ● O bloco do cron das 04:15 está em 19/63 com dump de hoje — o deploy da O87 espera ele (é o portão da O82). Uso a espera para escrever o resumo da noite no topo do RELATO, que é
   o que você lê de manhã:
 
-● Escrever o resumo da noite no topo do RELATO · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     # A NOITE DE 27/09 EM UMA PAGINA (00:50 -> 04:20)
-     ## O que foi ao ar, provado no worker servido
-     | hora | o que | prova |
-     |---|---|---|
-     | **01:53** | as **sete curas** da madrugada (E3, O65, O69, O72…
+  Ran 2 shell commands
 
-· Transmogrifying… (1h 27m 7s · ↓ 95.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● A noite fechou assim, e o resumo de uma página já está no topo do RELATO publicado:
+
+  Quatro coisas no ar, cada uma com smoke no worker servido
+  - 01:53 as sete curas (atraso de 4h10 volta a descontar 250 min; col382 com 389 min pousando no 20/09).
+  - 02:30 E1 com migration: convalidated=False, 53 linhas legíveis, INSERT e UPDATE recusados em prod.
+  - 03:31 O85: SMOKE_O85=OK — folha == espelho nos 5.
+  - 04:01 O73: col81 de 44,42 h de atraso para 0,00 h, zero alertas restantes.
+  - O87 empurrada (dfb0418c); o deploy espera o bloco da sombra, que o cron das 04:15 está rodando agora (25/63). Vou publicá-la quando o carimbo ficar verde.
+
+  Dinheiro: aplicadas +157,72 h em 5 colabs, com os outros 25 campos em zero e 0 entram/saem do TXT nos dois atos. A lista do DP caiu para 8 colabs / 248,2 h.
+
+  A parada que importa: o apply da L-084 descontaria 286,12 h de 24 pessoas, e o col820 deveria 12h21 de saída antecipada num dia em que trabalhou 2h19. A causa é a forma do corte
+  — a entrada fica a 161–178 min do marco, logo abaixo dos 180, e a saída a 700+. Está no topo do PENDENTES_RONALD.json com a tabela; não esperei ocioso, saíram O73 e O87 no
+  mesmo turno.
+
+  O achado mais sério é de desenho: o motor mutaciona os objetos Batida que recebe (O89) — provado em três rodadas com entrada idêntica. Curei a passada órfã da O85 com
+  re-consulta, mas o laço de fatias faz isso em 76 de 607 colabs, e nenhum deles foi medido contra objetos frescos. Espera seu ! entre "Batida imutável" e "cada passada consulta
+  as suas".
+
+  E derrubei cinco números meus medindo de novo — inclusive os "40,6% de células sem marco", que são folga, e um fixture meu que passava verde sem reproduzir nada porque a pausa
+  tinha 60 min redondos em vez dos 63 reais.
+
+✻ Baked for 1h 27m 45s · done 4:22 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ quando o ensaio ficar verde, deploy da O87 e segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
