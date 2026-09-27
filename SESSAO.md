@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 13:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (86.3 MB). Acoes na janela: **565**.
+**Medido em 27/09/2026 13:21:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (86.3 MB). Acoes na janela: **556**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -566,12 +566,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:21:33 | Bash | Ver como data_ini chega ao grade_da_celula | `grep -n 'def espelho_do_colab' -A 40 ponto/services/espelho.py \| grep -n 'montar_dias\\|data_ini\\|num_dias\\|def ' \| head -20; echo "=== montar_dias assinatura ==="; grep -n 'def montar_dias' -A 25 ponto/services/espelho.py \| head -40` |
 | 01:21:19 | Bash | Adicionar a linha PROVA e achar timestamps no futuro | `python3 - <<'PYEOF' p='docs/RELATO.md' s=open(p).read() velho="""MODO 24H (aval Ronald 27/09 03:4x). **APLICADOS: 4 colabs**, movimento so nos campos do item (`horas_extras +0,92 h`, `horas_extras_50 +0,91 h`). **SEPARADOS: 30** -- restaurados integralmente, o gravado deles segue no estado anterior. `col81` fora por classe propria (O73). **0 entram, 0 saem do TXT; 07 e 08 com 0 divergencias.** Rev ...` |
 | 01:21:04 | Bash | Encontrar a regra que exige a linha PROVA | `grep -rln 'PROVA' core/tests/*.py \| head; echo "=== quem barra ==="; grep -rn 'RELATO retido' ../bin/relato.sh \| head; echo "=== padrao exigido ==="; grep -rn 'APLICAD\\|PROVA' ../bin/*.py ../bin/*.sh 2>/dev/null \| grep -i 'prova' \| head -20` |
-| 01:20:51 | Bash | Ler o trecho bloqueado do RELATO e o selo que o barra | `sed -n 150,170p docs/RELATO.md; echo "=== selo ==="; grep -rn 'PROVA' core/tests/test_selo_afirmacao_com_prova.py 2>/dev/null \| head; ls core/tests/ \| grep -i prova` |
-| 01:20:38 | Bash | Comparar hora do commit, mtime dos arquivos e inicio dos workers | `echo "== commit c6c3785b =="; git log -1 --format='%H %ci' c6c3785b; echo; echo "== mtime dos arquivos das curas =="; for f in ponto/motor_calculo_v2.py ponto/services/fechamento.py escala/alimentacao.py escala/servico_jornada.py; do stat -c '%y %n' $f; done; echo; echo "== inicio dos workers servidos =="; for c in saas_core saas_ui; do echo "-- $c"; docker exec $c ps -o pid,lstart,etime,cmd -C gu ...` |
-| 01:20:08 | Bash | Medir quantos dias de ata agregada caem na janela da competencia 09 | `cat > /tmp/o81_janela.py <<'PYEOF' from django.apps import apps import datetime as d, collections G = lambda n: next(m for m in apps.get_models() if m.__name__ == n) CD, E, FM = G('CelulaDia'), G('Empresa'), G('FechamentoMensal') from ponto import janelas alvo = {} for e in E.objects.filter(pk__in=[2,3,4]).order_by('pk'): ini, fim = janelas.janela_fechamento(9, 2026, e) alvo[e.pk] = (ini, fim) pri ...` |
-| 01:19:45 | Bash | Ler o trecho do espelho que captura a excecao | `sed -n 325,400p ponto/services/espelho.py` |
-| 01:19:42 | Bash | Localizar quem levanta e quem captura a excecao da ata agregada | `grep -rn 'AtaAgregadaSemMarcos' --include=*.py \| head -20` |
-| 01:19:34 | Bash | Ver a linha da O81 no BACKLOG | `grep -n 'O81' docs/BACKLOG.md` |
-| 01:19:30 | Bash | Refazer o ensaio da sombra e rodar o bloco da manha | `cd /home/ronald/saas-hasner && (bin/sombra.sh --refazer && bin/sombra.sh --bloco && bin/sombra.sh --conferir) 2>&1 \| tail -40` |
-| 01:19:14 | Bash | Conferir hora e estado do ensaio da sombra | `date '+%Y-%m-%d %H:%M:%S %Z'; echo ---; cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -8; echo ---; ls -la logs/sombra_carimbo* 2>/dev/null; echo ---; grep -n 'sem-sombra\\|--bloco\\|--refazer' bin/sombra.sh \| head -30` |
-| 01:15:56 | Bash | Atualizar o handoff com os fatos novos | `python3 - <<'PYEOF' import re # RELATO p='docs/RELATO.md' s=open(p).read() s=s.replace("""\| **push52** \| **EM VOO, nao pousou.** `origin/main` = **`d39c0696`**, `HEAD` = **`c6c3785b`**, `ahead = 3`.""", """\| **push52** \| **POUSOU.** `origin/main` = **`c6c3785b`**, `ahead = 0`, **8.388 testes OK** + control-plane 22 OK.""") s=s.replace("""\| **DEPLOY JA** \| **PENDENTE, e e o item mais urgente. ...` |

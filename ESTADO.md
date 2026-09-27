@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 13:15:45.**
+**Medido em 27/09/2026 13:21:01.**
 
 | | |
 |---|---|
@@ -111,14 +111,14 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● A régua cobra linha no TICKETS para a O93 e está certa. Acrescento:
 
-  Empurrar de novo com a linha do TICKETS · 3m 4s
+● Empurrar de novo com a linha do TICKETS · 8m 20s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md && git commit -F - <<'MSGEOF'
      [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
      Fatia citada em commit tem de ter linha na tabela no MESMO ato ("em voo" quando abre). Eu abri a O93 nos
-     dois commits anteriores e nao abri a li… (3m 3s · 3 lines)
+     dois commits anteriores e nao abri a li… (8m 19s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Warping… (5m 42s · ↓ 6.7k tokens)
+✢ Warping… (10m 58s · ↓ 6.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
