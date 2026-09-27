@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:47:12.**
+**Medido em 27/09/2026 02:48:01.**
 
 | | |
 |---|---|
@@ -85,6 +85,7 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 3 shell commands
 
 ● A suíte segue. Meço a O66 com os juízes reais, não com campo lateral:
 
@@ -110,15 +111,14 @@ ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 
 ● Confirmado: 5 dos 7 colabs da O73 estão entre os separados, e três por horas_atraso — o campo exato que a O73 infla. Publico a dependência, que muda a ordem da fila:
 
-● Publicar a dependencia O73 -> L-084 · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## PAREI a aplicacao da L-084 no gravado: a O73 infla exatamente os campos dela
-     `PAREI: dependencia medida O73 -> L-084 | espera a cura da O73, nao o Ronald`
-     Eu ia aplicar a L-084 corrigida no grava…
+  Ran 1 shell command
 
-✽ Symbioting… (5m 36s · ↓ 19.7k tokens)
+● A suíte segue. Preparo a O73 entendendo o mecanismo — quem chama aplicar_tolerancia e com quais marcos:
+
+● Ler a zona 5 que casa marco com periodo
+  ⎿  $ sed -n 1500,1560p ponto/motor_calculo_v2.py
+
+✢ Symbioting… (6m 25s · ↓ 22.3k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

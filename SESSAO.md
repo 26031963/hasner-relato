@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 02:47:12.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (80.7 MB). Acoes na janela: **1031**.
+**Medido em 27/09/2026 02:48:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (80.7 MB). Acoes na janela: **1033**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:47:47 | Bash | Achar quem chama aplicar_tolerancia | `grep -rn 'aplicar_tolerancia' --include=*.py \| grep -v tests \| head; echo "=== o sitio da chamada ==="; grep -n 'aplicar_tolerancia' -B 18 ponto/motor_calculo_v2.py \| grep -n 'for \\|prevista\\|periodo\\|marco\\|def \\|aplicar_tol' \| head -20` |
+| 02:47:09 | Bash | Publicar a dependencia O73 -> L-084 | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() bloco = """# RELATO — esteira saas-hasner ## PAREI a aplicacao da L-084 no gravado: a O73 infla exatamente os campos dela `PAREI: dependencia medida O73 -> L-084 \| espera a cura da O73, nao o Ronald` Eu ia aplicar a L-084 corrigida no gravado de 09 (campos `horas_atraso` e `horas_saida_antecipada`, os 31+16 colabs). **Medi antes e nao vou** ...` |
 | 02:46:32 | Bash | Ver quais dos 7 colabs da O73 estao entre os separados e por que campo | `cd /home/ronald/saas-hasner && for c in 81 129 155 522 922 819 316; do printf "col%-5s " $c; grep -o "col$c *moveu fora do item: .*" logs/sombra/diff_o85.log \| head -1 \| cut -c1-120 \|\| echo "(nao separado)"; done` |
 | 02:46:07 | Bash | Medir o tamanho da O73 | `cat > /tmp/o73.py <<'PYEOF' """O73: nos templates `turno_partido` SEM janela de intervalo declarada (intervalo_modo=duracao), o motor continuo cobra o SEGUNDO bloco contra o marco de INICIO -- a volta da pausa vira atraso. Tamanho: quantos vinculos e quanto atraso gravado ha nesses templates em 09. """ from django.apps import apps import collections G = lambda n: next(m for m in apps.get_models()  ...` |
 | 02:45:27 | Bash | Commitar e publicar a O66 | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF' [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado` LEI-AKITA: origem=medicao (nenhum .py tocado), testemunha=PerguntaDisputa.respondida_em e ChamadoColaborador.status_local contra motor.VIVOS -- as autoridades, nao campo lateral, RED=as 99 celulas sem cana ...` |
