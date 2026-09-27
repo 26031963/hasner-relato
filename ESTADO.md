@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:04:13.**
+**Medido em 27/09/2026 10:08:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M app/ponto/services/fechamento.py
+ M app/ponto/views.py
+?? app/ponto/tests/test_o80_selo_l092.py
 ?? esteira.pausada
 ```
 
@@ -85,22 +88,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  empurro:
-
-  Ran 2 shell commands
-
-● Push em voo. Enquanto roda, a parte nova do corte da L-086: remedir os 17. A lei já está no código (selo com 10 casos); o que falta é o DIFF com os campos da família 100%:
-
-  Ran 1 shell command
-
-● Background command "Publicar e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push pousou (96a8c0d7). A remedição dos 17 resolveu-se sozinha com as curas da noite: sobra 1 colab com +6,00 h em horas_extras_100_noturna. Aplico e publico:
-
-  Ran 1 shell command
-
 ● Aplicado (+6,00 h em 1 colab) e deploy no ar. Smoke das duas curas no worker servido:
 
   Ran 1 shell command
@@ -108,16 +95,32 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ● SMOKE OK no worker servido: zero dias do col820 violam o teto, 0 de 77 batidas do chamador alteradas, e as três passadas dão o mesmo. Publico e sigo para a O80, que a sua regra
   de fila põe em primeiro — e que agora ganhou razão a mais: ela é o corte de 06:3x virando código.
 
-  Publicar o smoke e comecar a O80 · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## Smoke das duas curas no worker servido, e a remedicao dos 17 que se resolveu sozinha
-     | prova, no `saas_ui` | resultado |
-     |---|---|
-     | **L-093** -- dias do col820 que violam o teto | **0** (gravado…
+  Ran 1 shell command
 
-✶ Shimmying… (1h 4m 52s · ↓ 76.4k tokens)
+● A O80 agora é o corte de 06:3x virando guarda. Antes de escolher entre "recusar" e "pular", faço o censo de quem chama o escritor:
+
+  Searched for 1 pattern
+
+● Censo fechado: o botão da tela, o simular_folha --recalcular, o CLI espelho e os meus comandos. A guarda alcança os quatro — e é isso que o corte quer. Leio a autoridade e o
+  tratamento de erro da view:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Autoridade localizada. Escrevo a guarda, a porta com trilha e o selo:
+
+  Ran 1 shell command
+
+● Agora a view, para o admin ver a recusa em vez de um 500:
+
+● Ver os campos da ExportacaoDominio
+  ⎿  $ python3 - <<'PY'
+     s=open('folha/models.py').read()
+     i=s.index('class ExportacaoDominio')
+     b=s[i:i+1800]
+     print('\n'.join(l for l in b.split('\n') if '= models.' in l or 'class ' in l)[:900])
+     PY
+
+✢ Shimmying… (1h 9m 9s · ↓ 86.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
