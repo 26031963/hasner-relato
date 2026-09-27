@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 19:07:01.**
+**Medido em 27/09/2026 19:10:54.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
  M app/chamados/services/cobranca.py
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -83,18 +84,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Aplicado: 7 colabs, horas_trabalhadas 71.095,78 → 71.077,02 (−18,76 h de pausa que era paga) e intra −15,93. A CONDICAO_SAIDA_REAL separou 3. Agora R1 — o papel sobrescrevendo
-  gravado coerente. A causa é a ata escolher bordas erradas e deixar batida real fora do vão:
-
-  Ran 1 shell command
-
-● A cura R1 falha nas duas direções — não pega o col920 e quebra o col922 (404 → 1015). Reverto: meia-correção é pior que nenhuma.
-
-  Ran 1 shell command
-
-● Base restaurada (col922 404, col51 485, col81 423). O col904 a 670 não é divergência: é o intervalo declarado saindo pela lei de 14/09, e o oráculo não tem esse conceito. R1
-  fica medida e a cura REJEITADA pela medição. Agora o envio do mutirão, que é ! com prazo no texto — vejo se o prazo é parametrizável:
-
   Ran 1 shell command
 
 ● HORAS_DE_PRAZO = 48 é constante declarada, e agora + 48h dá 29/09 ~23h, não 28/09 12h. Não mudo a lei: passo o prazo só deste lote, com o default intacto:
@@ -108,18 +97,30 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Primeiro entregue (col909, canal fcm, prazo 28/09 12:00, e o juiz recontou os pendentes no ato). Envio os 157 restantes:
 
-● Enviar o mutirao aos 158 · 52s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     import datetime as d, collections
-     from django.utils import timezone as tz
-     from django.contrib.auth import get_user_model
-     from colaboradores.models import Colaborado… (51s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Crunching… (13m 51s · ↓ 18.0k tokens)
+● Mutirão enviado: 143 entregues de 158 (137 FCM, 6 webpush), 2.521 perguntas cobradas, prazo 28/09 12:00. Dos 15 não entregues, 13 são o próprio juiz recontando ("não há pergunta
+  em aberto" — o CSV estava velho), 1 token morto e 1 o meu teste. Registro tudo e fecho:
+
+● Publicar o RELATO final
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     anc = '# AS REGRESSOES DAS MINHAS CURAS DE HOJE'
+     i = s.index(anc)
+     novo = '''# MUTIRAO ENVIADO, reapply da O96 aplicado, e a R1 medida e REJEITADA (27/09 ~23:5x)
+     ## Mutirao aos colabs: **ENVIADO**
+     PROVA: 158 colabs com canal, **143 entregues…
+
+✽ Crunching… (17m 44s · ↓ 19.6k tokens)
+
+❯ aval Ronald: (1) O96: explicar no RELATO a diferenca entre 116,1 h / 44 colabs do censo e 18,76 h / 7 colabs aplicados, colab a colab por balde (ja aplicado as 19:33 / fora do
+  TXT / CONDICAO_SAIDA_REAL / outro); "outro" > 0 = cura. (2) R1 e regressao de hoje no gravado: a cura mais restritiva e desligar SO o trecho da O68b-PAPEL que a causa, com
+  oraculo e6 nos afetados e as 4 condicoes do aval-de-criterio; nao fica em pe. (3) mutirao: publicar quantos casos vao a mesa da supervisao as 12:00 de 28/09 se ninguem
+  responder.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

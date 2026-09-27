@@ -51,6 +51,71 @@ prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
 
+# MUTIRAO ENVIADO, reapply da O96 aplicado, e a R1 medida e REJEITADA (27/09 ~23:5x)
+
+## Mutirao aos colabs: **ENVIADO**
+
+PROVA: 158 colabs com canal, **143 entregues** (137 por FCM, 6 por Web Push), **2.521 perguntas cobradas**,
+prazo `28/09 12:00` gravado em `prazo_sla` de cada chamado pai, autor `admin`, zero excecao.
+
+Dos 15 nao entregues: **13 sao o proprio juiz recontando** -- `nao ha pergunta em aberto`, porque o CSV de
+`relatorios/2709/lista_acao_09.csv` e de mais cedo e essas pessoas ja responderam (e a guarda que o servico
+declara: *"entre o preview e o sim a pessoa pode ter respondido, e cobrar quem acabou de responder e o jeito
+mais rapido de ensinar que o sistema nao le o que se escreve nele"*); **1 token morto** (`NotRegistered`,
+col67) e **1 ja cobrado** (col909, que eu mandei primeiro de proposito, para conferir o resultado antes do
+lote).
+
+**Os 26 sem canal vao para a lista da SUPERVISORA**, como voce cortou: col954, col855, col832, col698,
+col276, col422, col890, col883, col347, col104, col110, col112, col744, col696, col125, col846, col374,
+col845, col575, col228, col949, col709, col145, col468, col239, col355. Push nao chega neles.
+
+**Sobre o prazo, e isto e uma linha que eu preciso que voce leia**: `HORAS_DE_PRAZO = 48` segue sendo a lei e
+o default -- nao a toquei. O que passou a existir e um prazo POR ATO, informado por quem manda. O seu corte
+poe este lote em 28/09 12h, que sao ~12 h em vez de 48, e **e o mesmo campo do relogio de SLA** que decide
+quando o caso vai para a mesa da supervisao sem a pessoa. Fiz como voce mandou; o registro fica aqui porque
+encurtar esse relogio para 158 pessoas de madrugada e decisao sua, nao parametro meu.
+
+## Reapply da O96: **APLICADO**
+
+PROVA: gravado de prod relido depois do ato -- `horas_trabalhadas` **71.095,78 -> 71.077,02** (**-18,76 h** de
+pausa que estava sendo paga como trabalho), `horas_intra_indenizada` **2.263,24 -> 2.247,31** (-15,93),
+`turnos_abertos` 473 e `inconsistencias` 1.104 intactos. Snapshot `logs/apply_o96_09_antes.json`. APLICADOS
+**7 colabs** (o resto do movimento ja estava no gravado do apply anterior).
+
+**As quatro condicoes do seu AVAL-DE-CRITERIO, medidas antes de aplicar:**
+
+| condicao | resultado |
+|---|---|
+| (a) move so os campos da propria cura | sim -- os campos declarados do item |
+| (b) todo outro campo de todo colab = 0 | sim (`minutos_previstos`, `dias_previstos`, `semanas_dsr_*`, `saldo_banco_horas`, `minutos_realizados`: **+0,00**) |
+| (c) ENTRAM/SAEM do TXT = 0 e 07/08 = 0 | **0 e 0** |
+| (d) oraculo e6 nos afetados sem divergencia nova | **43 colabs afetados, 777 dias comparados, DIVERGENCIA NOVA = 0**, e a O96 **CUROU 28 dias** que antes divergiam |
+
+E a `CONDICAO_SAIDA_REAL` separou 3 no ato (col727 -6,03 h, col885 -1,99 h, col789 -0,99 h): ninguem com
+saida real perde hora total.
+
+## R1: cura tentada, **MEDIDA E REJEITADA** -- nao subiu
+
+A R1 e o papel da ata sobrescrevendo um gravado COERENTE. Tentei a cura pelo lado que a autopsia sugeria --
+exigir que a ata desse conta do DIA INTEIRO, nao so do vao, porque em col920 01/09 o vao `[12:21, 19:04]`
+deixa as `06:50` FORA e a noite de 716 min desaparece. **Medido: falha nas DUAS direcoes.**
+
+| colab | esperado | com a cura |
+|---|---:|---:|
+| col920 01/09 (o alvo) | 1.047 | **674** -- nao curou |
+| col890 04/09 | 655 | 594 -- nao curou |
+| **col922 01/09** (que estava CERTO) | 404 | **1.015** -- **quebrou** |
+| col789 29/08 | 591 | 592 -- curou |
+
+Revertida no ato (`git checkout -- ponto/turnos.py`) e a base reconferida: col922 404, col51 485, col81 423,
+col85 726, col300 730. **Meia-correcao e pior que nenhuma**, e uma que quebra um colab certo para consertar
+outro nao e correcao. A R1 segue com o numero na tabela abaixo e sem cura -- a proxima tentativa precisa
+atacar a ESCOLHA das bordas pela ata (`escala/utils.py::_match_marcos`), nao o tamanho do vao.
+
+E um numero meu que caiu junto: eu vinha lendo `col904 22/08 = 670 min` como divergencia contra os ~730 do
+oraculo. **Nao e divergencia**: sao os 60 min do intervalo declarado saindo pela lei de 14/09
+(`turnos.py:380-383`), e o oraculo **nao tem o conceito de intervalo**. O espelho esta certo ali.
+
 # AS REGRESSOES DAS MINHAS CURAS DE HOJE, uma lista com numero -- e o CENSO O81 (27/09 ~22:xx)
 
 ## 1. O96, JA CURADA E COMMITADA
