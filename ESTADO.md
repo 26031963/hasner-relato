@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:433 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:455 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:50:45.**
+**Medido em 27/09/2026 05:54:54.**
 
 | | |
 |---|---|
-| `HEAD` local | `0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra` |
-| `origin/main` | `6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)` |
+| `HEAD` local | `4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald` |
+| `origin/main` | `0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
 0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
 6adad96d [O86] classe C fechada em taxonomia, e a O86 vira a maior obra aberta (~900 h)
 6a4ed51b RELATO: resumo da noite fechado com a O66, a O91 e a licao do heredoc
 d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
-47336b0e ERRATA da mensagem de 512030da -- backtick em `git commit -m` e execucao de comando
 ```
 
 ## `git status --short`
@@ -86,16 +86,6 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ```
 
-  ┌────────────────────────────────────────────────────────┬────────┬──────────┬───────────────────────────────────┐
-  │                         causa                          │ colabs │  horas   │               obra                │
-  ├────────────────────────────────────────────────────────┼────────┼──────────┼───────────────────────────────────┤
-  │ buraco de vínculo                                      │      5 │ 159,25 h │ O85 — aplicada                    │
-  ├────────────────────────────────────────────────────────┼────────┼──────────┼───────────────────────────────────┤
-  │ o motor não fecha o par (motor == folha, piso > motor) │     23 │   ~180 h │ O86                               │
-  ├────────────────────────────────────────────────────────┼────────┼──────────┼───────────────────────────────────┤
-  │ gravado velho (motor > folha)                          │      4 │    ~44 h │ deriva — estão entre os separados │
-  └────────────────────────────────────────────────────────┴────────┴──────────┴───────────────────────────────────┘
-
   Isso faz da O86 a maior obra aberta: 733,7 h da classe B + ~180 h da C. Publico:
 
   Ran 1 shell command
@@ -110,15 +100,25 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
 ● Push pousou (6adad96d). E a decomposição que acabei de medir corrige o que publiquei há dez minutos: a O86 não é uma causa só — são seis formas nomeadas:
 
-● Publicar a correcao e empurrar · 6m 47s
+  Ran 2 shell commands
+
+● Background command "Publicar a correcao e empurrar" completed (exit code 0)
+
+● Background command "Esperar o push da correcao" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Tudo pousado (0161a378). A fila tratável está fechada e o que resta tem trava nomeada — escrevo a linha que a regra exige e publico:
+
+● Publicar a linha PAREI com a trava de cada item · 2s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
-     ## CORRECAO de dez minutos atras: a O86 nao e "uma causa so" -- sao SEIS formas, e cinco ja tem nome
-     Eu acabei de escrever que a O86 e "~900 h numa causa so". **Errado, e a medicao seguinte desmonto… (6m 46s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     # PAREI: a fila do MODO 24H so tem item com TRAVA NOMEADA | espera o Ronald
+     Nao e turno devolvido cedo: os seis itens tratáveis sairam (E1, O85, O73, O87, O66, mais a taxonomia da
+     classe C e a decom…
 
-· Bloviating… (21m 31s · ↓ 15.9k tokens)
+✻ Bloviating… (25m 40s · ↓ 18.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
