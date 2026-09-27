@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:74 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:103 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:42:31.**
+**Medido em 27/09/2026 02:45:29.**
 
 | | |
 |---|---|
-| `HEAD` local | `b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO` |
+| `HEAD` local | `3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3d2ae53a [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
 b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos em ZERO
 64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
 ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 237c9b16 [O85] o dia com batida e sem vinculo vigente para de desaparecer da folha
-c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ```
 
 ## `git status --short`
@@ -85,40 +85,40 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ E1 vigência                       │ no ar 02:30 com migration, smoke em prod: convalidated=False, 53 legíveis, INSERT e UPDATE recusados        │
-  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O85 buraco de vínculo             │ aplicada: +153,72 h em 5 colabs, outros 25 campos em zero, 0 entram/saem do TXT — falta só o deploy da cura │
-  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ push                              │ c35dbe8c pousado (8.393 testes)                                                                             │
-  ├───────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O82 · O83 · O84 · O86 · O87 · O88 │ medidas, com causa e arquivo:linha, linhas abertas no TICKETS                                               │
-  └───────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Duas dívidas nomeadas no topo do RELATO para você ler: a L-084 corrigida não está no gravado (31 colabs em horas_saida_antecipada, 16 em horas_atraso — é apply, não pergunta) e
-  os 7 templates com intervalo fora do turno (O87), cuja correção de cadastro é L-009 e espera seu !.
-
-✻ Brewed for 10m 15s · done 2:40 AM · 2 shells still running
-
-● Background command "Esperar o veredito da suite da O85" completed (exit code 0)
-
-  Read 1 file
-
-● O until casou com uma linha de saída de teste ("OK: 31"), não com o veredito. Confiro direito:
-
-  Ran 2 shell commands
-
-● Duas linhas DEFEITO em selo apareceram na suíte. Vejo quem as emite e se são minhas:
-
   Searched for 1 pattern
 
 ● Os dois DEFEITO em selo são deliberados: colaboradores/tests/test_bug112_defeito_nao_vira_toast.py:106 os levanta de propósito. Não são meus. Enquanto a suíte fecha, leio o
   sítio da guarda da O87:
 
-● Ler o clean do TipoEscala
-  ⎿  $ grep -n 'def clean' -A 40 escala/models.py | sed -n 1,60p | grep -n 'def clean\|ValidationError\|raise\|if \|#' | head -24
+  Ran 2 shell commands
 
-· Symbioting… (55s · ↓ 1.9k tokens · thinking)
+● Existe já um _validar_intervalo_piso_legal(). Leio antes de criar irmão — pode ser que a lei já esteja lá:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● A lei da O87 não existe: _validar_intervalo_piso_legal confere a DURAÇÃO contra o Art.71, nunca se a janela cai dentro do turno (para o col206, jornada 210 min e intervalo 60
+  min passam). Escrevo a guarda irmã em cópia:
+
+  Ran 3 shell commands
+
+● A suíte segue. Meço a O66 com os juízes reais, não com campo lateral:
+
+  Ran 1 shell command
+
+● ChamadoColaborador tem status_local e — melhor ainda — FK direta para celula. Corrijo:
+
+  Ran 1 shell command
+
+● O66 medida: celula_furo_sem_canal = **99** (esperado 0), em 34 colabs, e um sinal limpo — todas as 99 são furo, nenhuma cobrado: a cobrança sempre abre canal, o furo simples
+  não. Publico:
+
+  Commitar e publicar a O66
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md && git commit -q -F - <<'EOF'
+     [O66] celula_furo_sem_canal = 99 em 34 colabs, e todas sao `furo` -- nenhuma `cobrado`
+     LEI-AKITA: origem=medicao (nenhum .py tocado), testemunha=PerguntaDisputa.respondida_em e
+     ChamadoColab…
+
+* Symbioting… (3m 53s · ↓ 14.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
