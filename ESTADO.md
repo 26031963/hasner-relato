@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:51:01.**
+**Medido em 27/09/2026 04:56:31.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_o66_furo_sem_canal.py
  M app/config/crons.py
+ M app/docs/ARQUITETURA.mmd
 ?? esteira.pausada
 ```
 
@@ -87,9 +89,6 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ```
 
-● O contador na competência aberta (21/09–20/10) dá 13 em 459 células — e ali há 1 cobrado sem canal, então meu "todas são furo" valia só para a janela de 09. E o --apply estourou
-  por coluna obrigatória. Vejo como o irmão grava:
-
   Ran 1 shell command
 
 ● data_ini é obrigatório e eu não o passei. Espelho o irmão e corrijo também minha afirmação sobre "todas furo", que valia só para a janela de 09:
@@ -110,16 +109,19 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 
 ● Declaro o papel dos três (a lei do tabuleiro) e vejo o que sobra:
 
-● Declarar os papeis e rodar core e chamados · 3m 15s
+  Searched for 1 pattern, ran 2 shell commands
+
+● Quatro quebras, todas minhas e todas com cura óbvia. Vejo as três primeiras:
+
+● Mover o cron para 07:36 e rodar os selos · 2m 24s
   ⎿  $ python3 - <<'PYEOF'
-     import py_compile
      p='config/crons.py'; s=open(p).read()
-     velho = "'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',)},"
-     novo = ("'lavrar_jornada_lixo', 'lavrar_abriu_nao_bateu.sh', 'calcular_metricas', 'calcular_scores',\n"
-     " # O66 (27/… (3m 14s · 2 lines)
+     velho = " C('23 7 * * *', 'lavrar_furo_sem_canal', '--apply',"
+     novo = (" # 07:36 e nao 07:19/07:23: o bloco das 07h e denso e o selo `test_sem_sobreposicao_no_bloco_diario`\n"
+     " # cobra folga contra a DURACAO medida (crons_duracao.json). 0… (2m 23s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Harmonizing… (22m 43s · ↓ 38.1k tokens)
+· Harmonizing… (28m 13s · ↓ 41.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
