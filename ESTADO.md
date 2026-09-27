@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:54 AFIRMA ato sem PROVA ao lado -- # APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:74 AFIRMA ato sem PROVA ao lado -- ENTRAM/SAEM do TXT **0** · 07 e 08 **0 divergencias** · col81 intacto · **APLICADOS 106** · SEPARADOS 33
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:04:01.**
+**Medido em 27/09/2026 17:07:56.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
  M app/ponto/services/fechamento.py
 ?? app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
@@ -92,21 +93,9 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
 
-  Escrevo o selo que prova que o modo não escreve, e publico:
-
-  Ran 1 shell command
-
 ● Três coisas minhas erradas (campo da Empresa e o recorte do selo estrutural, que pegou o else). Conserto:
 
-● Corrigir e rodar o selo da E5
-  ⎿  $ python3 - <<'PYEOF'
-     p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read()
-     s = s.replace("emp = Empresa.objects.create(nome='E5', cnpj='00000000000191', ativa=True)",
-     "emp = Empresa.objects.create(razao_social='E5 LTDA', cnpj='00000000000191', ativa=True)")
-     s = s.replace(""" _i = fo…
-
-✢ Puzzling… (45m 12s · ↓ 48.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Searched for 1 pattern, ran 2 shell commands
 
 ❯ ID: FILA-2709-A (reordena a fila; nenhuma lei nova)
   LEIS: L-092, L-009
@@ -117,18 +106,30 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   4. FILA NOVA, nesta ordem, substitui a anterior: O81 -> E5 fatia 1 -> dia impar "em aberto" -> curas das autopsias -> E6 rodada 4 + sorteio dos 10. Nao comecar a E5 antes da
   O81 provada.
      PRONTO: RELATO publicado (nao retido) + DRY do mutirao no RELATO.
-  ctrl+x ctrl+s to send now
+
+● Ordem nova recebida — ela reordena tudo. Ataco os dois itens de PRONTO primeiro. Vejo a linha retida e a lista do mutirão:
+
+● Publicar o RELATO e abrir o CSV do mutirao
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     p='app/docs/RELATO.md'; s=open(p).read()
+     velho = """# APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
+     ## O apply, em prod, com snapshot"""
+     novo = """# APPLY DA 09 FEITO, e a E6 rodada 3 na frota inteira (27/09 ~19:3x)
+     PROVA: `l…
+
+✽ Puzzling… (49m 7s · ↓ 50.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Writing LAUDO.txt taxonomy summary                                                                                                 19m 31s · ↓ 238.7k tokens
-  ◯ general-purpose  Tracing folga-day marcos in turnos_do_colab                                                                                        19m 30s · ↓ 133.7k tokens
-  ◯ general-purpose  Measuring Motor12x36.calcular_periodo for col81                                                                                    19m 30s · ↓ 219.9k tokens
-  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  19m 30s · ↓ 158.2k tokens
-  ◯ general-purpose  Reclassifying G rows by per-turno parity                                                                                           19m 30s · ↓ 152.6k tokens
+  ◯ general-purpose  Planning probe for col417 parear_turnos drop                                                                                       23m 26s · ↓ 239.3k tokens
+  ◯ general-purpose  Tracing oracle day-keys in probe3_out.json                                                                                         23m 26s · ↓ 181.2k tokens
+  ◯ general-purpose  Measuring frota-wide `_pares_marcados` leak                                                                                        23m 26s · ↓ 221.5k tokens
+  ◯ general-purpose  Probing papel_por_minuto_da_ata per divergent day                                                                                  23m 26s · ↓ 158.9k tokens
+  ◯ general-purpose  Checking envelope arithmetic against classes.json                                                                                  23m 26s · ↓ 154.5k tokens
   ⧉  index
 ```
