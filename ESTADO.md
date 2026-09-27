@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:812 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:857 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:38:31.**
+**Medido em 27/09/2026 11:42:13.**
 
 | | |
 |---|---|
-| `HEAD` local | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
+| `HEAD` local | `2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
 6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
 4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
 5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
 9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
-c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oraculo confirma a O85 por via independente
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -87,14 +85,6 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E e 12:03 E a 5,07 h, com a ata explicando. Vejo quem passa a alimentação do papel:
-
-  Searched for 1 pattern
-
-● turnos_do_colab passa papel_por_minuto. A pergunta é se o motor passa. Vejo:
-
-  Searched for 1 pattern, ran 1 shell command
-
 ● Achei, e é a causa dos 197: o motor chama parear_turnos na linha 269 sem papel_por_minuto. A cura da O65 — "o papel vem da ata quando ela responde" — chegou ao turnos_do_colab e
   não ao motor. É a pergunta da LEI-AKITA 4: qual leitor não migrou. Leio a alimentação antes de ligá-la:
 
@@ -108,22 +98,30 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ● Meio caminho, e o caminho certo: col51 24/08 agora fecha 06:59 → 16:02 = 9,05 h. O col904 segue aberto porque ali o problema é outro — a batida órfã das 06:57 abre um turno
   antes de a S das 07:00 poder fechar o plantão. Meço o DIFF da cura:
 
-● DIFF da alimentacao do papel da ata no motor · 1m 25s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --campos-do-item
-     horas_trabalhadas,turnos_abertos 2>&1 | grep -vE 'moveu fora do item' | grep -E '^ [a-z_]+ ' | awk 'NR==1 || $2!=$3'; docker exec saas_core … (1m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Zesting… (50m 4s · ↓ 63.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
 
 ❯ HANDOFF ANTES DO AUTO-COMPACT (1%): grava no topo do RELATO e no TICKETS: (1) a cura EM CURSO: motor_calculo_v2.py:269 chama parear_turnos SEM papel_por_minuto -- a O65 nao
   chegou ao motor; 197 casos com a ata explicando e o motor pareando pelo tipo gravado (RED col51 06:59/12:03); falta ligar a alimentacao com a guarda da E3, selo, DIFF pelo
   criterio do MODO 24H e DEPLOY JA. (2) classe B remedida: 236 ate 14 h (197 esta cura + 39 plano B), 109 entre 14 e 20 h, 437 com 20 h ou mais (saida realmente faltando =
   cobranca, lista de segunda). (3) FILA depois: classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3. Regras do MODO 24H e da fila sem trava continuam. Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
+
+● Handoff gravado agora, com o estado real — que está mais adiante do que o seu resumo assume, porque a alimentação já está ligada e o DIFF já voltou:
+
+  Gravar o handoff no RELATO e no TICKETS · 5s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     bloco = """# RELATO — esteira saas-hasner
+     # HANDOFF (auto-compact) -- estado exato em 27/09 ~11:5x
+     ## (1) A cura da classe B: **JA LIGADA**, com DIFF medido -- nao esta "faltando ligar"
+     | | |
+     |---|---|
+     | **a causa** | `ponto/motor_calculo_v…
+
+· Zesting… (53m 46s · ↓ 66.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                             1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 11:38:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.1 MB). Acoes na janela: **601**.
+**Medido em 27/09/2026 11:42:13.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (84.2 MB). Acoes na janela: **596**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -606,8 +606,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:43:24 | Bash | Publicar a tabela do desvio e a reversao | `cat > /tmp/desvio.md <<'EOF' ## PAREI: o apply moveu 4 campos FORA do criterio, e eu REVERTI os 20 colabs Ordem Ronald 27/09 01:3x. **A tabela primeiro**, porque foi ela que eu devia ter publicado junto com o apply e nao publiquei: \| campo \| colabs \| delta \| causa \| \|---\|---:\|---:\|---\| \| **`horas_extras_100_noturna`** \| **13** \| **+105,45 h** \| HE 100% noturna: hora que estava em tur ...` |
 | 23:42:33 | Bash | Reverter os 20 colabs atingidos, com prova | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command desvio_o68b --schema=juliani --snapshot /app/logs/apply_o68b_09_antes.json --reverter 2>&1 \| grep -v "objects imported" \| tail -8` |
 | 23:42:20 | Bash | Medir quem foi atingido fora do criterio | `cat > ponto/management/commands/desvio_o68b.py <<'PYEOF' """Os campos que o apply da 09 moveu FORA do criterio, e a reversao POR COLAB. -> tabela Ordem Ronald 27/09 01:3x: *"tabela desses tres grupos no topo do RELATO (campo, colabs, horas, causa). Se algum deles e dinheiro fora do criterio da L-082, e PAREI: reverte ESSES colabs pelo snapshot `logs/apply_o68b_09_antes.json`, com prova antes/depoi ...` |
-| 23:39:31 | Bash | Conferir o selo e republicar o RELATO | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md && echo "=== selo da PROVA: VERDE ==="; bash bin/relato.sh 2>&1 \| tail -12` |
-| 23:39:24 | Bash | PROVA na linha retida e cura do efeito colateral | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' p='app/docs/RELATO.md' s=open(p).read() old="""### Item (1) FEITO: a porta nova saiu da arvore""" new="""### Item (1) FEITO: a porta nova saiu da arvore PROVA: `grep -c '_recusa_partido_sem_vao' app/escala/services/cadastro_tipo.py` = **0** -- a funcao que recusava nao existe mais na arvore (foi substituida por `descreve_turno_partido`, que RESPON ...` |
-| 23:38:49 | Bash | Colher as provas exatas que a ordem pede | `cd /home/ronald/saas-hasner && echo "=== as provas, colhidas AGORA ==="; echo "arquivo cadastro_tipo.py mtime : $(stat -c %y app/escala/services/cadastro_tipo.py \| cut -c1-19)"; echo -n "workers saas_ui iniciados em : "; docker exec saas_ui ps -o lstart= -C gunicorn 2>/dev/null \| head -1; echo "grep da chamada comentada:"; grep -n "_recusa_partido_sem_vao\\|A PORTA NAO BARRA POR ROTULO" app/esca ...` |
-| 23:38:41 | Bash | O bloco do selo e a linha acusada | `cd /home/ronald/saas-hasner && sed -n '56,72p' bin/relato.sh; echo "=== a linha acusada ==="; grep -n "Item (1) FEITO" app/docs/RELATO.md` |
-| 23:38:35 | Bash | A linha retida e o selo que a barra | `cd /home/ronald/saas-hasner && sed -n '20,30p' app/docs/RELATO.md; echo "=== o selo da prova em relato.sh ==="; grep -n "PROVA\\|retido\\|ESTADO\\|SESSAO" bin/relato.sh \| head -20` |
