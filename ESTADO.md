@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:07:31.**
+**Medido em 27/09/2026 05:13:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama` |
-| `origin/main` | `dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje` |
+| `origin/main` | `512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
+47336b0e ERRATA da mensagem de 512030da -- backtick em `git commit -m` e execucao de comando
 512030da [O66] papel do cron declarado, horario sem sobreposicao, ruff e diagrama
 da97cf37 crons_duracao: duracao medida do lavrar_furo_sem_canal (dado gerado por bin/crons_duracao.py)
 4a6bc47b [O66+O91] o contador do beco nasce -- e no primeiro uso desmente a minha propria frase
-9060f899 RELATO da noite: a noite de 27/09 em uma pagina: o que foi ao ar, o que se moveu, o que espera o Ronald
-dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda achou um fixture com a mesma doenca
 ```
 
 ## `git status --short`
@@ -85,19 +85,6 @@ dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● [RELATO-NOITE] é a mesma armadilha: tag entre colchetes é lida como fatia. A forma limpa é não usar colchetes em commit que não é fatia:
-
-  Ran 2 shell commands
-
-● A casa cobra que todo cron declare o papel (a lei do tabuleiro). Vejo o selo e as outras quebras:
-
-  Listed 1 directory, ran 2 shell commands
-
-● Declaro o papel dos três (a lei do tabuleiro) e vejo o que sobra:
-
-  Searched for 1 pattern, ran 2 shell commands
 
 ● Quatro quebras, todas minhas e todas com cura óbvia. Vejo as três primeiras:
 
@@ -113,12 +100,25 @@ dfb0418c [O87] o cadastro nao aceita mais intervalo FORA do turno -- e a guarda 
 
 ● Selo do diagrama verde (era a mudança do cron depois da primeira regeneração). Empurro:
 
-● Commitar as quatro curas de selo e empurrar · 9m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/config/crons.py
-     app/config/crons_duracao.json app/chamados/tests/test_o66_furo_sem_canal.py app/docs/ARQUITETURA.mmd app/docs/MAPA.md app/docs/T… (9m 46s · 6 lines)
+  Pushed to main
+
+● Push pousou (512030da), mas os backticks na -m foram interpretados pelo bash e comeram palavras — segunda vez na noite. Não reescrevo histórico já empurrado; corrijo com um
+  commit de errata e gravo a lição:
+
+  Ran 1 shell command
+
+● O backtick não só comeu palavras: ele executou bin/gerar_diagrama.py e colou a saída dentro da mensagem. Foi inofensivo porque era um gerador — com um rm teria rodado. Errata e
+  lição gravada:
+
+● Curar o placar e empurrar · 4m 14s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
+     git commit -q -F - <<'EOF'
+     [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 barra um push hoje
+     Co-Author… (4m 12s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Harmonizing… (39m 13s · ↓ 43.2k tokens)
+✢ Harmonizing… (44m 43s · ↓ 46.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
