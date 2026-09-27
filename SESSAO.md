@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 18:23:14.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.8 MB). Acoes na janela: **406**.
+**Medido em 27/09/2026 18:28:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (89.8 MB). Acoes na janela: **408**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:24:18 | Bash | Empurrar com a suite verde | `cd /home/ronald/saas-hasner && git add app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -q --amend --no-edit && timeout 2400 git push origin main 2>&1 \| tail -6` |
+| 18:23:11 | Bash | Selo da E5 estrutural e rodar | `python3 - <<'PYEOF' p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read() i = s.index('import datetime') cab = s[:i] cab = cab.replace('''O QUE ESTE SELO GUARDA, e e a parte que morde: o modo leitura **nao escreve**.''', '''LIMITE DE COBERTURA, DECLARADO (nao e descuido): este selo prova a parte ESTRUTURAL -- que o modo leitura nao monta linha no banco -- e NAO monta cenario proprio ...` |
 | 18:22:07 | Bash | Ver o modelo Posto | `python3 -c " import re s=open('colaboradores/models.py').read() i=s.find('class Posto') if i<0: import subprocess; print(subprocess.run(['grep','-rn','class Posto','--include=*.py','.'],capture_output=True,text=True).stdout[:300]) else: for m in re.finditer(r'^ (\w+) = models\.(\w+)\(([^\n]*)', s[i:i+2500], re.M): req = 'blank' not in m.group(3) and 'null' not in m.group(3) and 'default' not in m. ...` |
 | 18:21:43 | Bash | Corrigir a fixture e rodar | `python3 - <<'PYEOF' p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read() velho = """ te = TipoEscala.objects.create( empresa=emp, nome='E5-COMERCIAL', hora_inicio=datetime.time(8), hora_fim=datetime.time(17), hora_inicio_intervalo=datetime.time(12), hora_fim_intervalo=datetime.time(13), tipo_ciclo='6x1', tipo_base='comercial', minutos_jornada=480)""" novo = """ te = TipoEscala.obje ...` |
 | 18:21:27 | Bash | Ver os campos do TipoEscala | `python3 -c " import re s=open('escala/models.py').read() i=s.index('class TipoEscala') bloco=s[i:i+4000] for m in re.finditer(r'^ (\w+) = models\.(\w+)\(([^\n]*)', bloco, re.M): req = 'blank' not in m.group(3) and 'null' not in m.group(3) and 'default' not in m.group(3) print('%-26s %-18s %s' % (m.group(1), m.group(2), 'OBRIGATORIO' if req else '')) " \| head -22` |

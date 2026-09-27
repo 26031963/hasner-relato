@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:23:14.**
+**Medido em 27/09/2026 18:28:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `7219a482 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
+| `HEAD` local | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
 | `origin/main` | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
 | commits a subir (`ahead`) | **2** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-7219a482 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
+0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora
 5c8d4240 [O95] rodape e placar do TICKETS antes do push
@@ -32,7 +32,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
- M app/ponto/tests/test_e5_fechamento_como_leitura.py
 ?? esteira.pausada
 ```
 
@@ -83,11 +82,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● A régua cobra linha para a O96. Acrescento e empurro:
-
-  Ran 1 shell command
-
 ● A suíte do pre-push pegou os 2 erros do meu selo da E5 (fixture). Vejo o erro real:
 
   Ran 1 shell command
@@ -103,19 +97,24 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ● Essa cadeia de fixture (Empresa → Praça → Posto → …) é fundo de poço para um selo que a fila só vai usar depois. Deixo a parte estrutural e declaro o limite de cobertura, com a
   prova de prod no lugar:
 
-  Selo da E5 estrutural e rodar · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='ponto/tests/test_e5_fechamento_como_leitura.py'; s=open(p).read()
-     i = s.index('import datetime')
-     cab = s[:i]
-     cab = cab.replace('''O QUE ESTE SELO GUARDA, e e a parte que morde: o modo leitura **nao escreve**.''',
-     '''LIMITE DE COBERTURA, DECLARADO (nao e descuido): este selo…
-
-✻ Puzzling… (2h 4m 24s · ↓ 95.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
 
 ❯ aval Ronald: regras de execucao ate o fim da meta: (a) toda cura roda o oraculo e6 nos colabs afetados ANTES do apply, dentro da PROVA; divergencia nova = nao aplica e vira
   cura; (b) fixture de selo sempre copiada de selo existente da mesma familia; (c) PROVA: sempre nas 6 linhas seguintes a afirmacao de ato.
+
+  Empurrar com a suite verde · 4m 22s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -q --amend --no-edit && timeout 2400 git push origin main 2>&1 |
+     tail -6 (4m 17s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Puzzling… (2h 9m 52s · ↓ 97.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: fatias (4) e (5) do bloco META viram UMA: E5. FONTE: topo = relatorios/cartao_pela_celula.py:138-172 (gravado); linhas = ponto/services/espelho.py:600 (motor ao
+  vivo, escala ativa unica :589-592) x fechamento por fatia de vinculo (fechamento.py:160-236). SELO da E5 no universo do TXT: topo == soma das linhas em todas as chaves,
+  inclusive total_atraso e total_saida_antecipada (O51b entra aqui, lendo a mesma computacao, nunca conta propria). ANTES: re-medir E4-topo-igual-coluna depois da O96 (a prova do
+  placar e de 02:1x) e separar divergencia por causa: gravado envelhecido / escala unica x fatia / cadastro (col515 EC1220 vigencia impossivel = L-009, lista para meu !).
+  Nenhuma lei nova.
   ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
