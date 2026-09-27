@@ -88,7 +88,7 @@ lista — ela e o que esta EM PE._
 | **O77** | SELO DA L-084 | **livre** |
 | **O78** | SELO DA L-086 | **livre** |
 | **O79** | SELO DO VOCABULARIO falta x furo | **livre** |
-| **O80** | SELO DA L-092 | **livre, prioridade** |
+| **O80** | FECHADA 27/09 07:1x | **livre, prioridade** |
 | **O81** | ATA-SEM-LAMPADA | espera corte |
 | **O82** | PORTAO-DA-SOMBRA-CEGO-ENTRE-00-E-04 | espera aval |
 | **O83** | E6-CLASSES | **em curso** |

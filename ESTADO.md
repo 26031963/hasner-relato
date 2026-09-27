@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:622 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:649 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:08:31.**
+**Medido em 27/09/2026 10:12:49.**
 
 | | |
 |---|---|
-| `HEAD` local | `d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab` |
+| `HEAD` local | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
 | `origin/main` | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever
 d90b9338 [L-093+O89+L-086] smoke verde no worker servido, e a remedicao dos 17 sobrou 1 colab
 96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila
 bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e onde clicar -- com o RED do col39 corrigido
 4d8b3ad4 PAREI: a fila do MODO 24H so tem item com trava nomeada -- espera o Ronald
-0161a378 [O86] corrijo minha propria frase de dez minutos: nao e "uma causa so", sao seis formas e cinco ja tem obra
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/services/fechamento.py
- M app/ponto/views.py
-?? app/ponto/tests/test_o80_selo_l092.py
 ?? esteira.pausada
 ```
 
@@ -88,12 +85,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Aplicado (+6,00 h em 1 colab) e deploy no ar. Smoke das duas curas no worker servido:
-
-  Ran 1 shell command
-
-● SMOKE OK no worker servido: zero dias do col820 violam o teto, 0 de 77 batidas do chamador alteradas, e as três passadas dão o mesmo. Publico e sigo para a O80, que a sua regra
-  de fila põe em primeiro — e que agora ganhou razão a mais: ela é o corte de 06:3x virando código.
 
   Ran 1 shell command
 
@@ -112,15 +103,21 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● Agora a view, para o admin ver a recusa em vez de um 500:
 
-● Ver os campos da ExportacaoDominio
-  ⎿  $ python3 - <<'PY'
-     s=open('folha/models.py').read()
-     i=s.index('class ExportacaoDominio')
-     b=s[i:i+1800]
-     print('\n'.join(l for l in b.split('\n') if '= models.' in l or 'class ' in l)[:900])
-     PY
+  Ran 3 shell commands
 
-✢ Shimmying… (1h 9m 9s · ↓ 86.6k tokens)
+● 6 OK, com a trilha da porta aparecendo. Confiro que a guarda não trava nada que deva funcionar:
+
+  Ran 1 shell command
+
+● 2.593 testes OK, nada quebrou. Publico a O80 e atualizo a L-092, que deixa de ser "sem selo":
+
+● Publicar e empurrar a O80 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/LEIS.md'; s=open(p).read()
+     s = s.replace("| **SEM SELO** -- nao ha teste que impeca recalculo de competencia com export confirmado: obra O80 | **vigente** |",
+     "| `ponto/tests/test_o80_selo_l092.py` (6 casos) + a guarda em `ponto/services/fechamento.py::recalcular_fecha…
+
+* Shimmying… (1h 13m 27s · ↓ 89.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
