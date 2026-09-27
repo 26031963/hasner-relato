@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 17:45:45.**
+**Medido em 27/09/2026 17:50:51.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
  M app/ponto/services/fechamento.py
  M app/ponto/turnos.py
 ?? app/ponto/tests/test_e5_fechamento_como_leitura.py
+?? app/ponto/tests/test_o96_par_da_ata_e_pausa.py
 ?? esteira.pausada
 ```
 
@@ -96,12 +97,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ```
 
-❯ aval Ronald: (1) O81-CURA so comeca depois do meu corte escrito sobre a tabela a/b/c do censo; censo pronto = PARAR e publicar. (2) RELATO retido de novo em RELATO.md:74:
-  varrer o RELATO inteiro por afirmacao de ato sem PROVA: ao lado, curar todas numa passada e republicar antes do DRY do mutirao. (3) A colisao de lei do dia impar vem ao RELATO
-  como pergunta com as duas leis citadas (L-NNN), sem escolher lado.
-
-● Ordem recebida. Vejo o que o relato.sh cobra e varro o RELATO inteiro numa passada:
-
   Ran 2 shell commands
 
 › Message from @a383d3bbe278fc59f (ctrl+o to expand)
@@ -119,9 +114,15 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
 ● Curado: col81 21/08 vai de 488 → 423 min (oráculo 422) e col327 22/08 de 466 → 406 (oráculo 406, exato). Selo e medição de frota:
 
-  Running 1 shell command…
+● Selo da O96
+  ⎿  $ cat > ponto/tests/test_o96_par_da_ata_e_pausa.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O96 -- o par que a ATA marcou como miolo e PAUSA, nao trabalho. Regressao minha, de hoje.
+     O QUE EU QUEBREI HOJE. A O68b-PAPEL passou a marcar como `X` a batida que esta DENTRO do vao da ata e que
+     nenhum marco re…
 
-✻ Waiting for API response · will retry in 2m 32s · check your network
+✶ Puzzling… (1h 32m 2s · ↓ 70.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 › Message from @ae9d376eeecd3e213 (ctrl+o to expand)
 › Message from @ab04a661308c44a3f (ctrl+o to expand)
@@ -133,6 +134,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Grouping offending days from o81forma2.out                                                                                         31m 51s · ↓ 167.3k tokens
+  ◯ general-purpose  Writing O81_CENSO_ENTREGA.md to scratchpad                                                                                         36m 57s · ↓ 173.1k tokens
   ⧉  index
 ```
