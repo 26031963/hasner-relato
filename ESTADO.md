@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:42:09.**
+**Medido em 27/09/2026 03:47:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa` |
+| `HEAD` local | `0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90` |
 | `origin/main` | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0bb18e12 [TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
 95d74797 [O73] a volta da pausa deixa de ser atraso -- e o apply da L-084 PAROU com 286 h de desconto na mesa
 9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
 ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 56475e40 [TICKETS] a linha da vigencia passa a ter o ID E1, que e a tag citada nos commits
-ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
 ```
 
 ## `git status --short`
@@ -85,6 +85,7 @@ ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
 ● 19 colabs, horas_atraso +5,95 h e horas_saida_antecipada +221,21 h — ou seja ~11,6 h de desconto por pessoa. O critério do MODO 24H diz "aplica", mas o próprio motor avisa
   (:2049) que a L-084 mascarava esse efeito, e a O88 mostrou que a ata assigna a batida mais próxima e órfana o resto. Não desconto 221 h de 19 pessoas sem saber o que são. Meço
@@ -106,18 +107,17 @@ ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
 
   Nesses dias a entrada está a 161–178 min do marco — logo abaixo dos 180 da L-084 — e a saída a 700+ min. Uma ponta escapa por minutos e o dia inteiro é cobrado:
 
-● Commitar a O73 e a parada da L-084
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import json
-     p='app/docs/PENDENTES_RONALD.json'; d=json.load(open(p))
-     alvo = d if isinstance(d, list) else d.setdefault('itens', [])
-     item = {
-     "id": "L-084-FORMA-DO-CORTE",
-     "tipo": "corte",
-     "quando": "27/09 03:5x",
-     "o_que": ("L-084: alem das duas p…
+  Ran 2 shell commands
 
-✶ Transmogrifying… (47m 52s · ↓ 81.8k tokens)
+● Pré-empto as duas barreiras da O90 e empurro:
+
+● Empurrar a O73 · 4m 26s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git add app/docs/TICKETS.md; git
+     diff --cached --quiet || git commit -q -m "[TICKETS] placar e rodape com o push que pousou (9746080f) -- pre-empcao da O90
+     C… (4m 25s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Transmogrifying… (52m 43s · ↓ 83.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
