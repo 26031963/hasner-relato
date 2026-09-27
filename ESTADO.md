@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 04:30:45.**
+**Medido em 27/09/2026 04:35:45.**
 
 | | |
 |---|---|
@@ -39,10 +39,12 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## `git status --short`
 
 ```
+ M app/config/crons.py
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
 ?? app/chamados/management/commands/lavrar_furo_sem_canal.py
 ?? app/chamados/services/furo_sem_canal.py
+?? app/chamados/tests/test_o66_furo_sem_canal.py
 ?? esteira.pausada
 ```
 
@@ -89,40 +91,40 @@ b9867ceb [O73] anotacao de tipo que o contrato de mypy cobrou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  re-consulta, mas o laço de fatias faz isso em 76 de 607 colabs, e nenhum deles foi medido contra objetos frescos. Espera seu ! entre "Batida imutável" e "cada passada consulta
-  as suas".
 
-  E derrubei cinco números meus medindo de novo — inclusive os "40,6% de células sem marco", que são folga, e um fixture meu que passava verde sem reproduzir nada porque a pausa
-  tinha 60 min redondos em vez dos 63 reais.
+  Searched for 2 patterns, ran 1 shell command
 
-✻ Baked for 1h 27m 45s · done 4:22 AM · 1 shell still running
-
-● Background command "Esperar o bloco do cron ficar verde" completed (exit code 0)
+● DisputaSupervisao exige um chamado. Aproveito para isolar melhor: o caso da pergunta ganha um chamado terminal, então o único canal vivo é a pergunta:
 
   Ran 1 shell command
 
-● Ensaio verde. DEPLOY JÁ da O87 e smoke em prod (escrita dentro de atomic() + raise):
+● universo=1: os vereditos não sobreviveram à criação — o cartório julga no save (B5.2). Fixo o estado com update(), que é a forma honesta de montar o cenário que o contador tem
+  de ver:
 
   Ran 1 shell command
 
-● O87 no ar (04:28) e provada em prod: os 7 templates seguem legíveis, salvar um deles é recusado, e um 12x36 legítimo que cruza a meia-noite (te380, 19:00→07:00 com intervalo
-  01:00) continua salvando — a regra é relativa à entrada, não ao relógio, provado em prod e não só em teste.
+● Ainda 1. Paro de supor e imprimo o estado:
 
   Ran 1 shell command
 
-● Existe lavrar_vigencia_impossivel — o contador irmão do E1. Uso como molde para o da O66:
-
-  Listed 1 directory, ran 1 shell command
-
-● Molde claro. Construo o contador da O66 no mesmo desenho — vigia que lê as autoridades, nunca juiz:
+● Os canais re-julgam a célula ao nascer (B5.2) e apagaram meu veredito — pk2/3/4 viraram nunca_bateu. Fixo o veredito depois dos canais:
 
   Ran 1 shell command
 
-● Agora o selo, que afirma sobre o mecanismo e morde. Confiro duas assinaturas antes:
+● 7 OK, incluindo o MORDE (chamado terminal não é canal). Declaro o cron com o papel de vigia:
 
-  Searching for 1 pattern…
+  Searched for 1 pattern, ran 1 shell command
 
-· Harmonizing… (2m 27s · ↓ 8.5k tokens)
+● O crons.sh check mostra divergência pré-existente: há linhas no crontab do host que config/crons.py não declara. Instalar agora as removeria. Meço antes de tocar:
+
+  Ran 1 shell command
+
+● Achado importante: seriam 6 linhas adicionadas — e cinco delas são contadores declarados que nunca foram instalados (lavrar_fase_conflitante, lavrar_vigencia_sem_trilha,
+  lavrar_vigencia_impossivel, lavrar_jornada_lixo, reverter_situacao_afastado) — e 2 removidas, que são scripts do host não declarados. Vejo se crons.py sabe declarar host:
+
+  Ver se o crons.py declara cron de host
+
+· Harmonizing… (7m 27s · ↓ 23.1k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
