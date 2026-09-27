@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:20:01.**
+**Medido em 27/09/2026 03:25:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso` |
+| `HEAD` local | `9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **12** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9746080f [O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e esta certo)
 ea91c992 [TICKETS] rodape com o push que pousou; a O90 ganha o terceiro caso
 56475e40 [TICKETS] a linha da vigencia passa a ter o ID E1, que e a tag citada nos commits
 ffa4079e [TICKETS] linhas de O66 O73 O87 O88 O89 O90
 f7ed9dc8 [O90] o placar do TICKETS guarda o hash do ultimo push e por isso nasce velho -- barrou dois pushes hoje
-f1afcead [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres rodadas, e a O85 fecha em +157,72 h
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ```
 
@@ -85,16 +86,6 @@ f1afcead [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres roda
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  tocou (o tipo continua E/S — a mutação é em outro atributo). Curo com re-consulta e faço o RED morder:
-
-  Ran 2 shell commands
-
-● +4,00 h em 1 colab, nada mais move. Aplico o resíduo:
-
-  Ran 1 shell command
-
-● SMOKE_O85 = OK — os cinco com folha == espelho (col375 agora 28,00 = 28,00). Total da O85: +157,72 h. Registro a O89, que é classe de bug nova e de desenho:
-
   Ran 1 shell command
 
 ● Agora o push (a suíte roda no hook) e o deploy em seguida:
@@ -113,12 +104,22 @@ f1afcead [O89+O85] o motor MUTACIONA a Batida que recebe -- provado em tres roda
 
 ● Mesma família da O90, agora no rodapé. Curo e empurro:
 
-● Curar o rodape e empurrar · 7m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2; sed -i 's/barrou DOIS pushes na mesma noite. Cura: valor cuja fonte e o git nao se
-     guarda em arquivo/barrou TRES pushes na mesma noite -- duas vezes o placar do topo (linha 82) e uma o RODAPE (`bin\/tickets_rodap… (7m 1s · 2 lines)
+  Ran 1 shell command
+
+● O selo test_selo_pendentes_so_decisao recusou meu item — ele existe justamente para o PENDENTES guardar só decisão. Leio o que ele exige:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● O vocabulário é {aval, !, corte, corte-dado, smoke} e eu usei corte-de-desenho. O que a O89 espera é o !:
+
+  Empurrar com o selo verde · 3m 59s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/PENDENTES_RONALD.json && git commit -q -m "[O89] o item do PENDENTES nasce com o tipo do vocabulario: ! (o selo cobrou e
+     esta certo)
+     core/fila_pendentes.py::DECISAO e {aval, !, corte, corte-dado, smoke}; eu havia escrito
+     'corte-de-desenho', que nao … (3m 57s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Transmogrifying… (25m 43s · ↓ 51.7k tokens)
+· Transmogrifying… (31m 13s · ↓ 53.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
