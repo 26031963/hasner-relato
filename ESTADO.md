@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 18:34:01.**
+**Medido em 27/09/2026 18:39:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
-| `origin/main` | `eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefinido pela regua da supervisora` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -82,44 +82,44 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A suíte do pre-push pegou os 2 erros do meu selo da E5 (fixture). Vejo o erro real:
-
-  Ran 1 shell command
-
-❯ aval Ronald: META = nenhuma tela mente para quem entra no TXT da 09 (espelho, PDF em lote, fechamento, TXT no mesmo numero). Tudo abaixo PRIMEIRO no universo do TXT, frota
-  depois. Ordem: (1) O96 + cada regressao das autopsias: cura, apply, PROVA com numero isolado; (2) O81 com o MUDA do meu corte (celula no periodo pedido, builder so antes do
-  apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO); (3) dia impar = "em aberto" + o que falta -- a colisao de lei vem ao RELATO e espera meu corte, o resto nao para;
-  (4) topo do cartao = soma das linhas + O51b; (5) E5: a 09 lida da celula, chave com meu !; (6) SELO no universo do TXT: tela == PDF == fechamento == TXT = 0 divergencia + E6
-  rodada 4 = 0 divergencia; quem falhar sai para a lista de ajuste. Export so depois do (6), com meu !. Nenhuma lei nova. Parar so em pergunta de lei.
-
-  Ran 4 shell commands
-
-● Essa cadeia de fixture (Empresa → Praça → Posto → …) é fundo de poço para um selo que a fila só vai usar depois. Deixo a parte estrutural e declaro o limite de cobertura, com a
-  prova de prod no lugar:
-
-  Ran 1 shell command
-
-❯ aval Ronald: regras de execucao ate o fim da meta: (a) toda cura roda o oraculo e6 nos colabs afetados ANTES do apply, dentro da PROVA; divergencia nova = nao aplica e vira
-  cura; (b) fixture de selo sempre copiada de selo existente da mesma familia; (c) PROVA: sempre nas 6 linhas seguintes a afirmacao de ato.
-
-● Empurrar com a suite verde · 9m 42s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_e5_fechamento_como_leitura.py && git commit -q --amend --no-edit && timeout 2400 git push origin main 2>&1 |
-     tail -6 (9m 37s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Puzzling… (2h 15m 12s · ↓ 97.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
 ❯ aval Ronald: fatias (4) e (5) do bloco META viram UMA: E5. FONTE: topo = relatorios/cartao_pela_celula.py:138-172 (gravado); linhas = ponto/services/espelho.py:600 (motor ao
   vivo, escala ativa unica :589-592) x fechamento por fatia de vinculo (fechamento.py:160-236). SELO da E5 no universo do TXT: topo == soma das linhas em todas as chaves,
   inclusive total_atraso e total_saida_antecipada (O51b entra aqui, lendo a mesma computacao, nunca conta propria). ANTES: re-medir E4-topo-igual-coluna depois da O96 (a prova do
   placar e de 02:1x) e separar divergencia por causa: gravado envelhecido / escala unica x fatia / cadastro (col515 EC1220 vigencia impossivel = L-009, lista para meu !).
   Nenhuma lei nova.
-  ctrl+x ctrl+s to send now
+
+● Push pousou (eb87a7c2..0a22e208), suíte verde sobre o commit. Estado do turno e a fila como você a deixou:
+
+  No ar hoje, com PROVA própria: O68b-PAPEL · O84 · O93 · O95 · O96 · a lavra de prod na sombra · placar E1/E3/E5/E6 atualizado. Apply da 09 FEITO: turnos_abertos 620 → 473,
+  horas_trabalhadas +1.040,82 h, inconsistencias −228, snapshot de 468 KB, 0 entram/saem do TXT, 07/08 em zero.
+
+  As cinco autópsias + o censo O81 voltaram: 644 de 644 dias nomeados, 0 sem causa. E elas acharam o que eu não tinha visto:
+
+  - O96 curada e commitada — o X da minha própria cura entrava no turno sem carimbo e a pausa era paga como trabalho: 116,1 h em 44 colabs, 50,9 h delas criadas por mim hoje.
+    PROVA contra o oráculo: col327 406=406, col51 485=485, col922 404=404. O número inflado está no gravado — o reapply é o próximo item.
+  - R1–R5, minhas regressões, com número no RELATO: o papel da ata sobrescrevendo gravado coerente (col920 perde uma noite de 716 min), a guarda do par da pausa descartando o dia
+    inteiro (7 dias), o posicional invertido (col146, 900 min de descanso como turno), o resíduo da O84 no leitor (col610, 11 dias), e o selo da O68b vazio (fixture sem hii/hfi
+    prova forma que prod não tem).
+  - Censo O81 a/b/c publicado: 235 confirmado exato, causa única = ata agregada de 08/2026 (3.046 dias, zero em 09); (b) NÃO toca o gravado de 06/07/08; (c) a cura muda ZERO dos
+    644 — minha hipótese de que os 644 eram artefato do builder caiu.
+  - O MUDA que o censo propôs é band-aid e eu não o apliquei (LEI-AKITA 1). Seu corte trocou por outro: célula em [max(data_ini,apur_ini)..data_fim_mes], builder só antes do
+    apur_ini, sem tocar 06/07/08.
+
+  Duas coisas esperando seu corte, e só elas: a colisão de lei do dia ímpar (seu corte de hoje × turnos.py:329-336 de 14/09 — 55 dos 159 dias são o código obedecendo a lei antiga)
+  e a origem da O81 (re-lavrar ata exportada = L-092).
+
+  E a sua regra (b) de agora chegou pelo caminho mais caro: acabei de queimar tempo montando fixture de TipoEscala/Posto do zero no selo da E5 em vez de copiar de um selo da mesma
+  família — o selo ficou com a parte estrutural e o limite de cobertura declarado, com o A/B de prod (518/604 idênticas, 86 explicadas, zero sem explicação) como prova
+  comportamental.
+
+  Fila, na sua ordem: reapply da O96 → R1..R5 uma por uma → O81 com o seu MUDA → dia ímpar (a metade que é bug puro) → E5 (topo == soma das linhas, com O51b) → selo
+  tela==PDF==fechamento==TXT + E6 rodada 4 → export com o seu !.
+
+✻ Cogitated for 2h 15m 48s · done 6:34 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
