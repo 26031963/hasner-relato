@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:00:31.**
+**Medido em 27/09/2026 12:05:45.**
 
 | | |
 |---|---|
@@ -86,40 +86,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bad2vo90w.output (11 lines)
-
-● Task "Esperar o veredito da suite completa" still running in background
-
-● Os dois REDs cross-meia-noite seguem abertos — o X não chegou ao pareador. Vou medir o mapa em si antes de supor:
-
-  Ran 1 shell command
-
-● _papel_da_ata filtra p in ('E','S') — meu X era descartado e a batida voltava ao tipo gravado. Uma linha:
-
-  Ran 1 shell command
-
-● col904 fecha 18:50 → 07:00 = 12,16 h e o col300 (RED da classe D) fecha 17:53 → 06:03 = 12,17 h — o guarda de calendário era a causa dos dois. Mas o mapa do col51 mostra um
-  efeito colateral que eu não quero: as batidas de intervalo (12:03/13:01) viraram X porque o juiz não lhes dá tipo, embora a ata as tenha ACENDIDO num marco. Aplico a versão mais
-  restritiva (L-081) — só é órfã a batida que não casa com nenhuma luz:
-
-  Ran 2 shell commands
-
-● Antes de fixar a semântica do X preciso ver o DNA do dia do col51 — se o dia tem marco de intervalo, aquelas duas batidas não são órfãs, são almoço:
-
-  Ran 2 shell commands
-
-● O DNA decide: o col51 não tem marco de intervalo (hii/hfi: null, n_missing=0) — suas 12:03/13:01 são almoço real, e marcá-las X pagaria o almoço de ~197 dias. O col904 tem a
-  órfã a 3 min da luz que fecha o plantão. Vou ler a lei de cluster/eco que já existe antes de inventar critério:
-
-  Ran 1 shell command
 
 ● A casa já tem esse juiz: escala/orfa_classe.py classifica órfã em eco_cluster (rajada ≤ 15 min de outra marca) x geometria. É ele que separa o col904 do col51. Vou lê-lo para
   reusar, não reimplementar:
 
-● Ler o classificador de orfa existente
-  ⎿  $ cat escala/orfa_classe.py
+  Read 1 file
 
-✢ Hashing… (12m 26s · ↓ 24.0k tokens · thinking)
+● A casa tem o vocabulário (JANELA_CLUSTER_MIN = 15, rajada) mas o classificar_orfas só vê rajada entre órfãs — a do col904 é rajada com uma luz acesa, que é o cluster-guard
+  ("batida só ocupa o marco mais próximo"). Vou consultar antes de fixar essa semântica, porque ela mexe em dinheiro:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Aviso decisivo: os campos do item estavam estreitos demais — fechar plantão noturno move horas_noturnas por definição, e a DIFF anterior estava separando exatamente a cura.
+  Aplico as três correções no mesmo patch:
+
+  Ran 1 shell command
+
+❯ Pista para o col51 (leis existentes, nenhuma nova): se o template dele tem intervalo_modo = duracao, o dia nao tem marco de intervalo por construcao, e o par de batidas no MEIO
+  do turno e a PAUSA pela LEI DO MIOLO (HX-MIOLO-POR-DURACAO), nunca orfa. Batida so e orfa se nao casa com nenhuma luz E nao forma o par de pausa dentro do turno. E a mesma
+  familia da O62 (juiz "sem intervalo" com cadastro de 70 min): conferir se a cura fecha as duas.
+
+● A pista fecha o buraco por lei existente, não por critério meu: se o template é intervalo_modo = duracao, o dia não tem marco de intervalo por construção e o par do miolo é a
+  PAUSA. Vou ler a lei do miolo e o cadastro do col51:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● A lei do miolo é declarada e deslizante ("bordas são a lei do template; miolo se auto-ancora por duração"), e o O62 diz que a duração vem do cadastro, não do 60 do Art.71. Vou
+  achar o leitor canônico da duração e o _marca_intra_duracao (o miolo dentro do próprio pareador):
+
+  Achar o leitor canonico da duracao do intervalo
+  ⎿  $ echo '=== juizes.py:775-800 ==='; sed -n '775,800p' core/juizes.py; echo; echo '=== leitores de intervalo_duracao_min ==='; grep -rn 'intervalo_duracao_min' --include=*.py
+     . | grep -v '/tests/\|migrations' | head -20; echo; echo '=== _marca_intra_duracao ==='; sed -n '125,165p' ponto/turnos.py
+
+· Hashing… (17m 40s · ↓ 28.5k tokens · still thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
