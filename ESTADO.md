@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 16:00:45.**
+**Medido em 27/09/2026 16:05:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ## `git status --short`
 
 ```
+ M app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -87,40 +89,40 @@ acfa037f [O93] dois selos da casa morderam a minha cura, e os dois tinham razao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  outros 7 com saída real já caíam pelo critério de campos, então nenhum colab com saída real perde hora total. Commito (sem tocar arquivos, a suíte está rodando):
-
-  Ran 2 shell commands
-
-● Commitado 59cf0bbe; a suíte está rodando e o esperador está armado. Estado da sequência:
-
-  ┌───────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │         passo         │                                                                       estado                                                                       │
-  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 1. smoke do deploy    │ feito — worker servido 15:21, sete casos verdes                                                                                                    │
-  │ anterior              │                                                                                                                                                    │
-  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 2. remedir L-007      │ feito — 12 colabs / −219,01 h, 9 com saída real                                                                                                    │
-  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 3. O95 com DIFF de    │ feito — turnos_abertos 620 → 464, horas_trabalhadas +1.069,99 h, inconsistencias −237; col51 e col382 explicados (col51 = 3,99 h de feriado        │
-  │ frota                 │ recuperadas; col382 = a minha 1ª versão cortava 2,37 h e 3,56 h dele, e a prova do _ENVELOPE_SS corrigiu)                                          │
-  ├───────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 4. condição a mais no │ escrita e medida — CONDICAO_SAIDA_REAL separa quem perde hora total tendo saída real; dos 9, 7 já caíam por campos e ela pega os 2 restantes       │
-  │  aplicador            │ (col890, col450)                                                                                                                                   │
-  └───────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Falta na fila: suíte → push → deploy → smoke → apply da 09 → classe C residual → E5 fatia 1 → E6 rodada 3 com o número final no placar.
-
-✻ Baked for 46m 31s · done 3:56 PM · 1 shell still running
-
-● Background command "Commitar a O95 e esperar a suite" completed (exit code 0)
-
   Read 1 file
 
 ● 11 vermelhos — a cura mexeu na absorção de intervalo e os selos da casa objetaram. Vejo todos antes de decidir:
 
-  Listar os 11 vermelhos
+  Searched for 1 pattern
 
-· Slithering… (2m 6s · ↓ 508 tokens · thinking)
+● Os 11 vermelhos dizem uma lei que eu atropelei, e ela é clara nos nomes: "o intervalo do DNA não fecha turno", "durante o almoço o turno segue ABERTO", "só saída de intervalo
+  abre turno aberto". No momento VIVO do almoço não existe volta nem saída posterior — e meu guarda fechava o turno ali. É a doutrina do teto temporal: vale fato encerrado, não
+  instante. Reverto a absorção e movo a cura para um passo final:
+
+  Ran 1 shell command
+
+● A cura vai para um passo final sobre fato encerrado: turno que ficou aberto e cuja última batida é uma S absorvida, e há batida posterior (prova de que o dia acabou e a volta
+  nunca veio), fecha ali. No almoço vivo não há batida posterior, então nada muda:
+
+  Ran 2 shell commands
+
+● Os 33 testes dos 11 arquivos que quebraram passam — a lei do almoço vivo está respeitada. Confiro os casos e os selos da O95 (que testavam a absorção, agora revertida):
+
+  Ran 1 shell command
+
+● A frota melhorou mais: col727 163,46 · col107 177,54 (acima do gravado) · col382 e col51 como esperado. Os selos da O95 falham porque testavam a absorção — reescrevo pelo passo
+  final, e entra o caso que os 11 selos me ensinaram:
+
+  Ran 1 shell command
+
+● 9 verdes. Suíte completa e DIFF de frota:
+
+  Suite e DIFF com o passo final da O95 · 1m 14s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; LAB=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); nohup docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=… (1m 13s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Slithering… (7m 6s · ↓ 14.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
