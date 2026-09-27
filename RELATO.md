@@ -1,5 +1,105 @@
 # RELATO — esteira saas-hasner
 
+## LISTA DE AJUSTE AO DP (09/2026): **9 colabs no TXT, 259,3 h** que as batidas provam e a folha nao paga
+
+Pedido de 27/09 02:0x. Regua = `horas_trabalhadas + horas_folga_trabalhada` do `FechamentoMensal`
+contra o PISO das batidas com par completo (oraculo `/tmp/e6c.py`, que nao passa pelo motor).
+**Estes 9 estao `entra` em `classificar_export`** -- se a cura nao sair antes do export, a folha
+de 09 sai com esta diferenca. Persistido em `logs/e6c_classes.json`.
+
+| colab | emp | classe | folha paga | batidas provam | faltam |
+|---|---|---|---:|---:|---:|
+| **col924** | 2 | A -- fechamento zero | **0,00 h** | 129,28 h | **129,28 h** |
+| **col391** | 2 | A -- fechamento zero | **0,00 h** | 31,96 h | **31,96 h** |
+| **col43** | 2 | A -- fechamento zero | **0,00 h** | 28,33 h | **28,33 h** |
+| **col942** | 2 | A -- fechamento zero | **0,00 h** | 28,17 h | **28,17 h** |
+| col85 | 3 | D -- nem o espelho ve | 52,93 h | 65,02 h | 12,09 h |
+| col935 | 2 | C -- o espelho ve, a folha nao | 77,06 h | 88,16 h | 11,10 h |
+| col881 | 2 | C -- o espelho ve, a folha nao | 165,29 h | 175,29 h | 10,00 h |
+| col920 | 2 | D -- nem o espelho ve | 111,72 h | 116,93 h | 5,21 h |
+| col306 | 2 | D -- nem o espelho ve | 161,63 h | 164,78 h | 3,15 h |
+
+Os **4 de classe A** somam 217,7 h e sao os mesmos do E1-sem-previsao: **sem vinculo e sem celula**.
+Nao e cura de codigo -- e cadastro, e vai tambem para a lista da supervisora.
+Os outros **75** dos 84 estao **fora** do TXT: a diferenca deles nao entrega numero errado ao DP em
+09, mas continua sendo hora nao paga.
+
+## E6-CLASSES: **84 colabs, 1.602,2 h** -- as quatro classes MEDIDAS, com as listas
+
+Regua do pedido, frota de 09, oraculo `/tmp/e6c.py` (le `espelho_do_colab`, `FechamentoMensal` e
+`classificar_export`; **0 erros de espelho**). Os numeros da ordem se confirmaram: 84 colabs e
+1.602,2 h, A com 4 e B com 27.
+
+| classe | colabs | horas | o que e |
+|---|---:|---:|---|
+| **B** -- turno aberto 5+ | **27** | **733,7 h** | o par nao fecha; e a O68b, que passa a ter estes REDs |
+| **C** -- o espelho ve e a folha nao | **32** | **376,4 h** | mesma fonte, dois numeros |
+| **D** -- nem o espelho ve o plantao | **21** | **274,3 h** | o plantao completo nao chega a nenhuma testemunha |
+| **A** -- fechamento zero | **4** | **217,7 h** | cadastro: sem vinculo nem celula |
+
+**A fronteira C/D e uma ESCOLHA, e eu a errei na primeira medicao.** Com tolerancia absoluta de 1 h
+eu tinha C=26 / D=27 e o **col515 caia em D** -- mas voce o nomeou como RED de C, e com razao: o
+espelho dele ve 92,30 h de um piso de 94,81 (2,6% de folga). Com tolerancia `max(3 h, 5% do piso)`,
+que e a pergunta certa ("o espelho ve o plantao?"), **6 colabs trocam de classe** e o resultado fica
+C=32 / D=21, contra C=33 / D=20 da sua contagem. Os REDs caem todos na classe nomeada.
+
+| classe | os colabs, por horas |
+|---|---|
+| **C (32)** | col882(77,0) col515(39,1) col89(20,0) col375(20,0) col903(17,1) col51(16,4) col437(15,5) col362(12,6) col743(12,1) col349(12,0) col935(11,1) col701(10,8) col881(10,0) col129(9,0) col155(9,0) col857(8,7) col943(8,2) col503(6,1) col338(6,0) col712(5,6) col476(5,4) col506(5,2) col367(5,0) col112(4,4) col152(4,3) col242(4,2) col782(4,1) col667(4,0) col417(3,8) col161(3,5) col567(3,5) col422(2,8) |
+| **D (21)** | col784(29,7) col263(27,6) col949(20,1) col827(19,6) col616(17,9) col885(14,8) col87(13,8) col297(13,3) col904(12,1) col85(12,1) col228(12,1) col913(12,0) col451(12,0) col860(11,9) col443(11,9) col769(10,1) col910(7,2) col946(6,1) col920(5,2) col306(3,1) col853(1,8) |
+
+### **O col300 nao e mais defeito** -- e o RED morreu antes do deploy
+
+Voce o nomeou como RED de D (02/09, 17:53->06:03). MEDIDO agora: folha **180,47 h**, oraculo
+**180,47 h**, vao **-0,00 h**, e o plantao de 02/09 aparece como **1 par completo**. Ele nao esta
+entre os 84. A explicacao esta no carimbo: **todos os 607 fechamentos de 09 foram reescritos as
+00:50-00:51 de hoje**, pelo recalculo do apply da folga -- ou seja, com O76 e a L-084 corrigida no
+disco. A cura do dia do turno pegou o col300 antes de eu ir olhar.
+
+### Autopsia da classe C -- col882 e col515: o gravado NAO esta velho, e a hora nao esta escondida
+
+Duas hipoteses mortas por medicao, antes de qualquer cura:
+
+1. **Nao e deriva.** `atualizado_em` dos 607 fechamentos de 09 = **27/09 00:50-00:51**. O gravado
+   do col882 tem 1 minuto de vida a mais que a leitura da tela que o contradiz.
+2. **A hora nao esta em outro campo.** Varri os 26 campos numericos do col882: `horas_trabalhadas`
+   11,00 · `horas_folga_trabalhada` 87,68 · **todas as sete rubricas de HE em ZERO**. Somando tudo,
+   98,68 h contra 175,73 h do motor. As 77 h nao foram reclassificadas: elas nao existem no gravado.
+
+| | col882 | col515 |
+|---|---:|---:|
+| oraculo (batidas com par completo) | 175,73 h | 94,81 h |
+| espelho, soma das LINHAS | 175,65 h | 92,30 h |
+| espelho, numero do TOPO | **11,00 h** | **11,13 h** |
+| folha (`trabalhadas + folga`) | 98,68 h | 55,75 h |
+| `minutos_realizados` gravado | 660 min = 11,00 h | 660 min = 11,00 h |
+| `dias_previstos` | 9 | 1 |
+
+**O TOPO DO ESPELHO CONCORDA COM A FOLHA, E A COLUNA E' QUEM DISCORDA** -- `horas_trabalhadas`
+11,00 h e `resumo['total_trabalhadas']` 11,0 h sao o MESMO numero. Isso funde duas obras que eu
+tratava como separadas: a **E4-topo-igual-coluna** (col515 11,13 x 92,30, "item (6) do [nome]") e a
+**classe C** sao o mesmo defeito visto de dois lados. Nao sao dois numeros: sao **tres**
+(topo/folha 11,13 · coluna 92,30 · oraculo 94,81), e o que hoje se paga e o menor.
+
+**HIPOTESE, ainda NAO provada** (e por isso nao curei): a folha roda o motor **uma vez por FATIA de
+escala** e acumula (`ponto/services/fechamento.py:225-236`, `resultado.periodos += r_fatia.periodos`),
+enquanto o espelho roda **uma vez** com a escala `ativa=True`
+(`ponto/services/espelho.py:590`). Se uma fatia nao cobre dias que tem batida, a hora daqueles dias
+nao entra em NENHUMA soma -- que e exatamente a assinatura de um `dias_previstos` de 9 num mes de 31
+dias com 17 turnos batidos. **O TESTE DECISIVO**, a rodar na sombra (que acabou de ser refeita com
+dump de agora, entao tem o gravado desta madrugada): chamar
+`recalcular_fechamento_mes(9, 2026, colaborador_ids=[882])` e `espelho_do_colab` no MESMO processo e
+comparar fatia por fatia. Nao vou reconstruir a chamada em sonda propria -- a casa ja pagou 7x por
+isso.
+
+## O70 GERADORA-EM-TODA-CELULA: **cumprida no dado, falta o selo**
+
+MEDIDO 27/09 02:0x: **17.332 de 17.332** celulas da janela 09 tem `escala_geradora` -- **0 sem**. E
+das 17.561 celulas nascidas de 20/09 para ca, **0 nasceram sem geradora**. O numero de **6.848** que
+estava na fila era de ANTES da O69: o apply dela preencheu a coluna. O que resta do item nao e dado,
+e **guarda**: o selo "celula nova nasce sem geradora = VERMELHO" e a saida do fallback aritmetico.
+
+
 ## E6, o oraculo independente: **91,5% dos dias BATEM** -- e o resto tem nome
 
 Rodada de 27/09 ~07:xx, `/tmp/e6b.py` dentro do `saas_core` sobre PROD, **depois** das sete curas desta

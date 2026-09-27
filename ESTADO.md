@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 01:38:51.**
+**Medido em 27/09/2026 01:44:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA` |
+| `HEAD` local | `d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna` |
 | `origin/main` | `c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d06bb2fa [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espelho concorda com a folha contra a propria coluna
 fb20381f [O82] o portao do deploy e cego entre 00:00 e 04:00, e a divergencia por IDADE parece divergencia de SCHEMA
 5836683c [L-084-DOC] a docstring dizia OU onde o codigo diz E, e o handoff dizia "deploy em curso" onde ele foi recusado
 2d71f717 [PLACAR+O81] o placar deixa de inflar a E6, e um dia de julho arrasta o espelho de setembro
 c6c3785b [E6-PISO+O76+L-084/L-086] a hora de folga que sumia volta (+431,90 h em 11), e o dia do turno passa a sair do juiz
-c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas, e o MODO 24H separando por colab
 ```
 
 ## `git status --short`
@@ -60,7 +60,7 @@ c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas
 | E3 | no turno partido sem intervalo declarado, a volta da pausa nao e atraso (O73 | **FALTA** | RED col81 (te#189 16:00-00:00): "Atraso: entrada as 18:29 (previsto 16:00)" na volta do intervalo; 6 templates `turno_partido` com intervalo_modo=dura |
 | E4 | o cartao PDF desenha o mesmo que a tela | FEITO | `pdf_x_espelho_divergentes` = 0 em 199 colabs (sombra, pos-O69) |
 | E4 | o cartao e o TXT no mesmo numero | FEITO | `cartao_x_txt_divergentes` = 0 na competencia 09 |
-| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | MEDIDO o contrario: topo x coluna diverge em 7 casos conferidos (col515 11,13 x 92,30 h). Item (6) do [nome], obra aberta |
+| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | MEDIDO: topo x coluna diverge (col515 11,13 x 92,30 h). 27/09 02:1x: e o MESMO defeito que a classe C da O83 -- o TOPO concorda com a FOLHA (11,00 h)  |
 | E4 | colunas Atraso e Saida antecipada lendo a folha (O51b) | **FALTA** | (sem prova) |
 | E4 | o tipo de escala exibido sai da DEFINICAO, nao do rotulo gravado | em curso | O74: `rotulo_do_desenho` + filtro `desenho_do_turno`; ficha no ar, lista de tipos espera o deploy |
 | E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
@@ -69,7 +69,7 @@ c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas
 | E6 | ZERO divergencia nao explicada entre oraculo e espelho | **FALTA** | MEDIDO o contrario em 27/09 ~01:10: 644 de 7.536 dias (8,5%) fora de 10 min -- 257 acima de 60 min, 233 entre 10 e 60, 77 com espelho zero e trabalho  |
 | E6 | o oraculo compara contra espelho INTEGRO, nao contra o builder | **FALTA** | MEDIDO: 235 dos colabs caem no builder (espelho.py:352-361). Causa = O81 (3.986 dias de ata agregada em 06/07/08 arrastando 09 via espelho.py:585) |
 | E6 | dia de batida impar nao fica fora da certificacao em silencio | **FALTA** | MEDIDO: 473 dias saem da comparacao por batida impar -- o oraculo nao os julga e ninguem mais responde por eles |
-| E6 | o piso de horas que o oraculo acusa tem causa por colab | em curso | medido: 185 colabs / 2.713,8 h contra `minutos_realizados` (campo CAPADO, superestima). Item (3) do E6-PISO -- classificar por causa e cruzar com os 2 |
+| E6 | o piso de horas que o oraculo acusa tem causa por colab | em curso | CLASSIFICADO em 27/09 02:1x (O83), com a regua trabalhadas+folga: 84 colabs / 1.602,2 h em 4 classes (B 27/733,7 · C 32/376,4 · D 21/274,3 · A 4/217,7 |
 | E6 | hora de folga trabalhada sem escala certa entra em horas_trabalhadas | FEITO | aplicada em 09: +431,90 h em 11 colabs, HE em zero, 0 saem do TXT; reversao logs/apply_folga_antes.json |
 
 **E6 -- calculador independente (`/tmp/e6b.py`), ultima rodada 27/09/2026 ~01:10:** **91.5% dos dias BATEM** (ate 10 min) em 7536 dias comparados; 160 colabs com divergencia.
@@ -77,40 +77,40 @@ c060e70a [O68b+L-084..L-092] o corte pelo VAO no ar, 8 leis de dominio indexadas
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (1) C -- o espelho ve e o fechamento nao: 33 colabs, 442 h. RED col882 (77 h) e col515 (39 h). Classe nova: mesma fonte, dois numeros. Autopsia dia a dia (dia do espelho x
-  periodo do fechamento), causa por arquivo:linha, cura na origem, DIFF pelo criterio do MODO 24H.
-  (2) D -- nem o espelho ve plantao completo: 20 colabs, 209 h. RED col300 02/09 (17:53-06:03), col904 22/08 (18:50-06:57), col85 21/08 (18:56-07:02). Mesma receita.
-  (3) B -- turno aberto 5+: 27 colabs, 734 h (col788 63 turnos abertos, col923 46, col880 11). E a O68b: vira a prioridade dela, com estes REDs.
-  (4) A -- fechamento zero: col924, col391, col43, col942 (218 h). Cadastro: sem vinculo nem celula. Nao e cura de codigo; entram na lista de ajuste ao DP e na lista da
-  supervisora.
-  LISTA DE AJUSTE AO DP (09): os 9 colabs das classes A, C e D que estao no TXT, com as horas de cada um, no topo do RELATO, se a cura nao sair antes do export. Nenhuma lei nova.
 
-● O70 está cumprida no dado: 17.332 de 17.332 células da janela 09 têm escala_geradora (o 6.848 era de antes da O69), e nenhuma célula nascida de 20/09 para cá nasce sem ela —
-  falta só o selo e a saída do fallback. Registro isso e entro na ordem nova, pela classe (1) C:
+● Enquanto roda, sigo a pista que o número aponta — 77 h que não estão em nenhum dos 26 campos, num colab com dias_previstos=9. Leio o bloco da folga, vizinhança da minha própria
+  cura:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O mecanismo aparece: a folha roda o motor por FATIA de escala e acumula (resultado.periodos_ft += r_fatia.periodos_ft, :231), enquanto o espelho roda uma vez com a escala ativa.
+  Leio o laço das fatias:
 
   Ran 1 shell command
 
-● Achado forte, e não é periodos_ft (zero nos dois). O motor, rodado agora, dá 175,73 h para o col882 contra 98,68 h gravadas; e o col515 tem três números — topo 11,13 h, coluna
-  92,30 h, gravado 55,75 h. Testo a hipótese decisiva: o gravado está velho?
+● Background command "Rodar o calculador das quatro classes" completed (exit code 0)
 
-  Ran 2 shell commands
+  Read 1 file
 
-● O gravado não está velho: todos os 607 fechamentos de 09 foram atualizados às 00:50-00:51 de hoje, pelo recálculo do apply da folga. Então o mesmo código, no mesmo minuto,
-  produziu 98,68 h na folha e 175,73 h na tela — a classe C é exatamente "mesma fonte, dois números". Leio o somador da folha:
+● O calculador reproduz a ordem: 84 colabs / 1.602,2 h, A=4 (217,7 h), B=27 (733,7 h), e a lista do DP = 9 colabs / 259,3 h. Minha fronteira C/D ficou diferente da sua (C=26/D=27
+  contra C=33/D=20) porque usei tolerância absoluta de 1 h — o col515, que você chamou de C, caiu em D por 2,51 h em 94,81. Corrijo a régua da fronteira e publico:
 
   Ran 1 shell command
 
-● Antes de acusar o sistema, testo se a régua da medição está certa — foi assim que o minutos_realizados capado me enganou antes. Imprimo os 26 campos do col882:
+● Agora as classes batem com a ordem (C=32, D=21, A=4, B=27) e cada RED cai na sua classe — exceto o col300, que não aparece entre os 84. Meço o col300 antes de dizer o que é:
 
-  Conferir se as horas estao em outro campo
-  ⎿  $ cat > /tmp/c882_campos.py <<'PYEOF'
-     from django.apps import apps
-     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
-     FM = G('FechamentoMensal')
-     CAMPOS = ('horas_trabalhadas','horas_noturnas','horas_extras','horas_extras_50','horas_extras_50_noturna',
-     'horas_extras_100','horas_extr…
+  Ran 1 shell command
 
-✢ Unfurling… (23m 33s · ↓ 62.2k tokens · thinking some more)
+● col300 está exato: folha 180,47 h == oráculo 180,47 h, vão −0,00 h — o plantão 02/09 17:53→06:03 é pago. Esse RED já morreu, curado pelo recálculo das 00:50 desta noite. Publico
+  tudo no RELATO, com a lista do DP no topo:
+
+● Commitar a O83 e publicar o RELATO · 15s
+  ⎿  $ grep -n 'E6-CLASSES\|SMOKE+PLACAR' docs/PROMPTS.md | cut -c1-100; cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PROMPTS.md
+     app/core/espelho_verdade.py && git commit -q -F - <<'EOF'
+     [O83 E6-CLASSES] 84 colabs e 1.602,2 h em quatro classes, e o topo do espel… (15s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Unfurling… (28m 43s · ↓ 84.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
