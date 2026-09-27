@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 05:35:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.4 MB). Acoes na janela: **960**.
+**Medido em 27/09/2026 05:40:12.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (82.4 MB). Acoes na janela: **953**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -963,10 +963,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:41:54 | Bash | Ver os numeros crus das duas falhas | `cd /home/ronald/saas-hasner && grep -A 14 "FAIL: test_registrar_batida_sem_pergunta" logs/o65_suite.log \| tail -8; echo "=== calendario ==="; grep -A 14 "FAIL: test_calendario " logs/o65_suite.log \| tail -6` |
 | 17:41:48 | Bash | Ler as mensagens das duas falhas | `cd /home/ronald/saas-hasner && grep -B 2 -A 12 "FAIL: test_registrar_batida_sem_pergunta" logs/o65_suite.log \| grep -iE "assertion\|teto\|acima\|queries\|!=\|>" \| head -6; echo "--- calendario ---"; grep -B 2 -A 12 "FAIL: test_calendario " logs/o65_suite.log \| grep -iE "assertion\|teto\|acima\|queries\|!=\|>" \| head -6` |
 | 17:41:42 | Bash | Ver os numeros das duas falhas | `cd /home/ronald/saas-hasner && grep -A 5 "FAIL: test_calendario\\|FAIL: test_registrar_batida_sem_pergunta" logs/o65_suite.log \| grep -E "AssertionError\|assert\|queries" \| head -6` |
-| 17:38:02 | Bash | Esperar o fim da suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if grep -qE "^Ran [0-9]+ tests" logs/o65_suite.log 2>/dev/null; then break; fi; sleep 50; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o65_suite.log \| tail -10` |
-| 17:37:48 | Bash | Ver se a suite ainda roda | `docker ps --format '{{.Names}} {{.Status}} {{.Command}}' \| grep -v "saas_\\|juliani_db\\|mensageria" \| head -3; echo "--- tail cru do log ---"; tail -3 /home/ronald/saas-hasner/logs/o65_suite.log` |
-| 17:37:37 | Bash | Esperar a suite fechar | `cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE "^(OK\|FAILED) " logs/o65_suite.log 2>/dev/null \|\| grep -qE "^(OK\|FAILED)\(\|^OK$\|^FAILED" logs/o65_suite.log 2>/dev/null; then break; fi; sleep 50; done; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o65_suite.log \| tail -8` |
-| 17:37:31 | Bash | Veredito da suite da O65 | `cd /home/ronald/saas-hasner && grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)" logs/o65_suite.log \| tail -8` |
-| 17:37:25 | Bash | Achar os escritores que fecham o fio | `echo "=== quem ESCREVE validada_em / fecha pergunta ==="; grep -rn "validada_em\s*=" --include=*.py chamados/ \| grep -v test \| grep -v "None" \| head -6; echo "=== quem fecha por via (o escritor da via) ==="; grep -rn "via\s*=\\|via=" --include=*.py chamados/services/validacao.py chamados/reconciliador.py 2>/dev/null \| grep -v test \| head -6; echo "=== Q2-JA conversa parada ==="; grep -rln "co ...` |
-| 17:37:17 | Bash | Censo dos fechadores por via | `for via in chamado_encerrado celula_absolveu completude_turno "nada a perguntar" conversa_parada; do echo "=== $via ==="; grep -rn "$via" --include=*.py chamados/ ponto/ escala/ core/ 2>/dev/null \| grep -v test \| head -4; done` |
-| 17:37:08 | Bash | Registrar a O66 e ver a suite | `python3 <<'ENDPY' import re f='docs/BACKLOG.md' s=open(f,encoding='utf-8').read() m=re.search(r'^\\| O65 .*$', s, re.M) o66 = ('\| O66 \| **BECO-FIO-FECHADO-CELULA-ABERTA** (P7.1, pedido 26/09 21:xx; L-002 a celula manda) -- INVARIANTE: celula de ' 'competencia ABERTA com veredito `furo`/`cobrado` tem SEMPRE um canal vivo (pergunta aberta ao colab ou pendencia do ' 'admin). Contador `celula_furo_s ...` |

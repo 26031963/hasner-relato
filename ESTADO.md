@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 05:35:01.**
+**Medido em 27/09/2026 05:40:12.**
 
 | | |
 |---|---|
@@ -110,15 +110,15 @@ d070cf9d [TICKETS] placar e rodape com o push 512030da -- quarta vez que a O90 b
 
   Isso faz da O86 a maior obra aberta: 733,7 h da classe B + ~180 h da C. Publico:
 
-● Publicar a taxonomia da classe C e empurrar · 2m 55s
+● Publicar a taxonomia da classe C e empurrar · 8m 6s
   ⎿  $ python3 - <<'PYEOF'
      p='docs/RELATO.md'; s=open(p).read()
      bloco = """# RELATO — esteira saas-hasner
      ## Classe C fechada em TAXONOMIA: tres causas, todas nomeadas -- e a O86 vira a maior obra aberta
-     Os 27 colabs da classe C que NAO eram buraco de vinculo, medidos um por um (piso das batidas x soma … (2m 54s · 3 lines)
+     Os 27 colabs da classe C que NAO eram buraco de vinculo, medidos um por um (piso das batidas x soma … (8m 5s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (5m 48s · ↓ 9.2k tokens)
+✽ Bloviating… (10m 58s · ↓ 9.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
