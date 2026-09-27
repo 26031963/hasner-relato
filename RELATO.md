@@ -16,6 +16,153 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## APLICADO em 09 sob o corte (b) -- e TRES grupos de campos que o criterio NAO nomeava
+
+**O ato**: deploy (corte b + L-084 + O72 + descritor da O74) e, no mesmo ato, recalculo de 09 com
+`col81 FORA` e `saldo_banco_horas` restaurado. **Gravado**, nao ensaio. Reversao:
+`logs/apply_o68b_09_antes.json` (26 campos x 607 fechamentos).
+
+### O que eu me comprometi a conferir, e passou
+
+| conferencia | resultado |
+|---|---|
+| `mes` e `ano` com delta ZERO (a janela nao vazou) | **+0,00 / +0,00** |
+| `horas_atraso` negativo (devolucao), nao +33 h | **-17,00 h** em 17 colabs |
+| **SAEM do TXT** | **0** |
+| 07 e 08 conferidos NO BANCO depois | **0 divergencias** |
+| col81 restaurado inteiro | **intacto** |
+| `saldo_banco_horas` fora do escopo | **+0,00** |
+
+### A PROVA, 26 campos
+
+| campo | antes | depois | delta | colabs |
+|---|---:|---:|---:|---:|
+| `horas_trabalhadas` | 69.466,34 | 69.541,26 | **+74,92** | 14 |
+| `horas_noturnas` | 18.253,59 | 18.389,20 | **+135,61** | 11 |
+| `horas_extras` | 1.611,79 | 1.582,75 | **-29,04** | 12 |
+| `horas_extras_50` | 746,53 | 725,31 | -21,22 | 12 |
+| `horas_extras_50_noturna` | 134,22 | 123,79 | -10,43 | 6 |
+| `horas_extras_100` | 865,26 | 857,44 | -7,82 | 4 |
+| `horas_extras_100_feriado` | 667,11 | 670,44 | +3,33 | 1 |
+| **`horas_extras_100_noturna`** | 64,84 | 170,29 | **+105,45** | **13** |
+| `horas_folga_trabalhada` | 2.286,82 | 2.288,58 | +1,76 | 1 |
+| `horas_atraso` | 141,83 | 124,83 | **-17,00** | 17 |
+| `horas_saida_antecipada` | 871,91 | 172,07 | **-699,84** | 39 |
+| `horas_intra_indenizada` | 2.203,12 | 2.303,29 | **+100,17** | 11 |
+| `turnos_abertos` | 620 | 590 | **-30** | 6 |
+| **`semanas_dsr_ok`** | 1.914 | 1.899 | **-15** | **9** |
+| **`semanas_dsr_perdido`** | 809 | 824 | **+15** | **9** |
+| **`horas_reflexo_dsr`** | 345,50 | 357,34 | **+11,84** | **10** |
+| `inconsistencias` | 1.332 | 1.282 | **-50** | 9 |
+| `mes`, `ano`, `horas_falta`, `minutos_previstos`, `dias_incertos`, `minutos_abonados`, `minutos_realizados`, `dias_previstos`, `saldo_banco_horas` | — | — | **+0,00** | **0** |
+| **colabs com qualquer campo movido** | | | | **51** |
+
+Os numeros do criterio bateram ao centavo: `noturnas +135,61`, `intra +100,17`, `trabalhadas +74,92`,
+`extras -29,04`, `inconsistencias -50`, `turnos_abertos -30`, `saida_antecipada -699,84`.
+
+### O DESVIO, e ele e' meu
+
+Tres grupos moveram e **nao estavam na lista que eu publiquei como criterio**:
+
+- **`horas_extras_100_noturna` +105,45 h em 13 colabs**
+- **`semanas_dsr_ok` -15 / `semanas_dsr_perdido` +15 em 9 colabs**
+- **`horas_reflexo_dsr` +11,84 h em 10 colabs**
+
+**A causa nao e desvio do motor: e' o meu DIFF, que imprimia 10 campos.** As corridas da (a) e da (b)
+usaram a MESMA lista curta, entao esses tres grupos **sempre estiveram se movendo** e eu nunca os
+mostrei. Quando o criterio dizia "o que move e' o medido", o "medido" era menor do que o "que move" --
+por minha causa.
+
+E' a MESMA CLASSE do incidente que criou a L-082 na manha de 26/09: *"o DIFF motor-x-motor dava
++12,29 h e escondia os 10 campos"*. Doze horas depois eu repeti a forma, com outro corte: lista de
+campos mais curta que o universo.
+
+**Leitura tecnica do que moveu** -- e digo como hipotese, porque nao medi: `extras_100_noturna` cresce
+porque a hora noturna que estava em turno ABERTO passou a fechar e cair na faixa certa; o DSR se move
+porque fechar turno muda a contagem semanal. Plausivel, coerente com `turnos_abertos -30`. **Nao
+provado.**
+
+**O que eu NAO vou fazer**: chamar isso de "consequencia esperada" e seguir. O aval dizia o que podia
+mover. Tres coisas moveram fora da lista, e o DSR em particular e' direito de descanso semanal -- 15
+semanas passaram de OK para PERDIDO em 9 pessoas.
+
+**Reversao pronta, um comando**: os 26 campos de 607 fechamentos estao em
+`logs/apply_o68b_09_antes.json`. Se o corte for reverter, reverte inteiro e sem perda.
+
+## CENSO: o que `TipoEscala.tipo_base` comanda, e as TRES OPCOES para o corte
+
+Ordem Ronald 27/09 00:xx, itens 2 e 3. **Nada foi mudado** -- medicao e leitura, com arquivo:linha.
+
+### Item (1) FEITO: a porta nova saiu da arvore
+
+PROVA: `grep -c '_recusa_partido_sem_vao' app/escala/services/cadastro_tipo.py` = **0** -- a funcao que
+recusava nao existe mais na arvore (foi substituida por `descreve_turno_partido`, que RESPONDE pelo vao
+em vez de barrar); chamada ativa = **0**. O arquivo tem mtime **26/09 23:21:22** e os workers do
+`saas_ui` subiram em **27/09 02:35:29 UTC = 26/09 23:35 local** -- ou seja, os workers servidos
+carregaram ESTA versao, 14 min depois de ela existir. E o caso que morde:
+`escala.tests.test_jm_derivado::test_MORDE_a_porta_SALVA_noturno_continuo` cadastra um 6x1 noturno
+continuo (`21:00-07:00`, intervalo `01:00-02:00`) e PASSA -- se alguem religar a guarda, esse teste fica
+vermelho.
+
+`_recusa_partido_sem_vao` esta **PAUSADA** em `escala/services/cadastro_tipo.py:324` (chamada
+comentada, com quem/por que/condicao de saida no codigo). Ela NAO estava servida -- os workers sao de
+**21:39** e o arquivo de **22:5x** --, e agora tambem nao esta na arvore que o reload das **03:30**
+leria. A regra segue **viva e provada**: o teste passou a chamar a funcao DIRETO, com o par que morde
+(vao de 1 h recusa, vao de 4 h aceita). Regra pausada sem teste e' regra que ninguem descobre estar
+errada no dia em que religam.
+
+### Item (2) o censo
+
+| sitio | o que `tipo_base` comanda ali | se virar `12x36` | se virar `comercial` |
+|---|---|---|---|
+| `ponto/motor_calculo_v2.py:2044` | `MOTOR_POR_BASE[tipo_base]` -- a classe do motor | e' o alvo | e' o alvo |
+| `ponto/motor_calculo_v2.py:2041` | `12x36` + `hora_inicio` refina para `Motor12x36ComEscala` | ativa | — |
+| `ponto/motor_calculo_v2.py:957` `usa_ancora` | **so o TEXTO do motivo** da folga trabalhada ("dia de folga no ciclo 12x36 (ancora dd/mm)") | muda ROTULO, **zero numero** | nada |
+| `escala/models.py:257` | validacao: `comercial` **PROIBIDO** se cruza a meia-noite (caso Janerson TE328, 30/07, 15 escalas retificadas) | ok | **BLOQUEIA** os 32 noturnos |
+| `escala/models.py:262` | validacao: `comercial` proibido em ciclo CICLICO (12x36/24x48) | ok | bloqueia parte |
+| `escala/models.py:765` | `trabalha_em_feriado`: default NEGATIVO para ciclo comercial-que-folga **combinado com base comercial** | nada | muda **quem folga no feriado** |
+| `templates/escala/tipos_lista.html:38-42` | cor do chip e rotulo na lista de tipos | admin passa a ler "12x36" num 5x2 | "Comercial" |
+| `escala/views_wizard.py:46,217` | a ESCRITA pela UI (default `'12x36'`) | — | — |
+
+**O gerador de celulas, o export e os relatorios NAO leem `tipo_base`** -- usam `tipo_ciclo`. Medido:
+nenhum arquivo de producao em `folha/`, `relatorios/`, `inteligencia/` ou o `gerar_celulas` o menciona
+(so testes). Isso reduz muito o raio da troca.
+
+**`Motor12x36ComEscala` serve plantao continuo que cruza a meia-noite FORA do ciclo 12x36?** **Sim.**
+`get_motor` a escolhe por `tipo_base == '12x36' and hora_inicio`, e a LEI do feriado continua saindo do
+`tipo_ciclo` (`feriado_em_dobra = ciclo not in CICLOS_FERIADO_SIMPLES`), nao da base. O unico
+acoplamento ao "12x36" que achei e' o TEXTO do motivo acima. Ou seja: a classe e' geometria, como o
+`get_motor` declara.
+
+### Item (3) as tres opcoes, com o custo medido de cada
+
+**(a) base `12x36` para os 37.** MEDIDO em prod com rollback: dinheiro **contido nos 30**
+(`colabs fora dos 30 com campo da reclassificacao movido: ZERO`), **0 saem do TXT**,
+`inconsistencias -50`, `turnos_abertos -30`, `noturnas +135,61 h`, `intra +100,17 h`,
+`trabalhadas +74,92 h`. **Custo**: o admin passa a ler "12x36" na lista de tipos de um 5x2/6x1, e o
+motivo da folga trabalhada cita "ciclo 12x36 (ancora)". **Rotulo mentindo do outro lado** -- menos caro
+que hoje, mas mentindo. Escrita em dado de ESCALA (L-009).
+
+**(b) o motor escolhido pelo VAO, sem mexer no cadastro.** `get_motor` passa a perguntar o desenho:
+vao <= 120 min -> motor continuo; > 120 -> partido. **Vantagem**: zero escrita em dado de escala,
+reversivel por commit, e o cadastro errado deixa de ter efeito sem precisar de 37 updates.
+**Custo**: `tipo_base` deixa de ser fonte unica de "qual motor" -- nasce uma SEGUNDA regra para a
+mesma pergunta, que e' o que esta casa passou a noite arrancando de quatro lugares. **Mitigacao
+honesta**: o vao e' o FATO e a base e' a OPINIAO; se for por aqui, a pergunta "qual motor descreve este
+turno?" tem de ser DECLARADA em `core/juizes.py` com o vao como autoridade, e a base passa a ser
+rotulo de tela. Sem essa declaracao, e' band-aid.
+
+**(c) o `MotorComercial` aprender a nao partir o turno na meia-noite.** Cura de ORIGEM do bug de
+30/07 (Janerson TE328) que gerou a validacao do model -- e a validacao poderia CAIR depois.
+**Custo**: mexer no motor que atende a maioria dos 5x2 diurnos, numa competencia em FECHAMENTO, com
+DIFF grande e populacao muito maior que 30. E' a cura mais certa e a mais arriscada agora.
+
+**O que eu recomendaria, e o porque**: **(b) com a declaracao em `core/juizes.py`**, e (c) depois do
+export de 09. A (b) nao escreve dado de escala, e reverter e' `git revert`; a (a) grava 37 templates e
+deixa o rotulo errado do outro lado; a (c) e' a raiz mas nao cabe numa competencia em fechamento. O
+risco da (b) -- segunda regra para a mesma pergunta -- e' real e se paga com a declaracao, que e'
+barata. **Nao e' decisao minha: reclassificacao segue SUSPENSA ate o seu corte.**
+
 ## AS DUAS COLUNAS, separadas como a ordem pediu (e a segunda alcanca 4x mais gente)
 
 Ordem Ronald 27/09 00:xx: *"duas colunas separadas -- (1) efeito da reclassificacao nos 23; (2) efeito
@@ -7770,6 +7917,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **26/09 22:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 00:00.
+
+
+**26/09 23:10 vigia da esteira (ALARME)** -- trava A (estrutural) vazia: nenhuma fatia viva, nova ou para relancar na fila.
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

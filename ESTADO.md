@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 23:08:10.**
+**Medido em 26/09/2026 23:39:33.**
 
 | | |
 |---|---|
@@ -33,18 +33,25 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 
 ```
  M CLAUDE.md
+ M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/core/juizes.py
+ M app/core/templatetags/hasner_filters.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/BACKLOG.md
  M app/docs/CORTES.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/services/cadastro_tipo.py
+ M app/escala/servico_jornada.py
  M app/escala/tests/test_jm_derivado.py
  M app/ponto/management/commands/diff_reclassificar_partido.py
  M app/ponto/management/commands/plano_b_no_dinheiro.py
  M app/ponto/motor_calculo_v2.py
  M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
+ M bin/relato.sh
+?? app/ponto/management/commands/aplicar_09_corte_b.py
 ?? app/ponto/management/commands/dna_x_batida_real.py
 ?? esteira.pausada
 ```
@@ -52,44 +59,44 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  usar turno_partido. Ou seja: o cadastro que você identificou como errado é, hoje, o único que o sistema aceita para plantão noturno contínuo.
+  parece pronto porque eu já sei o formato dele.
 
-  Isso reposiciona a O68 inteira. Reclassificar 32 templates para 12x36 pode passar por essa validação, mas a minha correção de fixture para comercial num turno 21:00–05:00 é
-  inválida por regra do modelo — e o mais importante: significa que a casa já sabia que comercial quebra turno que cruza, e resolveu isso rotulando de "partido", o que criou os
-  761 dias fora do juiz.
+  O monitor está armado e a publicação sai assim que o log fechar. Ela vai ter, na ordem: os 26 campos com antes, depois, delta e colabs; ENTRAM e SAEM do TXT; a conferência de 07
+  e 08 feita no banco; e a linha do col81 dizendo intacto ou MOVEU.
 
-  Não aplico. Duas razões, e nenhuma é a suíte por si: a condição literal que você deu não fechou, e o alvo da reclassificação precisa ser revisto contra uma validação do modelo
-  que eu desconhecia quando propus o mapeamento.
+  Se qualquer um dos três números que eu listei vier fora do previsto, a publicação vira PAREI com a reversão pelo snapshot em logs/apply_o68b_09_antes.json — e o que eu publico é
+  a tabela da divergência, não a da vitória.
 
-✻ Brewed for 1m 12s · done 11:05 PM · 1 shell, 2 monitors still running
+✻ Cogitated for 16s · done 11:36 PM · 1 shell still running
 
-❯ (1) A porta nova (recusa "partido" com vao ate 2 h) NAO vai ao ar enquanto a base do plantao noturno continuo nao for decidida: junto com a validacao antiga (comercial nao
-  cruza a meia-noite) ela impede cadastrar 5x2/6x1 noturno. Garantir que nao esta na arvore servida antes do reload das 03:30; se estiver, tirar com trilha.
-  (2) MEDIR, sem mudar nada: o que TipoEscala.tipo_base comanda alem de MOTOR_POR_BASE (gerador de celulas/ciclo, tela, relatorios, export) -- arquivo:linha. E se
-  Motor12x36ComEscala serve para plantao continuo que cruza a meia-noite fora do ciclo 12x36.
-  (3) Com isso, trazer as opcoes para eu decidir: (a) base de 12x36 para esses 37; (b) o motor escolhido pelo vao entre blocos, sem mexer no cadastro; (c) o motor comercial
-  aprender a nao partir o turno na meia-noite. Reclassificacao em 09 fica suspensa ate o corte. Seguem sem esperar os itens de dinheiro zero (O70, O51b). Nenhuma lei nova.
-
-● Item (1) é urgente e vou primeiro. A guarda está na árvore viva e o reload das 03:30 a poria no ar:
+● Background command "APPLY de 09 sob o corte b, com a prova dos 26 campos" completed (exit code 0)
 
   Ran 1 shell command
 
-● Correção importante do meu próprio método: docker exec ... python -c abre processo novo e lê o disco, não o worker servido. Isso responde "está na árvore", não "está no ar". O
-  que vale é a hora: arquivo escrito ~22:5x, workers de pé desde 21:39 — a guarda não está servida, e o reload das 03:30 a poria. Tiro agora, com trilha:
+● O apply pousou. Os três números que eu me comprometi a conferir passaram — mas a tabela de 26 campos mostra três grupos que não estavam no seu critério, e isso vem primeiro.
 
-  Testar a regra pausada direto na funcao
-  ⎿  $ python3 - <<'PYEOF'
-     p='escala/tests/test_jm_derivado.py'
-     s=open(p).read()
-     old=''' def test_MORDE_a_porta_recusa_partido_com_vao_de_intrajornada(self):
-     """`!` Ronald 26/09: vao de ate 2 h nao e turno partido. Sem este caso, a guarda poderia
-     sumir da porta e os tres testes acima seguiriam verdes --…
+  Ran 1 shell command
 
-✽ Undulating… (1m 41s · ↓ 5.6k tokens)
+❯ RELATO bloqueado desde 23:08: RELATO.md:23 "Item (1) FEITO: a porta nova saiu da arvore" sem linha PROVA -- ponha a PROVA (hora dos workers x hora do arquivo, e o grep da
+  chamada comentada em cadastro_tipo.py:324) e republique. E cura o efeito colateral do selo: afirmacao sem prova barra so o RELATO; ESTADO e SESSAO publicam sempre, com um aviso
+  no topo do ESTADO dizendo "RELATO retido: <linha>". Nenhuma lei nova.
+
+● RELATO retido, e o selo está certo — eu escrevi "FEITO" sem prova ao lado. Ponho a prova e curo o efeito colateral:
+
+  Ran 3 shell commands
+
+● O mtime é 23:21 e os workers subiram 23:35 (02:35 UTC) — o deploy carregou esta versão. E a função nem existe mais: _recusa_partido_sem_vao tem 0 ocorrências. Ponho a PROVA e
+  curo o relato.sh:
+
+● Conferir o selo e republicar o RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md && echo "=== selo da PROVA: VERDE ==="; bash
+     bin/relato.sh 2>&1 | tail -12
+
+✢ Ionizing… (2m 18s · ↓ 9.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
