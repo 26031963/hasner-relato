@@ -16,6 +16,46 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## O PLANO B NO DINHEIRO TEM TAMANHO: 758 dia-colab, 11,0% do que o motor julga
+
+Ordem de 26/09 21:2x: rodar o medidor na frota de 09 e publicar o numero. Medido na SOMBRA (o
+`juliani_db_test` estava ocupado pela suite do push47, e colisao ali gera errors falsos).
+
+**COMO**, porque o numero so vale pelo metodo: `plano_b_no_dinheiro` chama
+`recalcular_fechamento_mes` -- a funcao REAL do dinheiro -- dentro de `atomic()` com `raise`, e le os
+contadores das **instancias de motor que o proprio fechamento criou**, interceptando
+`get_motor_cct`. Nenhuma sonda replica a guarda da orfa: ela ja tem duas versoes mortas atras dela
+(contava por dia civil, depois contava batida crua) e sonda mal parametrizada ja foi lida como bug do
+sistema sete vezes.
+
+| contador do motor | dia-colab | o que significa |
+|---|---:|---|
+| `_dias_pelo_marco` | **6.154** | a ata explica o dia e o MARCO manda -- o caminho bom |
+| `_dias_com_orfa_na_ata` | **614** | batida dentro do periodo sem marco: a ata nao explica o dia |
+| `_dias_luz_sem_batida` | **109** | a lampada aponta instante sem `Batida` correspondente |
+| `_dias_partido_fora_do_juiz` | **35** | o dia ficou partido fora do juizo |
+| `_dias_sem_juiz` | **0** | — |
+| **PLANO B (a soma dos quatro)** | **758** | **11,0%** do que o motor julgou, em **199 colabs** |
+
+Hoje esses 758 dias caem na geometria por TIPO e sao **pagos em silencio**. A ordem da O68 e que isso
+acabe: dia que a ata nao explica fica "em aberto (a decidir)", VISIVEL.
+
+**Oito de cada dez e a MESMA classe**: `_dias_com_orfa_na_ata` = 614 de 758. Nao e um mosaico de
+causas, e uma causa com 614 ocorrencias -- e a orfa e quase sempre a IDA E A VOLTA DO INTERVALO. Os
+piores concentram muito: col384 com 24 dias, col457 22, col239 e col892 21 cada. Num mes de 31 dias,
+col384 tem 24 dias que o dinheiro julgou sem a ata.
+
+**COBERTURA, declarada**: 639 motores criados, **199** colabs com ao menos 1 dia no plano B, e **7
+colabs RECUSARAM o recalculo** -- todos pela mesma causa, a lavra do esmeril ausente na sombra. Isso
+nao e furo do medidor: e a **O63 funcionando**. Sem lavra o recalculo recusa em vez de decidir no
+escuro, e recusou sete vezes em voz alta. O numero acima, portanto, e' um **piso**: falta o que esses
+7 teriam somado.
+
+**ACHADO NO CAMINHO** (LEI-AKITA 6): `bin/sombra.sh` nao menciona `esmeril` nenhuma vez -- a sombra
+**nao monta a lavra**. Enquanto nao montar, todo ensaio de dinheiro que precise de folga trabalhada
+sai incompleto na sombra, e sai incompleto CALADO para quem nao ler os 7 avisos no meio de 900 linhas
+de log. Item proprio, e nao entra como nota de rodape desta medicao.
+
 ## O69 LADO DO ESPELHO: a regra propria tinha QUATRO copias, e o numero e -85 min
 
 O fechamento foi curado e aplicado hoje (654,74 h). Faltava a TESTEMUNHA -- e a LEI-AKITA 2 nao

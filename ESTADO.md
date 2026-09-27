@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:22:01.**
+**Medido em 26/09/2026 21:27:31.**
 
 | | |
 |---|---|
@@ -35,6 +35,9 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
+ M app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 ?? app/ponto/management/commands/plano_b_no_dinheiro.py
 ?? esteira.pausada
 ```
@@ -43,43 +46,43 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 
 ```
 
-● Estado, com o que está provado e o que está em voo:
+  Achado no caminho (LEI-AKITA 6): bin/sombra.sh não menciona esmeril nenhuma vez — a sombra não monta a lavra. Enquanto não montar, todo ensaio de dinheiro que dependa de folga
+  trabalhada sai incompleto na sombra, e sai incompleto calado para quem não ler 7 avisos no meio de 900 linhas de log. Registro como item próprio, não como nota de rodapé — foi
+  exatamente esse padrão ("ausência de sinal lida como sinal bom") que custou 134,71 h em 8 colabs há duas horas.
 
-  (1) fechado e commitado — 3783cc55, 9 arquivos. Duas rejeições de push antes, ambas com causa nomeada e curada: rodapé do TICKETS 9 commits atrás, e test_juliani ocupado por um
-  container --rm órfão que sobreviveu ao TaskStop. push47 está rodando a suíte sobre a árvore do commit.
+  O push47 ainda está na suíte. O DEPLOY JÁ da fatia do espelho sai no momento em que ele pousar, e só dela.
 
-  Um erro de método meu no caminho: editei um .py enquanto uma suíte lia a árvore montada — LEI-AKITA 10, "construir em cópia, aplicar no commit". Matei aquele run em vez de
-  aceitar o verde dele, porque suíte que leu árvore em movimento não prova nada.
+✻ Cooked for 1m 47s · done 9:24 PM · 1 shell still running
 
-  (2) começado — ponto/management/commands/plano_b_no_dinheiro.py: chama recalcular_fechamento_mes, a função real do dinheiro, dentro de atomic() com raise, e lê os contadores das
-  instâncias de motor que o próprio fechamento criou, interceptando get_motor_cct. Nada de sonda replicando a guarda da órfã — ela já tem duas versões mortas atrás dela (por dia
-  civil e por batida crua), e sonda mal parametrizada já foi lida como bug do sistema sete vezes. Rodo assim que o push desocupar o cpuset de teste.
-
-  O que a O68 vai encontrar já tem uma pista medida hoje: topo == gravado nos sete casos significa que o vão está entre topo e coluna, não no topo. Isso reposiciona o item (b) —
-  "dia que a ata não explica fica em aberto, visível" — como a cura que também fecha o item (6) do [nome], em vez de duas obras separadas.
-
-✻ Cogitated for 43m 4s · done 9:19 PM · 3 shells, 1 monitor still running
-
-❯ Roda o plano_b_no_dinheiro (so leitura) na frota de 09 e publica o numero. Quando o push47 pousar, DEPLOY JA so da fatia do espelho (dinheiro zero). A O68 segue com DIFF e
-  PAREI para o meu ! antes de aposentar o plano B. Depois, GERADORA-EM-TODA-CELULA.
+● Background command "Push 47 com o banco de teste limpo" completed (exit code 0)
 
   Ran 1 shell command
 
-❯ GERADORA-EM-TODA-CELULA (L-002): 6.848 dias de 09 sem CelulaDia.escala_geradora caem no fallback da regra velha. Medir por que nasceram sem geradora (gerador antigo?
-  regeneracao? admissao?) e preencher pela mesma regra que o fallback usa hoje, com DIFF: se o numero de nenhum dia muda, aplica e faz DEPLOY JA; se muda, PAREI. Selo: celula
-  nova nasce sem geradora = vermelho. Depois o fallback sai. Entra apos a O68. Nenhuma lei nova.
+● Três falhas, todas minhas, e todas são selos funcionando. Vou ver cada uma:
 
-● push47 está na suíte (ocupa o juliani_db_test), então o medidor vai na sombra, que é o lateral. Lanço e registro as duas ordens novas em paralelo:
+  Ran 1 shell command
 
-● Registrar a O70 no BACKLOG e as duas ordens no PROMPTS
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bue2pn80d.output 2>/dev/null | tail -25; echo "=== push47 ==="; tail -3
-     /home/ronald/saas-hasner/logs/push47.log
+● Monitor "veredito do push47 da fatia do espelho" stream ended
 
-✢ Roosting… (1m 1s · ↓ 3.6k tokens · thinking)
+● Todas as três são minhas: comando sem casa declarada, ruff, e relógio solto no meu teste novo — o selo MORDE pegou. Curo as três:
+
+  Ran 3 shell commands
+
+● Curo as três na origem. Primeiro vejo o que o selo do relógio exige:
+
+● Limpar import morto e ver o FORA_DE_PIPELINE
+  ⎿  $ sed -n '410,420p' config/crons.py
+
+✢ Lollygagging… (1m 30s · ↓ 4.8k tokens)
+
+❯ REJULGAR-09 (O67 item 2, antes da O68): contador celula_veredito_velho em 09 (veredito gravado x juiz de hoje); rejulgar as celulas de 09 pelo cartorio (porta canonica, com
+  trilha). DIFF antes: celulas que mudam de veredito e, principalmente, colabs que ENTRAM e que SAEM do classificar_export de 09, com a lista. So entram -> aplica e DEPLOY JA.
+  Alguem sai -> PAREI com a lista para o meu !. Nenhuma lei nova.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
