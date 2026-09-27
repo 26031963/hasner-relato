@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 11:28:00.**
+**Medido em 27/09/2026 11:33:01.**
 
 | | |
 |---|---|
@@ -86,23 +86,6 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pessoa voltou do almoço e nunca bateu a saída. A S que meu script achou "disponível" era a do intervalo, já consumida. Meço o universo real da sua regra, pelo que o próprio
-  pareador devolve:
-
-  Ran 1 shell command
-
-● Medição decisiva, e ela derruba o meu diagnóstico da classe B — preciso dizer isso com clareza:
-
-  ┌──────────────────────────────────────────────┬───────┬─────┐
-  │       o que vem depois do turno aberto       │ casos │  %  │
-  ├──────────────────────────────────────────────┼───────┼─────┤
-  │ outra ENTRADA (não há S nenhuma para fechar) │   782 │ 94% │
-  ├──────────────────────────────────────────────┼───────┼─────┤
-  │ aberto e último da lista                     │    35 │ 4%  │
-  ├──────────────────────────────────────────────┼───────┼─────┤
-  │ S órfã adiante — o universo da sua regra     │    16 │ 2%  │
-  └──────────────────────────────────────────────┴───────┴─────┘
-
   E os 16 têm duração de 27 a 96 horas — todos reprovados pela condição (b). Ou seja: a regra está certa e o universo dela é zero aplicável. E o meu "103 com S disponível, 55 a
   ≤90 min" contava a S do intervalo, já consumida.
 
@@ -110,15 +93,32 @@ c5337c0f [O91+E6] O91 fechada sem instalar (situacao_divergente = 0), e o oracul
 
 ● Push pousou (6060994d). Deploy e entro na classe D, medindo o que o juiz da ata responde hoje para o RED do col904:
 
-  Deploying e medir o juiz da ata nos REDs da classe D · 7s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -3; cat > /tmp/d_col904.py <<'PYEOF'
-     from django.apps import apps
-     from django.utils import timezone as tz
-     import datetime as d
-     G = lambda n: next(m for m in apps.get_models() if m.__name__ == n)
-     Col, EC, CD = G('Colaborador'),…
+  Ran 1 shell command
 
-✻ Zesting… (39m 33s · ↓ 48.9k tokens)
+● Duas respostas muito diferentes, e a primeira é grave:
+
+  - col904 22/08: o juiz da ata responde certo — entrada=18:50, saida=23/08 07:00, desalinhado=False. E o motor produziu 18:50 → aberto. A autoridade responde e o consumidor
+    ignora.
+  - col85 21/08: desalinhado=True, porque='sem marcos no dna' — é a cura (1) da O84.
+
+  Meço por que o motor não usa a resposta:
+
+  Ran 1 shell command
+
+❯ Antes de fechar a classe B como "saida nao batida": nos 782 turnos abertos seguidos de outra ENTRADA, medir o intervalo entre as duas entradas: ate 14 h (provavel SAIDA com
+  tipo gravado trocado, em dia que a ata nao explica) x 20 h ou mais (entrada do dia seguinte, saida realmente faltando). Para o primeiro grupo, cruzar com os dias do plano B e
+  com a ata no formato antigo (O81). Tabela com os dois grupos, as horas de cada um e 3 exemplos. Nenhuma lei nova.
+
+● Sua medição é mais importante que a minha sonda (que tinha um len() num int). Meço os 782 pelo intervalo entre as duas entradas, com os dois cruzamentos:
+
+● Medir os 782 pelo intervalo entre as entradas
+  ⎿  $ cat > /tmp/b_gap_entradas.py <<'PYEOF'
+     """Os 782 turnos ABERTOS seguidos de outra ENTRADA: qual o intervalo entre as duas entradas?
+     <= 14 h = provavel SAIDA com tipo gravado trocado, em dia que a ata nao explica
+     >= 20 h = entrada do dia seguinte, saida realmente faltando
+     Cruza o primeiro grupo co…
+
+✢ Zesting… (44m 34s · ↓ 54.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
