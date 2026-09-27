@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 22:31:01.**
+**Medido em 26/09/2026 22:36:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
+| `HEAD` local | `4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min` |
 | `origin/main` | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,70 +22,62 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4f82c385 [O71+O68] o cadastro que mente: NENHUM dos 37 "turno_partido" e partido, e o maior vao e 70 min
 d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga
 a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra propria tinha QUATRO copias
 068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou
 a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam de 116h para 7 minutos
-9b67131e [O69 VINCULO-DO-DIA] o fechamento pergunta a CELULA qual vinculo vale no dia -- sobreposicao para de dobrar
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/ponto/management/commands/plano_b_no_dinheiro.py
-?? app/ponto/management/commands/celula_veredito_velho.py
-?? app/ponto/management/commands/diff_reclassificar_partido.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  de intervalo. O motor obedeceu corretamente a um cadastro errado — e a L-012 da casa é exatamente isso: regra que varia por cliente nasce como cadastro, com nome e leitor. Aqui
-  o leitor existe e funciona; o nome está errado.
-
-  E é por isso que o paliativo da alimentação, que eu havia medido antes da sua correção, era tratamento de sintoma. Com a base certa esses 761 dias passam a ir ao juiz da ata
-  como qualquer outro dia, sem patch nenhum no motor — o que também significa que o número da alimentação (−25,11 h trabalhadas, −10 turnos abertos) provavelmente se sobrepõe a
-  este, e somar os dois seria contar a mesma cura duas vezes.
-
-✻ Worked for 27s · done 10:29 PM · 1 shell still running
-
-❯ publica o numero quando o recalculo acabar
+  chamou atenção:
 
   Searched for 1 pattern
 
-● Combinado — o monitor está armado e publico no RELATO assim que o recálculo fechar, sem precisar de novo pedido seu.
+● Duas pistas fortes: saldo_banco_horas é calculado numa única linha (1685) e horas_saida_antecipada em 1879/1396. Vejo em que classe cada linha mora — se forem exclusivas de
+  certos motores, a explicação é outra:
 
-  O recálculo está lento porque é o caso mais pesado da noite: as quatro empresas inteiras recalculadas com 37 motores trocados, ou seja 30 colaboradores mudando de geometria, e
-  tudo dentro de um atomic() que termina em raise. Os ensaios anteriores trocavam dado; este troca o motor.
+  Ran 1 shell command
 
-  O bloco que vai ao RELATO já está definido: o plano dos 37 template por template com o vão, o DIFF por campo incluindo horas_atraso, horas_saida_antecipada e saldo_banco_horas,
-  os vinte maiores por horas_trabalhadas, e — o que decide — quem entra e quem sai do classificar_export.
+❯ Pista para a autopsia do col382 (saida antecipada ~4 h por dia) e do banco -305 h: conferir, dia a dia, o marco de SAIDA que o motor usa depois da troca de regime -- se o
+  template "partido" tem a saida do 2o bloco depois da meia-noite e o motor passa a compara-la na data da entrada, a saida antecipada e artefato de data, nao fato. Mostrar 3 dias
+  do col382: marco de saida usado, batida de saida real, minutos descontados. Nenhuma lei nova.
 
-  Sobre esse último, adianto qual vai ser a minha leitura, para você saber o critério antes do número: se qualquer colaborador sair do TXT, isso vira PAREI com a lista, sem
-  exceção. A reclassificação é dado de escala e já exige o seu ! pela L-009 de qualquer forma — mas a diferença entre "o ! é sobre horas que mudam" e "o ! é sobre alguém que deixa
-  de receber" é grande o suficiente para merecer estar na primeira linha do que eu te entrego, não no meio da tabela.
+● A AST já derruba metade da minha hipótese e confirma a outra:
 
-✻ Baked for 16s · done 10:30 PM · 1 shell still running
+  ┌─────────────────────────────────┬─────────────────────────────────────────┐
+  │             cálculo             │                 mora em                 │
+  ├─────────────────────────────────┼─────────────────────────────────────────┤
+  │ saldo_banco_horas (único sítio) │ MotorComercial                          │
+  ├─────────────────────────────────┼─────────────────────────────────────────┤
+  │ minutos_saida_antecipada        │ MotorTurnoPartido e Motor12x36ComEscala │
+  └─────────────────────────────────┴─────────────────────────────────────────┘
 
-❯ commit e push o que ja esta medido
+  Então o banco não existia para quem era turno_partido — os −305,37 h são o campo passando a ser calculado, não gente perdendo hora. Já a saída antecipada existe nos dois, e é aí
+  que a sua pista entra. Leio o cálculo:
 
-● Antes do commit: os dois comandos novos precisam de casa em FORA_DE_PIPELINE, senão o selo test_todo_command_tem_casa derruba o push — foi assim que o push47 caiu.
+  Ran 2 shell commands
+
+● Motor12x36ComEscala trata o cross-meia-noite: se hora_fim < hora_inicio, data_ref = dia do início previsto + 1. Então a data do marco parece certa — mas o alerta do motor
+  carrega o marco que ele usou, e é isso que vou ler em vez de deduzir:
 
 ● Running 1 shell command…
 
-· Befuddling… (36s · ↓ 1.5k tokens)
+✢ Fiddle-faddling… (1m 41s · ↓ 6.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

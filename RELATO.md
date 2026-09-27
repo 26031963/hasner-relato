@@ -16,6 +16,64 @@ colunas Atraso e Saida antecipada; **(4)** O66 -- fechadores que nao consultam a
 **ABERTOS PARA O DP**: 4 sem vinculo nem celula (col924, col391, col43, col942, ~221 h) · troca de vinculo
 no meio (8) · sem causa (7) · **09 CONDICIONAL**. Sigo o (1) sem esperar.
 
+## O DIFF DA RECLASSIFICACAO, medido em PROD: 23 colabs, **SAEM do TXT = 0**
+
+Plano: **37 de 37** templates reclassificam -- **32 para `12x36`** (a geometria que cruza a
+meia-noite) e **5 para `comercial`** (os diurnos, par E->S no mesmo dia). O `tipo_ciclo` NAO e tocado:
+a lei do feriado de um 6x1 continua a do 6x1. O parametro `--vao-teto` (120 min, Art.71) preservaria
+um partido de verdade, e **nao foi exercido uma vez** -- nao ha um cadastro legitimo para proteger.
+
+**Medido em PROD, e por isso vale.** A primeira corrida foi na sombra e eu NAO a publiquei: ela acusou
+143 colabs com dinheiro movido quando so 30 tem o cadastro, porque a sombra carrega a deriva de
++142,14 h e nao tem o apply da O69 (o `col866 -83,94 h` na lista dela era a O69, nao a
+reclassificacao). Em prod o baseline de recalculo puro e' **zero provado** -- nenhum campo move --,
+entao o que segue e' o efeito da reclassificacao e nada mais.
+
+| campo | delta | colabs |
+|---|---:|---:|
+| `saldo_banco_horas` | **-305,37 h** | 6 |
+| `horas_saida_antecipada` | **+253,42 h** | 12 |
+| `horas_noturnas` | **+135,61 h** | 11 |
+| `horas_intra_indenizada` | **+100,17 h** | 11 |
+| `horas_trabalhadas` | **+74,92 h** | 14 |
+| `inconsistencias` | **-50** | 9 |
+| `horas_atraso` | +33,37 h | 12 |
+| `turnos_abertos` | **-30** | 6 |
+| `horas_extras` | **-29,04 h** | 12 |
+| `horas_folga_trabalhada` | +1,76 h | 1 |
+| **colabs com dinheiro movido** | **23** | (de **30** com o cadastro) |
+| **ENTRAM no TXT** | **0** | |
+| **SAEM do TXT** | **0** | |
+
+**CONTIDO: 23 de 30.** O dinheiro se move so em quem tem o cadastro errado -- nenhum colaborador de
+fora e tocado. Essa e' a condicao que o `!` de criterio da O68 pede e que a alimentacao da ata NAO
+cumpria (ela alcancava 96 colabs). **Ninguem sai do TXT.**
+
+**A assinatura e coerente com a cura**, e isso importa mais que o total: `inconsistencias -50` e
+`turnos_abertos -30` dizem que o pareamento melhorou (par que estava aberto fechou);
+`horas_noturnas +135,61 h` diz que a jornada noturna passou a receber o adicional que o regime
+"partido" escondia; `horas_intra_indenizada +100,17 h` diz que o gap de 1 h voltou a ser intrajornada
+-- e onde foi suprimido, virou indenizacao do Art.71 §4.
+
+Os casos que mais se movem, por colab: **col923** (`inconsistencias -29`, `turnos_abertos -28`,
+noturnas +27,48 h, saida antecipada +20,35 h), **col382** (saida antecipada **+86,45 h**, noturnas
++18,49 h), **col174** (noturnas +32,08 h, `inconsistencias -9`), **col879** (intra +21,00 h, noturnas
++18,11 h), **col857 (o [nome])** (`horas_extras -17,87 h`, noturnas +5,39 h, trabalhadas +7,69 h) e
+**col493** (`saldo_banco_horas -40,30 h`).
+
+**DUAS LINHAS QUE EU NAO SEI EXPLICAR AINDA, e nao vou apresentar como se soubesse**:
+`saldo_banco_horas` **-305,37 h concentrado em 6 colabs** e `horas_saida_antecipada` **+253,42 h em
+12**, com o col382 sozinho respondendo por 86,45 h da segunda. As duas tem magnitude desproporcional
+ao resto e caem em pouca gente. Podem ser consequencia legitima (banco de horas e saida antecipada se
+recalculam contra uma jornada prevista que muda de regime), mas "podem ser" nao e' explicacao. **Antes
+do `!` eu devo a autopsia dessas duas linhas**, no mesmo padrao da que o Ronald pediu para o col107.
+
+**GUARDA DE INTEGRIDADE**: apos o ensaio, `TipoEscala.objects.filter(tipo_base__in=PARTIDO).count()`
+em prod = **37**, o esperado. O rollback aguentou, e a conferencia foi feita no banco DEPOIS do
+ensaio, nao suposta. (A segunda linha da minha guarda -- "viraram 12x36 ou comercial por acidente:
+290" -- e INUTIL: ela conta todos os templates que ja tinham essas bases. Fica registrado como
+metrica mal escrita, nao como alarme.)
+
 ## PAREI: NENHUM dos 37 cadastros "turno_partido" e turno partido. O maior vao e' 70 MINUTOS
 
 Ordem do Ronald (26/09 23:4x): *"o [nome] nao e turno partido -- plantao continuo 21:00-07:00 com
