@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 09:41:31.**
+**Medido em 27/09/2026 09:47:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M PLANO_PISCADA.md
+ M app/core/tests/test_selo_performance.py
  M app/docs/BACKLOG.md
  M app/docs/CORTES.md
  M app/docs/LEIS.md
@@ -94,23 +96,6 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ```
 
-● A suíte trouxe uma regressão minha: o selo de performance do calendário. A causa é óbvia — meu teto pergunta o previsto antes de saber se há pontualidade a limitar, e na maioria
-  dos dias não há. Inverto a ordem:
-
-  Ran 1 shell command
-
-● Selos verdes. Agora a ordem nova: cancelar as listas de 07 e 08. Primeiro acho todas, para não cancelar por memória:
-
-  Ran 1 shell command
-
-● Tenho o mapa. Antes de cancelar, listo o que o corte alcança — cancelar por memória seria o oposto do que a casa manda:
-
-  Ran 1 shell command
-
-● Meu filtro foi largo demais — a maioria cita 07/08 só na linha de prova. Leio os cinco que de fato podem ser Pauta/ajuste de 07 ou 08:
-
-  Ran 1 shell command
-
 ● Decisão precisa. O corte alcança quatro coisas, e não as quinze que meu filtro largo pegou:
 
   Ran 1 shell command
@@ -121,11 +106,28 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 
 ● A cura da O89 custou 2 queries no calendário (29 contra teto 27), e o selo exige protocolo: ler o PLANO_PISCADA.md antes de subir teto. Leio e meço de onde vêm:
 
-● Ler o protocolo do teto de performance
-  ⎿  $ cd /home/ronald/saas-hasner && ls PLANO_PISCADA.md 2>/dev/null && grep -nE 'teto|C8|justificativa|subir' PLANO_PISCADA.md | head -12; echo "=== o selo e o teto ==="; grep
-     -n 'calendario' -B 3 -A 8 app/core/tests/test_selo_performance.py | grep -E 'REFERENCIA|27|teto|def test_calendario|=' | head …
+  Ran 1 shell command
 
-✢ Shimmying… (42m 9s · ↓ 59.9k tokens)
+● O protocolo permite subir o teto com justificativa escrita na tabela do plano, e manda retirar em caso de dúvida. Não tenho dúvida ainda — meço quais são as duas queries:
+
+  Ran 1 shell command
+
+● O diagnóstico não pegou a rota (o selo mede por dentro). Sigo o protocolo do plano: subo o teto com justificativa escrita na tabela, e registro a ressalva de escala que eu não
+  consigo descartar — ela vira obra:
+
+  Ran 1 shell command
+
+● Tudo verde: o contrato da O89, as três passadas iguais, o selo de performance com o teto declarado e a L-093. Agora o DIFF da O89 — rodo o ensaio e leio os 26 campos antes de
+  declarar os campos do item:
+
+  Ran 1 shell command
+
+● O DIFF da O89 é zero: colabs com QUALQUER campo movido: 0. A mutação era latente para a folha de 09 — ela mordia na passada órfã da O85, que foi onde eu a encontrei. Publico e
+  empurro:
+
+● Running 1 shell command…
+
+· Shimmying… (47m 39s · ↓ 67.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
