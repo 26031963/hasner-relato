@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 20:49:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **443**.
+**Medido em 27/09/2026 20:50:50.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (90.5 MB). Acoes na janela: **445**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:50:37 | Bash | Qual afirmacao falta prova | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md 2>&1 \| head -2` |
+| 20:50:28 | Bash | Publicar R2, o PAREI e o censo; conferir o hook | `python3 - <<'PYEOF' p='docs/RELATO.md'; s=open(p).read() # a linha canonica de PAREI no topo, que e o que a porta do hook cobra s = s.replace('# RELATO — esteira saas-hasner\n', '# RELATO — esteira saas-hasner\n\n' '`PAREI: apply da R2 retido pela condicao (d) do AVAL-DE-CRITERIO -- 1 divergencia nova no oraculo ' '(col843 25/08), e ela e ARTEFATO DO INSTRUMENTO, nao dano da cura \| espera Ronald` ...` |
 | 20:45:06 | Bash | Ver a suite da R2 | `cd /home/ronald/saas-hasner && grep -E '^Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_r2.log 2>/dev/null \| grep -v '^OK: ' \| tail -4; echo "procs=$(ps aux \| grep -c '[m]anage.py test')"` |
 | 20:44:45 | Bash | Medir se o zero do oraculo no col843 e artefato | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d, collections from django.utils import timezone as tz from colaboradores.models import Colaborador from ponto.turnos import batidas_apuraveis, realizado_do_dia from ponto import janelas pk = 843 col = Colaborador.objects.get(pk=pk) ini, fim = janelas.janela_fe ...` |
 | 20:42:21 | Bash | Condicao (d) da R2: oraculo nos afetados | `cd /home/ronald/saas-hasner && timeout 3000 docker exec saas_core python manage.py shell --command "exec(open('/tmp/o96_oraculo.py').read())" 2>&1 \| grep -E 'colabs AFETADOS\|dias comparados\|CUROU\|DIVERGENCIA NOVA\|^ col' \| head -14` |

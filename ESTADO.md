@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:49:31.**
+**Medido em 27/09/2026 20:50:50.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
  M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
  M app/ponto/turnos.py
 ?? esteira.pausada
@@ -84,12 +85,6 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  código. Corrijo o caso para ter uma sobra:
-
-  Ran 1 shell command
-
-● 43 verdes. Suíte completa e a PROVA da R2 com as quatro condições — DIFF mais oráculo nos afetados:
-
   Ran 1 shell command
 
 › Message from @a9e3f4464a25b8c2d (ctrl+o to expand)
@@ -111,12 +106,18 @@ eb87a7c2 [O95] apply da 09 FEITO, E6 rodada 3 na frota, e o placar da E6 redefin
 
   Pela sua regra, a R2 não aplica. Registro e fecho:
 
-● Ver a suite da R2
-  ⎿  $ cd /home/ronald/saas-hasner && grep -E '^Ran [0-9]+ tests|^OK$|^OK \(|^FAILED|^(FAIL|ERROR):'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_r2.log 2>/dev/null | grep -v '^OK: ' | tail -4; echo "procs=$(ps aux |
-     grep -c '[m]anage.py test')"
+  Ran 2 shell commands
 
-✢ Enchanting… (42m 27s · ↓ 40.4k tokens)
+● O hook libera corretamente (o RELATO declara PAREI). Falta uma linha de PROVA — acho e curo:
+
+● Curar a prova e publicar · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     p='app/docs/RELATO.md'; s=open(p).read()
+     velho = """ENTRAM/SAEM do TXT **0**, 07 e 08 **0 divergencias**, APLICADOS 200, SEPARADOS 34, CONDICAO_SAIDA_REAL 2
+     (col821 -7,76 h, col727 -6,03 h)."""
+     novo = """ENTRAM/SAEM do TXT **0**, 07 e 08 **0 dive…
+
+✻ Enchanting… (43m 46s · ↓ 43.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

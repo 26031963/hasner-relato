@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: apply da R2 retido pela condicao (d) do AVAL-DE-CRITERIO -- 1 divergencia nova no oraculo (col843 25/08), e ela e ARTEFATO DO INSTRUMENTO, nao dano da cura | espera Ronald`. A cura da R2 esta no disco e selada; o que espera e a decisao sobre a regra de paridade do oraculo, que quatro das cinco autopsias nomearam sozinhas. A fila segue: R3 -> R4 -> R5 -> impar -> E5.
+
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
 
 # PAREI: o apply da O68b em 09 esta PARADO -- ha caso do 2o TIPO na folga trabalhada (27/09 ~14:xx)
@@ -50,6 +52,81 @@ container da sombra monta `--tmpfs /app/logs`: sem o arquivo, `escala_certa_no_d
 prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,71 h de diferenca entre o
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
+
+# R2 CURADA E SELADA, apply RETIDO pela condicao (d) -- e o censo do matcher fecha a R1 (28/09 ~00:4x)
+
+## R2: a pausa pode ter UMA perna acesa
+
+PROVA: `realizado_do_dia` em prod contra o oraculo -- **col736 15/09 221 -> 447 min, exato** (envelope 477
+menos a pausa real de 30); col518 27/08 **446** (oraculo 449) e 11/09 **443** (442). Os 8 casos de controle
+**identicos**: col922 404, col51 485, col81 423, col904 670, col85 726, col300 730, col327 406, col920 674.
+Selo `PernaSoltaDaPausaTest` (4 casos) na familia do O68b-PAPEL, reusando a fixture dela -- sua regra (b).
+43 testes da familia do pareador, OK.
+
+A guarda do miolo exigia o par INTEIRO. Quando UMA das duas batidas da pausa acendeu o seu marco e a outra
+nao, o dia nao emitia papel, o pareador caia no `tipo` gravado -- que nessas frotas tem a ultima batida como
+`E` -- e a TARDE INTEIRA se perdia. No col736 15/09 a IDA das 12:30 nao acendeu o `hii` (30 min do marco) e
+sobrou sozinha. **Cura 3 dos 7 dias da R2**; os outros 4 (col736 17/09, col784 12/09 e 19/09, col926 08/09)
+sao outra forma e seguem nomeados.
+
+**E esta cura me ensinou o mesmo erro duas vezes**: a 1a versao nasceu MUDA porque lia as luzes de intervalo
+de `_acesos`, variavel do PRIMEIRO laco -- no segundo ela ja guarda o ULTIMO dia iterado, nao o dia corrente.
+O vao teve exatamente esse bug antes dela. Agora as luzes de intervalo VIAJAM com o dia.
+E o selo me corrigiu enquanto eu o escrevia: montei um caso com DUAS sobras esperando descarte, e ele acusou
+o mapa cheio -- **estava certo o codigo**, porque duas sobras com vao curto sao o par da pausa por DURACAO.
+O caso que morde e UMA sobra sem luz de intervalo nenhuma.
+
+## PAREI no apply da R2: condicao (d), e a divergencia e do INSTRUMENTO
+
+A DIFF passou em (a), (b) e (c): `turnos_abertos` **620 -> 446 (-174**, em 74 colabs), `horas_trabalhadas`
+**+1.066,64 h** (82), `inconsistencias` **-256** (93), e **todo campo fora do item em +0,00** --
+`minutos_previstos`, `minutos_realizados`, `dias_previstos`, `semanas_dsr_ok`, `semanas_dsr_perdido`.
+ENTRAM/SAEM do TXT **0**, 07 e 08 **0 divergencias**, APLICADOS 200, SEPARADOS 34, CONDICAO_SAIDA_REAL 2
+(col821 -7,76 h, col727 -6,03 h).
+PROVA: estes numeros sao de **ENSAIO na sombra** -- o carimbo do proprio comando diz `ENSAIO revertido (nada
+gravado)`, e o gravado de prod segue em `horas_trabalhadas` 71.077,02 / `turnos_abertos` 473, do reapply da
+O96. **Nada da R2 foi aplicado.**
+
+**Mas (d) falhou com 1 divergencia nova: col843 25/08, espelho 181 x oraculo 0.** Medido o porque: o oraculo
+agrupa `24/08 18:56 · 22:59 · 23:59 · 25/08 03:00 · 07:01` em **5 batidas (IMPAR)** chaveadas em 24/08 --
+entao ele pontua ZERO no dia 25 e nem julga o grupo. No dia 26/08, com 4 batidas (par), os dois concordam
+**exatamente** (665 = 665). E o artefato da regra `len(cur) % 2 == 0 and gap >= 8h`, que **quatro das cinco
+autopsias nomearam sozinhas** (classes B1, T7, C2).
+
+Pela sua regra a R2 **nao aplica**, e eu nao a aplico. Mas o registro tem de dizer o que a medicao diz: o que
+bloqueia nao e dano da cura, e um defeito do INSTRUMENTO de medida. A cura que a regra aponta e na regra de
+paridade do oraculo, nao no espelho -- e ela e' sua, porque o oraculo e a testemunha independente da E6.
+
+## Censo do matcher: **NAO justifica mexer na grade**, e o numero e' o proprio mecanismo
+
+O censo da R1 mediu 437 dia-colab / 153 colabs com `tipo` do marco diferente do gravado, e separou:
+**(a) 251 dias** em que o gravado e incoerente e a ata o CONSERTA -- a forma col369 que a casa quer;
+**(b) 114 dias** em que o gravado e coerente e a ata CRIA o defeito -- a forma col920;
+**(d) 72 dias** em que os dois sao incoerentes e ninguem pode ser nomeado.
+
+**O veredito, pelo numero**: o dano provado de (b) e **24,9 h (3 dias) a 53,1 h (9 dias / 7 colabs)**,
+conforme o medidor, contra **+115,1 h em 38 dias / 26 colabs** de (a), em que o gravado deixa o turno ABERTO
+e a inversao o FECHA. **Pior caso 1:2,2, no MESMO codigo**, com a certificacao da grade (diff-zero do swift +
+fuzz de conservacao) como preco de entrada. Mexer em `escala/utils.py:132` hoje troca um numero conhecido por
+um risco maior nao medido.
+
+**E o corte por DISTANCIA esta excluido por medicao**, nao por opiniao: as medianas de `|luz - marco|` sao
+**60 / 60 / 60** nos tres grupos, sobreposicao total -- e DENTRO de (b) os dias que custam dinheiro sao os
+**mais perto** (mediana 21 min) e nao os mais longe. Uma regra "so casa tipo oposto se estiver perto"
+atingiria justamente os casos caros.
+
+A forma tem nome unico: **o marco `hf` (tipo S) recebe a batida que o chao gravou como `E`** -- 56% de (b)
+contra 17% de (a). A entrada do turno SEGUINTE e lavrada como a saida do turno declarado, e o turno seguinte
+inteiro deixa de existir. E a linha que decide e `escala/utils.py:132`, um DP que soma **so** `|batida -
+marco|`: em `:226` o tipo gravado esta na mao (`BT`) e em `:227` o tipo do marco e DESCARTADO -- a escolha e
+feita sem saber o tipo de nenhuma das duas pontas, e `BT` so reaparece em `:254` para ser GRAVADO.
+
+**Tres coisas que o censo justifica, e que eu registro sem fazer**: (1) os 9 dias de (b) entram em CADASTRO x
+REALIDADE (col468 17/09, col945 14/09, col789 29/08, col920 01/09, col879 02/09); (2) os **78 dias** em que a
+ata ja esta errada e **so a guarda `em_aberto` segura** passam a ser contador vigiado -- qualquer afrouxamento
+de guarda os converte em dinheiro; (3) **a folha ve MAIS que a tela: 36 contra 33**, porque
+`ponto/motor_calculo_v2.py:421` nao tem a guarda da L-084 das duas pontas que `ponto/turnos.py:961-965` tem.
+Isso e divergencia de testemunha por si, e a folha e' o leitor mais exposto, nao o menos.
 
 # HOOK DE STOP INSTALADO E PROVADO: o turno nao fecha com a fila 1 em pe (28/09 ~00:1x)
 
