@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:32:31.**
+**Medido em 27/09/2026 12:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda` |
+| `HEAD` local | `42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+42a8f25a [O68b-PAPEL] a regressao que a PROVA pegou: vao tem DUAS pontas, e minuto com duas batidas nao se endereca
 a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
 2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
 6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
 4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
-5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/aplicar_09_corte_b.py
- M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
- M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -88,39 +85,39 @@ a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 mi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● MELHORA −70 contra PIORA +23 = −47, o sentido que o Ronald exige. Mas 23 dias novos abertos ainda é dinheiro no lado errado; vou ver as duas formas que sobraram:
-
-  Ran 1 shell command
-
-● O col922 e o col297 são a cura certa (a célula soberana diz que as 23:04/22:50 abrem o plantão; o turno do dia fica aberto porque a saída realmente falta — vira cobrança). Mas o
-  col570 é bug meu: duas batidas no mesmo minuto (18:55 S e 18:55 E) colapsam na chave de minuto e as duas recebem o papel E:
-
-  Ran 1 shell command
-
-● col570 saiu da piora. Saldo −68 + 21 = −47: cai, como o critério exige. Os 21 que sobram são o col922/col297 — a célula soberana diz que a batida abre o plantão seguinte e o
-  turno anterior fica aberto porque a saída realmente falta (vira cobrança). Acrescento os selos que o Ronald nomeou:
-
-  Ran 2 shell commands
-
-● A suíte de fundo está obsoleta (começou antes dos últimos quatro patches) e ocupa o banco de teste. Mato e relanço limpa, com a DIFF em paralelo:
-
-  Ran 1 shell command
-
-● pkill -f casou o próprio shell (a linha contém o padrão). Verifico o estado e relanço sem essa armadilha:
-
-  Ran 3 shell commands
-
 ● Um único run no banco de teste. Enquanto a suíte roda, a DIFF na sombra (banco lateral, não colide):
 
-● DIFF v2 com a PROVA de 26 campos · 47s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
-     SAI=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o68b_v2.log; timeout 3000 bin/sombra.sh --com-a-sombra o68b_papel --
-     docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2… (47s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Hashing… (44m 26s · ↓ 88.5k tokens)
+● turnos_abertos 620 → 609 (−11), horas_trabalhadas +322,82 h, inconsistencias −59. Mas horas_folga_trabalhada −281,46 h é grande e estava igual na rodada anterior — suspeito de
+  deriva, não da minha cura. Meço a linha de base numa cópia do HEAD antes dela (a lição do AVAL-DE-CRITERIO):
+
+  Read 1 file, ran 2 shell commands
+
+● A isolação contra a base separa a minha cura da deriva (cures já no ar e não aplicadas):
+
+  ┌────────────────────────┬───────────────┬────────────┬───────────┐
+  │         campo          │ deriva (base) │ com a cura │ só a cura │
+  ├────────────────────────┼───────────────┼────────────┼───────────┤
+  │ horas_trabalhadas      │ +281,71       │ +322,82    │ +41,11    │
+  ├────────────────────────┼───────────────┼────────────┼───────────┤
+  │ horas_folga_trabalhada │ −279,20       │ −281,46    │ −2,26     │
+  ├────────────────────────┼───────────────┼────────────┼───────────┤
+  │ turnos_abertos         │ −13           │ −11        │ +2        │
+  ├────────────────────────┼───────────────┼────────────┼───────────┤
+  │ inconsistencias        │ −48           │ −59        │ −11       │
+  └────────────────────────┴───────────────┴────────────┴───────────┘
+
+  O −281 h de folga trabalhada era deriva, não minha. Commito e confiro a suíte:
+
+  Committed 42a8f25a, ran 1 shell command
+
+● Suíte ainda rodando. Uso o tempo para o RELATO e o TICKETS, que é o que o Ronald lê:
+
+● Ler o topo do RELATO
+  ⎿  $ sed -n '1,40p' docs/RELATO.md
+
+✢ Hashing… (49m 56s · ↓ 98.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
