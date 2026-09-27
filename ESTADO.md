@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:41 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 02:33:15.**
+**Medido em 27/09/2026 02:35:49.**
 
 | | |
 |---|---|
-| `HEAD` local | `ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c` |
+| `HEAD` local | `64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso` |
 | `origin/main` | `c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+64a74cf7 [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
 ceaeedbd [RELATO] E1 provada em prod, RED da O85 evidenciado, push c35dbe8c
 237c9b16 [O85] o dia com batida e sem vinculo vigente para de desaparecer da folha
 c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 21cb89f7 [TICKETS] placar do topo com o push que pousou (c6c3785b) -- a regua barrou o push por isso
-31790c43 [E1] o colateral que a suite achou: dois fixtures mais nasciam invertidos, e o argumento e `condition`
 ```
 
 ## `git status --short`
@@ -85,40 +85,40 @@ c35dbe8c [TICKETS] linhas das fatias da noite: O82 O83 O84 O85 O86 e E1-VIGENCIA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● E1 fechada e provada em PROD: convalidated=False no schema juliani (passado intocado), as 53 linhas legíveis, e o banco recusou tanto o INSERT invertido quanto o UPDATE numa
-  congelada — congelamento de verdade.
-
-  Próximo item da fila: O85. RED primeiro, com a cura ainda fora da árvore:
-
-  Ran 1 shell command
-
-● RED evidenciado: delta = 0,0 — o colab com o dia órfão recebe exatamente as mesmas 8,00 h do que não tem. As 8 h desaparecem. Aplico a cura:
-
-  Ran 1 shell command
-
-● RED → GREEN (8 testes). Agora o DIFF na sombra, que responde as duas perguntas de uma vez — a O85 e a remedição dos 30 separados:
-
-  Ran 1 shell command
-
 ● Enquanto o ensaio roda, commito a cura (o ensaio lê a árvore; commit não a altera):
 
   Ran 1 shell command
 
 ● Commitado (237c9b16). Publico o smoke do E1 em prod e o RED da O85 enquanto o ensaio roda:
 
-● Publicar o estado e ver o ensaio · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     bloco = """# RELATO — esteira saas-hasner
-     ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
-     | | |
-     |---|---|
-     | **push** | **pousou**: `c35dbe8c`, **8.393 testes OK** + 22 do control-plane. Barrou duas vezes antes, e a…
+  Ran 2 shell commands
 
-✢ Roosting… (3m 1s · ↓ 7.4k tokens)
+● O ensaio roda (container a 70% de CPU). Enquanto isso, remeço a O66, próxima da fila, que pode ter mudado com as curas desta noite:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Background command "Rodar o DIFF da O85 na sombra" completed (exit code 0)
+
+  Read 2 files, ran 1 shell command
+
+● O tail -60 cortou justamente a prova dos 26 campos e as contagens. Refaço o ensaio gravando a saída inteira:
+
+  Ran 1 shell command
+
+● Enquanto refaz, escrevo a observação estrutural que esse DIFF revela — e ela importa para a manhã:
+
+  Ran 1 shell command
+
+● Número que muda a fila: 60 colabs movem fora de horas_trabalhadas, e o campo mais frequente é horas_saida_antecipada (31), seguido de horas_atraso (16) — essa é a L-084
+  corrigida, que está no ar desde 01:53 mas nunca entrou no gravado (o recálculo das 00:50 rodou com a versão errada, "ou"). Publico:
+
+● Commitar e publicar a divida da L-084
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -F - <<'EOF'
+     [L-084] a lei corrigida esta no ar e nao esta no gravado: o DIFF da O85 tropecou nisso
+     LEI-AKITA: origem=a ordem dos fatos (recalculo 00:50, cura da L-084 no motor 01:04, no ar 01:53),
+     testemunha=o DIFF na som…
+
+· Roosting… (5m 34s · ↓ 15.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
