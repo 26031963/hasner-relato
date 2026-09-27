@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:119 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:182 AFIRMA ato sem PROVA ao lado -- divergencias**. APLICADOS **148**, SEPARADOS **31**.
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 14:10:01.**
+**Medido em 27/09/2026 14:15:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD` |
+| `HEAD` local | `e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso` |
 | `origin/main` | `73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e652f7c6 [O94] PAREI o apply de 09 outra vez: 14 colabs perdem 283,01 h de hora TOTAL, e nenhum aval nomeia isso
 0a657eb0 [O93] sem turno anterior, o dia e o do INICIO -- e o ensaio de dinheiro passa a exigir a lavra de PROD
 b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma posicional do intermitente
 73322ebd [O68b-PAPEL] no ar com smoke no worker servido, e onde o Ronald clica
 5215187e [TICKETS] linha da O93 -- a regua cobrou no push e estava certa
-5e7b56ef [O93] o item vai para a fila como `!`, que e o que ele e -- e o selo das DUAS FILAS estava certo
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -90,22 +87,6 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Mesma data_ref e mesmo número de chaves, mas md5 diferente — a lavra da sombra não é a de prod. Vejo onde diverge:
-
-  Ran 1 shell command
-
-● Divergência real e nomeável: prod tem colabs_com_anomalia_recorrente: 122 e a sombra 119, e o destino de prod inclui o col154 que a sombra não tem — 3 colabs julgados diferente
-  no ensaio. Sua ordem vale, com o mecanismo corrigido. Implemento:
-
-  Ran 2 shell commands
-
-● Implemento a sincronização da lavra e a recusa, com o marcador que prova que ela ocorreu:
-
-  Ran 3 shell commands
-
 ● Sincronizada (md5 26d7f7ea…, o de prod). Agora o selo que o aval pede:
 
   Ran 1 shell command
@@ -117,13 +98,29 @@ b93b05b0 [O84] a ata NOMEIA a inversao e o juiz devolvia "nao sei" -- a forma po
 ● O selo de host morde (removendo a chamada fica vermelho) e voltou a OK. Commito tudo e lanço suíte + DIFF — esta DIFF já sai com a lavra de prod, o que muda o número da folga
   trabalhada:
 
-  DIFF da O93 com a lavra de prod · 23s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
-     SAI=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o93.log; timeout 3000 bin/sombra.sh --com-a-sombra o93 -- docker run
-     --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network … (22s)
+  Committed 0a657eb0, ran 1 shell command
+
+● A DIFF saiu com a lavra de prod (lavra_de_prod=OK md5=26d7f7ea…). Antes de aplicar, a checagem que a L-007 exige — nenhuma hora pode desaparecer, só o adicional de 100% pode
+  mudar:
+
+  Ran 1 shell command
+
+● PAREI de novo, e por outro motivo — este é maior. A checagem da L-007 diz que 14 colabs perdem hora total: −283,01 h:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Acrescento a linha da O94 no TICKETS (a régua vai cobrar) e commito os documentos:
+
+● Commitar a O94 e esperar a suite · 7s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/TICKETS.md'; s=open(p).read()
+     i = s.index('| O93 |')
+     nova = ('| O94 | ponto (dinheiro de 09) | turno cuja saida REALMENTE falta fica ABERTO e vale 0 h -- o '
+     'gravado de hoje PAGA essas horas por pareamento velho | **medida, PAROU o apply de 09; codigo ja no '
+     'ar** | … (7s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Lollygagging… (16m 4s · ↓ 58.5k tokens)
+· Lollygagging… (21m 34s · ↓ 71.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
