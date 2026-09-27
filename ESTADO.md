@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 03:03:41.**
+**Medido em 27/09/2026 03:09:01.**
 
 | | |
 |---|---|
@@ -88,16 +88,6 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 
 ```
 
-● 0 colabs movem — o horas_trabalhadas total não mudou. Então minha correção não pegou. Meço com o espião, que agora lê a árvore corrigida:
-
-  Ran 1 shell command
-
-● O pad funcionou (as batidas de 21/08 viajam) e o par ainda não fecha. A diferença entre a minha sonda e a cura são dois argumentos. Testo qual deles inverte:
-
-  Ran 1 shell command
-
-● Nenhum dos dois. Resta a alimentação de células: a cura passa o envelope inteiro (02/08–28/08), a minha sonda passou só 20–27/08. Testo:
-
   Ran 1 shell command
 
 ● O envelope também não. Resta o datas_justificadas, que o laço das fatias mutaciona com as datas cobertas por ausência — e a célula de 21/08 do col375 diz fato_em_ausencia.
@@ -112,15 +102,25 @@ b62371db [O85] aplicada em 09: +153,72 h em 5 colabs, todos os outros 25 campos 
 ● Achei, e é revelador: com tipo_escala=None a fábrica devolve Motor12x36 — não existe motor neutro. A fatia usou MotorComercial (6x1); o meu passe órfão pediu "nenhum template" e
   recebeu o motor de 12x36, que não fecha um par de 4 h. Testo a cura certa — o último template conhecido:
 
-  Comparar o motor None com o ultimo template conhecido
-  ⎿  $ cat > /home/ronald/saas-hasner/logs/sombra/col375_motor.py <<'PYEOF'
-     """Qual motor a fabrica entrega e qual fecha o par: None x ultimo template conhecido."""
-     import datetime as d
-     from django.utils import timezone as tz
-     from django.apps import apps
-     G = lambda n: next(m for m in apps.get_models() i…
+  Ran 1 shell command
 
-✢ Transmogrifying… (9m 23s · ↓ 28.9k tokens)
+● A saída é o oposto do que eu supunha: None → Motor12x36 fecha o par; o template 6x1 → MotorComercial não. Mas a cura usa None e não fecha. Sobrou uma hipótese: o motor da fatia
+  mutaciona os objetos Batida que a passada órfã reaproveita. Testo:
+
+  Ran 1 shell command
+
+● PROVADO, e é maior que a minha cura: o motor mutaciona os objetos Batida que recebe. A mesma passada órfã dá 4,0 h com objetos frescos e ABERTO com os objetos que a fatia já
+  tocou (o tipo continua E/S — a mutação é em outro atributo). Curo com re-consulta e faço o RED morder:
+
+  Ran 2 shell commands
+
+● +4,00 h em 1 colab, nada mais move. Aplico o resíduo:
+
+  Ran 1 shell command
+
+●
+
+✢ Transmogrifying… (14m 43s · ↓ 37.2k tokens · thought for 7s)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
