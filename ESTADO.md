@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 00:23:01.**
+**Medido em 27/09/2026 00:28:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
  M app/config/crons_duracao.json
+ M app/ponto/motor_calculo_v2.py
 ?? esteira.pausada
 ```
 
@@ -47,43 +48,43 @@ a497ed37 [O69 VINCULO-DO-DIA] o espelho e o cartao perguntam a celula: a regra p
 
 ```
 
-  Enquanto a suíte roda, um balanço do que esta madrugada produziu, porque a fila do MODO 24H depende dele:
+  Searched for 1 pattern, ran 1 shell command
 
-  No ar em código: o corte (b) com o juiz eh_turno_partido, a L-084 da pontualidade, a O72 do marco do dia seguinte, a L-086 corrigida (feriado pelo ciclo com dia de início,
-  domingo pela escala), o descritor calculado na ficha.
+● _dia_do_turno já existe e a docstring diz "So o dia sai daqui" — e ele é usado no MotorTurnoPartido e no MotorComercial, mas não no MotorBase, que é onde o col382 roda. Eu criei
+  um segundo mapa para a mesma pergunta. Removo o meu e uso o declarado:
 
-  No gravado de 09: pouco — 4 colabs. E isso é a informação mais útil do turno, não o fracasso dele: o corte (b) está provado e o dinheiro dele está retido atrás de duas coisas
-  nomeadas, não de vinte.
+  Ran 1 shell command
 
-  Medido e publicado: plano B 1.484 dia-colab (19,4%), celula_veredito_velho 158, 37 de 37 cadastros partidos falsos com vão máximo de 70 min, 365 dia-colab com DNA em desacordo,
-  12 de 33 perguntas de domínio sem lei.
+● O76 curada, e o RED fechou exatamente como a sua ordem previa:
 
-  Erros meus, todos medidos e corrigidos no mesmo turno: o 758 que era 1.484, o 1.504 que era 158, os +105,45 h aplicados sem aval, os −642,43 h que eu ia tirar de 64 pessoas, e o
-  template no bind-mount antes do .py. Os cinco estão no RELATO com o número e a causa — nenhum deles foi descoberto por você depois.
+  ┌────────┬────────────────────────┬────────────────────────┬───────────────────────────────────────────────────────────────────────────────────────┐
+  │ colab  │         antes          │         agora          │                                        leitura                                        │
+  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ col382 │ perdido=1, falta 20/09 │ ok=1, sem falta        │ ele não faltou — entrou 10 min depois da meia-noite e o motor o jogava fora da janela │
+  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ col491 │ perdido=1, falta 20/09 │ perdido=1, falta 20/09 │ falta real — segue perdido, e está certo                                              │
+  ├────────┼────────────────────────┼────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ col343 │ ok=1                   │ ok=1                   │ controle, inalterado                                                                  │
+  └────────┴────────────────────────┴────────────────────────┴───────────────────────────────────────────────────────────────────────────────────────┘
 
-  Assim que o push pousar: DEPLOY JÁ e O80, a trava da L-092.
+  A cura foi menor e mais funda do que eu tinha escrito na primeira tentativa. Três coisas que valem registro:
 
-✻ Cogitated for 1m 11s · done 12:22 AM · 2 shells still running
+  O mapa já existia. MotorBase._dia_do_turno, cuja docstring diz literalmente "So o dia sai daqui". O MotorTurnoPartido e o MotorComercial já o usavam; o MotorBase era o único dos
+  três que derivava por conta própria — e é nele que roda o Motor12x36ComEscala, ou seja o plantão noturno, exatamente quem sofre o problema.
 
-❯ corte Ronald (corrige a L-086): a L-086 vale para DOMINGO e dia seguinte: plantao previsto nao vira domingo trabalhado nem HE 100%, porque a hora pertence ao dia de inicio
-  (L-085). FERIADO NAO entra na L-086: segue a regra de feriado que ja existe no cadastro do ciclo (feriado_em_dobra; 12x36 nao dobra pelo parecer do Art.59-A), com o dia do
-  feriado sendo o dia de INICIO do plantao. Reescrever o texto da L-086 e os casos do selo: "feriado previsto nao dobra" sai; entra "plantao que COMECA no feriado dobra, salvo
-  ciclo sem dobra" e "plantao que comeca na vespera e entra pelo feriado nao dobra".
-  MODO 24H: a O76 (entrada logo depois da meia-noite jogando o plantao fora da janela) entra AGORA, antes do O80: ela destrava 21 dos 30 separados. Depois de L-086 corrigida e
-  O76 curada, remede os 30 pelo criterio do modo 24h e aplica os que passarem. !
+  Eu criei um segundo mapa antes de procurar o primeiro. Chaveado pelo timestamp cru, enquanto o declarado chaveia por localizar(...). Apaguei o meu. Um segundo mapa para a mesma
+  pergunta é o que esta noite inteira arrancou de quatro lugares — e eu quase plantei outro.
 
-● Primeiro parágrafo: já recebido 27/09 03:xx — a L-086 corrigida está implementada (feriado pelo ciclo com dia de início, domingo pela escala), selo reescrito com 10 casos
-  verdes, e o número está publicado no RELATO. Não refaço.
+  Havia uma terceira derivação, no DSR. datas_trabalho.add(localizar(p.entrada).date()) — e era ela que derrubava a semana do col382. Curar só o data_jornada não bastava; o laço
+  do DSR tinha a sua própria conta. Agora ele lê o dia da jornada que classificou o período.
 
-  Segundo é novo e muda a fila: O76 agora, antes do O80. Vou ao sítio:
+  Agora remeço os 30 pelo critério do MODO 24H e aplico os que passarem.
 
-● Running 1 shell command…
-
-· Canoodling… (12s · ↓ 591 tokens)
+✻ Cooked for 3m 1s · done 12:25 AM · 2 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ remede os 30 e aplica os que passarem
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
