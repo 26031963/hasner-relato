@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/09/2026 21:38:31.**
+**Medido em 26/09/2026 21:43:51.**
 
 | | |
 |---|---|
 | `HEAD` local | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
-| `origin/main` | `068e830b TICKETS: linhas da O69 (aplicada) e da O67 (medida) que a regua cobrou` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `d39c0696 [O68 PLANO-B-MEDIDO] o plano B tem tamanho: 758 dia-colab, 11,0% do que o motor julga` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -33,50 +33,52 @@ a92ae9c4 [O69 VINCULO-DO-DIA] APLICADA em 09: 654,74 h, e os sobrepostos cairam 
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
+?? app/ponto/management/commands/celula_veredito_velho.py
 ?? esteira.pausada
 ```
 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  └─────────────────────────────────────────┴──────────────────────────────────────────────────────────┘
+✻ Churned for 1m 10s · done 9:40 PM · 2 shells still running
 
-  O B023 merece destaque porque não era pedantismo: num medidor de dinheiro, closure sobre variável de laço é a receita do número do colab errado. Curei com argumentos explícitos,
-  congelei o relógio em 2026-09-16, e declarei a casa dos dois medidores. Rodando a verificação agora.
+❯ NAO ENCERRE O TURNO ate segunda: O71 REJULGAR-09 -> O68 (plano B, 758 dias) -> O70 GERADORA-EM-TODA-CELULA -> O51b (Atraso e Saida antecipada) -> O66. So para em PAREI com a
+  tabela (dinheiro que move, ou colab que SAI do export) ou em item da L-009. Entre um item e outro: commit, push pela regua, DEPLOY JA quando o dinheiro der zero, RELATO
+  publicado. A cada PAREI, o numero no topo do RELATO. Nenhuma lei nova.
 
-✻ Baked for 2m 17s · done 9:28 PM · 2 shells still running
+● Registro a ordem e começo a O71 pelo que a lei manda antes de tudo: quem é o juiz do veredito e quem o escreve.
 
-● Background command "Ruff limpo e os tres selos que caíram" completed (exit code 0)
+  Ran 2 shell commands
 
-  Read 1 file
+● O veredito deriva de codigos por mapa fechado, e o escritor único é a porta ponto/portas/celula.py::lavrar_veredito. Então "o juiz de hoje" é o cartório. Leio o que ele já
+  oferece em dry:
 
-● Ruff limpo, 35 testes OK. Vou em dois commits — o medidor do plano B é da O68, não da fatia do espelho. Confiro se a O68 tem linha na tabela antes de citá-la:
+  Searched for 1 pattern, read 1 file, ran 1 shell command
 
-  Searched for 1 pattern, ran 3 shell commands
+● O ponto central: o cartório rejulga quando a impressão dos insumos muda — mas as minhas curas de hoje mudaram o juiz, não os insumos. Por isso o --forcar existe. Leio o juiz
+  puro:
 
-● Ruff limpo, 35 testes OK, régua de tickets OK. push48 em voo com dois commits:
+  Searched for 1 pattern
 
-  - a497ed37 — a fatia do espelho (O69), com as três curas de selo
-  - d39c0696 — o medidor do plano B em fatia própria (O68), com o número e a linha no TICKETS
+● julgar_colab com apply_=False, forcar=True preenche out['cods'][data] sem escrever — é o juiz de hoje, chamado de verdade. Agora o outro lado, quem entra no TXT:
 
-  Separei em dois porque o medidor é da O68, não da fatia do espelho, e misturar fatia é o tipo de coisa que fica barata hoje e cara quando alguém precisar reverter uma só.
+  Searched for 1 pattern, ran 1 shell command
 
-  Enquanto a suíte roda, o que está em pé e em que ordem, pela sua determinação:
+● A cadeia é mais longa do que "veredito → TXT": classificar_export lê FechamentoMensal, e o que a rejulga muda é a ata, que o motor lê. Então faço em dois estágios. Primeiro o
+  contador (a), que é leitura pura:
 
-  1. O71 REJULGAR-09 — contador celula_veredito_velho, rejulgar pelo cartório, DIFF com quem entra e quem sai do classificar_export. Assimetria literal: um único colab saindo =
-     PAREI.
-  2. O68 — a cura do plano B (os 758 dias) + DIFF + o seu !.
-  3. O70 GERADORA-EM-TODA-CELULA — os 6.848 dias sem geradora.
+● Medir celula_veredito_velho em 09 na sombra
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p logs/o71 && source bin/recursos.sh >/dev/null 2>&1; docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network
+     saas-hasner_default --env-file .env \
+     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
+     -e HT…
 
-  E um achado desta medição que vai virar item próprio, porque não é nota de rodapé: bin/sombra.sh não monta a lavra do esmeril. Sete colabs recusaram o recálculo — o que é a O63
-  funcionando, não um bug — mas isso faz de todo ensaio de dinheiro que dependa de folga trabalhada um ensaio incompleto na sombra, e incompleto em silêncio para quem não ler sete
-  avisos no meio de novecentas linhas de log. É a mesma forma que custou 134,71 h em 8 colabs há poucas horas.
-
-✻ Baked for 1m 19s · done 9:29 PM · 2 shells still running
+✶ Lollygagging… (2m 11s · ↓ 8.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ deploy ja do espelho quando o push48 pousar
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
