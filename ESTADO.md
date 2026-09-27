@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 12:16:01.**
+**Medido em 27/09/2026 12:21:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido` |
+| `HEAD` local | `a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda` |
 | `origin/main` | `6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,19 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a0fb3feb [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
 2a727532 HANDOFF: a cura da classe B ja esta ligada (a O65 nao havia chegado ao motor), com DIFF medido
 6060994d [TICKETS] linhas de O68b e VIGIA -- a regua cobrou e esta certa
 4e446260 [O68b] o passo final entra com selo e DIFF zero -- e eu derrubo o meu proprio diagnostico da classe B
 5458270d [O86/classe B] causa nomeada, e duas hipoteses minhas caidas no caminho
-9c5a6fe3 [VIGIA] trava A vazia deixa de ser alarme enquanto o fabricante esta desligado COM dono
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/motor_calculo_v2.py
- M app/ponto/turnos.py
-?? app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
+ M app/ponto/management/commands/aplicar_09_corte_b.py
 ?? esteira.pausada
 ```
 
@@ -88,40 +86,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  onde o pareador consome _intra_dur para o miolo vencer a leitura de órfã:
-
-  Ran 1 shell command
-
-● O miolo já vence: o bloco de _intra_dur/is_intervalo consome a batida antes da leitura do papel (linha 619), e é por isso que os números do col51 foram idênticos. Escrevo a
-  versão final — dois passos, miolo respeitado, janela de cluster reusada:
-
-  Ran 3 shell commands
-
-● O miolo entrou: o par do col51 saiu do mapa e o dia segue descrito. Agora o RED primeiro (LEI-AKITA 5) — estou curando por sonda. Vou ver a forma do selo da O68b para reusar a
-  fixture:
-
-  Ran 1 shell command
-
-● O selo tem de correr no caminho REAL (o bug era justamente o motor não chamar). Vou achar a fixture de célula com ata já usada pelos selos da O65/E3:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Selo com os quatro casos que a medição produziu, no caminho real (turnos_via_autoridade, o sítio da ligação):
-
-  Read 1 file
-
-● 8/8 verdes. Agora provo que o selo morde — desligo só o X no leitor e os REDs têm de cair:
-
   Ran 1 shell command
 
 ● Selo morde (com o X desligado o RED do col904 cai) e restaurado. Commito antes de medir, e leio as flags do aplicador:
 
-  Estado do git e flags do aplicador
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/turnos.py app/ponto/motor_calculo_v2.py app/ponto/tests/test_o68b_papel_da_ata_no_motor.py && git commit -F - <<'MSGEOF'
-     [O68b-PAPEL] o vao da ata nao tem data de calendario -- e a orfa a 3 min da luz nao e borda
-     LEI-AKITA: origem=ponto/turnos.py::…
+  Committed a0fb3feb, ran 1 shell command
 
-✢ Hashing… (27m 56s · ↓ 53.9k tokens)
+● Commitado. Agora a suíte completa em paralelo com a DIFF, e a DIFF com os campos que um plantão fechado necessariamente move (o conselho decisivo: horas_noturnas está dentro de
+  22h-05h por definição):
+
+  Ran 2 shell commands
+
+● O conjunto já é declarado no arquivo, com justificativa escrita — não vou ampliá-lo por conta própria. Rodo a DIFF com o default e leio quem sobra:
+
+  Ran 6 shell commands
+
+● 163 aplicados (contra 7 antes: os campos estreitos estavam jogando a cura fora), 54 separados, 0 entrando/saindo do TXT. Mas o col904 e o col300 — os REDs que curei — caem em
+  horas_reflexo_dsr. Vou conferir se o reflexo é aritmética da HE (que está no item):
+
+  Searched for 1 pattern
+
+● Confirmado na fonte: reflexo = (HE_semana / dias_trabalhados) * dias_repouso (Súmula 172) — é aritmética da HE, que já está no item. É o mesmo erro que o arquivo documenta para
+  a HE 50%. Acrescento com a justificativa escrita, e a família 100% (a dobra, questão de LEI aberta) fica fora:
+
+● Acrescentar reflexo_dsr e remedir a DIFF com a PROVA salva · 42s
+  ⎿  $ python3 - <<'PYEOF'
+     import py_compile
+     p='ponto/management/commands/aplicar_09_corte_b.py'; s=open(p).read()
+     velho = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna')"""
+     novo = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna',
+     # O REFLEXO DO DSR E ARITMETICA DA HE (… (42s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Hashing… (33m 26s · ↓ 61.9k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
