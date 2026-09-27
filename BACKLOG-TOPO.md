@@ -69,7 +69,7 @@ lista — ela e o que esta EM PE._
 | **O58** | ESPELHO-COM-HASH-POR-PERIODO-LIVRE | espera aval |
 | **O59** | RESCISAO-LE-O-REGISTRO | **livre na parte de leitura; o hash herd |
 | **O60** | ESPELHO-VERDADE-E3-COMPLETA | HEAD x novo = CURA |
-| **O61** | CANCELADA 27/09 06:3x pelo corte "competencia paga fora do sistema" | espera `!` |
+| **O61** | CANCELADA 27/09 09:4x pelo corte "competencia paga fora do sistema" | espera `!` |
 | **O62** | JUIZ-DIZ-SEM-INTERVALO-COM-CADASTRO-DE-70 | espera corte |
 | **O63** | A SOMBRA MENTE SOBRE FOLGA TRABALHADA | espera corte |
 | **O64** | col369: `inconsistencias` 10 em prod x 14 na sombra | espera `!` |
@@ -88,7 +88,7 @@ lista — ela e o que esta EM PE._
 | **O77** | SELO DA L-084 | **livre** |
 | **O78** | SELO DA L-086 | **livre** |
 | **O79** | SELO DO VOCABULARIO falta x furo | **livre** |
-| **O80** | FECHADA 27/09 07:1x | **livre, prioridade** |
+| **O80** | FECHADA 27/09 10:1x | **livre, prioridade** |
 | **O81** | ATA-SEM-LAMPADA | espera corte |
 | **O82** | PORTAO-DA-SOMBRA-CEGO-ENTRE-00-E-04 | espera aval |
 | **O83** | E6-CLASSES | **em curso** |

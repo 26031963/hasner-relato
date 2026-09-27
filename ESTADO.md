@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:649 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:664 AFIRMA ato sem PROVA ao lado -- ## E1 NO AR e provada em prod · O85 com RED evidenciado · push `c35dbe8c`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 10:19:31.**
+**Medido em 27/09/2026 10:25:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
-| `origin/main` | `96a8c0d7 [L-093+O89] o desconto para de cobrar mais do que faltou, o motor para de escrever na Batida, e 07/08 saem da fila` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `ae058f68 [O80] a L-092 deixa de ser promessa: competencia exportada agora RECUSA antes de escrever` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,15 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/CORTES.md
+ M app/docs/LEIS.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/fechamento.py
+ M app/ponto/tests/test_l093_teto_pontualidade.py
+ M app/ponto/tests/test_o89_motor_nao_escreve_na_batida.py
 ?? esteira.pausada
 ```
 
@@ -85,40 +94,40 @@ bb282dfb [O91+O51b] as duas linhas pedidas: qual escritor o install ativaria, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ L-086, remedir os   │ sobrou 1 colab, +6,00 h — os outros 16 saíram pelas curas da noite. Aplicado                                                                         │
+  │ 17 (!)              │                                                                                                                                                      │
+  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O91: qual escritor  │ reverter_situacao_afastado escreve um campo (situacao), e hoje escreveria 0. No topo do RELATO                                                       │
+  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O51b: onde clicar   │ o RED do col39 não reproduz (24/08 não está na competência 08) — publiquei três alvos reais: col104, col217, col889                                  │
+  ├─────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ cancelar 07/08 (!)  │ O61 inteira, a cláusula da O60, dois itens do PENDENTES (150→148) e o item (3) do col650. E isso resolveu uma dívida que não existia: os 99% e 81%   │
+  │                     │ de "divergência" em 07 e 08 nunca foram deriva                                                                                                       │
+  └─────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  E a O80 fechada pela sua regra de fila: a L-092 deixou de ser promessa — recalcular_fechamento_mes agora recusa antes de escrever, com porta que exige motivo e casca que traduz
+  a recusa. 2.593 testes de ponto e folha OK.
+
+✻ Brewed for 1h 23m 55s · done 10:23 AM · 1 shell still running
+
+● Background command "Publicar e empurrar a O80" completed (exit code 0)
+
   Ran 1 shell command
 
-● A O80 agora é o corte de 06:3x virando guarda. Antes de escolher entre "recusar" e "pular", faço o censo de quem chama o escritor:
+● Push pousou (ae058f68). Mas o relógio me surpreendeu — confiro antes de datar mais nada:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● Censo fechado: o botão da tela, o simular_folha --recalcular, o CLI espelho e os meus comandos. A guarda alcança os quatro — e é isso que o corte quer. Leio a autoridade e o
-  tratamento de erro da view:
+● O relógio real é 10:23 -03 — eu datei os últimos itens como 06:0x/07:1x, e eles aconteceram entre 09h e 10h20. Corrijo os rótulos e gravo a lição, porque é a segunda vez hoje:
 
   Searched for 1 pattern, ran 2 shell commands
 
-● Autoridade localizada. Escrevo a guarda, a porta com trilha e o selo:
+● Esses três são do vigia da esteira, que carimba a própria hora — corretos, e dizem algo que vale uma linha: "trava A vazia" às 05:25, 06:25 e 07:30, enquanto eu trabalhava
+  direto. Commito a correção e relanço o oráculo, como sua regra de fila manda:
 
-  Ran 1 shell command
+● Running 1 shell command…
 
-● Agora a view, para o admin ver a recusa em vez de um 500:
-
-  Ran 3 shell commands
-
-● 6 OK, com a trilha da porta aparecendo. Confiro que a guarda não trava nada que deva funcionar:
-
-  Ran 1 shell command
-
-● 2.593 testes OK, nada quebrou. Publico a O80 e atualizo a L-092, que deixa de ser "sem selo":
-
-● Publicar e empurrar a O80 · 6m 45s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/LEIS.md'; s=open(p).read()
-     s = s.replace("| **SEM SELO** -- nao ha teste que impeca recalculo de competencia com export confirmado: obra O80 | **vigente** |",
-     "| `ponto/tests/test_o80_selo_l092.py` (6 casos) + a guarda em `ponto/services/fechamento.py::recalcular_fecha… (6m 43s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Shimmying… (1h 20m 9s · ↓ 91.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+· Envisioning… (1m 44s · ↓ 5.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
