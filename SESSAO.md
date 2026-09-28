@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 19:25:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.6 MB). Acoes na janela: **507**.
+**Medido em 28/09/2026 19:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.6 MB). Acoes na janela: **505**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -515,5 +515,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:34:00 | Bash | Reescrever o placar e empurrar a R4 | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && git add app/docs/TICKETS.md && git commit -q --amend --no-edit && git push 2>&1 \| tail -3` |
 | 07:33:52 | Bash | Commitar a volta da R4 e a cura do carimbo | `cd /home/ronald/saas-hasner && git commit -q -F - <<'MSG' [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18 Revert do revert de 0dab512d. A R4 sobe pelo caminho (c) que voce cortou agora, e a lei virou **L-094** no `LEIS.md` (63 leis indexadas, selo verde). AS QUATRO CONDICOES DA L-094, medidas e publicadas ANTES do deploy: (1) DIFF de f ...` |
 | 07:33:27 | Bash | Fotografar 07 e 08 antes do deploy da R4 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/foto0708.py <<'PY' from django_tenants.utils import schema_context with schema_context('juliani'): import json, os, hashlib from ponto.models import FechamentoMensal from ponto.management.commands.aplicar_09_corte_b import CAMPOS foto = {} for m in (7, 8):  ...` |
-| 07:30:34 | Bash | Ler a E6 pos-R4 | `cd /home/ronald/saas-hasner && docker wait e6_pos_r4 >/dev/null && docker logs e6_pos_r4 2>&1 \| grep -E "^\{\|^BATE\|erros no espelho" ; docker rm e6_pos_r4 >/dev/null; echo "=== a E6 ANTES da R4 (rodada 4), para comparar ==="; echo "BATE 92,9% de 7512 \| diverge_acima_60: 208 \| diverge_10_60: 218 \| esp_zero_e6: 58 \| e6_zero_esp: 53"` |
-| 07:30:25 | Bash | Carimbo gravado e E6 pos-R4 para a condicao 3 | `cd /home/ronald/saas-hasner && cat .regua_stamp \| head -3 && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && docker run -d --name e6_pos_r4 --cpuset-cpus 4-7 --cpus 3 --memory 2g --network saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONDONTWRITEBYTECODE=1 -e ALVO=pos_r4 -v ~/saas-hasner/app:/app:ro --tmpfs /app/logs -v $S:/saida - ...` |

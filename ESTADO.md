@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:25:31.**
+**Medido em 28/09/2026 19:30:45.**
 
 | | |
 |---|---|
@@ -111,16 +111,16 @@ A  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: BUG-ANCORA-NAO-REGENERA -- mudar a ANCORA do 12x36 nao refazia celula nenhuma -- escala/signals.py regenerava por VIGENCIA e nao por ANCO
 
-● Publicar o placar e rodar a regua · 3m 15s
+  Publicar o placar e rodar a regua · 8m 28s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      p='/home/ronald/saas-hasner/app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
      sec = '''# O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e a lista so encolhe (28/09 19:4x)
-     A S3 troca os leitores um a um, e a pr… (3m 14s · 2 lines)
+     A S3 troca os leitores um a um, e a pr… (8m 27s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Orchestrating… (28m 33s · ↓ 35.8k tokens)
+· Orchestrating… (33m 47s · ↓ 35.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
