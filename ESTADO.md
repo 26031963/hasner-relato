@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:38:01.**
+**Medido em 28/09/2026 00:43:31.**
 
 | | |
 |---|---|
@@ -123,7 +123,7 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
      p=d['por_colab']
      div=[(k,v) for k,v in p.items() if 'ERRO' not in v and abs(v['topo']-v['soma…
 
-✢ Hashing… (6m 42s · ↓ 8.2k tokens · deep in thought)
+✢ Hashing… (12m 12s · ↓ 8.2k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
