@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 19:14:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.5 MB). Acoes na janela: **507**.
+**Medido em 28/09/2026 19:19:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.5 MB). Acoes na janela: **508**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:17:17 | Bash | Commitar, empurrar e publicar a saida C | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() t=t.replace("""## Apply Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro**""", """## Apply FEITO PROVA: cadastro ligado nas **quatro** empresas pela porta `atualizar_empresa`, com `janela_he_ativa=True` e `janela_he_desde=2026-09-2 ...` |
 | 19:08:10 | Bash | Esperar a regua da saida C | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|MUDOU' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ ...` |
 | 19:08:00 | Bash | Aplicar o cadastro da janela com o ! dele | `cd /home/ronald/saas-hasner && cat > /tmp/aplicar_janela.py <<'PYEOF' # -*- coding: utf-8 -*- """APPLY da parte A da O-JANELA-HE: liga o cadastro, pela porta, com a vigencia da competencia 10. AUTORIZADO pelo `!` do Ronald (28/09 18:2x, condicional) com as tres condicoes CONFERIDAS no DIFF publicado: so os campos-alvo, nenhum colab para cima (zero linhas com HE ou trabalhadas subindo) e resto ZERO ...` |
 | 19:07:47 | Bash | Publicar o DIFF da saida C | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=[x for x in t.split('\n') if not x.startswith('`PAREI:')] t='\n'.join(l) sec = '''# JANELA DE HE, saida (C): a L-084 julga ANTES, e o DIFF fecha na sua condicao (28/09 19:2x) Sua saida (C) implementada ao pe da letra: **a L-084  ...` |

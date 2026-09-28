@@ -73,9 +73,13 @@ A separacao (a)/(b) exigiu duas rodadas: na primeira eu li `dias_cadastro_x_real
 de -90,68). Numero de instrumento quebrado e pior que numero nenhum, porque parece resposta. A rodada boa tem
 341 comparados e zero erro.
 
-## Apply
+## Apply FEITO
 
-Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro** (`janela_he_ativa=True`,
+PROVA: cadastro ligado nas **quatro** empresas pela porta `atualizar_empresa`, com `janela_he_ativa=True` e
+`janela_he_desde=2026-09-21` (o primeiro dia da competencia 10, vindo do juiz `janela_fechamento`), e a **janela
+de SAIDA segue DESLIGADA em todas** -- o corte a poe desligada e ela ficou. Antes: `(False, None)` nas quatro.
+
+Com as tres condicoes fechadas, o apply da parte A foi **ligar o cadastro** (`janela_he_ativa=True`,
 `janela_he_desde` = primeiro dia da competencia 10, pela porta `atualizar_empresa`, com trilha). Nao ha
 recalculo forcado: a **10 e competencia ABERTA** e o recalculo por EVENTO leva a regra a cada colaborador na
 primeira batida ou resposta dele -- e a 09, exportada, fica intocada pela vigencia (L-092).

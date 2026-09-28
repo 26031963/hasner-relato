@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:14:31.**
+**Medido em 28/09/2026 19:20:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)` |
-| `origin/main` | `b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)` |
+| `HEAD` local | `9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)` |
+| `origin/main` | `9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,23 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)
+de5b1a61 JANELA DE HE saida (C) implementada e APLICADA: a L-084 julga antes, e o DIFF fechou nas tres condicoes
 b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 e05ebb21 PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede
 37c8852b TICKETS: rodape e placar (8602 testes OK)
-eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
-63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/janela_he.py
- M app/ponto/management/commands/diff_janela_he.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/tests/test_janela_he_regra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,11 +84,6 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2. Nos demais dias a janela vale inteira, INCLUSIVE "nao compensa": minuto fora da janela nao entra no
-     trabalhado que o teto da L-093 usa; o desconto de pontualidade que surgir disso E a L-097 (campo-alvo).
-  3. Re-medir o DIFF da 10 e publicar por colab, separando: (a) dias que sairam da janela pela L-084; (b) desconto
-     de pontualidade que nasce do "nao compensa", com os colabs nomeados. col788 deve sair do desconto.
-  4. Disputa (113 sem data): FICA FORA do Cobrar em massa — vive pelo fio. Fechado.
      Apply so com meu "!" sobre o DIFF novo.
      segue a fila; PAREI so em lei ou !
 
@@ -118,13 +106,18 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 
 ● Background command "DIFF final da saida C" completed (exit code 0)
 
-● Esperar a regua da saida C · 6m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|MUDOU' /tm… (6m 19s)
+● Commitar, empurrar e publicar a saida C · 2m 44s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p='/home/ronald/saas-hasner/app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     t=t.replace("""## Apply
+     Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro**""",
+     """## Apply FEITO
+     PROVA: cadastro ligado nas **qu… (2m 43s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Orchestrating… (17m 33s · ↓ 25.4k tokens)
+✽ Orchestrating… (23m 4s · ↓ 27.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
