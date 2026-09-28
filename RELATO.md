@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-**O TXT AGORA RECUSA SOZINHO** (O1 item 4): sem carimbo VERDE do dia, `gerar_dominio_txt` barra com a LISTA de quem divergiu. A porta esta verde nas cinco perguntas e o carimbo de hoje esta lavrado nas 4 empresas. PARADO em DOIS `!`: o **`!` do EXPORT** (dossie abaixo) e a **pergunta de lei da R4**.
+**LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash por empresa publicado abaixo. A **R4 subiu pela L-094** com as quatro condicoes medidas. O CADASTRO-ZERO reteve **exatamente os 4** que voce nomeou. Falta so a EMISSAO com trilha -- um clique, que a porta ja guarda.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
@@ -50,6 +50,56 @@ universo do TXT (09/2026): 205 colaborador(es)
   dias_em_aberto=284  (nao e divergencia -- furo sem decisao, linha propria)
 SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia, sem allowlist
 ```
+
+
+# LOTE 1 DO EXPORT DA 09: pronto, conferido e com hash (28/09 08:3x)
+
+## (a) A R4 pela L-094 -- as quatro condicoes, medidas
+
+A propria lei que voce cortou exige o DIFF publicado ANTES. Aqui estao as quatro, cada uma com o numero:
+
+| condicao da L-094 | medida |
+|---|---|
+| (1) DIFF de frota PUBLICADO antes do deploy | **+75,12 h em 27 colabs / 78 dias**, no RELATO desde 02:5x, padrao de +60 min/dia (a pausa fantasma do template) |
+| (2) ZERO colaborador para baixo | **27 sobem, 0 descem.** Maiores: col416 +13,00 h · col610 +11,00 · col727 +10,00 · col348 +8,00 · col438 +6,00 |
+| (3) E6 nao piora | **MELHORA**: `BATE 92,9% -> 93,7%` de 7.512 dias · `diverge_acima_60` 208 -> **171** · `diverge_10_60` 218 -> **191** · `erros no espelho: 0`. **64 dias** passam a bater |
+| (4) 07/08 = 0 (L-092) | **md5 IDENTICO antes e depois do deploy**: 07 `n=629 md5=7a6f23c91ac9d20a19d4f121b90c8abe` · 08 `n=618 md5=95eb9ad041d7d375398a88d88a6a8dd0`. As duas competencias estao EXPORTADAS, entao `recalcular_fechamento_mes` RECUSA por construcao -- a lei nao depende de eu me lembrar dela |
+
+## (c) O CADASTRO-ZERO reteve EXATAMENTE os quatro que voce nomeou
+
+`fora/cadastro_zero: 4` -> **col43, col391, col924, col942**. Nenhum a mais, nenhum a menos: sao os mesmos que
+voce nomeou no corte e os mesmos da classe A da E6. **Nao ha PAREI.**
+Cada um: col43 (0 celulas, 20 batidas), col391 (0/7), col924 (0/66), col942 (0/14) -- todos com **0 fatia de
+escala** e `horas_trabalhadas = 0,00`, somando **217,7 h** que o espelho ve e a folha nao. Vao ao LOTE 2 depois
+do cadastro.
+
+## O LOTE 1, arquivo por arquivo
+
+| empresa | colabs | linhas | horas | bytes | sha256 |
+|---|---|---|---|---|---|
+| emp2 J.A Juliani Eireli | 133 | 244 | **17.345,65** | 10.500 | `baa582ddb2829f9cb355afb535d23039591378befa5c8df036de66c4e5fc1b4b` |
+| emp3 Juliani Seguranca Patrimonial | 55 | 96 | **7.952,48** | 4.192 | `728321ca4d56bba84e08bbbcdea0413ca3cfcf75f48e3a2af236623142e02cfd` |
+| emp4 R. A. de Oliveira Lopes | 12 | 12 | **1.641,11** | 540 | `cb7f00fe59f84e505fce92aab2769242aec6671b688d7c514311518345c29773` |
+| **TOTAL** | **200** | **352** | **26.939,24** | 15.232 | — |
+
+As horas sao `horas_trabalhadas + horas_folga_trabalhada` do gravado, que e' a regua que a E6 e a O83 usam.
+
+**FICARAM FORA, com o motivo de cada um** (406 no total): 335 `furo_espelho` · 59 `rescisao_modulo_proprio` ·
+6 `sem_codigo_dominio` · **4 `cadastro_zero`** · 2 `ferias_com_batida`. E **a emp1 (Confiance Force, 1 colab)
+nao exporta**: a integracao Dominio dela nao esta configurada, e a propria view recusa com essa frase antes de
+montar linha -- foi ela que me derrubou o montador na primeira tentativa, e a guarda que eu pus e a MESMA da
+view, nao uma minha.
+
+## O que falta, e e um clique -- nao um numero
+
+Eu montei o conteudo pela **autoridade unica** (`folha.export.montar_linhas_export`, a mesma funcao que a view
+usa) em modo **SO LEITURA**: nada foi emitido, nada carimbado, nenhum `ExportacaoDominio` criado. O que falta e
+a EMISSAO com trilha, e ela e o POST da tela -- porque *"script que POSTa em porta HTTP de prod E ESCRITA, nunca
+teste"* (CLAUDE.md secao 4, o incidente de 27/08). E ela **ja esta guardada**: o carimbo VERDE de hoje esta
+lavrado nas tres empresas exportaveis, e sem ele o TXT RECUSA.
+
+Se o conteudo que sair do clique tiver um hash diferente destes tres, alguma coisa mudou entre agora e o clique
+-- e e' exatamente para isso que o hash esta publicado.
 
 
 # O TXT RECUSA SOZINHO -- o portao do O1 item 4 fechou (28/09 06:1x)

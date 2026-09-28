@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:35:45.**
+**Medido em 28/09/2026 08:40:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar` |
+| `HEAD` local | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
 | `origin/main` | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094
 1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar
 6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201
 798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
 29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
-65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
 ```
 
 ## `git status --short`
@@ -84,10 +84,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
 
 ✻ Cogitated for 36m 14s · done 5:58 AM · 1 shell still running
 
@@ -109,16 +105,20 @@ RELATO, com a lista de nomes do banco como autoridade._
   esta incompleta pela propria lei; (b) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (c) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
   se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT. Segue a fila; PAREI so em lei ou !
 
-  Remover o _dbg.py com selo e registrar o O97
-  ⎿  $ cd /home/ronald/saas-hasner && git rm -q --cached app/folha/tests/_dbg.py && rm -f app/folha/tests/_dbg.py && bash bin/tests/test_sem_arquivo_de_mount.sh | tail -2 && git
-     add bin/tests/test_sem_arquivo_de_mount.sh && python3 - <<'PY'
+  Publicar o lote 1 com hashes e a R4 pela L-094 · 1m 54s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io
-     p='app/docs/BACKLOG.md'
-     s=io.open(p,encoding='utf-8')…
+     p='app/docs/RELATO.md'
+     s=io.open(p,encoding='utf-8').read()
+     l3=s.split('\n')[2]
+     novo3=('**LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash '
+     'por empresa publi… (1m 53s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (2h 33m 12s · ↓ 69.1k tokens · thinking)
+· Determining… (2h 38m 12s · ↓ 77.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
