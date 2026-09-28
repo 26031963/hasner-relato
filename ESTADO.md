@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:53:01.**
+**Medido em 28/09/2026 12:58:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)` |
-| `origin/main` | `9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)` |
+| `HEAD` local | `6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)` |
+| `origin/main` | `6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)
+a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou um erro MEU, no invariante
 9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)
 9a23287f RELATO: linha PAREI canonica no topo -- apply-HE-intra-fora-do-criterio (L-082 b), espera Ronald
 6cf525f4 TICKETS: rodape e placar com o carimbo da regua da S1 (8568 testes OK)
-464b031e O-DIA-PAGO S1: o dinheiro do dia passa a ser DADO lavrado uma vez -- e PAREI no apply da cura HE/intra (L-082 b)
-a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/RELATO.md
-M  app/folha/porta_export.py
-M  app/folha/tests/test_porta_do_export.py
-M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +91,24 @@ M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
       },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
@@ -107,32 +121,14 @@ M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
     }
   }
 
-✻ Crunched for 6h 28m 52s · done 12:31 PM · 3 shells still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Ran 6 shell commands
-
-● Background command "Provar a porta com a tabela ausente" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Curar o teto do invariante e re-medir" completed (exit code 0)
-
-● Esperar a regua da S2 · 6m 51s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (6m 50s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Combobulating… (20m 28s · ↓ 15.2k tokens)
+✻ Sautéed for 24m 58s · done 12:57 PM · 3 shells still running
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ aval Ronald: caminho (B), apply cirurgico pela porta. !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
