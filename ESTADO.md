@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:02:39.**
+**Medido em 28/09/2026 14:08:01.**
 
 | | |
 |---|---|
@@ -43,7 +43,7 @@ M  app/docs/ARQUITETURA.mmd
 M  app/docs/BACKLOG.md
 M  app/docs/MAPA.md
 M  app/docs/PENDENTES_RONALD.json
-M  app/docs/RELATO.md
+MM app/docs/RELATO.md
 M  app/escala/signals.py
 A  app/escala/tests/test_ancora_regenera_celulas.py
 ?? bin/keepalive.sh
@@ -98,6 +98,7 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  (regenerar_celulas_vinculo, passado errado por cadastro, corte 16/08) com trilha em regeneradas_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR
   perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
 
@@ -119,18 +120,17 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
   chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
   competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
 
-● Prender o relogio, regerar o diagrama e rodar
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='app/escala/tests/test_ancora_regenera_celulas.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace("""import datetime
-     from django.test import TestCase
-     class AncoraRegeneraCelulasTest(TestCase):""",
-     """import datetime
-     from django.test…
+● Diagnosticar por que a regeneracao nao alcancou
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/col824_diag.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import collections
+     from colaboradores.models import Colaborador
+     from escala.models import CelulaDia, EscalaColaborador
+     from ponto.janelas import janela_fechamento
+     c = Colaborador.objects.get(pk=824)
+     ec = Es…
 
-✶ Catapulting… (1h 0m 6s · ↓ 57.1k tokens)
+· Catapulting… (1h 5m 28s · ↓ 63.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
