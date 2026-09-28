@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:245 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:309 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:52:01.**
+**Medido em 28/09/2026 13:57:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,11 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## `git status --short`
 
 ```
- M app/escala/signals.py
-?? app/escala/tests/test_ancora_regenera_celulas.py
+M  app/docs/BACKLOG.md
+M  app/docs/PENDENTES_RONALD.json
+M  app/docs/RELATO.md
+M  app/escala/signals.py
+A  app/escala/tests/test_ancora_regenera_celulas.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -93,10 +96,6 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: AVISO-ENTRADA-ANTECIPADA (so informativo; nenhuma lei nova; nao retrata, nao cria chamado, nao muda calculo). Fila 1 logo depois do lote 1 gerado. FONTE:
-  ponto/services/aviso_da_batida.py::aviso_do_dia (campo aviso ja devolvido por api/views_core.py) + marco de entrada da CELULA do dia. MUDA: quando a ENTRADA do turno chega
-  antes do marco, o aviso devolve "Entrada registrada as HH:MM. Sua escala comeca as HH:MM (faltam N min)." -- so ENTRADA do turno, so dia com marco na celula; nada alem da
-  frase. RED: 06:47 com marco 07:00 -> aviso com 13 min; 07:00 -> sem aviso; volta de intervalo -> sem aviso. Selo nas duas cascas se tocar template (nao deve tocar). A parte
   ESPURIA/janela fica REGISTRADA no BACKLOG como desenho aguardando confirmacao do admin da folha e do dono -- nao construir. Segue a fila; PAREI so em lei ou !
 
   Ran 2 shell commands
@@ -116,20 +115,24 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
   aberta publicado antes do deploy; move dinheiro para os dois lados -> PAREI para o meu !. Os 5 com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como lista para o meu ! no PENDENTES. LEI-AKITA: origem=escala/signals.py (so vigencia regenera), testemunha=CelulaDia, juizes novos=0. Segue a fila; PAREI so em lei ou !
 
-● Ler a proposta dos 5 nomeados
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/prop5.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """SO LEITURA: a proposta do propositor para os 5 que o Ronald nomeou."""
-     from escala.services.propositor import linhas_para_a_pauta
-     ALVO = {936, 932, 877, 451, 416}
-     linhas = linhas_para_a_pauta()
-     print('linhas n…
+● Esperar a regua da ancora · 4m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_anc.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (4m 19s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Catapulting… (49m 28s · ↓ 50.4k tokens · thinking)
+· Catapulting… (54m 58s · ↓ 55.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: col824 [nome] -- a fase ja foi corrigida pelo admin no wizard (vale da competencia 10 em diante); a 09 (21/08-20/09, NAO exportada) ficou com a fase velha porque
+  o wizard so alcanca a competencia aberta. Regenerar as CELULAS do vinculo dele de 21/08 ate 20/09 pela excecao formal (regenerar_celulas_vinculo, passado errado por cadastro,
+  corte 16/08) com a ancora ja declarada, trilha em regenerada_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR perdido, faltas, folga trabalhada,
+  chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
+  competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
