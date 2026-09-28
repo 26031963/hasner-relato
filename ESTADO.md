@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 20:23:31.**
+**Medido em 28/09/2026 20:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
-| `origin/main` | `13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `10e2d912 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke` |
+| `origin/main` | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+10e2d912 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke
 88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
 13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
 642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
-9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,44 +84,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Fila 1 adiante: S3 segue com a troca dos 8 leitores, um a um, cada uma tirando uma linha do placar — depois S5b (o pareamento por marco, com os três números já escritos) e S4.
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
+        "additionalContext": "string (optional)"
+      },
+      "for Stop / SubagentStop": {
+        "hookEventName": "\"Stop\" | \"SubagentStop\"",
+        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
+      }
+    }
+  }
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
-  exportada", e na
-
-  Searched for 4 patterns, ran 14 shell commands
-
-❯ aval Ronald: VOLTA A FILA 1. Leis: L-096, L-097, L-010. Nenhuma lei nova.
-  1. JANELA: o apply saiu sem o meu ! sobre o DIFF novo (escopo do aval e literal). Publicar a linha INTRA do DIFF (C) por colab. Se algum colab SOBE em intra = PAREI. Senao,
-  apply ratificado; nao desligar.
-  2. UI-GRADE-CALENDARIO: fila 2 congelada (L-096). Nao empurrar; aguarda meu smoke ou checkout.
-  3. BACKLOG-ORDEM-VIVA: bloco OBRAS de app/docs/BACKLOG.md com a ordem viva: janela A (FECHADA) -> O-DIA-PAGO S3 -> S5b -> S4. Linhas "em voo 08:4x" (E6-14, O73b, CORTE-B-30,
-  E5-FINAL, PLACAR-E) viram FECHADA com prova, ABSORVIDA (E5-FINAL dentro da S4) ou CONGELADA L-096. RED: bin/hook_stop_fila1.py nunca cobra item de fila 2 e cobra o 1o da ordem
-  viva. bin/relato.sh publica BACKLOG.md no hasner-relato (hoje 404).
-  4. Retomar S3 pelo placar dos 8 leitores.
-     PRONTO: RELATO com linha intra + hook apontando S3 + curl BACKLOG.md = 200 + commit.
-     segue a fila; PAREI so em lei ou !
-
-❯ 5. hook_stop_fila1.py mexido sem aviso e git add -A app/ (proibido, add por path): publicar o diff do hook no RELATO antes de commitar; commit por path.
-
-  Ran 4 shell commands
-
-● Background command "Medir a linha intra por colab" completed (exit code 0)
-
-● Commitar por path a fila e empurrar · 6m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_fila.txt <<'EOF'
-     VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
-     1. O APPLY DA JANELA SAIU SEM O ! SOBRE O DIFF NOVO, e ele esta certo: o ! de 18:2x era
-     sobre o DIFF de 18:4x… (6m 56s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Orchestrating… (1h 26m 33s · ↓ 75.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Crunched for 1h 30m 16s · done 8:27 PM · 7 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
