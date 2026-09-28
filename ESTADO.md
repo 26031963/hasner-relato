@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:52:33.**
+**Medido em 28/09/2026 18:54:30.**
 
 | | |
 |---|---|
 | `HEAD` local | `b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)` |
-| `origin/main` | `37c8852b TICKETS: rodape e placar (8602 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -109,14 +109,14 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 
 ● Background command "DIFF da janela na competencia 10" completed (exit code 0)
 
-● Commitar, empurrar e publicar o PAREI · 5s
+  Commitar, empurrar e publicar o PAREI · 2m 2s
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_par.txt <<'EOF'
      PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede
      O ! foi condicional e literal -- "so os campos-alvo, resto ZERO, nenhum colab para cima;
-     fora disso = PAREI com a tabela". O DIFF nao fecha na co… (4s)
+     fora disso = PAREI com a tabela". O DIFF nao fecha na co… (2m 1s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (2h 3m 18s · ↓ 80.9k tokens)
+* Unfurling… (2h 5m 15s · ↓ 80.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

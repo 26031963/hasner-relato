@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 18:52:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.2 MB). Acoes na janela: **498**.
+**Medido em 28/09/2026 18:54:30.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.2 MB). Acoes na janela: **495**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -505,6 +505,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:07:24 | Bash | Deploy do portao do TXT | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -3` |
 | 07:04:26 | Bash | Abrir a linha do O1 e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/TICKETS.md' s=io.open(p,encoding='utf-8').read() anc='\| O81 \| ponto/services/espelho (grade) \|' i=s.index(anc) nova=('\| O1 \| folha/porta do export \| o TXT podia ser gerado sem NENHUMA prova de que tela, PDF, fechamento e ' 'TXT estavam no mesmo numero -- os dois contadores existiam e nenhum barrava o export (item 4 do ' 'C ...` |
 | 07:04:00 | Bash | Publicar o portao do TXT e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**O TXT AGORA RECUSA SOZINHO** (O1 item 4): sem carimbo VERDE do dia, `gerar_dominio_txt` barra com a ' 'LISTA de quem divergiu. A porta esta verde nas cinco perguntas e o carimbo de hoje esta lavrado nas 4 ' 'empresas. PARADO  ...` |
-| 06:54:20 | Bash | Regua final da porta do export | `cd /home/ronald/saas-hasner && git add app/folha/tests/test_integracao.py && bash bin/regua.sh 2>&1 \| tail -4` |
-| 06:53:58 | Bash | Declarar a precondicao nos selos de integracao | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, re p='app/folha/tests/test_integracao.py' s=io.open(p,encoding='utf-8').read() alvos = [(164, 5), (207, 5), (266, 6)] linhas = s.split('\n') # insere a precondicao ANTES de cada post, de baixo para cima (para nao deslocar os indices) for ln, mes in sorted(alvos, reverse=True): i = ln - 1 assert "reverse('folha:gerar_txt')" in linhas[i], ...` |
-| 06:53:44 | Bash | Ver os dois selos de integracao do export | `cd /home/ronald/saas-hasner && grep -n "gerar_txt" app/folha/tests/test_integracao.py \| head -4; grep -n "def test_export_valido_200_e_layout_ok" -A 10 app/folha/tests/test_integracao.py \| head -12` |
