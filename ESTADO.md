@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:08:15.**
+**Medido em 28/09/2026 16:12:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,8 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 ## `git status --short`
 
 ```
+ M app/ponto/calculador/regras.py
+ M app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,17 +86,6 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-          "to deny": {
-            "behavior": "\"deny\"",
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
-      },
       "for PostToolUse": {
         "hookEventName": "\"PostToolUse\"",
         "additionalContext": "string (optional)"
@@ -114,10 +105,21 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Ver a saida inteira do publicador · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -12
+  Pushed to main, ran 7 shell commands
 
-✶ Billowing… (15m 42s · ↓ 9.6k tokens)
+● Background command "Re-medir o DIFF do calculador" completed (exit code 0)
+
+● Autopsia dos casos de intra
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/caso618.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import datetime as d
+     from django.utils import timezone as tz
+     from colaboradores.models import Colaborador
+     from escala.models import CelulaDia
+     from escala.utils import intervalo_declarado_do_dia as idd
+     from esca…
+
+✢ Billowing… (19m 58s · ↓ 15.2k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
