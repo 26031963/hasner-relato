@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:01:31.**
+**Medido em 28/09/2026 16:07:20.**
 
 | | |
 |---|---|
-| `HEAD` local | `f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)` |
-| `origin/main` | `f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)` |
+| `HEAD` local | `5f8e4c29 TICKETS: rodape e placar (8581 testes OK, S1+S2 completas)` |
+| `origin/main` | `5f8e4c29 TICKETS: rodape e placar (8581 testes OK, S1+S2 completas)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5f8e4c29 TICKETS: rodape e placar (8581 testes OK, S1+S2 completas)
+66801bd5 O-DIA-PAGO S1+S2 completas: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome
 f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
 aec92117 PORTAO DA 09 cumprido item por item: deploy no ar, apply cirurgico dos 144, porta VERDE e lote 1 com hash novo -- so a emissao espera o !
 f6e0910b TICKETS: rodape e placar (8581 testes OK)
-48adfbd0 S5b (1o passo): o corte do nucleo pergunta a ESCALA DO DIA, e o RELATO volta a publicar
-f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/RELATO.md
-M  app/ponto/management/commands/lavrar_dias_pagos.py
-M  app/ponto/services/fechamento.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,6 +84,9 @@ M  app/ponto/services/fechamento.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+          }
+        }
+      },
       "for UserPromptSubmit": {
         "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
@@ -110,17 +110,14 @@ M  app/ponto/services/fechamento.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Publicar a S2 e rodar a regua · 5m 35s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     sec = '''# O-DIA-PAGO S1+S2 COMPLETAS: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome (28/09 15:4x)
-     PROVA: `tenant_command lavrar_dias_p… (5m 33s · 2 lines)
+● Commitar, empurrar e publicar · 2m 2s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s2f.txt <<'EOF'
+     O-DIA-PAGO S1+S2 completas: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome
+     PROVA: tenant_command lavrar_dias_pagos --mes 9 --ano 2026 -> 606 colaboradores
+     lidos, 8.809 linhas de DiaPago na versao motor, com o Fechamento… (2m 1s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Billowing… (8m 58s · ↓ 7.7k tokens)
+✻ Billowing… (14m 47s · ↓ 9.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
