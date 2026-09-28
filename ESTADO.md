@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:41:31.**
+**Medido em 28/09/2026 02:47:01.**
 
 | | |
 |---|---|
@@ -93,10 +93,6 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
-
-  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
-  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
@@ -120,12 +116,16 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua completa da R4 · 4m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_vinculo_do_dia_pela_celula.py && bash bin/regua.sh 2>&1 | tail -4; docker ps -a --filter name=r4_cura2 --format
-     '{{.Status}}' (4m 46s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● DIFF final da R4 com o leitor proprio
+  ⎿  $ cd /home/ronald/saas-hasner && docker rm r4_cura2 >/dev/null 2>&1; python3 - <<'PY'
+     import json
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
+     b=json.load(open(S+'r4_base.json')); c=json.load(open(S+'r4_cura2.json'))
+     mov={}
+     for k in b:
+     if 'E…
 
-· Metamorphosing… (1h 35m 33s · ↓ 86.1k tokens)
+✢ Metamorphosing… (1h 41m 3s · ↓ 90.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
