@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:23:01.**
+**Medido em 27/09/2026 23:28:31.**
 
 | | |
 |---|---|
@@ -92,8 +92,6 @@ A  app/ponto/tests/test_teto_da_absorcao.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Commitar e rodar a regua" completed (exit code 0)
-
   Read 1 file
 
 ● Background command "Medir o pico de RAM durante a regua" completed (exit code 0)
@@ -119,12 +117,14 @@ A  app/ponto/tests/test_teto_da_absorcao.py
   disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
   listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
 
-● Ver o veredito do DRY cirurgico · 1m 9s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && FORA=$(cat $S/fora.txt) && docker exec
-     saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --fora "$FORA" 2>&1 | grep … (1m 9s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Separar deriva de cura nos 9 aplicados
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
+     b=json.load(open(S+'dinheiro_base.json'))['diff'] # leitura_base x gravado
+     n=json.load(open(S+'novos_campos.json')) # (gravado, leit_b…
 
-✢ Zesting… (2h 19m 58s · ↓ 228.7k tokens)
+· Zesting… (2h 25m 28s · ↓ 234.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
