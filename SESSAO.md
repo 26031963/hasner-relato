@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 21:51:39.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (91.9 MB). Acoes na janela: **475**.
+**Medido em 27/09/2026 21:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (91.9 MB). Acoes na janela: **477**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:56:16 | Bash | Conferir o censo | `cd /home/ronald/saas-hasner && docker ps --filter name=r2bc_ --format '{{.Names}} {{.Status}}'; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b; ls -la $S/*.json 2>/dev/null` |
+| 21:55:52 | Bash | Suite completa com a cura montada | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && source bin/recursos.sh && teste_envfile >/dev/null && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-h ...` |
 | 21:51:22 | Bash | Provar o RED do selo contra o HEAD | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app -v $S/test_o68b.py:/app/ponto/tests/tes ...` |
 | 21:50:59 | Bash | Rodar o selo da R2b contra a cura | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app -v $S/turnos.py:/app/ponto/turnos.py:ro ...` |
 | 21:50:30 | Bash | Montar o selo da R2b em copia do HEAD | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:app/ponto/tests/test_o68b_papel_da_ata_no_motor.py > $S/test_o68b.py && python3 - <<'PY' # -*- coding: utf-8 -*- import io, py_compile p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/test_o68b.py'  ...` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:51:39.**
+**Medido em 27/09/2026 21:57:01.**
 
 | | |
 |---|---|
@@ -110,16 +110,16 @@ bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar n
 
 ● Background command "Medir a cura (com tmpfs de logs)" completed (exit code 0)
 
-● Provar o RED do selo contra o HEAD
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && source bin/recursos.sh &&
-     teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_…
+● Conferir o censo
+  ⎿  $ cd /home/ronald/saas-hasner && docker ps --filter name=r2bc_ --format '{{.Names}} {{.Status}}';
+     S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b; ls -la $S/*.json 2>/dev/null
 
-✢ Zesting… (48m 36s · ↓ 88.1k tokens)
+✢ Zesting… (53m 58s · ↓ 89.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
