@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:35:45.**
+**Medido em 28/09/2026 04:40:45.**
 
 | | |
 |---|---|
@@ -38,6 +38,7 @@ M  app/core/espelho_verdade.py
 M  app/docs/BACKLOG.md
 MM app/docs/RELATO.md
 M  app/docs/TICKETS.md
+M  app/ponto/tests/test_detectar_entrada_adiantada.py
 A  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
@@ -92,16 +93,6 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      28 +
-      29 +Quem NAO entra, e por que (402 colabs): **335 `furo_espelho`** (espelho com pendencia -- e o portao le a CELULA,
-      30 +nao o gravado, entao recalcular nao abre vaga), **59 rescisao por modulo proprio**, **6 sem codigo Dominio**,
-      31 +**2 ferias com batida**.
-      32 +
-      33 +**SEIS colabs dos 205 carregam classe da E6**, e quatro deles sao a mesma coisa: **col924, col391, col43,
-      34 +col942** -- classe A, `fechamento zero`: **zero fatia de escala e zero celula** na janela, com batidas (66, 7,
-      35 +20, 14). **Isso e CADASTRO, nao codigo**, e vale **217,7 h**. Sobram 1 de classe C e 1 de classe D. A classe B
-      36 +(turno aberto 5+), que era a maior do censo da O83 com 733,7 h, **nao tem nenhum colab no TXT**.
-      37 +
       38 +## LOTE 2 -- recontagem depois das 12h
       39 +
       40 +O mutirao venceu para **158 colabs** com prazo **28/09 12:00** (159 chamados em 145 colabs com `prazo_sla`
@@ -124,7 +115,17 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
       57
       58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-✶ Metamorphosing… (3h 29m 28s · ↓ 145.8k tokens)
+  Congelar o relogio do teste e rodar a regua · 2m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p='app/ponto/tests/test_detectar_entrada_adiantada.py'
+     s=io.open(p,encoding='utf-8').read()
+     s=s.replace("from django.test import TestCase",
+     "from django.test import TestCase\nfrom freezegun import freeze_time")
+     s=s.replace("""class Entr… (2m 21s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Metamorphosing… (3h 34m 47s · ↓ 148.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
