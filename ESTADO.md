@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:00:46.**
+**Medido em 28/09/2026 11:06:01.**
 
 | | |
 |---|---|
@@ -119,13 +119,13 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
   push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-  Esperar a regua do BUG-HE · 4s
+● Esperar a regua do BUG-HE · 5m 20s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hei.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (3s)
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (5m 18s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Determining… (4h 58m 14s · ↓ 262.7k tokens)
+· Determining… (5h 3m 28s · ↓ 262.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
