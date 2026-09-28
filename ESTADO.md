@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:14:22.**
+**Medido em 28/09/2026 04:19:51.**
 
 | | |
 |---|---|
@@ -110,7 +110,7 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Corrigir a entrada no dict e rodar a regua · 35s
+● Corrigir a entrada no dict e rodar a regua · 6m 5s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      p='app/config/crons.py'
@@ -118,10 +118,10 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
      old = """ 'selo_leitores_no_mesmo_numero',
      'folga_que_sumiu':"""
      new = """ 'selo_leitores_no_mesmo_numero':
-     'SELO DE PORTA, nao de pipeline (28/09): e a pergunta que antecede … (33s · 2 lines)
+     'SELO DE PORTA, nao de pipeline (28/09): e a pergunta que antecede … (6m 2s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Metamorphosing… (3h 8m 24s · ↓ 135.9k tokens)
+✢ Metamorphosing… (3h 13m 53s · ↓ 135.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
