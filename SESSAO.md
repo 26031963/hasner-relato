@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 06:43:23.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.9 MB). Acoes na janela: **510**.
+**Medido em 28/09/2026 06:48:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.9 MB). Acoes na janela: **512**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:44:27 | Bash | Regua completa da porta do export | `cd /home/ronald/saas-hasner && git add app/folha app/ponto/tests/test_o81_celula_da_competencia.py app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py && bash bin/regua.sh 2>&1 \| tail -4` |
+| 06:43:21 | Bash | Apontar os selos para a porta e congelar o relogio | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io # 1. o selo do comando passa a apontar para a PORTA (a medicao mudou de casa, a lei nao) p='app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py' s=io.open(p,encoding='utf-8').read() s=s.replace(''' def _src(self): from relatorios.management.commands import selo_leitores_no_mesmo_numero as m return inspect.getsource(m)''', ''' def  ...` |
 | 06:34:14 | Bash | Regua da porta do export | `cd /home/ronald/saas-hasner && git add app/folha app/relatorios/tests/test_cauda_trilha_do_cartao.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py && bash bin/regua.sh 2>&1 \| tail -4` |
 | 06:33:48 | Bash | Rodar os quatro conjuntos afetados | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test folha.tests.test_sm1_monster_export relatorios.tests.test_cauda_trilha_do_cartao core.tests.test ...` |
 | 06:33:40 | Bash | Corrigir a precondicao do sm1 e ver a do cartao | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/folha/tests/test_sm1_monster_export.py' s=io.open(p,encoding='utf-8').read() s=s.replace(""" lavrar_verde_para_teste(self.emp, 9, 2026) resp = self.client.post(reverse('folha:gerar_txt'), {'empresa': empresa.id, 'mes': '6', 'ano': '2026'})""", """ lavrar_verde_para_teste(empresa, 6, 2026) resp = self.client.post(reverse('folha:ger ...` |
