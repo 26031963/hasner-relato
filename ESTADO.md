@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:09:01.**
+**Medido em 28/09/2026 19:14:31.**
 
 | | |
 |---|---|
@@ -118,13 +118,13 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 
 ● Background command "DIFF final da saida C" completed (exit code 0)
 
-● Esperar a regua da saida C · 50s
+● Esperar a regua da saida C · 6m 20s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|MUDOU' /tm… (49s)
+     |FALHOU)|^(FAIL|ERROR):|MUDOU' /tm… (6m 19s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Orchestrating… (12m 3s · ↓ 25.4k tokens)
+✢ Orchestrating… (17m 33s · ↓ 25.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
