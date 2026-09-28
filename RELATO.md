@@ -4,7 +4,89 @@
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
-`universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 4: **92,9%**` (era 91,4% na r3) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+`universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# ITEM (7) FECHADO: os 473 dias impares saem do limbo, e 158 deles nao sao divergencia -- sao INDECIDIVEIS sem DNA (28/09 09:2x)
+
+O oraculo E6 tinha um `continue` no dia de contagem impar: nao somava, nao comparava e nao entrava em contador
+nenhum. **473 dias da competencia 09 sem julgamento** -- e nao havia razao, porque a lei do **BUG-144** ja diz
+que o dia vale a **soma dos pares FECHADOS** e que a ultima batida solta nao conta. O oraculo tinha os pares na
+mao e so nao os somava.
+
+**A CERTIFICACAO CAIU DE 92,9% PARA 91,2%, E ISSO E A CURA.** Nao ha nada pior hoje do que ontem: o
+denominador subiu de **7.512 para 7.860 dias** porque 348 dias que estavam FORA da conta entraram. O numero
+velho era mais alto por CEGUEIRA. `bate_ate_10min` segue sendo a certificacao, e ela nao se afrouxa (corte seu
+de 27/09): nada do que esta abaixo entrou no percentual.
+
+**O QUE OS IMPARES DIZEM** -- 340 chegaram a comparacao (dos 473; os outros 133 param antes, nos filtros de
+isento/ausencia/sem-trabalho-nos-dois, que vem antes do rotulo de paridade -- nao desapareceram):
+
+| | dias | o que e |
+|---|---|---|
+| batem (<= 10 min) | **126** (37,1%) | o dia impar ja fechava certo |
+| **dentro da faixa piso..teto** | **158** | **INDECIDIVEL sem DNA**: falta uma perna, e so a celula sabe qual |
+| fora da faixa | **56** | contraditorio ou com o DIA atribuido a outra data |
+
+A **faixa** e a segunda leitura crua do proprio oraculo, e nao le celula nenhuma: **piso** = soma dos pares que
+fecharam; **teto** = da primeira a ultima batida do turno. Entre os dois nao cabe mais tempo, e menos que o
+piso o dia nao pode valer.
+
+**PROVADO em 4 de 4** dos dias de 3 batidas, lendo `EscalaColaborador.intervalo_do_dia` e o `falta_marcos` da
+tela -- a celula DECLARA a pausa e a tela SABE qual perna faltou:
+
+| colab | dia | batidas | pausa declarada | perna que falta | tela | piso..teto |
+|---|---|---|---|---|---|---|
+| col618 | 04/09 | 06:58 13:00 17:00 | 12:00-13:00 | `S 12:00` (a saida p/ almoco) | 542 | 362..602 |
+| col600 | 02/09 | 12:38 17:00 21:00 | 17:00-18:00 | `E 18:00` (a volta) | 442 | 262..502 |
+| col266 | 04/09 | 07:15 12:00 17:15 | 12:00-13:10 | `E 13:10` | 530 | 285..600 |
+| col362 | 18/09 | 12:01 13:03 16:30 | 12:00-13:00 | `E 07:30` | 207 | 63..269 |
+
+Em todos, `aberto=False`: a tela FECHA o dia porque le o DNA. O oraculo, **por desenho**, nao le -- e por isso
+nesses 158 dias ele nao discorda da tela, ele diz que o numero e indecidivel sem a celula. Isso NAO e o oraculo
+concordando por conveniencia: a aritmetica dele nao mudou uma linha (a prova esta abaixo).
+
+**OS 56 FORA DA FAIXA, que e a lista que vale**: 44 colabs, e se repartem em duas familias com pesos bem
+diferentes:
+- **42 ABAIXO do piso** -- a tela mostra MENOS do que os pares que fecharam. **Esta e a familia que custa
+  dinheiro ao colaborador.** Piores: `col439 14/09` (tela 67 min, piso **1.349**), `col704 19/09` (672 x 1.054),
+  `col43 15/09` (**0** x 57), `col820 14/09` (0 x 79), `col862 01 e 02/09` (238 x 256, 200 x 285).
+- **14 ACIMA do teto** -- e aqui a maioria nao e tempo inventado, e **atribuicao de DIA**: o oraculo poe o turno
+  num dia e a tela noutro. `col830 06/09` e o caso limpo, e **a tela esta certa**: a jornada `06:52 -> 21:34` tem
+  **14 h 42**, e a regra de 14 h do PROPRIO oraculo a partiu. Fica carimbado no CSV (`dono_da_paridade`), para o
+  laudo nao cobrar da tela um defeito do certificador.
+
+**E de quem e a paridade, medido sem interpretar**: **213 dos 214** tem batida faltando de verdade no conjunto
+do dia; **1** so ficou impar por corte do oraculo. Ou seja: o dia impar e, quase sempre, batida que o chao nao
+deu -- nao artefato de quem mede.
+
+## MUDA
+
+- `ponto/management/commands/e6_oraculo.py` **NASCE NO REPO** (saiu de `/tmp/e6b.py`, cauda da O98): a unica
+  coisa que dizia se a tela mente morava em `/tmp`, apagavel por qualquer limpeza, invisivel no git e sem selo.
+- A derivacao inteira saiu do `for` e virou **`minutos_do_oraculo`**, funcao unica (LEI-AKITA 2). Nao e
+  cosmetico: enquanto a paridade morava dentro do `handle`, era impossivel chamar o que prod chama --
+  CLAUDE.md 6, *"nao reconstruir em sonda propria a chamada que o sistema faz"*.
+- Dia impar passa a SOMAR `tu[:-1]` e a COMPARAR; `impar` continua, mas como ROTULO, nao veto.
+- Nasce o `Veredito` com `piso`, `teto`, contagem crua e o carimbo do corte que orfana.
+
+## PROVA
+
+- **RED evidenciado**: com o `continue` de volta no dia impar, 2 dos 8 casos mordem --
+  `test_dia_impar_SOMA_os_pares_fechados` (`'2026-09-14' not found in defaultdict(...)`) e
+  `test_MORDE_a_solta_nao_vira_hora` (`480.0 != 0.0`). Retirado o `continue`: **Ran 8 tests OK**.
+- **O refator nao mexeu em nada**: antes e depois de extrair a funcao, os contadores de prod sao IDENTICOS --
+  `dias_comparados=7860`, `bate_ate_10min=7169`, `dia_batida_impar=340`, `impar_que_BATE=126`,
+  `impar_que_DIVERGE=214`. `erros no espelho: 0`.
+- Selo: `ponto/tests/test_e6_oraculo_julga_impar.py`, 8 casos, cada um chamando a funcao REAL. O que MORDE:
+  devolver o veto do dia impar; fechar a batida solta em qualquer relogio (o dia de 5 batidas tem de dar o
+  MESMO numero do de 4); afrouxar o teto; a derivacao nascer de novo fora de `minutos_do_oraculo`
+  (varredura por **AST**, nunca texto -- comentario que explica a cura nao e codigo); e o carimbo do corte
+  desaparecer.
+- CSV nominal das 691 divergencias (com `piso_min`, `teto_min`, `dono_da_paridade`) em `/tmp/e6_r9.csv`.
+
+**LEI-AKITA**: origem=`e6_oraculo.py` (o veto do dia impar), testemunha=batida crua apuravel + `intervalo_do_dia`
+e `falta_marcos` na prova dos 4, RED=`test_e6_oraculo_julga_impar` (2 casos vermelhos com o veto de volta),
+quem-mais-le=so o comando (a funcao nasceu aqui), juizes novos=0.
 
 # O81 FECHADA (5b): metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia (28/09 05:1x)
 
