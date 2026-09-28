@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 03:25:31.**
+**Medido em 28/09/2026 03:31:01.**
 
 | | |
 |---|---|
@@ -96,6 +96,7 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
   maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
@@ -118,17 +119,16 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Reverter a R4 da arvore e publicar a razao · 5m 11s
+● Reverter a R4 da arvore e publicar a razao
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      p='app/docs/RELATO.md'
      s=io.open(p,encoding='utf-8').read()
      anc = '# ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template'
-     add = """# E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/… (5m 9s · 9 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     add = """# E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/…
 
-✢ Metamorphosing… (2h 19m 33s · ↓ 121.6k tokens)
+· Metamorphosing… (2h 25m 3s · ↓ 121.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

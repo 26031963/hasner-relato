@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 03:25:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.9 MB). Acoes na janela: **513**.
+**Medido em 28/09/2026 03:31:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.9 MB). Acoes na janela: **509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -519,7 +519,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:42:12 | Bash | Ligar a condicao e rodar os selos | `python3 - <<'PYEOF' import py_compile p='ponto/management/commands/aplicar_09_corte_b.py'; s=open(p).read() # troca o metodo que eu havia escrito (referenciava _motor_para, que nao existe) ini = s.index(' # CONDICAO_SAIDA_REAL (ordem Ronald') fim = s.index(' def add_arguments(self, p):') novo = ''' # CONDICAO_SAIDA_REAL (ordem Ronald 27/09 ~17:xx, passo 4 da sequencia): **nenhum colab com SAIDA #  ...` |
 | 15:41:39 | Bash | Ler o laco do aplicador | `sed -n '119,180p' ponto/management/commands/aplicar_09_corte_b.py` |
 | 15:41:25 | Bash | Selos da O95 e a condicao a mais no aplicador | `cat > ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py <<'PYEOF' # -*- coding: utf-8 -*- """O95 -- a pausa DECLARADA so absorve quem VOLTOU, ou quem tem saida real mais adiante. A ASSIMETRIA QUE EXISTIA: `_marca_intra_duracao` exige PROVA para absorver uma `S` como intrajornada, e o comentario dela de 25/07 diz por que -- *"Sem ela (batida final falhou / posterior e outra E), veto fica -> turn ...` |
-| 15:27:05 | Bash | L-007 depois da O95 completa | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; cp $SC/probe_l007b.py app/probe_tmp.py; timeout 2400 bin/sombra.sh --com-a-sombra o95 -- docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTIN ...` |
-| 15:26:46 | Bash | Reparar e medir a O95 completa | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = ''' **3,56 h** dele, e a minha propria medicao acusou o -1,28 h antes de subir. """ A PAUSA SO ABSORVE QUEM VOLTOU, e esta exigencia nao e nova: `_marca_intra_duracao` ja a faz, e o comentario dela de 25/07 a escreve com todas as letras -- *"Sem ela (batida final falhou / posterior e outra E), veto fica -> turno ab ...` |
-| 15:26:25 | Bash | Ver o estado da funcao para reparar | `sed -n '600,650p' ponto/turnos.py` |
-| 15:26:09 | Bash | O95 com as duas provas e medir os casos | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ def _tem_volta(x): \"\"\"Depois desta `S`, houve VOLTA (uma `E`) dentro de `intra_max_s`? -> bool (O95, 27/09).""" novo = """ def _tem_volta(x): \"\"\"Ha PROVA de que o turno continuou depois desta `S`? -> bool (O95, 27/09). DUAS provas, e as duas ja sao lei nesta casa -- estao escritas em `_marca_intra_duracao ...` |
