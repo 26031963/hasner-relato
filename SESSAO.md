@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 01:16:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.9 MB). Acoes na janela: **530**.
+**Medido em 28/09/2026 01:21:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.9 MB). Acoes na janela: **531**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:20:30 | Bash | Publicar e empurrar o item (1) | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO ate o export.** Item (1) FECHADO: o topo carrega a SOMA DAS LINHAS, na mesma computacao, ' 'com a decomposicao que fecha a conta (folga trab. · intra · atraso · saida ant.) -- nas duas cascas. ' 'Em curso: **(2) ...` |
 | 01:10:52 | Bash | Registrar a ordem, o O81 e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io, re p='app/docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() # ORDEM NOVA do modo continuo + O81 depois do selo old_com = "<!-- A FILA 1 VIVA. ORDEM VIGENTE (corte Ronald 27/09 22:5x, reordenada por IMPORTANCIA):\n R2b -> IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export com o `!`.\n (a ordem anterior era R2b -> R4 -> R5 -> IMPA ...` |
 | 01:10:11 | Bash | Provar o RED do topo | `cd /home/ronald/saas-hasner && git stash push -q app/ponto/services/espelho.py app/templates/ponto/espelho.html && source bin/recursos.sh && teste_envfile >/dev/null && echo "### RED contra o HEAD:" && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest p ...` |
 | 01:09:37 | Bash | Topo com o relogio e a decomposicao, com selo | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:app/templates/ponto/espelho.html > $S/esp_tpl.html && python3 - <<'PY' import io p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/esp_tpl.html' s=io.open(p,encoding='utf-8').read() old = """ <div styl ...` |

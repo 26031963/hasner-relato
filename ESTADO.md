@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:13 AFIRMA ato sem PROVA ao lado -- ## O recalculo: APLICADO, e as quatro condicoes fecharam
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:70 AFIRMA ato sem PROVA ao lado -- ## O recalculo: APLICADO, e as quatro condicoes fecharam
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:16:01.**
+**Medido em 28/09/2026 01:21:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)` |
+| `HEAD` local | `a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou` |
 | `origin/main` | `d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou
 d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 2d9b50c5 [E5] a checagem que evitou a cura errada: o `minutos_realizados` do gravado e CAPADO pelo previsto, por desenho
 1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME
 f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
-67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
-M  app/docs/PROMPTS.md
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_e5_topo_soma_das_linhas.py
-M  app/templates/ponto/espelho.html
-A  bin/tests/test_hook_stop_vivo.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -96,8 +90,6 @@ A  bin/tests/test_hook_stop_vivo.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
-  resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
   maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
@@ -120,16 +112,18 @@ A  bin/tests/test_hook_stop_vivo.sh
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Registrar a ordem, o O81 e rodar a regua · 5m 9s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io, re
-     p='app/docs/BACKLOG.md'
+● Publicar e empurrar o item (1) · 1m 1s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/RELATO.md'
      s=io.open(p,encoding='utf-8').read()
-     # ORDEM NOVA do modo continuo + O81 depois do selo
-     old_com = "<!-- A FILA 1 VIVA. ORDEM VIGENTE (corte Ronald 27/09 22:5x, reordenada por IMPORTANCIA):\n R2b -> IMPAR (+TETO)… (5m 7s · 3 lines)
+     l3=s.split('\n')[2]
+     novo3=('**MODO CONTINUO ate o export.** Item (1) FECHADO: o topo carrega a SOMA DAS LINHAS, na mesma computacao, '
+     'com a decomposic… (1m 0s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (10m 3s · ↓ 15.2k tokens)
+· Metamorphosing… (15m 33s · ↓ 19.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
