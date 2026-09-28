@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:21:31.**
+**Medido em 28/09/2026 01:26:56.**
 
 | | |
 |---|---|
 | `HEAD` local | `a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou` |
-| `origin/main` | `d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,10 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## `git status --short`
 
 ```
+ M app/chamados/services/validacao.py
+ M app/ponto/registro_batida.py
+ M app/ponto/services/fechamento.py
+?? app/ponto/tests/test_e5_evento_mantem_o_gravado.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -90,6 +94,11 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
+
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
+  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
+  resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
   maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
@@ -112,18 +121,13 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Publicar e empurrar o item (1) · 1m 1s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     l3=s.split('\n')[2]
-     novo3=('**MODO CONTINUO ate o export.** Item (1) FECHADO: o topo carrega a SOMA DAS LINHAS, na mesma computacao, '
-     'com a decomposic… (1m 0s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ligar o evento na validacao e rodar o selo · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show
+     HEAD:app/chamados/services/validacao.py > $S/val.py && python3 - <<'PY'
+     import io, py_compile
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21…
 
-· Metamorphosing… (15m 33s · ↓ 19.5k tokens)
+✻ Metamorphosing… (20m 58s · ↓ 31.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
