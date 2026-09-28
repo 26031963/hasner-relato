@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:29:31.**
+**Medido em 27/09/2026 22:35:01.**
 
 | | |
 |---|---|
@@ -32,6 +32,10 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M bin/fabricante_alvo.py
+ M bin/hooks.sh
+ M bin/tests/test_labels_fonte_unica.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -83,18 +87,6 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 4 shell commands
-
-❯ aval Ronald: reordenar por importancia: depois da R2b, IMPAR (pelo laudo: espelho.py:513-514 passa a ler RealizadoDoDia.aberto de turnos.py:393-394; classes B e C primeiro,
-  depois F com "parcial provado" rotulado, depois D na autoridade) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. Push dos commits locais pela regua. Segue a fila.
-
-  Committed 7b8329a1, ran 3 shell commands
-
-● Background command "Rodar a regua" completed (exit code 0)
-
-  Read 1 file, ran 10 shell commands
-
 ● Background command "Commitar a cura da regua e roda-la" completed (exit code 0)
 
 ● Background command "Amostrar RAM do container de teste durante a regua" completed (exit code 0)
@@ -111,11 +103,23 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 
 ● Background command "Medir o pico de RAM durante a regua" completed (exit code 0)
 
-● Ler o escalonamento do fabricante
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '242,262p' bin/fabricante_alvo.py; echo "=== os 3 itens no BACKLOG ==="; grep -nE '^\| (O59|O66|O81) \|' app/docs/BACKLOG.md | awk
-     -F'|' '{print $2" ESTADO=["$4"]"}'
+  Ran 14 shell commands
 
-· Zesting… (1h 26m 28s · ↓ 141.8k tokens · still thinking)
+❯ aval Ronald: (1) junto do IMPAR entra o TETO: col444 30/08 (1.750 min) e col349 14/09 (78 h) na tela/PDF -- absorcao de intervalo engole batida do dia seguinte (CLAUDE.md 6,
+  teto temporal = fato encerrado/instante, nunca data); RED os dois. (2) R4, BO pronto: origem escala/models.py:977-986 (EC.marcos_do_dia: celula EXISTE com dna sem marcos cai no
+  template :986 e entrega hii/hfi; espelho.py:197-198 -> turnos.py:403-406 desconta 60 min). Lei: celula soberana. RED col610 22/08 661 -> 721 (ata=oraculo=721). ANTES da cura:
+  censo dos 69 chamadores de marcos_do_dia (P15) e DIFF restrito aos dias com celula sem marcos. Nenhuma lei nova. Segue a fila.
+
+● Seguir o ponteiro do wrapper e provar que morde
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='bin/tests/test_labels_fonte_unica.sh'
+     s=io.open(p,encoding='utf-8').read()
+     old = """if [ -f "$HOOK" ] && grep -q 'bin/pre-push.sh' "$HOOK" \\
+     && ! grep -vE '^\\s*#|^\\s*$' "$HOOK" | grep -q 'LABELS='; then
+     echo "hook e WRAPPER: o arquiv…
+
+* Zesting… (1h 31m 59s · ↓ 158.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
