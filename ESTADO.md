@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:56:01.**
+**Medido em 28/09/2026 16:01:31.**
 
 | | |
 |---|---|
@@ -110,17 +110,17 @@ M  app/ponto/services/fechamento.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Publicar a S2 e rodar a regua · 5s
+● Publicar a S2 e rodar a regua · 5m 35s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      p='app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
      sec = '''# O-DIA-PAGO S1+S2 COMPLETAS: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome (28/09 15:4x)
-     PROVA: `tenant_command lavrar_dias_p… (3s · 2 lines)
+     PROVA: `tenant_command lavrar_dias_p… (5m 33s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Billowing… (3m 28s · ↓ 7.7k tokens)
+✢ Billowing… (8m 58s · ↓ 7.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
