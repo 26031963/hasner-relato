@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 18:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.1 MB). Acoes na janela: **500**.
+**Medido em 28/09/2026 18:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.1 MB). Acoes na janela: **501**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:17:02 | Bash | Curar o lookup, cortar a PROVA-DOMINIO e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() v = """ from ponto.models import Batida ids = list(Batida.objects.filter( colaborador__empresa=e, retratada_em__isnull=True, timestamp__date__gte=ini, timestamp__date__lte=fim ).values_list('colaborador_id', flat=T ...` |
 | 18:07:55 | Bash | Limpar e rodar a regua | `cd /home/ronald/saas-hasner && python3 -c " import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() t=t.replace(' por_fam = collections.Counter()\n','') io.open(P,'w',encoding='utf-8').write(t) py_compile.compile(P, doraise=True); print('variavel morta fora')" && git add -A app/ && git reset -q bin/keepalive.sh 2>/dev/null; nohup bash bin/regu ...` |
 | 18:07:34 | Bash | Conferir ruff e os tres contratos | `cd /home/ronald/saas-hasner && source ~/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null; \ docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \ --env-file "$TESTE_ENVFILE" -v ~/saas-hasner/app:/app saas-hasner-core:latest \ sh -c 'ruff check /app --output-format concise 2>&1 \| head -4'; echo "--- contratos ---"; \ docker run --rm $TESTE_DOCKER --networ ...` |
 | 18:07:25 | Bash | Usar a porta do cadastro e declarar a casa | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() t=t.replace(""" from colaboradores.models import Colaborador, Empresa""", """ from colaboradores.models import Colaborador, Empresa # A ESCRITA DO CADASTRO PASSA PELA PORTA, mesmo dentro de transacao que vai ser de ...` |

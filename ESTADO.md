@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:15:45.**
+**Medido em 28/09/2026 18:20:46.**
 
 | | |
 |---|---|
@@ -33,6 +33,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 M  app/config/crons.py
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
 M  app/ponto/management/commands/diff_janela_he.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -87,8 +89,6 @@ M  app/ponto/management/commands/diff_janela_he.py
 
 ```
 
-  Fechados agora, com a prova na linha:
-
   - BUG-HE-INTRA-DOBRADA — o ! veio pelo caminho (B), o apply cirúrgico gravou os 144 colabs (horas_extras −346,83 h, nenhum campo fora do alvo, antes/depois em logs/), a porta
     re-medida deu SELO VERDE com minuto_em_duas_rubricas=0, e o lote 1 da 09 foi emitido às 16:5x com os hashes conferidos. col125: HE50 1,98 → 0,00 com intra 2,00 intacta. Ficou
     registrado na própria linha que por ~4 h o apply esteve parado na L-082(b), porque o recálculo inteiro moveria 10 campos fora do !.
@@ -103,26 +103,28 @@ M  app/ponto/management/commands/diff_janela_he.py
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Limpar e rodar a regua · 7m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
-     import io, py_compile
-     P='app/ponto/management/commands/diff_janela_he.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace(' por_fam = collections.Counter()\n','')
-     io.open(P,'w',encoding='utf-8').write(t)
-     py_compile.compile(P, doraise=True); print('vari… (7m 48s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Unfurling… (1h 26m 30s · ↓ 70.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Searched for 4 patterns, ran 17 shell commands
 
 ❯ aval Ronald: PROVA-DOMINIO CORTADA (Ronald 28/09 manha: "ninguem se importa com o que passou"). Remover do BACKLOG
   e da cobranca do hook; NAO executar. Nenhuma lei nova. Segue O-JANELA-HE parte A.
   segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Curar o lookup, cortar a PROVA-DOMINIO e rodar · 3m 43s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/ponto/management/commands/diff_janela_he.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ from ponto.models import Batida
+     ids = list(Batida.objects.filter(
+     colaborador__empresa=e, retratada_em_… (3m 41s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Unfurling… (1h 31m 31s · ↓ 72.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
