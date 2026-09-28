@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 17:27:37.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.8 MB). Acoes na janela: **494**.
+**Medido em 28/09/2026 17:30:26.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.8 MB). Acoes na janela: **495**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:28:22 | Bash | Commitar, empurrar e publicar o COBRAR | `cd /home/ronald/saas-hasner && cat > /tmp/msg_cob.txt <<'EOF' COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada O botao Cobrar mandava push por chamado que nao muda folha nenhuma. Pedir a alguem que resolva um dia que ja virou folha e pedir o impossivel: pela L-092 competencia exportada nao muda, e o sistema recusaria a correcao que a mensagem pede. ...` |
 | 17:18:51 | Bash | Registrar a parte A e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # registrar a ordem da O-JANELA-HE parte A p='app/docs/PROMPTS.md' u=io.open(p,encoding='utf-8').read() anc='\n\n## Contagem' u=u.replace(anc,'\n\| O-JANELA-HE parte A (REGRA) \| 28/09 ~17:3x \| **fila 1, AGORA**; as partes de tela/aba/portao ' 'seguem atras da S3 **com PRAZO: prontas antes do export da competenci ...` |
 | 17:18:11 | Bash | Rodar os dois selos do cobrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/chamados/tests/test_e5b_cobrar_massa.py' t=io.open(P,encoding='utf-8').read() t=t.replace('''def _chamado_cobravel(colab, titulo): """Chamado com pergunta VIVA creditada (bola com o colab -> verbo cobrar).""" ch = ChamadoColaborador.criar(colaborador=colab, modulo_origem='batida_ausente', titulo=titulo, descricao='massa')''', '''d ...` |
 | 17:17:50 | Bash | Ler a fixture do selo antigo | `sed -n '10,45p' chamados/tests/test_e5b_cobrar_massa.py` |

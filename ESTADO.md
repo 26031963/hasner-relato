@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:27:37.**
+**Medido em 28/09/2026 17:30:26.**
 
 | | |
 |---|---|
-| `HEAD` local | `4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)` |
-| `origin/main` | `4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)` |
+| `HEAD` local | `7288e90e TICKETS: rodape e placar (8592 testes OK)` |
+| `origin/main` | `7288e90e TICKETS: rodape e placar (8592 testes OK)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,23 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7288e90e TICKETS: rodape e placar (8592 testes OK)
+0ca33cfc COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada
 4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
 45eaa780 LOTE 1 DA 09 EMITIDO, e a S5b guarda os tres numeros do pareamento pela autoridade
 a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
-792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)
-9942ee91 O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME
 ```
 
 ## `git status --short`
 
 ```
-A  app/chamados/services/cobranca_folha.py
-A  app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py
-M  app/chamados/tests/test_e5b_cobrar_massa.py
-M  app/chamados/views_cobrar.py
-M  app/docs/BACKLOG.md
-M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,6 +84,9 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     55 colabs so tem chamado sem data/antigo e levam push sem dever nada na competencia.
+     FONTE: chamados/catalogo/modulos.py::data_do_chamado + competencia exportada pelo juiz de
+     ponto/services/fechamento.py (CompetenciaExportada / empresas_exportadas_no_escopo). Nunca data cravada.
      MUDA: chamados/views_cobrar.py::cobrar_massa (e a previa) — so chamado cujo dia cai em competencia NAO exportada.
      Sem data: fora do massa (cura mais restritiva); listar os 113 por modulo_origem no RELATO para corte.
      RED: colab so com chamado da 09 exportada -> nao recebe push; colab com furo na 10 -> recebe; previa conta igual ao envio.
@@ -113,18 +109,15 @@ M  app/docs/RELATO.md
      LEI-AKITA: origem=motor_calculo_v2 (tolerancia HE), testemunha=motor/DiaPago, RED=item 4, quem-mais-le=tela/PDF/TXT/calculador, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-  Registrar a parte A e rodar a regua · 8m 45s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     # registrar a ordem da O-JANELA-HE parte A
-     p='app/docs/PROMPTS.md'
-     u=io.open(p,encoding='utf-8').read()
-     anc='\n\n## Contagem'
-     u=u.replace(anc,'\n| O-JANELA-HE parte A (REGRA) | 28/09 ~17:3x | **fila 1, AGORA**; a… (8m 43s · 2 lines)
+● Commitar, empurrar e publicar o COBRAR · 2m 4s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_cob.txt <<'EOF'
+     COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada
+     O botao Cobrar mandava push por chamado que nao muda folha nenhuma. Pedir a alguem
+     que resolva um dia que ja virou folha e pedir o impos… (2m 1s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (38m 22s · ↓ 32.8k tokens)
+✽ Unfurling… (41m 11s · ↓ 34.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
