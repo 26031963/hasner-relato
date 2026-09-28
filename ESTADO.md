@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:40:01.**
+**Medido em 28/09/2026 16:45:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)` |
+| `HEAD` local | `a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)` |
 | `origin/main` | `792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,16 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)
 9942ee91 O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME
 5f8e4c29 TICKETS: rodape e placar (8581 testes OK, S1+S2 completas)
 66801bd5 O-DIA-PAGO S1+S2 completas: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome
-f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
 ```
 
 ## `git status --short`
 
 ```
+ M app/ponto/calculador/nucleo.py
+ M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,23 +87,6 @@ f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"PermissionRequest\"",
-        "decision": {
-          "to allow": {
-            "behavior": "\"allow\"",
-            "updatedInput": "object (optional) - Modified tool input to use",
-            "updatedPermissions": "array (optional) - Permission updates"
-          },
-          "to deny": {
-            "behavior": "\"deny\"",
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
         "hookEventName": "\"PostToolUse\"",
@@ -117,11 +103,28 @@ f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
     }
   }
 
-✻ Crunched for 46m 25s · done 4:38 PM · 4 shells still running
+✻ Crunched for 46m 25s · done 4:38 PM · 5 shells still running
+
+❯ aval Ronald: UI-CAL-COMPETENCIA — registrar no BACKLOG (fila 2, nao construir agora). Nenhuma lei nova.
+  FONTE: ponto/janelas.py::janela_fechamento(mes, ano, colaborador.empresa) — juiz unico de competencia, nunca 21 cravado.
+  MUDA: colaboradores/services/calendario.py:204 ganha modo 'competencia' (data_ini/data_fim do juiz);
+        templates/colaboradores/calendario_partial.html: botao "Competencia" ao lado de Mes/Quinzena/Semana;
+        rotulo "Competencia 09/2026 · 21/08–20/09"; setas ← → andam de competencia mantendo o modo.
+  RED: col qualquer emp com corte 21, mes=9 ano=2026 modo=competencia -> 21/08..20/09; empresa com corte != 21 -> janela do corte dela.
+  PROIBIDO: derivar a janela na view/template; tocar base.html.
+  LEI-AKITA: origem=calendario.py (modo), testemunha=janelas.janela_fechamento, juizes novos=0.
+  segue a fila; PAREI so em lei ou !
+
+● Esperar o DIFF com pares da autoridade · 11s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'rubrica|Error' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_s5e.txt
+     2>/dev/null; do sleep 25; done; head -9 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scrat… (10s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Beaming… (2m 55s · ↓ 10.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
