@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:56:51.**
+**Medido em 28/09/2026 20:02:27.**
 
 | | |
 |---|---|
@@ -35,8 +35,10 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 A  app/colaboradores/tests/test_ui_grade_calendario.py
 M  app/docs/RELATO.md
+ M app/ponto/management/commands/diff_janela_he.py
 M  app/templates/colaboradores/partials/_calendario_grade.html
 M  bin/hook_stop_fila1.py
+ M bin/relato.sh
 A  bin/tests/test_hook_nao_cobra_congelado.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -90,39 +92,39 @@ A  bin/tests/test_hook_nao_cobra_congelado.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────────────────────┼────────────────────────┤
-  │ ponto/selecao_periodo.py             │ o grep não tinha visto │
-  ├──────────────────────────────────────┼────────────────────────┤
-  │ ponto/services/esmeril_espelho.py    │ idem                   │
-  └──────────────────────────────────────┴────────────────────────┘
-
-  Os dois últimos saíram só na varredura por AST. É a razão de ser por AST: contar leitor de dinheiro por texto deixa leitor de fora, e leitor de fora não entra no placar da
-  troca. (Foi também por texto que outro selo meu, nesta mesma esteira, mordeu três vezes o comentário que explicava a cura.)
-
-  O que o selo garante: ninguém novo entra — leitor novo chamando o motor é vermelho no commit — e leitor trocado sai da lista no mesmo ato. Se sair e continuar chamando, ou for
-  trocado e ficar na lista, o selo acusa. O 8 está cravado num caso próprio, para não mudar de tamanho sem o RELATO dizer.
-
-  Quem pode chamar o motor está declarado: o motor, a porta do fechamento, a autoridade do espelho, o calculador da S5 e a régua CCT (que monta o motor, não o consulta). Comandos
-  de obra e medição ficam fora.
-
-  Estado da fila
-
-  BUG-ANCORA-NAO-REGENERA fechou na parte que é minha: a cura está no ar e selada. O que sobra é decisão sua, em PENDENTES — a ancora de ec983 no col824 (as 31 células da 09 estão
-  em fase com ele; o wizard criou um vínculo novo em vez de mudar a ancora do antigo) e os 12 dias do col899, o único caso vivo da frota.
-
-  Fila 1 adiante: S3 segue com a troca dos 8 leitores, um a um, cada uma tirando uma linha do placar — depois S5b (o pareamento por marco, com os três números já escritos) e S4.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
   exportada", e na
 
-● Regua final da UI · 5m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && git add -A app/ && git reset -q bin/keepalive.sh 2>/dev/null; nohup bash bin/regua.sh >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_ui2.log 2>&1 & sleep 3; until grep -qE '^(OK|FAILED|Ran
-     |FALHOU)|BLOQUEADO|MUD… (5m 18s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 4 patterns, ran 14 shell commands
 
-· Orchestrating… (59m 53s · ↓ 54.8k tokens)
+❯ aval Ronald: VOLTA A FILA 1. Leis: L-096, L-097, L-010. Nenhuma lei nova.
+  1. JANELA: o apply saiu sem o meu ! sobre o DIFF novo (escopo do aval e literal). Publicar a linha INTRA do DIFF (C) por colab. Se algum colab SOBE em intra = PAREI. Senao,
+  apply ratificado; nao desligar.
+  2. UI-GRADE-CALENDARIO: fila 2 congelada (L-096). Nao empurrar; aguarda meu smoke ou checkout.
+  3. BACKLOG-ORDEM-VIVA: bloco OBRAS de app/docs/BACKLOG.md com a ordem viva: janela A (FECHADA) -> O-DIA-PAGO S3 -> S5b -> S4. Linhas "em voo 08:4x" (E6-14, O73b, CORTE-B-30,
+  E5-FINAL, PLACAR-E) viram FECHADA com prova, ABSORVIDA (E5-FINAL dentro da S4) ou CONGELADA L-096. RED: bin/hook_stop_fila1.py nunca cobra item de fila 2 e cobra o 1o da ordem
+  viva. bin/relato.sh publica BACKLOG.md no hasner-relato (hoje 404).
+  4. Retomar S3 pelo placar dos 8 leitores.
+     PRONTO: RELATO com linha intra + hook apontando S3 + curl BACKLOG.md = 200 + commit.
+     segue a fila; PAREI so em lei ou !
+
+❯ 5. hook_stop_fila1.py mexido sem aviso e git add -A app/ (proibido, add por path): publicar o diff do hook no RELATO antes de commitar; commit por path.
+
+  Ran 4 shell commands
+
+● Background command "Medir a linha intra por colab" completed (exit code 0)
+
+● Publicar o BACKLOG.md no hasner-relato
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='bin/relato.sh'
+     t=io.open(P,encoding='utf-8').read()
+     v = ''' "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" || exit 1'''
+     assert t.count(v)==1
+     t=t.replace(v, ''' "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" \\
+     "$RAIZ/app/docs…
+
+* Orchestrating… (1h 5m 29s · ↓ 58.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
