@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 03:52:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.0 MB). Acoes na janela: **511**.
+**Medido em 28/09/2026 03:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.0 MB). Acoes na janela: **510**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -520,4 +520,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:01:16 | Bash | Ler o passo final da O68b | `sed -n '/^def _fechar_aberto_com_saida_seguinte/,/^def /p' ponto/turnos.py \| head -70` |
 | 16:00:36 | Bash | Listar os 11 vermelhos | `grep -E '^(FAIL\|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o95.log` |
 | 15:58:44 | Bash | Ler o veredito da suite da O95 | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ba08dm8kg.output` |
-| 15:55:53 | Bash | Conferir o commit e a suite | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ba08dm8kg.output 2>/dev/null \| tail -12; echo "procs=$(ps aux \| grep -c '[m]anage.py test')"; cd /home/ronald/saas-hasner && git log --oneline -1` |

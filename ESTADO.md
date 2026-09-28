@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 03:52:51.**
+**Medido em 28/09/2026 03:58:01.**
 
 | | |
 |---|---|
@@ -114,12 +114,12 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua do item (5) · 2m 42s
+● Regua do item (5) · 7m 51s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py &&
-     bash bin/regua.sh 2>&1 | tail -4 (2m 37s)
+     bash bin/regua.sh 2>&1 | tail -4 (7m 47s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (2h 46m 53s · ↓ 131.8k tokens)
+· Metamorphosing… (2h 52m 3s · ↓ 131.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
