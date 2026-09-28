@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:49:31.**
+**Medido em 28/09/2026 17:55:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
+| `HEAD` local | `63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)` |
 | `origin/main` | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,24 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)
+00ff0b53 O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
 8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)
 7d0952e8 BACKLOG: estado em dia -- BUG-HE-INTRA-DOBRADA e COBRAR fechados, O-DIA-PAGO com S1/S2/S5a fechadas
 7288e90e TICKETS: rodape e placar (8592 testes OK)
-0ca33cfc COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada
-4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
 ```
 
 ## `git status --short`
 
 ```
-A  app/colaboradores/migrations/0052_empresa_janela_he_ativa_empresa_janela_he_desde_and_more.py
-M  app/colaboradores/models.py
-M  app/docs/BACKLOG.md
-A  app/escala/tests/test_janela_he_cadastro.py
-M  app/ponto/calculador/regras.py
-A  app/ponto/janela_he.py
-M  app/ponto/motor_calculo_v2.py
-A  app/ponto/tests/test_janela_he_regra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -92,6 +84,7 @@ A  app/ponto/tests/test_janela_he_regra.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Pushed to main, ran 1 shell command
 
 ● Estado dos itens em dia e empurrado (8e8420e5).
@@ -115,16 +108,15 @@ A  app/ponto/tests/test_janela_he_regra.py
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Selo do import unico e regua
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='app/ponto/tests/test_janela_he_regra.py'
-     t=io.open(P,encoding='utf-8').read()
-     anc=" def test_MORDE_empresa_com_a_janela_DESLIGADA_nao_muda_nada(self):"
-     novo = ''' def test_MORDE_a_regra_e_UMA_e_os_dois_calculadores_a_IMPORTAM(self):
-     …
+● Commitar e empurrar a parte A · 4m 14s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_jhe.txt <<'EOF'
+     O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
+     1. CADASTRO POR EMPRESA (LEI-AKITA 12): Empresa ganha janela_he_ativa,
+     janela_he_piso_min (10), janela_he_teto_min (60), janela_he_saida_ativa,
+     janela_he_sai… (4m 13s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (1h 0m 16s · ↓ 60.0k tokens · still thinking)
+· Unfurling… (1h 5m 46s · ↓ 66.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
