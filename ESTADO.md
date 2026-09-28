@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:67 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:146 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:00:01.**
+**Medido em 28/09/2026 12:05:31.**
 
 | | |
 |---|---|
@@ -39,12 +39,16 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
- M app/ponto/models.py
- M app/ponto/services/fechamento.py
-?? app/ponto/management/commands/lavrar_dias_pagos.py
-?? app/ponto/migrations/0067_diapago.py
-?? app/ponto/services/dia_pago.py
-?? app/ponto/tests/test_dia_pago_soma.py
+M  app/docs/BACKLOG.md
+M  app/docs/PENDENTES_RONALD.json
+M  app/docs/PROMPTS.md
+M  app/docs/RELATO.md
+A  app/ponto/management/commands/lavrar_dias_pagos.py
+A  app/ponto/migrations/0067_diapago.py
+M  app/ponto/models.py
+A  app/ponto/services/dia_pago.py
+M  app/ponto/services/fechamento.py
+A  app/ponto/tests/test_dia_pago_soma.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,20 +101,6 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Fechado nesta leva
-
-  - item (7): os 473 dias ímpares saem do limbo — 340 julgados, 126 batem; dos 214 que divergem, 158 são indecidíveis sem DNA (provado em 4 de 4) e 56 estão fora da faixa. A
-    certificação caiu 92,9% → 91,2% porque o denominador subiu de 7.512 para 7.860: o número velho era mais alto por cegueira.
-  - cauda do lote 1: cruzei os 56 dias fora da faixa com o TXT — zero abaixo do piso, um único dia (col109 26/08) e nele o oráculo é que corta errado, a tela está certa. Não há
-    PAREI por aí.
-  - E4-CALENDARIO: havia um segundo motor na casa (72 dia-colab em 30 colabs, mostrando zero onde a folha paga 453 min de extra 100 num feriado). Fechou em commit verde 3 min
-    antes da sua ordem de parar — por isso não revertі (está na lista NUNCA PRE-APROVADO); diff guardado com trilha em /tmp/diffs_com_trilha/, escolha manter-ou-reverter no topo
-    do PENDENTES.
-  - porta do export ganhou a 6ª e a 7ª testemunhas; a do "minuto em duas rubricas" eu escrevi diferente do aval, porque a forma do aval se satisfaz com igualdade exatamente no
-    col125.
-  - hook que escrevia PAREI sozinho: curado com selo (alarme não escreve na voz de quem decide).
-  - L-095, L-096 e a S5 registradas em LEIS/CORTES, fila 2 marcada CONGELADA item por item.
-
   Próximo sem depender de você: O-DIA-PAGO S1-S2 (contrato do DiaPago, aditiva).
 
 ● Ran 1 stop hook
@@ -126,10 +116,24 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 
 ● Background command "Medir o que o apply vai escrever, pela porta real" completed (exit code 0)
 
-● Ler o DIFF do apply
-  ⎿  $ cd /home/ronald/saas-hasner && tail -38 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bkrni4mjf.output
+  Ran 3 shell commands
 
-✢ Determining… (5h 57m 29s · ↓ 325.6k tokens · thinking more)
+● Background command "Medir o isolado em 12 campos" completed (exit code 0)
+
+  Ran 1 shell command
+
+❯ aval Ronald: UI-GRADE-CALENDARIO (logo depois do lote 1 gerado, antes da S1; so CSS/template, sem logica, nenhuma lei nova): na grade do calendario (admin e perfil do colab --
+  mesmo partial), celula de dia com LARGURA e ALTURA FIXAS iguais para os 7 dias, grade inteira cabendo na largura do painel sem corte a direita nem rolagem horizontal; textos
+  longos (atestado, folga compensatoria, chips de extra) quebram em ate 2 linhas com reticencias e title com o texto inteiro; nada muda de cor nem de conteudo. Selo de front nas
+  DUAS cascas (grafo de includes) + smoke meu de clique antes do push. Segue a fila; PAREI so em lei ou !
+
+● Esperar a regua da S1 · 1m 26s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (1m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Determining… (6h 2m 58s · ↓ 335.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
