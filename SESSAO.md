@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 15:17:30.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **473**.
+**Medido em 28/09/2026 15:18:58.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **477**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:18:50 | Bash | Ver por que a regua saiu com 3 | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao2.log` |
+| 15:18:43 | Bash | Casa do comando e nova regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, py_compile P='app/config/crons.py' t=io.open(P,encoding='utf-8').read() anc=" # DIFF DE OBRA, e obra nao vira rotina" assert t.count(anc)==1 novo = """ # APPLY DE UMA VEZ, com o `!` na mao (28/09, PORTAO-09): `aplicar_09_he_intra` grava o delta ISOLADO # da cura HE/intra nos campos do alvo, na competencia 09, e isso acontece UMA vez na  ...` |
+| 15:18:22 | Bash | Preparar o commit do portao | `cd /home/ronald/saas-hasner && git add -A app/ bin/ logs/apply_he_intra_092026_20260928_150156.json 2>/dev/null; git reset -q bin/keepalive.sh 2>/dev/null; git status --short \| head -10; nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao.log 2>&1 & sleep 2; echo "regua em voo"` |
+| 15:17:27 | Bash | Publicar com a PROVA no PAREI | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') for k,x in enumerate(l): if x.startswith('`PAREI: emissao-do-lote-1'): l.insert(k+1, '\nPROVA: `deploy.sh` OK com migration 0067 e tres rotas provadas · ' '`aplicar_09_he_intra --aplicar` = 144 colabs, `horas_extras -346,83 h`, nenhum campo fora do alvo · ' '`col ...` |
 | 15:16:29 | Bash | Qual afirmacao esta sem prova | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| grep -E 'AFIRMA ato' \| head -3` |
 | 15:15:33 | Bash | Publicar o portao no RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') l=[x for x in l if not x.startswith('`PAREI:')] l.insert(1, '\n`PAREI: emissao-do-lote-1 \| espera Ronald` -- tudo o que vinha antes esta FEITO e provado abaixo: ' 'deploy no ar, apply cirurgico dos 144 (col125 HE50 **1,98 -> 0,00** com in ...` |
 | 15:14:14 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='/tmp/lote1_novo.py' t=io.open(p).read() t=t.replace(""" try: linhas = montar_linhas_export(e, 9, 2026) except Exception as ex: print('\| emp%s %s \| NAO EXPORTA: %s \|' % (e.pk, e.razao_social, str(ex)[:80])) continue txt = ''.join(linhas) if isinstance(linhas, (list, tuple)) else str(linhas) if isinstance(linhas, (list, tuple)): n_li ...` |
