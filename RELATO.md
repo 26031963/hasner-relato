@@ -1,8 +1,83 @@
 # RELATO — esteira saas-hasner
 
-**MODO CONTINUO ate o export.** (1) topo = soma das linhas **FECHADO e no ar**; (2) **E5 recalculo por EVENTO FECHADO** (batida e resposta validada, `on_commit`, p50 122 ms, L-092 respeitada). E fechei um **VAZAMENTO REAL**: 20 nomes inteiros no repo PUBLICO, achados pelo selo. Em curso: **(3) R4**. Depois: R5 -> selo + E6 r4 -> O81 -> export no `!`.
+**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) **R4 curada e selada (+75,12 h em 27 colabs, todos para CIMA)** -- commitada, **NAO deployada**, porque com o evento vivo o deploy VIROU o apply: ha uma **pergunta de LEI** no topo do PENDENTES. Em curso: **(4) R5**.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# PERGUNTA DE LEI: com o evento vivo, o DEPLOY virou o APPLY (28/09 02:5x)
+
+Isto e a unica parada que as suas regras permitem, e ela nasceu do item (2) que voce acabou de avalizar.
+
+**Antes do evento**: cura de codigo subia na hora (DEPLOY JA) porque *"nao move dinheiro por si"* -- o gravado so
+mudava quando eu rodasse o apply, e o apply pedia o seu `!` (L-009).
+**Depois do evento**: o `FechamentoMensal` se recalcula por colab a cada batida ou resposta validada. Entao
+**qualquer cura de codigo que mude o calculo passa a mover o gravado sozinha**, colab por colab, conforme as
+batidas chegam. O `!` deixa de ser sobre "aplicar" e passa a ser sobre **deployar**.
+
+O CASO CONCRETO, ja medido: a **R4** esta curada, selada e commitada, com DIFF de frota de **+75,12 h em 27
+colabs / 78 dias, todos para CIMA** (ninguem perde). Se eu deployar, os 27 vao para o gravado sem `!` nenhum --
+nao de uma vez, mas na primeira batida de cada um, o que e pior de auditar.
+
+**O que eu decidi sozinho e o que eu nao decido.** Pela lei existente, decidi: `DEPLOY JA` diz, na propria
+letra, que vale para cura que *"nao move dinheiro por si"*; a R4 com o evento vivo move. Entao a L-009 manda, e
+**nao deployei**. O que eu NAO decido e a forma da porta daqui em diante, e sao tres caminhos:
+  **(a)** `!` por cura de dinheiro ANTES do deploy (a L-009 como hoje, so mudando o momento);
+  **(b)** o evento recusa mexer em campo de dinheiro sem aval registrado -- porta nova, e mata metade da E5;
+  **(c)** `!` de CRITERIO por classe de cura (como a sua AVAL-DE-CRITERIO faz hoje por fatia), com faixa.
+A R4 espera no (a) enquanto voce nao disser. **A fila NAO parou**: sigo na R5.
+
+# ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template (28/09 02:4x)
+
+RED MEDIDO, col610 22/08: celula existe, `trabalha=False`, `dna.marcos=null`, e a ata na forma POSICIONAL do
+intermitente (O84) acende `·I1<-05:20` e `·I2<-17:21` = **721 min** -- o valor que a PROPRIA ata lavrou em
+`minutos_realizados`. `EC.marcos_do_dia` devolvia o template `(05:30, 17:30, 12:00, 13:00)` e
+`_janela_declarada` descontava 60 min de uma pausa que nunca existiu: espelho **661**. Ata 721, oraculo 721,
+espelho 661.
+
+## O censo que voce pediu ANTES da cura, e o balde que eu quase perdi
+
+Das **17.332** celulas da competencia 09, **7.035 nao tem marcos**. Destas, **6.954** nao tem luz acesa nenhuma
+(folga de verdade) e **81 dia-colab em 9 colabs TEM luz** -- a pessoa trabalhou.
+**O MEU PRIMEIRO CENSO DEU ZERO**, porque filtrei por `trabalha=True`: o col610 tem `trabalha=False` com 721 min
+de trabalho lavrados na ata, e ele cabia exatamente no balde que eu descartei. Quem procura intermitente por
+`trabalha` nao o acha. O segundo censo procurou por LUZ ACESA, e achou.
+
+## A cura mudou de lugar duas vezes, e as duas por selo da casa
+
+1. Tentei fazer `EC.marcos_do_dia` devolver `(None, None, None, None)` para celula sem marcos. **Cinco selos
+   ficaram vermelhos**, entre eles `escala.tests.test_celula_dia::test_folga_cai_no_template`, que afirma em
+   letra que no dia de FOLGA `ec.marcos_do_dia(d) == te.marcos_do_dia(d)`. **Ele esta certo**: a grade prevista
+   e o builder usam os marcos do template no dia de folga, e ali nao ha realizado para descontar.
+2. A pergunta errada era minha. Nao era "quais os marcos deste dia" -- era **"qual a PAUSA que este dia
+   declara"**, e essa **nunca teve leitor proprio**: seis sitios a pediam como uma FATIA `[2:4]` de outra
+   pergunta. Nasceu `EscalaColaborador.intervalo_do_dia(data, celulas=None)`, que devolve `(None, None)` quando
+   a celula existe e nao declara marco, e os **seis leitores** passaram a usa-la: `turnos.py:430`,
+   `espelho.py:198`, `bordas_realizado.py:39`, `pdf_espelho.py:557`, `vinculo_do_dia_divergentes.py:45`,
+   `regua_defesa.py:352`. **Nao e juiz novo**: mesma autoridade (celula, senao template), com a pergunta dita
+   por extenso -- e agora a tela, o PDF e o fechamento leem a MESMA pausa, que e a meta.
+
+PROVA do DIFF, universo do `FechamentoMensal` 09 (607 colabs): **27 colabs, 78 dias, +75,12 h**, padrao de
++60 min por dia (a pausa fantasma), com duas excecoes de sobreposicao parcial (col820 +1 e +5 min, col242
++1 min). **Todos PARA CIMA, ZERO para baixo.** Maiores: col416 +13,00 h, col610 +11,00, col727 +10,00,
+col348 +8,00, col438 +6,00. E o DIFF do leitor proprio e **identico** ao da cura larga que derrubava 5 selos --
+mesma cura, sem o estrago.
+
+PROVA do selo: `ponto/tests/test_r4_celula_sem_marcos.py`, 5 casos -- RED de 1 contra o HEAD; os que MORDEM sao
+"o `marcos_do_dia` NAO mudou para a folga" (se mudar, os 5 selos da casa caem de novo), "celula COM marcos segue
+mandando nas DUAS perguntas" e "SEM celula o template responde, inclusive a pausa". Regua: **8.523 OK em 475 s**.
+
+## E DOIS selos da casa tiveram de ser ajustados -- com a lei intacta, e digo o que mudei
+
+`ponto/tests/test_vinculo_do_dia_pela_celula.py` media a escolha do vinculo pelo **tamanho do intervalo que o
+TEMPLATE entregava** num dia de celula SEM marcos -- exatamente o caminho que a R4 fecha. O `test_MORDE` dele
+avisou na hora (`540 == 540`, depois `480 == 480`). A lei dele nao mudou; o INSTRUMENTO mudou: a celula ganhou
+marcos e o segundo vinculo passou a diferir no **modo** do intervalo (`duracao`, entao `livre=True`), que e
+propriedade do VINCULO e a celula nao apaga. E descobri no caminho que `TipoEscala.save()` FORCA
+`intervalo_modo='fixo'` quando os dois horarios de intervalo estao preenchidos (`escala/models.py:686-690`) --
+passar `intervalo_modo=DURACAO` no `create` nao adianta, tem de NAO declarar os horarios.
+As duas lambdas do selo tambem passaram a LER `intervalo_do_dia` em vez de recalcular o `[2:4]`: testemunha le,
+nao recalcula.
+
 
 # VAZAMENTO REAL FECHADO: 20 nomes inteiros estavam no repo PUBLICO (28/09 01:4x)
 

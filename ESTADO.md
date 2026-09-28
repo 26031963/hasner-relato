@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:47:01.**
+**Medido em 28/09/2026 02:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO` |
-| `origin/main` | `e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO` |
+| `HEAD` local | `ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI` |
+| `origin/main` | `ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,25 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
 e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO
 a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou
 d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 2d9b50c5 [E5] a checagem que evitou a cura errada: o `minutos_realizados` do gravado e CAPADO pelo previsto, por desenho
-1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME
 ```
 
 ## `git status --short`
 
 ```
-M  app/escala/models.py
-M  app/escala/regua_defesa.py
-M  app/ponto/services/bordas_realizado.py
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_r4_celula_sem_marcos.py
-M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
-M  app/ponto/turnos.py
-M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
-M  app/relatorios/pdf_espelho.py
+ M app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -93,6 +85,11 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
+
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
+  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
@@ -116,16 +113,11 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● DIFF final da R4 com o leitor proprio
-  ⎿  $ cd /home/ronald/saas-hasner && docker rm r4_cura2 >/dev/null 2>&1; python3 - <<'PY'
-     import json
-     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
-     b=json.load(open(S+'r4_base.json')); c=json.load(open(S+'r4_cura2.json'))
-     mov={}
-     for k in b:
-     if 'E…
+● Rodar o diagnostico do encanamento
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && sed -i 's/from ponto.turnos import
+     _marcos_do_template, parear_turnos/from ponto.turnos import marcos_do_template, parear_turnos/; s/mi, mb = _marcos_do_template(t…
 
-✢ Metamorphosing… (1h 41m 3s · ↓ 90.0k tokens)
+· Metamorphosing… (1h 46m 33s · ↓ 106.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
