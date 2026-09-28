@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 05:29:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.5 MB). Acoes na janela: **498**.
+**Medido em 28/09/2026 05:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.5 MB). Acoes na janela: **499**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:32:11 | Bash | Provar o RED: 97 colabs no builder sem o MUDA | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:app/ponto/services/espelho.py > $S/esp_red.py && python3 - <<'PY' import io, py_compile p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/esp_red.py' s=io.open(p,encoding='utf-8').read() old=""" _gr, _ ...` |
 | 05:27:37 | Bash | Dar leitor a degradacao e contar na porta | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && python3 - <<'PYEOF' import io, py_compile p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/esp_o81.py' s=io.open(p,encoding='utf-8').read() old = """ _gr, _grade_por_data = _pela_grade() _grade_marcos = _gr.get('ma ...` |
 | 05:26:57 | Bash | Medir o custo do MUDA na tela | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/o81_tempo.py <<'PY' from django_tenants.utils import schema_context with schema_context('juliani'): import time from colaboradores.models import Colaborador from ponto.janelas import janela_fechamento from ponto.services.espelho import espelho_do_colab from ...` |
 | 05:26:27 | Bash | Diff do espelho antes e depois do MUDA | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/' b=json.load(open(S+'o81_base.json'))['por_colab']; c=json.load(open(S+'o81_cura.json'))['por_colab'] mov={} for k in b: if 'ERRO' in b[k] or 'ERRO' in c.get(k,{}): print('ERRO col%s'%k); continue d={} for dd in sorted(set(b[k]['dias'])\| ...` |

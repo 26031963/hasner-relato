@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:29:01.**
+**Medido em 28/09/2026 05:34:31.**
 
 | | |
 |---|---|
@@ -113,14 +113,14 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Dar leitor a degradacao e contar na porta · 1m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && python3 - <<'PYEOF'
+● Provar o RED: 97 colabs no builder sem o MUDA · 2m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show
+     HEAD:app/ponto/services/espelho.py > $S/esp_red.py && python3 - <<'PY'
      import io, py_compile
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/esp_o81.py'
-     s=io.ope… (1m 22s · 3 lines)
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210… (2m 18s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flibbertigibbeting… (6m 29s · ↓ 15.3k tokens)
+✢ Flibbertigibbeting… (11m 59s · ↓ 16.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
