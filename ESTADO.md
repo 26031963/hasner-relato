@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:14:01.**
+**Medido em 28/09/2026 08:19:31.**
 
 | | |
 |---|---|
@@ -109,7 +109,7 @@ M  app/folha/views.py
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Remover o import morto e rodar a regua · 1m 55s
+● Remover o import morto e rodar a regua · 7m 24s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      p='app/folha/export.py'
@@ -117,10 +117,10 @@ M  app/folha/views.py
      old = """ from escala.models import CelulaDia as _CelCz
      from ponto.models import Batida as _BatCz
      from ponto.janelas import janela_fechamento as _jf"""
-     new = """ from escala.m… (1m 52s · 2 lines)
+     new = """ from escala.m… (7m 22s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (2h 11m 28s · ↓ 59.1k tokens)
+✢ Determining… (2h 16m 59s · ↓ 59.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
