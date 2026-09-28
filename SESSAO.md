@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 15:15:39.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **471**.
+**Medido em 28/09/2026 15:16:32.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **472**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:15:33 | Bash | Publicar o portao no RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') l=[x for x in l if not x.startswith('`PAREI:')] l.insert(1, '\n`PAREI: emissao-do-lote-1 \| espera Ronald` -- tudo o que vinha antes esta FEITO e provado abaixo: ' 'deploy no ar, apply cirurgico dos 144 (col125 HE50 **1,98 -> 0,00** com in ...` |
 | 15:14:14 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='/tmp/lote1_novo.py' t=io.open(p).read() t=t.replace(""" try: linhas = montar_linhas_export(e, 9, 2026) except Exception as ex: print('\| emp%s %s \| NAO EXPORTA: %s \|' % (e.pk, e.razao_social, str(ex)[:80])) continue txt = ''.join(linhas) if isinstance(linhas, (list, tuple)) else str(linhas) if isinstance(linhas, (list, tuple)): n_li ...` |
 | 15:14:02 | Bash | Como o TXT e montado a partir das linhas | `grep -n 'def montar_linhas_export' -A 12 folha/export.py \| head -16 && grep -n 'montar_linhas_export\\|def .*txt\\|join' folha/views.py \| head -8` |
 | 15:13:50 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && cat > /tmp/lote1_novo.py <<'PYEOF' # -*- coding: utf-8 -*- """LOTE 1 da 09 com HASH NOVO -- SO LEITURA, pela autoridade unica (item 5 do portao). `folha/export.py::montar_linhas_export` e a MESMA funcao que a view usa. Nada e emitido, nada e carimbado, nenhum `ExportacaoDominio` e criado: a emissao e o clique do Ronald. """ import hashlib from colaboradores.models im ...` |
