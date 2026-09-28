@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:41:31.**
+**Medido em 28/09/2026 13:46:57.**
 
 | | |
 |---|---|
-| `HEAD` local | `6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)` |
+| `HEAD` local | `455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)` |
 | `origin/main` | `6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,27 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)
+46803e8c O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
 6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)
 a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou um erro MEU, no invariante
 9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)
-9a23287f RELATO: linha PAREI canonica no topo -- apply-HE-intra-fora-do-criterio (L-082 b), espera Ronald
-6cf525f4 TICKETS: rodape e placar com o carimbo da regua da S1 (8568 testes OK)
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
-M  app/docs/BACKLOG.md
-M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
-A  app/ponto/calculador/__init__.py
-A  app/ponto/calculador/nucleo.py
-A  app/ponto/calculador/regras.py
-A  app/ponto/management/commands/diff_calculador.py
-M  app/ponto/management/commands/e6_oraculo.py
-A  app/ponto/tests/test_calculador_regras.py
-M  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -102,24 +91,6 @@ M  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
-
-✻ Sautéed for 24m 58s · done 12:57 PM · 3 shells still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Ran 12 shell commands
-
-● Background command "DIFF do calculador na frota inteira" completed (exit code 0)
-
-  Ran 5 shell commands
-
-● Background command "Capturar a tabela inteira do DIFF" completed (exit code 0)
-
   Ran 2 shell commands
 
 ❯ aval Ronald: AVISO-ENTRADA-ANTECIPADA (so informativo; nenhuma lei nova; nao retrata, nao cria chamado, nao muda calculo). Fila 1 logo depois do lote 1 gerado. FONTE:
@@ -128,17 +99,35 @@ M  app/ponto/tests/test_e6_oraculo_julga_impar.py
   frase. RED: 06:47 com marco 07:00 -> aviso com 13 min; 07:00 -> sem aviso; volta de intervalo -> sem aviso. Selo nas duas cascas se tocar template (nao deve tocar). A parte
   ESPURIA/janela fica REGISTRADA no BACKLOG como desenho aguardando confirmacao do admin da folha e do dono -- nao construir. Segue a fila; PAREI so em lei ou !
 
-● Esperar a regua · 5m 53s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s5b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (5m 52s)
+  Ran 2 shell commands
+
+❯ aval Ronald: col824 [nome] -- a ancora do vinculo ja foi redeclarada pelo admin em 28/09; regenerar as CELULAS do vinculo dele de 21/08 ate 27/09 pela excecao formal
+  (regenerar_celulas_vinculo, passado errado por cadastro, corte 16/08) com trilha em regeneradas_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR
+  perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
+  como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
+
+● Commitar e empurrar a S5a · 2m 1s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s5.txt <<'EOF'
+     O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
+     O pacote ponto/calculador/ tem as tres pecas do corte de 12:1x, e a fronteira entre
+     elas e o ponto da obra:
+     nucleo.py -- batidas -> pares -> m… (2m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Catapulting… (38m 58s · ↓ 32.1k tokens)
+· Catapulting… (44m 24s · ↓ 34.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: BUG-ANCORA-NAO-REGENERA (bug provado que bloqueia folha; nenhuma lei nova -- aplica "tudo tem cadastro" e a excecao formal de passado errado por cadastro, corte
+  16/08). FATO: escala/signals.py::_ec_vigencia_regenera_celulas so regenera celulas quando muda a VIGENCIA; mudar data_ancora_colaborador (ancora do 12x36) nao refaz celula
+  nenhuma -- o admin corrige a fase e o espelho segue invertido. MUDA: mudanca de ancora regenera as celulas do vinculo pela MESMA porta (regenerar_celulas_vinculo) a partir do
+  inicio da competencia ABERTA (nunca competencia exportada, L-092), com trilha em regenerada_em/dna_anterior e motivo "ancora alterada: X -> Y". RED: col824 [nome] (ancora
+  redeclarada 28/09, celulas de 09 ainda invertidas: DSR perdido 5, faltas, folga trabalhada). DINHEIRO: DIFF do col824 e de todo vinculo com ancora alterada na competencia
+  aberta publicado antes do deploy; move dinheiro para os dois lados -> PAREI para o meu !. Os 5 com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
+  como lista para o meu ! no PENDENTES. LEI-AKITA: origem=escala/signals.py (so vigencia regenera), testemunha=CelulaDia, juizes novos=0. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
