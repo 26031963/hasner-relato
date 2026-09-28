@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:25:01.**
+**Medido em 28/09/2026 04:30:31.**
 
 | | |
 |---|---|
@@ -113,7 +113,7 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Publicar o item (5), marcar o placar e rodar a regua · 1m 45s
+● Publicar o item (5), marcar o placar e rodar a regua · 7m 14s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -121,10 +121,10 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
      s=io.open(p,encoding='utf-8').read()
      l3=s.split('\n')[2]
      novo3=('**MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 '
-     'divergencia nos 205 do … (1m 42s · 4 lines)
+     'divergencia nos 205 do … (7m 11s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Metamorphosing… (3h 19m 4s · ↓ 139.0k tokens)
+✢ Metamorphosing… (3h 24m 33s · ↓ 139.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
