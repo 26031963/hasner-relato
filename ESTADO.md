@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:148 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:193 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:42:01.**
+**Medido em 28/09/2026 12:47:31.**
 
 | | |
 |---|---|
@@ -39,9 +39,10 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
- M app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
+M  app/docs/RELATO.md
+M  app/folha/porta_export.py
+M  app/folha/tests/test_porta_do_export.py
+M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,10 +96,6 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 
 ```
       },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
-      },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
         "additionalContext": "string (optional)"
@@ -110,7 +107,7 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
     }
   }
 
-✻ Crunched for 6h 28m 52s · done 12:31 PM · 4 shells still running
+✻ Crunched for 6h 28m 52s · done 12:31 PM · 3 shells still running
 
 ❯ segue a fila; PAREI so em lei ou !
 
@@ -118,13 +115,17 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 
 ● Background command "Provar a porta com a tabela ausente" completed (exit code 0)
 
-● Esperar a re-medicao · 42s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'universo=|Error|Traceback'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf48te710.output 2>/dev/null; do sleep 25; done; tail -16
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df0… (41s)
+  Ran 2 shell commands
+
+● Background command "Curar o teto do invariante e re-medir" completed (exit code 0)
+
+● Esperar a regua da S2 · 1m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (1m 20s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Combobulating… (9m 28s · ↓ 12.8k tokens)
+· Combobulating… (14m 58s · ↓ 15.2k tokens)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
@@ -132,6 +133,6 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
