@@ -1,8 +1,344 @@
 # RELATO — esteira saas-hasner
 
-A fila 1 esta ANDANDO. **R2b CURADA e no ar**; o APPLY dela espera o seu `!` por UM motivo so -- `horas_folga_trabalhada` cai **25,85 h em 5 colabs** e a sua aval-de-criterio nao nomeou faixa (as outras tres condicoes fecharam, e o oraculo e6 traz **0 divergencia nova e 31 curadas**). Fila vigente: **IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export com o `!`**.
+**MODO CONTINUO ate o export.** Item (1) FECHADO: o topo carrega a SOMA DAS LINHAS, na mesma computacao, com a decomposicao que fecha a conta (folga trab. · intra · atraso · saida ant.) -- nas duas cascas. Em curso: **(2) E5 recalculo por EVENTO**. Depois: R4 -> R5 -> selo + E6 r4 -> O81 -> export no `!`.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# O HOOK DE STOP NAO EXECUTOU nas tres liberacoes -- a trilha respondeu (28/09 01:2x)
+
+Voce mandou ler `logs/hook_stop_fila1.log` e dizer por que ele liberou as 23:41, 00:30 e 01:04. A trilha
+responde, e a resposta nao e "ele decidiu liberar":
+
+```
+2026-09-27 23:44:51 BLOCK  item=R2 ...
+2026-09-27 23:44:51 BLOCK  item=R3 ...
+2026-09-27 23:51:07 BLOCK  item=R4 ...
+2026-09-27 23:51:24 BLOCK  item=IMPAR ...
+2026-09-28 00:27:23 BLOCK  item=E5 ...
+```
+
+**Cinco linhas, todas das minhas chamadas manuais de teste, e NENHUMA nos tres horarios em que o turno fechou.**
+Desde 23:4x o hook registra TODA decisao, inclusive a fail-open. Zero linha as 23:41, 00:30 e 01:04 significa que
+ele **NAO EXECUTOU**.
+
+A CAUSA, medida: `.claude/settings.json`, onde o `Stop` esta registrado, foi escrito em **27/09 20:09:03** -- com
+esta sessao JA ABERTA. O cliente le os hooks na ABERTURA da sessao; um hook instalado no meio dela so vale na
+sessao seguinte. Ou seja: o hook existe, esta correto (as tres curas de 23:4x sao reais e provadas), e nunca foi
+chamado. **Guarda prometida que nao roda e guarda nenhuma** -- a mesma classe da pasta `bin/tests/` que existiu
+muda desde 21/09, e da propria REGUA-MORTA desta madrugada.
+
+CURA, na parte que esta ao meu alcance:
+1. registrado tambem em `~/.claude/settings.json` (escopo de USUARIO), para qualquer sessao futura;
+2. selo de host novo `bin/tests/test_hook_stop_vivo.sh` -- FATAL se o hook nao existe ou nao esta registrado em
+   settings nenhum, e **ALARME (nao fatal)** se a trilha nao tem linha desde o ultimo commit, que e a assinatura
+   exata de "instalado e mudo". Alarme e nao veto pela mesma lei da ALARME-NAO-E-JUIZ: recarregar hooks nao esta
+   ao alcance da sessao, e vetar a regua por isso pararia a casa por algo que ela nao pode consertar.
+   PROVA do par que morde: com o `hooks` removido dos DOIS settings o selo reprova (rc 1); de volta, passa (rc 0).
+3. O QUE FALTA, e e seu: **reabrir a sessao** faz o hook valer. Ate la, a porta sou eu.
+
+# ITEM (1) FECHADO: o topo carrega a soma das linhas, e a conta FECHA na tela (28/09 01:3x)
+
+O card "Trabalhadas" mostra `total_trabalhadas`, que vem da FOLHA e e hora **LIQUIDA**: sem a
+`horas_folga_trabalhada` (campo proprio, porque paga 100%) e descontada de intra indenizada, atraso e saida
+antecipada. A COLUNA do dia mostra **RELOGIO**. Quem somava a coluna nunca chegava ao topo -- a tela mentindo
+para quem confere na calculadora, que e o criterio de ouro desta casa desde 28/07.
+
+O que a tela mostra agora, sob o numero grande:
+`relogio (soma das linhas): 177,1h · folga trab. 12,0h · intra 0,3h`
+e o numero grande passa a se chamar **Trabalhadas (pagas)**. Nada foi recalculado: cada parcela ja existia no
+resumo, lida da folha; o relogio e a soma das MESMAS linhas que a tela desenha.
+
+**ONDE A SOMA MORA, e por que nao no gravado**: `FechamentoMensal.minutos_realizados` e
+`sum(min(realizado, previsto))` CAPADO por dia (`fechamento.py:486-488`, F1 04/08) -- o numerador do cumprimento
+da grade, e diverge da soma das linhas em **65 dos 205**. O relogio bruto nao existe em campo nenhum do gravado.
+Entao ele nasce em `montar_dias`, somando `_real_dia.minutos` na janela `[apur_ini, apur_fim]` -- **uma vez, na
+fonte, pela autoridade que ja desenha as linhas**. Nenhuma segunda autoridade, nenhuma conta no desenho.
+
+PROVA: `ponto/tests/test_e5_topo_soma_das_linhas.py`, 5 casos -- **RED de 2 contra o HEAD**; os que MORDEM sao
+"o numero PAGO nao troca de fonte" (se `total_trabalhadas` deixar de vir de `fe.horas_trabalhadas`, VERMELHO),
+"sem relogio no resumo a linha nao aparece" (colab sem apuracao nao ganha `0.0h`) e "a decomposicao omite o que
+e ZERO". As duas cascas em todos os casos de render, com os numeros REAIS do col282 (165,05 pagas x 177,07 de
+relogio, folga trabalhada 11,99). Regua: **8.512 testes OK em 467 s**.
+
+
+# 09 RECALCULADA INTEIRA, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME (28/09 01:1x)
+
+Voce mandou, antes de ligar o recalculo por evento: recalcular 09 inteiro pela funcao REAL, com aval-de-criterio
+(pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0), publicando antes/depois de
+`entra`/`furo_espelho` e do topo x soma. Feito, nesta ordem, e com um achado que muda o que esperar do ato.
+
+## O recalculo: APLICADO, e as quatro condicoes fecharam
+
+PROVA (`aplicar_09_corte_b --mes 9 --ano 2026 --campos-do-item <os 24> --aplicar --antes
+logs/antes_recalc09_full.json` -- o mesmo instrumento do apply da R2b, com TODOS os campos no item para que
+ninguem seja separado por campo):
+
+| campo | antes | depois | delta | colabs |
+|---|---|---|---|---|
+| `horas_trabalhadas` | 71.086,96 | **71.376,46** | **+289,50** | 45 |
+| `turnos_abertos` | 468 | **363** | **-105** | 33 |
+| `inconsistencias` | 1.093 | **946** | **-147** | 43 |
+| `horas_noturnas` | 18.275,44 | 18.376,61 | +101,17 | 14 |
+| `horas_extras_100_noturna` | 70,84 | 145,97 | +75,13 | 12 |
+| `horas_intra_indenizada` | 2.244,31 | 2.299,48 | +55,17 | 11 |
+| `horas_saida_antecipada` | 228,96 | **182,95** | **-46,01** | 10 |
+| `horas_extras_100_feriado` | 667,11 | 711,60 | +44,49 | 11 |
+| `horas_atraso` | 73,27 | **63,80** | **-9,47** | 8 |
+| `saldo_banco_horas` | -9.769,82 | -9.769,82 | +0,00 | 0 |
+
+`ENTRAM no TXT: 0 | SAEM do TXT: 0` · `07 e 08 apos o ato: 0 divergencia(s)` · `col81 (FORA): intacto` ·
+**58 colabs aplicados, 0 separados por campo**, e **10 separados pela `CONDICAO_SAIDA_REAL`** (perdem hora total
+E tem saida real: col922 -63,12 h, col297 -43,72, col945 -19,87, col468 -15,41, col457 -9,80, col821 -7,76,
+col841 -6,78, col727 -6,03, col885 -1,99, col789 -0,99). `saldo_banco_horas` seguiu RESTAURADO, pelo seu `!` de
+26/09 que o poe fora do escopo -- mantive a leitura mais restritiva.
+
+ORACULO e6, a sua condicao: **IDENTICO antes e depois**, dia por dia.
+PROVA: `BATE (ate 10 min): 92.9% de 7512 dias comparados` nas duas rodadas, com TODOS os contadores iguais
+(`diverge_acima_60: 208`, `diverge_10_60: 218`, `dia_batida_impar: 473`, `esp_zero_e6_trabalho: 58`,
+`e6_zero_esp_trabalho: 53`). **Zero divergencia nova**, e a identidade nao e sorte: o oraculo compara as LINHAS
+do espelho (motor ao vivo) contra o proprio calculo dele, e o recalculo move o GRAVADO. Sao lados diferentes da
+mesma fronteira -- que e exatamente o que a E5 existe para juntar.
+
+## O achado que muda o que esperar: `furo_espelho` NAO LE o gravado
+
+`entra` e `furo_espelho` ficaram **iguais**: `entra 205 -> 205`, `furo_espelho 335 -> 335`.
+PROVA da causa, em codigo: `folha/export.py:646` -- `motivos_retencao_espelho(turnos_abertos, inconsistencias,
+grade, fech)` tem na propria docstring *"os 3 primeiros params sao IGNORADOS desde HX-BORDA-CELULA (o juiz e
+`motivos_retencao_celula`)"*. O portao do TXT pergunta a **CELULA**, nao ao `FechamentoMensal`. Entao **nenhum
+recalculo do gravado pode fazer alguem ENTRAR no TXT** -- a porta nao olha para la. Baixar `turnos_abertos` de
+468 para 363 nao abre uma vaga sequer.
+Isso nao invalida o ato (o gravado agora esta no presente, com as curas e o mutirao dentro dele), mas corrige a
+expectativa: os 335 retidos por `furo_espelho` saem de la curando a CELULA, nao o fechamento.
+
+## E4-topo-igual-coluna: 19 -> 18, e a maior causa tem NOME
+
+O unico curado foi o **col843** -- e pelo apply da R2b, nao por este recalculo. Os 18 restantes tem topo e soma
+**identicos antes e depois**: nenhum deles estava entre os 58 que se moveram, ou seja **a divergencia do topo x
+coluna NAO era gravado envelhecido**. Essa hipotese morreu medida.
+
+A causa, por balde (delta = soma das linhas menos o topo; residuo = delta menos os descontos de folha):
+
+| balde | colabs | h | o que e |
+|---|---|---|---|
+| **o topo nao soma `horas_folga_trabalhada`** | col282 +12,02 · col881 +10,04 · col512 +10,87 · col951 +7,38 | **~40** | o delta e a folga trabalhada quase EXATA (residuo -0,26 / -0,26 / -1,44 / -0,18). Folga trabalhada E hora trabalhada, mora em campo PROPRIO, e o topo do cartao mostra so `total_trabalhadas` -- a coluna (relogio) a inclui |
+| **fechamento ZERO com batida** | col924 132,78 · col391 31,95 · col43 29,38 · col942 28,18 | **222,29** | **0 fatias de escala e 0 celulas** na janela, mas 66/7/20/14 batidas. E a classe A da O83: cadastro, nao codigo -- DP e supervisora |
+| **residuo NEGATIVO grande** (a folha paga MAIS que o relogio) | col400 -21,51 · col146 -19,92 · col251 -15,02 · col123 -14,04 · col60 -12,43 | ~83 | col400 tem **0 fatias ATIVAS** na janela (cadastro); col146 e o intermitente da R3 |
+| **caso proprio** | col751 +28,12 | 28,12 | topo 28,38 contra soma 56,50, 1 fatia, 31 celulas, 28 batidas e ZERO em todos os descontos |
+| **cauda** | col288 +6,09 · col918 +2,10 · col499 +2,01 · col41 -2,01 | ~12 | |
+
+**A HIPOTESE DA FATIA DE ESCALA (a viva da O83) FICOU FRACA, medida**: so **3 dos 18** divergentes tem mais de
+uma fatia na janela (17%), contra 6% nos 120 de controle que batem. Enriquecimento pequeno, nao causa.
+
+## E um segundo relogio que eu fui medir e que NAO e bug -- a checagem que evitou a cura errada
+
+Antes de curar o topo eu perguntei se o GRAVADO ja nao tem o relogio: `FechamentoMensal.minutos_realizados`.
+MEDIDO no universo do TXT (205): ele bate com a soma das linhas em **140** e **diverge em 65** -- pior que o
+topo x coluna. Parecia um segundo defeito, maior.
+**NAO E.** `ponto/services/fechamento.py:486-488` escreve
+`sum(min(minutos_realizados_do_dia, minutos_previstos_do_dia))`, **capado POR DIA pelo previsto** (F1 04/08:
+"HE nao tapa furo de outro dia") e **so nos dias `tipo_dia == 'trabalho'`**. O proprio campo se declara no
+model: *"Minutos realizados (relogio da grade)"*. E o numerador do cumprimento da grade, nao o relogio bruto --
+duas perguntas diferentes, com nomes diferentes. Eu estava comparando coisas distintas, e a checagem antes da
+cura foi o que impediu de "consertar" um campo que esta certo.
+
+CONSEQUENCIA PARA A E5: o gravado **nao tem** o relogio bruto em campo nenhum. Entao o topo nao pode passar a
+mostra-lo lendo o fechamento -- ele tem de vir da MESMA autoridade que desenha as linhas
+(`realizado_do_dia`), somada UMA vez na fonte. E' exatamente o seu aval ("topo = soma das linhas + O51b lendo a
+MESMA computacao"), e e a fatia seguinte.
+
+**O QUE ISSO DIZ SOBRE O ITEM**: "o topo do cartao e a SOMA das linhas" nao e alcancavel enquanto o topo mostrar
+`total_trabalhadas` e a coluna mostrar RELOGIO -- sao unidades diferentes, e a propria casa escreveu isso
+(`minutos_realizados_do_dia`: *"NAO usar FechamentoMensal.horas_trabalhadas como numerador: aquilo e hora LIQUIDA
+DE FOLHA"*). Pela lei existente, quem manda e a meta: **nenhuma tela mente para quem soma a coluna**. Entao a
+cura do primeiro balde e de TELA e de uma linha -- o topo passa a somar `horas_trabalhadas +
+horas_folga_trabalhada`, que e **a mesma regua que a E6 e a O83 ja usam**. Entra como a fatia seguinte da E5,
+junto do O51b, que le a mesma computacao.
+
+
+# IMPAR fatia 2: a tela diz EM ABERTO, nas duas cascas -- e o selo pegou um bug meu que ia para o ar (28/09 00:2x)
+
+O desenho passou a LER o que a fatia 1 expos. A tela nao decide nada: `realizado_aberto` e `falta_marcos` vem do
+dict do dia, e a HORA tambem (`realizado_h`) -- o template Django nao divide, e deixar a tela fazer
+`minutos/60` seria dar a ela conta propria sobre numero de dinheiro. Um caso do selo proibe exatamente isso
+(`test_MORDE_a_tela_NAO_calcula_a_hora`).
+
+O que o dia em aberto mostra agora, na pilula do cabecalho do dia:
+`EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`, com o `title` explicando que o numero e o que os pares
+FECHADOS provam, nao o total do dia.
+
+**AS DUAS CASCAS DE GRACA, e nao por sorte**: `ponto/espelho.html` abre com
+`{% extends base_tpl|default:"base.html" %}` -- o MESMO arquivo serve o admin (`base.html`) e o app do
+colaborador (`base_app.html`), que e a fonte unica do BUG 139. O selo renderiza as DUAS raizes, como a lei de
+08/09 exige, e cada afirmacao roda duas vezes.
+
+## NO AR, e provado nas duas cascas EM PROD
+
+PROVA (deploy 00:2x; render em `saas_ui`, que e a casca do urlconf completo, col349 14/09):
+`dict do dia: aberto=True falta=[{'tipo': 'S', 'hora': '15:20'}] h=7.0`
+`base.html      EM ABERTO=True -> 'EM ABERTO — falta: S 15:20 · parcial provado: 7,0h'`
+`base_app.html  EM ABERTO=True -> 'EM ABERTO — falta: S 15:20 · parcial provado: 7,0h'`
+O smoke tentou primeiro no `saas_core` e levou `NoReverseMatch: ... is not a registered namespace` -- o core roda
+o urlconf ENXUTO (`config/urls_core.py`), que nao tem os namespaces do admin. Nao e defeito da fatia: e a
+topologia da casa, e o smoke de TELA se faz na casca da TELA. Fica registrado para nao me custar de novo.
+
+## O SELO ME CORRIGIU TRES VEZES, e a terceira era um bug que ia para o ar
+
+1. Fixture com o dia vazio: `espelho.html:143` so emite o card se o dia tem batida, turno, previsto, folga ou
+   ausencia -- a pagina renderizava e o card nem existia. O selo ficou vermelho afirmando sobre um card ausente.
+2. `colaborador: None`: `espelho.html:6` abre com `{% if not colaborador %}` e TODO o corpo mora no `{% else %}`.
+   Com `None` a pagina renderiza so o aviso "nao vinculado".
+3. **E o bug de verdade**: eu escrevi o comentario do bloco como `{# ... #}` de VARIAS LINHAS. O Django so trata
+   `{# #}` de UMA linha -- o texto inteiro do comentario ia PARA A PAGINA, em todo dia de todo espelho, e com
+   ele a frase "EM ABERTO". Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como em aberto,
+   porque a frase vinha do comentario e nao do `{% if %}`. Trocado por `{% comment %}`.
+   **Sem o par que morde, isso subiria**: o caso RED passava, e a marca apareceria em todos os dias.
+
+PROVA: `ponto/tests/test_impar_tela.py`, 4 casos x 2 cascas -- RED (as duas mostram EM ABERTO, o marco que falta
+e o rotulo parcial), e os que MORDEM (dia FECHADO nao leva a marca; turno aberto SEM marco apagado diz EM ABERTO
+e NAO inventa a frase "falta:"; a tela nao calcula a hora). Regua: **8.507 testes OK em 469 s**.
+
+
+# IMPAR fatia 1: o espelho para de jogar fora o estado do dia (28/09 00:02)
+
+O primitivo existia e nao tinha leitor -- foi o que o seu laudo apontou, e e literal: `RealizadoDoDia.aberto`
+nasce em `ponto/turnos.py:393-394`, sai em `:413`, e o dict do dia do espelho (`espelho.py:513-514`) deixava
+passar so `minutos` e `sem_turno`. `aberto` e `longo` morriam na fronteira. **Nao ha regra nova nesta fatia: ha
+campo que para de ser descartado.**
+
+AS DUAS LEIS VALEM, como voce cortou, e nao se tocam: **BUG-144 segue mandando no DINHEIRO** --
+`minutos_realizados` continua sendo a soma dos pares fechados e "nunca 0 pela E solta" -- e o corte de 27/09
+manda no **ESTADO DA TELA**. O selo tem um caso dedicado a isso (`test_MORDE_o_DINHEIRO_continua_com_a_lei_do_
+BUG_144`): se o numero do dia trocar de fonte, ele fica VERMELHO.
+
+E O QUE FALTA SAI DA GRADE, nao de conta nova. `montar_realizado_grade` (`escala/utils.py:674`) ja devolve
+`{'missing': True, 'tipo', 'hora'}` por marco APAGADO -- o mesmo objeto que a tela ja desenha. O filtro mora na
+FONTE, nao no desenho, pela mesma fronteira que o CARTAO=ESPELHO estabeleceu ("as tres chaves que so ele tinha
+nascem AQUI, e nao no desenho").
+
+PROVA: `ponto/tests/test_impar_em_aberto.py`, 6 casos -- **RED de 1 contra o HEAD** (o dict nao carregava o
+`aberto`), e os 5 que MORDEM: o dia PAR nao se declara aberto, o dia completo nao tem marco faltando, o que
+falta vem nomeado com tipo e hora (`{'tipo': 'S', 'hora': '15:20'}`), e o dinheiro nao troca de fonte.
+Regua: **8.503 testes OK em 472 s**.
+
+COBERTURA DECLARADA, porque ela nao e total: esta fatia prova a FRONTEIRA e a aritmetica das duas pontas. O
+desenho -- o texto `EM ABERTO -- falta: <marco>` e o rotulo **parcial provado** na tela e no PDF -- e a fatia 2,
+com selo e smoke proprios. Os 327 de 473 dias impares que hoje mostram numero so mudam com ela.
+
+
+# R2b APLICADA no gravado de 09, dentro da faixa -- 9 colabs (27/09 23:2x)
+
+Seu `!` veio com a faixa: `horas_folga_trabalhada` -25,85 h em 5 colabs, demais condicoes como medidas, fora
+disso PAREI. **Aplicado, e o movimento ficou DENTRO da faixa, nao na borda dela.**
+
+PROVA (`aplicar_09_corte_b --mes 9 --ano 2026 --fora <593 pks> --aplicar --antes logs/antes_r2b_09.json`):
+`APLICADOS: 9 colab(s)` · `ENTRAM no TXT: 0 | SAEM do TXT: 0` · `07 e 08 apos o ato: 0 divergencia(s)` ·
+familia 100% **+0,00 em 0 colabs** · `saldo_banco_horas` **+0,00** · `col81 (FORA): intacto`.
+
+**O APPLY FOI CIRURGICO DE PROPOSITO.** O DRY sem restricao movia **60 colabs** -- porque
+`recalcular_fechamento_mes` traz para o presente todo `FechamentoMensal` envelhecido, que e a licao que gerou a
+sua L-082 ("apply por recalculo nunca e cirurgico"). Restringi com `--fora` aos **14** que a medicao nomeou, e
+dos 14 a propria casa separou 5: **col107, col735, col865 e col923** pela familia 100% (pergunta de LEI aberta) e
+**col841** pela `CONDICAO_SAIDA_REAL` (-6,78 h com saida real existindo). Sobraram 9.
+
+## O que mudou, colab a colab
+
+| colab | campo | antes | depois |
+|---|---|---|---|
+| col191 | inconsistencias | 3 | **2** |
+| col193 | horas_folga_trabalhada | 6,44 | **0,00** |
+| col211 | horas_trabalhadas | 149,04 | **150,06** |
+| col226 | horas_noturnas · horas_trabalhadas | 90,18 · 167,82 | **90,04 · 167,68** |
+| col227 | horas_folga_trabalhada · inconsistencias | 7,50 · 4 | **0,00 · 1** |
+| col252 | trabalhadas · HE · HE50 · intra · DSR | 195,10 · 21,37 · 21,37 · 18,22 · 7,36 | **193,40 · 19,67 · 19,67 · 16,22 · 7,18** |
+| col306 | horas_trabalhadas · inconsistencias · turnos_abertos | 157,98 · 2 · 1 | **164,78 · 0 · 0** |
+| col518 | trabalhadas · HE · HE50 · intra · DSR · inconsist. · abertos | 177,75 · 17,63 · 0,90 · 9,60 · 0,00 · 7 · 5 | **181,71 · 21,01 · 4,27 · 8,60 · 0,56 · 2 · 1** |
+| col594 | horas_folga_trabalhada | 3,37 | **0,00** |
+
+Totais: `folga_trabalhada` **-17,31** · `trabalhadas` **+9,94** · `inconsistencias` **-11** ·
+`turnos_abertos` **-5** · `intra` **-3,00** · `HE` **+1,68** · `HE50` **+1,67** · `DSR` **+0,38** ·
+`noturnas` **-0,14**.
+
+## E a parte que eu preciso dizer sem ser perguntado: um dos 9 carrega DERIVA
+
+Separei, campo a campo, o que e CURA (leitura_cura menos leitura_base) e o que e DERIVA (leitura_base menos o
+GRAVADO, isto e, `FechamentoMensal` envelhecido que o recalculo traz junto).
+PROVA: **8 dos 9 colabs tem deriva = 0,00**. So o **col518** tem: `horas_trabalhadas +4,79`, `horas_extras
++4,21`, `horas_extras_50 +4,21`, `horas_reflexo_dsr +0,70` -- e a cura dele, isolada, e **-0,83 h**. Somando os
+nove: **deriva +13,91 h, cura -27,69 h**. Os numeros de deriva do col518 estavam na tabela que voce avalizou
+(coluna `leit_base`), entao nao e surpresa -- mas e deriva, nao cura, e quem le a tabela tem direito de saber
+qual metade e qual.
+
+REVERSAO: `logs/antes_r2b_09.json` tem os 26 campos dos 607 colabs ANTES do ato.
+
+
+# TETO: os dois casos MEDIDOS, e o mecanismo de cada um tem nome (27/09 23:0x)
+
+Voce mandou os dois como RED. **CORRIJO o que publiquei ha meia hora**: eu escrevi que eram mecanismos
+DIFERENTES e que a cura teria duas partes. Sao o **MESMO** mecanismo, e UMA cura vira os dois -- o que me
+enganou foi o sintoma (um dia de folga com 29 h, um dia util com 78 h) e nao a causa. A causa unica esta abaixo.
+
+**col444 30/08 = 1.750 min (29 h) num dia que a celula diz FOLGA, e 31/08 = 0 no dia que ele trabalhou.**
+PROVA: celula 30/08 `trabalha=False`, `marcos=None`. Batidas `30/08 10:00E` e depois `31/08 15:10S 16:13E
+21:00S`. A absorcao por MARCO comparou as 15:10 com o `hii 15:00` **do template de 31/08** -- 10 min, dentro da
+tolerancia de 90 -- e engoliu a batida como intervalo DESTE turno (`pausas=[62]`). Com a ida/volta consumidas, o
+`_fim_fechado` saiu buscando a proxima `S` e achou `31/08 21:00`: envelope de **35 h**. O teto HX-TETO-ENVELOPE
+(26 h) nao disparou porque quem deveria fecha-lo tinha sido ABSORVIDO antes. E a batida do dia seguinte virou
+pausa de um turno de folga.
+ORIGEM: `ponto/turnos.py:692-708` -- a absorcao por marco usa `_dist_marco`, que e distancia de HORA DO DIA, e
+nao confere se a batida cabe no ENVELOPE da jornada que comecou. E exatamente o que a CLAUDE.md secao 6 proibe:
+"teto por DATA NAO BASTA... so valem comparar INSTANTE ou exigir FATO ENCERRADO".
+
+**col349 14/09 = 4.682 min (78 h).**
+PROVA: batidas do dia `06:59E 13:57S 14:02E`, a saida real nunca veio (ata com `15:20` apagado). O turno fica
+ABERTO e `_fim_fechado` (`turnos.py:346`) procura a ultima `S` que fecha par **sem teto nenhum** -- alcanca dias
+adiante, e `bruto = fim - entrada` cobra os intervalos entre os dias como trabalho.
+ORIGEM: `realizado_dos_turnos` (`turnos.py:392-397`) contradiz a LEI QUE ESTA ESCRITA 60 LINHAS ACIMA DELA.
+`turnos.py:329-330` (BUG-144, corte seu de 14/09) declara: "realizado_do_dia = **soma dos PARES FECHADOS** dos
+turnos do juiz" e, para turno aberto, "**soma os pares fechados**; a ultima E solta nao conta". O codigo nao soma
+pares: ele faz `ultimo S que fecha par - entrada - pausas`, que e o ENVELOPE, e o envelope inclui os vazios entre
+os pares. Num turno que atravessa tres dias, o vazio e a conta inteira.
+
+## A causa UNICA, e a cura de uma linha
+
+`_dist_marco` mede distancia de **HORA DO DIA** -- ela nao sabe em que DIA a batida caiu. Uma batida de D+1 a
+10 min do `hii` do template e, para ela, "a 10 min do marco de intervalo", e era absorvida como PAUSA de um
+turno que abriu no dia ANTERIOR (`ponto/turnos.py:719-735`). Dai em diante a `S` que fecharia o turno tinha sido
+consumida, o `_fim_fechado` saia buscando a proxima, e o envelope crescia por DIAS -- com o HX-TETO-ENVELOPE de
+26 h **mudo**, porque quem o dispararia foi absorvido antes de chegar la. Os 1.750 min e os 4.682 min sao a mesma
+frase dita duas vezes.
+
+A CURA: a absorcao por marco passa a exigir que a batida caiba no ENVELOPE da jornada que comecou, comparado por
+**INSTANTE** contra a entrada do turno corrente. **E a batida fora do envelope tambem nao FECHA aquele turno** --
+licao que o selo da O95 me deu na regua: recusar so a absorcao jogava a batida no caminho normal do `S`, onde o
+teto e o de 26 h, e ela FECHAVA um turno de 20 h -- exatamente o que
+`test_MORDE_duracao_implausivel_nao_fecha` proibe ("ali o que ha e um dia que ninguem descreve"). Fora do
+envelope a batida nao e pausa deste turno nem borda dele: o turno fica ABERTO (a cobranca da saida e dele) e a
+batida segue o seu proprio caminho. Nenhuma lei nova (CLAUDE.md secao 6, em letra) e nenhum numero
+novo: o teto e o `cont_max_s` (14 h) que este mesmo pareador ja usa em quatro sitios -- BUG-144 proibe "teto
+inventado", e nenhum foi inventado.
+
+PROVA (prod, so leitura, container irmao com a cura montada sobre o HEAD):
+| caso | antes | depois |
+|---|---|---|
+| col444 30/08 (celula diz FOLGA) | **1.750 min** | **0**, e o turno segue ABERTO -- o estado verdadeiro |
+| col444 31/08 (o dia em que ele trabalhou) | **0** | **287 min** |
+| col349 14/09 | **4.682 min (78 h)** | **418 min**, o par fechado `06:59->13:57`, turno ABERTO |
+
+### E um tropeço meu no caminho, com a cura da tecnica
+
+Medir montando o arquivo da copia por cima da arvore (`-v copia.py:/app/.../novo.py:ro`) **cria o arquivo na
+arvore viva, vazio e dono root**, quando o caminho ainda nao existe -- o docker cria o ponto de montagem no
+HOST. Foi o que aconteceu as 23:01 com `app/ponto/tests/test_teto_da_absorcao.py`: 0 byte, `root:root`, na
+arvore que as tres cascas montam. Vazio nao quebra nada (modulo sem teste), mas e escrita na arvore que eu nao
+pedi -- a mesma familia da R2b de ontem a noite.
+REGRA, daqui em diante: montar so por cima de caminho que JA EXISTE; arquivo novo nasce com `touch` do ronald
+antes, ou se mede pelo diretorio. Removido e reescrito com o dono certo.
+
+RED: `ponto/tests/test_teto_da_absorcao.py` -- **3 falhas contra o HEAD** com os numeros de prod na fixture
+(1.750 e 4.736), e **2 casos que MORDEM** provando que a absorcao legitima nao morreu: a pausa do proprio dia
+segue absorvida (65 min) e a pausa que CRUZA A MEIA-NOITE dentro do envelope tambem -- que e exatamente o caso
+que um teto por DATA erraria e o INSTANTE acerta.
+
 
 # R2b NO AR: a pausa que a ATA declara nao passa mais pelo teto -- e o apply espera UM `!` (27/09 22:4x)
 
@@ -29,6 +365,16 @@ Remedio do corte: turnos abertos do pareador **501 -> 495** (caiu). Suite pela r
 E o comentario de `turnos.py:1040` que dizia "O TETO CONTINUA SENDO O CADASTRO" foi corrigido: nao e cadastro,
 sao tres constantes de classe (`motor_calculo_v2.py:485`, `:1536`, `:2117`). A pausa maxima como CADASTRO da
 escala entrou no BACKLOG como **O96, fora da meta** (LEI-AKITA 12).
+
+## NO AR, e provado em prod
+
+PROVA (deploy `bin/deploy.sh --sem-migrate`, 22:55): collectstatic, prova de casca (16 estaticos, 5 paginas),
+reload das tres cascas juntas, tres rotas 200/302/200, selo BUG 128 verde, `importerror_500=0`.
+SMOKE em prod, so leitura, no espelho do col843: **24/08 realizado=544 veredito=trabalhou** e
+**25/08 realizado=None veredito=folga** -- a noite e uma, e o dia de folga voltou a ter ZERO hora. O par
+vizinho tambem: 22/08 = 548, 23/08 = folga.
+O push saiu pela regua e o atalho **"JA VERDE" funcionou pela primeira vez** (arsenal PULADO, so o
+control-plane rodou: 100 s em vez de ~500) -- era isso que o carimbo congelado em FALHOU impedia.
 
 ## As quatro condicoes da sua AVAL-DE-CRITERIO, medidas
 
@@ -1336,9 +1682,9 @@ motor de hoje o col39 tem **13 min de atraso em 13/09** e **zero** saida antecip
 
 | onde clicar | colab | o que a coluna tem de mostrar |
 |---|---|---|
-| **tela** `/ponto/espelho/` (como admin, no colab) e o **PDF** do cartao | **col104** [nome] | **21,86 h de saida antecipada** e 0,38 h de atraso -- o maior da frota |
-| idem | **col217** [nome] | **18,91 h de antecipada**, atraso ZERO (isola a coluna nova) |
-| idem | **col889** [nome] | **10,99 h de atraso**, antecipada ZERO (isola a outra coluna) |
+| **tela** `/ponto/espelho/` (como admin, no colab) e o **PDF** do cartao | **col104** ILSON | **21,86 h de saida antecipada** e 0,38 h de atraso -- o maior da frota |
+| idem | **col217** ALAN | **18,91 h de antecipada**, atraso ZERO (isola a coluna nova) |
+| idem | **col889** WELLINGTON | **10,99 h de atraso**, antecipada ZERO (isola a outra coluna) |
 
 Os tres juntos provam as duas colunas e o topo somando, e dois deles tem uma coluna em zero -- que e o
 que impede o selo de passar por coincidencia. **A fatia ainda nao esta escrita**: quando estiver, e
@@ -2312,7 +2658,7 @@ Duas hipoteses mortas por medicao, antes de qualquer cura:
 
 **O TOPO DO ESPELHO CONCORDA COM A FOLHA, E A COLUNA E' QUEM DISCORDA** -- `horas_trabalhadas`
 11,00 h e `resumo['total_trabalhadas']` 11,0 h sao o MESMO numero. Isso funde duas obras que eu
-tratava como separadas: a **E4-topo-igual-coluna** (col515 11,13 x 92,30, "item (6) do [nome]") e a
+tratava como separadas: a **E4-topo-igual-coluna** (col515 11,13 x 92,30, "item (6) do JEAN") e a
 **classe C** sao o mesmo defeito visto de dois lados. Nao sao dois numeros: sao **tres**
 (topo/folha 11,13 · coluna 92,30 · oraculo 94,81), e o que hoje se paga e o menor.
 
@@ -2517,7 +2863,7 @@ snapshot.
 | col174 | `extras_100` `extras_100_feriado` `extras_100_noturna` `dsr_ok` `dsr_perdido` |
 | col923 | `extras_100` `reflexo_dsr` `dsr_ok` `dsr_perdido` |
 | col922 | `extras_100` `extras_100_noturna` `dsr_ok` `dsr_perdido` |
-| col857 ([nome]) | `extras_100` `extras_100_noturna` `reflexo_dsr` |
+| col857 (JEAN) | `extras_100` `extras_100_noturna` `reflexo_dsr` |
 | col382, col491, col343, col200 | `extras_100_noturna` + `dsr_ok` `dsr_perdido` |
 | col457 | `extras_100` `extras_100_noturna` |
 | col129, col235, col865, col879 | `extras_100_noturna` + `reflexo_dsr` |
@@ -3101,7 +3447,7 @@ cumpria (ela alcancava 96 colabs). **Ninguem sai do TXT.**
 Os casos que mais se movem, por colab: **col923** (`inconsistencias -29`, `turnos_abertos -28`,
 noturnas +27,48 h, saida antecipada +20,35 h), **col382** (saida antecipada **+86,45 h**, noturnas
 +18,49 h), **col174** (noturnas +32,08 h, `inconsistencias -9`), **col879** (intra +21,00 h, noturnas
-+18,11 h), **col857 (o [nome])** (`horas_extras -17,87 h`, noturnas +5,39 h, trabalhadas +7,69 h) e
++18,11 h), **col857 (o JEAN)** (`horas_extras -17,87 h`, noturnas +5,39 h, trabalhadas +7,69 h) e
 **col493** (`saldo_banco_horas -40,30 h`).
 
 **DUAS LINHAS QUE EU NAO SEI EXPLICAR AINDA, e nao vou apresentar como se soubesse**:
@@ -3119,7 +3465,7 @@ metrica mal escrita, nao como alarme.)
 
 ## PAREI: NENHUM dos 37 cadastros "turno_partido" e turno partido. O maior vao e' 70 MINUTOS
 
-Ordem do Ronald (26/09 23:4x): *"o [nome] nao e turno partido -- plantao continuo 21:00-07:00 com
+Ordem do Ronald (26/09 23:4x): *"o JEAN nao e turno partido -- plantao continuo 21:00-07:00 com
 intervalo de 1 h. Medir o CRITERIO que classifica 'partido' nos 28 colabs: vao entre blocos de cada um
 (1 h x 7 h). Se o criterio for o flag e nao o vao, a raiz e a classificacao."*
 
@@ -3142,7 +3488,7 @@ caminho olha o vao.** A classificacao e' um campo de CADASTRO, e o motor obedece
 | `TipoEscala` com `tipo_base='turno_partido*'` na base inteira | **37 de 338** |
 
 **Nenhum e' turno partido.** Sao jornadas CONTINUAS -- quase todas noturnas de 8 a 10 h -- com
-intrajornada normal de 1 h. O [nome] e o caso exemplar e nao a excecao: `21:00-07:00`, intervalo
+intrajornada normal de 1 h. O JEAN e o caso exemplar e nao a excecao: `21:00-07:00`, intervalo
 `01:00-02:00`, **60 min**, em quatro templates diferentes (te#318, #328, #467, #468).
 
 Amostra, para a forma ficar visivel: col49 `21:00-07:00 / 01:00-02:00`; col200 `22:00-06:00 /
@@ -3154,9 +3500,9 @@ Amostra, para a forma ficar visivel: col49 `21:00-07:00 / 01:00-02:00`; col200 `
 1. **761 dias de trabalho em 09 nunca chegam ao juiz da ata** -- `_periodos_pelo_marco` retorna na
    linha 314 antes de qualquer leitura. Metade do plano B (1.484) e' isto.
 2. **O gap S->E deixa de ser intrajornada**: `AUT_INTRA_MAX_S=0` diz "todo gap e' jornada partida".
-   Num 21:00-07:00 com 1 h de intervalo, o dia vira dois blocos independentes -- e o RED do [nome]
+   Num 21:00-07:00 com 1 h de intervalo, o dia vira dois blocos independentes -- e o RED do JEAN
    mostra o efeito: o motor montava UM periodo de **5,01 h** num dia de ~9 h.
-3. **A alimentacao da ata nao basta**: com ela o [nome] recupera a entrada das 21:01 (+3,96 h) mas o dia
+3. **A alimentacao da ata nao basta**: com ela o JEAN recupera a entrada das 21:01 (+3,96 h) mas o dia
    segue partido em dois, porque o regime declarado divide no intervalo. Curar por alimentacao e'
    tratar sintoma de um cadastro que mente.
 
@@ -3187,7 +3533,7 @@ sombra. **Ela corta a obra ao meio: nenhum juiz nasce.**
 
 ### RED, com os dois valores medidos
 
-`col857` ([nome], 5x2 noturno 21:00-07:00), dia **11/09**. A ata explica o dia INTEIRO: 4 lampadas
+`col857` (JEAN, 5x2 noturno 21:00-07:00), dia **11/09**. A ata explica o dia INTEIRO: 4 lampadas
 `acesa`, zero orfas, `21:01 -> 12/09 07:00`, `em_aberto=False`, e os `tipo_real` **ja nomeando a
 inversao** (a lampada `E` das 21:00 tem `tipo_real='S'`).
 
@@ -3264,7 +3610,7 @@ dia-colab. `_dias_partido_fora_do_juiz` NAO -- ele e incrementado UMA vez por ch
 regime de turno partido nao e coberto pelo juiz da ata. Somar 35 daquilo com 614 dias foi somar motor
 com dia, e cada unidade daquele 35 esconde um MES de um colaborador.
 
-**Quem denunciou foi o RED que a ordem manda usar.** O [nome] (col857) deu `pelo marco = 0` e
+**Quem denunciou foi o RED que a ordem manda usar.** O JEAN (col857) deu `pelo marco = 0` e
 `partido = 1`: um mes inteiro em que o juiz da ata nunca foi consultado, aparecendo como "1". Medido:
 **22 dias de trabalho dele**, todos fora do juiz. Sem o RED dirigido, o 758 teria ido para o DP.
 
@@ -3287,7 +3633,7 @@ chegam ao juiz.
 
 ### E o achado de DESENHO da parte (a), que muda o que ela e
 
-O 11/09 do [nome] -- o RED da ordem -- **a ata explica perfeitamente**: 4 lampadas todas `acesa`, zero
+O 11/09 do JEAN -- o RED da ordem -- **a ata explica perfeitamente**: 4 lampadas todas `acesa`, zero
 orfas, entrada `2026-09-11 21:01` -> saida `2026-09-12 07:00`, `em_aberto=False`,
 `desalinhado=False`, e os `tipo_real` ja NOMEANDO a inversao (a lampada `E` das 21:00 tem
 `tipo_real='S'`). O juiz atravessa a meia-noite e sabe a verdade.
@@ -3518,7 +3864,7 @@ leitores. A L-008 nao aceita isso, entao o medidor virou codigo
 declarar: o `tipo_escala` do vinculo ativo no motor do topo **nao** produz divergencia aqui -- o topo
 e o gravado sao o MESMO motor e concordam. Quem discorda dos dois e' a **COLUNA**, que soma
 `realizado_do_dia` dia a dia. Ou seja: o que sobra nao e' "o topo escolhe vinculo errado", e' o
-**item (6) do [nome]** -- "topo = soma das linhas ou PAREI" -- e agora ele tem sete casos com numero.
+**item (6) do JEAN** -- "topo = soma das linhas ou PAREI" -- e agora ele tem sete casos com numero.
 
 E o efeito da cura de hoje sobre isso, sem enfeite: no col515 a coluna era 93,30 e passou a 92,30
 contra um topo de 11,13. **Andou 1 h na direcao certa num vao de 81 h.** A cura do vinculo do dia era
@@ -3577,10 +3923,10 @@ o que sai e o dobro que nunca existiu. 07 e 08 nao foram tocadas.
 | col866 | 84h03 | **0h07** |
 | col277 | 116h40 | **0h07** |
 | col736 | 45h41 | **0h10** |
-| col857 ([nome]) | 0h42 | 0h42 (nao e sobreposto: a cura nao o alcanca, e nao deveria) |
+| col857 (JEAN) | 0h42 | 0h42 (nao e sobreposto: a cura nao o alcanca, e nao deveria) |
 
 De diferencas de 45 a 116 HORAS para 7 a 10 MINUTOS -- e os 7 a 10 min sao o arredondamento residual
-do topo, que e a outra classe (o item 6 do [nome], ainda aberta).
+do topo, que e a outra classe (o item 6 do JEAN, ainda aberta).
 
 Deploy pela L-083: `collectstatic`, prova de casca, tres cascas juntas, tres rotas provadas, selo BUG
 128 verde, `importerror_500=0`. Suite completa antes: **8.366 testes OK**.
@@ -3706,7 +4052,7 @@ a valer depois de eu ler o contrato da funcao. **51 colaboradores, nao 1.**
 
 ## PAREI no item (6): **85 colabs com diferenca de VALOR, somando 3.268h56** | e os meus dois medidores estavam cegos
 
-Voce disse "o [nome] nao aparece no item (1), e o medidor nao ve plantao que cruza a meia-noite". Refiz
+Voce disse "o JEAN nao aparece no item (1), e o medidor nao ve plantao que cruza a meia-noite". Refiz
 os dois. **Os dois estavam errados, e de maneiras diferentes.**
 
 ### Medidor (1): dois erros meus, e o Jean nao era da classe
@@ -3808,7 +4154,7 @@ col142   1 dia   17/09                        (orfa)
 
 **Nao e problema de frota: 1 colaborador, 1 dia, 1 minuto** (col454, a linha de 01/09 recebe uma
 entrada de 02/09). Medi pela pergunta direta -- numa linha do dia D, ha periodo cuja ENTRADA local cai
-em outro dia? A resposta na frota e praticamente nao. Entao o que o [nome] mostra em 12/09 **nao e esta
+em outro dia? A resposta na frota e praticamente nao. Entao o que o JEAN mostra em 12/09 **nao e esta
 classe** e segue em aberto: pela sua ordem (a), a hipotese viva e o plantao que cruza a meia-noite nao
 ser explicado pela ata, caindo no pareamento por tipo.
 
@@ -3826,7 +4172,7 @@ ser explicado pela ata, caindo no pareamento por tipo.
 `minutos_trabalhados` (inteiro). Somar hora arredondada 60 vezes acumula o erro.
 
 A sua regra resolve sem ambiguidade -- **topo = soma das linhas** --, e a cura e de uma linha: o topo
-passa a somar os MESMOS minutos e converter UMA vez. Nao e o mesmo defeito do 11/09 do [nome], que e
+passa a somar os MESMOS minutos e converter UMA vez. Nao e o mesmo defeito do 11/09 do JEAN, que e
 dinheiro de verdade; sao duas classes e vou tratar como duas.
 
 ### O que isso da como resposta para o DP
@@ -3842,7 +4188,7 @@ paga em silencio.
 
 ## 09/2026 LIBERADA **CONDICIONAL** -- coerencia provada, certeza NAO (corte Ronald 26/09 22:4x)
 
-A palavra certa e sua: **liberada prova COERENCIA, nao CERTEZA.** O cartao do [nome] tem 11/09 e 12/09
+A palavra certa e sua: **liberada prova COERENCIA, nao CERTEZA.** O cartao do JEAN tem 11/09 e 12/09
 errados em dinheiro com `pdf_x_espelho = 0` -- o medidor diz que as duas testemunhas contam a MESMA
 historia, e nao que a historia esta certa. Duas fontes coerentes podem estar coerentemente erradas.
 
@@ -5155,14 +5501,14 @@ que estava errado, e agora sai do cadastro -- e o efeito no caso nomeado e **+30
 por dia**, na direcao OPOSTA da queixa original ("13/08 +1,7h de HE -> 0 HE").
 
 O motivo e estrutural e vale registrar, porque separa as duas metades de verdade: o "0 HE" da
-[nome] vinha do **desconto do pre-assinalado** (os 90 min cadastrados SAINDO da jornada com ou sem
+ANDRESSA vinha do **desconto do pre-assinalado** (os 90 min cadastrados SAINDO da jornada com ou sem
 batida, 540 - 90 = 450 < 530). Esse desconto **e** a leitura de `intervalo_indenizavel` -- e a metade
 que ficou fora por aval. Sem ele, a jornada segue com o almoco dentro (540 min) e a HE segue.
 
 Ou seja: **as duas metades nao sao independentes, e a medicao provou.** A que entra conserta o numero
 do minimo legal; a que espera conserta a jornada. A primeira, sozinha, paga mais; a segunda e a que
 reduz. Se o `!` vier para a metade, o que voce esta aprovando e **+39,41 h em 56 colab-competencias**,
-e o RED da [nome] fica em pe esperando a obra do cadastro.
+e o RED da ANDRESSA fica em pe esperando a obra do cadastro.
 
 **Apply espera o seu `!`.** A cura esta em `/tmp/e3_metade_2609/cura/app/ponto/motor_calculo_v2.py`
 (o `calcular_periodo` dela e IDENTICO ao de HEAD -- conferido por `diff`), e a arvore servida intacta.
@@ -5258,7 +5604,7 @@ uma. O que sustenta o PAREI e o outro argumento, e ele basta: **a flag nao carre
 E a **decisao de origem**: `intervalo_indenizavel` so pode ter efeito no calculo depois de um ato que
 declare o valor **por escala, com trilha**. Enquanto esse ato nao existir, o certo e o motor **nao ler
 a flag** (fica como hoje, indenizando) e a E3 entregar so a metade inequivoca: **o 60 cravado morre em
-favor do intervalo CADASTRADO** -- que e exatamente o caso da [nome] (13/08: 541 - 90 = 451 min,
+favor do intervalo CADASTRADO** -- que e exatamente o caso da ANDRESSA (13/08: 541 - 90 = 451 min,
 abaixo da jornada de 530, **0 HE**) e que **nao tira dinheiro de ninguem**.
 
 E uma classe que muda o desenho, nao um caso: **parametro de dinheiro que ganha leitor precisa, no
@@ -5304,7 +5650,7 @@ O53 -- conferido no registro, nao de memoria.
 Medido chamando `get_motor_cct(...).calcular_mes(...)` com `batidas_apuraveis`, que e o caminho do
 FECHAMENTO (o que vira dinheiro), sobre o vinculo vigente NAQUELE dia -- nao o ativo de hoje.
 
-### col638 [nome], te#187 `PAI-COMERCIAL.3` -- tres defeitos no MESMO dia
+### col638 ANDRESSA, te#187 `PAI-COMERCIAL.3` -- tres defeitos no MESMO dia
 
 Cadastro: intervalo **fixo 13:00-14:30 = 90 min**, `intervalo_indenizavel=**False**`, jornada 530 min.
 
@@ -5714,8 +6060,8 @@ do aval manda):
 
 | vinculo | colab | taxa inativo x ativo | `data_fim` | efeito |
 |---|---|---|---|---|
-| ec1302 | col152 [nome] | `50,0` x **`100,0`** | `2026-09-15` -> **`2026-09-24`** | escala DIFERENTE: 1 dia (24/09) passa a usar `PAI-12x36.35` |
-| ec1008 | col624 [nome] | `n/a` x **`91,9`** | `2026-07-13` -> **`2026-07-21`** | MESMA escala nos dois: **0 efeito** |
+| ec1302 | col152 RAUL | `50,0` x **`100,0`** | `2026-09-15` -> **`2026-09-24`** | escala DIFERENTE: 1 dia (24/09) passa a usar `PAI-12x36.35` |
+| ec1008 | col624 SILVANA | `n/a` x **`91,9`** | `2026-07-13` -> **`2026-07-21`** | MESMA escala nos dois: **0 efeito** |
 
 Passivo **57 -> 54**. CheckConstraint segue bloqueado.
 
@@ -5783,25 +6129,25 @@ Tres coisas que os numeros dizem, e valem mais que o veredito:
 
 | colab | INATIVO (o que o escritor errado fechou) | ATIVO | trilha |
 |---|---|---|---|
-| col30 [nome] | ec896 `PAI-12x36.101` 21/06 | ec895 `PAI-12x36.5` 23/05 | 3 |
-| col134 [nome] | ec835 `PAI-12x36.4` 24/06 | ec1027 `PAI-12x36.4` 22/06 | 2 |
-| col152 [nome] | ec1302 `PAI-12x36.35` 24/09 | ec1229 `112` 16/09 | 3 |
-| col165 [nome] | ec1092 `PAI-12x36.101` 21/07 | ec1093 `PAI-12x36.101` 21/06 | 2 |
-| col225 [nome] | ec1089 `PAI-12x36.3` 22/07 | ec193 `PAI-12x36.3` 21/07 | 3 |
-| col227 [nome] | ec1131 `PAI-12x36.42` 22/07 | ec195 `PAI-12x36.42` 21/07 | 5 |
-| col277 [nome] | ec1237 `88` 16/09 | ec1238 `88` 21/08 | 2 |
-| col369 [nome] | ec1296 `111` 22/09 | ec1313 `42x1` 19/09 | 2 |
-| col624 [nome] | ec1008 `PAI-12x36.1` 21/07 | ec1010 `PAI-12x36.1` 14/07 | **0** |
-| col650 [nome] | ec1075 `PAI-12x36.45` 26/08 | ec695 `PAI-12x36.45` 21/07 | **0** |
-| col736 [nome] | ec1187 `75` 31/08 | ec1289 `33` 21/08 | 2 |
-| col866 [nome] | ec1194 `PAI-12x36.64` 07/09 | ec1188 `PAI-12x36.64` 05/09 | 2 |
-| col876 [nome] | ec1158 `PAI-12x36.5` 06/08 | ec1159 `PAI-12x36.5` 04/08 | 2 |
-| col878 [nome] | ec1055 `80` 06/08 | ec1161 `80` 27/07 | 2 |
-| col883 [nome] | ec1061 `PAI-12x36.104` 07/08 | ec1146 `PAI-12x36.104` 01/08 | 1 |
-| col887 [nome] | ec1223 `TPL-12x36-DIU` 21/08 | ec1070 `TPL-12x36-DIU` 11/08 | 2 |
-| col889 [nome] | ec1068 `PAI-12x36.9` 12/08 | ec1079 `PAI-12x36.9` 10/08 | **0** |
-| col893 [nome] | ec1073 `PAI-COMERCIAL` 12/08 | ec1085 `PAI-COMERCIAL` 11/08 | 1 |
-| col899 [nome] | ec1310 `PAI-12x36.37` 25/09 | ec1311 `117` 01/09 | 2 |
+| col30 ADEILTON | ec896 `PAI-12x36.101` 21/06 | ec895 `PAI-12x36.5` 23/05 | 3 |
+| col134 MARIO | ec835 `PAI-12x36.4` 24/06 | ec1027 `PAI-12x36.4` 22/06 | 2 |
+| col152 RAUL | ec1302 `PAI-12x36.35` 24/09 | ec1229 `112` 16/09 | 3 |
+| col165 THIAGO | ec1092 `PAI-12x36.101` 21/07 | ec1093 `PAI-12x36.101` 21/06 | 2 |
+| col225 NIVALDO | ec1089 `PAI-12x36.3` 22/07 | ec193 `PAI-12x36.3` 21/07 | 3 |
+| col227 JOAO MARCOS | ec1131 `PAI-12x36.42` 22/07 | ec195 `PAI-12x36.42` 21/07 | 5 |
+| col277 VALDECI | ec1237 `88` 16/09 | ec1238 `88` 21/08 | 2 |
+| col369 LUIZ MAURICIO | ec1296 `111` 22/09 | ec1313 `42x1` 19/09 | 2 |
+| col624 SILVANA | ec1008 `PAI-12x36.1` 21/07 | ec1010 `PAI-12x36.1` 14/07 | **0** |
+| col650 MILENE | ec1075 `PAI-12x36.45` 26/08 | ec695 `PAI-12x36.45` 21/07 | **0** |
+| col736 JULIANE | ec1187 `75` 31/08 | ec1289 `33` 21/08 | 2 |
+| col866 CLEMILSON | ec1194 `PAI-12x36.64` 07/09 | ec1188 `PAI-12x36.64` 05/09 | 2 |
+| col876 MARCO ANTONIO | ec1158 `PAI-12x36.5` 06/08 | ec1159 `PAI-12x36.5` 04/08 | 2 |
+| col878 GREICE | ec1055 `80` 06/08 | ec1161 `80` 27/07 | 2 |
+| col883 FELIPE | ec1061 `PAI-12x36.104` 07/08 | ec1146 `PAI-12x36.104` 01/08 | 1 |
+| col887 CHRYSTIAN | ec1223 `TPL-12x36-DIU` 21/08 | ec1070 `TPL-12x36-DIU` 11/08 | 2 |
+| col889 WELLINGTON | ec1068 `PAI-12x36.9` 12/08 | ec1079 `PAI-12x36.9` 10/08 | **0** |
+| col893 SELMA | ec1073 `PAI-COMERCIAL` 12/08 | ec1085 `PAI-COMERCIAL` 11/08 | 1 |
+| col899 JUNIOR CESAR | ec1310 `PAI-12x36.37` 25/09 | ec1311 `117` 01/09 | 2 |
 
 **O PADRAO QUE MUDA A DECISAO DO ADMIN: em 14 dos 19 os DOIS vinculos tem a MESMA escala**, com o
 inativo comecando poucos dias DEPOIS do ativo. Isso nao e troca de escala -- e **vinculo DUPLICADO**,
@@ -5890,9 +6236,9 @@ porta com guardas, como o ato das 22:32.
 
 | vinculo | colab | celulas alteradas | barrados |
 |---|---|---|---|
-| ec949 | col820 [nome] | 5 | 0 |
-| ec1165 | col366 [nome] | 5 | 0 |
-| ec939 | col418 [nome] | 5 | 0 |
+| ec949 | col820 BRUNO | 5 | 0 |
+| ec1165 | col366 IURI | 5 | 0 |
+| ec939 | col418 ADRIANO | 5 | 0 |
 
 ```
 PROVA col418, 01-30/09
@@ -5961,13 +6307,13 @@ Tres perguntas suas, respondidas com medicao.
 
 | colab | vinculo | dias `T->F` |
 |---|---|---|
-| col242 [nome] | ec1155 | 22, 24, 26, 28, 30/08 |
-| col334 [nome] | ec1115 | 22, 24, 26, 28, 30/08 |
-| col245 [nome] | ec211 | 22, 24, 26, 28, 30/08 |
-| col334 [nome] | ec292 | 22, 24, 26, 28, 30/08 |
-| col415 [nome] | ec355 | 21, 23, 25, 27, 29, 31/08 |
-| col219 [nome] | ec187 | 22, 24, 26, 28, 30/08 |
-| col824 [nome] | ec983 | 22, 24, 26, 28/08 · 02, 04, 08, 10, 12, 14, 16, 18, 20/09 · **22, 24, 26, 28, 30/09** |
+| col242 FABRICIO | ec1155 | 22, 24, 26, 28, 30/08 |
+| col334 NILTON | ec1115 | 22, 24, 26, 28, 30/08 |
+| col245 OSMAR | ec211 | 22, 24, 26, 28, 30/08 |
+| col334 NILTON | ec292 | 22, 24, 26, 28, 30/08 |
+| col415 NELSON | ec355 | 21, 23, 25, 27, 29, 31/08 |
+| col219 HEITOR | ec187 | 22, 24, 26, 28, 30/08 |
+| col824 ROULIAN | ec983 | 22, 24, 26, 28/08 · 02, 04, 08, 10, 12, 14, 16, 18, 20/09 · **22, 24, 26, 28, 30/09** |
 | **total** | 7 vinculos / 6 colabs | **49** (44 medidos + 5 que o horizonte da porta alcancou) |
 
 Eram "52" por dois erros meus: a paridade calculada **so para tras** (a cura usa a mais proxima em
@@ -6005,9 +6351,9 @@ resolveu, e todos com a foto terminando em **20/09**:
 
 | colab | vinculo | template | vira |
 |---|---|---|---|
-| col820 [nome] | ec949 | te#233 | 22, 24, 26, 28, 30/09 |
-| col366 [nome] | ec1165 | te#180 | 22, 24, 26, 28, 30/09 |
-| col418 [nome] (o RED) | ec939 | te#180 | 22, 24, 26, 28, 30/09 |
+| col820 BRUNO | ec949 | te#233 | 22, 24, 26, 28, 30/09 |
+| col366 IURI | ec1165 | te#180 | 22, 24, 26, 28, 30/09 |
+| col418 ADRIANO (o RED) | ec939 | te#180 | 22, 24, 26, 28, 30/09 |
 | **total** | | | **15 dias** |
 
 **O padrao vale a pena notar**: as tres fotos param em 20/09, que e o fim da competencia 09. A foto e
@@ -6038,13 +6384,13 @@ motivo citando o corte. `barrados = 0` em todos (nenhuma competencia exportada f
 
 | vinculo | colab | celulas alteradas | dias `T->F` em 21/08-20/09 | dias `T->F` em 21/09-20/10 |
 |---|---|---|---|---|
-| ec1155 | col242 [nome] | 10 | 5 (22,24,26,28,30/08) | 0 |
-| ec1115 | col334 [nome] | 10 | 5 (26,28,30/08...) | 0 |
-| ec211 | col245 [nome] | 5 | 5 (22,24,26,28,30/08) | 0 |
-| ec292 | col334 [nome] | **0** | 5 | 0 |
-| ec355 | col415 [nome] | 6 | 6 (21,23,25,27,29,31/08) | 0 |
-| ec187 | col219 [nome] | 10 | 5 (26,28,30/08...) | 0 |
-| ec983 | col824 [nome] | 26 | 13 | **5** (22,24,26,28,30/09) |
+| ec1155 | col242 FABRICIO | 10 | 5 (22,24,26,28,30/08) | 0 |
+| ec1115 | col334 NILTON | 10 | 5 (26,28,30/08...) | 0 |
+| ec211 | col245 OSMAR | 5 | 5 (22,24,26,28,30/08) | 0 |
+| ec292 | col334 NILTON | **0** | 5 | 0 |
+| ec355 | col415 NELSON | 6 | 6 (21,23,25,27,29,31/08) | 0 |
+| ec187 | col219 HEITOR | 10 | 5 (26,28,30/08...) | 0 |
+| ec983 | col824 ROULIAN | 26 | 13 | **5** (22,24,26,28,30/09) |
 | **total** | **6 colabs / 7 vinculos** | **67** | **44** | **5** |
 
 **67 celulas tocadas**, as 67 com `dna_anterior` preenchido e `regeneracoes=1`; **49 dias viraram
@@ -6066,7 +6412,7 @@ humana.
 
 ### O RED NAO FOI CURADO NO DADO
 
-**col418 [nome], que e o RED da fatia, nao foi tocado**: `regeneracoes=0`, celulas ainda
+**col418 ADRIANO, que e o RED da fatia, nao foi tocado**: `regeneracoes=0`, celulas ainda
 `21=T 22=T ... 30=T`. Os dias ruins dele sao 21-30/09 = competencia **10**, fora da janela que eu
 medi, e ele nao entrou no universo porque o universo foi medido na comp 09. O codigo curado **ja
 responde certo** para ele (`21=T 22=F 23=T 24=F ...`), mas o dado segue errado.
@@ -6112,7 +6458,7 @@ logo acima declara a lei certa -- *"a foto COMPLEMENTA onde o ciclo sabe respond
 ele nao sabe"* -- mas no 12x36 o TEMPLATE devolve `None` (nao declara fase) e o codigo assume
 **trabalho**. A ANCORA sabe responder (`delta % 2`), e nao e consultada nesse ramo.
 
-**RED col418 [nome]** (te#180 PAI-12x36.5, ancora 20/07): a foto de 09/2026 declara folga nos dias
+**RED col418 ADRIANO** (te#180 PAI-12x36.5, ancora 20/07): a foto de 09/2026 declara folga nos dias
 PARES, 02 a 20/09, e **para ai**. Como existe foto no mes, o ramo vale para setembro inteiro; 21 a
 30/09 nao estao na foto -> `None` -> trabalho. Celulas: `21=T 22=T 23=T ... 30=T`, **dez dias
 seguidos num 12x36**.
@@ -6249,9 +6595,9 @@ passada por pacote para o import relativo.
 
 | colab | pedido no aval | em prod agora | |
 |---|---|---|---|
-| col639 [nome] | 120,00 h | **120,00 h** | OK |
-| col70 [nome] | 8h00/noite | **72,00 h em 9 noites = 8h00** | OK |
-| col296 [nome] | 6h51/noite | **6,00 h** (emp2/CCT, **intocado** pelo apply so-emp3) | ver abaixo |
+| col639 ANDERSON | 120,00 h | **120,00 h** | OK |
+| col70 CLAUDIO | 8h00/noite | **72,00 h em 9 noites = 8h00** | OK |
+| col296 GENEIS | 6h51/noite | **6,00 h** (emp2/CCT, **intocado** pelo apply so-emp3) | ver abaixo |
 
 `col296` e emp2, declarada `cct` pelo proprio aval, e a clausula 38-d afasta a hora reduzida:
 `360 min / 60 = 6h00`. Os `6h51` sao `360 / 52,5`, a hora REDUZIDA, que e CLT. O apply "so emp3" nao
@@ -6557,7 +6903,7 @@ trilha do recalculo    acao=recalc_regime_clt | usuario=ronald_ti
 08/2026                INTACTA -- col70 segue com 120,00 h
 ```
 
-**A CONFERENCIA QUE O AVAL PEDIU** -- `col70 [nome]`:
+**A CONFERENCIA QUE O AVAL PEDIU** -- `col70 CLAUDIO DA SILVA`:
 
 ```
 fonte da regua       legal (empresa em CLT: Juliani Seguranca Patrimonial)
@@ -6577,93 +6923,93 @@ competencia 08/2026. Rodado em `atomic()` com rollback: **nada foi escrito**.
 
 | colab | nome | AN | HE 50 | HE 100 | DSR | Banco | Trab |
 |---|---|---|---|---|---|---|---|
-| col126 | [nome] | +51.41 | -0.49 | — | -0.25 | — | +24.04 |
-| col134 | [nome] NE | +43.36 | -0.26 | — | -0.35 | — | +23.94 |
-| col155 | [nome] CONCE | +43.09 | -22.49 | -22.51 | — | — | — |
-| col67 | [nome] | +35.84 | — | — | — | — | — |
-| col168 | [nome] | +35.72 | -0.28 | — | -0.27 | — | — |
-| col84 | [nome] | +35.12 | -0.02 | — | -0.02 | — | — |
-| col59 | [nome] | +34.60 | — | — | — | — | — |
-| col499 | [nome] | +34.45 | — | — | — | — | — |
-| col173 | [nome] | +34.41 | -0.21 | — | -0.23 | — | — |
-| col111 | [nome] | +34.21 | — | — | — | — | — |
-| col101 | [nome] BERTH | +34.11 | -0.40 | — | -0.39 | — | — |
-| col113 | [nome] | +33.98 | — | — | — | — | — |
-| col177 | [nome] FRE | +33.49 | — | — | — | — | +0.07 |
-| col157 | [nome] | +33.32 | -0.12 | — | -0.13 | — | — |
-| col94 | [nome] | +33.01 | -1.08 | — | -1.15 | — | — |
-| col154 | [nome] FERREIR | +32.38 | -0.24 | — | -0.21 | — | +0.19 |
-| col70 | [nome] | +32.35 | -0.16 | — | -0.15 | — | — |
-| col141 | [nome] | +31.84 | -0.09 | — | -0.08 | — | — |
-| col130 | [nome] | +30.67 | -0.07 | — | -0.03 | — | — |
-| col747 | [nome] GONCALVE | +30.58 | -0.95 | — | -0.85 | — | — |
-| col72 | [nome] | +29.29 | — | — | — | — | — |
-| col165 | [nome] | +25.57 | — | — | — | — | — |
-| col80 | [nome] | +25.24 | -0.15 | — | -0.09 | — | — |
-| col127 | [nome] | +25.12 | — | — | — | — | — |
-| col163 | [nome] | +23.96 | — | — | — | — | — |
-| col121 | [nome]  | +22.63 | — | — | — | — | — |
-| col110 | [nome] RODRIGU | +22.54 | — | — | — | — | — |
-| col78 | [nome] | +22.34 | -0.15 | — | -0.20 | — | — |
-| col876 | [nome] | +20.05 | — | — | — | — | — |
-| col149 | [nome] | +19.14 | -0.14 | — | -0.10 | — | — |
-| col125 | [nome] | +13.56 | — | — | — | — | — |
-| col49 | [nome] | -13.53 | -8.78 | — | — | — | -26.65 |
-| col95 | [nome] | +10.86 | — | — | — | — | — |
-| col868 | [nome] | +7.43 | — | — | — | -0.21 | — |
-| col128 | [nome] JUN | +6.95 | — | — | — | — | — |
-| col109 | [nome] | +5.72 | — | — | — | — | — |
-| col85 | [nome] BENEDI | +2.30 | — | — | — | — | — |
-| col147 | [nome] | +2.29 | — | — | — | +7.54 | — |
-| col56 | [nome] | — | -0.17 | — | -0.18 | — | — |
-| col58 | [nome] | — | -0.12 | — | -0.11 | — | — |
-| col61 | [nome] BARZ | — | -0.39 | — | -0.43 | — | — |
-| col639 | [nome] | — | -0.85 | — | -0.80 | — | — |
-| col638 | [nome] NASC | — | — | — | — | +7.54 | — |
-| col62 | [nome] BEN | — | -0.22 | — | -0.27 | — | — |
-| col63 | [nome]  | — | -1.57 | — | -1.44 | — | — |
-| col761 | [nome] | — | -0.79 | — | -0.82 | — | — |
-| col79 | [nome] | — | -0.35 | — | -0.24 | — | — |
-| col81 | [nome] | — | -5.45 | — | — | — | — |
-| col82 | [nome] | — | — | — | — | +7.55 | — |
-| col746 | [nome] | — | — | — | — | +7.54 | — |
-| col87 | [nome] | — | — | — | — | +7.54 | — |
-| col89 | [nome] | — | — | — | — | +7.54 | — |
-| col90 | [nome] | — | -0.52 | — | -0.53 | — | — |
-| col91 | [nome] NEVE | — | -0.11 | — | -0.08 | — | — |
-| col92 | [nome] OLIVE | — | -0.83 | — | -0.85 | — | — |
-| col741 | [nome] | — | -0.09 | — | -0.11 | — | — |
-| col750 | [nome] | — | -0.98 | — | -0.98 | — | — |
-| col752 | [nome] | — | -1.00 | — | -0.95 | — | — |
-| col642 | [nome] | — | — | — | — | +3.35 | — |
-| col743 | [nome] GONC | — | -3.89 | -0.07 | +2.83 | — | -13.19 |
-| col97 | [nome] SAN | — | -0.68 | — | -0.73 | — | — |
-| col100 | [nome] | — | -0.64 | — | -0.76 | — | — |
-| col104 | [nome] | — | -0.07 | — | -0.20 | — | — |
-| col106 | [nome] JUN | — | — | — | — | — | +0.11 |
-| col107 | [nome] | — | +3.54 | +2.90 | +0.81 | -16.94 | +107.68 |
-| col112 | [nome] PEREIR | — | +0.12 | — | — | — | +0.13 |
-| col114 | [nome] | — | — | — | — | +7.55 | — |
-| col866 | [nome] SIL | — | -0.04 | — | -0.01 | — | +59.88 |
-| col115 | [nome] | — | -0.03 | — | -0.04 | — | — |
-| col744 | [nome] | — | -0.51 | — | -0.47 | — | — |
-| col123 | [nome] | — | -0.74 | — | -1.05 | — | — |
-| col749 | [nome] | — | — | — | — | +7.54 | — |
-| col131 | [nome] | — | — | — | — | +67.90 | — |
-| col137 | [nome] | — | — | — | — | — | +12.00 |
-| col138 | [nome] | — | -0.02 | — | — | — | — |
-| col139 | [nome] G | — | -0.48 | — | -0.57 | — | — |
-| col829 | [nome] | — | — | — | — | +7.54 | — |
-| col150 | [nome] | — | -1.22 | — | -1.10 | — | — |
-| col152 | [nome] | — | +0.51 | — | — | -15.93 | -12.89 |
-| col159 | [nome] | — | -0.99 | — | -0.99 | — | — |
-| col755 | [nome] | — | -0.46 | — | -0.44 | — | — |
-| col643 | [nome] | — | -0.54 | — | -0.54 | — | — |
-| col166 | [nome] SIL | — | -0.13 | — | -0.13 | — | — |
-| col169 | [nome] | — | -1.10 | — | -1.06 | — | — |
-| col170 | [nome] | — | -0.89 | — | -0.87 | — | — |
-| col171 | [nome] TRAMON | — | -0.05 | — | -0.04 | — | — |
-| col172 | [nome] INA | — | -0.08 | — | -0.08 | — | — |
+| col126 | LUCAS ZACARIA RUIZ | +51.41 | -0.49 | — | -0.25 | — | +24.04 |
+| col134 | MARIO CLARO DE CARVALHO NE | +43.36 | -0.26 | — | -0.35 | — | +23.94 |
+| col155 | REINALDO PACIFICO DA CONCE | +43.09 | -22.49 | -22.51 | — | — | — |
+| col67 | CIRINEU AMARAL | +35.84 | — | — | — | — | — |
+| col168 | VALDEMIR DOS SANTOS | +35.72 | -0.28 | — | -0.27 | — | — |
+| col84 | EMERSON DE OLIVEIRA | +35.12 | -0.02 | — | -0.02 | — | — |
+| col59 | AIRTON JOSE DE AZEVEDO | +34.60 | — | — | — | — | — |
+| col499 | RODRIGO ESTEVAM SARDI | +34.45 | — | — | — | — | — |
+| col173 | VITORIO DE GODOY | +34.41 | -0.21 | — | -0.23 | — | — |
+| col111 | JOAO VITOR DE FREITAS REIS | +34.21 | — | — | — | — | — |
+| col101 | HUGO LEONARDO ARAUJO BERTH | +34.11 | -0.40 | — | -0.39 | — | — |
+| col113 | JOEL MARCOS DE NEZ | +33.98 | — | — | — | — | — |
+| col177 | WEVERTOWN RODRIGUES DE FRE | +33.49 | — | — | — | — | +0.07 |
+| col157 | RENATO ALEX DE BASSI | +33.32 | -0.12 | — | -0.13 | — | — |
+| col94 | FERNANDO JERONIMO DE PAULA | +33.01 | -1.08 | — | -1.15 | — | — |
+| col154 | REGINALDO PINHEIRO FERREIR | +32.38 | -0.24 | — | -0.21 | — | +0.19 |
+| col70 | CLAUDIO DA SILVA | +32.35 | -0.16 | — | -0.15 | — | — |
+| col141 | MATHEUS SUNTAQUE DE SOUZA | +31.84 | -0.09 | — | -0.08 | — | — |
+| col130 | MARCIO MACEDO DA SILVA | +30.67 | -0.07 | — | -0.03 | — | — |
+| col747 | EMERSON RODRIGUES GONCALVE | +30.58 | -0.95 | — | -0.85 | — | — |
+| col72 | CLEBER CORREA | +29.29 | — | — | — | — | — |
+| col165 | THIAGO APARECIDO PERES | +25.57 | — | — | — | — | — |
+| col80 | EDIMAR DOS SANTOS | +25.24 | -0.15 | — | -0.09 | — | — |
+| col127 | LUCIANE MARIA ASSENCIO | +25.12 | — | — | — | — | — |
+| col163 | THALYSON KAIKE DAGUANO | +23.96 | — | — | — | — | — |
+| col121 | JULIO WELLINGTON DOMINGOS  | +22.63 | — | — | — | — | — |
+| col110 | JOAO VITOR BATISTA RODRIGU | +22.54 | — | — | — | — | — |
+| col78 | DIOGO FERNANDES GOMES | +22.34 | -0.15 | — | -0.20 | — | — |
+| col876 | MARCO ANTONIO ROMAGNA | +20.05 | — | — | — | — | — |
+| col149 | RADAMI NEVES JUNIOR | +19.14 | -0.14 | — | -0.10 | — | — |
+| col125 | LUAN CRISTIAN DA CRUZ | +13.56 | — | — | — | — | — |
+| col49 | JANERSON ERIK FRANÇA LIMA | -13.53 | -8.78 | — | — | — | -26.65 |
+| col95 | GEOVANI BAMBIL COELHO | +10.86 | — | — | — | — | — |
+| col868 | LUCAS HENRIQUE TRIANO | +7.43 | — | — | — | -0.21 | — |
+| col128 | LUIZ CARLOS DOS SANTOS JUN | +6.95 | — | — | — | — | — |
+| col109 | JEFFERSON SOUZA DA SILVA | +5.72 | — | — | — | — | — |
+| col85 | EMERSON DE OLIVEIRA BENEDI | +2.30 | — | — | — | — | — |
+| col147 | PEDRO VIEIRA LAVOURA | +2.29 | — | — | — | +7.54 | — |
+| col56 | ADEMIR DOS SANTOS | — | -0.17 | — | -0.18 | — | — |
+| col58 | ADRIANO RIBEIRO DE GODOI | — | -0.12 | — | -0.11 | — | — |
+| col61 | ALYSSON FELIPE SANTOS BARZ | — | -0.39 | — | -0.43 | — | — |
+| col639 | ANDERSON DE ALMEIDA ASSIS | — | -0.85 | — | -0.80 | — | — |
+| col638 | ANDRESSA FRANCISCA DO NASC | — | — | — | — | +7.54 | — |
+| col62 | ANTONIO JOAQUIM WERNER BEN | — | -0.22 | — | -0.27 | — | — |
+| col63 | APARECIDO VALENTIM SOARES  | — | -1.57 | — | -1.44 | — | — |
+| col761 | CLAYTON COSME PARDINHO | — | -0.79 | — | -0.82 | — | — |
+| col79 | DOUGLAS BESSANI | — | -0.35 | — | -0.24 | — | — |
+| col81 | EDNEI ELCIO DE MELO | — | -5.45 | — | — | — | — |
+| col82 | EDSON CLEI DA SILVA | — | — | — | — | +7.55 | — |
+| col746 | EMERSON LEANDRO CATHARINO | — | — | — | — | +7.54 | — |
+| col87 | FABIO ROSA DA SILVA | — | — | — | — | +7.54 | — |
+| col89 | FELIPE FERNANDES BARROZO | — | — | — | — | +7.54 | — |
+| col90 | FELIPE LEMES RAIMUNDO | — | -0.52 | — | -0.53 | — | — |
+| col91 | FERNANDO FERREIRA DAS NEVE | — | -0.11 | — | -0.08 | — | — |
+| col92 | FERNANDO HENRIQUE DE OLIVE | — | -0.83 | — | -0.85 | — | — |
+| col741 | FERNANDO RODRIGO DA SILVA | — | -0.09 | — | -0.11 | — | — |
+| col750 | FERNANDO RODRIGUES LEANDRO | — | -0.98 | — | -0.98 | — | — |
+| col752 | FLAVIO FARIAS OLIVEIRA | — | -1.00 | — | -0.95 | — | — |
+| col642 | FRANCISLAINE SMOLAK CENA | — | — | — | — | +3.35 | — |
+| col743 | GABRIEL ALCIDES LAMAR GONC | — | -3.89 | -0.07 | +2.83 | — | -13.19 |
+| col97 | GUILHERME MENDONÇA DOS SAN | — | -0.68 | — | -0.73 | — | — |
+| col100 | HERALDO GIANGARELLI | — | -0.64 | — | -0.76 | — | — |
+| col104 | ILSON ALVES DOS REIS | — | -0.07 | — | -0.20 | — | — |
+| col106 | IZENOR INACIO DE ABREU JUN | — | — | — | — | — | +0.11 |
+| col107 | JANDERSON DA SILVA ARAUJO | — | +3.54 | +2.90 | +0.81 | -16.94 | +107.68 |
+| col112 | JOAO VITOR DE SOUZA PEREIR | — | +0.12 | — | — | — | +0.13 |
+| col114 | JOSE CARLOS APOLINARIO | — | — | — | — | +7.55 | — |
+| col866 | JOSE CLEMILSON DE MELO SIL | — | -0.04 | — | -0.01 | — | +59.88 |
+| col115 | JOSE EDILMAR DO NASCIMENTO | — | -0.03 | — | -0.04 | — | — |
+| col744 | JUAN PABLO HENRIQUE DACIUK | — | -0.51 | — | -0.47 | — | — |
+| col123 | LEANDRO REDON DA SILVA | — | -0.74 | — | -1.05 | — | — |
+| col749 | LUIZ HENRIQUE LADEIRA | — | — | — | — | +7.54 | — |
+| col131 | MARCO ANTONIO BORTOLOTI | — | — | — | — | +67.90 | — |
+| col137 | MATEUS DE SOUZA FERMINO | — | — | — | — | — | +12.00 |
+| col138 | MATHEUS GODOY DA COSTA | — | -0.02 | — | — | — | — |
+| col139 | MATHEUS HENRIQUE RIBEIRO G | — | -0.48 | — | -0.57 | — | — |
+| col829 | RAFAEL OLIVEIRA SILVA | — | — | — | — | +7.54 | — |
+| col150 | RAILTON CAMPOS DA SILVA | — | -1.22 | — | -1.10 | — | — |
+| col152 | RAUL GONÇALVES ALVES | — | +0.51 | — | — | -15.93 | -12.89 |
+| col159 | RODOLFO MORILHAS | — | -0.99 | — | -0.99 | — | — |
+| col755 | RODRIGO DE SOUZA SANFELICE | — | -0.46 | — | -0.44 | — | — |
+| col643 | RODRIGO HENRIQUE DE SOUZA | — | -0.54 | — | -0.54 | — | — |
+| col166 | THIAGO HENRIQUE SIMIÃO SIL | — | -0.13 | — | -0.13 | — | — |
+| col169 | VALDINEI FERREIRA | — | -1.10 | — | -1.06 | — | — |
+| col170 | VICTOR LIMA ROCHA | — | -0.89 | — | -0.87 | — | — |
+| col171 | VINICIUS DOS SANTOS TRAMON | — | -0.05 | — | -0.04 | — | — |
+| col172 | VITOR FELIPE FRANCISCO INA | — | -0.08 | — | -0.08 | — | — |
 
 TOTAL (87 colabs): AN +979.40 h · HE 50 -57.91 h · HE 100 -19.68 h · DSR -17.73 h · Banco +106.05 h · Trab +175.31 h
 
@@ -6683,7 +7029,7 @@ TOTAL (87 colabs): AN +979.40 h · HE 50 -57.91 h · HE 100 -19.68 h · DSR -17.
 A razao: a regua legal nao muda so a prorrogacao noturna -- ela tambem troca `regua_excedente` de
 `'legais'` para `'relogio'` e desliga a hora reduzida do Art.73. Com a hora de 60 min, o trabalhado
 sobe **e** o excedente sobre o teto de 8h diario cai, entao HE desce enquanto AN sobe.
-**Lancar so o AN paga a mais.** Caso extremo, a 3a linha da tabela: `col155 [nome]` tem
+**Lancar so o AN paga a mais.** Caso extremo, a 3a linha da tabela: `col155 REINALDO` tem
 **AN +43,09** contra **HE 50 -22,49 e HE 100 -22,51**.
 
 ### Duas coisas que ficam declaradas
@@ -6778,7 +7124,7 @@ commit das 07:25. Nenhum dos dois criou este bug.
 ### A causa, medida
 
 ```
-col418 ([nome], EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
+col418 (ADRIANO LUCAS, EC 939, tipo 180, 12x36 19:00-07:00, ancora 2026-07-20)
   17/09 a 20/09   trabalha alternado T.T.   gerada_em 2026-08-21 08:50:12
   21/09 a 30/09   trabalha TODOS True       gerada_em 2026-09-21 08:50:23
 ```
@@ -11618,7 +11964,7 @@ matricula, com a folha "regras aplicadas". Entregue em privado ao Ronald.
 | tela (cont.) | **17:2x PAUTA-DO-DIA (P7.1 parte B) na esteira (front, smoke)**. Medido: o botao 'Abrir Pauta DP' do dia fechado so abria a gaveta VAZIA (sem ancora, sem texto); e a porta exige 'assinado por' de superusuario e de quem tem 2+ setores, campo que o compositor nao tinha -- 14 dos 22 admins nao conseguiam enviar pauta nenhuma. **Zero pautas escritas por gente em todo o historico** (as 236 dos ultimos 14 dias sao do sistema). Cura: o botao passa colab e dia; o compositor abre para o DP colado no dia; a porta cola o dia no corpo (colab/matricula, marcos, batidas, o que a celula acusa e quais marcos ficaram sem batida, link do calendario); campo 'assinado por'; a ficha do colab lista as pautas dele. *Para a admin: dia de competencia fechada nao se mexe -- e com o DP; o botao 'Abrir Pauta DP' agora ja leva o dia inteiro para o DP.* |
 | tela (cont.) | **16:56 WIZARD-12x36-FASE regra 3 na esteira (front, por cima da fase12 no ar; vai no mesmo commit, depois do smoke)**. Corte Claude na pergunta ao Ronald (16:4x, 'ritmo = 2+ plantoes seguidos; avulso fica na escala anterior'): VIGENCIA = primeiro plantao realizado da fase nova depois do ultimo que a contradiz; sem plantao ainda, o primeiro dia da fase nova com o descanso cumprido. A tela diz 'dias antes de dd/mm ficam como estao (escala anterior); dias a partir de dd/mm seguem a fase nova'. Inicio da apuracao por escolha: 'a partir da mudanca' (padrao) ou 'desde o inicio do vinculo' (aviso vermelho; nunca antes da competencia aberta), previa de furos dos dois. **Achado no caminho: a sugestao votava pela maioria da janela e mandaria a col99 -- ja corrigida para 13/09 -- de volta a fase antiga (11 plantoes antigos x 3 novos)**; agora segue o ritmo recente. Sombra: col901 (mat 1757) fase par, vigencia 18/09, plantao de 15/09 avulso; col99 fase impar, vigencia 13/09. Contagem por dias corridos (par em setembro = impar em agosto). *Para a admin: ao trocar a fase de um 12x36, o sistema propoe a data em que o ritmo mudou e mostra o que muda nos dois jeitos de aplicar.* |
 | tela (cont.) | **16:22 UI-CHAMADOS-LENTA-2 na esteira** (fecha os 800 ms): o resumo da Central agrupa/conta/ordena pelas colunas e so materializa os 25 cartoes da pagina (a arvore anterior materializava todos os chamados do filtro). Sombra: painel 461 -> 343 ms. |
-| tela (cont.) | **16:3x COPILOTO-ACHA-PESSOA-2 NO AR** (586c2191): a guarda de empresa morde so o pedido. **15:59 COPILOTO-ACHA-PESSOA NO AR** (8a553b3d). **pessoa_nao_encontrada_com_nome_valido = 26 (7 dias)** ao pousar: 20 respostas que PEDIRAM a empresa de uma pessoa (a maioria nas rodadas noturnas do golden, 04:3x-05:0x, desde 14/09 -- o defeito era da semana, nao so da Edna), 3 nomes que o extrator nao via (#531 em minusculas, #1991, #1998) e 3 FALSOS POSITIVOS da guarda nova (URL com ?empresa=, "raio-x de cada empresa", menu de opcoes) -- corrigidos na COPILOTO-ACHA-PESSOA-2 (na esteira, 16:01: a guarda exige o PEDIDO; os 20 reais seguem mordendo). O contador cai para 0 conforme a janela de 7 dias anda (25/09). Reproduzido: conversas #2148/#2149 (15:16) -- "o que acontece com a edna Edna (mat/col 204)" e "Edna (mat/col 204)"; o extrator nao devolveu termo (nome de uma palavra exigia preposicao antes; a 1a palavra da frase nunca contava; "col 204" ignorado); nenhum bloco da pessoa entrou (so os 15 agregados) e o modelo pediu "em qual empresa ela trabalha?". A busca do core ja achava a pessoa por "Edna", "[nome]", parcial ou completo, em todas as empresas (1 resultado); e "204" solto acha a matricula de OUTRA pessoa. Cura: o cadastro decide o nome em qualquer caixa/posicao (so palavra INTEIRA de um nome achado); colNNN pelo id; 0 -> nao existe + 3 parecidos; N -> qual destes com matricula/empresa/posto; guarda deterministica perguntou_empresa (lei fonte); golden +2; contador pessoa_nao_encontrada_com_nome_valido (7 dias; as duas de 15:16 contam ate 25/09). *Para a admin: pode perguntar pelo nome como quiser -- so o primeiro nome, em maiusculas, ou o nome completo; se houver mais de uma pessoa, o copiloto mostra matricula, empresa e posto de cada; ele nao pergunta mais a empresa.* |
+| tela (cont.) | **16:3x COPILOTO-ACHA-PESSOA-2 NO AR** (586c2191): a guarda de empresa morde so o pedido. **15:59 COPILOTO-ACHA-PESSOA NO AR** (8a553b3d). **pessoa_nao_encontrada_com_nome_valido = 26 (7 dias)** ao pousar: 20 respostas que PEDIRAM a empresa de uma pessoa (a maioria nas rodadas noturnas do golden, 04:3x-05:0x, desde 14/09 -- o defeito era da semana, nao so da Edna), 3 nomes que o extrator nao via (#531 em minusculas, #1991, #1998) e 3 FALSOS POSITIVOS da guarda nova (URL com ?empresa=, "raio-x de cada empresa", menu de opcoes) -- corrigidos na COPILOTO-ACHA-PESSOA-2 (na esteira, 16:01: a guarda exige o PEDIDO; os 20 reais seguem mordendo). O contador cai para 0 conforme a janela de 7 dias anda (25/09). Reproduzido: conversas #2148/#2149 (15:16) -- "o que acontece com a edna Edna (mat/col 204)" e "Edna (mat/col 204)"; o extrator nao devolveu termo (nome de uma palavra exigia preposicao antes; a 1a palavra da frase nunca contava; "col 204" ignorado); nenhum bloco da pessoa entrou (so os 15 agregados) e o modelo pediu "em qual empresa ela trabalha?". A busca do core ja achava a pessoa por "Edna", "EDNA", parcial ou completo, em todas as empresas (1 resultado); e "204" solto acha a matricula de OUTRA pessoa. Cura: o cadastro decide o nome em qualquer caixa/posicao (so palavra INTEIRA de um nome achado); colNNN pelo id; 0 -> nao existe + 3 parecidos; N -> qual destes com matricula/empresa/posto; guarda deterministica perguntou_empresa (lei fonte); golden +2; contador pessoa_nao_encontrada_com_nome_valido (7 dias; as duas de 15:16 contam ate 25/09). *Para a admin: pode perguntar pelo nome como quiser -- so o primeiro nome, em maiusculas, ou o nome completo; se houver mais de uma pessoa, o copiloto mostra matricula, empresa e posto de cada; ele nao pergunta mais a empresa.* |
 | estrutural (cont.) | **16:34 VIGIA-DE-HORA NO AR** (2eba972c). **1a rodada sem push (o passivo de hoje): emp2 18 cobrancas (60 celulas julgadas, 16 pushes calados), emp3 2 (2 calados), emp4 0**; o cron */10 entrou depois dela. Placar ao pousar: faltas_de_hoje_sem_cobranca = 7 -- os 7 NUNCA bateram na vida (divida de adesao; a lei do cartorio nao cobra e a vigia nao cobrou); o contador passa a seguir a lei na FALTAS-DE-HOJE-ADESAO (na esteira, 16:39). cartorio_0628_novos = 13 e o de HOJE de manha, antes da vigia existir; o primeiro numero que vale e o de amanha. A linha do PENDENTES (faltas de hoje passivo) saiu. Desenho: A cada 10 min o cartorio julga a celula de HOJE com marco vencido ha 30 min, pela mesma funcao das 06:27 (`cartorio.julgar_celula`, comando `vigia_de_hora` com cron proprio -- reusar o nome do cartorio misturava a duracao da madrugada e quebrava o selo das 06:27, pego na regua 15:56). TABULEIRO: e juiz por relogio (a lampada que nao acende nao avisa) e entra DECLARADO em JUIZES_POR_VARREDURA, 26 -> 27; sai quando a celula agendar o proprio marco. Marco que nao venceu e 'nao sei', nunca furo; o relogio entra na impressao so no dia corrente; LIMBO pela lei do BUG 94; 1a rodada sem push (o passivo de hoje; sai da tabela PENDENTES quando pousar). Ensaio na sombra (12:15): emp2 5,2 s por passada / 11 emissoes (a col204 entre elas), emp3 1, emp4 0. **Madrugada identica: cartorio DRY --forcar emp4 antes x depois, 1.211 celulas, DIFF 0.** Contadores: faltas_de_hoje_sem_cobranca a 30 min (era 2 h) e cartorio_0628_novos (esperado 0). *Para a admin: quem nao bater o ponto passa a ter o chamado do dia 30 minutos depois do horario -- entrada, volta do intervalo ou saida --, em vez de so no dia seguinte.* |
 | BO (cont.) | **15:4x BO Ronald chamado #23412 -> col217 -- MEDIDO (so leitura): o "+1,1h HE toda noite" e BUG DE TELA, a folha nao paga**. Escala 6x1 22:00-06:00, pausa cadastrada 02:00-03:00 (jornada 420 min); batidas reais 21:5x / 00:5x-01:0x / 01:5x-02:0x / 05:5x-06:0x (pausa real ~01-02). Pela funcao da folha (motor na janela da competencia): 11/09 425 min de relogio, 423 noturnos = 483 reduzidos, HE 0; idem 14, 15, 17/09; so 12/09 tem 18,7 min de HE (438,7 min de relogio) e 15/09 tem 11 min do Art.71 (pausa de 49 min). O calendario mostra +1,0 a +1,2h 'extra 50%' porque reaproveita as batidas que o juiz de turno ja CARIMBOU como intervalo (marca no proprio objeto); o motor, recebendo as marcadas, pula a pausa sem desconta-la e pareia 21:57->06:09 inteiro (492 min -> 72 min 'extra'). Nao e (a) cadastro nem (c) tolerancia; a reducao da hora noturna (b) existe (7h de relogio = ~8h reduzidas) e sai como ADICIONAL NOTURNO, nao HE. **16:15 CALENDARIO-CARIMBO-INTRA NO AR** (ffa59bcd): o calendario entrega ao motor copias das batidas sem o carimbo do juiz de turno; selo = calendario x folha na mesma noite (RED 492 x 426 min, '+1.2h extra 50%'). A raiz (o juiz de turno nao zera `_intra_dur` entre passadas, como zera `_eco_flush`) toca o pareamento da folha: fica para a raia dinheiro, com DIFF. *Para a admin: essas noites NAO tem hora extra na folha -- o '+1,1h' do calendario e erro de tela (conta a pausa como trabalho) e vai ser corrigido; o que ela recebe a mais e o adicional noturno, que e lei. Se quiser, ajuste a pausa da escala para 01:00-02:00, que e quando ela pausa de fato.* |
 | tela (cont.) | **15:33 UI-CHAMADOS-LENTA NO AR** (2de5c3a7) -- **prod, gestor, mesma sonda: painel 3,0 s -> 454 ms (157 -> 42 consultas); modal do pior fio 351 -> 251 consultas, ~0,5 s -> 348 ms; placar 17 ms**. Log real 15:33-16:20 (gestores): painel 7 acessos 0,42-0,92 s (um de 3,3 s as 16:15:05, no minuto do deploy da CALINTRA -- worker frio); modal p50 412 / p95 763 ms; placar p95 278 ms. **O painel ainda roca os 800 ms em regime**: o que sobra e o resumo materializando os ~2 mil chamados do filtro com os joins (proxima dieta, fila tela). Contador p95_ms_central_chamados (24 h) ainda mistura o antes ate amanha 15:33. (1) prod, gestor, 24 h (log do ui): **painel p50 2,9 s / p95 4,6 s**; modal do fio p95 1,4 s; placar p95 0,36 s (a foto do PISCADA de 03/09 era do placar, e ele segue bem). (2) o selo de consultas roda na regua, mas com 3 colabs na fixture ficava verde; bisseccao na sombra: o painel ja fazia 120 consultas em 15/09 e hoje subiu (RITMO-DISCORDANTE +8, ARGUMENTA-C3 +23) para 151; o modal nao piorou (771 consultas no pior fio, antigo). (3) causa: o badge 'proposta' do resumo perguntava ao propositor pelos colabs do FILTRO INTEIRO, antes de paginar, e o propositor lia folga e empresa por linha; a particao por verbo trazia os followups de ~2 mil chamados; o modal lia os setores do usuario 2x por chamado. Cura: badge so para os 25 da pagina, folgas e empresa em lote, particao e credito so com as colunas que usam, setores 1x por request. **Nenhuma regra muda: DIFF de veredito 0 na sombra** (59 propostas, 2.314 vivos, 1.139 creditos, badges das 4 primeiras paginas). Sombra: **painel 2.657 -> 412 ms (151 -> 42 consultas)**; modal 1.094 -> 805 ms (771 -> 588). Selo novo de ESCALA (3 x 30 colabs: antes 92 -> 497 consultas) e contador **p95_ms_central_chamados** no placar (antes: 4.289 ms; esperado < 800). O modal ainda julga por chamado: continua na MODAL-LOTE (fila tela). *Para a admin: a Central de chamados (tela de Atendimento) deve abrir em menos de meio segundo, em vez de 3 a 5 segundos.* |
@@ -12652,7 +12998,7 @@ subir; este leu o sitio, viu que a pergunta ja e sua e parou.
 A fatia que ele fez: `vigia_ausencia.py::contadores` decidia sobreposicao por conta propria (fim
 derivado `a.data_fim or a.data`, corte de laco e comparacao de bordas na mao) e lia `data_fim`
 NULO como DIA UNICO -- inclusive em tipo de RANGE ABERTO. Ou seja, **o contador da familia repetia
-por conta propria o erro que ele existe para denunciar** (caso [nome] col422, contadores 6 e 7).
+por conta propria o erro que ele existe para denunciar** (caso EMMELI col422, contadores 6 e 7).
 Passa a perguntar a `ponto/turnos.py::dias_da_ausencia`, gemeo de `ausencia_sobrepoe` e insumo
 declarado de `veto_de_lancamento`.
 
@@ -12875,7 +13221,7 @@ sempre uma sessao, e processo de que o teto depende nao pode ter dono humano. **
 PID 61188 -> o systemd subiu o **61549** sozinho, segurando `/tmp/esteira_slots.lock`, aplicando
 `CADEIAS=4`.
 
-### 2. cpuset do teste no [nome] -- aqui a falha era minha
+### 2. cpuset do teste no NASCIMENTO -- aqui a falha era minha
 
 Eu tinha fixado o `juliani_db_test` **a mao** (`docker update`). O Ronald pegou certo: limite que so
 existe no container vivo **nao e limite** -- o primeiro `docker rm` devolveria a maquina inteira ao
