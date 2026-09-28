@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:01:31.**
+**Medido em 28/09/2026 09:07:01.**
 
 | | |
 |---|---|
@@ -88,6 +88,7 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  RED: termo usado em LEIS.md/MAPA.md/PRIMER.md sem linha no glossario = vermelho; "onde mora" que o grep nao acha = vermelho; card do Haiku diferente do gerado = vermelho.
   SELO: bin/tests/test_glossario_vivo.sh (ou core/tests), com caso que MORDE.
   PROIBIDO: definicao que contradiz lei vigente; termo sem ancora no codigo; glossario escrito a mao sem selo.
   CAUDA: oraculo E6 sai de /tmp/e6b.py para o repo, com selo (hoje a certificacao mora em /tmp).
@@ -108,9 +109,7 @@ M  app/docs/PROMPTS.md
   quantas perguntas vivas nascem de dia com par completo pelo marco. PROIBIDO: validar/fechar na mao, fallback, allowlist. Cadastro (sem escala vigente, sem posto) vai para a
   lista do meu !. PRONTO: RELATO com os REDs e o censo. LEI-AKITA: origem=emissor orfao_14h, testemunha=juiz da batida/marco, juizes novos=0. Segue a fila; PAREI so em lei ou !
 
-● Rodar o oraculo refatorado em prod · 1m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 --csv /tmp/e6_r5.csv 2>&1 | tail -12 (1m
-     23s)
+  Read 1 file, ran 11 shell commands
   ⎿  Referenced file docs/RELATO.md
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcbl13d3h.output (10 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1mesljwu.output (11 lines)
@@ -118,9 +117,10 @@ M  app/docs/PROMPTS.md
   ⎿  Referenced file ponto/management/commands/aplicar_09_corte_b.py
 
 ● Task "Esperar o veredito da suite completa" still running in background
-     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (2h 58m 59s · ↓ 97.6k tokens)
+  Advising using Fable 5.1
+
+· Determining… (3h 4m 28s · ↓ 101.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
