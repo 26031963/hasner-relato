@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:12:31.**
+**Medido em 28/09/2026 10:18:01.**
 
 | | |
 |---|---|
@@ -32,11 +32,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M PLANO_PISCADA.md
  M app/colaboradores/services/calendario.py
+ M app/core/juizes.py
+ M app/core/tests/test_selo_performance.py
 MM app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
  M app/ponto/management/commands/e6_oraculo.py
  M app/ponto/services/espelho.py
  M bin/hook_stop_fila1.py
@@ -93,25 +98,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Committed 8daf2359, 9de6b051, 9cf2f4d9, pushed to main, searched for 3 patterns, read 1 file, listed 1 directory, ran 13 shell commands
-
-❯ aval Ronald: REGISTRAR no BACKLOG (so registro, nao construir agora) a obra O-GEO-DECISAO, desenho cortado 28/09 09:5x; lei nova: precisa de corte -- "na recusa de geofence, o
-  colab nunca e a fonte da verdade do proprio dia recusado; o ato do admin e o carimbo". ETAPA 1 (codigo + UI simples no FIO do chamado de geofence, substituindo
-  autorizar/autorizar_advertir/recusar de chamados/services/acoes_chamado.py): porta UNICA de decisao com ato carimbado (quem, quando, motivo de catalogo, evidencia congelada:
-  distancia, gps_accuracy, ponto, posto). Decisoes: VALIDAR com motivo [funcao movel/ronda · entorno do posto · GPS impreciso · outro posto · servico externo] -> batida conta;
-  motivos de cadastro geram PROPOSTA de cadastro (raio, posto movel, posto do vinculo) que aplica so com ! (L-009). RECUSAR "nao trabalhou" -> batida retratada + FALTA DECIDIDA
-  no mesmo ato (L-088), sem pergunta ao colab. RECUSAR "trabalhou, esta nao vale" -> batida retratada; entrada = proxima batida valida no posto ou hora apurada pelo admin; sem
-  pergunta ao colab. [Advertir] so nos dois RECUSAR (grau/ciencia pelo desenho de app/docs/ADVERTENCIA-FICHA.md); registrar ponto sem trabalhar avisa o DP (Art.482, decisao do
-  DP). Pre-classificacao so SUGERE (mesmo ponto repetido, precisao pior que o raio, dentro de outro posto). Absorve a O41. ETAPA 2: coluna "Geo 30d" no painel situacional
-  (recusas + advertencias por colab, clique abre a lista de atos), nenhuma tela nova. Acesso: supervisao e DP, com trilha de leitura (o mapa mostra onde a pessoa mora). Registrar
-  tambem em PENDENTES o corte de lei acima. Segue a fila; PAREI so em lei ou !
-
-  Ran 5 shell commands
-
-❯ aval Ronald: corrige o REGISTRO da O-GEO-DECISAO, so a ETAPA 2 (etapa 1 intacta): sai a coluna "Geo 30d" do painel situacional. ENTRA: (a) historico dos atos de geo do colab no
-  DRAWER lateral existente (colaboradores/services/drawer.py), semente da ficha corrida (app/docs/ADVERTENCIA-FICHA.md); (b) atalho na navbar que abre o drawer generico
-  (core/_drawer_generico.html) com o filtro universal (core/_filtro_universal.html) -- periodo, tipo de ato (recusado nao trabalhou · recusado batida invalida · advertido ·
   validado por motivo), posto -- e gera PDF pelo botao canonico (core/_btn_pdf.html, L9 de UI). Drawer e PDF leem o MESMO leitor de atos (LEI-AKITA 2), trilha de leitura, acesso
   supervisao/DP. So registro. Segue a fila; PAREI so em lei ou !
 
@@ -122,14 +108,33 @@ M  app/docs/PROMPTS.md
   "PAREI: hook-teto | espera Ronald" no topo do RELATO esta velha, voce seguiu depois dela -- tira ou explica; (b) app/colaboradores/services/calendario.py aparece " M" na ARVORE
   VIVA fora de commit (L-005) -- de onde veio e o que e. Segue a fila; PAREI so em lei ou !
 
-● Ver o retorno e o conferir
-  ⎿  $ sed -n '82,140p' folha/porta_export.py
+● Declarar o teto e rodar colaboradores + folha
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/core/tests/test_selo_performance.py'
+     t=io.open(P,encoding='utf-8').read()
+     v=" 'colaboradores/N/calendario': 29,\n"
+     assert t.count(v)==1
+     n=(" # E4-CALENDARIO (28/09, corte Ronald): 29 -> 36, DEC…
 
-· Determining… (4h 9m 58s · ↓ 188.2k tokens)
+✢ Determining… (4h 15m 29s · ↓ 196.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: PARAR a emissao do lote 1 (hash atual invalido para este ponto). BUG-HE-INTRA-DOBRADA (fila 1, NA FRENTE; lei existente: politica de intrajornada 19/08 -- indeniza
+  o suprimido, nao reabre; nenhuma lei nova). FATO: col125 02/09 e 06/09 -- trab 11,99 h, horas_extra 0,99 E intra indenizada 1,0 no MESMO dia; gravado 09 HE50 1,98 + intra
+  2,00; o TXT exporta as duas rubricas (folha/export.py:270 e :277). CAUSA A PROVAR COM RED: a E3 (26/09) trocou o limite de HE de minutos_jornada (720) para
+  minutos_previstos_do_dia (jornada LIQUIDA, 660) -- o intervalo nao gozado passa a contar como HE e como intra. MEDIR ANTES (sombra, pelo motor REAL): na 09, dia-colab e horas
+  em que HE do dia <= intra suprimida do dia (a mesma hora contada 2x), por familia de motor, e quantos estao no lote 1; comparar com 08. MUDA: no dia com intra suprimida
+  indenizada, o suprimido nao entra no excedente da HE (limite = previsto liquido + suprimido indenizado) -- em TODOS os motores que indenizam. RED: col125 02/09 HE 0,99 -> 0 com
+  intra 1,0 intacta. SELO: caso que MORDE (turno de 13 h sem intervalo = 1 h HE + 1 h intra; 12 h sem intervalo = 0 HE + 1 h intra). DINHEIRO PARA BAIXO: L-094 nao cobre -- DIFF
+  de frota publicado e PAREI para o meu !. Depois do !: recalcular 09, re-medir a porta do export e novo hash do lote 1. PROIBIDO: ler intervalo_indenizavel (obra propria),
+  fallback, allowlist. LEI-AKITA: origem=limite de HE em motor_calculo_v2 (E3), testemunha=minutos_previstos_do_dia + intra suprimida, juizes novos=0. Segue a fila; PAREI so em
+  lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
