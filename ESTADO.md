@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:29:01.**
+**Medido em 28/09/2026 16:34:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 ## `git status --short`
 
 ```
+ M app/docs/ARQUITETURA.mmd
 M  app/docs/RELATO.md
 M  app/ponto/calculador/regras.py
 M  app/ponto/management/commands/diff_calculador.py
@@ -110,17 +111,17 @@ M  app/ponto/tests/test_calculador_regras.py
 
 ● Background command "Corrigir o import e rodar o DIFF" completed (exit code 0)
 
-● Publicar a S5b e rodar a regua · 2m 34s
+● Publicar a S5b e rodar a regua · 8m 4s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      p='app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
      sec = '''# O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME (28/09 16:1x)
-     Duas divergencias do DIFF fecharam, e as duas p… (2m 32s · 2 lines)
+     Duas divergencias do DIFF fecharam, e as duas p… (8m 2s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Billowing… (36m 28s · ↓ 24.4k tokens)
+· Billowing… (41m 58s · ↓ 24.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

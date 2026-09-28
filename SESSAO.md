@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 16:29:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **489**.
+**Medido em 28/09/2026 16:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **480**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -490,12 +490,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:36:58 | Bash | Procurar o teste na lista de relogio solto | `cd /home/ronald/saas-hasner && grep -n "entrada_adiantada" bin/relogio_solto.txt \| head -3; echo "rc=$?"` |
 | 04:35:25 | Edit |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
 | 04:34:48 | Read |  | `/home/ronald/saas-hasner/app/docs/RELATO.md` |
-| 04:34:31 | Bash | Procurar o teste na lista de relogio solto | `grep -n "entrada_adiantada" /home/ronald/saas-hasner/bin/relogio_solto.txt` |
-| 04:34:25 | Read |  | `/home/ronald/saas-hasner/bin/relogio_solto.txt` |
-| 04:34:15 | Bash | Contar linhas do relogio solto | `grep -c . /home/ronald/saas-hasner/bin/relogio_solto.txt` |
-| 04:34:00 | Bash | Conferir se o arquivo esta na lista de relogio solto | `grep -n "detectar_entrada_adiantada" /home/ronald/saas-hasner/bin/relogio_solto.txt \| head -3` |
-| 04:33:20 | Bash | Ver se o arquivo esta na lista de relogio solto | `cd /home/ronald/saas-hasner && grep -c "freeze_time" app/ponto/tests/*.py 2>/dev/null \| grep -v ":0" \| head -3; grep -n "freezegun" bin/relogio_solto.txt 2>/dev/null \| head -2; grep -c "test_detectar_entrada_adiantada" bin/relogio_solto.txt 2>/dev/null` |
-| 04:32:55 | Bash | Ler o setUp do teste com relogio solto | `sed -n '1,68p' /home/ronald/saas-hasner/app/ponto/tests/test_detectar_entrada_adiantada.py` |
-| 04:32:36 | Bash | Ler o teste que ficou vermelho | `grep -n "def test_sync_atrasado_fecha_chamado_preexistente" -A 30 /home/ronald/saas-hasner/app/ponto/tests/test_detectar_entrada_adiantada.py \| head -34` |
-| 04:32:24 | Bash | Rodar o teste suspeito isolado | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_detectar_entrada_adiantada --settings=config.settings.ci --noinput 2>&1 \| grep ...` |
-| 04:32:10 | Bash | Conferir se o teste e flaky | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && for i in 1 2; do docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_detectar_entrada_adiantada --settings=config.settings.ci --noi ...` |
