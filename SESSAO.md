@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 06:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.8 MB). Acoes na janela: **508**.
+**Medido em 28/09/2026 06:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.8 MB). Acoes na janela: **507**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -517,4 +517,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:21:27 | Bash | Ver os campos do TipoEscala | `python3 -c " import re s=open('escala/models.py').read() i=s.index('class TipoEscala') bloco=s[i:i+4000] for m in re.finditer(r'^ (\w+) = models\.(\w+)\(([^\n]*)', bloco, re.M): req = 'blank' not in m.group(3) and 'null' not in m.group(3) and 'default' not in m.group(3) print('%-26s %-18s %s' % (m.group(1), m.group(2), 'OBRIGATORIO' if req else '')) " \| head -22` |
 | 18:20:34 | Bash | Pegar a excecao real | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_e5_fechamento_como_leitura --settings=config.settings.ci --noinput  ...` |
 | 18:20:02 | Bash | Ler o erro da fixture da E5 | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_e5_fechamento_como_leitura --settings=config.settings.ci --noinput  ...` |
-| 18:11:48 | Bash | Linha da O96 e push | `python3 - <<'PYEOF' p='docs/TICKETS.md'; s=open(p).read() i = s.index('\| O95 \|') nova = ('\| O96 \| ponto/turnos (pareador) \| a pausa que a ATA marcou com `X` voltou a ser PAUSA -- ela entrava ' 'no turno sem carimbo e `_pares_marcados` ficava cego a ela \| **no ar (commit `6d3e54b0`); reapply do ' 'gravado pendente** \| (no push) \| 27/09 \| ' '`ponto/tests/test_o96_par_da_ata_e_pausa.py` (4 c ...` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 06:11:31.**
+**Medido em 28/09/2026 06:17:01.**
 
 | | |
 |---|---|
@@ -114,14 +114,14 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Ligar a porta ao TXT e rodar o comando · 30s
+● Ligar a porta ao TXT e rodar o comando · 6m 0s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && python3 - <<'PYEOF'
      import io
      # 1. o comando passa a USAR a porta (uma implementacao so) e a LAVRAR
-     p='app/relatorios/management/commands/selo_leitores_no_mesmo_nu… (28s · 3 lines)
+     p='app/relatorios/management/commands/selo_leitores_no_mesmo_nu… (5m 58s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (8m 58s · ↓ 9.8k tokens)
+✢ Determining… (14m 29s · ↓ 9.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
