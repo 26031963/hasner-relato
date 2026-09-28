@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:27:31.**
+**Medido em 28/09/2026 11:32:33.**
 
 | | |
 |---|---|
 | `HEAD` local | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
-| `origin/main` | `af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ## `git status --short`
 
 ```
+ M app/docs/CORTES.md
+ M app/docs/LEIS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,7 +93,6 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
 ❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
   push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
@@ -116,14 +117,15 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 
 ● Background command "Re-medir com o patch certo" completed (exit code 0)
 
-● Empurrar a cura · 1m 5s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
-     git commit -q -F - -- app/docs/TICKETS.md <<'EOF'
-     TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
-     … (1m 4s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Pushed to main, ran 7 shell commands
 
-✢ Determining… (5h 24m 58s · ↓ 282.7k tokens)
+❯ aval Ronald: LEI NOVA, corte meu agora -- registrar em LEIS e CORTES: "OBRA ESTRUTURAL ANDA SOZINHA ATE O FIM: construida em sombra, entra por TROCA INTEIRA; durante a obra
+  nenhum acerto colab a colab entra na fila do Code, salvo bug provado que bloqueie a folha do mes; depois da troca, erro de cadastro ou de regra se corrige UMA vez na fonte,
+  nunca por leitor nem por caso." APLICACAO HOJE: fila 1 = cura HE/intra (portao da 09) -> O-DIA-PAGO S1 a S4 sem pausa. FILA 2 CONGELADA ate a troca da S3 (BO col354,
+  O-FOLGA-DIA-ERRADO, O-GEO-DECISAO, AVISO-DO-DONO, O-GLOSSARIO, BO-HE-MIGALHA ficam registrados, nao andam); o resto da E6 (14 nao certificados, O73, 30 separados) passa a ser
+  medido CONTRA o DiaPago depois da troca. Segue a fila; PAREI so em lei ou !
+
+✢ Determining… (5h 30m 1s · ↓ 286.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
