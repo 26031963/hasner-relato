@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) R4 curada, **NAO deployada** (pergunta de LEI no topo do PENDENTES: com o evento vivo o deploy virou o apply; +75,12 h em 27 colabs). (4) **R5 FECHADA**: o selo da O68b era vazio E atribuia a ela dois dias que nao sao dela. Em curso: **(5) selo tela==PDF==fechamento==TXT + E6 rodada 4**.
+**MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
 
@@ -64,6 +64,63 @@ letra, que vale para cura que *"nao move dinheiro por si"*; a R4 com o evento vi
   **(b)** o evento recusa mexer em campo de dinheiro sem aval registrado -- porta nova, e mata metade da E5;
   **(c)** `!` de CRITERIO por classe de cura (como a sua AVAL-DE-CRITERIO faz hoje por fatia), com faixa.
 A R4 espera no (a) enquanto voce nao disser. **A fila NAO parou**: sigo na R5.
+
+# ITEM (5) FECHADO: SELO VERDE nos quatro leitores, e a E6 rodada 4 (28/09 04:0x)
+
+## O selo, e por que ele e UM comando e nao dois contadores soltos
+
+As duas metades ja existiam -- `pdf_x_espelho_divergentes` e `cartao_x_txt_divergentes` -- e **ninguem as rodava
+juntas**. Contador que vive solto e contador que alguem esquece, e a porta do export precisa de UMA pergunta com
+UMA resposta. Nasceu `relatorios/management/commands/selo_leitores_no_mesmo_numero`.
+
+PROVA: (`--mes 9 --ano 2026`, universo `classificar_export(status='entra')`)
+```
+universo do TXT (09/2026): 205 colaborador(es)
+  tela_x_pdf=0
+  topo_x_coluna=0
+  dias_em_aberto=284  (nao e divergencia -- furo sem decisao, linha propria)
+  cartao_x_txt=0
+SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia, sem allowlist
+```
+O `cartao_x_txt` **nao e replicado**: o selo chama o contador que ja existe, senao nascem duas contas para a
+mesma pergunta -- a doenca que ele existe para acabar. O `dias_em_aberto` **nao entra na soma de falhas**: furo
+sem decisao tem linha propria (FALTA-UM-SIGNIFICADO, 23/09), e somar os 284 faria o selo barrar o export por
+aquilo que a lei manda MOSTRAR.
+
+E O `dias_em_aberto` IMPRIMIU 0 NA PRIMEIRA VERSAO -- numero falso na cara de quem le o selo, que e pior que
+numero ausente. Eu lia a chave do resumo da TELA, e ela mora no resumo que passou por `folha_manda`, montado
+pelo caminho do CARTAO. Corrigido: **284 em 23 colabs**, o mesmo que o contador antigo diz.
+
+## TRES CONTRATOS DA CASA ME PEGARAM no mesmo commit, e os tres tinham razao
+
+1. `test_todo_command_tem_casa` -- todo command entra no `CRONS` ou se declara em `FORA_DE_PIPELINE` **com
+   motivo**. Declarei: selo de PORTA, nao de pipeline; roda no ato do export, e agendar seria medir competencia
+   que ninguem vai exportar hoje. (E `FORA_DE_PIPELINE` e um **dict**, nao um set -- minha primeira entrada,
+   sem valor, quebrou o arquivo, e a regua pegou.)
+2. `test_ruff_zero` -- `import datetime` sem uso.
+3. `test_contract_juiz_feriado::test_MORDE_nenhum_sitio_novo_responde_por_conta_propria` -- eu lia
+   `getattr(emp, 'dia_inicio_competencia', 21)` na mao. **O corte da empresa sai do juiz**: troquei por
+   `janela_fechamento(mes, ano, emp)`, que ja o aplica. Este e o contrato mais valioso dos tres: ele impediu um
+   derivador paralelo de nascer no mesmo arquivo que existe para acabar com derivadores paralelos.
+
+## E6 RODADA 4, frota inteira (607 colabs)
+
+`BATE (ate 10 min): **92,9%** de 7.512 dias comparados` -- era **91,4%** na rodada 3. `erros no espelho: 0`.
+`dia_batida_impar: 473` (e hoje **todos** dizem `EM ABERTO -- falta: <marco>` na tela, por construcao da IMPAR),
+`diverge_acima_60: 208`, `diverge_10_60: 218`.
+
+As quatro classes, e o quanto elas encolheram desde o censo da O83:
+| classe | O83 (27/09) | rodada 4 | no TXT |
+|---|---|---|---|
+| A fechamento zero (cadastro) | 4 colabs / 217,7 h | **4 / 217,7 h** | **4** |
+| B turno aberto 5+ | 27 / 733,7 h | **8 / 304,8 h** | 0 |
+| C o espelho ve e a folha nao | 32 / 376,4 h | **12 / 86,2 h** | 1 |
+| D nem o espelho ve | 21 / 274,3 h | **16 / 168,6 h** | 1 |
+
+**No universo do TXT sobram 6 colabs com classe**, e 4 deles sao a classe A -- col924, col391, col43, col942:
+zero fatia de escala e zero celula na janela, com batidas. **Nao e cura de codigo, e cadastro**, e vai para o DP
+e para a supervisora. A classe B, que era a maior (733,7 h), nao tem NENHUM colab no TXT.
+
 
 # E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/09 03:3x)
 

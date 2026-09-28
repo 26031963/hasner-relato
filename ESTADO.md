@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:19:51.**
+**Medido em 28/09/2026 04:25:01.**
 
 | | |
 |---|---|
@@ -34,7 +34,10 @@ a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nun
 ```
 M  app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
+M  app/core/espelho_verdade.py
+M  app/docs/BACKLOG.md
+M  app/docs/RELATO.md
+M  app/docs/TICKETS.md
 A  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
@@ -48,7 +51,7 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 |---|---:|---|
 | **E1** PREVISAO INTEGRA | **2/4 = 50%** | selos de frota = 0: vinculo com fim<inicio; 12x36 com 3+ trabalha seguidos; dia de colab ativo sem previsao ou |
 | **E3** MOTOR PELO JUIZ | **7/10 = 70%** | o motor le periodos do juiz da batida e jornada do juiz do previsto; DIFF no RELATO + `!` |
-| **E4** LEITORES NO MESMO NUMERO | **2/5 = 40%** | selo tela == PDF == fechamento == TXT na frota, 0 divergencia |
+| **E4** LEITORES NO MESMO NUMERO | **3/5 = 60%** | selo tela == PDF == fechamento == TXT na frota, 0 divergencia |
 | **E5** FECHAMENTO ONLINE | **1/2 = 50%** | fechamento = LEITURA; `recalcular` deixa de existir; so atos persistem |
 | **E6** CERTIFICACAO POR ORACULO INDEPENDENTE | **2/8 = 25%** | 0 divergencia nao explicada + 0 dia sem previsao + 0 periodo fora do juiz |
 
@@ -70,7 +73,7 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 | E3 | no turno partido sem intervalo declarado, a volta da pausa nao e atraso (O73 | **FALTA** | RED col81 (te#189 16:00-00:00): "Atraso: entrada as 18:29 (previsto 16:00)" na volta do intervalo; 6 templates `turno_partido` com intervalo_modo=dura |
 | E4 | o cartao PDF desenha o mesmo que a tela | FEITO | `pdf_x_espelho_divergentes` = 0 em 199 colabs (sombra, pos-O69) |
 | E4 | o cartao e o TXT no mesmo numero | FEITO | `cartao_x_txt_divergentes` = 0 na competencia 09 |
-| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | RE-MEDIDO 28/09 01:1x, depois da O96 e do recalculo inteiro de 09: **19 -> 18 divergentes >1 h no universo do TXT (205)**, e o unico curado (col843) f |
+| E4 | o topo do cartao e a SOMA das linhas | FEITO | RE-MEDIDO 28/09 01:1x, depois da O96 e do recalculo inteiro de 09: **19 -> 18 divergentes >1 h no universo do TXT (205)**, e o unico curado (col843) f |
 | E4 | colunas Atraso e Saida antecipada lendo a folha (O51b) | **FALTA** | (sem prova) |
 | E4 | o tipo de escala exibido sai da DEFINICAO, nao do rotulo gravado | em curso | O74: `rotulo_do_desenho` + filtro `desenho_do_turno`; ficha no ar, lista de tipos espera o deploy |
 | E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
@@ -110,18 +113,18 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Corrigir a entrada no dict e rodar a regua · 6m 5s
+● Publicar o item (5), marcar o placar e rodar a regua · 1m 45s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io
-     p='app/config/crons.py'
-     c=io.open(p,encoding='utf-8').read()
-     old = """ 'selo_leitores_no_mesmo_numero',
-     'folga_que_sumiu':"""
-     new = """ 'selo_leitores_no_mesmo_numero':
-     'SELO DE PORTA, nao de pipeline (28/09): e a pergunta que antecede … (6m 2s · 2 lines)
+     p='app/docs/RELATO.md'
+     s=io.open(p,encoding='utf-8').read()
+     l3=s.split('\n')[2]
+     novo3=('**MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 '
+     'divergencia nos 205 do … (1m 42s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (3h 13m 53s · ↓ 135.9k tokens)
+✶ Metamorphosing… (3h 19m 4s · ↓ 139.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
