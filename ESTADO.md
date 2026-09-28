@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:55:31.**
+**Medido em 28/09/2026 11:00:46.**
 
 | | |
 |---|---|
@@ -32,14 +32,15 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ## `git status --short`
 
 ```
-MM app/docs/BACKLOG.md
+M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
-MM app/docs/PROMPTS.md
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
- M app/ponto/motor_calculo_v2.py
- M app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
-?? app/ponto/tests/test_he_intra_dobrada.py
+M  app/docs/PROMPTS.md
+M  app/docs/RELATO.md
+M  app/folha/porta_export.py
+M  app/folha/tests/test_porta_do_export.py
+M  app/ponto/motor_calculo_v2.py
+A  app/ponto/tests/test_he_intra_dobrada.py
+M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -92,21 +93,6 @@ MM app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: REORDENA a fila 1 (substitui a reordenacao de 10:36) -- PORTAO DO EXPORT DA 09 = (1) BUG-HE-INTRA-DOBRADA curado com RED col125 e o DIFF para o meu ! -> (2)
-  PROVA-DOMINIO: motor ATUAL em sombra/so leitura sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE50, HE100, feriado, intra, noturno, atraso, saida antecipada, folga
-  trabalhada, falta) com os recibos Dominio ja extraidos (oraculo JSP 04-07); publicar por rubrica: total motor x total Dominio, colabs divergentes e os PADROES (mesma rubrica,
-  mesmo regime, mesmo sinal = regra, nao dado). Padrao sem causa nomeada = PAREI com a lista. -> (3) amostra de 20 colabs (todos os regimes) com extrato de rubricas da 09 para o
-  admin da folha conferir -> (4) novo lote 1 com hash novo, so com o meu !. DEPOIS: O-DIA-PAGO fatias 1+2, troca de leitores em lote, resto da E6. E4-CALENDARIO e E5-final
-  absorvidos pelo O-DIA-PAGO: parar a edicao de app/colaboradores/services/calendario.py (se for isso), guardar o diff em /tmp com trilha, voltar esse arquivo ao HEAD (L-005).
-  Segue a fila; PAREI so em lei ou !
-
-  Pushed to main, searched for 5 patterns, ran 17 shell commands
-
-❯ aval Ronald: amostra do admin da folha para o portao da 09 = col253, col134, col30, col125, col843, col207, col369, col87, col820, col865, col382, col81, col76, col610, col904,
-  col72 (escolha medida no gravado, 28/09 10:45). Extrato de rubricas por colab da 09 DEPOIS da cura HE/intra e do recalculo, lido da mesma fonte do TXT, publicado no RELATO
-  (ids, sem nome). Medido por fora: HE e intra no mesmo mes em 225 colabs, teto 494,73 h (12x36 240,96 · comercial 165,11 · turno partido 67,06 · sem vinculo 21,60) -- a cura
-  cobre TODOS os motores que indenizam, o DIFF tem que mostrar os dois maiores. Segue a fila; PAREI so em lei ou !
-
   Searched for 1 pattern, ran 4 shell commands
 
 ● Background command "DIFF de frota da cura contra o gravado" completed (exit code 0)
@@ -119,17 +105,32 @@ MM app/docs/PROMPTS.md
 
 ● Background command "Corrigir os campos e rodar o DIFF" completed (exit code 0)
 
-● Esperar o efeito isolado · 3s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'SOMA DOS DELTAS|Error'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bddsq698c.output 2>/dev/null; do sleep 20; done; tail -20
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94…
+  Ran 3 shell commands
 
-· Determining… (4h 52m 58s · ↓ 252.6k tokens)
+● Background command "Medir o efeito ISOLADO da cura" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Corrigir o monkeypatch e medir o isolado" completed (exit code 0)
+
+  Ran 2 shell commands
+
+❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
+  push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
+  push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
+
+  Esperar a regua do BUG-HE · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hei.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Determining… (4h 58m 14s · ↓ 262.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

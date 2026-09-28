@@ -1,6 +1,9 @@
 # RELATO — esteira saas-hasner
 
 
+> **PAREI: BUG-HE-INTRA-DOBRADA curado e MEDIDO, espera o seu `!`** (28/09 11:2x). A mesma hora estava sendo paga em DUAS rubricas. RED vermelho e verde, cura em todos os motores que indenizam, e o DIFF de frota abaixo: **-430,71 h de hora extra em 208 colabs, ZERO campo fora do alvo, ZERO colab para cima**. Dinheiro PARA BAIXO -- a L-094 nao cobre, entao nao deployei. Prod segue com o numero de hoje.
+
+
 > **EMISSAO DO LOTE 1 PARADA (28/09 10:3x, ordem do Ronald).** Os tres hashes publicados abaixo **nao valem mais para este ponto**: entrou o `BUG-HE-INTRA-DOBRADA` na frente da fila 1 -- a mesma hora paga em duas rubricas no dia de intrajornada suprimida. Nada foi emitido (a emissao sempre foi um clique seu, e ele nao aconteceu), entao nao ha o que reverter. Depois do `!` da cura: recalcular a 09, re-medir a porta e publicar hash NOVO.
 
 _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era mentira em duas pontas: o item que ela citava -- E6-IMPAR -- **fechou** as 09:2x (commit `8daf2359`), e eu segui trabalhando depois dela. Ela nao foi escrita por mim para pedir decisao sua: foi o hook do teto de bloqueios que a lavrou sozinho ao ver 5 bloqueios seguidos sem commit novo na fila 1. Um PAREI que nenhum humano escreveu e que ninguem apaga ao fechar o item e pior que nenhum -- ele faz voce procurar uma decisao que nao existe. Ao fechar item eu limpo o PAREI resolvido, como voce cortou em 27/09 23:4x, e a cura do lado do hook fica no BACKLOG como **HOOK-PAREI-SE-APAGA**.)_
@@ -10,6 +13,117 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# BUG-HE-INTRA-DOBRADA: a mesma hora paga DUAS vezes -- curada, medida, e PARADA no seu `!` (28/09 11:2x)
+
+## O que era, em uma conta
+
+col125, 02/09: entrou 07:00, saiu 19:00, **nao gozou o intervalo**. O motor faz:
+
+| | |
+|---|---|
+| relogio | 720 min |
+| previsto do juiz (`minutos_previstos_do_dia`) | 660 min -- jornada **LIQUIDA**, ja sem a 1 h de pausa |
+| intra suprimida, indenizada (`folha/export.py:277`) | **60 min** |
+| hora extra (`folha/export.py:270`) | 720 - 660 = **60 min** |
+
+Os mesmos 60 minutos sairam nas duas rubricas. No gravado da 09 do col125 isso virou HE50 **1,98 h** + intra
+**2,00 h** (dois dias iguais, 02 e 06/09), e o TXT exporta as duas linhas -- cada uma correta sozinha, e por
+isso invisivel na conferencia.
+
+**A CAUSA foi consequencia de uma cura certa.** A E3 (26/09) tirou o limite da HE de `minutos_jornada` (que a
+casa declara lixo) e o pos no juiz do previsto. Certissimo -- so que o previsto do juiz e LIQUIDO, e quem nao
+almoca trabalha 720 de relogio numa jornada cujo limite virou 660. O "excedente" que aparece e, minuto a
+minuto, o intervalo suprimido.
+
+**A lei que resolve ja existia**, e e por isso que nao nasceu lei nova: a politica de intrajornada de 19/08
+diz que o suprimido se **INDENIZA**. Se ele e indenizado, ele faz parte da jornada devida: o limite do dia e
+**previsto liquido + suprimido indenizado**.
+
+## RED, e o RED que MORDE nas duas direcoes
+
+`ponto/tests/test_he_intra_dobrada.py`, chamando o motor REAL pela mesma porta da folha (com `colaborador_id`,
+senao o juiz do previsto cala) e com a **celula** na fixture -- sem ela o juiz devolve 0, o motor recusa
+declarar HE e os tres casos passariam por AUSENCIA DE SINAL. Isso aconteceu na 1a rodada e eu so vi porque os
+dois casos de contorno tambem estavam escritos:
+
+| caso | antes | depois |
+|---|---|---|
+| **12 h sem intervalo** (col125) | HE **60** + intra 60 | HE **0** + intra 60 |
+| **13 h sem intervalo** | HE **120** + intra 60 | HE **60** + intra 60 |
+| 12 h **com** intervalo gozado | HE 60 + intra 0 | HE 60 + intra 0 (nao muda) |
+
+O segundo caso e o que impede a cura de virar desconto cego: quem trabalha 13 h sem intervalo TEM 1 h de hora
+extra real, e ela nao pode desaparecer. O terceiro impede o limite de ganhar um suprimido que nao existe.
+
+## A CURA: a regra em UM lugar, aplicada nos QUATRO sitios
+
+`MotorBase._limite_com_suprimido(limite, periodos)` -- o limite do dia soma o que a lei manda indenizar. Os
+quatro sitios que calculam excedente passam a chamar ela: `Motor12x36.calcular_periodo`,
+`MotorTurnoPartido.calcular_mes`, `MotorComercial.calcular_periodo` e o limite diario por marcos de
+`MotorComercial.calcular_mes`. **Todos os motores que indenizam**, como voce pediu -- e o censo mostra que era
+preciso: o bug aparece em 12x36, comercial 6x1 e 5x2, turno partido 6x1 e 5x2, e em quem esta sem vinculo.
+
+## DIFF DE FROTA -- o efeito ISOLADO da cura
+
+Medido no processo, desligando **apenas** o helper novo (o motor volta a ser o de ontem) e comparando com ele
+mesmo curado. **Nao e motor x gravado**: essa comparacao carrega todas as outras curas de hoje (R2b, TETO,
+IMPAR, R4, O81, E4) e chegaria a -2.165 h de trabalhadas, que nao tem nada a ver com esta fatia.
+
+| familia | colabs | HE50 (h) | HE100 (h) | total (h) | seu teto medido |
+|---|---|---|---|---|---|
+| 12x36 | 124 | -203,36 | -12,20 | **-215,56** | 240,96 |
+| comercial 6x1 | 54 | -109,14 | -6,61 | **-115,75** | (comercial: 165,11) |
+| comercial 5x2 | 9 | -27,87 | -2,40 | **-30,27** | idem |
+| turno partido 6x1 | 7 | -42,31 | -9,33 | **-51,64** | (partido: 67,06) |
+| turno partido 5x2 | 4 | -2,01 | 0,00 | **-2,01** | idem |
+| sem vinculo | 10 | -15,48 | 0,00 | **-15,48** | 21,60 |
+| **TOTAL** | **208** | **-400,17** | **-30,54** | **-430,71** | **494,73** |
+
+**As quatro condicoes, medidas:**
+1. **208 colabs para baixo, ZERO para cima** (399 colabs nao mudam nada).
+2. **ZERO campo fora do alvo**: `horas_trabalhadas` mexe em **0** colabs e `horas_intra_indenizada` em **0**.
+   A cura move HE50 e HE100 e mais nada -- que e a condicao (b) da L-082, medida como ela manda.
+3. **Cada familia fica ABAIXO do seu teto** na sua medicao, e os dois maiores sao 12x36 e comercial, como
+   voce disse que tinham de ser. O total (-430,71) e 87% do teto (494,73), e a diferenca e exatamente o
+   esperado: a cura tira `min(HE, suprimido)`, nunca mais que a HE que existia.
+4. **No lote 1: 48 colabs, -30,73 h.** O resto esta fora do TXT (furo, rescisao, cadastro-zero).
+
+Na amostra que voce nomeou: col253 **-15,00 h**, col904 -7,76, col207 -2,50, col382 -2,28, col125 -1,98 (o
+caso-fonte), col369 -1,99, col820 -2,06, col865 -1,00, col134 -1,00, col72 -0,71; e **col30, col843, col87,
+col81, col76 e col610 nao mudam nada** pela cura.
+
+## PROD NAO MUDOU, e isto foi CONFERIDO e nao suposto
+
+A cura esta na arvore e **nao deployada**. Duas perguntas, as duas respondidas:
+- o `.py` na arvore nao entra no ar sem `bin/deploy.sh` (BUG 128, `max_requests=0`), entao o recalculo por
+  EVENTO -- que roda dentro do gunicorn -- segue usando o motor de ontem;
+- mas **cron roda em processo NOVO e le o disco**, e foi isso que eu fui conferir: os oito commands que
+  escrevem `FechamentoMensal` (`recalcular_fechamento`, `simular_folha`, `desvio_o68b`, `folga_que_sumiu`,
+  `aplicar_09_corte_b`, `celula_veredito_velho`, `plano_b_no_dinheiro`, `diff_reclassificar_partido`) estao
+  **TODOS em `FORA_DE_PIPELINE`**. Nenhum tem cron. Nada vai escrever a cura sozinho.
+
+## 7a TESTEMUNHA NA PORTA (a cauda que voce pediu)
+
+`folha/porta_export.py::medir` ganhou o invariante **nenhum minuto do dia pago em duas rubricas**, contador
+esperado **0**, sem lista de excecao, e o TXT **RECUSA** nomeando colab, dia, HE, intra e teto.
+
+**Escrevi o teto como `HE <= max(0, trabalhado - previsto_liquido - suprimido)`, e nao na forma do aval**, por
+uma razao aritmetica: `HE + intra <= trabalhado - previsto + suprimido` tem `suprimido` nas duas pontas
+(porque `intra == suprimido`), sobra `HE <= trabalhado - previsto`, e o bug **satisfaz isso com igualdade** --
+720 - 660 = 60 era exatamente a HE do col125. O contador nasceria VERDE sobre o caso que o criou. Na forma que
+escrevi ele fica **VERMELHO** nele (60 > max(0, 720-660-60) = 0) e verde nos dois legitimos. O previsto vem do
+juiz, com celulas alimentadas em UMA query -- nao ha conta de jornada nascendo na porta.
+
+## O QUE ESPERA VOCE
+
+`!` para: **recalcular a 09** com a cura (o que grava as -430,71 h), **re-medir a porta** (os dois contadores
+novos em 0), **publicar o extrato dos 16** e **gerar o lote 1 com hash novo**. Sem o `!` nada disso anda --
+dinheiro para baixo nao esta na L-094.
+
+**LEI-AKITA**: origem=`MotorBase` (o limite de HE que a E3 deixou liquido), testemunha=`minutos_previstos_do_dia`
++ `minutos_intrajornada_indenizada`, RED=`test_he_intra_dobrada` (12 h com HE 60 -> 0; 13 h com 120 -> 60),
+quem-mais-le=os 4 sitios de excedente + a porta do export + o TXT (as duas rubricas), juizes novos=0.
 
 # E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, e ele mostrava zero onde a folha paga (28/09 10:2x)
 
