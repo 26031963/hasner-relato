@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:37:14.**
+**Medido em 28/09/2026 01:42:41.**
 
 | | |
 |---|---|
@@ -118,11 +118,11 @@ M  bin/relato.sh
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-  Rodar a regua com o item (2) e a cura do vazamento · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && git add bin/relato.sh app/docs/RELATO.md && git status --short | head -8 && bash bin/regua.sh 2>&1 | tail -5 (4s · 9 lines)
+  Rodar a regua com o item (2) e a cura do vazamento · 5m 32s
+  ⎿  $ cd /home/ronald/saas-hasner && git add bin/relato.sh app/docs/RELATO.md && git status --short | head -8 && bash bin/regua.sh 2>&1 | tail -5 (5m 30s · 9 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-* Metamorphosing… (31m 17s · ↓ 42.6k tokens)
+✢ Metamorphosing… (36m 43s · ↓ 42.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
