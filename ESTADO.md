@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:29:00.**
+**Medido em 28/09/2026 10:34:01.**
 
 | | |
 |---|---|
@@ -32,21 +32,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
- M PLANO_PISCADA.md
- M app/colaboradores/services/calendario.py
- M app/core/juizes.py
- M app/core/tests/test_selo_performance.py
+M  PLANO_PISCADA.md
+M  app/colaboradores/services/calendario.py
+M  app/core/juizes.py
+M  app/core/tests/test_selo_performance.py
+M  app/docs/ARQUITETURA.mmd
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
 M  app/docs/RELATO.md
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
- M app/ponto/management/commands/e6_oraculo.py
- M app/ponto/services/espelho.py
- M bin/hook_stop_fila1.py
+M  app/folha/porta_export.py
+M  app/folha/tests/test_porta_do_export.py
+M  app/ponto/management/commands/e6_oraculo.py
+M  app/ponto/services/espelho.py
+M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
+M  bin/hook_stop_fila1.py
+A  bin/tests/test_hook_nao_escreve_parei.sh
 ?? bin/keepalive.sh
-?? bin/tests/test_hook_nao_escreve_parei.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -98,22 +100,6 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  supervisao/DP. So registro. Segue a fila; PAREI so em lei ou !
-
-  Ran 1 shell command
-
-❯ aval Ronald: cauda ANTES da emissao do lote 1 -- cruzar os 44 colabs dos 56 dias FORA DA FAIXA do item (7) com os 200 do lote 1; publicar a lista dos que estao nos dois com
-  dia, tela, piso e teto. Se houver algum ABAIXO DO PISO dentro do lote: PAREI com a lista (o ! e meu: sai do lote 1 ou vai assim com ajuste declarado). Junto: (a) a linha
-  "PAREI: hook-teto | espera Ronald" no topo do RELATO esta velha, voce seguiu depois dela -- tira ou explica; (b) app/colaboradores/services/calendario.py aparece " M" na ARVORE
-  VIVA fora de commit (L-005) -- de onde veio e o que e. Segue a fila; PAREI so em lei ou !
-
-  Searched for 2 patterns, ran 26 shell commands
-
-❯ aval Ronald: PARAR a emissao do lote 1 (hash atual invalido para este ponto). BUG-HE-INTRA-DOBRADA (fila 1, NA FRENTE; lei existente: politica de intrajornada 19/08 -- indeniza
-  o suprimido, nao reabre; nenhuma lei nova). FATO: col125 02/09 e 06/09 -- trab 11,99 h, horas_extra 0,99 E intra indenizada 1,0 no MESMO dia; gravado 09 HE50 1,98 + intra
-  2,00; o TXT exporta as duas rubricas (folha/export.py:270 e :277). CAUSA A PROVAR COM RED: a E3 (26/09) trocou o limite de HE de minutos_jornada (720) para
-  minutos_previstos_do_dia (jornada LIQUIDA, 660) -- o intervalo nao gozado passa a contar como HE e como intra. MEDIR ANTES (sombra, pelo motor REAL): na 09, dia-colab e horas
-  em que HE do dia <= intra suprimida do dia (a mesma hora contada 2x), por familia de motor, e quantos estao no lote 1; comparar com 08. MUDA: no dia com intra suprimida
   indenizada, o suprimido nao entra no excedente da HE (limite = previsto liquido + suprimido indenizado) -- em TODOS os motores que indenizam. RED: col125 02/09 HE 0,99 -> 0 com
   intra 1,0 intacta. SELO: caso que MORDE (turno de 13 h sem intervalo = 1 h HE + 1 h intra; 12 h sem intervalo = 0 HE + 1 h intra). DINHEIRO PARA BAIXO: L-094 nao cobre -- DIFF
   de frota publicado e PAREI para o meu !. Depois do !: recalcular 09, re-medir a porta do export e novo hash do lote 1. PROIBIDO: ler intervalo_indenizavel (obra propria),
@@ -124,17 +110,33 @@ M  app/docs/RELATO.md
   intra indenizada do dia <= trabalhado - previsto liquido + suprimido), contador = 0 sem allowlist; o TXT recusa se > 0. RED: col125 02/09 hoje. Segue a fila; PAREI so em lei ou
   !
 
-● Esperar a regua do E4 · 5m 55s
+  Searched for 2 patterns, ran 13 shell commands
+
+● Background command "Censo do BUG-HE-INTRA-DOBRADA na frota" completed (exit code 0)
+
+● Esperar a regua do E4 · 1m 0s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (5m 54s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (57s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Determining… (4h 26m 28s · ↓ 210.3k tokens)
+· Determining… (4h 31m 28s · ↓ 215.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: O-DIA-PAGO (lei nova, corte meu agora: "o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula" -- registrar em LEIS e
+  CORTES). Fila 1 logo DEPOIS do BUG-HE-INTRA-DOBRADA; e a E5 com conteudo. FATIA 1 (aditiva, nenhum leitor muda): modelo DiaPago (colaborador, data, rubricas do dia: normais,
+  he50, he100, he100_feriado, noturno, intra_indenizada, atraso, saida_antecipada, folga_trabalhada, falta; versao_motor, versao_dna, evento_origem, lavrado_em; unico por
+  colab+data+versao) + escritor UNICO lavrar_dia_pago(colab, data) que chama o motor pelo MESMO caminho de ponto/services/fechamento.py (motor CCT, mesma alimentacao) + gancho no
+  evento do cartorio (julgar_celula) + comando de backfill da 09 em lote (O(n), sem N+1). FATIA 2 (sombra): contadores fechamento_x_soma_dias_pagos e espelho_x_dia_pago na
+  folha/porta_export.py::medir, esperado 0, publicados; divergencia = causa nomeada no RELATO, nao allowlist. FATIAS 3-4 so registradas: troca de leitor um a um (fechamento=soma,
+  TXT, espelho, PDF, calendario, app) com selo de AST "leitor nao chama motor"; recalcular morre; mudanca de motor = versao nova + DIFF por rubrica para o meu !. PROIBIDO:
+  leitor novo lendo DiaPago antes da fatia 2 zerar; mexer em regra de calculo nesta obra; allowlist. RED: col125 02/09 lavrado igual ao gravado de hoje (com o bug, antes da cura)
+  e igual depois da cura. PRONTO fatia 1+2: RELATO com contagem de dias lavrados na 09, os dois contadores e o commit. LEI-AKITA: origem=motor chamado por N leitores,
+  testemunha=DiaPago, juizes novos=0. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
