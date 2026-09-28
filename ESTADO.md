@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 20:07:08.**
+**Medido em 28/09/2026 20:12:31.**
 
 | | |
 |---|---|
@@ -120,12 +120,12 @@ AM bin/tests/test_hook_nao_cobra_congelado.sh
 
 ● Background command "Medir a linha intra por colab" completed (exit code 0)
 
-  Regua antes dos dois commits · 5s
+● Regua antes dos dois commits · 5m 28s
   ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_fila.log 2>&1 &
-     sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/… (3s)
+     sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/… (5m 27s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Orchestrating… (1h 10m 9s · ↓ 73.4k tokens)
+✢ Orchestrating… (1h 15m 33s · ↓ 73.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
