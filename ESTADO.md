@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 03:03:31.**
+**Medido em 28/09/2026 03:09:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI` |
-| `origin/main` | `ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI` |
+| `HEAD` local | `87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela` |
+| `origin/main` | `87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,17 +22,25 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
 ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
 e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO
 a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou
 d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
-2d9b50c5 [E5] a checagem que evitou a cura errada: o `minutos_realizados` do gravado e CAPADO pelo previsto, por desenho
 ```
 
 ## `git status --short`
 
 ```
-M  app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
+M  app/escala/models.py
+M  app/escala/regua_defesa.py
+M  app/ponto/services/bordas_realizado.py
+M  app/ponto/services/espelho.py
+D  app/ponto/tests/test_r4_celula_sem_marcos.py
+M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
+M  app/ponto/turnos.py
+M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
+M  app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -114,10 +122,10 @@ M  app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua da R5
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py && bash bin/regua.sh 2>&1 | tail -4
+● Manter os docs do HEAD e ver o que sobra revertido
+  ⎿  $ cd /home/ronald/saas-hasner && git checkout HEAD -- app/docs/ && git status --short | head -12 && git diff --cached --stat | tail -12
 
-✢ Metamorphosing… (1h 57m 33s · ↓ 113.7k tokens)
+✢ Metamorphosing… (2h 3m 3s · ↓ 119.2k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
