@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 20:55:01.**
+**Medido em 27/09/2026 21:00:25.**
 
 | | |
 |---|---|
@@ -110,11 +110,11 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 
 ● O hook libera corretamente (o RELATO declara PAREI). Falta uma linha de PROVA — acho e curo:
 
-● Empurrar e subir a R2 · 2m 32s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 git push origin main 2>&1 | tail -4 && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -4 (2m 31s)
+● Empurrar e subir a R2 · 7m 56s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 git push origin main 2>&1 | tail -4 && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -4 (7m 55s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Enchanting… (47m 57s · ↓ 46.0k tokens)
+· Enchanting… (53m 20s · ↓ 46.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
