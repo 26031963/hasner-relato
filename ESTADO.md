@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:10:58.**
+**Medido em 28/09/2026 01:16:01.**
 
 | | |
 |---|---|
@@ -120,16 +120,16 @@ A  bin/tests/test_hook_stop_vivo.sh
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-  Registrar a ordem, o O81 e rodar a regua · 5s
+● Registrar a ordem, o O81 e rodar a regua · 5m 9s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import io, re
      p='app/docs/BACKLOG.md'
      s=io.open(p,encoding='utf-8').read()
      # ORDEM NOVA do modo continuo + O81 depois do selo
-     old_com = "<!-- A FILA 1 VIVA. ORDEM VIGENTE (corte Ronald 27/09 22:5x, reordenada por IMPORTANCIA):\n R2b -> IMPAR (+TETO)… (4s · 3 lines)
+     old_com = "<!-- A FILA 1 VIVA. ORDEM VIGENTE (corte Ronald 27/09 22:5x, reordenada por IMPORTANCIA):\n R2b -> IMPAR (+TETO)… (5m 7s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Metamorphosing… (5m 0s · ↓ 15.2k tokens)
+✢ Metamorphosing… (10m 3s · ↓ 15.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

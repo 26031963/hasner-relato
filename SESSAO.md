@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 01:10:58.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.9 MB). Acoes na janela: **536**.
+**Medido em 28/09/2026 01:16:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.9 MB). Acoes na janela: **530**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -540,9 +540,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:23:31 | Bash | Achar as rotas de tela e PDF | `grep -rn "name='calendario'\\|name=\"calendario\"\\|espelho" colaboradores/urls.py ponto/urls.py relatorios/urls.py 2>/dev/null \| head -8` |
 | 13:23:17 | Bash | Smoke: hora do worker e os tres casos no ar | `cd /home/ronald/saas-hasner && echo "=== hora dos arquivos ==="; stat -c '%y %n' app/ponto/turnos.py app/ponto/motor_calculo_v2.py \| sed 's/\..* / /'; echo "=== hora dos workers (master e filhos) ==="; for c in saas_core saas_ui; do echo "-- $c"; docker exec $c ps -eo pid,lstart,cmd --sort=start_time 2>/dev/null \| grep -E 'gunicorn' \| head -3 \| cut -c1-95; done; echo "=== o caso, pelo codigo q ...` |
 | 13:22:36 | Bash | Subir a cura para producao | `cd /home/ronald/saas-hasner && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 \| tail -22` |
-| 13:12:40 | Bash | Empurrar de novo com a linha do TICKETS | `cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md && git commit -F - <<'MSGEOF' [TICKETS] linha da O93 -- a regua cobrou no push e estava certa Fatia citada em commit tem de ter linha na tabela no MESMO ato ("em voo" quando abre). Eu abri a O93 nos dois commits anteriores e nao abri a linha: `bin/regua_tickets.sh` barrou o push, que e o que ele existe para fazer. Mesma cobranca que ja me  ...` |
-| 13:12:25 | Bash | Acrescentar a linha da O93 e reconferir a regua | `python3 - <<'PYEOF' p='docs/TICKETS.md'; s=open(p).read() anc = '\| O68b-PAPEL \|' i = s.index(anc) nova = ('\| O93 \| ponto/motor (folga trabalhada) \| periodo que comeca em dia que a CELULA diz FOLGA pode ' 'cair em hora NORMAL, sem o adicional de 100%, porque o dia da jornada herda o dia ANTERIOR \| ' '**em voo -- achado e medido, NAO curado; PAROU o apply de 09** \| (no push) \| 27/09 \| ' 'ne ...` |
-| 13:12:05 | Bash | Empurrar os 6 commits | `cd /home/ronald/saas-hasner && timeout 2400 git push origin main 2>&1 \| tail -25` |
-| 13:11:55 | Bash | Ver o que o pre-push roda | `cd /home/ronald/saas-hasner && grep -nE 'bin/tests\|test_.*\.sh\|regua\|LABELS\|for t in' bin/pre-push.sh \| head -20` |
-| 13:11:46 | Bash | Commitar a correcao e conferir o remoto antes do push | `python3 - <<'PYEOF' import json p='docs/PENDENTES_RONALD.json'; d=json.load(open(p)) o = d[0]['o_que'] assert '05:58->18:00' in o and 'regra de 29/09' in o d[0]['o_que'] = o.replace('05:58->18:00', '05:53->18:00').replace('regra de 29/09', 'regra de 29/07') json.dump(d, open(p,'w'), ensure_ascii=False, indent=1) print('hora do turno e data da regra corrigidas') PYEOF cd /home/ronald/saas-hasner && ...` |
-| 13:11:07 | Bash | Corrigir o tipo do item e rodar o selo | `python3 - <<'PYEOF' import json p='docs/PENDENTES_RONALD.json'; d=json.load(open(p)) assert d[0]['id'] == 'O68b-APPLY-PAROU-FOLGA-TRABALHADA' d[0] = { "id": "O93-FOLGA-TRABALHADA-HERDA-O-DIA-ANTERIOR", "tipo": "!", "quando": "27/09 ~14:xx", "o_que": ("Curo a heranca do dia da jornada em `ponto/motor_calculo_v2.py` (ZONA INVIOLAVEL, e move " "dinheiro a 100%), ou o gravado fica como esta? A cura ca ...` |
