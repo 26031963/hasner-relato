@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:01:51.**
+**Medido em 28/09/2026 05:07:01.**
 
 | | |
 |---|---|
@@ -112,12 +112,12 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
       57
       58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-  Deploying do item (5) e selo em prod · 2m 5s
+● Deploying do item (5) e selo em prod · 7m 16s
   ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="04:4x -- portao da sombra CEGO entre 00:00 e 04:00 e o ensaio de hoje nasce as 04:15; itens (1)(5): TELA e SELO de porta,
-     zero migration, zero escrita no gravado, regua 8.523 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; echo "=== selo da porta … (2m 3s)
+     zero migration, zero escrita no gravado, regua 8.523 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; echo "=== selo da porta … (7m 13s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (3h 55m 53s · ↓ 154.1k tokens)
+✢ Metamorphosing… (4h 1m 3s · ↓ 154.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
