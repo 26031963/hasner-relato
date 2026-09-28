@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:25:01.**
+**Medido em 28/09/2026 08:26:00.**
 
 | | |
 |---|---|
@@ -107,12 +107,12 @@ cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia --
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Deploying e re-lavrar a porta com o universo do lote 1 · 1m 24s
+  Deploying e re-lavrar a porta com o universo do lote 1 · 2m 24s
   ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="08:0x -- sombra de HOJE REFEITA diverge=0 erros=0; o --bloco nao cabe antes do export. CADASTRO-ZERO e um PORTAO de
-     retencao (ninguem entra a mais, 4 saem) + o portao do TXT por carimbo; regua 8.548 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; … (1m 22s · 5 lines)
+     retencao (ninguem entra a mais, 4 saem) + o portao do TXT por carimbo; regua 8.548 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; … (2m 21s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (2h 22m 28s · ↓ 61.1k tokens)
+✻ Determining… (2h 23m 27s · ↓ 61.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: cauda do lote 1 -- (a) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (b) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
