@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:51:01.**
+**Medido em 28/09/2026 04:56:26.**
 
 | | |
 |---|---|
@@ -94,6 +94,7 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      37 +
       38 +## LOTE 2 -- recontagem depois das 12h
       39 +
       40 +O mutirao venceu para **158 colabs** com prazo **28/09 12:00** (159 chamados em 145 colabs com `prazo_sla`
@@ -116,17 +117,16 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
       57
       58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-● Encolher a lista de relogio solto e rodar a regua · 3m 22s
+● Encolher a lista de relogio solto e rodar a regua
   ⎿  $ cd /home/ronald/saas-hasner && grep -n "test_detectar_entrada_adiantada" app/core/tests/testes_sem_relogio.txt && python3 - <<'PY'
      import io
      p='app/core/tests/testes_sem_relogio.txt'
      s=io.open(p,encoding='utf-8').read()
      alvo='ponto/tests/test_detectar_entrada_adiantada.py'
      linhas=s.split('\n')
-     n=… (3m 21s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     n=…
 
-✢ Metamorphosing… (3h 45m 3s · ↓ 149.8k tokens)
+✻ Metamorphosing… (3h 50m 28s · ↓ 149.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 04:51:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.3 MB). Acoes na janela: **507**.
+**Medido em 28/09/2026 04:56:26.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.3 MB). Acoes na janela: **506**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -516,4 +516,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:57:42 | Bash | Ver o parentese e o retorno | `sed -n '379,386p' ponto/services/fechamento.py; echo '--- e o sitio da persistencia ---'; grep -n "if fechamento.status == 'aberto':" ponto/services/fechamento.py; grep -n '^ return\\|^ return' ponto/services/fechamento.py \| head -6` |
 | 16:57:27 | Bash | Abrir o modo leitura no fechamento | `python3 - <<'PYEOF' import py_compile p='ponto/services/fechamento.py'; s=open(p).read() velho = """def recalcular_fechamento_mes(mes, ano, empresa_id=None, colaborador_ids=None, permitir_exportada=False, motivo_exportada=''):""" novo = """def recalcular_fechamento_mes(mes, ano, empresa_id=None, colaborador_ids=None, permitir_exportada=False, motivo_exportada='', somente_leitura=False):""" assert  ...` |
 | 16:56:39 | Bash | Ver as bordas da escrita | `sed -n '350,362p' ponto/services/fechamento.py; echo ' ...'; sed -n '498,515p' ponto/services/fechamento.py` |
-| 16:56:21 | Bash | Ver a estrutura do fechamento | `grep -n 'def recalcular_fechamento_mes\\|def restaurar_fechamento\\|def _calcular\\|get_or_create\\|\.save(' ponto/services/fechamento.py \| head -20; echo '=== assinatura ==='; sed -n '/^def recalcular_fechamento_mes/,/"""/p' ponto/services/fechamento.py \| head -30` |
