@@ -1,7 +1,12 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: apply-HE-intra-fora-do-criterio (L-082 b) | espera Ronald` -- o `!` das 12:2x diz "so HE50/HE100, -430,71 h", e o RECALCULO da 09 move **10 campos que ele nao nomeia** (folga trabalhada -86,69 h, trabalhadas -78,02 h, noturnas +64,95, banco -196,65 h dentro do lote 1). A cura em isolamento move so HE50/HE100 e os dois derivados: **-346,87 h em 144 colabs**. Duas saidas com os numeros na mesa mais abaixo -- (A) `!` na tabela inteira, (B) apply cirurgico pela porta. Nada deployado, nada recalculado.
 
-> **PAREI: BUG-HE-INTRA-DOBRADA curado e MEDIDO, espera o seu `!`** (28/09 11:2x). A mesma hora estava sendo paga em DUAS rubricas. RED vermelho e verde, cura em todos os motores que indenizam, e o DIFF de frota abaixo: **-430,71 h de hora extra em 208 colabs, ZERO campo fora do alvo, ZERO colab para cima**. Dinheiro PARA BAIXO -- a L-094 nao cobre, entao nao deployei. Prod segue com o numero de hoje.
+
+> **PAREI: o seu `!` das 12:2x nao fecha na condicao, e a tabela esta abaixo** (28/09 12:3x). Voce autorizou *"so HE50/HE100, -430,71 h"*. Duas coisas mudaram desde o DIFF das 11:2x que voce leu: (1) a cura FINAL e mais estreita -- **-346,87 h em 144 colabs**, porque 12 selos da casa acharam um defeito na primeira versao; (2) medi pela porta REAL o que o recalculo VAI ESCREVER, e ele move **10 campos que o seu `!` nao nomeia**, entre eles **folga trabalhada -86,69 h**, **trabalhadas -78,02 h** e **banco -196,65 h dentro do lote 1**. Isso e DERIVA do gravado, nao da cura -- e e literalmente o caso que fez voce cortar a L-082 hoje de manha. Nao deployei e nao recalculei.
+
+
+> **PAREI: BUG-HE-INTRA-DOBRADA curado e MEDIDO, espera o seu `!`** (28/09 11:2x). A mesma hora estava sendo paga em DUAS rubricas. RED vermelho e verde, cura em todos os motores que indenizam, e o DIFF de frota abaixo: **-346,87 h de hora extra em 144 colabs, ZERO campo fora do alvo, ZERO colab para cima**. Dinheiro PARA BAIXO -- a L-094 nao cobre, entao nao deployei. Prod segue com o numero de hoje.
 
 
 > **EMISSAO DO LOTE 1 PARADA (28/09 10:3x, ordem do Ronald).** Os tres hashes publicados abaixo **nao valem mais para este ponto**: entrou o `BUG-HE-INTRA-DOBRADA` na frente da fila 1 -- a mesma hora paga em duas rubricas no dia de intrajornada suprimida. Nada foi emitido (a emissao sempre foi um clique seu, e ele nao aconteceu), entao nao ha o que reverter. Depois do `!` da cura: recalcular a 09, re-medir a porta e publicar hash NOVO.
@@ -13,6 +18,255 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# BUG-ANCORA-NAO-REGENERA: curado e selado -- e a frota medida DUAS vezes errado antes de sair 1 (28/09 14:5x)
+
+O BUG, provado por leitura: `escala/signals.py` regenerava celula quando mudava a **VIGENCIA** e ninguem
+regenerava quando mudava a **ANCORA**. No 12x36 a ancora e a FASE -- ela decide qual dia e trabalho e qual e
+folga. O admin corrige a fase, salva, e as celulas ja geradas seguem dizendo o contrario: espelho invertido,
+furo cobrado em dia de folga, folga trabalhada em dia de trabalho, e a folha pagando sobre isso.
+
+## A CURA: nenhuma regra nova, a MESMA porta
+
+`_ec_ancora_regenera_celulas` chama `ponto/portas/celula.py::regenerar_celulas_vinculo` -- a mesma porta da
+vigencia, com as guardas que ela ja tem: so `origem='gerada'` (celula humana fica), **competencia EXPORTADA
+pulada** (L-092, HX-REGEN-NAO-TOCA-EXPORTADO) e horizonte estendido ate o fim da competencia. A janela comeca no
+**inicio da competencia ABERTA**: mudar a fase de um 12x36 mexe em muito dia, e o que ja virou folha nao se toca
+nem para corrigir. Trilha em `regenerada_em`/`dna_anterior`, motivo `"ancora alterada: X -> Y"`.
+
+**RED e MORDE**, em `escala/tests/test_ancora_regenera_celulas.py`: a celula invertida na mao (o estado que o
+bug deixa) e consertada ao salvar a ancora, com trilha; e **salvar SEM mexer na ancora nao regenera nada** --
+sem esse segundo caso o signal viraria gerador de celula a cada edicao de tela, reescrevendo DNA congelado, que
+e o oposto da lei da celula.
+
+**A FIXTURE ME PEGOU PRIMEIRO, e vale registrar**: a 1a versao comparava a celula com
+`ec.eh_dia_trabalho(data)` -- que le a CELULA (celula soberana). Depois de criar a celula invertida, a funcao
+passava a devolver o valor DELA, e a fixture se comparava consigo mesma: `0 is not true`. A fase tem de ser
+colhida com a tabela VAZIA.
+
+## O MESMO ERRO, na SONDA -- TRES VEZES, e a terceira e a que vale
+
+Medi a frota tres vezes e errei duas. Vale escrito, porque e a mesma lei nas tres:
+
+1. **aritmetica minha** (`(data - ancora).days % 2`): achei **7 vinculos** fora de fase. Duas invencoes da
+   minha conta (col366, col418).
+2. **funcao real, vinculo ERRADO**: troquei pela `ec.eh_dia_trabalho(data, celulas={})` -- que cai no
+   `eh_dia_trabalho_calculado` porque dict alimentado vazio significa "nao ha celula neste dia" -- e achei
+   **5**. Melhor, e ainda errado: eu comparava a celula com o vinculo **ATIVO**, e quem responde por um dia e o
+   vinculo que **COBRE** aquele dia (semantica da grade, `escala/utils.py::_esc_vigente_do_dia`).
+3. **funcao real, vinculo do DIA**: **9.852 dia-12x36 conferidos na competencia ABERTA, e UM colab fora de
+   fase** -- `col899`, 12 dias (26/09 a 20/10), vinculo ec1310.
+
+E o CLAUDE.md secao 6 duas vezes na mesma fatia: *"nao reconstruir em sonda propria a chamada que o sistema
+faz"* e *"ler antes de afirmar"*.
+
+## col824: a premissa do BO nao se confirma, e a prova esta no cadastro dele
+
+**Executei o seu `!`** -- `regenerar_celulas_vinculo(ec, 21/08, 20/09)` e o recalculo da 09. Resultado:
+**0 celulas regeneradas** e o fechamento **identico em todos os 17 campos**. Nao foi falha: a porta recusou
+certo, e o cadastro explica por que.
+
+col824 tem **DOIS vinculos**, e o wizard nao mudou a ancora de um -- ele criou o outro:
+
+| vinculo | vigencia | ativa | ancora | template |
+|---|---|---|---|---|
+| **ec983** | 21/07 a **21/09** | nao | **22/07** | PAI-12x36.79 |
+| **ec1323** | **22/09** em diante | sim | **28/09** | PAI-12x36.79 |
+
+As **31 celulas da competencia 09** (21/08-20/09) foram geradas por **ec983**, e elas estao **EM FASE com
+ec983** -- `0 de 31` fora de fase quando a conferencia usa o vinculo que cobre cada dia. Minha chamada pediu a
+regeneracao ao vinculo **ATIVO** (ec1323), que nao cobre a 09; `_outro_vinculo_cobre(ec1323, 01/09)` devolve
+**True** e a porta pulou tudo -- exatamente como deve.
+
+**Entao a pergunta muda de lugar**: nao e "a regeneracao nao alcanca a 09", e sim **"a ancora de ec983 (22/07)
+esta certa?"**. Ninguem a alterou, e por isso nenhum signal -- nem o novo -- tinha o que regenerar. Se ela
+estiver errada, o ato e corrigir a ancora de **ec983**, e o signal desta fatia faz a regeneracao seguir sozinha.
+Mas **quais dias aquela pessoa devia trabalhar em agosto e setembro e CADASTRO**, e nao se decide por conta
+propria: **PAREI para o seu `!`**, com a tabela acima.
+
+E o que o gravado do col824 mostra -- falta **11,00 h**, **DSR perdido 3**, 3 inconsistencias, 1 turno aberto --
+**nao esta explicado por celula fora de fase**, porque nao ha nenhuma. E outra pergunta, e ela fica aberta com
+nome proprio.
+
+## A cura do signal segue valendo, e nao e desperdicio
+
+O bug que ela conserta esta provado por leitura e por selo: antes desta fatia, **mudar a ancora de um vinculo
+nao regenerava celula nenhuma**. Que hoje nenhum dos 5 candidatos precise dela nao a torna menos necessaria --
+ela e a razao de o proximo ato de admin nao deixar o espelho invertido. E o col899 (12 dias, ec1310) e o unico
+caso vivo hoje: ele tem celula fora de fase com o vinculo que cobre o dia, e entra na lista do seu `!`.
+
+# O-DIA-PAGO S5a: o calculador novo existe, e o DIFF por rubrica ja esta na mesa (28/09 14:0x)
+
+O corte de 12:1x: *"o e6_oraculo vira o nucleo do calculador que escreve o DiaPago, com UM modulo de regras de
+rubrica"*. O pacote `ponto/calculador/` tem as tres pecas, e a fronteira entre elas e o ponto da obra:
+
+- **`nucleo.py`** -- batidas -> pares -> minutos e PAUSA por dia. Nao sabe nada de rubrica. **Nao e codigo
+  novo**: e a derivacao do `e6_oraculo`, que certifica o espelho desde 27/09, agora com DOIS leitores e UMA
+  derivacao (o comando importa daqui). Se fosse copiada, certificador e calculador poderiam discordar em
+  silencio -- e o selo por AST varre os DOIS arquivos exatamente por isso.
+- **`regras.py`** -- as rubricas do dia, com a tolerancia e o piso do Art.71 **importados** do motor, nunca
+  copiados.
+- a lavratura na versao `'oraculo'` entra junto com a S5b (o modulo ainda esta cego em rubricas que pesam).
+
+## A linha mais importante: o que ele nao decide fica DECLARADO, nao sai zero
+
+Rubrica sem regra entra em `NAO_DECIDE` com a causa escrita, e o DIFF a reporta como **"regra que falta"** --
+uma das tres causas que voce nomeou. Se saisse **0**, o DIFF acusaria o MOTOR de errar exatamente onde o
+calculador esta cego, e a troca inteira seria decidida sobre um numero que mente.
+
+**E isso nao e teoria: o primeiro DIFF me obrigou a declarar duas rubricas que eu tinha como decididas.**
+`horas_extras_100` (faltava a **dobra de feriado** -- Sumula 146, Art.59-A par.2, `trabalha_em_feriado`,
+`CICLOS_FERIADO_SIMPLES`: **-50,27 h em 12 dia-colab**, padrao comercial/6x1) e `horas_folga_trabalhada`
+(depende da **lavra** da escala e do REGIME -- no intermitente a celula diz `trabalha=False` em TODO dia e o
+calculador leria a jornada inteira como folga: **+257,40 h em 27 dia-colab**). As duas eram as maiores
+divergencias do DIFF, e as duas por cegueira minha. Foram para `NAO_DECIDE` com o numero medido ao lado, e o
+selo `test_MORDE_rubrica_sem_regra_NAO_sai_zero` impede que voltem caladas.
+
+## O DIFF, frota inteira da 09 (8.089 dia-colab)
+
+| rubrica | motor (h) | calculador (h) | delta (h) | dia-colab divergentes | colabs |
+|---|---|---|---|---|---|
+| horas_trabalhadas | 69.252,48 | 70.023,35 | **+770,87** | 732 | 306 |
+| horas_intra_indenizada | 2.253,11 | 2.032,13 | **-220,98** | 432 | 179 |
+| horas_extras_50 | 388,00 | 525,85 | **+137,85** | 165 | 84 |
+
+**Os padroes, que e o que voce pediu para ler antes do dado:**
+
+| padrao | dia-colab | leitura |
+|---|---|---|
+| trabalhadas · 12x36 · **+** | 184 | o **corte do nucleo** (gap >= 8 h com contagem par, e > 14 h) parte jornada longa -- ponto cego ja medido e escrito na docstring (col109, col830) |
+| intra · comercial/6x1 · **-** | 156 | o motor indeniza onde o calculador nao: `_intra_minima` do motor cai no **bruto do periodo** quando o juiz nao sabe o previsto; o calculador usa so o piso do Art.71 |
+| trabalhadas · comercial/6x1 · **+** e **-** | 131 e 117 | o mesmo par de causas: corte do nucleo de um lado, dia sem previsto do outro |
+| trabalhadas · intermitente · **-** | 57 | dia sem trabalho previsto: o calculador se CALA (nao afirma rubrica), o motor poe em folga trabalhada |
+| HE50 · comercial/6x1 · **+** | 56 | consequencia direta da linha de cima: mais minutos trabalhados = mais excedente |
+
+Nenhum destes cinco padroes esta sem causa nomeada -- e essa era a sua condicao para nao PARAR.
+
+**O que a S5b tem de fechar, nesta ordem**: o corte do nucleo perguntando a escala do dia (e o maior numero
+isolado, 184+83 dia-colab); o piso do Art.71 quando o juiz nao sabe o previsto; noturnas com a janela e o fator
+como CADASTRO da CCT; atraso e antecipada com a L-084 e o teto da L-093; e a dobra de feriado. Comando do DIFF:
+`tenant_command diff_calculador --mes 9 --ano 2026 --csv ...`, so leitura.
+
+# O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou um erro MEU (28/09 13:1x)
+
+Os contadores que voce pediu estao em `folha/porta_export.py::medir`, publicados no carimbo e impressos pelo
+`selo_leitores_no_mesmo_numero`: **`fechamento_x_soma_dias_pagos`** (a soma das linhas do dia x o
+`FechamentoMensal`, campo a campo) e **`espelho_x_dia_pago`** (as horas de cada dia lavrado x o que o espelho
+mostra naquele dia).
+
+**"NAO LAVRADO" TEM LINHA PROPRIA E NAO E ZERO** (FALTA-UM-SIGNIFICADO): `colabs_sem_lavratura`. A lavratura
+nasce no ato do recalculo, entao hoje -- com o apply parado no seu `!` -- ninguem tem linha. Contar isso como
+"0 divergencia" seria ausencia de sinal lida como sinal bom.
+
+**Eles NAO entram em `falhas` ainda, e isso e declarado**: a obra esta em voo e a tabela esta vazia em prod;
+somar aqui trancaria o TXT por causa de uma obra pela metade. Seu aval da S2 pede *"esperado 0, publicados"*. A
+recusa entra quando a frota zerar, e ha selo que obriga a mudar os dois lugares juntos.
+
+## A medicao em prod achou um erro MEU, e vale contar
+
+Rodei a porta na emp2 (134 colabs) e o invariante das duas rubricas acusou **52 dias** -- com a cura JA no
+lugar. Fui ver: todos com previsto **BRUTO**. `col626 09/09` trabalhou 730,5 min contra previsto 720 **sem
+intervalo declarado**; a HE de 10,5 min e REAL e os 60 min de intra do Art.71 nao saem do mesmo minuto.
+
+**O invariante tinha a regra ERRADA -- a primeira versao da cura, que os 12 selos ja haviam corrigido no
+motor.** Eu subtraia o suprimido INTEIRO; o motor, certo, subtrai so o que o previsto tirou. Curado: o teto
+agora chama `escala/utils.py::intervalo_declarado_do_dia`, **o mesmo juiz** que
+`MotorBase._limite_com_suprimido` usa. Invariante com regra propria e o derivador paralelo da LEI-AKITA 2, do
+lado do vigia -- e ele teria RECUSADO o TXT sobre 52 dias corretos.
+
+## A porta da emp2, depois da cura
+
+| testemunha | |
+|---|---|
+| tela x PDF | **0** |
+| topo x coluna | **0** |
+| desenhados pelo builder | **0** |
+| **calendario x espelho** | **0** -- a E4 esta provada na frota, nao so no selo |
+| **minuto em duas rubricas** | **0** (era 52 com o invariante errado; e seria > 0 sem a cura) |
+| cartao x TXT | **0** |
+| fechamento x soma dos dias pagos | **0** |
+| espelho x dia pago | **0** |
+| colabs sem lavratura | **134** -- esperado, o apply esta no seu `!` |
+| **falhas** | **0** |
+
+E isto responde de graca uma pergunta que estava em aberto: **a cura HE/intra nao deixa nenhum dia da emp2 com
+minuto em duas rubricas**, medido pela porta, colab por colab -- e nao apenas nos tres casos do selo.
+
+# PAREI no apply da cura HE/intra: o `!` diz "so HE50/HE100" e o recalculo move 10 campos (28/09 12:3x)
+
+Seu `!` das 12:2x: *"208 colabs para baixo, 0 para cima, **so HE50/HE100**, -430,71 h, 48 colabs / -30,73 h no
+lote 1"*. Cumpri a L-082 ao pe da letra -- medi a condicao (b) **contra o GRAVADO e pela funcao que grava**
+(`recalcular_fechamento_mes(..., somente_leitura=True)`, o modo leitura da E5: a mesma conta, sem escrever) -- e
+ela NAO fecha.
+
+## Primeiro: a cura final e OUTRA, e menor
+
+O DIFF que voce leu era das 11:2x. Depois dele, **12 selos antigos da casa ficaram vermelhos** e estavam
+certos: somar o suprimido inteiro ao limite **apagava hora extra REAL** em template sem intervalo declarado
+(previsto BRUTO). A cura final devolve ao limite so o que o previsto ja tirou. Numero final:
+
+| | seu `!` (11:2x) | a cura FINAL (11:5x) |
+|---|---|---|
+| HE | -430,71 h | **-346,87 h** |
+| colabs | 208 | **144** |
+| no lote 1 | 48 colabs / -30,73 h | **15 colabs / -8,82 h** |
+
+Tudo para o lado conservador: menos gente, menos dinheiro, mesma direcao, zero para cima. Se o numero maior
+fosse o desejado, seria preciso reintroduzir o defeito.
+
+## Segundo, e e isto que PARA: o ATO nao e a CURA
+
+O que a **cura** move, medido em isolamento (motor de ontem x curado, mesmo processo):
+
+| campo | delta |
+|---|---|
+| HE50 | **-324,34** (dos quais -25,55 noturna) |
+| HE100 | **-22,53** (dos quais -1,93 noturna) |
+| reflexo DSR (Sumula 172, **derivado** das extras) | -294,02 |
+| saldo de banco (**derivado** das extras) | +143,85 |
+| trabalhadas · intra · noturnas · HE100 feriado · atraso · antecipada | **ZERO** |
+
+O que o **recalculo da 09** vai escrever, pela porta real, contra o gravado de agora:
+
+| campo | delta | e da cura? |
+|---|---|---|
+| horas_extras_50 | -364,01 | **nao**: a cura vale -324,34; ha **39,67 h de deriva** |
+| horas_extras_50_noturna | -32,88 | parcial (cura: -25,55) |
+| horas_extras_100_feriado | **+14,13** | **NAO** -- a cura da zero |
+| horas_extras_100_noturna | **+5,76** | **NAO** -- a cura da -1,93 |
+| **horas_folga_trabalhada** | **-86,69** | **NAO** |
+| **horas_trabalhadas** | **-78,02** | **NAO** |
+| **horas_noturnas** | **+64,95** | **NAO** |
+| horas_saida_antecipada | +3,47 | **NAO** |
+| horas_intra_indenizada | +1,00 | **NAO** |
+| horas_reflexo_dsr | -189,98 | parcial (cura: -294,02) |
+| **saldo_banco_horas** | **+563,34** | parcial (cura: +143,85) · **e -196,65 h DENTRO do lote 1** |
+| turnos_abertos +4 · inconsistencias -1 · minutos_previstos +2.220 · minutos_realizados +1.486 | | **NAO** |
+
+**Isso nao e a cura: e DERIVA.** O gravado e do ultimo recalculo, e as outras curas de hoje (R2b, TETO, IMPAR,
+O95, L-084, L-093) estao no codigo com o gravado so parcialmente atualizado -- recalcular traz tudo para o
+presente de uma vez. E exatamente o caso que fez voce cortar a **L-082** as 09:4x de hoje: *"apply por
+recalculo nunca e cirurgico, entao a condicao (b) tem de ser medida na sombra contra o GRAVADO"*. A condicao
+(b) -- **todo outro campo de todo colaborador da ZERO** -- esta violada em 10 campos.
+
+Por isso **nao deployei e nao recalculei**. Deployar sozinho nao resolve: com o recalculo por EVENTO, a
+primeira batida de cada colab dispara o mesmo recalculo completo, colab por colab, com os mesmos 10 campos --
+seria o mesmo apply, feito as escondidas e em ordem aleatoria.
+
+## As duas saidas, e a escolha e sua
+
+**(A) `!` sobre a tabela inteira.** Voce olha os 10 campos acima e autoriza o recalculo como ele e. E o caminho
+coerente: DSR e banco DEPENDEM das extras, entao mexer na HE sem eles deixaria o fechamento incoerente consigo
+mesmo. Custo: entra junto a deriva que ninguem mediu por fatia (os -86,69 h de folga trabalhada e os -78,02 h
+de trabalhadas tem causa em curas suas de hoje, mas nao foram medidas uma por uma).
+
+**(B) apply CIRURGICO pela porta**, escrevendo so os campos que a cura move (HE50, HE50 noturna, HE100, HE100
+noturna, horas_extras, reflexo DSR e banco) nos 144 colabs, e deixando todo o resto intocado. Fecha na letra do
+seu `!`, e a porta do fechamento e o unico escritor (E3) -- sai como funcao nomeada ali, com trilha, nao como
+UPDATE solto. Custo: o fechamento fica com HE de hoje e trabalhadas de ontem ate o proximo recalculo completo.
+
+Recomendo **(B)** para nao misturar sua decisao sobre a cura com a deriva de outras seis, e depois **(A)** como
+ato proprio, com a tabela da deriva medida por causa. Mas o numero e seu.
 
 # BUG-HE-INTRA-DOBRADA: a mesma hora paga DUAS vezes -- curada, medida, e PARADA no seu `!` (28/09 11:2x)
 
@@ -64,7 +318,27 @@ quatro sitios que calculam excedente passam a chamar ela: `Motor12x36.calcular_p
 `MotorComercial.calcular_mes`. **Todos os motores que indenizam**, como voce pediu -- e o censo mostra que era
 preciso: o bug aparece em 12x36, comercial 6x1 e 5x2, turno partido 6x1 e 5x2, e em quem esta sem vinculo.
 
-## DIFF DE FROTA -- o efeito ISOLADO da cura
+## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+
+PROVA: 12 selos VERMELHOS na regua com a 1a versao da cura (`test_extra_50_30min`, `test_extra_50_2h_exatas`, `test_extra_100_3h`, `test_07_20_extra_fora_da_noite`, `test_plantao_24h_sem_intra_gera_16h_he`, `test_12x36_com_he_aplica_sumula172` e mais 6), todos com previsto BRUTO; com a regra estreita, **Ran 8563 tests OK** e o DIFF isolado caiu de -430,71 h para **-346,87 h**.
+
+A 1a versao somava o suprimido **inteiro** ao limite. Ficou VERMELHA em **12 guardas antigas** --
+`test_extra_50_30min`, `test_extra_50_2h_exatas`, `test_extra_100_3h`, `test_07_20_extra_fora_da_noite`,
+`test_plantao_24h_sem_intra_gera_16h_he`, `test_12x36_com_he_aplica_sumula172` e mais 6 --, todas com a MESMA
+forma: **template SEM intervalo declarado**, jornada 07-19 (span 720, e esse 720 e previsto **BRUTO**, porque
+nao havia intervalo a descontar), saida 20:00. O piso do Art.71 aparece de qualquer jeito
+(`_intra_minima` -> `piso_intervalo_art71`), entao havia 60 min de suprimido -- e somar esses 60 a um limite que
+**nunca os descontou** dava teto 780 num dia de 780: **a hora extra REAL desaparecia**. Eu teria trocado um erro
+de 347 h para cima por um erro para baixo, e em dias de gente que fez hora extra de verdade.
+
+A regra certa e de mao dupla: **o limite devolve o que o previsto JA TIROU, nunca mais**. Quem responde e
+`escala/utils.py::intervalo_declarado_do_dia`, que nasceu nesta fatia como o **par** de
+`minutos_previstos_do_dia` -- mesma selecao de vinculo (extraida para `_esc_vigente_do_dia`, para as duas
+perguntas nao terem duas copias), mesmos marcos, mesma guarda `0 < intr < span`. Previsto LIQUIDO (col125: 660,
+com 11:00-12:00 declarado) devolve 60 e a HE dobrada morre; previsto BRUTO (720, sem intervalo no cadastro)
+devolve 0 e a HE real fica de pe. **Os 12 voltaram ao verde, e os tres casos do RED seguem verdes.**
+
+## DIFF DE FROTA -- o efeito ISOLADO da cura (medido com a regra CERTA)
 
 Medido no processo, desligando **apenas** o helper novo (o motor volta a ser o de ontem) e comparando com ele
 mesmo curado. **Nao e motor x gravado**: essa comparacao carrega todas as outras curas de hoje (R2b, TETO,
@@ -72,26 +346,27 @@ IMPAR, R4, O81, E4) e chegaria a -2.165 h de trabalhadas, que nao tem nada a ver
 
 | familia | colabs | HE50 (h) | HE100 (h) | total (h) | seu teto medido |
 |---|---|---|---|---|---|
-| 12x36 | 124 | -203,36 | -12,20 | **-215,56** | 240,96 |
-| comercial 6x1 | 54 | -109,14 | -6,61 | **-115,75** | (comercial: 165,11) |
+| 12x36 | 68 | -147,81 | -10,47 | **-158,28** | 240,96 |
+| comercial 6x1 | 52 | -105,71 | -6,33 | **-112,04** | (comercial: 165,11) |
 | comercial 5x2 | 9 | -27,87 | -2,40 | **-30,27** | idem |
-| turno partido 6x1 | 7 | -42,31 | -9,33 | **-51,64** | (partido: 67,06) |
+| turno partido 6x1 | 5 | -27,16 | -3,33 | **-30,49** | (partido: 67,06) |
 | turno partido 5x2 | 4 | -2,01 | 0,00 | **-2,01** | idem |
-| sem vinculo | 10 | -15,48 | 0,00 | **-15,48** | 21,60 |
-| **TOTAL** | **208** | **-400,17** | **-30,54** | **-430,71** | **494,73** |
+| sem vinculo | 6 | -13,78 | 0,00 | **-13,78** | 21,60 |
+| **TOTAL** | **144** | **-324,34** | **-22,53** | **-346,87** | **494,73** |
 
 **As quatro condicoes, medidas:**
-1. **208 colabs para baixo, ZERO para cima** (399 colabs nao mudam nada).
-2. **ZERO campo fora do alvo**: `horas_trabalhadas` mexe em **0** colabs e `horas_intra_indenizada` em **0**.
-   A cura move HE50 e HE100 e mais nada -- que e a condicao (b) da L-082, medida como ela manda.
-3. **Cada familia fica ABAIXO do seu teto** na sua medicao, e os dois maiores sao 12x36 e comercial, como
-   voce disse que tinham de ser. O total (-430,71) e 87% do teto (494,73), e a diferenca e exatamente o
-   esperado: a cura tira `min(HE, suprimido)`, nunca mais que a HE que existia.
-4. **No lote 1: 48 colabs, -30,73 h.** O resto esta fora do TXT (furo, rescisao, cadastro-zero).
+1. **144 colabs para baixo, ZERO para cima** (463 colabs nao mudam nada).
+2. **ZERO campo fora do alvo**: `horas_trabalhadas` mexe em **0** colabs e `horas_intra_indenizada` em **0** --
+   a cura move HE50 e HE100 e mais nada. E a condicao (b) da L-082, medida como ela manda.
+3. **Cada familia ABAIXO do seu teto** na sua medicao, e os dois maiores sao **12x36 e comercial**, como voce
+   disse que tinham de ser. O total (-346,87) e 70% do teto (494,73): a cura tira `min(HE, intervalo que o
+   previsto descontou)`, nunca mais.
+4. **No lote 1: 15 colabs, -8,82 h.** O resto esta fora do TXT (furo, rescisao, cadastro-zero).
 
-Na amostra que voce nomeou: col253 **-15,00 h**, col904 -7,76, col207 -2,50, col382 -2,28, col125 -1,98 (o
-caso-fonte), col369 -1,99, col820 -2,06, col865 -1,00, col134 -1,00, col72 -0,71; e **col30, col843, col87,
-col81, col76 e col610 nao mudam nada** pela cura.
+Na amostra que voce nomeou: **col904 -7,76**, col382 -2,28, col820 -2,06, col369 -1,99, **col125 -1,98** (o
+caso-fonte), col865 -1,00, col72 -0,71; e **col253, col134, col30, col843, col207, col87, col81, col76 e
+col610 nao mudam nada**. (Na versao errada da cura, col253 perdia 15 h e col207 2,5 h -- os dois eram
+justamente previsto BRUTO. A conferencia deles agora e sobre o numero que ja esta no gravado.)
 
 ## PROD NAO MUDOU, e isto foi CONFERIDO e nao suposto
 
@@ -2678,7 +2953,6 @@ lugar do intervalo era incidental: ele passou a se deslocar junto, em vez de a g
 
 ## PAREI o apply da L-084 no gravado: ele descontaria **286 h** de 24 pessoas, e ha absurdo dimensional
 
-`PAREI: pergunta de LEI -- a forma do corte de 3 h | espera uma frase sua. NAO esperei ocioso: segui e a O73 esta curada.`
 
 A O73 esta curada (abaixo) e a dependencia que eu havia registrado se resolveu. Rodei o ensaio dos dois
 campos da L-084 e o resultado me fez parar **antes** de aplicar:
@@ -2731,7 +3005,6 @@ fiz foi medir, publicar e **seguir** -- a esteira nao parou.
 
 ## O89 (CLASSE DE BUG NOVA, de DESENHO): **o motor MUTACIONA os objetos `Batida` que recebe**
 
-`PAREI: nada -- registro no topo e SIGO, como a ordem da noite manda. Mas isto e DESENHO e voce precisa ver.`
 
 Achado ao explicar 4 h que o smoke da O85 acusou. Tres rodadas na sombra, no col375, com **entrada
 identica** (mesmas 14 batidas, mesma janela `22/08..25/08`, mesmo motor, mesmos kwargs):
@@ -2782,7 +3055,6 @@ a O89 escapou da primeira versao do teste, e o col375 tem justamente um par de 4
 
 ## PAREI a aplicacao da L-084 no gravado: a O73 infla exatamente os campos dela
 
-`PAREI: dependencia medida O73 -> L-084 | espera a cura da O73, nao o Ronald`
 
 Eu ia aplicar a L-084 corrigida no gravado de 09 (campos `horas_atraso` e `horas_saida_antecipada`,
 os 31+16 colabs). **Medi antes e nao vou**: a **O73** produz atraso FALSO nesses mesmos campos, e
@@ -11845,6 +12117,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 
 **28/09 03:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 04:45.
+
+
+**28/09 14:05 vigia da esteira** -- docs/MAPA.md modificado fora do git depois de fatia no ar (prepush_commit, varre_comentario, zumbido_quarentena): a cadeia commitou o diagrama e nao o MAPA -- incluir no proximo commit (python3 bin/gerar_diagrama.py e git add app/docs/MAPA.md).
 
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 

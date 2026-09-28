@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:321 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:42:05.**
+**Medido em 28/09/2026 14:43:05.**
 
 | | |
 |---|---|
@@ -39,6 +32,7 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
  M app/ponto/calculador/nucleo.py
  M app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
@@ -93,12 +87,6 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. Tela aberta na SOMBRA sobre a 09 (so leitura), print para o Ronald ver como admin.
-  2. DIFF por rubrica da regra sobre a 09 na sombra contra o GRAVADO, por colab, publicado no RELATO.
-  3. RED: entrada 06:40 marco 07:00 → HE 0; mesmo dia autorizado → HE 20; 06:52 → nada muda; 05:30 → cadastro×realidade.
-  4. RED: Autorizar 2x = 1 trilha, mesmo estado (idempotencia).
-  5. RED: export com 1 pendente = travado; zerado = libera.
-  6. Soma da tela = soma do PDF = soma do TXT para a mesma competencia.
   7. Selo: zero leitor com derivacao propria de HE (grep).
      PROIBIDO: fallback, fatia posterior, item proprio, tocar a 09 gravada, apply sem meu "!".
      Vale da competencia 10; apply de dinheiro so com meu "!" sobre o DIFF do item 2.
@@ -123,10 +111,16 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Rodar o publicador do RELATO · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | head -14
+● Curar a linha e republicar o RELATO · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     anc='## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)\n'
+     assert t.count(anc)==1
+     t=t.replace(anc, anc+'\nPROVA: 12 selos VER…
 
-· Infusing… (4m 12s · ↓ 15.8k tokens)
+✻ Infusing… (5m 12s · ↓ 16.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

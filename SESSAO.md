@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 14:42:05.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.7 MB). Acoes na janela: **470**.
+**Medido em 28/09/2026 14:43:05.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.7 MB). Acoes na janela: **471**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:42:02 | Bash | Rodar o publicador do RELATO | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| head -14` |
 | 14:41:57 | Bash | Achar o publicador do RELATO | `cd /home/ronald/saas-hasner && grep -rln 'RELATO' bin/*.sh \| head -6 && grep -rn 'PROVA' bin/publicar*.sh bin/relato*.sh 2>/dev/null \| head -5` |
 | 14:41:48 | Bash | Rodar o selo da PROVA no RELATO | `cd /home/ronald/saas-hasner && bash bin/tests/test_relato_afirma_com_prova.sh 2>&1 \| tail -8` |
 | 14:41:42 | Bash | Ver a linha 321 do RELATO e quem cobra a PROVA | `cd /home/ronald/saas-hasner && sed -n '315,325p' app/docs/RELATO.md && echo "=== o selo que cobra ===" && grep -rn 'PROVA' bin/tests/*.sh core/tests/*.py 2>/dev/null \| grep -i 'relato' \| head -3` |
