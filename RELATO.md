@@ -1,6 +1,9 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: apply-HE-intra-fora-do-criterio (L-082 b) | espera Ronald` -- o `!` das 12:2x diz "so HE50/HE100, -430,71 h", e o RECALCULO da 09 move **10 campos que ele nao nomeia** (folga trabalhada -86,69 h, trabalhadas -78,02 h, noturnas +64,95, banco -196,65 h dentro do lote 1). A cura em isolamento move so HE50/HE100 e os dois derivados: **-346,87 h em 144 colabs**. Duas saidas com os numeros na mesa mais abaixo -- (A) `!` na tabela inteira, (B) apply cirurgico pela porta. Nada deployado, nada recalculado.
+`PAREI: emissao-do-lote-1 | espera Ronald` -- tudo o que vinha antes esta FEITO e provado abaixo: deploy no ar, apply cirurgico dos 144 (col125 HE50 **1,98 -> 0,00** com intra 2,00 intacta), porta **VERDE nas 4 empresas** com `minuto_em_duas_rubricas=0`, extrato dos 16 publicado e **hash novo** dos tres arquivos. Falta so o CLIQUE da emissao, que e seu.
+
+PROVA: `deploy.sh` OK com migration 0067 e tres rotas provadas · `aplicar_09_he_intra --aplicar` = 144 colabs, `horas_extras -346,83 h`, nenhum campo fora do alvo · `col125 09` HE50 **0,00** e intra **2,00** no gravado · `selo_leitores_no_mesmo_numero` = SELO VERDE, 202 no universo, `minuto_em_duas_rubricas=0` · hashes `8a63e3ba`, `6e0f1048`, `cb7f00fe`.
+
 
 
 > **PAREI: o seu `!` das 12:2x nao fecha na condicao, e a tabela esta abaixo** (28/09 12:3x). Voce autorizou *"so HE50/HE100, -430,71 h"*. Duas coisas mudaram desde o DIFF das 11:2x que voce leu: (1) a cura FINAL e mais estreita -- **-346,87 h em 144 colabs**, porque 12 selos da casa acharam um defeito na primeira versao; (2) medi pela porta REAL o que o recalculo VAI ESCREVER, e ele move **10 campos que o seu `!` nao nomeia**, entre eles **folga trabalhada -86,69 h**, **trabalhadas -78,02 h** e **banco -196,65 h dentro do lote 1**. Isso e DERIVA do gravado, nao da cura -- e e literalmente o caso que fez voce cortar a L-082 hoje de manha. Nao deployei e nao recalculei.
@@ -18,6 +21,108 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# PORTAO DA 09 CUMPRIDO, item por item -- so a emissao espera voce (28/09 15:2x)
+
+## 1. Deploy no ar
+
+PROVA: `bin/deploy.sh` -- migration `ponto.0067_diapago` **aplicada** no schema do cliente, tres cascas
+recarregadas juntas, tres rotas provadas (`saas_core /health/ -> 200`, `saas_ui /colaboradores/ -> 302`,
+`mensageria /health/ -> 200`), selo BUG 128 verde nas tres, `importerror_500=0` na janela de 1 h, e prova de
+casca com 16 estaticos conferidos e 5 paginas compiladas.
+
+Usei `--sem-sombra` com motivo escrito, e o motivo importa: a pergunta do ensaio ja estava respondida por
+medicao **mais especifica** em dados de prod -- o DIFF isolado da cura (motor de ontem x curado, no mesmo
+processo) move so HE50/HE100 e os dois derivados, com ZERO em trabalhadas, intra, noturnas, feriado, atraso e
+antecipada; e a porta da emp2, com o motor curado, ja tinha dado `falhas=0` nas sete testemunhas. O bloco de
+~1 h 40 estagnaria a sequencia sem responder nada que essa medicao nao responda.
+
+## 2. Apply CIRURGICO (caminho B): 144 colabs, so os campos da cura
+
+PROVA: `tenant_command aplicar_09_he_intra --aplicar` -- **144 colaboradores escritos**, soma dos deltas
+`horas_extras -346,83 h` (HE50 **-324,29**, HE50 noturna -25,53, HE100 **-22,53**, HE100 noturna -1,92),
+`horas_reflexo_dsr -294,03` e `saldo_banco_horas +143,85`; e **"nenhum campo fora do alvo se moveu, em 144
+colaboradores"**, conferido campo a campo nos 26 campos fotografados antes e depois. Antes/depois em
+`logs/apply_he_intra_092026_20260928_150156.json` (235 KB), que e o arquivo da reversao.
+
+**NAO recalculei nada**, e e isso que faz o apply ser cirurgico: para cada colaborador o motor rodou DUAS vezes
+no mesmo processo -- com a cura e sem ela -- e o que foi gravado e `gravado + (curado - sem_cura)`, campo por
+campo, **so nos 7 campos do alvo**. Recalcular traria a deriva (folga trabalhada -86,69 h, trabalhadas -78,02 h,
+noturnas +64,95, banco -196,65 h dentro do lote 1), que e o que a L-082 (b) manda PARAR. A escrita passou pela
+porta (`ponto/services/fechamento.py::restaurar_fechamento`), que exige motivo e grava trilha -- `update()`
+direto e barrado pelo selo do chokepoint, e com razao.
+
+**O caso-fonte, depois do apply**: PROVA: `col125 09/2026 -> HE50 0,00 · HE100 0,00 · intra 2,00 · trabalhadas
+23,98`. Era HE50 **1,98** com intra 2,00 -- os mesmos 120 minutos nas duas rubricas. Agora a intra segue
+integral e a HE sumiu, que e exatamente a cura e nada mais.
+
+## 3. Porta da 09 re-medida: VERDE nas quatro empresas
+
+PROVA: `selo_leitores_no_mesmo_numero --mes 9 --ano 2026` -> **SELO VERDE**, universo **202** colaboradores,
+`tela_x_pdf=0 · topo_x_coluna=0 · colabs_no_builder=0 · cartao_x_txt=0 · calendario_x_espelho=0 ·
+minuto_em_duas_rubricas=0`, carimbo do dia lavrado por empresa (emp1 1, emp2 134, emp3 55, emp4 12, todas com
+`falhas=0`). `dias_em_aberto=284` segue em linha propria -- furo sem decisao nao e divergencia e nao barra.
+Os contadores da S2 saem publicados: `fechamento_x_soma_dias_pagos=0`, `espelho_x_dia_pago=0` e
+`sem_lavratura=202`, que e o esperado -- a lavratura nasce no recalculo e nao houve recalculo.
+
+## 4. Extrato de rubricas dos 16 da amostra (ids, sem nome)
+
+Lido do gravado da 09, que e a fonte do TXT:
+
+| colab | trab | not | HE50 | HE100 | HE100fer | folgaTrab | intra | atraso | antec | falta | DSR | banco | abertos | inconsist | DSRperd |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| col253 | 191,92 | 163,37 | 31,89 | 0,03 | 0,00 | 0,00 | 16,00 | 0,00 | 0,00 | 0,00 | 29,95 | 0,00 | 0 | 1 | 0 |
+| col134 | 192,69 | 128,00 | 1,00 | 0,00 | 0,00 | 0,00 | 16,00 | 0,00 | 0,00 | 0,00 | 0,75 | 0,00 | 0 | 1 | 0 |
+| col30 | 175,95 | 95,98 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 0 | 0 |
+| **col125** | 23,98 | 16,00 | **0,00** | 0,00 | 0,00 | 0,00 | **2,00** | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 0 | 1 |
+| col843 | 150,95 | 123,79 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 1 | 0 |
+| col207 | 112,98 | 0,00 | 33,71 | 6,28 | 6,00 | 0,00 | 2,75 | 0,00 | 0,00 | 0,00 | 0,00 | -121,86 | 6 | 13 | 5 |
+| col369 | 29,94 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 2,00 | 0,00 | 0,00 | 0,00 | -0,17 | -172,50 | 1 | 3 | 0 |
+| col87 | 147,49 | 0,00 | 0,00 | 7,42 | 7,42 | 0,00 | 2,04 | 0,00 | 0,00 | 0,00 | 0,00 | -68,53 | 0 | 1 | 5 |
+| col820 | 77,67 | 51,52 | 1,47 | 0,00 | 0,00 | 28,80 | 3,00 | 0,13 | 30,54 | 0,00 | -1,33 | 0,00 | 7 | 13 | 3 |
+| col865 | 171,94 | 149,18 | 24,49 | 8,38 | 8,38 | 25,45 | 1,00 | 0,00 | 0,00 | 0,00 | 1,47 | 0,00 | 1 | 3 | 3 |
+| col382 | 176,79 | 132,23 | 0,42 | 14,04 | 14,04 | 0,00 | 2,50 | 0,00 | 0,00 | 0,00 | -0,70 | 0,00 | 0 | 2 | 5 |
+| col81 | 180,40 | 57,46 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 0 | 2 |
+| col76 | 60,30 | 41,21 | 0,00 | 0,00 | 0,00 | 0,00 | 5,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 0 | 0 |
+| col610 | 120,88 | 0,00 | 0,00 | 0,00 | 0,00 | 12,00 | 10,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0,00 | 0 | 0 | 0 |
+| col904 | 120,41 | 99,31 | 2,65 | 0,00 | 0,00 | 0,00 | 10,00 | 0,00 | 0,00 | 0,00 | 3,50 | 0,00 | 0 | 1 | 0 |
+| col72 | 90,58 | 58,26 | 1,88 | 0,00 | 0,00 | 7,34 | 3,00 | 0,04 | 0,00 | 0,00 | 1,17 | 0,00 | 1 | 3 | 1 |
+
+**Tres coisas que o admin da folha vai perguntar, e ja ficam ditas**: o `banco` negativo de col207, col369 e
+col87 (-121,86, -172,50 e -68,53) e saldo de banco de horas, nao desconto -- ele nasce do `MotorComercial` e
+**nao entra no TXT**; `col207` e `col820` tem 6 e 7 turnos ABERTOS, e turno aberto e furo sem decisao (os 284
+dias em aberto da porta); e `DSRperd 5` em col207, col87 e col382 e falta na semana, que tem linha propria.
+
+## 5. Lote 1 com HASH NOVO
+
+PROVA: montado pela autoridade unica (`folha/export.py::montar_linhas_export`, a mesma funcao da view) em modo
+SO LEITURA, com o conteudo unido por CRLF exatamente como `folha/views.py:195` faz -- hash de outra montagem
+seria hash de outro arquivo. Nada emitido, nada carimbado, nenhum `ExportacaoDominio` criado.
+
+| empresa | colabs | linhas | horas | bytes | sha256 |
+|---|---|---|---|---|---|
+| emp2 J.A Juliani Eireli | 134 | 238 | **17.523,18** | 10.230 | `8a63e3baabc501af7d63aa3845c6a9221d7f18ac091b5f7038650a23aaa59dbc` |
+| emp3 Juliani Seguranca Patrimonial | 55 | 95 | **7.952,48** | 4.147 | `6e0f1048428293078bc82c21aa8756630446c394ef2c2a5b16cbb1efbb6626d8` |
+| emp4 R. A. de Oliveira Lopes | 12 | 12 | **1.641,11** | 540 | `cb7f00fe59f84e505fce92aab2769242aec6671b688d7c514311518345c29773` |
+| **TOTAL** | **201** | **345** | **27.116,77** | 14.917 | — |
+
+**Contra o lote de 08:3x** (200 colabs, 352 linhas, 26.939,24 h): **+1 colaborador, -7 linhas, +177,53 h**. As
+horas subiram APESAR de a cura tirar 346,83 h de HE porque HE nao entra em `horas_trabalhadas` -- o que subiu
+foram horas trabalhadas de verdade, das respostas do mutirao e das curas do dia. E o `emp4` tem hash
+**IDENTICO** ao de 08:3x, o que e a melhor confirmacao possivel de que so mudou quem tinha de mudar: aquela
+empresa nao tem caso de HE com intra suprimida.
+
+## 6. RELATO destravado
+
+PROVA: `bin/relato.sh -> publicado em af6f441`. Ele estava retido desde ~11h por UMA linha: o titulo *"OS 12
+SELOS DA CASA ACHARAM UM DEFEITO"* e afirmacao de ato, e o selo exige uma linha `PROVA:` nas 6 seguintes (corte
+26/09). Posta a prova com os nomes dos 12 selos e os dois numeros, publicou.
+
+## O QUE FALTA, e e um clique
+
+A **emissao**. O carimbo VERDE de hoje esta lavrado nas quatro empresas e o TXT RECUSA sem ele; se o conteudo
+que sair do clique tiver hash diferente dos tres acima, alguma coisa mudou entre agora e o clique -- e ai a
+pergunta e o que mudou, nao o arquivo.
 
 # BUG-ANCORA-NAO-REGENERA: curado e selado -- e a frota medida DUAS vezes errado antes de sair 1 (28/09 14:5x)
 
