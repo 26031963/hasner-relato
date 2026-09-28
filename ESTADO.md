@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:20:37.**
+**Medido em 28/09/2026 07:25:45.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
 M  app/ponto/turnos.py
 M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 M  app/relatorios/pdf_espelho.py
+M  bin/pre-push.sh
+M  bin/regua.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -94,12 +96,6 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
       },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
@@ -123,10 +119,16 @@ M  app/relatorios/pdf_espelho.py
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-  Regua com a R4 de volta e a L-094
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/escala app/ponto app/relatorios app/docs/LEIS.md && bash bin/regua.sh 2>&1 | tail -4
+  Alinhar as duas impressoes digitais e rodar a regua · 4m 9s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p='bin/pre-push.sh'
+     s=io.open(p,encoding='utf-8').read()
+     old = """FP_AGORA=$(cd ~/saas-hasner/app && find . -type f \\( -name '*.py' -o -name '*.html' \\) -not -path '*/__pycache__/*' -exec sha1sum {} + 2>/dev/null | sort | sha1sum
+     | cu… (4m 7s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Determining… (1h 18m 5s · ↓ 31.0k tokens)
+· Determining… (1h 23m 12s · ↓ 34.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 07:20:37.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.0 MB). Acoes na janela: **509**.
+**Medido em 28/09/2026 07:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.0 MB). Acoes na janela: **514**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:21:35 | Bash | Alinhar as duas impressoes digitais e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='bin/pre-push.sh' s=io.open(p,encoding='utf-8').read() old = """FP_AGORA=$(cd ~/saas-hasner/app && find . -type f \\( -name '*.py' -o -name '*.html' \\) -not -path '*/__pycache__/*' -exec sha1sum {} + 2>/dev/null \| sort \| sha1sum \| cut -d' ' -f1)""" new = """# `./media/` FICA DE FORA, e as DUAS impressoes digitais tem de concordar ( ...` |
+| 07:21:23 | Bash | Ver a impressao digital do pre-push | `cd /home/ronald/saas-hasner && grep -n "FP_AGORA=" bin/pre-push.sh \| cut -c1-200` |
+| 07:21:16 | Bash | Excluir a saida gerada da impressao digital | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='bin/regua.sh' s=io.open(p,encoding='utf-8').read() old = """impressao_digital() { cd "$APP" \|\| exit 1 find . -type f \\( -name '*.py' -o -name '*.html' \\) -not -path '*/__pycache__/*' \\ -exec sha1sum {} + 2>/dev/null \| sort \| sha1sum \| cut -d' ' -f1""" new = """impressao_digital() { cd "$APP" \|\| exit 1 # `./media/` FICA DE FO ...` |
+| 07:21:01 | Bash | Ver a impressao digital e se o media e ignorado | `cd /home/ronald/saas-hasner && sed -n '18,28p' bin/regua.sh; git check-ignore -v app/media/invariantes_chamados.html 2>&1 \| head -2` |
+| 07:20:46 | Bash | Ver o que mudou durante a regua | `cd /home/ronald/saas-hasner && git status --short \| head -12; echo "=== .py/.html mudados nos ultimos 20 min ==="; find app -type f \( -name '*.py' -o -name '*.html' \) -not -path '*/__pycache__/*' -mmin -20 -printf '%TH:%TM %p\n' 2>/dev/null \| sort \| tail -8` |
 | 07:11:54 | Bash | Regua com a R4 de volta e a L-094 | `cd /home/ronald/saas-hasner && git add app/escala app/ponto app/relatorios app/docs/LEIS.md && bash bin/regua.sh 2>&1 \| tail -4` |
 | 07:11:44 | Bash | Registrar a L-094 no LEIS.md | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/LEIS.md' s=io.open(p,encoding='utf-8').read() linhas=s.split('\n') # insere a L-094 logo depois da L-093 i=next(k for k,l in enumerate(linhas) if l.startswith('\| **L-093**')) nova=('\| **L-094** \| **CURA DE DINHEIRO SOBE SEM `!` QUANDO A FAIXA FECHA** (caminho c): cura que move o ' 'gravado pode ser  ...` |
 | 07:11:27 | Bash | Achar o maior numero de lei | `cd /home/ronald/saas-hasner && grep -n "^\| \*\*L-0" app/docs/LEIS.md \| awk -F'\|' '{print $2}' \| grep -oP 'L-\d+' \| sort -u \| tail -3; sed -n '67p' app/docs/LEIS.md \| cut -c1-200` |
