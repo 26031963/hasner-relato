@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:50:45.**
+**Medido em 28/09/2026 08:56:01.**
 
 | | |
 |---|---|
@@ -32,8 +32,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
 ?? app/ponto/management/commands/e6_oraculo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -87,20 +87,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  esta incompleta pela propria lei; (b) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (c) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
-  se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT. Segue a fila; PAREI so em lei ou !
-
-  Pushed to main, ran 10 shell commands
-
-❯ aval Ronald: obra O-GLOSSARIO (fila 1, depois do lote 2; nenhuma lei nova -- aplica L-005, TRAVA JUIZ-NOVO, LEI-AKITA 11).
-  FONTE: termos do dominio ja existentes no codigo; nenhum termo novo nasce aqui.
-  MUDA: (1) app/docs/GLOSSARIO.md, uma linha por termo: termo | definicao curta | onde mora (arquivo::funcao/modelo, ancorado por grep, nunca por linha) | lei L-NNN | selo.
-  Grupos: O DIA (celula, cartorio, tabuleiro/lampada, veredito que acusa, ata, marco) · A PREVISAO (escala/template, vinculo, vinculo do dia, previsto do dia, intervalo do dia,
-  ancora/fase, turno partido) · O REALIZADO (batida, apuravel/retratada, juiz da batida, turno/pareador, realizado do dia, em aberto, furo x falta L-088, ausencia/catalogo) · A
-  COBRANCA (chamado, disputa, pergunta, pergunta viva/fio, premissa, via/relavrar, materializacao, retratacao) · CALCULO E FOLHA (motor, espelho, builder, fechamento, competencia
-  21-20 L-090, exportada L-092, portao do TXT, porta do export/carimbo, universo do TXT, cadastro-zero, oraculo E6) · GOVERNANCA (juiz/familia, porta canonica, portas da tela,
-  papel do cron, selo, contador/vigia, regua, lei/corte/!, L-094); (2) mensageria/nucleo/cards/glossario.md GERADO do GLOSSARIO.md (fonte unica); (3) CLAUDE.md e PRIMER.md
-  apontam para ele.
   RED: termo usado em LEIS.md/MAPA.md/PRIMER.md sem linha no glossario = vermelho; "onde mora" que o grep nao acha = vermelho; card do Haiku diferente do gerado = vermelho.
   SELO: bin/tests/test_glossario_vivo.sh (ou core/tests), com caso que MORDE.
   PROIBIDO: definicao que contradiz lei vigente; termo sem ancora no codigo; glossario escrito a mao sem selo.
@@ -113,15 +99,29 @@ RELATO, com a lista de nomes do banco como autoridade._
   -> (12) grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje (esta parada desde 27/09 19:3x). Cadastro/L-009 vira lista para o meu !. Segue a fila; PAREI so em lei
   ou !
 
-● Oraculo no repo, com o dia impar julgado · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/e6_oraculo.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """ORACULO E6 -- calculadora INDEPENDENTE que certifica o espelho, dia por dia.
-     SAIU DE `/tmp/e6b.py` PARA…
+  Ran 4 shell commands
 
-* Determining… (2h 48m 13s · ↓ 84.7k tokens)
+❯ aval Ronald: BO col354 (disputa #5527), bug a PROVAR com RED antes de curar. FATO: 23/09 faltou a volta do intervalo; o app gravou os tipos invertidos em 23/09 16:02 e em todo
+  24 e 25 (S 07:01 · E 11:27 · S 12:30 · E 16:00). Emissor orfao_14h abriu P36049 (24/09) e P36550 (25/09) perguntando "saida" em dias com 4 batidas completas, e P35636 (23/09)
+  pergunta saida quando o que falta e a VOLTA DO INTERVALO. As 3 tem via_resolucao=sem_turno_aberto e seguem vivas na tela. PROVAR: (1) o emissor orfao_14h le tipo gravado em vez
+  do marco (L-E3 "o MARCO manda") -> RED col354 24/09; (2) via carimbado + pergunta viva = fio incoerente (pergunta_viva, chamados/juizes.py) -> RED P36049; (3) censo da frota:
+  quantas perguntas vivas nascem de dia com par completo pelo marco. PROIBIDO: validar/fechar na mao, fallback, allowlist. Cadastro (sem escala vigente, sem posto) vai para a
+  lista do meu !. PRONTO: RELATO com os REDs e o censo. LEI-AKITA: origem=emissor orfao_14h, testemunha=juiz da batida/marco, juizes novos=0. Segue a fila; PAREI so em lei ou !
+
+● Registrar o BO do col354 na fila
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/PROMPTS.md'
+     t=io.open(p,encoding='utf-8').read()
+     anc='\n\n## Contagem'
+     nova=('| BO-col354-ORFAO14H | 28/09 ~08:5x | disputa #5527: em 23/09 faltou a volta do intervalo e o app gravou '
+     'TIPOS INVERTID…
+
+· Compacting conversation… (2h 53m 28s · ↓ 88.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            1% until auto-compact
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
