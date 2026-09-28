@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:30:26.**
+**Medido em 28/09/2026 17:33:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `7288e90e TICKETS: rodape e placar (8592 testes OK)` |
+| `HEAD` local | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
 | `origin/main` | `7288e90e TICKETS: rodape e placar (8592 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)
+7d0952e8 BACKLOG: estado em dia -- BUG-HE-INTRA-DOBRADA e COBRAR fechados, O-DIA-PAGO com S1/S2/S5a fechadas
 7288e90e TICKETS: rodape e placar (8592 testes OK)
 0ca33cfc COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada
 4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
-45eaa780 LOTE 1 DA 09 EMITIDO, e a S5b guarda os tres numeros do pareamento pela autoridade
-a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ```
 
 ## `git status --short`
@@ -84,39 +84,39 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     55 colabs so tem chamado sem data/antigo e levam push sem dever nada na competencia.
-     FONTE: chamados/catalogo/modulos.py::data_do_chamado + competencia exportada pelo juiz de
-     ponto/services/fechamento.py (CompetenciaExportada / empresas_exportadas_no_escopo). Nunca data cravada.
-     MUDA: chamados/views_cobrar.py::cobrar_massa (e a previa) — so chamado cujo dia cai em competencia NAO exportada.
-     Sem data: fora do massa (cura mais restritiva); listar os 113 por modulo_origem no RELATO para corte.
-     RED: colab so com chamado da 09 exportada -> nao recebe push; colab com furo na 10 -> recebe; previa conta igual ao envio.
-     PROIBIDO: filtro com data literal, juiz novo de competencia, mexer no cobrar individual.
-     LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
-     segue a fila; PAREI so em lei ou !
+  └───────────────┴───────┴────────┘
 
-  Pushed to main, searched for 5 patterns, ran 14 shell commands
+  681 barrados por competência exportada (676 da 09, emitida às 16:5x) e 113 por não ter data. 125 colaboradores param de receber push sem dever nada na competência. Os números
+  batem com a sua medição das 16:5x — a diferença de um chamado é o tempo entre as duas leituras.
 
-❯ aval Ronald: O-JANELA-HE parte A (REGRA) — fila 1, agora; partes de tela/aba/portao seguem atras da S3,
-  com PRAZO: prontas antes do export da competencia 10. Leis: L-097, L-092, L-082(b), L-009.
-  1. Cadastro por empresa "Janela de HE" (liga, piso 10, teto 60; saida com teto proprio DESLIGADO).
-  2. Regra em UM sitio no motor (sitio da TOLERANCIA_HE_MIN_DIA): entrada >10 min antes do marco -> conta do marco,
-     minutos fora nao viram HE nem compensam atraso/saida antecipada; >60 -> idem + lista CADASTRO×REALIDADE.
-     ponto/calculador/regras.py IMPORTA a mesma regra (nunca copia).
-  3. Vale da competencia 10; 09 exportada intocada.
-  4. RED: 06:40 marco 07:00 -> HE 0; 06:52 -> nada muda; 05:30 -> conta do marco + lista; turno noturno idem.
-  5. DIFF por rubrica da competencia 10 na sombra contra o GRAVADO, por colab, no RELATO. Apply so com meu "!".
-     PROIBIDO: regra no leitor, fallback, tocar a 09, apply sem "!".
-     LEI-AKITA: origem=motor_calculo_v2 (tolerancia HE), testemunha=motor/DiaPago, RED=item 4, quem-mais-le=tela/PDF/TXT/calculador, juizes novos=0.
-     segue a fila; PAREI so em lei ou !
+  Os 113 sem data, para virar corte: disputa_supervisao 102 · disputa_supervisao_manual 8 · chamados 3. Todos são disputa — e faz sentido: disputa nasce de uma divergência, não de
+  um dia, e por isso data_do_chamado não tem chave declarada para ela. A pergunta que sobra é de desenho: a disputa deve ser cobrável em massa? Se sim, precisa declarar o dia em
+  jogo; se não, sai do verbo cobrar e vive pelo fio, onde já é tratada.
 
-● Commitar, empurrar e publicar o COBRAR · 2m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_cob.txt <<'EOF'
-     COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada
-     O botao Cobrar mandava push por chamado que nao muda folha nenhuma. Pedir a alguem
-     que resolva um dia que ja virou folha e pedir o impos… (2m 1s · 4 lines)
+  A regra ganhou casa (chamados/services/cobranca_folha.py::muda_a_folha) e não ficou na view: a prévia e o envio leem a mesma resposta, e regra dentro de closure não tem selo que
+  a chame. Nenhum juiz nasce ali — dia por data_do_chamado, competência por janela_atual(...)[1], exportação por empresas_exportadas_no_escopo.
+
+  O caso que morde de verdade: empresa com corte 26, onde o dia 24/09 cai na 09 e não na 10 — se o filtro lesse 21, passaria. E três tentativas de fixture antes de o selo valer:
+  só passou quando o modulo_origem declara a chave de data; sem isso os três casos caíam todos no ramo "sem data" — verde por motivo errado.
+
+  Antes, na mesma leva
+
+  S5b guardou os três números do pareamento pela autoridade, e um deles é um erro meu que vale escrito: por sequência o DIFF de trabalhadas é +765,32 h; passando os limites do
+  turno deu +5.563,83 h (o envelope traz a pausa dentro); com os segmentos deu −2.676,48 h. A subtração da intra do motor não é simétrica à soma dos segmentos — isso pede um caso
+  medido ponta a ponta, não outra rodada de frota. O comando guarda as duas formas (--pares-da-autoridade), com o padrão na sequência, para quem continuar começar do número.
+
+  Registrada e em voo: O-JANELA-HE parte A (REGRA), com as partes de tela/aba/portão atrás da S3 e prazo antes do export da 10.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
+
+● Acertar o placar e empurrar · 57s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
+     git commit -q -m "TICKETS: placar do topo em dia (ultimo push 7288e90e)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Unfurling… (41m 11s · ↓ 34.8k tokens)
+✢ Unfurling… (43m 46s · ↓ 37.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
