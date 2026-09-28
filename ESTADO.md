@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:50:45.**
+**Medido em 27/09/2026 22:56:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
-| `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **9** |
+| `HEAD` local | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
+| `origin/main` | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
+c657f001 [REGUA-MORTA][ALARME-NAO-E-JUIZ][SELOS-MUDOS] as tres fatias ganham linha no TICKETS
 c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a regua VERDE em 476 s
 37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS
-fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire
-6738448e [REGUA-MORTA] `bash bin/regua.sh` nao rodava a suite desde 25/09 10:34, e a esteira seguia "verde"
 ```
 
 ## `git status --short`
@@ -110,12 +110,12 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 
 ● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
 
-  Reescrever o placar e empurrar
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -3 && git add app/docs/TICKETS.md && git commit -q -F - <<'MSG'
-     [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
-     Causa em uma linha: o placar do topo citava `regua FALHOU (25/09 07:25)` -- …
+● Smoke em prod no col843
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/smoke.py <<'PY'
+     # SMOKE em PROD, SO LEITURA: o espelho do col843 mostra UMA noite em 24/08 e ZERO em 25/08?
+     from django_tenants.utils import schema_contex…
 
-· Zesting… (1h 47m 42s · ↓ 188.2k tokens)
+✢ Zesting… (1h 52m 58s · ↓ 192.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
