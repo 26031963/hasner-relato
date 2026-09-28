@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:309 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:321 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:08:01.**
+**Medido em 28/09/2026 14:13:31.**
 
 | | |
 |---|---|
@@ -43,7 +43,7 @@ M  app/docs/ARQUITETURA.mmd
 M  app/docs/BACKLOG.md
 M  app/docs/MAPA.md
 M  app/docs/PENDENTES_RONALD.json
-MM app/docs/RELATO.md
+M  app/docs/RELATO.md
 M  app/escala/signals.py
 A  app/escala/tests/test_ancora_regenera_celulas.py
 ?? bin/keepalive.sh
@@ -98,6 +98,10 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Ran 2 shell commands
+
+❯ aval Ronald: col824 [nome] -- a ancora do vinculo ja foi redeclarada pelo admin em 28/09; regenerar as CELULAS do vinculo dele de 21/08 ate 27/09 pela excecao formal
   (regenerar_celulas_vinculo, passado errado por cadastro, corte 16/08) com trilha em regeneradas_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR
   perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
@@ -120,17 +124,13 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
   chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
   competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
 
-● Diagnosticar por que a regeneracao nao alcancou
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/col824_diag.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import collections
-     from colaboradores.models import Colaborador
-     from escala.models import CelulaDia, EscalaColaborador
-     from ponto.janelas import janela_fechamento
-     c = Colaborador.objects.get(pk=824)
-     ec = Es…
+● Esperar a regua · 2m 38s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_anc2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-1… (2m 36s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Catapulting… (1h 5m 28s · ↓ 63.5k tokens)
+✢ Catapulting… (1h 10m 58s · ↓ 69.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
