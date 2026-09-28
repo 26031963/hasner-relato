@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:40:45.**
+**Medido em 28/09/2026 04:45:46.**
 
 | | |
 |---|---|
@@ -115,17 +115,17 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
       57
       58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-  Congelar o relogio do teste e rodar a regua · 2m 23s
+  Congelar o relogio do teste e rodar a regua · 7m 24s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      p='app/ponto/tests/test_detectar_entrada_adiantada.py'
      s=io.open(p,encoding='utf-8').read()
      s=s.replace("from django.test import TestCase",
      "from django.test import TestCase\nfrom freezegun import freeze_time")
-     s=s.replace("""class Entr… (2m 21s · 2 lines)
+     s=s.replace("""class Entr… (7m 21s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Metamorphosing… (3h 34m 47s · ↓ 148.8k tokens)
+✽ Metamorphosing… (3h 39m 48s · ↓ 148.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
