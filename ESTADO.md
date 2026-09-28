@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:50:36.**
+**Medido em 28/09/2026 16:55:45.**
 
 | | |
 |---|---|
@@ -110,7 +110,7 @@ M  app/ponto/tests/test_calculador_regras.py
 
 ● Background command "DIFF com segmentos de trabalho" completed (exit code 0)
 
-● Publicar o 3b e rodar a regua · 4s
+  Publicar o 3b e rodar a regua · 5m 14s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -118,10 +118,10 @@ M  app/ponto/tests/test_calculador_regras.py
      t=io.open(p,encoding='utf-8').read()
      anc='## (3) O BURACO GRANDE: o nucleo nao pareia por MARCO -- e agora ha o caso'
      assert t.count(anc)==1
-     sec = '''## (3b) Tentei parear pela AUTORIDADE e… (4s · 2 lines)
+     sec = '''## (3b) Tentei parear pela AUTORIDADE e… (5m 13s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Unfurling… (1m 21s · ↓ 3.7k tokens)
+· Unfurling… (6m 30s · ↓ 3.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
