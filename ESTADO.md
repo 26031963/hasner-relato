@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:97 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:148 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:28:31.**
+**Medido em 27/09/2026 23:34:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um` |
+| `HEAD` local | `1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa` |
 | `origin/main` | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa
 c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um
 47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 c657f001 [REGUA-MORTA][ALARME-NAO-E-JUIZ][SELOS-MUDOS] as tres fatias ganham linha no TICKETS
 c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
-d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a regua VERDE em 476 s
 ```
 
 ## `git status --short`
 
 ```
 M  app/docs/RELATO.md
-A  app/ponto/tests/test_teto_da_absorcao.py
+M  app/ponto/turnos.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -92,8 +92,6 @@ A  app/ponto/tests/test_teto_da_absorcao.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file
-
 ● Background command "Medir o pico de RAM durante a regua" completed (exit code 0)
 
   Ran 14 shell commands
@@ -117,14 +115,16 @@ A  app/ponto/tests/test_teto_da_absorcao.py
   disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
   listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
 
-● Separar deriva de cura nos 9 aplicados
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import json
-     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
-     b=json.load(open(S+'dinheiro_base.json'))['diff'] # leitura_base x gravado
-     n=json.load(open(S+'novos_campos.json')) # (gravado, leit_b…
+● Levar o TETO a arvore e rodar a regua · 4m 45s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cp $S/t3.py app/ponto/turnos.py &&
+     python3 - <<'PY'
+     import io
+     p='app/docs/RELATO.md'
+     s=io.open(p,encoding='utf-8').read()
+     old = """A CURA: a absorcao por marco pas… (4m 44s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Zesting… (2h 25m 28s · ↓ 234.1k tokens)
+✢ Zesting… (2h 30m 58s · ↓ 238.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
