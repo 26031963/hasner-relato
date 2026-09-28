@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:30:45.**
+**Medido em 28/09/2026 19:33:43.**
 
 | | |
 |---|---|
-| `HEAD` local | `9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)` |
-| `origin/main` | `9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)` |
+| `HEAD` local | `13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)` |
+| `origin/main` | `13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
+642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
 9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)
 de5b1a61 JANELA DE HE saida (C) implementada e APLICADA: a L-084 julga antes, e o DIFF fechou nas tres condicoes
 b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
-e05ebb21 PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede
-37c8852b TICKETS: rodape e placar (8602 testes OK)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
-M  app/docs/RELATO.md
-A  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -111,16 +108,16 @@ A  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: BUG-ANCORA-NAO-REGENERA -- mudar a ANCORA do 12x36 nao refazia celula nenhuma -- escala/signals.py regenerava por VIGENCIA e nao por ANCO
 
-  Publicar o placar e rodar a regua · 8m 28s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     p='/home/ronald/saas-hasner/app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     sec = '''# O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e a lista so encolhe (28/09 19:4x)
-     A S3 troca os leitores um a um, e a pr… (8m 27s · 2 lines)
+  Commitar, empurrar e publicar o placar da S3 · 2m 8s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s3.txt <<'EOF'
+     O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
+     A S3 troca os leitores um a um, e a primeira peca nao e uma troca: e o PLACAR, para cada
+     troca ser verificavel e nenhuma entrar calada.
+     ponto/tests/… (2m 2s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Orchestrating… (33m 47s · ↓ 35.8k tokens)
+✢ Orchestrating… (36m 44s · ↓ 37.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
