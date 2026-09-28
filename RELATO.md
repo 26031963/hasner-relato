@@ -46,6 +46,27 @@ intervalo do dia e cadastro do template **nao sao a mesma coisa**. O juiz e
 Efeito medido: intra de **-216,98 h para -170,93 h**, e o padrao `intra comercial/6x1` caiu de **156 para 117
 dia-colab**. Fecharam 39 dia-colab e 46 h por uma linha.
 
+## (3b) Tentei parear pela AUTORIDADE e PIOROU -- os tres numeros ficam escritos (16:5x)
+
+O caminho certo e o pareamento pelo MARCO, e o `col600 02/09` prova (262 x 502 min). Construi a capacidade no
+nucleo -- `minutos_do_oraculo(ts, pares=...)`: quando a autoridade ja pareou, ele **SOMA** em vez de parear, e
+isso esta selado com os dois casos (par fechado da 502 min; par sem saida da zero minuto e marca o dia impar).
+Mas a **ligacao** com a autoridade nao esta certa, e as duas tentativas ficaram medidas:
+
+| forma | `trabalhadas` | leitura |
+|---|---|---|
+| por **sequencia** (a de hoje) | **+765,32 h** | pareia por ordem, descarta a solta |
+| limites do TURNO (`entrada`, `saida`) | **+5.563,83 h** | o envelope traz a pausa DENTRO, e o motor conta `minutos_trabalhados` ja sem ela -- somei a pausa como trabalho e depois a indenizei de novo |
+| SEGMENTOS de trabalho (quebrados por `intervalos_do_turno`) | **-2.676,48 h** | melhor, e ainda errado: padrao `12x36 -700 dia-colab` |
+
+**O que isso diz, e nao e um palpite**: a subtracao da intra que o motor faz nao e simetrica a soma dos
+segmentos que a autoridade entrega. Isso pede **UM caso medido ponta a ponta** -- como col618 e col600 foram --,
+nao outra rodada de frota. Fica como o proximo passo da S5b, com os tres numeros na mao.
+
+**O comando guarda as duas formas**: `diff_calculador` pareia por sequencia por padrao (o numero conhecido) e
+aceita `--pares-da-autoridade` para repetir a medicao sem reconstruir nada. Quem continuar comeca do numero, e
+nao do zero.
+
 ## (3) O BURACO GRANDE: o nucleo nao pareia por MARCO -- e agora ha o caso
 
 `horas_trabalhadas` segue em **+765,32 h** (734 dia-colab, 306 colabs), e a causa esta provada:

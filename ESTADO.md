@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:45:31.**
+**Medido em 28/09/2026 16:50:36.**
 
 | | |
 |---|---|
@@ -32,9 +32,10 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ## `git status --short`
 
 ```
- M app/ponto/calculador/nucleo.py
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_calculador_regras.py
+M  app/docs/RELATO.md
+M  app/ponto/calculador/nucleo.py
+M  app/ponto/management/commands/diff_calculador.py
+M  app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,23 +88,8 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolBatch": {
-        "hookEventName": "\"PostToolBatch\"",
-        "additionalContext": "string (optional)"
-      },
-      "for Stop / SubagentStop": {
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
 
-✻ Crunched for 46m 25s · done 4:38 PM · 5 shells still running
+✻ Crunched for 46m 25s · done 4:38 PM · 4 shells still running
 
 ❯ aval Ronald: UI-CAL-COMPETENCIA — registrar no BACKLOG (fila 2, nao construir agora). Nenhuma lei nova.
   FONTE: ponto/janelas.py::janela_fechamento(mes, ano, colaborador.empresa) — juiz unico de competencia, nunca 21 cravado.
@@ -115,16 +101,31 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
   LEI-AKITA: origem=calendario.py (modo), testemunha=janelas.janela_fechamento, juizes novos=0.
   segue a fila; PAREI so em lei ou !
 
-● Esperar o DIFF com pares da autoridade · 11s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'rubrica|Error' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_s5e.txt
-     2>/dev/null; do sleep 25; done; head -9 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scrat… (10s)
+  Searched for 2 patterns, ran 6 shell commands
+
+● Background command "DIFF com os pares da autoridade" completed (exit code 0)
+
+  Ran 2 shell commands
+  ⎿  Interrupted · What should Claude do instead?
+
+● Background command "DIFF com segmentos de trabalho" completed (exit code 0)
+
+● Publicar o 3b e rodar a regua · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     anc='## (3) O BURACO GRANDE: o nucleo nao pareia por MARCO -- e agora ha o caso'
+     assert t.count(anc)==1
+     sec = '''## (3b) Tentei parear pela AUTORIDADE e… (4s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Beaming… (2m 55s · ↓ 10.9k tokens)
+✽ Unfurling… (1m 21s · ↓ 3.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
