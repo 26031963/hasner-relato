@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:47:31.**
+**Medido em 28/09/2026 12:53:01.**
 
 | | |
 |---|---|
@@ -119,13 +119,13 @@ M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 
 ● Background command "Curar o teto do invariante e re-medir" completed (exit code 0)
 
-● Esperar a regua da S2 · 1m 21s
+● Esperar a regua da S2 · 6m 51s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (1m 20s)
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (6m 50s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Combobulating… (14m 58s · ↓ 15.2k tokens)
+✢ Combobulating… (20m 28s · ↓ 15.2k tokens)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
