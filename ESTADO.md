@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:35:01.**
+**Medido em 27/09/2026 22:40:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire` |
+| `HEAD` local | `37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,20 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS
 fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire
 6738448e [REGUA-MORTA] `bash bin/regua.sh` nao rodava a suite desde 25/09 10:34, e a esteira seguia "verde"
 7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA
 75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
-1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M bin/fabricante_alvo.py
- M bin/hooks.sh
- M bin/tests/test_labels_fonte_unica.sh
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -87,7 +85,6 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Commitar a cura da regua e roda-la" completed (exit code 0)
 
 ● Background command "Amostrar RAM do container de teste durante a regua" completed (exit code 0)
 
@@ -110,21 +107,22 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
   template :986 e entrega hii/hfi; espelho.py:197-198 -> turnos.py:403-406 desconta 60 min). Lei: celula soberana. RED col610 22/08 661 -> 721 (ata=oraculo=721). ANTES da cura:
   censo dos 69 chamadores de marcos_do_dia (P15) e DIFF restrito aos dias com celula sem marcos. Nenhuma lei nova. Segue a fila.
 
-● Seguir o ponteiro do wrapper e provar que morde
+● Abrir o pedido de ! do apply da R2b
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='bin/tests/test_labels_fonte_unica.sh'
-     s=io.open(p,encoding='utf-8').read()
-     old = """if [ -f "$HOOK" ] && grep -q 'bin/pre-push.sh' "$HOOK" \\
-     && ! grep -vE '^\\s*#|^\\s*$' "$HOOK" | grep -q 'LABELS='; then
-     echo "hook e WRAPPER: o arquiv…
+     import io, json
+     p='app/docs/PENDENTES_RONALD.json'
+     d=json.load(open(p, encoding='utf-8'))
+     # a colisao do IMPAR voce JA respondeu -- ela sai da fila de decisao
+     for it in d:
+     if it.get('id')=='IMPAR-ABERTO-COLISAO-COM-BUG-144':
+     it['o_que'] = ('RESPONDI…
 
-* Zesting… (1h 31m 59s · ↓ 158.5k tokens)
+✢ Zesting… (1h 37m 29s · ↓ 179.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
