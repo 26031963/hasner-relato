@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:30:45.**
+**Medido em 28/09/2026 13:36:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## `git status --short`
 
 ```
+M  app/config/crons.py
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
 M  app/docs/RELATO.md
 A  app/ponto/calculador/__init__.py
 A  app/ponto/calculador/nucleo.py
@@ -99,12 +102,6 @@ M  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      },
-      "for PostToolBatch": {
-        "hookEventName": "\"PostToolBatch\"",
-        "additionalContext": "string (optional)"
-      },
-      "for Stop / SubagentStop": {
         "hookEventName": "\"Stop\" | \"SubagentStop\"",
         "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
       }
@@ -123,16 +120,22 @@ M  app/ponto/tests/test_e6_oraculo_julga_impar.py
 
 ● Background command "Capturar a tabela inteira do DIFF" completed (exit code 0)
 
-● Esperar a regua da S5a · 4m 23s
+  Ran 2 shell commands
+
+❯ aval Ronald: AVISO-ENTRADA-ANTECIPADA (so informativo; nenhuma lei nova; nao retrata, nao cria chamado, nao muda calculo). Fila 1 logo depois do lote 1 gerado. FONTE:
+  ponto/services/aviso_da_batida.py::aviso_do_dia (campo aviso ja devolvido por api/views_core.py) + marco de entrada da CELULA do dia. MUDA: quando a ENTRADA do turno chega
+  antes do marco, o aviso devolve "Entrada registrada as HH:MM. Sua escala comeca as HH:MM (faltam N min)." -- so ENTRADA do turno, so dia com marco na celula; nada alem da
+  frase. RED: 06:47 com marco 07:00 -> aviso com 13 min; 07:00 -> sem aviso; volta de intervalo -> sem aviso. Selo nas duas cascas se tocar template (nao deve tocar). A parte
+  ESPURIA/janela fica REGISTRADA no BACKLOG como desenho aguardando confirmacao do admin da folha e do dono -- nao construir. Segue a fila; PAREI so em lei ou !
+
+  Esperar a regua · 22s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s5.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (4m 22s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s5b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (22s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Catapulting… (28m 12s · ↓ 29.6k tokens)
-
-● How is Claude doing this session? (optional)
-  1: Bad    2: Fine   3: Good   0: Dismiss
+· Catapulting… (33m 28s · ↓ 32.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
