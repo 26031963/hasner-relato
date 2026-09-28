@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:12:01.**
+**Medido em 27/09/2026 23:17:31.**
 
 | | |
 |---|---|
@@ -41,7 +41,6 @@ d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a
 ```
 M  app/docs/RELATO.md
 A  app/ponto/tests/test_teto_da_absorcao.py
-M  app/ponto/turnos.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -93,7 +92,6 @@ M  app/ponto/turnos.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 13 shell commands
 
 ● Background command "Commitar e rodar a regua" completed (exit code 0)
 
@@ -116,20 +114,21 @@ M  app/ponto/turnos.py
 
 ● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
 
-● Ler o selo que ficou vermelho
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n "$(grep -n 'def test_MORDE_duracao_implausivel_nao_fecha' app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py | cut -d:
-     -f1),+22p" app/ponto/tests/test_o95_pausa_so_absorve_quem_voltou.py
-
-✢ Zesting… (2h 8m 59s · ↓ 219.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Pushed to main, ran 22 shell commands
 
 ❯ aval Ronald: R2b APPLY autorizado com a faixa: horas_folga_trabalhada -25,85 h em 5 colabs (efeito L-085 da noite que volta a ser uma), demais condicoes como medidas; fora
   disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
   listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
-  ctrl+x ctrl+s to send now
+
+● DRY do apply da R2b · 58s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 2>&1 | tail -40 (58s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Zesting… (2h 14m 28s · ↓ 226.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
