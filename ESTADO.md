@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:34:31.**
+**Medido em 28/09/2026 05:40:01.**
 
 | | |
 |---|---|
@@ -33,8 +33,9 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
 
 ```
  M app/config/crons_duracao.json
- M app/ponto/services/espelho.py
- M app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
+M  app/ponto/services/espelho.py
+A  app/ponto/tests/test_o81_celula_da_competencia.py
+M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,6 +88,8 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
           }
         }
       },
@@ -113,14 +116,12 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Provar o RED: 97 colabs no builder sem o MUDA · 2m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show
-     HEAD:app/ponto/services/espelho.py > $S/esp_red.py && python3 - <<'PY'
-     import io, py_compile
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210… (2m 18s · 2 lines)
+● Regua do O81 · 2m 17s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
+     app/ponto/tests/test_o81_celula_da_competencia.py && bash bin/regua.sh 2>&1 | tail -4 (2m 15s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flibbertigibbeting… (11m 59s · ↓ 16.3k tokens)
+· Flibbertigibbeting… (17m 29s · ↓ 21.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
