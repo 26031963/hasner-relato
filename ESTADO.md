@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:46:31.**
+**Medido em 27/09/2026 21:51:39.**
 
 | | |
 |---|---|
@@ -110,11 +110,11 @@ bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar n
 
 ● Background command "Medir a cura (com tmpfs de logs)" completed (exit code 0)
 
-● Rodar o diagnostico corrigido
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && sed -i 's/from escala.utils import
-     periodos_do_dia/from ponto.juiz_batida import periodos_do_dia/' $S/diag.py && docker run --rm --cpuset-cpus 6-7 --cpus 2 --memor…
+● Provar o RED do selo contra o HEAD
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && source bin/recursos.sh &&
+     teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_…
 
-✢ Zesting… (43m 28s · ↓ 74.6k tokens)
+✢ Zesting… (48m 36s · ↓ 88.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
