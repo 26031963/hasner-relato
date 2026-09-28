@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:09:01.**
+**Medido em 28/09/2026 04:14:22.**
 
 | | |
 |---|---|
@@ -89,13 +89,6 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
-  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
-
-  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
-  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
-  resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
-
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
   maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
   "relógio da grade". É o numerador do cumprimento, não o relógio bruto. Consequência para a fatia seguinte: o gravado não tem o relógio bruto, então o topo tem de vir da mesma
@@ -117,11 +110,18 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua do item (5) · 4m 27s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/config/crons.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py && bash bin/regua.sh 2>&1 | tail -4 (4m 26s)
+● Corrigir a entrada no dict e rodar a regua · 35s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     p='app/config/crons.py'
+     c=io.open(p,encoding='utf-8').read()
+     old = """ 'selo_leitores_no_mesmo_numero',
+     'folga_que_sumiu':"""
+     new = """ 'selo_leitores_no_mesmo_numero':
+     'SELO DE PORTA, nao de pipeline (28/09): e a pergunta que antecede … (33s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (3h 3m 3s · ↓ 135.0k tokens)
+✻ Metamorphosing… (3h 8m 24s · ↓ 135.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

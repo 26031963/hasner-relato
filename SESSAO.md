@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 04:09:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.1 MB). Acoes na janela: **507**.
+**Medido em 28/09/2026 04:14:22.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.1 MB). Acoes na janela: **509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:13:46 | Bash | Corrigir a entrada no dict e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/config/crons.py' c=io.open(p,encoding='utf-8').read() old = """ 'selo_leitores_no_mesmo_numero', 'folga_que_sumiu':""" new = """ 'selo_leitores_no_mesmo_numero': 'SELO DE PORTA, nao de pipeline (28/09): e a pergunta que antecede o EXPORT -- tela == PDF == ' 'fechamento == TXT, 0 divergencia no universo do TXT (`classificar_export( ...` |
+| 04:13:32 | Bash | Conferir a sintaxe de crons.py | `cd /home/ronald/saas-hasner && python3 -c "import ast,sys; ast.parse(open('app/config/crons.py').read())" && echo "sintaxe ok" ; sed -n '428,440p' app/config/crons.py` |
 | 04:04:33 | Bash | Regua do item (5) | `cd /home/ronald/saas-hasner && git add app/config/crons.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py && bash bin/regua.sh 2>&1 \| tail -4` |
 | 04:00:18 | Bash | Declarar a casa do command e reconferir | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/config/crons.py' c=io.open(p,encoding='utf-8').read() anc='FORA_DE_PIPELINE = {' i=c.index(anc)+len(anc) c=c[:i] + ("\n # SELO DE PORTA, nao de pipeline (28/09): `selo_leitores_no_mesmo_numero` e a pergunta que\n" " # antecede o EXPORT -- tela == PDF == fechamento == TXT, 0 divergencia no universo do TXT.\n" " # Roda no ATO do exp ...` |
 | 04:00:06 | Bash | Achar onde mora FORA_DE_PIPELINE | `cd /home/ronald/saas-hasner && grep -rn "FORA_DE_PIPELINE" app/config/*.py \| head -3` |
