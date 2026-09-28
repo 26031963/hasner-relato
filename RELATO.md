@@ -1,18 +1,19 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: emissao-do-lote-1 | espera Ronald` -- tudo o que vinha antes esta FEITO e provado abaixo: deploy no ar, apply cirurgico dos 144 (col125 HE50 **1,98 -> 0,00** com intra 2,00 intacta), porta **VERDE nas 4 empresas** com `minuto_em_duas_rubricas=0`, extrato dos 16 publicado e **hash novo** dos tres arquivos. Falta so o CLIQUE da emissao, que e seu.
+**LOTE 1 DA 09 EMITIDO** pelo Ronald as 16:5x, com os tres hashes CONFERIDOS e identicos aos publicados -- `8a63e3ba` (emp2), `6e0f1048` (emp3), `cb7f00fe` (emp4).
 
-PROVA: `deploy.sh` OK com migration 0067 e tres rotas provadas · `aplicar_09_he_intra --aplicar` = 144 colabs, `horas_extras -346,83 h`, nenhum campo fora do alvo · `col125 09` HE50 **0,00** e intra **2,00** no gravado · `selo_leitores_no_mesmo_numero` = SELO VERDE, 202 no universo, `minuto_em_duas_rubricas=0` · hashes `8a63e3ba`, `6e0f1048`, `cb7f00fe`.
+PROVA: hashes conferidos na emissao = hashes publicados as 15:2x, montados pela autoridade unica em so leitura; carimbo VERDE da porta lavrado nas quatro empresas antes do clique.
 
-
-
-> **PAREI: o seu `!` das 12:2x nao fecha na condicao, e a tabela esta abaixo** (28/09 12:3x). Voce autorizou *"so HE50/HE100, -430,71 h"*. Duas coisas mudaram desde o DIFF das 11:2x que voce leu: (1) a cura FINAL e mais estreita -- **-346,87 h em 144 colabs**, porque 12 selos da casa acharam um defeito na primeira versao; (2) medi pela porta REAL o que o recalculo VAI ESCREVER, e ele move **10 campos que o seu `!` nao nomeia**, entre eles **folga trabalhada -86,69 h**, **trabalhadas -78,02 h** e **banco -196,65 h dentro do lote 1**. Isso e DERIVA do gravado, nao da cura -- e e literalmente o caso que fez voce cortar a L-082 hoje de manha. Nao deployei e nao recalculei.
+_Os PAREI de 10:3x, 11:2x, 12:3x e o da emissao foram RESOLVIDOS e sairam do topo: o de 10:3x virou o apply cirurgico, o de 11:2x e o de 12:3x viraram o caminho (B) que o Ronald escolheu, e o da emissao acabou de fechar no clique. Fila 1 sem PAREI aberto._
 
 
-> **PAREI: BUG-HE-INTRA-DOBRADA curado e MEDIDO, espera o seu `!`** (28/09 11:2x). A mesma hora estava sendo paga em DUAS rubricas. RED vermelho e verde, cura em todos os motores que indenizam, e o DIFF de frota abaixo: **-346,87 h de hora extra em 144 colabs, ZERO campo fora do alvo, ZERO colab para cima**. Dinheiro PARA BAIXO -- a L-094 nao cobre, entao nao deployei. Prod segue com o numero de hoje.
 
 
-> **EMISSAO DO LOTE 1 PARADA (28/09 10:3x, ordem do Ronald).** Os tres hashes publicados abaixo **nao valem mais para este ponto**: entrou o `BUG-HE-INTRA-DOBRADA` na frente da fila 1 -- a mesma hora paga em duas rubricas no dia de intrajornada suprimida. Nada foi emitido (a emissao sempre foi um clique seu, e ele nao aconteceu), entao nao ha o que reverter. Depois do `!` da cura: recalcular a 09, re-medir a porta e publicar hash NOVO.
+
+
+
+
+
 
 _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era mentira em duas pontas: o item que ela citava -- E6-IMPAR -- **fechou** as 09:2x (commit `8daf2359`), e eu segui trabalhando depois dela. Ela nao foi escrita por mim para pedir decisao sua: foi o hook do teto de bloqueios que a lavrou sozinho ao ver 5 bloqueios seguidos sem commit novo na fila 1. Um PAREI que nenhum humano escreveu e que ninguem apaga ao fechar o item e pior que nenhum -- ele faz voce procurar uma decisao que nao existe. Ao fechar item eu limpo o PAREI resolvido, como voce cortou em 27/09 23:4x, e a cura do lado do hook fica no BACKLOG como **HOOK-PAREI-SE-APAGA**.)_
 

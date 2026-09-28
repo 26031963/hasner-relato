@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:55:45.**
+**Medido em 28/09/2026 17:01:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)` |
+| `HEAD` local | `4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)` |
 | `origin/main` | `792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,20 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
+45eaa780 LOTE 1 DA 09 EMITIDO, e a S5b guarda os tres numeros do pareamento pela autoridade
 a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)
 9942ee91 O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME
-5f8e4c29 TICKETS: rodape e placar (8581 testes OK, S1+S2 completas)
-66801bd5 O-DIA-PAGO S1+S2 completas: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/RELATO.md
-M  app/ponto/calculador/nucleo.py
-M  app/ponto/management/commands/diff_calculador.py
-M  app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -89,18 +85,6 @@ M  app/ponto/tests/test_calculador_regras.py
 
 ```
 
-✻ Crunched for 46m 25s · done 4:38 PM · 4 shells still running
-
-❯ aval Ronald: UI-CAL-COMPETENCIA — registrar no BACKLOG (fila 2, nao construir agora). Nenhuma lei nova.
-  FONTE: ponto/janelas.py::janela_fechamento(mes, ano, colaborador.empresa) — juiz unico de competencia, nunca 21 cravado.
-  MUDA: colaboradores/services/calendario.py:204 ganha modo 'competencia' (data_ini/data_fim do juiz);
-        templates/colaboradores/calendario_partial.html: botao "Competencia" ao lado de Mes/Quinzena/Semana;
-        rotulo "Competencia 09/2026 · 21/08–20/09"; setas ← → andam de competencia mantendo o modo.
-  RED: col qualquer emp com corte 21, mes=9 ano=2026 modo=competencia -> 21/08..20/09; empresa com corte != 21 -> janela do corte dela.
-  PROIBIDO: derivar a janela na view/template; tocar base.html.
-  LEI-AKITA: origem=calendario.py (modo), testemunha=janelas.janela_fechamento, juizes novos=0.
-  segue a fila; PAREI so em lei ou !
-
   Searched for 2 patterns, ran 6 shell commands
 
 ● Background command "DIFF com os pares da autoridade" completed (exit code 0)
@@ -110,18 +94,30 @@ M  app/ponto/tests/test_calculador_regras.py
 
 ● Background command "DIFF com segmentos de trabalho" completed (exit code 0)
 
-  Publicar o 3b e rodar a regua · 5m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     anc='## (3) O BURACO GRANDE: o nucleo nao pareia por MARCO -- e agora ha o caso'
-     assert t.count(anc)==1
-     sec = '''## (3b) Tentei parear pela AUTORIDADE e… (5m 13s · 2 lines)
+  Ran 3 shell commands
+
+❯ aval Ronald: LOTE-1-EMITIDO + COBRAR-SO-O-QUE-MUDA-A-FOLHA. Leis: L-092. Nenhuma lei nova.
+  1. Lote 1 da 09 EMITIDO pelo Ronald 16:5x; hashes conferidos = 8a63e3ba / 6e0f1048 / cb7f00fe (identicos ao publicado).
+     Limpar o PAREI da emissao e os PAREI resolvidos do topo do RELATO (10:3x, 11:2x, 12:3x).
+  2. COBRAR-SO-O-QUE-MUDA-A-FOLHA — fila 1 (bug de tela provado):
+     MEDIDO 16:5x: Cobrar = 1.117 chamados / 261 colabs; dia na 10 = 321, na 09 = 676, sem data = 113, <=08 = 7;
+     55 colabs so tem chamado sem data/antigo e levam push sem dever nada na competencia.
+     FONTE: chamados/catalogo/modulos.py::data_do_chamado + competencia exportada pelo juiz de
+     ponto/services/fechamento.py (CompetenciaExportada / empresas_exportadas_no_escopo). Nunca data cravada.
+     MUDA: chamados/views_cobrar.py::cobrar_massa (e a previa) — so chamado cujo dia cai em competencia NAO exportada.
+     Sem data: fora do massa (cura mais restritiva); listar os 113 por modulo_origem no RELATO para corte.
+     RED: colab so com chamado da 09 exportada -> nao recebe push; colab com furo na 10 -> recebe; previa conta igual ao envio.
+     PROIBIDO: filtro com data literal, juiz novo de competencia, mexer no cobrar individual.
+     LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
+     segue a fila; PAREI so em lei ou !
+
+● Acertar o placar e empurrar · 57s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
+     git commit -q -m "TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
+     Co-Authored-By: Claude Opus 5 (1M context) <norep… (55s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (6m 30s · ↓ 3.7k tokens)
+✢ Unfurling… (11m 46s · ↓ 7.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
