@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:148 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:175 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:00:45.**
+**Medido em 28/09/2026 00:06:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou` |
-| `origin/main` | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
-| commits a subir (`ahead`) | **1** |
+| `HEAD` local | `872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor` |
+| `origin/main` | `872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor
 c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou
 3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato
 ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -- 1.750 min e 78 h viram 0 e 418
 1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa
-c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um
 ```
 
 ## `git status --short`
 
 ```
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_impar_em_aberto.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -92,8 +90,6 @@ A  app/ponto/tests/test_impar_em_aberto.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Auditoria da árvore viva (sua ordem) — 7 crons */5 rodaram na janela 21:15:04–21:15:18, dentro dela. Zero escrita estrutural: célula 0, chamado 0, pergunta 0, fechamento 0,
-  batida retratada 0. Saíram só 3 push (envio, não estado — e os 3 colabs seguem com turno aberto pelo juiz revertido) e o snapshot do placar, já sobrescrito às 21:25. Nada a
   reverter. Os escritores de dinheiro rodam 06:26–07:37, a 9 h da janela.
 
   R2b — curada pela sua lei (ata com hii E hfi acesos = o par É a pausa, teto não se aplica), selada, régua verde, no ar e aplicada no gravado com o seu !: 9 colabs,
@@ -121,11 +117,13 @@ A  app/ponto/tests/test_impar_em_aberto.py
 
 ❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-  Regua da IMPAR fatia 1 · 6m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/ponto/tests/test_impar_em_aberto.py && bash bin/regua.sh 2>&1 | tail -6 (6m 22s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Deploying e smoke da IMPAR fatia 1
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -4 && echo "=== SMOKE: o dict do dia carrega o estado? (col349 14/09) ===" && docker exec saas_core
+     python manage.py tenant_command shell --schema=juliani --command "
+     import datetime
+     from colaboradores.models import Colaborado…
 
-· Zigzagging… (17m 48s · ↓ 21.5k tokens)
+✢ Zigzagging… (23m 4s · ↓ 25.3k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
