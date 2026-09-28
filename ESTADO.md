@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:50:31.**
+**Medido em 27/09/2026 23:55:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
+| `HEAD` local | `c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou` |
 | `origin/main` | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou
 3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato
 ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -- 1.750 min e 78 h viram 0 e 418
 1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa
 c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um
-47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 ```
 
 ## `git status --short`
 
 ```
- M bin/hook_stop_fila1.py
+M  app/ponto/services/espelho.py
+A  app/ponto/tests/test_impar_em_aberto.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -91,6 +92,8 @@ c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Auditoria da árvore viva (sua ordem) — 7 crons */5 rodaram na janela 21:15:04–21:15:18, dentro dela. Zero escrita estrutural: célula 0, chamado 0, pergunta 0, fechamento 0,
+  batida retratada 0. Saíram só 3 push (envio, não estado — e os 3 colabs seguem com turno aberto pelo juiz revertido) e o snapshot do placar, já sobrescrito às 21:25. Nada a
   reverter. Os escritores de dinheiro rodam 06:26–07:37, a 9 h da janela.
 
   R2b — curada pela sua lei (ata com hii E hfi acesos = o par É a pausa, teto não se aplica), selada, régua verde, no ar e aplicada no gravado com o seu !: 9 colabs,
@@ -118,13 +121,11 @@ c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e
 
 ❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-● Curar as tres falhas do hook e provar
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:bin/hook_stop_fila1.py >
-     $S/hook.py && python3 - <<'PY'
-     import io, py_compile
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961…
+  Regua da IMPAR fatia 1 · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/ponto/tests/test_impar_em_aberto.py && bash bin/regua.sh 2>&1 | tail -6 (1m 22s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Zigzagging… (7m 34s · ↓ 8.2k tokens)
+· Zigzagging… (12m 48s · ↓ 21.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
