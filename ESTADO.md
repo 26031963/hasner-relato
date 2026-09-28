@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:36:31.**
+**Medido em 28/09/2026 18:42:01.**
 
 | | |
 |---|---|
@@ -86,6 +86,7 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+    curas medidas e os três números do pareamento escritos; S3/S4 depois.
 
   Em pé na fila 1, sem trava: O-JANELA-HE parte A (REGRA) — cadastro "Janela de HE" por empresa e a regra no sítio da TOLERANCIA_HE_MIN_DIA, com ponto/calculador/regras.py
   importando a mesma regra, valendo da competência 10 e com o DIFF na sombra para o seu !.
@@ -107,7 +108,7 @@ M  app/docs/RELATO.md
 
 ● Background command "DIFF da janela na competencia 10" completed (exit code 0)
 
-● Publicar o PAREI e rodar a regua · 4m 32s
+● Publicar o PAREI e rodar a regua
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -115,15 +116,14 @@ M  app/docs/RELATO.md
      t=io.open(p,encoding='utf-8').read()
      l=t.split('\n')
      l=[x for x in l if not x.startswith('`PAREI:')]
-     l.insert(1, '\n`PAREI: janela-de-HE-cria-desconto-de-pontualidade | espera Ronald` -- o … (4m 30s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     l.insert(1, '\n`PAREI: janela-de-HE-cria-desconto-de-pontualidade | espera Ronald` -- o …
 
-· Unfurling… (1h 47m 16s · ↓ 78.5k tokens)
+✢ Unfurling… (1h 52m 46s · ↓ 78.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
