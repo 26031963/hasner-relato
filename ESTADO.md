@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- `PAREI: emissao-do-lote-1 | espera Ronald` -- tudo o que vinha antes esta FEITO e provado abaixo: deploy no ar, apply cirurgico dos 144 (col
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:13:31.**
+**Medido em 28/09/2026 15:15:39.**
 
 | | |
 |---|---|
@@ -32,6 +39,7 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? app/ponto/management/commands/aplicar_09_he_intra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -85,14 +93,6 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  7. Selo: zero leitor com derivacao propria de HE (grep).
-     PROIBIDO: fallback, fatia posterior, item proprio, tocar a 09 gravada, apply sem meu "!".
-     Vale da competencia 10; apply de dinheiro so com meu "!" sobre o DIFF do item 2.
-     LEI-AKITA: origem=motor_calculo_v2, testemunha=fonte O-DIA-PAGO, RED=itens 3-5, quem-mais-le=espelho/calendario/PDF/TXT/porta_export, juizes novos=0.
-     segue a fila; PAREI so em lei ou !
-
-  Ran 5 shell commands
-
 ❯ aval Ronald: PORTAO-09 — fila 1, na frente de O-DIA-PAGO S5b e de O-JANELA-HE. Reafirma o ! das 12:31.
   LEIS: L-082(b), L-092, L-094, L-005, L-009. Nenhuma lei nova.
   MEDIDO 14:40: col125 09 HE50 1,98 / intra 2,00; tabela ponto_diapago inexistente em prod = (B) nao rodou, deploy nao subiu.
@@ -115,9 +115,17 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 
 ● Background command "Esperar a porta" completed (exit code 0)
 
-● Running 1 shell command…
+● Publicar o portao no RELATO · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     l=t.split('\n')
+     l=[x for x in l if not x.startswith('`PAREI:')]
+     l.insert(1, '\n`PAREI: emissao-do-lote-1 | espera Ronald` -- tudo o que vinha antes esta…
 
-✢ Infusing… (35m 38s · ↓ 31.7k tokens · thought for 5s)
+· Infusing… (37m 46s · ↓ 36.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 15:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.9 MB). Acoes na janela: **467**.
+**Medido em 28/09/2026 15:15:39.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **471**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:14:14 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='/tmp/lote1_novo.py' t=io.open(p).read() t=t.replace(""" try: linhas = montar_linhas_export(e, 9, 2026) except Exception as ex: print('\| emp%s %s \| NAO EXPORTA: %s \|' % (e.pk, e.razao_social, str(ex)[:80])) continue txt = ''.join(linhas) if isinstance(linhas, (list, tuple)) else str(linhas) if isinstance(linhas, (list, tuple)): n_li ...` |
+| 15:14:02 | Bash | Como o TXT e montado a partir das linhas | `grep -n 'def montar_linhas_export' -A 12 folha/export.py \| head -16 && grep -n 'montar_linhas_export\\|def .*txt\\|join' folha/views.py \| head -8` |
+| 15:13:50 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && cat > /tmp/lote1_novo.py <<'PYEOF' # -*- coding: utf-8 -*- """LOTE 1 da 09 com HASH NOVO -- SO LEITURA, pela autoridade unica (item 5 do portao). `folha/export.py::montar_linhas_export` e a MESMA funcao que a view usa. Nada e emitido, nada e carimbado, nenhum `ExportacaoDominio` e criado: a emissao e o clique do Ronald. """ import hashlib from colaboradores.models im ...` |
+| 15:13:33 | Bash | Extrato de rubricas dos 16 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/extrato16.py').read())" 2>&1 \| tail -20` |
 | 15:12:30 | Bash | Esperar a porta e preparar o extrato | `cd /home/ronald/saas-hasner && cat > /tmp/extrato16.py <<'PYEOF' # -*- coding: utf-8 -*- """EXTRATO DE RUBRICAS DOS 16 DA AMOSTRA -- lido da MESMA fonte do TXT (item 4 do portao da 09). A fonte e `folha/export.py::montar_linhas_export`, a mesma funcao que a view usa para gerar o arquivo. Nao ha conta nova aqui: o extrato e a leitura das linhas que iriam para o Dominio, mais os campos do `Fechament ...` |
 | 15:12:12 | Bash | Ver o progresso da porta | `cd /home/ronald/saas-hasner && tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; echo "--- (ainda rodando? ---"; ps -eo args \| grep -c '[s]elo_leitores'` |
 | 15:02:25 | Bash | Esperar a porta | `cd /home/ronald/saas-hasner && until grep -qE 'SELO (VERDE\|VERMELHO)\|Error\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; do sleep 25; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt \| tail -16` |
