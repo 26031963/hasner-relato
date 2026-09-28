@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:51:01.**
+**Medido em 28/09/2026 09:56:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA` |
-| `origin/main` | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
-| commits a subir (`ahead`) | **1** |
+| `HEAD` local | `9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)` |
+| `origin/main` | `9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -22,16 +22,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)
+9de6b051 TICKETS: placar do topo em dia (regua 28/09 09:50, ultimo push 12888d36)
 8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA
 12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094
 1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar
-6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201
-798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
 ```
 
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/calendario.py
+M  app/docs/BACKLOG.md
+M  app/docs/PENDENTES_RONALD.json
+M  app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,26 +88,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Task "Esperar o veredito da suite completa" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 4 shell commands
-
-❯ aval Ronald: E4-CALENDARIO (fila 1, logo apos o item em curso; nenhuma lei nova -- LEI-AKITA 2, E4). FONTE: ponto/services/espelho.py::espelho_do_colab (motor CCT). MUDA:
-  colaboradores/services/calendario.py:287 deixa de montar motor proprio (get_motor sem CCT) e LE os periodos/extras da mesma autoridade do espelho; o registro _F3 em
-  core/juizes.py sai. RED: colab com feriado previsto e colab 12x36 da 09 onde calendario != espelho em extra 50/100 (medir a frota primeiro: quantos dia-colab divergem,
-  publicar). SELO: folha/porta_export.py::medir ganha a 5a testemunha (calendario_x_espelho = 0), sem allowlist. PROIBIDO: trocar so para get_motor_cct no calendario (seria
-  segunda conta), fallback. PRONTO: RELATO com o censo antes/depois, REDs e commit. LEI-AKITA: origem=calendario.py:287, testemunha=espelho_do_colab, juizes novos=0. Segue a
-  fila; PAREI so em lei ou !
-
-  Searched for 3 patterns, ran 23 shell commands
-
-● Background command "Rodar o censo do calendario contra o espelho" completed (exit code 0)
-
-❯ aval Ronald: O-FOLGA-DIA-ERRADO (fila 2, depois do BO col354; lei nova: precisa de corte -- rota do chamado para cadastro). FONTE: celulas da competencia (veredito) +
   fatos_do_dia; tela existente templates/escala/cadastro_x_realidade.html (L-084); regenerar_celulas_vinculo (excecao formal de passado errado por cadastro, corte 16/08). MUDA:
   (1) vigia com contador (esperado 0, dono supervisao): por colab 6x1/5x2, dia da semana com furo recorrente (>=3 de 4) E dia de folga cadastrada com turno recorrente (>=3 de 4)
   -> caso na tela cadastro x realidade com "folga provavel: <dia>", e o chamado desses dias ganha verbo cadastro endereçado ao admin; (2) o "Resolver dia" NAO ganha veredito
@@ -113,10 +97,30 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: censo da frota (colabs, dias de folga trabalhada a 100% envolvidos, horas) no RELATO. LEI-AKITA: origem=emissao por dia sem leitura de padrao, testemunha=celula, juizes
   novos=0. Segue a fila; PAREI so em lei ou !
 
-● Pushing do item 7
-  ⎿  $ cd /home/ronald/saas-hasner && git push 2>&1 | tail -6
+  Committed 8daf2359, 9de6b051, 9cf2f4d9, pushed to main, searched for 3 patterns, read 1 file, listed 1 directory, ran 13 shell commands
 
-✢ Determining… (3h 48m 29s · ↓ 149.9k tokens)
+❯ aval Ronald: REGISTRAR no BACKLOG (so registro, nao construir agora) a obra O-GEO-DECISAO, desenho cortado 28/09 09:5x; lei nova: precisa de corte -- "na recusa de geofence, o
+  colab nunca e a fonte da verdade do proprio dia recusado; o ato do admin e o carimbo". ETAPA 1 (codigo + UI simples no FIO do chamado de geofence, substituindo
+  autorizar/autorizar_advertir/recusar de chamados/services/acoes_chamado.py): porta UNICA de decisao com ato carimbado (quem, quando, motivo de catalogo, evidencia congelada:
+  distancia, gps_accuracy, ponto, posto). Decisoes: VALIDAR com motivo [funcao movel/ronda · entorno do posto · GPS impreciso · outro posto · servico externo] -> batida conta;
+  motivos de cadastro geram PROPOSTA de cadastro (raio, posto movel, posto do vinculo) que aplica so com ! (L-009). RECUSAR "nao trabalhou" -> batida retratada + FALTA DECIDIDA
+  no mesmo ato (L-088), sem pergunta ao colab. RECUSAR "trabalhou, esta nao vale" -> batida retratada; entrada = proxima batida valida no posto ou hora apurada pelo admin; sem
+  pergunta ao colab. [Advertir] so nos dois RECUSAR (grau/ciencia pelo desenho de app/docs/ADVERTENCIA-FICHA.md); registrar ponto sem trabalhar avisa o DP (Art.482, decisao do
+  DP). Pre-classificacao so SUGERE (mesmo ponto repetido, precisao pior que o raio, dentro de outro posto). Absorve a O41. ETAPA 2: coluna "Geo 30d" no painel situacional
+  (recusas + advertencias por colab, clique abre a lista de atos), nenhuma tela nova. Acesso: supervisao e DP, com trilha de leitura (o mapa mostra onde a pessoa mora). Registrar
+  tambem em PENDENTES o corte de lei acima. Segue a fila; PAREI so em lei ou !
+
+● Registrar O-GEO-DECISAO e o corte de lei
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, json
+     p='app/docs/PROMPTS.md'
+     t=io.open(p,encoding='utf-8').read()
+     anc='\n\n## Contagem'
+     nova=('| O-GEO-DECISAO | 28/09 ~09:5x | **SO REGISTRO** (nao construir agora). Desenho cortado 09:5x. **LEI NOVA, '
+     'precis…
+
+✢ Determining… (3h 53m 59s · ↓ 162.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
