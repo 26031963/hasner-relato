@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 14:24:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.6 MB). Acoes na janela: **475**.
+**Medido em 28/09/2026 14:30:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.6 MB). Acoes na janela: **474**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -484,4 +484,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:33:52 | Bash | Ver os dois vinculos da fixture | `cd /home/ronald/saas-hasner && sed -n '1,66p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py \| grep -nE "TipoEscala\|hora_\|intervalo\|ec_a\|ec_b\|def setUp" \| head -30` |
 | 02:33:36 | Bash | Ler o cenario e os dois usos | `cd /home/ronald/saas-hasner && sed -n '66,82p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py; echo "--- 120-140"; sed -n '120,140p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py` |
 | 02:33:30 | Bash | Ver as ocorrencias exatas no selo | `cd /home/ronald/saas-hasner && grep -n "marcos_do_dia" app/ponto/tests/test_vinculo_do_dia_pela_celula.py \| cut -c1-140` |
-| 02:24:44 | Bash | Fazer a testemunha ler o leitor certo e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_vinculo_do_dia_pela_celula.py' s=io.open(p,encoding='utf-8').read() old = """ intervalo=tuple(ec.marcos_do_dia(d, celulas=celulas))[2:4]).minutos""" new = """ # R4: a PAUSA vem do leitor proprio (`intervalo_do_dia`), o MESMO que o espelho usa. Este selo # montava o intervalo por conta propria com `[2:4]` de `marcos_d ...` |
