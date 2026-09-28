@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 14:30:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.6 MB). Acoes na janela: **474**.
+**Medido em 28/09/2026 14:35:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.6 MB). Acoes na janela: **467**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -477,10 +477,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:36:01 | Bash | Ler o save do TipoEscala | `cd /home/ronald/saas-hasner && sed -n '657,700p' app/escala/models.py \| grep -nE "intervalo_modo\|INTERVALO\|if \|self\." \| head -14` |
 | 02:35:55 | Bash | Ver se o save normaliza o intervalo_modo | `cd /home/ronald/saas-hasner && grep -n "def save" -A 20 app/escala/models.py \| sed -n '1,30p' \| grep -nE "intervalo_modo\|def save\|INTERVALO" \| head` |
 | 02:35:43 | Bash | Ver as constantes de intervalo_modo | `cd /home/ronald/saas-hasner && grep -n "INTERVALO_DURACAO\\|INTERVALO_FIXO\\|intervalo_modo = \\|INTERVALO_MODOS\\|intervalo_modo=" app/escala/models.py \| head -8` |
-| 02:35:13 | Bash | Dar marcos a celula e rodar o selo do vinculo | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_vinculo_do_dia_pela_celula.py' s=io.open(p,encoding='utf-8').read() old = """ dna={'dna_versao': 1, 'vinculo_id': self.ec_b.pk, 'tipo_escala_id': self.te_b.pk, 'tipo_ciclo': '5x2', 'marcos': None, 'minutos_jornada': 420, 'intervalo_livre': False})""" new = """ # A CELULA GANHOU MARCOS (fixture ajustada na R4). Eles v ...` |
-| 02:34:56 | Bash | Ver a criacao da celula na fixture | `cd /home/ronald/saas-hasner && sed -n "$(grep -n 'CelulaDia.objects.create' app/ponto/tests/test_vinculo_do_dia_pela_celula.py \| head -1 \| cut -d: -f1),+14p" app/ponto/tests/test_vinculo_do_dia_pela_celula.py` |
-| 02:34:25 | Bash | Ajustar a fixture do selo do vinculo e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/ponto/tests/test_vinculo_do_dia_pela_celula.py' s=io.open(p,encoding='utf-8').read() # 1. os dois vinculos passam a diferir no MODO de intervalo, nao no tamanho dele old_te = """ cls.te_b = TipoEscala.objects.create( codigo='O69-2H', descricao='8-17 intervalo de 2 h', tipo_ciclo='5x2', hora_inicio=datetime.time(8, 0), hora_fim=dateti ...` |
-| 02:34:04 | Bash | Ver o que faz _intervalo_livre | `cd /home/ronald/saas-hasner && grep -n "def _intervalo_livre" -A 14 app/escala/models.py \| head -18` |
-| 02:33:52 | Bash | Ver os dois vinculos da fixture | `cd /home/ronald/saas-hasner && sed -n '1,66p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py \| grep -nE "TipoEscala\|hora_\|intervalo\|ec_a\|ec_b\|def setUp" \| head -30` |
-| 02:33:36 | Bash | Ler o cenario e os dois usos | `cd /home/ronald/saas-hasner && sed -n '66,82p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py; echo "--- 120-140"; sed -n '120,140p' app/ponto/tests/test_vinculo_do_dia_pela_celula.py` |
-| 02:33:30 | Bash | Ver as ocorrencias exatas no selo | `cd /home/ronald/saas-hasner && grep -n "marcos_do_dia" app/ponto/tests/test_vinculo_do_dia_pela_celula.py \| cut -c1-140` |
