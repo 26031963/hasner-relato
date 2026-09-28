@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:33:43.**
+**Medido em 28/09/2026 19:35:45.**
 
 | | |
 |---|---|
@@ -32,7 +32,9 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## `git status --short`
 
 ```
+ M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
+?? bin/tests/test_hook_nao_cobra_congelado.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -84,39 +86,39 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (a) 66 dias em 24 colabs saíram da janela pela L-084 — é por isso que trabalhadas caiu de −221 para −91: boa parte do efeito anterior vinha de dias que a L-084 protege.
-  (b) o desconto que sobra é o do "não compensa", que pelo seu item 2 é a L-097: col820 +2,69 (e atraso +0,18), col189 +2,18, col572 +1,04, col238 +0,41 e col788 +0,23 — saiu do
-  desconto, de +6,00 h, como você exigiu.
+  │ ponto/services/esmeril_espelho.py    │ idem                   │
+  └──────────────────────────────────────┴────────────────────────┘
 
-  As três condições, conferidas: só os campos-alvo · zero linhas com HE ou trabalhadas subindo · falta, folga trabalhada, DSR e banco não aparecem.
+  Os dois últimos saíram só na varredura por AST. É a razão de ser por AST: contar leitor de dinheiro por texto deixa leitor de fora, e leitor de fora não entra no placar da
+  troca. (Foi também por texto que outro selo meu, nesta mesma esteira, mordeu três vezes o comentário que explicava a cura.)
 
-  Apply feito
+  O que o selo garante: ninguém novo entra — leitor novo chamando o motor é vermelho no commit — e leitor trocado sai da lista no mesmo ato. Se sair e continuar chamando, ou for
+  trocado e ficar na lista, o selo acusa. O 8 está cravado num caso próprio, para não mudar de tamanho sem o RELATO dizer.
 
-  Cadastro ligado nas quatro empresas pela porta, janela_he_desde=2026-09-21 (primeiro dia da 10, vindo do juiz), e a janela de saída segue desligada. Sem recálculo forçado: a 10
-  é aberta e o evento leva a regra a cada colaborador na primeira batida dele; a 09 exportada fica intocada pela vigência.
+  Quem pode chamar o motor está declarado: o motor, a porta do fechamento, a autoridade do espelho, o calculador da S5 e a régua CCT (que monta o motor, não o consulta). Comandos
+  de obra e medição ficam fora.
 
-  Dois erros meus, escritos
+  Estado da fila
 
-  O instrumento errou duas vezes: li dias_cadastro_x_realidade com set() e ela é List[dict] — unhashable derrubou 24 colabs e mudou o DIFF inteiro (−27,21 em vez de −90,68).
-  Número de instrumento quebrado é pior que número nenhum, porque parece resposta.
+  BUG-ANCORA-NAO-REGENERA fechou na parte que é minha: a cura está no ar e selada. O que sobra é decisão sua, em PENDENTES — a ancora de ec983 no col824 (as 31 células da 09 estão
+  em fase com ele; o wizard criou um vínculo novo em vez de mudar a ancora do antigo) e os 12 dias do col899, o único caso vivo da frota.
 
-  E o selo da regra única me morde pela terceira vez na mesma fatia: acusou o comentário que explica a cura, depois código legítimo de outra parte do motor. Agora varre AST e só
-  dentro do método.
-
-  Disputa (113 sem data): fora do Cobrar em massa, vive pelo fio — fechado. Ordem nova registrada: S3 antes da S5b, S4 depois.
+  Fila 1 adiante: S3 segue com a troca dos 8 leitores, um a um, cada uma tirando uma linha do placar — depois S5b (o pareamento por marco, com os três números já escritos) e S4.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-ANCORA-NAO-REGENERA -- mudar a ANCORA do 12x36 nao refazia celula nenhuma -- escala/signals.py regenerava por VIGENCIA e nao por ANCO
+  ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
+  exportada", e na
 
-  Commitar, empurrar e publicar o placar da S3 · 2m 8s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s3.txt <<'EOF'
-     O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
-     A S3 troca os leitores um a um, e a primeira peca nao e uma troca: e o PLACAR, para cada
-     troca ser verificavel e nenhuma entrar calada.
-     ponto/tests/… (2m 2s · 4 lines)
+● Rodar o selo e ver o que o hook aponta agora · 11s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, py_compile
+     P='bin/hook_stop_fila1.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace("""_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando|espera o `?!|PAREI', re.I)""",
+     """_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando… (10s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Orchestrating… (36m 44s · ↓ 37.1k tokens)
+· Orchestrating… (38m 47s · ↓ 41.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
