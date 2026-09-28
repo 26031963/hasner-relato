@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:56:26.**
+**Medido em 28/09/2026 05:01:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica` |
-| `origin/main` | `0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica` |
+| `HEAD` local | `ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export` |
+| `origin/main` | `ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,26 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
 0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
 87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
 ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
 e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO
-a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
  M app/config/crons_duracao.json
-M  app/core/espelho_verdade.py
-M  app/core/tests/testes_sem_relogio.txt
-M  app/docs/BACKLOG.md
-MM app/docs/RELATO.md
-M  app/docs/TICKETS.md
-M  app/ponto/tests/test_detectar_entrada_adiantada.py
-A  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -94,6 +85,10 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      33 +**SEIS colabs dos 205 carregam classe da E6**, e quatro deles sao a mesma coisa: **col924, col391, col43,
+      34 +col942** -- classe A, `fechamento zero`: **zero fatia de escala e zero celula** na janela, com batidas (66, 7,
+      35 +20, 14). **Isso e CADASTRO, nao codigo**, e vale **217,7 h**. Sobram 1 de classe C e 1 de classe D. A classe B
+      36 +(turno aberto 5+), que era a maior do censo da O83 com 733,7 h, **nao tem nenhum colab no TXT**.
       37 +
       38 +## LOTE 2 -- recontagem depois das 12h
       39 +
@@ -117,16 +112,12 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
       57
       58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-● Encolher a lista de relogio solto e rodar a regua
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "test_detectar_entrada_adiantada" app/core/tests/testes_sem_relogio.txt && python3 - <<'PY'
-     import io
-     p='app/core/tests/testes_sem_relogio.txt'
-     s=io.open(p,encoding='utf-8').read()
-     alvo='ponto/tests/test_detectar_entrada_adiantada.py'
-     linhas=s.split('\n')
-     n=…
+  Deploying do item (5) e selo em prod · 2m 5s
+  ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="04:4x -- portao da sombra CEGO entre 00:00 e 04:00 e o ensaio de hoje nasce as 04:15; itens (1)(5): TELA e SELO de porta,
+     zero migration, zero escrita no gravado, regua 8.523 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; echo "=== selo da porta … (2m 3s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Metamorphosing… (3h 50m 28s · ↓ 149.8k tokens)
+✢ Metamorphosing… (3h 55m 53s · ↓ 154.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

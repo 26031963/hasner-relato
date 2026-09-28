@@ -116,6 +116,27 @@ letra, que vale para cura que *"nao move dinheiro por si"*; a R4 com o evento vi
   **(c)** `!` de CRITERIO por classe de cura (como a sua AVAL-DE-CRITERIO faz hoje por fatia), com faixa.
 A R4 espera no (a) enquanto voce nao disser. **A fila NAO parou**: sigo na R5.
 
+# O DIA VIROU E UM SELO FICOU VERMELHO SOZINHO -- relogio solto, curado (28/09 04:3x)
+
+No meio da regua do item (5), `ponto.tests.test_detectar_entrada_adiantada::test_sync_atrasado_fecha_chamado_
+preexistente` ficou VERMELHO sem que eu tivesse tocado no caminho dele. Ele passou a noite inteira verde.
+
+PROVA: o MESMO codigo, com `freeze_time('2026-09-27 05:00:00')`, da `Ran 3 tests OK`; sem congelar, em 28/09,
+da `AssertionError: 'aberto' unexpectedly found in ('aberto', 'em_analise')`. **Era o dia virando de 27 para
+28**, nao regressao minha. O arquivo monta o cenario 12x36 a partir de `timezone.localdate()`
+(`data_ancora_colaborador=self.hoje`, batida em `hoje-2`, celulas de `hoje-3` a `hoje+1`), e a virada do dia
+mudou o cenario debaixo dele.
+
+CURADO com o relogio congelado, e o instante nao e arbitrario: 27/09/2026 e um dia em que o ciclo 12x36 ancorado
+em `hoje` da trabalho em `hoje` e em `hoje-2`, e a competencia 09 esta ABERTA -- as duas condicoes que o cenario
+precisa. **A lista de relogio solto ENCOLHEU**, que e a unica direcao permitida:
+`core/tests/testes_sem_relogio.txt` foi de 465 para **464** entradas, e o selo `test_a_lista_so_encolhe` cobrou
+isso de mim no mesmo ato -- eu havia curado e esquecido de tirar da lista.
+
+E eu procurei no arquivo ERRADO primeiro: `bin/relogio_solto.txt` mede deslocamento de FUSO (+14h no mesmo
+instante), e este caso era outra familia -- virada de DIA. Duas listas para duas perguntas parecidas, e eu
+conclui "nasceu solto e ninguem viu" quando ele estava declarado na outra.
+
 # ITEM (5) FECHADO: SELO VERDE nos quatro leitores, e a E6 rodada 4 (28/09 04:0x)
 
 ## O selo, e por que ele e UM comando e nao dois contadores soltos
