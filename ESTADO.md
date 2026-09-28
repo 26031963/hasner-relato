@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:06:16.**
+**Medido em 28/09/2026 17:11:41.**
 
 | | |
 |---|---|
@@ -32,9 +32,10 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ## `git status --short`
 
 ```
- M app/chamados/views_cobrar.py
-?? app/chamados/services/cobranca_folha.py
-?? app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py
+A  app/chamados/services/cobranca_folha.py
+A  app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py
+M  app/chamados/views_cobrar.py
+M  app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -110,17 +111,17 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
      LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-  Selo chamando a funcao real · 2s
+● Publicar e rodar a regua do COBRAR · 3m 19s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io
-     P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.index(' def _previa(self):')
-     novo = ''' def _contador(self):
-     return {'exportada': 0, 'sem_data': 0, 'sem_data_modulos': {}}
-     def test_RE…
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     sec = '''# COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x)
+     O botao **Cobrar** mandava p… (3m 17s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Unfurling… (17m 1s · ↓ 21.5k tokens)
+✢ Unfurling… (22m 26s · ↓ 28.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

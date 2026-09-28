@@ -23,6 +23,57 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x)
+
+O botao **Cobrar** mandava push por chamado que nao muda folha nenhuma. Pedir a alguem que resolva um dia que ja
+virou folha e pedir o impossivel: pela **L-092**, competencia exportada nao muda -- o sistema recusaria a
+correcao que a mensagem esta pedindo.
+
+PROVA (frota, so leitura, pela funcao real): fila Cobrar = **1.116 chamados em 261 colaboradores**. Por
+competencia do DIA: **09/2026 = 676** (exportada hoje as 16:5x), 10/2026 = 320, **sem data = 113**, 07/2026 = 5,
+08 = 1, 06 = 1. **Depois do filtro: 322 chamados em 136 colaboradores** -- 681 barrados por competencia
+exportada e 113 por nao ter data. **125 colaboradores deixam de receber push** sem dever nada na competencia.
+
+Os numeros conferem com a medicao que voce fez as 16:5x (1.117 / 261 / 676 / 321 / 113 / 7), e a diferenca de um
+chamado e o tempo entre as duas leituras.
+
+## Os 113 SEM DATA, por `modulo_origem` -- a lista que vira corte
+
+| modulo_origem | chamados |
+|---|---|
+| `disputa_supervisao` | **102** |
+| `disputa_supervisao_manual` | 8 |
+| `chamados` | 3 |
+
+**Todos os 113 sao disputa** (os tres de `chamados` sao o guarda-chuva manual). Faz sentido: disputa nasce de
+uma DIVERGENCIA, nao de um dia -- e por isso `data_do_chamado` nao tem chave declarada para ela. A pergunta que
+fica para voce e de desenho, nao de codigo: **a disputa deve ser cobravel em massa?** Se sim, ela precisa
+declarar o dia que esta em jogo; se nao, ela sai do verbo `cobrar` e vive pelo fio, que e onde ela ja e tratada.
+
+## A regra ganhou casa, e nao ficou dentro da view
+
+`chamados/services/cobranca_folha.py::muda_a_folha` -- por dois motivos: a **previa e o envio leem a MESMA
+resposta** (era a lei da HX-COBRAR-PREVIA de 19/08, quando o confirm falava em chamados e o resultado vinha em
+pushes, 697 x 190), e **regra dentro de closure de view nao tem selo que a chame** -- e selo que nao chama a
+funcao real ja enganou esta casa sete vezes.
+
+**Nenhum juiz nasce ali**: o dia sai de `data_do_chamado` (chave declarada por modulo, nunca
+tentativa-e-erro), a competencia do dia de `janela_atual(...)[1]` (o mesmo idioma de `competencia_fechada` --
+nada de 21 cravado) e a exportacao de `empresas_exportadas_no_escopo`, que le `marcos_da_competencia`.
+
+## PROVA
+
+`chamados/tests/test_cobrar_so_o_que_muda_a_folha.py`, 6 casos chamando a FUNCAO REAL: dia na competencia
+exportada nao cobra; dia na aberta **cobra** (sem este a cura viraria um NAO para todo mundo); sem data fica
+fora e sai contado por modulo; e o caso que morde de verdade -- **empresa com corte 26**, onde o dia 24/09 cai
+na competencia 09 e nao na 10: se o filtro lesse 21, ele passaria. Mais dois estruturais: o filtro esta ANTES da
+previa (por POSICAO no fonte, porque a 1a versao fatiou por palavra e mordeu o proprio comentario que explica a
+cura -- quarta vez nesta casa) e nenhuma data literal na regra.
+
+TRES TENTATIVAS DE FIXTURE, e a licao e a de sempre: o selo so passou quando o `modulo_origem` **declara** a
+chave de data (`batida_ausente`); com um modulo que nao declara, `data_do_chamado` devolve None e os tres casos
+caiam todos no ramo "sem data" -- verde por motivo errado.
+
 # O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME (28/09 16:1x)
 
 Duas divergencias do DIFF fecharam, e as duas por causa medida em caso concreto -- nao por palpite. E a
