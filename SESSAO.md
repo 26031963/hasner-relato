@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 07:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.0 MB). Acoes na janela: **514**.
+**Medido em 28/09/2026 07:31:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.1 MB). Acoes na janela: **516**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:30:34 | Bash | Ler a E6 pos-R4 | `cd /home/ronald/saas-hasner && docker wait e6_pos_r4 >/dev/null && docker logs e6_pos_r4 2>&1 \| grep -E "^\{\|^BATE\|erros no espelho" ; docker rm e6_pos_r4 >/dev/null; echo "=== a E6 ANTES da R4 (rodada 4), para comparar ==="; echo "BATE 92,9% de 7512 \| diverge_acima_60: 208 \| diverge_10_60: 218 \| esp_zero_e6: 58 \| e6_zero_esp: 53"` |
+| 07:30:25 | Bash | Carimbo gravado e E6 pos-R4 para a condicao 3 | `cd /home/ronald/saas-hasner && cat .regua_stamp \| head -3 && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && docker run -d --name e6_pos_r4 --cpuset-cpus 4-7 --cpus 3 --memory 2g --network saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONDONTWRITEBYTECODE=1 -e ALVO=pos_r4 -v ~/saas-hasner/app:/app:ro --tmpfs /app/logs -v $S:/saida - ...` |
 | 07:21:35 | Bash | Alinhar as duas impressoes digitais e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='bin/pre-push.sh' s=io.open(p,encoding='utf-8').read() old = """FP_AGORA=$(cd ~/saas-hasner/app && find . -type f \\( -name '*.py' -o -name '*.html' \\) -not -path '*/__pycache__/*' -exec sha1sum {} + 2>/dev/null \| sort \| sha1sum \| cut -d' ' -f1)""" new = """# `./media/` FICA DE FORA, e as DUAS impressoes digitais tem de concordar ( ...` |
 | 07:21:23 | Bash | Ver a impressao digital do pre-push | `cd /home/ronald/saas-hasner && grep -n "FP_AGORA=" bin/pre-push.sh \| cut -c1-200` |
 | 07:21:16 | Bash | Excluir a saida gerada da impressao digital | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='bin/regua.sh' s=io.open(p,encoding='utf-8').read() old = """impressao_digital() { cd "$APP" \|\| exit 1 find . -type f \\( -name '*.py' -o -name '*.html' \\) -not -path '*/__pycache__/*' \\ -exec sha1sum {} + 2>/dev/null \| sort \| sha1sum \| cut -d' ' -f1""" new = """impressao_digital() { cd "$APP" \|\| exit 1 # `./media/` FICA DE FO ...` |
