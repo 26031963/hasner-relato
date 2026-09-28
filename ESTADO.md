@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:43:31.**
+**Medido em 28/09/2026 11:49:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,12 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
+ M app/ponto/models.py
+ M app/ponto/services/fechamento.py
+?? app/ponto/management/commands/lavrar_dias_pagos.py
+?? app/ponto/migrations/0067_diapago.py
+?? app/ponto/services/dia_pago.py
+?? app/ponto/tests/test_dia_pago_soma.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,11 +97,6 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ por família         │ 12x36 −158,28 · comercial −142,31 · partido −32,50 · sem vínculo −13,78 — cada uma abaixo do teto que você mediu (494,73) │
-  ├─────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ no lote 1           │ 15 colabs, −8,82 h                                                                                                        │
-  └─────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
   Não apliquei e não deployei (dinheiro para baixo, a L-094 não cobre). Conferi que nenhum cron aplica sozinho: os 8 commands que escrevem FechamentoMensal estão todos em
   FORA_DE_PIPELINE.
 
@@ -120,10 +121,15 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: E6-IMPAR -- dia de batida IMPAR fora da certificacao: o oraculo dia_batida_impar -> continue, e 473 dias ficam sem julgame
 
-  Como o fechamento monta as horas
-  ⎿  $ grep -n '_dia_do_turno' -A 14 ponto/motor_calculo_v2.py | head -22 && sed -n '380,400p;425,462p' ponto/services/fechamento.py
+  Pushed to main, searched for 3 patterns, listed 1 directory, ran 13 shell commands
 
-· Determining… (5h 40m 58s · ↓ 301.2k tokens)
+❯ aval Ronald: BUG-HE-INTRA-DOBRADA aprovado pelo DIFF publicado 11:2x (208 colabs para baixo, 0 para cima, so HE50/HE100, -430,71 h, 48 colabs / -30,73 h no lote 1). Deploy da
+  cura, recalcular a 09, re-medir a porta (os dois contadores novos = 0), publicar o extrato de rubricas dos 16 da amostra e gerar o lote 1 com hash novo, parado no meu ! de
+  emissao. Segue a fila; PAREI so em lei ou ! !
+
+● Running 1 shell command…
+
+✢ Determining… (5h 46m 29s · ↓ 323.7k tokens · thought for 36s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
