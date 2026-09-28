@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 20:45:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **506**.
+**Medido em 28/09/2026 20:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **502**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -512,7 +512,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:57:45 | Read |  | `/home/ronald/saas-hasner/app/ponto/management/commands/e6_oraculo.py` |
 | 08:57:45 | Bash | Estado do git e da suite em voo | `cd /home/ronald/saas-hasner && git status --short && echo "--- bg ---" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b7e4vhaq4.output 2>/dev/null \| tail -20 && echo "--- stamp ---" && cat .regua_stamp 2>/dev/null \| head -5` |
 | 08:53:52 | Bash | Registrar o BO do col354 na fila | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/PROMPTS.md' t=io.open(p,encoding='utf-8').read() anc='\n\n## Contagem' nova=('\| BO-col354-ORFAO14H \| 28/09 ~08:5x \| disputa #5527: em 23/09 faltou a volta do intervalo e o app gravou ' 'TIPOS INVERTIDOS em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). O emissor ' '`orfao_1 ...` |
-| 08:50:43 | Bash | Oraculo no repo, com o dia impar julgado | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/e6_oraculo.py <<'PYEOF' # -*- coding: utf-8 -*- """ORACULO E6 -- calculadora INDEPENDENTE que certifica o espelho, dia por dia. SAIU DE `/tmp/e6b.py` PARA O REPO (cauda da O98, corte Ronald 28/09 08:3x: *"o oraculo E6 sai de /tmp/e6b.py para o repo, com sel ...` |
-| 08:49:53 | Bash | Ler o resto do oraculo | `cd /home/ronald/saas-hasner && sed -n '44,75p' /tmp/e6b.py` |
-| 08:49:37 | Bash | Fechar a R4 no BACKLOG e ver o proximo | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() i=s.index('\| R4 \| **residuo da O84') j=s.index('\n', i) linha=s[i:j] old='\| **CURADA, MEDIDA e REVERTIDA DA ARVORE 28/09** -- o codigo saiu (a arvore e bind-mount e os crons das 06:2x escrevem com o pareador); volta com `git revert` do revert quando o `!` da pergunta de lei che ...` |
-| 08:49:23 | Bash | Registrar os dois avals e ver o proximo da fila | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # --- PROMPTS: os dois avals p='app/docs/PROMPTS.md' t=io.open(p,encoding='utf-8').read() anc='\n\n## Contagem' novas=( '\| FILA-POS-LOTE-1 \| 28/09 ~08:3x \| fila 1 depois do lote 1, sem segurar o lote 2: (7) E6 dia impar JULGADO ' 'pelo oraculo (473 dias fora da certificacao) -> (8) os 14 nao certificados, causa ...` |
