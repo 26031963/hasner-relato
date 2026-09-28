@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:44:01.**
+**Medido em 28/09/2026 17:49:31.**
 
 | | |
 |---|---|
@@ -92,6 +92,7 @@ A  app/ponto/tests/test_janela_he_regra.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Pushed to main, ran 1 shell command
 
 ● Estado dos itens em dia e empurrado (8e8420e5).
 
@@ -114,17 +115,16 @@ A  app/ponto/tests/test_janela_he_regra.py
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Selo do import unico e regua · 3m 52s
+● Selo do import unico e regua
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      P='app/ponto/tests/test_janela_he_regra.py'
      t=io.open(P,encoding='utf-8').read()
      anc=" def test_MORDE_empresa_com_a_janela_DESLIGADA_nao_muda_nada(self):"
      novo = ''' def test_MORDE_a_regra_e_UMA_e_os_dois_calculadores_a_IMPORTAM(self):
-     … (3m 50s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     …
 
-✢ Unfurling… (54m 46s · ↓ 60.0k tokens)
+✢ Unfurling… (1h 0m 16s · ↓ 60.0k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
