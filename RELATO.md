@@ -1,12 +1,54 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: hook-teto | espera Ronald` -- 5 bloqueios seguidos sem commit novo na fila 1 (`E6-IMPAR -- dia de batida IMPAR fora da certificacao: o oraculo dia_batida_impar -> continue, e 473 dias ficam sem julgame`). O hook liberou o encerramento e deixou este registro.
+_(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era mentira em duas pontas: o item que ela citava -- E6-IMPAR -- **fechou** as 09:2x (commit `8daf2359`), e eu segui trabalhando depois dela. Ela nao foi escrita por mim para pedir decisao sua: foi o hook do teto de bloqueios que a lavrou sozinho ao ver 5 bloqueios seguidos sem commit novo na fila 1. Um PAREI que nenhum humano escreveu e que ninguem apaga ao fechar o item e pior que nenhum -- ele faz voce procurar uma decisao que nao existe. Ao fechar item eu limpo o PAREI resolvido, como voce cortou em 27/09 23:4x, e a cura do lado do hook fica no BACKLOG como **HOOK-PAREI-SE-APAGA**.)_
 
 **LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash por empresa publicado abaixo. A **R4 subiu pela L-094** com as quatro condicoes medidas. O CADASTRO-ZERO reteve **exatamente os 4** que voce nomeou. Falta so a EMISSAO com trilha -- um clique, que a porta ja guarda.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# CAUDA DO LOTE 1: cruzei os 56 dias FORA DA FAIXA com os 200 do TXT -- **NAO HA PAREI** (28/09 10:1x)
+
+Sua condicao era literal: *"se houver algum ABAIXO DO PISO dentro do lote: PAREI com a lista"*. **Nao ha
+nenhum.** Dos **56 dias fora da faixa em 44 colabs**, o lote 1 tem **UM dia, de UM colab**, e ele esta do lado
+de CIMA do teto:
+
+| colab | dia | tela | piso | teto | lado | batidas |
+|---|---|---|---|---|---|---|
+| col109 | 26/08 | 704 | 199 | 228 | acima do teto | 10:05 12:59 13:28 13:53 22:14 |
+
+**ABAIXO do piso no lote 1: ZERO.** Os outros **55 dias, em 43 colabs, estao fora do TXT** -- caem nos 335
+`furo_espelho`, nas rescisoes ou nos 4 do `cadastro_zero`. E isso nao e coincidencia: quem tem o dia
+contraditorio tende a ter pendencia, e a pendencia e justamente o que o portao ja barra.
+
+**E o col109 nao e defeito da tela -- e o ORACULO que cortou errado.** Conferido na autoridade: vinculo
+`PAI-12x36.19`, **12x36**, marcos do dia **10:00 -> 22:00 com pausa declarada 14:00-15:00**. Ele entrou 10:05,
+tomou a pausa mais cedo (13:28 -> 13:53, 25 min) e saiu 22:14. A tela mostra **704 min = 729 (10:05 -> 22:14)
+menos os 25 da pausa**, com `falta_marcos` **vazio**, `aberto=False`, veredito `trabalhou`. Quem partiu o dia
+foi o oraculo: a regra dele de "gap >= 8 h com contagem par na mao" disparou no intervalo 13:53 -> 22:14 e
+**orfanou a saida das 22:14**, deixando teto 228 num dia de 12 h. Mesma familia do `col830 06/09`.
+
+Eu **nao afrouxei a regra do oraculo para ele concordar** (seu corte de 27/09). Fiz o contrario: escrevi o
+ponto cego na docstring do comando, com os dois casos nomeados, e o laudo agora avisa que *dia "acima do teto"
+pede conferencia do CORTE antes de acusar a tela*. Corrigi tambem um rotulo meu que estava mentindo: eu havia
+escrito "213 com batida faltando de verdade", e contagem impar significa **falta OU SOBRA** -- o col109 tem 5
+batidas porque bateu uma A MAIS. O contador agora se chama `impar_no_conjunto_do_dia` e diz as duas
+possibilidades.
+
+**Veredito da cauda: o lote 1 pode ser emitido como esta.** Nenhum colaborador do TXT tem dia em que a tela
+mostre menos do que os pares que fecharam.
+
+## As duas perguntas de arvore que vieram junto
+
+**(a) A linha `PAREI: hook-teto`** era do HOOK, nao minha, e o item que ela citava fechou. Tirei, expliquei no
+topo e abri **HOOK-PAREI-SE-APAGA** no BACKLOG.
+
+**(b) `app/colaboradores/services/calendario.py` com ` M` na arvore viva** e a **E4-CALENDARIO que voce cortou
+as 09:1x**, em construcao neste momento -- nao e resto de sessao nem edicao orfa. Ela esta ` M` e nao commitada
+porque a regua ainda nao tinha passado sobre ela quando voce olhou; o commit vem nesta mesma leva, com o censo
+abaixo. **Prod nao viu nada disso**: `.py` na arvore nao entra no ar sem `bin/deploy.sh` (BUG 128,
+`max_requests=0`), e o deploy vai junto do commit.
 
 # ITEM (7) FECHADO: os 473 dias impares saem do limbo, e 158 deles nao sao divergencia -- sao INDECIDIVEIS sem DNA (28/09 09:2x)
 

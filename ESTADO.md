@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:01:47.**
+**Medido em 28/09/2026 10:07:01.**
 
 | | |
 |---|---|
@@ -36,6 +36,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/ponto/management/commands/e6_oraculo.py
  M app/ponto/services/espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -90,16 +92,6 @@ M  app/docs/PROMPTS.md
 
 ```
 
-❯ aval Ronald: O-FOLGA-DIA-ERRADO (fila 2, depois do BO col354; lei nova: precisa de corte -- rota do chamado para cadastro). FONTE: celulas da competencia (veredito) +
-  fatos_do_dia; tela existente templates/escala/cadastro_x_realidade.html (L-084); regenerar_celulas_vinculo (excecao formal de passado errado por cadastro, corte 16/08). MUDA:
-  (1) vigia com contador (esperado 0, dono supervisao): por colab 6x1/5x2, dia da semana com furo recorrente (>=3 de 4) E dia de folga cadastrada com turno recorrente (>=3 de 4)
-  -> caso na tela cadastro x realidade com "folga provavel: <dia>", e o chamado desses dias ganha verbo cadastro endereçado ao admin; (2) o "Resolver dia" NAO ganha veredito
-  "folga"; ganha a acao "a folga e em outro dia -> corrigir escala", que abre a porta de correcao do vinculo PRE-PREENCHIDA (dia da semana), com trilha, e so aplica com o !
-  (L-009). RED: colab da quarta/domingo de 09 (Ronald passa o id). SELO: contador folga_dia_errado publicado; caso que MORDE (2 de 4 nao dispara); o Resolver dia nao grava folga
-  como veredito (selo de arvore). PROIBIDO: mudar vinculo sozinho, veredito de folga no dia, silenciar chamado sem prazo+tripwire, juiz novo, competencia exportada (L-092).
-  PRONTO: censo da frota (colabs, dias de folga trabalhada a 100% envolvidos, horas) no RELATO. LEI-AKITA: origem=emissao por dia sem leitura de padrao, testemunha=celula, juizes
-  novos=0. Segue a fila; PAREI so em lei ou !
-
   Committed 8daf2359, 9de6b051, 9cf2f4d9, pushed to main, searched for 3 patterns, read 1 file, listed 1 directory, ran 13 shell commands
 
 ❯ aval Ronald: REGISTRAR no BACKLOG (so registro, nao construir agora) a obra O-GEO-DECISAO, desenho cortado 28/09 09:5x; lei nova: precisa de corte -- "na recusa de geofence, o
@@ -121,7 +113,17 @@ M  app/docs/PROMPTS.md
   validado por motivo), posto -- e gera PDF pelo botao canonico (core/_btn_pdf.html, L9 de UI). Drawer e PDF leem o MESMO leitor de atos (LEI-AKITA 2), trilha de leitura, acesso
   supervisao/DP. So registro. Segue a fila; PAREI so em lei ou !
 
-· Determining… (3h 59m 14s · ↓ 165.5k tokens)
+  Ran 1 shell command
+
+❯ aval Ronald: cauda ANTES da emissao do lote 1 -- cruzar os 44 colabs dos 56 dias FORA DA FAIXA do item (7) com os 200 do lote 1; publicar a lista dos que estao nos dois com
+  dia, tela, piso e teto. Se houver algum ABAIXO DO PISO dentro do lote: PAREI com a lista (o ! e meu: sai do lote 1 ou vai assim com ajuste declarado). Junto: (a) a linha
+  "PAREI: hook-teto | espera Ronald" no topo do RELATO esta velha, voce seguiu depois dela -- tira ou explica; (b) app/colaboradores/services/calendario.py aparece " M" na ARVORE
+  VIVA fora de commit (L-005) -- de onde veio e o que e. Segue a fila; PAREI so em lei ou !
+
+  Ler o bloco do teto no hook
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '130,155p' bin/hook_stop_fila1.py
+
+✢ Determining… (4h 4m 28s · ↓ 181.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
