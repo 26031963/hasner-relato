@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 01:31:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.1 MB). Acoes na janela: **537**.
+**Medido em 28/09/2026 01:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.1 MB). Acoes na janela: **538**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:31:38 | Bash | Republicar com raspagem e conferir o selo | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -8; echo "=== o selo agora ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 \| tail -3` |
 | 01:31:07 | Bash | Medir a extensao do vazamento | `cd /home/ronald/saas-hasner && echo "=== extensao do vazamento no repo publico ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 \| grep -E "NOME_INTEIRO\|TOKEN_DE_NOME\|CPF\|AUSENTE" \| sed 's/^ *//' \| awk '{print $1, $2}' \| sort \| uniq -c \| sort -rn \| head; echo "=== o repo publico e publico mesmo? ==="; git -C /home/ronald/hasner-relato remote -v 2>/dev/null \| head -2; git -C /home/ro ...` |
 | 01:30:16 | Bash | Ver se o selo era verde antes e o que ele varre | `cd /home/ronald/saas-hasner && grep -n "publicacao_sem_nome" /tmp/regua_011054.log /tmp/regua_005233.log 2>/dev/null \| head; echo "=== o selo varre quais caminhos? ==="; sed -n '45,75p' bin/tests/test_publicacao_sem_nome.sh; echo "=== o DEST tem o nome? ==="; grep -c "[nome]" /home/ronald/hasner-relato/RELATO.md 2>/dev/null \|\| echo "sem arquivo/sem match"` |
 | 01:30:04 | Bash | Ler o selo de publicacao sem nome | `cd /home/ronald/saas-hasner && sed -n '1,45p' bin/tests/test_publicacao_sem_nome.sh` |
