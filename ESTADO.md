@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:55:01.**
+**Medido em 28/09/2026 18:00:31.**
 
 | | |
 |---|---|
@@ -84,6 +84,10 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Registrada e em voo: O-JANELA-HE parte A (REGRA), com as partes de tela/aba/portão atrás da S3 e prazo antes do export da 10.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
 
   Pushed to main, ran 1 shell command
 
@@ -108,15 +112,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Commitar e empurrar a parte A · 4m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_jhe.txt <<'EOF'
-     O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
-     1. CADASTRO POR EMPRESA (LEI-AKITA 12): Empresa ganha janela_he_ativa,
-     janela_he_piso_min (10), janela_he_teto_min (60), janela_he_saida_ativa,
-     janela_he_sai… (4m 13s)
+● Ver as falhas do pre-push · 1m 42s
+  ⎿  $ cd /home/ronald/saas-hasner && ls -t logs/pre-push*.log /tmp/pre-push*.log 2>/dev/null | head -2; git push 2>&1 | grep -E '^(FAIL|ERROR):|AssertionError' | head -6 (1m 40s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (1h 5m 46s · ↓ 66.3k tokens)
+✢ Unfurling… (1h 11m 16s · ↓ 66.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
