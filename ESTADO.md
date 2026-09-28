@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:42:41.**
+**Medido em 28/09/2026 01:48:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 
 ```
 M  app/chamados/services/validacao.py
+M  app/docs/ARQUITETURA.mmd
 M  app/docs/RELATO.md
 M  app/ponto/registro_batida.py
 M  app/ponto/services/fechamento.py
@@ -118,11 +119,11 @@ M  bin/relato.sh
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-  Rodar a regua com o item (2) e a cura do vazamento · 5m 32s
-  ⎿  $ cd /home/ronald/saas-hasner && git add bin/relato.sh app/docs/RELATO.md && git status --short | head -8 && bash bin/regua.sh 2>&1 | tail -5 (5m 30s · 9 lines)
+● Regua com o diagrama regenerado · 1m 17s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 | tail -4 (1m 16s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (36m 43s · ↓ 42.6k tokens)
+✢ Metamorphosing… (42m 3s · ↓ 43.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

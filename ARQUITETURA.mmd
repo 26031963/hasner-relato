@@ -131,13 +131,13 @@ flowchart TD
     x_ponto_forms_py["ponto/forms.py"] --> p_criar_ausencia
     x_ponto_precedencia_py["ponto/precedencia.py"] --> p_criar_ausencia
     mais_criar_ausencia["... +3 chamadores"] --> p_criar_ausencia
-    p_registrar_batida(["registrar_batida()<br/>batida<br/>15 chamador(es)"])
+    p_registrar_batida(["registrar_batida()<br/>batida<br/>16 chamador(es)"])
     x_api_views_py["api/views.py"] --> p_registrar_batida
     x_api_views_core_py["api/views_core.py"] --> p_registrar_batida
     x_chamados_management_commands_reconciliar_chamados_py["chamados/management/commands/reconciliar_chamados.py"] --> p_registrar_batida
     x_chamados_models_py["chamados/models.py"] --> p_registrar_batida
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_registrar_batida
-    mais_registrar_batida["... +10 chamadores"] --> p_registrar_batida
+    mais_registrar_batida["... +11 chamadores"] --> p_registrar_batida
     p_relavrar(["relavrar()<br/>via da pergunta<br/>3 chamador(es)"])
     x_chamados_management_commands_relavrar_via_i6_py["chamados/management/commands/relavrar_via_i6.py"] --> p_relavrar
     x_config_crons_py["config/crons.py"] --> p_relavrar
