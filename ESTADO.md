@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:193 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:245 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:25:31.**
+**Medido em 28/09/2026 13:30:45.**
 
 | | |
 |---|---|
@@ -39,11 +39,14 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/e6_oraculo.py
- M app/ponto/tests/test_e6_oraculo_julga_impar.py
-?? app/ponto/calculador/
-?? app/ponto/management/commands/diff_calculador.py
-?? app/ponto/tests/test_calculador_regras.py
+M  app/docs/RELATO.md
+A  app/ponto/calculador/__init__.py
+A  app/ponto/calculador/nucleo.py
+A  app/ponto/calculador/regras.py
+A  app/ponto/management/commands/diff_calculador.py
+M  app/ponto/management/commands/e6_oraculo.py
+A  app/ponto/tests/test_calculador_regras.py
+M  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,11 +99,6 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
       },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
@@ -121,12 +119,17 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 
 ● Background command "DIFF do calculador na frota inteira" completed (exit code 0)
 
-● Esperar a tabela do DIFF · 1m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q 'rubrica' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_calc_full.txt
-     2>/dev/null; do sleep 25; done; head -11 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scrat… (1m 13s)
+  Ran 5 shell commands
+
+● Background command "Capturar a tabela inteira do DIFF" completed (exit code 0)
+
+● Esperar a regua da S5a · 4m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s5.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-100… (4m 22s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Catapulting… (22m 58s · ↓ 26.6k tokens)
+· Catapulting… (28m 12s · ↓ 29.6k tokens)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
