@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:45:01.**
+**Medido em 27/09/2026 23:50:31.**
 
 | | |
 |---|---|
@@ -124,7 +124,7 @@ c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e
      import io, py_compile
      p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961…
 
-✢ Zigzagging… (2m 4s · ↓ 7.6k tokens)
+· Zigzagging… (7m 34s · ↓ 8.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

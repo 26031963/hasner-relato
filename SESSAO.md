@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 23:45:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (93.8 MB). Acoes na janela: **567**.
+**Medido em 27/09/2026 23:50:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (93.8 MB). Acoes na janela: **565**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -575,5 +575,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:57:52 | Bash | Restringir a orfa e remedir os quatro REDs | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ _acesos = [p for p in (r.get('papeis') or []) if p.get('acesa') and p.get('instante_luz') and p.get('tipo')] if not _acesos: continue _reivindicados = {_minuto(p['instante_luz']): p['tipo'] for p in _acesos} # cada luz tem de ser uma batida REAL -- luz sem batida e ata que nao descreve o que houve if any(_m not ...` |
 | 11:55:51 | Bash | Deixar o X passar e remedir os quatro REDs | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ _m = _tz.localtime(b.timestamp).replace(tzinfo=None, second=0, microsecond=0) p = papel_por_minuto.get(_m) return p if p in ('E', 'S') else None""" novo = """ _m = _tz.localtime(b.timestamp).replace(tzinfo=None, second=0, microsecond=0) p = papel_por_minuto.get(_m) # `X` = a ata viu esta batida DENTRO do vao do ...` |
 | 11:55:27 | Bash | Ler o leitor do papel e o uso de cont_max | `sed -n '/^def _papel_da_ata/,/^def /p' ponto/turnos.py \| head -30; echo '--- guarda do cont_max / fechamento ---'; grep -n 'cont_max_s\\|_fechar_aberto_com_saida_seguinte' ponto/turnos.py \| head -30` |
-| 11:50:07 | Bash | Curar o guarda e a orfa, e medir os tres REDs | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ out = {} for _d, cel in celulas.items(): try: r = periodos_do_dia(cel, te) except Exception: # noqa: BLE001 -- juiz que levanta nao vira papel chutado continue if r.get('desalinhado'): continue _acesas = sum(1 for p in (r.get('papeis') or []) if p.get('acesa')) if _por_dia.get(_d, 0) != _acesas or not _acesas:  ...` |
-| 11:48:29 | Bash | Ler o resto da alimentacao do papel | `sed -n 760,800p ponto/turnos.py` |
