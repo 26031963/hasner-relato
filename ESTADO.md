@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:39:30.**
+**Medido em 28/09/2026 10:44:38.**
 
 | | |
 |---|---|
-| `HEAD` local | `9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)` |
-| `origin/main` | `9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)` |
+| `HEAD` local | `af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)` |
+| `origin/main` | `af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,32 +22,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
+3cacf25e E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, mostrando zero onde a folha paga -- 72 dia-colab em 30 colabs
 9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)
 9de6b051 TICKETS: placar do topo em dia (regua 28/09 09:50, ultimo push 12888d36)
 8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA
-12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094
-1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar
 ```
 
 ## `git status --short`
 
 ```
-M  PLANO_PISCADA.md
-M  app/colaboradores/services/calendario.py
-M  app/core/juizes.py
-M  app/core/tests/test_selo_performance.py
-M  app/docs/ARQUITETURA.mmd
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
-M  app/folha/porta_export.py
-M  app/folha/tests/test_porta_do_export.py
-M  app/ponto/management/commands/e6_oraculo.py
-M  app/ponto/services/espelho.py
-M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
-M  bin/hook_stop_fila1.py
-A  bin/tests/test_hook_nao_escreve_parei.sh
+?? app/ponto/tests/test_he_intra_dobrada.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,28 +88,10 @@ A  bin/tests/test_hook_nao_escreve_parei.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  indenizada, o suprimido nao entra no excedente da HE (limite = previsto liquido + suprimido indenizado) -- em TODOS os motores que indenizam. RED: col125 02/09 HE 0,99 -> 0 com
-  intra 1,0 intacta. SELO: caso que MORDE (turno de 13 h sem intervalo = 1 h HE + 1 h intra; 12 h sem intervalo = 0 HE + 1 h intra). DINHEIRO PARA BAIXO: L-094 nao cobre -- DIFF
-  de frota publicado e PAREI para o meu !. Depois do !: recalcular 09, re-medir a porta do export e novo hash do lote 1. PROIBIDO: ler intervalo_indenizavel (obra propria),
-  fallback, allowlist. LEI-AKITA: origem=limite de HE em motor_calculo_v2 (E3), testemunha=minutos_previstos_do_dia + intra suprimida, juizes novos=0. Segue a fila; PAREI so em
-  lei ou !
-
-❯ aval Ronald: cauda do BUG-HE-INTRA-DOBRADA -- SELO DE FROTA na porta do export (folha/porta_export.py::medir): invariante "nenhum minuto do dia pago em duas rubricas" (HE +
-  intra indenizada do dia <= trabalhado - previsto liquido + suprimido), contador = 0 sem allowlist; o TXT recusa se > 0. RED: col125 02/09 hoje. Segue a fila; PAREI so em lei ou
-  !
-
-  Searched for 2 patterns, ran 13 shell commands
 
 ● Background command "Censo do BUG-HE-INTRA-DOBRADA na frota" completed (exit code 0)
 
-  Esperar a regua do E4 · 6m 30s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (6m 26s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✶ Determining… (4h 36m 58s · ↓ 215.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 11 shell commands
 
 ❯ aval Ronald: O-DIA-PAGO (lei nova, corte meu agora: "o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula" -- registrar em LEIS e
   CORTES). Fila 1 logo DEPOIS do BUG-HE-INTRA-DOBRADA; e a E5 com conteudo. FATIA 1 (aditiva, nenhum leitor muda): modelo DiaPago (colaborador, data, rubricas do dia: normais,
@@ -133,10 +103,28 @@ A  bin/tests/test_hook_nao_escreve_parei.sh
   leitor novo lendo DiaPago antes da fatia 2 zerar; mexer em regra de calculo nesta obra; allowlist. RED: col125 02/09 lavrado igual ao gravado de hoje (com o bug, antes da cura)
   e igual depois da cura. PRONTO fatia 1+2: RELATO com contagem de dias lavrados na 09, os dois contadores e o commit. LEI-AKITA: origem=motor chamado por N leitores,
   testemunha=DiaPago, juizes novos=0. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+  Committed 3cacf25e
+
+❯ aval Ronald: REORDENA a fila 1 (substitui a reordenacao de 10:36) -- PORTAO DO EXPORT DA 09 = (1) BUG-HE-INTRA-DOBRADA curado com RED col125 e o DIFF para o meu ! -> (2)
+  PROVA-DOMINIO: motor ATUAL em sombra/so leitura sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE50, HE100, feriado, intra, noturno, atraso, saida antecipada, folga
+  trabalhada, falta) com os recibos Dominio ja extraidos (oraculo JSP 04-07); publicar por rubrica: total motor x total Dominio, colabs divergentes e os PADROES (mesma rubrica,
+  mesmo regime, mesmo sinal = regra, nao dado). Padrao sem causa nomeada = PAREI com a lista. -> (3) amostra de 20 colabs (todos os regimes) com extrato de rubricas da 09 para o
+  admin da folha conferir -> (4) novo lote 1 com hash novo, so com o meu !. DEPOIS: O-DIA-PAGO fatias 1+2, troca de leitores em lote, resto da E6. E4-CALENDARIO e E5-final
+  absorvidos pelo O-DIA-PAGO: parar a edicao de app/colaboradores/services/calendario.py (se for isso), guardar o diff em /tmp com trilha, voltar esse arquivo ao HEAD (L-005).
+  Segue a fila; PAREI so em lei ou !
+
+  Traceback do selo
+  ⎿  $ cd /home/ronald/saas-hasner && source ~/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null; \
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
+     saas-hasner-core:latest…
+
+✽ Determining… (4h 42m 5s · ↓ 224.9k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
