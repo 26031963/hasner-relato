@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:38:01.**
+**Medido em 28/09/2026 11:43:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `61a37f13 TICKETS/CORTES: O-DIA-PAGO ganha S5 (calculador na forma do oraculo) e o placar do topo em dia` |
-| `origin/main` | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)` |
+| `origin/main` | `a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
+073fb74e BACKLOG: estado dos itens em dia -- E6-IMPAR e E4 fechadas, BUG-HE parado no !
 61a37f13 TICKETS/CORTES: O-DIA-PAGO ganha S5 (calculador na forma do oraculo) e o placar do topo em dia
 8e45457a L-095 e L-096 cortadas e registradas: o dinheiro do dia e DADO, e obra estrutural anda sozinha ate o fim
 70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
-5ece3a86 BUG-HE-INTRA-DOBRADA: a mesma hora era paga em DUAS rubricas -- curado, -346,87 h de HE em 144 colabs, PARADO no !
-af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ```
 
 ## `git status --short`
@@ -91,39 +91,39 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ por família         │ 12x36 −158,28 · comercial −142,31 · partido −32,50 · sem vínculo −13,78 — cada uma abaixo do teto que você mediu (494,73) │
+  ├─────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ no lote 1           │ 15 colabs, −8,82 h                                                                                                        │
+  └─────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Pushed to main, ran 7 shell commands
+  Não apliquei e não deployei (dinheiro para baixo, a L-094 não cobre). Conferi que nenhum cron aplica sozinho: os 8 commands que escrevem FechamentoMensal estão todos em
+  FORA_DE_PIPELINE.
 
-❯ aval Ronald: LEI NOVA, corte meu agora -- registrar em LEIS e CORTES: "OBRA ESTRUTURAL ANDA SOZINHA ATE O FIM: construida em sombra, entra por TROCA INTEIRA; durante a obra
-  nenhum acerto colab a colab entra na fila do Code, salvo bug provado que bloqueie a folha do mes; depois da troca, erro de cadastro ou de regra se corrige UMA vez na fonte,
-  nunca por leitor nem por caso." APLICACAO HOJE: fila 1 = cura HE/intra (portao da 09) -> O-DIA-PAGO S1 a S4 sem pausa. FILA 2 CONGELADA ate a troca da S3 (BO col354,
-  O-FOLGA-DIA-ERRADO, O-GEO-DECISAO, AVISO-DO-DONO, O-GLOSSARIO, BO-HE-MIGALHA ficam registrados, nao andam); o resto da E6 (14 nao certificados, O73, 30 separados) passa a ser
-  medido CONTRA o DiaPago depois da troca. Segue a fila; PAREI so em lei ou !
+  Seu ! libera: recalcular a 09 → re-medir a porta → extrato dos 16 → lote 1 com hash novo.
 
-  Ran 2 shell commands
+  Fechado nesta leva
 
-● Background command "Registrar a L-096 e congelar a fila 2" failed with exit code 144
+  - item (7): os 473 dias ímpares saem do limbo — 340 julgados, 126 batem; dos 214 que divergem, 158 são indecidíveis sem DNA (provado em 4 de 4) e 56 estão fora da faixa. A
+    certificação caiu 92,9% → 91,2% porque o denominador subiu de 7.512 para 7.860: o número velho era mais alto por cegueira.
+  - cauda do lote 1: cruzei os 56 dias fora da faixa com o TXT — zero abaixo do piso, um único dia (col109 26/08) e nele o oráculo é que corta errado, a tela está certa. Não há
+    PAREI por aí.
+  - E4-CALENDARIO: havia um segundo motor na casa (72 dia-colab em 30 colabs, mostrando zero onde a folha paga 453 min de extra 100 num feriado). Fechou em commit verde 3 min
+    antes da sua ordem de parar — por isso não revertі (está na lista NUNCA PRE-APROVADO); diff guardado com trilha em /tmp/diffs_com_trilha/, escolha manter-ou-reverter no topo
+    do PENDENTES.
+  - porta do export ganhou a 6ª e a 7ª testemunhas; a do "minuto em duas rubricas" eu escrevi diferente do aval, porque a forma do aval se satisfaz com igualdade exatamente no
+    col125.
+  - hook que escrevia PAREI sozinho: curado com selo (alarme não escreve na voz de quem decide).
+  - L-095, L-096 e a S5 registradas em LEIS/CORTES, fila 2 marcada CONGELADA item por item.
 
-  Ran 3 shell commands
+  Próximo sem depender de você: O-DIA-PAGO S1-S2 (contrato do DiaPago, aditiva).
 
-❯ aval Ronald: O-DIA-PAGO ganha S5, corte meu agora (registrar em CORTES; aplica a lei "obra anda sozinha, troca inteira"): CALCULADOR NA FORMA DO ORACULO -- o e6_oraculo (247
-  linhas: batidas + escala do dia -> pares -> horas) vira o nucleo do calculador que escreve o DiaPago, com UM modulo de regras de rubrica (HE50/100, feriado, noturno, intra,
-  DSR, atraso/antecipada, folga trabalhada; parametros da CCT como cadastro). O motor_calculo_v2 atual segue escrevendo o DiaPago versao "motor" em SOMBRA; o calculador novo
-  escreve a versao "oraculo"; DIFF por rubrica e por colab entre as duas versoes publicado; divergencia = causa nomeada (erro do velho, erro do novo, ou regra que falta) -- nunca
-  allowlist. Troca inteira com o meu !. Depois da troca: censo das camadas que so conciliavam representacoes (pareador por tipo gravado, flip, plano B, builder, ata agregada,
-  partes de ponto/turnos.py e escala/utils.py) para remocao, medido por AST (quem ainda chama). ORDEM: S1-S2 (contrato DiaPago) -> S5 (calculador novo em sombra) -> S3/S4
-  (leitores e troca). Segue a fila; PAREI so em lei ou !
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: E6-IMPAR -- dia de batida IMPAR fora da certificacao: o oraculo dia_batida_impar -> continue, e 473 dias ficam sem julgame
 
-● Registrar a S5 e empurrar · 1m 45s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     # S5 no CORTES e no BACKLOG (aval 12:1x)
-     Q='app/docs/CORTES.md'
-     s=io.open(Q,encoding='utf-8').read… (1m 43s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Como o fechamento monta as horas
+  ⎿  $ grep -n '_dia_do_turno' -A 14 ponto/motor_calculo_v2.py | head -22 && sed -n '380,400p;425,462p' ponto/services/fechamento.py
 
-✢ Determining… (5h 35m 28s · ↓ 294.2k tokens)
+· Determining… (5h 40m 58s · ↓ 301.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
