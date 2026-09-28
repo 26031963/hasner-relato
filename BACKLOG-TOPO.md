@@ -107,4 +107,4 @@ lista — ela e o que esta EM PE._
 | **O95** | A PAUSA DECLARADA ABSORVE QUEM NAO VOLTOU | espera aval |
 | **O96** | PAUSA MAXIMA E CADASTRO DA ESCALA, nao constante de classe | espera aval |
 | **O97** | SELO VAZIO DESDE 30/06 | **livre** |
-| **O98** | GLOSSARIO DO DOMINIO | **fila 1, DEPOIS do lote 2** |
+| **O98** | CONGELADA (L-096) -- GLOSSARIO DO DOMINIO | **fila 1, DEPOIS do lote 2** |

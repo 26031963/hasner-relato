@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:32:33.**
+**Medido em 28/09/2026 11:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
+| `HEAD` local | `61a37f13 TICKETS/CORTES: O-DIA-PAGO ganha S5 (calculador na forma do oraculo) e o placar do topo em dia` |
 | `origin/main` | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+61a37f13 TICKETS/CORTES: O-DIA-PAGO ganha S5 (calculador na forma do oraculo) e o placar do topo em dia
+8e45457a L-095 e L-096 cortadas e registradas: o dinheiro do dia e DADO, e obra estrutural anda sozinha ate o fim
 70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
 5ece3a86 BUG-HE-INTRA-DOBRADA: a mesma hora era paga em DUAS rubricas -- curado, -346,87 h de HE em 144 colabs, PARADO no !
 af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
-3cacf25e E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, mostrando zero onde a folha paga -- 72 dia-colab em 30 colabs
-9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/CORTES.md
- M app/docs/LEIS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -94,29 +92,6 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 
 ```
 
-❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
-  push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
-  push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
-
-  Ran 8 shell commands
-
-❯ aval Ronald: O-DIA-PAGO S1 -- SUBSTITUI o desenho da fatia 1 (escritor/gancho) ja na fila; nenhuma lei nova alem do corte ja dado. FONTE:
-  ponto/services/fechamento.py::recalcular_fechamento_mes (o resultado de cada colab: periodos, periodos_ft, buraco de vinculo O85, reflexo DSR, banco) + recalcular_por_evento
-  (ja chamado por ponto/registro_batida.py:137 e chamados/services/validacao.py:107). MUDA: no MESMO ponto em que o FechamentoMensal do colab e gravado, lavrar DiaPago a partir
-  do MESMO resultado -- uma linha por dia (dia de INICIO do turno, O76 MotorBase._dia_do_turno) com as rubricas do dia, mais UMA linha de ajuste da competencia para o que so
-  existe no mes (reflexo DSR, banco); versao_motor, versao_dna, evento_origem, lavrado_em; substitui as linhas da mesma competencia+colab na mesma transacao. NENHUM escritor
-  novo, NENHUM gancho novo, nenhum leitor muda. Competencia exportada: recusa como o fechamento (L-092). SELO: soma(DiaPago do colab na competencia) == FechamentoMensal, campo a
-  campo, na frota da 09 = 0 divergencia (vira o contador fechamento_x_soma_dias_pagos da S2). RED: col125 09/2026. ORDEM: logo apos a cura HE/intra, SEM esperar o lote 1
-  (aditiva). LEI-AKITA: origem=recalcular_fechamento_mes, testemunha=DiaPago, juizes novos=0. Segue a fila; PAREI so em lei ou !
-
-  Ran 2 shell commands
-
-● Background command "Re-medir o DIFF com a regra estreita" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Re-medir com o patch certo" completed (exit code 0)
-
   Pushed to main, ran 7 shell commands
 
 ❯ aval Ronald: LEI NOVA, corte meu agora -- registrar em LEIS e CORTES: "OBRA ESTRUTURAL ANDA SOZINHA ATE O FIM: construida em sombra, entra por TROCA INTEIRA; durante a obra
@@ -125,7 +100,30 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
   O-FOLGA-DIA-ERRADO, O-GEO-DECISAO, AVISO-DO-DONO, O-GLOSSARIO, BO-HE-MIGALHA ficam registrados, nao andam); o resto da E6 (14 nao certificados, O73, 30 separados) passa a ser
   medido CONTRA o DiaPago depois da troca. Segue a fila; PAREI so em lei ou !
 
-✢ Determining… (5h 30m 1s · ↓ 286.3k tokens)
+  Ran 2 shell commands
+
+● Background command "Registrar a L-096 e congelar a fila 2" failed with exit code 144
+
+  Ran 3 shell commands
+
+❯ aval Ronald: O-DIA-PAGO ganha S5, corte meu agora (registrar em CORTES; aplica a lei "obra anda sozinha, troca inteira"): CALCULADOR NA FORMA DO ORACULO -- o e6_oraculo (247
+  linhas: batidas + escala do dia -> pares -> horas) vira o nucleo do calculador que escreve o DiaPago, com UM modulo de regras de rubrica (HE50/100, feriado, noturno, intra,
+  DSR, atraso/antecipada, folga trabalhada; parametros da CCT como cadastro). O motor_calculo_v2 atual segue escrevendo o DiaPago versao "motor" em SOMBRA; o calculador novo
+  escreve a versao "oraculo"; DIFF por rubrica e por colab entre as duas versoes publicado; divergencia = causa nomeada (erro do velho, erro do novo, ou regra que falta) -- nunca
+  allowlist. Troca inteira com o meu !. Depois da troca: censo das camadas que so conciliavam representacoes (pareador por tipo gravado, flip, plano B, builder, ata agregada,
+  partes de ponto/turnos.py e escala/utils.py) para remocao, medido por AST (quem ainda chama). ORDEM: S1-S2 (contrato DiaPago) -> S5 (calculador novo em sombra) -> S3/S4
+  (leitores e troca). Segue a fila; PAREI so em lei ou !
+
+● Registrar a S5 e empurrar · 1m 45s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     # S5 no CORTES e no BACKLOG (aval 12:1x)
+     Q='app/docs/CORTES.md'
+     s=io.open(Q,encoding='utf-8').read… (1m 43s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Determining… (5h 35m 28s · ↓ 294.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

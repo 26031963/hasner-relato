@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 11:32:33.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.1 MB). Acoes na janela: **500**.
+**Medido em 28/09/2026 11:38:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.2 MB). Acoes na janela: **506**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:36:15 | Bash | Registrar a S5 e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # S5 no CORTES e no BACKLOG (aval 12:1x) Q='app/docs/CORTES.md' s=io.open(Q,encoding='utf-8').read() s += ('\n\n# corte Ronald 28/09 ~12:1x -- O-DIA-PAGO S5: CALCULADOR NA FORMA DO ORACULO\n\n' 'Aplica ...` |
+| 11:35:43 | Bash | Empurrar as leis | `cd /home/ronald/saas-hasner && git push 2>&1 \| tail -4` |
+| 11:35:37 | Bash | Commitar as duas leis | `cd /home/ronald/saas-hasner && cat > /tmp/msg_leis.txt <<'EOF' L-095 e L-096 cortadas e registradas: o dinheiro do dia e DADO, e obra estrutural anda sozinha ate o fim L-095 DIA-PAGO (corte Ronald 28/09 10:4x): o valor de um dia e lavrado UMA vez, pelo motor v2, no evento -- e todo leitor le, ninguem recalcula. Nasceu medida duas vezes no mesmo dia: a E4 achou 72 dia-colab em 30 colabs onde o cale ...` |
+| 11:35:25 | Bash | Conferir o estado do git | `cd /home/ronald/saas-hasner && git status --short \| head -6; echo "---"; git log --oneline -1; ps -eo pid,args \| grep '[g]it commit' \| head -3` |
+| 11:35:17 | Bash | Limpar o commit travado | `cd /home/ronald/saas-hasner && pkill -f 'git commit -q -F -' 2>/dev/null; sleep 1; git status --short \| head -5; git log --oneline -1` |
+| 11:33:11 | Bash | Registrar a L-096 e congelar a fila 2 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/LEIS.md' t=io.open(P,encoding='utf-8').read() i=t.index('\| **L-095** \|') j=t.index('\n', i)+1 nova=('\| **L-096** \| **OBRA ESTRUTURAL ANDA SOZINHA ATE O FIM**: obra estrutural e construida em **sombra** e ' 'entra por **TROCA INTEIRA**; durante a obra **nenhum acerto colab a colab entra na fila do C ...` |
 | 11:29:25 | Bash | Registrar a L-095 e o corte | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/LEIS.md' t=io.open(P,encoding='utf-8').read() i=t.index('\| **L-094** \|') j=t.index('\n', i)+1 nova=('\| **L-095** \| **O DINHEIRO DO DIA E DADO, LAVRADO UMA VEZ**: o valor de um dia (normais, HE50, HE100, ' 'HE100 feriado, noturno, intra indenizada, atraso, saida antecipada, folga trabalhada, falta)  ...` |
 | 11:28:53 | Bash | Ultimas leis numeradas | `cd /home/ronald/saas-hasner && grep -n 'L-09[0-9]' app/docs/LEIS.md \| tail -8` |
 | 11:28:47 | Bash | Formato de LEIS e CORTES | `cd /home/ronald/saas-hasner && tail -6 app/docs/LEIS.md && echo "=== CORTES ===" && ls app/docs/CORTES.md CORTES.md 2>/dev/null; tail -5 $(ls app/docs/CORTES.md CORTES.md 2>/dev/null \| head -1)` |
