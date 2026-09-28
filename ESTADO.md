@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:51:25.**
+**Medido em 28/09/2026 19:56:51.**
 
 | | |
 |---|---|
@@ -33,9 +33,9 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 
 ```
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
-AM app/colaboradores/tests/test_ui_grade_calendario.py
+A  app/colaboradores/tests/test_ui_grade_calendario.py
 M  app/docs/RELATO.md
-MM app/templates/colaboradores/partials/_calendario_grade.html
+M  app/templates/colaboradores/partials/_calendario_grade.html
 M  bin/hook_stop_fila1.py
 A  bin/tests/test_hook_nao_cobra_congelado.sh
 ?? bin/keepalive.sh
@@ -90,6 +90,10 @@ A  bin/tests/test_hook_nao_cobra_congelado.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├──────────────────────────────────────┼────────────────────────┤
+  │ ponto/selecao_periodo.py             │ o grep não tinha visto │
+  ├──────────────────────────────────────┼────────────────────────┤
+  │ ponto/services/esmeril_espelho.py    │ idem                   │
   └──────────────────────────────────────┴────────────────────────┘
 
   Os dois últimos saíram só na varredura por AST. É a razão de ser por AST: contar leitor de dinheiro por texto deixa leitor de fora, e leitor de fora não entra no placar da
@@ -112,17 +116,13 @@ A  bin/tests/test_hook_nao_cobra_congelado.sh
   ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
   exportada", e na
 
-● Curar os dois e rodar
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     # 1) o import morto
-     P='app/colaboradores/tests/test_ui_grade_calendario.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace('import io\nimport os\nimport re\n','import io\nimport os\n',1)
-     io.open(P,'w',encoding='utf-8').write(t)
-     # 2) a…
+● Regua final da UI · 5m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && git add -A app/ && git reset -q bin/keepalive.sh 2>/dev/null; nohup bash bin/regua.sh >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_ui2.log 2>&1 & sleep 3; until grep -qE '^(OK|FAILED|Ran
+     |FALHOU)|BLOQUEADO|MUD… (5m 18s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Orchestrating… (54m 27s · ↓ 54.3k tokens)
+· Orchestrating… (59m 53s · ↓ 54.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

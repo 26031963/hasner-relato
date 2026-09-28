@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 19:51:25.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.8 MB). Acoes na janela: **509**.
+**Medido em 28/09/2026 19:56:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.8 MB). Acoes na janela: **510**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:51:31 | Bash | Regua final da UI | `cd /home/ronald/saas-hasner && git add -A app/ && git reset -q bin/keepalive.sh 2>/dev/null; nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_ui2.log 2>&1 & sleep 3; until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb ...` |
 | 19:50:56 | Bash | Curar os dois e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io # 1) o import morto P='app/colaboradores/tests/test_ui_grade_calendario.py' t=io.open(P,encoding='utf-8').read() t=t.replace('import io\nimport os\nimport re\n','import io\nimport os\n',1) io.open(P,'w',encoding='utf-8').write(t) # 2) a lapide multilinha no template: `{# ... #}` de varias linhas NAO e comentario Django (o texto vaza # pa ...` |
 | 19:50:41 | Bash | Ver o ruff | `cd /home/ronald/saas-hasner && source ~/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null; \ docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \ --env-file "$TESTE_ENVFILE" -v ~/saas-hasner/app:/app saas-hasner-core:latest \ sh -c 'ruff check /app --output-format concise 2>&1 \| head -3'` |
 | 19:41:29 | Bash | Publicar e rodar a regua da UI | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=[x for x in t.split('\n') if not x.startswith('`PAREI:')] t='\n'.join(l) l=t.split('\n') l.insert(1, '\n`PAREI: smoke-da-UI-GRADE-CALENDARIO \| espera Ronald` -- a fatia esta pronta, selada e commitada, e ' '**nao empurrei**: fa ...` |
