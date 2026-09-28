@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:50:45.**
+**Medido em 28/09/2026 15:56:01.**
 
 | | |
 |---|---|
@@ -32,6 +32,9 @@ f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira 
 ## `git status --short`
 
 ```
+M  app/docs/RELATO.md
+M  app/ponto/management/commands/lavrar_dias_pagos.py
+M  app/ponto/services/fechamento.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,20 +87,6 @@ f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"PermissionRequest\"",
-        "decision": {
-          "to allow": {
-            "behavior": "\"allow\"",
-            "updatedInput": "object (optional) - Modified tool input to use",
-            "updatedPermissions": "array (optional) - Permission updates"
-          },
-          "to deny": {
-            "behavior": "\"deny\"",
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
       "for UserPromptSubmit": {
         "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
@@ -118,10 +107,24 @@ f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira 
   }
 
 ✻ Cogitated for 1h 11m 10s · done 3:49 PM · 3 shells still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Publicar a S2 e rodar a regua · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     sec = '''# O-DIA-PAGO S1+S2 COMPLETAS: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome (28/09 15:4x)
+     PROVA: `tenant_command lavrar_dias_p… (3s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Billowing… (3m 28s · ↓ 7.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ ! emite o lote 1; segue a fila
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

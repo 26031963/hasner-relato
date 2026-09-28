@@ -22,6 +22,52 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# O-DIA-PAGO S1+S2 COMPLETAS: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome (28/09 15:4x)
+
+PROVA: `tenant_command lavrar_dias_pagos --mes 9 --ano 2026` -> **606 colaboradores lidos, 8.809 linhas de
+`DiaPago` na versao `motor`**, com o `FechamentoMensal` **intocado**.
+
+O backfill da S1 estava incompleto e eu nao tinha visto: ele MEDIA e nao LAVRAVA -- o modo `somente_leitura` da
+porta nunca chegava a lavratura. Agora `recalcular_fechamento_mes` aceita `lavrar_dias_pagos=True` junto de
+`somente_leitura=True`, e o nome diz na assinatura exatamente o que acontece: **fechamento intocado, `DiaPago`
+lavrado**. Um modo "leitura" que escrevesse escondido seria a pior peca desta obra.
+
+## E agora a S2 mede de verdade -- esta e a tabela do caminho (A)
+
+Com as 8.809 linhas lavradas pelo motor de HOJE e o gravado carregando a cura **so nos 7 campos do alvo**, a
+divergencia que sobra e, por construcao, a **DERIVA**: o tamanho exato do que um recalculo inteiro moveria. Nos
+606 colaboradores da 09:
+
+| campo | soma (dia_pago - fechamento) | colabs | os maiores |
+|---|---|---|---|
+| **saldo_banco_horas** | **+373,31** | 71 | col257 **-190,67** · col42 +40,87 · col849 +40,82 |
+| **horas_reflexo_dsr** | **+104,14** | 80 | col911 +7,83 · col174 +6,39 · col438 +6,17 |
+| **horas_trabalhadas** | **-87,96** | **7** | col922 **-63,12** · col297 +21,18 · col945 -19,87 |
+| **horas_folga_trabalhada** | **-71,68** | **2** | col297 **-64,90** · col841 -6,78 |
+| **horas_noturnas** | **+64,95** | **6** | col859 +31,93 · col297 +28,81 · col922 +24,38 |
+| horas_extras_100 | -42,64 | 7 | col922 -35,26 · col945 -12,60 |
+| horas_extras_50 | -39,68 | 24 | col922 -14,00 · col904 -2,16 |
+| horas_extras_100_noturna | +7,68 | 5 | col922 +7,27 · col859 +6,96 |
+| horas_extras_50_noturna | -7,34 | 8 | col862 -2,10 |
+| horas_extras_100_feriado | +14,13 | 2 | col297 +7,17 · col859 +6,96 |
+| horas_saida_antecipada | +3,47 | 1 | col821 |
+| horas_atraso | +2,26 | 2 | col821 +1,34 · col922 +0,92 |
+| horas_intra_indenizada | +0,00 | 6 | col922 +5,00 e col885 -2,00 se cancelam |
+
+**A DERIVA E CONCENTRADA, e isso muda a decisao (A)**: `horas_trabalhadas` move em **7 colaboradores** e
+`horas_folga_trabalhada` em **2**. Tres nomes explicam quase tudo -- **col922** (trabalhadas -63,12, HE100
+-35,26, noturnas +24,38), **col297** (folga trabalhada -64,90, noturnas +28,81, HE100 feriado +7,17) e
+**col257** (banco -190,67). Nao e uma nuvem de 500 pessoas: sao poucos casos, com nome, que podem ser olhados
+um por um antes de qualquer recalculo.
+
+**Os dois campos de maior CONTAGEM -- DSR (80 colabs) e banco (71) -- sao os derivados das extras.** Eles
+subiram porque a cura tirou HE: menos extra, menos reflexo de DSR e menos hora indo para o banco. Estao
+coerentes com o apply, e nao sao surpresa.
+
+**A porta NAO foi re-medida de proposito.** O carimbo VERDE de 15:0x esta lavrado e e ele que libera a emissao;
+os contadores da S2 **nao entram em `falhas`** enquanto a obra corre, entao re-medir nao mudaria o portao e
+mexeria no carimbo que voce vai usar no clique. Depois da emissao, a porta volta a ser medida com a S2 dentro.
+
 # PORTAO DA 09 CUMPRIDO, item por item -- so a emissao espera voce (28/09 15:2x)
 
 ## 1. Deploy no ar
