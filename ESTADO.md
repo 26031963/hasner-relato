@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado nas duas cascas EM PROD
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:13 AFIRMA ato sem PROVA ao lado -- ## O recalculo: APLICADO, e as quatro condicoes fecharam
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:49:01.**
+**Medido em 28/09/2026 00:54:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo` |
+| `HEAD` local | `1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME` |
 | `origin/main` | `f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME
 f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`
 b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar
 872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor
-c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou
 ```
 
 ## `git status --short`
@@ -71,7 +71,7 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
 | E3 | no turno partido sem intervalo declarado, a volta da pausa nao e atraso (O73 | **FALTA** | RED col81 (te#189 16:00-00:00): "Atraso: entrada as 18:29 (previsto 16:00)" na volta do intervalo; 6 templates `turno_partido` com intervalo_modo=dura |
 | E4 | o cartao PDF desenha o mesmo que a tela | FEITO | `pdf_x_espelho_divergentes` = 0 em 199 colabs (sombra, pos-O69) |
 | E4 | o cartao e o TXT no mesmo numero | FEITO | `cartao_x_txt_divergentes` = 0 na competencia 09 |
-| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | MEDIDO: topo x coluna diverge (col515 11,13 x 92,30 h). 27/09 02:1x: e o MESMO defeito que a classe C da O83 -- o TOPO concorda com a FOLHA (11,00 h)  |
+| E4 | o topo do cartao e a SOMA das linhas | **FALTA** | RE-MEDIDO 28/09 01:1x, depois da O96 e do recalculo inteiro de 09: **19 -> 18 divergentes >1 h no universo do TXT (205)**, e o unico curado (col843) f |
 | E4 | colunas Atraso e Saida antecipada lendo a folha (O51b) | **FALTA** | (sem prova) |
 | E4 | o tipo de escala exibido sai da DEFINICAO, nao do rotulo gravado | em curso | O74: `rotulo_do_desenho` + filtro `desenho_do_turno`; ficha no ar, lista de tipos espera o deploy |
 | E5 | a 09 lida da celula, sem gravado envelhecendo | **FALTA** | (sem prova) |
@@ -90,6 +90,7 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   O selo me corrigiu três vezes, e a terceira era um bug que ia ao ar: escrevi o comentário do bloco como {# ... #} de várias linhas. O Django só trata {# #} de UMA linha — o
   texto inteiro ia para a página, em todo dia de todo espelho, levando a frase "EM ABERTO" com ele. Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como aberto.
   Sem o par que morde, subia.
@@ -118,12 +119,11 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
   as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
   topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
 
-● Esperar com docker wait e ler · 1m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && docker wait e4_depois e6_depois && echo "=== e4 DEPOIS ===" && docker logs e4_depois 2>&1 | grep -E "^entra=|^contadores" && echo "=== e6
-     DEPOIS ===" && docker logs e6_depois 2>&1 | grep -E "^\{|^BATE" (1m 21s · 2 lines)
+● Esperar a regua e ler o veredito · 8s
+  ⎿  $ cd /home/ronald/saas-hasner && docker wait inspiring_darwin >/dev/null 2>&1; tail -4 /tmp/regua_e5.out; cat .regua_stamp | head -3 (7s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hashing… (17m 42s · ↓ 12.1k tokens)
+✢ Hashing… (23m 12s · ↓ 29.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
