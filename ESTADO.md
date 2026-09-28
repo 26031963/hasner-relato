@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:25:19.**
+**Medido em 28/09/2026 02:30:41.**
 
 | | |
 |---|---|
@@ -115,16 +115,16 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Fazer a testemunha ler o leitor certo e rodar a regua · 34s
+● Fazer a testemunha ler o leitor certo e rodar a regua · 5m 56s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import io
      p='app/ponto/tests/test_vinculo_do_dia_pela_celula.py'
      s=io.open(p,encoding='utf-8').read()
      old = """ intervalo=tuple(ec.marcos_do_dia(d, celulas=celulas))[2:4]).minutos"""
-     new = """ # R4: a PAUSA vem do leitor proprio (`intervalo_do_dia`)… (33s · 4 lines)
+     new = """ # R4: a PAUSA vem do leitor proprio (`intervalo_do_dia`)… (5m 54s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (1h 19m 21s · ↓ 77.8k tokens)
+✢ Metamorphosing… (1h 24m 43s · ↓ 77.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

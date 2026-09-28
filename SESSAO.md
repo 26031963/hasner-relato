@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 02:25:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.5 MB). Acoes na janela: **518**.
+**Medido em 28/09/2026 02:30:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.5 MB). Acoes na janela: **515**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -525,6 +525,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:33:51 | Bash | Medir as duas distancias nos 14 colabs | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_o94.py <<'PYEOF' # O94: a batida que a ata chama de ENTRADA do plantao seguinte esta mais perto da entrada ou da SAIDA? import datetime as d from django.utils import timezone as tz from django.db.models import Q from colaboradores.models import Colaborador from escala.models import Esc ...` |
 | 14:31:13 | Bash | Aguardar o veredito da suite final | `until grep -qE '^Ran [0-9]+ tests' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_final.log 2>/dev/null; do sleep 25; done; sleep 4; grep -E '^Ran [0-9]+ tests\|^OK$\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_final.log \| grep -v '^OK: ' \| tail -8` |
 | 14:31:02 | Bash | Reconfirmar a medicao depois da troca para instantes | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " import datetime as d from django.utils import timezone as tz from django.db.models import Q from colaboradores.models import Colaborador from escala.models import EscalaColaborador, CelulaDia from ponto.turnos import batidas_apuraveis from core.regua_cct import get_motor_cct from ...` |
-| 14:26:45 | Bash | Commitar as duas curas de selo e lancar a suite final | `python3 - <<'PYEOF' p='ponto/tests/test_ensaio_de_dinheiro_exige_lavra_de_prod.py'; t=open(p).read() t = t.replace("# razao): `date.today()` num teste amarra o resultado ao dia em que ele roda. Aqui a data nem e' parte da", "# razao): ler o relogio real num teste amarra o resultado ao dia em que ele roda. Aqui a data nem e' parte da") open(p,'w').write(t) assert 'today()' not in t print('prosa sem ...` |
-| 14:26:17 | Bash | Ver o today() restante | `grep -n 'today()' ponto/tests/test_ensaio_de_dinheiro_exige_lavra_de_prod.py` |
-| 14:25:46 | Bash | Curar os dois selos e rodar os cinco arquivos | `python3 - <<'PYEOF' import py_compile p='ponto/turnos.py'; s=open(p).read() velho = """ if saida is not None: _ts = timezone.localtime(saida.timestamp) if _ts.date() != d or _ts.time() > hf: # o turno SAI fora da janela da vespera: e turno novo, e o dia e o do inicio (L-085) return d""" novo = """ if saida is not None: # O LIMITE E' UM INSTANTE, nao uma data extraida da batida: o contrato # `test_ ...` |
