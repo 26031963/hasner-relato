@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:26:56.**
+**Medido em 28/09/2026 01:31:41.**
 
 | | |
 |---|---|
@@ -39,10 +39,10 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## `git status --short`
 
 ```
- M app/chamados/services/validacao.py
- M app/ponto/registro_batida.py
- M app/ponto/services/fechamento.py
-?? app/ponto/tests/test_e5_evento_mantem_o_gravado.py
+M  app/chamados/services/validacao.py
+M  app/ponto/registro_batida.py
+M  app/ponto/services/fechamento.py
+A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -94,6 +94,9 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  faz alguém entrar. Baixar turnos abertos de 468 para 363 não abre uma vaga. Os 335 saem de lá curando a célula.
+
+  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
   e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
 
   A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
@@ -121,13 +124,10 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Ligar o evento na validacao e rodar o selo · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show
-     HEAD:app/chamados/services/validacao.py > $S/val.py && python3 - <<'PY'
-     import io, py_compile
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21…
+● Republicar com raspagem e conferir o selo · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -8; echo "=== o selo agora ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 | tail -3
 
-✻ Metamorphosing… (20m 58s · ↓ 31.9k tokens)
+· Metamorphosing… (25m 43s · ↓ 37.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
