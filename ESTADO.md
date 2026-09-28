@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:15:45.**
+**Medido em 28/09/2026 12:20:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,7 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
- M app/config/crons.py
+M  app/config/crons.py
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
@@ -102,39 +102,39 @@ A  app/ponto/tests/test_dia_pago_soma.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  mesmo partial), celula de dia com LARGURA e ALTURA FIXAS iguais para os 7 dias, grade inteira cabendo na largura do painel sem corte a direita nem rolagem horizontal; textos
-  longos (atestado, folga compensatoria, chips de extra) quebram em ate 2 linhas com reticencias e title com o texto inteiro; nada muda de cor nem de conteudo. Selo de front nas
-  DUAS cascas (grafo de includes) + smoke meu de clique antes do push. Segue a fila; PAREI so em lei ou !
+          , e a linha sobrevivia ao proprio motivo -- o Ronald a leu as 10:0x citando E6-IMPAR, fechado as 09:2x. Alarme nao escreve na voz de quem decide (CLAUDE.md 4a): o
+           teto segue liberando e agora alarma no log do proprio hook. Selo `bin/tests/test_hook_nao_escreve_parei.sh`, com RED provado | **fechada** | `bin/hook_stop_fila1
+          .py` | CURA-MAIS-RESTRITIVA: a cura que tira a escrita e mais restritiva que "apagar depois" | 28/09 10:1x |
+      39 -| BO-354 | **CONGELADA (L-096) -- o emissor `orfao_14h` pergunta SAIDA em dia com 4 batidas completas** -- ele le o `tipo` GRAVADO em vez do MARCO (L-E3: "o marco
+         - manda"), e o app gravou tipos INVERTIDOS no col354 em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). Tres perguntas nasceram erradas --
+         - P36049 (24/09), P36550 (25/09) e P35636 (23/09, pergunta saida quando falta a VOLTA DO INTERVALO) -- as tres com `via_resolucao=sem_turno_aberto` carimbado e ain
+         -da VIVAS na tela (fio incoerente) | **em voo** | — | disputa #5527. PROVAR com RED antes de curar: (1) emissor x marco, (2) via carimbado + pergunta viva, (3) cen
+         -so da frota. Cadastro (sem escala vigente, sem posto) vai para a lista do `!` | 28/09 08:5x |
+      39 +| BO-354 | **CONGELADA (L-096) -- o emissor `orfao_14h` pergunta SAIDA em dia com 4 batidas completas** -- ele le o `tipo` GRAVADO em vez do MARCO (L-E3: "o marco
+         + manda"), e o app gravou tipos INVERTIDOS no col354 em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). Tres perguntas nasceram erradas --
+         + P36049 (24/09), P36550 (25/09) e P35636 (23/09, pergunta saida quando falta a VOLTA DO INTERVALO) -- as tres com `via_resolucao=sem_turno_aberto` carimbado e ain
+         +da VIVAS na tela (fio incoerente) | **CONGELADA (L-096)** -- fila 2 nao anda durante a obra estrutural | — | disputa #5527. PROVAR com RED antes de curar: (1) emi
+         +ssor x marco, (2) via carimbado + pergunta viva, (3) censo da frota. Cadastro (sem escala vigente, sem posto) vai para a lista do `!` | 28/09 08:5x |
+      40  | E6-14 | **os 14 nao certificados**, causa por colab (a lista que sobra da E6 no universo do TXT) | **em voo** | — | cadastro/L-009 vira lista para o `!` | 28/09
+           08:4x |
+      41  | O-FOLGA-DIA-ERRADO | **CONGELADA (L-096) -- FILA 2** -- a folga cadastrada esta no dia errado e o sistema cobra o dia todo mes: vigia com contador (esperado 0)
+          casa **furo recorrente num dia da semana** (>=3 de 4) com **turno recorrente no dia de folga cadastrada** (>=3 de 4) e joga o caso na tela `cadastro_x_realidade`
+          como "folga provavel: <dia>"; o chamado desses dias ganha verbo CADASTRO para o admin; o "Resolver dia" NAO ganha veredito `folga`, ganha a acao "a folga e em out
+          ro dia -> corrigir escala", porta do vinculo pre-preenchida, com trilha, aplicando so com o `!` | **fila 2, apos BO-354** | — | **LEI NOVA: espera o CORTE escrito
+           do Ronald** (rota chamado -> cadastro). RED: colab da quarta/domingo de 09 (id vem dele). PRONTO exige censo da frota no RELATO: colabs, dias de folga trabalhada
+           a 100% envolvidos, horas | 28/09 09:4x |
+      42  | AVISO-DO-DONO | **CONGELADA (L-096) -- FILA 2, fatia pequena** -- o dono fica sabendo sem abrir o RELATO: todo `PAREI` que espera o `!` dele e todo marco fechad
+          o do placar (portao da 09, DIA-PAGO S1-S4) manda push para o colaborador **col677** pelo servico que ja existe (o do holerite), texto curto `"<item>: <estado> --
+          espera seu !"` ou `"<item>: fechado"`, com trilha de envio e **idempotente por evento** (um push, nao um por varredura) | **registrada** | — | depois do portao da
+           09. **Smoke dele no celular antes de o push ir ao repo** (FRONT SEM SMOKE NAO SOBE). Nenhuma lei nova | 28/09 11:3x |
 
-  Ran 2 shell commands
+  Esperar a regua · 3m 43s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (3m 41s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-❯ aval Ronald: ordem -- o PORTAO DA 09 vem antes da S1: deploy da cura HE/intra -> recalcular 09 -> porta (contadores novos = 0) -> extrato dos 16 -> lote 1 com hash novo parado
-  no meu ! de emissao. A S1 so depois. E4-CALENDARIO: MANTER (nao reverter; ele e absorvido pelo DiaPago na S3b). Segue a fila; PAREI so em lei ou !
-
-  Read 1 file, ran 2 shell commands
-
-● Update(config/crons.py)
-  ⎿  Added 9 lines
-      440          'encher log de verde. As duas metades existiam soltas (`pdf_x_espelho_divergentes` e '
-      441          '`cartao_x_txt_divergentes`) e ninguem as rodava juntas -- este comando e a UMA pergunta com UMA '
-      442          'resposta que a porta do export precisa.',
-      443 +    # BACKFILL DE OBRA, e obra nao vira rotina (28/09, O-DIA-PAGO S1): `lavrar_dias_pagos` existe para
-      444 +    # medir e conferir o universo de uma competencia durante a construcao do `DiaPago`. Ele roda a porta
-      445 +    # do fechamento em modo SO LEITURA e nao escreve `FechamentoMensal` -- quem lavra de verdade e o
-      446 +    # proprio recalculo, no ato. Virar cron seria transformar ferramenta de obra em rotina permanente,
-      447 +    # que e como a casa acumula comando que ninguem le.
-      448 +    'lavrar_dias_pagos':
-      449 +        'BACKFILL/CONFERENCIA da obra O-DIA-PAGO (28/09): le a competencia pela porta do fechamento em modo '
-      450 +        'somente_leitura (nao escreve FechamentoMensal) e reporta quantas linhas de DiaPago existem na versao '
-      451 +        'pedida. Roda por ATO, durante a obra; a lavratura de producao acontece dentro do recalculo que grava.',
-      452      # CERTIFICADOR, e certificador nao se agenda (28/09, item 7): `e6_oraculo` e a calculadora
-      453      # INDEPENDENTE que diz se o espelho mente -- ela le batida crua, nao chama motor, pareador nem
-      454      # celula, e por isso NAO pode virar rotina de cron: cron que roda o certificador todo dia produz
-
-● Reading docs/BACKLOG.md
-  ⎿  docs/BACKLOG.md
-
-· Determining… (6h 13m 12s · ↓ 342.4k tokens)
+✻ Determining… (6h 18m 13s · ↓ 345.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
