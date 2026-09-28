@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:07:20.**
+**Medido em 28/09/2026 16:08:15.**
 
 | | |
 |---|---|
@@ -84,6 +84,10 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
           }
         }
       },
@@ -110,14 +114,10 @@ f6e0910b TICKETS: rodape e placar (8581 testes OK)
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Commitar, empurrar e publicar · 2m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s2f.txt <<'EOF'
-     O-DIA-PAGO S1+S2 completas: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome
-     PROVA: tenant_command lavrar_dias_pagos --mes 9 --ano 2026 -> 606 colaboradores
-     lidos, 8.809 linhas de DiaPago na versao motor, com o Fechamento… (2m 1s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ver a saida inteira do publicador · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -12
 
-✻ Billowing… (14m 47s · ↓ 9.2k tokens)
+✶ Billowing… (15m 42s · ↓ 9.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
