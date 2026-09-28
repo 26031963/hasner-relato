@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:10:45.**
+**Medido em 28/09/2026 12:15:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
+ M app/config/crons.py
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
@@ -101,39 +102,39 @@ A  app/ponto/tests/test_dia_pago_soma.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Próximo sem depender de você: O-DIA-PAGO S1-S2 (contrato do DiaPago, aditiva).
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: E6-IMPAR -- dia de batida IMPAR fora da certificacao: o oraculo dia_batida_impar -> continue, e 473 dias ficam sem julgame
-
-  Pushed to main, searched for 3 patterns, listed 1 directory, ran 13 shell commands
-
-❯ aval Ronald: BUG-HE-INTRA-DOBRADA aprovado pelo DIFF publicado 11:2x (208 colabs para baixo, 0 para cima, so HE50/HE100, -430,71 h, 48 colabs / -30,73 h no lote 1). Deploy da
-  cura, recalcular a 09, re-medir a porta (os dois contadores novos = 0), publicar o extrato de rubricas dos 16 da amostra e gerar o lote 1 com hash novo, parado no meu ! de
-  emissao. Segue a fila; PAREI so em lei ou ! !
-
-  Ran 2 shell commands
-
-● Background command "Medir o que o apply vai escrever, pela porta real" completed (exit code 0)
-
-  Ran 3 shell commands
-
-● Background command "Medir o isolado em 12 campos" completed (exit code 0)
-
-  Ran 1 shell command
-
-❯ aval Ronald: UI-GRADE-CALENDARIO (logo depois do lote 1 gerado, antes da S1; so CSS/template, sem logica, nenhuma lei nova): na grade do calendario (admin e perfil do colab --
   mesmo partial), celula de dia com LARGURA e ALTURA FIXAS iguais para os 7 dias, grade inteira cabendo na largura do painel sem corte a direita nem rolagem horizontal; textos
   longos (atestado, folga compensatoria, chips de extra) quebram em ate 2 linhas com reticencias e title com o texto inteiro; nada muda de cor nem de conteudo. Selo de front nas
   DUAS cascas (grafo de includes) + smoke meu de clique antes do push. Segue a fila; PAREI so em lei ou !
 
-  Esperar a regua da S1 · 6m 41s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (6m 39s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-· Determining… (6h 8m 12s · ↓ 335.9k tokens)
+❯ aval Ronald: ordem -- o PORTAO DA 09 vem antes da S1: deploy da cura HE/intra -> recalcular 09 -> porta (contadores novos = 0) -> extrato dos 16 -> lote 1 com hash novo parado
+  no meu ! de emissao. A S1 so depois. E4-CALENDARIO: MANTER (nao reverter; ele e absorvido pelo DiaPago na S3b). Segue a fila; PAREI so em lei ou !
+
+  Read 1 file, ran 2 shell commands
+
+● Update(config/crons.py)
+  ⎿  Added 9 lines
+      440          'encher log de verde. As duas metades existiam soltas (`pdf_x_espelho_divergentes` e '
+      441          '`cartao_x_txt_divergentes`) e ninguem as rodava juntas -- este comando e a UMA pergunta com UMA '
+      442          'resposta que a porta do export precisa.',
+      443 +    # BACKFILL DE OBRA, e obra nao vira rotina (28/09, O-DIA-PAGO S1): `lavrar_dias_pagos` existe para
+      444 +    # medir e conferir o universo de uma competencia durante a construcao do `DiaPago`. Ele roda a porta
+      445 +    # do fechamento em modo SO LEITURA e nao escreve `FechamentoMensal` -- quem lavra de verdade e o
+      446 +    # proprio recalculo, no ato. Virar cron seria transformar ferramenta de obra em rotina permanente,
+      447 +    # que e como a casa acumula comando que ninguem le.
+      448 +    'lavrar_dias_pagos':
+      449 +        'BACKFILL/CONFERENCIA da obra O-DIA-PAGO (28/09): le a competencia pela porta do fechamento em modo '
+      450 +        'somente_leitura (nao escreve FechamentoMensal) e reporta quantas linhas de DiaPago existem na versao '
+      451 +        'pedida. Roda por ATO, durante a obra; a lavratura de producao acontece dentro do recalculo que grava.',
+      452      # CERTIFICADOR, e certificador nao se agenda (28/09, item 7): `e6_oraculo` e a calculadora
+      453      # INDEPENDENTE que diz se o espelho mente -- ela le batida crua, nao chama motor, pareador nem
+      454      # celula, e por isso NAO pode virar rotina de cron: cron que roda o certificador todo dia produz
+
+● Reading docs/BACKLOG.md
+  ⎿  docs/BACKLOG.md
+
+· Determining… (6h 13m 12s · ↓ 342.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
