@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 20:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **518**.
+**Medido em 28/09/2026 20:23:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **517**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -527,4 +527,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:34:03 | Bash | Selo contra arquivo nascido de mount | `cd /home/ronald/saas-hasner && cat > bin/tests/test_sem_arquivo_de_mount.sh <<'SH' #!/usr/bin/env bash # ARQUIVO NASCIDO DE MOUNT NAO ENTRA NA ARVORE (achado 28/09 08:1x -- a SEGUNDA vez, e desta vez chegou ao git). # # O QUE ACONTECE: quando eu meço uma cura em container irmao e monto o arquivo da copia por cima de um caminho # que AINDA NAO EXISTE (`-v copia.py:/app/.../novo.py:ro`), o docker CR ...` |
 | 08:33:30 | Bash | Ver o estado do _dbg.py | `cd /home/ronald/saas-hasner && ls -la app/folha/tests/_dbg.py 2>/dev/null; git ls-files app/folha/tests/_dbg.py; echo "rastreado acima (vazio = nao rastreado)"; git log --oneline -1 -- app/folha/tests/_dbg.py` |
 | 08:23:36 | Bash | Deploy e re-lavrar a porta com o universo do lote 1 | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="08:0x -- sombra de HOJE REFEITA diverge=0 erros=0; o --bloco nao cabe antes do export. CADASTRO-ZERO e um PORTAO de retencao (ninguem entra a mais, 4 saem) + o portao do TXT por carimbo; regua 8.548 OK" bin/deploy.sh --sem-migrate 2>&1 \| tail -3; echo "=== porta RE-LAVRADA com o universo do LOTE 1 ==="; docker exec saas_core python manage.py tenan ...` |
-| 08:21:26 | Bash | Commitar o cadastro_zero e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -F - <<'MSG' CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201 LEI-AKITA: origem=folha/export.py::classificar_export (nao havia motivo para "o mes nao existe no  ...` |

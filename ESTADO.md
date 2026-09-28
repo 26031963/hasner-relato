@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 20:18:01.**
+**Medido em 28/09/2026 20:23:31.**
 
 | | |
 |---|---|
@@ -112,14 +112,14 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Medir a linha intra por colab" completed (exit code 0)
 
-● Commitar por path a fila e empurrar · 1m 28s
+● Commitar por path a fila e empurrar · 6m 57s
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_fila.txt <<'EOF'
      VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
      1. O APPLY DA JANELA SAIU SEM O ! SOBRE O DIFF NOVO, e ele esta certo: o ! de 18:2x era
-     sobre o DIFF de 18:4x… (1m 26s)
+     sobre o DIFF de 18:4x… (6m 56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Orchestrating… (1h 21m 3s · ↓ 75.4k tokens)
+✢ Orchestrating… (1h 26m 33s · ↓ 75.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
