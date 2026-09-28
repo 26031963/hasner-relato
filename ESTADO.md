@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:44:38.**
+**Medido em 28/09/2026 10:50:01.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
+ M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_he_intra_dobrada.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -88,9 +89,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Censo do BUG-HE-INTRA-DOBRADA na frota" completed (exit code 0)
-
   Ran 11 shell commands
 
 ❯ aval Ronald: O-DIA-PAGO (lei nova, corte meu agora: "o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula" -- registrar em LEIS e
@@ -114,17 +112,20 @@ M  app/docs/PROMPTS.md
   absorvidos pelo O-DIA-PAGO: parar a edicao de app/colaboradores/services/calendario.py (se for isso), guardar o diff em /tmp com trilha, voltar esse arquivo ao HEAD (L-005).
   Segue a fila; PAREI so em lei ou !
 
-  Traceback do selo
-  ⎿  $ cd /home/ronald/saas-hasner && source ~/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null; \
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
-     saas-hasner-core:latest…
+● Ver o previsto no dia do espelho
+  ⎿  $ sed -n '535,550p' ponto/services/espelho.py
 
-✽ Determining… (4h 42m 5s · ↓ 224.9k tokens)
+✢ Determining… (4h 47m 29s · ↓ 236.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: amostra do admin da folha para o portao da 09 = col253, col134, col30, col125, col843, col207, col369, col87, col820, col865, col382, col81, col76, col610, col904,
+  col72 (escolha medida no gravado, 28/09 10:45). Extrato de rubricas por colab da 09 DEPOIS da cura HE/intra e do recalculo, lido da mesma fonte do TXT, publicado no RELATO
+  (ids, sem nome). Medido por fora: HE e intra no mesmo mes em 225 colabs, teto 494,73 h (12x36 240,96 · comercial 165,11 · turno partido 67,06 · sem vinculo 21,60) -- a cura
+  cobre TODOS os motores que indenizam, o DIFF tem que mostrar os dois maiores. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
