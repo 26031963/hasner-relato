@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:10:45.**
+**Medido em 27/09/2026 21:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
+| `HEAD` local | `3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,17 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
 912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
 bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
 f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
 0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
-6d3e54b0 [O96] a pausa que a ATA marcou com `X` voltou a ser PAUSA -- regressao minha, de hoje, no gravado
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
  M app/ponto/turnos.py
 ?? esteira.pausada
 ```
@@ -84,30 +83,6 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  caros são os mais perto, não os mais longe. A forma tem nome único: o marco hf recebe a batida gravada E, e o turno seguinte deixa de existir. Fica registrado sem fazer: a
-  folha vê mais que a tela (36 × 33) porque o motor não tem a guarda das duas pontas que o pareador tem.
-
-  O hook liberou o encerramento porque o RELATO declara PAREI: — e a trava é nomeada e real: a decisão sobre a regra de paridade do oráculo. A fila segue em R3 → R4 → R5 → ímpar →
-  E5.
-
-✻ Baked for 55m 58s · done 9:03 PM · 1 shell still running
-
-● Background command "Empurrar e subir a R2" completed (exit code 0)
-
-  Read 1 file
-
-● Push (f029d738..912ab728) e deploy OK. Smoke e sigo para R3:
-
-  Ran 1 shell command
-
-● R3 está inteira, e o bug é meu: a mesma batida 06:30 é reivindicada por duas células — como saída de 07/09 e como entrada de 08/09 — e o meu out.update(_reiv) deixa o dia
-  posterior sobrescrever o anterior. Daí os 900 min de puro descanso. Curo com a regra restritiva: célula que reivindica batida já reivindicada não descreve o seu dia.
-
-  Ran 1 shell command
-
-● R3 cura os quatro dias do col146 exatamente (777≈778, 540=540, 787=787, 540=540), com R2 intacta e os oito controles idênticos. Selo na mesma família e suíte:
-
-  Ran 1 shell command
 
 ● 41 verdes. Suíte e a PROVA da R3 com as quatro condições:
 
@@ -115,10 +90,34 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 
 ● R3 não acrescenta divergência nova — o bloqueio segue sendo o mesmo único (col843 25/08, o artefato de paridade do oráculo), e os dias curados sobem de 39 para 43. Commito:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-· Zesting… (7m 42s · ↓ 10.4k tokens)
-                                                                                                                                           ✔ Update installed · Restart to update
+❯ aval Ronald: (1) col843 25/08 NAO e artefato ate provar pelas leis: julgar o dia contra L-085 (jornada = dia de INICIO) e contra o corte do dia impar (EM ABERTO, nunca numero).
+  Se o espelho erra -> e defeito do espelho, entra na fatia IMPAR/L-085 e a R2 aplica com o col843 separado. Se o espelho acerta pelas leis -> corrigir a chave do oraculo para
+  dia de INICIO (L-085, lei existente, nao regra nova) e rodar (d) de novo. Proibido afrouxar a paridade do oraculo para concordar com o sistema. (2) motor_calculo_v2.py:421
+  ganha a guarda de duas pontas da L-084 igual a ponto/turnos.py:961-965 (folha 36 x tela 33), RED + aval-de-criterio. Nenhuma lei nova. Segue a fila: R3 -> R4 -> R5 -> impar ->
+  E5 -> selo + E6 rodada 4 -> export para meu !. !
+
+● Você está certo — eu chamei de artefato sem julgar pelas leis. Julgo agora, contra a L-085 e contra o corte do dia ímpar:
+
+  Ran 1 shell command
+
+● O espelho está errado pelas duas leis, e a ata sabe a resposta certa. O template é 12x36 19:00→07:00, e a ata de 24/08 acende os quatro marcos: 19:00←18:56, 03:00←23:59,
+  04:00←03:00, 07:00←07:01 — uma noite só, 18:56→07:01. Mas o espelho monta dois turnos e põe 181 min em 25/08, que a célula diz ser FOLGA — violando a L-085 — e o segundo turno
+  começa numa batida gravada S. Vejo por que o papel não está sendo emitido:
+
+  Ran 1 shell command
+
+● O papel está certo (18:56 E · 22:59 X · 23:59 S · 03:00 E · 07:01 S) — o erro é do pareador depois dele. A pausa real é de 181 min contra o teto intra_max_s de 180: passa por um
+  minuto, o 23:59 S fecha o turno e a noite se parte. Mas a ata já julgou: aquelas duas batidas acenderam o hii e o hfi. Pela LEI-AKITA 2, testemunha lê e não recalcula:
+
+  Ran 1 shell command
+
+❯ aval Ronald: antes da proxima acao, gravar no topo do RELATO e em TICKETS o estado vivo: col843 24-25/08 = espelho viola L-085 (ata lavra 1 noite 18:56->07:01, espelho monta 2
+  turnos e poe 181 min em 25/08 FOLGA), o que ja foi medido do papel nao emitido, e a fila R4 -> R5 -> impar -> E5 -> selo + E6 r4. Depois segue a fila.
+
+· Zesting… (12m 42s · ↓ 22.5k tokens)
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

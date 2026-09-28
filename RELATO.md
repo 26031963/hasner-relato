@@ -53,6 +53,36 @@ prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
 
+# R3 CURADA: duas celulas nao reivindicam a mesma batida (28/09 ~01:0x)
+
+PROVA: `realizado_do_dia` em prod contra o oraculo, nos quatro dias do col146 --
+**07/09 0 -> 777 min** (oraculo 778) · **08/09 900 -> 540** (oraculo **540, exato**) ·
+**13/09 0 -> 787** (**exato**) · **14/09 893 -> 540** (**exato**). R2 intacta (col736 15/09 = 447) e os
+oito controles identicos. Selo `DuasCelulasNaoReivindicamAMesmaBatidaTest` (5 casos), na familia do
+O68b-PAPEL. 41 testes da familia, OK.
+
+**E o bug era MEU**: `out.update(_reiv)` deixava o dia POSTERIOR sobrescrever o papel que o anterior ja tinha
+dado. Numa noite que cruza a meia-noite a SAIDA pertence aos dois dias de calendario -- a celula de 07/09
+acende `.I1 E <- 17:33` e `.I2 S <- 06:30`, e a de 08/09 acende `.I1 E <- 06:30` e `.I2 S <- 21:30`. **A mesma
+batida das 06:30 e saida para uma e entrada para a outra**, o dia de cima vinha depois e vencia, e o espelho
+montava um turno `06:30 -> 21:30` de **900 min de puro DESCANSO** enquanto a noite real ficava com **0**.
+
+Na forma POSICIONAL a ata nao tem arbitro: o `tipo` dela vem da POSICAO no dia de calendario
+(`escala/utils.py:962`), nao de um marco. Entao a primeira reivindicacao fica e a colidente **nao descreve o
+seu dia** -- ele cai inteiro e o pareador volta ao `tipo` gravado, como em qualquer dia sem ata. Nao ha
+criterio novo escolhendo entre as duas: a primeira e a que tem a outra ponta corroborada pelo gravado
+(`17:33 E`).
+
+DIFF acumulada (R2 + R3), em ENSAIO na sombra: `turnos_abertos` **620 -> 446 (-174**, 74 colabs),
+`horas_trabalhadas` **+1.066,64 h** (82), `inconsistencias` **-260** (92), todo campo fora do item em
+**+0,00**, TXT **0/0**, 07 e 08 **0 divergencias**, APLICADOS 200.
+PROVA: `ENSAIO revertido (nada gravado)` no carimbo do comando -- o gravado de prod segue em 71.077,02 h e
+473 turnos abertos, do reapply da O96. **Nada da R2 nem da R3 foi aplicado.**
+
+**A condicao (d) segue com a MESMA e unica divergencia nova** -- col843 25/08, o artefato de paridade do
+oraculo -- e a R3 nao acrescentou nenhuma: os dias CURADOS subiram de 39 para **43**. O bloqueio do apply nao
+cresceu com as curas; ele e' um so, e e do instrumento.
+
 # R2 CURADA E SELADA, apply RETIDO pela condicao (d) -- e o censo do matcher fecha a R1 (28/09 ~00:4x)
 
 ## R2: a pausa pode ter UMA perna acesa
