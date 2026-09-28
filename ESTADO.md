@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:05:45.**
+**Medido em 28/09/2026 18:10:45.**
 
 | | |
 |---|---|
@@ -32,6 +32,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+M  app/config/crons.py
+M  app/ponto/management/commands/diff_janela_he.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,12 +86,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Registrada e em voo: O-JANELA-HE parte A (REGRA), com as partes de tela/aba/portão atrás da S3 e prazo antes do export da 10.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
-
-  Pushed to main, ran 1 shell command
 
 ● Estado dos itens em dia e empurrado (8e8420e5).
 
@@ -112,11 +108,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Ver as falhas do pre-push · 6m 56s
-  ⎿  $ cd /home/ronald/saas-hasner && ls -t logs/pre-push*.log /tmp/pre-push*.log 2>/dev/null | head -2; git push 2>&1 | grep -E '^(FAIL|ERROR):|AssertionError' | head -6 (6m 54s)
+● Limpar e rodar a regua · 2m 49s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+     import io, py_compile
+     P='app/ponto/management/commands/diff_janela_he.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace(' por_fam = collections.Counter()\n','')
+     io.open(P,'w',encoding='utf-8').write(t)
+     py_compile.compile(P, doraise=True); print('vari… (2m 48s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (1h 16m 30s · ↓ 66.6k tokens)
+· Unfurling… (1h 21m 30s · ↓ 70.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
