@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:04:33.**
+**Medido em 28/09/2026 07:10:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu` |
-| `origin/main` | `65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,18 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## `git status --short`
 
 ```
+M  app/docs/BACKLOG.md
+UU app/docs/RELATO.md
+UU app/docs/TICKETS.md
+M  app/escala/models.py
+M  app/escala/regua_defesa.py
+M  app/ponto/services/bordas_realizado.py
+M  app/ponto/services/espelho.py
+A  app/ponto/tests/test_r4_celula_sem_marcos.py
+M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
+M  app/ponto/turnos.py
+M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
+M  app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,6 +96,7 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -105,18 +118,17 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Abrir a linha do O1 e empurrar · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/docs/TICKETS.md'
-     s=io.open(p,encoding='utf-8').read()
-     anc='| O81 | ponto/services/espelho (grade) |'
-     i=s.index(anc)
-     nova=('| O1 | folha/porta do export | o TXT podia ser gerado sem NENHUMA prova de que tela, PDF, fechamento e '
-     'TXT… (4s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Pushed to main, ran 24 shell commands
 
-✢ Determining… (1h 2m 0s · ↓ 27.4k tokens)
+❯ aval Ronald: lei R4 = caminho (c): cura que move dinheiro faz deploy sem ! quando DIFF de frota publicado ANTES, zero colab para baixo, E6 nao piora, 07/08 = 0 (L-092); fora da
+  faixa = (a). Registrar em LEIS.md (lei nova, corte meu agora). R4 entra ja por (c): revert do revert, regua, deploy, porta re-lavrada hoje. EXPORT 09 LOTE 1 = universo da
+  porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
+  final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
+
+● Reverter o revert da R4
+  ⎿  $ cd /home/ronald/saas-hasner && git log --oneline -1 --format='%h %s' 0dab512d && git revert --no-commit 0dab512d 2>&1 | tail -3; git status --short | head -12
+
+✢ Determining… (1h 7m 29s · ↓ 29.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
