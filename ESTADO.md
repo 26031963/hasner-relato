@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:32:43.**
+**Medido em 28/09/2026 00:38:01.**
 
 | | |
 |---|---|
@@ -90,9 +90,6 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O selo me corrigiu três vezes, e a terceira era um bug que ia ao ar: escrevi o comentário do bloco como {# ... #} de várias linhas. O Django só trata {# #} de UMA linha — o
-  texto inteiro ia para a página, em todo dia de todo espelho, levando a frase "EM ABERTO" com ele. Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como aberto.
-  Sem o par que morde, subia.
 
   PROVA em prod (saas_ui, col349 14/09): aberto=True falta=[{'tipo':'S','hora':'15:20'}] h=7.0, e as duas raízes (base.html e base_app.html) emitem a pílula. O smoke no saas_core
   morre com NoReverseMatch — o core roda o urlconf enxuto; smoke de tela se faz na casca da tela. Régua 8.507 OK.
@@ -118,12 +115,15 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
   as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
   topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
 
-● Medir topo x soma ANTES do recalculo
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/e4topo.py <<'PY'
-     # E4-topo-igual-coluna: topo do cartao (GRAVADO, pela folha) x SOMA das linhas (motor ao vivo). SO LEITURA.
-     from django_tenants.utils imp…
+● Bucketizar os divergentes do topo x soma
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
+     d=json.load(open(S+'e4topo_antes.json'))
+     p=d['por_colab']
+     div=[(k,v) for k,v in p.items() if 'ERRO' not in v and abs(v['topo']-v['soma…
 
-· Hashing… (1m 24s · ↓ 3.7k tokens)
+✢ Hashing… (6m 42s · ↓ 8.2k tokens · deep in thought)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
