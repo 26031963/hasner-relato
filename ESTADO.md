@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 06:17:01.**
+**Medido em 28/09/2026 06:22:10.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
  M app/folha/views.py
  M app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? app/folha/porta_export.py
+?? app/folha/tests/test_porta_do_export.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -88,6 +89,9 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
           }
         }
       },
@@ -114,14 +118,11 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Ligar a porta ao TXT e rodar o comando · 6m 0s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && python3 - <<'PYEOF'
-     import io
-     # 1. o comando passa a USAR a porta (uma implementacao so) e a LAVRAR
-     p='app/relatorios/management/commands/selo_leitores_no_mesmo_nu… (5m 58s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Provar o RED da ligacao do TXT com a porta
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:app/folha/views.py >
+     $S/views_head.py && git show HEAD:app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py > $S/cmd_head.py && source…
 
-✢ Determining… (14m 29s · ↓ 9.8k tokens)
+✻ Determining… (19m 37s · ↓ 14.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
