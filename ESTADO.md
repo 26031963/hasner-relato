@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:17:31.**
+**Medido em 27/09/2026 23:23:01.**
 
 | | |
 |---|---|
@@ -92,7 +92,6 @@ A  app/ponto/tests/test_teto_da_absorcao.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Background command "Commitar e rodar a regua" completed (exit code 0)
 
   Read 1 file
@@ -120,11 +119,12 @@ A  app/ponto/tests/test_teto_da_absorcao.py
   disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
   listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
 
-● DRY do apply da R2b · 58s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 2>&1 | tail -40 (58s)
+● Ver o veredito do DRY cirurgico · 1m 9s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && FORA=$(cat $S/fora.txt) && docker exec
+     saas_core python manage.py tenant_command aplicar_09_corte_b --schema=juliani --mes 9 --ano 2026 --fora "$FORA" 2>&1 | grep … (1m 9s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zesting… (2h 14m 28s · ↓ 226.0k tokens)
+✢ Zesting… (2h 19m 58s · ↓ 228.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
