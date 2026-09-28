@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:40:01.**
+**Medido em 28/09/2026 05:45:31.**
 
 | | |
 |---|---|
@@ -116,12 +116,12 @@ M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Regua do O81 · 2m 17s
+● Regua do O81 · 7m 47s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-     app/ponto/tests/test_o81_celula_da_competencia.py && bash bin/regua.sh 2>&1 | tail -4 (2m 15s)
+     app/ponto/tests/test_o81_celula_da_competencia.py && bash bin/regua.sh 2>&1 | tail -4 (7m 45s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Flibbertigibbeting… (17m 29s · ↓ 21.6k tokens)
+✢ Flibbertigibbeting… (22m 59s · ↓ 21.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
