@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:18:41.**
+**Medido em 27/09/2026 22:24:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x` |
+| `HEAD` local | `7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -22,19 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA
 75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
 1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
 3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
 912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
-bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/TICKETS.md
-M  app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
-M  app/ponto/turnos.py
+ M bin/regua.sh
+?? bin/tests/test_fonte_unica_antes_do_uso.sh
 ?? esteira.pausada
 ```
 
@@ -85,16 +84,6 @@ M  app/ponto/turnos.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Background command "Medir a cura (com tmpfs de logs)" completed (exit code 0)
-
-  Read 1 file, listed 1 directory, ran 23 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 5 shell commands
 
 ● Background command "Suite completa com a cura montada" completed (exit code 0)
 
@@ -115,14 +104,24 @@ M  app/ponto/turnos.py
 ❯ aval Ronald: reordenar por importancia: depois da R2b, IMPAR (pelo laudo: espelho.py:513-514 passa a ler RealizadoDoDia.aberto de turnos.py:393-394; classes B e C primeiro,
   depois F com "parcial provado" rotulado, depois D na autoridade) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. Push dos commits locais pela regua. Segue a fila.
 
-  Running 1 shell command…
+  Committed 7b8329a1, ran 3 shell commands
 
-✢ Zesting… (1h 15m 38s · ↓ 115.6k tokens)
+● Background command "Rodar a regua" completed (exit code 0)
+
+  Corrigir o falso positivo do selo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='bin/tests/test_fonte_unica_antes_do_uso.sh'
+     s=io.open(p,encoding='utf-8').read()
+     old=""" ln_src=$(grep -nE '^[[:space:]]*(source|\\.)[[:space:]].*recursos\\.sh' "$f" | head -1 | cut -d: -f1)"""
+     new=""" # O SOURCE NAO PRECISA ESTAR NO IN…
+
+✢ Zesting… (1h 20m 58s · ↓ 126.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
