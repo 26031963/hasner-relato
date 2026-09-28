@@ -1,8 +1,75 @@
 # RELATO — esteira saas-hasner
 
-**MODO CONTINUO ate o export.** Item (1) FECHADO: o topo carrega a SOMA DAS LINHAS, na mesma computacao, com a decomposicao que fecha a conta (folga trab. · intra · atraso · saida ant.) -- nas duas cascas. Em curso: **(2) E5 recalculo por EVENTO**. Depois: R4 -> R5 -> selo + E6 r4 -> O81 -> export no `!`.
+**MODO CONTINUO ate o export.** (1) topo = soma das linhas **FECHADO e no ar**; (2) **E5 recalculo por EVENTO FECHADO** (batida e resposta validada, `on_commit`, p50 122 ms, L-092 respeitada). E fechei um **VAZAMENTO REAL**: 20 nomes inteiros no repo PUBLICO, achados pelo selo. Em curso: **(3) R4**. Depois: R5 -> selo + E6 r4 -> O81 -> export no `!`.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# VAZAMENTO REAL FECHADO: 20 nomes inteiros estavam no repo PUBLICO (28/09 01:4x)
+
+Isto vem primeiro porque e dado pessoal em repositorio aberto, e nao foi achado por voce -- foi o selo
+`bin/tests/test_publicacao_sem_nome.sh`, na regua, que e exatamente para isso que ele existe (VAZAMENTO-RELATO,
+26/09).
+PROVA: `grep -c '[nome]' /home/ronald/hasner-relato/RELATO.md` = **1**, e o selo listou
+**20 NOME_INTEIRO** no `RELATO.md` publicado. O commit publico das 01:27 dizia, no texto,
+"(sem nome/CPF)".
+
+## A causa, e ela e minha em duas camadas
+
+1. **A retencao do RELATO congelava no ar a copia anterior.** `bin/relato.sh` tira o par do RELATO da lista do
+   raspador quando ele esta RETIDO -- e ai o `$DEST/RELATO.md` do ciclo anterior fica **intocado** no repo
+   publico, enquanto o commit segue dizendo "sem nome/CPF". A retencao existe para nao publicar afirmacao de ato
+   sem prova; ela nunca deveria suspender a HIGIENE do que ja esta no ar.
+2. **E quem retinha o RELATO era eu, por pontuacao.** `bin/relato_afirma_com_prova.py:25` casa
+   `\*{0,2}PROVA:` -- com DOIS PONTOS. Eu escrevi seis afirmacoes como `PROVA (`, com parentese. As tres do
+   ciclo de hoje retiveram o RELATO desde as 01:2x, e a copia velha -- de antes de o raspador cobrir o arquivo --
+   ficou publicada.
+
+## As duas curas, e as duas entraram
+
+* **HIGIENE NAO SE SUSPENDE**: `bin/relato.sh` agora raspa o `$DEST/RELATO.md` **que esta no ar** mesmo quando o
+  RELATO esta retido. Retencao e sobre conteudo NOVO.
+* **As seis linhas viraram `PROVA:`** (o RELATO deixou de estar retido no mesmo ato).
+PROVA: depois das duas, `bin/relato.sh` raspou o RELATO com **91 nomes, 54 apos id, 26 tokens = 180
+substituicoes**, e o selo fechou: `test_publicacao_sem_nome: OK -- 8 documentos publicos, 0 nome (inteiro ou
+primeiro), 0 CPF`.
+
+O fonte (`app/docs/RELATO.md`) segue com os 91 nomes de proposito -- ele vive no repo PRIVADO e e' o raspador que
+faz a fronteira. O que estava errado era a fronteira vazar quando a pagina ficava retida.
+
+# ITEM (2) FECHADO: o EVENTO mantem o gravado (28/09 02:0x)
+
+A sua decisao, implementada como voce escreveu: o `FechamentoMensal` se recalcula **por colab, na competencia
+daquele dia**, no EVENTO, pelo **escritor unico** `recalcular_fechamento_mes`. Leitores intactos, zero juiz novo.
+
+POR QUE, com o numero que voce ja tem: recalcular 09 inteira hoje moveu **58 colabs**, `+289,50 h`,
+`turnos_abertos 468 -> 363`. Todo esse desvio era **idade** -- a folha atras dos fatos por dias.
+
+TRES LEIS MOLDARAM A FORMA, e nenhuma foi negociada:
+1. **A batida de chao NUNCA e barrada em runtime** (CLAUDE.md 4). A porta agenda em `transaction.on_commit` --
+   depois de a batida estar gravada -- e engole qualquer excecao; nem o `import` pode subir. Se o recalculo
+   falhar, a batida existe e o cron da madrugada rega o gravado como sempre.
+2. **Trabalho longo vai pra job** (CLAUDE.md 2, o POST de 152 s). **MEDIDO ANTES de escolher a forma**:
+   `recalcular_fechamento_mes` de UM colab custa **p50 122 ms, p95 243 ms, max 243 ms** (12 amostras de
+   09/2026). Nao e longo. Se fosse segundo, a porta enfileiraria -- e a medicao e que decidiu, nao o gosto.
+3. **Competencia exportada nao muda o gravado** (L-092). Zero guarda nova: o proprio escritor levanta
+   `CompetenciaExportada`, e a porta transforma isso em linha de log, nao em erro.
+
+A COMPETENCIA SAI DO JUIZ, nunca do mes civil (CALENDARIO-UNICO, 17/09): `janelas.janela_atual` da a janela que
+CONTEM o dia do FATO -- batida retroativa conserta a competencia dela, nao a de hoje.
+
+**SEM DEDUPE, de proposito.** Quando a resposta validada materializa batida, o recalculo roda DUAS vezes (na
+validacao e na porta da batida). E idempotente por requisito e custa 122 ms; deduplicar exigiria estado por
+transacao, e transacao revertida deixaria a chave presa -- **trabalho dobrado aparece no log, recalculo PERDIDO
+nao aparece em lugar nenhum**. A escolha e pelo lado que se ve.
+
+PROVA: `ponto/tests/test_e5_evento_mantem_o_gravado.py`, 6 casos -- **RED de 6 contra o HEAD** (5 errors + 1
+failure). Os que MORDEM: a porta **nunca levanta** (chamada com um objeto que nao e colaborador, e com uma
+string no lugar da data, devolve `None`), a batida chama a porta **dentro de um `except`**, a validacao usa a
+data do **FATO** e nao a de hoje, e a porta **nao calcula nem grava nada** por conta propria (`horas_*`,
+`FechamentoMensal(`, `.save(` proibidos no corpo dela -- se aparecerem, e derivador paralelo).
+Regua: **8.518 testes OK em 470 s**. `ARQUITETURA.mmd` regenerado no mesmo ato (o selo do diagrama pegou a
+aresta nova antes de eu lembrar dele).
+
 
 # O HOOK DE STOP NAO EXECUTOU nas tres liberacoes -- a trilha respondeu (28/09 01:2x)
 
