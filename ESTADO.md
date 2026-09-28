@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:33:01.**
+**Medido em 28/09/2026 17:38:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
-| `origin/main` | `7288e90e TICKETS: rodape e placar (8592 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/colaboradores/models.py
+ M app/docs/BACKLOG.md
+ M app/ponto/motor_calculo_v2.py
+?? app/colaboradores/migrations/0052_empresa_janela_he_ativa_empresa_janela_he_desde_and_more.py
+?? app/escala/tests/test_janela_he_cadastro.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,39 +89,39 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  └───────────────┴───────┴────────┘
 
-  681 barrados por competência exportada (676 da 09, emitida às 16:5x) e 113 por não ter data. 125 colaboradores param de receber push sem dever nada na competência. Os números
-  batem com a sua medição das 16:5x — a diferença de um chamado é o tempo entre as duas leituras.
+● Estado dos itens em dia e empurrado (8e8420e5).
 
-  Os 113 sem data, para virar corte: disputa_supervisao 102 · disputa_supervisao_manual 8 · chamados 3. Todos são disputa — e faz sentido: disputa nasce de uma divergência, não de
-  um dia, e por isso data_do_chamado não tem chave declarada para ela. A pergunta que sobra é de desenho: a disputa deve ser cobrável em massa? Se sim, precisa declarar o dia em
-  jogo; se não, sai do verbo cobrar e vive pelo fio, onde já é tratada.
+  O hook cobrou BUG-HE-INTRA-DOBRADA como item em pé, e estava certo: a linha do BACKLOG seguia "PARADA no !" embora o ciclo inteiro tenha fechado. Estado velho no BACKLOG é o
+  mesmo defeito do PAREI que não se apaga — ao fechar item, o estado fecha no mesmo ato.
 
-  A regra ganhou casa (chamados/services/cobranca_folha.py::muda_a_folha) e não ficou na view: a prévia e o envio leem a mesma resposta, e regra dentro de closure não tem selo que
-  a chame. Nenhum juiz nasce ali — dia por data_do_chamado, competência por janela_atual(...)[1], exportação por empresas_exportadas_no_escopo.
+  Fechados agora, com a prova na linha:
 
-  O caso que morde de verdade: empresa com corte 26, onde o dia 24/09 cai na 09 e não na 10 — se o filtro lesse 21, passaria. E três tentativas de fixture antes de o selo valer:
-  só passou quando o modulo_origem declara a chave de data; sem isso os três casos caíam todos no ramo "sem data" — verde por motivo errado.
+  - BUG-HE-INTRA-DOBRADA — o ! veio pelo caminho (B), o apply cirúrgico gravou os 144 colabs (horas_extras −346,83 h, nenhum campo fora do alvo, antes/depois em logs/), a porta
+    re-medida deu SELO VERDE com minuto_em_duas_rubricas=0, e o lote 1 da 09 foi emitido às 16:5x com os hashes conferidos. col125: HE50 1,98 → 0,00 com intra 2,00 intacta. Ficou
+    registrado na própria linha que por ~4 h o apply esteve parado na L-082(b), porque o recálculo inteiro moveria 10 campos fora do !.
+  - COBRAR-SO-O-QUE-MUDA-A-FOLHA — 1.116 chamados em 261 colabs viraram 322 em 136; 681 barrados por competência exportada, 113 sem data (todos disputa), 125 colabs param de
+    receber push por nada.
+  - O-DIA-PAGO — S1 e S2 fechadas (8.809 dias lavrados, contadores na porta, "não lavrado" em linha própria) e S5a fechada (calculador + DIFF por rubrica); S5b em voo com as duas
+    curas medidas e os três números do pareamento escritos; S3/S4 depois.
 
-  Antes, na mesma leva
-
-  S5b guardou os três números do pareamento pela autoridade, e um deles é um erro meu que vale escrito: por sequência o DIFF de trabalhadas é +765,32 h; passando os limites do
-  turno deu +5.563,83 h (o envelope traz a pausa dentro); com os segmentos deu −2.676,48 h. A subtração da intra do motor não é simétrica à soma dos segmentos — isso pede um caso
-  medido ponta a ponta, não outra rodada de frota. O comando guarda as duas formas (--pares-da-autoridade), com o padrão na sequência, para quem continuar começar do número.
-
-  Registrada e em voo: O-JANELA-HE parte A (REGRA), com as partes de tela/aba/portão atrás da S3 e prazo antes do export da 10.
+  Em pé na fila 1, sem trava: O-JANELA-HE parte A (REGRA) — cadastro "Janela de HE" por empresa e a regra no sítio da TOLERANCIA_HE_MIN_DIA, com ponto/calculador/regras.py
+  importando a mesma regra, valendo da competência 10 e com o DIFF na sombra para o seu !.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
+  ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Acertar o placar e empurrar · 57s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
-     git commit -q -m "TICKETS: placar do topo em dia (ultimo push 7288e90e)
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (56s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Alimentar a regra e ligar a lista
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/ponto/motor_calculo_v2.py'
+     t=io.open(P,encoding='utf-8').read()
+     # 1) alimentacao no ponto comum de calcular_mes
+     v = """ self._colab_do_calculo = colaborador_id
+     # L-084: a lista nasce vazia a ca…
 
-✢ Unfurling… (43m 46s · ↓ 37.8k tokens)
+✢ Unfurling… (49m 16s · ↓ 53.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
