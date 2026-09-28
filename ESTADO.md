@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:35:55.**
+**Medido em 28/09/2026 01:37:14.**
 
 | | |
 |---|---|
@@ -33,11 +33,11 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 
 ```
 M  app/chamados/services/validacao.py
- M app/docs/RELATO.md
+M  app/docs/RELATO.md
 M  app/ponto/registro_batida.py
 M  app/ponto/services/fechamento.py
 A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
- M bin/relato.sh
+M  bin/relato.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -90,6 +90,10 @@ A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
+
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
   −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
@@ -114,16 +118,12 @@ A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-  Curar a higiene do publicado e republicar · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='bin/relato.sh'
-     s=io.open(p,encoding='utf-8').read()
-     old = """# --- 3. raspa e copia
-     python3 "$RAIZ/bin/raspar_publico.py" "$TMP/nomes.json" "$DEST" \\"""
-     new = """# RELATO RETIDO NAO PODE CONGELAR NO AR UMA PAGINA QUE VAZA (achado 28/09…
+  Rodar a regua com o item (2) e a cura do vazamento · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && git add bin/relato.sh app/docs/RELATO.md && git status --short | head -8 && bash bin/regua.sh 2>&1 | tail -5 (4s · 9 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (29m 57s · ↓ 41.7k tokens)
+* Metamorphosing… (31m 17s · ↓ 42.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
