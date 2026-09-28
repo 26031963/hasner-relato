@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:42:01.**
+**Medido em 28/09/2026 18:47:31.**
 
 | | |
 |---|---|
@@ -86,6 +86,10 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+    registrado na própria linha que por ~4 h o apply esteve parado na L-082(b), porque o recálculo inteiro moveria 10 campos fora do !.
+  - COBRAR-SO-O-QUE-MUDA-A-FOLHA — 1.116 chamados em 261 colabs viraram 322 em 136; 681 barrados por competência exportada, 113 sem data (todos disputa), 125 colabs param de
+    receber push por nada.
+  - O-DIA-PAGO — S1 e S2 fechadas (8.809 dias lavrados, contadores na porta, "não lavrado" em linha própria) e S5a fechada (calculador + DIFF por rubrica); S5b em voo com as duas
     curas medidas e os três números do pareamento escritos; S3/S4 depois.
 
   Em pé na fila 1, sem trava: O-JANELA-HE parte A (REGRA) — cadastro "Janela de HE" por empresa e a regra no sítio da TOLERANCIA_HE_MIN_DIA, com ponto/calculador/regras.py
@@ -108,17 +112,13 @@ M  app/docs/RELATO.md
 
 ● Background command "DIFF da janela na competencia 10" completed (exit code 0)
 
-● Publicar o PAREI e rodar a regua
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     l=t.split('\n')
-     l=[x for x in l if not x.startswith('`PAREI:')]
-     l.insert(1, '\n`PAREI: janela-de-HE-cria-desconto-de-pontualidade | espera Ronald` -- o …
+● Esperar a regua · 5m 15s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_par.log 2>/dev/null; do sleep 25; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|MUDOU' /… (5m 13s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (1h 52m 46s · ↓ 78.5k tokens)
+· Unfurling… (1h 58m 16s · ↓ 78.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
