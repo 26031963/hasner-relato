@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:13:31.**
+**Medido em 28/09/2026 14:19:01.**
 
 | | |
 |---|---|
@@ -124,13 +124,13 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
   chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
   competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
 
-● Esperar a regua · 2m 38s
+● Esperar a regua · 8m 8s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_anc2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-1… (2m 36s)
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-1… (8m 6s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Catapulting… (1h 10m 58s · ↓ 69.9k tokens)
+✢ Catapulting… (1h 16m 28s · ↓ 69.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
