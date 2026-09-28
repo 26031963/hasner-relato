@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 19:40:58.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.7 MB). Acoes na janela: **515**.
+**Medido em 28/09/2026 19:46:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.8 MB). Acoes na janela: **516**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:41:29 | Bash | Publicar e rodar a regua da UI | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=[x for x in t.split('\n') if not x.startswith('`PAREI:')] t='\n'.join(l) l=t.split('\n') l.insert(1, '\n`PAREI: smoke-da-UI-GRADE-CALENDARIO \| espera Ronald` -- a fatia esta pronta, selada e commitada, e ' '**nao empurrei**: fa ...` |
 | 19:40:31 | Bash | Rodar os dois selos da grade | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/colaboradores/tests/test_calendario_sete_colunas.py' t=io.open(P,encoding='utf-8').read() v = ''' """A doenca de volta na MESMA pagina. Sem este caso o de cima nao prova nada.""" html = self._pagina().replace('repeat(7,minmax(0,1fr))', 'repeat(7,1fr)')''' assert t.count(v)==1 n = ''' """A doenca de volta na MESMA pagina. Sem este  ...` |
 | 19:40:13 | Bash | Ler o caso que ficou vazio | `grep -n 'def test_MORDE_com_1fr' -A 30 colaboradores/tests/test_calendario_sete_colunas.py \| head -36` |
 | 19:39:38 | Bash | Selar a grade do calendario | `cd /home/ronald/saas-hasner && cat > app/colaboradores/tests/test_ui_grade_calendario.py <<'PYEOF' # -*- coding: utf-8 -*- """UI-GRADE-CALENDARIO (BO Ronald 28/09 12:4x): a grade cabe no painel, e o texto longo quebra em 2 linhas. O QUE O CORTE PEDE: celula de dia com **largura e altura FIXAS iguais** para os 7 dias, grade inteira dentro da largura do painel -- **sem corte a direita e sem rolagem  ...` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:40:58.**
+**Medido em 28/09/2026 19:46:01.**
 
 | | |
 |---|---|
@@ -32,12 +32,13 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/templates/colaboradores/partials/_calendario_grade.html
- M bin/hook_stop_fila1.py
-?? app/colaboradores/tests/test_ui_grade_calendario.py
+M  app/colaboradores/tests/test_calendario_sete_colunas.py
+A  app/colaboradores/tests/test_ui_grade_calendario.py
+M  app/docs/RELATO.md
+M  app/templates/colaboradores/partials/_calendario_grade.html
+M  bin/hook_stop_fila1.py
+A  bin/tests/test_hook_nao_cobra_congelado.sh
 ?? bin/keepalive.sh
-?? bin/tests/test_hook_nao_cobra_congelado.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -89,10 +90,6 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────────────────────┼────────────────────────┤
-  │ ponto/services/esmeril_espelho.py    │ idem                   │
-  └──────────────────────────────────────┴────────────────────────┘
-
   Os dois últimos saíram só na varredura por AST. É a razão de ser por AST: contar leitor de dinheiro por texto deixa leitor de fora, e leitor de fora não entra no placar da
   troca. (Foi também por texto que outro selo meu, nesta mesma esteira, mordeu três vezes o comentário que explicava a cura.)
 
@@ -113,15 +110,19 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
   ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
   exportada", e na
 
-● Rodar os dois selos da grade
+● Publicar e rodar a regua da UI · 4m 32s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io
-     P='app/colaboradores/tests/test_calendario_sete_colunas.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = ''' """A doenca de volta na MESMA pagina. Sem este caso o de cima nao prova nada."""
-     html = self._pagina().replace('repeat(7,minmax(0,1…
+     p='/home/ronald/saas-hasner/app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     l=[x for x in t.split('\n') if not x.startswith('`PAREI:')]
+     t='\n'.join(l)
+     l=t.split('\n')
+     l.insert(1, '\n`PAREI: smoke-da-UI-G… (4m 30s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Orchestrating… (44m 0s · ↓ 50.6k tokens)
+✢ Orchestrating… (49m 3s · ↓ 52.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

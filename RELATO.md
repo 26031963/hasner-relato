@@ -1,5 +1,9 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: smoke-da-UI-GRADE-CALENDARIO | espera Ronald` -- a fatia esta pronta, selada e commitada, e **nao empurrei**: fatia que toca template de calendario nao sobe sem o seu smoke de clique nas duas cascas (FRONT SEM SMOKE NAO SOBE, BUG 73). Basta abrir o calendario do admin e o do perfil de um colab e dizer se a grade cabe.
+
+PROVA: `colaboradores/tests/test_ui_grade_calendario.py` (6 casos) + `test_calendario_sete_colunas` (chromium em 1366) VERDES, e a regua no rodape do TICKETS. O template ja esta na arvore -- e ela e servida na hora --, entao a tela **ja mostra** o layout novo; se algo estiver errado, `git checkout` do arquivo volta em um comando.
+
 
 PROVA: `tenant_command diff_janela_he --mes 10` (ensaio, transacao desfeita): 298 comparados, 60 mudam; `trabalhadas -221,09` · `HE50 -9,80` · `HE100 -7,10` · `noturnas -7,80` · `intra -10,27` · **`antecipada +15,43`** · **`atraso +0,80`**.
 
@@ -25,6 +29,39 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# UI-GRADE-CALENDARIO: a celula do mes ganha ALTURA fixa, e o texto longo cabe em 2 linhas (28/09 20:0x)
+
+A largura das 7 colunas ja era igual desde a CALENDARIO-SEM-DOMINGO (25/09, `minmax(0,1fr)`). **O que faltava
+era a ALTURA**, que variava com o conteudo do dia -- e e o que fazia a grade "pular" e empurrar. Agora a celula
+do modo MES tem `height:132px` com `box-sizing:border-box` e `overflow:hidden`, e os **tres** textos longos
+(palavra do dia, rotulo da ausencia, chip de extra) deixam de ser cortados em UMA linha por `nowrap` e passam a
+quebrar em **ate duas**, com reticencias. O chip de badge, que nao tinha `title`, ganhou um -- com o texto em
+duas linhas, o tooltip e o unico lugar onde o rotulo inteiro aparece.
+
+**Nada de cor nem de conteudo mudou**, e ha caso de selo para isso: as quatro cores de status do dia seguem
+identicas e nao entrou nenhum `!important` (briga de CSS nao e caixa).
+
+**E O ARQUIVO E UM SO PARA AS DUAS CASCAS.** O selo prova pelo GRAFO DE INCLUDES em vez de renderizar duas telas
+com request, sessao e permissao: quem desenha calendario inclui `_calendario_grade.html`, nas duas arvores. A
+casa pagou duas vezes por selo de front que afirmava sobre UMA raiz (BUG 69 e o selo do BUG 73).
+
+## Um selo da casa ficou VAZIO com esta cura, e ele mesmo denunciou
+
+`test_MORDE_com_1fr_de_volta_a_setima_coluna_sai` (25/09) prova a cura do `minmax` **reproduzindo a doenca**:
+troca para `1fr` e cobra que alguma largura aperte. Com a altura fixa e o clamp, **o conteudo nao empurra mais a
+coluna** -- e o caso passou a nao morder. Foi o proprio assert que acusou, com a mensagem que ele carrega: *"ou
+a cura nao era esta... o selo acima esta vazio -- ver SELO ANTI-VACUIDADE"*.
+
+Nao e regressao, e o contrario: a grade ficou robusta. A doenca precisa de DUAS condicoes -- `1fr` **e** conteudo
+solto --, e o caso agora remove as duas juntas para seguir mordendo. **Selo que fica verde por ausencia de sinal
+nao prende nada**, e este e o quinto desta esteira que exigiu essa conversa.
+
+## O que espera voce
+
+O **smoke de clique**, nas duas cascas: o calendario do admin e o do perfil de um colaborador. Fatia que toca
+template nao sobe sem ele (BUG 73 -- o overlay do modal ficou visivel e vazio em toda pagina com 5.142 testes
+verdes, e quem descobriu foi um vigilante que nao conseguiu bater a saida). **Commitado e nao empurrado.**
 
 # O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e a lista so encolhe (28/09 19:4x)
 
