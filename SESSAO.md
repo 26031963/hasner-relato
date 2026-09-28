@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 20:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **502**.
+**Medido em 28/09/2026 20:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **501**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -511,4 +511,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:58:12 | Bash | Ver convencao de selo da familia | `sed -n '1,40p' ponto/tests/test_impar_em_aberto.py && echo "=== ruff check do oraculo ===" && ls ponto/tests/ \| grep -i oracul` |
 | 08:57:45 | Read |  | `/home/ronald/saas-hasner/app/ponto/management/commands/e6_oraculo.py` |
 | 08:57:45 | Bash | Estado do git e da suite em voo | `cd /home/ronald/saas-hasner && git status --short && echo "--- bg ---" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b7e4vhaq4.output 2>/dev/null \| tail -20 && echo "--- stamp ---" && cat .regua_stamp 2>/dev/null \| head -5` |
-| 08:53:52 | Bash | Registrar o BO do col354 na fila | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/PROMPTS.md' t=io.open(p,encoding='utf-8').read() anc='\n\n## Contagem' nova=('\| BO-col354-ORFAO14H \| 28/09 ~08:5x \| disputa #5527: em 23/09 faltou a volta do intervalo e o app gravou ' 'TIPOS INVERTIDOS em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). O emissor ' '`orfao_1 ...` |
