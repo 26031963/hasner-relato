@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:52:31.**
+**Medido em 28/09/2026 07:58:01.**
 
 | | |
 |---|---|
@@ -115,11 +115,11 @@ M  app/folha/views.py
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-  Regua do cadastro_zero · 2m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/folha && bash bin/regua.sh 2>&1 | tail -4 (2m 47s)
+● Regua do cadastro_zero · 8m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/folha && bash bin/regua.sh 2>&1 | tail -4 (8m 17s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (1h 49m 58s · ↓ 48.1k tokens)
+✢ Determining… (1h 55m 29s · ↓ 48.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
