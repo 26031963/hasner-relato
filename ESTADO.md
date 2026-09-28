@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:175 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado nas duas cascas EM PROD
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:22:01.**
+**Medido em 28/09/2026 00:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor` |
-| `origin/main` | `872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor` |
-| commits a subir (`ahead`) | **0** |
+| `HEAD` local | `67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`` |
+| `origin/main` | `b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`
+b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar
 872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor
 c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou
 3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato
-ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -- 1.750 min e 78 h viram 0 e 418
-1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa
 ```
 
 ## `git status --short`
 
 ```
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_impar_tela.py
-M  app/templates/ponto/espelho.html
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -93,10 +90,6 @@ M  app/templates/ponto/espelho.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  reverter. Os escritores de dinheiro rodam 06:26–07:37, a 9 h da janela.
-
-  R2b — curada pela sua lei (ata com hii E hfi acesos = o par É a pausa, teto não se aplica), selada, régua verde, no ar e aplicada no gravado com o seu !: 9 colabs,
-  horas_folga_trabalhada −17,31 h em 3 (dentro dos −25,85 em 5 autorizados; a casa separou 4 pela família 100% e 1 pela CONDICAO_SAIDA_REAL). ENTRAM/SAEM do TXT = 0, 07 e 08 = 0,
   família 100% e banco intocados. Smoke em prod: col843 24/08 = 544 trabalhou, 25/08 = folga sem hora. Condição (d): 0 divergência nova no oráculo e 31 curadas (85,0% → 90,0%).
 
   TETO — os seus dois casos eram um mecanismo, não dois (corrigi o que publiquei): _dist_marco mede hora do dia e engolia batida de D+1 como pausa de um turno de D, silenciando o
@@ -120,12 +113,16 @@ M  app/templates/ponto/espelho.html
 
 ❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-● Regua da IMPAR fatia 2 · 7m 15s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/templates/ponto/espelho.html app/ponto/tests/test_impar_tela.py && bash bin/regua.sh 2>&1 | tail -6
-     (7m 14s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Registrar o smoke e ver o proximo da fila
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='app/docs/RELATO.md'
+     s=io.open(p,encoding='utf-8').read()
+     anc='## O SELO ME CORRIGIU TRES VEZES, e a terceira era um bug que ia para o ar'
+     add = """## NO AR, e provado nas duas cascas EM PROD
+     PROVA (deploy 00:2x; render em `saas_ui`, que…
 
-· Zigzagging… (39m 4s · ↓ 41.8k tokens)
+✢ Zigzagging… (44m 34s · ↓ 48.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
