@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:46:57.**
+**Medido em 28/09/2026 13:52:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)` |
-| `origin/main` | `6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## `git status --short`
 
 ```
+ M app/escala/signals.py
+?? app/escala/tests/test_ancora_regenera_celulas.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,8 +93,6 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
 ❯ aval Ronald: AVISO-ENTRADA-ANTECIPADA (so informativo; nenhuma lei nova; nao retrata, nao cria chamado, nao muda calculo). Fila 1 logo depois do lote 1 gerado. FONTE:
   ponto/services/aviso_da_batida.py::aviso_do_dia (campo aviso ja devolvido por api/views_core.py) + marco de entrada da CELULA do dia. MUDA: quando a ENTRADA do turno chega
   antes do marco, o aviso devolve "Entrada registrada as HH:MM. Sua escala comeca as HH:MM (faltam N min)." -- so ENTRADA do turno, so dia com marco na celula; nada alem da
@@ -106,16 +106,7 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
   perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
 
-● Commitar e empurrar a S5a · 2m 1s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s5.txt <<'EOF'
-     O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
-     O pacote ponto/calculador/ tem as tres pecas do corte de 12:1x, e a fronteira entre
-     elas e o ponto da obra:
-     nucleo.py -- batidas -> pares -> m… (2m 0s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Catapulting… (44m 24s · ↓ 34.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Pushed to main
 
 ❯ aval Ronald: BUG-ANCORA-NAO-REGENERA (bug provado que bloqueia folha; nenhuma lei nova -- aplica "tudo tem cadastro" e a excecao formal de passado errado por cadastro, corte
   16/08). FATO: escala/signals.py::_ec_vigencia_regenera_celulas so regenera celulas quando muda a VIGENCIA; mudar data_ancora_colaborador (ancora do 12x36) nao refaz celula
@@ -124,10 +115,21 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
   redeclarada 28/09, celulas de 09 ainda invertidas: DSR perdido 5, faltas, folga trabalhada). DINHEIRO: DIFF do col824 e de todo vinculo com ancora alterada na competencia
   aberta publicado antes do deploy; move dinheiro para os dois lados -> PAREI para o meu !. Os 5 com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como lista para o meu ! no PENDENTES. LEI-AKITA: origem=escala/signals.py (so vigencia regenera), testemunha=CelulaDia, juizes novos=0. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Ler a proposta dos 5 nomeados
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/prop5.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """SO LEITURA: a proposta do propositor para os 5 que o Ronald nomeou."""
+     from escala.services.propositor import linhas_para_a_pauta
+     ALVO = {936, 932, 877, 451, 416}
+     linhas = linhas_para_a_pauta()
+     print('linhas n…
+
+✢ Catapulting… (49m 28s · ↓ 50.4k tokens · thinking)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
