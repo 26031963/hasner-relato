@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:22:31.**
+**Medido em 28/09/2026 17:27:37.**
 
 | | |
 |---|---|
@@ -113,7 +113,7 @@ M  app/docs/RELATO.md
      LEI-AKITA: origem=motor_calculo_v2 (tolerancia HE), testemunha=motor/DiaPago, RED=item 4, quem-mais-le=tela/PDF/TXT/calculador, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-  Registrar a parte A e rodar a regua · 3m 39s
+  Registrar a parte A e rodar a regua · 8m 45s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -121,10 +121,10 @@ M  app/docs/RELATO.md
      p='app/docs/PROMPTS.md'
      u=io.open(p,encoding='utf-8').read()
      anc='\n\n## Contagem'
-     u=u.replace(anc,'\n| O-JANELA-HE parte A (REGRA) | 28/09 ~17:3x | **fila 1, AGORA**; a… (3m 38s · 2 lines)
+     u=u.replace(anc,'\n| O-JANELA-HE parte A (REGRA) | 28/09 ~17:3x | **fila 1, AGORA**; a… (8m 43s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (33m 16s · ↓ 32.8k tokens)
+· Unfurling… (38m 22s · ↓ 32.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
