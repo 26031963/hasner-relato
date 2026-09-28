@@ -1,6 +1,5 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: janela-de-HE-cria-desconto-de-pontualidade | espera Ronald` -- o `!` diz "so os campos-alvo, resto ZERO, nenhum colab para cima; fora disso = PAREI com a tabela". O DIFF da 10 tem **`antecipada +15,43 h` e `atraso +0,80 h`**: a janela CANCELA a protecao da L-084 em 4 colaboradores e passa a descontar pontualidade que eles hoje nao devem. Nao apliquei. Tabela e causa abaixo.
 
 PROVA: `tenant_command diff_janela_he --mes 10` (ensaio, transacao desfeita): 298 comparados, 60 mudam; `trabalhadas -221,09` · `HE50 -9,80` · `HE100 -7,10` · `noturnas -7,80` · `intra -10,27` · **`antecipada +15,43`** · **`atraso +0,80`**.
 
@@ -26,6 +25,60 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# JANELA DE HE, saida (C): a L-084 julga ANTES, e o DIFF fecha na sua condicao (28/09 19:2x)
+
+Sua saida (C) implementada ao pe da letra: **a L-084 julga primeiro, contra a batida REAL**, e o dia
+classificado CADASTRO x REALIDADE **fica fora da janela** -- as horas contam normal, a pontualidade nao se
+cobra e o dia vai para a lista. A janela **nunca reescreve a geometria desse dia**. Nos demais, a janela vale
+inteira, **inclusive o "nao compensa"**.
+
+## O DIFF da competencia 10, e o antes/depois da propria saida (C)
+
+PROVA: `tenant_command diff_janela_he --mes 10 --ano 2026` (ensaio: liga o cadastro pela porta dentro de
+`atomic()` e **desfaz**; nenhum cadastro ficou ligado). **341 comparados, 59 mudam.**
+
+| rubrica | janela SEM a L-084 na frente (18:4x) | **com a saida (C)** |
+|---|---|---|
+| trabalhadas | -221,09 | **-90,68** |
+| HE50 | -9,80 | **-16,66** |
+| HE100 | -7,10 | -7,13 |
+| noturnas | -7,80 | **-1,56** |
+| atraso | +0,80 | **+0,18** |
+| saida antecipada | +15,43 | **+11,22** |
+
+**(a) 66 dias em 24 colaboradores sairam da janela pela L-084.** Sao os dias em que o cadastro nao descreve a
+jornada: a janela nao os toca, e e por isso que `trabalhadas` caiu de -221 para -91 e `noturnas` de -7,8 para
+-1,6 -- boa parte do efeito anterior vinha de dias que a L-084 protege.
+
+**(b) O desconto de pontualidade que sobra e o do "nao compensa"**, que pelo seu item 2 **E a L-097**
+(campo-alvo). Cinco colaboradores, nomeados: `col820` +2,69 h (e atraso +0,18), `col189` +2,18, `col572` +1,04,
+`col238` +0,41 e `col788` **+0,23**.
+
+**col788 saiu do desconto, como voce exigiu**: de **+6,00 h** para **+0,23 h** -- os 5,77 h de desconto que ele
+tinha vinham de dias que a L-084 protege, e agora a janela nao entra neles.
+
+## As tres condicoes do seu `!`, conferidas
+
+1. **so os campos-alvo**: HE50, HE100 e trabalhadas (o mecanismo), noturnas e intra como consequencia direta,
+   e a pontualidade do "nao compensa" que voce declarou campo-alvo. Nenhum outro campo se move.
+2. **nenhum colab para cima**: **ZERO** linhas com `horas_extra_50=+`, `horas_extra_100=+` ou
+   `horas_trabalhadas=+` no DIFF inteiro.
+3. **resto ZERO**: falta, folga trabalhada, DSR e banco nao aparecem no DIFF.
+
+## O instrumento errou duas vezes antes de acertar, e vale escrito
+
+A separacao (a)/(b) exigiu duas rodadas: na primeira eu li `dias_cadastro_x_realidade` com `set()`, e ela e
+`List[dict]` -- `unhashable` derrubou **24 colaboradores** e mudou o DIFF inteiro (`trabalhadas -27,21` em vez
+de -90,68). Numero de instrumento quebrado e pior que numero nenhum, porque parece resposta. A rodada boa tem
+341 comparados e zero erro.
+
+## Apply
+
+Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro** (`janela_he_ativa=True`,
+`janela_he_desde` = primeiro dia da competencia 10, pela porta `atualizar_empresa`, com trilha). Nao ha
+recalculo forcado: a **10 e competencia ABERTA** e o recalculo por EVENTO leva a regra a cada colaborador na
+primeira batida ou resposta dele -- e a 09, exportada, fica intocada pela vigencia (L-092).
 
 # PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede (28/09 18:4x)
 

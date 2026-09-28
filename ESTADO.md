@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:03:31.**
+**Medido em 28/09/2026 19:09:01.**
 
 | | |
 |---|---|
@@ -34,7 +34,9 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 ```
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/ponto/janela_he.py
+ M app/ponto/management/commands/diff_janela_he.py
  M app/ponto/motor_calculo_v2.py
  M app/ponto/tests/test_janela_he_regra.py
 ?? bin/keepalive.sh
@@ -89,18 +91,6 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      "for Stop / SubagentStop": {
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
-
-✻ Cooked for 2h 6m 33s · done 6:55 PM · 6 shells still running
-
-❯ aval Ronald: O-JANELA-HE parte A — nem (A) nem (B): saida (C). Leis: L-097, L-084, L-093. Nenhuma lei nova.
-  1. ORDEM: a L-084 julga ANTES, contra a batida REAL. Dia classificado CADASTRO×REALIDADE fica FORA da janela
-     (horas contam normal, sem atraso/antecipada, vai para a lista) — a janela nunca reescreve a geometria desse dia.
   2. Nos demais dias a janela vale inteira, INCLUSIVE "nao compensa": minuto fora da janela nao entra no
      trabalhado que o teto da L-093 usa; o desconto de pontualidade que surgir disso E a L-097 (campo-alvo).
   3. Re-medir o DIFF da 10 e publicar por colab, separando: (a) dias que sairam da janela pela L-084; (b) desconto
@@ -116,13 +106,25 @@ eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (
   Leis: L-095, L-096. Nenhuma lei nova.
   segue a fila; PAREI so em lei ou !
 
-● Esperar o DIFF da saida C · 45s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'ENSAIO: transacao|Error|Traceback'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_jhe_c.txt 2>/dev/null; do sleep 25; done; head -12
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-… (45s)
+  Ran 9 shell commands
+
+● Background command "Registrar a ordem e re-medir o DIFF com a saida C" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "DIFF separando (a) e (b)" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "DIFF final da saida C" completed (exit code 0)
+
+● Esperar a regua da saida C · 50s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|MUDOU' /tm… (49s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Orchestrating… (6m 33s · ↓ 13.4k tokens)
+· Orchestrating… (12m 3s · ↓ 25.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
