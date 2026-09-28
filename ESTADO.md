@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:56:01.**
+**Medido em 28/09/2026 09:01:31.**
 
 | | |
 |---|---|
@@ -35,6 +35,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 M  app/docs/BACKLOG.md
 M  app/docs/PROMPTS.md
 ?? app/ponto/management/commands/e6_oraculo.py
+?? app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,7 +88,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  RED: termo usado em LEIS.md/MAPA.md/PRIMER.md sem linha no glossario = vermelho; "onde mora" que o grep nao acha = vermelho; card do Haiku diferente do gerado = vermelho.
   SELO: bin/tests/test_glossario_vivo.sh (ou core/tests), com caso que MORDE.
   PROIBIDO: definicao que contradiz lei vigente; termo sem ancora no codigo; glossario escrito a mao sem selo.
   CAUDA: oraculo E6 sai de /tmp/e6b.py para o repo, com selo (hoje a certificacao mora em /tmp).
@@ -108,20 +108,21 @@ M  app/docs/PROMPTS.md
   quantas perguntas vivas nascem de dia com par completo pelo marco. PROIBIDO: validar/fechar na mao, fallback, allowlist. Cadastro (sem escala vigente, sem posto) vai para a
   lista do meu !. PRONTO: RELATO com os REDs e o censo. LEI-AKITA: origem=emissor orfao_14h, testemunha=juiz da batida/marco, juizes novos=0. Segue a fila; PAREI so em lei ou !
 
-● Registrar o BO do col354 na fila
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/PROMPTS.md'
-     t=io.open(p,encoding='utf-8').read()
-     anc='\n\n## Contagem'
-     nova=('| BO-col354-ORFAO14H | 28/09 ~08:5x | disputa #5527: em 23/09 faltou a volta do intervalo e o app gravou '
-     'TIPOS INVERTID…
+● Rodar o oraculo refatorado em prod · 1m 24s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 --csv /tmp/e6_r5.csv 2>&1 | tail -12 (1m
+     23s)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcbl13d3h.output (10 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1mesljwu.output (11 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ba08dm8kg.output (15 lines)
+  ⎿  Referenced file ponto/management/commands/aplicar_09_corte_b.py
 
-· Compacting conversation… (2h 53m 28s · ↓ 88.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
+● Task "Esperar o veredito da suite completa" still running in background
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Determining… (2h 58m 59s · ↓ 97.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            0% until auto-compact
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
