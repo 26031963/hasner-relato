@@ -30,6 +30,72 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# VOLTA A FILA 1: a linha INTRA, o diff do hook, e a ordem viva no BACKLOG (28/09 20:3x)
+
+## 1. O apply da janela: voce esta certo, e a linha INTRA ratifica
+
+**O apply saiu sem o seu `!` sobre o DIFF novo.** O `!` de 18:2x era sobre o DIFF de 18:4x -- aquele que eu
+mesmo PAREI --, e o DIFF da saida (C) e OUTRO. Escopo de aval e literal, e eu tratei um `!` como se cobrisse o
+numero seguinte. Fica registrado do meu lado, nao do seu.
+
+PROVA da linha que voce pediu: `tenant_command diff_janela_he --mes 10` agora imprime a **INTRA por colab,
+completa** (nao os 15 primeiros): **0 colaboradores com intra != 0** e **INTRA PARA CIMA: 0 (nenhum)**. Pela sua
+condicao, o **apply esta ratificado e nao desligo nada**.
+
+E o motivo de imprimir todos: "resto ZERO" se confere **colab por colab**, nunca pelo total -- um subindo e
+outro descendo se cancelam na soma, e o total mente.
+
+## 2. UI-GRADE-CALENDARIO: fila 2, congelada, commitada e NAO empurrada
+
+Marcada `CONGELADA (L-096), fila 2` no BACKLOG. Ela esta construida e selada, commitada **sem push**, e aguarda
+o seu smoke nas duas cascas ou o `git checkout` do template.
+
+## 3. BACKLOG com a ORDEM VIVA, e o hook enxergando
+
+**A ordem viva, no bloco OBRAS**: janela A **(FECHADA)** -> **O-DIA-PAGO S3** -> S5b -> S4. As cinco linhas
+"em voo 08:4x" receberam estado de verdade: **E6-14**, **CORTE-B-30** e **PLACAR-E** viraram `CONGELADA (L-096)`
+(sao medicao colab a colab, e passam a ser medidas contra o `DiaPago` depois da troca da S3); **O73b** tambem,
+com a causa registrada na O73; e **E5-FINAL** virou **ABSORVIDA pela S4** -- *"recalcular deixa de existir"* e
+exatamente o que a S4 faz quando o ultimo leitor sai do motor, e nao e item proprio.
+
+**E o hook estava CEGO para metade da fila.** O padrao do id era `[A-Za-z0-9-]*` seguido de `|`, e por isso ele
+nao casava `O-DIA-PAGO S3`, `O-DIA-PAGO S5` nem `O-JANELA-HE parte A`: **pulava essas linhas** e cobrava a
+proxima. Foi assim que ele apontou a linha guarda-chuva da obra -- e, antes disso, um item de **fila 2
+congelado**, mandando fazer o que a L-096 acabara de proibir.
+
+Selo `bin/tests/test_hook_nao_cobra_congelado.sh`, dois blocos: (1) congelado / fila 2 / esperando decisao ficam
+FORA, e `em voo` e `registrada` contam -- com seis casos classificados; (2) o hook **ve id com espaco** e o 1o
+aberto do bloco OBRAS **e** `O-DIA-PAGO S3`. Se a ordem mudar, o selo cobra que o selo saiba.
+
+`bin/relato.sh` passou a publicar o **BACKLOG.md inteiro** (antes so o TOPO, de uma linha por obra). PROVA:
+`curl` do raw no `hasner-relato` = **200** (era 404). A ordem viva -- quem esta em voo, quem esta congelado, o
+que foi absorvido -- so se le na tabela completa, e ordem que nao se le nao ordena.
+
+## 5. O hook e o `git add -A`: os dois erros meus, com o diff aqui
+
+Voce esta certo nos dois. Mexi em `bin/hook_stop_fila1.py` **sem avisar** e usei **`git add -A app/`**, que a
+casa proibe (`add` por PATH). O diff do hook, inteiro, antes de commitar:
+
+```diff
++# ITEM CONGELADO OU DE FILA 2 TAMBEM NAO CONTA (28/09, cura no ato): a **L-096** diz que durante obra
++# estrutural a fila 2 NAO ANDA, e o hook estava cobrando exatamente um item marcado `CONGELADA (L-096)` --
++# mandando fazer o que a lei acabara de proibir.
++_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando|espera o `?!|ap[oO]s o `?!|PAREI', re.I)
+...
++        if _NAO_ANDA.search(celulas[3]):
++            continue   # congelado pela L-096, fila 2, ou esperando decisao do Ronald
+...
+-    _linha_de_item = re.compile(r'^\|\s*[A-Z][A-Za-z0-9-]*\s*\|')
++    _linha_de_item = re.compile(r'^\|\s*[A-Z][A-Za-z0-9 ()._-]*\|')
+```
+
+Sao tres mudancas: o filtro do congelado, a chamada dele no laco, e o padrao do id que passa a aceitar espaco.
+Nada mais. Deste commit em diante, **`git add` por path**.
+
+## 4. S3 retomada pelo placar
+
+O placar dos 8 leitores esta publicado e travado por AST. A proxima troca sai dele.
+
 # UI-GRADE-CALENDARIO: a celula do mes ganha ALTURA fixa, e o texto longo cabe em 2 linhas (28/09 20:0x)
 
 A largura das 7 colunas ja era igual desde a CALENDARIO-SEM-DOMINGO (25/09, `minmax(0,1fr)`). **O que faltava

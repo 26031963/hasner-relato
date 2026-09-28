@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 20:02:27.**
+**Medido em 28/09/2026 20:07:08.**
 
 | | |
 |---|---|
@@ -34,12 +34,13 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ```
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 A  app/colaboradores/tests/test_ui_grade_calendario.py
-M  app/docs/RELATO.md
+ M app/docs/BACKLOG.md
+MM app/docs/RELATO.md
  M app/ponto/management/commands/diff_janela_he.py
 M  app/templates/colaboradores/partials/_calendario_grade.html
-M  bin/hook_stop_fila1.py
+MM bin/hook_stop_fila1.py
  M bin/relato.sh
-A  bin/tests/test_hook_nao_cobra_congelado.sh
+AM bin/tests/test_hook_nao_cobra_congelado.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -92,6 +93,12 @@ A  bin/tests/test_hook_nao_cobra_congelado.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  em fase com ele; o wizard criou um vínculo novo em vez de mudar a ancora do antigo) e os 12 dias do col899, o único caso vivo da frota.
+
+  Fila 1 adiante: S3 segue com a troca dos 8 leitores, um a um, cada uma tirando uma linha do placar — depois S5b (o pareamento por marco, com os três números já escritos) e S4.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
   exportada", e na
 
   Searched for 4 patterns, ran 14 shell commands
@@ -113,18 +120,12 @@ A  bin/tests/test_hook_nao_cobra_congelado.sh
 
 ● Background command "Medir a linha intra por colab" completed (exit code 0)
 
-● Publicar o BACKLOG.md no hasner-relato
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='bin/relato.sh'
-     t=io.open(P,encoding='utf-8').read()
-     v = ''' "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" || exit 1'''
-     assert t.count(v)==1
-     t=t.replace(v, ''' "$TMP/BACKLOG-TOPO.md:BACKLOG-TOPO.md" \\
-     "$RAIZ/app/docs…
+  Regua antes dos dois commits · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_fila.log 2>&1 &
+     sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/… (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Orchestrating… (1h 5m 29s · ↓ 58.5k tokens)
+✻ Orchestrating… (1h 10m 9s · ↓ 73.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
