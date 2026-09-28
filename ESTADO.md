@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:31:01.**
+**Medido em 28/09/2026 07:36:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu` |
+| `HEAD` local | `798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18` |
 | `origin/main` | `29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,28 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
 29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
 65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
 cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
 ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
-0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/LEIS.md
-M  app/escala/models.py
-M  app/escala/regua_defesa.py
-M  app/ponto/services/bordas_realizado.py
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_r4_celula_sem_marcos.py
-M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
-M  app/ponto/turnos.py
-M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
-M  app/relatorios/pdf_espelho.py
-M  bin/pre-push.sh
-M  bin/regua.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -123,12 +111,12 @@ M  bin/regua.sh
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Ler a E6 pos-R4 · 26s
-  ⎿  $ cd /home/ronald/saas-hasner && docker wait e6_pos_r4 >/dev/null && docker logs e6_pos_r4 2>&1 | grep -E "^\{|^BATE|erros no espelho" ; docker rm e6_pos_r4 >/dev/null; echo
-     "=== a E6 ANTES da R4 (rodada 4), para comparar ==="; echo "BATE 92,9% de 7512 | diverge_acima_60: 208 | diverge_10_60: 218 |… (25s)
+  Reescrever o placar e empurrar a R4 · 2m 1s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && git add app/docs/TICKETS.md
+     && git commit -q --amend --no-edit && git push 2>&1 | tail -3 (1m 59s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (1h 28m 29s · ↓ 34.9k tokens)
+✻ Determining… (1h 33m 29s · ↓ 37.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
