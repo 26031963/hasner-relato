@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 04:30:31.**
+**Medido em 28/09/2026 04:35:45.**
 
 | | |
 |---|---|
@@ -36,7 +36,7 @@ M  app/config/crons.py
  M app/config/crons_duracao.json
 M  app/core/espelho_verdade.py
 M  app/docs/BACKLOG.md
-M  app/docs/RELATO.md
+MM app/docs/RELATO.md
 M  app/docs/TICKETS.md
 A  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
@@ -92,39 +92,39 @@ A  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
-  maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
-  "relógio da grade". É o numerador do cumprimento, não o relógio bruto. Consequência para a fatia seguinte: o gravado não tem o relógio bruto, então o topo tem de vir da mesma
-  autoridade que desenha as linhas — que é literalmente o seu aval da E5.
+      28 +
+      29 +Quem NAO entra, e por que (402 colabs): **335 `furo_espelho`** (espelho com pendencia -- e o portao le a CELULA,
+      30 +nao o gravado, entao recalcular nao abre vaga), **59 rescisao por modulo proprio**, **6 sem codigo Dominio**,
+      31 +**2 ferias com batida**.
+      32 +
+      33 +**SEIS colabs dos 205 carregam classe da E6**, e quatro deles sao a mesma coisa: **col924, col391, col43,
+      34 +col942** -- classe A, `fechamento zero`: **zero fatia de escala e zero celula** na janela, com batidas (66, 7,
+      35 +20, 14). **Isso e CADASTRO, nao codigo**, e vale **217,7 h**. Sobram 1 de classe C e 1 de classe D. A classe B
+      36 +(turno aberto 5+), que era a maior do censo da O83 com 733,7 h, **nao tem nenhum colab no TXT**.
+      37 +
+      38 +## LOTE 2 -- recontagem depois das 12h
+      39 +
+      40 +O mutirao venceu para **158 colabs** com prazo **28/09 12:00** (159 chamados em 145 colabs com `prazo_sla`
+      41 +carimbado). Cada resposta validada **recalcula o fechamento daquele colab na hora**, pelo evento que entrou hoje
+      42 +-- entao o lote 2 nao precisa de nenhum comando novo: as respostas que chegarem ate o meio-dia ja estarao no
+      43 +gravado, e a recontagem e rodar a porta outra vez.
+      44 +
+      45 +## O QUE ESTA PARADO, e sao DUAS coisas
+      46 +
+      47 +1. **O `!` do export** (este dossie).
+      48 +2. **A pergunta de lei da R4** -- com o evento vivo, o deploy virou o apply. A R4 esta curada, medida
+      49 +   (**+75,12 h em 27 colabs, todos para cima**) e **revertida da arvore**, porque deixa-la ali faria os crons
+      50 +   das 06:2x julgarem com ela sem `!`. Item no topo do `PENDENTES_RONALD.json` com os tres caminhos.
+      51 +
+      52 +**Se voce der o `!` do export sem responder a R4**, o TXT sai com os numeros de hoje (a R4 nao entrou em nenhum
+      53 +deles) -- e os 27 colabs dela ficam para a competencia seguinte ou para um ajuste declarado. Nao ha incoerencia
+      54 +nisso: o que sai no TXT e exatamente o que a tela, o PDF e o cartao mostram agora.
+      55 +
+      56  # ITEM (4) R5 FECHADA: o selo da O68b era vazio -- e os DOIS REDs dele nao sao dela (28/09 03:2x)
+      57
+      58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
 
-  Régua 8.507 OK, tudo commitado e empurrado (d35de481).
-
-✻ Baked for 32m 50s · done 1:04 AM · 1 shell still running
-
-❯ aval Ronald: MODO CONTINUO ate o export. Fila, sem devolver turno entre itens: (1) topo lendo a mesma computacao das linhas (inclui folga trabalhada e O51b) -> (2) E5 recalculo
-  por evento -> (3) R4 (BO pronto: escala/models.py:977-986) -> (4) R5 -> (5) selo tela==PDF==fechamento==TXT no universo do TXT + E6 rodada 4 -> (6) export pronto em 2 lotes
-  (os que entram agora + recontagem apos 12h), PARADO so para o meu !. Regras: ao fechar um item, commitar, publicar no RELATO com PROVA e comecar o PROXIMO na mesma resposta;
-  resumo vai para o RELATO, nunca para o chat como fim de turno. Unica parada permitida: pergunta de LEI ou o ! do export. Antes do item (1): ler logs/hook_stop_fila1.log,
-  publicar por que o hook liberou as 23:41, 00:30 e 01:04, e curar. Segue.
-
-  Ran 7 shell commands
-
-❯ aval Ronald: O81 entra na fila 1 depois do item (5) selo+E6 r4 e antes do fechamento da E6, sem segurar o export: MUDA ja cortado 18:08 (espelho.py:585 + :353, celula em
-  [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
-  Segue.
-
-● Publicar o item (5), marcar o placar e rodar a regua · 7m 14s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     l3=s.split('\n')[2]
-     novo3=('**MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 '
-     'divergencia nos 205 do … (7m 11s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Metamorphosing… (3h 24m 33s · ↓ 139.0k tokens)
+✶ Metamorphosing… (3h 29m 28s · ↓ 145.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

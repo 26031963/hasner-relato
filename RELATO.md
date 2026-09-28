@@ -2,7 +2,56 @@
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
-`09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+`universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 4: **92,9%**` (era 91,4% na r3) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# DOSSIE DO EXPORT DA 09 -- esperando o seu `!` (28/09 04:2x)
+
+Item (6) da sua fila: *"export pronto em 2 lotes (os que entram agora + recontagem apos 12h), PARADO so para o
+meu !"*. Esta pronto, e aqui esta tudo o que voce precisa para decidir em uma tela.
+
+## A porta, medida agora
+
+| pergunta | resposta |
+|---|---|
+| tela == PDF | **0 divergencia** em 205 colabs |
+| cartao == TXT | **0 divergencia** |
+| topo == soma das linhas | **0 divergencia** (a E5 fechou isso hoje) |
+| E6 rodada 4 (frota, 607 colabs) | **92,9%** de 7.512 dias batem com o oraculo; `erros no espelho: 0` |
+| dias de batida IMPAR | 473, e **todos** dizem `EM ABERTO -- falta: <marco>` na tela, por construcao |
+| 07 e 08 depois do recalculo | **0 divergencia** (L-092 respeitada) |
+| SAEM do TXT pelo recalculo | **0** |
+
+Comando da porta, para voce mesmo rodar antes de dar o `!`:
+`docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026`
+
+## LOTE 1 -- os 205 que entram agora
+
+Quem NAO entra, e por que (402 colabs): **335 `furo_espelho`** (espelho com pendencia -- e o portao le a CELULA,
+nao o gravado, entao recalcular nao abre vaga), **59 rescisao por modulo proprio**, **6 sem codigo Dominio**,
+**2 ferias com batida**.
+
+**SEIS colabs dos 205 carregam classe da E6**, e quatro deles sao a mesma coisa: **col924, col391, col43,
+col942** -- classe A, `fechamento zero`: **zero fatia de escala e zero celula** na janela, com batidas (66, 7,
+20, 14). **Isso e CADASTRO, nao codigo**, e vale **217,7 h**. Sobram 1 de classe C e 1 de classe D. A classe B
+(turno aberto 5+), que era a maior do censo da O83 com 733,7 h, **nao tem nenhum colab no TXT**.
+
+## LOTE 2 -- recontagem depois das 12h
+
+O mutirao venceu para **158 colabs** com prazo **28/09 12:00** (159 chamados em 145 colabs com `prazo_sla`
+carimbado). Cada resposta validada **recalcula o fechamento daquele colab na hora**, pelo evento que entrou hoje
+-- entao o lote 2 nao precisa de nenhum comando novo: as respostas que chegarem ate o meio-dia ja estarao no
+gravado, e a recontagem e rodar a porta outra vez.
+
+## O QUE ESTA PARADO, e sao DUAS coisas
+
+1. **O `!` do export** (este dossie).
+2. **A pergunta de lei da R4** -- com o evento vivo, o deploy virou o apply. A R4 esta curada, medida
+   (**+75,12 h em 27 colabs, todos para cima**) e **revertida da arvore**, porque deixa-la ali faria os crons
+   das 06:2x julgarem com ela sem `!`. Item no topo do `PENDENTES_RONALD.json` com os tres caminhos.
+
+**Se voce der o `!` do export sem responder a R4**, o TXT sai com os numeros de hoje (a R4 nao entrou em nenhum
+deles) -- e os 27 colabs dela ficam para a competencia seguinte ou para um ajuste declarado. Nao ha incoerencia
+nisso: o que sai no TXT e exatamente o que a tela, o PDF e o cartao mostram agora.
 
 # ITEM (4) R5 FECHADA: o selo da O68b era vazio -- e os DOIS REDs dele nao sao dela (28/09 03:2x)
 
