@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:14:31.**
+**Medido em 28/09/2026 13:20:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
  M app/ponto/management/commands/e6_oraculo.py
  M app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? app/ponto/calculador/
+?? app/ponto/management/commands/diff_calculador.py
+?? app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -94,9 +96,6 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-            "interrupt": "boolean (optional)"
-          }
-        }
       },
       "for UserPromptSubmit": {
         "hookEventName": "\"UserPromptSubmit\"",
@@ -121,10 +120,13 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Provar que o oraculo segue rodando apos a mudanca de casa
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 2>&1 | head -4
+● DIFF por rubrica entre calculador e motor · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > app/ponto/management/commands/diff_calculador.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """DIFF POR RUBRICA entre o CALCULADOR NOVO e o MOTOR (O-DIA-PAGO S5, corte Ronald 28/09 12:1x).
+     SO LEITURA, e nao escreve `DiaPago` nenhum: o corte manda comparar as duas verso…
 
-· Catapulting… (11m 58s · ↓ 7.3k tokens)
+* Catapulting… (17m 28s · ↓ 17.3k tokens)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
