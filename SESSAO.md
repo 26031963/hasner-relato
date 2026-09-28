@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 18:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.1 MB). Acoes na janela: **501**.
+**Medido em 28/09/2026 18:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.1 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -510,4 +510,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:22:07 | Bash | Provar o RED da ligacao do TXT com a porta | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:app/folha/views.py > $S/views_head.py && git show HEAD:app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py > $S/cmd_head.py && source bin/recursos.sh && teste_envfile >/dev/null && echo "### RED da LIGACAO contra o HEAD:" && docker run  ...` |
 | 06:21:35 | Bash | Provar o RED da porta | `cd /home/ronald/saas-hasner && git stash push -q app/folha/views.py app/folha/porta_export.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py 2>/dev/null; source bin/recursos.sh && teste_envfile >/dev/null && echo "### RED contra o HEAD:" && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBY ...` |
 | 06:21:00 | Bash | Selo da porta do export | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/test_porta_txt.py <<'PYEOF' # -*- coding: utf-8 -*- """O TXT RECUSA quando os leitores discordam (O1 item 4, corte Ronald 22/09 23:2x). A LEI, literal: *"TXT RECUSA com a lista se `pdf_x_espelho` ou `cartao_x_txt` > 0"*. A meta da serie e' que nenhuma tela  ...` |
-| 06:11:00 | Bash | Ligar a porta ao TXT e rodar o comando | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && python3 - <<'PYEOF' import io # 1. o comando passa a USAR a porta (uma implementacao so) e a LAVRAR p='app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py' s=io.open(p,encoding='utf-8').read() i=s.index(' def handle(self, *a, **o):') novo_handle = '' ...` |
