@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:16:40.**
+**Medido em 28/09/2026 11:22:01.**
 
 | | |
 |---|---|
@@ -101,6 +101,9 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Ran 2 shell commands
+
 ❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
   push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
   push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
@@ -124,16 +127,13 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 
 ● Background command "Re-medir com o patch certo" completed (exit code 0)
 
-  Corrigir o RELATO e rodar a regua final
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     t=t.replace('-430,71 h de hora extra em 208 colabs, ZERO campo fora do alvo, ZERO colab para cima',
-     '-346,87 h de hora extra em 144 colabs, ZERO campo f…
+● Esperar a regua final · 4m 26s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hei2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO'… (4m 24s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Determining… (5h 14m 7s · ↓ 279.1k tokens)
+✢ Determining… (5h 19m 29s · ↓ 279.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
