@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:50:01.**
+**Medido em 28/09/2026 10:55:31.**
 
 | | |
 |---|---|
@@ -32,10 +32,13 @@ af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
+MM app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
-M  app/docs/PROMPTS.md
+MM app/docs/PROMPTS.md
+ M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
  M app/ponto/motor_calculo_v2.py
+ M app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? app/ponto/tests/test_he_intra_dobrada.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -89,21 +92,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 11 shell commands
-
-❯ aval Ronald: O-DIA-PAGO (lei nova, corte meu agora: "o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula" -- registrar em LEIS e
-  CORTES). Fila 1 logo DEPOIS do BUG-HE-INTRA-DOBRADA; e a E5 com conteudo. FATIA 1 (aditiva, nenhum leitor muda): modelo DiaPago (colaborador, data, rubricas do dia: normais,
-  he50, he100, he100_feriado, noturno, intra_indenizada, atraso, saida_antecipada, folga_trabalhada, falta; versao_motor, versao_dna, evento_origem, lavrado_em; unico por
-  colab+data+versao) + escritor UNICO lavrar_dia_pago(colab, data) que chama o motor pelo MESMO caminho de ponto/services/fechamento.py (motor CCT, mesma alimentacao) + gancho no
-  evento do cartorio (julgar_celula) + comando de backfill da 09 em lote (O(n), sem N+1). FATIA 2 (sombra): contadores fechamento_x_soma_dias_pagos e espelho_x_dia_pago na
-  folha/porta_export.py::medir, esperado 0, publicados; divergencia = causa nomeada no RELATO, nao allowlist. FATIAS 3-4 so registradas: troca de leitor um a um (fechamento=soma,
-  TXT, espelho, PDF, calendario, app) com selo de AST "leitor nao chama motor"; recalcular morre; mudanca de motor = versao nova + DIFF por rubrica para o meu !. PROIBIDO:
-  leitor novo lendo DiaPago antes da fatia 2 zerar; mexer em regra de calculo nesta obra; allowlist. RED: col125 02/09 lavrado igual ao gravado de hoje (com o bug, antes da cura)
-  e igual depois da cura. PRONTO fatia 1+2: RELATO com contagem de dias lavrados na 09, os dois contadores e o commit. LEI-AKITA: origem=motor chamado por N leitores,
-  testemunha=DiaPago, juizes novos=0. Segue a fila; PAREI so em lei ou !
-
-  Committed 3cacf25e
-
 ❯ aval Ronald: REORDENA a fila 1 (substitui a reordenacao de 10:36) -- PORTAO DO EXPORT DA 09 = (1) BUG-HE-INTRA-DOBRADA curado com RED col125 e o DIFF para o meu ! -> (2)
   PROVA-DOMINIO: motor ATUAL em sombra/so leitura sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE50, HE100, feriado, intra, noturno, atraso, saida antecipada, folga
   trabalhada, falta) com os recibos Dominio ja extraidos (oraculo JSP 04-07); publicar por rubrica: total motor x total Dominio, colabs divergentes e os PADROES (mesma rubrica,
@@ -112,21 +100,36 @@ M  app/docs/PROMPTS.md
   absorvidos pelo O-DIA-PAGO: parar a edicao de app/colaboradores/services/calendario.py (se for isso), guardar o diff em /tmp com trilha, voltar esse arquivo ao HEAD (L-005).
   Segue a fila; PAREI so em lei ou !
 
-● Ver o previsto no dia do espelho
-  ⎿  $ sed -n '535,550p' ponto/services/espelho.py
-
-✢ Determining… (4h 47m 29s · ↓ 236.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Pushed to main, searched for 5 patterns, ran 17 shell commands
 
 ❯ aval Ronald: amostra do admin da folha para o portao da 09 = col253, col134, col30, col125, col843, col207, col369, col87, col820, col865, col382, col81, col76, col610, col904,
   col72 (escolha medida no gravado, 28/09 10:45). Extrato de rubricas por colab da 09 DEPOIS da cura HE/intra e do recalculo, lido da mesma fonte do TXT, publicado no RELATO
   (ids, sem nome). Medido por fora: HE e intra no mesmo mes em 225 colabs, teto 494,73 h (12x36 240,96 · comercial 165,11 · turno partido 67,06 · sem vinculo 21,60) -- a cura
   cobre TODOS os motores que indenizam, o DIFF tem que mostrar os dois maiores. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● Background command "DIFF de frota da cura contra o gravado" completed (exit code 0)
+
+  Ran 4 shell commands
+
+❯ aval Ronald: PROVA-DOMINIO sai do portao do export da 09 (registrar no BACKLOG como livre, sem prazo). Portao de hoje = cura HE/intra com o meu ! -> recalculo da 09 -> porta do
+  export + selo "nenhum minuto em duas rubricas" = 0 -> extrato de rubricas dos 16 colabs da amostra publicado para o admin da folha -> lote 1 novo com hash novo, so com o meu
+  !. Segue a fila; PAREI so em lei ou !
+
+● Background command "Corrigir os campos e rodar o DIFF" completed (exit code 0)
+
+● Esperar o efeito isolado · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'SOMA DOS DELTAS|Error'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bddsq698c.output 2>/dev/null; do sleep 20; done; tail -20
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94…
+
+· Determining… (4h 52m 58s · ↓ 252.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
