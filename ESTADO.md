@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:30:45.**
+**Medido em 27/09/2026 21:35:45.**
 
 | | |
 |---|---|
@@ -111,11 +111,11 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
   que a ata nao descreve (guarda da ausencia de 4 h, selo proprio intacto). Corrigir o comentario turnos.py:1040 ("teto e o CADASTRO" e falso: e constante de classe) e registrar
   no BACKLOG, fora da meta, a pausa maxima como cadastro da escala (LEI-AKITA 12). RED col843 24/08 = uma noite, 0 min em 25/08. Aval-de-criterio. Segue a fila.
 
-  Ver a chave do update_or_create
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '88,104p' app/core/management/commands/lavrar_placar_situacional.py; echo "=== badge ==="; sed -n '88,98p'
-     app/core/management/commands/lavrar_badge_navbar.py
+● Ver a guarda do relato.sh
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,60p' bin/relato.sh 2>/dev/null | head -60
 
-✶ Zesting… (27m 43s · ↓ 45.4k tokens · thinking some more)
+✶ Zesting… (32m 43s · ↓ 49.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

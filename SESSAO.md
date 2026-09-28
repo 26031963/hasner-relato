@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/09/2026 21:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (91.3 MB). Acoes na janela: **445**.
+**Medido em 27/09/2026 21:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (91.4 MB). Acoes na janela: **448**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:35:44 | Bash | Ver a guarda do relato.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/relato.sh 2>/dev/null \| head -60` |
+| 21:35:16 | Bash | Horas locais dos commits recentes | `cd /home/ronald/saas-hasner && git log -5 --format='%h %ad %s' --date=format:'%d/%m %H:%M'` |
+| 21:34:11 | Bash | Conferir relogio do host x container | `cd /home/ronald/saas-hasner && echo "host: $(date '+%d/%m %H:%M %Z')"; echo "container core: $(docker exec saas_core date '+%d/%m %H:%M %Z')"; grep -n "28/09" app/docs/RELATO.md \| head` |
+| 21:32:13 | Bash | Ver o topo do RELATO | `cd /home/ronald/saas-hasner && sed -n '1,14p' app/docs/RELATO.md; echo "..."; grep -n "^## \\|^# " app/docs/RELATO.md \| head -8` |
 | 21:29:52 | Bash | Ver a chave do update_or_create | `cd /home/ronald/saas-hasner && sed -n '88,104p' app/core/management/commands/lavrar_placar_situacional.py; echo "=== badge ==="; sed -n '88,98p' app/core/management/commands/lavrar_badge_navbar.py` |
 | 21:29:45 | Bash | Localizar os lavradores do placar e badge | `cd /home/ronald/saas-hasner && ls app/*/management/commands/ \| grep -n "placar_situacional\\|badge_navbar" ; find app -name "lavrar_placar_situacional.py" -o -name "lavrar_badge_navbar.py" \| head; echo "---"; for f in $(find app -name "lavrar_placar_situacional.py" -o -name "lavrar_badge_navbar.py"); do echo "## $f"; grep -n "update_or_create\\|data_ref\\|chave=" $f \| head -6; done` |
 | 21:28:54 | Bash | Ler o laco do pareador | `cd /home/ronald/saas-hasner && sed -n '670,800p' app/ponto/turnos.py` |
@@ -454,4 +458,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:38:04 | Bash | Ler o texto integral dos cinco candidatos | `python3 - <<'PYEOF' import json d = json.load(open('docs/PENDENTES_RONALD.json')) itens = d if isinstance(d, list) else d.get('itens', []) alvos = ('o69-vinculo-do-dia-aplicada', 'e3-completa-09-aplicada', 'emp4-8-dias-lavrados-por-holerite', 'pauta-dp-col650', 'fechamento-online-a-leitura-alcanca-o-passado') for x in itens: if x.get('id') in alvos: print('=== %s (tipo=%s)' % (x.get('id'), x.get(' ...` |
 | 09:37:28 | Bash | Listar os candidatos a cancelamento antes de agir | `python3 - <<'PYEOF' import json, re d = json.load(open('docs/PENDENTES_RONALD.json')) itens = d if isinstance(d, list) else d.get('itens', []) alvo = [] for x in itens: txt = ' '.join(str(x.get(k, '')) for k in ('id', 'o_que', 'por_que_chama', 'tipo')) t = txt.lower() de_0708 = bool(re.search(r'\b0[78]/2026\b\|competencia 0[78]\b\|pauta de 0[78]\b\|07 e 08\|de 07/08\|07/08', t)) fala_pauta = 'paut ...` |
 | 09:37:05 | Bash | Achar todas as listas de 07 e 08 | `echo "=== BACKLOG: obras que citam 07 ou 08 como alvo de ajuste ==="; grep -nE '\\| O[0-9]+ \\|' docs/BACKLOG.md \| grep -iE '07/2026\|08/2026\|competencia 07\|competencia 08\|de 07 e 08\|07 e 08' \| cut -c1-200 \| head -10; echo "=== PENDENTES ==="; python3 -c " import json d=json.load(open('docs/PENDENTES_RONALD.json')) itens = d if isinstance(d, list) else d.get('itens', []) print('itens no PEN ...` |
-| 09:35:41 | Bash | Inverter a ordem e rodar o selo de performance | `python3 - <<'PYEOF' import py_compile p='ponto/motor_calculo_v2.py'; s=open(p).read() velho = """ for dia, ps in por_dia.items(): prev = self._previsto_do_dia(dia) if prev is None: continue # sem juiz do previsto: nao ha teto a aplicar soma = sum(float(p.minutos_atraso or 0) + float(p.minutos_saida_antecipada or 0) for p in ps) if soma <= 0: continue trab = sum(float(p.minutos_trabalhados or 0) fo ...` |
