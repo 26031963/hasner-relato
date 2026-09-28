@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:31:14.**
+**Medido em 28/09/2026 12:36:41.**
 
 | | |
 |---|---|
 | `HEAD` local | `9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)` |
-| `origin/main` | `6cf525f4 TICKETS: rodape e placar com o carimbo da regua da S1 (8568 testes OK)` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,9 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## `git status --short`
 
 ```
+ M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
+ M app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,44 +94,44 @@ a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ he100_feriado +14,13 · he100_noturna +5,76 · antecipada +3,47 · intra +1,00 · turnos_abertos +4 │                                        │ não                          │
-  ├─────────────────────────────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────────────────────────┤
-  │ horas_extras_50                                                                                 │ −364,01                                │ 39,67 h são deriva, não cura │
-  └─────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────────────────────┴──────────────────────────────┘
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
+        "additionalContext": "string (optional)"
+      },
+      "for Stop / SubagentStop": {
+        "hookEventName": "\"Stop\" | \"SubagentStop\"",
+        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
+      }
+    }
+  }
 
-  Em isolamento a cura move HE50/HE100 e os dois derivados (DSR −294,02, banco +143,85) e zero em trabalhadas, intra, noturnas, feriado, atraso e antecipada. O resto é deriva do
-  gravado — R2b, TETO, IMPAR, O95, L-084, L-093 estão no código com o gravado só parcialmente atualizado. É exatamente a forma que fez você cortar a L-082 às 09:4x.
+✻ Crunched for 6h 28m 52s · done 12:31 PM · 4 shells still running
 
-  Não deployei e não recalculei. Deployar sozinho não resolve: com o recalculo por evento, a primeira batida de cada colab dispara o mesmo apply, na ordem que vier.
+❯ segue a fila; PAREI so em lei ou !
 
-  Duas saídas, tabelas completas no RELATO:
-  - (A) ! sobre a tabela inteira — coerente, porque DSR e banco dependem das extras.
-  - (B) apply cirúrgico pela porta do fechamento, só nos campos que a cura move, nos 144 colabs — fecha na letra do seu !. Recomendo (B), e depois (A) como ato próprio com a
-    deriva medida por causa.
-
-  Entregue e empurrado nesta leva (6cf525f4)
-
-  O-DIA-PAGO S1 pronta e aditiva: modelo DiaPago, lavratura no mesmo ponto em que o FechamentoMensal é gravado e a partir do mesmo resultado — nenhum escritor novo, nenhum gancho
-  novo. Três lugares passaram a guardar o mapa por dia que antes construíam e jogavam fora (O85, faltas, crédito parcial). O selo prova a identidade nos 14 campos, a idempotência,
-  e que o ajuste não é resíduo (senão a identidade seria verdadeira por construção — o [] de dois sentidos). 5 casos verdes de primeira; régua 8.568 OK.
-
-  E4-CALENDARIO: MANTER registrado, item fora do PENDENTES, sobe no próximo deploy.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
-
-  Acertar o placar e empurrar · 2m 3s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
-     git commit -q -m "TICKETS: placar do topo em dia (ultimo push 6cf525f4)
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (2m 1s)
+● Esperar a prova da porta · 10s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'universo=|Error|Traceback'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb1l7fto1.output 2>/dev/null; do sleep 25; done; tail -20
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df0… (9s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Determining… (6h 28m 41s · ↓ 350.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+· Combobulating… (4m 8s · ↓ 10.3k tokens)
+
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
