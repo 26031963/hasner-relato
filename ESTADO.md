@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:20:02.**
+**Medido em 28/09/2026 19:25:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,9 @@ e05ebb21 PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a
 ## `git status --short`
 
 ```
+M  app/docs/BACKLOG.md
+M  app/docs/RELATO.md
+A  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,40 +87,40 @@ e05ebb21 PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     Apply so com meu "!" sobre o DIFF novo.
-     segue a fila; PAREI so em lei ou !
+  (a) 66 dias em 24 colabs saíram da janela pela L-084 — é por isso que trabalhadas caiu de −221 para −91: boa parte do efeito anterior vinha de dias que a L-084 protege.
+  (b) o desconto que sobra é o do "não compensa", que pelo seu item 2 é a L-097: col820 +2,69 (e atraso +0,18), col189 +2,18, col572 +1,04, col238 +0,41 e col788 +0,23 — saiu do
+  desconto, de +6,00 h, como você exigiu.
 
-  Searched for 1 pattern, ran 3 shell commands
+  As três condições, conferidas: só os campos-alvo · zero linhas com HE ou trabalhadas subindo · falta, folga trabalhada, DSR e banco não aparecem.
 
-❯ aval Ronald: ORDEM DA FILA 1 — depois da O-JANELA-HE parte A (C), entra O-DIA-PAGO S3 (leitores leem o DiaPago),
-  ANTES da S5b; S4 so depois da S5b. Motivo: S3 nao depende do calculador (DiaPago versao motor ja bate, S2=0).
-  Leis: L-095, L-096. Nenhuma lei nova.
-  segue a fila; PAREI so em lei ou !
+  Apply feito
 
-  Ran 9 shell commands
+  Cadastro ligado nas quatro empresas pela porta, janela_he_desde=2026-09-21 (primeiro dia da 10, vindo do juiz), e a janela de saída segue desligada. Sem recálculo forçado: a 10
+  é aberta e o evento leva a regra a cada colaborador na primeira batida dele; a 09 exportada fica intocada pela vigência.
 
-● Background command "Registrar a ordem e re-medir o DIFF com a saida C" completed (exit code 0)
+  Dois erros meus, escritos
 
-  Ran 2 shell commands
+  O instrumento errou duas vezes: li dias_cadastro_x_realidade com set() e ela é List[dict] — unhashable derrubou 24 colabs e mudou o DIFF inteiro (−27,21 em vez de −90,68).
+  Número de instrumento quebrado é pior que número nenhum, porque parece resposta.
 
-● Background command "DIFF separando (a) e (b)" completed (exit code 0)
+  E o selo da regra única me morde pela terceira vez na mesma fatia: acusou o comentário que explica a cura, depois código legítimo de outra parte do motor. Agora varre AST e só
+  dentro do método.
 
-  Ran 2 shell commands
+  Disputa (113 sem data): fora do Cobrar em massa, vive pelo fio — fechado. Ordem nova registrada: S3 antes da S5b, S4 depois.
 
-● Background command "DIFF final da saida C" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-ANCORA-NAO-REGENERA -- mudar a ANCORA do 12x36 nao refazia celula nenhuma -- escala/signals.py regenerava por VIGENCIA e nao por ANCO
 
-● Commitar, empurrar e publicar a saida C · 2m 44s
+● Publicar o placar e rodar a regua · 3m 15s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      p='/home/ronald/saas-hasner/app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
-     t=t.replace("""## Apply
-     Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro**""",
-     """## Apply FEITO
-     PROVA: cadastro ligado nas **qu… (2m 43s · 5 lines)
+     sec = '''# O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e a lista so encolhe (28/09 19:4x)
+     A S3 troca os leitores um a um, e a pr… (3m 14s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Orchestrating… (23m 4s · ↓ 27.7k tokens)
+· Orchestrating… (28m 33s · ↓ 35.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

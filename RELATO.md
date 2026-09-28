@@ -26,6 +26,36 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e a lista so encolhe (28/09 19:4x)
+
+A S3 troca os leitores um a um, e a primeira peca dela nao e uma troca: e o **placar**, para que cada troca seja
+verificavel e nenhuma entre calada. `ponto/tests/test_s3_leitor_nao_chama_motor.py` varre a arvore por **AST** e
+enumera quem ainda pergunta ao motor:
+
+| leitor | |
+|---|---|
+| `relatorios/pdf_espelho.py` | o PDF do cartao |
+| `colaboradores/services/calendario.py` | o calendario (ja passou a ler a autoridade unica na E4) |
+| `colaboradores/services/ficha.py` | a ficha do colaborador |
+| `api/views.py` | o app |
+| `relatorios/views.py` | os relatorios |
+| `folha/porta_export.py` | a propria porta do export |
+| `ponto/selecao_periodo.py` | **o grep nao tinha visto** |
+| `ponto/services/esmeril_espelho.py` | **idem** |
+
+**Eu tinha contado 6 e sao 8.** Os dois ultimos sairam so na varredura por AST -- meu `grep` de leitores nao os
+pegou. E a razao de a varredura ser por AST e exatamente essa: contar leitor de dinheiro por TEXTO deixa leitor
+de fora, e leitor de fora nao entra no placar da troca. (Foi tambem por texto que outro selo meu, nesta mesma
+esteira, morde tres vezes o comentario que explicava a cura.)
+
+**O que o selo garante hoje**: ninguem NOVO entra (leitor novo chamando o motor e vermelho no commit), e leitor
+trocado **sai da lista no mesmo ato** -- se sair da lista e continuar chamando, ou se for trocado e ficar na
+lista, o selo acusa. O numero 8 esta cravado num caso proprio, para nao mudar de tamanho sem o RELATO dizer.
+
+**Quem PODE chamar o motor** e declarado: o proprio motor, a porta do fechamento, a autoridade do espelho, o
+calculador da S5 e a regua CCT (que MONTA o motor, e nao o consulta como leitor). Comandos de obra e medicao
+tambem ficam fora -- eles nao sao leitores de tela.
+
 # JANELA DE HE, saida (C): a L-084 julga ANTES, e o DIFF fecha na sua condicao (28/09 19:2x)
 
 Sua saida (C) implementada ao pe da letra: **a L-084 julga primeiro, contra a batida REAL**, e o dia
