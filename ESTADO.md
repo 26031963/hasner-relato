@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:52:31.**
+**Medido em 28/09/2026 02:58:01.**
 
 | | |
 |---|---|
@@ -32,7 +32,7 @@ d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 ## `git status --short`
 
 ```
- M app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
+M  app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -113,11 +113,11 @@ d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Rodar o diagnostico do encanamento
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && sed -i 's/from ponto.turnos import
-     _marcos_do_template, parear_turnos/from ponto.turnos import marcos_do_template, parear_turnos/; s/mi, mb = _marcos_do_template(t…
+● Regua da R5 · 4m 4s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py && bash bin/regua.sh 2>&1 | tail -4 (4m 3s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Metamorphosing… (1h 46m 33s · ↓ 106.6k tokens)
+✢ Metamorphosing… (1h 52m 3s · ↓ 112.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
