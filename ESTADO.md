@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:23:31.**
+**Medido em 28/09/2026 10:29:00.**
 
 | | |
 |---|---|
@@ -124,13 +124,13 @@ M  app/docs/RELATO.md
   intra indenizada do dia <= trabalhado - previsto liquido + suprimido), contador = 0 sem allowlist; o TXT recusa se > 0. RED: col125 02/09 hoje. Segue a fila; PAREI so em lei ou
   !
 
-● Esperar a regua do E4 · 26s
+● Esperar a regua do E4 · 5m 55s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (25s)
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (5m 54s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (4h 20m 58s · ↓ 210.3k tokens)
+✻ Determining… (4h 26m 28s · ↓ 210.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
