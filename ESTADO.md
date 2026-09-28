@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 03:36:31.**
+**Medido em 28/09/2026 03:42:01.**
 
 | | |
 |---|---|
@@ -32,6 +32,8 @@ a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nun
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
+?? app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -111,12 +113,12 @@ a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nun
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Medir PDF x espelho e cartao x TXT na 09 · 3m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 | tail -8; echo "===
-     cartao x txt ==="; docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 9 -… (3m 1s · 10 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Criar e rodar o selo dos leitores no mesmo numero
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/selo_leitores.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """SELO: tela == PDF == fechamento == TXT no universo do TXT, 0 divergencia (corte Ronald, meta da E4/E…
 
-✢ Metamorphosing… (2h 30m 33s · ↓ 123.2k tokens)
+✢ Metamorphosing… (2h 36m 3s · ↓ 127.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
