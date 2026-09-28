@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:05:33.**
+**Medido em 27/09/2026 21:10:45.**
 
 | | |
 |---|---|
@@ -84,10 +84,6 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  regra é sua — mas o registro diz o que a medição diz: o que bloqueia é a testemunha, não a cura.
-
-  O censo do matcher fecha a R1 com número, e o veredito é não mexer na grade. Dano provado de (b) entre 24,9 h e 53,1 h contra +115,1 h de benefício de (a) no mesmo mecanismo —
-  pior caso 1:2,2, com a certificação da grade como preço de entrada. E o corte por distância está excluído por medição: medianas 60/60/60 nos três grupos, e dentro de (b) os dias
   caros são os mais perto, não os mais longe. A forma tem nome único: o marco hf recebe a batida gravada E, e o turno seguinte deixa de existir. Fica registrado sem fazer: a
   folha vê mais que a tela (36 × 33) porque o motor não tem a guarda das duas pontas que o pareador tem.
 
@@ -111,13 +107,17 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 
 ● R3 cura os quatro dias do col146 exatamente (777≈778, 540=540, 787=787, 540=540), com R2 intacta e os oito controles idênticos. Selo na mesma família e suíte:
 
-  Selo da R3 e rodar a familia · 2s
-  ⎿  $ cat >> ponto/tests/test_o68b_papel_da_ata_no_motor.py <<'PYEOF'
-     class DuasCelulasNaoReivindicamAMesmaBatidaTest(TestCase):
-     """R3 -- a mesma batida nao e SAIDA de um dia e ENTRADA do seguinte.
-     `out.update(_reiv)` deixava o dia POSTERIOR sobrescrever o papel que o anterior ja tinha dado. Numa noite…
+  Ran 1 shell command
 
-✢ Zesting… (2m 31s · ↓ 7.2k tokens)
+● 41 verdes. Suíte e a PROVA da R3 com as quatro condições:
+
+  Ran 1 shell command
+
+● R3 não acrescenta divergência nova — o bloqueio segue sendo o mesmo único (col843 25/08, o artefato de paridade do oráculo), e os dias curados sobem de 39 para 43. Commito:
+
+  Running 1 shell command…
+
+· Zesting… (7m 42s · ↓ 10.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
