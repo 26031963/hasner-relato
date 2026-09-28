@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:45:31.**
+**Medido em 28/09/2026 09:51:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
+| `HEAD` local | `8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA` |
 | `origin/main` | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,23 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA
 12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094
 1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar
 6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201
 798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
-29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
-M  app/docs/BACKLOG.md
-M  app/docs/PENDENTES_RONALD.json
-M  app/docs/PROMPTS.md
-MM app/docs/RELATO.md
-A  app/ponto/management/commands/e6_oraculo.py
-A  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,6 +84,9 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Task "Esperar o veredito da suite completa" still running in background
+
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -117,13 +113,10 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
   PRONTO: censo da frota (colabs, dias de folga trabalhada a 100% envolvidos, horas) no RELATO. LEI-AKITA: origem=emissao por dia sem leitura de padrao, testemunha=celula, juizes
   novos=0. Segue a fila; PAREI so em lei ou !
 
-● Esperar a regua do item 7 · 1m 56s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e6d.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (1m 54s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Pushing do item 7
+  ⎿  $ cd /home/ronald/saas-hasner && git push 2>&1 | tail -6
 
-· Determining… (3h 42m 58s · ↓ 147.5k tokens)
+✢ Determining… (3h 48m 29s · ↓ 149.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
