@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:24:01.**
+**Medido em 28/09/2026 15:29:31.**
 
 | | |
 |---|---|
@@ -87,6 +87,7 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     LEI-AKITA: origem=motor_calculo_v2, testemunha=fonte O-DIA-PAGO, RED=itens 3-5, quem-mais-le=espelho/calendario/PDF/TXT/porta_export, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
   Ran 5 shell commands
@@ -113,13 +114,12 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 
 ● Background command "Esperar a porta" completed (exit code 0)
 
-● Esperar a primeira regua terminar · 5m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|MUDOU|BLOQUEADO'… (5m 1s)
+● Rodar a regua com a arvore estavel · 2m 5s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao3.log
+     2>&1 & sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-a… (2m 3s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Infusing… (46m 8s · ↓ 42.3k tokens)
+✢ Infusing… (51m 38s · ↓ 42.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

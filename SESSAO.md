@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 15:24:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **477**.
+**Medido em 28/09/2026 15:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.0 MB). Acoes na janela: **478**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:27:26 | Bash | Rodar a regua com a arvore estavel | `cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao3.log 2>&1 & sleep 3; until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao3.log 2>/dev/null; do sleep 20; do ...` |
 | 15:18:57 | Bash | Esperar a primeira regua terminar | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao.log 2>/dev/null; do sleep 20; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|MUDOU\|BLOQUEADO' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratch ...` |
 | 15:18:50 | Bash | Ver por que a regua saiu com 3 | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao2.log` |
 | 15:18:43 | Bash | Casa do comando e nova regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, py_compile P='app/config/crons.py' t=io.open(P,encoding='utf-8').read() anc=" # DIFF DE OBRA, e obra nao vira rotina" assert t.count(anc)==1 novo = """ # APPLY DE UMA VEZ, com o `!` na mao (28/09, PORTAO-09): `aplicar_09_he_intra` grava o delta ISOLADO # da cura HE/intra nos campos do alvo, na competencia 09, e isso acontece UMA vez na  ...` |
