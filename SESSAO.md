@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 00:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.3 MB). Acoes na janela: **576**.
+**Medido em 28/09/2026 00:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (94.3 MB). Acoes na janela: **567**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -577,12 +577,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:24:23 | Bash | Ler o juiz da L-084 | `sed -n '984,1035p' ponto/motor_calculo_v2.py` |
 | 12:24:15 | Bash | Achar a implementacao da L-084 | `grep -rn 'L-084\\|180\b.*marco\\|CADASTRO_X_REALIDADE\\|_dna_descreve\\|CORTE_DNA' --include=*.py ponto/ escala/ core/ \| grep -v tests/ \| head -20` |
 | 12:23:28 | Bash | Medir onde a alimentacao abre turno em vez de fechar | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_abertos.py <<'PYEOF' # Onde a alimentacao do papel ABRE turno em vez de fechar. Read-only. import datetime as d from django.utils import timezone as tz from django.db.models import Q from colaboradores.models import Colaborador from escala.models import EscalaColaborador, CelulaDia fro ...` |
-| 12:20:48 | Bash | Acrescentar reflexo_dsr e remedir a DIFF com a PROVA salva | `python3 - <<'PYEOF' import py_compile p='ponto/management/commands/aplicar_09_corte_b.py'; s=open(p).read() velho = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna')""" novo = """ 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna', # O REFLEXO DO DSR E ARITMETICA DA HE (O68b-PAPEL, 27/09), e pela mesma razao da HE 50 # acima. `motor_calculo_v2.py:1304` declara a formula d ...` |
-| 12:20:19 | Bash | Ver a derivacao do reflexo do DSR | `grep -rn 'reflexo_dsr' ponto/motor_calculo_v2.py \| head -12; echo '=== a conta ==='; grep -n 'reflexo' ponto/motor_calculo_v2.py \| grep -i 'def \\|= \\|extras' \| head; echo; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_o68b_papel.log 2>/dev/null \|\| echo 'suite ainda rodando'` |
-| 12:18:14 | Bash | DIFF na sombra com os campos declarados do item | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 3000 bin/sombra.sh --com-a-sombra o68b_papel -- docker run --rm --cpuset-cpus "$TESTE_CPUSET" --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo -e HTTP_PROXY=http://127.0.0.1:9 -e HTTPS_PROXY=http ...` |
-| 12:18:05 | Bash | Ler o invocador da sombra | `cd /home/ronald/saas-hasner && sed -n '36,60p' bin/simular_folha.sh` |
-| 12:17:47 | Bash | Achar o docker run contra a sombra | `cd /home/ronald/saas-hasner && grep -rn 'settings.sombra' bin/*.sh \| head -10` |
-| 12:17:38 | Bash | Ler como --com-a-sombra monta o comando | `cd /home/ronald/saas-hasner && sed -n '300,326p' bin/sombra.sh` |
-| 12:17:21 | Bash | Rodar a DIFF na sombra com os campos declarados | `cd /home/ronald/saas-hasner && bin/sombra.sh --cobre 2026-08-21 2026-09-20 2>&1 \| tail -4; echo "=== DIFF O68b-PAPEL (campos do item declarados) ==="; timeout 3000 bin/sombra.sh --com-a-sombra o68b_papel -- tenant_command aplicar_09_corte_b --mes 9 --ano 2026 --fora 81 2>&1 \| tail -70` |
-| 12:17:10 | Bash | Achar a invocacao da DIFF na sombra | `cd /home/ronald/saas-hasner && grep -rn 'com-a-sombra.*aplicar_09_corte_b\\|aplicar_09_corte_b' app/docs/RELATO.md 2>/dev/null \| head -5; echo '=== uso ==='; grep -n 'com-a-sombra' bin/sombra.sh \| head -5` |
-| 12:16:54 | Bash | Ler o conjunto declarado de campos do item | `cd /home/ronald/saas-hasner && sed -n '43,66p' app/ponto/management/commands/aplicar_09_corte_b.py` |

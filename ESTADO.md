@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:16:31.**
+**Medido em 28/09/2026 00:22:01.**
 
 | | |
 |---|---|
@@ -120,12 +120,12 @@ M  app/templates/ponto/espelho.html
 
 ❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-● Regua da IMPAR fatia 2 · 1m 46s
+● Regua da IMPAR fatia 2 · 7m 15s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/templates/ponto/espelho.html app/ponto/tests/test_impar_tela.py && bash bin/regua.sh 2>&1 | tail -6
-     (1m 44s)
+     (7m 14s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zigzagging… (33m 34s · ↓ 41.8k tokens)
+· Zigzagging… (39m 4s · ↓ 41.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
