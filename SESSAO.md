@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 09:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (98.4 MB). Acoes na janela: **552**.
+**Medido em 28/09/2026 09:40:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (98.4 MB). Acoes na janela: **542**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -552,13 +552,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:41:01 | Bash | Ler a emissao do PASSO 2 | `cd /home/ronald/saas-hasner && sed -n '1040,1085p' /tmp/r2b/turnos.py` |
 | 21:40:10 | Bash | Copia do HEAD e leitura do bloco das luzes | `cd /home/ronald/saas-hasner && mkdir -p /tmp/r2b && git show HEAD:app/ponto/turnos.py > /tmp/r2b/turnos.py && sed -n '895,985p' /tmp/r2b/turnos.py` |
 | 21:40:04 | Bash | Commitar a auditoria da arvore viva | `cd /home/ronald/saas-hasner && cat > /tmp/prompts_add.py <<'PY' import io p = 'app/docs/PROMPTS.md' s = io.open(p, encoding='utf-8').read() anc = '\n\n## Contagem' assert s.count(anc) == 1 novas = ( '\| ARVORE-VIVA auditoria \| 27/09 ~21:2x \| a R2b foi escrita na arvore viva (LEI-AKITA 10) e revertida com ' 'checkout: medir e publicar quais crons `*/5` rodaram na janela e se algum GRAVOU (celula, ...` |
-| 21:39:33 | Bash | Ver o fim da tabela de PROMPTS | `cd /home/ronald/saas-hasner && sed -n '170,175p' app/docs/PROMPTS.md \| cut -c1-400` |
-| 21:39:29 | Bash | Conferir R2b em TICKETS e formato de PROMPTS | `cd /home/ronald/saas-hasner && grep -c "R2b" app/docs/TICKETS.md; tail -3 app/docs/PROMPTS.md \| head -1; grep -n "^\| " app/docs/PROMPTS.md \| tail -3 \| cut -c1-160` |
-| 21:39:01 | Bash | Ver formatos de PROMPTS e TICKETS | `cd /home/ronald/saas-hasner && tail -6 app/docs/PROMPTS.md; echo "=== TICKETS rodape ==="; tail -12 app/docs/TICKETS.md` |
-| 21:38:35 | Bash | Registrar R2b na fila 1 e a obra da pausa-cadastro | `cd /home/ronald/saas-hasner && cat > /tmp/backlog_r2b.py <<'PY' import io p = 'app/docs/BACKLOG.md' s = io.open(p, encoding='utf-8').read() # --- R2b entra como PRIMEIRO item da fila 1 (o aval de 27/09 21:2x desbloqueou a condicao (d)) anc = '\| R4 \| **residuo da O84' assert s.count(anc) == 1 linha = ('\| R2b \| **o teto de duracao parte a noite que a ATA descreve inteira**: pausa real de 181 min ...` |
-| 21:38:14 | Bash | Conferir O96 no backlog | `cd /home/ronald/saas-hasner && grep -c "O96" app/docs/BACKLOG.md; grep -n "\| O95" app/docs/BACKLOG.md \| cut -c1-200` |
-| 21:38:09 | Bash | Maior numero de obra | `cd /home/ronald/saas-hasner && grep -oP '^\\| O\d+' app/docs/BACKLOG.md \| grep -oP '\d+' \| sort -n \| tail -3` |
-| 21:37:46 | Bash | Ver o bloco OBRAS do BACKLOG | `cd /home/ronald/saas-hasner && grep -n "OBRAS" app/docs/BACKLOG.md \| head -4; echo "---"; sed -n "$(grep -n 'OBRAS' app/docs/BACKLOG.md \| head -1 \| cut -d: -f1),+30p" app/docs/BACKLOG.md` |
-| 21:37:40 | Bash | Escrever a auditoria da arvore viva no RELATO | `cd /home/ronald/saas-hasner && cat > /tmp/audit_relato.py <<'PY' import io, re p = 'app/docs/RELATO.md' s = io.open(p, encoding='utf-8').read() # --- 1. topo: a PAREI da condicao (d) foi RESPONDIDA pelo aval da R2b velho_parei = s.split('\n')[2] assert velho_parei.startswith('`PAREI:'), velho_parei[:60] novo = ('A fila 1 esta ANDANDO -- nada parado. O aval da R2b (27/09 21:2x) desbloqueou a condic ...` |
-| 21:35:44 | Bash | Ver a guarda do relato.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/relato.sh 2>/dev/null \| head -60` |
-| 21:35:16 | Bash | Horas locais dos commits recentes | `cd /home/ronald/saas-hasner && git log -5 --format='%h %ad %s' --date=format:'%d/%m %H:%M'` |

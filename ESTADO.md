@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:34:31.**
+**Medido em 28/09/2026 09:40:01.**
 
 | | |
 |---|---|
@@ -90,17 +90,6 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pergunta saida quando o que falta e a VOLTA DO INTERVALO. As 3 tem via_resolucao=sem_turno_aberto e seguem vivas na tela. PROVAR: (1) o emissor orfao_14h le tipo gravado em vez
-  do marco (L-E3 "o MARCO manda") -> RED col354 24/09; (2) via carimbado + pergunta viva = fio incoerente (pergunta_viva, chamados/juizes.py) -> RED P36049; (3) censo da frota:
-  quantas perguntas vivas nascem de dia com par completo pelo marco. PROIBIDO: validar/fechar na mao, fallback, allowlist. Cadastro (sem escala vigente, sem posto) vai para a
-  lista do meu !. PRONTO: RELATO com os REDs e o censo. LEI-AKITA: origem=emissor orfao_14h, testemunha=juiz da batida/marco, juizes novos=0. Segue a fila; PAREI so em lei ou !
-
-  Read 1 file, ran 11 shell commands
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcbl13d3h.output (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1mesljwu.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/ba08dm8kg.output (15 lines)
-  ⎿  Referenced file ponto/management/commands/aplicar_09_corte_b.py
 
 ● Task "Esperar o veredito da suite completa" still running in background
 
@@ -116,17 +105,28 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
   segunda conta), fallback. PRONTO: RELATO com o censo antes/depois, REDs e commit. LEI-AKITA: origem=calendario.py:287, testemunha=espelho_do_colab, juizes novos=0. Segue a
   fila; PAREI so em lei ou !
 
-● Esperar o veredito da regua · 4m 28s
+● Esperar o veredito da regua · 9m 58s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran )|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e6c.log 2>/dev/null; do sleep 15; done; grep -E '^(OK|FAILED|Ran
-     )|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /tmp/claude-10… (4m 25s)
+     )|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /tmp/claude-10… (9m 55s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (3h 31m 58s · ↓ 136.2k tokens)
+✢ Determining… (3h 37m 29s · ↓ 136.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: O-FOLGA-DIA-ERRADO (fila 2, depois do BO col354; lei nova: precisa de corte -- rota do chamado para cadastro). FONTE: celulas da competencia (veredito) +
+  fatos_do_dia; tela existente templates/escala/cadastro_x_realidade.html (L-084); regenerar_celulas_vinculo (excecao formal de passado errado por cadastro, corte 16/08). MUDA:
+  (1) vigia com contador (esperado 0, dono supervisao): por colab 6x1/5x2, dia da semana com furo recorrente (>=3 de 4) E dia de folga cadastrada com turno recorrente (>=3 de 4)
+  -> caso na tela cadastro x realidade com "folga provavel: <dia>", e o chamado desses dias ganha verbo cadastro endereçado ao admin; (2) o "Resolver dia" NAO ganha veredito
+  "folga"; ganha a acao "a folga e em outro dia -> corrigir escala", que abre a porta de correcao do vinculo PRE-PREENCHIDA (dia da semana), com trilha, e so aplica com o !
+  (L-009). RED: colab da quarta/domingo de 09 (Ronald passa o id). SELO: contador folga_dia_errado publicado; caso que MORDE (2 de 4 nao dispara); o Resolver dia nao grava folga
+  como veredito (selo de arvore). PROIBIDO: mudar vinculo sozinho, veredito de folga no dia, silenciar chamado sem prazo+tripwire, juiz novo, competencia exportada (L-092).
+  PRONTO: censo da frota (colabs, dias de folga trabalhada a 100% envolvidos, horas) no RELATO. LEI-AKITA: origem=emissao por dia sem leitura de padrao, testemunha=celula, juizes
+  novos=0. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
