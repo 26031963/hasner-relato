@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:32:01.**
+**Medido em 28/09/2026 01:33:22.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ M  app/chamados/services/validacao.py
 M  app/ponto/registro_batida.py
 M  app/ponto/services/fechamento.py
 A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
+?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -123,11 +124,11 @@ A  app/ponto/tests/test_e5_evento_mantem_o_gravado.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Republicar com raspagem e conferir o selo · 22s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -8; echo "=== o selo agora ==="; bash bin/tests/test_publicacao_sem_nome.sh 2>&1 | tail -3 (21s · 10 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ver por que o raspador nao pegou os 20 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | grep -E "RELATO.md|nomes=|vazamento|PAROU" | head -5; echo "=== o nome esta no publicado? ==="; grep -c "[nome]
+     [nome] DA [nome]" /home/ronald/hasner-relato/RELATO.md; echo "=== e no fonte? ==="; grep -c "[nome]" app/do…
 
-· Metamorphosing… (26m 3s · ↓ 37.8k tokens)
+* Metamorphosing… (27m 25s · ↓ 38.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
