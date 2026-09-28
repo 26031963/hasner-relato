@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 03:09:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.9 MB). Acoes na janela: **519**.
+**Medido em 28/09/2026 03:14:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.9 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:10:17 | Bash | Regua com a R4 revertida | `cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 \| tail -4` |
 | 03:08:19 | Bash | Manter os docs do HEAD e ver o que sobra revertido | `cd /home/ronald/saas-hasner && git checkout HEAD -- app/docs/ && git status --short \| head -12 && git diff --cached --stat \| tail -12` |
 | 03:08:10 | Bash | Reverter so o codigo da R4, mantendo o registro | `cd /home/ronald/saas-hasner && git revert --no-commit ca7bacf3 && git checkout HEAD -- app/docs/RELATO.md app/docs/TICKETS.md && git status --short \| head -12` |
 | 03:06:42 | Bash | Ver os arquivos do commit da R4 | `cd /home/ronald/saas-hasner && git show --stat ca7bacf3 \| tail -12` |
@@ -527,5 +528,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:22:31 | Bash | Remedir a L-007 com o split de saida real | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/probe_l007b.py <<'PYEOF' # L-007 por colab + se os turnos abertos dele tem SAIDA REAL disponivel (condicao do passo 4). import datetime as d, json from django.utils import timezone as tz from django.db.models import Q from colaboradores.models import Colaborador from escala.models import Esc ...` |
 | 15:21:50 | Bash | Smoke no worker servido com os sete casos | `cd /home/ronald/saas-hasner && echo "=== hora dos arquivos x hora dos workers ==="; stat -c '%y %n' app/ponto/turnos.py app/ponto/juiz_batida.py app/ponto/motor_calculo_v2.py \| sed 's/\..* / /'; for c in saas_core saas_ui; do echo -n "$c: "; docker exec $c ps -eo lstart,cmd 2>/dev/null \| grep gunicorn \| head -1 \| cut -c1-25; done; echo "=== SMOKE pelo codigo no ar ==="; docker exec saas_core p ...` |
 | 15:21:12 | Bash | Deploy das curas commitadas | `cd /home/ronald/saas-hasner && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 \| tail -16` |
-| 15:10:03 | Bash | Atualizar rodape e placar e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -1; bash bin/tickets_placar.sh --escrever 2>&1 \| tail -1; git diff --stat app/docs/TICKETS.md \| tail -2; git add app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF' [O95] placar e rodape do TICKETS antes do push -- a regua cobra e esta certa O rodape guarda o hash do ultimo push e o teto e 5 commits de atraso; com ...` |
-| 15:09:47 | Bash | Ler o veredito da suite | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9a61s4me.output` |
