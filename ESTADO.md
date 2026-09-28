@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:11:08.**
+**Medido em 28/09/2026 00:16:31.**
 
 | | |
 |---|---|
@@ -39,9 +39,9 @@ ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -
 ## `git status --short`
 
 ```
- M app/ponto/services/espelho.py
- M app/templates/ponto/espelho.html
-?? app/ponto/tests/test_impar_tela.py
+M  app/ponto/services/espelho.py
+A  app/ponto/tests/test_impar_tela.py
+M  app/templates/ponto/espelho.html
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -93,6 +93,9 @@ ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  reverter. Os escritores de dinheiro rodam 06:26–07:37, a 9 h da janela.
+
+  R2b — curada pela sua lei (ata com hii E hfi acesos = o par É a pausa, teto não se aplica), selada, régua verde, no ar e aplicada no gravado com o seu !: 9 colabs,
   horas_folga_trabalhada −17,31 h em 3 (dentro dos −25,85 em 5 autorizados; a casa separou 4 pela família 100% e 1 pela CONDICAO_SAIDA_REAL). ENTRAM/SAEM do TXT = 0, 07 e 08 = 0,
   família 100% e banco intocados. Smoke em prod: col843 24/08 = 544 trabalhou, 25/08 = folga sem hora. Condição (d): 0 divergência nova no oráculo e 31 curadas (85,0% → 90,0%).
 
@@ -117,16 +120,13 @@ ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -
 
 ❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-● Corrigir a janela do selo e rodar
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/ponto/tests/test_impar_tela.py'
-     s=io.open(p,encoding='utf-8').read()
-     s=s.replace(" trecho = tpl[max(0, i - 900):i + 900]",
-     " # a JANELA tem de cobrir o bloco inteiro: com +-900 ela cortava antes do `dia.realizado_h`\n"
-     " # e o propr…
+● Regua da IMPAR fatia 2 · 1m 46s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/templates/ponto/espelho.html app/ponto/tests/test_impar_tela.py && bash bin/regua.sh 2>&1 | tail -6
+     (1m 44s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Zigzagging… (28m 11s · ↓ 36.0k tokens)
+✢ Zigzagging… (33m 34s · ↓ 41.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
