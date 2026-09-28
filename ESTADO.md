@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:67 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:11:31.**
+**Medido em 28/09/2026 11:16:40.**
 
 | | |
 |---|---|
@@ -36,10 +43,10 @@ M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
 M  app/docs/RELATO.md
- M app/escala/utils.py
+M  app/escala/utils.py
 M  app/folha/porta_export.py
 M  app/folha/tests/test_porta_do_export.py
-MM app/ponto/motor_calculo_v2.py
+M  app/ponto/motor_calculo_v2.py
 A  app/ponto/tests/test_he_intra_dobrada.py
 M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
@@ -94,39 +101,39 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 4 shell commands
-
-❯ aval Ronald: PROVA-DOMINIO sai do portao do export da 09 (registrar no BACKLOG como livre, sem prazo). Portao de hoje = cura HE/intra com o meu ! -> recalculo da 09 -> porta do
-  export + selo "nenhum minuto em duas rubricas" = 0 -> extrato de rubricas dos 16 colabs da amostra publicado para o admin da folha -> lote 1 novo com hash novo, so com o meu
-  !. Segue a fila; PAREI so em lei ou !
-
-● Background command "Corrigir os campos e rodar o DIFF" completed (exit code 0)
-
-  Ran 3 shell commands
-
-● Background command "Medir o efeito ISOLADO da cura" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Corrigir o monkeypatch e medir o isolado" completed (exit code 0)
-
-  Ran 2 shell commands
-
 ❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
   push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
   push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Somar so o que o previsto descontou
+  Ran 8 shell commands
+
+❯ aval Ronald: O-DIA-PAGO S1 -- SUBSTITUI o desenho da fatia 1 (escritor/gancho) ja na fila; nenhuma lei nova alem do corte ja dado. FONTE:
+  ponto/services/fechamento.py::recalcular_fechamento_mes (o resultado de cada colab: periodos, periodos_ft, buraco de vinculo O85, reflexo DSR, banco) + recalcular_por_evento
+  (ja chamado por ponto/registro_batida.py:137 e chamados/services/validacao.py:107). MUDA: no MESMO ponto em que o FechamentoMensal do colab e gravado, lavrar DiaPago a partir
+  do MESMO resultado -- uma linha por dia (dia de INICIO do turno, O76 MotorBase._dia_do_turno) com as rubricas do dia, mais UMA linha de ajuste da competencia para o que so
+  existe no mes (reflexo DSR, banco); versao_motor, versao_dna, evento_origem, lavrado_em; substitui as linhas da mesma competencia+colab na mesma transacao. NENHUM escritor
+  novo, NENHUM gancho novo, nenhum leitor muda. Competencia exportada: recusa como o fechamento (L-092). SELO: soma(DiaPago do colab na competencia) == FechamentoMensal, campo a
+  campo, na frota da 09 = 0 divergencia (vira o contador fechamento_x_soma_dias_pagos da S2). RED: col125 09/2026. ORDEM: logo apos a cura HE/intra, SEM esperar o lote 1
+  (aditiva). LEI-AKITA: origem=recalcular_fechamento_mes, testemunha=DiaPago, juizes novos=0. Segue a fila; PAREI so em lei ou !
+
+  Ran 2 shell commands
+
+● Background command "Re-medir o DIFF com a regra estreita" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Re-medir com o patch certo" completed (exit code 0)
+
+  Corrigir o RELATO e rodar a regua final
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/ponto/motor_calculo_v2.py'
-     t=io.open(P,encoding='utf-8').read()
-     # helper passa a somar SO o que o previsto descontou
-     v_old = """ return (limite or 0) + sum((p.minutos_intrajornada_indenizada or…
+     import io
+     p='app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     t=t.replace('-430,71 h de hora extra em 208 colabs, ZERO campo fora do alvo, ZERO colab para cima',
+     '-346,87 h de hora extra em 144 colabs, ZERO campo f…
 
-✢ Determining… (5h 8m 59s · ↓ 271.6k tokens)
+✽ Determining… (5h 14m 7s · ↓ 279.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
