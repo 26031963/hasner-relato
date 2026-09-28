@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:12:31.**
+**Medido em 28/09/2026 09:18:01.**
 
 | | |
 |---|---|
@@ -34,8 +34,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
 M  app/docs/BACKLOG.md
 M  app/docs/PROMPTS.md
-?? app/ponto/management/commands/e6_oraculo.py
-?? app/ponto/tests/test_e6_oraculo_julga_impar.py
+A  app/ponto/management/commands/e6_oraculo.py
+A  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -88,10 +88,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 4 shell commands
-
-❯ aval Ronald: BO col354 (disputa #5527), bug a PROVAR com RED antes de curar. FATO: 23/09 faltou a volta do intervalo; o app gravou os tipos invertidos em 23/09 16:02 e em todo
   24 e 25 (S 07:01 · E 11:27 · S 12:30 · E 16:00). Emissor orfao_14h abriu P36049 (24/09) e P36550 (25/09) perguntando "saida" em dias com 4 batidas completas, e P35636 (23/09)
   pergunta saida quando o que falta e a VOLTA DO INTERVALO. As 3 tem via_resolucao=sem_turno_aberto e seguem vivas na tela. PROVAR: (1) o emissor orfao_14h le tipo gravado em vez
   do marco (L-E3 "o MARCO manda") -> RED col354 24/09; (2) via carimbado + pergunta viva = fio incoerente (pergunta_viva, chamados/juizes.py) -> RED P36049; (3) censo da frota:
@@ -110,17 +106,21 @@ M  app/docs/PROMPTS.md
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● CSV com piso, teto e contagem crua · 28s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, py_compile
-     p='app/ponto/management/commands/e6_oraculo.py'
-     t=io.open(p,encoding='utf-8').read()
-     t=t.replace(""" _teto = _v.envelope.get(k, 0.0)
-     T['impar_dentro_da_faixa'""",""" T['impar_dentro_da_faixa'""",1)
-     t=t.replace(""" df = m_e6 … (27s · 2 lines)
+  Ran 4 shell commands
+
+❯ aval Ronald: E4-CALENDARIO (fila 1, logo apos o item em curso; nenhuma lei nova -- LEI-AKITA 2, E4). FONTE: ponto/services/espelho.py::espelho_do_colab (motor CCT). MUDA:
+  colaboradores/services/calendario.py:287 deixa de montar motor proprio (get_motor sem CCT) e LE os periodos/extras da mesma autoridade do espelho; o registro _F3 em
+  core/juizes.py sai. RED: colab com feriado previsto e colab 12x36 da 09 onde calendario != espelho em extra 50/100 (medir a frota primeiro: quantos dia-colab divergem,
+  publicar). SELO: folha/porta_export.py::medir ganha a 5a testemunha (calendario_x_espelho = 0), sem allowlist. PROIBIDO: trocar so para get_motor_cct no calendario (seria
+  segunda conta), fallback. PRONTO: RELATO com o censo antes/depois, REDs e commit. LEI-AKITA: origem=calendario.py:287, testemunha=espelho_do_colab, juizes novos=0. Segue a
+  fila; PAREI so em lei ou !
+
+● Rodada final do oraculo com o carimbo do corte · 1m 6s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 --csv /tmp/e6_r8.csv 2>&1 | tail -8 (1m
+     4s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (3h 9m 59s · ↓ 109.7k tokens)
+✢ Determining… (3h 15m 28s · ↓ 118.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
