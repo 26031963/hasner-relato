@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:03:42.**
+**Medido em 28/09/2026 02:09:01.**
 
 | | |
 |---|---|
@@ -32,8 +32,8 @@ d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 ## `git status --short`
 
 ```
- M app/escala/models.py
-?? app/ponto/tests/test_r4_celula_sem_marcos.py
+M  app/escala/models.py
+A  app/ponto/tests/test_r4_celula_sem_marcos.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -86,7 +86,6 @@ d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
   e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
 
   A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
@@ -114,11 +113,12 @@ d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-  Ver o erro do selo da R4
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.p…
+  Provar o RED da R4 e rodar a regua · 4m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && git stash push -q app/escala/models.py && source bin/recursos.sh && teste_envfile >/dev/null && echo "### RED contra o HEAD:" && docker run
+     --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEB… (4m 38s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Metamorphosing… (57m 45s · ↓ 65.5k tokens)
+✢ Metamorphosing… (1h 3m 3s · ↓ 67.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
