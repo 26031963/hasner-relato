@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:05:31.**
+**Medido em 28/09/2026 12:10:45.**
 
 | | |
 |---|---|
@@ -127,13 +127,13 @@ A  app/ponto/tests/test_dia_pago_soma.py
   longos (atestado, folga compensatoria, chips de extra) quebram em ate 2 linhas com reticencias e title com o texto inteiro; nada muda de cor nem de conteudo. Selo de front nas
   DUAS cascas (grafo de includes) + smoke meu de clique antes do push. Segue a fila; PAREI so em lei ou !
 
-● Esperar a regua da S1 · 1m 26s
+  Esperar a regua da S1 · 6m 41s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (1m 26s)
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (6m 39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (6h 2m 58s · ↓ 335.9k tokens)
+· Determining… (6h 8m 12s · ↓ 335.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
