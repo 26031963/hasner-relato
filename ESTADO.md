@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:46:01.**
+**Medido em 28/09/2026 14:51:31.**
 
 | | |
 |---|---|
@@ -114,13 +114,13 @@ M  app/ponto/tests/test_calculador_regras.py
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Esperar a regua · 1m 53s
+● Esperar a regua · 7m 23s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (1m 51s)
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (7m 21s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Infusing… (8m 8s · ↓ 17.4k tokens)
+✢ Infusing… (13m 38s · ↓ 17.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
