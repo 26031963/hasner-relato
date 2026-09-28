@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:22:01.**
+**Medido em 28/09/2026 11:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)` |
+| `HEAD` local | `70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)` |
 | `origin/main` | `af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,26 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
+5ece3a86 BUG-HE-INTRA-DOBRADA: a mesma hora era paga em DUAS rubricas -- curado, -346,87 h de HE em 144 colabs, PARADO no !
 af87c738 TICKETS: rodape e placar com o carimbo da regua do E4 (8558 testes OK)
 3cacf25e E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, mostrando zero onde a folha paga -- 72 dia-colab em 30 colabs
 9cf2f4d9 TICKETS: rodape com o carimbo da regua de agora (8556 testes OK, 28/09 09:50)
-9de6b051 TICKETS: placar do topo em dia (regua 28/09 09:50, ultimo push 12888d36)
-8daf2359 ITEM 7: os 473 dias impares saem do limbo -- 158 deles nao sao divergencia, sao indecidiveis sem DNA
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
-M  app/docs/PENDENTES_RONALD.json
-M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
-M  app/escala/utils.py
-M  app/folha/porta_export.py
-M  app/folha/tests/test_porta_do_export.py
-M  app/ponto/motor_calculo_v2.py
-A  app/ponto/tests/test_he_intra_dobrada.py
-M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,7 +91,6 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 2 shell commands
 
 ❯ aval Ronald: AVISO-DO-DONO (fila 2, fatia pequena, depois do portao da 09): todo PAREI que espera o meu ! e todo marco fechado do placar (portao da 09, DIA-PAGO S1-S4) dispara
@@ -127,13 +116,14 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 
 ● Background command "Re-medir com o patch certo" completed (exit code 0)
 
-● Esperar a regua final · 4m 26s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hei2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO'… (4m 24s)
+● Empurrar a cura · 1m 5s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
+     git commit -q -F - -- app/docs/TICKETS.md <<'EOF'
+     TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
+     … (1m 4s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (5h 19m 29s · ↓ 279.5k tokens)
+✢ Determining… (5h 24m 58s · ↓ 282.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
