@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:48:01.**
+**Medido em 28/09/2026 01:53:31.**
 
 | | |
 |---|---|
@@ -119,11 +119,11 @@ M  bin/relato.sh
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua com o diagrama regenerado · 1m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 | tail -4 (1m 16s)
+● Regua com o diagrama regenerado · 6m 47s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 | tail -4 (6m 46s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (42m 3s · ↓ 43.3k tokens)
+✢ Metamorphosing… (47m 33s · ↓ 43.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
