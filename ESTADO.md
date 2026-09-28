@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:39:31.**
+**Medido em 27/09/2026 23:45:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
-| `origin/main` | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e
 ## `git status --short`
 
 ```
+ M bin/hook_stop_fila1.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -90,40 +91,40 @@ c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 14 shell commands
+  reverter. Os escritores de dinheiro rodam 06:26–07:37, a 9 h da janela.
 
-❯ aval Ronald: (1) junto do IMPAR entra o TETO: col444 30/08 (1.750 min) e col349 14/09 (78 h) na tela/PDF -- absorcao de intervalo engole batida do dia seguinte (CLAUDE.md 6,
-  teto temporal = fato encerrado/instante, nunca data); RED os dois. (2) R4, BO pronto: origem escala/models.py:977-986 (EC.marcos_do_dia: celula EXISTE com dna sem marcos cai no
-  template :986 e entrega hii/hfi; espelho.py:197-198 -> turnos.py:403-406 desconta 60 min). Lei: celula soberana. RED col610 22/08 661 -> 721 (ata=oraculo=721). ANTES da cura:
-  censo dos 69 chamadores de marcos_do_dia (P15) e DIFF restrito aos dias com celula sem marcos. Nenhuma lei nova. Segue a fila.
+  R2b — curada pela sua lei (ata com hii E hfi acesos = o par É a pausa, teto não se aplica), selada, régua verde, no ar e aplicada no gravado com o seu !: 9 colabs,
+  horas_folga_trabalhada −17,31 h em 3 (dentro dos −25,85 em 5 autorizados; a casa separou 4 pela família 100% e 1 pela CONDICAO_SAIDA_REAL). ENTRAM/SAEM do TXT = 0, 07 e 08 = 0,
+  família 100% e banco intocados. Smoke em prod: col843 24/08 = 544 trabalhou, 25/08 = folga sem hora. Condição (d): 0 divergência nova no oráculo e 31 curadas (85,0% → 90,0%).
 
-  Read 3 files, ran 30 shell commands
+  TETO — os seus dois casos eram um mecanismo, não dois (corrigi o que publiquei): _dist_marco mede hora do dia e engolia batida de D+1 como pausa de um turno de D, silenciando o
+  próprio teto de 26 h. col444 30/08 1.750 → 0 (turno segue aberto) e 31/08 0 → 287; col349 14/09 4.682 → 418. No ar, com smoke em prod.
 
-● Background command "Commitar as curas de selo e rodar a regua" completed (exit code 0)
+  REGUA-MORTA, sua pergunta — nenhum push pulou o arsenal entre 25/09 10:34 e 27/09 22:24. O atalho exige REGUA_STATUS == "OK", o único escritor do carimbo é bin/regua.sh (que
+  morria antes de escrever), e o carimbo ficou em FALHOU / 25/09 07:25:56. Os 199 commits da janela rodaram o arsenal inteiro. O custo foi tempo e a cegueira dos selos de host,
+  não código sem teste.
 
-  Committed d97dd4b1
+  Suite pela régua — régua 8.497 testes em 467 s; o docker run manual sem --parallel levava 898 s. Pico de RAM em --parallel 2: 1.024 MiB de 2.048 (50%), CPU ~145% de 400%.
+  --parallel 4 cabe (~1,7 GiB, 83%), folgado com --memory 3g; mas o cpuset de teste são 4 threads em 2 núcleos físicos, então espero 25–40%, não o dobro — rodo uma régua assim e
+  publico os dois tempos se você quiser.
 
-● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
+  Achados de carona ao cumprir a ordem da régua: ela estava morta desde 25/09 10:34, e com ela viva 4 selos de host mudos há 36 h acusaram — alarme de cortes virado juiz,
+  fabricante sorteando item que espera você (O59/O66/O81, e O81 declarado duas vezes), hook virado cópia de 177 linhas num ciclo com o próprio hooks.sh, e o selo de LABELS vazio
+  (comparava a fonte única consigo mesma).
 
-  Pushed to main, ran 22 shell commands
+  Próximo: IMPAR — espelho.py:513-514 passa a ler RealizadoDoDia.aberto, classes B e C primeiro.
 
-❯ aval Ronald: R2b APPLY autorizado com a faixa: horas_folga_trabalhada -25,85 h em 5 colabs (efeito L-085 da noite que volta a ser uma), demais condicoes como medidas; fora
-  disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
-  listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
+✻ Brewed for 2h 38m 35s · done 11:41 PM · 1 shell still running
 
-● Abrir a linha do IMPAR e empurrar · 48s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/docs/TICKETS.md'
-     s=io.open(p,encoding='utf-8').read()
-     anc='| TETO | ponto/turnos (pareador) |'
-     i=s.index(anc)
-     nova=('| IMPAR | ponto/services/espelho + tela/PDF | dia de batida IMPAR mostra NUMERO em vez de "EM ABERTO -- '
-     'falta: <… (48s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
 
-· Zesting… (2h 36m 28s · ↓ 241.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Curar as tres falhas do hook e provar
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && git show HEAD:bin/hook_stop_fila1.py >
+     $S/hook.py && python3 - <<'PY'
+     import io, py_compile
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961…
+
+✢ Zigzagging… (2m 4s · ↓ 7.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
