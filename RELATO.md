@@ -1,10 +1,56 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: hook-teto | espera Ronald` -- 5 bloqueios seguidos sem commit novo na fila 1 (`R4 -- residuo da O84 no leitor do realizado: dna.marcos=null (posicional) cai no TEMPLATE e desconta 60 min que nao `). O hook liberou o encerramento e deixou este registro.
+**MODO CONTINUO.** Itens (1)(2)(4)(5) e **O81 (5b)** fechados. A porta do export esta **VERDE** com uma pergunta a mais: `colabs_no_builder=0` (era **96 dos 205**). PARADO em DOIS `!`: a pergunta de lei da R4 e o **`!` do EXPORT** -- o dossie esta abaixo.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 4: **92,9%**` (era 91,4% na r3) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# O81 FECHADA (5b): metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia (28/09 05:1x)
+
+O MUDA que voce cortou em 18:08, ao pe da letra: a **celula** e lida de `max(data_ini, apur_ini)` em diante, o
+**builder** cobre so o que vem ANTES do `apur_ini`, e a **regua e por dia**.
+
+O tamanho do problema, medido pela propria porta do export:
+**`colabs_no_builder` = 96 de 205 -> 0.** Metade do universo do TXT tinha o espelho desenhado pelo BUILDER, a
+fonte antiga.
+
+A CAUSA e pequena e o estrago era grande: `data_ini` no `montar_dias` e o `vis_ini`, que a tela estica para TRAS
+(piso visual) -- em 09/2026 ele cai em **21/07** para a maioria. E **um unico dia** com ata na forma AGREGADA
+dentro dessa janela derrubava o periodo INTEIRO para o builder. A causa era sempre um dia **19/08 ou 20/08** --
+dois dias que **nao estao nem na competencia 09**, que abre em 21/08.
+
+**E NAO MUDA UM NUMERO.** O DIFF do espelho dia a dia nos 205 deu `colabs movidos=0`, exatamente o que o seu
+corte previa ("muda 0 dos 644"). O ganho nao e numero, e alcance: **enquanto o builder desenha, toda cura no
+caminho da CELULA silenciosamente nao alcanca esses colabs** -- metade do TXT estava fora do alcance de qualquer
+cura desta serie. E nao custa: esses colabs ja rodavam o builder (era a degradacao). Medido em 10 deles:
+p50 **264 ms** antes, **265 ms** depois.
+
+A ATA DE 06/07/08 NAO FOI TOCADA (HX-REGEN-NAO-TOCA-EXPORTADO): nao se re-lavrou nada. Apenas se parou de
+PERGUNTAR a ela sobre um periodo que nao e o dela. O selo tem caso para isso, e ele **varre a AST**: se nascer
+`save`/`update`/`create`/`delete` no caminho da grade, fica VERMELHO.
+
+## A DEGRADACAO GANHOU LEITOR, e e isso que explica os 96 invisiveis
+
+A queda no builder era NOMEADA -- mas **so no log**. E log nao e contador: por isso 96 colabs passaram semanas
+sendo desenhados pela fonte antiga sem ninguem saber. Agora `resumo['grade_pelo_builder']` diz, e a **porta do
+export CONTA e REPROVA**: `colabs_no_builder` entra na soma de falhas do `selo_leitores_no_mesmo_numero`.
+PROVA do RED, com o contador montado sobre o codigo ANTIGO (so o contador, sem o MUDA):
+`colabs_no_builder=96` e `SELO VERMELHO: 96 divergencia(s)`. Com o MUDA: `colabs_no_builder=0` e SELO VERDE.
+
+E o selo do O81 me corrigiu na 4a repeticao da mesma licao: a 1a versao procurava a palavra `lavrar` no FONTE e
+ficou vermelha por causa dos COMENTARIOS que explicam a cura. **Selo que varre texto morde a prosa; o que varre
+AST morde a chamada.**
+
+## A porta do export agora, com as cinco perguntas
+
+```
+universo do TXT (09/2026): 205 colaborador(es)
+  tela_x_pdf=0 · topo_x_coluna=0 · colabs_no_builder=0 · cartao_x_txt=0
+  dias_em_aberto=284  (nao e divergencia -- furo sem decisao, linha propria)
+SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia, sem allowlist
+```
+
 
 # DOSSIE DO EXPORT DA 09 -- esperando o seu `!` (28/09 04:2x)
 

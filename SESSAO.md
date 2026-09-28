@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 05:45:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.6 MB). Acoes na janela: **503**.
+**Medido em 28/09/2026 05:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.6 MB). Acoes na janela: **505**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:50:02 | Bash | Deploy do O81 e porta em prod | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -3; echo "=== porta do export em prod, depois do deploy ==="; docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 \| grep -E "^universo\|^ [a-z]\|^SELO"` |
+| 05:47:26 | Bash | Publicar o O81 e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO.** Itens (1)(2)(4)(5) e **O81 (5b)** fechados. A porta do export esta **VERDE** com ' 'uma pergunta a mais: `colabs_no_builder=0` (era **96 dos 205**). PARADO em DOIS `!`: a pergunta de lei ' 'da R4 e o **`!` do ...` |
 | 05:37:43 | Bash | Regua do O81 | `cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py app/ponto/tests/test_o81_celula_da_competencia.py && bash bin/regua.sh 2>&1 \| tail -4` |
 | 05:37:34 | Bash | Corrigir o parse da AST no selo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/ponto/tests/test_o81_celula_da_competencia.py' s=io.open(p,encoding='utf-8').read() s=s.replace(""" def _src(self): from ponto.services.espelho import montar_dias self._src.__globals__['montar_dias'] = montar_dias return inspect.getsource(montar_dias)""", """ def _src(self): from ponto.services.espelho import montar_dias return in ...` |
 | 05:37:22 | Bash | Varrer AST em vez de texto no selo do O81 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/ponto/tests/test_o81_celula_da_competencia.py' s=io.open(p,encoding='utf-8').read() old = ''' def test_MORDE_a_cura_NAO_escreve_na_ata(self): """HX-REGEN-NAO-TOCA-EXPORTADO: o MUDA para de PERGUNTAR, nunca re-lavra. Se aparecer escrita neste caminho, e o veto da L-092 sendo furado.""" src = self._src() for proibido in ('.save(', ' ...` |

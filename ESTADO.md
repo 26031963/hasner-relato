@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:45:31.**
+**Medido em 28/09/2026 05:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export` |
-| `origin/main` | `ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export` |
+| `HEAD` local | `cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0` |
+| `origin/main` | `cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,20 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
 ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
 0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
 87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
 ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
-e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
-M  app/ponto/services/espelho.py
-A  app/ponto/tests/test_o81_celula_da_competencia.py
-M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -116,12 +113,12 @@ M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Regua do O81 · 7m 47s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/services/espelho.py app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-     app/ponto/tests/test_o81_celula_da_competencia.py && bash bin/regua.sh 2>&1 | tail -4 (7m 45s)
+  Deploying do O81 e porta em prod · 42s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -3; echo "=== porta do export em prod, depois do deploy ==="; docker exec saas_core python manage.py
+     tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 | grep -E "^universo|^ [a-z]|^SELO" (40s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Flibbertigibbeting… (22m 59s · ↓ 21.6k tokens)
+· Flibbertigibbeting… (28m 12s · ↓ 26.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
