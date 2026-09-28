@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:17:01.**
+**Medido em 28/09/2026 17:22:31.**
 
 | | |
 |---|---|
@@ -34,7 +34,10 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ```
 A  app/chamados/services/cobranca_folha.py
 A  app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py
+M  app/chamados/tests/test_e5b_cobrar_massa.py
 M  app/chamados/views_cobrar.py
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
 M  app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -88,8 +91,6 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     FONTE: chamados/catalogo/modulos.py::data_do_chamado + competencia exportada pelo juiz de
-     ponto/services/fechamento.py (CompetenciaExportada / empresas_exportadas_no_escopo). Nunca data cravada.
      MUDA: chamados/views_cobrar.py::cobrar_massa (e a previa) — so chamado cujo dia cai em competencia NAO exportada.
      Sem data: fora do massa (cura mais restritiva); listar os 113 por modulo_origem no RELATO para corte.
      RED: colab so com chamado da 09 exportada -> nao recebe push; colab com furo na 10 -> recebe; previa conta igual ao envio.
@@ -97,17 +98,7 @@ M  app/docs/RELATO.md
      LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Publicar e rodar a regua do COBRAR · 8m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     sec = '''# COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x)
-     O botao **Cobrar** mandava p… (8m 37s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Unfurling… (27m 46s · ↓ 28.6k tokens)
+  Pushed to main, searched for 5 patterns, ran 14 shell commands
 
 ❯ aval Ronald: O-JANELA-HE parte A (REGRA) — fila 1, agora; partes de tela/aba/portao seguem atras da S3,
   com PRAZO: prontas antes do export da competencia 10. Leis: L-097, L-092, L-082(b), L-009.
@@ -121,10 +112,22 @@ M  app/docs/RELATO.md
      PROIBIDO: regra no leitor, fallback, tocar a 09, apply sem "!".
      LEI-AKITA: origem=motor_calculo_v2 (tolerancia HE), testemunha=motor/DiaPago, RED=item 4, quem-mais-le=tela/PDF/TXT/calculador, juizes novos=0.
      segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+  Registrar a parte A e rodar a regua · 3m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     # registrar a ordem da O-JANELA-HE parte A
+     p='app/docs/PROMPTS.md'
+     u=io.open(p,encoding='utf-8').read()
+     anc='\n\n## Contagem'
+     u=u.replace(anc,'\n| O-JANELA-HE parte A (REGRA) | 28/09 ~17:3x | **fila 1, AGORA**; a… (3m 38s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Unfurling… (33m 16s · ↓ 32.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
