@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 16:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **483**.
+**Medido em 28/09/2026 16:23:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **482**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -492,4 +492,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:32:36 | Bash | Ler o teste que ficou vermelho | `grep -n "def test_sync_atrasado_fecha_chamado_preexistente" -A 30 /home/ronald/saas-hasner/app/ponto/tests/test_detectar_entrada_adiantada.py \| head -34` |
 | 04:32:24 | Bash | Rodar o teste suspeito isolado | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_detectar_entrada_adiantada --settings=config.settings.ci --noinput 2>&1 \| grep ...` |
 | 04:32:10 | Bash | Conferir se o teste e flaky | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && for i in 1 2; do docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test ponto.tests.test_detectar_entrada_adiantada --settings=config.settings.ci --noi ...` |
-| 04:23:16 | Bash | Publicar o item (5), marcar o placar e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 ' 'divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a ' 'pergunta de lei da R4 (o ...` |
