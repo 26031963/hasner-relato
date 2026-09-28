@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 11:06:01.**
+**Medido em 28/09/2026 11:11:31.**
 
 | | |
 |---|---|
@@ -36,9 +36,10 @@ M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
 M  app/docs/RELATO.md
+ M app/escala/utils.py
 M  app/folha/porta_export.py
 M  app/folha/tests/test_porta_do_export.py
-M  app/ponto/motor_calculo_v2.py
+MM app/ponto/motor_calculo_v2.py
 A  app/ponto/tests/test_he_intra_dobrada.py
 M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
@@ -93,9 +94,6 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 4 shell commands
-
-● Background command "DIFF de frota da cura contra o gravado" completed (exit code 0)
 
   Ran 4 shell commands
 
@@ -119,13 +117,16 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
   push para o colaborador col677 pelo servico de push que ja existe (mesmo do holerite), texto curto "<item>: <estado> -- espera seu !" ou "<item>: fechado"; trilha de envio; um
   push por evento (idempotente); smoke meu no celular antes do push ir ao repo. Nenhuma lei nova. Segue a fila; PAREI so em lei ou !
 
-● Esperar a regua do BUG-HE · 5m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hei.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (5m 18s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Somar so o que o previsto descontou
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/ponto/motor_calculo_v2.py'
+     t=io.open(P,encoding='utf-8').read()
+     # helper passa a somar SO o que o previsto descontou
+     v_old = """ return (limite or 0) + sum((p.minutos_intrajornada_indenizada or…
 
-· Determining… (5h 3m 28s · ↓ 262.8k tokens)
+✢ Determining… (5h 8m 59s · ↓ 271.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
