@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:30:31.**
+**Medido em 28/09/2026 08:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
+| `HEAD` local | `1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar` |
 | `origin/main` | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1f81fa82 _dbg.py sai do repo: arquivo nascido de MOUNT, e agora ha selo para a segunda vez nao passar
 6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201
 798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
 29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
 65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
-cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
 ```
 
 ## `git status --short`
@@ -84,9 +84,6 @@ cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia --
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      },
-      "for Stop / SubagentStop": {
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
         "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
       }
     }
@@ -103,13 +100,7 @@ cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia --
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-  Deploying e re-lavrar a porta com o universo do lote 1 · 6m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="08:0x -- sombra de HOJE REFEITA diverge=0 erros=0; o --bloco nao cabe antes do export. CADASTRO-ZERO e um PORTAO de
-     retencao (ninguem entra a mais, 4 saem) + o portao do TXT por carimbo; regua 8.548 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; … (6m 52s · 6 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Determining… (2h 27m 59s · ↓ 61.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Pushed to main, ran 40 shell commands
 
 ❯ aval Ronald: cauda do lote 1 -- (a) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (b) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
   se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT (regra fora do corte). Segue a fila; PAREI so em lei ou !
@@ -117,10 +108,19 @@ cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia --
 ❯ aval Ronald: cauda do lote 1 -- (a) RELATO da R4 pela L-094: publicar as QUATRO condicoes medidas (DIFF de frota, zero para baixo, E6 antes/depois, 07/08 = 0) -- sem isso a R4
   esta incompleta pela propria lei; (b) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (c) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
   se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+  Remover o _dbg.py com selo e registrar o O97
+  ⎿  $ cd /home/ronald/saas-hasner && git rm -q --cached app/folha/tests/_dbg.py && rm -f app/folha/tests/_dbg.py && bash bin/tests/test_sem_arquivo_de_mount.sh | tail -2 && git
+     add bin/tests/test_sem_arquivo_de_mount.sh && python3 - <<'PY'
+     import io
+     p='app/docs/BACKLOG.md'
+     s=io.open(p,encoding='utf-8')…
+
+· Determining… (2h 33m 12s · ↓ 69.1k tokens · thinking)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
