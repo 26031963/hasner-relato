@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:11:41.**
+**Medido em 28/09/2026 17:17:01.**
 
 | | |
 |---|---|
@@ -88,20 +88,6 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-  ⎿  Interrupted · What should Claude do instead?
-
-● Background command "DIFF com segmentos de trabalho" completed (exit code 0)
-
-  Ran 3 shell commands
-
-❯ aval Ronald: LOTE-1-EMITIDO + COBRAR-SO-O-QUE-MUDA-A-FOLHA. Leis: L-092. Nenhuma lei nova.
-  1. Lote 1 da 09 EMITIDO pelo Ronald 16:5x; hashes conferidos = 8a63e3ba / 6e0f1048 / cb7f00fe (identicos ao publicado).
-     Limpar o PAREI da emissao e os PAREI resolvidos do topo do RELATO (10:3x, 11:2x, 12:3x).
-  2. COBRAR-SO-O-QUE-MUDA-A-FOLHA — fila 1 (bug de tela provado):
-     MEDIDO 16:5x: Cobrar = 1.117 chamados / 261 colabs; dia na 10 = 321, na 09 = 676, sem data = 113, <=08 = 7;
-     55 colabs so tem chamado sem data/antigo e levam push sem dever nada na competencia.
      FONTE: chamados/catalogo/modulos.py::data_do_chamado + competencia exportada pelo juiz de
      ponto/services/fechamento.py (CompetenciaExportada / empresas_exportadas_no_escopo). Nunca data cravada.
      MUDA: chamados/views_cobrar.py::cobrar_massa (e a previa) — so chamado cujo dia cai em competencia NAO exportada.
@@ -111,20 +97,34 @@ M  app/docs/RELATO.md
      LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Publicar e rodar a regua do COBRAR · 3m 19s
+● Publicar e rodar a regua do COBRAR · 8m 39s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      p='app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
      sec = '''# COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x)
-     O botao **Cobrar** mandava p… (3m 17s · 2 lines)
+     O botao **Cobrar** mandava p… (8m 37s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (22m 26s · ↓ 28.6k tokens)
+· Unfurling… (27m 46s · ↓ 28.6k tokens)
+
+❯ aval Ronald: O-JANELA-HE parte A (REGRA) — fila 1, agora; partes de tela/aba/portao seguem atras da S3,
+  com PRAZO: prontas antes do export da competencia 10. Leis: L-097, L-092, L-082(b), L-009.
+  1. Cadastro por empresa "Janela de HE" (liga, piso 10, teto 60; saida com teto proprio DESLIGADO).
+  2. Regra em UM sitio no motor (sitio da TOLERANCIA_HE_MIN_DIA): entrada >10 min antes do marco -> conta do marco,
+     minutos fora nao viram HE nem compensam atraso/saida antecipada; >60 -> idem + lista CADASTRO×REALIDADE.
+     ponto/calculador/regras.py IMPORTA a mesma regra (nunca copia).
+  3. Vale da competencia 10; 09 exportada intocada.
+  4. RED: 06:40 marco 07:00 -> HE 0; 06:52 -> nada muda; 05:30 -> conta do marco + lista; turno noturno idem.
+  5. DIFF por rubrica da competencia 10 na sombra contra o GRAVADO, por colab, no RELATO. Apply so com meu "!".
+     PROIBIDO: regra no leitor, fallback, tocar a 09, apply sem "!".
+     LEI-AKITA: origem=motor_calculo_v2 (tolerancia HE), testemunha=motor/DiaPago, RED=item 4, quem-mais-le=tela/PDF/TXT/calculador, juizes novos=0.
+     segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
