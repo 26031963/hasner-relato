@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 05:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.6 MB). Acoes na janela: **505**.
+**Medido em 28/09/2026 06:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.7 MB). Acoes na janela: **507**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:56:29 | Bash | Tirar o colchete do assunto e empurrar | `cd /home/ronald/saas-hasner && git log -1 --format=%B \| sed '1s/^\[FILA-1\] //' > /tmp/msg_parei.txt && head -1 /tmp/msg_parei.txt && git commit -q --amend -F /tmp/msg_parei.txt && bash bin/regua_tickets.sh 2>&1 \| tail -2 && git push 2>&1 \| tail -3` |
+| 05:56:19 | Bash | Reescrever o placar e empurrar o PAREI | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && git add app/docs/TICKETS.md && git commit -q --amend --no-edit && git push 2>&1 \| tail -3 && git log --oneline -1` |
 | 05:55:03 | Bash | Escrever o PAREI, publicar o relato e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('`PAREI: a fila 1 esta VAZIA de item que eu possa executar -- restam DOIS, e os dois sao decisao sua \| ' 'espera Ronald`. (a) **`!` do EXPORT da 09** -- a porta esta VERDE nas cinco perguntas e o dossie esta ' 'abaixo; (b) **pe ...` |
 | 05:54:30 | Bash | Deploy do O81 pela porta declarada | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="05:2x -- a sombra de HOJE esta REFEITA com diverge=0 erros=0, mas o --bloco (1h40) ainda nao rodou; fatia de TELA/SELO: zero migration, zero escrita no gravado, regua 8.529 OK e DIFF de frota medido em ZERO numero movido" bin/deploy.sh --sem-migrate 2>&1 \| tail -3` |
 | 05:50:02 | Bash | Deploy do O81 e porta em prod | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 \| tail -3; echo "=== porta do export em prod, depois do deploy ==="; docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 \| grep -E "^universo\|^ [a-z]\|^SELO"` |

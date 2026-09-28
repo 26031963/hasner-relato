@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:55:45.**
+**Medido em 28/09/2026 06:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0` |
-| `origin/main` | `cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0` |
+| `HEAD` local | `65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald` |
+| `origin/main` | `65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,18 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
 cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
 ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
 0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
 87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
-ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -86,6 +85,22 @@ ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 c
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -103,27 +118,11 @@ ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 c
     }
   }
 
-✻ Crunched for 4h 8m 38s · done 5:14 AM · 1 shell still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Escrever o PAREI, publicar o relato e empurrar · 41s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     l3=s.split('\n')[2]
-     novo3=('`PAREI: a fila 1 esta VAZIA de item que eu possa executar -- restam DOIS, e os dois sao decisao sua | '
-     'espera Ronald`. (a)… (40s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Flibbertigibbeting… (33m 12s · ↓ 28.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Cogitated for 36m 14s · done 5:58 AM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ ! export da 09, e R4 aplica com o caminho (a)
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
