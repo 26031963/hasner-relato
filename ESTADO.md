@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:00:25.**
+**Medido em 27/09/2026 21:05:33.**
 
 | | |
 |---|---|
 | `HEAD` local | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| `origin/main` | `f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,8 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ## `git status --short`
 
 ```
+ M app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
+ M app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -82,40 +84,40 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  regra é sua — mas o registro diz o que a medição diz: o que bloqueia é a testemunha, não a cura.
 
-● 43 verdes. Suíte completa e a PROVA da R2 com as quatro condições — DIFF mais oráculo nos afetados:
+  O censo do matcher fecha a R1 com número, e o veredito é não mexer na grade. Dano provado de (b) entre 24,9 h e 53,1 h contra +115,1 h de benefício de (a) no mesmo mecanismo —
+  pior caso 1:2,2, com a certificação da grade como preço de entrada. E o corte por distância está excluído por medição: medianas 60/60/60 nos três grupos, e dentro de (b) os dias
+  caros são os mais perto, não os mais longe. A forma tem nome único: o marco hf recebe a batida gravada E, e o turno seguinte deixa de existir. Fica registrado sem fazer: a
+  folha vê mais que a tela (36 × 33) porque o motor não tem a guarda das duas pontas que o pareador tem.
+
+  O hook liberou o encerramento porque o RELATO declara PAREI: — e a trava é nomeada e real: a decisão sobre a regra de paridade do oráculo. A fila segue em R3 → R4 → R5 → ímpar →
+  E5.
+
+✻ Baked for 55m 58s · done 9:03 PM · 1 shell still running
+
+● Background command "Empurrar e subir a R2" completed (exit code 0)
+
+  Read 1 file
+
+● Push (f029d738..912ab728) e deploy OK. Smoke e sigo para R3:
 
   Ran 1 shell command
 
-› Message from @a9e3f4464a25b8c2d (ctrl+o to expand)
-
-● Agent "Censo do matcher de marcos" finished · 25m 40s
-
-● O censo do matcher fecha a R1 com veredito medido: não justifica mexer na grade (dano 24,9–53,1 h contra +115,1 h de benefício do mesmo mecanismo, 1:2,2), e a distância não
-  separa os grupos (medianas 60/60/60) — corte por distância está excluído por medição. Rodo a condição (d) da R2:
+● R3 está inteira, e o bug é meu: a mesma batida 06:30 é reivindicada por duas células — como saída de 07/09 e como entrada de 08/09 — e o meu out.update(_reiv) deixa o dia
+  posterior sobrescrever o anterior. Daí os 900 min de puro descanso. Curo com a regra restritiva: célula que reivindica batida já reivindicada não descreve o seu dia.
 
   Ran 1 shell command
 
-● Condição (d) violada: 1 divergência nova — col843 25/08 (esp 181, oráculo 0). Pela sua regra, não aplico. Mas preciso saber se é dano meu ou artefato do instrumento:
+● R3 cura os quatro dias do col146 exatamente (777≈778, 540=540, 787=787, 540=540), com R2 intacta e os oito controles idênticos. Selo na mesma família e suíte:
 
-  Ran 1 shell command
+  Selo da R3 e rodar a familia · 2s
+  ⎿  $ cat >> ponto/tests/test_o68b_papel_da_ata_no_motor.py <<'PYEOF'
+     class DuasCelulasNaoReivindicamAMesmaBatidaTest(TestCase):
+     """R3 -- a mesma batida nao e SAIDA de um dia e ENTRADA do seguinte.
+     `out.update(_reiv)` deixava o dia POSTERIOR sobrescrever o papel que o anterior ja tinha dado. Numa noite…
 
-● É artefato do instrumento, não dano meu. O oráculo agrupa 24/08 18:56 · 22:59 · 23:59 · 25/08 03:00 · 07:01 em 5 batidas (ímpar) chaveadas em 24/08 — então ele pontua zero no
-  dia 25 e nem julga o grupo. No dia 26/08, com 4 batidas (par), os dois concordam exatamente (665 = 665). É o artefato da regra de paridade que quatro das cinco autópsias
-  nomearam sozinhas.
-
-  Pela sua regra, a R2 não aplica. Registro e fecho:
-
-  Ran 2 shell commands
-
-● O hook libera corretamente (o RELATO declara PAREI). Falta uma linha de PROVA — acho e curo:
-
-● Empurrar e subir a R2 · 7m 56s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 2400 git push origin main 2>&1 | tail -4 && timeout 2400 bin/deploy.sh --sem-migrate 2>&1 | tail -4 (7m 55s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Enchanting… (53m 20s · ↓ 46.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✢ Zesting… (2m 31s · ↓ 7.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
