@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: apply da R2 retido pela condicao (d) do AVAL-DE-CRITERIO -- 1 divergencia nova no oraculo (col843 25/08), e ela e ARTEFATO DO INSTRUMENTO, nao dano da cura | espera Ronald`. A cura da R2 esta no disco e selada; o que espera e a decisao sobre a regra de paridade do oraculo, que quatro das cinco autopsias nomearam sozinhas. A fila segue: R3 -> R4 -> R5 -> impar -> E5.
+`PAREI: apply de R2+R3 retido pela condicao (d) -- col843 24-25/08, e eu estava ERRADO ao chamar de artefato: julgado pelas leis, **o ESPELHO viola a L-085** | espera Ronald`. Julgamento e cura candidata abaixo. Fila: **R4 -> R5 -> impar -> E5 -> selo + E6 r4**.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
 
@@ -52,6 +52,42 @@ container da sombra monta `--tmpfs /app/logs`: sem o arquivo, `escala_certa_no_d
 prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,71 h de diferenca entre o
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
+
+# col843 JULGADO PELAS LEIS: eu estava errado, o ESPELHO viola a L-085 (28/09 ~01:2x)
+
+Eu havia chamado a divergencia do col843 de "artefato do instrumento". **Julgado contra as leis, como voce
+mandou, a conclusao se inverte: o defeito e do ESPELHO.**
+
+**O que a ATA lavra** (col843, template 12x36 `19:00->07:00`, intervalo declarado `03:00-04:00`): a celula de
+**24/08 acende os QUATRO marcos** -- `19:00<-18:56`, `03:00<-23:59`, `04:00<-03:00`, `07:00<-07:01`. Ou seja a
+autoridade declara **UMA noite, `18:56 -> 07:01`**, com pausa de **181 min**. A celula de **25/08 diz
+`trabalha=False`** -- folga -- e nao tem marco nenhum.
+
+**O que o espelho monta**: DOIS turnos -- `data_turno=24/08` de `18:56 -> 23:59` (303 min) e
+**`data_turno=25/08` de `03:00 -> 07:01`** (181 min). Tres violacoes numa:
+1. **L-085** -- a jornada pertence ao dia de INICIO, e a noite comeca em 24/08. Os 181 min estao no dia errado;
+2. os 181 min caem num dia que a **celula diz ser FOLGA**;
+3. o segundo turno **comeca numa batida cujo `tipo` gravado e `S`** -- um turno que abre com uma saida.
+
+**E o papel da ata NAO e o culpado** -- medido: depois da R2 ele sai correto,
+`18:56 E · 22:59 X · 23:59 S · 03:00 E · 07:01 S`. Quem parte a noite e o pareador DEPOIS dele: a pausa real
+e de **181 min** contra o teto `intra_max_s` de **180** -- passa por **UM minuto** --, entao
+`_marca_intra_duracao` recusa o par, o `23:59 S` FECHA o turno e o resto da noite vira turno do dia seguinte.
+
+**CURA CANDIDATA TENTADA E REVERTIDA** (a terceira de hoje, e a medicao derrubou as tres): marcar a luz de
+`hii`/`hfi` como borda de INTERVALO pela ata (`I`), porque com o marco ACESO o teto de duracao nao tem o que
+inferir -- ele existe para quando NAO ha marco (LEI-AKITA 2). O numero certo seria **544** (725 menos os 181
+da pausa real). **Deu 665**, que e 725 menos **60**: `_pares_marcados` casa GULOSAMENTE o par adjacente
+`22:59 -> 23:59` (60 min) em vez do par de intervalo que a ata declarou, `23:59 -> 03:00`. Revertida no ato, e
+a base reconferida (col843 303/181, col146 777, col736 447, col922 404, col51 485).
+
+**O que falta, nomeado**: `_pares_marcados` (`ponto/turnos.py:434`) tem de PREFERIR o par que a ata declarou
+como intervalo ao primeiro par adjacente que encontrar. E' pareamento guloso onde deveria haver autoridade --
+a mesma familia de tudo o que este dia mediu.
+
+**Consequencia para o apply**: pela sua regra, o espelho errando torna isto **defeito do espelho**, entao a
+R2+R3 aplicam **com o col843 separado** -- e nao se afrouxa a paridade do oraculo para concordar com o
+sistema. Isso e' o proximo ato, e nao um pedido de decisao.
 
 # R3 CURADA: duas celulas nao reivindicam a mesma batida (28/09 ~01:0x)
 

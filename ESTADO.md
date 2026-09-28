@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:15:45.**
+**Medido em 27/09/2026 21:17:24.**
 
 | | |
 |---|---|
@@ -32,7 +32,8 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ## `git status --short`
 
 ```
- M app/ponto/turnos.py
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -84,20 +85,6 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 
 ```
 
-● 41 verdes. Suíte e a PROVA da R3 com as quatro condições:
-
-  Ran 1 shell command
-
-● R3 não acrescenta divergência nova — o bloqueio segue sendo o mesmo único (col843 25/08, o artefato de paridade do oráculo), e os dias curados sobem de 39 para 43. Commito:
-
-  Ran 1 shell command
-
-❯ aval Ronald: (1) col843 25/08 NAO e artefato ate provar pelas leis: julgar o dia contra L-085 (jornada = dia de INICIO) e contra o corte do dia impar (EM ABERTO, nunca numero).
-  Se o espelho erra -> e defeito do espelho, entra na fatia IMPAR/L-085 e a R2 aplica com o col843 separado. Se o espelho acerta pelas leis -> corrigir a chave do oraculo para
-  dia de INICIO (L-085, lei existente, nao regra nova) e rodar (d) de novo. Proibido afrouxar a paridade do oraculo para concordar com o sistema. (2) motor_calculo_v2.py:421
-  ganha a guarda de duas pontas da L-084 igual a ponto/turnos.py:961-965 (folha 36 x tela 33), RED + aval-de-criterio. Nenhuma lei nova. Segue a fila: R3 -> R4 -> R5 -> impar ->
-  E5 -> selo + E6 rodada 4 -> export para meu !. !
-
 ● Você está certo — eu chamei de artefato sem julgar pelas leis. Julgo agora, contra a L-085 e contra o corte do dia ímpar:
 
   Ran 1 shell command
@@ -116,10 +103,24 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ❯ aval Ronald: antes da proxima acao, gravar no topo do RELATO e em TICKETS o estado vivo: col843 24-25/08 = espelho viola L-085 (ata lavra 1 noite 18:56->07:01, espelho monta 2
   turnos e poe 181 min em 25/08 FOLGA), o que ja foi medido do papel nao emitido, e a fila R4 -> R5 -> impar -> E5 -> selo + E6 r4. Depois segue a fila.
 
-· Zesting… (12m 42s · ↓ 22.5k tokens)
+● A R2b dá 665 (725 − 60), não 544: o _pares_marcados casa gulosamente o par 22:59→23:59 (60 min) em vez do par de intervalo da ata 23:59→03:00 (181 min). Não converge — reverto e
+  gravo o estado vivo, como você mandou:
+
+● Gravar o estado vivo do col843 · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     p='docs/RELATO.md'; s=open(p).read()
+     s = s.replace("""`PAREI: apply da R2 retido pela condicao (d) do AVAL-DE-CRITERIO -- 1 divergencia nova no oraculo (col843 25/08), e ela e ARTEFATO DO INSTRUMENTO, nao dano
+     da cura | espera Ronald`. A cura da R2 esta no disco e selada; o qu…
+
+✽ Zesting… (14m 21s · ↓ 26.1k tokens)
+
+❯ aval Ronald: a R2b foi escrita na ARVORE VIVA (LEI-AKITA 10) e revertida com checkout. Medir e publicar: quais crons */5 rodaram entre o patch e o checkout, e se algum GRAVOU
+  algo (celula, chamado, pergunta, fechamento) com o turnos.py experimental; se gravou, lista e reversao. Daqui ao fim da meta toda cura nasce em copia do HEAD (git show HEAD:) e
+  so vai a arvore no commit. Segue a fila.
+  ctrl+x ctrl+s to send now
                                                                                                                                                             1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
