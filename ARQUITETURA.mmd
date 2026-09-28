@@ -249,7 +249,9 @@ flowchart TD
     evs_DisputaSupervisao --> evr_materializa_perguntas_ao_fechar_disputa
     evr_retoma_regularizacoes_ao_fechar_disputa["retoma_regularizacoes_ao_fechar_disputa<br/>post_save"]
     evs_DisputaSupervisao --> evr_retoma_regularizacoes_ao_fechar_disputa
-    evs_EscalaColaborador[/"EscalaColaborador<br/>6 receiver(s)"/]
+    evs_EscalaColaborador[/"EscalaColaborador<br/>7 receiver(s)"/]
+    evr_ec_ancora_regenera_celulas["_ec_ancora_regenera_celulas<br/>post_save"]
+    evs_EscalaColaborador --> evr_ec_ancora_regenera_celulas
     evr_ec_capturar_ancora_anterior["_ec_capturar_ancora_anterior<br/>pre_save"]
     evs_EscalaColaborador --> evr_ec_capturar_ancora_anterior
     evr_ec_folgas_seguem_a_pessoa["_ec_folgas_seguem_a_pessoa<br/>post_save"]

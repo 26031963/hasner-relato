@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:57:31.**
+**Medido em 28/09/2026 14:02:39.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou
 ## `git status --short`
 
 ```
+M  app/docs/ARQUITETURA.mmd
 M  app/docs/BACKLOG.md
+M  app/docs/MAPA.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/RELATO.md
 M  app/escala/signals.py
@@ -96,12 +98,6 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ESPURIA/janela fica REGISTRADA no BACKLOG como desenho aguardando confirmacao do admin da folha e do dono -- nao construir. Segue a fila; PAREI so em lei ou !
-
-  Ran 2 shell commands
-
-❯ aval Ronald: col824 [nome] -- a ancora do vinculo ja foi redeclarada pelo admin em 28/09; regenerar as CELULAS do vinculo dele de 21/08 ate 27/09 pela excecao formal
-  (regenerar_celulas_vinculo, passado errado por cadastro, corte 16/08) com trilha em regeneradas_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR
   perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
 
@@ -115,24 +111,30 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
   aberta publicado antes do deploy; move dinheiro para os dois lados -> PAREI para o meu !. Os 5 com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
   como lista para o meu ! no PENDENTES. LEI-AKITA: origem=escala/signals.py (so vigencia regenera), testemunha=CelulaDia, juizes novos=0. Segue a fila; PAREI so em lei ou !
 
-● Esperar a regua da ancora · 4m 21s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_anc.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (4m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Catapulting… (54m 58s · ↓ 55.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Searched for 6 patterns, listed 1 directory, ran 12 shell commands
 
 ❯ aval Ronald: col824 [nome] -- a fase ja foi corrigida pelo admin no wizard (vale da competencia 10 em diante); a 09 (21/08-20/09, NAO exportada) ficou com a fase velha porque
   o wizard so alcanca a competencia aberta. Regenerar as CELULAS do vinculo dele de 21/08 ate 20/09 pela excecao formal (regenerar_celulas_vinculo, passado errado por cadastro,
   corte 16/08) com a ancora ja declarada, trilha em regenerada_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR perdido, faltas, folga trabalhada,
   chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
   competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
-  ctrl+x ctrl+s to send now
+
+● Prender o relogio, regerar o diagrama e rodar
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='app/escala/tests/test_ancora_regenera_celulas.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace("""import datetime
+     from django.test import TestCase
+     class AncoraRegeneraCelulasTest(TestCase):""",
+     """import datetime
+     from django.test…
+
+✶ Catapulting… (1h 0m 6s · ↓ 57.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

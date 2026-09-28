@@ -42,6 +42,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 - chamados/signals.py::_cartorio_post_save_chamado (post_save ChamadoColaborador) -> julga
 - escala/signals.py::_ec_capturar_ancora_anterior (pre_save EscalaColaborador)
 - escala/signals.py::_ec_vigencia_regenera_celulas (post_save EscalaColaborador)
+- escala/signals.py::_ec_ancora_regenera_celulas (post_save EscalaColaborador)
 - escala/signals.py::_ec_invalida_previsto (post_save EscalaColaborador)
 - escala/signals.py::_ec_revalidar_disputas_ancora (post_save EscalaColaborador)
 - escala/signals.py::_ec_folgas_seguem_a_pessoa (post_save EscalaColaborador)
