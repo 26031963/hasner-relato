@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:00:02.**
+**Medido em 28/09/2026 01:05:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME` |
-| `origin/main` | `f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo` |
-| commits a subir (`ahead`) | **1** |
+| `HEAD` local | `d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)` |
+| `origin/main` | `d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
+2d9b50c5 [E5] a checagem que evitou a cura errada: o `minutos_realizados` do gravado e CAPADO pelo previsto, por desenho
 1967ac28 [E5] 09 recalculada inteira com o seu `!`, e o E4-topo-igual-coluna re-medido: a maior causa tem NOME
 f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`
-b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar
-872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor
 ```
 
 ## `git status --short`
@@ -90,44 +90,44 @@ b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que mo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
+  │ horas_trabalhadas      │ 71.086,96 │ 71.376,46 │ +289,50 (45 colabs) │
+  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
+  │ turnos_abertos         │ 468       │ 363       │ −105 (33)           │
+  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
+  │ inconsistencias        │ 1.093     │ 946       │ −147 (43)           │
+  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
+  │ horas_saida_antecipada │ 228,96    │ 182,95    │ −46,01              │
+  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
+  │ horas_atraso           │ 73,27     │ 63,80     │ −9,47               │
+  └────────────────────────┴───────────┴───────────┴─────────────────────┘
 
-  O selo me corrigiu três vezes, e a terceira era um bug que ia ao ar: escrevi o comentário do bloco como {# ... #} de várias linhas. O Django só trata {# #} de UMA linha — o
-  texto inteiro ia para a página, em todo dia de todo espelho, levando a frase "EM ABERTO" com ele. Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como aberto.
-  Sem o par que morde, subia.
+  SAEM do TXT: 0 · 07 e 08: 0 divergências · col81 intacto · saldo_banco_horas +0,00 (segue restaurado pelo seu ! de 26/09). Oráculo e6 idêntico antes e depois — BATE 92,9% de
+  7512 dias, todos os contadores iguais, zero divergência nova. Reversão em logs/antes_recalc09_full.json.
 
-  PROVA em prod (saas_ui, col349 14/09): aberto=True falta=[{'tipo':'S','hora':'15:20'}] h=7.0, e as duas raízes (base.html e base_app.html) emitem a pílula. O smoke no saas_core
-  morre com NoReverseMatch — o core roda o urlconf enxuto; smoke de tela se faz na casca da tela. Régua 8.507 OK.
+  O achado que corrige a expectativa: entra 205 → 205 e furo_espelho 335 → 335. A causa está em código — folha/export.py:646 diz na própria docstring que motivos_retencao_espelho
+  ignora turnos_abertos, inconsistencias e grade: o juiz é motivos_retencao_celula. O portão do TXT pergunta à CÉLULA, não ao FechamentoMensal — então nenhum recálculo do gravado
+  faz alguém entrar. Baixar turnos abertos de 468 para 363 não abre uma vaga. Os 335 saem de lá curando a célula.
 
-  Sobre o hook liberar às 23:41: tinha três furos, os três curados e provados. (1) Contador truncado liberava a porta — json.load de arquivo vazio levantava, a exceção subia ao
-  except de fora e ele falhava ABERTO; agora contador ilegível começa do zero e a porta fica firme. (2) Lia a coluna errada — procurava "FECHADA/NO AR" no texto da obra, não no
-  estado, então item resolvido contaria como fila para sempre. (3) Não deixava rastro — e é por isso que não consigo afirmar qual dos três caminhos liberou às 23:41: os três saíam
-  antes de escrever qualquer coisa. Agora toda decisão vira linha em logs/hook_stop_fila1.log.
+  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
 
-  Cumpri a sua ordem de fechar o que fechou: R2, R3, R2b marcadas FECHADA com commit e prova, a metade TETO dentro da linha da IMPAR, e a IMPAR agora também. E reordenei a FILA 1
-  para a ordem que você cortou — o hook lê a primeira linha aberta e, com a tabela na ordem velha, apontava R4.
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
+  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
+  resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
-  Próximo da fila: E5. O seu aval já decidiu o desenho (recálculo por colab no EVENTO pelo escritor único fechamento.py:382/541, leitores intactos, competência exportada recusa) e
-  pede como primeiro passo a re-medição do E4-topo-igual-coluna depois da O96.
+  Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
+  maior. Não é: fechamento.py:486-488 grava sum(min(realizado_do_dia, previsto_do_dia)), capado por dia pelo previsto (F1 04/08) e só em dias de trabalho; o model já o chama
+  "relógio da grade". É o numerador do cumprimento, não o relógio bruto. Consequência para a fatia seguinte: o gravado não tem o relógio bruto, então o topo tem de vir da mesma
+  autoridade que desenha as linhas — que é literalmente o seu aval da E5.
 
-✻ Cogitated for 47m 12s · done 12:30 AM · 1 shell still running
+  Régua 8.507 OK, tudo commitado e empurrado (d35de481).
 
-❯ segue a fila: E5, comecando pela re-medicao do E4-topo-igual-coluna
-
-  Ran 2 shell commands
-
-❯ segue a fila: E5. Primeiro: re-medir E4-topo-igual-coluna. Depois, ANTES de ligar o recalculo por evento: recalcular 09 inteiro pela funcao real (traz as respostas do mutirao e
-  as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
-  topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
-
-● Esperar a regua e ler o veredito · 5m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && docker wait inspiring_darwin >/dev/null 2>&1; tail -4 /tmp/regua_e5.out; cat .regua_stamp | head -3 (5m 38s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Hashing… (28m 43s · ↓ 29.3k tokens)
+✻ Baked for 32m 50s · done 1:04 AM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila: a fatia do topo lendo a mesma computacao
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
