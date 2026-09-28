@@ -1,5 +1,9 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: janela-de-HE-cria-desconto-de-pontualidade | espera Ronald` -- o `!` diz "so os campos-alvo, resto ZERO, nenhum colab para cima; fora disso = PAREI com a tabela". O DIFF da 10 tem **`antecipada +15,43 h` e `atraso +0,80 h`**: a janela CANCELA a protecao da L-084 em 4 colaboradores e passa a descontar pontualidade que eles hoje nao devem. Nao apliquei. Tabela e causa abaixo.
+
+PROVA: `tenant_command diff_janela_he --mes 10` (ensaio, transacao desfeita): 298 comparados, 60 mudam; `trabalhadas -221,09` · `HE50 -9,80` · `HE100 -7,10` · `noturnas -7,80` · `intra -10,27` · **`antecipada +15,43`** · **`atraso +0,80`**.
+
 **LOTE 1 DA 09 EMITIDO** pelo Ronald as 16:5x, com os tres hashes CONFERIDOS e identicos aos publicados -- `8a63e3ba` (emp2), `6e0f1048` (emp3), `cb7f00fe` (emp4).
 
 PROVA: hashes conferidos na emissao = hashes publicados as 15:2x, montados pela autoridade unica em so leitura; carimbo VERDE da porta lavrado nas quatro empresas antes do clique.
@@ -22,6 +26,59 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede (28/09 18:4x)
+
+Seu `!` foi condicional e literal: *"so os campos-alvo, resto ZERO, nenhum colab para cima. Fora disso = PAREI
+com a tabela."* O DIFF nao fecha na condicao, e o motivo e uma interacao entre duas leis suas.
+
+## A tabela, competencia 10, ensaio com a transacao desfeita
+
+PROVA: `tenant_command diff_janela_he --mes 10 --ano 2026` -- **298 colaboradores comparados, 60 mudam**, e
+nenhum cadastro ficou ligado (o comando liga a janela pela porta dentro de `atomic()` e desfaz no fim).
+
+| rubrica | delta (h) | e do alvo? |
+|---|---|---|
+| trabalhadas | **-221,09** | sim -- e o mecanismo: a jornada passa a contar do marco |
+| HE50 | -9,80 | **sim** |
+| HE100 | -7,10 | **sim** |
+| noturnas | -7,80 | consequencia direta (menos minutos antes do marco, menos janela noturna) |
+| intra | -10,27 | consequencia (jornada menor muda o piso do Art.71) |
+| **saida antecipada** | **+15,43** | **NAO** -- e desconto para o colaborador |
+| **atraso** | **+0,80** | **NAO** -- idem |
+
+## A causa, e ela e uma colisao de leis, nao um bug de codigo
+
+A **L-084** diz: *"dia cujo DNA nao descreve a batida real NAO gera atraso nem saida antecipada"*, e o corte
+sao **3 h nas duas pontas**. Quem chega 90 min antes do marco e sai no horario tem a ENTRADA longe do marco --
+e, dependendo do dia, e a propria distancia que o protege de ser cobrado.
+
+Quando a **janela de HE** desloca a entrada para o marco, **essa distancia desaparece**: o dia passa a
+"descrever a batida real", a L-084 deixa de valer e a saida antecipada volta a ser cobravel. Medido em **4
+colaboradores** -- `col788` (antecipada **+6,00 h**, com trabalhadas -15,00), `col450` (+3,16 h e atraso
++0,80), `col189` (+2,18 h), `col572` (+1,04 h).
+
+**Nao e o que a L-097 quis.** Ela diz que o minuto fora da janela *"nao vira HE **nem compensa nada**"* -- ou
+seja, ele deve desaparecer **nas duas direcoes**. O que o codigo faz hoje e mais forte do que isso: ao mover a
+entrada, ele nao so apaga o minuto como **reescreve a geometria do dia**, e a geometria e o que a L-084 usa para
+decidir se ha o que cobrar.
+
+## As duas saidas, e a escolha e sua
+
+**(A) a janela nao mexe na pontualidade.** A L-084 e o teto da L-093 continuam julgando contra a batida REAL, e
+a janela vale so para o excedente (HE) e para o total trabalhado. E a leitura estrita de *"nem compensa nada"*:
+o minuto nao entra na HE **e** nao muda o juizo de pontualidade. Custo: o dia fica com duas geometrias -- uma
+para o excedente, outra para a pontualidade --, e isso precisa estar escrito para nao virar surpresa depois.
+
+**(B) a janela manda em tudo, e os 4 casos entram no apply.** Coerente com "a jornada conta do marco", e o
+preco esta na tabela: **+16,23 h de desconto de pontualidade em 4 pessoas** que hoje nao devem nada. Se for
+essa, o `!` precisa nomear os quatro.
+
+Recomendo **(A)**: a L-084 nasceu medida, de um caso em que a testemunha mentia pelo lado mais caro (desconto no
+holerite), e a janela de HE nao foi cortada para reabrir essa porta. Mas o numero e seu.
+
+Enquanto isso **nada foi aplicado e nada ficou ligado**: o cadastro da janela segue desligado em todas as
+empresas, com vigencia nula.
 
 # COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x)
 
