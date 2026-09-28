@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 03:31:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (95.9 MB). Acoes na janela: **509**.
+**Medido em 28/09/2026 03:36:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.0 MB). Acoes na janela: **511**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:33:27 | Bash | Medir PDF x espelho e cartao x TXT na 09 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 \| tail -8; echo "=== cartao x txt ==="; docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 \| tail -8` |
+| 03:31:08 | Bash | Commitar o revert com a delecao declarada | `cd /home/ronald/saas-hasner && HASNER_COMMIT_DEL=1 git commit -q -F - <<'MSG' Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica This reverts the code of commit ca7bacf3 (documentos preservados). POR QUE, e e a LEI-AKITA 10 outra vez, do outro lado: commitar sem deployar NAO basta, porque a arvore e BIND-MOUNT. Os workers do gunicorn ainda ser ...` |
 | 03:20:19 | Bash | Reverter a R4 da arvore e publicar a razao | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() anc = '# ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template' add = """# E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/09 03:3x) Commitar a R4 e nao deployar nao basta, e isso e' consequencia direta da LEI-AKITA 10 que eu  ...` |
 | 03:10:17 | Bash | Regua com a R4 revertida | `cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 \| tail -4` |
 | 03:08:19 | Bash | Manter os docs do HEAD e ver o que sobra revertido | `cd /home/ronald/saas-hasner && git checkout HEAD -- app/docs/ && git status --short \| head -12 && git diff --cached --stat \| tail -12` |

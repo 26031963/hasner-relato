@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 03:31:01.**
+**Medido em 28/09/2026 03:36:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela` |
-| `origin/main` | `87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela` |
+| `HEAD` local | `0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica` |
+| `origin/main` | `0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,28 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
 87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
 ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 colabs -- e uma PERGUNTA DE LEI
 e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL de 20 nomes no repo PUBLICO
 a6a36c2c [E5] item (1): o topo carrega a SOMA DAS LINHAS -- e o hook de Stop nunca executou, a trilha provou
-d35de481 [E5] placar e rodape do TICKETS pelo mundo (regua OK 28/09 01:01)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
-M  app/docs/RELATO.md
-M  app/docs/TICKETS.md
-M  app/escala/models.py
-M  app/escala/regua_defesa.py
-M  app/ponto/services/bordas_realizado.py
-M  app/ponto/services/espelho.py
-D  app/ponto/tests/test_r4_celula_sem_marcos.py
-M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
-M  app/ponto/turnos.py
-M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
-M  app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,6 +84,10 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
+
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
+  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
@@ -119,16 +111,12 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Reverter a R4 da arvore e publicar a razao
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     anc = '# ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template'
-     add = """# E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/…
+● Medir PDF x espelho e cartao x TXT na 09 · 3m 4s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 | tail -8; echo "===
+     cartao x txt ==="; docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 9 -… (3m 1s · 10 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Metamorphosing… (2h 25m 3s · ↓ 121.8k tokens · thinking)
+✢ Metamorphosing… (2h 30m 33s · ↓ 123.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
