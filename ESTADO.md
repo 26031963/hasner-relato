@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:36:01.**
+**Medido em 28/09/2026 02:41:31.**
 
 | | |
 |---|---|
@@ -37,7 +37,7 @@ M  app/escala/regua_defesa.py
 M  app/ponto/services/bordas_realizado.py
 M  app/ponto/services/espelho.py
 A  app/ponto/tests/test_r4_celula_sem_marcos.py
- M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
+M  app/ponto/tests/test_vinculo_do_dia_pela_celula.py
 M  app/ponto/turnos.py
 M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 M  app/relatorios/pdf_espelho.py
@@ -93,8 +93,6 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
   e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
 
   A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
@@ -122,10 +120,12 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Ver se o save normaliza o intervalo_modo
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def save" -A 20 app/escala/models.py | sed -n '1,30p' | grep -nE "intervalo_modo|def save|INTERVALO" | head
+● Regua completa da R4 · 4m 48s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_vinculo_do_dia_pela_celula.py && bash bin/regua.sh 2>&1 | tail -4; docker ps -a --filter name=r4_cura2 --format
+     '{{.Status}}' (4m 46s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Metamorphosing… (1h 30m 3s · ↓ 84.4k tokens)
+· Metamorphosing… (1h 35m 33s · ↓ 86.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
