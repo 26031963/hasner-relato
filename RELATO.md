@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: hook-teto | espera Ronald` -- 5 bloqueios seguidos sem commit novo na fila 1 (`R4 -- residuo da O84 no leitor do realizado: dna.marcos=null (posicional) cai no TEMPLATE e desconta 60 min que nao `). O hook liberou o encerramento e deixou este registro.
+
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 4: **92,9%**` (era 91,4% na r3) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
