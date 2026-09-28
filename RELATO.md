@@ -1,8 +1,47 @@
 # RELATO — esteira saas-hasner
 
-**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) **R4 curada e selada (+75,12 h em 27 colabs, todos para CIMA)** -- commitada, **NAO deployada**, porque com o evento vivo o deploy VIROU o apply: ha uma **pergunta de LEI** no topo do PENDENTES. Em curso: **(4) R5**.
+**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) R4 curada, **NAO deployada** (pergunta de LEI no topo do PENDENTES: com o evento vivo o deploy virou o apply; +75,12 h em 27 colabs). (4) **R5 FECHADA**: o selo da O68b era vazio E atribuia a ela dois dias que nao sao dela. Em curso: **(5) selo tela==PDF==fechamento==TXT + E6 rodada 4**.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# ITEM (4) R5 FECHADA: o selo da O68b era vazio -- e os DOIS REDs dele nao sao dela (28/09 03:2x)
+
+A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
+colabs nomeados tem essa forma** -- os dois tem QUATRO marcos no `dna`. Sem `hii`/`hfi` nao existe absorcao de
+intervalo, a `S` fica livre e o turno fecha sempre. O verde vinha da fixture, nao do codigo.
+
+PROVA: o mesmo dia do col349, nas duas formas, da respostas OPOSTAS --
+`forma da fixture (hii/hfi None): 06:59E -> 13:57S aberto=False` contra
+`forma REAL (4 marcos, 3 batidas): 06:59E -> None aberto=True`. Esse par virou caso do selo
+(`test_MORDE_a_forma_da_fixture_ANTIGA_fecharia`), para que ninguem volte a escrever a fixture assim pensando
+que prova algo sobre prod.
+
+## E a atribuicao estava errada nos DOIS, medido com o cadastro real
+
+**col349 14/09** -- `dna.marcos` = `07:00 / 13:00 / 14:00 / 15:20`, batidas `06:59E 13:57S 14:02E`. O turno fica
+**ABERTO, e esta CERTO**: a `S` das 13:57 esta a **3 min** do `hfi 14:00` e e absorvida como VOLTA do intervalo,
+e a `14:02E` e a volta. Nao existe "S real disponivel" para a O68b usar -- **a saida do dia REALMENTE falta**, e
+fechar ali seria FABRICAR saida. Os **6,97 h** que a docstring atribuia a O68b **nunca foram recuperados por
+ela**. Aquele dia e caso da IMPAR, e hoje a tela diz `EM ABERTO -- falta: S 15:20 · parcial provado: 7,0h`.
+
+**col206 21/08** -- `dna.marcos` = `07:30 / 12:00 / 13:00 / 11:00` (o `hf` ANTES do `hii`, um dos 7 templates de
+geometria impossivel da O87), e o template vigente da `marcos_intervalo=(13:00, 14:00)` /
+`marcos_borda=(07:30, 16:30)` -- **diferentes dos do `dna`**. Em prod o dia fecha em `13:01`.
+**LIMITE DECLARADO, e eu prefiro declarar do que fingir**: nao consegui reproduzir esse fechamento no nivel
+puro. Com exatamente esse encanamento -- e ate acrescentando as batidas do dia seguinte, para dar a prova de
+fato encerrado que a O95 pede -- `parear_turnos` deixa o turno ABERTO com `13:01` e `14:00` dentro dele. Falta
+algo que `turnos_do_colab` faz e que eu nao isolei (ele segmenta por escala e enche `marcos_por_dia` da janela
+inteira). Entao o arquivo **nao afirma nada sobre o col206**: fica o registro do medido. Trocar um selo vazio
+por outro selo vazio nao e conserto.
+
+O que o selo afirma agora e a REGRA, no caso em que ela existe para valer: dia sem marco de intervalo declarado,
+com uma `S` real fora da janela do marco de saida -- ali nao ha absorcao possivel, a `S` esta livre e a O68b
+fecha. E isso **nao e fixture inventada**: sao os **7.035 dias da competencia 09** cuja celula nao declara marco
+nenhum (censo da R4) mais os templates em `intervalo_modo='duracao'`.
+
+PROVA: 7 casos, regua **8.524 OK em 472 s**. Os dois REDs originais viraram, um em afirmacao da VERDADE
+(col349 fica aberto) e outro em registro com limite declarado (col206).
+
 
 # PERGUNTA DE LEI: com o evento vivo, o DEPLOY virou o APPLY (28/09 02:5x)
 

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:58:01.**
+**Medido em 28/09/2026 03:03:31.**
 
 | | |
 |---|---|
@@ -85,6 +85,7 @@ M  app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
   e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
 
@@ -113,11 +114,10 @@ M  app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Regua da R5 · 4m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py && bash bin/regua.sh 2>&1 | tail -4 (4m 3s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Regua da R5
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py && bash bin/regua.sh 2>&1 | tail -4
 
-✢ Metamorphosing… (1h 52m 3s · ↓ 112.2k tokens)
+✢ Metamorphosing… (1h 57m 33s · ↓ 113.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
