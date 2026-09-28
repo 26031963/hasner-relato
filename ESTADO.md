@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:29:01.**
+**Medido em 28/09/2026 09:34:31.**
 
 | | |
 |---|---|
@@ -90,9 +90,6 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ aval Ronald: BO col354 (disputa #5527), bug a PROVAR com RED antes de curar. FATO: 23/09 faltou a volta do intervalo; o app gravou os tipos invertidos em 23/09 16:02 e em todo
-  24 e 25 (S 07:01 · E 11:27 · S 12:30 · E 16:00). Emissor orfao_14h abriu P36049 (24/09) e P36550 (25/09) perguntando "saida" em dias com 4 batidas completas, e P35636 (23/09)
   pergunta saida quando o que falta e a VOLTA DO INTERVALO. As 3 tem via_resolucao=sem_turno_aberto e seguem vivas na tela. PROVAR: (1) o emissor orfao_14h le tipo gravado em vez
   do marco (L-E3 "o MARCO manda") -> RED col354 24/09; (2) via carimbado + pergunta viva = fio incoerente (pergunta_viva, chamados/juizes.py) -> RED P36049; (3) censo da frota:
   quantas perguntas vivas nascem de dia com par completo pelo marco. PROIBIDO: validar/fechar na mao, fallback, allowlist. Cadastro (sem escala vigente, sem posto) vai para a
@@ -119,10 +116,13 @@ A  app/ponto/tests/test_e6_oraculo_julga_impar.py
   segunda conta), fallback. PRONTO: RELATO com o censo antes/depois, REDs e commit. LEI-AKITA: origem=calendario.py:287, testemunha=espelho_do_colab, juizes novos=0. Segue a
   fila; PAREI so em lei ou !
 
-● Entrada e saida do contexto_calendario
-  ⎿  $ sed -n '196,250p' colaboradores/services/calendario.py && echo '=== retorno ===' && sed -n '620,660p' colaboradores/services/calendario.py
+● Esperar o veredito da regua · 4m 28s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran )|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e6c.log 2>/dev/null; do sleep 15; done; grep -E '^(OK|FAILED|Ran
+     )|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /tmp/claude-10… (4m 25s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (3h 26m 29s · ↓ 132.4k tokens)
+· Determining… (3h 31m 58s · ↓ 136.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
