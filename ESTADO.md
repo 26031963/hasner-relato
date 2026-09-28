@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:40:31.**
+**Medido em 28/09/2026 15:45:45.**
 
 | | |
 |---|---|
@@ -109,17 +109,17 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 
 ● Background command "Esperar a porta" completed (exit code 0)
 
-● Curar os dois e rodar a regua · 3m 21s
+  Curar os dois e rodar a regua · 8m 35s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io, py_compile
      P='app/ponto/management/commands/aplicar_09_he_intra.py'
      t=io.open(P,encoding='utf-8').read()
      t=t.replace(""" def _sem_cura(self_, limite, periodos, quando): # o motor de ontem
      return limite or 0""",
-     """ def _sem_cura(_motor… (3m 20s · 2 lines)
+     """ def _sem_cura(_motor… (8m 33s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (1h 2m 38s · ↓ 44.5k tokens)
+· Infusing… (1h 7m 52s · ↓ 44.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
