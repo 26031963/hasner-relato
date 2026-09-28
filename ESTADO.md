@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:25:46.**
+**Medido em 28/09/2026 18:31:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)` |
-| `origin/main` | `8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `37c8852b TICKETS: rodape e placar (8602 testes OK)` |
+| `origin/main` | `37c8852b TICKETS: rodape e placar (8602 testes OK)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -22,20 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+37c8852b TICKETS: rodape e placar (8602 testes OK)
+eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
 63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)
 00ff0b53 O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
 8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)
-7d0952e8 BACKLOG: estado em dia -- BUG-HE-INTRA-DOBRADA e COBRAR fechados, O-DIA-PAGO com S1/S2/S5a fechadas
-7288e90e TICKETS: rodape e placar (8592 testes OK)
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
-M  app/docs/BACKLOG.md
-M  app/docs/PROMPTS.md
-M  app/ponto/management/commands/diff_janela_he.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -88,6 +84,10 @@ M  app/ponto/management/commands/diff_janela_he.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Fechados agora, com a prova na linha:
+
+  - BUG-HE-INTRA-DOBRADA — o ! veio pelo caminho (B), o apply cirúrgico gravou os 144 colabs (horas_extras −346,83 h, nenhum campo fora do alvo, antes/depois em logs/), a porta
+    re-medida deu SELO VERDE com minuto_em_duas_rubricas=0, e o lote 1 da 09 foi emitido às 16:5x com os hashes conferidos. col125: HE50 1,98 → 0,00 com intra 2,00 intacta. Ficou
     registrado na própria linha que por ~4 h o apply esteve parado na L-082(b), porque o recálculo inteiro moveria 10 campos fora do !.
   - COBRAR-SO-O-QUE-MUDA-A-FOLHA — 1.116 chamados em 261 colabs viraram 322 em 136; 681 barrados por competência exportada, 113 sem data (todos disputa), 125 colabs param de
     receber push por nada.
@@ -106,25 +106,21 @@ M  app/ponto/management/commands/diff_janela_he.py
   e da cobranca do hook; NAO executar. Nenhuma lei nova. Segue O-JANELA-HE parte A.
   segue a fila; PAREI so em lei ou !
 
-  Curar o lookup, cortar a PROVA-DOMINIO e rodar · 8m 43s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/ponto/management/commands/diff_janela_he.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ from ponto.models import Batida
-     ids = list(Batida.objects.filter(
-     colaborador__empresa=e, retratada_em_… (8m 41s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Unfurling… (1h 36m 31s · ↓ 72.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
 
 ❯ aval Ronald: O-JANELA-HE parte A — apply na competencia 10 sobre o DIFF publicado (so os campos-alvo, resto ZERO, nenhum colab para cima). Fora disso = PAREI com a tabela. !
-  ctrl+x ctrl+s to send now
+
+  Pushed to main, ran 4 shell commands
+
+● Background command "DIFF da janela na competencia 10" completed (exit code 0)
+
+● Running 1 shell command…
+
+✢ Unfurling… (1h 41m 46s · ↓ 75.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
