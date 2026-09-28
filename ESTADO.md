@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:63 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:97 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:01:07.**
+**Medido em 27/09/2026 23:06:31.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a
 ## `git status --short`
 
 ```
-?? app/ponto/tests/test_teto_da_absorcao.py
+M  app/docs/RELATO.md
+A  app/ponto/tests/test_teto_da_absorcao.py
+M  app/ponto/turnos.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -117,13 +119,13 @@ d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a
 
 ● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
 
-● Selo do teto contra a cura
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/test_teto.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """TETO DA ABSORCAO -- a pausa tem de caber no ENVELOPE da jornada que comecou (corte Ronald 27/09 22:5x).
-     …
+● Corrigir o dono, registrar a licao e rodar a regua · 4m 11s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && rm -f
+     app/ponto/tests/test_teto_da_absorcao.py && cp $S/test_teto.py app/ponto/tests/test_teto_da_absorcao.py && ls -l app/ponto/tests/test_teto_da_absorcao.py && … (4m 10s · 8
+     lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zesting… (1h 58m 5s · ↓ 210.7k tokens)
+✢ Zesting… (2h 3m 28s · ↓ 216.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
