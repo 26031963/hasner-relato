@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:63 AFIRMA ato sem PROVA ao lado -- ## NO AR, e provado em prod
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:56:01.**
+**Medido em 27/09/2026 23:01:07.**
 
 | | |
 |---|---|
-| `HEAD` local | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
+| `HEAD` local | `c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um` |
 | `origin/main` | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um
 47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 c657f001 [REGUA-MORTA][ALARME-NAO-E-JUIZ][SELOS-MUDOS] as tres fatias ganham linha no TICKETS
 c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a regua VERDE em 476 s
-37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS
 ```
 
 ## `git status --short`
 
 ```
+?? app/ponto/tests/test_teto_da_absorcao.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -83,7 +91,6 @@ d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file
 
 ● Background command "Medir o pico de RAM do container de teste" completed (exit code 0)
 
@@ -110,12 +117,13 @@ d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a
 
 ● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
 
-● Smoke em prod no col843
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/smoke.py <<'PY'
-     # SMOKE em PROD, SO LEITURA: o espelho do col843 mostra UMA noite em 24/08 e ZERO em 25/08?
-     from django_tenants.utils import schema_contex…
+● Selo do teto contra a cura
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/test_teto.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """TETO DA ABSORCAO -- a pausa tem de caber no ENVELOPE da jornada que comecou (corte Ronald 27/09 22:5x).
+     …
 
-✢ Zesting… (1h 52m 58s · ↓ 192.1k tokens)
+✢ Zesting… (1h 58m 5s · ↓ 210.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
