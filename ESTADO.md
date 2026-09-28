@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:02:31.**
+**Medido em 28/09/2026 15:08:01.**
 
 | | |
 |---|---|
@@ -112,13 +112,13 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Esperar a porta · 5s
+  Esperar a porta · 5m 35s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'SELO (VERDE|VERMELHO)|Error|Traceback'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; do sleep 25; done; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-96… (4s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-96… (5m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Infusing… (24m 38s · ↓ 30.1k tokens)
+✢ Infusing… (30m 8s · ↓ 30.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

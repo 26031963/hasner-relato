@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 15:02:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.9 MB). Acoes na janela: **472**.
+**Medido em 28/09/2026 15:08:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.9 MB). Acoes na janela: **468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -478,7 +478,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:10:17 | Bash | Regua com a R4 revertida | `cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 \| tail -4` |
 | 03:08:19 | Bash | Manter os docs do HEAD e ver o que sobra revertido | `cd /home/ronald/saas-hasner && git checkout HEAD -- app/docs/ && git status --short \| head -12 && git diff --cached --stat \| tail -12` |
 | 03:08:10 | Bash | Reverter so o codigo da R4, mantendo o registro | `cd /home/ronald/saas-hasner && git revert --no-commit ca7bacf3 && git checkout HEAD -- app/docs/RELATO.md app/docs/TICKETS.md && git status --short \| head -12` |
-| 03:06:42 | Bash | Ver os arquivos do commit da R4 | `cd /home/ronald/saas-hasner && git show --stat ca7bacf3 \| tail -12` |
-| 03:06:31 | Bash | Achar o commit do codigo da R4 | `cd /home/ronald/saas-hasner && git log --oneline -3 && echo "=== o commit da R4 (codigo) ===" && git log --format='%h %s' -6 \| grep -i "R4" \| head -2` |
-| 03:06:09 | Bash | Ver se algum cron recalcula o fechamento | `cd /home/ronald/saas-hasner && echo "=== algum cron recalcula fechamento? ==="; grep -rn "recalcular_fechamento_mes\\|recalcular_por_evento" app/*/management/commands/*.py app/config/crons.py 2>/dev/null \| head -8; echo "=== o evento esta no ar? (prod serve o codigo deployado, mas manage.py/cron leem a arvore) ==="; git log --oneline -1; git status --short \| head -3` |
-| 03:03:35 | Bash | Publicar a R5 e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) R4 curada, **NAO ' 'deployada** (pergunta de LEI no topo do PENDENTES: com o evento vivo o deploy virou o apply; +75,12 h ' 'em 27 colabs). (4) **R5 ...` |
