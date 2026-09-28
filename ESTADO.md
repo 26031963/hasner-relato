@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 06:00:45.**
+**Medido em 28/09/2026 06:06:01.**
 
 | | |
 |---|---|
@@ -85,12 +85,6 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"PermissionRequest\"",
-        "decision": {
-          "to allow": {
-            "behavior": "\"allow\"",
-            "updatedInput": "object (optional) - Modified tool input to use",
-            "updatedPermissions": "array (optional) - Permission updates"
           },
           "to deny": {
             "behavior": "\"deny\"",
@@ -119,10 +113,16 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
   }
 
 ✻ Cogitated for 36m 14s · done 5:58 AM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Running 1 shell command…
+
+✢ Determining… (3m 29s · ↓ 402 tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ ! export da 09, e R4 aplica com o caminho (a)
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
