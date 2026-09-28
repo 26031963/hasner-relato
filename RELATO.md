@@ -65,6 +65,22 @@ letra, que vale para cura que *"nao move dinheiro por si"*; a R4 com o evento vi
   **(c)** `!` de CRITERIO por classe de cura (como a sua AVAL-DE-CRITERIO faz hoje por fatia), com faixa.
 A R4 espera no (a) enquanto voce nao disser. **A fila NAO parou**: sigo na R5.
 
+# E A R4 SAIU DA ARVORE VIVA, porque deixa-la ali E o apply (28/09 03:3x)
+
+Commitar a R4 e nao deployar nao basta, e isso e' consequencia direta da LEI-AKITA 10 que eu levei ontem a noite:
+**a arvore e bind-mount**. Os workers do gunicorn ainda servem o codigo de antes dela (o reload foi as 02:0x,
+antes do commit), mas **todo processo `manage.py` que nasce depois do commit importa a arvore** -- e os crons das
+06:2x importam. Dois deles JULGAM com o pareador e ESCREVEM: `detectar_par_relampago --apply --retratar` (06:26)
+e `processar_cartorio --apply` (06:28). Com a R4 na arvore, eles julgariam com a pausa nova as 06:26, sem `!`.
+
+Entao **revertei o CODIGO da R4 da arvore** (`git revert` do commit, com os documentos preservados): o registro
+fica, a cura sai. Ela volta com um `git revert` do revert no momento em que voce responder a pergunta de lei --
+e o DIFF ja esta medido, nao precisa remedir.
+PROVA: regua **8.519 OK** com a arvore revertida (os 8.524 de antes menos os 5 casos do selo da R4, que sai
+junto -- selo de cura revertida ficaria VERMELHO, e selo vermelho barra o push de todo mundo).
+O que sobrou de pe: o **registro** no RELATO e no TICKETS, o item no topo do PENDENTES, e o DIFF medido
+(**27 colabs, 78 dias, +75,12 h, todos para cima**).
+
 # ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template (28/09 02:4x)
 
 RED MEDIDO, col610 22/08: celula existe, `trabalha=False`, `dna.marcos=null`, e a ata na forma POSICIONAL do
