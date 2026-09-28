@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:34:01.**
+**Medido em 28/09/2026 10:39:30.**
 
 | | |
 |---|---|
@@ -114,13 +114,13 @@ A  bin/tests/test_hook_nao_escreve_parei.sh
 
 ● Background command "Censo do BUG-HE-INTRA-DOBRADA na frota" completed (exit code 0)
 
-● Esperar a regua do E4 · 1m 0s
+  Esperar a regua do E4 · 6m 30s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (57s)
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (6m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (4h 31m 28s · ↓ 215.5k tokens)
+✶ Determining… (4h 36m 58s · ↓ 215.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ aval Ronald: O-DIA-PAGO (lei nova, corte meu agora: "o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula" -- registrar em LEIS e
