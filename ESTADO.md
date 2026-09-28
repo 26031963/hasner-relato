@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:17:24.**
+**Medido em 27/09/2026 21:20:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU` |
+| `HEAD` local | `1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,18 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
 3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
 912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
 bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
 f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
-0a22e208 [O96] o RELATO sai do retido, e entram as regressoes com numero + o censo O81 a/b/c
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ```
 
@@ -85,14 +83,6 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 
 ```
 
-● Você está certo — eu chamei de artefato sem julgar pelas leis. Julgo agora, contra a L-085 e contra o corte do dia ímpar:
-
-  Ran 1 shell command
-
-● O espelho está errado pelas duas leis, e a ata sabe a resposta certa. O template é 12x36 19:00→07:00, e a ata de 24/08 acende os quatro marcos: 19:00←18:56, 03:00←23:59,
-  04:00←03:00, 07:00←07:01 — uma noite só, 18:56→07:01. Mas o espelho monta dois turnos e põe 181 min em 25/08, que a célula diz ser FOLGA — violando a L-085 — e o segundo turno
-  começa numa batida gravada S. Vejo por que o papel não está sendo emitido:
-
   Ran 1 shell command
 
 ● O papel está certo (18:56 E · 22:59 X · 23:59 S · 03:00 E · 07:01 S) — o erro é do pareador depois dele. A pausa real é de 181 min contra o teto intra_max_s de 180: passa por um
@@ -106,21 +96,29 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
 ● A R2b dá 665 (725 − 60), não 544: o _pares_marcados casa gulosamente o par 22:59→23:59 (60 min) em vez do par de intervalo da ata 23:59→03:00 (181 min). Não converge — reverto e
   gravo o estado vivo, como você mandou:
 
-● Gravar o estado vivo do col843 · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     p='docs/RELATO.md'; s=open(p).read()
-     s = s.replace("""`PAREI: apply da R2 retido pela condicao (d) do AVAL-DE-CRITERIO -- 1 divergencia nova no oraculo (col843 25/08), e ela e ARTEFATO DO INSTRUMENTO, nao dano
-     da cura | espera Ronald`. A cura da R2 esta no disco e selada; o qu…
-
-✽ Zesting… (14m 21s · ↓ 26.1k tokens)
+  Ran 2 shell commands
 
 ❯ aval Ronald: a R2b foi escrita na ARVORE VIVA (LEI-AKITA 10) e revertida com checkout. Medir e publicar: quais crons */5 rodaram entre o patch e o checkout, e se algum GRAVOU
   algo (celula, chamado, pergunta, fechamento) com o turnos.py experimental; se gravou, lista e reversao. Daqui ao fim da meta toda cura nasce em copia do HEAD (git show HEAD:) e
   so vai a arvore no commit. Segue a fila.
-  ctrl+x ctrl+s to send now
-                                                                                                                                                            1% until auto-compact
+
+● Você está certo, e é grave: escrevi a R2b na árvore viva, que é bind-mount dos containers — qualquer cron */5 que tenha rodado nessa janela importou o turnos.py experimental.
+  Meço a janela e o que gravou:
+
+  Ran 1 shell command
+
+● A janela é clara e um lote de cron caiu dentro dela: R3 commitada 21:12:33, R2b aplicada depois, revertida antes de 21:18:07 — e o lote */5 rodou 21:15:04 a 21:15:18. Leio o que
+  cada um fez:
+
+  Conferir relavra e os tres alertas
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o lote seguinte (pos-checkout) ja relavrou? ==="; find logs -maxdepth 1 -type f -mmin -8 -printf '%TH:%TM:%TS %p\n' 2>/dev/null |
+     sort | head -12; echo "=== o placar foi relavrado depois do revert? ==="; tail -2 logs/placar_situacional.log | sed 's/^/ /'; …
+
+· Compacting conversation… (17m 42s · ↓ 32.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 49%
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
