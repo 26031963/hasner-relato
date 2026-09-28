@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 21:35:45.**
+**Medido em 27/09/2026 21:41:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085` |
+| `HEAD` local | `9e2d416e [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9e2d416e [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
 1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
 3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
 912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
 bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar no BACKLOG
-f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depois de DUAS curas rejeitadas
 ```
 
 ## `git status --short`
@@ -111,10 +111,10 @@ f029d738 [O96] reapply aplicado, mutirao ENVIADO, e a R1 com origem nomeada depo
   que a ata nao descreve (guarda da ausencia de 4 h, selo proprio intacto). Corrigir o comentario turnos.py:1040 ("teto e o CADASTRO" e falso: e constante de classe) e registrar
   no BACKLOG, fora da meta, a pausa maxima como cadastro da escala (LEI-AKITA 12). RED col843 24/08 = uma noite, 0 min em 25/08. Aval-de-criterio. Segue a fila.
 
-● Ver a guarda do relato.sh
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,60p' bin/relato.sh 2>/dev/null | head -60
+● Copia do HEAD e leitura do bloco das luzes
+  ⎿  $ cd /home/ronald/saas-hasner && mkdir -p /tmp/r2b && git show HEAD:app/ponto/turnos.py > /tmp/r2b/turnos.py && sed -n '895,985p' /tmp/r2b/turnos.py
 
-✶ Zesting… (32m 43s · ↓ 49.3k tokens)
+· Zesting… (37m 58s · ↓ 60.5k tokens · thought for 32s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

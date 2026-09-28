@@ -1,8 +1,68 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: apply de R2+R3 retido pela condicao (d) -- col843 24-25/08, e eu estava ERRADO ao chamar de artefato: julgado pelas leis, **o ESPELHO viola a L-085** | espera Ronald`. Julgamento e cura candidata abaixo. Fila: **R4 -> R5 -> impar -> E5 -> selo + E6 r4**.
+A fila 1 esta ANDANDO -- nada parado. O aval da R2b (27/09 21:2x) desbloqueou a condicao (d): **quando a ata acende `hii` E `hfi`, o par E a pausa e o teto `AUT_INTRA_MAX_S` nao se aplica** (celula soberana, LEI-AKITA 2); o teto so vale no dia que a ata NAO descreve. Fila: **R2b -> R4 -> R5 -> impar -> E5 -> selo + E6 r4 -> export com o `!`**.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# ARVORE VIVA: o que os crons */5 fizeram na janela da R2b -- e o rotulo de hora que eu errei 4x (27/09 21:3x)
+
+A R2b foi escrita na **arvore viva** e revertida com `git checkout` -- violacao da **LEI-AKITA 10**. A arvore e
+bind-mount (`~/saas-hasner/app` -> `/app` nas tres cascas), entao todo cron que rodou na janela importou o
+`turnos.py` experimental. Voce mandou medir e publicar. Medido.
+
+**JANELA**: do commit da R3 (`3d037f1b`, **21:12:33**) ao commit do doc da R2b (`1038bd65`, **21:18:07**). O lote
+`*/5` rodou **21:15:04 -> 21:15:18**, DENTRO dela. O segundo exato da gravacao do patch e do checkout morreu com o
+proprio checkout (o `mtime` foi embora), entao trato o lote como DENTRO -- a medicao e conservadora de proposito.
+
+## Os 7 crons, e o que cada um GRAVOU (log de prod, nao inferencia)
+
+| cron (hora do host) | saida literal | gravou |
+|---|---|---|
+| `lavrar_perguntas_stale` 21:15:04 | `nada stale -- rodada vazia` | 0 perguntas |
+| `escalonar_chamados_supervisao` 21:15:04 | `N1=0 N2=0 N3=0 N4=0 N5=0 ORFAOS=0` | 0 |
+| `reconciliar_fantasmas --apply` 21:15:07 | `[APPLY] fantasmas=0 legitimos=153 skip=0` | 0 batidas |
+| `detectar_ausencias` 21:15:11 | `avaliados=71 abertos=0 vetados_celula=0 vetados_regua=1 fechados=0` | 0 ausencias |
+| `processar_alertas_turno` 21:15:13 | `148 colaboradores · Alertas enviados: 3` | **3 push ENVIADOS** |
+| `reconciliar_chamados` 21:15:17 | `0 retratado(s) · 0 religado(s) · 0 retratado(s)` | 0 chamados |
+| `lavrar_placar_situacional` + `lavrar_badge_navbar` 21:15:18 | `4 linhas` + `badge=859` | snapshot (sobrescrito) |
+
+## Veredito: ZERO escrita estrutural, e nada a reverter
+
+**celula 0 · chamado 0 · pergunta 0 · fechamento 0 · batida retratada 0.**
+PROVA: as sete linhas da tabela acima sao `tail` dos logs de `~/saas-hasner/logs/` com `mtime` entre 21:15:04 e
+21:15:18 (`find logs -maxdepth 1 -mmin -8 -printf '%TH:%TM:%TS %p'`). Nenhum escritor de dinheiro roda nessa faixa:
+`processar_cartorio`, `detectar_par_relampago --retratar`, `supra_juiz --executar` e `flip_automatico` estao em
+06:26-07:37 (`config/crons.py`) -- a 9 h da janela.
+
+Duas coisas SAIRAM, e nenhuma delas se desfaz por rollback:
+
+1. **3 alertas de push.** E um ENVIO, nao um estado: nao ha o que reverter. Conferido contra a arvore REVERTIDA:
+   os tres colabs alertados seguem com turno aberto pelo juiz de HEAD.
+   PROVA: `turno_aberto_de` em HEAD -> `col900 aberto=True entrada=27/09 06:49`, `col868 07:02`, `col829 10:46`.
+   O alerta que saiu ("bata a saida") diz o que o codigo revertido diria. Dano: zero.
+2. **Snapshot do placar/badge.** `PlacarSituacional.update_or_create(empresa_id=...)`
+   (`core/management/commands/lavrar_placar_situacional.py:94`) e `PlacarNavbar.update_or_create(pk=1)`
+   (`lavrar_badge_navbar.py:91`) -- linha UNICA por escopo, sobrescrita a cada 5 min.
+   PROVA: os lotes de 21:20 e **21:25:16** ja relavraram com a arvore revertida (`badge=859`, `mtime` de
+   `logs/placar_situacional.log` = 21:25:16). O snapshot da janela nao existe mais; nao ha residuo.
+
+**O que a violacao custou desta vez foi zero. O que ela poderia custar, nao.** Se a mesma janela tivesse caido as
+06:26, o `detectar_par_relampago --dias 2 --apply --retratar` teria RETRATADO batida com um pareador experimental
+-- e retratacao e escrita em dinheiro, irreversivel sem trilha. A lei nao e' sobre este caso, e' sobre esse.
+
+**Daqui ao fim da meta**: toda cura nasce em copia do HEAD (`git show HEAD:app/... > /tmp/...`), mede-se na copia,
+e so vai a arvore no ato do commit. Nao e regra nova: e a LEI-AKITA 10 e o CLAUDE.md secao 2 ("arquivo de fatia so
+vai para a arvore no ato do commit/deploy"), a mesma que as 5 respostas 500 de 23/09 ja haviam cobrado.
+
+## E um segundo erro meu, achado no meio desta medicao: o rotulo de hora
+
+Quatro titulos deste RELATO estavam datados **28/09 00:1x-01:2x**. Nao existiu 28/09 nenhum: o container roda em
+**UTC** e o host em **-03**, e eu datei de cabeca em cima do fuso errado -- inclusive uma hora (01:2x UTC) que
+ainda nao aconteceu. Corrigidos para a hora dos proprios commits (20:20, 20:52, 21:12, 21:18).
+PROVA: `date` no host = `27/09 21:34 -03`; `docker exec saas_core date` = `28/09 00:34 UTC`;
+`git log --date=format:'%d/%m %H:%M'` = `bad88495 27/09 20:20 · 912ab728 20:52 · 3d037f1b 21:12 · 1038bd65 21:18`.
+E a terceira vez que datar de cabeca erra em 3 h no mesmo dia. Rotulo de hora se le no `date` do HOST, no ato.
+
 
 # PAREI: o apply da O68b em 09 esta PARADO -- ha caso do 2o TIPO na folga trabalhada (27/09 ~14:xx)
 
@@ -53,7 +113,7 @@ prod entram. O proprio comentario do sitio ja media isso -- *"8 colabs, ate 134,
 ensaio (sem o arquivo) e prod (com ele)"*. Toda leitura de `horas_folga_trabalhada` feita na sombra com
 `logs` em tmpfs esta contaminada, e a minha estava.
 
-# col843 JULGADO PELAS LEIS: eu estava errado, o ESPELHO viola a L-085 (28/09 ~01:2x)
+# col843 JULGADO PELAS LEIS: eu estava errado, o ESPELHO viola a L-085 (27/09 21:18)
 
 Eu havia chamado a divergencia do col843 de "artefato do instrumento". **Julgado contra as leis, como voce
 mandou, a conclusao se inverte: o defeito e do ESPELHO.**
@@ -89,7 +149,7 @@ a mesma familia de tudo o que este dia mediu.
 R2+R3 aplicam **com o col843 separado** -- e nao se afrouxa a paridade do oraculo para concordar com o
 sistema. Isso e' o proximo ato, e nao um pedido de decisao.
 
-# R3 CURADA: duas celulas nao reivindicam a mesma batida (28/09 ~01:0x)
+# R3 CURADA: duas celulas nao reivindicam a mesma batida (27/09 21:12)
 
 PROVA: `realizado_do_dia` em prod contra o oraculo, nos quatro dias do col146 --
 **07/09 0 -> 777 min** (oraculo 778) · **08/09 900 -> 540** (oraculo **540, exato**) ·
@@ -119,7 +179,7 @@ PROVA: `ENSAIO revertido (nada gravado)` no carimbo do comando -- o gravado de p
 oraculo -- e a R3 nao acrescentou nenhuma: os dias CURADOS subiram de 39 para **43**. O bloqueio do apply nao
 cresceu com as curas; ele e' um so, e e do instrumento.
 
-# R2 CURADA E SELADA, apply RETIDO pela condicao (d) -- e o censo do matcher fecha a R1 (28/09 ~00:4x)
+# R2 CURADA E SELADA, apply RETIDO pela condicao (d) -- e o censo do matcher fecha a R1 (27/09 20:52)
 
 ## R2: a pausa pode ter UMA perna acesa
 
@@ -194,7 +254,7 @@ de guarda os converte em dinheiro; (3) **a folha ve MAIS que a tela: 36 contra 3
 `ponto/motor_calculo_v2.py:421` nao tem a guarda da L-084 das duas pontas que `ponto/turnos.py:961-965` tem.
 Isso e divergencia de testemunha por si, e a folha e' o leitor mais exposto, nao o menos.
 
-# HOOK DE STOP INSTALADO E PROVADO: o turno nao fecha com a fila 1 em pe (28/09 ~00:1x)
+# HOOK DE STOP INSTALADO E PROVADO: o turno nao fecha com a fila 1 em pe (27/09 20:20)
 
 PROVA: seis rodadas do `bin/hook_stop_fila1.py`, com a saida de cada uma --
 (1) fila com item e RELATO sem `PAREI:` -> `{"decision": "block", "reason": "siga: R2 -- ..."}`;
