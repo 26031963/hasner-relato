@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:01:01.**
+**Medido em 28/09/2026 17:06:16.**
 
 | | |
 |---|---|
 | `HEAD` local | `4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)` |
-| `origin/main` | `792a4366 TICKETS: rodape e placar (8584 testes OK, S5b com duas curas medidas)` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `4cfc8965 TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,9 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 ## `git status --short`
 
 ```
+ M app/chamados/views_cobrar.py
+?? app/chamados/services/cobranca_folha.py
+?? app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -85,10 +88,6 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
 
 ```
 
-  Searched for 2 patterns, ran 6 shell commands
-
-● Background command "DIFF com os pares da autoridade" completed (exit code 0)
-
   Ran 2 shell commands
   ⎿  Interrupted · What should Claude do instead?
 
@@ -111,13 +110,17 @@ a17dd8eb BACKLOG: UI-CAL-COMPETENCIA registrada na fila 2 (congelada pela L-096)
      LEI-AKITA: origem=cobrar_massa, testemunha=data_do_chamado + CompetenciaExportada, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Acertar o placar e empurrar · 57s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
-     git commit -q -m "TICKETS: rodape e placar (8586 testes OK, lote 1 emitido)
-     Co-Authored-By: Claude Opus 5 (1M context) <norep… (55s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Selo chamando a funcao real · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py'
+     t=io.open(P,encoding='utf-8').read()
+     i=t.index(' def _previa(self):')
+     novo = ''' def _contador(self):
+     return {'exportada': 0, 'sem_data': 0, 'sem_data_modulos': {}}
+     def test_RE…
 
-✢ Unfurling… (11m 46s · ↓ 7.5k tokens)
+✽ Unfurling… (17m 1s · ↓ 21.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
