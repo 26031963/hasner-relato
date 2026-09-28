@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 07:36:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.1 MB). Acoes na janela: **519**.
+**Medido em 28/09/2026 07:41:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.1 MB). Acoes na janela: **521**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:36:36 | Bash | Provar 07/08 intactas e re-lavrar a porta pos-R4 | `cd /home/ronald/saas-hasner && echo "=== 07/08 depois do deploy (condicao 4 da L-094) ==="; docker exec saas_core python manage.py shell --command "exec(open('/tmp/f.py').read())" 2>&1 \| grep -E "^ 0" \| head -4; echo "=== porta RE-LAVRADA pos-R4 ==="; docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 \| grep -E "^ emp\|^u ...` |
+| 07:36:09 | Bash | Deploy da R4 e do portao do TXT | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="07:3x -- sombra de HOJE REFEITA com diverge=0 erros=0; o --bloco (1h40) nao cabe antes do export. R4 pela L-094 caminho (c), as 4 condicoes MEDIDAS: DIFF publicado (+75,12 h/27 colabs), ZERO para baixo, E6 92,9->93,7%, 07/08 exportadas e protegidas pela L-092 com md5 fotografado. Regua 8.542 OK" bin/deploy.sh --sem-migrate 2>&1 \| tail -4` |
 | 07:34:00 | Bash | Reescrever o placar e empurrar a R4 | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && git add app/docs/TICKETS.md && git commit -q --amend --no-edit && git push 2>&1 \| tail -3` |
 | 07:33:52 | Bash | Commitar a volta da R4 e a cura do carimbo | `cd /home/ronald/saas-hasner && git commit -q -F - <<'MSG' [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18 Revert do revert de 0dab512d. A R4 sobe pelo caminho (c) que voce cortou agora, e a lei virou **L-094** no `LEIS.md` (63 leis indexadas, selo verde). AS QUATRO CONDICOES DA L-094, medidas e publicadas ANTES do deploy: (1) DIFF de f ...` |
 | 07:33:27 | Bash | Fotografar 07 e 08 antes do deploy da R4 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/foto0708.py <<'PY' from django_tenants.utils import schema_context with schema_context('juliani'): import json, os, hashlib from ponto.models import FechamentoMensal from ponto.management.commands.aplicar_09_corte_b import CAMPOS foto = {} for m in (7, 8):  ...` |
