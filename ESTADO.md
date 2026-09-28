@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 19:35:45.**
+**Medido em 28/09/2026 19:40:58.**
 
 | | |
 |---|---|
@@ -32,7 +32,10 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## `git status --short`
 
 ```
+ M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/templates/colaboradores/partials/_calendario_grade.html
  M bin/hook_stop_fila1.py
+?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
 ?? bin/tests/test_hook_nao_cobra_congelado.sh
 ?? cortes.alarme.pausado
@@ -86,6 +89,7 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├──────────────────────────────────────┼────────────────────────┤
   │ ponto/services/esmeril_espelho.py    │ idem                   │
   └──────────────────────────────────────┴────────────────────────┘
 
@@ -109,21 +113,20 @@ b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
   ⎿  Stop hook error: siga: WIZARD-FASE-ALCANCA-A-NAO-EXPORTADA -- FILA 2, CONGELADA (L-096): o wizard de fase oferecer "desde o inicio da competencia ainda NAO
   exportada", e na
 
-● Rodar o selo e ver o que o hook aponta agora · 11s
+● Rodar os dois selos da grade
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, py_compile
-     P='bin/hook_stop_fila1.py'
+     import io
+     P='app/colaboradores/tests/test_calendario_sete_colunas.py'
      t=io.open(P,encoding='utf-8').read()
-     t=t.replace("""_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando|espera o `?!|PAREI', re.I)""",
-     """_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando… (10s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     v = ''' """A doenca de volta na MESMA pagina. Sem este caso o de cima nao prova nada."""
+     html = self._pagina().replace('repeat(7,minmax(0,1…
 
-· Orchestrating… (38m 47s · ↓ 41.3k tokens)
+✽ Orchestrating… (44m 0s · ↓ 50.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
