@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:43:31.**
+**Medido em 28/09/2026 00:49:01.**
 
 | | |
 |---|---|
@@ -90,6 +90,9 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  O selo me corrigiu três vezes, e a terceira era um bug que ia ao ar: escrevi o comentário do bloco como {# ... #} de várias linhas. O Django só trata {# #} de UMA linha — o
+  texto inteiro ia para a página, em todo dia de todo espelho, levando a frase "EM ABERTO" com ele. Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como aberto.
+  Sem o par que morde, subia.
 
   PROVA em prod (saas_ui, col349 14/09): aberto=True falta=[{'tipo':'S','hora':'15:20'}] h=7.0, e as duas raízes (base.html e base_app.html) emitem a pílula. O smoke no saas_core
   morre com NoReverseMatch — o core roda o urlconf enxuto; smoke de tela se faz na casca da tela. Régua 8.507 OK.
@@ -115,15 +118,12 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
   as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
   topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
 
-● Bucketizar os divergentes do topo x soma
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import json
-     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/'
-     d=json.load(open(S+'e4topo_antes.json'))
-     p=d['por_colab']
-     div=[(k,v) for k,v in p.items() if 'ERRO' not in v and abs(v['topo']-v['soma…
+● Esperar com docker wait e ler · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && docker wait e4_depois e6_depois && echo "=== e4 DEPOIS ===" && docker logs e4_depois 2>&1 | grep -E "^entra=|^contadores" && echo "=== e6
+     DEPOIS ===" && docker logs e6_depois 2>&1 | grep -E "^\{|^BATE" (1m 21s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hashing… (12m 12s · ↓ 8.2k tokens · deep in thought)
+✢ Hashing… (17m 42s · ↓ 12.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
