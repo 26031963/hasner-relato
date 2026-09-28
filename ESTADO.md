@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 01:05:31.**
+**Medido em 28/09/2026 01:10:58.**
 
 | | |
 |---|---|
@@ -39,6 +39,12 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## `git status --short`
 
 ```
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
+M  app/ponto/services/espelho.py
+A  app/ponto/tests/test_e5_topo_soma_das_linhas.py
+M  app/templates/ponto/espelho.html
+A  bin/tests/test_hook_stop_vivo.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -90,29 +96,6 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
-  │ horas_trabalhadas      │ 71.086,96 │ 71.376,46 │ +289,50 (45 colabs) │
-  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
-  │ turnos_abertos         │ 468       │ 363       │ −105 (33)           │
-  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
-  │ inconsistencias        │ 1.093     │ 946       │ −147 (43)           │
-  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
-  │ horas_saida_antecipada │ 228,96    │ 182,95    │ −46,01              │
-  ├────────────────────────┼───────────┼───────────┼─────────────────────┤
-  │ horas_atraso           │ 73,27     │ 63,80     │ −9,47               │
-  └────────────────────────┴───────────┴───────────┴─────────────────────┘
-
-  SAEM do TXT: 0 · 07 e 08: 0 divergências · col81 intacto · saldo_banco_horas +0,00 (segue restaurado pelo seu ! de 26/09). Oráculo e6 idêntico antes e depois — BATE 92,9% de
-  7512 dias, todos os contadores iguais, zero divergência nova. Reversão em logs/antes_recalc09_full.json.
-
-  O achado que corrige a expectativa: entra 205 → 205 e furo_espelho 335 → 335. A causa está em código — folha/export.py:646 diz na própria docstring que motivos_retencao_espelho
-  ignora turnos_abertos, inconsistencias e grade: o juiz é motivos_retencao_celula. O portão do TXT pergunta à CÉLULA, não ao FechamentoMensal — então nenhum recálculo do gravado
-  faz alguém entrar. Baixar turnos abertos de 468 para 363 não abre uma vaga. Os 335 saem de lá curando a célula.
-
-  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
-  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
-
-  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
   −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
@@ -124,10 +107,33 @@ f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
   Régua 8.507 OK, tudo commitado e empurrado (d35de481).
 
 ✻ Baked for 32m 50s · done 1:04 AM · 1 shell still running
+
+❯ aval Ronald: MODO CONTINUO ate o export. Fila, sem devolver turno entre itens: (1) topo lendo a mesma computacao das linhas (inclui folga trabalhada e O51b) -> (2) E5 recalculo
+  por evento -> (3) R4 (BO pronto: escala/models.py:977-986) -> (4) R5 -> (5) selo tela==PDF==fechamento==TXT no universo do TXT + E6 rodada 4 -> (6) export pronto em 2 lotes
+  (os que entram agora + recontagem apos 12h), PARADO so para o meu !. Regras: ao fechar um item, commitar, publicar no RELATO com PROVA e comecar o PROXIMO na mesma resposta;
+  resumo vai para o RELATO, nunca para o chat como fim de turno. Unica parada permitida: pergunta de LEI ou o ! do export. Antes do item (1): ler logs/hook_stop_fila1.log,
+  publicar por que o hook liberou as 23:41, 00:30 e 01:04, e curar. Segue.
+
+  Ran 7 shell commands
+
+❯ aval Ronald: O81 entra na fila 1 depois do item (5) selo+E6 r4 e antes do fechamento da E6, sem segurar o export: MUDA ja cortado 18:08 (espelho.py:585 + :353, celula em
+  [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
+  Segue.
+
+  Registrar a ordem, o O81 e rodar a regua · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io, re
+     p='app/docs/BACKLOG.md'
+     s=io.open(p,encoding='utf-8').read()
+     # ORDEM NOVA do modo continuo + O81 depois do selo
+     old_com = "<!-- A FILA 1 VIVA. ORDEM VIGENTE (corte Ronald 27/09 22:5x, reordenada por IMPORTANCIA):\n R2b -> IMPAR (+TETO)… (4s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Metamorphosing… (5m 0s · ↓ 15.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila: a fatia do topo lendo a mesma computacao
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
