@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:45:45.**
+**Medido em 28/09/2026 08:50:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
-| `origin/main` | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `12888d36 LOTE 1 do export da 09: 200 colabs, 352 linhas, 26.939,24 h, hash por empresa -- e a R4 completa pela L-094` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,9 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+?? app/ponto/management/commands/e6_oraculo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,18 +87,10 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     l3=s.split('\n')[2]
-     novo3=('**LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash '
-     'por empresa publi… (6m 53s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  esta incompleta pela propria lei; (b) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (c) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
+  se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT. Segue a fila; PAREI so em lei ou !
 
-· Determining… (2h 43m 12s · ↓ 77.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Pushed to main, ran 10 shell commands
 
 ❯ aval Ronald: obra O-GLOSSARIO (fila 1, depois do lote 2; nenhuma lei nova -- aplica L-005, TRAVA JUIZ-NOVO, LEI-AKITA 11).
   FONTE: termos do dominio ja existentes no codigo; nenhum termo novo nasce aqui.
@@ -117,10 +112,18 @@ RELATO, com a lista de nomes do banco como autoridade._
   certificados, causa por colab -> (9) O73 col81 (volta da pausa no turno partido nao e atraso) -> (10) os 30 separados do corte (b) -> (11) E5 final: recalcular deixa de existir
   -> (12) grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje (esta parada desde 27/09 19:3x). Cadastro/L-009 vira lista para o meu !. Segue a fila; PAREI so em lei
   ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                                                            2% until auto-compact
+
+● Oraculo no repo, com o dia impar julgado · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/e6_oraculo.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """ORACULO E6 -- calculadora INDEPENDENTE que certifica o espelho, dia por dia.
+     SAIU DE `/tmp/e6b.py` PARA…
+
+* Determining… (2h 48m 13s · ↓ 84.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
