@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 03:47:24.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.0 MB). Acoes na janela: **508**.
+**Medido em 28/09/2026 03:52:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (96.0 MB). Acoes na janela: **511**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:50:09 | Bash | Regua do item (5) | `cd /home/ronald/saas-hasner && git add app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py && bash bin/regua.sh 2>&1 \| tail -4` |
+| 03:47:29 | Bash | Ler a E6 rodada 4 | `cd /home/ronald/saas-hasner && docker wait e6_r4 >/dev/null && docker logs e6_r4 2>&1 \| grep -E "^\{\|^BATE\|erros no espelho\|CLASSES\|^[A-D]_" \| head -8; docker rm e6_r4 >/dev/null` |
+| 03:47:21 | Bash | Selo do selo e E6 rodada 4 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && docker run -d --name e6_r4 --cpuset-cpus 4-7 --cpus 3 --memory 2g --network saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONDONTWRITEBYTECODE=1 -e ALVO=rodada4 -v ~/saas-hasner/app:/app:ro --tmpfs /app/logs -v $S:/saida -v $S/e6_full.py:/tmp/e6.py:ro saas ...` |
 | 03:42:08 | Bash | Somar o cartao x TXT ao selo e reler os abertos | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py' s=io.open(p,encoding='utf-8').read() s=s.replace(""" abertos += int(r.get('dias_em_aberto') or 0)""", """ # O `dias_em_aberto` mora no resumo que passou por `folha_manda`, e quem o monta e o # caminho do CARTAO -- no resumo da tela ele vem 0. Eu li o da tela na 1a ve ...` |
 | 03:38:30 | Bash | Criar e rodar o selo dos leitores no mesmo numero | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/selo_leitores.py <<'PYEOF' # -*- coding: utf-8 -*- """SELO: tela == PDF == fechamento == TXT no universo do TXT, 0 divergencia (corte Ronald, meta da E4/E6). POR QUE UM COMANDO E NAO DOIS CONTADORES SOLTOS: as duas metades ja existiam -- `pdf_x_espelho_dive ...` |
 | 03:33:27 | Bash | Medir PDF x espelho e cartao x TXT na 09 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command pdf_x_espelho_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 \| tail -8; echo "=== cartao x txt ==="; docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 9 --ano 2026 2>&1 \| tail -8` |
