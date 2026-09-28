@@ -8,6 +8,61 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, e ele mostrava zero onde a folha paga (28/09 10:2x)
+
+`colaboradores/services/calendario.py:287` montava motor proprio -- `get_motor`, **sem a regua CCT** -- e o
+chamava **um dia por vez**. Sao duas diferencas contra a folha, nao uma: falta a clausula do sindicato E falta
+a janela do periodo (regra que olha semana ou ciclo nao existe numa janela de um dia).
+
+**CENSO DA FROTA, com as duas funcoes REAIS** (`contexto_calendario` x `espelho_do_colab`, competencia 09,
+todos os colabs com fechamento):
+
+| | |
+|---|---|
+| dia-colab comparados | **18.817** |
+| iguais | **18.745** |
+| **divergem** | **72** (0,38%), em **30 colabs** |
+| por campo | extra 50: **45** · extra 100: **17** · atraso: **5** · saida antecipada: **10** |
+
+E o desvio tem sentido: **o calendario mostrava ZERO onde o espelho paga**. `col862 07/09`: **453,2 min de
+extra 100** no feriado, que a tela nao pintava -- e no dia seguinte outros 436,2. `col833` e `col362` no mesmo
+07/09 (242,3 e 239,9). E exatamente o que o registro `_F3` em `core/juizes.py` previa por escrito desde 14/09:
+*"motor sem clausula CCT: tela mostra simples onde a folha dobra"*. Estava previsto, anotado e vivo.
+
+## A CURA: a autoridade sai de dentro do espelho e passa a ter nome
+
+Trocar para `get_motor_cct` no calendario era o que voce proibiu no aval, e com razao: seria **a mesma conta
+escrita duas vezes**. Entao a montagem inteira do motor da folha -- batidas APURAVEIS com a borda de 12 h,
+feriados DO COLAB, vinculo ativo, regua CCT e celulas alimentadas em UMA query -- saiu de dentro de
+`espelho_do_colab` e virou **`ponto/services/espelho.py::autoridade_do_periodo`**. O espelho continua sendo o
+espelho; ele so parou de ser o unico que sabia montar o motor. O calendario RECORTA os periodos do dia
+(`ResultadoMes(periodos=[...])`, a MESMA classe, entao todo numero da tela sai das @property dela) e o registro
+`_F3` do calendario saiu de `core/juizes.py`.
+
+**UM BAND-AID MORREU COM A CAUSA.** `_sem_carimbo` copiava cada Batida para tirar o carimbo `_intra_dur` que o
+juiz de turno deixa no objeto -- band-aid que so existia porque havia motor proprio rodando em LOOP, e a marca
+da passada anterior sobrevivia (BO 18/09, chamado #23412, col217: "+1,2h de HE toda noite" que a folha nao
+paga). Com uma chamada so, nao ha passada seguinte para sujar. O selo do BO segue de pe e agora afirma sobre a
+fonte, nao sobre a copia.
+
+## PROVA
+
+- **RED antes**: os 72 dia-colab acima, medidos chamando as duas funcoes reais (nunca replicando conta).
+- **O selo do BO de 18/09 MORDEU durante a cura**: quando a extracao entrou com um `_dt` faltando,
+  `test_MORDE_o_calendario_desconta_a_pausa_como_a_folha` foi o primeiro a ficar vermelho -- e depois 25 selos
+  de ficha/espelho junto, por UMA linha (a borda de 12 h estava sendo escrita de volta em `fim`, entregando
+  datetime aware a quem espera DATA). Os dois defeitos foram vistos por selo, nao por leitura.
+- **Teto de performance INTACTO**: `colaboradores/N/calendario` segue em 29 queries. A primeira versao da cura
+  chamava `espelho_do_colab` inteiro e media **62** -- e foi o selo de performance que cobrou. Chamar a
+  AUTORIDADE extraida em vez da TELA inteira resolveu: o calendario nao precisa de `montar_dias`.
+- Regua: verde sobre a arvore com esta fatia (numero no rodape do TICKETS).
+
+**LEI-AKITA**: origem=`calendario.py:287` (o segundo motor), testemunha=`autoridade_do_periodo`, a mesma que a
+folha usa, RED=72 dia-colab medidos na frota + os selos que morderam, quem-mais-le=censo dos chamadores de
+`espelho_do_colab` (a ficha, o cartao, o PDF, a api do app -- todos passam pela funcao extraida sem mudar de
+comportamento, provado por 25 selos que ficaram vermelhos e voltaram), juizes novos=0 (o `_F3` do calendario
+SAIU do registro).
+
 # CAUDA DO LOTE 1: cruzei os 56 dias FORA DA FAIXA com os 200 do TXT -- **NAO HA PAREI** (28/09 10:1x)
 
 Sua condicao era literal: *"se houver algum ABAIXO DO PISO dentro do lote: PAREI com a lista"*. **Nao ha

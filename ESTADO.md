@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:07:01.**
+**Medido em 28/09/2026 10:12:31.**
 
 | | |
 |---|---|
@@ -33,13 +33,15 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/colaboradores/services/calendario.py
-M  app/docs/BACKLOG.md
+MM app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/ponto/management/commands/e6_oraculo.py
  M app/ponto/services/espelho.py
+ M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
+?? bin/tests/test_hook_nao_escreve_parei.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -120,10 +122,10 @@ M  app/docs/PROMPTS.md
   "PAREI: hook-teto | espera Ronald" no topo do RELATO esta velha, voce seguiu depois dela -- tira ou explica; (b) app/colaboradores/services/calendario.py aparece " M" na ARVORE
   VIVA fora de commit (L-005) -- de onde veio e o que e. Segue a fila; PAREI so em lei ou !
 
-  Ler o bloco do teto no hook
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '130,155p' bin/hook_stop_fila1.py
+● Ver o retorno e o conferir
+  ⎿  $ sed -n '82,140p' folha/porta_export.py
 
-✢ Determining… (4h 4m 28s · ↓ 181.9k tokens)
+· Determining… (4h 9m 58s · ↓ 188.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
