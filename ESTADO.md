@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 23:34:01.**
+**Medido em 27/09/2026 23:39:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa` |
+| `HEAD` local | `3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato` |
 | `origin/main` | `47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato
+ce88575c [TETO] a absorcao de intervalo para de engolir batida do dia seguinte -- 1.750 min e 78 h viram 0 e 418
 1c031592 [R2b] APLICADA no gravado de 09 com o seu `!`: 9 colabs, folga trabalhada -17,31 h -- dentro da faixa
 c372449c [IMPAR][TETO] os dois casos do TETO medidos, com mecanismo NOMEADO -- e sao dois, nao um
 47e36f90 [R2b] rodape do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
-c657f001 [REGUA-MORTA][ALARME-NAO-E-JUIZ][SELOS-MUDOS] as tres fatias ganham linha no TICKETS
-c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/RELATO.md
-M  app/ponto/turnos.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -92,8 +90,6 @@ M  app/ponto/turnos.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Medir o pico de RAM durante a regua" completed (exit code 0)
-
   Ran 14 shell commands
 
 ❯ aval Ronald: (1) junto do IMPAR entra o TETO: col444 30/08 (1.750 min) e col349 14/09 (78 h) na tela/PDF -- absorcao de intervalo engole batida do dia seguinte (CLAUDE.md 6,
@@ -115,16 +111,18 @@ M  app/ponto/turnos.py
   disso PAREI. REGUA-MORTA: medir e publicar se algum push de 25/09 10:34 a 27/09 22:24 pulou o arsenal por carimbo "JA VERDE" falso; se pulou, rodar a regua sobre o HEAD atual e
   listar os commits que subiram sem teste. Segue a fila: IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. !
 
-● Levar o TETO a arvore e rodar a regua · 4m 45s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cp $S/t3.py app/ponto/turnos.py &&
-     python3 - <<'PY'
+● Abrir a linha do IMPAR e empurrar · 48s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import io
-     p='app/docs/RELATO.md'
+     p='app/docs/TICKETS.md'
      s=io.open(p,encoding='utf-8').read()
-     old = """A CURA: a absorcao por marco pas… (4m 44s · 2 lines)
+     anc='| TETO | ponto/turnos (pareador) |'
+     i=s.index(anc)
+     nova=('| IMPAR | ponto/services/espelho + tela/PDF | dia de batida IMPAR mostra NUMERO em vez de "EM ABERTO -- '
+     'falta: <… (48s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Zesting… (2h 30m 58s · ↓ 238.3k tokens)
+· Zesting… (2h 36m 28s · ↓ 241.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
