@@ -1,5 +1,7 @@
 # RELATO — esteira saas-hasner
 
+`PAREI: hook-teto | espera Ronald` -- 5 bloqueios seguidos sem commit novo na fila 1 (`E6-IMPAR -- dia de batida IMPAR fora da certificacao: o oraculo dia_batida_impar -> continue, e 473 dias ficam sem julgame`). O hook liberou o encerramento e deixou este registro.
+
 **LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash por empresa publicado abaixo. A **R4 subiu pela L-094** com as quatro condicoes medidas. O CADASTRO-ZERO reteve **exatamente os 4** que voce nomeou. Falta so a EMISSAO com trilha -- um clique, que a porta ja guarda.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
