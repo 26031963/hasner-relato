@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:12:31.**
+**Medido em 28/09/2026 05:18:01.**
 
 | | |
 |---|---|
@@ -85,44 +85,44 @@ e133bfb3 [E5] item (2): o EVENTO mantem o gravado -- e fechei um VAZAMENTO REAL 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      33 +**SEIS colabs dos 205 carregam classe da E6**, e quatro deles sao a mesma coisa: **col924, col391, col43,
-      34 +col942** -- classe A, `fechamento zero`: **zero fatia de escala e zero celula** na janela, com batidas (66, 7,
-      35 +20, 14). **Isso e CADASTRO, nao codigo**, e vale **217,7 h**. Sobram 1 de classe C e 1 de classe D. A classe B
-      36 +(turno aberto 5+), que era a maior do censo da O83 com 733,7 h, **nao tem nenhum colab no TXT**.
-      37 +
-      38 +## LOTE 2 -- recontagem depois das 12h
-      39 +
-      40 +O mutirao venceu para **158 colabs** com prazo **28/09 12:00** (159 chamados em 145 colabs com `prazo_sla`
-      41 +carimbado). Cada resposta validada **recalcula o fechamento daquele colab na hora**, pelo evento que entrou hoje
-      42 +-- entao o lote 2 nao precisa de nenhum comando novo: as respostas que chegarem ate o meio-dia ja estarao no
-      43 +gravado, e a recontagem e rodar a porta outra vez.
-      44 +
-      45 +## O QUE ESTA PARADO, e sao DUAS coisas
-      46 +
-      47 +1. **O `!` do export** (este dossie).
-      48 +2. **A pergunta de lei da R4** -- com o evento vivo, o deploy virou o apply. A R4 esta curada, medida
-      49 +   (**+75,12 h em 27 colabs, todos para cima**) e **revertida da arvore**, porque deixa-la ali faria os crons
-      50 +   das 06:2x julgarem com ela sem `!`. Item no topo do `PENDENTES_RONALD.json` com os tres caminhos.
-      51 +
-      52 +**Se voce der o `!` do export sem responder a R4**, o TXT sai com os numeros de hoje (a R4 nao entrou em nenhum
-      53 +deles) -- e os 27 colabs dela ficam para a competencia seguinte ou para um ajuste declarado. Nao ha incoerencia
-      54 +nisso: o que sai no TXT e exatamente o que a tela, o PDF e o cartao mostram agora.
-      55 +
-      56  # ITEM (4) R5 FECHADA: o selo da O68b era vazio -- e os DOIS REDs dele nao sao dela (28/09 03:2x)
-      57
-      58  A fixture passava `marcos_por_dia=(hi, hf, None, None)`: um dia SEM marcos de intervalo. **Nenhum dos dois
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
+        "additionalContext": "string (optional)"
+      },
+      "for Stop / SubagentStop": {
+        "hookEventName": "\"Stop\" | \"SubagentStop\"",
+        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
+      }
+    }
+  }
 
-● Rodar o selo da porta em prod apos o deploy · 2m 27s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 | grep -E
-     "^universo|^ [a-z]|^SELO" (2m 26s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Metamorphosing… (4h 6m 33s · ↓ 154.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Crunched for 4h 8m 38s · done 5:14 AM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
