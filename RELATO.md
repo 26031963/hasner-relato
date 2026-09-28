@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-**MODO CONTINUO.** Itens (1)(2)(4)(5) e **O81 (5b)** fechados. A porta do export esta **VERDE** com uma pergunta a mais: `colabs_no_builder=0` (era **96 dos 205**). PARADO em DOIS `!`: a pergunta de lei da R4 e o **`!` do EXPORT** -- o dossie esta abaixo.
+`PAREI: a fila 1 esta VAZIA de item que eu possa executar -- restam DOIS, e os dois sao decisao sua | espera Ronald`. (a) **`!` do EXPORT da 09** -- a porta esta VERDE nas cinco perguntas e o dossie esta abaixo; (b) **pergunta de LEI da R4** -- com o evento vivo o deploy virou o apply, e a R4 (+75,12 h em 27 colabs) esta medida, commitada e revertida da arvore esperando a sua resposta. Tudo o mais que estava na sua fila FECHOU: topo=soma das linhas, E5 por evento, R5, selo dos quatro leitores, E6 rodada 4 e O81.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 

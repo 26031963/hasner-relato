@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 05:50:45.**
+**Medido em 28/09/2026 05:55:45.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 c
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -85,13 +86,6 @@ ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 c
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -113,12 +107,19 @@ ca7bacf3 [R4] celula que existe nao empresta pausa do template: +75,12 h em 27 c
 
 ❯ segue a fila; PAREI so em lei ou !
 
-  Deploying do O81 e porta em prod · 42s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate 2>&1 | tail -3; echo "=== porta do export em prod, depois do deploy ==="; docker exec saas_core python manage.py
-     tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 | grep -E "^universo|^ [a-z]|^SELO" (40s · 5 lines)
+  Escrever o PAREI, publicar o relato e empurrar · 41s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='app/docs/RELATO.md'
+     s=io.open(p,encoding='utf-8').read()
+     l3=s.split('\n')[2]
+     novo3=('`PAREI: a fila 1 esta VAZIA de item que eu possa executar -- restam DOIS, e os dois sao decisao sua | '
+     'espera Ronald`. (a)… (40s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Flibbertigibbeting… (28m 12s · ↓ 26.1k tokens)
+· Flibbertigibbeting… (33m 12s · ↓ 28.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
