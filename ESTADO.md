@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 17:38:31.**
+**Medido em 28/09/2026 17:44:01.**
 
 | | |
 |---|---|
@@ -32,11 +32,14 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
- M app/colaboradores/models.py
- M app/docs/BACKLOG.md
- M app/ponto/motor_calculo_v2.py
-?? app/colaboradores/migrations/0052_empresa_janela_he_ativa_empresa_janela_he_desde_and_more.py
-?? app/escala/tests/test_janela_he_cadastro.py
+A  app/colaboradores/migrations/0052_empresa_janela_he_ativa_empresa_janela_he_desde_and_more.py
+M  app/colaboradores/models.py
+M  app/docs/BACKLOG.md
+A  app/escala/tests/test_janela_he_cadastro.py
+M  app/ponto/calculador/regras.py
+A  app/ponto/janela_he.py
+M  app/ponto/motor_calculo_v2.py
+A  app/ponto/tests/test_janela_he_regra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -111,17 +114,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PROVA-DOMINIO -- (2) do portao da 09: motor ATUAL em sombra, so leitura, sobre a JSP 07/2026, comparado RUBRICA POR RUBRICA (HE
 
-● Alimentar a regra e ligar a lista
+● Selo do import unico e regua · 3m 52s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/ponto/motor_calculo_v2.py'
+     import io
+     P='app/ponto/tests/test_janela_he_regra.py'
      t=io.open(P,encoding='utf-8').read()
-     # 1) alimentacao no ponto comum de calcular_mes
-     v = """ self._colab_do_calculo = colaborador_id
-     # L-084: a lista nasce vazia a ca…
+     anc=" def test_MORDE_empresa_com_a_janela_DESLIGADA_nao_muda_nada(self):"
+     novo = ''' def test_MORDE_a_regra_e_UMA_e_os_dois_calculadores_a_IMPORTAM(self):
+     … (3m 50s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (49m 16s · ↓ 53.5k tokens)
+✢ Unfurling… (54m 46s · ↓ 60.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

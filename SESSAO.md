@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 17:38:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.0 MB). Acoes na janela: **503**.
+**Medido em 28/09/2026 17:44:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.0 MB). Acoes na janela: **506**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:40:09 | Bash | Selo do import unico e regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/ponto/tests/test_janela_he_regra.py' t=io.open(P,encoding='utf-8').read() anc=" def test_MORDE_empresa_com_a_janela_DESLIGADA_nao_muda_nada(self):" novo = ''' def test_MORDE_a_regra_e_UMA_e_os_dois_calculadores_a_IMPORTAM(self): """O corte pede que `ponto/calculador/regras.py` IMPORTE a mesma regra, nunca copie. Regra copiada em d ...` |
+| 17:39:35 | Bash | Regra pura importada pelos dois calculadores | `cd /home/ronald/saas-hasner && cat > app/ponto/janela_he.py <<'PYEOF' # -*- coding: utf-8 -*- """A REGRA DA JANELA DE HE, pura, em UM sitio (L-097, corte Ronald 28/09 15:0x). *"Minuto fora da janela nao vira HE nem compensa nada"*: quem chega antes do marco tem a jornada contada **DO MARCO**, e os minutos anteriores nao geram hora extra e **nao abatem** atraso nem saida antecipada -- eles nao exis ...` |
+| 17:38:34 | Bash | Os quatro RED da janela de HE | `cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_janela_he_regra.py <<'PYEOF' # -*- coding: utf-8 -*- """JANELA DE HE, parte A item 2: a REGRA no motor (L-097, corte Ronald 28/09 15:0x). *"Minuto fora da janela nao vira HE nem compensa nada"*: quem chega antes do marco tem a jornada contada **DO MARCO**, e os minutos anteriores nao geram hora extra e **nao abatem** atraso nem saida anteci ...` |
 | 17:37:53 | Bash | Alimentar a regra e ligar a lista | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/motor_calculo_v2.py' t=io.open(P,encoding='utf-8').read() # 1) alimentacao no ponto comum de calcular_mes v = """ self._colab_do_calculo = colaborador_id # L-084: a lista nasce vazia a cada calculo -- motor reaproveitado entre colabs somaria dia de # um no outro, que e o tipo de vazamento  ...` |
 | 17:37:25 | Bash | O ponto comum que recebe o colaborador | `sed -n '1198,1215p' ponto/motor_calculo_v2.py` |
 | 17:37:20 | Bash | Onde o motor recebe o colaborador | `grep -n '_colab_do_calculo = \\|_colab_do_calculo=' ponto/motor_calculo_v2.py \| head -5` |
