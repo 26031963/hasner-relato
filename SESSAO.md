@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 20:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **517**.
+**Medido em 28/09/2026 20:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:16:33 | Bash | Commitar por path a fila e empurrar | `cd /home/ronald/saas-hasner && cat > /tmp/msg_fila.txt <<'EOF' VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado 1. O APPLY DA JANELA SAIU SEM O ! SOBRE O DIFF NOVO, e ele esta certo: o ! de 18:2x era sobre o DIFF de 18:4x -- aquele que eu mesmo PAREI --, e o DIFF da saida (C) e OUTRO. Escopo de aval e literal, e eu tratei  ...` |
 | 20:07:02 | Bash | Regua antes dos dois commits | `cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_fila.log 2>&1 & sleep 3; until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_fila.log 2>/dev/null; do sleep 20; done; gr ...` |
 | 20:06:47 | Bash | Publicar os cinco itens no RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() sec = '''# VOLTA A FILA 1: a linha INTRA, o diff do hook, e a ordem viva no BACKLOG (28/09 20:3x) ## 1. O apply da janela: voce esta certo, e a linha INTRA ratifica **O apply saiu sem o seu `!` sobre o DIFF novo.** O `!` de 18:2x  ...` |
 | 20:06:12 | Bash | Selar a ordem viva no hook | `cd /home/ronald/saas-hasner && cat >> bin/tests/test_hook_nao_cobra_congelado.sh <<'EOF' # --- 2. O HOOK COBRA O 1o DA ORDEM VIVA, e ve id com ESPACO (achado 28/09 20:2x) # O padrao do id era `[A-Za-z0-9-]*` seguido de `\|`, e por isso ele NAO casava `O-DIA-PAGO S3`, # `O-DIA-PAGO S5` nem `O-JANELA-HE parte A`: o hook PULAVA essas linhas e cobrava a proxima -- foi assim # que ele apontou a linha g ...` |

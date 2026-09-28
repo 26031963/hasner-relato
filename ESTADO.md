@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 20:12:31.**
+**Medido em 28/09/2026 20:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)` |
+| `HEAD` local | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
 | `origin/main` | `13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,25 +22,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
+8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
 13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
 642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
 9e7de43c TICKETS: rodape e placar (8602 OK, janela de HE aplicada)
-de5b1a61 JANELA DE HE saida (C) implementada e APLICADA: a L-084 julga antes, e o DIFF fechou nas tres condicoes
-b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
 ```
 
 ## `git status --short`
 
 ```
-M  app/colaboradores/tests/test_calendario_sete_colunas.py
-A  app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
-MM app/docs/RELATO.md
- M app/ponto/management/commands/diff_janela_he.py
-M  app/templates/colaboradores/partials/_calendario_grade.html
-MM bin/hook_stop_fila1.py
- M bin/relato.sh
-AM bin/tests/test_hook_nao_cobra_congelado.sh
+ M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -93,8 +87,6 @@ AM bin/tests/test_hook_nao_cobra_congelado.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  em fase com ele; o wizard criou um vínculo novo em vez de mudar a ancora do antigo) e os 12 dias do col899, o único caso vivo da frota.
-
   Fila 1 adiante: S3 segue com a troca dos 8 leitores, um a um, cada uma tirando uma linha do placar — depois S5b (o pareamento por marco, com os três números já escritos) e S4.
 
 ● Ran 1 stop hook
@@ -120,12 +112,14 @@ AM bin/tests/test_hook_nao_cobra_congelado.sh
 
 ● Background command "Medir a linha intra por colab" completed (exit code 0)
 
-● Regua antes dos dois commits · 5m 28s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_fila.log 2>&1 &
-     sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/… (5m 27s)
+● Commitar por path a fila e empurrar · 1m 28s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_fila.txt <<'EOF'
+     VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
+     1. O APPLY DA JANELA SAIU SEM O ! SOBRE O DIFF NOVO, e ele esta certo: o ! de 18:2x era
+     sobre o DIFF de 18:4x… (1m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Orchestrating… (1h 15m 33s · ↓ 73.4k tokens)
+✢ Orchestrating… (1h 21m 3s · ↓ 75.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
