@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:27:31.**
+**Medido em 28/09/2026 00:32:43.**
 
 | | |
 |---|---|
-| `HEAD` local | `67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`` |
-| `origin/main` | `b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar` |
-| commits a subir (`ahead`) | **1** |
+| `HEAD` local | `f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo` |
+| `origin/main` | `f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f511baa8 [IMPAR] placar e rodape do TICKETS reescritos pelo mundo
 67cea461 [IMPAR] smoke em PROD nas duas cascas: `EM ABERTO — falta: S 15:20 · parcial provado: 7,0h`
 b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que morde pegou um bug meu que ia ao ar
 872c3bc4 [IMPAR] fatia 1: o espelho para de jogar fora o estado do dia -- `RealizadoDoDia.aberto` ganha leitor
 c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contador truncado -- e a fila 1 fecha o que fechou
-3b742106 [IMPAR] linha aberta no TICKETS: citei a fatia em commit e nao abri a linha no mesmo ato
 ```
 
 ## `git status --short`
@@ -90,40 +90,40 @@ c32534cb [O96] o hook de Stop tinha TRES furos, e um deles o liberava por contad
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  família 100% e banco intocados. Smoke em prod: col843 24/08 = 544 trabalhou, 25/08 = folga sem hora. Condição (d): 0 divergência nova no oráculo e 31 curadas (85,0% → 90,0%).
+  O selo me corrigiu três vezes, e a terceira era um bug que ia ao ar: escrevi o comentário do bloco como {# ... #} de várias linhas. O Django só trata {# #} de UMA linha — o
+  texto inteiro ia para a página, em todo dia de todo espelho, levando a frase "EM ABERTO" com ele. Quem pegou foi o caso que MORDE: o dia FECHADO aparecia marcado como aberto.
+  Sem o par que morde, subia.
 
-  TETO — os seus dois casos eram um mecanismo, não dois (corrigi o que publiquei): _dist_marco mede hora do dia e engolia batida de D+1 como pausa de um turno de D, silenciando o
-  próprio teto de 26 h. col444 30/08 1.750 → 0 (turno segue aberto) e 31/08 0 → 287; col349 14/09 4.682 → 418. No ar, com smoke em prod.
+  PROVA em prod (saas_ui, col349 14/09): aberto=True falta=[{'tipo':'S','hora':'15:20'}] h=7.0, e as duas raízes (base.html e base_app.html) emitem a pílula. O smoke no saas_core
+  morre com NoReverseMatch — o core roda o urlconf enxuto; smoke de tela se faz na casca da tela. Régua 8.507 OK.
 
-  REGUA-MORTA, sua pergunta — nenhum push pulou o arsenal entre 25/09 10:34 e 27/09 22:24. O atalho exige REGUA_STATUS == "OK", o único escritor do carimbo é bin/regua.sh (que
-  morria antes de escrever), e o carimbo ficou em FALHOU / 25/09 07:25:56. Os 199 commits da janela rodaram o arsenal inteiro. O custo foi tempo e a cegueira dos selos de host,
-  não código sem teste.
+  Sobre o hook liberar às 23:41: tinha três furos, os três curados e provados. (1) Contador truncado liberava a porta — json.load de arquivo vazio levantava, a exceção subia ao
+  except de fora e ele falhava ABERTO; agora contador ilegível começa do zero e a porta fica firme. (2) Lia a coluna errada — procurava "FECHADA/NO AR" no texto da obra, não no
+  estado, então item resolvido contaria como fila para sempre. (3) Não deixava rastro — e é por isso que não consigo afirmar qual dos três caminhos liberou às 23:41: os três saíam
+  antes de escrever qualquer coisa. Agora toda decisão vira linha em logs/hook_stop_fila1.log.
 
-  Suite pela régua — régua 8.497 testes em 467 s; o docker run manual sem --parallel levava 898 s. Pico de RAM em --parallel 2: 1.024 MiB de 2.048 (50%), CPU ~145% de 400%.
-  --parallel 4 cabe (~1,7 GiB, 83%), folgado com --memory 3g; mas o cpuset de teste são 4 threads em 2 núcleos físicos, então espero 25–40%, não o dobro — rodo uma régua assim e
-  publico os dois tempos se você quiser.
+  Cumpri a sua ordem de fechar o que fechou: R2, R3, R2b marcadas FECHADA com commit e prova, a metade TETO dentro da linha da IMPAR, e a IMPAR agora também. E reordenei a FILA 1
+  para a ordem que você cortou — o hook lê a primeira linha aberta e, com a tabela na ordem velha, apontava R4.
 
-  Achados de carona ao cumprir a ordem da régua: ela estava morta desde 25/09 10:34, e com ela viva 4 selos de host mudos há 36 h acusaram — alarme de cortes virado juiz,
-  fabricante sorteando item que espera você (O59/O66/O81, e O81 declarado duas vezes), hook virado cópia de 177 linhas num ciclo com o próprio hooks.sh, e o selo de LABELS vazio
-  (comparava a fonte única consigo mesma).
+  Próximo da fila: E5. O seu aval já decidiu o desenho (recálculo por colab no EVENTO pelo escritor único fechamento.py:382/541, leitores intactos, competência exportada recusa) e
+  pede como primeiro passo a re-medição do E4-topo-igual-coluna depois da O96.
 
-  Próximo: IMPAR — espelho.py:513-514 passa a ler RealizadoDoDia.aberto, classes B e C primeiro.
+✻ Cogitated for 47m 12s · done 12:30 AM · 1 shell still running
 
-✻ Brewed for 2h 38m 35s · done 11:41 PM · 1 shell still running
+❯ segue a fila: E5, comecando pela re-medicao do E4-topo-igual-coluna
 
-❯ segue a fila: IMPAR. E o hook liberou o fim do turno as 23:41 com fila em pe: se foi PAREI velho no topo do RELATO, limpar o PAREI resolvido ao fechar cada item. Segue.
+  Ran 2 shell commands
 
-● Registrar o smoke e ver o proximo da fila
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/docs/RELATO.md'
-     s=io.open(p,encoding='utf-8').read()
-     anc='## O SELO ME CORRIGIU TRES VEZES, e a terceira era um bug que ia para o ar'
-     add = """## NO AR, e provado nas duas cascas EM PROD
-     PROVA (deploy 00:2x; render em `saas_ui`, que…
+❯ segue a fila: E5. Primeiro: re-medir E4-topo-igual-coluna. Depois, ANTES de ligar o recalculo por evento: recalcular 09 inteiro pela funcao real (traz as respostas do mutirao e
+  as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
+  topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
 
-✢ Zigzagging… (44m 34s · ↓ 48.6k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Medir topo x soma ANTES do recalculo
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/e4topo.py <<'PY'
+     # E4-topo-igual-coluna: topo do cartao (GRAVADO, pela folha) x SOMA das linhas (motor ao vivo). SO LEITURA.
+     from django_tenants.utils imp…
+
+· Hashing… (1m 24s · ↓ 3.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
