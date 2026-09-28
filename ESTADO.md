@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:40:45.**
+**Medido em 28/09/2026 08:45:45.**
 
 | | |
 |---|---|
@@ -84,28 +84,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-✻ Cogitated for 36m 14s · done 5:58 AM · 1 shell still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Pushed to main, ran 24 shell commands
-
-❯ aval Ronald: lei R4 = caminho (c): cura que move dinheiro faz deploy sem ! quando DIFF de frota publicado ANTES, zero colab para baixo, E6 nao piora, 07/08 = 0 (L-092); fora da
-  faixa = (a). Registrar em LEIS.md (lei nova, corte meu agora). R4 entra ja por (c): revert do revert, regua, deploy, porta re-lavrada hoje. EXPORT 09 LOTE 1 = universo da
-  porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
-  final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
-
-  Pushed to main, ran 40 shell commands
-
-❯ aval Ronald: cauda do lote 1 -- (a) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (b) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
-  se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT (regra fora do corte). Segue a fila; PAREI so em lei ou !
-
-❯ aval Ronald: cauda do lote 1 -- (a) RELATO da R4 pela L-094: publicar as QUATRO condicoes medidas (DIFF de frota, zero para baixo, E6 antes/depois, 07/08 = 0) -- sem isso a R4
-  esta incompleta pela propria lei; (b) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (c) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
-  se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT. Segue a fila; PAREI so em lei ou !
-
-  Publicar o lote 1 com hashes e a R4 pela L-094 · 1m 54s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -113,14 +91,36 @@ RELATO, com a lista de nomes do banco como autoridade._
      s=io.open(p,encoding='utf-8').read()
      l3=s.split('\n')[2]
      novo3=('**LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash '
-     'por empresa publi… (1m 53s · 2 lines)
+     'por empresa publi… (6m 53s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Determining… (2h 38m 12s · ↓ 77.2k tokens)
+· Determining… (2h 43m 12s · ↓ 77.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: obra O-GLOSSARIO (fila 1, depois do lote 2; nenhuma lei nova -- aplica L-005, TRAVA JUIZ-NOVO, LEI-AKITA 11).
+  FONTE: termos do dominio ja existentes no codigo; nenhum termo novo nasce aqui.
+  MUDA: (1) app/docs/GLOSSARIO.md, uma linha por termo: termo | definicao curta | onde mora (arquivo::funcao/modelo, ancorado por grep, nunca por linha) | lei L-NNN | selo.
+  Grupos: O DIA (celula, cartorio, tabuleiro/lampada, veredito que acusa, ata, marco) · A PREVISAO (escala/template, vinculo, vinculo do dia, previsto do dia, intervalo do dia,
+  ancora/fase, turno partido) · O REALIZADO (batida, apuravel/retratada, juiz da batida, turno/pareador, realizado do dia, em aberto, furo x falta L-088, ausencia/catalogo) · A
+  COBRANCA (chamado, disputa, pergunta, pergunta viva/fio, premissa, via/relavrar, materializacao, retratacao) · CALCULO E FOLHA (motor, espelho, builder, fechamento, competencia
+  21-20 L-090, exportada L-092, portao do TXT, porta do export/carimbo, universo do TXT, cadastro-zero, oraculo E6) · GOVERNANCA (juiz/familia, porta canonica, portas da tela,
+  papel do cron, selo, contador/vigia, regua, lei/corte/!, L-094); (2) mensageria/nucleo/cards/glossario.md GERADO do GLOSSARIO.md (fonte unica); (3) CLAUDE.md e PRIMER.md
+  apontam para ele.
+  RED: termo usado em LEIS.md/MAPA.md/PRIMER.md sem linha no glossario = vermelho; "onde mora" que o grep nao acha = vermelho; card do Haiku diferente do gerado = vermelho.
+  SELO: bin/tests/test_glossario_vivo.sh (ou core/tests), com caso que MORDE.
+  PROIBIDO: definicao que contradiz lei vigente; termo sem ancora no codigo; glossario escrito a mao sem selo.
+  CAUDA: oraculo E6 sai de /tmp/e6b.py para o repo, com selo (hoje a certificacao mora em /tmp).
+  PRONTO: RELATO com a contagem de termos, os REDs nomeados e o commit.
+  LEI-AKITA: origem=codigo, testemunha=grep dos sitios, juizes novos=0. Segue a fila; PAREI so em lei ou !
+
+❯ aval Ronald: fila 1 depois do lote 1 publicado, sem segurar o lote 2: (7) E6 dia de batida impar JULGADO pelo oraculo (473 dias hoje fora da certificacao) -> (8) os 14 nao
+  certificados, causa por colab -> (9) O73 col81 (volta da pausa no turno partido nao e atraso) -> (10) os 30 separados do corte (b) -> (11) E5 final: recalcular deixa de existir
+  -> (12) grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje (esta parada desde 27/09 19:3x). Cadastro/L-009 vira lista para o meu !. Segue a fila; PAREI so em lei
+  ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                                             2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
