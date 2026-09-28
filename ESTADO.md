@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:20:45.**
+**Medido em 28/09/2026 12:26:01.**
 
 | | |
 |---|---|
@@ -102,6 +102,7 @@ A  app/ponto/tests/test_dia_pago_soma.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      38  | HOOK-PAREI-SE-APAGA | **CURADO NO ATO** (28/09 10:1x): o hook do Stop escrevia `PAREI: hook-teto | espera Ronald` no topo do RELATO ao bater o teto de bloqueios
           , e a linha sobrevivia ao proprio motivo -- o Ronald a leu as 10:0x citando E6-IMPAR, fechado as 09:2x. Alarme nao escreve na voz de quem decide (CLAUDE.md 4a): o
            teto segue liberando e agora alarma no log do proprio hook. Selo `bin/tests/test_hook_nao_escreve_parei.sh`, com RED provado | **fechada** | `bin/hook_stop_fila1
           .py` | CURA-MAIS-RESTRITIVA: a cura que tira a escrita e mais restritiva que "apagar depois" | 28/09 10:1x |
@@ -128,13 +129,12 @@ A  app/ponto/tests/test_dia_pago_soma.py
           espera seu !"` ou `"<item>: fechado"`, com trilha de envio e **idempotente por evento** (um push, nao um por varredura) | **registrada** | — | depois do portao da
            09. **Smoke dele no celular antes de o push ir ao repo** (FRONT SEM SMOKE NAO SOBE). Nenhuma lei nova | 28/09 11:3x |
 
-  Esperar a regua · 3m 43s
+● Esperar a regua
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' … (3m 41s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' …
 
-✻ Determining… (6h 18m 13s · ↓ 345.1k tokens)
+· Determining… (6h 23m 28s · ↓ 345.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

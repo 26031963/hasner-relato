@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 12:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.7 MB). Acoes na janela: **506**.
+**Medido em 28/09/2026 12:26:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.7 MB). Acoes na janela: **505**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -515,4 +515,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:26:58 | Bash | Smoke da tela na casca que serve o admin | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && docker cp $S/smoke_tela.py saas_ui:/tmp/smoke_tela.py >/dev/null && docker exec saas_ui python manage.py shell --command "exec(open('/tmp/smoke_tela.py').read())" 2>&1 \| grep -E "^ (dict\|base)"` |
 | 00:26:46 | Bash | Smoke da tela em prod nas duas cascas | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/smoke_tela.py <<'PY' import datetime from django_tenants.utils import schema_context with schema_context('juliani'): from colaboradores.models import Colaborador from ponto.services.espelho import espelho_do_colab from django.template.loader import render_t ...` |
 | 00:26:20 | Bash | Deploy e smoke da tela nas duas cascas | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="00:2x -- portao da sombra CEGO entre 00:00 e 04:00 (CLAUDE.md sec.2). Fatia de TELA: zero migration, zero escrita no gravado, regua 8.507 OK, selo renderiza as duas cascas" bin/deploy.sh --sem-migrate 2>&1 \| tail -5; echo "=== SMOKE em prod: a pilula aparece na tela? (col349) ==="; docker exec saas_core python manage.py shell --command " import da ...` |
-| 00:24:09 | Bash | Publicar e empurrar a IMPAR fatia 2 | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('A fila 1 esta ANDANDO. **IMPAR FECHADA (as duas fatias)**: o dia de batida impar diz `EM ABERTO -- ' 'falta: <marco>` e rotula o numero como **parcial provado**, nas DUAS cascas. R2b e TETO fechadas e no ar ' '(R2b aplicada com o seu `!` dentro da faixa) ...` |
