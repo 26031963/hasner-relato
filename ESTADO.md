@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:19:01.**
+**Medido em 28/09/2026 14:24:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)` |
-| `origin/main` | `455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)` |
+| `HEAD` local | `2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)` |
+| `origin/main` | `2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -29,23 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)
+b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes errado antes de sair 1
 455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)
 46803e8c O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
 6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)
-a3ae603c O-DIA-PAGO S2: os dois contadores na porta -- e a medicao em prod achou um erro MEU, no invariante
-9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/ARQUITETURA.mmd
-M  app/docs/BACKLOG.md
-M  app/docs/MAPA.md
-M  app/docs/PENDENTES_RONALD.json
-M  app/docs/RELATO.md
-M  app/escala/signals.py
-A  app/escala/tests/test_ancora_regenera_celulas.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,44 +91,44 @@ A  app/escala/tests/test_ancora_regenera_celulas.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
+        "additionalContext": "string (optional)"
+      },
+      "for Stop / SubagentStop": {
+        "hookEventName": "\"Stop\" | \"SubagentStop\"",
+        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
+      }
+    }
+  }
 
-  Ran 2 shell commands
-
-❯ aval Ronald: col824 [nome] -- a ancora do vinculo ja foi redeclarada pelo admin em 28/09; regenerar as CELULAS do vinculo dele de 21/08 ate 27/09 pela excecao formal
-  (regenerar_celulas_vinculo, passado errado por cadastro, corte 16/08) com trilha em regeneradas_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR
-  perdido, faltas, folga trabalhada, chamados que morrem). Nao toca 07/08 (L-092). Os 5 vinculos com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
-  como LISTA para o meu ! no PENDENTES com a ancora sugerida -- nao aplicar sem ele. Segue a fila; PAREI so em lei ou ! !
-
-  Pushed to main
-
-❯ aval Ronald: BUG-ANCORA-NAO-REGENERA (bug provado que bloqueia folha; nenhuma lei nova -- aplica "tudo tem cadastro" e a excecao formal de passado errado por cadastro, corte
-  16/08). FATO: escala/signals.py::_ec_vigencia_regenera_celulas so regenera celulas quando muda a VIGENCIA; mudar data_ancora_colaborador (ancora do 12x36) nao refaz celula
-  nenhuma -- o admin corrige a fase e o espelho segue invertido. MUDA: mudanca de ancora regenera as celulas do vinculo pela MESMA porta (regenerar_celulas_vinculo) a partir do
-  inicio da competencia ABERTA (nunca competencia exportada, L-092), com trilha em regenerada_em/dna_anterior e motivo "ancora alterada: X -> Y". RED: col824 [nome] (ancora
-  redeclarada 28/09, celulas de 09 ainda invertidas: DSR perdido 5, faltas, folga trabalhada). DINHEIRO: DIFF do col824 e de todo vinculo com ancora alterada na competencia
-  aberta publicado antes do deploy; move dinheiro para os dois lados -> PAREI para o meu !. Os 5 com proposta limpa do fora_de_fase (col936, col932, col877, col451, col416) ficam
-  como lista para o meu ! no PENDENTES. LEI-AKITA: origem=escala/signals.py (so vigencia regenera), testemunha=CelulaDia, juizes novos=0. Segue a fila; PAREI so em lei ou !
-
-  Searched for 6 patterns, listed 1 directory, ran 12 shell commands
-
-❯ aval Ronald: col824 [nome] -- a fase ja foi corrigida pelo admin no wizard (vale da competencia 10 em diante); a 09 (21/08-20/09, NAO exportada) ficou com a fase velha porque
-  o wizard so alcanca a competencia aberta. Regenerar as CELULAS do vinculo dele de 21/08 ate 20/09 pela excecao formal (regenerar_celulas_vinculo, passado errado por cadastro,
-  corte 16/08) com a ancora ja declarada, trilha em regenerada_em/dna_anterior; recalcular o fechamento dele na 09; publicar antes/depois (DSR perdido, faltas, folga trabalhada,
-  chamados que morrem). Ele entra no LOTE 2 se sair do furo. Nao toca 07/08 (L-092). Registrar no BACKLOG (fila 2, congelada): o wizard de fase oferecer "desde o inicio da
-  competencia ainda NAO exportada". Segue a fila; PAREI so em lei ou ! !
-
-● Esperar a regua · 8m 8s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_anc2.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-1… (8m 6s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Catapulting… (1h 16m 28s · ↓ 69.9k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Baked for 1h 19m 48s · done 2:22 PM · 3 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
