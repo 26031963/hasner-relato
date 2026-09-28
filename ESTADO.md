@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 13:36:01.**
+**Medido em 28/09/2026 13:41:31.**
 
 | | |
 |---|---|
@@ -128,13 +128,13 @@ M  app/ponto/tests/test_e6_oraculo_julga_impar.py
   frase. RED: 06:47 com marco 07:00 -> aviso com 13 min; 07:00 -> sem aviso; volta de intervalo -> sem aviso. Selo nas duas cascas se tocar template (nao deve tocar). A parte
   ESPURIA/janela fica REGISTRADA no BACKLOG como desenho aguardando confirmacao do admin da folha e do dono -- nao construir. Segue a fila; PAREI so em lei ou !
 
-  Esperar a regua · 22s
+● Esperar a regua · 5m 53s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s5b.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (22s)
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (5m 52s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Catapulting… (33m 28s · ↓ 32.1k tokens)
+✢ Catapulting… (38m 58s · ↓ 32.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

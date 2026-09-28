@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 13:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.2 MB). Acoes na janela: **471**.
+**Medido em 28/09/2026 13:41:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.2 MB). Acoes na janela: **470**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -480,4 +480,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:56:31 | Bash | Publicar item (2) e a cura do vazamento, e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO ate o export.** (1) topo = soma das linhas **FECHADO e no ar**; (2) **E5 recalculo por ' 'EVENTO FECHADO** (batida e resposta validada, `on_commit`, p50 122 ms, L-092 respeitada). ' 'E fechei um **VAZAMENTO REAL ...` |
 | 01:46:44 | Bash | Regua com o diagrama regenerado | `cd /home/ronald/saas-hasner && bash bin/regua.sh 2>&1 \| tail -4` |
 | 01:46:28 | Bash | Regenerar o diagrama e conferir o selo | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py gerar_diagrama 2>&1 \| tail -3; git diff --stat app/docs/ARQUITETURA.mmd; git add app/docs/ARQUITETURA.mmd && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/ap ...` |
-| 01:37:09 | Bash | Rodar a regua com o item (2) e a cura do vazamento | `cd /home/ronald/saas-hasner && git add bin/relato.sh app/docs/RELATO.md && git status --short \| head -8 && bash bin/regua.sh 2>&1 \| tail -5` |
