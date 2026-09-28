@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:40:31.**
+**Medido em 27/09/2026 22:45:37.**
 
 | | |
 |---|---|
@@ -86,6 +86,12 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 
 ```
 
+● Background command "Rodar a regua" completed (exit code 0)
+
+  Read 1 file, ran 10 shell commands
+
+● Background command "Commitar a cura da regua e roda-la" completed (exit code 0)
+
 ● Background command "Amostrar RAM do container de teste durante a regua" completed (exit code 0)
 
   Read 1 file
@@ -107,22 +113,16 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
   template :986 e entrega hii/hfi; espelho.py:197-198 -> turnos.py:403-406 desconta 60 min). Lei: celula soberana. RED col610 22/08 661 -> 721 (ata=oraculo=721). ANTES da cura:
   censo dos 69 chamadores de marcos_do_dia (P15) e DIFF restrito aos dias com celula sem marcos. Nenhuma lei nova. Segue a fila.
 
-● Abrir o pedido de ! do apply da R2b
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io, json
-     p='app/docs/PENDENTES_RONALD.json'
-     d=json.load(open(p, encoding='utf-8'))
-     # a colisao do IMPAR voce JA respondeu -- ela sai da fila de decisao
-     for it in d:
-     if it.get('id')=='IMPAR-ABERTO-COLISAO-COM-BUG-144':
-     it['o_que'] = ('RESPONDI…
+  Read 3 files, ran 30 shell commands
 
-✢ Zesting… (1h 37m 29s · ↓ 179.9k tokens)
+● Background command "Commitar as curas de selo e rodar a regua" completed (exit code 0)
+
+* Zesting… (1h 42m 35s · ↓ 185.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

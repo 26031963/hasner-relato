@@ -1,8 +1,63 @@
 # RELATO — esteira saas-hasner
 
-A fila 1 esta ANDANDO -- nada parado. O aval da R2b (27/09 21:2x) desbloqueou a condicao (d): **quando a ata acende `hii` E `hfi`, o par E a pausa e o teto `AUT_INTRA_MAX_S` nao se aplica** (celula soberana, LEI-AKITA 2); o teto so vale no dia que a ata NAO descreve. Fila: **R2b -> R4 -> R5 -> impar -> E5 -> selo + E6 r4 -> export com o `!`**.
+A fila 1 esta ANDANDO. **R2b CURADA e no ar**; o APPLY dela espera o seu `!` por UM motivo so -- `horas_folga_trabalhada` cai **25,85 h em 5 colabs** e a sua aval-de-criterio nao nomeou faixa (as outras tres condicoes fecharam, e o oraculo e6 traz **0 divergencia nova e 31 curadas**). Fila vigente: **IMPAR (+TETO) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export com o `!`**.
 
 `09 exportavel: **189 de 203 colabs certificados**` · `E6 sistema: 91,4%` · `E6 operacao: 30,9%` — o apply da 09 **FOI FEITO** (turnos abertos 620 -> 473). A O93 que voce avalizou esta CURADA e o RED virou (col616 14/09 entrou como folga trabalhada); o que segura o apply agora e OUTRO numero, medido depois da cura. A ESTEIRA NAO PAROU: a cura de codigo da O68b-PAPEL sobe (nao move dinheiro por si) e a fila segue em classe D -> classe C residual -> E5 fatia 1 -> E6 rodada 3.
+
+# R2b NO AR: a pausa que a ATA declara nao passa mais pelo teto -- e o apply espera UM `!` (27/09 22:4x)
+
+A sua lei, ao pe da letra: com `hii` E `hfi` acesos o par E a pausa, e o teto `AUT_INTRA_MAX_S` nao se aplica;
+o teto segue mandando no dia que a ata NAO descreve, e la a guarda da ausencia de 4 h ficou intacta.
+
+**RED cumprido exatamente como voce escreveu.**
+PROVA (prod, so leitura, container irmao com a cura montada sobre o HEAD): col843 24/08 = **303 -> 544 min,
+UMA noite fechada 18:56->07:01**; 25/08, que a celula diz ser FOLGA = **181 -> 0 min, ZERO turno**. Controles
+imoveis: col146 07/09 777 e 08/09 540, col736 15/09 447, col922 01/09 404, col51 24/08 485, col382 04/09 424.
+Remedio do corte: turnos abertos do pareador **501 -> 495** (caiu). Suite pela regua, 8.492 testes.
+
+## Eram DOIS defeitos, e o segundo derrubou a versao de ontem
+
+1. **O papel.** A luz de marco de intervalo devolve `tipo` (`hii`=S, `hfi`=E) e entrava no mapa como BORDA --
+   era o `23:59 S` que fechava a noite no meio. Agora o par declarado ganha papel proprio `Xi`.
+   **A minha 1a versao saiu MUDA**: usei `setdefault` acreditando no comentario de `turnos.py:906`, que diz
+   que a luz de intervalo vem SEM tipo. Vem COM. O `Xi` SOBRESCREVE, e e o certo -- `S` no `hii` quer dizer
+   "saiu para a pausa", nunca "fechou o turno".
+2. **O pareamento guloso.** `_pares_marcados` casava o PRIMEIRO par adjacente: com a sobra das 22:59 antes do
+   23:59 ele tomava 60 min de pausa em vez dos 181 declarados -- o 665 em vez de 544 de ontem. Agora o par
+   DECLARADO e casado numa passada propria, antes do laco guloso.
+
+E o comentario de `turnos.py:1040` que dizia "O TETO CONTINUA SENDO O CADASTRO" foi corrigido: nao e cadastro,
+sao tres constantes de classe (`motor_calculo_v2.py:485`, `:1536`, `:2117`). A pausa maxima como CADASTRO da
+escala entrou no BACKLOG como **O96, fora da meta** (LEI-AKITA 12).
+
+## As quatro condicoes da sua AVAL-DE-CRITERIO, medidas
+
+| condicao | resultado |
+|---|---|
+| (a) so os campos da familia da cura se movem | **SIM** -- trabalhadas +4,25 · folga_trabalhada -25,85 · inconsistencias -7 · HE -2,09 · noturnas -6,37 · intra -3,00 · DSR -0,32 · turnos_abertos -1 · banco +4,12 |
+| (b) todo outro colaborador da ZERO | **SIM** -- 14 movem no fechamento, **593 dao zero** |
+| (c) o total fica na faixa aprovada | **SEM FAIXA no aval** -- e por isso que isto para |
+| (d) oraculo e6 nos afetados sem divergencia nova | **SIM, e melhor** -- **0 novas, 31 CURADAS**, BATE ate 10 min **85,0% -> 90,0%** |
+
+PROVA de (b) e (d): DIFF `leitura x GRAVADO` no universo do `FechamentoMensal` 09 (607 colabs, `somente_leitura`),
+e o oraculo e6 rodado DUAS vezes nos 40 afetados -- uma com `turnos.py` de `7b8329a1~1`, outra com a cura --
+comparando os CSV: `divergencias BASE=91, CURA=60`, `NOVAS com a cura: 0`.
+
+## O que segura o apply, com nome e numero
+
+`horas_folga_trabalhada` cai **25,85 h em 5 colabs**: col193 6,44->0,00 · col227 7,50->0,00 · col594 3,37->0,00
+· col841 10,71->3,93 · col865 27,21->25,45. **E o defeito sendo curado** -- a noite que caia no dia de FOLGA era
+paga a 100%, e ao voltar para o dia de INICIO (L-085) deixa de ser. Mas sao 25,85 h a 100% saindo do holerite de
+5 pessoas: isso e decisao, nao execucao (L-009). Item no TOPO do `PENDENTES_RONALD.json` com a frase de reversao.
+
+**PONTO CEGO DO MEU INSTRUMENTO, nomeado antes de alguem o achar.** O censo do espelho compara MINUTOS e turnos
+abertos por dia; dia que troca de FORMA sem trocar de TOTAL nao aparece nele. Foi assim que o col865 apareceu no
+fechamento e nao no censo.
+PROVA da causa dele: `papel_por_minuto_da_ata` com a base de `7b8329a1~1` da **0 minutos `Xi`**, com a cura da
+**40**; os turnos e os `realizado_do_dia` dele sao IDENTICOS nas duas (pausas `[59]`/`[60]` ja vinham pela
+DURACAO). So a IDENTIDADE do par muda -- e e ela que o fechamento le para classificar folga trabalhada.
+Nao e OUTRO, nao e deriva: e a cura, vista pelo outro leitor.
+
 
 # ARVORE VIVA: o que os crons */5 fizeram na janela da R2b -- e o rotulo de hora que eu errei 4x (27/09 21:3x)
 
