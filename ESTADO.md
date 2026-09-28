@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 02:30:41.**
+**Medido em 28/09/2026 02:36:01.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ M  app/escala/regua_defesa.py
 M  app/ponto/services/bordas_realizado.py
 M  app/ponto/services/espelho.py
 A  app/ponto/tests/test_r4_celula_sem_marcos.py
+ M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
 M  app/ponto/turnos.py
 M  app/relatorios/management/commands/vinculo_do_dia_divergentes.py
 M  app/relatorios/pdf_espelho.py
@@ -92,6 +93,12 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  E4-topo-igual-coluna re-medido: 19 → 18, e o único curado (col843) foi pelo apply da R2b. A hipótese "gravado envelhecido" morreu medida: topo e soma dos 18 são idênticos antes
+  e depois, e nenhum deles estava entre os 58 que se moveram. A hipótese da fatia de escala ficou fraca (3 de 18 com >1 fatia, contra 6% nos 120 de controle).
+
+  A maior causa tem nome: o topo não soma horas_folga_trabalhada — em col282, col881, col512 e col951 o delta é a folga trabalhada quase exata (resíduo −0,26 / −0,26 / −1,44 /
+  −0,18). Baldes: topo-sem-folga ~40 h · fechamento ZERO com batida 222,29 h (col924/391/43/942, zero fatia e zero célula com 66/7/20/14 batidas — cadastro, classe A da O83) ·
   resíduo negativo ~83 h (col400 com 0 fatias ativas; col146 é o intermitente da R3) · col751 28,12 h · cauda ~12 h.
 
   Uma checagem que evitou a cura errada: fui ver se o gravado já não tem o relógio. FechamentoMensal.minutos_realizados diverge da soma das linhas em 65 de 205 — parecia defeito
@@ -115,16 +122,10 @@ M  app/relatorios/pdf_espelho.py
   [max(data_ini,apur_ini)..data_fim_mes], builder so antes do apur_ini, sem tocar 06/07/08 -- HX-REGEN-NAO-TOCA-EXPORTADO), SELO colabs_no_builder_09 = 0, RED 3 colabs do censo.
   Segue.
 
-● Fazer a testemunha ler o leitor certo e rodar a regua · 5m 56s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/ponto/tests/test_vinculo_do_dia_pela_celula.py'
-     s=io.open(p,encoding='utf-8').read()
-     old = """ intervalo=tuple(ec.marcos_do_dia(d, celulas=celulas))[2:4]).minutos"""
-     new = """ # R4: a PAUSA vem do leitor proprio (`intervalo_do_dia`)… (5m 54s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ver se o save normaliza o intervalo_modo
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def save" -A 20 app/escala/models.py | sed -n '1,30p' | grep -nE "intervalo_modo|def save|INTERVALO" | head
 
-✢ Metamorphosing… (1h 24m 43s · ↓ 77.8k tokens)
+✢ Metamorphosing… (1h 30m 3s · ↓ 84.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
