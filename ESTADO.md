@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 06:59:31.**
+**Medido em 28/09/2026 07:04:33.**
 
 | | |
 |---|---|
-| `HEAD` local | `65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald` |
+| `HEAD` local | `29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu` |
 | `origin/main` | `65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,26 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
 65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
 cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
 ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
 0dab512d Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica
-87e69805 [R5] o selo da O68b era vazio -- e os dois REDs que ele nomeia nao sao dela
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons_duracao.json
-A  app/folha/porta_export.py
-M  app/folha/tests/test_integracao.py
-A  app/folha/tests/test_porta_do_export.py
-M  app/folha/tests/test_sm1_monster_export.py
-M  app/folha/views.py
-M  app/ponto/tests/test_o81_celula_da_competencia.py
-M  app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py
-M  app/relatorios/tests/test_cauda_trilha_do_cartao.py
-M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -94,13 +84,6 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -122,11 +105,18 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Regua final da porta do export · 5m 11s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/folha/tests/test_integracao.py && bash bin/regua.sh 2>&1 | tail -4 (5m 8s)
+● Abrir a linha do O1 e empurrar · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='app/docs/TICKETS.md'
+     s=io.open(p,encoding='utf-8').read()
+     anc='| O81 | ponto/services/espelho (grade) |'
+     i=s.index(anc)
+     nova=('| O1 | folha/porta do export | o TXT podia ser gerado sem NENHUMA prova de que tela, PDF, fechamento e '
+     'TXT… (4s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (56m 59s · ↓ 22.4k tokens)
+✢ Determining… (1h 2m 0s · ↓ 27.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

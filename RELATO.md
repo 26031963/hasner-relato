@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: a fila 1 esta VAZIA de item que eu possa executar -- restam DOIS, e os dois sao decisao sua | espera Ronald`. (a) **`!` do EXPORT da 09** -- a porta esta VERDE nas cinco perguntas e o dossie esta abaixo; (b) **pergunta de LEI da R4** -- com o evento vivo o deploy virou o apply, e a R4 (+75,12 h em 27 colabs) esta medida, commitada e revertida da arvore esperando a sua resposta. Tudo o mais que estava na sua fila FECHOU: topo=soma das linhas, E5 por evento, R5, selo dos quatro leitores, E6 rodada 4 e O81.
+**O TXT AGORA RECUSA SOZINHO** (O1 item 4): sem carimbo VERDE do dia, `gerar_dominio_txt` barra com a LISTA de quem divergiu. A porta esta verde nas cinco perguntas e o carimbo de hoje esta lavrado nas 4 empresas. PARADO em DOIS `!`: o **`!` do EXPORT** (dossie abaixo) e a **pergunta de lei da R4**.
 
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
@@ -50,6 +50,61 @@ universo do TXT (09/2026): 205 colaborador(es)
   dias_em_aberto=284  (nao e divergencia -- furo sem decisao, linha propria)
 SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia, sem allowlist
 ```
+
+
+# O TXT RECUSA SOZINHO -- o portao do O1 item 4 fechou (28/09 06:1x)
+
+A sua lei de 22/09 23:2x, literal: *"TXT RECUSA com a lista se `pdf_x_espelho` ou `cartao_x_txt` > 0"*. Faltava
+esse item do O1, e era o ultimo antes do export. **Portao que so avisa nao e portao** -- agora
+`folha/views.py::gerar_dominio_txt` barra ANTES de montar a primeira linha.
+
+## A forma e CARIMBO, e a escolha foi medida antes
+
+Medir as cinco perguntas custa **DOIS espelhos completos por colaborador** (`espelho_do_colab` +
+`_coletar_dados_espelho_mes`), ~500 ms cada -- **~100 s para os 205 do TXT**. Dentro de um POST de tela isso e
+inaceitavel. E a casa ja tem a forma certa para esse problema: o `bin/deploy.sh` **EXIGE o ensaio de HOJE na
+sombra por CARIMBO**, sem re-rodar o ensaio no ato. Aqui igual: quem mede e o comando, que **LAVRA**; o TXT
+**CONFERE**. Auditavel e barato.
+
+O carimbo e por **empresa** e por **competencia**, e do **DIA**. Carimbo de ontem nao libera: entre um dia e
+outro entraram batidas, respostas do mutirao e -- desde hoje -- o recalculo por EVENTO.
+
+PROVA: `selo_leitores_no_mesmo_numero --mes 9 --ano 2026` ->
+`emp1 universo=1 · emp2 universo=137 · emp3 universo=55 · emp4 universo=12`, todos `falhas=0`, carimbo lavrado,
+e o veredito final `SELO VERDE ... 0 divergencia, sem allowlist`.
+
+## UMA implementacao so, e e isso que faz o portao valer
+
+A medicao mudou de casa para `folha/porta_export.py::medir`, porque **quem recusa o TXT e a view, e ela nao
+pode ter uma segunda conta** -- seriam duas respostas para a mesma pergunta, a doenca que esta serie inteira
+persegue. O comando mede PELA porta, imprime e lavra. Um caso do selo proibe o comando de voltar a medir
+sozinho (`espelho_do_colab` e `_coletar_dados_espelho_mes` sao proibidos no fonte dele).
+
+PROVA do RED, com os arquivos do HEAD montados: `test_a_VIEW_do_TXT_confere_a_porta_ANTES_de_montar` e
+`test_MORDE_a_medicao_tem_UMA_casa` **falham**. E o selo confere a ORDEM, nao so a chamada: a conferencia tem
+de vir antes de `FechamentoMensal.objects.filter`.
+
+Os casos que MORDEM, um por buraco que eu poderia deixar: **sem carimbo** nao sai (e a recusa diz a CURA, o
+comando a rodar); **carimbo com divergencia** sai com a LISTA (`col111`, `col222`, `col333` aparecem na
+mensagem); **carimbo VERDE libera** (sem isso a porta travaria o export para sempre); **carimbo de outra
+competencia** nao libera; **carimbo de ONTEM** nao libera; e **porta que NAO PUDE MEDIR** nao libera -- selo
+que nao mede nao passa.
+
+## SEIS selos da casa ficaram vermelhos, e os seis estavam CERTOS
+
+Tres que POSTam em `folha:gerar_txt` (`test_sm1_monster_export`, `test_cauda_trilha_do_cartao`,
+`test_integracao` com tres chamadas) passaram a receber a RECUSA -- **exatamente o que o portao existe para
+fazer**. Eles medem outra coisa (rubricas, idempotencia, trilha, layout), entao declaram a precondicao por um
+helper (`lavrar_verde_para_teste`) em vez de cada um montar o snapshot na mao, que e como nasce a quarta versao
+da mesma fixture. **Nao e atalho**: quem quer o TXT em PROD mede de verdade.
+E na primeira tentativa eu errei o helper em dois deles -- usei `self.emp` e `9/2026` onde a funcao recebia a
+empresa por PARAMETRO e exportava `6/2026`. O `AttributeError` apareceu na hora.
+
+Dois eram meus, e mudaram de alvo com a medicao: os selos do comando e do O81 apontavam para o COMANDO e agora
+leem a PORTA. E um terceiro foi o `test_MORDE_teste_novo_com_relogio_solto_e_vermelho`: o meu arquivo novo fala
+de "carimbo de HOJE" e "de ONTEM", entao LE o relogio por construcao -- congelado em `2026-09-28 06:00:00`.
+
+Regua: **8.537 testes OK**.
 
 
 # DOSSIE DO EXPORT DA 09 -- esperando o seu `!` (28/09 04:2x)

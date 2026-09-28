@@ -9,7 +9,7 @@ lista — ela e o que esta EM PE._
 
 | ID | obra | estado |
 |---|---|---|
-| **O1** | COERENCIA-PORTAO | **em curso** |
+| **O1** | COERENCIA-PORTAO | **item (4) FEITO 28/09** -- o TXT RECUSA |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | espera aval |
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | espera corte |
 | **O4** | ACESSO-NUNCA-EM-LOTE | **livre** |
