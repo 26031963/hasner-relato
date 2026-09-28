@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 09:56:31.**
+**Medido em 28/09/2026 10:01:47.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
+ M app/ponto/services/espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -88,6 +89,8 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+❯ aval Ronald: O-FOLGA-DIA-ERRADO (fila 2, depois do BO col354; lei nova: precisa de corte -- rota do chamado para cadastro). FONTE: celulas da competencia (veredito) +
   fatos_do_dia; tela existente templates/escala/cadastro_x_realidade.html (L-084); regenerar_celulas_vinculo (excecao formal de passado errado por cadastro, corte 16/08). MUDA:
   (1) vigia com contador (esperado 0, dono supervisao): por colab 6x1/5x2, dia da semana com furo recorrente (>=3 de 4) E dia de folga cadastrada com turno recorrente (>=3 de 4)
   -> caso na tela cadastro x realidade com "folga provavel: <dia>", e o chamado desses dias ganha verbo cadastro endereçado ao admin; (2) o "Resolver dia" NAO ganha veredito
@@ -110,17 +113,15 @@ M  app/docs/PROMPTS.md
   (recusas + advertencias por colab, clique abre a lista de atos), nenhuma tela nova. Acesso: supervisao e DP, com trilha de leitura (o mapa mostra onde a pessoa mora). Registrar
   tambem em PENDENTES o corte de lei acima. Segue a fila; PAREI so em lei ou !
 
-● Registrar O-GEO-DECISAO e o corte de lei
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, json
-     p='app/docs/PROMPTS.md'
-     t=io.open(p,encoding='utf-8').read()
-     anc='\n\n## Contagem'
-     nova=('| O-GEO-DECISAO | 28/09 ~09:5x | **SO REGISTRO** (nao construir agora). Desenho cortado 09:5x. **LEI NOVA, '
-     'precis…
+  Ran 5 shell commands
 
-✢ Determining… (3h 53m 59s · ↓ 162.0k tokens)
+❯ aval Ronald: corrige o REGISTRO da O-GEO-DECISAO, so a ETAPA 2 (etapa 1 intacta): sai a coluna "Geo 30d" do painel situacional. ENTRA: (a) historico dos atos de geo do colab no
+  DRAWER lateral existente (colaboradores/services/drawer.py), semente da ficha corrida (app/docs/ADVERTENCIA-FICHA.md); (b) atalho na navbar que abre o drawer generico
+  (core/_drawer_generico.html) com o filtro universal (core/_filtro_universal.html) -- periodo, tipo de ato (recusado nao trabalhou · recusado batida invalida · advertido ·
+  validado por motivo), posto -- e gera PDF pelo botao canonico (core/_btn_pdf.html, L9 de UI). Drawer e PDF leem o MESMO leitor de atos (LEI-AKITA 2), trilha de leitura, acesso
+  supervisao/DP. So registro. Segue a fila; PAREI so em lei ou !
+
+· Determining… (3h 59m 14s · ↓ 165.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
