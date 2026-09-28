@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 06:48:51.**
+**Medido em 28/09/2026 06:54:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ```
 M  app/config/crons_duracao.json
 A  app/folha/porta_export.py
+ M app/folha/tests/test_integracao.py
 A  app/folha/tests/test_porta_do_export.py
 M  app/folha/tests/test_sm1_monster_export.py
 M  app/folha/views.py
@@ -93,11 +94,6 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
         "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
@@ -120,12 +116,17 @@ M  app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Regua completa da porta do export · 4m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/folha app/ponto/tests/test_o81_celula_da_competencia.py app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py && bash
-     bin/regua.sh 2>&1 | tail -4 (4m 22s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Declarar a precondicao nos selos de integracao · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, re
+     p='app/folha/tests/test_integracao.py'
+     s=io.open(p,encoding='utf-8').read()
+     alvos = [(164, 5), (207, 5), (266, 6)]
+     linhas = s.split('\n')
+     # insere a precondicao ANTES de cada post, de baixo para cima (para nao deslocar os indices)
+     f…
 
-· Determining… (46m 18s · ↓ 21.2k tokens)
+· Determining… (51m 28s · ↓ 21.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
