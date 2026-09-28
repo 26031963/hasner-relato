@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 14:43:05.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.7 MB). Acoes na janela: **471**.
+**Medido em 28/09/2026 14:46:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.8 MB). Acoes na janela: **473**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:44:08 | Bash | Esperar a regua | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log 2>/dev/null; do sleep 20; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|BLOQUEADO' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log ...` |
+| 14:43:58 | Bash | Estado e regua antes do deploy | `cd /home/ronald/saas-hasner && git status --short \| head -12 && git add -A app/ bin/ && git reset -q bin/keepalive.sh 2>/dev/null; nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log 2>&1 & sleep 2; echo "regua em voo"` |
+| 14:43:03 | Bash | Curar a linha e republicar o RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() anc='## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)\n' assert t.count(anc)==1 t=t.replace(anc, anc+'\nPROVA: 12 selos VERMELHOS na regua com a 1a versao da cura (`test_extra_50_30min`, ' '`test_extra_50_2h_exatas`, `test_ext ...` |
 | 14:42:02 | Bash | Rodar o publicador do RELATO | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| head -14` |
 | 14:41:57 | Bash | Achar o publicador do RELATO | `cd /home/ronald/saas-hasner && grep -rln 'RELATO' bin/*.sh \| head -6 && grep -rn 'PROVA' bin/publicar*.sh bin/relato*.sh 2>/dev/null \| head -5` |
 | 14:41:48 | Bash | Rodar o selo da PROVA no RELATO | `cd /home/ronald/saas-hasner && bash bin/tests/test_relato_afirma_com_prova.sh 2>&1 \| tail -8` |
@@ -480,4 +483,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:49:45 | Bash | Comparar a forma da fixture com a forma real | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/r5_forma.py <<'PY' # R5: a forma REAL do col349 14/09 contra a forma da fixture do selo. SO LEITURA, puro. import datetime from django.utils import timezone from ponto.turnos import parear_turnos class B: def __init__(s, q, t): s.timestamp=q; s.tipo=t; s.re ...` |
 | 02:49:16 | Bash | Ler o selo vazio da O68b | `cd /home/ronald/saas-hasner && cat app/ponto/tests/test_o68b_fecha_aberto_com_saida_seguinte.py` |
 | 02:47:08 | Bash | Publicar a R4 e a pergunta de lei, e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() l3=s.split('\n')[2] novo3=('**MODO CONTINUO.** (1) topo=soma das linhas e (2) E5 por EVENTO **no ar**. (3) **R4 curada e selada ' '(+75,12 h em 27 colabs, todos para CIMA)** -- commitada, **NAO deployada**, porque com o evento vivo o ' 'deploy VIROU ...` |
-| 02:45:40 | Bash | DIFF final da R4 com o leitor proprio | `cd /home/ronald/saas-hasner && docker rm r4_cura2 >/dev/null 2>&1; python3 - <<'PY' import json S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b/' b=json.load(open(S+'r4_base.json')); c=json.load(open(S+'r4_cura2.json')) mov={} for k in b: if 'ERRO' in b[k] or 'ERRO' in c.get(k,{}): continue d={} for dd in sorted(set(b[k])\|set(c[k])): vb=b[k].ge ...` |

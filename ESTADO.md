@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:43:05.**
+**Medido em 28/09/2026 14:46:01.**
 
 | | |
 |---|---|
@@ -32,9 +32,9 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/calculador/nucleo.py
- M app/ponto/tests/test_calculador_regras.py
+M  app/docs/RELATO.md
+M  app/ponto/calculador/nucleo.py
+M  app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,6 +87,9 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  4. RED: Autorizar 2x = 1 trilha, mesmo estado (idempotencia).
+  5. RED: export com 1 pendente = travado; zerado = libera.
+  6. Soma da tela = soma do PDF = soma do TXT para a mesma competencia.
   7. Selo: zero leitor com derivacao propria de HE (grep).
      PROIBIDO: fallback, fatia posterior, item proprio, tocar a 09 gravada, apply sem meu "!".
      Vale da competencia 10; apply de dinheiro so com meu "!" sobre o DIFF do item 2.
@@ -111,16 +114,13 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Curar a linha e republicar o RELATO · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     p='app/docs/RELATO.md'
-     t=io.open(p,encoding='utf-8').read()
-     anc='## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)\n'
-     assert t.count(anc)==1
-     t=t.replace(anc, anc+'\nPROVA: 12 selos VER…
+● Esperar a regua · 1m 53s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (1m 51s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Infusing… (5m 12s · ↓ 16.4k tokens)
+· Infusing… (8m 8s · ↓ 17.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
