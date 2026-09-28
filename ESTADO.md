@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:45:45.**
+**Medido em 28/09/2026 15:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `f6e0910b TICKETS: rodape e placar (8581 testes OK)` |
-| `origin/main` | `f6e0910b TICKETS: rodape e placar (8581 testes OK)` |
+| `HEAD` local | `f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)` |
+| `origin/main` | `f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
+aec92117 PORTAO DA 09 cumprido item por item: deploy no ar, apply cirurgico dos 144, porta VERDE e lote 1 com hash novo -- so a emissao espera o !
 f6e0910b TICKETS: rodape e placar (8581 testes OK)
 48adfbd0 S5b (1o passo): o corte do nucleo pergunta a ESCALA DO DIA, e o RELATO volta a publicar
 f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente
-2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)
-b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes errado antes de sair 1
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
-M  app/docs/RELATO.md
-A  app/ponto/management/commands/aplicar_09_he_intra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,44 +84,44 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: PORTAO-09 — fila 1, na frente de O-DIA-PAGO S5b e de O-JANELA-HE. Reafirma o ! das 12:31.
-  LEIS: L-082(b), L-092, L-094, L-005, L-009. Nenhuma lei nova.
-  MEDIDO 14:40: col125 09 HE50 1,98 / intra 2,00; tabela ponto_diapago inexistente em prod = (B) nao rodou, deploy nao subiu.
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
+        "additionalContext": "string (optional)"
+      },
+      "for Stop / SubagentStop": {
+        "hookEventName": "\"Stop\" | \"SubagentStop\"",
+        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
+      }
+    }
+  }
 
-  1. bin/deploy.sh (cura HE/intra + migration 0067), smoke em prod no RELATO.
-  2. Apply caminho (B) de 464b031: gravado da 09, 144 colabs, SO os campos que a cura move em isolamento;
-     antes/depois em logs/ para reversao. DIFF contra o GRAVADO: campo fora do alvo != 0 = PAREI com a tabela.
-  3. Porta da 09 re-medida: falhas=0, minuto_em_duas_rubricas=0.
-  4. Extrato dos 16 da amostra (253,134,30,125,843,207,369,87,820,865,382,81,76,610,904,72) no RELATO.
-  5. Lote 1 com hash NOVO; PAREI na emissao (meu !).
-  6. RELATO preso desde ~11h: linha PROVA faltando em RELATO.md:321 — curar e publicar.
-     PRONTO = RELATO com col125 HE50 depois do apply, porta=0, extrato, hash novo. Sem isso = INCOMPLETO com a lista.
-     PROIBIDO: apply fora dos 144/campos, recalculo inteiro da 09, fallback, pular teste.
-     LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
-     segue a fila; PAREI so em lei ou !
-
-  Pushed to main, ran 20 shell commands
-
-● Background command "Re-medir e lavrar a porta do export" completed (exit code 0)
-
-● Background command "Esperar a porta" completed (exit code 0)
-
-  Curar os dois e rodar a regua · 8m 35s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, py_compile
-     P='app/ponto/management/commands/aplicar_09_he_intra.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace(""" def _sem_cura(self_, limite, periodos, quando): # o motor de ontem
-     return limite or 0""",
-     """ def _sem_cura(_motor… (8m 33s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Infusing… (1h 7m 52s · ↓ 44.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Cogitated for 1h 11m 10s · done 3:49 PM · 3 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ ! emite o lote 1; segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
