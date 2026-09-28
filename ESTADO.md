@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 10:18:01.**
+**Medido em 28/09/2026 10:23:31.**
 
 | | |
 |---|---|
@@ -36,10 +36,10 @@ RELATO, com a lista de nomes do banco como autoridade._
  M app/colaboradores/services/calendario.py
  M app/core/juizes.py
  M app/core/tests/test_selo_performance.py
-MM app/docs/BACKLOG.md
+M  app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
- M app/docs/RELATO.md
+M  app/docs/RELATO.md
  M app/folha/porta_export.py
  M app/folha/tests/test_porta_do_export.py
  M app/ponto/management/commands/e6_oraculo.py
@@ -98,7 +98,6 @@ M  app/docs/PROMPTS.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  validado por motivo), posto -- e gera PDF pelo botao canonico (core/_btn_pdf.html, L9 de UI). Drawer e PDF leem o MESMO leitor de atos (LEI-AKITA 2), trilha de leitura, acesso
   supervisao/DP. So registro. Segue a fila; PAREI so em lei ou !
 
   Ran 1 shell command
@@ -108,18 +107,7 @@ M  app/docs/PROMPTS.md
   "PAREI: hook-teto | espera Ronald" no topo do RELATO esta velha, voce seguiu depois dela -- tira ou explica; (b) app/colaboradores/services/calendario.py aparece " M" na ARVORE
   VIVA fora de commit (L-005) -- de onde veio e o que e. Segue a fila; PAREI so em lei ou !
 
-● Declarar o teto e rodar colaboradores + folha
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/core/tests/test_selo_performance.py'
-     t=io.open(P,encoding='utf-8').read()
-     v=" 'colaboradores/N/calendario': 29,\n"
-     assert t.count(v)==1
-     n=(" # E4-CALENDARIO (28/09, corte Ronald): 29 -> 36, DEC…
-
-✢ Determining… (4h 15m 29s · ↓ 196.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Searched for 2 patterns, ran 26 shell commands
 
 ❯ aval Ronald: PARAR a emissao do lote 1 (hash atual invalido para este ponto). BUG-HE-INTRA-DOBRADA (fila 1, NA FRENTE; lei existente: politica de intrajornada 19/08 -- indeniza
   o suprimido, nao reabre; nenhuma lei nova). FATO: col125 02/09 e 06/09 -- trab 11,99 h, horas_extra 0,99 E intra indenizada 1,0 no MESMO dia; gravado 09 HE50 1,98 + intra
@@ -131,10 +119,22 @@ M  app/docs/PROMPTS.md
   de frota publicado e PAREI para o meu !. Depois do !: recalcular 09, re-medir a porta do export e novo hash do lote 1. PROIBIDO: ler intervalo_indenizavel (obra propria),
   fallback, allowlist. LEI-AKITA: origem=limite de HE em motor_calculo_v2 (E3), testemunha=minutos_previstos_do_dia + intra suprimida, juizes novos=0. Segue a fila; PAREI so em
   lei ou !
-  ctrl+x ctrl+s to send now
+
+❯ aval Ronald: cauda do BUG-HE-INTRA-DOBRADA -- SELO DE FROTA na porta do export (folha/porta_export.py::medir): invariante "nenhum minuto do dia pago em duas rubricas" (HE +
+  intra indenizada do dia <= trabalhado - previsto liquido + suprimido), contador = 0 sem allowlist; o TXT recusa se > 0. RED: col125 02/09 hoje. Segue a fila; PAREI so em lei ou
+  !
+
+● Esperar a regua do E4 · 26s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
+     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' /… (25s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Determining… (4h 20m 58s · ↓ 210.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

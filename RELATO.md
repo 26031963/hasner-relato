@@ -1,5 +1,8 @@
 # RELATO — esteira saas-hasner
 
+
+> **EMISSAO DO LOTE 1 PARADA (28/09 10:3x, ordem do Ronald).** Os tres hashes publicados abaixo **nao valem mais para este ponto**: entrou o `BUG-HE-INTRA-DOBRADA` na frente da fila 1 -- a mesma hora paga em duas rubricas no dia de intrajornada suprimida. Nada foi emitido (a emissao sempre foi um clique seu, e ele nao aconteceu), entao nao ha o que reverter. Depois do `!` da cura: recalcular a 09, re-medir a porta e publicar hash NOVO.
+
 _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era mentira em duas pontas: o item que ela citava -- E6-IMPAR -- **fechou** as 09:2x (commit `8daf2359`), e eu segui trabalhando depois dela. Ela nao foi escrita por mim para pedir decisao sua: foi o hook do teto de bloqueios que a lavrou sozinho ao ver 5 bloqueios seguidos sem commit novo na fila 1. Um PAREI que nenhum humano escreveu e que ninguem apaga ao fechar o item e pior que nenhum -- ele faz voce procurar uma decisao que nao existe. Ao fechar item eu limpo o PAREI resolvido, como voce cortou em 27/09 23:4x, e a cura do lado do hook fica no BACKLOG como **HOOK-PAREI-SE-APAGA**.)_
 
 **LOTE 1 DO EXPORT DA 09 PRONTO E CONFERIDO**: 200 colaboradores, 352 linhas, **26.939,24 h**, com hash por empresa publicado abaixo. A **R4 subiu pela L-094** com as quatro condicoes medidas. O CADASTRO-ZERO reteve **exatamente os 4** que voce nomeou. Falta so a EMISSAO com trilha -- um clique, que a porta ja guarda.
