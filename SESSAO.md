@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 12:36:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.9 MB). Acoes na janela: **498**.
+**Medido em 28/09/2026 12:42:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (100.9 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:41:18 | Bash | Esperar a re-medicao | `cd /home/ronald/saas-hasner && until grep -qE 'universo=\|Error\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf48te710.output 2>/dev/null; do sleep 25; done; tail -16 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bf48te710.output` |
+| 12:41:11 | Bash | Curar o teto do invariante e re-medir | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() v = """ _prev = _mpd(c, _k, celulas=_cels_inv) or 0 _teto_he = max(0.0, _trab - _prev - _intra)""" assert t.count(v)==1 n = """ _prev = _mpd(c, _k, celulas=_cels_inv) or 0 # O TETO LE A MESMA AUTORIDADE QUE O MOTOR, e esta linha foi esc ...` |
 | 12:36:30 | Bash | Esperar a prova da porta | `cd /home/ronald/saas-hasner && until grep -qE 'universo=\|Error\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb1l7fto1.output 2>/dev/null; do sleep 25; done; tail -20 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb1l7fto1.output` |
 | 12:36:24 | Bash | Provar a porta com a tabela ausente | `cd /home/ronald/saas-hasner && cat > /tmp/s2_probe.py <<'PYEOF' # -*- coding: utf-8 -*- """PROVA da S2 em prod, SO LEITURA: a porta sobrevive a tabela do DiaPago que ainda nao subiu?""" from colaboradores.models import Empresa from folha.porta_export import medir e = Empresa.objects.filter(ativa=True, pk=2).first() r = medir(e, 9, 2026) print('emp%s universo=%s falhas=%s' % (e.pk, r['universo'], r ...` |
 | 12:35:22 | Bash | Guardar a porta contra a tabela ausente | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() v = """ _soma_dp = _soma_dia_pago(c, mes, ano) if _soma_dp is None: sem_lavratura.append(c.pk) else:""" assert t.count(v)==1 n = """ # A TABELA PODE NAO EXISTIR AINDA, e isso nao pode derrubar a porta do TXT: a migration 0067 sobe # com ...` |
