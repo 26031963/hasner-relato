@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:24:01.**
+**Medido em 27/09/2026 22:29:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA` |
+| `HEAD` local | `fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,18 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire
+6738448e [REGUA-MORTA] `bash bin/regua.sh` nao rodava a suite desde 25/09 10:34, e a esteira seguia "verde"
 7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA
 75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
 1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
-3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
-912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
 ```
 
 ## `git status --short`
 
 ```
- M bin/regua.sh
-?? bin/tests/test_fonte_unica_antes_do_uso.sh
+?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
 
@@ -85,20 +84,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
-● Background command "Suite completa com a cura montada" completed (exit code 0)
-
-  Searched for 1 pattern, ran 13 shell commands
-
-❯ aval Ronald: daqui ao fim da meta a suite roda SEMPRE por bin/regua.sh (grava .regua_stamp; o pre-push pula o arsenal com JA VERDE) -- nunca docker run manual antes do commit.
-  Publicar no RELATO a duracao dos ultimos pushes (log do pre-push) e medir, sem mudar nada, o pico de RAM do container de teste em --parallel 2; se couber, propor --parallel 4
-  com o numero. Segue a fila.
-
-  Ran 1 shell command
-
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && md5sum $S/turnos.py $S/tes… ·
-     stopped
-
   Ran 4 shell commands
 
 ❯ aval Ronald: reordenar por importancia: depois da R2b, IMPAR (pelo laudo: espelho.py:513-514 passa a ler RealizadoDoDia.aberto de turnos.py:393-394; classes B e C primeiro,
@@ -108,20 +93,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Rodar a regua" completed (exit code 0)
 
-  Corrigir o falso positivo do selo
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='bin/tests/test_fonte_unica_antes_do_uso.sh'
-     s=io.open(p,encoding='utf-8').read()
-     old=""" ln_src=$(grep -nE '^[[:space:]]*(source|\\.)[[:space:]].*recursos\\.sh' "$f" | head -1 | cut -d: -f1)"""
-     new=""" # O SOURCE NAO PRECISA ESTAR NO IN…
+  Read 1 file, ran 10 shell commands
 
-✢ Zesting… (1h 20m 58s · ↓ 126.1k tokens)
+● Background command "Commitar a cura da regua e roda-la" completed (exit code 0)
+
+● Background command "Amostrar RAM do container de teste durante a regua" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Medir o pico de RAM do container de teste" completed (exit code 0)
+
+  Ran 13 shell commands
+
+● Background command "Commitar e rodar a regua" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Medir o pico de RAM durante a regua" completed (exit code 0)
+
+● Ler o escalonamento do fabricante
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '242,262p' bin/fabricante_alvo.py; echo "=== os 3 itens no BACKLOG ==="; grep -nE '^\| (O59|O66|O81) \|' app/docs/BACKLOG.md | awk
+     -F'|' '{print $2" ESTADO=["$4"]"}'
+
+· Zesting… (1h 26m 28s · ↓ 141.8k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
