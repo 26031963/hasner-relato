@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:146 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:148 AFIRMA ato sem PROVA ao lado -- ## OS 12 SELOS DA CASA ACHARAM UM DEFEITO NA MINHA PRIMEIRA CURA (e este e o melhor paragrafo do dia)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 12:26:01.**
+**Medido em 28/09/2026 12:31:14.**
 
 | | |
 |---|---|
-| `HEAD` local | `a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)` |
-| `origin/main` | `a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)` |
-| commits a subir (`ahead`) | **0** |
+| `HEAD` local | `9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)` |
+| `origin/main` | `6cf525f4 TICKETS: rodape e placar com o carimbo da regua da S1 (8568 testes OK)` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,27 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9101cb58 TICKETS: placar do topo em dia (ultimo push 6cf525f4)
+9a23287f RELATO: linha PAREI canonica no topo -- apply-HE-intra-fora-do-criterio (L-082 b), espera Ronald
+6cf525f4 TICKETS: rodape e placar com o carimbo da regua da S1 (8568 testes OK)
+464b031e O-DIA-PAGO S1: o dinheiro do dia passa a ser DADO lavrado uma vez -- e PAREI no apply da cura HE/intra (L-082 b)
 a775549b TICKETS: placar do topo em dia (ultimo push 61a37f13)
-073fb74e BACKLOG: estado dos itens em dia -- E6-IMPAR e E4 fechadas, BUG-HE parado no !
-61a37f13 TICKETS/CORTES: O-DIA-PAGO ganha S5 (calculador na forma do oraculo) e o placar do topo em dia
-8e45457a L-095 e L-096 cortadas e registradas: o dinheiro do dia e DADO, e obra estrutural anda sozinha ate o fim
-70cf6bc3 TICKETS: rodape e placar com o carimbo da regua do BUG-HE (8563 testes OK)
 ```
 
 ## `git status --short`
 
 ```
-M  app/config/crons.py
-M  app/docs/BACKLOG.md
-M  app/docs/PENDENTES_RONALD.json
-M  app/docs/PROMPTS.md
-M  app/docs/RELATO.md
-A  app/ponto/management/commands/lavrar_dias_pagos.py
-A  app/ponto/migrations/0067_diapago.py
-M  app/ponto/models.py
-A  app/ponto/services/dia_pago.py
-M  app/ponto/services/fechamento.py
-A  app/ponto/tests/test_dia_pago_soma.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -102,39 +91,39 @@ A  app/ponto/tests/test_dia_pago_soma.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      38  | HOOK-PAREI-SE-APAGA | **CURADO NO ATO** (28/09 10:1x): o hook do Stop escrevia `PAREI: hook-teto | espera Ronald` no topo do RELATO ao bater o teto de bloqueios
-          , e a linha sobrevivia ao proprio motivo -- o Ronald a leu as 10:0x citando E6-IMPAR, fechado as 09:2x. Alarme nao escreve na voz de quem decide (CLAUDE.md 4a): o
-           teto segue liberando e agora alarma no log do proprio hook. Selo `bin/tests/test_hook_nao_escreve_parei.sh`, com RED provado | **fechada** | `bin/hook_stop_fila1
-          .py` | CURA-MAIS-RESTRITIVA: a cura que tira a escrita e mais restritiva que "apagar depois" | 28/09 10:1x |
-      39 -| BO-354 | **CONGELADA (L-096) -- o emissor `orfao_14h` pergunta SAIDA em dia com 4 batidas completas** -- ele le o `tipo` GRAVADO em vez do MARCO (L-E3: "o marco
-         - manda"), e o app gravou tipos INVERTIDOS no col354 em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). Tres perguntas nasceram erradas --
-         - P36049 (24/09), P36550 (25/09) e P35636 (23/09, pergunta saida quando falta a VOLTA DO INTERVALO) -- as tres com `via_resolucao=sem_turno_aberto` carimbado e ain
-         -da VIVAS na tela (fio incoerente) | **em voo** | — | disputa #5527. PROVAR com RED antes de curar: (1) emissor x marco, (2) via carimbado + pergunta viva, (3) cen
-         -so da frota. Cadastro (sem escala vigente, sem posto) vai para a lista do `!` | 28/09 08:5x |
-      39 +| BO-354 | **CONGELADA (L-096) -- o emissor `orfao_14h` pergunta SAIDA em dia com 4 batidas completas** -- ele le o `tipo` GRAVADO em vez do MARCO (L-E3: "o marco
-         + manda"), e o app gravou tipos INVERTIDOS no col354 em 23/09 16:02 e em todo 24 e 25 (`S 07:01 · E 11:27 · S 12:30 · E 16:00`). Tres perguntas nasceram erradas --
-         + P36049 (24/09), P36550 (25/09) e P35636 (23/09, pergunta saida quando falta a VOLTA DO INTERVALO) -- as tres com `via_resolucao=sem_turno_aberto` carimbado e ain
-         +da VIVAS na tela (fio incoerente) | **CONGELADA (L-096)** -- fila 2 nao anda durante a obra estrutural | — | disputa #5527. PROVAR com RED antes de curar: (1) emi
-         +ssor x marco, (2) via carimbado + pergunta viva, (3) censo da frota. Cadastro (sem escala vigente, sem posto) vai para a lista do `!` | 28/09 08:5x |
-      40  | E6-14 | **os 14 nao certificados**, causa por colab (a lista que sobra da E6 no universo do TXT) | **em voo** | — | cadastro/L-009 vira lista para o `!` | 28/09
-           08:4x |
-      41  | O-FOLGA-DIA-ERRADO | **CONGELADA (L-096) -- FILA 2** -- a folga cadastrada esta no dia errado e o sistema cobra o dia todo mes: vigia com contador (esperado 0)
-          casa **furo recorrente num dia da semana** (>=3 de 4) com **turno recorrente no dia de folga cadastrada** (>=3 de 4) e joga o caso na tela `cadastro_x_realidade`
-          como "folga provavel: <dia>"; o chamado desses dias ganha verbo CADASTRO para o admin; o "Resolver dia" NAO ganha veredito `folga`, ganha a acao "a folga e em out
-          ro dia -> corrigir escala", porta do vinculo pre-preenchida, com trilha, aplicando so com o `!` | **fila 2, apos BO-354** | — | **LEI NOVA: espera o CORTE escrito
-           do Ronald** (rota chamado -> cadastro). RED: colab da quarta/domingo de 09 (id vem dele). PRONTO exige censo da frota no RELATO: colabs, dias de folga trabalhada
-           a 100% envolvidos, horas | 28/09 09:4x |
-      42  | AVISO-DO-DONO | **CONGELADA (L-096) -- FILA 2, fatia pequena** -- o dono fica sabendo sem abrir o RELATO: todo `PAREI` que espera o `!` dele e todo marco fechad
-          o do placar (portao da 09, DIA-PAGO S1-S4) manda push para o colaborador **col677** pelo servico que ja existe (o do holerite), texto curto `"<item>: <estado> --
-          espera seu !"` ou `"<item>: fechado"`, com trilha de envio e **idempotente por evento** (um push, nao um por varredura) | **registrada** | — | depois do portao da
-           09. **Smoke dele no celular antes de o push ir ao repo** (FRONT SEM SMOKE NAO SOBE). Nenhuma lei nova | 28/09 11:3x |
+  │ he100_feriado +14,13 · he100_noturna +5,76 · antecipada +3,47 · intra +1,00 · turnos_abertos +4 │                                        │ não                          │
+  ├─────────────────────────────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────┼──────────────────────────────┤
+  │ horas_extras_50                                                                                 │ −364,01                                │ 39,67 h são deriva, não cura │
+  └─────────────────────────────────────────────────────────────────────────────────────────────────┴────────────────────────────────────────┴──────────────────────────────┘
 
-● Esperar a regua
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s1c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|SELO VERMELHO|BLOQUEADO' …
+  Em isolamento a cura move HE50/HE100 e os dois derivados (DSR −294,02, banco +143,85) e zero em trabalhadas, intra, noturnas, feriado, atraso e antecipada. O resto é deriva do
+  gravado — R2b, TETO, IMPAR, O95, L-084, L-093 estão no código com o gravado só parcialmente atualizado. É exatamente a forma que fez você cortar a L-082 às 09:4x.
 
-· Determining… (6h 23m 28s · ↓ 345.6k tokens)
+  Não deployei e não recalculei. Deployar sozinho não resolve: com o recalculo por evento, a primeira batida de cada colab dispara o mesmo apply, na ordem que vier.
+
+  Duas saídas, tabelas completas no RELATO:
+  - (A) ! sobre a tabela inteira — coerente, porque DSR e banco dependem das extras.
+  - (B) apply cirúrgico pela porta do fechamento, só nos campos que a cura move, nos 144 colabs — fecha na letra do seu !. Recomendo (B), e depois (A) como ato próprio com a
+    deriva medida por causa.
+
+  Entregue e empurrado nesta leva (6cf525f4)
+
+  O-DIA-PAGO S1 pronta e aditiva: modelo DiaPago, lavratura no mesmo ponto em que o FechamentoMensal é gravado e a partir do mesmo resultado — nenhum escritor novo, nenhum gancho
+  novo. Três lugares passaram a guardar o mapa por dia que antes construíam e jogavam fora (O85, faltas, crédito parcial). O selo prova a identidade nos 14 campos, a idempotência,
+  e que o ajuste não é resíduo (senão a identidade seria verdadeira por construção — o [] de dois sentidos). 5 casos verdes de primeira; régua 8.568 OK.
+
+  E4-CALENDARIO: MANTER registrado, item fora do PENDENTES, sobe no próximo deploy.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-HE-INTRA-DOBRADA -- a mesma hora esta sendo paga DUAS VEZES: no dia com intrajornada suprimida indenizada, o minuto suprimido entr
+
+  Acertar o placar e empurrar · 2m 3s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md &&
+     git commit -q -m "TICKETS: placar do topo em dia (ultimo push 6cf525f4)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (2m 1s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Determining… (6h 28m 41s · ↓ 350.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
