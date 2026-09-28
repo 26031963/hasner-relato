@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:13:19.**
+**Medido em 27/09/2026 22:18:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `9e2d416e [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x` |
+| `HEAD` local | `75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
 | commits a subir (`ahead`) | **3** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-9e2d416e [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
+75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
 1038bd65 [R2b] col843 julgado pelas leis: eu estava errado, o ESPELHO viola a L-085
 3d037f1b [R3] duas celulas nao reivindicam a mesma batida -- e o bug era MEU
 912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)
@@ -32,6 +32,9 @@ bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar n
 ## `git status --short`
 
 ```
+M  app/docs/TICKETS.md
+M  app/ponto/tests/test_o68b_papel_da_ata_no_motor.py
+M  app/ponto/turnos.py
 ?? esteira.pausada
 ```
 
@@ -82,20 +85,6 @@ bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar n
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  no BACKLOG, fora da meta, a pausa maxima como cadastro da escala (LEI-AKITA 12). RED col843 24/08 = uma noite, 0 min em 25/08. Aval-de-criterio. Segue a fila.
-
-  Committed 9e2d416e, ran 28 shell commands
-
-● Background command "Medir a base em container irmao" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Medir a cura em container irmao" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Medir a base (com tmpfs de logs)" completed (exit code 0)
-
   Ran 1 shell command
 
 ● Background command "Medir a cura (com tmpfs de logs)" completed (exit code 0)
@@ -109,17 +98,31 @@ bad88495 [O96] hook de Stop instalado e PROVADO, e a fila falada passa a morar n
 
 ● Background command "Suite completa com a cura montada" completed (exit code 0)
 
-  Lancar o DIFF de dinheiro leitura x gravado
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/diff_dinheiro.py <<'PY'
-     # R2b -- DIFF DE DINHEIRO: leitura (motor ao vivo) x GRAVADO, campo a campo, na 09. SO LEITURA.
-     # Nao chama recalculo que grava: `…
+  Searched for 1 pattern, ran 13 shell commands
 
-✢ Zesting… (1h 10m 16s · ↓ 104.8k tokens)
+❯ aval Ronald: daqui ao fim da meta a suite roda SEMPRE por bin/regua.sh (grava .regua_stamp; o pre-push pula o arsenal com JA VERDE) -- nunca docker run manual antes do commit.
+  Publicar no RELATO a duracao dos ultimos pushes (log do pre-push) e medir, sem mudar nada, o pico de RAM do container de teste em --parallel 2; se couber, propor --parallel 4
+  com o numero. Segue a fila.
+
+  Ran 1 shell command
+
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && md5sum $S/turnos.py $S/tes… ·
+     stopped
+
+  Ran 4 shell commands
+
+❯ aval Ronald: reordenar por importancia: depois da R2b, IMPAR (pelo laudo: espelho.py:513-514 passa a ler RealizadoDoDia.aberto de turnos.py:393-394; classes B e C primeiro,
+  depois F com "parcial provado" rotulado, depois D na autoridade) -> E5 -> R4 -> R5 -> selo + E6 r4 -> export para meu !. Push dos commits locais pela regua. Segue a fila.
+
+  Running 1 shell command…
+
+✢ Zesting… (1h 15m 38s · ↓ 115.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
