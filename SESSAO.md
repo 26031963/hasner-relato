@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 14:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.8 MB). Acoes na janela: **466**.
+**Medido em 28/09/2026 15:02:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (101.9 MB). Acoes na janela: **472**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:02:25 | Bash | Esperar a porta | `cd /home/ronald/saas-hasner && until grep -qE 'SELO (VERDE\|VERMELHO)\|Error\|Traceback' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; do sleep 25; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt \| tail -16` |
+| 15:02:18 | Bash | Re-medir e lavrar a porta do export | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>&1; tail -18 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt` |
+| 15:02:04 | Bash | Guardar o antes/depois em logs e conferir o col125 | `cd /home/ronald/saas-hasner && mkdir -p logs && docker cp saas_core:/tmp/apply_he_intra_092026_20260928_150156.json logs/apply_he_intra_092026_20260928_150156.json && ls -la logs/apply_he_intra_*.json \| tail -2 && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from ponto.models import FechamentoMensal as F f=F.objects.get(colaborador_id=125, mes=9, ano=20 ...` |
+| 14:59:53 | Bash | Aplicar o caminho B com o ! do Ronald | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command aplicar_09_he_intra --schema=juliani --mes 9 --ano 2026 --aplicar 2>&1 \| tail -10` |
+| 14:57:50 | Bash | Ensaio do apply cirurgico | `cd /home/ronald/saas-hasner && cat > app/ponto/management/commands/aplicar_09_he_intra.py <<'PYEOF' # -*- coding: utf-8 -*- """APPLY CIRURGICO da cura BUG-HE-INTRA-DOBRADA na 09 -- caminho (B) do `!` de 28/09 15:1x. O QUE O RONALD ORDENOU, na letra: *"gravado da 09, 144 colabs, SO os campos que a cura move em isolamento; antes/depois em logs/ para reversao. DIFF contra o GRAVADO: campo fora do alv ...` |
+| 14:56:51 | Bash | Ler a porta restaurar_fechamento | `sed -n '660,695p' ponto/services/fechamento.py` |
 | 14:56:42 | Bash | Ver as portas de escrita do fechamento | `grep -n '^def \\|^ def ' ponto/services/fechamento.py \| sed -n '1,30p' && echo "=== como o corte_b grava ===" && grep -n 'update(\\|restaur\\|porta\\|fechamento\.' ponto/management/commands/aplicar_09_corte_b.py \| head -12` |
 | 14:56:18 | Bash | Ver o comando de apply cirurgico existente | `sed -n '1,50p' ponto/management/commands/aplicar_09_corte_b.py` |
 | 14:55:51 | Bash | Deploy com motivo escrito | `cd /home/ronald/saas-hasner && bash bin/deploy.sh --sem-sombra "PORTAO-09 ordenado 15:1x: a pergunta do ensaio ja esta respondida por medicao MAIS especifica em dados de prod -- DIFF isolado da cura (motor de ontem x curado, mesmo processo) move so HE50/HE100 e os dois derivados, ZERO em trabalhadas/intra/noturnas/feriado/atraso/antecipada, e a porta da emp2 com o motor curado deu falhas=0 nas 7 t ...` |

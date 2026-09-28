@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:57:01.**
+**Medido em 28/09/2026 15:02:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## `git status --short`
 
 ```
+?? app/ponto/management/commands/aplicar_09_he_intra.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,9 +85,6 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. Tela aberta na SOMBRA sobre a 09 (so leitura), print para o Ronald ver como admin.
-  2. DIFF por rubrica da regra sobre a 09 na sombra contra o GRAVADO, por colab, publicado no RELATO.
-  3. RED: entrada 06:40 marco 07:00 → HE 0; mesmo dia autorizado → HE 20; 06:52 → nada muda; 05:30 → cadastro×realidade.
   4. RED: Autorizar 2x = 1 trilha, mesmo estado (idempotencia).
   5. RED: export com 1 pendente = travado; zerado = libera.
   6. Soma da tela = soma do PDF = soma do TXT para a mesma competencia.
@@ -114,14 +112,17 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Ler a porta restaurar_fechamento
-  ⎿  $ sed -n '660,695p' ponto/services/fechamento.py
+● Esperar a porta · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE 'SELO (VERDE|VERMELHO)|Error|Traceback'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; do sleep 25; done; cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-96… (4s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Infusing… (19m 8s · ↓ 23.0k tokens · thinking)
+✢ Infusing… (24m 38s · ↓ 30.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
