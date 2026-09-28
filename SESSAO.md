@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 18:54:30.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.2 MB). Acoes na janela: **495**.
+**Medido em 28/09/2026 18:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (103.2 MB). Acoes na janela: **497**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:57:42 | Bash | Ler o juiz da L-084 | `sed -n '1124,1132p;1150,1175p' ponto/motor_calculo_v2.py` |
+| 18:57:32 | Bash | Onde a L-084 julga no motor | `grep -n 'L-084\\|180' ponto/motor_calculo_v2.py \| grep -iv 'l-0840\\|1800' \| head -12` |
 | 18:52:28 | Bash | Commitar, empurrar e publicar o PAREI | `cd /home/ronald/saas-hasner && cat > /tmp/msg_par.txt <<'EOF' PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede O ! foi condicional e literal -- "so os campos-alvo, resto ZERO, nenhum colab para cima; fora disso = PAREI com a tabela". O DIFF nao fecha na condicao. PROVA: tenant_command diff_janela_he --mes 10 --ano 2026 (ensaio: liga a janela pela porta dent ...` |
 | 18:52:02 | Bash | Ver o progresso da regua | `cd /home/ronald/saas-hasner && tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_par.log; ps -eo args \| grep -c '[m]anage.py test'` |
 | 18:42:16 | Bash | Esperar a regua | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_par.log 2>/dev/null; do sleep 25; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|MUDOU' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpa ...` |
