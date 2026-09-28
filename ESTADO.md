@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:40:48.**
+**Medido em 28/09/2026 14:42:05.**
 
 | | |
 |---|---|
@@ -93,18 +93,6 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  TELA
-  - Atalho "HE" no quadro ATALHOS da Central de Atendimento, contador = pendentes, cai so com Autorizar/Nao.
-  - Gestao de HE: 1 linha por colab colapsada (molde HX-RESUMO-COLAB), expande dias; Autorizar/Nao por dia,
-    por colab e multisselecao; busca nome/CPF; filtros competencia, praca, posto, estado.
-  - Totais da competencia por colab (automatica / autorizada / nao autorizada) lidos da fonte unica; PDF padrao LEIS-UI.
-  - Espelho e calendario: SVG relogio riscado 10px apos a hora da batida (padrao do ⇄), cinza; autorizado = azul sem risco;
-    tooltip "N min antes do marco · nao conta · Art. 4º §2º".
-  - Permissao propria autorizar_he (tem_acao).
-  - folha/porta_export.py::medir: contador he_pendente, esperado 0.
-
-  RESULTADOS OBSERVAVEIS (sem todos = INCOMPLETO com a lista)
   1. Tela aberta na SOMBRA sobre a 09 (so leitura), print para o Ronald ver como admin.
   2. DIFF por rubrica da regra sobre a 09 na sombra contra o GRAVADO, por colab, publicado no RELATO.
   3. RED: entrada 06:40 marco 07:00 → HE 0; mesmo dia autorizado → HE 20; 06:52 → nada muda; 05:30 → cadastro×realidade.
@@ -117,16 +105,28 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
      LEI-AKITA: origem=motor_calculo_v2, testemunha=fonte O-DIA-PAGO, RED=itens 3-5, quem-mais-le=espelho/calendario/PDF/TXT/porta_export, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-  Rodar o selo corrigido
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='app/ponto/tests/test_calculador_regras.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace(''' # COM envelope: a jornada declarada mantem o turno inteiro
-     env = {d0: (_t(10, 0), _t(22, 30))}
-     visto = minutos_do_oraculo(batidas, envelo…
+  Ran 5 shell commands
 
-✻ Infusing… (2m 55s · ↓ 12.0k tokens)
+❯ aval Ronald: PORTAO-09 — fila 1, na frente de O-DIA-PAGO S5b e de O-JANELA-HE. Reafirma o ! das 12:31.
+  LEIS: L-082(b), L-092, L-094, L-005, L-009. Nenhuma lei nova.
+  MEDIDO 14:40: col125 09 HE50 1,98 / intra 2,00; tabela ponto_diapago inexistente em prod = (B) nao rodou, deploy nao subiu.
+
+  1. bin/deploy.sh (cura HE/intra + migration 0067), smoke em prod no RELATO.
+  2. Apply caminho (B) de 464b031: gravado da 09, 144 colabs, SO os campos que a cura move em isolamento;
+     antes/depois em logs/ para reversao. DIFF contra o GRAVADO: campo fora do alvo != 0 = PAREI com a tabela.
+  3. Porta da 09 re-medida: falhas=0, minuto_em_duas_rubricas=0.
+  4. Extrato dos 16 da amostra (253,134,30,125,843,207,369,87,820,865,382,81,76,610,904,72) no RELATO.
+  5. Lote 1 com hash NOVO; PAREI na emissao (meu !).
+  6. RELATO preso desde ~11h: linha PROVA faltando em RELATO.md:321 — curar e publicar.
+     PRONTO = RELATO com col125 HE50 depois do apply, porta=0, extrato, hash novo. Sem isso = INCOMPLETO com a lista.
+     PROIBIDO: apply fora dos 144/campos, recalculo inteiro da 09, fallback, pular teste.
+     LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
+     segue a fila; PAREI so em lei ou !
+
+● Rodar o publicador do RELATO · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | head -14
+
+· Infusing… (4m 12s · ↓ 15.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
