@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 27/09/2026 22:45:37.**
+**Medido em 27/09/2026 22:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS` |
+| `HEAD` local | `c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)` |
 | `origin/main` | `912ab728 [R2] a pausa pode ter UMA perna acesa -- curada e selada; o apply RETIDO pela condicao (d)` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -22,18 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c30257af [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
+d97dd4b1 [R2b] RELATO publicado: as 4 condicoes medidas, o apply no seu `!`, e a regua VERDE em 476 s
 37178784 [SELOS-MUDOS] a regua viva acusou 4 guardas paradas ha 36 h -- as quatro curadas, tres delas eram VAZIAS
 fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua -- pausa com dono + tripwire
 6738448e [REGUA-MORTA] `bash bin/regua.sh` nao rodava a suite desde 25/09 10:34, e a esteira seguia "verde"
-7b8329a1 [R2b] a pausa que a ATA declara nao passa pelo teto de duracao -- a noite do col843 volta a ser UMA
-75708ec4 [R2b] auditoria da ARVORE VIVA: 7 crons na janela, ZERO escrita estrutural -- e o rotulo de hora que eu errei 4x
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -85,15 +83,6 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Rodar a regua" completed (exit code 0)
-
-  Read 1 file, ran 10 shell commands
-
-● Background command "Commitar a cura da regua e roda-la" completed (exit code 0)
-
-● Background command "Amostrar RAM do container de teste durante a regua" completed (exit code 0)
-
   Read 1 file
 
 ● Background command "Medir o pico de RAM do container de teste" completed (exit code 0)
@@ -117,12 +106,21 @@ fddfb5ca [ALARME-NAO-E-JUIZ] o alarme de 24 h dos cortes deixa de MATAR a regua 
 
 ● Background command "Commitar as curas de selo e rodar a regua" completed (exit code 0)
 
-* Zesting… (1h 42m 35s · ↓ 185.6k tokens)
+  Committed d97dd4b1
+
+● Background command "Medir o pico de RAM em parallel 2" completed (exit code 0)
+
+  Reescrever o placar e empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -3 && git add app/docs/TICKETS.md && git commit -q -F - <<'MSG'
+     [R2b] placar do topo do TICKETS reescrito pelo mundo (regua OK 27/09 22:45)
+     Causa em uma linha: o placar do topo citava `regua FALHOU (25/09 07:25)` -- …
+
+· Zesting… (1h 47m 42s · ↓ 188.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
