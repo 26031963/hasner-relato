@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 08:19:31.**
+**Medido em 28/09/2026 08:25:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18` |
-| `origin/main` | `798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18` |
+| `HEAD` local | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
+| `origin/main` | `6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201` |
 | commits a subir (`ahead`) | **0** |
 
 ## Fabrica
@@ -22,20 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6c74c30a CADASTRO-ZERO: quem bateu ponto sem cadastro do mes fica FORA do TXT, com nome proprio -- LOTE 1 = 201
 798349a3 [R4] volta pela L-094 (caminho c): as quatro condicoes MEDIDAS -- e a regua perdia o carimbo todo dia as 07:18
 29386d87 [O1] item (4): o TXT RECUSA sozinho, por carimbo do dia e com a lista de quem divergiu
 65b82720 PAREI: restam DOIS itens e os dois sao decisao do Ronald
 cfffd8de [O81] metade do TXT era desenhada pela fonte ANTIGA, e ninguem sabia -- 96 de 205 para 0
-ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 4 = 92,9% -- e o dossie do export
 ```
 
 ## `git status --short`
 
 ```
-M  app/folha/export.py
-A  app/folha/tests/_dbg.py
-A  app/folha/tests/test_cadastro_zero_com_batida.py
-M  app/folha/views.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -88,6 +84,8 @@ M  app/folha/views.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      },
+      "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
         "additionalContext": "string (optional)"
       },
@@ -109,22 +107,20 @@ M  app/folha/views.py
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Remover o import morto e rodar a regua · 7m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     p='app/folha/export.py'
-     s=io.open(p,encoding='utf-8').read()
-     old = """ from escala.models import CelulaDia as _CelCz
-     from ponto.models import Batida as _BatCz
-     from ponto.janelas import janela_fechamento as _jf"""
-     new = """ from escala.m… (7m 22s · 2 lines)
+● Deploying e re-lavrar a porta com o universo do lote 1 · 1m 24s
+  ⎿  $ cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="08:0x -- sombra de HOJE REFEITA diverge=0 erros=0; o --bloco nao cabe antes do export. CADASTRO-ZERO e um PORTAO de
+     retencao (ninguem entra a mais, 4 saem) + o portao do TXT por carimbo; regua 8.548 OK" bin/deploy.sh --sem-migrate 2>&1 | tail -3; … (1m 22s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (2h 16m 59s · ↓ 59.1k tokens)
+· Determining… (2h 22m 28s · ↓ 61.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: cauda do lote 1 -- (a) app/folha/tests/_dbg.py sai do repo (git rm, commit proprio); (b) no RELATO do lote 1 publicar quantos o CADASTRO-ZERO reteve, com os ids;
+  se reteve alem de col924/391/43/942, PAREI com a lista antes de gerar o TXT (regra fora do corte). Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
