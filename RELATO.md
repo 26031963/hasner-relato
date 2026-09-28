@@ -217,7 +217,6 @@ letra, que vale para cura que *"nao move dinheiro por si"*; a R4 com o evento vi
   **(c)** `!` de CRITERIO por classe de cura (como a sua AVAL-DE-CRITERIO faz hoje por fatia), com faixa.
 A R4 espera no (a) enquanto voce nao disser. **A fila NAO parou**: sigo na R5.
 
-<<<<<<< HEAD
 # O DIA VIROU E UM SELO FICOU VERMELHO SOZINHO -- relogio solto, curado (28/09 04:3x)
 
 No meio da regua do item (5), `ponto.tests.test_detectar_entrada_adiantada::test_sync_atrasado_fecha_chamado_
@@ -312,8 +311,6 @@ junto -- selo de cura revertida ficaria VERMELHO, e selo vermelho barra o push d
 O que sobrou de pe: o **registro** no RELATO e no TICKETS, o item no topo do PENDENTES, e o DIFF medido
 (**27 colabs, 78 dias, +75,12 h, todos para cima**).
 
-=======
->>>>>>> parent of 0dab512d (Revert "[R4] celula que existe nao empresta pausa do template" -- o codigo sai da ARVORE, o registro fica)
 # ITEM (3) R4 CURADA: celula que existe nao empresta pausa do template (28/09 02:4x)
 
 RED MEDIDO, col610 22/08: celula existe, `trabalha=False`, `dna.marcos=null`, e a ata na forma POSICIONAL do

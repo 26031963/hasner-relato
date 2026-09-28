@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:10:01.**
+**Medido em 28/09/2026 07:15:31.**
 
 | | |
 |---|---|
@@ -32,9 +32,7 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## `git status --short`
 
 ```
-M  app/docs/BACKLOG.md
-UU app/docs/RELATO.md
-UU app/docs/TICKETS.md
+M  app/docs/LEIS.md
 M  app/escala/models.py
 M  app/escala/regua_defesa.py
 M  app/ponto/services/bordas_realizado.py
@@ -96,7 +94,6 @@ M  app/relatorios/pdf_espelho.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -125,10 +122,11 @@ M  app/relatorios/pdf_espelho.py
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Reverter o revert da R4
-  ⎿  $ cd /home/ronald/saas-hasner && git log --oneline -1 --format='%h %s' 0dab512d && git revert --no-commit 0dab512d 2>&1 | tail -3; git status --short | head -12
+● Regua com a R4 de volta e a L-094 · 3m 36s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/escala app/ponto app/relatorios app/docs/LEIS.md && bash bin/regua.sh 2>&1 | tail -4 (3m 35s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Determining… (1h 7m 29s · ↓ 29.2k tokens)
+✢ Determining… (1h 12m 58s · ↓ 31.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
