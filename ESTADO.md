@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 18:47:31.**
+**Medido em 28/09/2026 18:52:33.**
 
 | | |
 |---|---|
-| `HEAD` local | `37c8852b TICKETS: rodape e placar (8602 testes OK)` |
+| `HEAD` local | `b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)` |
 | `origin/main` | `37c8852b TICKETS: rodape e placar (8602 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,18 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b04efe41 TICKETS: rodape e placar (8602 OK, PAREI na janela de HE)
+e05ebb21 PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede
 37c8852b TICKETS: rodape e placar (8602 testes OK)
 eee6fbbf O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
 63e1c1fa TICKETS: rodape e placar (8602 testes OK, janela de HE parte A)
-00ff0b53 O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097)
-8e8420e5 TICKETS: placar do topo em dia (ultimo push 7288e90e)
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/PENDENTES_RONALD.json
-M  app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -86,7 +84,6 @@ M  app/docs/RELATO.md
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    registrado na própria linha que por ~4 h o apply esteve parado na L-082(b), porque o recálculo inteiro moveria 10 campos fora do !.
   - COBRAR-SO-O-QUE-MUDA-A-FOLHA — 1.116 chamados em 261 colabs viraram 322 em 136; 681 barrados por competência exportada, 113 sem data (todos disputa), 125 colabs param de
     receber push por nada.
   - O-DIA-PAGO — S1 e S2 fechadas (8.809 dias lavrados, contadores na porta, "não lavrado" em linha própria) e S5a fechada (calculador + DIFF por rubrica); S5b em voo com as duas
@@ -112,18 +109,19 @@ M  app/docs/RELATO.md
 
 ● Background command "DIFF da janela na competencia 10" completed (exit code 0)
 
-● Esperar a regua · 5m 15s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_par.log 2>/dev/null; do sleep 25; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|MUDOU' /… (5m 13s)
+● Commitar, empurrar e publicar o PAREI · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_par.txt <<'EOF'
+     PAREI no apply da JANELA DE HE: ela cria desconto de pontualidade que a L-084 hoje impede
+     O ! foi condicional e literal -- "so os campos-alvo, resto ZERO, nenhum colab para cima;
+     fora disso = PAREI com a tabela". O DIFF nao fecha na co… (4s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (1h 58m 16s · ↓ 78.9k tokens)
+✢ Unfurling… (2h 3m 18s · ↓ 80.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
