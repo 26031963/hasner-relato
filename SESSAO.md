@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 16:37:55.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **476**.
+**Medido em 28/09/2026 16:40:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (102.3 MB). Acoes na janela: **475**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -485,4 +485,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:57:18 | Bash | Publicar o item (5) e o dossie, e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/docs/RELATO.md' s=io.open(p,encoding='utf-8').read() anc='# ITEM (5) FECHADO: SELO VERDE nos quatro leitores' add = """# O DIA VIROU E UM SELO FICOU VERMELHO SOZINHO -- relogio solto, curado (28/09 04:3x) No meio da regua do item (5), `ponto.tests.test_detectar_entrada_adiantada::test_sync_atrasado_fecha_chamado_ preexistente` fic ...` |
 | 04:47:38 | Bash | Encolher a lista de relogio solto e rodar a regua | `cd /home/ronald/saas-hasner && grep -n "test_detectar_entrada_adiantada" app/core/tests/testes_sem_relogio.txt && python3 - <<'PY' import io p='app/core/tests/testes_sem_relogio.txt' s=io.open(p,encoding='utf-8').read() alvo='ponto/tests/test_detectar_entrada_adiantada.py' linhas=s.split('\n') n=len(linhas) linhas=[l for l in linhas if l.strip()!=alvo] io.open(p,'w',encoding='utf-8').write('\n'.jo ...` |
 | 04:47:18 | Bash | Ver o que o selo do relogio cobra | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test core.tests.test_selo_teste_sem_relogio --settings=config.settings.ci --noinput 2>&1 \| grep -B2  ...` |
-| 04:38:22 | Bash | Congelar o relogio do teste e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/ponto/tests/test_detectar_entrada_adiantada.py' s=io.open(p,encoding='utf-8').read() s=s.replace("from django.test import TestCase", "from django.test import TestCase\nfrom freezegun import freeze_time") s=s.replace("""class EntradaAdiantadaTest(TestCase):""", '''# RELOGIO CONGELADO (28/09 04:3x, medido). Este arquivo tinha RELOGI ...` |

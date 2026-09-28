@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 16:37:55.**
+**Medido em 28/09/2026 16:40:01.**
 
 | | |
 |---|---|
@@ -84,6 +84,30 @@ f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+        "hookEventName": "\"PermissionRequest\"",
+        "decision": {
+          "to allow": {
+            "behavior": "\"allow\"",
+            "updatedInput": "object (optional) - Modified tool input to use",
+            "updatedPermissions": "array (optional) - Permission updates"
+          },
+          "to deny": {
+            "behavior": "\"deny\"",
+            "message": "string (optional)",
+            "interrupt": "boolean (optional)"
+          }
+        }
+      },
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
+      "for PostToolBatch": {
+        "hookEventName": "\"PostToolBatch\"",
         "additionalContext": "string (optional)"
       },
       "for Stop / SubagentStop": {
@@ -93,35 +117,11 @@ f5853076 TICKETS: rodape e placar do portao da 09 (8581 testes OK)
     }
   }
 
-✻ Cogitated for 1h 11m 10s · done 3:49 PM · 4 shells still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Pushed to main, ran 7 shell commands
-
-● Background command "Re-medir o DIFF do calculador" completed (exit code 0)
-
-  Searched for 1 pattern, ran 6 shell commands
-
-● Background command "DIFF com o cadastro no minimo" completed (exit code 0)
-
-  Searched for 2 patterns, ran 4 shell commands
-
-● Background command "Corrigir o import e rodar o DIFF" completed (exit code 0)
-
-● Commitar, empurrar e publicar a S5b · 2m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_s5b.txt <<'EOF'
-     O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME
-     Duas divergencias do DIFF fecharam, as duas por causa medida em caso concreto -- nao
-     por palpite. E a terceira, que e a maior, tem agora causa provada e es… (2m 0s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Billowing… (45m 22s · ↓ 26.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Crunched for 46m 25s · done 4:38 PM · 4 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
