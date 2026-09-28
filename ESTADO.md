@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:51:31.**
+**Medido em 28/09/2026 14:57:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente` |
-| `origin/main` | `2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)` |
-| commits a subir (`ahead`) | **1** |
+| `HEAD` local | `f6e0910b TICKETS: rodape e placar (8581 testes OK)` |
+| `origin/main` | `f6e0910b TICKETS: rodape e placar (8581 testes OK)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -22,19 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f6e0910b TICKETS: rodape e placar (8581 testes OK)
+48adfbd0 S5b (1o passo): o corte do nucleo pergunta a ESCALA DO DIA, e o RELATO volta a publicar
 f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente
 2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)
 b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes errado antes de sair 1
-455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)
-46803e8c O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
 ```
 
 ## `git status --short`
 
 ```
-M  app/docs/RELATO.md
-M  app/ponto/calculador/nucleo.py
-M  app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -87,6 +84,9 @@ M  app/ponto/tests/test_calculador_regras.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  1. Tela aberta na SOMBRA sobre a 09 (so leitura), print para o Ronald ver como admin.
+  2. DIFF por rubrica da regra sobre a 09 na sombra contra o GRAVADO, por colab, publicado no RELATO.
+  3. RED: entrada 06:40 marco 07:00 → HE 0; mesmo dia autorizado → HE 20; 06:52 → nada muda; 05:30 → cadastro×realidade.
   4. RED: Autorizar 2x = 1 trilha, mesmo estado (idempotencia).
   5. RED: export com 1 pendente = travado; zerado = libera.
   6. Soma da tela = soma do PDF = soma do TXT para a mesma competencia.
@@ -114,13 +114,10 @@ M  app/ponto/tests/test_calculador_regras.py
      LEI-AKITA: origem=motor (cura 5ece3a8), testemunha=porta_export.medir, RED=test_he_intra_dobrada, quem-mais-le=tela/PDF/TXT, juizes novos=0.
      segue a fila; PAREI so em lei ou !
 
-● Esperar a regua · 7m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_env.log 2>/dev/null; do sleep 20; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|BLOQUEADO' /tmp/claude-10… (7m 21s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ler a porta restaurar_fechamento
+  ⎿  $ sed -n '660,695p' ponto/services/fechamento.py
 
-✢ Infusing… (13m 38s · ↓ 17.4k tokens)
+· Infusing… (19m 8s · ↓ 23.0k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
