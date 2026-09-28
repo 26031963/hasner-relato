@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 07:41:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.1 MB). Acoes na janela: **521**.
+**Medido em 28/09/2026 07:47:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (97.1 MB). Acoes na janela: **523**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:46:47 | Bash | Confirmar que a regra pega exatamente os 4 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/cadzero.py <<'PY' from django_tenants.utils import schema_context with schema_context('juliani'): from colaboradores.models import Colaborador, Empresa from escala.models import CelulaDia, EscalaColaborador from ponto.models import Batida, FechamentoMensal  ...` |
+| 07:46:26 | Bash | Ler a cadeia de retencao do classificar_export | `cd /home/ronald/saas-hasner && sed -n '375,445p' app/folha/export.py` |
 | 07:36:36 | Bash | Provar 07/08 intactas e re-lavrar a porta pos-R4 | `cd /home/ronald/saas-hasner && echo "=== 07/08 depois do deploy (condicao 4 da L-094) ==="; docker exec saas_core python manage.py shell --command "exec(open('/tmp/f.py').read())" 2>&1 \| grep -E "^ 0" \| head -4; echo "=== porta RE-LAVRADA pos-R4 ==="; docker exec saas_core python manage.py tenant_command selo_leitores_no_mesmo_numero --schema=juliani --mes 9 --ano 2026 2>&1 \| grep -E "^ emp\|^u ...` |
 | 07:36:09 | Bash | Deploy da R4 e do portao do TXT | `cd /home/ronald/saas-hasner && DEPLOY_SEM_SOMBRA="07:3x -- sombra de HOJE REFEITA com diverge=0 erros=0; o --bloco (1h40) nao cabe antes do export. R4 pela L-094 caminho (c), as 4 condicoes MEDIDAS: DIFF publicado (+75,12 h/27 colabs), ZERO para baixo, E6 92,9->93,7%, 07/08 exportadas e protegidas pela L-092 com md5 fotografado. Regua 8.542 OK" bin/deploy.sh --sem-migrate 2>&1 \| tail -4` |
 | 07:34:00 | Bash | Reescrever o placar e empurrar a R4 | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1 && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1 && git add app/docs/TICKETS.md && git commit -q --amend --no-edit && git push 2>&1 \| tail -3` |

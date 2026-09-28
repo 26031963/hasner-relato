@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 07:41:31.**
+**Medido em 28/09/2026 07:47:01.**
 
 | | |
 |---|---|
@@ -84,8 +84,6 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      },
-      "for PostToolUse": {
         "hookEventName": "\"PostToolUse\"",
         "additionalContext": "string (optional)"
       },
@@ -111,12 +109,14 @@ ecead209 [SELO-TXT] item (5) FECHADO: selo VERDE nos quatro leitores, E6 rodada 
   porta pos-R4 MENOS col924, col391, col43, col942 (fechamento zero por cadastro, vao ao lote 2); gerar o TXT so com carimbo VERDE de hoje pos-R4; publicar no RELATO a lista
   final, total de horas e hash do arquivo. LOTE 2 = recontagem apos 12h com porta nova e novo ! meu. Segue a fila; PAREI so em lei ou ! !
 
-● Provar 07/08 intactas e re-lavrar a porta pos-R4 · 4m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== 07/08 depois do deploy (condicao 4 da L-094) ==="; docker exec saas_core python manage.py shell --command
-     "exec(open('/tmp/f.py').read())" 2>&1 | grep -E "^ 0" | head -4; echo "=== porta RE-LAVRADA pos-R4 ==="; docker exec saas_core python manage.py tenant… (4m 52s · 7 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Confirmar que a regra pega exatamente os 4
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r2b && cat > $S/cadzero.py <<'PY'
+     from django_tenants.utils import schema_context
+     with schema_context('juliani'):
+     from colaboradores.models import Colaborador, Empresa
+     fr…
 
-✢ Determining… (1h 38m 59s · ↓ 38.6k tokens)
+✢ Determining… (1h 44m 28s · ↓ 41.0k tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
