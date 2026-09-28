@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 20:29:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **517**.
+**Medido em 28/09/2026 20:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **514**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -524,6 +524,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:35:52 | Bash | Ver se ha comando que gera o TXT | `cd /home/ronald/saas-hasner && ls app/folha/management/commands/ \| head -20; echo "=== quem monta as linhas ==="; grep -n "def montar_linhas_export" app/folha/export.py \| head -2; grep -rn "montar_linhas_export" app/folha/management/commands/*.py 2>/dev/null \| head -3` |
 | 08:35:29 | Bash | Remover o _dbg.py com selo e registrar o O97 | `cd /home/ronald/saas-hasner && git rm -q --cached app/folha/tests/_dbg.py && rm -f app/folha/tests/_dbg.py && bash bin/tests/test_sem_arquivo_de_mount.sh \| tail -2 && git add bin/tests/test_sem_arquivo_de_mount.sh && python3 - <<'PY' import io p='app/docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() i=s.index('## OBRAS PEDIDAS POR PROMPT') j=s.index('\n\|---\|---\|---\|---\|---\|\n', i) + len ...` |
 | 08:35:04 | Bash | Selo preciso: py vazio E dono root | `cd /home/ronald/saas-hasner && find app -type f -name '*.py' -empty -user root -not -path '*/__pycache__/*' 2>/dev/null; echo "--- (acima: a assinatura exata do mount) ---"; cat > bin/tests/test_sem_arquivo_de_mount.sh <<'SH' #!/usr/bin/env bash # ARQUIVO NASCIDO DE MOUNT NAO ENTRA NA ARVORE (achado 28/09 08:1x -- a SEGUNDA vez, e desta vez chegou ao git). # # O QUE ACONTECE: quando eu meco uma cu ...` |
-| 08:34:20 | Bash | Ver a historia do outro teste vazio | `cd /home/ronald/saas-hasner && git log --oneline -2 -- app/colaboradores/tests/test_gate_disputa_isento.py; echo "---"; git show --stat $(git log --format=%h -1 -- app/colaboradores/tests/test_gate_disputa_isento.py) -- app/colaboradores/tests/test_gate_disputa_isento.py \| tail -3` |
-| 08:34:03 | Bash | Selo contra arquivo nascido de mount | `cd /home/ronald/saas-hasner && cat > bin/tests/test_sem_arquivo_de_mount.sh <<'SH' #!/usr/bin/env bash # ARQUIVO NASCIDO DE MOUNT NAO ENTRA NA ARVORE (achado 28/09 08:1x -- a SEGUNDA vez, e desta vez chegou ao git). # # O QUE ACONTECE: quando eu meço uma cura em container irmao e monto o arquivo da copia por cima de um caminho # que AINDA NAO EXISTE (`-v copia.py:/app/.../novo.py:ro`), o docker CR ...` |
-| 08:33:30 | Bash | Ver o estado do _dbg.py | `cd /home/ronald/saas-hasner && ls -la app/folha/tests/_dbg.py 2>/dev/null; git ls-files app/folha/tests/_dbg.py; echo "rastreado acima (vazio = nao rastreado)"; git log --oneline -1 -- app/folha/tests/_dbg.py` |
