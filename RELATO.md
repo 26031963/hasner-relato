@@ -22,6 +22,62 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# O-DIA-PAGO S5b: duas curas medidas no calculador, e o buraco grande ganhou NOME (28/09 16:1x)
+
+Duas divergencias do DIFF fecharam, e as duas por causa medida em caso concreto -- nao por palpite. E a
+terceira, que e a maior, tem agora a causa provada e escrita.
+
+## (1) O piso do Art.71 quando o juiz nao sabe o previsto
+
+O motor aplica o piso sobre o FATO quando o previsto e 0 (`MotorBase._intra_minima`), porque o juiz devolve 0
+tambem para "sem escala vigente" e "template incompleto", nao so para folga. O calculador nao fazia. Corrigido
+-- e o efeito, medido: intra de **-220,98 h para -216,98 h**. Pequeno, e certo.
+
+## (2) O cadastro do TEMPLATE entra no minimo, e este foi grande
+
+PROVA: `col618 01/09` -- batidas `07:00 -> 13:03` (363,7 min), previsto 360, o DIA **sem pausa declarada** e o
+TEMPLATE com **60 min**. O motor indenizava **60**; eu indenizava **15** (o piso do Art.71 para 360 min).
+
+A regra do motor e `max(cadastrado, piso do Art.71)`, e a razao esta na docstring dele: **cadastro ACIMA da lei
+manda** -- `te#194` declara 160 min e e direito do colaborador. Eu lia so o intervalo declarado NO DIA, e
+intervalo do dia e cadastro do template **nao sao a mesma coisa**. O juiz e
+`ponto/juiz_batida.py::intervalo_cadastrado`, a mesma funcao que o motor importa.
+
+Efeito medido: intra de **-216,98 h para -170,93 h**, e o padrao `intra comercial/6x1` caiu de **156 para 117
+dia-colab**. Fecharam 39 dia-colab e 46 h por uma linha.
+
+## (3) O BURACO GRANDE: o nucleo nao pareia por MARCO -- e agora ha o caso
+
+`horas_trabalhadas` segue em **+765,32 h** (734 dia-colab, 306 colabs), e a causa esta provada:
+
+PROVA: `col600 02/09` -- batidas `12:38 · 17:00 · 21:00` (tres, impar). O **nucleo** pareia por sequencia:
+fecha `12:38 -> 17:00` (262 min) e **descarta o 21:00**. O **motor** fecha `12:38 -> 21:00` (502 min), porque
+**o MARCO manda** (E3, 26/09) -- a ata do dia diz que aquela e a saida.
+
+Sao 240 minutos de diferenca em UM dia, e o padrao e exatamente o que o DIFF mostra: `trabalhadas 12x36 +184`,
+`comercial/6x1 +131 e -117`, `12x36 -85`. Nao e ruido: e a diferenca entre pareamento por SEQUENCIA e
+pareamento por MARCO, que e a lei da casa desde a E3.
+
+**E por isso a S5 nao pode ser fechada sem isto**: o corte diz *"batidas + escala do dia -> pares -> horas"*, e
+hoje a escala do dia entra depois dos pares. O envelope de 15:3x foi o primeiro passo (o vao longo dentro da
+jornada declarada deixou de cortar); o passo que falta e o pareamento consultar os marcos, que e o mesmo
+caminho que `_periodos_pelo_marco` ja abriu no motor.
+
+**O certificador nao muda com isso**: `e6_oraculo` chama o nucleo SEM alimentacao e segue pareando por
+sequencia. A independencia dele e o que faz a certificacao valer (corte 27/09), e quem paga para ver a escala e
+o calculador.
+
+## Onde o DIFF esta agora
+
+| rubrica | motor (h) | calculador (h) | delta (h) | dia-colab | colabs |
+|---|---|---|---|---|---|
+| horas_trabalhadas | 69.285,48 | 70.050,79 | **+765,32** | 734 | 306 |
+| horas_intra_indenizada | 2.253,11 | 2.082,18 | **-170,93** | 373 | 174 |
+| horas_extras_50 | 388,00 | 525,64 | **+137,64** | 164 | 83 |
+
+A intra andou **-220,98 -> -216,98 -> -170,93** nas duas curas de hoje. As outras oito rubricas seguem
+declaradas em `NAO_DECIDE`, com a causa escrita e o numero ao lado.
+
 # O-DIA-PAGO S1+S2 COMPLETAS: 8.809 dias lavrados, e a DERIVA finalmente tem tabela por nome (28/09 15:4x)
 
 PROVA: `tenant_command lavrar_dias_pagos --mes 9 --ano 2026` -> **606 colaboradores lidos, 8.809 linhas de
