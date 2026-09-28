@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 00:54:31.**
+**Medido em 28/09/2026 01:00:02.**
 
 | | |
 |---|---|
@@ -119,11 +119,11 @@ b07c2efa [IMPAR] fatia 2: a tela diz EM ABERTO nas duas cascas -- e o par que mo
   as curas de hoje ao gravado) com aval-de-criterio: pode ENTRAR no TXT, ninguem SAI, oraculo e6 sem divergencia nova, 07/08 = 0; publicar antes/depois de entra/furo_espelho e o
   topo x soma. Depois o evento mantem. Substitui a frase RECALCULO-MUTIRAO. Segue a fila. !
 
-● Esperar a regua e ler o veredito · 8s
-  ⎿  $ cd /home/ronald/saas-hasner && docker wait inspiring_darwin >/dev/null 2>&1; tail -4 /tmp/regua_e5.out; cat .regua_stamp | head -3 (7s)
+● Esperar a regua e ler o veredito · 5m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && docker wait inspiring_darwin >/dev/null 2>&1; tail -4 /tmp/regua_e5.out; cat .regua_stamp | head -3 (5m 38s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hashing… (23m 12s · ↓ 29.3k tokens)
+✽ Hashing… (28m 43s · ↓ 29.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
