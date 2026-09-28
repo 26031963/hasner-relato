@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 15:35:01.**
+**Medido em 28/09/2026 15:40:31.**
 
 | | |
 |---|---|
@@ -87,11 +87,6 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     LEI-AKITA: origem=motor_calculo_v2, testemunha=fonte O-DIA-PAGO, RED=itens 3-5, quem-mais-le=espelho/calendario/PDF/TXT/porta_export, juizes novos=0.
-     segue a fila; PAREI so em lei ou !
-
-  Ran 5 shell commands
-
 ❯ aval Ronald: PORTAO-09 — fila 1, na frente de O-DIA-PAGO S5b e de O-JANELA-HE. Reafirma o ! das 12:31.
   LEIS: L-082(b), L-092, L-094, L-005, L-009. Nenhuma lei nova.
   MEDIDO 14:40: col125 09 HE50 1,98 / intra 2,00; tabela ponto_diapago inexistente em prod = (B) nao rodou, deploy nao subiu.
@@ -114,12 +109,17 @@ A  app/ponto/management/commands/aplicar_09_he_intra.py
 
 ● Background command "Esperar a porta" completed (exit code 0)
 
-● Rodar a regua com a arvore estavel · 7m 35s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_portao3.log
-     2>&1 & sleep 3; until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-a… (7m 33s)
+● Curar os dois e rodar a regua · 3m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, py_compile
+     P='app/ponto/management/commands/aplicar_09_he_intra.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace(""" def _sem_cura(self_, limite, periodos, quando): # o motor de ontem
+     return limite or 0""",
+     """ def _sem_cura(_motor… (3m 20s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Infusing… (57m 8s · ↓ 42.8k tokens)
+✢ Infusing… (1h 2m 38s · ↓ 44.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
