@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 14:35:31.**
+**Medido em 28/09/2026 14:40:48.**
 
 | | |
 |---|---|
-| `HEAD` local | `2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)` |
+| `HEAD` local | `f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente` |
 | `origin/main` | `2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f23ae7be L-097 cortada e O-JANELA-HE registrada: minuto fora da janela nao vira HE nem compensa nada, e o portao trava com HE pendente
 2f6ffe9d TICKETS: rodape e placar com o carimbo da regua da ancora (8580 testes OK)
 b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes errado antes de sair 1
 455bff0f TICKETS: rodape e placar com o carimbo da regua da S5a (8578 testes OK)
 46803e8c O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa
-6ec19be5 TICKETS: rodape e placar com o carimbo da regua da S2 (8570 testes OK)
 ```
 
 ## `git status --short`
 
 ```
+ M app/ponto/calculador/nucleo.py
+ M app/ponto/tests/test_calculador_regras.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,44 +93,44 @@ b1da952f BUG-ANCORA-NAO-REGENERA curado e selado -- e a frota medida DUAS vezes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"PermissionRequest\"",
-        "decision": {
-          "to allow": {
-            "behavior": "\"allow\"",
-            "updatedInput": "object (optional) - Modified tool input to use",
-            "updatedPermissions": "array (optional) - Permission updates"
-          },
-          "to deny": {
-            "behavior": "\"deny\"",
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolBatch": {
-        "hookEventName": "\"PostToolBatch\"",
-        "additionalContext": "string (optional)"
-      },
-      "for Stop / SubagentStop": {
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
 
-✻ Baked for 1h 19m 48s · done 2:22 PM · 3 shells still running
+  TELA
+  - Atalho "HE" no quadro ATALHOS da Central de Atendimento, contador = pendentes, cai so com Autorizar/Nao.
+  - Gestao de HE: 1 linha por colab colapsada (molde HX-RESUMO-COLAB), expande dias; Autorizar/Nao por dia,
+    por colab e multisselecao; busca nome/CPF; filtros competencia, praca, posto, estado.
+  - Totais da competencia por colab (automatica / autorizada / nao autorizada) lidos da fonte unica; PDF padrao LEIS-UI.
+  - Espelho e calendario: SVG relogio riscado 10px apos a hora da batida (padrao do ⇄), cinza; autorizado = azul sem risco;
+    tooltip "N min antes do marco · nao conta · Art. 4º §2º".
+  - Permissao propria autorizar_he (tem_acao).
+  - folha/porta_export.py::medir: contador he_pendente, esperado 0.
+
+  RESULTADOS OBSERVAVEIS (sem todos = INCOMPLETO com a lista)
+  1. Tela aberta na SOMBRA sobre a 09 (so leitura), print para o Ronald ver como admin.
+  2. DIFF por rubrica da regra sobre a 09 na sombra contra o GRAVADO, por colab, publicado no RELATO.
+  3. RED: entrada 06:40 marco 07:00 → HE 0; mesmo dia autorizado → HE 20; 06:52 → nada muda; 05:30 → cadastro×realidade.
+  4. RED: Autorizar 2x = 1 trilha, mesmo estado (idempotencia).
+  5. RED: export com 1 pendente = travado; zerado = libera.
+  6. Soma da tela = soma do PDF = soma do TXT para a mesma competencia.
+  7. Selo: zero leitor com derivacao propria de HE (grep).
+     PROIBIDO: fallback, fatia posterior, item proprio, tocar a 09 gravada, apply sem meu "!".
+     Vale da competencia 10; apply de dinheiro so com meu "!" sobre o DIFF do item 2.
+     LEI-AKITA: origem=motor_calculo_v2, testemunha=fonte O-DIA-PAGO, RED=itens 3-5, quem-mais-le=espelho/calendario/PDF/TXT/porta_export, juizes novos=0.
+     segue a fila; PAREI so em lei ou !
+
+  Rodar o selo corrigido
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='app/ponto/tests/test_calculador_regras.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace(''' # COM envelope: a jornada declarada mantem o turno inteiro
+     env = {d0: (_t(10, 0), _t(22, 30))}
+     visto = minutos_do_oraculo(batidas, envelo…
+
+✻ Infusing… (2m 55s · ↓ 12.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
