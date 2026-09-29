@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:50:01.**
+**Medido em 29/09/2026 08:55:31.**
 
 | | |
 |---|---|
@@ -39,10 +39,13 @@ d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotu
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/vinculo.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_vinculo_linha_do_tempo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -125,13 +128,13 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Rodar o teste da EXCLUDE por arquivo
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/t.sql <<'SQL'
-     create extension if not exists btree_gist;
-     create temp table _t(id serial, cid int, di date, df date, ativa bool);
-     alter table _t add constraint _x exclude using gist (cid with =, daterange(di, coalesce(df,'infinity'::date), '[]') with &&) w…
+● Conferir a trilha em prod
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from core.models import LogAuditoria
+     from colaboradores.models import HistoricoVinculo
+     for l in LogAuditoria.objects.filter(modelo='EscalaColaborador', objeto_id=1326).order_by(…
 
-✢ Levitating… (2h 3m 53s · ↓ 193.4k tokens)
+✢ Levitating… (2h 9m 23s · ↓ 212.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
