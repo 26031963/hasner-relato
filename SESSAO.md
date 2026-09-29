@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 05:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **747**.
+**Medido em 29/09/2026 05:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **740**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -750,10 +750,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:17:50 | Bash | Ler a fixture do selo antigo | `sed -n '10,45p' chamados/tests/test_e5b_cobrar_massa.py` |
 | 17:17:45 | Bash | Tirar o import morto e ver a fixture antiga | `cd /home/ronald/saas-hasner && python3 -c " import io P='app/chamados/views_cobrar.py' t=io.open(P,encoding='utf-8').read() t=t.replace('from django.shortcuts import redirect, get_object_or_404\nimport datetime\n','from django.shortcuts import redirect, get_object_or_404\n',1) io.open(P,'w',encoding='utf-8').write(t) import py_compile; py_compile.compile(P, doraise=True); print('import morto fora' ...` |
 | 17:17:36 | Bash | Ver os detalhes das falhas | `cd /home/ronald/saas-hasner && ls -t /tmp/regua_*.log \| head -1 \| xargs -I{} awk '/FAIL: test_previa_conta_sem_enviar/,/^----/' {} \| grep -E 'AssertionError' \| head -2; ls -t /tmp/regua_*.log \| head -1 \| xargs -I{} grep -E '^(app\|chamados\|ponto)/.*:[0-9]+:[0-9]+:' {} \| head -4` |
-| 17:08:22 | Bash | Publicar e rodar a regua do COBRAR | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() sec = '''# COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada (28/09 17:2x) O botao **Cobrar** mandava push por chamado que nao muda folha nenhuma. Pedir a alguem que resolva um dia que ja virou folha e pedi ...` |
-| 17:07:40 | Bash | Censo do filtro na frota | `cd /home/ronald/saas-hasner && cat > /tmp/cobrar_censo.py <<'PYEOF' # -*- coding: utf-8 -*- """CENSO do COBRAR-SO-O-QUE-MUDA-A-FOLHA, so leitura, pela FUNCAO REAL.""" import collections from chamados.catalogo.motor import VIVOS from chamados.models import ChamadoColaborador from chamados.services.cobranca_folha import dia_do_chamado, muda_a_folha from chamados.services.verbos import particionar_ve ...` |
-| 17:07:08 | Bash | Rodar o selo corrigido | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py' t=io.open(P,encoding='utf-8').read() # o modulo tem de DECLARAR a chave de data: `batida_ausente` declara `data_turno` t=t.replace("def _ch(colab, dia, modulo='furo_apurado'):","def _ch(colab, dia, modulo='batida_ausente'):",1) t=t.replace("self.assertEqual({'furo_apurado': 1},  ...` |
-| 17:06:52 | Bash | Modulos que declaram data_turno | `grep -n "_m('data_turno'" chamados/catalogo/modulos.py \| head -4` |
-| 17:06:46 | Bash | Onde aparece chave_data | `grep -n "chave_data" chamados/catalogo/modulos.py \| head -8` |
-| 17:06:41 | Bash | Modulos com chave de data declarada | `python3 -c " import io,re s=io.open('chamados/catalogo/modulos.py',encoding='utf-8').read() for m in re.finditer(r\"'([a-z_0-9]+)':\s*\{[^}]*?'chave_data':\s*'([a-z_]+)'\", s, re.S): print(m.group(1), '->', m.group(2)) " \| head -8` |
-| 17:06:13 | Bash | Selo chamando a funcao real | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py' t=io.open(P,encoding='utf-8').read() i=t.index(' def _previa(self):') novo = ''' def _contador(self): return {'exportada': 0, 'sem_data': 0, 'sem_data_modulos': {}} def test_RED_dia_em_competencia_EXPORTADA_nao_muda_a_folha(self): """A 09 (21/08-20/09) esta exportada: chamado de ...` |
