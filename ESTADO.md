@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:50:01.**
+**Medido em 29/09/2026 09:55:31.**
 
 | | |
 |---|---|
@@ -121,12 +121,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar push e medição · 25s
+● Esperar o push · 1m 33s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main|rejected|error:"
-     $S/push4.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push4.log; echo "=== med09"; grep -v "^93 objects" $S/med09.log; date '+%… (24s)
+     $S/push4.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push4.log; date '+%H:%M' (1m 30s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Levitating… (3h 3m 53s · ↓ 279.3k tokens)
+✢ Levitating… (3h 9m 23s · ↓ 281.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ /compact manter: fila viva do BACKLOG (S3 falta so o PDF, depois S4 com lavratura por evento); ABONO-NO-AR (retrato da 09 a partir do gravado, contador 0 nas 3 empresas e nas 2
