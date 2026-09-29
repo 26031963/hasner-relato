@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:63 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:17:31.**
+**Medido em 29/09/2026 14:23:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia` |
+| `HEAD` local | `0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **13** |
+| commits a subir (`ahead`) | **14** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela
 2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
 988e3375 REGEN-EM-EXPORTADA: a excecao para a competencia paga nasce como PORTA, e o carimbo fica honesto
 9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"
 57c056e2 APLICADO: a 10 recalculada, as duas relavradas, e a 09 com hash IDENTICO nas quatro empresas
-af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos
 ```
 
 ## `git status --short`
@@ -100,23 +100,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-● O desenho B está aplicado pela porta. Os 19 dias exportados foram barrados, como a lei manda — agora construo a porta que os alcança.
-
-  Searched for 2 patterns, ran 2 shell commands
-
-❯ aval Ronald FAMILIA-FASE-12x36 (absorve [nome] e o col1422; puxa o juiz DESVIO-DE-CADASTRO da O-HAIKU-INVESTIGA para AGORA, antes da S4): (1) censo de frota, leitura: para
-  cada vinculo 12x36 ativo, paridade real das batidas por competencia 09 e 10 (funcao real _previsto_do_template, nunca derivacao propria) e o dia em que a fase virou; publicar
-  tabela com ids, N plantoes, paridade. (2) AUTOMATICO, sem clique, so quando paridade >= 90% com >= 6 plantoes: reescrever a linha do tempo pela porta unica de vinculo desde o
-  dia da virada (vinculo anterior fecha em D-1, trilha HistoricoVinculo, reversao em logs/), regenerar e re-julgar celulas. (3) Abaixo do criterio ou escala de tipo diferente:
-  PROPOSTA pronta em PENDENTES para o admin, nada grava. (4) Lei nova REGEN-EM-EXPORTADA: porta declarada staff-only com trilha e hash antes/depois para regenerar celulas e
-  refazer FechamentoMensal de um colab em competencia exportada; TXT parcial de retificacao com hash publicado; aplicar na 09 para os do item 2. (5) DIFF de frota publicado antes
-  do apply da 10; a 09 so pela porta do item 4. RED: [nome] = desenho B (2 furos, 4 folgas trabalhadas), col1422 = fase certa com 0 folga com batida, repetir = no_op. PRONTO:
-  tabela do censo, lista dos automaticos com trilha, lista das propostas, hashes. Segue a fila; PAREI so em lei. !
-
-● Obra grande. Registro e começo pelo censo, que é leitura e alimenta todo o resto.
-
-  Ran 2 shell commands
-
 ❯ aval Ronald raia PDF: git worktree add ../wt-pdf main; nesta raia SO relatorios/pdf_espelho.py + relatorios/tests/ + docs. Construir o leitor #3 pelo plano ja escrito no RELATO
   (anomalias e turnos_abertos por selecao_periodo.montar_periodos_de; dinheiro por rubricas_do_dia; credito parcial sai do PDF; dias_falta/abono da lavratura) + linha do dia
   mostrando o pago. RED por colab medido ANTES (col600 22/09 = 7h01). Selo AST S3 = placar cai 1. Nao deployar, nao relavrar, nao tocar gravado: entregar branch + DIFF por colab
@@ -124,19 +107,36 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Três ordens vivas. Registro as duas novas, abro a raia PDF em worktree e sigo no censo na raia principal.
 
-● Committing da porta, do censo e dos registros
-  ⎿  $ sed -i '/^ from colaboradores.models import Colaborador$/d' ponto/management/commands/censo_fase_12x36.py && docker exec saas_core ruff check
-     /app/ponto/management/commands/censo_fase_12x36.py 2>&1 | tail -2; python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'docs/PROMPTS.md'
-     ls = io.open…
+  Ran 4 shell commands
 
-✢ Nucleating… (21m 5s · ↓ 65.9k tokens)
+● Agent(Raia PDF: leitor #3 da S3)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+● A raia PDF está em voo. Na principal, rodo o censo da família.
+
+  Ran 2 shell commands
+
+● O censo achou 47 colaboradores, não um. E o critério dele é sobre a fase PROPOSTA, não sobre o cadastro atual — vou medir a proposta.
+
+  Ran 2 shell commands
+
+● O censo decidiu: 5 automáticos, 42 propostas. Publico a tabela e sigo para o apply.
+
+● Aplicar os 5 automaticos pela porta unica · 13s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/familia_item2.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """FAMILIA-FASE-12x36 item 2: cura AUTOMATICA dos 5 que passam o criterio, pela porta unica.
+     Criterio literal dele: proposta com paridade >=… (13s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Nucleating… (26m 35s · ↓ 82.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading porta_export.py medir function                                                                                              4m 33s · ↓ 158.1k tokens
   ⧉  index
 ```
