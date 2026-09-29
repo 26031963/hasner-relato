@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:295 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:325 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:18:31.**
+**Medido em 29/09/2026 03:24:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)` |
-| `origin/main` | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
+| `HEAD` local | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
+| `origin/main` | `67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30
 67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
 9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
 0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
 2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
-0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
 ```
 
 ## `git status --short`
@@ -95,16 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o push" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● 7 OK — e o caso test_RED_a_soma_dos_dias_E_o_fechamento_campo_a_campo agora cobra os três campos novos sem uma linha nova, porque o universo é declarado. Deploy da migration e
-  backfill:
-
-  Ran 2 shell commands
-
-● Background command "Esperar o push fechar" completed (exit code 0)
 
   Ran 6 shell commands
 
@@ -122,17 +112,27 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Suite OK (8.634) — o bloqueio é só a migration fora do git, a guarda de sempre. Commit, push e o deploy agendado para depois do ensaio da sombra:
 
-● Esperar o push fechar · 1m 41s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6wrgvohu.output; echo "=== falta: $(git log --oneline or… (1m 39s)
+  Ran 6 shell commands
+
+● Background command "Push da lavratura do abono" completed (exit code 0)
+
+● PUSH: 9104c7e9..67024ef2. Agora agendo o deploy da migration para depois do ensaio da sombra — gate temporal por cron, nunca por processo meu:
+
+  Ran 5 shell commands
+
+● Gate agendado: 29/09 04:30, cron.d de disparo único — depois do ensaio da sombra das 04:15, e o fim é um arquivo (fatia.done), nunca um processo meu. Publico e fecho o registro:
+
+● Curar o placar e empurrar · 1m 15s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git commit -q --amend --no-edit
+     -- fatias_agendadas/abono-no-ar/esteira.sh app/docs/RELATO.md app/docs/BACKLOG.md app/docs/TICKETS.md && timeout 1700 git push… (1m 15s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (2h 13m 47s · ↓ 107.8k tokens)
+✢ Thundering… (2h 19m 17s · ↓ 114.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
