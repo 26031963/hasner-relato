@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 13:50:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **912**.
+**Medido em 29/09/2026 13:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **907**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -917,8 +917,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:56:25 | Bash | Regua e leitura do leitor 3 | `cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l3a.log 2>&1 & sleep 90; ls -t /tmp/regua_*.log \| head -1; echo '--- enquanto roda: o que o PDF faz com cada periodo por DIA (as linhas do papel):'; grep -n "for _d in\\|dias.append\\|'dias':" app/relatorios/pdf_espel ...` |
 | 01:56:17 | Bash | Remover o indice morto e publicar o censo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='/home/ronald/saas-hasner/app/relatorios/pdf_espelho.py' t=io.open(P,encoding='utf-8').read() v = """ # Indexa periodos por entrada resultados_por_entrada = {} _ft_ids = {id(x) for x in resultado.periodos_ft} for p in resultado.periodos + resultado.periodos_ft: resultados_por_entrada[p.entrada] = p _ ...` |
 | 01:55:50 | Bash | O indice por entrada tem consumidor? | `cd /home/ronald/saas-hasner && grep -rn "resultados_por_entrada" --include=* . 2>/dev/null \| grep -v '\.git/' \| wc -l; grep -rn "resultados_por_entrada" --include=*.py --include=*.html . \| head -3` |
-| 01:55:33 | Bash | Quem consome o indice por entrada | `grep -rn "resultados_por_entrada" relatorios/ \| head; echo '=== quem consome o dict:'; grep -rn "resultados_por_entrada\b" -A 4 relatorios/pdf_espelho.py \| sed -n '5,20p'` |
-| 01:55:28 | Bash | Publicar o achado e ler o uso no pdf | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() sec = '''# O QUE A TROCA DO CALENDARIO MUDOU DE SIGNIFICADO NA TELA -- 1 dia-colab, e no sentido certo (29/09 01:5x) Fui medir o que eu NAO tinha medido antes de empurrar o leitor #2, e achei uma mudanca de significado que merece  ...` |
-| 01:54:57 | Bash | A badge mudou de significado para quem tem credito parcial? | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/credito.py <<'PYEOF' # A BADGE DE ATRASO MUDOU DE SIGNIFICADO PARA QUEM TEM CREDITO PARCIAL? # O DiaPago grava o atraso POS-credito (`dia_pago.lavrar`: max(m - usa, 0)); o motor devolve o CRU. # Quantos dia-colab tem `credito_parcial_min` na lavratura da 09 e da 10? fr ...` |
-| 01:54:31 | Bash | O que o pdf faz com os periodos | `echo '== o que o pdf_espelho monta com periodos (490-515):'; sed -n '466,500p' relatorios/pdf_espelho.py` |
-| 01:52:30 | Bash | Acompanhar o push | `cd /home/ronald/saas-hasner && sleep 115; tail -7 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"; pgrep -f 'git push' >/dev/null && echo 'push rodando' \|\| echo 'push terminou'` |
