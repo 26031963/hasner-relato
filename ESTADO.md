@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## E esta NO AR
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:48:31.**
+**Medido em 29/09/2026 10:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `80b95f7e "Desde o inicio do vinculo" oferecia 21/09 para consertar dias de 02 a 19/09` |
+| `HEAD` local | `75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler` |
 | `origin/main` | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler
+f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110
+6e04672e A [nome] nao pode ser reescrita desde 21/07, e os tres motivos tem numero
+b66044b9 TICKETS: placar do topo com o push 5f8924b6
 80b95f7e "Desde o inicio do vinculo" oferecia 21/09 para consertar dias de 02 a 19/09
-e15125d2 O carimbo da lavratura dizia o nome errado em 19.515 linhas, e a lapide que prometia o certo era minha
-89a8cf3f A parte B da O-JANELA-HE vira B1 (LEITURA) e B2 (AUTORIZAR), com posicoes diferentes
-24a7e51e Registrar a O-JANELA-HE parte B: a tela e o portao da L-097, com prazo
-5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)
 ```
 
 ## `git status --short`
@@ -99,7 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 4 patterns, read 2 files, ran 27 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -128,10 +127,11 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   zerado libera o export. PRAZO das duas: antes do export da 10.
   segue a fila; PAREI so em lei ou !
 
-● Aplicar a linha do tempo da [nome] pela porta
-  ⎿  $ tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas.log; date '+%H:%M'
+● Procurar copia do carimbo anterior
+  ⎿  $ cd /home/ronald/saas-hasner && ls -la app/logs/carimbo_gravado_emp2_09.json; git log --oneline -1 -- app/logs/carimbo_gravado_emp2_09.json 2>/dev/null; find / -name
+     "carimbo_gravado_emp2_09*" -not -path "/proc/*" 2>/dev/null | head; ls backups/ 2>/dev/null | head -3
 
-✢ Puttering… (40m 11s · ↓ 115.0k tokens)
+· Puttering… (45m 41s · ↓ 134.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
