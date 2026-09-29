@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:17:01.**
+**Medido em 29/09/2026 09:22:31.**
 
 | | |
 |---|---|
@@ -51,7 +51,9 @@ A  app/colaboradores/tests/test_vinculo_linha_do_tempo.py
  M app/ponto/management/commands/lavrar_dias_pagos.py
  M app/ponto/services/dia_pago.py
  M app/ponto/services/fechamento.py
+AM app/ponto/tests/test_retrato_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+ M fatias_agendadas/abono-no-ar/esteira.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -108,7 +110,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  segue a fila; PAREI so em lei ou !
 
   Ran 5 shell commands
 
@@ -136,11 +137,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Medir o contador de emp4 09 depois do retrato" completed (exit code 0)
 
-● Medir tudo de novo depois do retrato
-  ⎿  $ pkill -f "bd.py" 2>/dev/null; pgrep -f "breakdown\|bd.py" | head -2; cd /home/ronald/saas-hasner && nohup docker exec saas_core nice -n 19 python manage.py tenant_command
-     shell --schema=juliani --command "exec(open('/tmp/bd.py').read())" > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21…
+● Esperar mais do breakdown · 32s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do [ "$(grep -c '^== emp' $S/breakdown2.log)" -ge 4 ]
+     && break; sleep 10; done; grep -v "^93 objects" $S/breakdown2.log; date '+%H:%M' (31s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (2h 30m 53s · ↓ 240.0k tokens)
+· Levitating… (2h 36m 23s · ↓ 250.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
