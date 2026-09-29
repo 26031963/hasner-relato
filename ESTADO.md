@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:30:31.**
+**Medido em 29/09/2026 20:35:33.**
 
 | | |
 |---|---|
@@ -99,6 +99,7 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Searched for 2 patterns, ran 7 shell commands
 
 ● Agora o selo com o caso que morde nas duas pontas:
@@ -126,12 +127,11 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
-● Suite dos tres apps na raia da B1 · 1m 7s
+  Os dois vermelhos existem na arvore principal?
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-b1/app:/app saas… (1m 5s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn…
 
-✢ Schlepping… (4h 23m 48s · ↓ 212.5k tokens)
+· Schlepping… (4h 28m 50s · ↓ 213.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
