@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:08:31.**
+**Medido em 29/09/2026 20:14:01.**
 
 | | |
 |---|---|
@@ -99,6 +99,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
+  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
+  │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
+  └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
+
+  A janela da competência vem do juiz (janela_fechamento), não do mês civil, e o rótulo chega pronto — o template não tem |date sobre a janela, não compara dia e não conhece o 21.
+
+  Push 40995328..08f8ca75, suíte verde, faltam=0. wt-cal2 removida.
+
   Falta de você, nos dois itens que seguem em pé: o smoke de clique da UI-GRADE (roteiro no RELATO da raia-ui, col292/647/311/417 em setembro/2026) e a decisão de 5px da Auditoria
   de espelhos. O próximo da ORDEM VIVA é O-JANELA-HE parte B1 (LEITURA).
 
@@ -117,25 +127,15 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Acertar rodape e empurrar" completed (exit code 0)
 
-● O contador da 10 depois da re-lavratura · 3m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir10.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     from colaboradores.models import Empresa
-     from folha.porta_export import medir
-     tot = 0
-     for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'):
-     d = medir(e, 10, 2026)
-     linhas = d.get('fechamento_x_soma_d… (3m 55s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Schlepping… (4h 1m 48s · ↓ 194.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Searched for 1 pattern, read 1 file, listed 1 directory, ran 9 shell commands
 
 ❯ ordem Ronald: B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b. Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+· Schlepping… (4h 7m 18s · ↓ 194.6k tokens · thinking)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
