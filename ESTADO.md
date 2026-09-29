@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:50:45.**
+**Medido em 29/09/2026 03:55:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
-| `origin/main` | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,17 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Curar o placar e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● PUSH: 67024ef2..a3ac4421 — o gate agendado está no remoto. Régua para as lápides curadas:
-
-  Ran 1 shell command
-
-● Background command "Esperar o push" completed (exit code 0)
-
 ● A régua roda. Enquanto ela fecha, a leitura do leitor #4 (api/views.py), que é o único que sobra além do pdf_espelho:
 
   Ran 2 shell commands
@@ -122,12 +111,23 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Publicar o censo e esperar a regua" completed (exit code 0)
 
-  Acompanhar o push · 1m 53s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bitms98lp.output 2>/dev/null;
-     echo "=== falta: $(git log --oneline origin/main..HEAD | wc -l)"; date +%H:%M (1m 52s)
+  Ran 4 shell commands
+
+● Background command "Commit e push das lapides curadas" completed (exit code 0)
+
+● PUSH: a3ac4421..53c8a2a3 — sete pushes nesta rodada. São 03:54; o gate do deploy dispara em 36 min. Enquanto isso, construo o leitor #4, que não depende do abono:
+
+  Ran 1 shell command
+
+● O leitor #4 é trocável por inteiro — os cinco KPIs existem no FechamentoMensal gravado. Meço o DIFF antes de tocar a tela de 750 pessoas:
+
+  Colher o DIFF do leitor 4 · 7s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if grep -q "KPI que MUDA"
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_app.log 2>/dev/null; then break; fi; sleep 30; done; tail -16
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52… (6s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (2h 46m 0s · ↓ 132.2k tokens)
+· Thundering… (2h 51m 1s · ↓ 135.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
