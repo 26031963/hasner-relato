@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 12:14:01.**
+**Medido em 29/09/2026 12:19:07.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ a3202eb0 PAREI de volta ao TOPO do RELATO: a S3 para na L-095, que e lei sua
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,7 +101,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  SMOKE NÃO SOBE. O resto são artefatos da esteira (fatia.done, esteira.out, pausas), não código.
 
   Cinco commits locais esperando o push7, que está no arsenal:
 
@@ -117,7 +118,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   Retomo por conta própria quando as duas medições em voo terminarem: o push7 (se barrar no placar, é o ciclo conhecido) e a re-medição dos contadores, que deve corrigir para cima
   o "09: 1" que publiquei de manhã.
 
-✻ Worked for 22s · done 12:08 PM · 5 shells still running
+✻ Worked for 22s · done 12:08 PM · 6 shells still running
 
 ● Background command "Fim do push7" completed (exit code 0)
 
@@ -125,18 +126,19 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar os dois" completed (exit code 0)
 
-● Placar e primeira leitura da cegueira · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; cd app && (git diff --quiet
-     docs/TICKETS.md || git commit -q -F - -- docs/TICKETS.md <<'MSGEOF'
-     TICKETS: placar e rodape com o push 9b446740
-     Co-Authored-By:… (4s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Provar o vermelho do contador cego
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp folha/porta_export.py $S/porta.bak && python3 - <<'PYEOF'
+     import io
+     P='folha/porta_export.py'
+     t=io.open(P,encoding='utf-8').read()
+     i=t.index(' for _pk in sorted(_com_dado - _vistos):')
+     j=t.index(…
 
-✢ Puttering… (1m 56s · ↓ 6.3k tokens)
+✢ Puttering… (7m 2s · ↓ 19.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
