@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 02:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.6 MB). Acoes na janela: **655**.
+**Medido em 29/09/2026 02:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.6 MB). Acoes na janela: **657**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:17:18 | Bash | Esperar o push fechar | `cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output \| tail -4; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"; git log --oneline -1 origin/main` |
+| 02:15:15 | Bash | Acompanhar o push | `cd /home/ronald/saas-hasner && sleep 115; tail -7 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output 2>/dev/null; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
 | 02:13:07 | Bash | Esperar o push | `cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -7 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
 | 02:11:01 | Bash | Commit e push do censo do leitor 3 | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_l3a.txt <<'EOF' Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram CENSO (antes de trocar o terceiro leitor). O `relatorios/pdf_espelho.py` pede ao `resultado`: periodos, periodos_ft, horas_falta e saldo_ba ...` |
 | 02:08:39 | Bash | Veredito da regua | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_020049.log 2>/dev/null \| head -4; head -3 .regua_stamp; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l3c.log` |

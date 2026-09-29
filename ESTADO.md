@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:13:31.**
+**Medido em 29/09/2026 02:19:01.**
 
 | | |
 |---|---|
@@ -122,17 +122,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Régua VERDE com carimbo: 8.631 OK. Commit e push, em primeiro plano:
 
-● Esperar o push · 23s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -7
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output; echo "=== falta: $(git log --oneline or… (20s)
+  Esperar o push fechar · 1m 43s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output | tail -4; echo "=== falta: $(git log --… (1m 39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (1h 8m 47s · ↓ 70.5k tokens)
+· Thundering… (1h 14m 16s · ↓ 71.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
