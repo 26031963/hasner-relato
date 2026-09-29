@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:18:31.**
+**Medido em 29/09/2026 07:24:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/chamados/tests/test_contract_crons.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
@@ -50,17 +51,22 @@ A  app/core/censo_codigo.py
  M app/core/tests/test_contract_crons_duracao_horario.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
  M bin/cron_run.sh
  M bin/deploy_agendado.sh
+ M bin/hook_stop_fila1.py
  M bin/sombra_regras_pessoais.py
+ M bin/tests/test_hook_nao_cobra_congelado.sh
+ M bin/tests/test_hook_stop_saida_valida.sh
  M fatias_agendadas/abono-no-ar/esteira.sh
 ?? bin/encadeado.sh
 ?? bin/keepalive.sh
 ?? bin/tests/test_furo_encadeado_ao_cartorio.sh
+?? bin/tests/test_hook_parei_so_lei.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -116,13 +122,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Duas vitórias juntas: os 36 contratos de cron verdes, e a sombra passou — SELO_PESSOAL OK (142 inventariadas, era 140), sombra_diverge_de_prod=0, dump_de_hoje=sim. O portão do
-  deploy abriu. Rodo a fatia:
-
-  Ran 1 shell command
-
-● A migration 0068 foi aplicada, mas o --conferir exige também o bloco da manhã na sombra (~1h40), que eu não havia rodado. Disparo o bloco e sigo para o item 3 enquanto ele
-  corre:
 
   Ran 1 shell command
 
@@ -144,11 +143,18 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler totais_da_folha e competencia_do_periodo
-  ⎿  $ sed -n '/^def totais_da_folha/,/^def /p' relatorios/cartao_pela_celula.py | head -40; echo "=== competencia_do_periodo"; sed -n '/^def competencia_do_periodo/,/^def /p'
-     relatorios/cartao_pela_celula.py | head -25
+  Searched for 3 patterns, read 1 file, listed 1 directory, ran 20 shell commands
 
-✢ Levitating… (32m 23s · ↓ 74.2k tokens)
+❯ PAREI-SO-LEI: PAREI so existe para (a) pergunta de LEI sem lei escrita ou (b) ! de dinheiro/escala/vinculo/apagar. Decisao TECNICA (horario de cron, desenho de encaixe, qual
+  caminho de codigo) o Code decide pela lei existente, registra no RELATO e SEGUE. bin/hook_stop_fila1.py: PAREI sem "lei:" ou "!" no texto nao libera o Stop. RED: PAREI
+  "bloco-da-manha-saturado" -> hook devolve block "siga". Linha na secao LEI-AKITA do CLAUDE.md. Commit por path. segue a fila; PAREI so em lei ou !
+
+● Esperar a régua terminar · 1m 21s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 30); do pgrep -f "regua.sh" >/dev/null || break; sleep 10;
+     done; echo "regua: $(pgrep -f regua.sh >/dev/null && echo RODANDO || echo terminou)"; tail -4 $S/regua_encadeado.log; echo "… (1m 20s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Levitating… (37m 53s · ↓ 90.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
