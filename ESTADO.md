@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:585 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:648 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:29:31.**
+**Medido em 29/09/2026 07:35:02.**
 
 | | |
 |---|---|
@@ -49,6 +49,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons.py
  M app/config/crons_duracao.json
 A  app/core/censo_codigo.py
+ M app/core/management/commands/gerar_diagrama.py
  M app/core/tests/test_cartorio_0627.py
  M app/core/tests/test_contract_crons_duracao_horario.py
  M app/docs/ARQUITETURA.mmd
@@ -62,6 +63,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/cron_run.sh
  M bin/deploy_agendado.sh
  M bin/hook_stop_fila1.py
+ M bin/sombra.sh
  M bin/sombra_regras_pessoais.py
  M bin/tests/test_hook_nao_cobra_congelado.sh
  M bin/tests/test_hook_stop_saida_valida.sh
@@ -126,7 +128,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● A 0068 está aplicada ([X]), o bloco da sombra corre até ~08:40, e o fatia.done = PAROU_DEPLOY diz a verdade. Publico os dois itens e sigo para o item 3 — leitor #4:
 
   Searched for 4 patterns, listed 1 directory, ran 10 shell commands
@@ -155,10 +156,11 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar a régua terminar" completed (exit code 0)
 
-● Ler C() e ENC()
-  ⎿  $ sed -n 29,60p config/crons.py
+● Ver o log interno da régua
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do pgrep -f regua.sh >/dev/null || break; sleep 10;
+     done; tail -12 $S/regua_l4.log
 
-✢ Levitating… (43m 23s · ↓ 105.1k tokens)
+✻ Levitating… (48m 54s · ↓ 115.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

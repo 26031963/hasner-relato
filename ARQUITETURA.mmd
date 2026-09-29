@@ -84,6 +84,7 @@ flowchart TD
   c_reconciliar_grade --> c_detectar_cluster_espurio
   c_processar_cartorio --> c_detectar_intervalo_ausente
   c_reconciliar_grade --> c_detectar_par_relampago
+  c_processar_cartorio --> c_disparar_perguntas_competencia
   c_apurar_furos_diarios --> c_disparar_perguntas_competencia
   c_processar_cartorio --> c_esmeril_espelho
   c_reconciliar_perguntas_orfas --> c_fechar_becos_disputa
@@ -112,7 +113,7 @@ flowchart TD
   c_detectar_par_relampago --> c_verificar_nucleo
   c_processar_cartorio --> c_vigia_b5_ausencia
   c_flip_automatico --> c_vigia_plantio_overnight
-  %% arestas `depende` declaradas: 34
+  %% arestas `depende` declaradas: 35
 
   %% (c) PORTAS CANONICAS — fonte: AST/grep sobre app/
   subgraph PORTAS["escritores unicos / portas canonicas"]
