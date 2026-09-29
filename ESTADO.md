@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:02:01.**
+**Medido em 29/09/2026 03:07:31.**
 
 | | |
 |---|---|
@@ -101,7 +101,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 5 shell commands
 
 ● Background command "Commit e push do censo do abono" completed (exit code 0)
@@ -129,16 +128,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● O mypy pegou o dicionário vazio sem anotação (dict vazio não tem tipo inferível) — curado. Régua rodando; enquanto isso, o backfill precisa de deploy antes:
 
-● Estado da migration e do ensaio
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command showmigrations ponto --schema=juliani 2>/dev/null | tail -3; echo '--- a migration 0068
-     esta no disco mas nao aplicada; o deploy.sh migra ANTES. Ensaio da sombra de hoje:'; bash bin/sombra.sh --conferir 2>&1 | ta…
+● Acompanhar · 1m 11s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_025954.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_025954.log)" (1m 9s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (1h 57m 17s · ↓ 103.0k tokens · still thinking)
+✢ Thundering… (2h 2m 47s · ↓ 104.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
