@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:30:08.**
+**Medido em 28/09/2026 23:35:15.**
 
 | | |
 |---|---|
@@ -99,6 +99,9 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+       7 a escala **ATIVA de hoje** (a folha usa o vinculo que cobre CADA DIA), a regra de alcance (`eh_dia_trabalho`
+       8 dia a dia, com a escala errada) e as datas justificadas. E o relatorio se chama "extrato parcial" e e o que o
+       9 admin abre para CONFERIR a folha: um segundo numero, com cara de conferencia, sobre insumo diferente do da
       10 folha.
      … +173 lines
 
@@ -122,16 +125,13 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar a regua terminar" completed (exit code 0)
 
-● Rodar os selos da troca
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/core/juizes.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ _p(_TT5, 'relatorios/views.py', 'def extrato_parcial(request):', TELA,
-     '7 demais: trabalhadas, noturnas, HE, atraso -- classe B; dev…
+● Rodar a regua com caminho absoluto · 35s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3b.log 2>&1 &
+     sleep 60; echo '--- backfill:'; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-… (34s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Sprouting… (1h 26m 8s · ↓ 159.0k tokens · thinking)
+✶ Sprouting… (1h 31m 15s · ↓ 166.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
