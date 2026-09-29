@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:31:31.**
+**Medido em 28/09/2026 22:36:37.**
 
 | | |
 |---|---|
@@ -112,12 +112,12 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
   PRONTO: print no RELATO; push so com meu novo smoke.
   segue a fila; PAREI so em lei ou !
 
-● Empurrar o placar e recolocar o UI local · 2m 57s
+● Empurrar o placar e recolocar o UI local · 8m 4s
   ⎿  $ cd /home/ronald/saas-hasner && git branch -f tmp-ui HEAD && git reset --hard 1b1db218 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
-     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- app/ponto/tests/… (2m 56s)
+     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- app/ponto/tests/… (8m 2s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Sprouting… (27m 31s · ↓ 16.1k tokens)
+· Sprouting… (32m 36s · ↓ 16.1k tokens)
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
