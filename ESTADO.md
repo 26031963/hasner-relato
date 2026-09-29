@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:40:31.**
+**Medido em 29/09/2026 16:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `100caa63 TICKETS: placar do topo com o ultimo push do mundo` |
+| `HEAD` local | `4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito` |
 | `origin/main` | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
-| commits a subir (`ahead`) | **25** |
+| commits a subir (`ahead`) | **26** |
 
 ## Fabrica
 
@@ -29,23 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito
 100caa63 TICKETS: placar do topo com o ultimo push do mundo
 e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja eram diferentes
 6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou
 8c25a2da A guarda criada por incidente estava cega a worktree, e um subagente escreveu na arvore de prod
-f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/calendario.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
-A  app/relatorios/tests/test_s3_cartao_le_dia_pago.py
  M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_cal_competencia_nucleo.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -104,14 +99,6 @@ A  app/relatorios/tests/test_s3_cartao_le_dia_pago.py
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push11.log (20 lines)
-  ⎿  Referenced file api/tests/test_espelho_app_fonte_e_geometria.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bji172rog.output (5 lines)
-  ⎿  Referenced file ponto/services/dia_pago.py
-  ⎿  Referenced file relatorios/pdf_espelho.py
-
-● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
-
 ● Task "Curar a saida do hook e provar" still running in background
 
 ● Task "Selo por comportamento, nos dois caminhos" still running in background
@@ -131,17 +118,25 @@ A  app/relatorios/tests/test_s3_cartao_le_dia_pago.py
 
 ● Agora o RED que a raia pediu no mesmo commit:
 
-● Esperar o push terminar · 1m 27s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 22); do if grep -q '^rc=' $S/push_s3.log 2>/dev/null; then
-     break; fi; sleep 25; done; tail -22 $S/push_s3.log (1m 26s)
+  Searched for 1 pattern, read 4 files, ran 16 shell commands
+
+● Background command "Push dos 25 commits" completed (exit code 0)
+
+  Searched for 1 pattern, read 1 file, ran 7 shell commands
+
+● Enquanto a suíte do pre-push roda, registro o estado. O push está vivo (4 min, segundo runner em curso).
+
+  Bloquear ate o push terminar · 1m 35s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q '^rc=' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3.log 2>/dev/null;
+     do sleep 45; done; echo "=== PUSH TERMINOU"; grep -E 'Ran |^OK$|^FAILED|rc=|main -> main|error:|FAIL:' /tmp/claude-1001/-home-… (1m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (33m 48s · ↓ 68.7k tokens)
+· Schlepping… (39m 2s · ↓ 77.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
