@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:20:45.**
+**Medido em 29/09/2026 19:25:45.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/folha/porta_export.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/tests/test_dia_pago_soma.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,6 +103,7 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
 
@@ -122,18 +125,17 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-● O contador da 09 com a linha nova · 8m 4s
+● Inverter o selo e ver o terceiro caso
   ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io, py_compile
-     P='folha/tests/test_gravado_discorda_da_propria_grade.py'
+     P='ponto/tests/test_dia_pago_soma.py'
      t=io.open(P,encoding='utf-8').read()
-     t=t.replace("""import datetime
-     from types import SimpleNamespace as NS
-     from django.test import SimpleTestCase""", """import datetime
-     from django.test import Sim… (8m 2s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     V = '''class LavraDaFolgaTrabalhadaTest(TestCase):
+     """A FOLGA TRABALHADA leva as rubricas do dia, e nao so a hora (achado 29/09 11:5x, medido).
+     O laco de `f…
 
-* Schlepping… (3h 14m 2s · ↓ 166.1k tokens)
+✶ Schlepping… (3h 19m 2s · ↓ 180.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
