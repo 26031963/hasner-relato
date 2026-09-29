@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:296 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:11 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 re-lavrada, contador 33 -> 19, e as 19 que sobram sao de OUTRA classe (29/09 19:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:14:01.**
+**Medido em 29/09/2026 20:19:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `87b5303d TICKETS: rodape e placar com o ultimo push` |
+| `HEAD` local | `38e6d92e TICKETS: rodape e placar` |
 | `origin/main` | `87b5303d TICKETS: rodape e placar com o ultimo push` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+38e6d92e TICKETS: rodape e placar
+e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19 sao de outra classe
 87b5303d TICKETS: rodape e placar com o ultimo push
 6c692ded TICKETS: placar do topo
 852b739c A minha propria lapide afirmava o contrario do codigo, e o contador da porta cobrou
-910fc8cd O censo respondeu quem escreve no gravado da exportada, e a resposta e UM -- com tripwire
-08f8ca75 TICKETS: placar do topo
 ```
 
 ## `git status --short`
@@ -99,14 +99,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
-  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
-  │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
-  └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
-
-  A janela da competência vem do juiz (janela_fechamento), não do mês civil, e o rótulo chega pronto — o template não tem |date sobre a janela, não compara dia e não conhece o 21.
-
   Push 40995328..08f8ca75, suíte verde, faltam=0. wt-cal2 removida.
 
   Falta de você, nos dois itens que seguem em pé: o smoke de clique da UI-GRADE (roteiro no RELATO da raia-ui, col292/647/311/417 em setembro/2026) e a decisão de 5px da Auditoria
@@ -131,7 +123,15 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ❯ ordem Ronald: B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b. Segue a fila; PAREI so em lei ou !
 
-· Schlepping… (4h 7m 18s · ↓ 194.6k tokens · thinking)
+● Ordem recebida e registrada. Antes dela, fecho a prova do apply que estava em curso: a 10 caiu de 33 para 19, e as 19 que sobram são de outra classe.
+
+● Publicar a prova e a ordem registrada · 3m 15s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 14s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Schlepping… (4h 12m 48s · ↓ 202.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
