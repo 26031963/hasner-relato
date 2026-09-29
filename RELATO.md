@@ -30,6 +30,34 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
 
+# HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump no tmux (28/09 20:5x)
+
+**O RED, medido antes da cura**: `python3 bin/hook_stop_fila1.py` devolvia
+`{"decision": "allow", "reason": "o RELATO declara PAREI"}`. O json **parseia** -- e por isso passava
+despercebido --, mas **`decision: "allow"` nao existe no schema do Stop**: ele conhece o bloqueio
+(`{"decision":"block","reason":...}`) e conhece o **silencio**. Campo fora do schema e o que fazia o cliente
+responder imprimindo o schema inteiro no fim de **cada** turno.
+
+**A cura e uma linha menos**: liberar passou a ser `sys.exit(0)` sem dizer nada. Quem precisa saber POR QUE
+liberou le a trilha em `logs/hook_stop_fila1.log`, que e o dono do contador e continua recebendo tudo -- alarme
+mora no log, nao na voz do protocolo (a mesma lei que tirou o `PAREI` escrito por maquina, hoje as 10:1x).
+
+PROVA (os dois caminhos, contra uma arvore de MENTIRA):
+
+| caminho | saida |
+|---|---|
+| fila aberta (`OBRA-DE-MENTIRA X` em voo) | `{"decision":"block","reason":"siga: OBRA-DE-MENTIRA X -- ..."}` -- **duas chaves**, `reason` string, e nomeia o item |
+| `PAREI` no topo do RELATO | **vazio** -- silencio total |
+
+Selo: `bin/tests/test_hook_stop_saida_valida.sh`, e ele **mede COMPORTAMENTO, nao texto**. A 1a versao grepava
+o fonte por `decision: allow` e mordeu o proprio comentario que explica a cura -- a **sexta** vez nesta esteira
+que um selo textual acusa a prosa. Para o selo poder rodar o hook sem sujar a arvore, `HOOK_STOP_RAIZ`
+sobrescreve a raiz (em producao a variavel nao existe e nada muda).
+
+**E o selo se pendurou por 5 minutos na 1a rodada**: o hook LE o payload em `stdin`, e sem `</dev/null` ele
+espera para sempre. Fica escrito no proprio selo, porque quem copiar este arquivo para medir outro hook vai
+tropecar no mesmo lugar.
+
 # VOLTA A FILA 1: a linha INTRA, o diff do hook, e a ordem viva no BACKLOG (28/09 20:3x)
 
 ## 1. O apply da janela: voce esta certo, e a linha INTRA ratifica

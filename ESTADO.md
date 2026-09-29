@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:17:01.**
+**Medido em 28/09/2026 21:22:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
  M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
 ?? bin/tests/test_hook_stop_saida_valida.sh
@@ -86,8 +87,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolBatch": {
@@ -101,7 +100,7 @@ RELATO, com a lista de nomes do banco como autoridade._
     }
   }
 
-✻ Crunched for 1h 30m 16s · done 8:27 PM · 8 shells still running
+✻ Crunched for 1h 30m 16s · done 8:27 PM · 9 shells still running
 
 ❯ HOOK-STOP-SAIDA-VALIDA · Leis: L-096. Nenhuma lei nova.
   FONTE: bin/hook_stop_fila1.py (saida para o Stop do Claude Code)
@@ -111,19 +110,21 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: RELATO com o RED e commit por path.
   segue a fila; PAREI so em lei ou !
 
-● Selo por comportamento, nos dois caminhos · 3m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > bin/tests/test_hook_stop_saida_valida.sh <<'EOF'
-     #!/usr/bin/env bash
-     # SELO: a saida do hook do Stop e JSON do SCHEMA, ou NADA (HOOK-STOP-SAIDA-VALIDA, ordem Ronald 28/09 20:4x).
-     #
-     # O schema do Stop conhece bloqueio com duas chaves e conhece o SILENCIO. Nao e… (3m 36s)
+● Publicar o RED e rodar a regua · 3m 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     p='/home/ronald/saas-hasner/app/docs/RELATO.md'
+     t=io.open(p,encoding='utf-8').read()
+     sec = '''# HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump no tmux (28/09 20:5x)
+     **O RED, … (3m 3s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Architecting… (7m 44s · ↓ 7.4k tokens)
+✢ Architecting… (13m 14s · ↓ 10.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
