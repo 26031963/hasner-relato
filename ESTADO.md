@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:40:31.**
+**Medido em 29/09/2026 02:45:46.**
 
 | | |
 |---|---|
 | `HEAD` local | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
-| `origin/main` | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,7 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/ponto/models.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,16 +96,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  depois de medir quantos colabs mudariam, porque aí é significado no papel trabalhista e entra no seu !.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Achado com número, e ele bloqueia o leitor #3: a lavratura é cega para o abono.
-
-  Searched for 1 pattern, ran 2 shell commands
 
 ● Background command "Esperar o push" completed (exit code 0)
 
@@ -122,12 +113,22 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Régua VERDE: 8.632 OK. Commit e push do censo do abono:
 
-● Acompanhar o push · 1m 13s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bapspgi9i.output 2>/dev/null;
-     echo "=== falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 11s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 5 shell commands
 
-· Thundering… (1h 35m 47s · ↓ 86.8k tokens)
+● Background command "Commit e push do censo do abono" completed (exit code 0)
+
+● PUSH: 0df14bf8..9104c7e9. Agora o passo que desbloqueia o leitor #3 — os três campos na lavratura:
+
+  Migration dos tres campos · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """A lavratura passa a carregar abono, previsto e realizado -- por DIA, da mesma grade."""
+     import io, py_compile
+     P='/home/ronald/saas-hasner/app/ponto/models.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ horas_reflexo_d…
+
+✻ Thundering… (1h 41m 2s · ↓ 87.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
