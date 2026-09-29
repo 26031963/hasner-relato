@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:10:45.**
+**Medido em 29/09/2026 10:16:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
@@ -100,19 +102,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 22 shell commands
-  ⎿  Interrupted · What should Claude do instead?
-
-❯ /compact manter: fila viva do BACKLOG (S3 falta so o PDF, depois S4 com lavratura por evento); ABONO-NO-AR (retrato da 09 a partir do gravado, contador 0 nas 3 empresas e nas 2
-competencias, esteira.sh so escreve OK com contador 0); VINCULO-LINHA-DO-TEMPO pendente (P7.1, [nome] EC 1326; os outros 2 blocos de vinculo ANULADOS); PAREI-SO-LEI; ruff antes
-da regua; HANDOFF+PAREI ao fechar a S3
-  ⎿  Compacted (ctrl+o to see full summary)
-  ⎿  Read ponto/management/commands/lavrar_dias_pagos.py (117 lines)
-  ⎿  Read api/tests/test_bug139_espelho_app_mesma_fonte.py (121 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_encadeado.log (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_bloco.log (5 lines)
-  ⎿  Referenced file config/crons.py
-
 ● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
 
 ● Task "Curar a saida do hook e provar" still running in background
@@ -133,10 +122,23 @@ da regua; HANDOFF+PAREI ao fechar a S3
   GOLDEN: caso [nome] (noturno cadastrado x diurno nos pares; vinculo duplo) + 12x36 ancora invertida, 6x1 meio periodo, troca de turno.
   segue a fila; PAREI so em lei ou !
 
-* Puttering… (2m 25s · ↓ 7.1k tokens · still thinking)
+  Searched for 4 patterns, ran 6 shell commands
+
+● Advising using Fable 5.1
+
+✢ Puttering… (7m 41s · ↓ 17.7k tokens)
+
+❯ ADENDO ao VINCULO-LINHA-DO-TEMPO (mesma obra, nao e bloco novo). Leis: L-092, L-096, corte 27/08 correcao retroativa em sequencia.
+  1. O wizard "desde o inicio do vinculo" hoje le o vinculo NOVO (ofereceu 21/09): passa a oferecer o inicio do vinculo que COBRE o dia errado ([nome]: EC 934, 21/07).
+  2. [nome]: reescrever a linha do tempo desde 21/07 como 12x36 06:00-18:00 na fase dos pares (ancora 28/09), absorvendo 934, 1326 e 1327 numa linha so, com trilha; regerar e
+  re-julgar celulas 21/07->hoje. FechamentoMensal das competencias exportadas NAO muda (L-092); a diferenca espelho x pago de cada competencia sai como Pauta DP com os dois
+  numeros.
+  3. PRONTO: espelho de 01-19/09 sem espuria nos dias pares; hash do FechamentoMensal identico antes/depois; Pauta DP publicada com as horas.
+     aval de vinculo/escala retroativo !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
