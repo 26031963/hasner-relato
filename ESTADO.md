@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:33:51.**
+**Medido em 29/09/2026 14:38:56.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/api/tests/test_espelho_app_fonte_e_geometria.py
+ M app/api/views.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
@@ -99,44 +101,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Dois erros meus que a medição pegou antes de virarem dano:
+  1. O selo da porta nova achou a trilha falhando em silêncio — Decimal não serializa em JSON e a escrita é best-effort: a porta cederia sem deixar rastro, numa porta cuja metade
+     da lei é a trilha.
+  2. O DIFF em leitura da 10 mostrou que a âncora que corrige a 09 do col414 quebrava a 10 dele (48,12 h migrando para folga a 100%). Medi as duas competências contra todas as
+     âncoras: a fase dele virou duas vezes, com intervalo de 3 dias — a anatomia da [nome]. Curado com a segunda virada pela mesma porta: 3 furos → 0, e a 10 voltou a "nada
+     mudou". A lição é de desenho e está escrita: uma âncora por vínculo não descreve quem virou duas vezes.
+
+  Em voo: o push do lote (14 commits), a re-medição dos contadores — que é o número honesto do dia depois de tudo — e a raia PDF no worktree ../wt-pdf, construindo o leitor #3 com
+  o compromisso de entregar branch + DIFF por colab e PAREI para merge, sem deployar nem tocar gravado.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+
+  Ran 3 shell commands
+
+● O leitor #4 (o app) ainda lê o dinheiro do dia do motor. Meço a troca antes de fazê-la.
+
   Ran 1 shell command
 
-● O DIFF achou um problema meu: a âncora que corrige a 09 do col414 quebra a 10 dele. Vou medir a segunda virada.
+● A troca do leitor #4 é neutra: zero dia-colab muda de número. Faço com o rótulo no payload.
 
-  Ran 1 shell command
+● Provar o vermelho do leitor 4
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp api/views.py $S/apiviews.bak && python3 - <<'PYEOF'
+     import io
+     P='api/views.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace(""" _linha_dp = _dp_por_dia_app.get(d)
+     _pago_dia = _pago_do_dia_app…
 
-● O col414 virou duas vezes — 100% na 09 com âncora 19/09 e 100% na 10 com âncora 22/09. Aplico a segunda virada.
-
-  Ran 1 shell command
-
-● Tudo aplicado. Publico o resultado com prova.
-
-  Ran 7 shell commands
-
-● Estado da esteira — três frentes rodando, e uma delas já entregou dinheiro real.
-
-  Sob a lei nova DINHEIRO-EM-COMPETENCIA-ABERTA, a 10 foi recalculada e as duas competências relavradas:
-  - 570 colaboradores recalculados, 148 passaram a ter gravado. minutos_realizados +24.554 min (+409,2 h) em 52, horas_trabalhadas +81,63 h em 24, saldo_banco_horas +168,39 h em
-    7, horas_folga_trabalhada −27,80 h em 4.
-  - A 09 com hash IDÊNTICO nas quatro empresas, antes e depois. Condição 3 cumprida.
-  - A 09 relavrada por retrato: 607 colabs, 10.412 linhas, "Motor NÃO rodou", hash conferido pelo próprio comando.
-  - DIFF na sombra publicado antes, reversão em logs/, resultado com prova depois.
-
-  O carimbo pegou o escritor da exportada por nome: col451, e o rastro são três batidas retroativas com origem disputa_s84_retro criadas às 12:01 e 12:30 — com atualizado_em de
-  28/09, o que confirma a assinatura de queryset.update() que você apontou. Faltava o campo, e agora o carimbo guarda valor (não hash) — mais três correções que a estreia dele
-  exigiu: previsto_em fora do universo, "incomparável" com linha própria, e comparação pela interseção dos campos.
-
-  A FAMILIA-FASE-12x36 fechou os cinco itens: censo de 595 linhas separou 5 automáticos de 42 propostas; os 5 curados pela porta única (furos 8→0, 9→0, 11→2); a 09 dos seis
-  retificada pela porta REGEN-EM-EXPORTADA com trilha e hash; 6 Pautas DP (842–847) com os dois números; TXT parcial com sha256 — e ele revelou que só 2 dos 6 entram no TXT, os
-  outros quatro vão pela Pauta, o que é coerente.
-
+✽ Nucleating… (42m 30s · ↓ 126.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Copying pdf_espelho.py from HEAD                                                                                                   15m 22s · ↓ 196.4k tokens
+  ◯ general-purpose  Polling docker ps for free test slot                                                                                               20m 28s · ↓ 233.6k tokens
   ⧉  index
 ```
