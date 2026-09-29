@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 05:48:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **718**.
+**Medido em 29/09/2026 05:53:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **716**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -726,5 +726,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:07:25 | Bash | Usar a porta do cadastro e declarar a casa | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() t=t.replace(""" from colaboradores.models import Colaborador, Empresa""", """ from colaboradores.models import Colaborador, Empresa # A ESCRITA DO CADASTRO PASSA PELA PORTA, mesmo dentro de transacao que vai ser de ...` |
 | 18:07:07 | Bash | Qual e a porta do cadastro | `grep -n 'satelite' colaboradores/tests/test_chokepoint_cadastro_gate.py \| head -4; grep -rn 'def .*empresa' colaboradores/services/*.py \| head -6` |
 | 17:58:48 | Bash | Ver as falhas do pre-push | `cd /home/ronald/saas-hasner && ls -t logs/pre-push*.log /tmp/pre-push*.log 2>/dev/null \| head -2; git push 2>&1 \| grep -E '^(FAIL\|ERROR):\|AssertionError' \| head -6` |
-| 17:50:46 | Bash | Commitar e empurrar a parte A | `cd /home/ronald/saas-hasner && cat > /tmp/msg_jhe.txt <<'EOF' O-JANELA-HE parte A: a regra existe, em UM sitio puro, e nasce INERTE (L-097) 1. CADASTRO POR EMPRESA (LEI-AKITA 12): Empresa ganha janela_he_ativa, janela_he_piso_min (10), janela_he_teto_min (60), janela_he_saida_ativa, janela_he_saida_teto_min (60) e janela_he_desde. Migration 0052, aditiva. A VIGENCIA E CADASTRO, nao data cravada: j ...` |
-| 17:50:10 | Bash | DIFF da janela de HE na 10, em ensaio | `cd /home/ronald/saas-hasner && cat > app/ponto/management/commands/diff_janela_he.py <<'PYEOF' # -*- coding: utf-8 -*- """DIFF da JANELA DE HE na competencia 10 (L-097, item 5 da parte A) -- SEMPRE ENSAIO, nada persiste. O QUE ELE FAZ: liga a Janela de HE no cadastro DENTRO de uma transacao, roda o motor REAL por colaborador com a janela ligada e desligada, compara rubrica por rubrica, e **desfaz  ...` |
