@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:37:31.**
+**Medido em 29/09/2026 00:43:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha` |
+| `HEAD` local | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
 | `origin/main` | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
 b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha
 73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
-4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
 ```
 
 ## `git status --short`
@@ -42,13 +42,7 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
- M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M bin/tests/test_hook_stop_vivo.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,44 +95,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├───────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ app/docs/RELATO.md, BACKLOG.md                    │ as três curas publicadas com número, e o censo dos 6                                                                    │
-  └───────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Depois: tickets_placar --escrever, push dos dois commits, e o leitor #2 (calendario.py:301) pelo plano já escrito — com a consequência declarada de que a 6ª testemunha da porta
-  se funde na 7ª, porque o calendário passa a ser o DiaPago.
+✻ Sautéed for 53s · done 12:37 AM · 15 shells still running
 
-  Uma coisa sobre o hook, que é fato e não desculpa: ele está liberando pelo teto de bloqueios sem commit novo na fila 1. O teto está certo — ele está medindo que eu acumulei três
-  curas verdes na árvore sem empurrar. O push fecha isso.
+● Background command "Esperar a suite (viva, rodando)" completed (exit code 0)
 
-✻ Worked for 1m 16s · done 12:33 AM · 17 shells still running
+  Ran 1 shell command
 
-● Background command "Esperar a regua final" completed (exit code 0)
+● Background command "Esperar (suite completa)" completed (exit code 0)
+
+● Régua VERDE com carimbo: 8.627 testes OK. Commit #2 e push:
+
+  Ran 2 shell commands
+
+● Background command "Esperar o Ran da regua final" completed (exit code 0)
+
+● Background command "Esperar a suite completa fechar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Esperar o veredito" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Esperar o veredito da suite" completed (exit code 0)
 
   Ran 6 shell commands
 
-● A suite passou de 1.400 linhas e segue. Vou esperar o veredito sem interferir na árvore — editar .py durante a corrida foi o que custou o carimbo duas vezes hoje.
+● O push está rodando a suite no pre-push (não pegou o atalho "JÁ VERDE" — a guarda é a correta, deixo rodar). Dois commits prontos para subir:
 
-  Estado congelado, para não haver dúvida sobre o que está provado e o que não está:
+  - b600ea56 — S3 1ª troca: o extrato parcial lê o DiaPago (227 de 540 colabs, os três maiores casando com o gravado na 2ª casa)
+  - 0a918855 — o contador espelho_x_dia_pago curado nas duas pontas (pergunta: 09 de 29 → 0; janela: 10 de 60 → 23), o caso que morde em três pontas, o placar 6 → 3 com
+    arquivo:linha por saída, e o selo do hook aceitando os dois caminhos da lei
 
-  Provado e commitado (b600ea56, esperando só o push): leitor #1 da S3 — o extrato parcial lê o DiaPago; 227 de 540 colabs mudaram de número e os três maiores casam com o gravado
-  na 2ª casa.
-
-  Provado e na árvore, aguardando este carimbo: as duas curas do contador (a pergunta: 09 de 29 → 0; a janela: 10 de 60 → 23), o caso que morde em três pontas, o placar 6 → 3 com
-  arquivo:linha por saída, e o selo do hook aceitando os dois caminhos da lei. Os selos direcionados já deram 292 OK; o que falta é a árvore inteira.
-
-  Aberto, com número e sem causa provada — e é o que vai medido antes de qualquer afirmação: as 23 divergências da competência 10. A hipótese com lastro está na docstring do
-  próprio lavrar_dias_pagos (backfill com o motor de hoje contra fechamento de 28/09 19:30). É S1/S2, não S3.
-
-  Não fiz, e digo por quê: não afrouxei tolerância nem tirei caso de lista nenhuma para número cair; não troquei a janela civil do extrato por competência (muda o que o relatório
-  significa para o admin — está em PENDENTES como corte seu); e não mexi no dia_decidido/calendario para o chip, porque você cortou e a medição me deu razão a você (177 com
-  palavra, 360 sem, e os 360 têm desenho próprio).
-
-✻ Sautéed for 53s · done 12:37 AM · 17 shells still running
+  Os dois passaram por régua verde com carimbo (8.627 testes). Dois alarmes do pre-push curados no caminho, os dois com cura declarada no próprio alarme: tickets_placar --escrever
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ empurra os dois commits e segue no calendario
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 15 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
