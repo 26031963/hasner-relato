@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:05:45.**
+**Medido em 29/09/2026 00:10:45.**
 
 | | |
 |---|---|
@@ -44,6 +44,8 @@ AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/RELATO.md
  M app/folha/porta_export.py
+ M app/folha/tests/test_porta_do_export.py
+ M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -97,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Colher o histograma" completed (exit code 0)
+● Background command "Esperar o fim da suite e o carimbo" completed (exit code 0)
 
-  Searched for 1 pattern, ran 3 shell commands
+● Background command "Esperar a regua e o carimbo" completed (exit code 0)
 
-● Publico o achado da janela enquanto a suite fecha (docs não entram na impressão digital):
+● Background command "Conferir o fim da suite" completed (exit code 0)
 
-  Ran 4 shell commands
+● Background command "Esperar a regua e o carimbo" completed (exit code 0)
 
-● O estado, enquanto a suite fecha:
+● Background command "Esperar o Ran" completed (exit code 0)
 
-  Empurrado (commit b600ea56, bloqueado só pelo placar do TICKETS, que curo junto do push): O-DIA-PAGO S3 1ª troca — o extrato parcial lê o DiaPago. 227 de 540 colabs mudam, e os
-  três maiores casam com o FechamentoMensal gravado na 2ª casa; os números antigos não existiam em lugar nenhum do sistema. Placar 7 → 6. Curei três defeitos meus no caminho (HE
-  noturna somada sobre a HE50, "sem apuração" apagando quem foi admitido no meio do intervalo, data em UTC).
+● Background command "Esperar a regua do contador" completed (exit code 0)
 
-  Dois defeitos meus no contador espelho_x_dia_pago, os dois medidos:
-  1. A pergunta: comparava minutos_realizados (cru) com o trabalhadas do motor — col600 22/09 dava 21,37 min (janela de HE) e col60 26/08 dava +1,00 h (a pausa), nos dois casos
-     com o DiaPago certo. Curado → 09 caiu de 29 para ZERO em 430 colabs.
-  2. A janela: reusei esp['resultado'], e espelho.py:730 monta a autoridade até HOJE porque o espelho é tela. Contra a janela da competência +1 dia: 60 → 23, e as 37 da diferença
-     saíram todas na borda. A cura está pronta e entra no commit seguinte; as 23 que sobram não têm causa provada e vão medidas antes de eu afirmar qual lado está velho.
+● Régua VERDE com carimbo: 8.625 testes OK, 31 selos de host. Aplico os dois patches e o placar:
 
-  Censo dos 6 do placar, com arquivo:linha: só 3 são leitores de dinheiro. porta_export.py:44 não pode trocar (medidor que lê o DiaPago dos dois lados compara a lavratura consigo
-  mesma); esmeril_espelho.py:121 lê magnitude de deslocamento e o DiaPago.horas_atraso é pós-crédito-parcial, então ler dali mascararia a anomalia; ficha.py:195 já lê o gravado
-  (cartao_pela_celula.py:167 sobrescreve com totais_da_folha). O encolhimento do placar vai junto do RELATO, como o próprio selo cobra.
+  Ran 1 shell command
 
-  Leitor #2 será o calendario.py:301 — e por razão medida: com espelho_x_dia_pago = 0 na 09, trocar um leitor de dinheiro por dia é provadamente neutro no número.
+● Background command "Esperar a suite terminar" completed (exit code 0)
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+● Background command "Esperar a suite (espera longa)" completed (exit code 0)
 
-  Esperar o Ran
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ test' /tmp/regua_235837.log 2>/dev/null; do sleep 90; done; grep -E '^Ran [0-9]+ test|^OK
-     \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_235837.log | head -5; head -3 .regua_stamp
+  Ran 2 shell commands
 
-· Bootstrapping… (10m 38s · ↓ 30.7k tokens)
+● Background command "Esperar (a suite esta longa hoje)" completed (exit code 0)
+
+● Fazer a fixture entrar no TXT · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, py_compile
+     P='app/folha/tests/test_porta_do_export.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ colab = Colaborador.objects.create(cpf='[cpf]', nome='C MORDE', empresa=self.emp,
+     posto=posto, situacao='ativo')"""
+     assert t.coun…
+
+* Bootstrapping… (15m 38s · ↓ 43.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
