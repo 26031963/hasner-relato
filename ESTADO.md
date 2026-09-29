@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:55:01.**
+**Medido em 29/09/2026 19:00:31.**
 
 | | |
 |---|---|
@@ -100,10 +100,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ```
 
-  A prova foi feita fora da árvore viva, e é a parte que importa: template no bind-mount muda a tela na hora, então copiar o partial para ~/saas-hasner/app para rodar o teste
-  seria pôr o botão no ar antes do verde — a família exata do 500 de 23/09. Abri wt-cal2 a partir de main (que já tinha o núcleo no ar), rodei a suíte montando aquele caminho: 556
-  testes OK (colaboradores inteiro + test_smoke_chromium, que abre a tela nas duas cascas). Só depois o par entrou na principal, no ato do commit.
-
   Smoke em prod, e a minha primeira medição estava errada: urlopen na porta do saas_ui devolve 200 com a página de login (segue o redirect), então "200" ali não prova tela nenhuma
   — eu li botao=nao de uma página que não era a tela. Medi pelo caminho que a tela usa, contexto_calendario + render_to_string reais, dentro do saas_ui (no saas_core isso estoura
   com NoReverseMatch: 'colaboradores' is not a registered namespace, porque o core roda o urlconf enxuto — o erro prova em qual casca a tela mora):
@@ -126,12 +122,16 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Esperar a medicao da 10 · 5m 32s
-  ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf medir_porta)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log | sed -n '/competencia 10/,$p' (5m 30s)
+  Searched for 3 patterns, ran 21 shell commands
+
+● Background command "Medir os contadores da porta em prod" completed (exit code 0)
+
+● Esperar e ler a nomeacao · 36s
+  ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf nomear.py)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log | head -60 (36s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (2h 48m 18s · ↓ 154.4k tokens)
+✢ Schlepping… (2h 53m 48s · ↓ 155.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
