@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:57:09.**
+**Medido em 29/09/2026 16:02:31.**
 
 | | |
 |---|---|
@@ -107,17 +107,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Background command "Esperar a pista livre e empurrar" completed (exit code 0)
-
-● A segunda correção dela é mais séria: a lavratura da 09 carrega dinheiro (403,63 h de HE50 contra 443,31 gravadas). Meu contador escondia ~40 h.
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● A raia PDF entregou e me achou três erros. Os três já estão curados, e o mais importante é o que ela provou contra a minha própria conclusão:
-
-  1. Eu havia quebrado o vocabulário que a minha própria docstring prometia. O total_trabalhadas do gravado são só as trabalhadas — a folga certa vai em trab_folga, separada,
   porque é paga a 100% em rubrica própria. Eu somei as duas dentro de total_trabalhadas no _totais_da_lavratura, e a mesma chave passaria a significar duas coisas conforme
   existisse ou não fechamento. É o BUG 139 com outro nome, e a minha docstring dizia "as duas falam o mesmo vocabulário" três linhas acima.
 
@@ -138,13 +127,24 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   não é substituição 1:1 — e fazer o merge na ordem que ela pediu.
 
 ✻ Waiting for 1 background agent to finish
-                                                                                                                                           ✔ Update installed · Restart to update
+
+› Message from @a0132ccfe1cb91a23 (ctrl+o to expand)
+
+● A raia UI relata um incidente em prod: o cd dela vazou e a árvore principal — que é o bind-mount de produção — recebeu escrita. Verifico eu mesmo antes de qualquer outra coisa.
+
+  Ran 1 shell command
+
+● Agent "Raia UI: fila 2 descongelada" finished · 46m 12s
+
+● Prova independente de que prod esta sao
+  ⎿  $ cd /home/ronald/saas-hasner && curl -s -o /dev/null -w "health=%{http_code} " http://127.0.0.1/health/ 2>/dev/null; docker exec saas_ui python -c "print('ui vivo')"
+     2>/dev/null; echo "=== 500 na ultima hora ==="; docker logs saas_ui --since 60m 2>&1 | grep -c " 500 " ; docker logs saas_core --sin…
+
+✢ Forging… (26s · ↓ 1.0k tokens)
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Reading renderiza and abre in test_smoke_chromium.py                                                                               41m 13s · ↓ 291.8k tokens
+  ⏵⏵ auto mode on · 5 shells · /tasks to see subagents · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
