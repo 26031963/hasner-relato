@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:44:31.**
+**Medido em 29/09/2026 09:50:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)` |
+| `HEAD` local | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
 | `origin/main` | `aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,31 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
+38f18bbe A competencia paga nao podia ser lavrada, e por isso 421 colabs apareciam como divida: o 09 fecha por RETRATO
 aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)
 6563f03c O ensaio da sombra reprovava no ULTIMO comando porque ele mesmo trocava a lavra -- e a cura nao rodava por um apostrofo
-b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias
-d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/vinculo.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
-A  app/colaboradores/tests/test_vinculo_linha_do_tempo.py
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/management/commands/lavrar_dias_pagos.py
- M app/ponto/services/dia_pago.py
- M app/ponto/services/fechamento.py
-AM app/ponto/tests/test_retrato_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M fatias_agendadas/abono-no-ar/esteira.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -110,12 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Read 1 file, ran 25 shell commands
-
-❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
-  PAREI so em lei ou !
-
   Committed 6563f03c, listed 1 directory, ran 71 shell commands
 
 ❯ ABONO-NO-AR NAO FECHOU: fatia.done=OK mas fechamento_x_soma_dias_pagos = 09: emp2 276, emp3 120, emp4 25 | 10: emp2 34, emp3 7. Leis: L-092, L-095, "feito so com o numero".
@@ -136,8 +119,14 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   Searched for 2 patterns, read 1 file, listed 1 directory, ran 25 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Levitating… (2h 58m 23s · ↓ 271.6k tokens)
+● Esperar push e medição · 25s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main|rejected|error:"
+     $S/push4.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push4.log; echo "=== med09"; grep -v "^93 objects" $S/med09.log; date '+%… (24s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Levitating… (3h 3m 53s · ↓ 279.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ /compact manter: fila viva do BACKLOG (S3 falta so o PDF, depois S4 com lavratura por evento); ABONO-NO-AR (retrato da 09 a partir do gravado, contador 0 nas 3 empresas e nas 2
