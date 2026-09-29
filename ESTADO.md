@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:05:45.**
+**Medido em 28/09/2026 22:10:45.**
 
 | | |
 |---|---|
@@ -84,15 +84,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │         caminho         │                                                  saída                                                  │
-  ├─────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ fila aberta             │ {"decision":"block","reason":"siga: OBRA-DE-MENTIRA X — …"} — duas chaves, reason string, nomeia o item │
-  ├─────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ PAREI no topo do RELATO │ vazio                                                                                                   │
-  └─────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  O selo mede comportamento, não texto: a 1ª versão grepava o fonte e mordeu o próprio comentário que explica a cura — sexta vez nesta esteira que um selo textual acusa a prosa. E
-  ele se pendurou 5 min na 1ª rodada porque o hook lê o payload em stdin; sem </dev/null espera para sempre. Ficou escrito no selo, para quem copiar o arquivo não tropeçar igual.
 
   35 selos de host verdes. A suite não foi afetada — bin/ não entra na impressão digital da régua, e o app segue no Ran 8611 tests OK da mesma árvore.
 
@@ -112,15 +103,24 @@ RELATO, com a lista de nomes do banco como autoridade._
   CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
   O-DIA-PAGO S3". Depois S3 leitor a leitor, sem pergunta no fim do turno. segue a fila; PAREI so em lei ou !
 
-  Placar em dia e empurrar o hook · 56s
+  Placar em dia e empurrar o hook · 5m 57s
   ⎿  $ cd /home/ronald/saas-hasner && git branch tmp-ui 763ad662 && git reset --hard 76926ee3 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
-     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- bin/hook_stop_f… (56s · 3 lines)
+     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- bin/hook_stop_f… (5m 56s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Sprouting… (1m 44s · ↓ 2.0k tokens)
+· Sprouting… (6m 44s · ↓ 2.0k tokens)
+
+❯ aval Ronald: depois do hook, FILA 1 INTEIRA ate o fim, sem voltar a mim. Leis: L-095, L-096, L-097. Nenhuma lei nova.
+  2. O-DIA-PAGO S3: os 8 leitores, um a um, cada troca tirando uma linha do placar e com espelho_x_dia_pago = 0.
+  3. O-DIA-PAGO S4: recalcular deixa de existir (absorve E5-FINAL).
+  4. O-DIA-PAGO S5b: pareamento por marco, DIFF por rubrica e por colab com a causa nomeada -> PAREI para o meu ! da troca.
+  5. Enquanto espera o !, O-JANELA-HE telas (os 7 resultados observaveis) em sombra -> PAREI para o meu smoke.
+  Cada item fecha com commit por path, push e prova no RELATO, e o proximo comeca na MESMA resposta. PROIBIDO: fechar turno com pergunta, reescopar, fila 2.
+  segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                                             2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

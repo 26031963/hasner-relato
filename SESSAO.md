@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 22:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.2 MB). Acoes na janela: **442**.
+**Medido em 28/09/2026 22:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.2 MB). Acoes na janela: **434**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -444,11 +444,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:15:22 | Bash | Ler os casos do selo da porta | `sed -n '26,62p;97,120p' folha/tests/test_porta_do_export.py` |
 | 10:15:16 | Bash | Estrutura do selo da porta | `grep -n 'def test\\|class \\|lavrar_verde_para_teste\\|_lavra' folha/tests/test_porta_do_export.py \| head -20` |
 | 10:15:09 | Bash | 6a testemunha na porta e saida do _F3 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() # 1) docstring: passa a ser SEIS perguntas t=t.replace('"""As cinco perguntas da porta, para UMA empresa. -> dict', '"""As SEIS perguntas da porta, para UMA empresa. -> dict',1) t=t.replace('POR QUE UM CARIMBO E NAO A MEDICAO DENTRO DO  ...` |
-| 10:08:28 | Bash | Ver o retorno e o conferir | `sed -n '82,140p' folha/porta_export.py` |
-| 10:08:17 | Bash | Ler a porta do export | `sed -n '1,40p' folha/porta_export.py && echo "..." && grep -n 'def medir' -A 60 folha/porta_export.py \| sed -n '1,70p'` |
-| 10:08:05 | Bash | Publicar o E4 e registrar a cura do hook | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() sec = '''# E4-CALENDARIO: havia um SEGUNDO MOTOR na casa, e ele mostrava zero onde a folha paga (28/09 10:2x) `colaboradores/services/calendario.py:287` montava motor proprio -- `get_motor`, **sem a regua CCT** -- e o chamava **um dia por vez**. Sao duas  ...` |
-| 10:07:24 | Bash | Provar que o selo do hook morde | `cd /home/ronald/saas-hasner && cp bin/hook_stop_fila1.py /tmp/h.bak && printf "\n# prova de RED\n_x = open(RELATO, 'w')\n" >> bin/hook_stop_fila1.py && bash bin/tests/test_hook_nao_escreve_parei.sh; echo "rc=$?"; cp /tmp/h.bak bin/hook_stop_fila1.py && bash bin/tests/test_hook_nao_escreve_parei.sh` |
-| 10:07:17 | Bash | Tirar o PAREI do hook e selar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='bin/hook_stop_fila1.py' t=io.open(P,encoding='utf-8').read() v=''' if n > TETO: with open(RELATO, encoding='utf-8') as fh: s = fh.read() k = s.find('\\n') linha = ('\\n`PAREI: hook-teto \| espera Ronald` -- %d bloqueios seguidos sem commit novo na fila 1' ' (`%s`). O hook liberou o encerramento e de ...` |
-| 10:06:44 | Bash | Ler o bloco do teto no hook | `cd /home/ronald/saas-hasner && sed -n '130,155p' bin/hook_stop_fila1.py` |
-| 10:06:37 | Bash | Onde o hook escreve o PAREI | `cd /home/ronald/saas-hasner && grep -n 'PAREI' bin/hook_stop_fila1.py \| head -10` |
-| 10:06:20 | Bash | Publicar a cauda do lote 1 e limpar o PAREI velho | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') assert l[2].startswith('`PAREI: hook-teto') l[2]=('_(a linha `PAREI: hook-teto \| espera Ronald` que estava aqui SAIU, porque era mentira em duas pontas: ' 'o item que ela citava -- E6-IMPAR -- **fechou** as 09:2x (commit `8daf2359`), e eu ...` |
