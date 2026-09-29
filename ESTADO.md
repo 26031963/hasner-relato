@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:06:01.**
+**Medido em 28/09/2026 21:11:31.**
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,28 +85,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-        "hookEventName": "\"PermissionRequest\"",
-        "decision": {
-          "to allow": {
-            "behavior": "\"allow\"",
-            "updatedInput": "object (optional) - Modified tool input to use",
-            "updatedPermissions": "array (optional) - Permission updates"
-          },
-          "to deny": {
-            "behavior": "\"deny\"",
-            "message": "string (optional)",
-            "interrupt": "boolean (optional)"
-          }
-        }
-      },
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
-      },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
         "additionalContext": "string (optional)"
@@ -118,10 +97,32 @@ RELATO, com a lista de nomes do banco como autoridade._
   }
 
 ✻ Crunched for 1h 30m 16s · done 8:27 PM · 7 shells still running
+
+❯ HOOK-STOP-SAIDA-VALIDA · Leis: L-096. Nenhuma lei nova.
+  FONTE: bin/hook_stop_fila1.py (saida para o Stop do Claude Code)
+  MUDA: saida = JSON valido do schema do Stop ({"decision":"block","reason":...}) ou nada; nunca texto solto nem campo fora do schema.
+  RED: rodar o hook com o BACKLOG atual -> stdout passa em json.loads e tem decision/reason; tmux nao mostra mais o dump do schema ao fim do turno.
+  PROIBIDO: parar a S3 por isto alem do tempo da cura.
+  PRONTO: RELATO com o RED e commit por path.
+  segue a fila; PAREI so em lei ou !
+
+● Curar a saida do hook e provar · 1m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='bin/hook_stop_fila1.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """def _libera(motivo='', item=None):
+     _trilha('ALLOW', motivo, item)
+     print(json.dumps({'decision': 'allow', 'reason': motivo}))
+     sys.… (1m 38s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Architecting… (2m 14s · ↓ 2.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
