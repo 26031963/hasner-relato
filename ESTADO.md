@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:15:45.**
+**Medido em 29/09/2026 19:20:45.**
 
 | | |
 |---|---|
@@ -122,7 +122,7 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-  O contador da 09 com a linha nova · 3m 4s
+● O contador da 09 com a linha nova · 8m 4s
   ⎿  $ python3 - <<'PYEOF'
      import io, py_compile
      P='folha/tests/test_gravado_discorda_da_propria_grade.py'
@@ -130,10 +130,10 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
      t=t.replace("""import datetime
      from types import SimpleNamespace as NS
      from django.test import SimpleTestCase""", """import datetime
-     from django.test import Sim… (3m 2s · 2 lines)
+     from django.test import Sim… (8m 2s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (3h 9m 2s · ↓ 166.1k tokens)
+* Schlepping… (3h 14m 2s · ↓ 166.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
