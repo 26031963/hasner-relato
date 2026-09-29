@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:06:31.**
+**Medido em 29/09/2026 04:12:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
-| `origin/main` | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -43,6 +43,7 @@ M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -96,17 +97,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O leitor #4 é trocável por inteiro — os cinco KPIs existem no FechamentoMensal gravado. Meço o DIFF antes de tocar a tela de 750 pessoas:
-
-  Ran 2 shell commands
-
-● Achado do DIFF, e ele muda o desenho do leitor #4: zero KPI muda para quem tem fechamento — mas 52 de 120 colabs (43%) não têm FechamentoMensal na competência corrente. O app
-  mostra o apurado do motor para eles jogando fora o rótulo da fonte:
-
-  Ran 1 shell command
-
 ● Achado próprio, medido: o app do colaborador mostra número de motor com cara de folha — o espelho rotula a fonte e o app joga o rótulo fora. É o mesmo defeito que a
   FICHA-TOTAIS-FONTE curou na ficha em 23/09, e ninguém tinha olhado a tela dos ~750.
 
@@ -124,11 +114,22 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar o push fechar" completed (exit code 0)
 
-● Esperar o push fechar
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsuoolhk9.output; echo "=== falta: $(git log --oneline or…
+  Ran 4 shell commands
 
-✢ Thundering… (3h 1m 47s · ↓ 143.7k tokens)
+● Background command "Commit e push do achado do app" completed (exit code 0)
+
+● PUSH: 53c8a2a3..d7625622 — oito pushes. São 04:10; o gate dispara em 20 min. Uso o tempo no leitor #4, que é trocável e cujo DIFF já está medido:
+
+  Ran 2 shell commands
+
+● O passo que falta no leitor #4 é texto na tela — decisão sua, já em PENDENTES. Uso os 20 min até o gate preparando o #3 e esperando o fatia.done em primeiro plano:
+
+● Esperar o gate das 04:30 em primeiro plano · 29s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 22); do if [ -f fatias_agendadas/abono-no-ar/fatia.done ]; then break; fi; sleep 60; done; echo "=== fatia.done:"; cat
+     fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null || echo 'ainda nao'; date +%H:%M; tail -12 fatias_agendadas/abono-no-ar/esteir… (29s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Thundering… (3h 7m 17s · ↓ 146.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
