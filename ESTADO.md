@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:468 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:513 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:38:32.**
+**Medido em 29/09/2026 04:44:01.**
 
 | | |
 |---|---|
@@ -110,38 +110,38 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
+● O geofence roda por empresa (3 × passo 2 = 5 min) e não cabe no bloco. Ele não tem dependência alguma (depende=()), então vai para o fim do estágio:
+
+  Ran 3 shell commands
+
+● Errei três vezes por olhar o horário de início e não a faixa de um cron por-empresa. Paro de adivinhar e meço o mapa real:
+
   Ran 1 shell command
 
-● A cura está provada nos dois sentidos: a fatia agora roda (antes morria antes de começar) e para na porta certa — fatia.done = PAROU_ENSAIO, porque o ensaio da sombra ainda é de
-  28/09. Nada foi forçado.
+● O mapa medido dá a resposta: há um buraco de 7 min em 06:55→07:02, e é o único antes da auditoria das 07:18:
 
   Ran 1 shell command
 
-● Background command "Esperar o gate das 04:30" completed (exit code 0)
+● Os 24 contratos de cron verdes. Cinco segundos de cartório custaram quatro horários, e o selo acusou as três tentativas que eu fiz por intuição. Régua completa:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Background command "Esperar o gate" completed (exit code 0)
+● O crontab vivo ainda tem os horários antigos — e às 06:27 o cartório invadiria o furo. Instalo pela porta declarada:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Os três vermelhos são sobre duração de cron em prod, e a causa é provavelmente minha: o cartório passou de 397 para 398 s e passou a invadir o apurar_furos_diarios das 06:37.
-  Confirmo antes de mexer:
+● Crontab instalado e conferido (crontab == config/crons.py, 102 linhas), com backup em logs/crontab_backup_20260929_044246.txt. Publico:
 
-  Ran 6 shell commands
+● Publicar e esperar a regua · 46s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='/home/ronald/saas-hasner/app/docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     sec = '''# CINCO SEGUNDOS DE CARTORIO CUSTARAM QUATRO HORARIOS -- e o selo acusou as tres tentativas que eu chutei (29/09 04:4x)
+     A regua ficou VERMELHA… (45s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● A causa é o MUNDO, não eu: bin/crons_duracao.py rodou às 04:05 (cron de medição) e o processar_cartorio subiu de 357 → 362 s. Com 362, ceil(362/60) = 7 min e a última empresa
-  (06:31) termina 06:38 — invadindo o apurar_furos_diarios das 06:37. O selo mediu o mundo e acusou:
-
-  Ran 3 shell commands
-
-● A janela livre é 06:44 (entre reconciliar_geofence/06:43 e reconciliar_vinculo/06:47), e o furo só é cobrado às 07:10:
-
-  A mensagem inteira das duas violacoes
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
-
-✻ Thundering… (3h 33m 47s · ↓ 178.3k tokens)
+✢ Thundering… (3h 39m 17s · ↓ 190.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
