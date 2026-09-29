@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:69 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:125 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:10:31.**
+**Medido em 29/09/2026 11:15:43.**
 
 | | |
 |---|---|
-| `HEAD` local | `4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP` |
+| `HEAD` local | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
 | `origin/main` | `f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe
 4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP
 dca3c792 TICKETS: placar e rodape com o push f96eaba1
 d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
 13d8c130 Eu sobrescrevi a unica prova do intervalo, e a cura e que foto nao se sobrescreve
-75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler
 ```
 
 ## `git status --short`
@@ -99,26 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 6 shell commands
-
-❯ REGISTRAR NO BACKLOG (so registro, nao construir): duas linhas. Lei: L-097; nenhuma lei nova.
-  O-JANELA-HE parte B1 (LEITURA), posicao na ORDEM VIVA: imediatamente apos S3, antes da S4. Itens: coluna Saida antecipada + Atraso no espelho e no lote PDF lendo DiaPago
-  (E4/O51b); relogio riscado no marco + tooltip "N min antes do marco · nao conta · Art. 4o §2o" no espelho e PDF; aviso ao admin quando o dia tem HE fora da janela sem decisao;
-  porta_export.medir ganha he_pendente esperado 0. RED: 06:40/07:00 -> coluna 0 + relogio riscado; export com 1 pendente TRAVADO. Selo: zero leitor com derivacao propria de HE.
-  O-JANELA-HE parte B2 (AUTORIZAR), posicao: imediatamente apos S4, antes de O-HAIKU-INVESTIGA. Itens: aba Gestao de HE com Autorizar/Nao, permissao autorizar_he, trilha por dia
-  (quem, quando, motivo, antes/depois); Autorizar re-lavra o DiaPago do dia no evento; Nao = padrao + ciencia. RED: dia autorizado -> HE 20; autorizar 2x = 1 trilha; pendente
-  zerado libera o export. PRAZO das duas: antes do export da 10.
-  segue a fila; PAREI so em lei ou !
-
-  Searched for 4 patterns, listed 1 directory, ran 38 shell commands
-
-● Background command "Aguardar o fim do push" completed (exit code 0)
-
-● Background command "Esperar o push terminar" completed (exit code 0)
-
-● Background command "Esperar o push por ARQUIVO" completed (exit code 0)
-
-  Ran 5 shell commands
 
 ● Background command "Aguardar o push final" completed (exit code 0)
 
@@ -131,12 +111,32 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Puttering… (1h 2m 11s · ↓ 163.5k tokens · thinking)
+  Ran 2 shell commands
+
+❯ PRIORIDADE (P7.1, bug no caminho da S3): QUEM-ESCREVE-NO-GRAVADO-DA-EXPORTADA. Antes de carimbar por colab, MEDIR a hipotese com lastro: (a) SELECT app,name,applied FROM
+  juliani.django_migrations WHERE applied BETWEEN '2026-09-29 09:00' AND '2026-09-29 09:30'; (b) quais colunas de FechamentoMensal entram no hash e se alguma nasceu/mudou de
+  default nessas migrations; (c) se sim: nao e bug -- PROVA com hash recalculado antes/depois da migration em copia; se nao: segue o carimbo por colab. Publicar no RELATO com
+  PROVA.
+  DEPOIS, fechando a S3: leitor #3 (PDF) pelo plano ja escrito; + a LINHA DO DIA do espelho e do PDF passa a mostrar o pago (DiaPago.horas_trabalhadas + rubricas_do_dia), o cru
+  sai da linha (L-095). RED: col600 22/09 linha = 7,01 h, nao 7,37. Selo de placar: S3 = 0 leitor de dinheiro chamando motor.
+  Leis: L-092, L-095, L-097; nenhuma lei nova. segue a fila; PAREI so em lei ou !
+
+  Ran 1 shell command
+
+● Background command "Aguardar o push" completed (exit code 0)
+
+● Background command "Aguardar o push" completed (exit code 0)
+
+  Placar e push do lote
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; cd app && git commit -q -F - --
+     docs/TICKETS.md <<'MSGEOF'; cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-…
+
+* Puttering… (1h 7m 23s · ↓ 181.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
