@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:22:31.**
+**Medido em 29/09/2026 09:28:01.**
 
 | | |
 |---|---|
@@ -111,8 +111,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  Ran 5 shell commands
-
 ❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
 
   Read 1 file, ran 25 shell commands
@@ -137,12 +135,14 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Medir o contador de emp4 09 depois do retrato" completed (exit code 0)
 
-● Esperar mais do breakdown · 32s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do [ "$(grep -c '^== emp' $S/breakdown2.log)" -ge 4 ]
-     && break; sleep 10; done; grep -v "^93 objects" $S/breakdown2.log; date '+%H:%M' (31s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● O hash é estável?
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/hash2.py <<'PYEOF'
+     import hashlib, time
+     from colaboradores.models import Empresa
+     from ponto.models import FechamentoMensal
+     _fora = {'id','colaborador','colaborador_id','mes','ano','criado_em','atualizado_em','aprovado_em','aprovado_por','aprovado_por_id'}…
 
-· Levitating… (2h 36m 23s · ↓ 250.8k tokens)
+✢ Levitating… (2h 41m 53s · ↓ 256.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
