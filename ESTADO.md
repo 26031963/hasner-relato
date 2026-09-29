@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:57:40.**
+**Medido em 29/09/2026 12:03:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio` |
+| `HEAD` local | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
 | `origin/main` | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9b446740 TICKETS: placar e rodape com o push a0c12c3e
+9592fc83 A lavratura descartava o adicional noturno do dia de folga trabalhada -- e os leitores ja leem a lavratura
 db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio
 a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro
 ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
-48609348 TICKETS: placar e rodape depois do deploy da linha do dia
-6c05f6cf A linha do dia do papel mostra o PAGO -- e medir antes evitou imprimir 0,00 em dias de 12 horas
 ```
 
 ## `git status --short`
@@ -42,9 +42,6 @@ ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/RELATO.md
- M app/ponto/services/dia_pago.py
- M app/ponto/tests/test_dia_pago_soma.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -102,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. RECALCULO-DA-10-PARA-ZERAR-O-CONTADOR — 76 colabs em 20 campos, mais 158 que passam a ter gravado.
-  2. [nome]-REESCREVER-A-LINHA-DO-TEMPO — o 21/07 não passa: a porta recusa (S99 põe o piso em 21/08, competência 08 trancada) e uma linha só desde 21/07 não pode descrevê-la (a
-     paridade virou no intervalo 30/08→02/09). 21 furos e 24 folgas trabalhadas contra 2 e 4 do desenho que começa em 02/09.
+  Achei e curei um buraco de dinheiro na lavratura — indo tirar o resumo do cartão do motor.
 
-  E um erro meu, declarado: sobrescrevi a foto das 09:27 do gravado da emp2 comparando com forma de chave diferente — perdi a base do intervalo. Cura na origem: manage.py
-  carimbo_gravado, que nunca sobrescreve, com selo cujo caso que morde é exatamente o meu.
+  O plano da fatia estava certo no destino e errado no meio. Medido: folha_manda → totais_da_folha já lê o FechamentoMensal direto (corte RESUMO-UMA-FONTE, 23/09), e roda depois
+  do laço do motor e depois do :498. Na competência 09, 100% dos ativos têm fechamento (540/540) — ali o laço do motor e o abatimento do :498 são código morto. Na 10, 121 de 540
+  (22,4%) não têm — e para esses o :498 é o único abatimento do crédito parcial. Então o item (d) do plano ("esse bloco SAI na troca") está suspenso: tirá-lo agora deixaria 121
+  pessoas com o atraso do mês sem o crédito. O caminho existe e está medido: os 121 têm, os 121, lavratura (100%).
+
+  O DIFF dos 121 achou um caso, e ele era um bug. 120 batem nos sete campos; col917 [nome] se move: trabalhadas −7,00 h, noturnas −1,14 h. As 7 h não faltavam — o dia
+  26/09 dele é folga trabalhada (7,00 na rubrica própria, 0,00 em trabalhadas), e 34,67 + 7,00 = 41,67, o número do motor. Foi a minha soma que olhou só uma das duas.
+
+  As noturnas, não. A linha de 26/09 tinha horas_noturnas = 0,00 e o motor apura 1,14 h. O defeito estava no laço de lavrar: ft_certa gravava só horas_folga_trabalhada e
+  descartava todo o resto do período — adicional noturno, HE 50/100, intrajornada indenizada, saída antecipada. O FechamentoMensal conta esses minutos (ele soma periodos +
+  periodos_ft), então a lavratura ficava abaixo do gravado em rubrica de dinheiro. Contra o gravado, na 09: 1,99 + 1,69 h de HE 50% e 3,00 h de intra em 6 colaboradores. É a mesma
+  classe do minutos_abonados de madrugada — com a diferença que importa: desde hoje os leitores leem a lavratura.
+
+  Curado no laço (as duas listas levam as rubricas do período, sem dobra — nenhuma delas está em periodos; a hora trabalhada continua na rubrica própria, que é o que garante o
+  100% da CLASSE3-FOLGA-100). RED provado descartando as rubricas de novo: os três casos de LavraDaFolgaTrabalhadaTest ficam vermelhos. Commit 9592fc83, no ar às 11:59.
+
+  Em voo agora: o push do lote e uma re-medição dos contadores das duas competências pela porta_export.medir — preciso dela porque suspeito que o "09: 1" que publiquei de manhã
+  está baixo: se a lavratura da 09 está sem essas rubricas em 6 colabs, o contador tem de dizer 6 ou 7, não 1. Se for isso, corrijo o número no RELATO com o mesmo destaque que dei
+  ao 421 → 1.
+
+  Falta relavrar a 10 (o backfill é aditivo e não toca o gravado) para as linhas ganharem as rubricas curadas. Na 09 não dá pelo retrato — e isso é o seu corte funcionando, não um
+  esquecimento: rodar o motor de hoje sobre competência paga é a deriva disfarçada de cura que você barrou às 09:0x. A diferença fica onde ela deve ficar: no contador.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-  Read 1 file, listed 1 directory, ran 11 shell commands
+● Contador e push7
+  ⎿  $ grep -v "objects imported" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk6nq89ux.output 2>/dev/null | head -12; echo "== push7
+     =="; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; date '+…
 
-● Background command "Aguardar a medicao dos 121" completed (exit code 0)
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Background command "Esperar 4 min e ler os dois" completed (exit code 0)
-
-● Background command "Esperar o DIFF dos 121" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Aguardar o diff do resumo na frota" completed (exit code 0)
-
-  Searched for 2 patterns, read 3 files, ran 16 shell commands
-
-● Background command "Fim do push6" completed (exit code 0)
-
-  Rodar os selos da lavratura ft
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
-
-✽ Puttering… (1h 49m 20s · ↓ 298.1k tokens)
+✢ Puttering… (1h 54m 41s · ↓ 306.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
