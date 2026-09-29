@@ -1,5 +1,87 @@
 # RELATO — esteira saas-hasner
 
+# CHIP DO CALENDARIO: os dois diffs que voce pediu, e os dois foram RETIRADOS (28/09 23:2x)
+
+Sua ordem de 23:1x: *"publicar no RELATO o diff de `ponto/services/dia_decidido.py` e
+`colaboradores/services/calendario.py` ANTES do commit e dizer por que o chip precisa de servico do ponto; se
+for so rotulo curto, o rotulo mora no template/catalogo, nao em dia_decidido (L-096: fila 2 nao toca nucleo)"*.
+
+## O diff, inteiro (98 linhas, guardado em `/tmp/.../retirado/nome_curto.diff`)
+
+`ponto/services/dia_decidido.py` -- extraia `nome_curto_do_dia(veredito, *, tipo=None)` do meio de
+`palavra_do_dia`, e `palavra_do_dia` passava a LE-LA (uma derivacao, dois leitores). `do_dia` ganhava uma
+quarta chave `nome` nas tres saidas:
+
+```
++def nome_curto_do_dia(veredito, *, tipo=None):
++    if veredito == TRABALHOU:  return ''
++    if veredito in PALAVRA:    return PALAVRA[veredito]
++    return (PALAVRA_QUANDO_O_CATALOGO_CALA.get(tipo)
++            or CAT.rotulo_curto(tipo)
++            or (CAT.rotulo_vigente(tipo) or tipo or '').split(' - ')[0])
+-    nome = (PALAVRA_QUANDO_O_CATALOGO_CALA.get(tipo) or CAT.rotulo_curto(tipo) or ...)
++    nome = nome_curto_do_dia(veredito, tipo=tipo)
+-    return {'veredito': v, 'palavra': rotulo_de(cobertura), 'cor': CORES[v]}
++    return {'veredito': v, 'palavra': rotulo_de(cobertura), 'cor': CORES[v],
++            'nome': nome_curto_do_dia(v, tipo=cobertura.tipo)}
+```
+
+`colaboradores/services/calendario.py` -- duas linhas, so repasse: `_dd` default ganhava `'nome': ''` e o dia
+ganhava `'nome_dia': _dd['nome']`.
+
+## POR QUE eu fui buscar servico do ponto -- e por que voce esta certo
+
+**Nao e "so rotulo curto" para TODOS os tipos**: o catalogo CALA de proposito em tres (`rotulo_curto` devolve
+vazio para quem tem desenho proprio), e a palavra desses tres ("Falta", "Ferias") existe **so** em
+`dia_decidido.PALAVRA_QUANDO_O_CATALOGO_CALA`, que e um corte SEU de 24/09 ("nunca tick sem palavra"). Foi
+atras dela que eu fui. **So que a premissa estava errada**: nesses tres o chip nao fica mudo -- ele fica com o
+ICONE DO TIPO (que e justamente a razao de o catalogo calar), o `->DD/MM` e a frase inteira no `title`. O
+corte de 24/09 falava do dia que aparecia com **tick verde generico**, nao do chip com desenho proprio.
+
+PROVA (medida na competencia aberta 21/09-20/10, ausencias aprovadas): **177 dia-colab com palavra** e **360
+sem** -- `ferias` 353, `falta` 5, `folga_compensatoria` 2, e os tres sao exatamente os `tem_icone_proprio`.
+Nenhum outro tipo fica sem palavra.
+
+**Os dois arquivos voltaram ao HEAD.** O chip le `dia.ausencia.rotulo_curto`, que
+`colaboradores/services/calendario.py` **ja montava** com `ponto/catalogo/ausencias.py::rotulo_curto` desde a
+UI-3 de 12/09: a fatia nao precisou de campo novo em lugar nenhum. Nucleo tocado: **zero**.
+
+PROVA: `grep -c nome_curto_do_dia app/ponto/services/dia_decidido.py` = 0 e `grep -c nome_dia
+app/colaboradores/services/calendario.py` = 0; `git status` mostra so o template e tres selos na fatia.
+
+## O chip, MEDIDO por navegador -- e o que o selo NAO afirma
+
+PROVA: `colaboradores/tests/test_chip_ausencia_duas_linhas.py` (4 casos, chromium) + `test_ui_grade_calendario`
+(7 casos) = **11 VERDES**. Numeros crus das caixas, com atestado de 28/09 a 04/10:
+
+| largura | celula | chip | rotulo x celula | veredito |
+|---|---|---|---|---|
+| **1366** | 102x132 | 90 | 873..916 dentro de 841..943 | "Atestado" **INTEIRO**, 27px de folga; `->04/10` na 2a linha |
+| 1920 | 102x132 | 90 | idem | idem |
+| 1024 | 66x132 | 54 | 719..763 contra 687..754 | o rotulo passa **9px** da celula e ela o clipa |
+
+A largura do seu PRONTO (1366) esta cumprida. **A 1024 nao esta**, e o numero fica escrito: o selo cobra as
+duas linhas, uma linha de texto e o CHIP dentro da celula em todas as larguras, e **nao** afirma rotulo
+inteiro a 1024 -- afirmar seria selo vermelho de fabrica, e calar seria esconder.
+
+**O que eu tentei e NAO entrou**: `minmax(0,1fr)` na coluna do rotulo e `overflow:hidden;text-overflow:ellipsis`
+nele. O navegador deu **os mesmos numeros** nas tres variantes (medido, 6 rodadas). CSS que nao move numero
+medido nao e cura, e decoracao -- saiu, e o template ficou no minimo: grid de 2 linhas + `nowrap`.
+
+PROVA: rodadas `[EXP]` com 'Atestado', 'Declaracao' e 'TROCA DE PLA' (o teto de 12 caracteres do catalogo) nas
+tres variantes: `rotdentro` = 1 a 1366/1920 e 0 a 1024 em TODAS -- inclusive na variante com as duas guardas.
+
+## Estado da fatia, e por que ela PARA aqui
+
+Ela nao esta commitada: os arquivos estao **staged** (`git add` por path), o que basta para o selo
+`testes_fora_do_git` ficar verde, e main == `origin/main` -- assim a fila 1 empurra sem arrastar UI que espera
+seu smoke. O commit anterior (`b98308a3`) saiu da historia empurravel por `git reset` para `origin/main`, com
+o conteudo preservado no branch `tmp-ui` (`98243991`); nenhum arquivo foi tocado por isso.
+
+**Pela sua ordem de 23:3x ("fila 2 de UI so depois"), a UI-GRADE fica exatamente aqui** -- staged, viva na
+arvore servida para o seu smoke, com os 9px de 1024 nomeados. Sigo para a S3.
+
+
 
 PROVA: `colaboradores/tests/test_ui_grade_calendario.py` (6 casos) + `test_calendario_sete_colunas` (chromium em 1366) VERDES, e a regua no rodape do TICKETS. O template ja esta na arvore -- e ela e servida na hora --, entao a tela **ja mostra** o layout novo; se algo estiver errado, `git checkout` do arquivo volta em um comando.
 

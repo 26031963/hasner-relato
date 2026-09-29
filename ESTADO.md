@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:14:04.**
+**Medido em 28/09/2026 23:19:31.**
 
 | | |
 |---|---|
@@ -35,9 +35,10 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_zz_exp_longo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -90,15 +91,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      311                                  'so %d template(s) desenham a grade: este caso perdeu o universo (%s)'
-      312                                  % (len(desenham), desenham))
-      313          # a pagina que o RED acima mede entra no universo: e ela que hospeda o fragmento do perfil
-      274 -        alvo = desenham + ['colaboradores/detalhe.html']
-      275 -        for rel in alvo:
-      276 -            src = fonte[rel]
-      277 -            ext = re.findall(r'{%\s*extends\s+([^%]+?)\s*%}', src)
-      278 -            for e in ext:
-      314 +        for rel in desenham + ['colaboradores/detalhe.html']:
       315 +            for e in re.findall(r'{%\s*extends\s+([^%]+?)\s*%}', fonte[rel]):
       316                  self.assertNotIn('base_app', e,
       317                                   '%s passou a estender a casca do COLABORADOR (%s): medir a geometria do '
@@ -113,16 +105,25 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Agora o selo de fonte, que ainda cobra nome_dia:
 
-● Medir com a coluna que encolhe
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='app/templates/colaboradores/partials/_calendario_grade.html'
-     t=io.open(P,encoding='utf-8').read()
-     v='grid-template-columns:auto 1fr;grid-template-rows:auto auto;'
-     assert t.count(v)==1
-     t=t.replace(v,'grid-template-columns:auto minmax(…
+  Ran 5 shell commands
 
-✻ Sprouting… (1h 10m 3s · ↓ 109.0k tokens)
+❯ aval Ronald: ORDEM ATE O ESPELHO-VERDADE no bloco OBRAS do BACKLOG. Leis: L-095, L-096. Nenhuma lei nova.
+  Ordem viva: S3 -> S4 -> S5b (PAREI no meu !) -> DESCONGELA so O73, E6-14, CORTE-B-30 e turnos abertos, cada um medido contra o DiaPago (o que zerar fecha com prova) -> lista de
+  cadastro do E1 em PENDENTES -> PLACAR-E re-medido -> TRIAGEM O-nn/TELA-xx (morto pela troca com certidao / fila 2 / feito) -> telas O-JANELA-HE. Fila 2 de UI so depois.
+  RED: hook cobra o 1o aberto dessa ordem.
+  segue a fila; PAREI so em lei ou !
+
+● Os números crus fecham a questão. Aplico o mínimo medido e sigo para a S3:
+
+  Ran 12 shell commands
+
+● Régua no fundo, e S3 leitor 1 começa agora:
+
+● Disparar a regua e ler o leitor do extrato
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3a.log 2>&1 &
+     echo "regua disparada"; sed -n '440,478p' app/relatorios/views.py
+
+✢ Sprouting… (1h 15m 30s · ↓ 126.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
