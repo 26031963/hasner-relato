@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:25:01.**
+**Medido em 28/09/2026 23:30:08.**
 
 | | |
 |---|---|
@@ -35,6 +35,8 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/config/crons.py
+ M app/core/juizes.py
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -43,6 +45,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/relatorios/views.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M app/templates/relatorios/extrato_parcial.html
+?? app/relatorios/management/commands/diff_extrato_parcial.py
 ?? app/relatorios/tests/test_s3_extrato_le_dia_pago.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -96,39 +99,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 12 shell commands
-
-● Régua no fundo, e S3 leitor 1 começa agora:
-
-  Searched for 1 pattern, ran 7 shell commands
-
-● Agora o leitor — o extrato para de montar motor próprio:
-
-  Searched for 1 pattern, ran 6 shell commands
-
-● Agora o placar cai de 7 para 6, e o selo do leitor:
-
-  Ran 3 shell commands
-
-● Write(relatorios/tests/test_s3_extrato_le_dia_pago.py)
-  ⎿  Wrote 183 lines to relatorios/tests/test_s3_extrato_le_dia_pago.py
-       1 # -*- coding: utf-8 -*-
-       2 """O-DIA-PAGO S3, 1a TROCA: o extrato parcial LE o `DiaPago` e nao calcula mais (L-095, 28/09 23:5x).
-       3
-       4 A LEI: *"o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem
-       5 recalcula"*. Este era o pior leitor da lista dos 7, e nao por tamanho -- por DIVERGENCIA EMBUTIDA. Ele montava
-       6 um motor proprio por colaborador (`get_motor_cct` + `calcular_mes`) com **tres** insumos derivados ali mesmo:
-       7 a escala **ATIVA de hoje** (a folha usa o vinculo que cobre CADA DIA), a regra de alcance (`eh_dia_trabalho`
-       8 dia a dia, com a escala errada) e as datas justificadas. E o relatorio se chama "extrato parcial" e e o que o
-       9 admin abre para CONFERIR a folha: um segundo numero, com cara de conferencia, sobre insumo diferente do da
       10 folha.
      … +173 lines
 
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3a.log; grep -E '^Ran
-     [0-9]+|^OK|^FAILED|BLOQUEADO' /tmp/regua_231929.log 2>/dev/null | tail -3
+  Ran 3 shell commands
 
-✢ Sprouting… (1h 21m 0s · ↓ 148.9k tokens)
+● Write(relatorios/management/commands/diff_extrato_parcial.py)
+  ⎿  Wrote 161 lines to relatorios/management/commands/diff_extrato_parcial.py
+       1 # -*- coding: utf-8 -*-
+       2 """DIFF da 1a troca da O-DIA-PAGO S3: o extrato parcial ANTES (motor proprio) x AGORA (`DiaPago` lavrado).
+       3
+       4 SO LEITURA. Ele existe porque a troca de um leitor de dinheiro precisa de numero, colab a colab, com a causa
+       5 NOMEADA -- e nao de "a suite passou". O lado ANTES e o codigo LITERAL que saiu de `relatorios/views.py` neste
+       6 commit (copiado de `git show HEAD:`, nao reescrito): reconstruir de memoria a conta que se quer comparar seria
+       7 medir com uma terceira conta, e a casa ja pagou sete vezes por sonda mal parametrizada lida como bug.
+       8
+       9 O QUE SE ESPERA, e por que a divergencia NAO e defeito da troca: o lado ANTES calculava com a escala **ATIVA
+      10 de hoje** e com a regra de alcance derivada ali; o lado AGORA soma o que o motor da FOLHA lavrou, dia a dia,
+     … +151 lines
+
+  Ran 3 shell commands
+
+● Background command "Esperar a regua terminar" completed (exit code 0)
+
+● Rodar os selos da troca
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/core/juizes.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ _p(_TT5, 'relatorios/views.py', 'def extrato_parcial(request):', TELA,
+     '7 demais: trabalhadas, noturnas, HE, atraso -- classe B; dev…
+
+✢ Sprouting… (1h 26m 8s · ↓ 159.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
