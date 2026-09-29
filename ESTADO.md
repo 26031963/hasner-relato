@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:650 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # ABONO NO AR, e a VINCULO-LINHA-DO-TEMPO aplicada no col616 (29/09 08:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:55:31.**
+**Medido em 29/09/2026 09:00:45.**
 
 | | |
 |---|---|
@@ -43,6 +43,8 @@ d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotu
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_vinculo_linha_do_tempo.py
@@ -102,17 +104,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
-  segue a fila; PAREI so em lei ou !
-
-  Searched for 1 pattern, ran 4 shell commands
-
-❯ aval Ronald: VINCULO-LINHA-DO-TEMPO (P7.1, apos o passo atual da S3). Leis: corte 27/08 HX-HISTORICO-ESCALA (correcao retroativa em sequencia, escritor unico), P13, L-096 bug
-  provado. Nenhuma lei nova.
-  FONTE: colaboradores/services/vinculo.py::executar_vinculo (hoje fecha so o ANTERIOR a data_inicio; o POSTERIOR sobrevive).
-  DESENHO: vinculo do colab = UMA linha do tempo. Salvar "a partir de D" REESCREVE a linha de D em diante: o vigente em D fecha em D-1, todo vinculo com inicio > D e absorvido
-  (inativo, trilha em HistoricoVinculo com de/para). Escritor unico dessa operacao; toda porta (wizard de fase, cadastro, admissao) passa por ela. O banco (EXCLUDE de vigencia
-  sobreposta, NOT VALID como a 0041) so confirma o desenho.
   CASO: [nome] -- EC 1327 (20/09) e EC 1326 (29/09) ambos ATIVOS. Aplicar ja: absorver o 1326 pela operacao nova, regerar, conferir 29/09-06/10 (29 folga, 30
   trabalha).
   RED: vinculo de 29/09 existente + salvar a partir de 20/09 -> 1 vigente so, o de 20/09, historico com a absorcao; repetir = no_op.
@@ -128,17 +119,28 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Conferir a trilha em prod
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from core.models import LogAuditoria
-     from colaboradores.models import HistoricoVinculo
-     for l in LogAuditoria.objects.filter(modelo='EscalaColaborador', objeto_id=1326).order_by(…
+  Esperar a régua · 1m 0s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_lt.log 2>/dev/null &&
+     break; sleep 10; done; tail -3 $S/regua_lt.log; date '+%H:%M' (1m 0s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (2h 9m 23s · ↓ 212.7k tokens)
+· Levitating… (2h 14m 37s · ↓ 216.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ ABONO-NO-AR NAO FECHOU: fatia.done=OK mas fechamento_x_soma_dias_pagos = 09: emp2 276, emp3 120, emp4 25 | 10: emp2 34, emp3 7. Leis: L-092, L-095, "feito so com o numero".
+  Nenhuma lei nova.
+  1. 09 (exportada): o backfill levantou CompetenciaExportada e a lavratura ficou sem abono. Decisao tecnica: a lavratura da exportada e RETRATO do FechamentoMensal gravado -- os
+  campos de abono/previstos/realizados por dia saem da mesma grade gravada, sem recalcular motor, sem tocar o fechamento. A guarda da L-092 bloqueia gravar FECHAMENTO, nao
+  lavrar DiaPago em modo leitura. RED: 09 com contador 0 nas 3 empresas e FechamentoMensal com hash identico antes/depois.
+  2. 10: nomear a causa dos 41 divergentes por campo e por colab, curar, contador 0.
+  3. esteira.sh: fatia.done so escreve OK com os contadores = 0; senao PAROU_CONTADOR com os numeros. Corrigir o texto "nenhum leitor le estas linhas" (extrato, calendario e app
+  ja leem).
+  4. So entao o PDF (leitor #3).
+     segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
