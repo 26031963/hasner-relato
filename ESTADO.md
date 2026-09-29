@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:139 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:163 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 17:23:31.**
+**Medido em 29/09/2026 17:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres` |
-| `origin/main` | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
-| commits a subir (`ahead`) | **27** |
+| `HEAD` local | `958ac42d TICKETS: rodape e placar com o ultimo push do mundo` |
+| `origin/main` | `9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+958ac42d TICKETS: rodape e placar com o ultimo push do mundo
+ff5f697d TICKETS: placar do topo
+b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido em prod hoje
 9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres
 4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito
-100caa63 TICKETS: placar do topo com o ultimo push do mundo
-e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja eram diferentes
-6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou
 ```
 
 ## `git status --short`
@@ -100,10 +100,6 @@ e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja 
 
 ```
 
-● Background command "Esperar o push terminar" completed (exit code 0)
-
-● Background command "Aguardar 5 min e reler o log" completed (exit code 0)
-
 ● Background command "Esperar o fim do push por arquivo de sinal" completed (exit code 0)
 
 ● Background command "Esperar o fim do push" completed (exit code 0)
@@ -125,13 +121,17 @@ e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja 
 
 ● Background command "Rodar os cinco apps mais afetados" completed (exit code 0)
 
-● Pushing dos 27 commits · 9m 21s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log 2>&1; echo "rc=$?" >>
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3… (9m 19s)
+  Committed 9570adc8, searched for 1 pattern, read 1 file, ran 7 shell commands
+
+● Background command "Push dos 27 commits" completed (exit code 0)
+
+● Pushing com o rodape acertado · 1m 56s
+  ⎿  $ cd /home/ronald/saas-hasner && git commit -q -m "TICKETS: rodape e placar com o ultimo push do mundo
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && echo ok; timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21… (1m 55s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (1h 16m 48s · ↓ 106.9k tokens)
+· Schlepping… (1h 22m 18s · ↓ 115.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
