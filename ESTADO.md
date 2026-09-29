@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:01:01.**
+**Medido em 29/09/2026 04:06:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/config/crons_duracao.json
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,8 +96,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● PUSH: a3ac4421..53c8a2a3 — sete pushes nesta rodada. São 03:54; o gate do deploy dispara em 36 min. Enquanto isso, construo o leitor #4, que não depende do abono:
-
   Ran 1 shell command
 
 ● O leitor #4 é trocável por inteiro — os cinco KPIs existem no FechamentoMensal gravado. Meço o DIFF antes de tocar a tela de 750 pessoas:
@@ -121,18 +120,20 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● A régua respondeu JÁ VERDE — só mudei .md/.json, que não entram na impressão digital, então o carimbo de 8.634 OK vale. Commit e push:
 
-● Committing e push do achado do app · 47s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_app.txt <<'EOF'
-     O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
-     Fui medir o DIFF do leitor #4 da S3 antes de toca… (46s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Thundering… (2h 56m 17s · ↓ 143.0k tokens)
+● Background command "Esperar o push fechar" completed (exit code 0)
+
+● Esperar o push fechar
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bsuoolhk9.output; echo "=== falta: $(git log --oneline or…
+
+✢ Thundering… (3h 1m 47s · ↓ 143.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
