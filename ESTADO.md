@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:386 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:412 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:12:01.**
+**Medido em 29/09/2026 04:17:31.**
 
 | | |
 |---|---|
@@ -44,6 +44,7 @@ AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -97,44 +98,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Achado próprio, medido: o app do colaborador mostra número de motor com cara de folha — o espelho rotula a fonte e o app joga o rótulo fora. É o mesmo defeito que a
-  FICHA-TOTAIS-FONTE curou na ficha em 23/09, e ninguém tinha olhado a tela dos ~750.
 
   Ran 2 shell commands
 
-● Background command "Esperar o push" completed (exit code 0)
+● A espera pelo gate está armada e me avisa. Corrigi um diagnóstico meu antes de agir sobre ele, e isso é o produto desta última medição:
 
-● Registrado. O texto na tela de quem recebe holerite é decisão sua — três saídas, com a minha recomendação escrita. Régua e push do achado:
+  Eu havia escrito que o crédito parcial seria abatido duas vezes no cartão se a troca fosse ingênua. Fui ver com arquivo:linha e é outra coisa: pdf_espelho.py:498-501 calcula o
+  abatimento e cartao_pela_celula.py::aplicar_nos_totais sobrescreve total_atraso com fe.horas_atraso — o gravado, que já é pós-crédito. Então o bloco é trabalho jogado fora
+  sempre que existe fechamento, e vivo só quando não existe.
+
+  Isso muda a cura: não se remove o bloco "para não abater duas vezes" (diagnóstico errado) — declara-se a fronteira, porque quem manda no total_atraso é o gravado.
+
+  E os dois achados da noite convergem num só: duas telas mostram número de motor onde não há folha, e nenhuma das duas diz isso — o app (17 de 80 colabs medidos) e o cartão sem
+  fechamento. O fonte_dos_totais existe desde o seu corte de 23/09 e é jogado fora nas duas.
+
+  O que está armado e não depende de mim: o gate das 04:30 → confere o ensaio da sombra de hoje → deploy.sh (migra a 0068) → backfill da 09 e da 10 → mede os três contadores →
+  escreve fatia.done com OK, PAROU_ENSAIO ou PAROU_DEPLOY.
+
+  Quando ele fechar: leio o fatia.done e o número dos contadores, publico, e só então o leitor #3 anda — com o plano já escrito e agora com o diagnóstico certo.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
   Ran 1 shell command
 
-● A régua respondeu JÁ VERDE — só mudei .md/.json, que não entram na impressão digital, então o carimbo de 8.634 OK vale. Commit e push:
+● São 04:17 — o gate dispara em 13 min. Uso o tempo medindo o tamanho do achado que os dois defeitos compartilham, porque é ele que decide o desenho da cura:
 
-  Ran 1 shell command
+● Quem le e quem joga fora a fonte dos totais
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sem_folha.txt <<'EOF'
+     CENSO: quem LE `fonte_dos_totais` e quem o JOGA FORA (grep, nao suposicao)
+     EOF
+     grep -rn "fonte_dos_totais" --include=*.py --include=*.html app/ …
 
-● Background command "Esperar o push fechar" completed (exit code 0)
-
-  Ran 4 shell commands
-
-● Background command "Commit e push do achado do app" completed (exit code 0)
-
-● PUSH: 53c8a2a3..d7625622 — oito pushes. São 04:10; o gate dispara em 20 min. Uso o tempo no leitor #4, que é trocável e cujo DIFF já está medido:
-
-  Ran 2 shell commands
-
-● O passo que falta no leitor #4 é texto na tela — decisão sua, já em PENDENTES. Uso os 20 min até o gate preparando o #3 e esperando o fatia.done em primeiro plano:
-
-● Esperar o gate das 04:30 em primeiro plano · 29s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 22); do if [ -f fatias_agendadas/abono-no-ar/fatia.done ]; then break; fi; sleep 60; done; echo "=== fatia.done:"; cat
-     fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null || echo 'ainda nao'; date +%H:%M; tail -12 fatias_agendadas/abono-no-ar/esteir… (29s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Thundering… (3h 7m 17s · ↓ 146.6k tokens)
+· Thundering… (3h 12m 47s · ↓ 151.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
