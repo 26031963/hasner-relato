@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:49:31.**
+**Medido em 29/09/2026 18:55:01.**
 
 | | |
 |---|---|
@@ -99,7 +99,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (_calendario_grade.html da UI-GRADE, que espera o seu smoke e já está no ar; o index de 13 cards, que é o catálogo /relatorios/) e não vieram.
 
   A prova foi feita fora da árvore viva, e é a parte que importa: template no bind-mount muda a tela na hora, então copiar o partial para ~/saas-hasner/app para rodar o teste
   seria pôr o botão no ar antes do verde — a família exata do 500 de 23/09. Abri wt-cal2 a partir de main (que já tinha o núcleo no ar), rodei a suíte montando aquele caminho: 556
@@ -127,11 +126,12 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Esperar a medicao da 10
+● Esperar a medicao da 10 · 5m 32s
   ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf medir_porta)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log | sed -n '/competencia 10/,$p'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log | sed -n '/competencia 10/,$p' (5m 30s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (2h 42m 48s · ↓ 154.3k tokens)
+✢ Schlepping… (2h 48m 18s · ↓ 154.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
