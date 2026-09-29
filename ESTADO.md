@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:48:02.**
+**Medido em 29/09/2026 00:53:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
-| `origin/main` | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,44 +95,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
-  Ran 1 shell command
-
-● Background command "Conferir o push" completed (exit code 0)
-
-  Ran 1 shell command
-
-● A suite do pre-push segue. Aguardo o veredito dela — e é a espera certa: ela está provando exatamente os dois commits que vão subir, e mexer na árvore agora anularia a prova.
-
-  Enquanto isso, nada de novo a relatar sem medição. Os dois commits e os três achados já estão publicados no RELATO com número e arquivo:linha, o placar da S3 está em 3 com
-  lastro, e o leitor #2 tem plano escrito com as duas pedras nomeadas.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
-  Ran 3 shell commands
-
-● O push começou 00:40 e a suite do pre-push leva ~8-10 min; estou às 00:44. A espera está no fundo e me avisa quando fechar.
-
-  Não tenho nada a acrescentar sem medição nova — e criar trabalho na árvore agora quebraria a prova que o pre-push está produzindo sobre os dois commits.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
   Ran 2 shell commands
 
 ● A espera está no fundo e me avisa. O push roda a suite completa no pre-push — é a porta que impede subir código não provado, e ela vale os minutos.
 
   Nada novo a dizer até ela fechar: o que está medido está publicado, e o que não está medido (as 23 divergências da 10) está nomeado como pendente de medição, não de opinião.
 
-✻ Churned for 5m 25s · done 12:44 AM · 19 shells still running
+✻ Churned for 5m 25s · done 12:44 AM · 17 shells still running
+
+● Background command "Empurrar os dois commits" completed (exit code 0)
+
+  Ran 1 shell command
+
+● PUSH FEITO: 73061422..0a918855 — os dois commits no remoto, suite 8.616 OK + control-plane 22 OK no pre-push. Agora o leitor #2:
+
+  Ran 2 shell commands
+
+● Background command "Esperar o push fechar" completed (exit code 0)
+
+  Ran 4 shell commands
+
+● A medição me corrigiu antes de eu afirmar — e essa é a quarta vez hoje, sempre pelo mesmo tipo de erro:
+
+  Eu media "colab com batida no dia" e encontrei 20-25% sem linha lavrada, o que me levaria a dizer "a lavratura não é contínua, o calendário não pode ler o DiaPago". Errado: a
+  lei da casa é o dia é o da ENTRADA, e 64 dos 66 "sem linha" são o noturno cuja batida de 28/09 é a saída de um turno do dia 27 — a linha deles existe, no dia certo. Universo
+  errado, não buraco.
+
+  Os 2 que sobraram são buraco real e já estão nomeados: col43 e col924 — os mesmos do FOLHA-ZERO-COM-BATIDA que registrei em PENDENTES. Têm par fechado, FechamentoMensal = 0,00 e
+  nenhuma linha, porque o fechamento deles é zero pelo cadastro_zero. Não é defeito da lavratura: é o cadastro que não descreve o mês, com dono já declarado.
+
+  E o que essa medição prova a favor do leitor #2: dos 66, 65 têm o FechamentoMensal atualizado no próprio dia 28/09 — ou seja, o recálculo do fechamento é diário, e a lavratura
+  acompanha. Estou remedindo com o universo certo para publicar o número antes de tocar no calendário; sem esse número eu estaria trocando a tela viva do admin com base numa
+  suposição.
+
+✻ Cogitated for 2m 31s · done 12:52 AM · 17 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 19 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
