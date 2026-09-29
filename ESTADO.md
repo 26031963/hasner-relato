@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:236 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:296 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:25:45.**
+**Medido em 29/09/2026 19:31:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/RELATO.md
  M app/folha/porta_export.py
  M app/ponto/services/dia_pago.py
  M app/ponto/tests/test_dia_pago_soma.py
@@ -103,7 +104,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
 
@@ -125,17 +125,18 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-● Inverter o selo e ver o terceiro caso
-  ⎿  $ python3 - <<'PYEOF'
+● PAREI de lei no topo e o relato do achado
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='ponto/tests/test_dia_pago_soma.py'
+     import io
+     P='app/docs/RELATO.md'
      t=io.open(P,encoding='utf-8').read()
-     V = '''class LavraDaFolgaTrabalhadaTest(TestCase):
-     """A FOLGA TRABALHADA leva as rubricas do dia, e nao so a hora (achado 29/09 11:5x, medido).
-     O laco de `f…
+     V = "# RELATO — esteira saas-hasner\n\n"
+     assert t.startswith(V)
+     NOVO = """# RELATO — esteira saas-hasner
+     PAREI: lei: hora noturna trabalhada em DIA DE F…
 
-✶ Schlepping… (3h 19m 2s · ↓ 180.4k tokens)
+✢ Schlepping… (3h 24m 18s · ↓ 185.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
