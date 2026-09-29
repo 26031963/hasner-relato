@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:347 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:386 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:55:45.**
+**Medido em 29/09/2026 04:01:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
+| `HEAD` local | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
 | `origin/main` | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
 53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
 a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30
 67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
 9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
-0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A régua roda. Enquanto ela fecha, a leitura do leitor #4 (api/views.py), que é o único que sobra além do pdf_espelho:
-
-  Ran 2 shell commands
-
-● O leitor #4 é trocável sem depender do abono — o card do dia do app usa só horas_trabalhadas e turno_aberto. Registro o censo enquanto a régua fecha:
-
-  Ran 4 shell commands
-
-● Background command "Esperar o push fechar" completed (exit code 0)
-
-● Régua VERDE com carimbo: 8.634 OK. Commit e push das lápides curadas + o censo do #4:
-
-  Ran 1 shell command
-
-● Background command "Publicar o censo e esperar a regua" completed (exit code 0)
-
-  Ran 4 shell commands
-
-● Background command "Commit e push das lapides curadas" completed (exit code 0)
-
 ● PUSH: a3ac4421..53c8a2a3 — sete pushes nesta rodada. São 03:54; o gate do deploy dispara em 36 min. Enquanto isso, construo o leitor #4, que não depende do abono:
 
   Ran 1 shell command
 
 ● O leitor #4 é trocável por inteiro — os cinco KPIs existem no FechamentoMensal gravado. Meço o DIFF antes de tocar a tela de 750 pessoas:
 
-  Colher o DIFF do leitor 4 · 7s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if grep -q "KPI que MUDA"
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_app.log 2>/dev/null; then break; fi; sleep 30; done; tail -16
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52… (6s)
+  Ran 2 shell commands
+
+● Achado do DIFF, e ele muda o desenho do leitor #4: zero KPI muda para quem tem fechamento — mas 52 de 120 colabs (43%) não têm FechamentoMensal na competência corrente. O app
+  mostra o apurado do motor para eles jogando fora o rótulo da fonte:
+
+  Ran 1 shell command
+
+● Achado próprio, medido: o app do colaborador mostra número de motor com cara de folha — o espelho rotula a fonte e o app joga o rótulo fora. É o mesmo defeito que a
+  FICHA-TOTAIS-FONTE curou na ficha em 23/09, e ninguém tinha olhado a tela dos ~750.
+
+  Ran 2 shell commands
+
+● Background command "Esperar o push" completed (exit code 0)
+
+● Registrado. O texto na tela de quem recebe holerite é decisão sua — três saídas, com a minha recomendação escrita. Régua e push do achado:
+
+  Ran 1 shell command
+
+● A régua respondeu JÁ VERDE — só mudei .md/.json, que não entram na impressão digital, então o carimbo de 8.634 OK vale. Commit e push:
+
+● Committing e push do achado do app · 47s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_app.txt <<'EOF'
+     O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
+     Fui medir o DIFF do leitor #4 da S3 antes de toca… (46s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (2h 51m 1s · ↓ 135.5k tokens)
+· Thundering… (2h 56m 17s · ↓ 143.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
