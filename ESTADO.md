@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:00:45.**
+**Medido em 29/09/2026 09:06:01.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_vinculo_linha_do_tempo.py
@@ -119,13 +120,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-  Esperar a régua · 1m 0s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_lt.log 2>/dev/null &&
-     break; sleep 10; done; tail -3 $S/regua_lt.log; date '+%H:%M' (1m 0s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Levitating… (2h 14m 37s · ↓ 216.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Committed 6563f03c, listed 1 directory, ran 71 shell commands
 
 ❯ ABONO-NO-AR NAO FECHOU: fatia.done=OK mas fechamento_x_soma_dias_pagos = 09: emp2 276, emp3 120, emp4 25 | 10: emp2 34, emp3 7. Leis: L-092, L-095, "feito so com o numero".
   Nenhuma lei nova.
@@ -137,10 +132,16 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ja leem).
   4. So entao o PDF (leitor #3).
      segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Ler o breakdown
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "emp4 10/2026\|== emp4 .*10/"
+     $S/breakdown.log 2>/dev/null && break; sleep 10; done; cat $S/breakdown.log | grep -v "^93 objects"; echo "=== regua"; grep -E "— Ran " $…
+
+✢ Levitating… (2h 19m 53s · ↓ 222.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

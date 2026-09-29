@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 09:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (114.3 MB). Acoes na janela: **882**.
+**Medido em 29/09/2026 09:06:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (114.4 MB). Acoes na janela: **889**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:04:06 | Bash | Ler o breakdown | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "emp4 10/2026\\|== emp4 .*10/" $S/breakdown.log 2>/dev/null && break; sleep 10; done; cat $S/breakdown.log \| grep -v "^93 objects"; echo "=== regua"; grep -E "— Ran " $S/regua_lt.log \| tail -2; date '+%H:%M'` |
+| 09:02:59 | Bash | Medir o breakdown por campo | `cd /home/ronald/saas-hasner && cat > /tmp/breakdown.py <<'PYEOF' # -*- coding: utf-8 -*- # O QUE diverge no `fechamento_x_soma_dias_pagos`, POR CAMPO e POR COLAB. So leitura. from collections import Counter from colaboradores.models import Empresa from folha.porta_export import medir for e in Empresa.objects.filter(ativa=True, pk__in=(2, 3, 4)).order_by('pk'): for (m, a) in ((9, 2026), (10, 2026)) ...` |
+| 09:02:46 | Bash | Ver como o contador monta dif_dp_fech | `grep -n "dif_dp_fech" -B4 -A22 folha/porta_export.py \| head -45` |
+| 09:02:41 | Bash | Ler o contador fechamento_x_soma | `grep -n "fechamento_x_soma_dias_pagos" -A 30 folha/porta_export.py \| sed -n 1,45p` |
+| 09:02:21 | Bash | Ler a guarda da exportada e o trecho da grade | `sed -n 60,90p ponto/services/fechamento.py; echo "=== 490-525 (a grade)"; sed -n 490,522p ponto/services/fechamento.py` |
+| 09:02:16 | Bash | Ver a guarda e os mapas por dia | `grep -n "CompetenciaExportada\\|somente_leitura\\|lavrar_dias_pagos\\|_abono_dia\\|_prev_dia_m\\|_real_dia_m\\|_dt_trab" ponto/services/fechamento.py \| head -30` |
+| 09:02:10 | Bash | Registrar a ordem e tirar o pendente que ele decidiu | `python3 - <<'PYEOF' import io, json P='docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() anc='\| PAREI-SO-LEI \| 29/09 07:3x \|' nova = ("\| ABONO-NO-AR-NAO-FECHOU \| 29/09 ~09:0x \| `fatia.done=OK` com `fechamento_x_soma_dias_pagos` 09: " "emp2 276 emp3 120 emp4 25 · 10: emp2 34 emp3 7. **(1)** decisao tecnica DELE: a lavratura da " "competencia EXPORTADA e **RETRATO do `FechamentoMensal` gra ...` |
 | 08:59:44 | Bash | Esperar a régua | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_lt.log 2>/dev/null && break; sleep 10; done; tail -3 $S/regua_lt.log; date '+%H:%M'` |
 | 08:57:48 | Bash | Esperar a régua | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_lt.log 2>/dev/null && break; sleep 10; done; tail -2 $S/regua_lt.log; date '+%H:%M'` |
 | 08:55:53 | Bash | Esperar a régua | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_lt.log 2>/dev/null && break; sleep 10; done; tail -2 $S/regua_lt.log; date '+%H:%M'` |
