@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:03:31.**
+**Medido em 28/09/2026 23:09:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b98308a3 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke` |
+| `HEAD` local | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
 | `origin/main` | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -22,22 +22,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-b98308a3 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke
 73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
+88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/calendario.py
- M app/colaboradores/tests/test_ui_grade_calendario.py
+M  app/colaboradores/tests/test_calendario_sete_colunas.py
+A  app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
+A  app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/RELATO.md
- M app/ponto/services/dia_decidido.py
- M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
+MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -90,12 +89,6 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Esperar o veredito da regua" still running in background
-
-● Task "Esperar o DIFF do apply" still running in background
-
-● Task "Esperar o DIFF" still running in background
-
 ● Task "Publicar o PAREI e rodar a regua" still running in background
 
 ● Task "Esperar a regua" still running in background
@@ -117,12 +110,18 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar o veredito da regua · 14s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 40); do if grep -qE '^(OK|FAILED)$|^(OK|FAILED) \(|^Ran [0-9]+ test' /tmp/regua_225509.log 2>/dev/null; then break; fi;
-     sleep 20; done; grep -E '^Ran [0-9]+ test|^OK$|^OK \(|^FAILED' /tmp/regua_225509.log | tail -5; tail -6 /tmp/claude-1001/-home-ro… (13s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 10 shell commands
 
-· Sprouting… (59m 30s · ↓ 72.4k tokens)
+❯ chip do calendario: publicar no RELATO o diff de ponto/services/dia_decidido.py e colaboradores/services/calendario.py ANTES do commit e dizer por que o chip precisa de servico
+  do ponto; se for so rotulo curto, o rotulo mora no template/catalogo, nao em dia_decidido (L-096: fila 2 nao toca nucleo). Depois S3 leitor a leitor. segue a fila; PAREI so em
+  lei ou !
+
+● Ordem recebida e registrada. Ela me corrige: vou publicar os dois diffs e retirá-los — o rótulo volta para o catálogo.
+
+● Como o catalogo le o cadastro
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n "$(grep -n 'def vigente' app/ponto/catalogo/ausencias.py | head -1 | cut -d: -f1),+25p" app/ponto/catalogo/ausencias.py
+
+✢ Sprouting… (1h 5m 0s · ↓ 89.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
