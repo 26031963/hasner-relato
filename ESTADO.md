@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 17:45:31.**
+**Medido em 29/09/2026 17:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `958ac42d TICKETS: rodape e placar com o ultimo push do mundo` |
+| `HEAD` local | `40995328 TICKETS: placar do topo` |
 | `origin/main` | `958ac42d TICKETS: rodape e placar com o ultimo push do mundo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+40995328 TICKETS: placar do topo
+0afe9dac BACKLOG: a S3 fecha com o placar em 0, e o placar mudou de pergunta
 958ac42d TICKETS: rodape e placar com o ultimo push do mundo
 ff5f697d TICKETS: placar do topo
 b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido em prod hoje
-9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres
-4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito
 ```
 
 ## `git status --short`
@@ -99,9 +99,6 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Esperar o fim do push por arquivo de sinal" completed (exit code 0)
-
 ● Background command "Esperar o fim do push" completed (exit code 0)
 
 ● Background command "Esperar o push e ver o veredito" completed (exit code 0)
@@ -125,18 +122,21 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 
 ● Background command "Push dos 27 commits" completed (exit code 0)
 
-  Esperar o fim do push · 8m 13s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; tail -6
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3d.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (8m 11s)
+  Read 1 file, ran 13 shell commands
+
+● Background command "Push com o rodape acertado" completed (exit code 0)
+
+  Pushing do fechamento da S3 · 2m 35s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet -- app/docs/TICKETS.md || git commit -q -m "TICKETS: placar do topo
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md; timeout 3400 git push origin main … (2m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (1h 38m 48s · ↓ 116.3k tokens)
+· Schlepping… (1h 44m 2s · ↓ 119.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
