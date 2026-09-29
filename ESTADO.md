@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:44:01.**
+**Medido em 29/09/2026 14:49:09.**
 
 | | |
 |---|---|
-| `HEAD` local | `cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio` |
+| `HEAD` local | `96086b03 Dois contratos me pegaram no censo, e os dois estao certos` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **19** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+96086b03 Dois contratos me pegaram no censo, e os dois estao certos
+13689993 A porta REGEN-EM-EXPORTADA era MEIA-CORRECAO, e o contador disse isso subindo de 1 para 74
 cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio
 5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes
 9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO
-0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela
-2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
 ```
 
 ## `git status --short`
@@ -42,10 +42,7 @@ cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payloa
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/config/crons.py
- M app/docs/ARQUITETURA.mmd
  M app/ponto/management/commands/censo_fase_12x36.py
- M app/ponto/portas/regen_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -103,44 +100,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  2. O DIFF em leitura mostrou que a âncora que corrige a 09 do col414 quebrava a 10 — a fase dele virou duas vezes. Curado com a segunda virada; a 10 voltou a "nada mudou".
+  3. O contrato de cron me pegou pondo o censo às 08:20, quando auditoria tem de vir antes de alerta.
+  4. E o que passou: a porta era meia-correção — consertava o FechamentoMensal e deixava a lavratura velha. O contador da 09 disse isso subindo de 1 para 74. A porta agora relavra
+     no mesmo atomic, e os seis foram relavrados.
+
+  Esse último merece o destaque: foi o contador cego que eu curei hoje de manhã que tornou o erro visível. Se ele ainda estivesse olhando só quem entra no TXT, a divergência dos
+  seis — quatro deles com status='fora' — não apareceria.
+
+  Em voo: a re-medição do contador da 09 depois da relavratura, o push do lote (16 commits) e a raia PDF no worktree. Não vou tocar folha_manda até ela entregar — é o arquivo onde
+  o resumo dela e o meu se encontram, e mexer agora tiraria o chão da medição dela.
+
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-  Ran 3 shell commands
+  Searched for 2 patterns, ran 3 shell commands
 
-● O leitor #4 (o app) ainda lê o dinheiro do dia do motor. Meço a troca antes de fazê-la.
+● Dois contratos meus me pegaram, e os dois estão certos. Curo.
 
-  Ran 1 shell command
+  Ran 5 shell commands
 
-● A troca do leitor #4 é neutra: zero dia-colab muda de número. Faço com o rótulo no payload.
+● Enquanto a raia PDF mede, escrevo o teto que falta para a cura automática do item 2 poder rodar sozinha.
 
-  Searched for 1 pattern, ran 10 shell commands
+  Ran 2 shell commands
 
-● A S3 agora depende da raia PDF (e eu não devo tocar folha_manda enquanto ela mede). Fecho o juiz da família: cron com contador e dono.
+● Isso é um bug meu, e o dano é real: o --curar desfez a segunda virada do col414. O censo mede a 09 contra a vigência ATIVA, que agora é a da 10.
 
-  Searched for 4 patterns, ran 6 shell commands
+● Repetir a cura: tem de ser no_op
+  ⎿  $ docker exec saas_core python manage.py tenant_command censo_fase_12x36 --schema=juliani --min-plantoes 6 --curar --teto 3 2>&1 | grep -v "objects imported" | tail -8
 
-● Background command "Aguardar push10 e o contador" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Três achados de uma vez. O contador subiu para 74 — e a causa é minha: a porta conserta o gravado e deixa a lavratura velha.
-
-  Ran 3 shell commands
-
-● A porta agora relavra. Os 6 já retificados precisam disso agora — relavro a 09.
-
-● Running 1 shell command…
-
-✢ Nucleating… (47m 35s · ↓ 139.7k tokens)
+· Nucleating… (52m 43s · ↓ 154.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading lavrar block in fechamento.py                                                                                              25m 33s · ↓ 254.5k tokens
+  ◯ general-purpose  Debugging saldo_banco_horas in _resumo_pela_lavratura                                                                              30m 40s · ↓ 280.3k tokens
   ⧉  index
 ```
