@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:25:01.**
+**Medido em 29/09/2026 20:30:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `38e6d92e TICKETS: rodape e placar` |
-| `origin/main` | `87b5303d TICKETS: rodape e placar com o ultimo push` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `38e6d92e TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -99,18 +99,6 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Push 40995328..08f8ca75, suíte verde, faltam=0. wt-cal2 removida.
-
-  Falta de você, nos dois itens que seguem em pé: o smoke de clique da UI-GRADE (roteiro no RELATO da raia-ui, col292/647/311/417 em setembro/2026) e a decisão de 5px da Auditoria
-  de espelhos. O próximo da ORDEM VIVA é O-JANELA-HE parte B1 (LEITURA).
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
-  Searched for 3 patterns, ran 21 shell commands
-
-● Background command "Medir os contadores da porta em prod" completed (exit code 0)
-
   Searched for 2 patterns, ran 7 shell commands
 
 ● Agora o selo com o caso que morde nas duas pontas:
@@ -125,13 +113,25 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 
 ● Ordem recebida e registrada. Antes dela, fecho a prova do apply que estava em curso: a 10 caiu de 33 para 19, e as 19 que sobram são de outra classe.
 
-● Publicar a prova e a ordem registrada · 8m 45s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 44s)
+  Searched for 1 pattern, ran 9 shell commands
+
+● Enquanto o push roda, sigo a B1. O primeiro item dela está meio feito e isso é achado, não suposição:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
+  derivação está no template.
+
+● Suite dos tres apps na raia da B1 · 1m 7s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-b1/app:/app saas… (1m 5s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (4h 18m 18s · ↓ 202.4k tokens)
+✢ Schlepping… (4h 23m 48s · ↓ 212.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
