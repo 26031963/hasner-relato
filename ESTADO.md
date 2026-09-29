@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:56:31.**
+**Medido em 29/09/2026 03:02:01.**
 
 | | |
 |---|---|
@@ -101,13 +101,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o push fechar" completed (exit code 0)
-
-  Ran 3 shell commands
-
-● Background command "Esperar a regua do censo" completed (exit code 0)
-
-● Régua VERDE: 8.632 OK. Commit e push do censo do abono:
 
   Ran 5 shell commands
 
@@ -128,17 +121,24 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar o push fechar" completed (exit code 0)
 
-● Acompanhar · 1m 35s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_024924.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_024924.log)" (1m 34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 6 shell commands
 
-✢ Thundering… (1h 51m 47s · ↓ 100.5k tokens)
+● Background command "Publicar e esperar a regua" completed (exit code 0)
+
+  Ran 4 shell commands
+
+● O mypy pegou o dicionário vazio sem anotação (dict vazio não tem tipo inferível) — curado. Régua rodando; enquanto isso, o backfill precisa de deploy antes:
+
+● Estado da migration e do ensaio
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command showmigrations ponto --schema=juliani 2>/dev/null | tail -3; echo '--- a migration 0068
+     esta no disco mas nao aplicada; o deploy.sh migra ANTES. Ensaio da sombra de hoje:'; bash bin/sombra.sh --conferir 2>&1 | ta…
+
+✢ Thundering… (1h 57m 17s · ↓ 103.0k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
