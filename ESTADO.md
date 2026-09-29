@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:392 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:06:31.**
+**Medido em 29/09/2026 14:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos` |
+| `HEAD` local | `9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"
+57c056e2 APLICADO: a 10 recalculada, as duas relavradas, e a 09 com hash IDENTICO nas quatro empresas
 af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos
 919d184c DIFF do recalculo da 10 na SOMBRA, publicado ANTES do apply -- e a 09 intacta
 d759f44b DINHEIRO-EM-COMPETENCIA-ABERTA: lei permanente, e ela revoga o meu proprio PAREI
-29670805 O espelho_x_dia_pago saiu de 0 para 1 e 4, e conferi que nao fui eu
-cd1adb17 O PAREI diz o tamanho novo do contador: 09 = 1 + 37, 10 = 39 + 43
 ```
 
 ## `git status --short`
@@ -42,6 +42,7 @@ cd1adb17 O PAREI diz o tamanho novo do contador: 09 = 1 + 37, 10 = 39 + 43
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/ponto/management/commands/carimbo_gravado.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,23 +100,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  push9 em voo com seis commits (a cura do contador, a da lavratura da folga trabalhada, os dois PAREI e o placar). Falta relavrar a 10 para as linhas ganharem as rubricas curadas
-  — aditivo, não toca o gravado.
-
-✻ Cooked for 9m 45s · done 12:21 PM · 5 shells still running
-
-❯ aval Ronald: recalcula a 10 (DIFF na sombra contra o gravado, publicado) e relavra as duas competencias (09 por retrato, 10 pelo recalculo); nenhum outro gravado se toca. segue
-  a fila; PAREI so em lei ou ! !
-
-● O ! chegou. Registro e executo na ordem que ele define: DIFF na sombra → carimbo do antes → apply → relavra → prova.
-
-  Ran 9 shell commands
-
-❯ aval Ronald PERMANENTE (CLAUDE.md, secao pre-aprovados): fica PRE-APROVADO tambem o apply de dinheiro em competencia NAO exportada (recalculo, relavratura, cura do motor),
-  desde que: DIFF de frota publicado no RELATO antes, arquivo de reversao em logs/, competencia exportada intacta (L-092), e o resultado com PROVA no RELATO. PAREI so em pergunta
-  de LEI, apagar/voltar arquivo de prod ou tocar competencia exportada. Executa agora o recalculo da 10 e a relavratura das duas e segue a fila ate o fim da S3 sem parar. !
-
-● Lei nova e permanente. Registro no CLAUDE.md e executo — o ! agora é estrutural, não por caso.
 
   Ran 19 shell commands
 
@@ -129,13 +113,30 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● O apply passou e a 09 não se mexeu. Agora o carimbo da 09 vai dizer quem a mexeu antes.
 
-● Running 1 shell command…
-  ⎿  $ docker exec saas_core python manage.py tenant_command carimbo_gravado --schema=juliani --empresa 2 --mes 9 --ano 2026 2>&1 | grep -v "objects imported" | tail -6
+  Ran 2 shell commands
 
-· Nucleating… (10m 5s · ↓ 27.2k tokens)
+● O carimbo nomeou o colaborador: col451. Faltou o campo — vou fazer o comando guardar valores. Primeiro a relavratura da 09, que é a ordem.
+
+  Comparar so a intersecao dos campos
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'ponto/management/commands/carimbo_gravado.py'
+     t = io.open(P, encoding='utf-8').read()
+     v = """ fora = []
+     for k in sorted(set(velho or {}) | set(novo or {})):
+     a, b = (velho or {}).get(k), (novo or {}).get(k)"""
+     assert t.count(v)…
+
+✢ Nucleating… (15m 35s · ↓ 43.9k tokens)
+
+❯ aval Ronald [nome]: desenho B (EC 934 ate 01/09; linha nova diurna 06-18 desde 02/09, ancora 28/09) pela porta unica com trilha. Lei nova REGEN-EM-EXPORTADA: porta declarada,
+  staff-only, com trilha (quem/quando/motivo/hash antes/depois), para regenerar celulas e refazer FechamentoMensal de UM colab em competencia exportada; TXT parcial de
+  retificacao com hash publicado. Aplicar nela: celulas 02/09->hoje, 09 dela retificada, Pauta DP com os dois numeros. Reversao em logs/. Segue a fila. !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
