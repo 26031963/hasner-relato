@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:12:01.**
+**Medido em 29/09/2026 14:17:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"` |
+| `HEAD` local | `2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
+988e3375 REGEN-EM-EXPORTADA: a excecao para a competencia paga nasce como PORTA, e o carimbo fica honesto
 9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"
 57c056e2 APLICADO: a 10 recalculada, as duas relavradas, e a 09 com hash IDENTICO nas quatro empresas
 af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos
-919d184c DIFF do recalculo da 10 na SOMBRA, publicado ANTES do apply -- e a 09 intacta
-d759f44b DINHEIRO-EM-COMPETENCIA-ABERTA: lei permanente, e ela revoga o meu proprio PAREI
 ```
 
 ## `git status --short`
@@ -42,7 +42,6 @@ d759f44b DINHEIRO-EM-COMPETENCIA-ABERTA: lei permanente, e ela revoga o meu prop
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/ponto/management/commands/carimbo_gravado.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -101,42 +100,42 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  Ran 19 shell commands
+● O desenho B está aplicado pela porta. Os 19 dias exportados foram barrados, como a lei manda — agora construo a porta que os alcança.
 
-● Background command "Aguardar o fim do apply (45s)" completed (exit code 0)
+  Searched for 2 patterns, ran 2 shell commands
 
-  Read 1 file
+❯ aval Ronald FAMILIA-FASE-12x36 (absorve [nome] e o col1422; puxa o juiz DESVIO-DE-CADASTRO da O-HAIKU-INVESTIGA para AGORA, antes da S4): (1) censo de frota, leitura: para
+  cada vinculo 12x36 ativo, paridade real das batidas por competencia 09 e 10 (funcao real _previsto_do_template, nunca derivacao propria) e o dia em que a fase virou; publicar
+  tabela com ids, N plantoes, paridade. (2) AUTOMATICO, sem clique, so quando paridade >= 90% com >= 6 plantoes: reescrever a linha do tempo pela porta unica de vinculo desde o
+  dia da virada (vinculo anterior fecha em D-1, trilha HistoricoVinculo, reversao em logs/), regenerar e re-julgar celulas. (3) Abaixo do criterio ou escala de tipo diferente:
+  PROPOSTA pronta em PENDENTES para o admin, nada grava. (4) Lei nova REGEN-EM-EXPORTADA: porta declarada staff-only com trilha e hash antes/depois para regenerar celulas e
+  refazer FechamentoMensal de um colab em competencia exportada; TXT parcial de retificacao com hash publicado; aplicar na 09 para os do item 2. (5) DIFF de frota publicado antes
+  do apply da 10; a 09 so pela porta do item 4. RED: [nome] = desenho B (2 furos, 4 folgas trabalhadas), col1422 = fase certa com 0 folga com batida, repetir = no_op. PRONTO:
+  tabela do censo, lista dos automaticos com trilha, lista das propostas, hashes. Segue a fila; PAREI so em lei. !
 
-● Background command "Resultado do apply" completed (exit code 0)
-
-● Background command "Aguardar o apply" completed (exit code 0)
-
-● O apply passou e a 09 não se mexeu. Agora o carimbo da 09 vai dizer quem a mexeu antes.
+● Obra grande. Registro e começo pelo censo, que é leitura e alimenta todo o resto.
 
   Ran 2 shell commands
 
-● O carimbo nomeou o colaborador: col451. Faltou o campo — vou fazer o comando guardar valores. Primeiro a relavratura da 09, que é a ordem.
+❯ aval Ronald raia PDF: git worktree add ../wt-pdf main; nesta raia SO relatorios/pdf_espelho.py + relatorios/tests/ + docs. Construir o leitor #3 pelo plano ja escrito no RELATO
+  (anomalias e turnos_abertos por selecao_periodo.montar_periodos_de; dinheiro por rubricas_do_dia; credito parcial sai do PDF; dias_falta/abono da lavratura) + linha do dia
+  mostrando o pago. RED por colab medido ANTES (col600 22/09 = 7h01). Selo AST S3 = placar cai 1. Nao deployar, nao relavrar, nao tocar gravado: entregar branch + DIFF por colab
+  do papel (antes x depois) e PAREI para merge pela raia principal. Regua so por regua.sh. Leis L-092, L-095, L-097; nenhuma lei nova. !
 
-  Comparar so a intersecao dos campos
-  ⎿  $ python3 - <<'PYEOF'
+● Três ordens vivas. Registro as duas novas, abro a raia PDF em worktree e sigo no censo na raia principal.
+
+● Committing da porta, do censo e dos registros
+  ⎿  $ sed -i '/^ from colaboradores.models import Colaborador$/d' ponto/management/commands/censo_fase_12x36.py && docker exec saas_core ruff check
+     /app/ponto/management/commands/censo_fase_12x36.py 2>&1 | tail -2; python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'ponto/management/commands/carimbo_gravado.py'
-     t = io.open(P, encoding='utf-8').read()
-     v = """ fora = []
-     for k in sorted(set(velho or {}) | set(novo or {})):
-     a, b = (velho or {}).get(k), (novo or {}).get(k)"""
-     assert t.count(v)…
+     import io
+     P = 'docs/PROMPTS.md'
+     ls = io.open…
 
-✢ Nucleating… (15m 35s · ↓ 43.9k tokens)
-
-❯ aval Ronald [nome]: desenho B (EC 934 ate 01/09; linha nova diurna 06-18 desde 02/09, ancora 28/09) pela porta unica com trilha. Lei nova REGEN-EM-EXPORTADA: porta declarada,
-  staff-only, com trilha (quem/quando/motivo/hash antes/depois), para regenerar celulas e refazer FechamentoMensal de UM colab em competencia exportada; TXT parcial de
-  retificacao com hash publicado. Aplicar nela: celulas 02/09->hoje, 09 dela retificada, Pauta DP com os dois numeros. Reversao em logs/. Segue a fila. !
-  ctrl+x ctrl+s to send now
+✢ Nucleating… (21m 5s · ↓ 65.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
