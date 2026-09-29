@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:285 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:291 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 12:03:01.**
+**Medido em 29/09/2026 12:08:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
+| `HEAD` local | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
 | `origin/main` | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava
+a3202eb0 PAREI de volta ao TOPO do RELATO: a S3 para na L-095, que e lei sua
 9b446740 TICKETS: placar e rodape com o push a0c12c3e
 9592fc83 A lavratura descartava o adicional noturno do dia de folga trabalhada -- e os leitores ja leem a lavratura
 db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio
-a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro
-ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
 ```
 
 ## `git status --short`
@@ -99,40 +99,40 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Achei e curei um buraco de dinheiro na lavratura — indo tirar o resumo do cartão do motor.
+    de código está descartado porque emp1/emp3/emp4 deram hash idêntico ao byte e só a emp2 andou.
 
-  O plano da fatia estava certo no destino e errado no meio. Medido: folha_manda → totais_da_folha já lê o FechamentoMensal direto (corte RESUMO-UMA-FONTE, 23/09), e roda depois
-  do laço do motor e depois do :498. Na competência 09, 100% dos ativos têm fechamento (540/540) — ali o laço do motor e o abatimento do :498 são código morto. Na 10, 121 de 540
-  (22,4%) não têm — e para esses o :498 é o único abatimento do crédito parcial. Então o item (d) do plano ("esse bloco SAI na troca") está suspenso: tirá-lo agora deixaria 121
-  pessoas com o atraso do mês sem o crédito. O caminho existe e está medido: os 121 têm, os 121, lavratura (100%).
+  Rodando ainda: o push do lote e a re-medição dos contadores. Sobre ela eu já disse o que espero — o "09: 1" deve estar baixo, e se for, corrijo com o mesmo destaque que dei ao
+  421 → 1. Falta relavrar a 10 para as linhas ganharem as rubricas curadas (aditivo, não toca o gravado).
 
-  O DIFF dos 121 achou um caso, e ele era um bug. 120 batem nos sete campos; col917 [nome] se move: trabalhadas −7,00 h, noturnas −1,14 h. As 7 h não faltavam — o dia
-  26/09 dele é folga trabalhada (7,00 na rubrica própria, 0,00 em trabalhadas), e 34,67 + 7,00 = 41,67, o número do motor. Foi a minha soma que olhou só uma das duas.
+✻ Churned for 1h 57m 57s · done 12:06 PM · 6 shells still running
 
-  As noturnas, não. A linha de 26/09 tinha horas_noturnas = 0,00 e o motor apura 1,14 h. O defeito estava no laço de lavrar: ft_certa gravava só horas_folga_trabalhada e
-  descartava todo o resto do período — adicional noturno, HE 50/100, intrajornada indenizada, saída antecipada. O FechamentoMensal conta esses minutos (ele soma periodos +
-  periodos_ft), então a lavratura ficava abaixo do gravado em rubrica de dinheiro. Contra o gravado, na 09: 1,99 + 1,69 h de HE 50% e 3,00 h de intra em 6 colaboradores. É a mesma
-  classe do minutos_abonados de madrugada — com a diferença que importa: desde hoje os leitores leem a lavratura.
+● Background command "Aguardar o contador" completed (exit code 0)
 
-  Curado no laço (as duas listas levam as rubricas do período, sem dobra — nenhuma delas está em periodos; a hora trabalhada continua na rubrica própria, que é o que garante o
-  100% da CLASSE3-FOLGA-100). RED provado descartando as rubricas de novo: os três casos de LavraDaFolgaTrabalhadaTest ficam vermelhos. Commit 9592fc83, no ar às 11:59.
+  Read 1 file, ran 4 shell commands
 
-  Em voo agora: o push do lote e uma re-medição dos contadores das duas competências pela porta_export.medir — preciso dela porque suspeito que o "09: 1" que publiquei de manhã
-  está baixo: se a lavratura da 09 está sem essas rubricas em 6 colabs, o contador tem de dizer 6 ou 7, não 1. Se for isso, corrijo o número no RELATO com o mesmo destaque que dei
-  ao 421 → 1.
+● O turno está no PAREI de lei, com tudo commitado e no ar. Duas coisas seguem rodando sozinhas e eu retomo por elas:
 
-  Falta relavrar a 10 (o backfill é aditivo e não toca o gravado) para as linhas ganharem as rubricas curadas. Na 09 não dá pelo retrato — e isso é o seu corte funcionando, não um
-  esquecimento: rodar o motor de hoje sobre competência paga é a deriva disfarçada de cura que você barrou às 09:0x. A diferença fica onde ela deve ficar: no contador.
+  - push7 (o lote com a cura da lavratura da folga trabalhada) — a suíte já passou nos runs anteriores; se ele barrar de novo no placar do TICKETS, é o ciclo de sempre:
+    tickets_placar --escrever, commit do TICKETS, push.
+  - re-medição dos contadores pela porta_export.medir nas duas competências — é ela que vai dizer se o "09: 1" que publiquei de manhã está baixo. Eu aposto que sim: a lavratura da
+    09 está sem as rubricas de folga trabalhada em 6 colabs, então o contador tem de dizer 6 ou 7. Quando o número vier, ele entra no RELATO com o mesmo destaque que dei ao 421 →
+    1 — número meu que estava errado se corrige no lugar onde foi publicado.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+  A trava, em uma linha: o contador da 10 está em 39 e a sua própria lei da obra proíbe leitor novo lendo DiaPago antes da fatia 2 zerar. O próximo leitor da S3 é o resumo do
+  cartão, e ele não anda sem o ! do RECALCULO-DA-10 — 76 colabs em 20 campos, mais 158 que passam a ter gravado, com a tabela e a frase de reversão no PENDENTES_RONALD.json.
+
+  Uma nota sobre o meu próprio placar do dia: três turnos devolvidos por detalhe de forma (o ** no PAREI, o placar do TICKETS duas vezes) custaram mais tempo que qualquer medição.
+  O hook estava certo nas três.
+
+✻ Crunched for 35s · done 12:08 PM · 6 shells still running
+
+● 2 background commands completed
 
 ● Contador e push7
-  ⎿  $ grep -v "objects imported" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk6nq89ux.output 2>/dev/null | head -12; echo "== push7
-     =="; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; date '+…
+  ⎿  $ grep -v "objects imported" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk6nq89ux.output 2>/dev/null | head -12; echo "--- push7
+     ---"; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; pgrep…
 
-✢ Puttering… (1h 54m 41s · ↓ 306.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✢ Deliberating… (8s · ↓ 110 tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
