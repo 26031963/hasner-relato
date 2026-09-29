@@ -71,6 +71,32 @@ defeito mais caro que este relatorio poderia ter: cada linha parecia certa.
   A 1a versao desta troca SOMAVA as duas -- a mesma hora paga duas vezes, a familia exata do
   BUG-HE-INTRA-DOBRADA de hoje. Selo proprio: `test_MORDE_a_HE_noturna_e_SUBSET_e_nao_se_soma_a_HE_50`.
 
+## O `espelho_x_dia_pago` da competencia 10 **NAO e zero**, e a causa esta medida
+
+Sua condicao por troca e `espelho_x_dia_pago = 0`. Ele **nao esta**, e o numero e este:
+
+PROVA: `porta_export.medir(emp2, 10, 2026)` -> `espelho_x_dia_pago` = **65 dia-colab**,
+`fechamento_x_soma_dias_pagos` = **36 linhas**, `colabs_sem_lavratura` = **0**.
+
+A CAUSA, num caso nomeado (col600, 22/09): o espelho diz **442 min** e o `DiaPago` diz **420,63 min** --
+exatamente o `p.minutos_trabalhados` do motor, copiado sem alterar. A diferenca e **21,37 min** e tem nome:
+e a **JANELA DE HE** (L-097), que entrou em prod hoje na competencia 10. O colaborador chegou ~21 min antes do
+marco; pela sua lei esses minutos "nao viram HE nem compensam nada", e a jornada conta **do marco**. Entao:
+
+* o **`DiaPago` esta certo** -- ele e o que a folha paga;
+* o **espelho esta mostrando o realizado CRU** (`minutos_realizados`, batida a batida), que e outra pergunta;
+* o contador esta comparando **duas perguntas diferentes** e chamando de divergencia.
+
+Isto **nao e bug novo nem defeito da troca**: e a metade de TELA da O-JANELA-HE, que voce ja declarou com
+PRAZO ("prontas antes do export da competencia 10") -- o relogio riscado 10px depois da hora, o tooltip
+*"N min antes do marco · nao conta · Art. 4o §2o"* e a Gestao de HE. Enquanto ela nao sobe, a tela mostra
+7,37 h num dia que a folha paga 7,01 h, e e por isso que o item tem prazo.
+
+**O que isso muda no meu plano**: a troca do extrato nao "fecha com contador zero" -- ela fecha com o contador
+**explicado e com o numero publicado**, e o zero passa a depender das telas da O-JANELA-HE, que estao na sua
+ordem viva depois da S3/S4/S5b. Nao mexi no contador para ele zerar: contador que muda de pergunta para
+concordar com o sistema e o oposto do que ele serve para fazer (`bin/tests` § paridade do oraculo, 27/09).
+
 ## Placar e pendencia
 
 PROVA: `ponto/tests/test_s3_leitor_nao_chama_motor.py` -- o placar da S3 cai de **7 para 6** no mesmo commit
