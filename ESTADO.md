@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:05:45.**
+**Medido em 29/09/2026 19:10:45.**
 
 | | |
 |---|---|
@@ -99,9 +99,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Smoke em prod, e a minha primeira medição estava errada: urlopen na porta do saas_ui devolve 200 com a página de login (segue o redirect), então "200" ali não prova tela nenhuma
-  — eu li botao=nao de uma página que não era a tela. Medi pelo caminho que a tela usa, contexto_calendario + render_to_string reais, dentro do saas_ui (no saas_core isso estoura
   com NoReverseMatch: 'colaboradores' is not a registered namespace, porque o core roda o urlconf enxuto — o erro prova em qual casca a tela mora):
 
   ┌─────────────┬──────────────────┬─────────────────────────────────────┬───────┬───────────────────────────┐
@@ -126,17 +123,20 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Background command "Medir os contadores da porta em prod" completed (exit code 0)
 
-  Esperar e ler a nomeacao · 5m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf nomear.py)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log | head -60 (5m 49s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Medir a causa das 12 divergencias da 09
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/causa12.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """A causa dos 12: o ESCALAR do gravado x a GRADE que o proprio gravado carrega (leitura pura)."""
+     from folha.export import grade_do_fechamento
+     from ponto.models import FechamentoMensal, DiaPago
+     from ponto.serv…
 
-· Schlepping… (2h 59m 2s · ↓ 155.2k tokens)
+· Schlepping… (3h 4m 2s · ↓ 157.5k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
