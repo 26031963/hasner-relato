@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:54:31.**
+**Medido em 29/09/2026 15:00:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese` |
+| `HEAD` local | `99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo
 aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 96086b03 Dois contratos me pegaram no censo, e os dois estao certos
 13689993 A porta REGEN-EM-EXPORTADA era MEIA-CORRECAO, e o contador disse isso subindo de 1 para 74
 cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio
-5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes
 ```
 
 ## `git status --short`
@@ -42,6 +42,7 @@ cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payloa
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/relatorios/cartao_pela_celula.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,44 +100,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● Estado: a pista de teste é uma só e eu a disputei comigo mesmo — o push está armado para sair quando ela esvaziar.
+  Não entrou hoje de propósito: é mudança de UI, e o quarteto UI-GRADE já espera o seu smoke. Somar uma segunda mudança de tela sem smoke é o apagão de 23/09 esperando — template
+  novo com urlconf velho, cinco respostas 500 na tela do calendário. Fica registrado no BACKLOG com esse motivo escrito.
 
-  O que fechou nesta leva, e dois erros meus com nome:
+  Resumo do que espera você, nesta ordem de custo:
 
-  Erro 1 — rodei --curar (que escreve) para testar o no_op. Curou 3 colaboradores sem DIFF publicado antes, que é a condição 1 da sua própria lei. Fui medir antes de decidir
-  reverter: col78 100%/100%, col112 100%/100%, col168 93,3%/100% nas duas competências. O cadastro deles passou a descrever os plantões reais, então não reverti — reverter um
-  acerto para punir o processo seria trocar um erro por outro. Os números ficam publicados; a reversão está em logs/.
+  1. Smoke de clique nas duas cascas — destrava o quarteto UI-GRADE e a linha do dia na tela do espelho.
+  2. 51 propostas de fase em FAMILIA-FASE-12x36-PROPOSTAS (item 2 automático está em zero; esses 51 são os que nenhuma âncora descreve, e quatro já têm caminho conhecido).
+  3. 6 Pautas DP (842–847) com o pago × passa-a-valer da retificação da 09, mais a Pauta 841 do col334.
+  4. O TXT parcial de retificação (sha256 12aeecb5…) para os 2 que entram no TXT — os outros 4 vão pela Pauta.
 
-  Erro 2, e esse causou dano — o censo media contra a vigência ATIVA. Depois da segunda virada do col414 (22/09), a ativa dele passou a ser a de 22/09, que não cobre a 09; o censo
-  leu a 09 como desvio outra vez e o --curar reescreveu desde 22/08, absorvendo o segmento correto da 10. O seu RED pedia "repetir = no_op" e o meu código desfazia trabalho
-  certo. Restaurado pela porta, não pelo banco na mão, e o censo curado: uma linha por colab × competência, medida contra a vigência que vale, e --curar virou NO_OP quando a
-  vigência que cobre já tem a âncora da proposta.
-
-  O censo curado e o item 2 em ZERO: 318 linhas, 260 com cadastro OK, 58 de desvio em 51 colabs, e nenhum acima do critério — todos os que passavam foram curados. Contador
-  desvio_de_cadastro_12x36 lavrado, cron às 07:38.
-
-  E o contador da 09 corrigiu uma hipótese minha. Eu disse que as 74 divergências vinham de lavratura defasada; relavrei tudo por retrato (607 colabs, 10.412 linhas, hash
-  idêntico) e ele ficou igual, 74. A causa é o seu corte de 09:0x: na exportada a lavratura é retrato e escreve só os três campos de grade — as rubricas de dinheiro vêm do motor,
-  que não roda sobre competência paga. HE 0,91 no gravado contra 0,00 na lavratura não é divergência. Comparar o que o retrato nunca escreve é um contador que não pode zerar por
-  construção — a irmã do "contador que compara só o que ele tem" de ontem. Curado: na exportada ele compara o universo do retrato, declarado em universo_dos_contadores. Não
-  afrouxei nada: mudei a pergunta para a que tem resposta, e escrevi qual é.
-
-  A raia PDF segue no worktree com o leitor #3. Não toco folha_manda até ela entregar.
+  E o push dos 21 commits sai sozinho quando a pista abrir.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-✢ Nucleating… (58m 5s · ↓ 170.2k tokens)
+● A S3 não fecha sem o resumo, e o lugar certo dele é o escritor único — não o PDF. Aviso a raia e faço lá.
+  ⎿  Message queued for delivery to aabd1e78f6bc1d283 at its next tool round.
+  ⎿  Allowed by auto mode classifier
+
+● Quem le o rotulo fonte_dos_totais
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'relatorios/cartao_pela_celula.py'
+     t = io.open(P, encoding='utf-8').read()
+     v = """ _tot = totais_da_folha(colaborador, _comp[0], _comp[1])
+     # SEM FECHAMENTO GRAVADO O NUMERO NAO E DA FOLHA, e a tela tem de DIZER isso (corte 19:2…
+
+✢ Nucleating… (1h 3m 35s · ↓ 186.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting RELATO.md structure                                                                                                      36m 3s · ↓ 302.3k tokens
+  ◯ general-purpose  Reverting money-total block in `_resumo_pela_lavratura`                                                                            41m 33s · ↓ 329.7k tokens
   ⧉  index
 ```
