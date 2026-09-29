@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 08:07:14.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.7 MB). Acoes na janela: **819**.
+**Medido em 29/09/2026 08:12:29.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.7 MB). Acoes na janela: **821**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:10:30 | Bash | Esperar | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_l4c.log 2>/dev/null && break; sleep 10; done; tail -2 $S/regua_l4c.log; echo "=== bloco"; tail -3 $S/sombra_bloco3.log; date '+%H:%M'` |
+| 08:08:34 | Bash | Esperar a régua por sinal de arquivo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_l4c.log 2>/dev/null && break; sleep 10; done; tail -3 $S/regua_l4c.log; echo "=== bloco"; tail -2 $S/sombra_bloco3.log; wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv; date '+%H:%M'` |
 | 08:06:46 | Bash | Rodar a régua e esperar por sinal de arquivo | `cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l4c.log 2>&1 & sleep 2; echo "regua 4 (so o ruff mudou)"; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 10); do grep -q "— Ran " $S/regua_l4c.log 2>/dev/null && break; sleep 1 ...` |
 | 08:06:33 | Bash | Confirmar que a régua terminou | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -4 $S/regua_l4b.log; echo "--- (o pgrep -f casava com a MINHA linha de comando: LICAO-PGREP de novo)"; ps -o lstart= -p $(pgrep -o -f "bin/regua.sh" 2>/dev/null) 2>/dev/null \| head -2` |
 | 08:06:22 | Bash | Estado real dos dois | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "regua: $(pgrep -f 'bin/regua.sh' >/dev/null && echo rodando \|\| echo TERMINOU)"; tail -3 $S/sombra_bloco3.log; grep -c "" /home/ronald/saas-hasner/logs/sombra/resultado.tsv 2>/dev/null; date '+%H:%M'` |

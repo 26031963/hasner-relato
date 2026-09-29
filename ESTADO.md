@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:07:14.**
+**Medido em 29/09/2026 08:12:29.**
 
 | | |
 |---|---|
@@ -104,6 +104,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
   trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
   segue a fila; PAREI so em lei ou !
@@ -131,12 +132,11 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Rodar a régua e esperar por sinal de arquivo · 27s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l4c.log 2>&1 &
-     sleep 2; echo "regua 4 (so o ruff mudou)"; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94… (25s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Esperar o bloco da sombra · 2s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "sombra: (OK|FALHOU)"
+     $S/sombra_bloco3.log 2>/dev/null && break; sleep 10; done; tail -4 $S/sombra_bloco3.log; echo "=== regua"; tail -2 $S/regua_l4c.log; date '+%H:%…
 
-✽ Levitating… (1h 21m 6s · ↓ 164.1k tokens)
+· Levitating… (1h 26m 21s · ↓ 164.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
