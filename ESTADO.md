@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:24:01.**
+**Medido em 29/09/2026 16:29:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,12 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 ## `git status --short`
 
 ```
+ M app/api/tests/test_espelho_app_fonte_e_geometria.py
+ M app/api/views.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/ponto/services/espelho.py
  M app/ponto/tests/test_s3_placar_exercicio.py
+ M app/relatorios/pdf_espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -100,9 +104,6 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ordem clara. Registro e executo em sequência — começando pelo commit do que está solto e o push.
-
   Ran 2 shell commands
 
 ● Cinco falhas, e quatro delas são minhas. A mais interessante: o alias que eu curei num lado do selo e não no outro.
@@ -131,9 +132,12 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 
 ● Agora escrevo as duas funções no núcleo (uma soma, uma linha do dia) e troco os três leitores.
 
-● Running 1 shell command…
+  Rodar de novo o bloco afetado · 1m 34s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn… (1m 34s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (17m 18s · ↓ 31.1k tokens)
+✢ Schlepping… (22m 48s · ↓ 45.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
