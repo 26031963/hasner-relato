@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:511 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:585 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:02:31.**
+**Medido em 29/09/2026 07:07:54.**
 
 | | |
 |---|---|
@@ -116,25 +116,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O selo morde nos dois casos — com o encadeado quebrado, a ordem inverte (furo-rodou,cartorio-terminou) e o teto deixa de alarmar. Instalo e rodo os contratos:
-
-  Ran 2 shell commands
-
-● Os quatro contratos varrem CRONS e não conhecem ENCADEADOS — não podem ficar verdes por ausência. Ajusto cada um:
-
-  Ran 4 shell commands
-
-● O contrato acusa o elo seguinte: disparar_perguntas_competencia depende do furo e tem horário fixo. Deixar metade da corrente no relógio recria a violação — encadeio a corrente:
-
-  Ran 3 shell commands
-
-● A corrente inteira pendurada na linha do cartório, cada elo esperando o carimbo do seu gatilho, e a sombra ensaia na mesma ordem. Os contratos:
-
-  Ran 3 shell commands
-
-● Os dois casos usavam o furo como exemplo de horário fixo — e ele não tem mais. A pergunta de cada um muda:
 
   Ran 3 shell commands
 
@@ -145,12 +126,31 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Duas vitórias juntas: os 36 contratos de cron verdes, e a sombra passou — SELO_PESSOAL OK (142 inventariadas, era 140), sombra_diverge_de_prod=0, dump_de_hoje=sim. O portão do
   deploy abriu. Rodo a fatia:
 
-  Rodar a fatia do abono pela porta
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 | tail -2; rm -f fatias_agendadas/abono-no-ar/fatia.done; nohup bash bin/deploy_agendado.sh rodar
-     abono-no-ar fatias_agendadas/abono-no-ar > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratch…
+  Ran 1 shell command
 
-· Levitating… (16m 23s · ↓ 39.1k tokens · thinking)
-                                                                                                                                                            0% until auto-compact
+● A migration 0068 foi aplicada, mas o --conferir exige também o bloco da manhã na sombra (~1h40), que eu não havia rodado. Disparo o bloco e sigo para o item 3 enquanto ele
+  corre:
+
+  Ran 1 shell command
+
+● A 0068 está aplicada ([X]), o bloco da sombra corre até ~08:40, e o fatia.done = PAROU_DEPLOY diz a verdade. Publico os dois itens e sigo para o item 3 — leitor #4:
+
+  Ler api_espelho_v2
+  ⎿  $ sed -n 1339,1420p api/views.py
+  ⎿  Read core/censo_codigo.py (91 lines)
+  ⎿  Referenced file docs/BACKLOG.md
+  ⎿  Referenced file ponto/services/dia_pago.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bbprd2g16.output (8 lines)
+  ⎿  Read ../.git/refs/heads/main (2 lines)
+
+● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
+
+● Task "Curar a saida do hook e provar" still running in background
+
+● Task "Selo por comportamento, nos dois caminhos" still running in background
+
+✽ Levitating… (21m 46s · ↓ 45.9k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
