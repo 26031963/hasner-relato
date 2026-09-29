@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 05:00:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **758**.
+**Medido em 29/09/2026 05:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **747**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -757,14 +757,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:06:46 | Bash | Onde aparece chave_data | `grep -n "chave_data" chamados/catalogo/modulos.py \| head -8` |
 | 17:06:41 | Bash | Modulos com chave de data declarada | `python3 -c " import io,re s=io.open('chamados/catalogo/modulos.py',encoding='utf-8').read() for m in re.finditer(r\"'([a-z_0-9]+)':\s*\{[^}]*?'chave_data':\s*'([a-z_]+)'\", s, re.S): print(m.group(1), '->', m.group(2)) " \| head -8` |
 | 17:06:13 | Bash | Selo chamando a funcao real | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py' t=io.open(P,encoding='utf-8').read() i=t.index(' def _previa(self):') novo = ''' def _contador(self): return {'exportada': 0, 'sem_data': 0, 'sem_data_modulos': {}} def test_RED_dia_em_competencia_EXPORTADA_nao_muda_a_folha(self): """A 09 (21/08-20/09) esta exportada: chamado de ...` |
-| 17:05:40 | Bash | Extrair a regra para casa propria | `cd /home/ronald/saas-hasner && cat > app/chamados/services/cobranca_folha.py <<'PYEOF' # -*- coding: utf-8 -*- """COBRAR SO O QUE MUDA A FOLHA (BO Ronald 28/09 16:5x): o chamado cujo dia ainda pode virar dinheiro. O BUG, medido por ele antes de qualquer linha de codigo: o botao **Cobrar** em massa mandava push por chamado que nao muda folha nenhuma. Dos **1.117 chamados em 261 colaboradores**, **6 ...` |
-| 17:04:46 | Bash | Rodar o selo do cobrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py' t=io.open(P,encoding='utf-8').read() t=t.replace(""" ExportacaoDominio.objects.create(empresa=emp, mes=9, ano=2026, usuario=cls.u, arquivo_nome='dominio_09.txt', total_colaboradores=1, total_linhas=1)""", """ ExportacaoDominio.objects.create(empresa=emp, mes=9, ano=2026, gerado_ ...` |
-| 17:04:37 | Bash | Campos do ExportacaoDominio | `python3 -c " import re,io s=io.open('folha/models.py',encoding='utf-8').read() i=s.index('class ExportacaoDominio') print('\n'.join(re.findall(r'^ (\w+)\s*=\s*models\.\w+', s[i:i+2500], re.M)))"` |
-| 17:04:16 | Bash | Selar o cobrar so o que muda a folha | `cd /home/ronald/saas-hasner && cat > app/chamados/tests/test_cobrar_so_o_que_muda_a_folha.py <<'PYEOF' # -*- coding: utf-8 -*- """COBRAR SO O QUE MUDA A FOLHA (BO Ronald 28/09 16:5x) -- pedir o impossivel e pior que nao pedir. O BUG, medido por ele antes de eu tocar codigo: o botao **Cobrar** em massa mandava push por chamado que nao muda folha nenhuma. Dos **1.117 chamados em 261 colaboradores**, ...` |
-| 17:03:34 | Bash | Cobrar so o que muda a folha | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/chamados/views_cobrar.py' t=io.open(P,encoding='utf-8').read() v = """ por_colab = {} fora_da_area = 0 from chamados.utils import pode_agir_chamado for ch in qs.filter(id__in=ids).order_by('criado_em'): if not pode_agir_chamado(request.user, ch): # AGIR-POR-DONO: o lote so alcanca o departamento ...` |
-| 17:03:04 | Bash | Como a casa converte a data do chamado | `sed -n '46,56p' chamados/services/pergunta_no_app.py` |
-| 17:02:59 | Bash | Quem ja le data_do_chamado e como | `grep -rn 'data_do_chamado(' --include=*.py . \| grep -v 'def data_do_chamado' \| head -5` |
-| 17:02:43 | Bash | Ler competencia_fechada | `sed -n '75,92p' ponto/janelas.py` |
-| 17:02:32 | Bash | janela_atual e data_do_chamado | `sed -n '60,75p' ponto/janelas.py && echo "=== data_do_chamado ===" && grep -n 'def data_do_chamado' -A 12 chamados/catalogo/modulos.py \| head -16` |
-| 17:02:26 | Bash | Juizes de competencia e de exportada | `grep -n '^def ' ponto/janelas.py && echo "=== exportadas ===" && grep -n 'def empresas_exportadas_no_escopo' -A 14 ponto/services/fechamento.py \| head -18` |
-| 17:02:12 | Bash | Ler o cobrar_massa | `grep -n 'def cobrar_massa' -A 40 chamados/views_cobrar.py \| head -48` |
