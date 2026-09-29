@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:19:31.**
+**Medido em 28/09/2026 23:25:01.**
 
 | | |
 |---|---|
@@ -38,7 +38,12 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/services/dia_pago.py
+ M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
+ M app/relatorios/views.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+ M app/templates/relatorios/extrato_parcial.html
+?? app/relatorios/tests/test_s3_extrato_le_dia_pago.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -91,39 +96,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      315 +            for e in re.findall(r'{%\s*extends\s+([^%]+?)\s*%}', fonte[rel]):
-      316                  self.assertNotIn('base_app', e,
-      317                                   '%s passou a estender a casca do COLABORADOR (%s): medir a geometria do '
-      318                                   'chip nessa casca antes de tirar este caso' % (rel, e.strip()))
-      319                  self.assertTrue(e.strip().startswith(("'", '"')),
-      320                                  '%s passou a escolher a casca em RUNTIME (%s): a grade pode cair dentro de '
-      284 -                                '`base_app.html`, e a geometria do chip nunca foi medida la' % (rel, e.strip()))
-      321 +                                '`base_app.html`, e a geometria do chip nunca foi medida la'
-      322 +                                % (rel, e.strip()))
-      323          self.assertIn("{% extends 'base.html' %}", fonte['colaboradores/detalhe.html'],
-      324                        'a pagina medida pelo RED deste arquivo deixou de fixar a casca do admin')
-
-● Agora o selo de fonte, que ainda cobra nome_dia:
-
-  Ran 5 shell commands
-
-❯ aval Ronald: ORDEM ATE O ESPELHO-VERDADE no bloco OBRAS do BACKLOG. Leis: L-095, L-096. Nenhuma lei nova.
-  Ordem viva: S3 -> S4 -> S5b (PAREI no meu !) -> DESCONGELA so O73, E6-14, CORTE-B-30 e turnos abertos, cada um medido contra o DiaPago (o que zerar fecha com prova) -> lista de
-  cadastro do E1 em PENDENTES -> PLACAR-E re-medido -> TRIAGEM O-nn/TELA-xx (morto pela troca com certidao / fila 2 / feito) -> telas O-JANELA-HE. Fila 2 de UI so depois.
-  RED: hook cobra o 1o aberto dessa ordem.
-  segue a fila; PAREI so em lei ou !
-
-● Os números crus fecham a questão. Aplico o mínimo medido e sigo para a S3:
-
   Ran 12 shell commands
 
 ● Régua no fundo, e S3 leitor 1 começa agora:
 
-● Disparar a regua e ler o leitor do extrato
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3a.log 2>&1 &
-     echo "regua disparada"; sed -n '440,478p' app/relatorios/views.py
+  Searched for 1 pattern, ran 7 shell commands
 
-✢ Sprouting… (1h 15m 30s · ↓ 126.3k tokens)
+● Agora o leitor — o extrato para de montar motor próprio:
+
+  Searched for 1 pattern, ran 6 shell commands
+
+● Agora o placar cai de 7 para 6, e o selo do leitor:
+
+  Ran 3 shell commands
+
+● Write(relatorios/tests/test_s3_extrato_le_dia_pago.py)
+  ⎿  Wrote 183 lines to relatorios/tests/test_s3_extrato_le_dia_pago.py
+       1 # -*- coding: utf-8 -*-
+       2 """O-DIA-PAGO S3, 1a TROCA: o extrato parcial LE o `DiaPago` e nao calcula mais (L-095, 28/09 23:5x).
+       3
+       4 A LEI: *"o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem
+       5 recalcula"*. Este era o pior leitor da lista dos 7, e nao por tamanho -- por DIVERGENCIA EMBUTIDA. Ele montava
+       6 um motor proprio por colaborador (`get_motor_cct` + `calcular_mes`) com **tres** insumos derivados ali mesmo:
+       7 a escala **ATIVA de hoje** (a folha usa o vinculo que cobre CADA DIA), a regra de alcance (`eh_dia_trabalho`
+       8 dia a dia, com a escala errada) e as datas justificadas. E o relatorio se chama "extrato parcial" e e o que o
+       9 admin abre para CONFERIR a folha: um segundo numero, com cara de conferencia, sobre insumo diferente do da
+      10 folha.
+     … +173 lines
+
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3a.log; grep -E '^Ran
+     [0-9]+|^OK|^FAILED|BLOQUEADO' /tmp/regua_231929.log 2>/dev/null | tail -3
+
+✢ Sprouting… (1h 21m 0s · ↓ 148.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
