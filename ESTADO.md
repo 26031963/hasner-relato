@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:436 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:468 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:33:31.**
+**Medido em 29/09/2026 04:38:32.**
 
 | | |
 |---|---|
@@ -42,17 +42,24 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/config/crons.py
  M app/config/crons_duracao.json
 A  app/core/censo_codigo.py
+ M app/core/tests/test_cartorio_0627.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
+ M fatias_agendadas/abono-no-ar/esteira.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
+?? fatias_agendadas/abono-no-ar/esteira.out
+?? fatias_agendadas/abono-no-ar/esteira_agendada.out
+?? fatias_agendadas/abono-no-ar/fatia.done
+?? fatias_agendadas/abono-no-ar/msg_commit.txt
 ```
 
 ## PLACAR ESPELHO-VERDADE
@@ -103,43 +110,43 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-● Sexta vez — e agora com a cura de origem: a regra de "docstring não é código" vira um módulo que serve o selo de host e o do Django, em vez de duas cópias:
+  Ran 1 shell command
 
-● Write(core/censo_codigo.py)
-  ⎿  Wrote 90 lines to core/censo_codigo.py
-       1 # -*- coding: utf-8 -*-
-       2 """CENSO DE UM PADRAO NAS LINHAS DE CODIGO -- prosa nao conta. UMA regra, dois chamadores.
-       3
-       4     linhas_de_codigo(fonte)                 -> {n: texto} das linhas que sao CODIGO
-       5     cita_no_codigo(fonte, padrao)           -> [(n, texto)] das que citam `padrao` em codigo
-       6     censo_na_arvore(raiz, padrao, ...)       -> [(arquivo, n, texto)]
-       7
-       8 POR QUE ELE EXISTE, e por que e UM sitio: em 29/09, **seis** selos desta casa ficaram vermelhos na mesma noite
-       9 mordendo a PROSA que explicava a cura -- o `max-width:58px` na lapide do chip, o `minutos_trabalhados` no
-      10 anti-copia da `porta_export`, o `json.load` do hook, a LICAO-PGREP e o `--cpuset-cpus` citados numa docstring,
-     … +80 lines
+● A cura está provada nos dois sentidos: a fatia agora roda (antes morria antes de começar) e para na porta certa — fatia.done = PAROU_ENSAIO, porque o ensaio da sombra ainda é de
+  28/09. Nada foi forçado.
 
   Ran 1 shell command
 
-● Os dois selos de host seguem mordendo o código e calando na prosa, agora com uma regra. O selo do Django passa a usar a mesma:
+● Background command "Esperar o gate das 04:30" completed (exit code 0)
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● 3 OK — e a regra de "prosa não conta" agora é um módulo (core/censo_codigo.py) servindo o selo de host e o do Django, em vez de duas cópias que divergiriam. Régua:
+● Background command "Esperar o gate" completed (exit code 0)
 
-  Ran 4 shell commands
+  Ran 3 shell commands
 
-● O gate disparou — abono-no-ar.done e .resultado existem:
+● Os três vermelhos são sobre duração de cron em prod, e a causa é provavelmente minha: o cartório passou de 397 para 398 s e passou a invadir o apurar_furos_diarios das 06:37.
+  Confirmo antes de mexer:
 
-● Resultado do gate
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== resultado:"; cat logs/deploy_agendado/abono-no-ar.resultado 2>/dev/null; echo "=== done:"; cat
-     logs/deploy_agendado/abono-no-ar.done 2>/dev/null; echo "=== log (fim):"; tail -18 logs/deploy_agendado/abono-no-ar.log 2>/dev/null
+  Ran 6 shell commands
 
-✻ Waiting for API response · will retry in 16s · check your network
+● A causa é o MUNDO, não eu: bin/crons_duracao.py rodou às 04:05 (cron de medição) e o processar_cartorio subiu de 357 → 362 s. Com 362, ceil(362/60) = 7 min e a última empresa
+  (06:31) termina 06:38 — invadindo o apurar_furos_diarios das 06:37. O selo mediu o mundo e acusou:
+
+  Ran 3 shell commands
+
+● A janela livre é 06:44 (entre reconciliar_geofence/06:43 e reconciliar_vinculo/06:47), e o furo só é cobrado às 07:10:
+
+  A mensagem inteira das duas violacoes
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
+
+✻ Thundering… (3h 33m 47s · ↓ 178.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
