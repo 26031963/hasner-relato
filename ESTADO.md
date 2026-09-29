@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:125 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:200 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:26:01.**
+**Medido em 29/09/2026 11:31:31.**
 
 | | |
 |---|---|
@@ -42,9 +42,13 @@ d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
  M app/ponto/services/dia_pago.py
  M app/ponto/services/espelho.py
  M app/relatorios/pdf_espelho.py
+ M app/relatorios/services.py
+ M app/relatorios/tests/test_pdf_realizado_do_dia.py
+ M app/relatorios/tests/test_resumo_espelho_morto.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/relatorios/tests/test_pdf_linha_do_dia_e_o_pago.py
 ?? bin/keepalive.sh
@@ -103,21 +107,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
-
-● Background command "Aguardar o push final" completed (exit code 0)
-
-  Searched for 1 pattern, ran 7 shell commands
-
-● Background command "Conferir o push" completed (exit code 0)
-
-  Searched for 4 patterns, ran 11 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
 ❯ PRIORIDADE (P7.1, bug no caminho da S3): QUEM-ESCREVE-NO-GRAVADO-DA-EXPORTADA. Antes de carimbar por colab, MEDIR a hipotese com lastro: (a) SELECT app,name,applied FROM
   juliani.django_migrations WHERE applied BETWEEN '2026-09-29 09:00' AND '2026-09-29 09:30'; (b) quais colunas de FechamentoMensal entram no hash e se alguma nasceu/mudou de
   default nessas migrations; (c) se sim: nao e bug -- PROVA com hash recalculado antes/depois da migration em copia; se nao: segue o carimbo por colab. Publicar no RELATO com
@@ -132,15 +121,30 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Aguardar o push" completed (exit code 0)
 
-● Push4 final
-  ⎿  $ tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push4.log; date '+%H:%M'
+  Searched for 15 patterns, listed 1 directory, ran 42 shell commands
 
-✢ Puttering… (1h 17m 41s · ↓ 216.6k tokens)
+● Background command "Aguardar push4" completed (exit code 0)
+
+● Background command "Aguardar push4 pelo arquivo" completed (exit code 0)
+
+● Background command "Conferir push4" completed (exit code 0)
+
+● Corrigir os dois selos
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     # 1) o selo do drill do caderno le a chave NOVA
+     P = 'relatorios/tests/test_resumo_espelho_morto.py'
+     t = io.open(P, encoding='utf-8').read()
+     v = ''' def test_o_drill_do_caderno_fica_e_le_o_coletor(self):
+     """Guarda do corte: `_dias_c…
+
+✢ Puttering… (1h 23m 11s · ↓ 230.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
