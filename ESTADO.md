@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:153 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:196 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:51:31.**
+**Medido em 29/09/2026 01:57:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
-| `origin/main` | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,8 @@ df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
+ M app/relatorios/pdf_espelho.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,13 +97,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       7
-       8 SO A PROSA SAI, NAO TODA STRING. A primeira versao disto pulava todo token de string e o selo **parou de
-       9 morder**: o nome da ferramenta, em codigo real, E uma string (`subprocess.run(["...", "-f", ...])`). Selo que
-      10 perde o caso que morde nao ficou mais brando -- ficou mudo. O que sai daqui e o DOCSTRING: um `ast.Expr` cujo
-     … +49 lines
-  ⎿  Allowed by auto mode classifier
-
   Ran 2 shell commands
 
 ● O selo agora cala na prosa e morde o código — provado nos dois sentidos. Régua completa, em primeiro plano:
@@ -122,17 +117,24 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Régua VERDE com carimbo: 8.631 testes OK. Commit do leitor #2 + as três curas de selo, por path:
 
-● Acompanhar o push · 1m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "===
-     falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 1s)
+  Pushed to main, ran 5 shell commands
+
+● Background command "Placar, rodape e push em primeiro plano" completed (exit code 0)
+
+● PUSH: 0a918855..2652ec8d — leitor #2 no remoto. Sigo para o leitor #3 com o censo já lido:
+
+  Regua e leitura do leitor 3 · 34s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l3a.log 2>&1 & sleep 90; ls -t /tmp/regua_*.log | head -1; echo '---
+     enquanto roda: o que o PDF faz com cada period… (34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (46m 47s · ↓ 57.1k tokens)
+✢ Thundering… (52m 17s · ↓ 64.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
