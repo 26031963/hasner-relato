@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 02:24:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.7 MB). Acoes na janela: **664**.
+**Medido em 29/09/2026 02:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.7 MB). Acoes na janela: **669**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:28:52 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_022445.log)"` |
+| 02:26:46 | Bash | Esperar a regua do censo | `cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_022445.log 2>/dev/null; then break; fi; sleep 50; done; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log \| head -4; echo "linhas: $(wc -l < /tmp/regua_022445.log)"` |
+| 02:26:29 | Bash | Ordem entre a grade e a lavratura | `sed -n '590,610p' ponto/services/fechamento.py; echo '=== a grade _g e calculada ANTES ou DEPOIS do lavrar?'; grep -n "_g = _gdf(fechamento)\\|dia_pago.lavrar\\|_lavrar_dp\\|lavrar(" ponto/services/fechamento.py \| head` |
+| 02:26:22 | Bash | Onde a lavratura recebe os mapas por dia | `grep -n "orfaos_por_dia\\|faltas_por_dia\\|atraso_por_dia=\\|credito_por_dia=\\|lavrar(" ponto/services/fechamento.py \| head -8; echo '=== e a grade _g, de onde sai o abono:'; grep -n "_g = \\|_g\.get('dias')" ponto/services/fechamento.py \| head -5` |
+| 02:24:44 | Bash | Publicar o achado e rodar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() sec = '''# A LAVRATURA E CEGA PARA O ABONO -- 7.610,9 h fora do contador, e isso BLOQUEIA o leitor #3 (29/09 02:1x) O censo do leitor #3 achou um buraco na **S1**, e o contador da **S2** dava ZERO sobre ele. `fechamento_x_soma_dias_pagos` compara o `Fech ...` |
 | 02:23:55 | Bash | Contador deixa de ser cego, com selo que morde | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- """O contador para de ser CEGO: campo de pagamento do fechamento sem par na lavratura ACUSA.""" import io, py_compile P='/home/ronald/saas-hasner/app/ponto/services/dia_pago.py' t=io.open(P,encoding='utf-8').read() v = "CAMPOS = CAMPOS_DIA + CAMPOS_AJUSTE" assert t.count(v)==1 n = '''CAMPOS = CAMPOS_DIA + CAMPOS_AJUSTE # O  ...` |
 | 02:23:03 | Bash | A conta do abono, por dia | `sed -n '497,525p' ponto/services/fechamento.py` |
 | 02:22:59 | Bash | De onde sai o abono no fechamento | `grep -n "minutos_abonados" ponto/services/fechamento.py \| head -6; echo '=== de onde sai:'; grep -n "minutos_abonados" -B 6 ponto/services/fechamento.py \| head -16` |

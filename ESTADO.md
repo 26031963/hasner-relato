@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:217 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:260 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:24:01.**
+**Medido em 29/09/2026 02:29:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
  M app/folha/tests/test_porta_do_export.py
  M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
@@ -97,13 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ 4   │ api/views.py                         │ censo feito (KPI já vem do gravado; o card do dia é geometria)   │
-  ├─────┼──────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤
-  │ —   │ porta_export, esmeril, ficha         │ fora do placar com arquivo:linha, nenhuma por troca              │
-  └─────┴──────────────────────────────────────┴──────────────────────────────────────────────────────────────────┘
-
-  O que a noite me ensinou, e está tudo medido: cinco selos meus afirmaram mais do que mediam (prosa da lápide, invariante vizinho, a própria lei do hook, e o meu selo do teto
-  dependendo do mundo). A cura foi sempre a mesma — varrer estrutura, e forjar o ambiente quando o selo fala dele. E dois selos da casa me pegaram em flagrante: o de CPUSET
   (container de teste sem cpuset nos núcleos do cliente, porque $TESTE_DOCKER vazio degrada em vez de falhar) e o espera_por_processo.
 
   Aberto, com número e sem causa provada — e é o próximo item de medição, não de afirmação: as 23 divergências de espelho_x_dia_pago na competência 10 (hipótese com lastro na
@@ -119,22 +114,29 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Achado com número, e ele bloqueia o leitor #3: a lavratura é cega para o abono.
 
-● Contador deixa de ser cego, com selo que morde · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O contador para de ser CEGO: campo de pagamento do fechamento sem par na lavratura ACUSA."""
-     import io, py_compile
-     P='/home/ronald/saas-hasner/app/ponto/services/dia_pago.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = "CA… (4s · 3 lines)
+  Searched for 1 pattern, ran 2 shell commands
+
+● Background command "Esperar o push" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Achado publicado e o bloqueio registrado. A régua roda; enquanto isso, o passo seguinte da S3 está definido pela própria medição:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Background command "Esperar o push fechar" completed (exit code 0)
+
+● Acompanhar · 38s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_022445.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_022445.log)" (37s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (1h 19m 17s · ↓ 80.5k tokens)
+· Thundering… (1h 24m 47s · ↓ 84.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
