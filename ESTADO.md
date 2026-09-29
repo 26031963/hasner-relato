@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:10:45.**
+**Medido em 28/09/2026 22:15:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
-| `origin/main` | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -32,6 +32,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,31 +85,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  35 selos de host verdes. A suite não foi afetada — bin/ não entra na impressão digital da régua, e o app segue no Ran 8611 tests OK da mesma árvore.
-
-  Dois commits locais, nenhum empurrado
-
-  bfdc165b  HOOK-STOP-SAIDA-VALIDA
-  10e2d912  UI-GRADE-CALENDARIO  ← aguarda seu smoke
-
-  Não empurrei porque o commit do hook ficou em cima do UI-GRADE: um push levaria os dois, e você disse para não subir a UI sem o smoke. O hook curado já vale agora, porque ele
-  roda da árvore — o dump no tmux deve parar neste turno.
-
-  Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
-
-✻ Cogitated for 31m 26s · done 9:40 PM · 11 shells still running
-
 ❯ reordena e empurra so o hook; calendario fica local ate meu smoke. HOOK-PAREI-DA-FILA: o hook so libera com PAREI de item da FILA 1 viva do bloco OBRAS; PAREI de item
   CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
   O-DIA-PAGO S3". Depois S3 leitor a leitor, sem pergunta no fim do turno. segue a fila; PAREI so em lei ou !
 
-  Placar em dia e empurrar o hook · 5m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && git branch tmp-ui 763ad662 && git reset --hard 76926ee3 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
-     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- bin/hook_stop_f… (5m 56s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Sprouting… (6m 44s · ↓ 2.0k tokens)
+  Pushed to main, ran 3 shell commands
 
 ❯ aval Ronald: depois do hook, FILA 1 INTEIRA ate o fim, sem voltar a mim. Leis: L-095, L-096, L-097. Nenhuma lei nova.
   2. O-DIA-PAGO S3: os 8 leitores, um a um, cada troca tirando uma linha do placar e com espelho_x_dia_pago = 0.
@@ -117,10 +98,30 @@ RELATO, com a lista de nomes do banco como autoridade._
   5. Enquanto espera o !, O-JANELA-HE telas (os 7 resultados observaveis) em sombra -> PAREI para o meu smoke.
   Cada item fecha com commit por path, push e prova no RELATO, e o proximo comeca na MESMA resposta. PROIBIDO: fechar turno com pergunta, reescopar, fila 2.
   segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+❯ UI-GRADE-CALENDARIO smoke Ronald: REPROVADO no chip de ausencia. Leis: L-096 (fila 2; entra apos o leitor da S3 em curso, sem parar a S3). Nenhuma lei nova.
+  FONTE: templates/colaboradores/partials/_calendario_grade.html (chip de ausencia), commit guardado em tmp-ui.
+  MUDA: chip em 2 linhas fixas: linha 1 = SVG + rotulo curto do tipo ("Atestado") inteiro, sem reticencia; linha 2 = "->DD/MM" do fim. Rotulo longo so no title.
+  RED: celula de 132px com atestado ate 04/10 mostra "Atestado" inteiro e "->04/10" na 2a linha, nas duas cascas, chromium 1366.
+  PRONTO: print no RELATO; push so com meu novo smoke.
+  segue a fila; PAREI so em lei ou !
+
+● RED: com o PAREI do calendario, o hook deve bloquear na S3
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='bin/hook_stop_fila1.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = '''def _relato_parou():
+     with open(RELATO, encoding='utf-8') as fh:
+     for ln in fh:
+     ln = ln.strip()
+     if not ln or ln.startswith('# RELAT…
+
+* Sprouting… (11m 45s · ↓ 5.5k tokens)
                                                                                                                                                             2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
