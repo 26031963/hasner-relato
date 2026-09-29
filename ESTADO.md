@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:47:07.**
+**Medido em 29/09/2026 11:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
+| `HEAD` local | `db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio` |
 | `origin/main` | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio
 a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro
 ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
 48609348 TICKETS: placar e rodape depois do deploy da linha do dia
 6c05f6cf A linha do dia do papel mostra o PAGO -- e medir antes evitou imprimir 0,00 em dias de 12 horas
-df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe
 ```
 
 ## `git status --short`
@@ -99,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Rodar relatorios, ponto e colaboradores" completed (exit code 0)
+  09 perderiam a HE do papel com o total ainda mostrando HE).
 
-● Background command "Aguardar a suite dos tres apps" completed (exit code 0)
+  O placar da S3 segue 2, e o censo agora diz por quê: falta o RESUMO (pdf_espelho.py:474-490) e o :498, que não pode sair antes — tirar o abate do crédito parcial com o resumo
+  ainda no motor deixaria o atraso do mês sem o crédito. O DIFF do resumo está medindo na frota agora; em 40 colabs deu zero em todos os quatro totais.
 
-● Background command "Aguardar o veredito (45s)" completed (exit code 0)
+  Registrado no mesmo turno, sem construir: O-HAIKU-INVESTIGA, O-JANELA-HE B1/B2 (com as posições e o prazo que você deu) e o ADENDO da VINCULO-LINHA-DO-TEMPO.
 
-  Read 1 file
+  Também no ar: o wizard de fase curado (parte (a) do adendo — ele oferecia 21/09 para consertar 02–19/09; a trilha mostra JSP02 às 07:19 indo para 29/09 e ronald_ti às 07:34 para
+  20/09 — o bug fabricava o passivo de vínculo); o carimbo da lavratura (19.515 linhas com o rótulo errado, e a lápide que prometia o certo era minha); e a Pauta 841 do col334
+  (folga compensatória de 25/08 aprovada depois do export: pago 0, apuração 660 min).
 
-● Background command "Aguardar a suite (30s)" completed (exit code 0)
+  Dois ! seus, com tabela e reversão no PENDENTES:
+  1. RECALCULO-DA-10-PARA-ZERAR-O-CONTADOR — 76 colabs em 20 campos, mais 158 que passam a ter gravado.
+  2. [nome]-REESCREVER-A-LINHA-DO-TEMPO — o 21/07 não passa: a porta recusa (S99 põe o piso em 21/08, competência 08 trancada) e uma linha só desde 21/07 não pode descrevê-la (a
+     paridade virou no intervalo 30/08→02/09). 21 furos e 24 folgas trabalhadas contra 2 e 4 do desenho que começa em 02/09.
 
-  Ran 1 shell command
+  E um erro meu, declarado: sobrescrevi a foto das 09:27 do gravado da emp2 comparando com forma de chave diferente — perdi a base do intervalo. Cura na origem: manage.py
+  carimbo_gravado, que nunca sobrescreve, com selo cujo caso que morde é exatamente o meu.
 
-● Background command "Esperar o veredito da suite" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Background command "Aguardar o fim da suite" completed (exit code 0)
+  Read 1 file, listed 1 directory, ran 11 shell commands
 
-  Ran 6 shell commands
+● Background command "Aguardar a medicao dos 121" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Searched for 1 pattern, ran 1 shell command
 
-  Searched for 3 patterns, read 1 file, ran 12 shell commands
+● Background command "Esperar 4 min e ler os dois" completed (exit code 0)
 
-● Background command "Aguardar o push5" completed (exit code 0)
+● Background command "Esperar o DIFF dos 121" completed (exit code 0)
 
-● Background command "Aguardar push5" completed (exit code 0)
-
-  Repetir o push · 4s
-  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push6.log 2>&1; echo
-     "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push6.log) & sleep 5; … (3s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Puttering… (1h 38m 46s · ↓ 261.1k tokens)
+✢ Puttering… (1h 44m 11s · ↓ 281.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
