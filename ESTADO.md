@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 17:07:01.**
+**Medido em 29/09/2026 17:12:31.**
 
 | | |
 |---|---|
@@ -132,12 +132,12 @@ e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja 
 
 ● Background command "Rodar os cinco apps mais afetados" completed (exit code 0)
 
-● Rodar seis apps com a cura do saldo · 1m 48s
+● Rodar seis apps com a cura do saldo · 7m 17s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn… (1m 46s)
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn… (7m 16s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (1h 0m 18s · ↓ 103.2k tokens)
+✢ Schlepping… (1h 5m 48s · ↓ 103.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
