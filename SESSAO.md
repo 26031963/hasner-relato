@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 04:55:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **760**.
+**Medido em 29/09/2026 05:00:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **758**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -768,5 +768,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:02:32 | Bash | janela_atual e data_do_chamado | `sed -n '60,75p' ponto/janelas.py && echo "=== data_do_chamado ===" && grep -n 'def data_do_chamado' -A 12 chamados/catalogo/modulos.py \| head -16` |
 | 17:02:26 | Bash | Juizes de competencia e de exportada | `grep -n '^def ' ponto/janelas.py && echo "=== exportadas ===" && grep -n 'def empresas_exportadas_no_escopo' -A 14 ponto/services/fechamento.py \| head -18` |
 | 17:02:12 | Bash | Ler o cobrar_massa | `grep -n 'def cobrar_massa' -A 40 chamados/views_cobrar.py \| head -48` |
-| 17:00:04 | Bash | Acertar o placar e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: rodape e placar (8586 testes OK, lote 1 emitido) Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && git push 2>&1 \| tail -3` |
-| 16:59:56 | Bash | Registrar a emissao e empurrar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') # fora TODOS os PAREI resolvidos (emissao, 10:3x, 11:2x, 12:3x) e os blocos de citacao velhos out, pular = [], 0 for x in l: if pular: pular -= 1 continue if x.startswith('`PAREI:'): continue if x.startswith('PROVA: `deploy.sh` OK com migr ...` |
