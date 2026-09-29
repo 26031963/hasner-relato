@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:33:31.**
+**Medido em 28/09/2026 21:39:01.**
 
 | | |
 |---|---|
@@ -87,6 +87,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      "for UserPromptSubmit": {
+        "hookEventName": "\"UserPromptSubmit\"",
         "additionalContext": "string (optional)"
       },
       "for PostToolUse": {
@@ -104,7 +106,7 @@ RELATO, com a lista de nomes do banco como autoridade._
     }
   }
 
-✻ Crunched for 1h 30m 16s · done 8:27 PM · 10 shells still running
+✻ Crunched for 1h 30m 16s · done 8:27 PM · 11 shells still running
 
 ❯ HOOK-STOP-SAIDA-VALIDA · Leis: L-096. Nenhuma lei nova.
   FONTE: bin/hook_stop_fila1.py (saida para o Stop do Claude Code)
@@ -114,17 +116,15 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: RELATO com o RED e commit por path.
   segue a fila; PAREI so em lei ou !
 
-● Esperar a regua do hook · 4m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^(OK|FAILED|Ran |FALHOU)|BLOQUEADO|MUDOU|OUTRA RAIA'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hook.log 2>/dev/null; do sleep 25; done; grep -E '^(OK|FAILED|Ran
-     |FALHOU)|^(FAIL|ERROR):|hook_st… (4m 16s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Esperar a regua do hook
+  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hook.log; ps -eo args | grep -c
+     '[m]anage.py test'
 
-✢ Architecting… (24m 14s · ↓ 10.6k tokens)
+· Architecting… (29m 44s · ↓ 10.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
