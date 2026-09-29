@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 22:20:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.3 MB). Acoes na janela: **426**.
+**Medido em 28/09/2026 22:26:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.3 MB). Acoes na janela: **416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -426,13 +426,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:29:41 | Bash | Ver o ruff e a lista de proibidos | `cd /home/ronald/saas-hasner && grep -E '^(app\|bin)/.*:[0-9]+:[0-9]+: [A-Z]' /tmp/regua_102012.log \| head -10; echo "=== o proibido ==="; sed -n '38,50p' app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py` |
 | 10:29:26 | Bash | Detalhe das falhas | `cd /home/ronald/saas-hasner && grep -A12 'test_ruff_zero' /tmp/regua_102012.log 2>/dev/null \| head -20; echo "=== leitores ==="; grep -A10 'test_MORDE_tolerancia_ZERO' /tmp/regua_102012.log \| head -14` |
 | 10:29:09 | Bash | Ler o censo do bug | `cd /home/ronald/saas-hasner && tail -20 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpuvjd32j.output` |
-| 10:23:04 | Bash | Esperar a regua do E4 | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log 2>/dev/null; do sleep 20; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|SELO VERMELHO\|BLOQUEADO' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad ...` |
-| 10:22:57 | Bash | Ver censo e regua | `cd /home/ronald/saas-hasner && tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpuvjd32j.output 2>/dev/null; echo "=== regua ==="; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log \| head` |
-| 10:22:50 | Bash | Preparar o selo RED do bug em copia | `mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/test_he_intra_dobrada.py <<'PYEOF' # -*- coding: utf-8 -*- """BUG-HE-INTRA-DOBRADA: o intervalo que nao foi gozado nao pode ser pago DUAS vezes (28/09, BO Ronald). O FATO, em col125 02/09 e 06/0 ...` |
-| 10:22:02 | Bash | Fixture de um selo de intra | `sed -n '1,60p' ponto/tests/test_intra_tolerancia.py` |
-| 10:21:57 | Bash | Selos existentes da intra suprimida | `grep -rln 'intrajornada_indenizada' ponto/tests/ \| head -8 && echo "---" && grep -n 'def test\\|class \\|Motor12x36(\\|get_motor(' ponto/tests/test_intra_suprimida.py 2>/dev/null \| head -20` |
-| 10:21:47 | Bash | Estado da regua do E4 | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_e4.log` |
-| 10:21:42 | Bash | Censo do BUG-HE-INTRA-DOBRADA na frota | `cd /home/ronald/saas-hasner && cat > /tmp/censo_hei.py <<'PYEOF' # -*- coding: utf-8 -*- """CENSO BUG-HE-INTRA-DOBRADA (so leitura): dia em que a MESMA hora e paga como HE e como intra suprimida. Chama o motor REAL pela autoridade unica (`ponto.services.espelho.autoridade_do_periodo`), nunca replicando conta. Agrupa por dia de INICIO (L-085) e conta o dia em que `HE do dia <= intra suprimida do di ...` |
-| 10:21:02 | Bash | Excedente por dia nos outros motores | `sed -n '1775,1800p;1900,1925p;1995,2030p' ponto/motor_calculo_v2.py` |
-| 10:20:56 | Bash | Todos os sitios que fixam o excedente | `grep -n 'minutos_extra = \\|minutos_extra +=\\|extra = ' ponto/motor_calculo_v2.py \| sed -n '1,40p'` |
-| 10:20:48 | Bash | Turno partido: intra e HE | `sed -n '1630,1700p' ponto/motor_calculo_v2.py` |

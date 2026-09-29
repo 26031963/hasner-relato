@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:20:46.**
+**Medido em 28/09/2026 22:26:01.**
 
 | | |
 |---|---|
@@ -110,14 +110,14 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
   PRONTO: print no RELATO; push so com meu novo smoke.
   segue a fila; PAREI so em lei ou !
 
-● Commitar e empurrar a HOOK-PAREI-DA-FILA · 3m 44s
+● Commitar e empurrar a HOOK-PAREI-DA-FILA · 9m 0s
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_parei.txt <<'EOF'
      HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
      O hook liberava o turno com QUALQUER PAREI no topo do RELATO, e o caso que mostrou o furo e
-     real: `PAREI: smoke-da-UI-GRADE-CALENDARIO` espera o smoke de uma fat… (3m 42s)
+     real: `PAREI: smoke-da-UI-GRADE-CALENDARIO` espera o smoke de uma fat… (8m 57s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Sprouting… (16m 45s · ↓ 10.8k tokens)
+✢ Sprouting… (22m 0s · ↓ 10.8k tokens)
                                                                                                                                                             1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
