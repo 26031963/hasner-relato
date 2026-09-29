@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:40 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:69 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:05:01.**
+**Medido em 29/09/2026 11:10:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `dca3c792 TICKETS: placar e rodape com o push f96eaba1` |
+| `HEAD` local | `4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP` |
 | `origin/main` | `f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP
 dca3c792 TICKETS: placar e rodape com o push f96eaba1
 d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
 13d8c130 Eu sobrescrevi a unica prova do intervalo, e a cura e que foto nao se sobrescreve
 75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler
-f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110
 ```
 
 ## `git status --short`
@@ -99,8 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  segue a fila; PAREI so em lei ou !
-
   Ran 6 shell commands
 
 ❯ REGISTRAR NO BACKLOG (so registro, nao construir): duas linhas. Lei: L-097; nenhuma lei nova.
@@ -128,15 +126,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Conferir o push" completed (exit code 0)
 
-  Escrever a Pauta DP do col334
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner/app && sed -n '40,60p' pautas/services.py
+  Searched for 4 patterns, ran 11 shell commands
 
-✶ Puttering… (56m 41s · ↓ 159.0k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+✢ Puttering… (1h 2m 11s · ↓ 163.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
