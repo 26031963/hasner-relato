@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:00:31.**
+**Medido em 29/09/2026 19:05:45.**
 
 | | |
 |---|---|
@@ -126,12 +126,12 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Background command "Medir os contadores da porta em prod" completed (exit code 0)
 
-● Esperar e ler a nomeacao · 36s
+  Esperar e ler a nomeacao · 5m 50s
   ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf nomear.py)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log | head -60 (36s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log | head -60 (5m 49s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (2h 53m 48s · ↓ 155.2k tokens)
+· Schlepping… (2h 59m 2s · ↓ 155.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
