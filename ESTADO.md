@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:40:01.**
+**Medido em 29/09/2026 03:45:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
+| `HEAD` local | `53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4` |
 | `origin/main` | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
 a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30
 67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
 9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
 0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
-2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
 ```
 
 ## `git status --short`
@@ -42,9 +42,6 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -98,13 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O Bash voltou. Régua e o push que ficou pendente:
-
-  Ran 3 shell commands
-
 ● O push do commit anterior ainda está com a suite no pre-push (é ele que tem a trava da régua). Espero em primeiro plano:
 
   Ran 1 shell command
@@ -125,17 +115,24 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● O leitor #4 é trocável sem depender do abono — o card do dia do app usa só horas_trabalhadas e turno_aberto. Registro o censo enquanto a régua fecha:
 
-● Acompanhar · 51s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_033443.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_033443.log)" (51s)
+  Ran 4 shell commands
+
+● Background command "Esperar o push fechar" completed (exit code 0)
+
+● Régua VERDE com carimbo: 8.634 OK. Commit e push das lápides curadas + o censo do #4:
+
+● Committing e push das lapides curadas · 51s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_lap.txt <<'EOF'
+     Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
+     DUAS AFIRMACOES ESCRITAS POR MIM FICARAM FALSAS quando a medi… (51s · 7 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (2h 35m 17s · ↓ 129.6k tokens)
+✢ Thundering… (2h 40m 47s · ↓ 131.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

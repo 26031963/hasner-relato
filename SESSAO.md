@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 03:40:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.4 MB). Acoes na janela: **709**.
+**Medido em 29/09/2026 03:45:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.4 MB). Acoes na janela: **712**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:44:39 | Bash | Commit e push das lapides curadas | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_lap.txt <<'EOF' Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4 DUAS AFIRMACOES ESCRITAS POR MIM FICARAM FALSAS quando a medicao seguinte as corrigiu, e elas estavam ao lado do codigo que as contradizia: 1. `ponto/services/dia_p ...` |
+| 03:43:11 | Bash | Veredito da regua | `cd /home/ronald/saas-hasner && sleep 60; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_033443.log 2>/dev/null \| head -4; head -3 .regua_stamp; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap2.log` |
+| 03:41:09 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_033443.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_033443.log)"` |
 | 03:39:09 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_033443.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_033443.log)"` |
 | 03:37:04 | Bash | Publicar o censo e esperar a regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() sec = '''# CENSO DO LEITOR #4 (api/views, o app do colaborador): ele NAO depende do abono (29/09 03:3x) Lido `api/views.py:1464-1490`, o card de cada dia do app usa do periodo exatamente **duas** coisas: `p.turno_aberto` (GEOMETRIA) e `p.minutos_trabalha ...` |
 | 03:36:28 | Bash | O card do dia no app, inteiro | `sed -n '1464,1500p' api/views.py` |
