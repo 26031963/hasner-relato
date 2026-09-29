@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:00:45.**
+**Medido em 28/09/2026 22:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
+| `HEAD` local | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
 | `origin/main` | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
-10e2d912 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke
+4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
 88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
 13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
+642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
 ```
 
 ## `git status --short`
@@ -84,17 +84,6 @@ bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que des
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O RED, medido antes da cura
-
-  {"decision": "allow", "reason": "o RELATO declara PAREI"}
-
-  O json parseia — e por isso passou despercebido. Mas decision: "allow" não existe no schema do Stop: ele conhece o bloqueio (block + reason) e conhece o silêncio. Campo fora do
-  schema é o que fazia o cliente responder imprimindo o schema inteiro no fim de cada turno.
-
-  A cura é uma linha menos: liberar passou a ser sys.exit(0) sem dizer nada. Quem precisa saber por que liberou lê a trilha em logs/hook_stop_fila1.log — alarme mora no log, não
-  na voz do protocolo. É a mesma lei que tirou o PAREI escrito por máquina hoje às 10:1x.
-
-  ┌─────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
   │         caminho         │                                                  saída                                                  │
   ├─────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ fila aberta             │ {"decision":"block","reason":"siga: OBRA-DE-MENTIRA X — …"} — duas chaves, reason string, nomeia o item │
@@ -118,10 +107,21 @@ bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que des
   Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
 
 ✻ Cogitated for 31m 26s · done 9:40 PM · 11 shells still running
-                                                                                                                                           ✔ Update installed · Restart to update
+
+❯ reordena e empurra so o hook; calendario fica local ate meu smoke. HOOK-PAREI-DA-FILA: o hook so libera com PAREI de item da FILA 1 viva do bloco OBRAS; PAREI de item
+  CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
+  O-DIA-PAGO S3". Depois S3 leitor a leitor, sem pergunta no fim do turno. segue a fila; PAREI so em lei ou !
+
+  Placar em dia e empurrar o hook · 56s
+  ⎿  $ cd /home/ronald/saas-hasner && git branch tmp-ui 763ad662 && git reset --hard 76926ee3 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
+     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- bin/hook_stop_f… (56s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Sprouting… (1m 44s · ↓ 2.0k tokens)
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ reordena e empurra so o hook
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
