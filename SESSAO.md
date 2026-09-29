@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 00:21:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (108.2 MB). Acoes na janela: **576**.
+**Medido em 29/09/2026 00:26:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (108.2 MB). Acoes na janela: **575**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -585,4 +585,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:29:10 | Bash | Acertar o placar e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: placar do topo em dia (ultimo push 6cf525f4) Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && git push 2>&1 \| tail -3` |
 | 12:29:01 | Bash | Commitar e empurrar a linha PAREI | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -m "RELATO: linha PAREI canonica no topo -- apply-HE-intra-fora-do-criterio (L-082 b), espera Ronald A trava tem nome e numero, na forma que a regra do CLAUDE.md 7b pede: o ! das 12:2x autoriza \"so HE50/HE100, -430,71 h\" e o recalculo da 09 move 10 campos que ele nao nomeia -- folga trabalhada -86,69 h, trabalhadas -78,02 ...` |
 | 12:28:50 | Bash | Escrever a linha PAREI canonica | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io p='app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() l=t.split('\n') # a linha que o hook le tem forma canonica: `PAREI: <trava> \| espera <quem>` (ele faz lstrip('`')) alvo='`PAREI: apply-HE-intra-fora-do-criterio (L-082 b) \| espera Ronald`' l=[x for x in l if not x.startswith('`PAREI:')] l.insert(1, '\n' ...` |
-| 12:26:17 | Bash | Commitar a S1 e empurrar | `cd /home/ronald/saas-hasner && cat > /tmp/msg_s1.txt <<'EOF' O-DIA-PAGO S1: o dinheiro do dia passa a ser DADO lavrado uma vez -- e PAREI no apply da cura HE/intra (L-082 b) DUAS COISAS NESTE COMMIT, e a segunda e a que precisa de decisao. 1) O-DIA-PAGO S1 (L-095), ADITIVA -- nenhum leitor le o DiaPago ainda. Modelo ponto.models.DiaPago: uma linha por colaborador-dia com as rubricas daquele dia, m ...` |
