@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:315 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:333 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:02:31.**
+**Medido em 29/09/2026 16:07:33.**
 
 | | |
 |---|---|
-| `HEAD` local | `f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam` |
+| `HEAD` local | `6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -29,28 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou
+8c25a2da A guarda criada por incidente estava cega a worktree, e um subagente escreveu na arvore de prod
 f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam
 cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador recebe numero de motor
 99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo
-aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
-96086b03 Dois contratos me pegaram no censo, e os dois estao certos
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
- M app/api/tests/test_espelho_app_fonte_e_geometria.py
-M  app/colaboradores/tests/test_calendario_sete_colunas.py
-AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
-AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/core/juizes.py
- M app/docs/PROMPTS.md
- M app/folha/porta_export.py
- M app/relatorios/cartao_pela_celula.py
- M app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
-MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/ponto/tests/test_s3_placar_exercicio.py
+ M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
+?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -107,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  porque é paga a 100% em rubrica própria. Eu somei as duas dentro de total_trabalhadas no _totais_da_lavratura, e a mesma chave passaria a significar duas coisas conforme
-  existisse ou não fechamento. É o BUG 139 com outro nome, e a minha docstring dizia "as duas falam o mesmo vocabulário" três linhas acima.
+  A verificação, por md5 contra o HEAD e por log — não pelo relato dela:
 
-  2. O meu contador da exportada escondia ~40 h. Eu tinha excluído as rubricas de dinheiro do universo, argumentando que "o retrato não escreve dinheiro, então comparar é um
-  contador que nunca zera". Ela mediu e o argumento não se sustenta: a lavratura da 09 carrega dinheiro — 403,63 h de HE 50% contra 443,31 gravadas, 18.557 h de noturnas contra
-  18.472. O retrato só completou os três campos de grade por cima do que o backfill já havia escrito. Então não é ausência, é idade — e esconder era o afrouxamento que eu prometi
-  não fazer. Agora tem linha própria (lavratura_congelada_na_exportada): visível, causa nomeada, fora de falhas, como a casa faz com sem_lavratura.
+  relatorios/index.html                de29e585…  == HEAD   IDENTICO
+  colaboradores/calendario_partial.html b6886de7…  == HEAD   IDENTICO
+  _calendario_grade.html               ea9ab936…  (o md5 de entrada dela)
+  500 nas duas cascas, última hora:    0
 
-  3. O selo era cego a ALIAS, e isso escondia um leitor inteiro. from ... import espelho_do_colab as _espelho fazia o selo comparar o nome chamado e não ver o fato. Censo dela:
-  dois sítios em prod — e um deles é ponto/views.py, a tela do espelho do admin, que lê dinheiro e nunca foi contado por nenhuma das duas listas do placar. Entrou na lista. Placar
-  que não enxerga um leitor não mede o placar: mede a lista.
+  A reversão é real, e ela não precisava do seu ! porque desfez a própria escrita sobre arquivos que estavam limpos em HEAD.
 
-  Ela também reverteu a implementação que eu havia mandado fazer no lugar errado, e o DIFF dela provou o meu ponto antes de eu mandar: dos 20 campos, só dias_abono se move (57
-  colabs na 09, 12 na 10) — e é justamente a chave que o gravado não carrega e a tela tem em cópia própria. Curar no papel poria 69 colab-competência com um número no Art. 74 §2 e
-  outro no celular da mesma pessoa.
+  O que mais me interessou no relato dela é a segunda falha, e ela é a mais instrutiva: como os arquivos revertidos eram da árvore errada, dois REDs dela voltaram verdes e ela
+  quase registrou "o selo passa com o template de antes" como selo vazio — quando o vazio era a medição. Medição que mede a árvore errada não descobre nada, e parece descobrir.
 
-  Falta responder o PAREI de lei dela (a composição de total_trabalhadas no laço do coletor), decidir o item (2) do plano — ela provou com três argumentos que montar_periodos_de
-  não é substituição 1:1 — e fazer o merge na ordem que ela pediu.
+  E a guarda criada por incidente estava cega. bin/index_vs_arvore.sh nasceu do caso de 12/09 e fazia cd "$(dirname $0)/.." — mas bin/ mora na árvore principal. Rodando de um
+  worktree, ele comparava o índice de uma árvore com o disco de outra: recusou 6 commits limpos, e — o lado perigoso — divergência real dentro de um worktree ficava invisível, o
+  defeito exato que ele existe para pegar. Guarda que mente nas duas direções ensina a desligá-la, e as duas raias usaram PULAR_INDEX=1 hoje.
 
-✻ Waiting for 1 background agent to finish
+  Curada com git rev-parse --show-toplevel, provada nos dois lados — e na árvore principal ela acusou na hora uma divergência real minha: o quarteto UI-GRADE estava staged e
+  modificado depois. Tirei do índice sem tocar o disco; o template segue em ea9ab936, byte a byte o que prod serve e o que você vai olhar no smoke.
 
-› Message from @a0132ccfe1cb91a23 (ctrl+o to expand)
+  Falta responder os dois PAREI das raias, aplicar o merge do PDF na ordem que ela pediu, e o patch de núcleo do modo COMPETÊNCIA.
 
-● A raia UI relata um incidente em prod: o cd dela vazou e a árvore principal — que é o bind-mount de produção — recebeu escrita. Verifico eu mesmo antes de qualquer outra coisa.
+✻ Baked for 2h 7m 53s · done 4:04 PM · 5 shells still running
 
-  Ran 1 shell command
+❯ segue a fila: (1) push dos 23 agora (pista livre); (2) PAREI da raia PDF e' decisao TECNICA pela LEI-AKITA 2 e pelo vocabulario do gravado: total_trabalhadas = so trabalhadas,
+  trab_folga separada -- decide e segue; (3) merge do PDF na ordem que ela pediu; (4) patch calendario.py:204 aplica na principal; (5) so entao /compact com "manter: S3 placar, 3
+  PAREI resolvidos, [nome] signal celula->cartorio pendente, L-097 >=10". PAREI so em lei ou !
 
-● Agent "Raia UI: fila 2 descongelada" finished · 46m 12s
+● Ordem clara. Registro e executo em sequência — começando pelo commit do que está solto e o push.
 
-● Prova independente de que prod esta sao
-  ⎿  $ cd /home/ronald/saas-hasner && curl -s -o /dev/null -w "health=%{http_code} " http://127.0.0.1/health/ 2>/dev/null; docker exec saas_ui python -c "print('ui vivo')"
-     2>/dev/null; echo "=== 500 na ultima hora ==="; docker logs saas_ui --since 60m 2>&1 | grep -c " 500 " ; docker logs saas_core --sin…
+● Conferir os selos com a pista livre · 3s
+  ⎿  $ docker ps --format '{{.Names}}' | grep -vE 'saas_|mensageria|juliani_db_test' | head -2; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
+     teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_EN…
 
-✢ Forging… (26s · ↓ 1.0k tokens)
-                                                                                                                                                            2% until auto-compact
+* Schlepping… (50s · ↓ 2.7k tokens)
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · /tasks to see subagents · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
