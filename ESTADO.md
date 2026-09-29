@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:291 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:361 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 12:19:07.**
+**Medido em 29/09/2026 12:24:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d65a2d26 TICKETS: placar e rodape com o push 9b446740` |
+| `HEAD` local | `29670805 O espelho_x_dia_pago saiu de 0 para 1 e 4, e conferi que nao fui eu` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+29670805 O espelho_x_dia_pago saiu de 0 para 1 e 4, e conferi que nao fui eu
+cd1adb17 O PAREI diz o tamanho novo do contador: 09 = 1 + 37, 10 = 39 + 43
+5d9a2ebf O contador que o seu portao usa era cego a 80 colaboradores -- entre eles os DEMITIDOS
 d65a2d26 TICKETS: placar e rodape com o push 9b446740
 5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava
-a3202eb0 PAREI de volta ao TOPO do RELATO: a S3 para na L-095, que e lei sua
-9b446740 TICKETS: placar e rodape com o push a0c12c3e
-9592fc83 A lavratura descartava o adicional noturno do dia de folga trabalhada -- e os leitores ja leem a lavratura
 ```
 
 ## `git status --short`
@@ -42,8 +42,6 @@ a3202eb0 PAREI de volta ao TOPO do RELATO: a S3 para na L-095, que e lei sua
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/folha/porta_export.py
- M app/folha/tests/test_porta_do_export.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -101,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  status='fora' não quer dizer "sem apuração". Quer dizer rescisão (verbas pelo módulo próprio do Domínio), sem código do Domínio, férias com batida, cadastro_zero. Gente que tem
+  espelho, tem lavratura e — na rescisão — cujo espelho é insumo do TRCT.
 
-  Cinco commits locais esperando o push7, que está no arsenal:
+  ┌─────────────┬──────────────────────────────────┬──────────┬───────────────────────────────────────────────────────────────────────────────────┐
+  │ competência │ fora do universo do TXT com dado │ divergem │                                      campos                                       │
+  ├─────────────┼──────────────────────────────────┼──────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ 09          │ 402                              │ 37       │ HE 50% em 24, trabalhadas 7, noturnas 5, HE 100% 5, intra 5… (14 campos)          │
+  ├─────────────┼──────────────────────────────────┼──────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ 10          │ 347                              │ 43       │ minutos_realizados 19, trabalhadas 13, antecipada 5, banco 5, reflexo DSR 4… (13) │
+  └─────────────┴──────────────────────────────────┴──────────┴───────────────────────────────────────────────────────────────────────────────────┘
 
-  5297b031  A linha do PAREI comecava com ** e o hook nao a lia como trava
-  a3202eb0  PAREI de volta ao TOPO do RELATO
-  9b446740  TICKETS: placar e rodape
-  9592fc83  A lavratura descartava o adicional noturno do dia de folga trabalhada
-  db358056  O resumo do cartao ja nao vem do motor para quem tem fechamento
+  80 colaboradores invisíveis ao portão que a L-095 usa para autorizar a troca de leitor. Portão cego autoriza — se eu tivesse seguido o contador, teria trocado o resumo do cartão
+  com 80 divergências de pé. E o "09: 1" que publiquei de manhã era 1 de 38; a correção está no mesmo lugar onde o número errado foi publicado.
 
-  Os dois anteriores (a0c12c3e com a linha do dia e a coluna preservada) já estão em origin, e os dois deploys do período (11:37 e 11:59) já puseram tudo isso em prod com prova de
-  casca.
+  Cura, no ar às 12:20: os dois contadores baratos varrem quem tem gravado ou lavratura (consulta de banco, não motor). O espelho_x_dia_pago fica no universo do TXT porque precisa
+  do espelho por colaborador — e isso passa a ser declarado: medir devolve universo_dos_contadores, porque renomear a chave quebraria todos os leitores do carimbo. RED provado
+  removendo o segundo laço; o caso monta um demitido com 7 h de HE 50% de diferença. folha verde: 282 testes.
 
-  PAREI: o ! de dinheiro do RECALCULO-DA-10 | espera Ronald — a linha está no topo do RELATO e o hook a aceita (rodei na mão, rc=0).
+  É a terceira vez em dois dias da mesma família — contador == universo (LEI-AKITA 8). Ontem foi "compara só os campos que ele tem" (minutos_abonados, 7.610,9 h). Hoje é "olha só
+  quem entra no TXT".
 
-  Retomo por conta própria quando as duas medições em voo terminarem: o push7 (se barrar no placar, é o ciclo conhecido) e a re-medição dos contadores, que deve corrigir para cima
-  o "09: 1" que publiquei de manhã.
+  Duas coisas que conferi e não eram minhas
 
-✻ Worked for 22s · done 12:08 PM · 6 shells still running
+  - espelho_x_dia_pago saiu de 0 para 1 (09) e 4 (10). Não foi a troca da linha do dia: dias_fora_do_dia_pago chama autoridade_do_periodo por conta própria e não lê nenhuma chave
+    que eu adicionei. É IDADE — eu curei o vínculo do col616 às 08:53 (cadastro mudado) e chegaram batidas novas.
+  - O fatia.done parou de mentir duas vezes hoje: primeiro o OK do gate antigo, agora o espelho_x_dia_pago = 0 e o contador cego.
 
-● Background command "Fim do push7" completed (exit code 0)
+  PAREI: o ! de dinheiro do RECALCULO-DA-10 | espera Ronald — e a linha do topo agora diz o tamanho novo: 09 = 1+37, 10 = 39+43. O aval tem de ser dado sobre o número certo, não
+  sobre o recorte.
 
-  Searched for 1 pattern, ran 1 shell command
+  push9 em voo com seis commits (a cura do contador, a da lavratura da folga trabalhada, os dois PAREI e o placar). Falta relavrar a 10 para as linhas ganharem as rubricas curadas
+  — aditivo, não toca o gravado.
 
-● Background command "Esperar os dois" completed (exit code 0)
-
-● Provar o vermelho do contador cego
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp folha/porta_export.py $S/porta.bak && python3 - <<'PYEOF'
-     import io
-     P='folha/porta_export.py'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.index(' for _pk in sorted(_com_dado - _vistos):')
-     j=t.index(…
-
-✢ Puttering… (7m 2s · ↓ 19.8k tokens)
+✻ Cooked for 9m 45s · done 12:21 PM · 5 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ ! recalcula a 10; e relavra as duas
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
