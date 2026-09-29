@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 13:55:45.**
+**Medido em 29/09/2026 14:01:01.**
 
 | | |
 |---|---|
@@ -39,9 +39,12 @@ d65a2d26 TICKETS: placar e rodape com o push 9b446740
 ## `git status --short`
 
 ```
+ M CLAUDE.md
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,25 +102,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  status='fora' não quer dizer "sem apuração". Quer dizer rescisão (verbas pelo módulo próprio do Domínio), sem código do Domínio, férias com batida, cadastro_zero. Gente que tem
-  espelho, tem lavratura e — na rescisão — cujo espelho é insumo do TRCT.
-
-  ┌─────────────┬──────────────────────────────────┬──────────┬───────────────────────────────────────────────────────────────────────────────────┐
-  │ competência │ fora do universo do TXT com dado │ divergem │                                      campos                                       │
-  ├─────────────┼──────────────────────────────────┼──────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ 09          │ 402                              │ 37       │ HE 50% em 24, trabalhadas 7, noturnas 5, HE 100% 5, intra 5… (14 campos)          │
-  ├─────────────┼──────────────────────────────────┼──────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ 10          │ 347                              │ 43       │ minutos_realizados 19, trabalhadas 13, antecipada 5, banco 5, reflexo DSR 4… (13) │
-  └─────────────┴──────────────────────────────────┴──────────┴───────────────────────────────────────────────────────────────────────────────────┘
-
-  80 colaboradores invisíveis ao portão que a L-095 usa para autorizar a troca de leitor. Portão cego autoriza — se eu tivesse seguido o contador, teria trocado o resumo do cartão
-  com 80 divergências de pé. E o "09: 1" que publiquei de manhã era 1 de 38; a correção está no mesmo lugar onde o número errado foi publicado.
-
-  Cura, no ar às 12:20: os dois contadores baratos varrem quem tem gravado ou lavratura (consulta de banco, não motor). O espelho_x_dia_pago fica no universo do TXT porque precisa
-  do espelho por colaborador — e isso passa a ser declarado: medir devolve universo_dos_contadores, porque renomear a chave quebraria todos os leitores do carimbo. RED provado
-  removendo o segundo laço; o caso monta um demitido com 7 h de HE 50% de diferença. folha verde: 282 testes.
-
-  É a terceira vez em dois dias da mesma família — contador == universo (LEI-AKITA 8). Ontem foi "compara só os campos que ele tem" (minutos_abonados, 7.610,9 h). Hoje é "olha só
   quem entra no TXT".
 
   Duas coisas que conferi e não eram minhas
@@ -133,10 +117,29 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   — aditivo, não toca o gravado.
 
 ✻ Cooked for 9m 45s · done 12:21 PM · 5 shells still running
-                                                                                                                                           new task? /clear to save 604.4k tokens
+
+❯ aval Ronald: recalcula a 10 (DIFF na sombra contra o gravado, publicado) e relavra as duas competencias (09 por retrato, 10 pelo recalculo); nenhum outro gravado se toca. segue
+  a fila; PAREI so em lei ou ! !
+
+● O ! chegou. Registro e executo na ordem que ele define: DIFF na sombra → carimbo do antes → apply → relavra → prova.
+
+  Ran 9 shell commands
+
+❯ aval Ronald PERMANENTE (CLAUDE.md, secao pre-aprovados): fica PRE-APROVADO tambem o apply de dinheiro em competencia NAO exportada (recalculo, relavratura, cura do motor),
+  desde que: DIFF de frota publicado no RELATO antes, arquivo de reversao em logs/, competencia exportada intacta (L-092), e o resultado com PROVA no RELATO. PAREI so em pergunta
+  de LEI, apagar/voltar arquivo de prod ou tocar competencia exportada. Executa agora o recalculo da 10 e a relavratura das duas e segue a fila ate o fim da S3 sem parar. !
+
+● Lei nova e permanente. Registro no CLAUDE.md e executo — o ! agora é estrutural, não por caso.
+
+● DIFF na sombra, com a lavra reposta no mesmo container
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; nohup bin/sombra.sh --com-a-sombra
+     "diff10-do-aval" -- docker run --rm --cpuset-cpus 4-7 --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env …
+
+✢ Nucleating… (4m 35s · ↓ 12.2k tokens · thinking)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ ! recalcula a 10; e relavra as duas
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
