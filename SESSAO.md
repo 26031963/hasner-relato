@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 06:15:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **711**.
+**Medido em 29/09/2026 06:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **710**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -720,4 +720,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:29:32 | Bash | DIFF da janela na competencia 10 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command diff_janela_he --schema=juliani --mes 10 --ano 2026 > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_jhe.txt 2>&1; tail -20 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_jhe.txt` |
 | 18:29:09 | Bash | Deploy da migration da janela | `cd /home/ronald/saas-hasner && bash bin/deploy.sh --sem-sombra "O-JANELA-HE parte A: migration 0052 e ADITIVA e a regra nasce INERTE -- toda empresa com janela_he_ativa=False e janela_he_desde NULO, e o selo test_MORDE_empresa_com_a_janela_DESLIGADA_nao_muda_nada prova que com o cadastro desligado o motor calcula como sempre calculou. Regua verde: 8602 testes. O bloco de ~1h40 nao responderia nada ...` |
 | 18:26:16 | Bash | Commitar e empurrar a parte A | `cd /home/ronald/saas-hasner && git add -A app/ bin/ && git reset -q bin/keepalive.sh 2>/dev/null; git commit -q -F /tmp/msg_jhe.txt -- app bin 2>/dev/null; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: rodape e placar (8602 testes OK) Co-Authored-By: Claude Opus 5 (1M context)  ...` |
-| 18:17:02 | Bash | Curar o lookup, cortar a PROVA-DOMINIO e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() v = """ from ponto.models import Batida ids = list(Batida.objects.filter( colaborador__empresa=e, retratada_em__isnull=True, timestamp__date__gte=ini, timestamp__date__lte=fim ).values_list('colaborador_id', flat=T ...` |
