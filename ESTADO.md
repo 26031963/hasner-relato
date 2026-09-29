@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:23:01.**
+**Medido em 29/09/2026 08:28:23.**
 
 | | |
 |---|---|
@@ -126,12 +126,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Esperar o push · 1m 32s
+● Esperar o push e o bloco · 1m 7s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main|rejected|error:|FAILED"
-     $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/lo… (1m 31s)
+     $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/lo… (1m 6s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (1h 36m 53s · ↓ 175.9k tokens)
+· Levitating… (1h 42m 15s · ↓ 176.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
