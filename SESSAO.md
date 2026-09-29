@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/09/2026 21:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **491**.
+**Medido em 28/09/2026 21:06:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (104.0 MB). Acoes na janela: **490**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -500,4 +500,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:09:00 | Bash | Rodar o oraculo com a faixa em prod | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 --csv /tmp/e6_r6.csv 2>&1 \| tail -12` |
 | 09:08:50 | Bash | Atualizar o selo e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='app/ponto/tests/test_e6_oraculo_julga_impar.py' t=io.open(p,encoding='utf-8').read() t=t.replace("e6, impar, _h = minutos_do_oraculo","_v = minutos_do_oraculo") t=t.replace("quatro, _i4, _h4 = minutos_do_oraculo","_q = minutos_do_oraculo") t=t.replace("cinco, _i5, _h5 = minutos_do_oraculo","_c = minutos_do_oraculo") t=t.replace("self. ...` |
 | 09:08:22 | Bash | Faixa piso..teto e origem da paridade no oraculo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile p='app/ponto/management/commands/e6_oraculo.py' t=io.open(p,encoding='utf-8').read() # --- a funcao devolve VEREDITO, com o teto (envelope) e a contagem CRUA do dia --- velho = t[t.index('def minutos_do_oraculo(ts):'):t.index('class Command(BaseCommand):')] novo = '''class Veredito(typing.NamedTuple):  ...` |
-| 09:05:17 | Bash | Classificar as divergencias dos dias impares | `cd /home/ronald/saas-hasner && docker cp saas_core:/tmp/e6_r5.csv /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6_r5.csv && python3 - <<'PYEOF' import csv, collections r=list(csv.DictReader(open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6_r5.csv'))) imp=[x for x in r if x['paridade']=='IMPAR'] pr ...` |
