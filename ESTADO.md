@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:28:23.**
+**Medido em 29/09/2026 08:33:51.**
 
 | | |
 |---|---|
 | `HEAD` local | `aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)` |
-| `origin/main` | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -126,12 +126,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Esperar o push e o bloco · 1m 7s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main|rejected|error:|FAILED"
-     $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/lo… (1m 6s)
+● Rodar a fatia abono-no-ar pela porta · 1m 27s
+  ⎿  $ cd /home/ronald/saas-hasner && cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null; echo "=== rodando a fatia pela porta"; nohup bash bin/deploy_agendado.sh rodar
+     abono-no-ar fatias_agendadas/abono-no-ar > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scra… (1m 26s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Levitating… (1h 42m 15s · ↓ 176.8k tokens)
+✢ Levitating… (1h 47m 43s · ↓ 178.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 08:28:23.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.9 MB). Acoes na janela: **837**.
+**Medido em 29/09/2026 08:33:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.9 MB). Acoes na janela: **841**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:32:24 | Bash | Rodar a fatia abono-no-ar pela porta | `cd /home/ronald/saas-hasner && cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null; echo "=== rodando a fatia pela porta"; nohup bash bin/deploy_agendado.sh rodar abono-no-ar fatias_agendadas/abono-no-ar > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/fatia_abono.log 2>&1 & sleep 100; tail -12 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e5 ...` |
+| 08:32:17 | Bash | Conferir o ensaio da sombra | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| tail -5` |
+| 08:30:41 | Bash | Esperar o bloco 4 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "sombra: (OK\|FALHOU)" $S/sombra_bloco4.log 2>/dev/null && break; sleep 10; done; tail -4 $S/sombra_bloco4.log; date '+%H:%M'` |
+| 08:29:11 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
 | 08:27:16 | Bash | Esperar o push e o bloco | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; grep -c "erro" /home/ronald/saas-hasner/logs/sombra/resultado.tsv;  ...` |
 | 08:25:20 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
 | 08:23:24 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
