@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:23:01.**
+**Medido em 29/09/2026 14:28:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela` |
+| `HEAD` local | `9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO
 0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela
 2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
 988e3375 REGEN-EM-EXPORTADA: a excecao para a competencia paga nasce como PORTA, e o carimbo fica honesto
 9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"
-57c056e2 APLICADO: a 10 recalculada, as duas relavradas, e a 09 com hash IDENTICO nas quatro empresas
 ```
 
 ## `git status --short`
@@ -100,18 +100,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-❯ aval Ronald raia PDF: git worktree add ../wt-pdf main; nesta raia SO relatorios/pdf_espelho.py + relatorios/tests/ + docs. Construir o leitor #3 pelo plano ja escrito no RELATO
-  (anomalias e turnos_abertos por selecao_periodo.montar_periodos_de; dinheiro por rubricas_do_dia; credito parcial sai do PDF; dias_falta/abono da lavratura) + linha do dia
-  mostrando o pago. RED por colab medido ANTES (col600 22/09 = 7h01). Selo AST S3 = placar cai 1. Nao deployar, nao relavrar, nao tocar gravado: entregar branch + DIFF por colab
-  do papel (antes x depois) e PAREI para merge pela raia principal. Regua so por regua.sh. Leis L-092, L-095, L-097; nenhuma lei nova. !
-
-● Três ordens vivas. Registro as duas novas, abro a raia PDF em worktree e sigo no censo na raia principal.
-
-  Ran 4 shell commands
-
-● Agent(Raia PDF: leitor #3 da S3)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
-
 ● A raia PDF está em voo. Na principal, rodo o censo da família.
 
   Ran 2 shell commands
@@ -122,14 +110,26 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● O censo decidiu: 5 automáticos, 42 propostas. Publico a tabela e sigo para o apply.
 
-● Aplicar os 5 automaticos pela porta unica · 13s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/familia_item2.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """FAMILIA-FASE-12x36 item 2: cura AUTOMATICA dos 5 que passam o criterio, pela porta unica.
-     Criterio literal dele: proposta com paridade >=… (13s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-✢ Nucleating… (26m 35s · ↓ 82.5k tokens)
+● Os 5 estão corrigidos no cadastro. Os dias exportados foram barrados — agora o selo da porta, antes de usá-la.
+
+  Searched for 1 pattern, ran 5 shell commands
+
+● A porta está selada. Agora ela vai à 09 dos seis — os 5 da família mais a [nome].
+
+  Ran 3 shell commands
+
+● 6 de 6 pela porta, com trilha. Agora as Pautas DP com os dois números e as 42 propostas.
+
+  Pautas DP com os dois numeros
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/pautas_familia.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """PAUTA DP com os DOIS numeros, para cada um dos 6 retificados na 09 (lei REGEN-EM-EXPORTADA).
+     A L-092 nao vira "esconde a diferenca": vir…
+
+✶ Nucleating… (31m 58s · ↓ 96.6k tokens · thought for 3s)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -137,6 +137,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading porta_export.py medir function                                                                                              4m 33s · ↓ 158.1k tokens
+  ◯ general-purpose  Inspecting datas_falta in motor_calculo_v2.py                                                                                       9m 55s · ↓ 172.8k tokens
   ⧉  index
 ```
