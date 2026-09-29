@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:12:29.**
+**Medido em 29/09/2026 08:17:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias` |
+| `HEAD` local | `9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)` |
 | `origin/main` | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,25 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)
+6563f03c O ensaio da sombra reprovava no ULTIMO comando porque ele mesmo trocava a lavra -- e a cura nao rodava por um apostrofo
 b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias
 d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
 53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
-a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30
-67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
- M app/api/tests/test_espelho_app_fonte_e_geometria.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M bin/sombra.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -104,7 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
   trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
   segue a fila; PAREI so em lei ou !
@@ -132,11 +126,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-  Esperar o bloco da sombra · 2s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "sombra: (OK|FALHOU)"
-     $S/sombra_bloco3.log 2>/dev/null && break; sleep 10; done; tail -4 $S/sombra_bloco3.log; echo "=== regua"; tail -2 $S/regua_l4c.log; date '+%H:%…
+● Commitar o placar e empurrar · 8s
+  ⎿  $ cd /home/ronald/saas-hasner && git diff app/docs/TICKETS.md | tail -4 | cut -c1-200 && git commit -q -m "TICKETS: o placar do topo volta a bater com o mundo (regua VERDE,
+     8.642 OK)" -- app/docs/TICKETS.md && nohup git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-… (6s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Levitating… (1h 26m 21s · ↓ 164.7k tokens)
+✢ Levitating… (1h 31m 43s · ↓ 175.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
