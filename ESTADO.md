@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:200 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:236 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:44:01.**
+**Medido em 29/09/2026 18:49:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `08f8ca75 TICKETS: placar do topo` |
+| `HEAD` local | `910fc8cd O censo respondeu quem escreve no gravado da exportada, e a resposta e UM -- com tripwire` |
 | `origin/main` | `08f8ca75 TICKETS: placar do topo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,22 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+910fc8cd O censo respondeu quem escreve no gravado da exportada, e a resposta e UM -- com tripwire
 08f8ca75 TICKETS: placar do topo
 0a2289ed O smoke do partial nao foi por HTTP, e a primeira medicao minha era a pagina de login
 c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA da arvore viva
 40995328 TICKETS: placar do topo
-0afe9dac BACKLOG: a S3 fecha com o placar em 0, e o placar mudou de pergunta
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/BACKLOG.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/tests/test_selo_gravado_um_escritor_em_lote.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,6 +99,11 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  (_calendario_grade.html da UI-GRADE, que espera o seu smoke e já está no ar; o index de 13 cards, que é o catálogo /relatorios/) e não vieram.
+
+  A prova foi feita fora da árvore viva, e é a parte que importa: template no bind-mount muda a tela na hora, então copiar o partial para ~/saas-hasner/app para rodar o teste
+  seria pôr o botão no ar antes do verde — a família exata do 500 de 23/09. Abri wt-cal2 a partir de main (que já tinha o núcleo no ar), rodei a suíte montando aquele caminho: 556
+  testes OK (colaboradores inteiro + test_smoke_chromium, que abre a tela nas duas cascas). Só depois o par entrou na principal, no ato do commit.
 
   Smoke em prod, e a minha primeira medição estava errada: urlopen na porta do saas_ui devolve 200 com a página de login (segue o redirect), então "200" ali não prova tela nenhuma
   — eu li botao=nao de uma página que não era a tela. Medi pelo caminho que a tela usa, contexto_calendario + render_to_string reais, dentro do saas_ui (no saas_core isso estoura
@@ -124,21 +127,16 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-  Medir os contadores da porta em prod · 5m 58s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_porta.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """Contadores da porta do export -- LEITURA (o `medir` nao escreve; provado no item)."""
-     from colaboradores.models import Empresa
-     from folha.porta_export import medir
-     CHAVES = ('fechamento_x_soma_dias_pagos… (5m 56s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Esperar a medicao da 10
+  ⎿  $ cd /home/ronald/saas-hasner && until [ "$(pgrep -cf medir_porta)" = "0" ]; do sleep 30; done; grep -v 'objects imported'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log | sed -n '/competencia 10/,$p'
 
-✢ Schlepping… (2h 37m 18s · ↓ 149.2k tokens)
+✢ Schlepping… (2h 42m 48s · ↓ 154.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
