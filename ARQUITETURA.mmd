@@ -33,10 +33,10 @@ flowchart TD
     c_tripwire_vinculo_orfao["tripwire_vinculo_orfao<br/>06:07"]
   end
   subgraph e_cobranca["cobranca"]
-    c_apurar_furos_diarios["apurar_furos_diarios<br/>06:37"]
+    c_apurar_furos_diarios["apurar_furos_diarios<br/>apos processar_cartorio"]
     c_detectar_cluster_espurio["detectar_cluster_espurio<br/>06:24"]
     c_detectar_par_relampago["detectar_par_relampago<br/>06:26"]
-    c_disparar_perguntas_competencia["disparar_perguntas_competencia<br/>06:38"]
+    c_disparar_perguntas_competencia["disparar_perguntas_competencia<br/>apos apurar_furos_diarios"]
     c_processar_cartorio["processar_cartorio<br/>06:27"]
     c_reconciliar_grade["reconciliar_grade<br/>06:20"]
   end
@@ -47,7 +47,7 @@ flowchart TD
     c_mapa_divergencia["mapa_divergencia<br/>07:07"]
     c_reavaliar_ausencias_feriado["reavaliar_ausencias_feriado<br/>07:02"]
     c_reconciliar_geofence["reconciliar_geofence<br/>06:42"]
-    c_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas<br/>06:41"]
+    c_reconciliar_perguntas_orfas["reconciliar_perguntas_orfas<br/>apos disparar_perguntas_competencia"]
     c_reconciliar_vinculo["reconciliar_vinculo<br/>06:47"]
     c_silenciar_chamados_isentos["silenciar_chamados_isentos<br/>07:05"]
     c_supra_juiz["supra_juiz<br/>06:54"]
@@ -84,7 +84,6 @@ flowchart TD
   c_reconciliar_grade --> c_detectar_cluster_espurio
   c_processar_cartorio --> c_detectar_intervalo_ausente
   c_reconciliar_grade --> c_detectar_par_relampago
-  c_processar_cartorio --> c_disparar_perguntas_competencia
   c_apurar_furos_diarios --> c_disparar_perguntas_competencia
   c_processar_cartorio --> c_esmeril_espelho
   c_reconciliar_perguntas_orfas --> c_fechar_becos_disputa
@@ -113,7 +112,7 @@ flowchart TD
   c_detectar_par_relampago --> c_verificar_nucleo
   c_processar_cartorio --> c_vigia_b5_ausencia
   c_flip_automatico --> c_vigia_plantio_overnight
-  %% arestas `depende` declaradas: 35
+  %% arestas `depende` declaradas: 34
 
   %% (c) PORTAS CANONICAS — fonte: AST/grep sobre app/
   subgraph PORTAS["escritores unicos / portas canonicas"]

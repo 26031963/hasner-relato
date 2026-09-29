@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:24:01.**
+**Medido em 29/09/2026 07:29:31.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 
 ```
  M CLAUDE.md
+ M app/api/views.py
  M app/chamados/tests/test_contract_crons.py
+ M app/chamados/tests/test_selo_emissor_fio_mudo.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
@@ -49,11 +51,12 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
 A  app/core/censo_codigo.py
  M app/core/tests/test_cartorio_0627.py
  M app/core/tests/test_contract_crons_duracao_horario.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
-A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
+AM app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
  M bin/cron_run.sh
@@ -63,6 +66,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/tests/test_hook_nao_cobra_congelado.sh
  M bin/tests/test_hook_stop_saida_valida.sh
  M fatias_agendadas/abono-no-ar/esteira.sh
+?? app/api/tests/test_espelho_app_fonte_e_geometria.py
 ?? bin/encadeado.sh
 ?? bin/keepalive.sh
 ?? bin/tests/test_furo_encadeado_ao_cartorio.sh
@@ -123,8 +127,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  Ran 1 shell command
-
 ● A 0068 está aplicada ([X]), o bloco da sombra corre até ~08:40, e o fatia.done = PAROU_DEPLOY diz a verdade. Publico os dois itens e sigo para o item 3 — leitor #4:
 
   Searched for 4 patterns, listed 1 directory, ran 10 shell commands
@@ -149,12 +151,14 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   caminho de codigo) o Code decide pela lei existente, registra no RELATO e SEGUE. bin/hook_stop_fila1.py: PAREI sem "lei:" ou "!" no texto nao libera o Stop. RED: PAREI
   "bloco-da-manha-saturado" -> hook devolve block "siga". Linha na secao LEI-AKITA do CLAUDE.md. Commit por path. segue a fila; PAREI so em lei ou !
 
-● Esperar a régua terminar · 1m 21s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 30); do pgrep -f "regua.sh" >/dev/null || break; sleep 10;
-     done; echo "regua: $(pgrep -f regua.sh >/dev/null && echo RODANDO || echo terminou)"; tail -4 $S/regua_encadeado.log; echo "… (1m 20s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 25 shell commands
 
-· Levitating… (37m 53s · ↓ 90.9k tokens)
+● Background command "Esperar a régua terminar" completed (exit code 0)
+
+● Ler C() e ENC()
+  ⎿  $ sed -n 29,60p config/crons.py
+
+✢ Levitating… (43m 23s · ↓ 105.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
