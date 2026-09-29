@@ -3,12 +3,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:36:37.**
+**Medido em 28/09/2026 22:42:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
-| `origin/main` | `df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)` |
+| `HEAD` local | `b98308a3 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke` |
+| `origin/main` | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -22,16 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b98308a3 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke
 73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
-88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
+ M app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -84,12 +86,6 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Não empurrei porque o commit do hook ficou em cima do UI-GRADE: um push levaria os dois, e você disse para não subir a UI sem o smoke. O hook curado já vale agora, porque ele
-  roda da árvore — o dump no tmux deve parar neste turno.
-
-  Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
-
-✻ Cogitated for 31m 26s · done 9:40 PM · 11 shells still running
 
 ❯ reordena e empurra so o hook; calendario fica local ate meu smoke. HOOK-PAREI-DA-FILA: o hook so libera com PAREI de item da FILA 1 viva do bloco OBRAS; PAREI de item
   CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
@@ -112,12 +108,18 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
   PRONTO: print no RELATO; push so com meu novo smoke.
   segue a fila; PAREI so em lei ou !
 
-● Empurrar o placar e recolocar o UI local · 8m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && git branch -f tmp-ui HEAD && git reset --hard 1b1db218 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
-     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- app/ponto/tests/… (8m 2s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Chip de ausencia em duas linhas fixas
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """UI-GRADE chip de ausencia: 2 linhas FIXAS -- linha 1 = SVG + rotulo INTEIRO, linha 2 = ->DD/MM."""
+     import io
+     P='app/templates/colaboradores/partials/_calendario_grade.html'
+     t=io.open(P,encoding='utf-8').read()
+     # o rotul…
 
-· Sprouting… (32m 36s · ↓ 16.1k tokens)
+· Compacting conversation… (38m 0s · ↓ 17.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

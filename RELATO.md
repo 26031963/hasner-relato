@@ -12697,6 +12697,9 @@ Tambem nao medido: quantos dos 49 tem chamado `vinculo_divergente` vivo.
 
 **28/09 14:05 vigia da esteira** -- docs/MAPA.md modificado fora do git depois de fatia no ar (prepush_commit, varre_comentario, zumbido_quarentena): a cadeia commitou o diagrama e nao o MAPA -- incluir no proximo commit (python3 bin/gerar_diagrama.py e git add app/docs/MAPA.md).
 
+
+**28/09 22:40 vigia da esteira** -- esteira em espera de janela: 0 fatias prontas, reabre 00:00.
+
 ## PENDENTES DO RONALD (110) -- aval, "!", corte e smoke esperando voce
 
 _Gerada de `PENDENTES_RONALD.json` por `bin/gerar_pendentes.py` em 24/09 23:52. Entra quando o DRY/pedido nasce, sai quando aplicado. `pendentes` = 110 (aval 35 - corte 44 - smoke 18); `mais_velho_h` = 296 (esperado: nenhum acima de 24 h -- hoje **91 acima**)._
