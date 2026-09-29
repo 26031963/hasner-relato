@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:52:09.**
+**Medido em 29/09/2026 19:57:31.**
 
 | | |
 |---|---|
@@ -99,6 +99,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
   ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
@@ -125,13 +126,12 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Acertar rodape e empurrar" completed (exit code 0)
 
-  Deploying da cura do FT · 4s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bin/deploy.sh --sem-migrate >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy2.log 2>&1; echo "rc=$?"; tail -8
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratch… (3s)
+● Esperar a re-lavratura da 10 · 3m 32s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'lavrar_dias_pagos' >/dev/null; do sleep 30; done; cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relavra10.log | tail -20 (3m 11s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (3h 45m 26s · ↓ 189.1k tokens)
+✢ Schlepping… (3h 50m 48s · ↓ 193.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
