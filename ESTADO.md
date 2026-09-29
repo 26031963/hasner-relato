@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:33:01.**
+**Medido em 29/09/2026 18:38:31.**
 
 | | |
 |---|---|
@@ -40,9 +40,11 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/BACKLOG.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/tests/test_selo_gravado_um_escritor_em_lote.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,44 +101,44 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - O critério (a) casava nome genérico: resultado em relatorios/views.py é o dict do serviço de PDF e periodos = list(qs) em relatorios/services.py são PeriodoAquisitivo de
-    férias. Por AST, zero chamada de motor nos dois. É o irmão de ler prosa, com a palavra num nome de variável.
-  - tem_rotulo era cego a alias enquanto toca_motor já via.
 
-  (2) O PAREI da raia PDF — decidido, e a decisão fechou a S3. total_trabalhadas = só as trabalhadas, trab_folga separada. Curando o critério (b) achei o que estava por baixo: a
-  mesma soma estava escrita duas vezes — a tela somava 6 rubricas, o cartão 10 — e total_atraso/total_saida_antecipada, que a tela imprime (espelho.html:50-51), existiam só no
-  papel: sem fechamento gravado a tela mostrava vazio e o PDF do mesmo mês mostrava horas de atraso. Cura: espelho.somar_periodos, um só sítio. DIFF na sombra pelas duas funções
-  reais, 36 resumos (09 e 10, ativos e demitidos): zero nas 21 chaves.
+  Smoke em prod, e a minha primeira medição estava errada: urlopen na porta do saas_ui devolve 200 com a página de login (segue o redirect), então "200" ali não prova tela nenhuma
+  — eu li botao=nao de uma página que não era a tela. Medi pelo caminho que a tela usa, contexto_calendario + render_to_string reais, dentro do saas_ui (no saas_core isso estoura
+  com NoReverseMatch: 'colaboradores' is not a registered namespace, porque o core roda o urlconf enxuto — o erro prova em qual casca a tela mora):
 
-  (3) Merge da raia PDF — feito, e rodar o selo dela contra a principal achou três bugs: o papel contava como falta 15 furos que ninguém decidiu (FALTA-UM-SIGNIFICADO, 23/09 —
-  desconto no holerite é o lado caro disso); os dias de abono discordavam das horas no mesmo papel (2,00 h ao lado de 0 dias); e o saldo não era a subtração dos dois números
-  impressos (10,00 − 192,00 = −180,0). Em total_extras o selo dela estava errado e o corte é de 19/09 — corrigi a assertiva dela por relação.
+  ┌─────────────┬──────────────────┬─────────────────────────────────────┬───────┬───────────────────────────┐
+  │    modo     │ janela devolvida │           rótulo impresso           │ botão │ modo=competencia no HTML  │
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
+  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
+  │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
+  └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
 
-  (4) calendario.py — aplicado na principal, com o RED no mesmo commit; o que morde é empresa com corte 26. O botão nasce desligado: nenhum template no ar conhece
-  competencia_rotulo.
+  A janela da competência vem do juiz (janela_fechamento), não do mês civil, e o rótulo chega pronto — o template não tem |date sobre a janela, não compara dia e não conhece o 21.
 
-  No ar (L-083): deploy --sem-migrate, três rotas provadas, BUG 128 verde, /colaboradores/ /ponto/espelho/ /relatorios/ = 200. Smoke de número pelo coletor real: 0 inconsistentes
-  em 6. E o smoke achou o que eu não sabia: procurei colaborador no ramo lavratura para exercitar a cura em prod e achei zero — depois do recálculo de hoje todo mundo com
-  lavratura tem fechamento. As três curas estão provadas pelo selo e pelo ramo folha, não por tráfego do ramo curado. Fica dito em vez de virar verde que parece cobertura.
+  Push 40995328..08f8ca75, suíte verde, faltam=0. wt-cal2 removida.
 
-  Placar da S3 = 0 (a e b verdes). (5) é seu: /compact com "manter: S3 placar, 3 PAREI resolvidos, [nome] signal celula→cartorio pendente, L-097 ≥10". O próximo da ORDEM VIVA é
-  O-JANELA-HE parte B1 (LEITURA) — não o comecei para não encher o contexto que você vai compactar.
+  Falta de você, nos dois itens que seguem em pé: o smoke de clique da UI-GRADE (roteiro no RELATO da raia-ui, col292/647/311/417 em setembro/2026) e a decisão de 5px da Auditoria
+  de espelhos. O próximo da ORDEM VIVA é O-JANELA-HE parte B1 (LEITURA).
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: UI-CAL-COMPETENCIA -- o calendario ganha o modo COMPETENCIA -- hoje ele tem Mes, Quinzena e Semana, e a competencia (21-20, ou o cor
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Esperar o push do item de UI · 9m 51s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (9m 50s)
+● Medir os contadores da porta em prod · 26s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_porta.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """Contadores da porta do export -- LEITURA (o `medir` nao escreve; provado no item)."""
+     from colaboradores.models import Empresa
+     from folha.porta_export import medir
+     CHAVES = ('fechamento_x_soma_dias_pagos… (26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (2h 26m 18s · ↓ 132.2k tokens)
+· Schlepping… (2h 31m 48s · ↓ 149.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
