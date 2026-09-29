@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:25:45.**
+**Medido em 29/09/2026 01:30:45.**
 
 | | |
 |---|---|
@@ -138,16 +138,16 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 
 ● Os dois selos mordem código real e calam na prosa — provado em ambos. Régua completa, primeiro plano:
 
-  Acompanhar a regua · 1m 45s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 110; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqxrb8nrm.output 2>/dev/null; ls
-     -t /tmp/regua_*.log | head -1 (1m 41s)
+  Acompanhar a suite · 36s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_012155.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_012155.log 2>/dev/null)" (35s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (21m 0s · ↓ 47.4k tokens)
+· Thundering… (26m 0s · ↓ 48.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
