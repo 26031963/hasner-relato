@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:46:01.**
+**Medido em 29/09/2026 01:51:31.**
 
 | | |
 |---|---|
@@ -122,17 +122,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Régua VERDE com carimbo: 8.631 testes OK. Commit do leitor #2 + as três curas de selo, por path:
 
-● Placar, rodape e push em primeiro plano · 1m 44s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git commit -q --amend --no-edit
-     -- app/colaboradores/services/calendario.py app/ponto/services/dia_pago.py app/folha/porta_export.py app/core/juizes.py app/co… (1m 43s · 5 lines)
+● Acompanhar o push · 1m 2s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "===
+     falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 1s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (41m 17s · ↓ 56.4k tokens)
+· Thundering… (46m 47s · ↓ 57.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
