@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:26:01.**
+**Medido em 28/09/2026 22:31:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)` |
-| `origin/main` | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem` |
+| `origin/main` | `df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
 88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
-8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
 ```
 
 ## `git status --short`
@@ -84,6 +84,8 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Não empurrei porque o commit do hook ficou em cima do UI-GRADE: um push levaria os dois, e você disse para não subir a UI sem o smoke. O hook curado já vale agora, porque ele
+  roda da árvore — o dump no tmux deve parar neste turno.
 
   Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
 
@@ -110,15 +112,13 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
   PRONTO: print no RELATO; push so com meu novo smoke.
   segue a fila; PAREI so em lei ou !
 
-● Commitar e empurrar a HOOK-PAREI-DA-FILA · 9m 0s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_parei.txt <<'EOF'
-     HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
-     O hook liberava o turno com QUALQUER PAREI no topo do RELATO, e o caso que mostrou o furo e
-     real: `PAREI: smoke-da-UI-GRADE-CALENDARIO` espera o smoke de uma fat… (8m 57s)
+● Empurrar o placar e recolocar o UI local · 2m 57s
+  ⎿  $ cd /home/ronald/saas-hasner && git branch -f tmp-ui HEAD && git reset --hard 1b1db218 >/dev/null 2>&1 && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash
+     bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q --amend --no-edit -- app/ponto/tests/… (2m 56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Sprouting… (22m 0s · ↓ 10.8k tokens)
-                                                                                                                                                            1% until auto-compact
+✢ Sprouting… (27m 31s · ↓ 16.1k tokens)
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
