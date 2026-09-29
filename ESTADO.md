@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:56:31.**
+**Medido em 29/09/2026 08:02:01.**
 
 | | |
 |---|---|
@@ -102,9 +102,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  CASO: [nome] -- EC 1327 (20/09, ATIVA) e EC 1326 (29/09, ATIVA), sobrepostos; reincidencia da classe [nome] (27/08).
-  MUDA: (1) constraint EXCLUDE no Postgres: mesmo colaborador, daterange(data_inicio, data_fim ou infinito) sobreposta = recusado (btree_gist), NOT VALID como a 0041; (2) toda
-  porta que abre vinculo ENCERRA o anterior na mesma transacao, com trilha P14; (3) censo dos leitores de ativa=True: onde houver juiz do dia (vinculo_do_dia pela celula), le o
   juiz.
   RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
@@ -129,12 +126,15 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
 
-● Esperar bloco e régua · 47s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "sombra: \(OK\|FALHOU\)"
-     $S/sombra_bloco3.log 2>/dev/null && break; pgrep -f regua.sh >/dev/null || break; sleep 10; done; echo "=== bloco3"; tail -4 $S/sombra_bloco3.… (47s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Read 1 file, ran 25 shell commands
 
-✢ Levitating… (1h 10m 23s · ↓ 158.7k tokens)
+❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
+  PAREI so em lei ou !
+
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '/FAIL: test_ruff_zero/,/^====/p' /tmp/regua_074923.log | grep -E "AssertionError|ruff|\.py" | head -12
+
+✢ Levitating… (1h 15m 53s · ↓ 160.7k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
