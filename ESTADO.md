@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:16:01.**
+**Medido em 29/09/2026 10:21:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
+| `HEAD` local | `02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo` |
 | `origin/main` | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo
 c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
 38f18bbe A competencia paga nao podia ser lavrada, e por isso 421 colabs apareciam como divida: o 09 fecha por RETRATO
 aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)
-6563f03c O ensaio da sombra reprovava no ULTIMO comando porque ele mesmo trocava a lavra -- e a cura nao rodava por um apostrofo
 ```
 
 ## `git status --short`
@@ -42,8 +42,6 @@ aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
-M  app/docs/BACKLOG.md
-M  app/docs/PROMPTS.md
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
@@ -102,11 +100,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
-
-● Task "Curar a saida do hook e provar" still running in background
-
-● Task "Selo por comportamento, nos dois caminhos" still running in background
 
 ❯ segue a fila; PAREI so em lei ou !
 
@@ -125,8 +118,9 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   Searched for 4 patterns, ran 6 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Puttering… (7m 41s · ↓ 17.7k tokens)
+  Ran 1 shell command
 
 ❯ ADENDO ao VINCULO-LINHA-DO-TEMPO (mesma obra, nao e bloco novo). Leis: L-092, L-096, corte 27/08 correcao retroativa em sequencia.
   1. O wizard "desde o inicio do vinculo" hoje le o vinculo NOVO (ofereceu 21/09): passa a oferecer o inicio do vinculo que COBRE o dia errado ([nome]: EC 934, 21/07).
@@ -135,10 +129,14 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   numeros.
   3. PRONTO: espelho de 01-19/09 sem espuria nos dias pares; hash do FechamentoMensal identico antes/depois; Pauta DP publicada com as horas.
      aval de vinculo/escala retroativo !
-  ctrl+x ctrl+s to send now
+
+● Conferir que somente_leitura nao escreve
+  ⎿  $ sed -n '550,560p;628,640p' ponto/services/fechamento.py
+
+· Puttering… (13m 11s · ↓ 28.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
