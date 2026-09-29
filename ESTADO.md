@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:200 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:213 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:36:39.**
+**Medido em 29/09/2026 11:42:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
+| `HEAD` local | `ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09` |
 | `origin/main` | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
+48609348 TICKETS: placar e rodape depois do deploy da linha do dia
+6c05f6cf A linha do dia do papel mostra o PAGO -- e medir antes evitou imprimir 0,00 em dias de 12 horas
 df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe
 4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP
-dca3c792 TICKETS: placar e rodape com o push f96eaba1
-d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
-13d8c130 Eu sobrescrevi a unica prova do intervalo, e a cura e que foto nao se sobrescreve
 ```
 
 ## `git status --short`
@@ -42,17 +42,7 @@ d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/ponto/services/dia_pago.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
- M app/relatorios/pdf_espelho.py
- M app/relatorios/services.py
- M app/relatorios/tests/test_pdf_realizado_do_dia.py
- M app/relatorios/tests/test_resumo_espelho_morto.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/relatorios/tests/test_pdf_linha_do_dia_e_o_pago.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -109,17 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Aguardar push4" completed (exit code 0)
-
-● Background command "Aguardar push4 pelo arquivo" completed (exit code 0)
-
-● Background command "Conferir push4" completed (exit code 0)
-
-  Searched for 3 patterns, read 3 files, listed 1 directory, ran 22 shell commands
-
-● Background command "Resultado da suite dos tres apps" completed (exit code 0)
-
 ● Background command "Esperar e ler" completed (exit code 0)
 
   Read 1 file, ran 2 shell commands
@@ -134,19 +113,30 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Aguardar a suite (30s)" completed (exit code 0)
 
-  Provar o vermelho da coluna
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp relatorios/pdf_espelho.py $S/pdf.bak && python3 - <<'PYEOF'
-     import io
-     P='relatorios/pdf_espelho.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace(" ] + _rubvals + [(_h(_pago_h) if _pago_h is n…
+  Ran 1 shell command
 
-✢ Puttering… (1h 28m 19s · ↓ 239.6k tokens)
+● Background command "Esperar o veredito da suite" completed (exit code 0)
+
+● Background command "Aguardar o fim da suite" completed (exit code 0)
+
+  Ran 6 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O papel perdeu coluna de rubrica?
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/colunas.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O papel PERDEU coluna? Colab com rubrica no GRAVADO e zero na LAVRATURA -> a coluna desaparece do PDF."""
+     from django.db.models import Sum
+     from…
+
+· Puttering… (1h 33m 41s · ↓ 246.9k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
