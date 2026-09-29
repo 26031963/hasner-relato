@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:63 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:172 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:28:23.**
+**Medido em 29/09/2026 14:33:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO` |
+| `HEAD` local | `5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **15** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes
 9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO
 0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela
 2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
 988e3375 REGEN-EM-EXPORTADA: a excecao para a competencia paga nasce como PORTA, e o carimbo fica honesto
-9c2f21de O carimbo do gravado passa a guardar VALOR: "mudou col451" vira "mudou col451, campo X, de A para B"
 ```
 
 ## `git status --short`
@@ -99,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● A raia PDF está em voo. Na principal, rodo o censo da família.
+● O DIFF achou um problema meu: a âncora que corrige a 09 do col414 quebra a 10 dele. Vou medir a segunda virada.
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O censo achou 47 colaboradores, não um. E o critério dele é sobre a fase PROPOSTA, não sobre o cadastro atual — vou medir a proposta.
+● O col414 virou duas vezes — 100% na 09 com âncora 19/09 e 100% na 10 com âncora 22/09. Aplico a segunda virada.
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O censo decidiu: 5 automáticos, 42 propostas. Publico a tabela e sigo para o apply.
+● Tudo aplicado. Publico o resultado com prova.
 
-  Ran 3 shell commands
+  Ran 7 shell commands
 
-● Os 5 estão corrigidos no cadastro. Os dias exportados foram barrados — agora o selo da porta, antes de usá-la.
+● Estado da esteira — três frentes rodando, e uma delas já entregou dinheiro real.
 
-  Searched for 1 pattern, ran 5 shell commands
+  Sob a lei nova DINHEIRO-EM-COMPETENCIA-ABERTA, a 10 foi recalculada e as duas competências relavradas:
+  - 570 colaboradores recalculados, 148 passaram a ter gravado. minutos_realizados +24.554 min (+409,2 h) em 52, horas_trabalhadas +81,63 h em 24, saldo_banco_horas +168,39 h em
+    7, horas_folga_trabalhada −27,80 h em 4.
+  - A 09 com hash IDÊNTICO nas quatro empresas, antes e depois. Condição 3 cumprida.
+  - A 09 relavrada por retrato: 607 colabs, 10.412 linhas, "Motor NÃO rodou", hash conferido pelo próprio comando.
+  - DIFF na sombra publicado antes, reversão em logs/, resultado com prova depois.
 
-● A porta está selada. Agora ela vai à 09 dos seis — os 5 da família mais a [nome].
+  O carimbo pegou o escritor da exportada por nome: col451, e o rastro são três batidas retroativas com origem disputa_s84_retro criadas às 12:01 e 12:30 — com atualizado_em de
+  28/09, o que confirma a assinatura de queryset.update() que você apontou. Faltava o campo, e agora o carimbo guarda valor (não hash) — mais três correções que a estreia dele
+  exigiu: previsto_em fora do universo, "incomparável" com linha própria, e comparação pela interseção dos campos.
 
-  Ran 3 shell commands
+  A FAMILIA-FASE-12x36 fechou os cinco itens: censo de 595 linhas separou 5 automáticos de 42 propostas; os 5 curados pela porta única (furos 8→0, 9→0, 11→2); a 09 dos seis
+  retificada pela porta REGEN-EM-EXPORTADA com trilha e hash; 6 Pautas DP (842–847) com os dois números; TXT parcial com sha256 — e ele revelou que só 2 dos 6 entram no TXT, os
+  outros quatro vão pela Pauta, o que é coerente.
 
-● 6 de 6 pela porta, com trilha. Agora as Pautas DP com os dois números e as 42 propostas.
-
-  Pautas DP com os dois numeros
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/pautas_familia.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """PAUTA DP com os DOIS numeros, para cada um dos 6 retificados na 09 (lei REGEN-EM-EXPORTADA).
-     A L-092 nao vira "esconde a diferenca": vir…
-
-✶ Nucleating… (31m 58s · ↓ 96.6k tokens · thought for 3s)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting datas_falta in motor_calculo_v2.py                                                                                       9m 55s · ↓ 172.8k tokens
+  ◯ general-purpose  Copying pdf_espelho.py from HEAD                                                                                                   15m 22s · ↓ 196.4k tokens
   ⧉  index
 ```
