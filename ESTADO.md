@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:22:31.**
+**Medido em 28/09/2026 21:28:01.**
 
 | | |
 |---|---|
@@ -110,17 +110,17 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: RELATO com o RED e commit por path.
   segue a fila; PAREI so em lei ou !
 
-● Publicar o RED e rodar a regua · 3m 5s
+● Publicar o RED e rodar a regua · 8m 35s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      p='/home/ronald/saas-hasner/app/docs/RELATO.md'
      t=io.open(p,encoding='utf-8').read()
      sec = '''# HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump no tmux (28/09 20:5x)
-     **O RED, … (3m 3s · 3 lines)
+     **O RED, … (8m 33s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Architecting… (13m 14s · ↓ 10.2k tokens)
+· Architecting… (18m 44s · ↓ 10.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
