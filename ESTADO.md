@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:333 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:405 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:29:31.**
+**Medido em 29/09/2026 16:35:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou` |
-| `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
+| `HEAD` local | `100caa63 TICKETS: placar do topo com o ultimo push do mundo` |
+| `origin/main` | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
 | commits a subir (`ahead`) | **25** |
 
 ## Fabrica
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+100caa63 TICKETS: placar do topo com o ultimo push do mundo
+e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja eram diferentes
 6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou
 8c25a2da A guarda criada por incidente estava cega a worktree, e um subagente escreveu na arvore de prod
 f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam
-cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador recebe numero de motor
-99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo
 ```
 
 ## `git status --short`
 
 ```
- M app/api/tests/test_espelho_app_fonte_e_geometria.py
- M app/api/views.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_s3_placar_exercicio.py
- M app/relatorios/pdf_espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -104,6 +99,7 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 2 shell commands
 
 ● Cinco falhas, e quatro delas são minhas. A mais interessante: o alias que eu curei num lado do selo e não no outro.
@@ -132,12 +128,11 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 
 ● Agora escrevo as duas funções no núcleo (uma soma, uma linha do dia) e troco os três leitores.
 
-  Rodar de novo o bloco afetado · 1m 34s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn… (1m 34s)
+  Acertar o placar do topo do TICKETS · 1m 31s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3500 git push origin main 2>&1 | tail -30 (1m 30s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (22m 48s · ↓ 45.5k tokens)
+✻ Schlepping… (28m 19s · ↓ 56.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
