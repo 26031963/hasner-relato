@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:15:45.**
+**Medido em 29/09/2026 15:20:45.**
 
 | | |
 |---|---|
@@ -103,36 +103,35 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  (b) 0 leitor com derivação própria de dinheiro, por AST. E aqui a parte que faz o selo valer: ele distingue aritmética de leitura. p.minutos_trabalhados / 60,
-  sum(pp.minutos_extra_50 ...) e r['x'] += p.minutos_atraso / 60 — as três formas exatas que tirei do código hoje — caem. Já return {'m': p.minutos_trabalhados} não cai, e essa
-  guarda do outro lado é deliberada: sem ela o selo proibiria o leitor de tocar o objeto, e qualquer leitura viraria "derivação" — o número mentindo para cima, que é o vício que
-  eu curei hoje no contador cego.
+● A fila 2 está descongelada e andando em raia própria. Registrei a lei e passei o trabalho.
 
-  Os quatro casos que mordem estão no arquivo, fabricando as duas doenças em fonte de mentira — sem eles os dois passariam por ausência de sinal.
+  Uma coisa que a lei me obrigou a registrar, porque não é óbvia e muda o que "descongelar" significa: template não precisa de deploy — não há cached.Loader, o Django relê o
+  arquivo do disco a cada request. Então o _calendario_grade.html modificado que estava solto na árvore principal já está no ar em produção, sem smoke, desde que foi escrito.
+  Mover a fatia para a raia não a tira da tela; o que a tiraria é voltar o arquivo ao HEAD, e isso é justamente um dos três casos de PAREI da sua lei nova (apagar/voltar arquivo
+  que prod usa). Então não desfiz nada: copiei os quatro arquivos para wt-ui e a raia fecha a fatia com selo, pronta para o seu smoke.
 
-  O selo está armado para rodar quando a pista abrir. Se (a) e (b) vierem verdes, o placar da S3 é 0 e eu o movo com a prova; se algum acusar, tenho arquivo:linha de cada sítio e
-  curo antes de mover.
+  A raia UI (wt-ui, branch raia-ui) recebeu a sua ordem: UI-GRADE-CALENDARIO → UI-CAL-COMPETENCIA → catálogo /relatorios/. Com duas amarras que eu acrescentei por lei da casa:
+  - núcleo intocado — calendario.py:204 é onde o modo COMPETÊNCIA precisa ler janela_fechamento, e isso é núcleo: ela entrega o patch pronto com arquivo:linha e eu aplico na
+    principal;
+  - pista compartilhada — três raias e um só juliani_db_test; ela checa container antes e espera.
 
-✻ Waiting for 1 background agent to finish
+  E ela vai me devolver o roteiro do smoke: qual tela, qual colaborador, o que olhar (largura fixa dos 7 dias, sem corte à direita, chip quebrando em 2 linhas), nas duas cascas.
 
-● Background command "Rodar o selo novo do placar" completed (exit code 0)
+  Enquanto isso, na fila 1: o selo novo do placar da S3 já pegou três coisas reais, uma delas um bug no meu próprio detector — sum(pp.minutos_extra_50 for pp in dia) passava
+  batido porque eu não atravessava a GeneratorExp, e era justamente a forma mais comum de derivação no repo. Curado; a rodada com o detector corrigido está no ar e vai me dar a
+  lista de arquivo:linha dos sítios que ainda derivam dinheiro.
 
-  Read 1 file
+✻ Waiting for 2 background agents to finish
 
-● O selo funcionou e achou três coisas — incluindo um bug no meu próprio detector, que o caso que morde pegou.
+● Background command "Esperar a pista e empurrar de verdade" completed (exit code 0)
 
-  Ran 1 shell command
+  Searched for 1 pattern, read 1 file, ran 1 shell command
 
-❯ aval Ronald lei: fila 2 (UI) DESCONGELA em raia propria enquanto a S3 espera pista/merge -- worktree wt-ui, so templates/static/testes de tela, deploy --sem-migrate, nucleo
-  intocado (L-096 segue para dinheiro/celula). Ordem: UI-GRADE-CALENDARIO (smoke meu na sequencia) -> UI-CAL-COMPETENCIA -> catalogo /relatorios/ de 26/09. PAREI so em lei ou !
+● Os dois selos estão certos em reclamar: um pendente que eu curei não saiu da lista, e o outro guarda a forma antiga do rótulo. Curo os dois.
 
-● Lei nova: a fila 2 descongela em raia própria. Registro, abro o worktree e passo os quatro arquivos que estão soltos na árvore principal.
+● Searching for 1 pattern…
 
-● Passar o quarteto UI-GRADE para a raia
-  ⎿  $ cd /home/ronald/saas-hasner && for f in app/templates/colaboradores/partials/_calendario_grade.html app/colaboradores/tests/test_calendario_sete_colunas.py
-     app/colaboradores/tests/test_chip_ausencia_duas_linhas.py app/colaboradores/tests/test_ui_grade_calendario.py; do cp "$f" "../wt-ui/$f" && ec…
-
-· Concocting… (3m 55s · ↓ 6.1k tokens)
+✶ Perambulating… (51s · ↓ 1.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -140,6 +139,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Queueing full test suite run                                                                                                       57m 17s · ↓ 358.3k tokens
+  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py contract changes                                                                        1h 2m 17s · ↓ 374.6k tokens
+  ◯ general-purpose  Comparing _calendario_grade.html against live tree                                                                                  4m 49s · ↓ 116.2k tokens
   ⧉  index
 ```
