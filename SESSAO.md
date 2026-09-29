@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 00:59:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (108.7 MB). Acoes na janela: **621**.
+**Medido em 29/09/2026 01:04:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (108.7 MB). Acoes na janela: **618**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -628,6 +628,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:19:04 | Bash | Corrigir a conta do selo e rodar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/ponto/tests/test_calculador_regras.py' t=io.open(P,encoding='utf-8').read() t=t.replace(''' """12 h e 8 min: variacao dentro do Art.58 par.1 nao e extraordinaria.""" r = regras.do_dia(minutos_trabalhados=728, pausa_min=60, previsto_min=660, intervalo_declarado_min=60)''', ''' """8 min acima do previsto LIQUIDO: variacao dentro do  ...` |
 | 13:17:46 | Bash | Selar as regras do calculador | `cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_calculador_regras.py <<'PYEOF' # -*- coding: utf-8 -*- """CALCULADOR S5a: as regras de rubrica dizem o MESMO que o motor nos casos que a casa ja julgou (28/09). O corte de 12:1x poe o nucleo do `e6_oraculo` como calculador e pede UM modulo de regras. O risco obvio de uma segunda implementacao e ela discordar do motor sem que ninguem saiba - ...` |
 | 13:17:03 | Bash | Escrever o modulo de regras de rubrica | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/calculador/nucleo.py' t=io.open(P,encoding='utf-8').read() t=t.replace(" cortes: set # dias em que o CORTE do proprio oraculo (gap > 14 h) orfanou uma batida", """ cortes: set # dias em que o CORTE do proprio oraculo (gap > 14 h) orfanou uma batida pausas: dict # minutos de PAUSA dentro do ...` |
-| 13:04:00 | Bash | Provar que o oraculo segue rodando apos a mudanca de casa | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command e6_oraculo --schema=juliani --mes 9 --ano 2026 2>&1 \| head -4` |
-| 13:03:36 | Bash | Mover o nucleo do oraculo para o pacote do calculador | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, os, py_compile, re SRC='app/ponto/management/commands/e6_oraculo.py' t=io.open(SRC,encoding='utf-8').read() i=t.index('class Veredito(typing.NamedTuple):') j=t.index('class Command(BaseCommand):') nucleo=t[i:j].rstrip()+'\n' os.makedirs('app/ponto/calculador', exist_ok=True) io.open('app/ponto/calculador/__init__ ...` |
-| 13:02:56 | Bash | Ver o nucleo do oraculo para mover | `sed -n '/^class Veredito/,/^def minutos_do_oraculo/p' ponto/management/commands/e6_oraculo.py \| head -14 && echo "..." && grep -n 'def minutos_do_oraculo' -A 4 ponto/management/commands/e6_oraculo.py \| head -6` |
