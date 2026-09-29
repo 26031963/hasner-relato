@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 13:28:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **929**.
+**Medido em 29/09/2026 13:34:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **924**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -934,8 +934,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:35:13 | Bash | Plano dos leitores 3 e 4, e ver a regua | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/plano_leitores_3_4.md <<'EOF' # S3, leitores #3 e #4 -- censo do que o DiaPago AINDA NAO carrega (lido em 29/09 01:3x) ## `relatorios/pdf_espelho.py` (leitor #3) pede ao `resultado`: dinheiro por dia: periodos, periodos_ft, horas_falta, saldo_banco_horas -> o DiaPago T ...` |
 | 01:34:47 | Bash | Censo do que falta no DiaPago para os leitores 3 e 4 | `echo '== pdf_espelho: o que vem do resultado (censo):'; grep -oE "resultado, '[a-z_]+'\|resultado\.[a-z_]+" relatorios/pdf_espelho.py \| sed "s/resultado, '//;s/'//;s/resultado\.//" \| sort -u \| tr '\n' ' '; echo; echo '== api/views (o card do dia):'; sed -n '1418,1432p' api/views.py` |
 | 01:34:34 | Bash | O que o pdf_espelho usa do resultado | `grep -n "resultado\.\\|resultado," relatorios/pdf_espelho.py \| head -14` |
-| 01:32:49 | Bash | Regua e, enquanto roda, ler o leitor 3 | `cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l2.log 2>&1 & sleep 100; ls -t /tmp/regua_*.log \| head -1; echo '--- enquanto roda, leio o leitor #3 (pdf_espelho):'; grep -n "resultado\." app/relatorios/pdf_espelho.py \| head -12` |
-| 01:32:32 | Bash | Tirar a pendencia curada e regerar o diagrama | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='/home/ronald/saas-hasner/app/core/juizes.py' t=io.open(P,encoding='utf-8').read() v = """ _p(_TT4, 'colaboradores/services/calendario.py', 'if resultado.horas_extra_50 > 0:', TELA, '4 espelho/cartao: selos de extra 50/100, atraso e antecipada -- classe B; deveria ler MotorBase.aplicar_tolerancia via ...` |
-| 01:32:16 | Bash | A pendencia curada | `cd /home/ronald/saas-hasner && grep -n "if resultado.horas_extra_50 > 0:" -B 3 -A 3 app/core/juizes.py` |
-| 01:32:11 | Bash | Qual pendencia do calendario sumiu | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import re, io s=io.open('app/core/juizes.py',encoding='utf-8').read() v=io.open('app/colaboradores/services/calendario.py',encoding='utf-8').read() for m in re.finditer(r"_p\(([^,]+), 'colaboradores/services/calendario\.py', (\"[^\"]*\"\|'[^']*')", s): imp = m.group(2)[1:-1] print(('OK ' if imp in v else 'SUMIU'), m.group(1).strip(), '\|', imp[:90 ...` |
-| 01:30:08 | Bash | Acompanhar a suite | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_012155.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_012155.log 2>/dev/null)"` |
