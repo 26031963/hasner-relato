@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:06:01.**
+**Medido em 29/09/2026 18:11:05.**
 
 | | |
 |---|---|
@@ -99,44 +99,44 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - getattr(p, 'minutos_extra_50', 0) / 60 era invisível ao detector — e estava nas duas linhas mais caras do cartão do Art.74 §2. A exceção do getattr foi escrita para ler campo
+    de DiaPago por string (lavratura, que é a cura) e virou passe livre para conta de motor com outra sintaxe.
+  - O critério (a) casava nome genérico: resultado em relatorios/views.py é o dict do serviço de PDF e periodos = list(qs) em relatorios/services.py são PeriodoAquisitivo de
+    férias. Por AST, zero chamada de motor nos dois. É o irmão de ler prosa, com a palavra num nome de variável.
+  - tem_rotulo era cego a alias enquanto toca_motor já via.
 
-● Background command "Esperar o push e ver o veredito" completed (exit code 0)
+  (2) O PAREI da raia PDF — decidido, e a decisão fechou a S3. total_trabalhadas = só as trabalhadas, trab_folga separada. Curando o critério (b) achei o que estava por baixo: a
+  mesma soma estava escrita duas vezes — a tela somava 6 rubricas, o cartão 10 — e total_atraso/total_saida_antecipada, que a tela imprime (espelho.html:50-51), existiam só no
+  papel: sem fechamento gravado a tela mostrava vazio e o PDF do mesmo mês mostrava horas de atraso. Cura: espelho.somar_periodos, um só sítio. DIFF na sombra pelas duas funções
+  reais, 36 resumos (09 e 10, ativos e demitidos): zero nas 21 chaves.
 
-● Background command "Esperar o rc do push" completed (exit code 0)
+  (3) Merge da raia PDF — feito, e rodar o selo dela contra a principal achou três bugs: o papel contava como falta 15 furos que ninguém decidiu (FALTA-UM-SIGNIFICADO, 23/09 —
+  desconto no holerite é o lado caro disso); os dias de abono discordavam das horas no mesmo papel (2,00 h ao lado de 0 dias); e o saldo não era a subtração dos dois números
+  impressos (10,00 − 192,00 = −180,0). Em total_extras o selo dela estava errado e o corte é de 19/09 — corrigi a assertiva dela por relação.
 
-  Searched for 1 pattern, ran 6 shell commands
+  (4) calendario.py — aplicado na principal, com o RED no mesmo commit; o que morde é empresa com corte 26. O botão nasce desligado: nenhum template no ar conhece
+  competencia_rotulo.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  No ar (L-083): deploy --sem-migrate, três rotas provadas, BUG 128 verde, /colaboradores/ /ponto/espelho/ /relatorios/ = 200. Smoke de número pelo coletor real: 0 inconsistentes
+  em 6. E o smoke achou o que eu não sabia: procurei colaborador no ramo lavratura para exercitar a cura em prod e achei zero — depois do recálculo de hoje todo mundo com
+  lavratura tem fechamento. As três curas estão provadas pelo selo e pelo ramo folha, não por tráfego do ramo curado. Fica dito em vez de virar verde que parece cobertura.
 
-  Searched for 1 pattern, ran 2 shell commands
+  Placar da S3 = 0 (a e b verdes). (5) é seu: /compact com "manter: S3 placar, 3 PAREI resolvidos, [nome] signal celula→cartorio pendente, L-097 ≥10". O próximo da ORDEM VIVA é
+  O-JANELA-HE parte B1 (LEITURA) — não o comecei para não encher o contexto que você vai compactar.
 
-● Agora a assertiva (B) da raia, que contraria um corte escrito:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: UI-CAL-COMPETENCIA -- o calendario ganha o modo COMPETENCIA -- hoje ele tem Mes, Quinzena e Semana, e a competencia (21-20, ou o cor
 
-  Read 1 file, ran 6 shell commands
+● Provar as duas metades juntas na raia de prova
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-cal2/app:/app sa…
 
-● Background command "Rodar os cinco apps mais afetados" completed (exit code 0)
-
-  Committed 9570adc8, searched for 1 pattern, read 1 file, ran 7 shell commands
-
-● Background command "Push dos 27 commits" completed (exit code 0)
-
-  Read 1 file, ran 13 shell commands
-
-● Background command "Push com o rodape acertado" completed (exit code 0)
-
-  Esperar o push final · 7m 46s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3e.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (7m 43s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Schlepping… (1h 59m 18s · ↓ 119.4k tokens)
+· Schlepping… (2h 4m 22s · ↓ 124.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
