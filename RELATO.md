@@ -1,5 +1,90 @@
 # RELATO — esteira saas-hasner
 
+# O-DIA-PAGO S3, 1a TROCA: o extrato parcial LE o `DiaPago`, e o placar cai de 7 para 6 (28/09 23:5x)
+
+O leitor trocado e `relatorios/views.py::extrato_parcial` -- e foi escolhido primeiro nao por ser pequeno, mas
+por ser o **unico** dos 7 que montava motor PROPRIO (`get_motor_cct` + `calcular_mes`) em vez de consultar a
+autoridade do espelho. E ele montava com tres insumos derivados ali mesmo: a **escala ATIVA de hoje** (a folha
+usa o vinculo que cobre CADA DIA), a regra de alcance (`eh_dia_trabalho` dia a dia, com essa escala errada) e
+as datas justificadas. O relatorio se chama "extrato parcial" e e o que o admin abre para **conferir folha**.
+
+## O TAMANHO DA MENTIRA, medido na frota inteira
+
+PROVA: `tenant_command diff_extrato_parcial --mes 9 --ano 2026` (so leitura; o lado ANTES e o codigo
+**literal** que saiu da view neste commit, copiado de `git show HEAD:`, nao reescrito de memoria).
+**540 colabs, 0 erros, 227 colabs com numero diferente** -- 42% da frota.
+
+| rubrica | ANTES (motor proprio) | AGORA (`DiaPago` lavrado) | delta |
+|---|---|---|---|
+| trabalhadas | 63.155,39 | **64.644,79** | **+1.489,40** |
+| noturnas | 16.302,42 | 16.177,29 | -125,13 |
+| extras 50% | 325,58 | 316,96 | -8,62 |
+| extras 100% | 886,13 | 753,15 | **-132,98** |
+| atraso | 71,98 | 71,42 | -0,56 |
+
+**Para os dois lados, e grande**: `col877` 0,00 -> **143,55 h**; `col824` 49,39 -> 160,46; `col924` 193,66 ->
+**0,00**; `col43` 93,60 -> 0,00.
+
+## A PROVA de que o numero novo e o da FOLHA, e nao mais um terceiro
+
+PROVA (leitura do gravado, tres maiores deltas):
+
+| colab | `FechamentoMensal` 09 (GRAVADO) | soma do `DiaPago` da competencia 09 | extrato ANTES |
+|---|---|---|---|
+| col877 | **139,02** | **139,02** | 0,00 |
+| col824 | **182,70** | **182,70** | 49,39 |
+| col924 | **0,00** (e 0,00 na 10) | **0,00** | 193,66 |
+
+Casam na segunda casa. O extrato ANTES **esconde 139 h pagas** do col877 e **mostra 193 h que a folha nao
+paga** do col924. Nenhum dos dois numeros existia em lugar nenhum do sistema -- eram do relatorio.
+(`col924` com 90 batidas e folha ZERO e achado PROPRIO, da familia O85/vinculo: vai para PENDENTES como
+medicao, nao entra nesta fatia.)
+
+## O SILENCIO PASSOU A SER DECLARADO -- e foi ele que apareceu primeiro
+
+A 1a rodada do DIFF, antes da lavratura, tinha **23 de 40 colabs SEM NUMERO**: 11 "sem lavratura" (o
+`FechamentoMensal` existe e a linha de `DiaPago` nao) e 12 "sem apuracao ainda". Eram **2.680 h de 4.816**
+saindo da tabela. Nao e defeito da troca: a lavratura nasce quando o fechamento e RECALCULADO, e a competencia
+**10** tinha 349 fechamentos com apenas **257** colabs lavrados.
+
+PROVA: `tenant_command lavrar_dias_pagos --mes 10 --ano 2026` -- 570 colabs lidos, **2.610 linhas** na
+competencia 10 (eram 1.524). `FechamentoMensal` **nao tocado** (modo `somente_leitura=True` +
+`lavrar_dias_pagos=True`); depois disso o DIFF da amostra voltou com **zero** linha rotulada.
+
+E o rotulo FICA no codigo, porque o buraco volta a cada competencia nova: linha sem lavratura mostra
+**"sem lavratura"** (ou "sem apuracao ainda", que e outro estado) em vez de `0,00h`, **nao entra no total**, e
+o CSV diz a mesma coisa que a tela, com a coluna do motivo. Somar o que existe e chamar de total foi o
+defeito mais caro que este relatorio poderia ter: cada linha parecia certa.
+
+## O que mudou de casa, e o que NAO mudou
+
+* **Dinheiro**: `ponto/services/dia_pago.py::soma_do_periodo` (novo) soma as linhas `tipo='dia'` com `data` no
+  intervalo. A linha de AJUSTE da competencia (reflexo de DSR, banco) fica FORA de proposito -- ela nao tem
+  dia, e ratear competencia por intervalo parcial seria inventar numero. Declarado na docstring.
+* **Geometria**: `turnos_abertos` passa a sair de `ponto/selecao_periodo.py::montar_periodos_de`, a porta que
+  declara na 1a linha *"aqui so expomos a geometria"* -- e por isso NAO conta como leitor de dinheiro no
+  placar. O `DiaPago` guarda rubricas, nao pares: pedir turno aberto a ele seria pedir o que ele nao tem.
+* **Competencias que o intervalo toca**: `competencias_do_intervalo`, que passeia janela a janela com
+  `janela_atual(data, empresa)[1]` -- o MESMO idioma que `ponto/janelas.py::fechamentos_da_competencia_corrente`
+  ja usa. Zero derivacao nova de competencia.
+* **HE noturna e SUBSET**: `horas_extra_50_noturna` e "subset de horas_extra_50" (`motor_calculo_v2:218`).
+  A 1a versao desta troca SOMAVA as duas -- a mesma hora paga duas vezes, a familia exata do
+  BUG-HE-INTRA-DOBRADA de hoje. Selo proprio: `test_MORDE_a_HE_noturna_e_SUBSET_e_nao_se_soma_a_HE_50`.
+
+## Placar e pendencia
+
+PROVA: `ponto/tests/test_s3_leitor_nao_chama_motor.py` -- o placar da S3 cai de **7 para 6** no mesmo commit
+da troca, por AST. E em `core/juizes.py` a pendencia `resultado = motor.calcular_mes(` do extrato SAIU; a
+outra pendencia dele **fica, com o motivo corrigido**: a JANELA ainda e mes CIVIL (dia 1 ao dia 1) e a
+competencia da casa corre do 21 ao 20 -- o mesmo defeito que o CALENDARIO-UNICO curou no painel em 17/09.
+Trocar a janela muda o que o relatorio SIGNIFICA para o admin, entao e decisao de tela e segue pendente,
+nomeada. **Nao troquei sozinho**, e por isso esta escrito aqui em vez de feito.
+
+PROVA: `relatorios/tests/test_s3_extrato_le_dia_pago.py` (8 casos) + `relatorios` inteiro = **190 testes OK**.
+O caso que MORDE lava 7,5 h num colaborador **sem batida nenhuma**: se a tela mostrar 0, ela voltou a
+calcular. Sem mock -- o caminho e o da URL, com permissao de verdade.
+
+
 # CHIP DO CALENDARIO: os dois diffs que voce pediu, e os dois foram RETIRADOS (28/09 23:2x)
 
 Sua ordem de 23:1x: *"publicar no RELATO o diff de `ponto/services/dia_decidido.py` e

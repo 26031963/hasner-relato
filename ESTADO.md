@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:35:15.**
+**Medido em 28/09/2026 23:40:41.**
 
 | | |
 |---|---|
@@ -35,18 +35,18 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/config/crons.py
- M app/core/juizes.py
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/services/dia_pago.py
- M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
- M app/relatorios/views.py
+M  app/config/crons.py
+M  app/core/juizes.py
+M  app/docs/BACKLOG.md
+M  app/docs/PROMPTS.md
+M  app/docs/RELATO.md
+M  app/ponto/services/dia_pago.py
+M  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
+A  app/relatorios/management/commands/diff_extrato_parcial.py
+A  app/relatorios/tests/test_s3_extrato_le_dia_pago.py
+M  app/relatorios/views.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M app/templates/relatorios/extrato_parcial.html
-?? app/relatorios/management/commands/diff_extrato_parcial.py
-?? app/relatorios/tests/test_s3_extrato_le_dia_pago.py
+M  app/templates/relatorios/extrato_parcial.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,9 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       7 a escala **ATIVA de hoje** (a folha usa o vinculo que cobre CADA DIA), a regra de alcance (`eh_dia_trabalho`
-       8 dia a dia, com a escala errada) e as datas justificadas. E o relatorio se chama "extrato parcial" e e o que o
-       9 admin abre para CONFERIR a folha: um segundo numero, com cara de conferencia, sobre insumo diferente do da
       10 folha.
      … +173 lines
 
@@ -125,18 +122,21 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar a regua terminar" completed (exit code 0)
 
-● Rodar a regua com caminho absoluto · 35s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3b.log 2>&1 &
-     sleep 60; echo '--- backfill:'; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-… (34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 17 shell commands
 
-✶ Sprouting… (1h 31m 15s · ↓ 166.2k tokens)
+● Background command "Esperar o DIFF da frota" completed (exit code 0)
+
+  Esperar o veredito da regua
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ test|MUDOU|OUTRA RAIA|BLOQUEADO|FALHOU' /tmp/regua_233441.log
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_s3b.log 2>/dev/null; do sleep 25; done; grep -E '^Ran [0-9]+
+     test|^OK|^FAILE…
+
+✢ Sprouting… (1h 36m 40s · ↓ 175.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 13 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
