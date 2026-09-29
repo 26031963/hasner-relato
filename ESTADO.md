@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:153 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:15:02.**
+**Medido em 29/09/2026 01:20:31.**
 
 | | |
 |---|---|
@@ -42,15 +42,21 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
  M app/colaboradores/services/calendario.py
  M app/colaboradores/tests/test_calendario_badge_minutos.py
  M app/colaboradores/tests/test_calendario_carimbo_intra.py
+A  app/colaboradores/tests/test_calendario_le_dia_pago.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/colaboradores/tests/test_calendario_um_juiz.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
  M app/folha/porta_export.py
  M app/ponto/services/dia_pago.py
  M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_calendario_le_dia_pago.py
+ M bin/hook_stop_fila1.py
+ M bin/selo_espera_por_processo.sh
+A  bin/tests/test_hook_teto_nao_conta_espera.sh
+?? bin/censo_pgrep_py.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -103,40 +109,40 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├───────┼────────────────┼───────────────────┤
-  │ 28/09 │ 198            │ 2 (col43, col924) │
-  └───────┴────────────────┴───────────────────┘
 
-  99%+ de cobertura, e os faltantes são os mesmos nomes da classe folha-zero já registrada. A lavratura é contínua.
+● 284 OK — o selo do leitor #2 e a porta inteira. Agora a cura do teto do hook (ordem 01:xx), com o RED dos 5 turnos:
 
   Ran 4 shell commands
 
-❯ HOOK-TETO-NAO-CONTA-ESPERA: bin/hook_stop_fila1.py so conta bloqueio no teto quando o turno nao teve regua/push/suite em curso nem commit; espera de suite/push nunca gasta o
-  teto. RED: 5 turnos "esperando push" seguidos -> hook segue cobrando "siga: O-DIA-PAGO S3". Commit por path, sem parar a S3. segue a fila; PAREI so em lei ou !
+● Os seis selos do hook verdes, incluindo o RED da ordem: 5 turnos de espera seguem bloqueados, e sem espera o teto ainda libera. Régua completa e, em primeiro plano, o commit:
 
-● Ordem registrada (HOOK-TETO-NAO-CONTA-ESPERA) — entra por path assim que a S3 fechar o passo. Sigo o calendário:
+  Ran 10 shell commands
 
-  Ran 13 shell commands
-
-● Agora o selo da troca e a cura do teto do hook (a ordem das 01:xx), juntos:
-
-● Write(colaboradores/tests/test_calendario_le_dia_pago.py)
-  ⎿  Wrote 169 lines to colaboradores/tests/test_calendario_le_dia_pago.py
+● Write(~/saas-hasner/bin/censo_pgrep_py.py)
+  ⎿  Wrote 59 lines to ../bin/censo_pgrep_py.py
        1 # -*- coding: utf-8 -*-
-       2 """O-DIA-PAGO S3, leitor #2: o CALENDARIO le a linha lavrada e nao pede conta a ninguem (L-095, 29/09).
+       2 """CENSO da ferramenta de procurar processo por nome, dentro dos `.py` de `bin/`. -> stdout
        3
-       4 A LEI: *"o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem
-       5 recalcula"*. Este sitio ja tinha sido curado uma vez -- a **E4** (28/09) tirou dele um motor proprio
-       6 (`get_motor`, sem regua CCT, um dia por vez) que divergia em **72 dia-colab de 30 colabs** na competencia 09,
-       7 quase sempre mostrando ZERO onde o espelho paga. Mas ele continuava PEDINDO a conta a cada abertura de tela.
-       8 Agora ele LE `DiaPago`, que `recalcular_fechamento_mes` lavrou no MESMO ato em que gravou o `FechamentoMensal`.
-       9
-      10 POR QUE A TROCA NAO MOVE NUMERO, e isso foi medido ANTES de tocar o codigo:
-     … +159 lines
+       4 Chamado por `bin/selo_espera_por_processo.sh`, que faz o censo dos `.sh` linha a linha. Existe como arquivo
+       5 proprio, e nao como heredoc dentro do selo, porque heredoc-dentro-de-heredoc quebra na primeira linha que
+       6 parece um terminador -- tentei e corrompi o selo.
+       7
+       8 SO A PROSA SAI, NAO TODA STRING. A primeira versao disto pulava todo token de string e o selo **parou de
+       9 morder**: o nome da ferramenta, em codigo real, E uma string (`subprocess.run(["...", "-f", ...])`). Selo que
+      10 perde o caso que morde nao ficou mais brando -- ficou mudo. O que sai daqui e o DOCSTRING: um `ast.Expr` cujo
+     … +49 lines
+  ⎿  Allowed by auto mode classifier
 
-  Running 1 shell command…
+  Selo por estrutura: cala na prosa, morde o codigo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='/home/ronald/saas-hasner/bin/selo_espera_por_processo.sh'
+     t=io.open(P,encoding='utf-8').read()
+     v = """# A linha que comeca com `#` (com qualquer indentacao) nao e codigo. Comentario de FIM DE LINHA segue
+     # con…
 
-✻ Thundering… (10m 17s · ↓ 25.0k tokens)
+✢ Thundering… (15m 47s · ↓ 42.6k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
