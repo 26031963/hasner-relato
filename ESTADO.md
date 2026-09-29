@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:19:01.**
+**Medido em 29/09/2026 02:24:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
-| `origin/main` | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,8 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/folha/tests/test_porta_do_export.py
+ M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,39 +97,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar a suite" completed (exit code 0)
+  │ 4   │ api/views.py                         │ censo feito (KPI já vem do gravado; o card do dia é geometria)   │
+  ├─────┼──────────────────────────────────────┼──────────────────────────────────────────────────────────────────┤
+  │ —   │ porta_export, esmeril, ficha         │ fora do placar com arquivo:linha, nenhuma por troca              │
+  └─────┴──────────────────────────────────────┴──────────────────────────────────────────────────────────────────┘
 
-● Régua VERDE com carimbo: 8.631 testes OK. Commit do leitor #2 + as três curas de selo, por path:
+  O que a noite me ensinou, e está tudo medido: cinco selos meus afirmaram mais do que mediam (prosa da lápide, invariante vizinho, a própria lei do hook, e o meu selo do teto
+  dependendo do mundo). A cura foi sempre a mesma — varrer estrutura, e forjar o ambiente quando o selo fala dele. E dois selos da casa me pegaram em flagrante: o de CPUSET
+  (container de teste sem cpuset nos núcleos do cliente, porque $TESTE_DOCKER vazio degrada em vez de falhar) e o espera_por_processo.
 
-  Pushed to main, ran 5 shell commands
+  Aberto, com número e sem causa provada — e é o próximo item de medição, não de afirmação: as 23 divergências de espelho_x_dia_pago na competência 10 (hipótese com lastro na
+  docstring do lavrar_dias_pagos: backfill com o motor de hoje contra fechamento de 28/09 19:30). É S1/S2.
 
-● Background command "Placar, rodape e push em primeiro plano" completed (exit code 0)
+  Próximo na fila 1: leitor #3 (pdf_espelho) pelo censo publicado — geometria (anomalias, turnos_abertos+espúria) sai pela porta de seleção primeiro, e o dias_falta/dias_abono só
+  depois de medir quantos colabs mudariam, porque aí é significado no papel trabalhista e entra no seu !.
 
-● PUSH: 0a918855..2652ec8d — leitor #2 no remoto. Sigo para o leitor #3 com o censo já lido:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-  Ran 9 shell commands
+  Searched for 1 pattern, ran 3 shell commands
 
-● O selo agora é verde com e sem suite rodando — ele não depende mais do que acontece fora dele. Régua:
+● Achado com número, e ele bloqueia o leitor #3: a lavratura é cega para o abono.
 
-  Ran 2 shell commands
-
-● Background command "Esperar o push em primeiro plano" completed (exit code 0)
-
-● O selo de CPUSET pegou uma violação minha, de um minuto antes: eu rodei um container de teste com $TESTE_DOCKER vazio (não tinha feito source bin/recursos.sh naquele shell),
-  então ele subiu sem cpuset, nos núcleos do cliente. Container morto, selo verde. É a lei do 22/09 funcionando contra mim, e registro:
-
-  Ran 5 shell commands
-
-● Background command "Esperar a suite" completed (exit code 0)
-
-● Régua VERDE com carimbo: 8.631 OK. Commit e push, em primeiro plano:
-
-  Esperar o push fechar · 1m 43s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output | tail -4; echo "=== falta: $(git log --… (1m 39s)
+● Contador deixa de ser cego, com selo que morde · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O contador para de ser CEGO: campo de pagamento do fechamento sem par na lavratura ACUSA."""
+     import io, py_compile
+     P='/home/ronald/saas-hasner/app/ponto/services/dia_pago.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = "CA… (4s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (1h 14m 16s · ↓ 71.0k tokens)
+✢ Thundering… (1h 19m 17s · ↓ 80.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
