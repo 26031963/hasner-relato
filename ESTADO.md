@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:04:31.**
+**Medido em 29/09/2026 01:09:53.**
 
 | | |
 |---|---|
@@ -39,9 +39,13 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/calendario.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/colaboradores/tests/test_calendario_um_juiz.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+● Background command "Esperar o push fechar de vez" failed with exit code 144
 
-● A espera está no fundo e me avisa. O push roda a suite completa no pre-push — é a porta que impede subir código não provado, e ela vale os minutos.
+● Background command "Esperar o push fechar (200s)" failed with exit code 144
 
-  Nada novo a dizer até ela fechar: o que está medido está publicado, e o que não está medido (as 23 divergências da 10) está nomeado como pendente de medição, não de opinião.
+● 14 shells encerrados. O número do universo certo autoriza o leitor #2:
 
-✻ Churned for 5m 25s · done 12:44 AM · 17 shells still running
+  ┌───────┬────────────────┬───────────────────┐
+  │  dia  │ pares FECHADOS │ sem linha lavrada │
+  ├───────┼────────────────┼───────────────────┤
+  │ 26/09 │ 216            │ 1 (col924)        │
+  ├───────┼────────────────┼───────────────────┤
+  │ 27/09 │ 184            │ 2 (col43, col882) │
+  ├───────┼────────────────┼───────────────────┤
+  │ 28/09 │ 198            │ 2 (col43, col924) │
+  └───────┴────────────────┴───────────────────┘
 
-● Background command "Empurrar os dois commits" completed (exit code 0)
-
-  Ran 1 shell command
-
-● PUSH FEITO: 73061422..0a918855 — os dois commits no remoto, suite 8.616 OK + control-plane 22 OK no pre-push. Agora o leitor #2:
-
-  Ran 2 shell commands
-
-● Background command "Esperar o push fechar" completed (exit code 0)
+  99%+ de cobertura, e os faltantes são os mesmos nomes da classe folha-zero já registrada. A lavratura é contínua.
 
   Ran 4 shell commands
 
-● A medição me corrigiu antes de eu afirmar — e essa é a quarta vez hoje, sempre pelo mesmo tipo de erro:
+❯ HOOK-TETO-NAO-CONTA-ESPERA: bin/hook_stop_fila1.py so conta bloqueio no teto quando o turno nao teve regua/push/suite em curso nem commit; espera de suite/push nunca gasta o
+  teto. RED: 5 turnos "esperando push" seguidos -> hook segue cobrando "siga: O-DIA-PAGO S3". Commit por path, sem parar a S3. segue a fila; PAREI so em lei ou !
 
-  Eu media "colab com batida no dia" e encontrei 20-25% sem linha lavrada, o que me levaria a dizer "a lavratura não é contínua, o calendário não pode ler o DiaPago". Errado: a
-  lei da casa é o dia é o da ENTRADA, e 64 dos 66 "sem linha" são o noturno cuja batida de 28/09 é a saída de um turno do dia 27 — a linha deles existe, no dia certo. Universo
-  errado, não buraco.
+● Ordem registrada (HOOK-TETO-NAO-CONTA-ESPERA) — entra por path assim que a S3 fechar o passo. Sigo o calendário:
 
-  Os 2 que sobraram são buraco real e já estão nomeados: col43 e col924 — os mesmos do FOLHA-ZERO-COM-BATIDA que registrei em PENDENTES. Têm par fechado, FechamentoMensal = 0,00 e
-  nenhuma linha, porque o fechamento deles é zero pelo cadastro_zero. Não é defeito da lavratura: é o cadastro que não descreve o mês, com dono já declarado.
+● Selo do HE e placar acompanham a troca
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """Os selos do he_contabilizavel e o placar acompanham a troca, no MESMO commit."""
+     import io, py_compile
+     # 1) o selo do HE: a assinatura passa a ser por NUMERO
+     P='/home/ronald/saas-hasner/app/colaboradores/tests/test_cale…
 
-  E o que essa medição prova a favor do leitor #2: dos 66, 65 têm o FechamentoMensal atualizado no próprio dia 28/09 — ou seja, o recálculo do fechamento é diário, e a lavratura
-  acompanha. Estou remedindo com o universo certo para publicar o número antes de tocar no calendário; sem esse número eu estaria trocando a tela viva do admin com base numa
-  suposição.
-
-✻ Cogitated for 2m 31s · done 12:52 AM · 17 shells still running
+✢ Thundering… (5m 9s · ↓ 13.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
