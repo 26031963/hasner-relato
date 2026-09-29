@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:260 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:295 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:45:46.**
+**Medido em 29/09/2026 02:51:01.**
 
 | | |
 |---|---|
@@ -42,8 +42,13 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
  M app/ponto/models.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/services/fechamento.py
+ M app/ponto/tests/test_dia_pago_soma.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/ponto/migrations/0068_diapago_minutos_abonados_diapago_minutos_previstos_and_more.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,15 +101,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Esperar o push" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Achado publicado e o bloqueio registrado. A régua roda; enquanto isso, o passo seguinte da S3 está definido pela própria medição:
-
-  Searched for 1 pattern, ran 2 shell commands
-
 ● Background command "Esperar o push fechar" completed (exit code 0)
 
   Ran 3 shell commands
@@ -119,21 +115,30 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● PUSH: 0df14bf8..9104c7e9. Agora o passo que desbloqueia o leitor #3 — os três campos na lavratura:
 
-  Migration dos tres campos · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """A lavratura passa a carregar abono, previsto e realizado -- por DIA, da mesma grade."""
-     import io, py_compile
-     P='/home/ronald/saas-hasner/app/ponto/models.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ horas_reflexo_d…
+  Ran 6 shell commands
 
-✻ Thundering… (1h 41m 2s · ↓ 87.8k tokens)
+● Background command "Esperar o push" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● 7 OK — e o caso test_RED_a_soma_dos_dias_E_o_fechamento_campo_a_campo agora cobra os três campos novos sem uma linha nova, porque o universo é declarado. Deploy da migration e
+  backfill:
+
+  Publicar e esperar a regua · 13s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='/home/ronald/saas-hasner/app/docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     sec = '''# O BURACO DO ABONO FECHADO: os tres campos entram na lavratura (29/09 02:4x)
+     `DiaPago` ganha `minutos_abonados`, `minutos_previstos` e `minut… (11s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Thundering… (1h 46m 17s · ↓ 100.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
