@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:32:01.**
+**Medido em 29/09/2026 00:37:31.**
 
 | | |
 |---|---|
@@ -101,44 +101,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├───────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ app/docs/RELATO.md, BACKLOG.md                    │ as três curas publicadas com número, e o censo dos 6                                                                    │
+  └───────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Background command "Esperar a regua do contador" completed (exit code 0)
+  Depois: tickets_placar --escrever, push dos dois commits, e o leitor #2 (calendario.py:301) pelo plano já escrito — com a consequência declarada de que a 6ª testemunha da porta
+  se funde na 7ª, porque o calendário passa a ser o DiaPago.
 
-  Ran 1 shell command
+  Uma coisa sobre o hook, que é fato e não desculpa: ele está liberando pelo teto de bloqueios sem commit novo na fila 1. O teto está certo — ele está medindo que eu acumulei três
+  curas verdes na árvore sem empurrar. O push fecha isso.
 
-● Background command "Esperar regua e carimbo" completed (exit code 0)
+✻ Worked for 1m 16s · done 12:33 AM · 17 shells still running
 
-  Ran 2 shell commands
+● Background command "Esperar a regua final" completed (exit code 0)
 
-● Background command "Esperar (suite longa)" completed (exit code 0)
+  Ran 6 shell commands
 
-  Ran 15 shell commands
+● A suite passou de 1.400 linhas e segue. Vou esperar o veredito sem interferir na árvore — editar .py durante a corrida foi o que custou o carimbo duas vezes hoje.
 
-● A régua roda. Terceiro selo meu hoje que afirmou mais do que media — e o padrão é o mesmo nas três:
+  Estado congelado, para não haver dúvida sobre o que está provado e o que não está:
 
-  ┌───────────────────────────────────┬───────────────────────────────────┬─────────────────────────────────────────────────────────┐
-  │               selo                │        o que ele afirmava         │                      o que mordeu                       │
-  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ test_ui_grade_calendario          │ max-width:58px ausente            │ a prosa da lápide que explicava por que ele saiu        │
-  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ test_porta_do_export (anti-cópia) │ minutos_trabalhados fora de medir │ o invariante vizinho, que legitimamente soma esse campo │
-  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ test_hook_stop_vivo               │ json.load(saída) com block|allow  │ a própria lei que manda a saída ser vazia ao liberar    │
-  └───────────────────────────────────┴───────────────────────────────────┴─────────────────────────────────────────────────────────┘
+  Provado e commitado (b600ea56, esperando só o push): leitor #1 da S3 — o extrato parcial lê o DiaPago; 227 de 540 colabs mudaram de número e os três maiores casam com o gravado
+  na 2ª casa.
 
-  Os três são a mesma família: selo que escolhe a âncora errada mede o vizinho, não a lei. Os dois primeiros eu curei escolhendo a âncora (markup sem lápide; a chave de saída da
-  função). O terceiro eu curei aceitando os dois caminhos que a lei declara — bloqueio com as duas chaves ou silêncio — e recusando allow, json-invalido, nao-objeto e
-  sem-decision, cada um com mensagem própria. Os cinco selos do hook estão verdes.
+  Provado e na árvore, aguardando este carimbo: as duas curas do contador (a pergunta: 09 de 29 → 0; a janela: 10 de 60 → 23), o caso que morde em três pontas, o placar 6 → 3 com
+  arquivo:linha por saída, e o selo do hook aceitando os dois caminhos da lei. Os selos direcionados já deram 292 OK; o que falta é a árvore inteira.
 
-  E o hook está liberando agora pelo teto de bloqueios sem commit novo na fila 1 — o que é o alarme funcionando: ele está me dizendo que eu tenho duas curas verdes na árvore e
-  nenhuma empurrada. É exatamente o que vou fechar quando o carimbo sair: tickets_placar --escrever, commit #2 por path (contador + placar 6→3 + o selo do hook), e o push dos dois
-  commits.
+  Aberto, com número e sem causa provada — e é o que vai medido antes de qualquer afirmação: as 23 divergências da competência 10. A hipótese com lastro está na docstring do
+  próprio lavrar_dias_pagos (backfill com o motor de hoje contra fechamento de 28/09 19:30). É S1/S2, não S3.
 
-✻ Crunched for 3m 35s · done 12:30 AM · 12 shells still running
+  Não fiz, e digo por quê: não afrouxei tolerância nem tirei caso de lista nenhuma para número cair; não troquei a janela civil do extrato por competência (muda o que o relatório
+  significa para o admin — está em PENDENTES como corte seu); e não mexi no dia_decidido/calendario para o chip, porque você cortou e a medição me deu razão a você (177 com
+  palavra, 360 sem, e os 360 têm desenho próprio).
+
+✻ Sautéed for 53s · done 12:37 AM · 17 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ empurra os dois e segue pro calendario
+❯ empurra os dois commits e segue no calendario
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 12 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
