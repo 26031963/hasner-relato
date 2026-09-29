@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:47:01.**
+**Medido em 29/09/2026 19:52:09.**
 
 | | |
 |---|---|
@@ -99,10 +99,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ┌─────────────┬──────────────────┬─────────────────────────────────────┬───────┬───────────────────────────┐
-  │    modo     │ janela devolvida │           rótulo impresso           │ botão │ modo=competencia no HTML  │
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
-  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
   ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
@@ -125,18 +121,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-● Esperar o push da cura · 5m 8s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ft.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (5m 7s)
+  Searched for 2 patterns, listed 1 directory, ran 19 shell commands
+
+● Background command "Acertar rodape e empurrar" completed (exit code 0)
+
+  Deploying da cura do FT · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bin/deploy.sh --sem-migrate >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy2.log 2>&1; echo "rc=$?"; tail -8
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratch… (3s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (3h 40m 18s · ↓ 188.7k tokens)
+· Schlepping… (3h 45m 26s · ↓ 189.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
