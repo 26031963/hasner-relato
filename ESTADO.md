@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:30:45.**
+**Medido em 29/09/2026 01:35:45.**
 
 | | |
 |---|---|
@@ -47,6 +47,8 @@ M  app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/colaboradores/tests/test_calendario_um_juiz.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/core/juizes.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/BACKLOG.md
  M app/docs/RELATO.md
  M app/folha/porta_export.py
@@ -110,13 +112,6 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Os seis selos do hook verdes, incluindo o RED da ordem: 5 turnos de espera seguem bloqueados, e sem espera o teto ainda libera. Régua completa e, em primeiro plano, o commit:
-
-  Ran 10 shell commands
-
-● Write(~/saas-hasner/bin/censo_pgrep_py.py)
-  ⎿  Wrote 59 lines to ../bin/censo_pgrep_py.py
        1 # -*- coding: utf-8 -*-
        2 """CENSO da ferramenta de procurar processo por nome, dentro dos `.py` de `bin/`. -> stdout
        3
@@ -138,16 +133,23 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 
 ● Os dois selos mordem código real e calam na prosa — provado em ambos. Régua completa, primeiro plano:
 
-  Acompanhar a suite · 36s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_012155.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_012155.log 2>/dev/null)" (35s)
+  Ran 5 shell commands
+
+● Background command "Regua completa em primeiro plano" completed (exit code 0)
+
+● Background command "Esperar a suite em primeiro plano" completed (exit code 0)
+
+● Esperar a suite · 23s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_013251.log 2>/dev/null; then break; fi; sleep 55; done; grep -E '^Ran
+     [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_013251.log | head -5; echo "linhas: $(wc -l < /tmp/regua_013251.log)" (22s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (26m 0s · ↓ 48.1k tokens)
+· Thundering… (31m 0s · ↓ 52.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
