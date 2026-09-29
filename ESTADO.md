@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:172 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:240 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:49:09.**
+**Medido em 29/09/2026 14:54:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `96086b03 Dois contratos me pegaram no censo, e os dois estao certos` |
+| `HEAD` local | `aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 96086b03 Dois contratos me pegaram no censo, e os dois estao certos
 13689993 A porta REGEN-EM-EXPORTADA era MEIA-CORRECAO, e o contador disse isso subindo de 1 para 74
 cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio
 5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes
-9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO
 ```
 
 ## `git status --short`
@@ -42,7 +42,6 @@ cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payloa
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/ponto/management/commands/censo_fase_12x36.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -100,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2. O DIFF em leitura mostrou que a âncora que corrige a 09 do col414 quebrava a 10 — a fase dele virou duas vezes. Curado com a segunda virada; a 10 voltou a "nada mudou".
-  3. O contrato de cron me pegou pondo o censo às 08:20, quando auditoria tem de vir antes de alerta.
-  4. E o que passou: a porta era meia-correção — consertava o FechamentoMensal e deixava a lavratura velha. O contador da 09 disse isso subindo de 1 para 74. A porta agora relavra
-     no mesmo atomic, e os seis foram relavrados.
+  Ran 1 shell command
 
-  Esse último merece o destaque: foi o contador cego que eu curei hoje de manhã que tornou o erro visível. Se ele ainda estivesse olhando só quem entra no TXT, a divergência dos
-  seis — quatro deles com status='fora' — não apareceria.
+● Estado: a pista de teste é uma só e eu a disputei comigo mesmo — o push está armado para sair quando ela esvaziar.
 
-  Em voo: a re-medição do contador da 09 depois da relavratura, o push do lote (16 commits) e a raia PDF no worktree. Não vou tocar folha_manda até ela entregar — é o arquivo onde
-  o resumo dela e o meu se encontram, e mexer agora tiraria o chão da medição dela.
+  O que fechou nesta leva, e dois erros meus com nome:
+
+  Erro 1 — rodei --curar (que escreve) para testar o no_op. Curou 3 colaboradores sem DIFF publicado antes, que é a condição 1 da sua própria lei. Fui medir antes de decidir
+  reverter: col78 100%/100%, col112 100%/100%, col168 93,3%/100% nas duas competências. O cadastro deles passou a descrever os plantões reais, então não reverti — reverter um
+  acerto para punir o processo seria trocar um erro por outro. Os números ficam publicados; a reversão está em logs/.
+
+  Erro 2, e esse causou dano — o censo media contra a vigência ATIVA. Depois da segunda virada do col414 (22/09), a ativa dele passou a ser a de 22/09, que não cobre a 09; o censo
+  leu a 09 como desvio outra vez e o --curar reescreveu desde 22/08, absorvendo o segmento correto da 10. O seu RED pedia "repetir = no_op" e o meu código desfazia trabalho
+  certo. Restaurado pela porta, não pelo banco na mão, e o censo curado: uma linha por colab × competência, medida contra a vigência que vale, e --curar virou NO_OP quando a
+  vigência que cobre já tem a âncora da proposta.
+
+  O censo curado e o item 2 em ZERO: 318 linhas, 260 com cadastro OK, 58 de desvio em 51 colabs, e nenhum acima do critério — todos os que passavam foram curados. Contador
+  desvio_de_cadastro_12x36 lavrado, cron às 07:38.
+
+  E o contador da 09 corrigiu uma hipótese minha. Eu disse que as 74 divergências vinham de lavratura defasada; relavrei tudo por retrato (607 colabs, 10.412 linhas, hash
+  idêntico) e ele ficou igual, 74. A causa é o seu corte de 09:0x: na exportada a lavratura é retrato e escreve só os três campos de grade — as rubricas de dinheiro vêm do motor,
+  que não roda sobre competência paga. HE 0,91 no gravado contra 0,00 na lavratura não é divergência. Comparar o que o retrato nunca escreve é um contador que não pode zerar por
+  construção — a irmã do "contador que compara só o que ele tem" de ontem. Curado: na exportada ele compara o universo do retrato, declarado em universo_dos_contadores. Não
+  afrouxei nada: mudei a pergunta para a que tem resposta, e escrevi qual é.
+
+  A raia PDF segue no worktree com o leitor #3. Não toco folha_manda até ela entregar.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-  Searched for 2 patterns, ran 3 shell commands
-
-● Dois contratos meus me pegaram, e os dois estão certos. Curo.
-
-  Ran 5 shell commands
-
-● Enquanto a raia PDF mede, escrevo o teto que falta para a cura automática do item 2 poder rodar sozinha.
-
-  Ran 2 shell commands
-
-● Isso é um bug meu, e o dano é real: o --curar desfez a segunda virada do col414. O censo mede a 09 contra a vigência ATIVA, que agora é a da 10.
-
-● Repetir a cura: tem de ser no_op
-  ⎿  $ docker exec saas_core python manage.py tenant_command censo_fase_12x36 --schema=juliani --min-plantoes 6 --curar --teto 3 2>&1 | grep -v "objects imported" | tail -8
-
-· Nucleating… (52m 43s · ↓ 154.5k tokens · thinking)
+✢ Nucleating… (58m 5s · ↓ 170.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Debugging saldo_banco_horas in _resumo_pela_lavratura                                                                              30m 40s · ↓ 280.3k tokens
+  ◯ general-purpose  Inspecting RELATO.md structure                                                                                                      36m 3s · ↓ 302.3k tokens
   ⧉  index
 ```
