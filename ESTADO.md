@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:06:01.**
+**Medido em 29/09/2026 09:11:31.**
 
 | | |
 |---|---|
@@ -43,12 +43,14 @@ d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotu
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+A  app/colaboradores/tests/test_vinculo_linha_do_tempo.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/services/dia_pago.py
+ M app/ponto/services/fechamento.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_vinculo_linha_do_tempo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -105,15 +107,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  CASO: [nome] -- EC 1327 (20/09) e EC 1326 (29/09) ambos ATIVOS. Aplicar ja: absorver o 1326 pela operacao nova, regerar, conferir 29/09-06/10 (29 folga, 30
-  trabalha).
-  RED: vinculo de 29/09 existente + salvar a partir de 20/09 -> 1 vigente so, o de 20/09, historico com a absorcao; repetir = no_op.
-  PASSIVO: lista de colabs com vinculos sobrepostos, com nomes, no RELATO -> meu !.
-  segue a fila; PAREI so em lei ou !
-
-  Ran 5 shell commands
-
-❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
 
   Read 1 file, ran 25 shell commands
 
@@ -133,11 +126,20 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   4. So entao o PDF (leitor #3).
      segue a fila; PAREI so em lei ou !
 
-● Ler o breakdown
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "emp4 10/2026\|== emp4 .*10/"
-     $S/breakdown.log 2>/dev/null && break; sleep 10; done; cat $S/breakdown.log | grep -v "^93 objects"; echo "=== regua"; grep -E "— Ran " $…
+● Fazer o fechamento ler a derivação única
+  ⎿  $ python3 - <<'PYEOF'
+     import io, py_compile
+     P='ponto/services/fechamento.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ for _d_g in _dt_trab:
+     _k_g = _d_g.get('data')
+     if _k_g is None:
+     continue
+     _pv = _d_g.get('minutos_previstos') or 0
+     if _d_g.get('tipo_dia') == 'ausencia':
+     _abono_dia[_k_g] = _abono…
 
-✢ Levitating… (2h 19m 53s · ↓ 222.4k tokens)
+✢ Levitating… (2h 25m 23s · ↓ 233.9k tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
