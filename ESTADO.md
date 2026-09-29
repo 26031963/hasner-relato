@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:38:56.**
+**Medido em 29/09/2026 14:44:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes` |
+| `HEAD` local | `cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -29,21 +29,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio
 5de134bc FAMILIA-FASE-12x36 aplicada: 5 + [nome], a 09 retificada pela porta nova, 6 Pautas DP -- e um erro meu que a medicao pegou antes
 9cb7ffb6 A porta REGEN-EM-EXPORTADA cede com selo -- e o selo pegou a trilha falhando EM SILENCIO
 0a40461f O caso [nome] eram 47 pessoas: o censo da FAMILIA-FASE-12x36, com a tabela
 2b81b5ae FAMILIA-FASE-12x36 e a porta REGEN-EM-EXPORTADA: o caso [nome] nao era um caso, era uma familia
-988e3375 REGEN-EM-EXPORTADA: a excecao para a competencia paga nasce como PORTA, e o carimbo fica honesto
 ```
 
 ## `git status --short`
 
 ```
- M app/api/tests/test_espelho_app_fonte_e_geometria.py
- M app/api/views.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/config/crons.py
+ M app/docs/ARQUITETURA.mmd
+ M app/ponto/management/commands/censo_fase_12x36.py
+ M app/ponto/portas/regen_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -101,16 +103,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Dois erros meus que a medição pegou antes de virarem dano:
-  1. O selo da porta nova achou a trilha falhando em silêncio — Decimal não serializa em JSON e a escrita é best-effort: a porta cederia sem deixar rastro, numa porta cuja metade
-     da lei é a trilha.
-  2. O DIFF em leitura da 10 mostrou que a âncora que corrige a 09 do col414 quebrava a 10 dele (48,12 h migrando para folga a 100%). Medi as duas competências contra todas as
-     âncoras: a fase dele virou duas vezes, com intervalo de 3 dias — a anatomia da [nome]. Curado com a segunda virada pela mesma porta: 3 furos → 0, e a 10 voltou a "nada
-     mudou". A lição é de desenho e está escrita: uma âncora por vínculo não descreve quem virou duas vezes.
-
-  Em voo: o push do lote (14 commits), a re-medição dos contadores — que é o número honesto do dia depois de tudo — e a raia PDF no worktree ../wt-pdf, construindo o leitor #3 com
-  o compromisso de entregar branch + DIFF por colab e PAREI para merge, sem deployar nem tocar gravado.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
@@ -122,23 +114,33 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● A troca do leitor #4 é neutra: zero dia-colab muda de número. Faço com o rótulo no payload.
 
-● Provar o vermelho do leitor 4
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp api/views.py $S/apiviews.bak && python3 - <<'PYEOF'
-     import io
-     P='api/views.py'
-     t=io.open(P,encoding='utf-8').read()
-     t=t.replace(""" _linha_dp = _dp_por_dia_app.get(d)
-     _pago_dia = _pago_do_dia_app…
+  Searched for 1 pattern, ran 10 shell commands
 
-✽ Nucleating… (42m 30s · ↓ 126.4k tokens)
+● A S3 agora depende da raia PDF (e eu não devo tocar folha_manda enquanto ela mede). Fecho o juiz da família: cron com contador e dono.
+
+  Searched for 4 patterns, ran 6 shell commands
+
+● Background command "Aguardar push10 e o contador" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Três achados de uma vez. O contador subiu para 74 — e a causa é minha: a porta conserta o gravado e deixa a lavratura velha.
+
+  Ran 3 shell commands
+
+● A porta agora relavra. Os 6 já retificados precisam disso agora — relavro a 09.
+
+● Running 1 shell command…
+
+✢ Nucleating… (47m 35s · ↓ 139.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Polling docker ps for free test slot                                                                                               20m 28s · ↓ 233.6k tokens
+  ◯ general-purpose  Reading lavrar block in fechamento.py                                                                                              25m 33s · ↓ 254.5k tokens
   ⧉  index
 ```
