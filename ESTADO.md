@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:29:31.**
+**Medido em 29/09/2026 02:35:01.**
 
 | | |
 |---|---|
@@ -99,9 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (container de teste sem cpuset nos núcleos do cliente, porque $TESTE_DOCKER vazio degrada em vez de falhar) e o espera_por_processo.
-
-  Aberto, com número e sem causa provada — e é o próximo item de medição, não de afirmação: as 23 divergências de espelho_x_dia_pago na competência 10 (hipótese com lastro na
   docstring do lavrar_dias_pagos: backfill com o motor de hoje contra fechamento de 28/09 19:30). É S1/S2.
 
   Próximo na fila 1: leitor #3 (pdf_espelho) pelo censo publicado — geometria (anomalias, turnos_abertos+espúria) sai pela porta de seleção primeiro, e o dias_falta/dias_abono só
@@ -126,17 +123,20 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar o push fechar" completed (exit code 0)
 
-● Acompanhar · 38s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_022445.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_022445.log)" (37s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-· Thundering… (1h 24m 47s · ↓ 84.4k tokens)
+● Background command "Esperar a regua do censo" completed (exit code 0)
+
+● Régua VERDE: 8.632 OK. Commit e push do censo do abono:
+
+  Running 1 shell command…
+
+✢ Thundering… (1h 30m 17s · ↓ 85.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

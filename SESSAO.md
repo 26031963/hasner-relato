@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 02:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.7 MB). Acoes na janela: **669**.
+**Medido em 29/09/2026 02:35:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.7 MB). Acoes na janela: **671**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:32:53 | Bash | Veredito | `cd /home/ronald/saas-hasner && sleep 110; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log 2>/dev/null \| head -4; head -3 .regua_stamp` |
+| 02:30:53 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_022445.log)"` |
 | 02:28:52 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_022445.log)"` |
 | 02:26:46 | Bash | Esperar a regua do censo | `cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_022445.log 2>/dev/null; then break; fi; sleep 50; done; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_022445.log \| head -4; echo "linhas: $(wc -l < /tmp/regua_022445.log)"` |
 | 02:26:29 | Bash | Ordem entre a grade e a lavratura | `sed -n '590,610p' ponto/services/fechamento.py; echo '=== a grade _g e calculada ANTES ou DEPOIS do lavrar?'; grep -n "_g = _gdf(fechamento)\\|dia_pago.lavrar\\|_lavrar_dp\\|lavrar(" ponto/services/fechamento.py \| head` |
