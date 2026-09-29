@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 06:51:31.**
+**Medido em 29/09/2026 06:57:01.**
 
 | | |
 |---|---|
@@ -53,10 +53,12 @@ A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
  M bin/cron_run.sh
+ M bin/deploy_agendado.sh
  M bin/sombra_regras_pessoais.py
  M fatias_agendadas/abono-no-ar/esteira.sh
 ?? bin/encadeado.sh
 ?? bin/keepalive.sh
+?? bin/tests/test_furo_encadeado_ao_cartorio.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -113,42 +115,42 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-● Causa medida: o sombra.sh --refazer das 04:08 falhou no SELO_PESSOAL — duas colunas que eu criei ontem não estão no inventário:
+● Zero erros de caminho — a cura está provada nos dois sentidos. O refazer da sombra está na máscara 2; enquanto ele corre, sigo o item 2 (o encadeado), começando pelo diff que
+  ele pediu:
 
-  Ran 5 shell commands
+  Ran 2 shell commands
 
-● Falsos positivos por substring: janela_he_**pis**o_min casa com pis (PIS) e saldo_**banco**_horas casa com banco. O selo é conservador de propósito — inventario, não mexo no
-  padrão. Antes, vejo todas as minhas colunas novas:
+● O diff está claro e o vivo é o HEAD: config/crons.py tem só comentário (15 linhas, zero horário mudado), o crons_duracao.json tem as medições do cron das 04:05 (o cartório
+  357→362 entre elas), e nenhum horário difere do HEAD. Agora o encadeado:
+
+  Ran 3 shell commands
+
+● Desenho definido: o furo sai de CRONS e vira uma declaração própria em ENCADEADOS — explícita, não ausente:
+
+  Ran 2 shell commands
+
+● O encadeado viaja na linha das três empresas, o furo não tem mais minuto próprio, e a sombra ensaia a mesma ordem. Agora o RED que ele pediu — cartório 30 s mais lento:
 
   Ran 1 shell command
 
-● Só as duas — e ponto_fechamentomensal.saldo_banco_horas já está inventariada como 'numero', o que confirma o padrão da casa. Inventario pela mesma porta:
+● Passou de primeira — então preciso provar que ele morde. Quebro o encadeado de propósito:
 
   Ran 1 shell command
 
-● Inventariadas com motivo. Agora refaço o ensaio pela porta, sem --sem-sombra (são 06:52, fora da faixa cega das 00:00–04:00):
+● O selo morde nos dois casos — com o encadeado quebrado, a ordem inverte (furo-rodou,cartorio-terminou) e o teto deixa de alarmar. Instalo e rodo os contratos:
 
-● Refazer o ensaio da sombra pela porta · 1m 31s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/sombra.sh --refazer >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_refazer.log 2>&1 & echo "refazer disparado $(date +%H:%M)"; sleep 100;
-     tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9… (1m 29s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-· Levitating… (5m 23s · ↓ 11.2k tokens)
+● Os quatro contratos varrem CRONS e não conhecem ENCADEADOS — não podem ficar verdes por ausência. Ajusto cada um:
 
-❯ aval Ronald: tres itens, em ordem. Leis: gate temporal = cron + ARQUIVO (16/09), L-009. Nenhuma lei nova.
-  1. BUG-DEPLOY-AGENDADO-CWD: logs/deploy_agendado/abono-no-ar.log mostra rc=1 as 04:30 e 06:00 -- bin/deploy_agendado.sh:63 usa caminho RELATIVO (fatias_agendadas/...) e o cron
-  roda com cwd=$HOME. Cura na origem: o script resolve a raiz absoluta (cd da propria pasta) antes de tudo. RED: rodar o script com cwd=/ -> acha a fatia. Depois rodar a fatia
-  abono-no-ar pela porta agora (ensaio de hoje -> deploy 0068 -> backfill -> contadores) e publicar o .done. Sem --sem-sombra.
-  2. BLOCO-DA-MANHA-SATURADO (decisao tecnica, registrar no RELATO): apurar_furos_diarios roda ENCADEADO ao fim do processar_cartorio (arquivo de fim por empresa, teto + alarme),
-  sem horario proprio; geofence fica onde esta. Antes: git diff de config/crons.py e crons_duracao.json no RELATO e dizer se o crontab vivo difere do HEAD. RED: cartorio 30 s
-  mais lento -> furo roda depois, nunca durante. PROIBIDO afrouxar tolerancia ou mover cron por intuicao.
-  3. S3: leitor #4 (app, com a fonte no payload) ja; leitor #3 (PDF) logo que o abono estiver no ar.
-     segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
-                                                                                                                                           ✔ Update installed · Restart to update
+● O _fixos e o corpo do horario
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def _fixos" -A 10 app/chamados/tests/test_contract_crons.py | head -12; grep -n "def test_horario_respeita_dependencia_e_duracao" -A
+     22 app/chamados/tests/test_contract_crons.py | sed -n '8,24p'
+
+✢ Levitating… (10m 53s · ↓ 25.7k tokens)
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
