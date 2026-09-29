@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 20:19:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.2 MB). Acoes na janela: **973**.
+**Medido em 29/09/2026 20:25:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.2 MB). Acoes na janela: **970**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -980,6 +980,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:29:11 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
 | 08:27:16 | Bash | Esperar o push e o bloco | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; grep -c "erro" /home/ronald/saas-hasner/logs/sombra/resultado.tsv;  ...` |
 | 08:25:20 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -2 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
-| 08:23:24 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
-| 08:21:29 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
-| 08:19:32 | Bash | Curar o rodapé e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -3; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)" -- app/docs/TICKETS.md && echo commitado && nohup git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push3.log 2>&1 & sleep 110;  ...` |

@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:19:31.**
+**Medido em 29/09/2026 20:25:01.**
 
 | | |
 |---|---|
@@ -125,13 +125,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 
 ● Ordem recebida e registrada. Antes dela, fecho a prova do apply que estava em curso: a 10 caiu de 33 para 19, e as 19 que sobram são de outra classe.
 
-● Publicar a prova e a ordem registrada · 3m 15s
+● Publicar a prova e a ordem registrada · 8m 45s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
      app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 14s)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 44s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (4h 12m 48s · ↓ 202.4k tokens)
+✢ Schlepping… (4h 18m 18s · ↓ 202.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
