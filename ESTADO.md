@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:233 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:285 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:52:31.**
+**Medido em 29/09/2026 11:57:40.**
 
 | | |
 |---|---|
 | `HEAD` local | `db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio` |
-| `origin/main` | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
-| commits a subir (`ahead`) | **5** |
+| `origin/main` | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -42,6 +42,9 @@ ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
+ M app/ponto/services/dia_pago.py
+ M app/ponto/tests/test_dia_pago_soma.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,18 +102,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  09 perderiam a HE do papel com o total ainda mostrando HE).
-
-  O placar da S3 segue 2, e o censo agora diz por quê: falta o RESUMO (pdf_espelho.py:474-490) e o :498, que não pode sair antes — tirar o abate do crédito parcial com o resumo
-  ainda no motor deixaria o atraso do mês sem o crédito. O DIFF do resumo está medindo na frota agora; em 40 colabs deu zero em todos os quatro totais.
-
-  Registrado no mesmo turno, sem construir: O-HAIKU-INVESTIGA, O-JANELA-HE B1/B2 (com as posições e o prazo que você deu) e o ADENDO da VINCULO-LINHA-DO-TEMPO.
-
-  Também no ar: o wizard de fase curado (parte (a) do adendo — ele oferecia 21/09 para consertar 02–19/09; a trilha mostra JSP02 às 07:19 indo para 29/09 e ronald_ti às 07:34 para
-  20/09 — o bug fabricava o passivo de vínculo); o carimbo da lavratura (19.515 linhas com o rótulo errado, e a lápide que prometia o certo era minha); e a Pauta 841 do col334
-  (folga compensatória de 25/08 aprovada depois do export: pago 0, apuração 660 min).
-
-  Dois ! seus, com tabela e reversão no PENDENTES:
   1. RECALCULO-DA-10-PARA-ZERAR-O-CONTADOR — 76 colabs em 20 campos, mais 158 que passam a ter gravado.
   2. [nome]-REESCREVER-A-LINHA-DO-TEMPO — o 21/07 não passa: a porta recusa (S99 põe o piso em 21/08, competência 08 trancada) e uma linha só desde 21/07 não pode descrevê-la (a
      paridade virou no intervalo 30/08→02/09). 21 furos e 24 folgas trabalhadas contra 2 e 4 do desenho que começa em 02/09.
@@ -131,12 +122,24 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar o DIFF dos 121" completed (exit code 0)
 
-✢ Puttering… (1h 44m 11s · ↓ 281.2k tokens)
+  Ran 1 shell command
+
+● Background command "Aguardar o diff do resumo na frota" completed (exit code 0)
+
+  Searched for 2 patterns, read 3 files, ran 16 shell commands
+
+● Background command "Fim do push6" completed (exit code 0)
+
+  Rodar os selos da lavratura ft
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest pyt…
+
+✽ Puttering… (1h 49m 20s · ↓ 298.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
