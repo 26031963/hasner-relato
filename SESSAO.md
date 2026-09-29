@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 05:53:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **716**.
+**Medido em 29/09/2026 05:59:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **715**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -725,4 +725,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:07:34 | Bash | Conferir ruff e os tres contratos | `cd /home/ronald/saas-hasner && source ~/saas-hasner/bin/recursos.sh; teste_envfile >/dev/null; \ docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \ --env-file "$TESTE_ENVFILE" -v ~/saas-hasner/app:/app saas-hasner-core:latest \ sh -c 'ruff check /app --output-format concise 2>&1 \| head -4'; echo "--- contratos ---"; \ docker run --rm $TESTE_DOCKER --networ ...` |
 | 18:07:25 | Bash | Usar a porta do cadastro e declarar a casa | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/ponto/management/commands/diff_janela_he.py' t=io.open(P,encoding='utf-8').read() t=t.replace(""" from colaboradores.models import Colaborador, Empresa""", """ from colaboradores.models import Colaborador, Empresa # A ESCRITA DO CADASTRO PASSA PELA PORTA, mesmo dentro de transacao que vai ser de ...` |
 | 18:07:07 | Bash | Qual e a porta do cadastro | `grep -n 'satelite' colaboradores/tests/test_chokepoint_cadastro_gate.py \| head -4; grep -rn 'def .*empresa' colaboradores/services/*.py \| head -6` |
-| 17:58:48 | Bash | Ver as falhas do pre-push | `cd /home/ronald/saas-hasner && ls -t logs/pre-push*.log /tmp/pre-push*.log 2>/dev/null \| head -2; git push 2>&1 \| grep -E '^(FAIL\|ERROR):\|AssertionError' \| head -6` |
