@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:51:01.**
+**Medido em 29/09/2026 02:56:31.**
 
 | | |
 |---|---|
@@ -124,16 +124,16 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● 7 OK — e o caso test_RED_a_soma_dos_dias_E_o_fechamento_campo_a_campo agora cobra os três campos novos sem uma linha nova, porque o universo é declarado. Deploy da migration e
   backfill:
 
-  Publicar e esperar a regua · 13s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='/home/ronald/saas-hasner/app/docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     sec = '''# O BURACO DO ABONO FECHADO: os tres campos entram na lavratura (29/09 02:4x)
-     `DiaPago` ganha `minutos_abonados`, `minutos_previstos` e `minut… (11s · 2 lines)
+  Ran 2 shell commands
+
+● Background command "Esperar o push fechar" completed (exit code 0)
+
+● Acompanhar · 1m 35s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_024924.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_024924.log)" (1m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (1h 46m 17s · ↓ 100.2k tokens)
+✢ Thundering… (1h 51m 47s · ↓ 100.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
