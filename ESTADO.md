@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 06:46:01.**
+**Medido em 29/09/2026 06:51:31.**
 
 | | |
 |---|---|
@@ -52,7 +52,10 @@ A  app/core/censo_codigo.py
 A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
+ M bin/cron_run.sh
+ M bin/sombra_regras_pessoais.py
  M fatias_agendadas/abono-no-ar/esteira.sh
+?? bin/encadeado.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -109,44 +112,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Causa medida: o sombra.sh --refazer das 04:08 falhou no SELO_PESSOAL — duas colunas que eu criei ontem não estão no inventário:
+
+  Ran 5 shell commands
+
+● Falsos positivos por substring: janela_he_**pis**o_min casa com pis (PIS) e saldo_**banco**_horas casa com banco. O selo é conservador de propósito — inventario, não mexo no
+  padrão. Antes, vejo todas as minhas colunas novas:
+
   Ran 1 shell command
 
-● O alocador corrigido diz a verdade: o bloco está saturado — depois do furo, o disparar só acharia lugar às 07:58. Então a cascata não cabe. Volto os três ao original e busco o
-  lugar só do furo, que é o único conflito real:
+● Só as duas — e ponto_fechamentomensal.saldo_banco_horas já está inventariada como 'numero', o que confirma o padrão da casa. Inventario pela mesma porta:
 
   Ran 1 shell command
 
-● A medição é conclusiva: o furo precisa de 3 min e a janela entre o cartório (06:40) e o primeiro reconciliacao (06:41) é de 1 min. O bloco está saturado — acomodar 5 s de
-  cartório exige mover algo de reconciliacao, e isso é desenho, não execução. Reverto ao estado coerente:
+● Inventariadas com motivo. Agora refaço o ensaio pela porta, sem --sem-sombra (são 06:52, fora da faixa cega das 00:00–04:00):
 
-  Ran 2 shell commands
+● Refazer o ensaio da sombra pela porta · 1m 31s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/sombra.sh --refazer >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_refazer.log 2>&1 & echo "refazer disparado $(date +%H:%M)"; sleep 100;
+     tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9… (1m 29s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● PAREI: bloco-da-manha-saturado | espera Ronald — e é trava nomeada, com número, não turno devolvido cedo.
+· Levitating… (5m 23s · ↓ 11.2k tokens)
 
-  O que aconteceu: bin/crons_duracao.py mediu às 04:05 e o processar_cartorio subiu de 357 → 362 s. Com 362, a última das três empresas termina 06:38 e invade o
-  apurar_furos_diarios das 06:37, que depende dele. Não foi código meu — a migration 0068 nem está no ar.
-
-  Tentei quatro posições por intuição e o selo acusou as quatro (06:44 furou ordem de estágio; 06:46, 07:13 e 07:22 invadiram vizinhos). A causa foi sempre a mesma: um cron
-  por_empresa não ocupa um minuto, ocupa uma faixa — e eu olhava o horário de início. Meu próprio alocador errou antes disso, guardando a faixa no lugar do fim: o mesmo erro de
-  campo do set() sobre List[dict] de ontem.
-
-  Com o instrumento certo, a resposta é que não cabe: a janela entre o fim do cartório (06:40, com a tolerância de 2 min do selo) e o primeiro reconciliacao (06:41) é de 1 minuto
-  contra faixa de 3; e a cascata joga o disparar para 07:58.
-
-  O que eu não fiz: não escolhi horário que não pudesse provar, e não afrouxei selo. Tudo voltou ao original, o crontab vivo foi reinstalado pela porta e está conferido (crontab
-  == config/crons.py, backup gravado). A única mudança de selo foi de forma: o teto do test_cartorio_0627 passou a ler o horário do dependente em vez de um 06:37 cravado.
-
-  As três saídas estão em BLOCO-DA-MANHA-SATURADO com os números: tirar um cron do bloco (o geofence é o maior, 5 min, e sem dependência — mas cairia no estágio alerta), deixar o
-  cartório mais rápido, ou mudar passo/tolerância (e tolerância é lei).
-
-  O que segue sem você: o gate das 06:00 (ensaio da sombra → deploy da 0068 → backfill → contadores → fatia.done), já provado que roda e que para em PAREI_ENSAIO se o ensaio não
-  estiver de hoje.
-
-✻ Cogitated for 3h 50m 10s · done 4:54 AM · 3 shells still running
-                                                                                                                                           new task? /clear to save 909.1k tokens
+❯ aval Ronald: tres itens, em ordem. Leis: gate temporal = cron + ARQUIVO (16/09), L-009. Nenhuma lei nova.
+  1. BUG-DEPLOY-AGENDADO-CWD: logs/deploy_agendado/abono-no-ar.log mostra rc=1 as 04:30 e 06:00 -- bin/deploy_agendado.sh:63 usa caminho RELATIVO (fatias_agendadas/...) e o cron
+  roda com cwd=$HOME. Cura na origem: o script resolve a raiz absoluta (cd da propria pasta) antes de tudo. RED: rodar o script com cwd=/ -> acha a fatia. Depois rodar a fatia
+  abono-no-ar pela porta agora (ensaio de hoje -> deploy 0068 -> backfill -> contadores) e publicar o .done. Sem --sem-sombra.
+  2. BLOCO-DA-MANHA-SATURADO (decisao tecnica, registrar no RELATO): apurar_furos_diarios roda ENCADEADO ao fim do processar_cartorio (arquivo de fim por empresa, teto + alarme),
+  sem horario proprio; geofence fica onde esta. Antes: git diff de config/crons.py e crons_duracao.json no RELATO e dizer se o crontab vivo difere do HEAD. RED: cartorio 30 s
+  mais lento -> furo roda depois, nunca durante. PROIBIDO afrouxar tolerancia ou mover cron por intuicao.
+  3. S3: leitor #4 (app, com a fonte no payload) ja; leitor #3 (PDF) logo que o abono estiver no ar.
+     segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ ! tira o geofence do bloco da manha; segue a fila
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
