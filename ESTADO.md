@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:50:45.**
+**Medido em 29/09/2026 20:55:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `be50379e TICKETS: rodape e placar` |
-| `origin/main` | `38e6d92e TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `be50379e TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -125,13 +125,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
-  Pushing da B1 item 1 · 6m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (6m 54s)
+● Esperar o push da B1 · 1m 49s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1b.log; git fetch -q origin; echo "faltam=$(git rev-list --count
+     origin/main..HEAD)" (1m 48s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (4h 44m 2s · ↓ 221.2k tokens)
+✶ Schlepping… (4h 49m 2s · ↓ 221.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
