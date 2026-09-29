@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:25:46.**
+**Medido em 29/09/2026 15:31:01.**
 
 | | |
 |---|---|
@@ -141,7 +141,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Grepping rpdf_suite2.log for failures                                                                                            1h 7m 17s · ↓ 375.1k tokens
-  ◯ general-purpose  Installing gated Competência button in calendario_partial.html                                                                      9m 50s · ↓ 148.5k tokens
+  ◯ general-purpose  Grepping rpdf_suite2.log for failures                                                                                           1h 12m 33s · ↓ 375.1k tokens
+  ◯ general-purpose  Installing index.html and fechamento.html                                                                                           15m 6s · ↓ 181.9k tokens
   ⧉  index
 ```
