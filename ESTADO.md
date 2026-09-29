@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:02:31.**
+**Medido em 29/09/2026 02:08:01.**
 
 | | |
 |---|---|
@@ -98,7 +98,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Background command "Regua completa em primeiro plano" completed (exit code 0)
 
 ● Background command "Esperar a suite em primeiro plano" completed (exit code 0)
@@ -126,16 +125,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● O selo de CPUSET pegou uma violação minha, de um minuto antes: eu rodei um container de teste com $TESTE_DOCKER vazio (não tinha feito source bin/recursos.sh naquele shell),
   então ele subiu sem cpuset, nos núcleos do cliente. Container morto, selo verde. É a lei do 22/09 funcionando contra mim, e registro:
 
-● Esperar a suite · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_020049.log 2>/dev/null; then break; fi; sleep 50; done; grep -E '^Ran
-     [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_020049.log | head -4; echo "linhas: $(wc -l < /tmp/regua_020049.log)"
+● Acompanhar · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_020049.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_020049.log)" (1m 22s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (57m 47s · ↓ 67.7k tokens)
+· Thundering… (1h 3m 17s · ↓ 68.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
