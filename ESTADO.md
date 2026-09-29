@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:56 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:26:31.**
+**Medido em 29/09/2026 00:32:01.**
 
 | | |
 |---|---|
@@ -48,6 +48,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/folha/tests/test_porta_do_export.py
  M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+ M bin/tests/test_hook_stop_vivo.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,43 +102,43 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  Duas coisas que eu fiz errado e que valem escritas, porque as duas são padrão e não caso: confiei em número de produção (= 0) como se fosse selo — e foi assim que o contador
-  passou duas curas antes de eu escrever o caso que morde; e escrevi um assert de texto sem escolher a âncora, que mordeu o invariante vizinho — sétima vez nesta esteira, e a lei
-  já estava escrita.
+● Background command "Esperar a regua do contador" completed (exit code 0)
 
-  Fila 1, aberto com número e sem causa provada: as 23 divergências da competência 10. A hipótese com lastro está na docstring do próprio lavrar_dias_pagos (backfill com o motor
-  de hoje contra fechamento de 28/09 19:30) e é S1/S2, não S3 — vai medida antes de eu dizer qual lado está velho.
+  Ran 1 shell command
 
-  Próximo na ordem viva: leitor #2 = calendario.py:301, com a troca provadamente neutra no número (o espelho_x_dia_pago zerado na 09 é exatamente essa prova). O consumidor de
-  dia['resultado'] é um selo (test_calendario_carimbo_intra.py:74), então a troca inteira reescreve esse selo para comparar o lavrado com a folha — meia-troca deixaria o leitor
-  chamando a autoridade, e meia-correção é pior que nenhuma.
+● Background command "Esperar regua e carimbo" completed (exit code 0)
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+  Ran 2 shell commands
 
-  Ran 6 shell commands
+● Background command "Esperar (suite longa)" completed (exit code 0)
 
-● A régua está na suite completa. O plano do leitor #2 está escrito e tem uma consequência que não vou fazer calado:
+  Ran 15 shell commands
 
-  Se o calendário passa a ler o DiaPago, a 6ª testemunha da porta (calendario_x_espelho) vira a 7ª (espelho_x_dia_pago) — ela passaria a comparar DiaPago × espelho, que é
-  literalmente a outra. As duas se fundem, e isso é redução de vocabulário na porta do export: entra no mesmo commit, com a linha no RELATO dizendo que a 6ª saiu e por quê.
+● A régua roda. Terceiro selo meu hoje que afirmou mais do que media — e o padrão é o mesmo nas três:
 
-  As duas pedras do leitor #2, para não virarem meia-troca:
-  - dia['resultado'] tem dois consumidores — o selo test_calendario_carimbo_intra.py:74 (prova que o calendário desconta a pausa como a folha) e a 6ª testemunha. O selo passa a
-    comparar o lavrado com a folha, que é mais forte: é o que o TXT paga.
-  - he_contabilizavel(resultado) tem selo próprio com fixture de ResultadoMes; a assinatura passa a ser por número (os minutos de extra do dia), e o selo dele muda no mesmo ato.
+  ┌───────────────────────────────────┬───────────────────────────────────┬─────────────────────────────────────────────────────────┐
+  │               selo                │        o que ele afirmava         │                      o que mordeu                       │
+  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ test_ui_grade_calendario          │ max-width:58px ausente            │ a prosa da lápide que explicava por que ele saiu        │
+  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ test_porta_do_export (anti-cópia) │ minutos_trabalhados fora de medir │ o invariante vizinho, que legitimamente soma esse campo │
+  ├───────────────────────────────────┼───────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ test_hook_stop_vivo               │ json.load(saída) com block|allow  │ a própria lei que manda a saída ser vazia ao liberar    │
+  └───────────────────────────────────┴───────────────────────────────────┴─────────────────────────────────────────────────────────┘
 
-  O que não entra: manter resultado "por compatibilidade" ao lado do dia_pago (duas fontes no mesmo dict, e a próxima tela escolhe a errada), nem trocar só as badges deixando
-  autoridade_do_periodo de pé — o leitor continuaria no placar, e meia-correção é pior que nenhuma.
+  Os três são a mesma família: selo que escolhe a âncora errada mede o vizinho, não a lei. Os dois primeiros eu curei escolhendo a âncora (markup sem lápide; a chave de saída da
+  função). O terceiro eu curei aceitando os dois caminhos que a lei declara — bloqueio com as duas chaves ou silêncio — e recusando allow, json-invalido, nao-objeto e
+  sem-decision, cada um com mensagem própria. Os cinco selos do hook estão verdes.
 
-  O DIFF esperado é zero, e a prova disso já existe: espelho_x_dia_pago = 0 na 09, em 430 colaboradores. Assim que o carimbo sair, aplico o commit do contador (já verde em 292
-  testes), empurro os dois e começo a troca.
+  E o hook está liberando agora pelo teto de bloqueios sem commit novo na fila 1 — o que é o alarme funcionando: ele está me dizendo que eu tenho duas curas verdes na árvore e
+  nenhuma empurrada. É exatamente o que vou fechar quando o carimbo sair: tickets_placar --escrever, commit #2 por path (contador + placar 6→3 + o selo do hook), e o push dos dois
+  commits.
 
-✻ Worked for 24m 25s · done 12:19 AM · 14 shells still running
+✻ Crunched for 3m 35s · done 12:30 AM · 12 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ empurra os dois e segue pro calendario
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 14 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 12 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
