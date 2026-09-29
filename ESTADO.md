@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 06:57:01.**
+**Medido em 29/09/2026 07:02:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_contract_crons.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
@@ -46,6 +47,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons_duracao.json
 A  app/core/censo_codigo.py
  M app/core/tests/test_cartorio_0627.py
+ M app/core/tests/test_contract_crons_duracao_horario.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
@@ -114,27 +116,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Zero erros de caminho — a cura está provada nos dois sentidos. O refazer da sombra está na máscara 2; enquanto ele corre, sigo o item 2 (o encadeado), começando pelo diff que
-  ele pediu:
-
-  Ran 2 shell commands
-
-● O diff está claro e o vivo é o HEAD: config/crons.py tem só comentário (15 linhas, zero horário mudado), o crons_duracao.json tem as medições do cron das 04:05 (o cartório
-  357→362 entre elas), e nenhum horário difere do HEAD. Agora o encadeado:
-
-  Ran 3 shell commands
-
-● Desenho definido: o furo sai de CRONS e vira uma declaração própria em ENCADEADOS — explícita, não ausente:
-
-  Ran 2 shell commands
-
-● O encadeado viaja na linha das três empresas, o furo não tem mais minuto próprio, e a sombra ensaia a mesma ordem. Agora o RED que ele pediu — cartório 30 s mais lento:
-
-  Ran 1 shell command
-
-● Passou de primeira — então preciso provar que ele morde. Quebro o encadeado de propósito:
-
   Ran 1 shell command
 
 ● O selo morde nos dois casos — com o encadeado quebrado, a ordem inverte (furo-rodou,cartorio-terminou) e o teto deixa de alarmar. Instalo e rodo os contratos:
@@ -143,12 +124,33 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Os quatro contratos varrem CRONS e não conhecem ENCADEADOS — não podem ficar verdes por ausência. Ajusto cada um:
 
-● O _fixos e o corpo do horario
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def _fixos" -A 10 app/chamados/tests/test_contract_crons.py | head -12; grep -n "def test_horario_respeita_dependencia_e_duracao" -A
-     22 app/chamados/tests/test_contract_crons.py | sed -n '8,24p'
+  Ran 4 shell commands
 
-✢ Levitating… (10m 53s · ↓ 25.7k tokens)
-                                                                                                                                                            2% until auto-compact
+● O contrato acusa o elo seguinte: disparar_perguntas_competencia depende do furo e tem horário fixo. Deixar metade da corrente no relógio recria a violação — encadeio a corrente:
+
+  Ran 3 shell commands
+
+● A corrente inteira pendurada na linha do cartório, cada elo esperando o carimbo do seu gatilho, e a sombra ensaia na mesma ordem. Os contratos:
+
+  Ran 3 shell commands
+
+● Os dois casos usavam o furo como exemplo de horário fixo — e ele não tem mais. A pergunta de cada um muda:
+
+  Ran 3 shell commands
+
+● Terceiro consumidor de CRONS que reclama com razão — o furo julga o dia, então continua sendo juiz por varredura:
+
+  Ran 1 shell command
+
+● Duas vitórias juntas: os 36 contratos de cron verdes, e a sombra passou — SELO_PESSOAL OK (142 inventariadas, era 140), sombra_diverge_de_prod=0, dump_de_hoje=sim. O portão do
+  deploy abriu. Rodo a fatia:
+
+  Rodar a fatia do abono pela porta
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 | tail -2; rm -f fatias_agendadas/abono-no-ar/fatia.done; nohup bash bin/deploy_agendado.sh rodar
+     abono-no-ar fatias_agendadas/abono-no-ar > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratch…
+
+· Levitating… (16m 23s · ↓ 39.1k tokens · thinking)
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
