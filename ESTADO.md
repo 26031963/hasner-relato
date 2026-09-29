@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:325 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:347 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:34:47.**
+**Medido em 29/09/2026 03:40:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
  M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
@@ -97,15 +98,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-          * A S3 vem antes da S5b porque nao depende do calculador: a versao `motor` do `DiaPago` ja bate, e a S2 deu 0 | 28/09 12:1x |
-      44  | COBRAR-SO-O-QUE-MUDA-A-FOLHA | **o Cobrar em massa manda push por chamado que nao muda folha nenhuma** -- medido: 1.117 chamados em 261 colabs, dos quais **676
-          sao da 09 (JA EXPORTADA)**, 113 **sem data** e 7 de competencia <= 08; **55 colaboradores so tem chamado sem data ou antigo** e recebem push sem dever nada. `cobr
-          ar_massa` e a **previa** passam a cobrar so o chamado cujo dia -- por `data_do_chamado` -- cai em competencia NAO exportada, pelo juiz de `ponto/services/fechamen
-          to.py`; **sem data fica FORA** (cura mais restritiva) e os 113 vao listados por `modulo_origem` para corte | **FECHADA 28/09 17:2x** -- 1.116 chamados em 261 cola
-          bs viram **322 em 136**; 681 barrados por competencia EXPORTADA e 113 sem data (todos DISPUTA: `disputa_supervisao` 102, `_manual` 8, `chamados` 3); **125 colabs
-          param de receber push por nada**. Regra com casa em `chamados/services/cobranca_folha.py`, 6 casos de selo chamando a funcao real | `chamados/views_cobrar.py::cob
-          rar_massa` | RED: colab so com chamado da 09 exportada nao recebe push; colab com furo na 10 recebe; previa = envio. PROIBIDO data literal, juiz novo de competenc
-          ia, e mexer no cobrar individual | 28/09 16:5x |
 
   Ran 1 shell command
 
@@ -123,13 +115,22 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● PUSH: 67024ef2..a3ac4421 — o gate agendado está no remoto. Régua para as lápides curadas:
 
-  Regua das lapides · 5s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap2.log 2>&1 & sleep 95; ls -t /tmp/regua_*.log | head -1; tail -2
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (4s)
+  Ran 1 shell command
+
+● Background command "Esperar o push" completed (exit code 0)
+
+● A régua roda. Enquanto ela fecha, a leitura do leitor #4 (api/views.py), que é o único que sobra além do pdf_espelho:
+
+  Ran 2 shell commands
+
+● O leitor #4 é trocável sem depender do abono — o card do dia do app usa só horas_trabalhadas e turno_aberto. Registro o censo enquanto a régua fecha:
+
+● Acompanhar · 51s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_033443.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
+     /tmp/regua_033443.log)" (51s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (2h 30m 3s · ↓ 126.8k tokens)
+✢ Thundering… (2h 35m 17s · ↓ 129.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
