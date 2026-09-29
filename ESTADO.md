@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:43:01.**
+**Medido em 29/09/2026 00:48:02.**
 
 | | |
 |---|---|
@@ -96,43 +96,43 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-✻ Sautéed for 53s · done 12:37 AM · 15 shells still running
-
-● Background command "Esperar a suite (viva, rodando)" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
   Ran 1 shell command
 
-● Background command "Esperar (suite completa)" completed (exit code 0)
+● Background command "Conferir o push" completed (exit code 0)
 
-● Régua VERDE com carimbo: 8.627 testes OK. Commit #2 e push:
+  Ran 1 shell command
+
+● A suite do pre-push segue. Aguardo o veredito dela — e é a espera certa: ela está provando exatamente os dois commits que vão subir, e mexer na árvore agora anularia a prova.
+
+  Enquanto isso, nada de novo a relatar sem medição. Os dois commits e os três achados já estão publicados no RELATO com número e arquivo:linha, o placar da S3 está em 3 com
+  lastro, e o leitor #2 tem plano escrito com as duas pedras nomeadas.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+
+  Ran 3 shell commands
+
+● O push começou 00:40 e a suite do pre-push leva ~8-10 min; estou às 00:44. A espera está no fundo e me avisa quando fechar.
+
+  Não tenho nada a acrescentar sem medição nova — e criar trabalho na árvore agora quebraria a prova que o pre-push está produzindo sobre os dois commits.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
   Ran 2 shell commands
 
-● Background command "Esperar o Ran da regua final" completed (exit code 0)
+● A espera está no fundo e me avisa. O push roda a suite completa no pre-push — é a porta que impede subir código não provado, e ela vale os minutos.
 
-● Background command "Esperar a suite completa fechar" completed (exit code 0)
+  Nada novo a dizer até ela fechar: o que está medido está publicado, e o que não está medido (as 23 divergências da 10) está nomeado como pendente de medição, não de opinião.
 
-  Ran 1 shell command
-
-● Background command "Esperar o veredito" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Esperar o veredito da suite" completed (exit code 0)
-
-  Ran 6 shell commands
-
-● O push está rodando a suite no pre-push (não pegou o atalho "JÁ VERDE" — a guarda é a correta, deixo rodar). Dois commits prontos para subir:
-
-  - b600ea56 — S3 1ª troca: o extrato parcial lê o DiaPago (227 de 540 colabs, os três maiores casando com o gravado na 2ª casa)
-  - 0a918855 — o contador espelho_x_dia_pago curado nas duas pontas (pergunta: 09 de 29 → 0; janela: 10 de 60 → 23), o caso que morde em três pontas, o placar 6 → 3 com
-    arquivo:linha por saída, e o selo do hook aceitando os dois caminhos da lei
-
-  Os dois passaram por régua verde com carimbo (8.627 testes). Dois alarmes do pre-push curados no caminho, os dois com cura declarada no próprio alarme: tickets_placar --escrever
+✻ Churned for 5m 25s · done 12:44 AM · 19 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 15 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 19 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
