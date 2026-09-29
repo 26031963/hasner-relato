@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:05:31.**
+**Medido em 29/09/2026 15:10:45.**
 
 | | |
 |---|---|
@@ -39,10 +39,13 @@ aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 ## `git status --short`
 
 ```
+ M CLAUDE.md
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/PROMPTS.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/ponto/tests/test_s3_placar_exercicio.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,20 +102,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
-
-  Ran 1 shell command
-
-● Há uma pergunta de lei genuína aqui, e ela é o que falta para a S3 fechar com o placar em 0. Vou formulá-la.
-
-  Ran 2 shell commands
-
-● PAREI: lei: o placar da S3 conta CAMINHO ou EXERCÍCIO? duas leis suas se cruzam | espera Ronald
-
-  A S3 chegou ao ponto em que todo o dinheiro — do dia e da competência — sai da folha ou da lavratura. Medido hoje: 536 de 536 ativos com fechamento nas duas competências, zero
-  recebendo número de motor. Falta a entrega da raia PDF e falta uma decisão que é sua, porque duas leis suas se cruzam:
-
   - Corte de 23/09 19:2x — sem fechamento gravado, mostrar o número do motor rotulado (sem apuracao ainda), porque zero seria "perda de informação disfarçada de fonte única". A
     razão está escrita no código.
   - L-095 / selo da S3 — "0 leitor de dinheiro chamando motor", e o selo varre AST: ele conta o caminho no código, não quantas pessoas passam por ele.
@@ -130,13 +119,27 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   esperam esse verde. O único outro trabalho preso em você é o smoke — ele destrava o quarteto UI-GRADE e a linha do dia na tela do espelho.
 
 ✻ Waiting for 1 background agent to finish
+
+❯ aval Ronald lei: o placar da S3 conta EXERCICIO. Selo muda de pergunta: (a) 0 leitor mostrando numero de motor sem o rotulo "sem apuracao ainda"; (b) 0 leitor com derivacao
+  propria de dinheiro (AST). Corte 23/09 segue valendo; L-095 nao cede. Placar da S3 = 0 quando (a) e (b) forem verdes. Segue a fila; PAREI so em lei ou !
+
+● A lei veio e ela fecha a S3. Registro e reescrevo o selo com as duas perguntas novas.
+
+  O selo novo do placar: duas perguntas
+  ⎿  $ cat > ponto/tests/test_s3_placar_exercicio.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O PLACAR DA S3 CONTA EXERCICIO (corte Ronald 29/09 15:1x), e sao DUAS perguntas.
+     A pergunta antiga -- *"quem CHAMA o motor?"*, varrida por AST sobre `autoridade_do_periodo`,
+     `espelho_do_colab` e `calcular_mes` -- m…
+
+· Cascading… (1m 39s · ↓ 6.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py as RED                                                                                     47m 2s · ↓ 341.2k tokens
+  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py as RED                                                                                    52m 17s · ↓ 341.2k tokens
   ⧉  index
 ```
