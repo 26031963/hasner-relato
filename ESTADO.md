@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:213 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:233 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:42:01.**
+**Medido em 29/09/2026 11:47:07.**
 
 | | |
 |---|---|
-| `HEAD` local | `ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09` |
+| `HEAD` local | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
 | `origin/main` | `df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro
 ed0bbd01 Smoke em prod do leitor #3: o papel do col600 imprime 7h01 no dia 22/09
 48609348 TICKETS: placar e rodape depois do deploy da linha do dia
 6c05f6cf A linha do dia do papel mostra o PAGO -- e medir antes evitou imprimir 0,00 em dias de 12 horas
 df9685ee A hipotese da migration esta REFUTADA com prova, e o carimbo por colab tem base de pe
-4d051eb2 O PDF ja tem a medicao que o plano exigia: 606 de 607 nao mudam, e o unico virou Pauta DP
 ```
 
 ## `git status --short`
@@ -99,10 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar e ler" completed (exit code 0)
-
-  Read 1 file, ran 2 shell commands
-
 ● Background command "Rodar relatorios, ponto e colaboradores" completed (exit code 0)
 
 ● Background command "Aguardar a suite dos tres apps" completed (exit code 0)
@@ -124,19 +120,23 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● O papel perdeu coluna de rubrica?
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/colunas.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O papel PERDEU coluna? Colab com rubrica no GRAVADO e zero na LAVRATURA -> a coluna desaparece do PDF."""
-     from django.db.models import Sum
-     from…
+  Searched for 3 patterns, read 1 file, ran 12 shell commands
 
-· Puttering… (1h 33m 41s · ↓ 246.9k tokens · still thinking)
+● Background command "Aguardar o push5" completed (exit code 0)
+
+● Background command "Aguardar push5" completed (exit code 0)
+
+  Repetir o push · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push6.log 2>&1; echo
+     "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push6.log) & sleep 5; … (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Puttering… (1h 38m 46s · ↓ 261.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
