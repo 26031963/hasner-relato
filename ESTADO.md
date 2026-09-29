@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:02:01.**
+**Medido em 29/09/2026 08:07:14.**
 
 | | |
 |---|---|
@@ -40,9 +40,11 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 
 ```
  M CLAUDE.md
+ M app/api/tests/test_espelho_app_fonte_e_geometria.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/sombra.sh
@@ -102,8 +104,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  juiz.
-  RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
   trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
   segue a fila; PAREI so em lei ou !
@@ -131,10 +131,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '/FAIL: test_ruff_zero/,/^====/p' /tmp/regua_074923.log | grep -E "AssertionError|ruff|\.py" | head -12
+● Rodar a régua e esperar por sinal de arquivo · 27s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l4c.log 2>&1 &
+     sleep 2; echo "regua 4 (so o ruff mudou)"; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94… (25s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (1h 15m 53s · ↓ 160.7k tokens · thought for 3s)
+✽ Levitating… (1h 21m 6s · ↓ 164.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
