@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:24:01.**
+**Medido em 29/09/2026 03:29:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -95,44 +96,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      53 -# fechamento, campo a campo" -- e era campo a campo de um SUBCONJUNTO.
+      48 +# POR QUE ELE EXISTE (achado 29/09 02:1x, censo do leitor #3 da S3): `fechamento_x_soma_dias_pagos` compara
+      49 +# campo a campo **os CAMPOS acima** -- isto e, os campos que a lavratura TEM. `minutos_abonados` estava no
+      50 +# `FechamentoMensal`, e DINHEIRO (hora paga sem trabalho), e NAO estava aqui: o contador dava ZERO sobre um
+      51 +# buraco de **7.610,9 h**. MEDIDO em 09/2026, **179 de 607 colaboradores** com `minutos_abonados > 0`,
+      52 +# 456.656 minutos (na 10: 19 colabs, 289,1 h). A S2 declarou "a soma dos dias E o fechamento, campo a campo"
+      53 +# -- e era campo a campo de um SUBCONJUNTO. **Contador que compara so o que ele tem e cego por construcao.**
+      54  #
+      55 -# A FONTE DO ABONO JA TEM DIA e a cura e barata: `ponto/services/fechamento.py:497` soma
+      56 -# `d['minutos_previstos']` dos dias da grade com `tipo_dia == 'ausencia'` -- a mesma lista que a lavratura
+      57 -# recebe no mesmo ponto. Idem `minutos_previstos` e `minutos_realizados` (este com cap por dia, F1 04/08).
+      58 -# Enquanto nao entram, NENHUM leitor pode ler abono do `DiaPago`, e o `relatorios/pdf_espelho.py` (leitor #3
+      59 -# da S3) mostra `dias_abono`/`horas_abono` -- ou seja, **este buraco BLOQUEIA o leitor #3**.
+      55 +# OS TRES ENTRARAM em 29/09 02:3x (`minutos_abonados`, `minutos_previstos`, `minutos_realizados`, migration
+      56 +# `ponto/0068`), e a fonte deles ja tinha dia: `ponto/services/fechamento.py` soma
+      57 +# `d['minutos_previstos']` dos dias da grade com `tipo_dia == 'ausencia'` -- a MESMA lista que a lavratura
+      58 +# recebe no mesmo ponto, sem rateio. `minutos_realizados` leva o cap POR DIA (F1 04/08).
+      59  #
+      61 -# `dias_previstos` e `dias_incertos` NAO entram nesta lista: sao CONTAGEM derivada dos dias, nao rubrica --
+      62 -# quem os quiser conta as linhas. `horas_extras` idem: e o total de 50+100, que a soma ja da.
+      60 +# O QUE FICA PROIBIDO POR ESTA LISTA ESTAR VAZIA: nenhum campo de pagamento do fechamento pode existir sem
+      61 +# par na lavratura **em silencio**. Campo novo cai VERMELHO em
+      62 +# `folha/tests/test_porta_do_export.py::test_MORDE_o_contador_do_fechamento_NAO_e_cego_a_campo_de_pagamento`,
+      63 +# e quem o criar escolhe: lavra, ou declara AQUI com o TAMANHO medido e a FONTE com dia. Ela nao e lista de
+      64 +# desculpas -- e o instrumento que fez 7.610,9 h aparecerem.
+      65 +#
+      66 +# `dias_previstos` e `dias_incertos` NAO entram no censo: sao CONTAGEM derivada dos dias, nao rubrica -- quem
+      67 +# os quiser conta as linhas. `horas_extras` idem: e o total de 50+100, que a soma ja da.
+      68  PAGAMENTO_FORA_DA_LAVRATURA: dict = {
+      69      # VAZIO desde 29/09 02:3x -- e este dicionario FICA, vazio, com o selo cobrando: campo de pagamento novo
+      70      # no `FechamentoMensal` cai VERMELHO e quem o criar escolhe (lavra, ou declara aqui com o tamanho e a
 
-  Ran 6 shell commands
-
-● Background command "Publicar e esperar a regua" completed (exit code 0)
-
-  Ran 4 shell commands
-
-● O mypy pegou o dicionário vazio sem anotação (dict vazio não tem tipo inferível) — curado. Régua rodando; enquanto isso, o backfill precisa de deploy antes:
-
-  Ran 6 shell commands
-
-● Background command "Esperar a regua" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Suite OK (8.634) — o bloqueio é só a migration fora do git, a guarda de sempre. Commit, push e o deploy agendado para depois do ensaio da sombra:
-
-  Ran 6 shell commands
-
-● Background command "Push da lavratura do abono" completed (exit code 0)
-
-● PUSH: 9104c7e9..67024ef2. Agora agendo o deploy da migration para depois do ensaio da sombra — gate temporal por cron, nunca por processo meu:
-
-  Ran 5 shell commands
-
-● Gate agendado: 29/09 04:30, cron.d de disparo único — depois do ensaio da sombra das 04:15, e o fim é um arquivo (fatia.done), nunca um processo meu. Publico e fecho o registro:
-
-● Curar o placar e empurrar · 1m 15s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git commit -q --amend --no-edit
-     -- fatias_agendadas/abono-no-ar/esteira.sh app/docs/RELATO.md app/docs/BACKLOG.md app/docs/TICKETS.md && timeout 1700 git push… (1m 15s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Thundering… (2h 19m 17s · ↓ 114.7k tokens)
+* Thundering… (2h 24m 45s · ↓ 122.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
