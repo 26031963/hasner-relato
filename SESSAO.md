@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 09:55:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (115.1 MB). Acoes na janela: **934**.
+**Medido em 29/09/2026 10:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (115.1 MB). Acoes na janela: **938**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:00:15 | Bash | Medir a lista completa da competência 10 | `cd /home/ronald/saas-hasner && cat > /tmp/lista10.py <<'PYEOF' # -*- coding: utf-8 -*- # A LISTA INTEIRA da competencia 10: colab a colab, campo a campo. So leitura. from colaboradores.models import Empresa from folha.porta_export import medir tot = 0 for e in Empresa.objects.filter(ativa=True, pk__in=(2, 3, 4)).order_by('pk'): r = medir(e, 10, 2026) d = r.get('fechamento_x_soma_dias_pagos') or [] ...` |
+| 09:58:05 | Bash | Deploy da cura do vínculo e do retrato | `cd /home/ronald/saas-hasner && nohup bash bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy_lt.log 2>&1 & sleep 115; tail -14 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy_lt.log` |
+| 09:57:48 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push4.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push4.log; date '+%H:%M'` |
+| 09:55:53 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push4.log 2>/dev/null && break; sleep 10; done; tail -4 $S/push4.log; date '+%H:%M'` |
 | 09:53:58 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push4.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push4.log; date '+%H:%M'` |
 | 09:52:03 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:" $S/push4.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push4.log; date '+%H:%M'` |
 | 09:51:57 | Bash | Levar o fato para a Pauta do DP | `cd /home/ronald/saas-hasner && cat > /tmp/resp839.py <<'PYEOF' # -*- coding: utf-8 -*- from django.contrib.auth.models import User from pautas.models import Pauta from pautas.services import responder p = Pauta.objects.get(pk=839) texto = ('O DIA TEM NOME E HORA: 19/09. A entrada saiu do app em 19/09 18:53; a SAIDA (20/09 07:00) foi ' 'inserida MANUALMENTE em 29/09 07:31 -- isto e, dez dias depois ...` |
