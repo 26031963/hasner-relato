@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:44:01.**
+**Medido em 29/09/2026 04:49:31.**
 
 | | |
 |---|---|
@@ -47,6 +47,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
 A  app/core/censo_codigo.py
  M app/core/tests/test_cartorio_0627.py
  M app/docs/BACKLOG.md
+ M app/docs/MAPA.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
@@ -110,6 +111,10 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
+● A restrição é de estágio: o furo é cobranca e não pode rodar depois dos de reconciliacao. Então a cascata é mínima e em ordem:
+
+  Ran 3 shell commands
+
 ● O geofence roda por empresa (3 × passo 2 = 5 min) e não cabe no bloco. Ele não tem dependência alguma (depende=()), então vai para o fim do estágio:
 
   Ran 3 shell commands
@@ -132,21 +137,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Crontab instalado e conferido (crontab == config/crons.py, 102 linhas), com backup em logs/crontab_backup_20260929_044246.txt. Publico:
 
-● Publicar e esperar a regua · 46s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='/home/ronald/saas-hasner/app/docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     sec = '''# CINCO SEGUNDOS DE CARTORIO CUSTARAM QUATRO HORARIOS -- e o selo acusou as tres tentativas que eu chutei (29/09 04:4x)
-     A regua ficou VERMELHA… (45s · 2 lines)
+  Veredito da regua · 7s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 100; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_044121.log 2>/dev/null | head -4; head -3 .regua_stamp; date
+     +%H:%M (7s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (3h 39m 17s · ↓ 190.8k tokens)
+· Thundering… (3h 44m 47s · ↓ 191.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
