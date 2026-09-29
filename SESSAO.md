@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 17:01:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (123.9 MB). Acoes na janela: **1051**.
+**Medido em 29/09/2026 17:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (124.0 MB). Acoes na janela: **1055**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:05:13 | Bash | Rodar seis apps com a cura do saldo | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test relatorios ponto api colaboradores folha core --settings=config.se ...` |
+| 17:05:02 | Bash | Saldo se refaz no folha_manda e tirar o debug | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='relatorios/cartao_pela_celula.py' t=io.open(P,encoding='utf-8').read() # 1. o saldo sai do dict da lavratura -- ele nao e um numero proprio V = """ 'horas_previstas': _prev, 'saldo': (_f('horas_trabalhadas') - _prev) if _prev is not None else None, } """ N = """ 'horas_previstas': _prev, # `saldo` NAO ENTRA AQUI de proposito: ele ...` |
+| 17:04:18 | Bash | Medir o resumo de verdade | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/relatorios/tests/test_s3_cartao_le_dia_pago.py' t=io.open(P,encoding='utf-8').read() V=" r = _resumo(self.c)\n # A COMPOSICAO DE `total_trabalhadas` FICOU DECIDIDA" assert t.count(V)==1 io.open(P,'w',encoding='utf-8').write(t.replace(V," r = _resumo(self.c)\n print('DBG', {k: r.get(k) for k in ('total_trabalhadas','horas_previstas ...` |
+| 17:03:50 | Bash | Quem mexe em horas_previstas e saldo no cartao | `grep -n "horas_previstas\\|\['saldo'\]" relatorios/pdf_espelho.py \| cat` |
 | 17:00:56 | Bash | Esperar a suite dos cinco apps | `cd /home/ronald/saas-hasner && until [ -s /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b62cc8ta0.output ]; do sleep 20; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b62cc8ta0.output \| head -20` |
 | 17:00:52 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b62cc8ta0.output` |
 | 17:00:47 | Bash | RELATO dos dois achados do selo da raia | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() ANC = """# O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL""" assert t.count(ANC)==1 NOVO = """# O SELO DA RAIA PDF, RODADO NA PRINCIPAL, ACHOU DOIS -- E UM DELES E DESCONTO NO HOLERITE (29/09 17:1x) Merge nao e copiar arquivo: e rodar o selo do outro  ...` |
