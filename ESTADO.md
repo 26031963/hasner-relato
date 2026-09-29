@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:33:31.**
+**Medido em 29/09/2026 09:39:01.**
 
 | | |
 |---|---|
@@ -137,12 +137,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Medir o contador de emp4 09 depois do retrato" completed (exit code 0)
 
-● Esperar tudo · 42s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do [ "$(grep -c '^== emp' $S/breakdown2.log)" -ge 6 ]
-     && break; sleep 10; done; grep -v "^93 objects" $S/breakdown2.log | tail -6; echo "=== quem escreve"; grep "TESTE" $S/quem_e… (41s)
+● Esperar a régua · 39s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "— Ran " $S/regua_retrato.log 2>/dev/null
+     && break; sleep 10; done; tail -3 $S/regua_retrato.log; date '+%H:%M' (39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Levitating… (2h 47m 23s · ↓ 261.5k tokens)
+· Levitating… (2h 52m 53s · ↓ 267.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
