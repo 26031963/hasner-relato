@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:20:45.**
+**Medido em 29/09/2026 15:25:46.**
 
 | | |
 |---|---|
@@ -43,7 +43,9 @@ aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/core/juizes.py
  M app/docs/PROMPTS.md
+ M app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/ponto/tests/test_s3_placar_exercicio.py
 ?? bin/keepalive.sh
@@ -103,43 +105,43 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-● A fila 2 está descongelada e andando em raia própria. Registrei a lei e passei o trabalho.
+● segue a fila; PAREI so em lei ou ! — já recebido (linha em PROMPTS.md), sigo.
 
-  Uma coisa que a lei me obrigou a registrar, porque não é óbvia e muda o que "descongelar" significa: template não precisa de deploy — não há cached.Loader, o Django relê o
-  arquivo do disco a cada request. Então o _calendario_grade.html modificado que estava solto na árvore principal já está no ar em produção, sem smoke, desde que foi escrito.
-  Mover a fatia para a raia não a tira da tela; o que a tiraria é voltar o arquivo ao HEAD, e isso é justamente um dos três casos de PAREI da sua lei nova (apagar/voltar arquivo
-  que prod usa). Então não desfiz nada: copiei os quatro arquivos para wt-ui e a raia fecha a fatia com selo, pronta para o seu smoke.
+  Ran 2 shell commands
 
-  A raia UI (wt-ui, branch raia-ui) recebeu a sua ordem: UI-GRADE-CALENDARIO → UI-CAL-COMPETENCIA → catálogo /relatorios/. Com duas amarras que eu acrescentei por lei da casa:
-  - núcleo intocado — calendario.py:204 é onde o modo COMPETÊNCIA precisa ler janela_fechamento, e isso é núcleo: ela entrega o patch pronto com arquivo:linha e eu aplico na
-    principal;
-  - pista compartilhada — três raias e um só juliani_db_test; ela checa container antes e espera.
+● Sigo. A conferência está armada e dispara quando a raia PDF soltar a pista — ela está fechando a suíte dela agora (suite_fecha_pdf).
 
-  E ela vai me devolver o roteiro do smoke: qual tela, qual colaborador, o que olhar (largura fixa dos 7 dias, sem corte à direita, chip quebrando em 2 linhas), nas duas cascas.
+  Estado das três frentes neste minuto:
 
-  Enquanto isso, na fila 1: o selo novo do placar da S3 já pegou três coisas reais, uma delas um bug no meu próprio detector — sum(pp.minutos_extra_50 for pp in dia) passava
-  batido porque eu não atravessava a GeneratorExp, e era justamente a forma mais comum de derivação no repo. Curado; a rodada com o detector corrigido está no ar e vai me dar a
-  lista de arquivo:linha dos sítios que ainda derivam dinheiro.
+  ┌───────────┬─────────────┬──────────────────────────────────────────────────────────────────────┐
+  │   raia    │    onde     │                          o que está fazendo                          │
+  ├───────────┼─────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ principal │ saas-hasner │ 23 commits prontos; espera o verde dos selos curados para empurrar   │
+  ├───────────┼─────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ PDF       │ wt-pdf      │ rodando a suíte de fechamento do leitor #3                           │
+  ├───────────┼─────────────┼──────────────────────────────────────────────────────────────────────┤
+  │ UI        │ wt-ui       │ fila 2 descongelada, fechando o UI-GRADE-CALENDARIO para o seu smoke │
+  └───────────┴─────────────┴──────────────────────────────────────────────────────────────────────┘
+
+  O que a conferência vai me dizer, e é o que decide o placar da S3:
+
+  - (a) nenhum leitor mostra número de motor sem o rótulo — e aqui eu já sei que relatorios/views.py e um dos colaboradores/services/* foram acusados na primeira rodada; se
+    persistirem, são cura minha e eu faço;
+  - (b) nenhum leitor com derivação própria de dinheiro — a primeira rodada achou ponto/services/espelho.py:325 somando minutos_intrajornada_indenizada de período (esse é meu, e a
+    cura é ler o total do próprio resultado em vez de somar os períodos) e um sítio em pdf_espelho.py, que é da raia PDF e eu não toco — vai no pedido de merge.
+
+  Com (a) e (b) verdes, o placar vai a 0 pela sua lei do exercício, e eu o movo com a prova ao lado. Se não vierem, tenho arquivo:linha de cada um e curo antes de mover — placar
+  que anda sem prova é o número mentindo para cima, e foi o que eu já corrigi hoje no contador cego.
 
 ✻ Waiting for 2 background agents to finish
-
-● Background command "Esperar a pista e empurrar de verdade" completed (exit code 0)
-
-  Searched for 1 pattern, read 1 file, ran 1 shell command
-
-● Os dois selos estão certos em reclamar: um pendente que eu curei não saiu da lista, e o outro guarda a forma antiga do rótulo. Curo os dois.
-
-● Searching for 1 pattern…
-
-✶ Perambulating… (51s · ↓ 1.6k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py contract changes                                                                        1h 2m 17s · ↓ 374.6k tokens
-  ◯ general-purpose  Comparing _calendario_grade.html against live tree                                                                                  4m 49s · ↓ 116.2k tokens
+  ◯ general-purpose  Grepping rpdf_suite2.log for failures                                                                                            1h 7m 17s · ↓ 375.1k tokens
+  ◯ general-purpose  Installing gated Competência button in calendario_partial.html                                                                      9m 50s · ↓ 148.5k tokens
   ⧉  index
 ```
