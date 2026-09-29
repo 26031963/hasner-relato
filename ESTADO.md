@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:15:45.**
+**Medido em 28/09/2026 22:20:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
+| `HEAD` local | `df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)` |
 | `origin/main` | `4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,17 +22,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
+a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 4c26a72d HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
 88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
-13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
-642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
 ```
 
 ## `git status --short`
 
 ```
- M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -85,6 +84,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
+
+✻ Cogitated for 31m 26s · done 9:40 PM · 11 shells still running
+
 ❯ reordena e empurra so o hook; calendario fica local ate meu smoke. HOOK-PAREI-DA-FILA: o hook so libera com PAREI de item da FILA 1 viva do bloco OBRAS; PAREI de item
   CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
   O-DIA-PAGO S3". Depois S3 leitor a leitor, sem pergunta no fim do turno. segue a fila; PAREI so em lei ou !
@@ -106,20 +110,15 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: print no RELATO; push so com meu novo smoke.
   segue a fila; PAREI so em lei ou !
 
-● RED: com o PAREI do calendario, o hook deve bloquear na S3
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='bin/hook_stop_fila1.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = '''def _relato_parou():
-     with open(RELATO, encoding='utf-8') as fh:
-     for ln in fh:
-     ln = ln.strip()
-     if not ln or ln.startswith('# RELAT…
+● Commitar e empurrar a HOOK-PAREI-DA-FILA · 3m 44s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/msg_parei.txt <<'EOF'
+     HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
+     O hook liberava o turno com QUALQUER PAREI no topo do RELATO, e o caso que mostrou o furo e
+     real: `PAREI: smoke-da-UI-GRADE-CALENDARIO` espera o smoke de uma fat… (3m 42s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Sprouting… (11m 45s · ↓ 5.5k tokens)
-                                                                                                                                                            2% until auto-compact
+✻ Sprouting… (16m 45s · ↓ 10.8k tokens)
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

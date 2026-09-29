@@ -1,6 +1,5 @@
 # RELATO — esteira saas-hasner
 
-`PAREI: smoke-da-UI-GRADE-CALENDARIO | espera Ronald` -- a fatia esta pronta, selada e commitada, e **nao empurrei**: fatia que toca template de calendario nao sobe sem o seu smoke de clique nas duas cascas (FRONT SEM SMOKE NAO SOBE, BUG 73). Basta abrir o calendario do admin e o do perfil de um colab e dizer se a grade cabe.
 
 PROVA: `colaboradores/tests/test_ui_grade_calendario.py` (6 casos) + `test_calendario_sete_colunas` (chromium em 1366) VERDES, e a regua no rodape do TICKETS. O template ja esta na arvore -- e ela e servida na hora --, entao a tela **ja mostra** o layout novo; se algo estiver errado, `git checkout` do arquivo volta em um comando.
 
@@ -29,6 +28,26 @@ _(a linha `PAREI: hook-teto | espera Ronald` que estava aqui SAIU, porque era me
 **MODO CONTINUO.** Itens (1)(2)(4)(5) FECHADOS. **SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia nos 205 do TXT**, e a **E6 rodada 4 = 92,9%** (era 91,4% na r3). PARADO em DOIS `!`: a pergunta de lei da R4 (o evento fez o deploy virar apply; +75,12 h medidos, codigo revertido da arvore) e o **`!` do EXPORT**, cujo dossie esta abaixo.
 
 `universo do TXT da 09: **205 colabs**` · `selo dos quatro leitores: **VERDE, 0 divergencia**` · `E6 rodada 5: **91,2%** de 7.860 dias` (r4 dizia 92,9% de 7.512 -- **caiu porque os 473 dias impares entraram no julgamento**, nao porque algo piorou) · `dias em aberto: 284 em 23 colabs` (furo sem decisao, linha propria -- nao barra) · `turnos abertos no gravado: 468 -> 363` · `inconsistencias: 1.093 -> 946`.
+
+# HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca (28/09 21:0x)
+
+O hook liberava o turno com QUALQUER `PAREI:` no topo do RELATO. O caso que mostrou o furo e real:
+`PAREI: smoke-da-UI-GRADE-CALENDARIO` espera o smoke de uma fatia de TELA marcada `CONGELADA (L-096), fila 2` --
+e com ela no topo o hook liberava como se a obra estrutural estivesse travada. **Nao estava**: a S3 seguia em
+voo. Trava de fila 2 parando a fila 1 e a L-096 ao contrario.
+
+A leitura passa a ser: *"o que este PAREI trava esta na fila 1 VIVA?"*. O hook coleta os ids do bloco OBRAS que
+**nao andam** (fechados, congelados, fila 2, esperando decisao) e, se o PAREI nomeia um deles, **nao libera**.
+
+PROVA (RED literal do pedido): com `PAREI: smoke-da-UI-GRADE-CALENDARIO` no topo, o hook devolve
+
+```json
+{"decision": "block", "reason": "siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): ..."}
+```
+
+E o padrao da linha de item virou **funcao** (`_linha_de_item_re`), porque agora ha dois leitores dele -- o que
+escolhe o proximo da fila e o que lista quem nao anda. Escrito duas vezes, os dois poderiam discordar sobre o
+que e uma linha de obra.
 
 # HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump no tmux (28/09 20:5x)
 
@@ -152,6 +171,8 @@ solto --, e o caso agora remove as duas juntas para seguir mordendo. **Selo que 
 nao prende nada**, e este e o quinto desta esteira que exigiu essa conversa.
 
 ## O que espera voce
+
+`PAREI: smoke-da-UI-GRADE-CALENDARIO | espera Ronald` -- e esta linha vive AQUI, na secao do item, e nao no topo do RELATO: pela **HOOK-PAREI-DA-FILA** (21:0x), PAREI de item **congelado ou de fila 2** nao para a fila 1. Com ela no topo, o hook liberava o turno como se a obra estrutural estivesse travada -- e nao estava: a S3 seguia em voo.
 
 O **smoke de clique**, nas duas cascas: o calendario do admin e o do perfil de um colaborador. Fatia que toca
 template nao sobe sem ele (BUG 73 -- o overlay do modal ficou visivel e vazio em toda pagina com 5.142 testes
