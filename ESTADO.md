@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:513 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:511 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:49:31.**
+**Medido em 29/09/2026 04:55:01.**
 
 | | |
 |---|---|
@@ -47,7 +47,6 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
 A  app/core/censo_codigo.py
  M app/core/tests/test_cartorio_0627.py
  M app/docs/BACKLOG.md
- M app/docs/MAPA.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
@@ -110,44 +109,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● A restrição é de estágio: o furo é cobranca e não pode rodar depois dos de reconciliacao. Então a cascata é mínima e em ordem:
-
-  Ran 3 shell commands
-
-● O geofence roda por empresa (3 × passo 2 = 5 min) e não cabe no bloco. Ele não tem dependência alguma (depende=()), então vai para o fim do estágio:
-
-  Ran 3 shell commands
-
-● Errei três vezes por olhar o horário de início e não a faixa de um cron por-empresa. Paro de adivinhar e meço o mapa real:
+● O alocador corrigido diz a verdade: o bloco está saturado — depois do furo, o disparar só acharia lugar às 07:58. Então a cascata não cabe. Volto os três ao original e busco o
+  lugar só do furo, que é o único conflito real:
 
   Ran 1 shell command
 
-● O mapa medido dá a resposta: há um buraco de 7 min em 06:55→07:02, e é o único antes da auditoria das 07:18:
+● A medição é conclusiva: o furo precisa de 3 min e a janela entre o cartório (06:40) e o primeiro reconciliacao (06:41) é de 1 min. O bloco está saturado — acomodar 5 s de
+  cartório exige mover algo de reconciliacao, e isso é desenho, não execução. Reverto ao estado coerente:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Os 24 contratos de cron verdes. Cinco segundos de cartório custaram quatro horários, e o selo acusou as três tentativas que eu fiz por intuição. Régua completa:
+● PAREI: bloco-da-manha-saturado | espera Ronald — e é trava nomeada, com número, não turno devolvido cedo.
 
-  Ran 1 shell command
+  O que aconteceu: bin/crons_duracao.py mediu às 04:05 e o processar_cartorio subiu de 357 → 362 s. Com 362, a última das três empresas termina 06:38 e invade o
+  apurar_furos_diarios das 06:37, que depende dele. Não foi código meu — a migration 0068 nem está no ar.
 
-● O crontab vivo ainda tem os horários antigos — e às 06:27 o cartório invadiria o furo. Instalo pela porta declarada:
+  Tentei quatro posições por intuição e o selo acusou as quatro (06:44 furou ordem de estágio; 06:46, 07:13 e 07:22 invadiram vizinhos). A causa foi sempre a mesma: um cron
+  por_empresa não ocupa um minuto, ocupa uma faixa — e eu olhava o horário de início. Meu próprio alocador errou antes disso, guardando a faixa no lugar do fim: o mesmo erro de
+  campo do set() sobre List[dict] de ontem.
 
-  Ran 1 shell command
+  Com o instrumento certo, a resposta é que não cabe: a janela entre o fim do cartório (06:40, com a tolerância de 2 min do selo) e o primeiro reconciliacao (06:41) é de 1 minuto
+  contra faixa de 3; e a cascata joga o disparar para 07:58.
 
-● Crontab instalado e conferido (crontab == config/crons.py, 102 linhas), com backup em logs/crontab_backup_20260929_044246.txt. Publico:
+  O que eu não fiz: não escolhi horário que não pudesse provar, e não afrouxei selo. Tudo voltou ao original, o crontab vivo foi reinstalado pela porta e está conferido (crontab
+  == config/crons.py, backup gravado). A única mudança de selo foi de forma: o teto do test_cartorio_0627 passou a ler o horário do dependente em vez de um 06:37 cravado.
 
-  Veredito da regua · 7s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 100; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_044121.log 2>/dev/null | head -4; head -3 .regua_stamp; date
-     +%H:%M (7s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  As três saídas estão em BLOCO-DA-MANHA-SATURADO com os números: tirar um cron do bloco (o geofence é o maior, 5 min, e sem dependência — mas cairia no estágio alerta), deixar o
+  cartório mais rápido, ou mudar passo/tolerância (e tolerância é lei).
 
-· Thundering… (3h 44m 47s · ↓ 191.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  O que segue sem você: o gate das 06:00 (ensaio da sombra → deploy da 0068 → backfill → contadores → fatia.done), já provado que roda e que para em PAREI_ENSAIO se o ensaio não
+  estiver de hoje.
+
+✻ Cogitated for 3h 50m 10s · done 4:54 AM · 3 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ ! tira o geofence do bloco da manha; segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
