@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:163 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:200 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:11:05.**
+**Medido em 29/09/2026 18:16:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `40995328 TICKETS: placar do topo` |
+| `HEAD` local | `08f8ca75 TICKETS: placar do topo` |
 | `origin/main` | `40995328 TICKETS: placar do topo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+08f8ca75 TICKETS: placar do topo
+0a2289ed O smoke do partial nao foi por HTTP, e a primeira medicao minha era a pagina de login
+c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA da arvore viva
 40995328 TICKETS: placar do topo
 0afe9dac BACKLOG: a S3 fecha com o placar em 0, e o placar mudou de pergunta
-958ac42d TICKETS: rodape e placar com o ultimo push do mundo
-ff5f697d TICKETS: placar do topo
-b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido em prod hoje
 ```
 
 ## `git status --short`
@@ -99,7 +99,6 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - getattr(p, 'minutos_extra_50', 0) / 60 era invisível ao detector — e estava nas duas linhas mais caras do cartão do Art.74 §2. A exceção do getattr foi escrita para ler campo
     de DiaPago por string (lavratura, que é a cura) e virou passe livre para conta de motor com outra sintaxe.
   - O critério (a) casava nome genérico: resultado em relatorios/views.py é o dict do serviço de PDF e periodos = list(qs) em relatorios/services.py são PeriodoAquisitivo de
     férias. Por AST, zero chamada de motor nos dois. É o irmão de ler prosa, com a palavra num nome de variável.
@@ -127,11 +126,12 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: UI-CAL-COMPETENCIA -- o calendario ganha o modo COMPETENCIA -- hoje ele tem Mes, Quinzena e Semana, e a competencia (21-20, ou o cor
 
-● Provar as duas metades juntas na raia de prova
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-cal2/app:/app sa…
+● Pushing do UI-CAL-COMPETENCIA · 3m 27s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log
+     2>&1; echo "rc=$?"; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pu… (3m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (2h 4m 22s · ↓ 124.4k tokens)
+✢ Schlepping… (2h 9m 48s · ↓ 131.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
