@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:31:01.**
+**Medido em 29/09/2026 19:36:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `910fc8cd O censo respondeu quem escreve no gravado da exportada, e a resposta e UM -- com tripwire` |
+| `HEAD` local | `87b5303d TICKETS: rodape e placar com o ultimo push` |
 | `origin/main` | `08f8ca75 TICKETS: placar do topo` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,25 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+87b5303d TICKETS: rodape e placar com o ultimo push
+6c692ded TICKETS: placar do topo
+852b739c A minha propria lapide afirmava o contrario do codigo, e o contador da porta cobrou
 910fc8cd O censo respondeu quem escreve no gravado da exportada, e a resposta e UM -- com tripwire
 08f8ca75 TICKETS: placar do topo
-0a2289ed O smoke do partial nao foi por HTTP, e a primeira medicao minha era a pagina de login
-c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA da arvore viva
-40995328 TICKETS: placar do topo
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/RELATO.md
- M app/folha/porta_export.py
- M app/ponto/services/dia_pago.py
- M app/ponto/tests/test_dia_pago_soma.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/folha/tests/test_gravado_discorda_da_propria_grade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -104,6 +99,11 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ┌─────────────┬──────────────────┬─────────────────────────────────────┬───────┬───────────────────────────┐
+  │    modo     │ janela devolvida │           rótulo impresso           │ botão │ modo=competencia no HTML  │
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
+  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
+  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
 
@@ -125,18 +125,13 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-● PAREI de lei no topo e o relato do achado
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='app/docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     V = "# RELATO — esteira saas-hasner\n\n"
-     assert t.startswith(V)
-     NOVO = """# RELATO — esteira saas-hasner
-     PAREI: lei: hora noturna trabalhada em DIA DE F…
+  Acertar rodape e empurrar · 4m 44s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar com o ultimo push
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (4m 42s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (3h 24m 18s · ↓ 185.0k tokens)
+✢ Schlepping… (3h 29m 48s · ↓ 188.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
