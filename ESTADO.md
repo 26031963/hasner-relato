@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:45:33.**
+**Medido em 29/09/2026 07:51:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
+| `HEAD` local | `b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias` |
 | `origin/main` | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,51 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias
 d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
 53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
 a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30
 67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
-9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
- M app/api/tests/test_bug139_espelho_app_mesma_fonte.py
- M app/api/views.py
- M app/chamados/tests/test_contract_crons.py
- M app/chamados/tests/test_selo_emissor_fio_mudo.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/config/crons.py
- M app/config/crons_duracao.json
-A  app/core/censo_codigo.py
- M app/core/management/commands/gerar_diagrama.py
- M app/core/tests/test_cartorio_0627.py
- M app/core/tests/test_contract_crons_duracao_horario.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
-AM app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M bin/censo_codigo_py.py
- M bin/cron_run.sh
- M bin/deploy_agendado.sh
- M bin/hook_stop_fila1.py
- M bin/sombra.sh
- M bin/sombra_regras_pessoais.py
- M bin/tests/test_hook_nao_cobra_congelado.sh
- M bin/tests/test_hook_stop_saida_valida.sh
- M fatias_agendadas/abono-no-ar/esteira.sh
-?? app/api/tests/test_espelho_app_fonte_e_geometria.py
-?? bin/encadeado.sh
 ?? bin/keepalive.sh
-?? bin/tests/test_furo_encadeado_ao_cartorio.sh
-?? bin/tests/test_hook_parei_so_lei.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -129,6 +99,11 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  FONTE: escala.EscalaColaborador (ativa + data_inicio/data_fim = duas verdades).
+  CASO: [nome] -- EC 1327 (20/09, ATIVA) e EC 1326 (29/09, ATIVA), sobrepostos; reincidencia da classe [nome] (27/08).
+  MUDA: (1) constraint EXCLUDE no Postgres: mesmo colaborador, daterange(data_inicio, data_fim ou infinito) sobreposta = recusado (btree_gist), NOT VALID como a 0041; (2) toda
+  porta que abre vinculo ENCERRA o anterior na mesma transacao, com trilha P14; (3) censo dos leitores de ativa=True: onde houver juiz do dia (vinculo_do_dia pela celula), le o
+  juiz.
   RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
   trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
@@ -152,16 +127,11 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
 
-● Reescrever o selo e rodar os três · 2s
-  ⎿  $ rm -f api/tests/test_zz_sonda_anatomia.py && python3 - <<'PYEOF'
-     import io, py_compile
-     P='api/tests/test_espelho_app_fonte_e_geometria.py'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.find('@freeze_time(\'2026-09-10 15:00:00\')\nclass TurnoAbertoPelaGeometriaTest(_Base):')
-     assert i>0
-     novo = '''@freez…
+● Quando a guarda nasceu e o que ela previa
+  ⎿  $ cd /home/ronald/saas-hasner && git log -1 --format="%h %ad %s" --date=format:'%d/%m %H:%M' 0a657eb0 | cat; echo "=== o que o commit dizia sobre o bloco"; git log -1
+     --format=%B 0a657eb0 | grep -i -A4 -B2 "bloco\|ensaio" | head -30
 
-* Levitating… (59m 25s · ↓ 133.2k tokens)
+· Levitating… (1h 4m 53s · ↓ 146.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
