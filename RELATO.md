@@ -1,5 +1,36 @@
 # RELATO — esteira saas-hasner
 
+# CONTADOR CURADO NA PERGUNTA: `espelho_x_dia_pago` da 09 cai de 29 para **ZERO** (29/09 00:2x)
+
+O contador da S2 comparava `minutos_realizados` do espelho -- `ponto/turnos.py::realizado_do_dia`, batida a
+batida menos o intervalo do vinculo -- contra `DiaPago.horas_trabalhadas`, que e o `p.minutos_trabalhados` do
+MOTOR. Dois juizes, duas perguntas. A diferenca aparecia sempre que o motor aplicasse qualquer regra sobre o
+cru, e apareceu nos dois sentidos:
+
+| caso | espelho | DiaPago | diferenca | causa |
+|---|---|---|---|---|
+| col600 22/09 (comp. 10) | 442 min | 420,63 min | **21,37 min** | a **JANELA DE HE**: a jornada conta do MARCO |
+| col60 26/08 (comp. 09) | 11,08 h | **12,08 h** | **+1,00 h exato** | a **pausa** |
+
+Nas duas pontas o `DiaPago` estava certo. **O defeito era meu**, da S2 de hoje: contador que acusa 65 dia-colab
+por definicao propria e pior que contador nenhum, porque treina a casa a ignora-lo.
+
+A CURA E NA PERGUNTA. O espelho TEM o numero de dinheiro -- `esp['resultado']` e o `ResultadoMes` do motor --,
+e o dia de cada periodo sai da MESMA regra que a lavratura usa (`dia_pago._dia_de`, o dia da ENTRADA). A folga
+trabalhada soma junto, porque a lavratura reparte o mesmo minuto entre `horas_trabalhadas` e
+`horas_folga_trabalhada` (escala certa x sem escala certa, corte 27/09) -- comparar so uma acusaria reparticao
+como divergencia.
+
+PROVA: `porta_export.medir(emp2, 9, 2026)` com o contador curado -> `espelho_x_dia_pago` = **0**, contra **29**
+com a pergunta velha. Competencia exportada, 430 colaboradores, uma competencia inteira de dias: a lavratura e
+o dinheiro do espelho batem **exatamente**.
+
+E NAO E VACUO (o selo teria de morder): a lavratura e um RETRATO do recalculo e o espelho recalcula AGORA. Se o
+cadastro mudar, o DNA for reescrito ou uma cura do motor subir sem novo fechamento, os dois se afastam -- e e
+exatamente isso que "a tela e a folha no mesmo numero" quer dizer. O que eu **nao** fiz foi afrouxar tolerancia
+nem tirar caso da lista para o numero cair.
+
+
 # O-DIA-PAGO S3, 1a TROCA: o extrato parcial LE o `DiaPago`, e o placar cai de 7 para 6 (28/09 23:5x)
 
 O leitor trocado e `relatorios/views.py::extrato_parcial` -- e foi escolhido primeiro nao por ser pequeno, mas
@@ -92,10 +123,19 @@ PRAZO ("prontas antes do export da competencia 10") -- o relogio riscado 10px de
 *"N min antes do marco · nao conta · Art. 4o §2o"* e a Gestao de HE. Enquanto ela nao sobe, a tela mostra
 7,37 h num dia que a folha paga 7,01 h, e e por isso que o item tem prazo.
 
-**O que isso muda no meu plano**: a troca do extrato nao "fecha com contador zero" -- ela fecha com o contador
-**explicado e com o numero publicado**, e o zero passa a depender das telas da O-JANELA-HE, que estao na sua
-ordem viva depois da S3/S4/S5b. Nao mexi no contador para ele zerar: contador que muda de pergunta para
-concordar com o sistema e o oposto do que ele serve para fazer (`bin/tests` § paridade do oraculo, 27/09).
+**E A COMPETENCIA 09, ja exportada, TAMBEM nao zera**: `espelho_x_dia_pago` = **29** em emp2, com a diferenca
+no OUTRO sentido -- `col60 26/08` da espelho 11,08 h x DiaPago **12,08** h, +1,00 h exato, que e a **pausa**.
+Nos dois sentidos o `DiaPago` esta certo e o contador esta errado, e isso fecha o diagnostico: **o contador
+nunca foi zero, porque ele nunca comparou a mesma coisa**. Ele e MEU, da S2 de hoje.
+
+**A cura e na PERGUNTA, nao no numero** (vai no commit seguinte, com a medicao): o espelho TEM o numero de
+dinheiro -- `esp['resultado']` e o `ResultadoMes` do motor --, e o dia de cada periodo sai da MESMA regra que a
+lavratura usa (`dia_pago._dia_de`, o dia da ENTRADA). O contador passa a comparar **dinheiro com dinheiro**, e
+some a folga trabalhada junto porque a lavratura reparte o mesmo minuto entre duas rubricas. Nao e vacuo: a
+lavratura e um RETRATO do recalculo e o espelho recalcula AGORA -- cadastro mudado, DNA reescrito ou cura do
+motor sem novo fechamento afastam os dois, e e isso que "tela e folha no mesmo numero" quer dizer.
+O que eu **nao** fiz foi afrouxar a tolerancia ou tirar caso da lista para o numero cair: contador que muda de
+criterio para concordar com o sistema e o oposto do que ele serve para fazer (a paridade do oraculo, 27/09).
 
 ## Placar e pendencia
 
