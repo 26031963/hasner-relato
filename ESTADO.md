@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:22:01.**
+**Medido em 29/09/2026 18:27:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `08f8ca75 TICKETS: placar do topo` |
-| `origin/main` | `40995328 TICKETS: placar do topo` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `08f8ca75 TICKETS: placar do topo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -99,7 +99,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    de DiaPago por string (lavratura, que é a cura) e virou passe livre para conta de motor com outra sintaxe.
   - O critério (a) casava nome genérico: resultado em relatorios/views.py é o dict do serviço de PDF e periodos = list(qs) em relatorios/services.py são PeriodoAquisitivo de
     férias. Por AST, zero chamada de motor nos dois. É o irmão de ler prosa, com a palavra num nome de variável.
   - tem_rotulo era cego a alias enquanto toca_motor já via.
@@ -126,12 +125,13 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: UI-CAL-COMPETENCIA -- o calendario ganha o modo COMPETENCIA -- hoje ele tem Mes, Quinzena e Semana, e a competencia (21-20, ou o cor
 
-  Pushing do UI-CAL-COMPETENCIA · 8m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log
-     2>&1; echo "rc=$?"; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pu… (8m 56s)
+● Esperar o push do item de UI · 4m 22s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log; git fetch -q origin; echo "faltam=$(git rev-list --count
+     origin/main..HEAD)" (4m 20s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (2h 15m 18s · ↓ 131.9k tokens)
+✢ Schlepping… (2h 20m 48s · ↓ 132.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

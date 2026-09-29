@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 18:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (124.4 MB). Acoes na janela: **1092**.
+**Medido em 29/09/2026 18:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (124.4 MB). Acoes na janela: **1093**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:23:09 | Bash | Esperar o push do item de UI | `cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log; git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |
 | 18:13:03 | Bash | Push do UI-CAL-COMPETENCIA | `cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log 2>&1; echo "rc=$?"; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log` |
 | 18:12:56 | Bash | RELATO do smoke e placar | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() ANC = """O botao **agora aparece**, porque o nucleo foi ao ar as 17:2x e manda a chave. As setas ← → carregam `modo=competencia` quando o modo e ele, e seguem literais `modo=mes` no resto. """ assert t.count(ANC)==1 NOVO = ANC + """ **SMOKE EM PROD, e ele ...` |
 | 18:12:31 | Bash | Render real do partial na casca que o serve | `cd /home/ronald/saas-hasner && docker cp /tmp/smoke_cal2.py saas_ui:/tmp/smoke_cal2.py >/dev/null && timeout 300 docker exec saas_ui python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/smoke_cal2.py').read())" 2>&1 \| grep -v 'objects imported' \| tail -6` |
