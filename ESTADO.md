@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:28:01.**
+**Medido em 29/09/2026 04:33:31.**
 
 | | |
 |---|---|
@@ -103,8 +103,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-  Ran 2 shell commands
-
 ● Sexta vez — e agora com a cura de origem: a regra de "docstring não é código" vira um módulo que serve o selo de host e o do Django, em vez de duas cópias:
 
 ● Write(core/censo_codigo.py)
@@ -129,17 +127,19 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● 3 OK — e a regra de "prosa não conta" agora é um módulo (core/censo_codigo.py) servindo o selo de host e o do Django, em vez de duas cópias que divergiriam. Régua:
 
-● Gate e regua · 1m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; echo "=== gate: $(cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null || echo 'ainda nao')"; date +%H:%M; tail -12
-     fatias_agendadas/abono-no-ar/esteira.out 2>/dev/null; echo "--- regua: $(wc -l < /tmp/regua_042316.log 2>/dev/null) linhas" (1m 21s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 4 shell commands
 
-· Thundering… (3h 23m 17s · ↓ 165.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● O gate disparou — abono-no-ar.done e .resultado existem:
+
+● Resultado do gate
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== resultado:"; cat logs/deploy_agendado/abono-no-ar.resultado 2>/dev/null; echo "=== done:"; cat
+     logs/deploy_agendado/abono-no-ar.done 2>/dev/null; echo "=== log (fim):"; tail -18 logs/deploy_agendado/abono-no-ar.log 2>/dev/null
+
+✻ Waiting for API response · will retry in 16s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

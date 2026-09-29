@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 04:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.8 MB). Acoes na janela: **731**.
+**Medido em 29/09/2026 04:33:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.9 MB). Acoes na janela: **733**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:30:42 | Bash | Resultado do gate | `cd /home/ronald/saas-hasner && echo "=== resultado:"; cat logs/deploy_agendado/abono-no-ar.resultado 2>/dev/null; echo "=== done:"; cat logs/deploy_agendado/abono-no-ar.done 2>/dev/null; echo "=== log (fim):"; tail -18 logs/deploy_agendado/abono-no-ar.log 2>/dev/null` |
+| 04:28:39 | Bash | O gate disparou? | `cd /home/ronald/saas-hasner && sleep 115; echo "=== gate: $(cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null \|\| echo 'ainda nao')"; date +%H:%M; tail -14 fatias_agendadas/abono-no-ar/esteira.out 2>/dev/null; ls logs/deploy_agendado/ \| grep abono` |
 | 04:26:37 | Bash | Gate e regua | `cd /home/ronald/saas-hasner && sleep 115; echo "=== gate: $(cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null \|\| echo 'ainda nao')"; date +%H:%M; tail -12 fatias_agendadas/abono-no-ar/esteira.out 2>/dev/null; echo "--- regua: $(wc -l < /tmp/regua_042316.log 2>/dev/null) linhas"` |
 | 04:24:31 | Bash | Esperar o gate e a regua | `cd /home/ronald/saas-hasner && for i in $(seq 1 10); do if [ -f fatias_agendadas/abono-no-ar/fatia.done ] \|\| grep -qE '^Ran [0-9]+ test' /tmp/regua_042316.log 2>/dev/null; then break; fi; sleep 55; done; echo "=== gate: $(cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null \|\| echo 'ainda nao')"; echo "=== regua: $(grep -cE '^Ran ' /tmp/regua_042316.log 2>/dev/null)"; date +%H:%M; tail -10  ...` |
 | 04:23:10 | Bash | Esmeril e regua do selo da fonte | `cd /home/ronald/saas-hasner && git add app/core/censo_codigo.py app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py && docker run --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app saas-hasner-core:latest sh -c "ruff check . --output-format concise 2>&1\|tail -3; vulture . --exclude migrations,tests --min-confidence 80 --ignore-names exc_type,exc_val,exc_tb,expression,sig,frm 2>&1\|tail -3" 2>&1 \| ...` |
