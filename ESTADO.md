@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:10:45.**
+**Medido em 29/09/2026 00:15:53.**
 
 | | |
 |---|---|
@@ -99,7 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o fim da suite e o carimbo" completed (exit code 0)
 
 ● Background command "Esperar a regua e o carimbo" completed (exit code 0)
 
@@ -123,16 +122,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Esperar (a suite esta longa hoje)" completed (exit code 0)
 
-● Fazer a fixture entrar no TXT · 2s
+● Corrigir a ancora e rodar folha
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io, py_compile
-     P='app/folha/tests/test_porta_do_export.py'
+     P='app/folha/porta_export.py'
      t=io.open(P,encoding='utf-8').read()
-     v = """ colab = Colaborador.objects.create(cpf='[cpf]', nome='C MORDE', empresa=self.emp,
-     posto=posto, situacao='ativo')"""
-     assert t.coun…
+     i=t.index(" # ESTE CONTADOR NASCEU COMPARANDO DUAS PERGUNTAS DIFERENTES")
+     j=t.index(" dif_dp_esp.extend(dias_fora_do_dia_pago(")
+     t = …
 
-* Bootstrapping… (15m 38s · ↓ 43.6k tokens)
+· Bootstrapping… (20m 46s · ↓ 57.8k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

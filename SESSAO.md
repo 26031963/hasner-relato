@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 00:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (107.9 MB). Acoes na janela: **572**.
+**Medido em 29/09/2026 00:15:53.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (108.0 MB). Acoes na janela: **573**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:15:20 | Bash | Corrigir a ancora e rodar folha | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() i=t.index(" # ESTE CONTADOR NASCEU COMPARANDO DUAS PERGUNTAS DIFERENTES") j=t.index(" dif_dp_esp.extend(dias_fora_do_dia_pago(") t = t[:i] + (" # A 7a TESTEMUNHA MORA NUMA FUNCAO PROPRIA (`dias_fora_do_dia_pago`, no topo deste\n" " # ar ...` |
+| 00:14:26 | Bash | Selo morde a funcao; rodar folha inteiro | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() # os imports/vars que sobraram sem uso em `medir` for v in (" from datetime import timedelta as _td\n", " from ponto.services.espelho import autoridade_do_periodo as _autoridade\n", " _um_dia = _td(days=1)\n"): assert t.count(v)==1, v t=t.replace(v,"",1) io.op ...` |
+| 00:13:48 | Bash | Extrair a comparacao para funcao propria | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- """A comparacao vira FUNCAO PROPRIA: uma pergunta, uma funcao, um selo que a morde.""" import io, py_compile P='app/folha/porta_export.py' t=io.open(P,encoding='utf-8').read() i=t.index(" # A JANELA E A DA COMPETENCIA, NAO A DA TELA") j=t.index(" # 6a TESTEMUNHA (E4-CALENDARIO, 28/09)") antigo = t[i:j] assert 'dif_dp_esp.ap ...` |
+| 00:13:02 | Bash | O juiz da retencao pela celula | `grep -n "def motivos_retencao_celula" -A 32 folha/export.py \| head -40` |
+| 00:12:57 | Bash | O que retem o espelho | `grep -rn "def motivos_retencao_espelho" -A 30 folha/*.py \| head -38` |
+| 00:12:49 | Bash | O corpo do portao furo_espelho | `sed -n '485,520p' folha/export.py` |
+| 00:12:45 | Bash | O portao furo_espelho | `grep -n "furo_espelho" -B 3 -A 22 folha/export.py \| head -40` |
+| 00:12:22 | Bash | Rodar o MORDE batendo todo dia | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/tests/test_porta_do_export.py' t=io.open(P,encoding='utf-8').read() v = """ _ec = EscalaColaborador.objects.get(colaborador=colab) _dias = [] _d = _ini while _d <= _fim: if _ec.eh_dia_trabalho(_d): _dias.append(_d) for h, tp in ((7, 'E'), (19, 'S')): Batida.objects.create(colaborador=colab ...` |
+| 00:11:42 | Bash | Rodar o MORDE com a fixture cheia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test folha.tests.test_porta_do_export.PortaDoExportTest.test_MORDE_o_espelho_x_dia_pago_A ...` |
+| 00:11:35 | Bash | Conferir o inicio do caso | `cd /home/ronald/saas-hasner && sed -n '175,200p' app/folha/tests/test_porta_do_export.py` |
+| 00:11:28 | Bash | Fixture com a competencia inteira batida | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='app/folha/tests/test_porta_do_export.py' t=io.open(P,encoding='utf-8').read() i=t.index(" DIA = datetime.date(2026, 9, 10) # dentro da competencia 09 (21/08 a 20/09)") j=t.index(" # O UNIVERSO PRIMEIRO:") novo = ''' # A COMPETENCIA INTEIRA BATIDA, e nao um dia solto: `classificar_export` retem quem  ...` |
+| 00:10:43 | Bash | Fazer a fixture entrar no TXT | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, py_compile P='app/folha/tests/test_porta_do_export.py' t=io.open(P,encoding='utf-8').read() v = """ colab = Colaborador.objects.create(cpf='[cpf]', nome='C MORDE', empresa=self.emp, posto=posto, situacao='ativo')""" assert t.count(v)==1 n = """ # `codigo_dominio` E `horas_trabalhadas` NAO sao enfeite de fixture: `medir` so varre q ...` |
 | 00:10:16 | Bash | Os demais portoes do entra | `sed -n '425,480p' folha/export.py` |
 | 00:10:08 | Bash | O que faz um colab ENTRAR no export | `grep -n "def classificar_export" -A 45 folha/export.py \| head -55` |
 | 00:10:00 | Bash | O universo que medir varre | `sed -n '46,80p' folha/porta_export.py` |
@@ -571,14 +583,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:16:19 | Edit |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
 | 12:16:14 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
 | 12:16:08 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
-| 12:14:58 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
-| 12:14:52 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
-| 12:14:48 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
-| 12:14:43 | Bash | Achar a linha do E4 no BACKLOG | `cd /home/ronald/saas-hasner && grep -n 'NAO deployada' app/docs/BACKLOG.md \| head -2` |
-| 12:14:35 | Bash | Contar linhas do BACKLOG | `cd /home/ronald/saas-hasner && grep -c . app/docs/BACKLOG.md` |
-| 12:14:31 | Bash | Testar se o Bash voltou | `cd /home/ronald/saas-hasner && python3 -c "print('ping')"` |
-| 12:14:24 | Bash | Compilar e resolver o item do E4 | `cd /home/ronald/saas-hasner && python3 -c " import io,json,py_compile py_compile.compile('app/config/crons.py', doraise=True) p3='app/docs/PENDENTES_RONALD.json' d=json.load(io.open(p3,encoding='utf-8')) n=len(d) d=[x for x in d if x.get('id')!='E4-JA-FECHOU-MANTER-OU-REVERTER'] io.open(p3,'w',encoding='utf-8').write(json.dumps(d,ensure_ascii=False,indent=1)) print('crons ok; PENDENTES %d -> %d (E ...` |
-| 12:14:19 | Edit |  | `/home/ronald/saas-hasner/app/config/crons.py` |
-| 12:14:11 | Read |  | `/home/ronald/saas-hasner/app/config/crons.py` |
-| 12:14:05 | Bash | Casa do command e decisoes registradas | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile, json P='app/config/crons.py' t=io.open(P,encoding='utf-8').read() anc=" 'e6_oraculo':" assert t.count(anc)==1 novo = """ # BACKFILL DE OBRA, e obra nao vira rotina (28/09, O-DIA-PAGO S1): `lavrar_dias_pagos` existe para # medir e conferir o universo de uma competencia durante a construcao do `DiaPago` ...` |
-| 12:13:47 | Bash | Casa do command, E4 mantida, regua | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile, json P='app/config/crons.py' t=io.open(P,encoding='utf-8').read() anc=" 'e6_oraculo':" assert t.count(anc)==1 novo = """ # BACKFILL DE OBRA, e obra nao vira rotina (28/09, O-DIA-PAGO S1): `lavrar_dias_pagos` existe para # medir e conferir o universo de uma competencia durante a construcao do `DiaPago` ...` |
