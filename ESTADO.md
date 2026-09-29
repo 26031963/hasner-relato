@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 09:28:01.**
+**Medido em 29/09/2026 09:33:31.**
 
 | | |
 |---|---|
@@ -111,6 +111,8 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
+  Ran 5 shell commands
+
 ❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
 
   Read 1 file, ran 25 shell commands
@@ -135,14 +137,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Medir o contador de emp4 09 depois do retrato" completed (exit code 0)
 
-● O hash é estável?
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/hash2.py <<'PYEOF'
-     import hashlib, time
-     from colaboradores.models import Empresa
-     from ponto.models import FechamentoMensal
-     _fora = {'id','colaborador','colaborador_id','mes','ano','criado_em','atualizado_em','aprovado_em','aprovado_por','aprovado_por_id'}…
+● Esperar tudo · 42s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do [ "$(grep -c '^== emp' $S/breakdown2.log)" -ge 6 ]
+     && break; sleep 10; done; grep -v "^93 objects" $S/breakdown2.log | tail -6; echo "=== quem escreve"; grep "TESTE" $S/quem_e… (41s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (2h 41m 53s · ↓ 256.8k tokens · thinking)
+· Levitating… (2h 47m 23s · ↓ 261.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
