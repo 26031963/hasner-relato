@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 13:34:01.**
+**Medido em 29/09/2026 13:39:31.**
 
 | | |
 |---|---|
@@ -133,7 +133,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   — aditivo, não toca o gravado.
 
 ✻ Cooked for 9m 45s · done 12:21 PM · 5 shells still running
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           new task? /clear to save 604.4k tokens
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ ! recalcula a 10; e relavra as duas
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
