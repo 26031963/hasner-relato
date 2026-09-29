@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:36:31.**
+**Medido em 29/09/2026 19:41:57.**
 
 | | |
 |---|---|
@@ -125,18 +125,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-  Acertar rodape e empurrar · 4m 44s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar com o ultimo push
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@a… (4m 42s · 2 lines)
+● Esperar o push da cura · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ft.log; git fetch -q origin; echo "faltam=$(git rev-list --count
+     origin/main..HEAD)" (3s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (3h 29m 48s · ↓ 188.4k tokens)
+· Schlepping… (3h 35m 14s · ↓ 188.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
