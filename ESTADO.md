@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:37:46.**
+**Medido em 29/09/2026 10:43:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
-| `origin/main` | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `89a8cf3f A parte B da O-JANELA-HE vira B1 (LEITURA) e B2 (AUTORIZAR), com posicoes diferentes` |
+| `origin/main` | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+89a8cf3f A parte B da O-JANELA-HE vira B1 (LEITURA) e B2 (AUTORIZAR), com posicoes diferentes
+24a7e51e Registrar a O-JANELA-HE parte B: a tela e o portao da L-097, com prazo
 5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)
 d3d6c434 As 39 divergencias da competencia 10 tem UMA causa, e ela e o cartorio das 06:28 -- nao a lavratura
 ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07
-02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo
-c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
 ```
 
 ## `git status --short`
@@ -42,6 +42,7 @@ c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
  M app/colaboradores/tests/test_calendario_le_dia_pago.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
+ M app/colaboradores/tests/test_fase_12x36_tela.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/colaboradores/views_fase.py
  M app/escala/services/fase_na_tela.py
@@ -50,6 +51,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/ponto/services/fechamento.py
  M app/ponto/tests/test_retrato_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/escala/tests/test_inicio_do_vinculo_cobre_o_dia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -106,40 +108,40 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  12x36, turno inteiro deslocado > 3 h em >= 3 dias, folga trabalhada recorrente no mesmo dia da semana, vinculos sobrepostos) gera PROPOSTA pronta; admin Aceita pela porta
-  unica de vinculo (VINCULO-LINHA-DO-TEMPO) com trilha, ou Nao com ciencia. Nada grava sem clique.
-  ABSORVE: D3 haiku-propoe-escala (padrao_real/propor_escala, 10/09), fase_sugerida do wizard, lista CADASTRO x REALIDADE (L-084), esmeril A1, O-FOLGA-DIA-ERRADO.
-  GOLDEN: caso [nome] (noturno cadastrado x diurno nos pares; vinculo duplo) + 12x36 ancora invertida, 6x1 meio periodo, troca de turno.
-  segue a fila; PAREI so em lei ou !
-
-  Searched for 4 patterns, ran 6 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-❯ ADENDO ao VINCULO-LINHA-DO-TEMPO (mesma obra, nao e bloco novo). Leis: L-092, L-096, corte 27/08 correcao retroativa em sequencia.
-  1. O wizard "desde o inicio do vinculo" hoje le o vinculo NOVO (ofereceu 21/09): passa a oferecer o inicio do vinculo que COBRE o dia errado ([nome]: EC 934, 21/07).
-  2. [nome]: reescrever a linha do tempo desde 21/07 como 12x36 06:00-18:00 na fase dos pares (ancora 28/09), absorvendo 934, 1326 e 1327 numa linha so, com trilha; regerar e
-  re-julgar celulas 21/07->hoje. FechamentoMensal das competencias exportadas NAO muda (L-092); a diferenca espelho x pago de cada competencia sai como Pauta DP com os dois
-  numeros.
-  3. PRONTO: espelho de 01-19/09 sem espuria nos dias pares; hash do FechamentoMensal identico antes/depois; Pauta DP publicada com as horas.
-     aval de vinculo/escala retroativo !
-
-  Searched for 4 patterns, read 2 files, ran 27 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 2 patterns, read 1 file, ran 10 shell commands
-
 ● Agora os dois selos, um por porta:
 
-● Fixture do teste de vinculo de hoje
-  ⎿  $ sed -n '1,60p' colaboradores/tests/test_vinculo_linha_do_tempo.py
+  Searched for 1 pattern, listed 1 directory, ran 10 shell commands
 
-✶ Puttering… (29m 26s · ↓ 81.5k tokens)
+❯ REGISTRAR NO BACKLOG (so registro, nao construir): O-JANELA-HE parte B (TELAS+PORTAO), estado "registrada", posicao: depois das telas ja previstas na ORDEM VIVA (ultimo item
+  antes do export da 10), PRAZO = antes do export da 10. Lei: L-097; nenhuma lei nova.
+  ITENS: (1) coluna Saida antecipada + Atraso no espelho e no lote PDF lendo DiaPago (E4/O51b); (2) relogio riscado no marco + tooltip "N min antes do marco · nao conta · Art. 4o
+  §2o" no espelho e PDF; (3) aba Gestao de HE com Autorizar/Nao, permissao autorizar_he, trilha por dia; (4) porta_export.medir ganha he_pendente esperado 0; (5) aviso ao admin
+  na UI quando o dia tem HE fora da janela pendente. RED: os 5 da L-097 + selo zero leitor com derivacao propria de HE.
+  segue a fila; PAREI so em lei ou !
+
+  Ran 6 shell commands
+
+❯ REGISTRAR NO BACKLOG (so registro, nao construir): duas linhas. Lei: L-097; nenhuma lei nova.
+  O-JANELA-HE parte B1 (LEITURA), posicao na ORDEM VIVA: imediatamente apos S3, antes da S4. Itens: coluna Saida antecipada + Atraso no espelho e no lote PDF lendo DiaPago
+  (E4/O51b); relogio riscado no marco + tooltip "N min antes do marco · nao conta · Art. 4o §2o" no espelho e PDF; aviso ao admin quando o dia tem HE fora da janela sem decisao;
+  porta_export.medir ganha he_pendente esperado 0. RED: 06:40/07:00 -> coluna 0 + relogio riscado; export com 1 pendente TRAVADO. Selo: zero leitor com derivacao propria de HE.
+  O-JANELA-HE parte B2 (AUTORIZAR), posicao: imediatamente apos S4, antes de O-HAIKU-INVESTIGA. Itens: aba Gestao de HE com Autorizar/Nao, permissao autorizar_he, trilha por dia
+  (quem, quando, motivo, antes/depois); Autorizar re-lavra o DiaPago do dia no evento; Nao = padrao + ciencia. RED: dia autorizado -> HE 20; autorizar 2x = 1 trilha; pendente
+  zerado libera o export. PRAZO das duas: antes do export da 10.
+  segue a fila; PAREI so em lei ou !
+
+● Registrar B1 e B2 substituindo a parte B
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     B = 'docs/BACKLOG.md'
+     ls = io.open(B, encoding='utf-8').read().split('\n')
+     i = [k for k, l in enumerate(ls) if l.startswith('| O-JANELA-HE parte B (TELAS+PORTAO) |')]
+     assert len(i) == 1, i
+     b1 = ('| O-JANELA-HE parte B1 (LEITURA) | **REGISTRADA…
+
+· Puttering… (34m 41s · ↓ 99.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
