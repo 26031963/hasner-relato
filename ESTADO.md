@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:32:31.**
+**Medido em 29/09/2026 10:37:46.**
 
 | | |
 |---|---|
@@ -39,9 +39,16 @@ c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
 ## `git status --short`
 
 ```
+ M app/colaboradores/tests/test_calendario_le_dia_pago.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/colaboradores/views_fase.py
+ M app/escala/services/fase_na_tela.py
+ M app/ponto/management/commands/lavrar_dias_pagos.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/services/fechamento.py
+ M app/ponto/tests/test_retrato_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,10 +106,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ REGISTRAR NO BACKLOG (so registro, nao construir): obra O-HAIKU-INVESTIGA, estado "registrada", posicao na ORDEM VIVA: depois da O-DIA-PAGO S4, antes da S5b. Linha em
-  PROMPTS.md (L-010).
-  O QUE E: o Haiku ganha 3 ferramentas de LEITURA -- linha_do_tempo_vinculo(colab), dia_a_dia(colab, janela) [escala plantao/folga, batidas, celula, DiaPago],
-  celula_x_regra(colab, janela) -- e o metodo hipotese->medir->reformular; + juiz em lote DESVIO-DE-CADASTRO (cron, contador com dono): desvio SISTEMATICO (paridade real < 70% no
   12x36, turno inteiro deslocado > 3 h em >= 3 dias, folga trabalhada recorrente no mesmo dia da semana, vinculos sobrepostos) gera PROPOSTA pronta; admin Aceita pela porta
   unica de vinculo (VINCULO-LINHA-DO-TEMPO) com trilha, ou Nao com ciencia. Nada grava sem clique.
   ABSORVE: D3 haiku-propoe-escala (padrao_real/propor_escala, 10/09), fase_sugerida do wizard, lista CADASTRO x REALIDADE (L-084), esmeril A1, O-FOLGA-DIA-ERRADO.
@@ -129,10 +132,14 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler grade_da_celula
-  ⎿  $ sed -n "$(grep -n 'def grade_da_celula' escala/services/leitor_celula.py | cut -d: -f1),+70p" escala/services/leitor_celula.py
+  Searched for 2 patterns, read 1 file, ran 10 shell commands
 
-✢ Puttering… (24m 11s · ↓ 61.7k tokens · thinking)
+● Agora os dois selos, um por porta:
+
+● Fixture do teste de vinculo de hoje
+  ⎿  $ sed -n '1,60p' colaboradores/tests/test_vinculo_linha_do_tempo.py
+
+✶ Puttering… (29m 26s · ↓ 81.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
