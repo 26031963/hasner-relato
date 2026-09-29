@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 13:45:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **915**.
+**Medido em 29/09/2026 13:50:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (119.5 MB). Acoes na janela: **912**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -922,6 +922,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:54:57 | Bash | A badge mudou de significado para quem tem credito parcial? | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/credito.py <<'PYEOF' # A BADGE DE ATRASO MUDOU DE SIGNIFICADO PARA QUEM TEM CREDITO PARCIAL? # O DiaPago grava o atraso POS-credito (`dia_pago.lavrar`: max(m - usa, 0)); o motor devolve o CRU. # Quantos dia-colab tem `credito_parcial_min` na lavratura da 09 e da 10? fr ...` |
 | 01:54:31 | Bash | O que o pdf faz com os periodos | `echo '== o que o pdf_espelho monta com periodos (490-515):'; sed -n '466,500p' relatorios/pdf_espelho.py` |
 | 01:52:30 | Bash | Acompanhar o push | `cd /home/ronald/saas-hasner && sleep 115; tail -7 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"; pgrep -f 'git push' >/dev/null && echo 'push rodando' \|\| echo 'push terminou'` |
-| 01:50:29 | Bash | Acompanhar o push | `cd /home/ronald/saas-hasner && sleep 115; tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
-| 01:48:23 | Bash | Esperar o push em primeiro plano | `cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -8 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"; git log --oneline -1 origin/main` |
-| 01:46:23 | Bash | Acompanhar o push | `cd /home/ronald/saas-hasner && sleep 115; tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4jk97zf7.output 2>/dev/null; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
