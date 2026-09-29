@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:42:01.**
+**Medido em 28/09/2026 22:47:31.**
 
 | | |
 |---|---|
@@ -32,7 +32,10 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/calendario.py
+ M app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/RELATO.md
+ M app/ponto/services/dia_decidido.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -86,41 +89,41 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Referenced file config/crons.py
+  ⎿  Read ponto/management/commands/e6_oraculo.py (182 lines)
+  ⎿  Referenced file ponto/services/espelho.py
+  ⎿  Referenced file escala/models.py
 
-❯ reordena e empurra so o hook; calendario fica local ate meu smoke. HOOK-PAREI-DA-FILA: o hook so libera com PAREI de item da FILA 1 viva do bloco OBRAS; PAREI de item
-  CONGELADO/fila 2 (ex. smoke-da-UI-GRADE-CALENDARIO) nao para a fila 1 e sai do topo para a secao do item. RED: com o PAREI do calendario no topo, o hook devolve block "siga:
-  O-DIA-PAGO S3". Depois S3 leitor a leitor, sem pergunta no fim do turno. segue a fila; PAREI so em lei ou !
+● Task "Esperar o veredito da suite completa" still running in background
 
-  Pushed to main, ran 3 shell commands
+● Task "Esperar o veredito da regua" still running in background
 
-❯ aval Ronald: depois do hook, FILA 1 INTEIRA ate o fim, sem voltar a mim. Leis: L-095, L-096, L-097. Nenhuma lei nova.
-  2. O-DIA-PAGO S3: os 8 leitores, um a um, cada troca tirando uma linha do placar e com espelho_x_dia_pago = 0.
-  3. O-DIA-PAGO S4: recalcular deixa de existir (absorve E5-FINAL).
-  4. O-DIA-PAGO S5b: pareamento por marco, DIFF por rubrica e por colab com a causa nomeada -> PAREI para o meu ! da troca.
-  5. Enquanto espera o !, O-JANELA-HE telas (os 7 resultados observaveis) em sombra -> PAREI para o meu smoke.
-  Cada item fecha com commit por path, push e prova no RELATO, e o proximo comeca na MESMA resposta. PROIBIDO: fechar turno com pergunta, reescopar, fila 2.
-  segue a fila; PAREI so em lei ou !
+● Task "Esperar o DIFF do apply" still running in background
 
-❯ UI-GRADE-CALENDARIO smoke Ronald: REPROVADO no chip de ausencia. Leis: L-096 (fila 2; entra apos o leitor da S3 em curso, sem parar a S3). Nenhuma lei nova.
-  FONTE: templates/colaboradores/partials/_calendario_grade.html (chip de ausencia), commit guardado em tmp-ui.
-  MUDA: chip em 2 linhas fixas: linha 1 = SVG + rotulo curto do tipo ("Atestado") inteiro, sem reticencia; linha 2 = "->DD/MM" do fim. Rotulo longo so no title.
-  RED: celula de 132px com atestado ate 04/10 mostra "Atestado" inteiro e "->04/10" na 2a linha, nas duas cascas, chromium 1366.
-  PRONTO: print no RELATO; push so com meu novo smoke.
-  segue a fila; PAREI so em lei ou !
+● Task "Esperar o DIFF" still running in background
 
-● Chip de ausencia em duas linhas fixas
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """UI-GRADE chip de ausencia: 2 linhas FIXAS -- linha 1 = SVG + rotulo INTEIRO, linha 2 = ->DD/MM."""
-     import io
-     P='app/templates/colaboradores/partials/_calendario_grade.html'
-     t=io.open(P,encoding='utf-8').read()
-     # o rotul…
+● Task "Publicar o PAREI e rodar a regua" still running in background
 
-· Compacting conversation… (38m 0s · ↓ 17.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 86%
+● Task "Esperar a regua" still running in background
+
+● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
+
+● Task "Curar a saida do hook e provar" still running in background
+
+● Task "Selo por comportamento, nos dois caminhos" still running in background
+
+● Task "Publicar o RED e rodar a regua" still running in background
+
+● Task "Esperar a regua do hook" still running in background
+
+● Agora o chip lê o nome curto, guarda a frase no title, e ganha âncoras estruturais para o selo:
+
+● Campos da Ausencia
+  ⎿  $ sed -n "$(grep -n 'class Ausencia' ponto/models.py | head -1 | cut -d: -f1),+200p" ponto/models.py | grep -n "= models\." | head -30
+
+✢ Sprouting… (43m 30s · ↓ 34.1k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            0% until auto-compact
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
