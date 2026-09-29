@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:361 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:392 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 14:01:01.**
+**Medido em 29/09/2026 14:06:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `29670805 O espelho_x_dia_pago saiu de 0 para 1 e 4, e conferi que nao fui eu` |
+| `HEAD` local | `af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,22 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+af743fb0 Os dois contratos me pegaram na cura do contador cego, e os dois estavam certos
+919d184c DIFF do recalculo da 10 na SOMBRA, publicado ANTES do apply -- e a 09 intacta
+d759f44b DINHEIRO-EM-COMPETENCIA-ABERTA: lei permanente, e ela revoga o meu proprio PAREI
 29670805 O espelho_x_dia_pago saiu de 0 para 1 e 4, e conferi que nao fui eu
 cd1adb17 O PAREI diz o tamanho novo do contador: 09 = 1 + 37, 10 = 39 + 43
-5d9a2ebf O contador que o seu portao usa era cego a 80 colaboradores -- entre eles os DEMITIDOS
-d65a2d26 TICKETS: placar e rodape com o push 9b446740
-5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -102,17 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  quem entra no TXT".
-
-  Duas coisas que conferi e não eram minhas
-
-  - espelho_x_dia_pago saiu de 0 para 1 (09) e 4 (10). Não foi a troca da linha do dia: dias_fora_do_dia_pago chama autoridade_do_periodo por conta própria e não lê nenhuma chave
-    que eu adicionei. É IDADE — eu curei o vínculo do col616 às 08:53 (cadastro mudado) e chegaram batidas novas.
-  - O fatia.done parou de mentir duas vezes hoje: primeiro o OK do gate antigo, agora o espelho_x_dia_pago = 0 e o contador cego.
-
-  PAREI: o ! de dinheiro do RECALCULO-DA-10 | espera Ronald — e a linha do topo agora diz o tamanho novo: 09 = 1+37, 10 = 39+43. O aval tem de ser dado sobre o número certo, não
-  sobre o recorte.
-
   push9 em voo com seis commits (a cura do contador, a da lavratura da folga trabalhada, os dois PAREI e o placar). Falta relavrar a 10 para as linhas ganharem as rubricas curadas
   — aditivo, não toca o gravado.
 
@@ -131,11 +117,22 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Lei nova e permanente. Registro no CLAUDE.md e executo — o ! agora é estrutural, não por caso.
 
-● DIFF na sombra, com a lavra reposta no mesmo container
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; nohup bin/sombra.sh --com-a-sombra
-     "diff10-do-aval" -- docker run --rm --cpuset-cpus 4-7 --cpus 2 --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env …
+  Ran 19 shell commands
 
-✢ Nucleating… (4m 35s · ↓ 12.2k tokens · thinking)
+● Background command "Aguardar o fim do apply (45s)" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Resultado do apply" completed (exit code 0)
+
+● Background command "Aguardar o apply" completed (exit code 0)
+
+● O apply passou e a 09 não se mexeu. Agora o carimbo da 09 vai dizer quem a mexeu antes.
+
+● Running 1 shell command…
+  ⎿  $ docker exec saas_core python manage.py tenant_command carimbo_gravado --schema=juliani --empresa 2 --mes 9 --ano 2026 2>&1 | grep -v "objects imported" | tail -6
+
+· Nucleating… (10m 5s · ↓ 27.2k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
