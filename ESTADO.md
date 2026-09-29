@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:11:31.**
+**Medido em 28/09/2026 21:17:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
  M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
+?? bin/tests/test_hook_stop_saida_valida.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -85,6 +86,10 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      "for PostToolUse": {
+        "hookEventName": "\"PostToolUse\"",
+        "additionalContext": "string (optional)"
+      },
       "for PostToolBatch": {
         "hookEventName": "\"PostToolBatch\"",
         "additionalContext": "string (optional)"
@@ -96,7 +101,7 @@ RELATO, com a lista de nomes do banco como autoridade._
     }
   }
 
-✻ Crunched for 1h 30m 16s · done 8:27 PM · 7 shells still running
+✻ Crunched for 1h 30m 16s · done 8:27 PM · 8 shells still running
 
 ❯ HOOK-STOP-SAIDA-VALIDA · Leis: L-096. Nenhuma lei nova.
   FONTE: bin/hook_stop_fila1.py (saida para o Stop do Claude Code)
@@ -106,23 +111,19 @@ RELATO, com a lista de nomes do banco como autoridade._
   PRONTO: RELATO com o RED e commit por path.
   segue a fila; PAREI so em lei ou !
 
-● Curar a saida do hook e provar · 1m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='bin/hook_stop_fila1.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """def _libera(motivo='', item=None):
-     _trilha('ALLOW', motivo, item)
-     print(json.dumps({'decision': 'allow', 'reason': motivo}))
-     sys.… (1m 38s · 2 lines)
+● Selo por comportamento, nos dois caminhos · 3m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > bin/tests/test_hook_stop_saida_valida.sh <<'EOF'
+     #!/usr/bin/env bash
+     # SELO: a saida do hook do Stop e JSON do SCHEMA, ou NADA (HOOK-STOP-SAIDA-VALIDA, ordem Ronald 28/09 20:4x).
+     #
+     # O schema do Stop conhece bloqueio com duas chaves e conhece o SILENCIO. Nao e… (3m 36s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Architecting… (2m 14s · ↓ 2.0k tokens)
+✢ Architecting… (7m 44s · ↓ 7.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
