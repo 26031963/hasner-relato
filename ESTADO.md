@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:52:40.**
+**Medido em 28/09/2026 22:58:01.**
 
 | | |
 |---|---|
@@ -90,6 +90,9 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Referenced file config/crons.py
+  ⎿  Read ponto/management/commands/e6_oraculo.py (182 lines)
+  ⎿  Referenced file ponto/services/espelho.py
   ⎿  Referenced file escala/models.py
 
 ● Task "Esperar o veredito da suite completa" still running in background
@@ -116,13 +119,10 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 
 ● Agora o chip lê o nome curto, guarda a frase no title, e ganha âncoras estruturais para o selo:
 
-  Rodar so o selo de navegador, verboso
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; time docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env \
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
-     saas-hasner-core:l…
+● Soma_da_competencia e regua
+  ⎿  $ tail -12 /tmp/regua_225509.log 2>/dev/null; echo '---'; ls -la /tmp/regua_225509.log
 
-✻ Sprouting… (48m 40s · ↓ 54.7k tokens)
+✢ Sprouting… (54m 0s · ↓ 66.6k tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
