@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 17:34:31.**
+**Medido em 29/09/2026 17:40:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `958ac42d TICKETS: rodape e placar com o ultimo push do mundo` |
-| `origin/main` | `9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `958ac42d TICKETS: rodape e placar com o ultimo push do mundo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -125,13 +125,13 @@ b056b4f7 No ar, com smoke -- e o smoke achou que o ramo curado nao e percorrido 
 
 ● Background command "Push dos 27 commits" completed (exit code 0)
 
-● Pushing com o rodape acertado · 7m 26s
-  ⎿  $ cd /home/ronald/saas-hasner && git commit -q -m "TICKETS: rodape e placar com o ultimo push do mundo
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && echo ok; timeout 3400 git push origin main >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21… (7m 25s · 2 lines)
+● Esperar o fim do push · 2m 42s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; tail -6
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3d.log; git fetch -q origin; echo "faltam=$(git rev-list --count
+     origin/main..HEAD)" (2m 41s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (1h 27m 48s · ↓ 115.8k tokens)
+✢ Schlepping… (1h 33m 18s · ↓ 116.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
