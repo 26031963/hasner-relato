@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:196 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:217 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:57:01.**
+**Medido em 29/09/2026 02:02:31.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/RELATO.md
  M app/relatorios/pdf_espelho.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+ M bin/tests/test_hook_teto_nao_conta_espera.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,15 +98,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● O selo agora cala na prosa e morde o código — provado nos dois sentidos. Régua completa, em primeiro plano:
-
-  Ran 4 shell commands
-
-● Os dois selos mordem código real e calam na prosa — provado em ambos. Régua completa, primeiro plano:
-
-  Ran 5 shell commands
 
 ● Background command "Regua completa em primeiro plano" completed (exit code 0)
 
@@ -123,18 +115,27 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● PUSH: 0a918855..2652ec8d — leitor #2 no remoto. Sigo para o leitor #3 com o censo já lido:
 
-  Regua e leitura do leitor 3 · 34s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l3a.log 2>&1 & sleep 90; ls -t /tmp/regua_*.log | head -1; echo '---
-     enquanto roda: o que o PDF faz com cada period… (34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 9 shell commands
 
-✢ Thundering… (52m 17s · ↓ 64.2k tokens)
+● O selo agora é verde com e sem suite rodando — ele não depende mais do que acontece fora dele. Régua:
+
+  Ran 2 shell commands
+
+● Background command "Esperar o push em primeiro plano" completed (exit code 0)
+
+● O selo de CPUSET pegou uma violação minha, de um minuto antes: eu rodei um container de teste com $TESTE_DOCKER vazio (não tinha feito source bin/recursos.sh naquele shell),
+  então ele subiu sem cpuset, nos núcleos do cliente. Container morto, selo verde. É a lei do 22/09 funcionando contra mim, e registro:
+
+● Esperar a suite · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_020049.log 2>/dev/null; then break; fi; sleep 50; done; grep -E '^Ran
+     [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_020049.log | head -4; echo "linhas: $(wc -l < /tmp/regua_020049.log)"
+
+✢ Thundering… (57m 47s · ↓ 67.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
