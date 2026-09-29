@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 18:38:31.**
+**Medido em 29/09/2026 18:44:01.**
 
 | | |
 |---|---|
@@ -124,16 +124,16 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Medir os contadores da porta em prod · 26s
+  Medir os contadores da porta em prod · 5m 58s
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_porta.py <<'PYEOF'
      # -*- coding: utf-8 -*-
      """Contadores da porta do export -- LEITURA (o `medir` nao escreve; provado no item)."""
      from colaboradores.models import Empresa
      from folha.porta_export import medir
-     CHAVES = ('fechamento_x_soma_dias_pagos… (26s)
+     CHAVES = ('fechamento_x_soma_dias_pagos… (5m 56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (2h 31m 48s · ↓ 149.2k tokens)
+✢ Schlepping… (2h 37m 18s · ↓ 149.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
