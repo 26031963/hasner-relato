@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:40:46.**
+**Medido em 29/09/2026 01:46:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
+| `HEAD` local | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
 | `origin/main` | `0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,37 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
 0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
 b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha
 73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
-a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/calendario.py
- M app/colaboradores/tests/test_calendario_badge_minutos.py
- M app/colaboradores/tests/test_calendario_carimbo_intra.py
-A  app/colaboradores/tests/test_calendario_le_dia_pago.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/colaboradores/tests/test_calendario_um_juiz.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/core/juizes.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/folha/porta_export.py
- M app/ponto/services/dia_pago.py
- M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-A  bin/censo_codigo_py.py
- M bin/hook_stop_fila1.py
- M bin/selo_espera_por_processo.sh
- M bin/tests/test_cpuset_de_teste.sh
-A  bin/tests/test_hook_teto_nao_conta_espera.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -112,12 +95,6 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       1 # -*- coding: utf-8 -*-
-       2 """CENSO da ferramenta de procurar processo por nome, dentro dos `.py` de `bin/`. -> stdout
-       3
-       4 Chamado por `bin/selo_espera_por_processo.sh`, que faz o censo dos `.sh` linha a linha. Existe como arquivo
-       5 proprio, e nao como heredoc dentro do selo, porque heredoc-dentro-de-heredoc quebra na primeira linha que
-       6 parece um terminador -- tentei e corrompi o selo.
        7
        8 SO A PROSA SAI, NAO TODA STRING. A primeira versao disto pulava todo token de string e o selo **parou de
        9 morder**: o nome da ferramenta, em codigo real, E uma string (`subprocess.run(["...", "-f", ...])`). Selo que
@@ -139,17 +116,23 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 
 ● Background command "Esperar a suite em primeiro plano" completed (exit code 0)
 
-● Acompanhar a suite · 1m 16s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_013251.log 2>/dev/null | head -5; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l2.log (1m 14s)
+  Searched for 1 pattern, ran 10 shell commands
+
+● Background command "Esperar a suite" completed (exit code 0)
+
+● Régua VERDE com carimbo: 8.631 testes OK. Commit do leitor #2 + as três curas de selo, por path:
+
+● Placar, rodape e push em primeiro plano · 1m 44s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -1; bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1; git commit -q --amend --no-edit
+     -- app/colaboradores/services/calendario.py app/ponto/services/dia_pago.py app/folha/porta_export.py app/core/juizes.py app/co… (1m 43s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Thundering… (36m 1s · ↓ 52.8k tokens)
+✢ Thundering… (41m 17s · ↓ 56.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

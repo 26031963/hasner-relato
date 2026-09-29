@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 01:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.3 MB). Acoes na janela: **657**.
+**Medido em 29/09/2026 01:46:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (109.4 MB). Acoes na janela: **659**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:44:16 | Bash | Placar, rodape e push em primeiro plano | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -1; bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -1; git commit -q --amend --no-edit -- app/colaboradores/services/calendario.py app/ponto/services/dia_pago.py app/folha/porta_export.py app/core/juizes.py app/colaboradores/tests/test_calendario_le_dia_pago.py app/colaboradores/tests/test_calendario_um_juiz.py a ...` |
+| 01:44:07 | Bash | Commit do leitor 2 e das curas de selo | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_l2.txt <<'EOF' O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a O calendario parou de pedir `autoridade_do_periodo` a cada abertura de tela e passou a LER o `DiaPago`. A E4 (28/09) ja tinha tirado  ...` |
+| 01:41:31 | Bash | Acompanhar a suite | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_013251.log 2>/dev/null \| head -5; echo "linhas: $(wc -l < /tmp/regua_013251.log)"; head -3 .regua_stamp` |
 | 01:39:29 | Bash | Acompanhar a suite | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_013251.log 2>/dev/null \| head -5; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_l2.log` |
 | 01:37:27 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_013251.log 2>/dev/null \| head -5; echo "linhas: $(wc -l < /tmp/regua_013251.log)"` |
 | 01:35:21 | Bash | Esperar a suite | `cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_013251.log 2>/dev/null; then break; fi; sleep 55; done; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_013251.log \| head -5; echo "linhas: $(wc -l < /tmp/regua_013251.log)"` |
@@ -666,4 +669,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:47:28 | Bash | Assinatura da porta e o carimbo do anterior | `grep -n 'def regenerar_celulas_vinculo' -A 26 ponto/management/commands/gerar_celulas.py \| head -34 && echo "=== _vigencia_anterior ===" && grep -n '_vigencia_anterior\\|_ancora_anterior' escala/signals.py escala/models.py \| head` |
 | 13:47:21 | Bash | Resto do signal e onde mora a porta | `sed -n '63,95p' escala/signals.py && echo "=== a porta ===" && grep -rn 'def regenerar_celulas_vinculo' escala/ \| head -2` |
 | 13:47:13 | Bash | Ler a porta de regeneracao e o signal | `grep -n 'def regenerar_celulas_vinculo' -A 22 escala/services/regeneracao.py \| head -30 && echo "=== signal ===" && grep -n '_ec_vigencia_regenera_celulas' -A 28 escala/signals.py \| head -36` |
-| 13:44:55 | Bash | Commitar e empurrar a S5a | `cd /home/ronald/saas-hasner && cat > /tmp/msg_s5.txt <<'EOF' O-DIA-PAGO S5a: o calculador na forma do oraculo existe, e o DIFF por rubrica ja esta na mesa O pacote ponto/calculador/ tem as tres pecas do corte de 12:1x, e a fronteira entre elas e o ponto da obra: nucleo.py -- batidas -> pares -> minutos e PAUSA por dia, e nao sabe nada de rubrica. NAO E CODIGO NOVO: e a derivacao do e6_oraculo, que ...` |
