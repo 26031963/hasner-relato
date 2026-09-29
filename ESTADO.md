@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:10:45.**
+**Medido em 29/09/2026 15:15:45.**
 
 | | |
 |---|---|
@@ -102,37 +102,37 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - Corte de 23/09 19:2x — sem fechamento gravado, mostrar o número do motor rotulado (sem apuracao ainda), porque zero seria "perda de informação disfarçada de fonte única". A
-    razão está escrita no código.
-  - L-095 / selo da S3 — "0 leitor de dinheiro chamando motor", e o selo varre AST: ele conta o caminho no código, não quantas pessoas passam por ele.
 
-  Hoje o caminho existe nos dois leitores e não é exercido por ninguém. Então:
+  (b) 0 leitor com derivação própria de dinheiro, por AST. E aqui a parte que faz o selo valer: ele distingue aritmética de leitura. p.minutos_trabalhados / 60,
+  sum(pp.minutos_extra_50 ...) e r['x'] += p.minutos_atraso / 60 — as três formas exatas que tirei do código hoje — caem. Já return {'m': p.minutos_trabalhados} não cai, e essa
+  guarda do outro lado é deliberada: sem ela o selo proibiria o leitor de tocar o objeto, e qualquer leitura viraria "derivação" — o número mentindo para cima, que é o vício que
+  eu curei hoje no contador cego.
 
-  - se o placar conta caminho, ele não chega a zero enquanto o corte de 23/09 valer — e chegar exigiria tirar o número rotulado de quem não tem nem fechamento nem lavratura,
-    contra o corte;
-  - se conta exercício, ele já está em zero, e o selo precisa mudar de pergunta: de "quem chama o motor" para "quem mostra número de motor sem rótulo".
+  Os quatro casos que mordem estão no arquivo, fabricando as duas doenças em fonte de mentira — sem eles os dois passariam por ausência de sinal.
 
-  Não escolho essa por decisão técnica — ela decide o que o selo da casa mede e qual das duas leis cede. Até você dizer, o placar fica em 2, com o censo do selo explicando por
-  quê. Placar que anda sem a prova é o número mentindo para cima, e foi exatamente isso que eu curei hoje no contador cego.
-
-  O resto anda sem você: a raia PDF mede no worktree, o fechamento da leva (api + relatorios + folha + quatro contratos) dispara quando a pista de teste abrir, e 24 commits
-  esperam esse verde. O único outro trabalho preso em você é o smoke — ele destrava o quarteto UI-GRADE e a linha do dia na tela do espelho.
+  O selo está armado para rodar quando a pista abrir. Se (a) e (b) vierem verdes, o placar da S3 é 0 e eu o movo com a prova; se algum acusar, tenho arquivo:linha de cada sítio e
+  curo antes de mover.
 
 ✻ Waiting for 1 background agent to finish
 
-❯ aval Ronald lei: o placar da S3 conta EXERCICIO. Selo muda de pergunta: (a) 0 leitor mostrando numero de motor sem o rotulo "sem apuracao ainda"; (b) 0 leitor com derivacao
-  propria de dinheiro (AST). Corte 23/09 segue valendo; L-095 nao cede. Placar da S3 = 0 quando (a) e (b) forem verdes. Segue a fila; PAREI so em lei ou !
+● Background command "Rodar o selo novo do placar" completed (exit code 0)
 
-● A lei veio e ela fecha a S3. Registro e reescrevo o selo com as duas perguntas novas.
+  Read 1 file
 
-  O selo novo do placar: duas perguntas
-  ⎿  $ cat > ponto/tests/test_s3_placar_exercicio.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O PLACAR DA S3 CONTA EXERCICIO (corte Ronald 29/09 15:1x), e sao DUAS perguntas.
-     A pergunta antiga -- *"quem CHAMA o motor?"*, varrida por AST sobre `autoridade_do_periodo`,
-     `espelho_do_colab` e `calcular_mes` -- m…
+● O selo funcionou e achou três coisas — incluindo um bug no meu próprio detector, que o caso que morde pegou.
 
-· Cascading… (1m 39s · ↓ 6.6k tokens)
+  Ran 1 shell command
+
+❯ aval Ronald lei: fila 2 (UI) DESCONGELA em raia propria enquanto a S3 espera pista/merge -- worktree wt-ui, so templates/static/testes de tela, deploy --sem-migrate, nucleo
+  intocado (L-096 segue para dinheiro/celula). Ordem: UI-GRADE-CALENDARIO (smoke meu na sequencia) -> UI-CAL-COMPETENCIA -> catalogo /relatorios/ de 26/09. PAREI so em lei ou !
+
+● Lei nova: a fila 2 descongela em raia própria. Registro, abro o worktree e passo os quatro arquivos que estão soltos na árvore principal.
+
+● Passar o quarteto UI-GRADE para a raia
+  ⎿  $ cd /home/ronald/saas-hasner && for f in app/templates/colaboradores/partials/_calendario_grade.html app/colaboradores/tests/test_calendario_sete_colunas.py
+     app/colaboradores/tests/test_chip_ausencia_duas_linhas.py app/colaboradores/tests/test_ui_grade_calendario.py; do cp "$f" "../wt-ui/$f" && ec…
+
+· Concocting… (3m 55s · ↓ 6.1k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -140,6 +140,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py as RED                                                                                    52m 17s · ↓ 341.2k tokens
+  ◯ general-purpose  Queueing full test suite run                                                                                                       57m 17s · ↓ 358.3k tokens
   ⧉  index
 ```
