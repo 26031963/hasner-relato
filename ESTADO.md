@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 11:31:31.**
+**Medido em 29/09/2026 11:36:39.**
 
 | | |
 |---|---|
@@ -42,9 +42,11 @@ d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
  M app/docs/RELATO.md
  M app/ponto/services/dia_pago.py
  M app/ponto/services/espelho.py
+ M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
  M app/relatorios/pdf_espelho.py
  M app/relatorios/services.py
  M app/relatorios/tests/test_pdf_realizado_do_dia.py
@@ -107,21 +109,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ PRIORIDADE (P7.1, bug no caminho da S3): QUEM-ESCREVE-NO-GRAVADO-DA-EXPORTADA. Antes de carimbar por colab, MEDIR a hipotese com lastro: (a) SELECT app,name,applied FROM
-  juliani.django_migrations WHERE applied BETWEEN '2026-09-29 09:00' AND '2026-09-29 09:30'; (b) quais colunas de FechamentoMensal entram no hash e se alguma nasceu/mudou de
-  default nessas migrations; (c) se sim: nao e bug -- PROVA com hash recalculado antes/depois da migration em copia; se nao: segue o carimbo por colab. Publicar no RELATO com
-  PROVA.
-  DEPOIS, fechando a S3: leitor #3 (PDF) pelo plano ja escrito; + a LINHA DO DIA do espelho e do PDF passa a mostrar o pago (DiaPago.horas_trabalhadas + rubricas_do_dia), o cru
-  sai da linha (L-095). RED: col600 22/09 linha = 7,01 h, nao 7,37. Selo de placar: S3 = 0 leitor de dinheiro chamando motor.
-  Leis: L-092, L-095, L-097; nenhuma lei nova. segue a fila; PAREI so em lei ou !
-
-  Ran 1 shell command
-
-● Background command "Aguardar o push" completed (exit code 0)
-
-● Background command "Aguardar o push" completed (exit code 0)
-
-  Searched for 15 patterns, listed 1 directory, ran 42 shell commands
 
 ● Background command "Aguardar push4" completed (exit code 0)
 
@@ -129,17 +116,32 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Background command "Conferir push4" completed (exit code 0)
 
-● Corrigir os dois selos
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     # 1) o selo do drill do caderno le a chave NOVA
-     P = 'relatorios/tests/test_resumo_espelho_morto.py'
-     t = io.open(P, encoding='utf-8').read()
-     v = ''' def test_o_drill_do_caderno_fica_e_le_o_coletor(self):
-     """Guarda do corte: `_dias_c…
+  Searched for 3 patterns, read 3 files, listed 1 directory, ran 22 shell commands
 
-✢ Puttering… (1h 23m 11s · ↓ 230.8k tokens)
+● Background command "Resultado da suite dos tres apps" completed (exit code 0)
+
+● Background command "Esperar e ler" completed (exit code 0)
+
+  Read 1 file, ran 2 shell commands
+
+● Background command "Rodar relatorios, ponto e colaboradores" completed (exit code 0)
+
+● Background command "Aguardar a suite dos tres apps" completed (exit code 0)
+
+● Background command "Aguardar o veredito (45s)" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Aguardar a suite (30s)" completed (exit code 0)
+
+  Provar o vermelho da coluna
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp relatorios/pdf_espelho.py $S/pdf.bak && python3 - <<'PYEOF'
+     import io
+     P='relatorios/pdf_espelho.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace(" ] + _rubvals + [(_h(_pago_h) if _pago_h is n…
+
+✢ Puttering… (1h 28m 19s · ↓ 239.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
