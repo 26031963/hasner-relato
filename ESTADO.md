@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:07:33.**
+**Medido em 29/09/2026 16:13:01.**
 
 | | |
 |---|---|
@@ -99,14 +99,6 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  A verificação, por md5 contra o HEAD e por log — não pelo relato dela:
-
-  relatorios/index.html                de29e585…  == HEAD   IDENTICO
-  colaboradores/calendario_partial.html b6886de7…  == HEAD   IDENTICO
-  _calendario_grade.html               ea9ab936…  (o md5 de entrada dela)
-  500 nas duas cascas, última hora:    0
-
-  A reversão é real, e ela não precisava do seu ! porque desfez a própria escrita sobre arquivos que estavam limpos em HEAD.
 
   O que mais me interessou no relato dela é a segunda falha, e ela é a mais instrutiva: como os arquivos revertidos eram da árvore errada, dois REDs dela voltaram verdes e ela
   quase registrou "o selo passa com o template de antes" como selo vazio — quando o vazio era a medição. Medição que mede a árvore errada não descobre nada, e parece descobrir.
@@ -128,11 +120,19 @@ cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador receb
 
 ● Ordem clara. Registro e executo em sequência — começando pelo commit do que está solto e o push.
 
-● Conferir os selos com a pista livre · 3s
-  ⎿  $ docker ps --format '{{.Names}}' | grep -vE 'saas_|mensageria|juliani_db_test' | head -2; cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1;
-     teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_EN…
+  Ran 2 shell commands
 
-* Schlepping… (50s · ↓ 2.7k tokens)
+● Cinco falhas, e quatro delas são minhas. A mais interessante: o alias que eu curei num lado do selo e não no outro.
+
+● A string do caso que morde esta escapada errada?
+  ⎿  $ grep -n '_mudo = ' ponto/tests/test_s3_placar_exercicio.py | head -2; python3 -c "
+     import io
+     t=io.open('ponto/tests/test_s3_placar_exercicio.py',encoding='utf-8').read()
+     i=t.index('_mudo = ')
+     print(repr(t[i:i+70]))"
+
+✢ Compacting conversation… (6m 18s · ↓ 6.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
