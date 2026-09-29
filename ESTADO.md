@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:50:45.**
+**Medido em 28/09/2026 23:55:45.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ MM app/docs/BACKLOG.md
 M  app/docs/PENDENTES_RONALD.json
 M  app/docs/PROMPTS.md
 MM app/docs/RELATO.md
+ M app/folha/porta_export.py
 MM app/ponto/services/dia_pago.py
 M  app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 AM app/relatorios/management/commands/diff_extrato_parcial.py
@@ -101,44 +102,44 @@ M  app/templates/relatorios/extrato_parcial.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      10 de hoje** e com a regra de alcance derivada ali; o lado AGORA soma o que o motor da FOLHA lavrou, dia a dia,
-     … +151 lines
+● Background command "Regua final e a porta da 09" completed (exit code 0)
 
-  Ran 3 shell commands
+  Searched for 1 pattern, ran 13 shell commands
 
-● Background command "Esperar a regua terminar" completed (exit code 0)
+● Enquanto as duas medições correm, o estado até aqui:
 
-  Searched for 1 pattern, ran 17 shell commands
+  Chip do calendário (sua ordem 23:1x) — atendido, e você estava certo:
+  - Os dois diffs (dia_decidido.py, calendario.py) estão publicados no RELATO e os dois foram retirados (volta ao HEAD). O chip lê dia.ausencia.rotulo_curto, que o calendário já
+    montava com o catálogo desde 12/09 — núcleo tocado = 0.
+  - Por que eu tinha ido ao dia_decidido: o catálogo cala em 3 tipos (ferias, falta, folga_compensatoria) e a palavra deles só existe no seu corte de 24/09. Medido: 177 dia-colab
+    com palavra, 360 sem — e os 360 são exatamente os que têm desenho próprio, com →DD/MM e a frase no title. A premissa do "chip mudo" era minha, não do sistema.
+  - Medido por navegador: 1366/1920 → "Atestado" inteiro, 27px de folga, →04/10 na 2ª linha. A 1024 o rótulo passa 9px da célula — está escrito na lápide e o selo não afirma o que
+    não é verdade lá. Tentei minmax(0,1fr) e ellipsis: o navegador deu os mesmos números nas três variantes, então saíram (CSS que não move número medido é decoração).
 
-● Background command "Esperar o DIFF da frota" completed (exit code 0)
+  O-DIA-PAGO S3, 1ª troca — relatorios/views.py (extrato parcial): para de montar motor próprio e soma o DiaPago. 540 colabs, 227 mudam, trabalhadas +1.489,40 h; os três maiores
+  casam com o FechamentoMensal gravado na 2ª casa (col877 139,02=139,02 contra 0,00 do extrato antigo; col924 folha 0,00 contra 193,66). Placar 7 → 6. Curei no caminho três
+  defeitos meus: HE noturna somada em cima da HE50 (subset), "sem apuração" apagando quem foi admitido no meio do intervalo, e data em UTC.
 
-  Ran 9 shell commands
+  Achado que muda a leitura do seu contador: espelho_x_dia_pago nunca foi zero — ele comparava minutos_realizados (cru, realizado_do_dia) com o trabalhadas do motor. Duas
+  perguntas diferentes: col600 22/09 dava 21,37 min (a janela de HE, que conta do marco) e col60 26/08 dava +1,00 h exato (a pausa). Nos dois o DiaPago estava certo. Curei a
+  pergunta do contador (compara o dinheiro do espelho contra o lavrado, pelo mesmo juiz de dia) em vez de mexer no número — a medição do curado está correndo agora, junto da
+  régua.
 
-● Background command "Esperar o veredito da regua" completed (exit code 0)
+✻ Brewed for 1h 50m 11s · done 11:54 PM · 18 shells still running
 
-  Ran 7 shell commands
+● Background command "Colher o contador curado" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 4 shell commands
 
-  Ran 1 shell command
+● Duas esperas no fundo. Enquanto elas correm, leitor #2 exige uma decisão de forma que eu mediria errado se adivinhasse — vou medi-la:
 
-● Background command "Esperar o Ran da suite" completed (exit code 0)
+  Running 1 shell command…
 
-● Background command "Aguardar a regua e colher a porta" completed (exit code 0)
-
-● Background command "Medir a porta na competencia 10" completed (exit code 0)
-
-  Aguardar o Ran da regua final
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE '^Ran [0-9]+ test' /tmp/regua_234742.log 2>/dev/null; do sleep 40; done; grep -E '^Ran [0-9]+ test|^OK|^FAILED|^(FAIL|ERROR):'
-     /tmp/regua_234742.log | head -6; echo '=== rodape:'; tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40a…
-
-· Sprouting… (1h 46m 44s · ↓ 198.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+· Bootstrapping… (38s · ↓ 1.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 14 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
