@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 03:07:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.0 MB). Acoes na janela: **677**.
+**Medido em 29/09/2026 03:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.0 MB). Acoes na janela: **680**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:12:40 | Bash | Esperar o push | `cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6wrgvohu.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
+| 03:10:33 | Bash | Push da lavratura do abono | `cd /home/ronald/saas-hasner && timeout 1700 git push 2>&1 \| tail -4` |
+| 03:10:25 | Bash | Commit da lavratura do abono | `cd /home/ronald/saas-hasner && git add app/ponto/migrations/0068_diapago_minutos_abonados_diapago_minutos_previstos_and_more.py && bash bin/testes_fora_do_git.sh \| tail -1; cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_ab2.txt <<'EOF' A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068 ...` |
+| 03:09:58 | Bash | Por que o carimbo ficou FALHOU com a suite OK | `cd /home/ronald/saas-hasner && tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_ab3.log` |
+| 03:08:21 | Bash | Veredito | `cd /home/ronald/saas-hasner && sleep 90; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_025954.log 2>/dev/null \| head -4; head -3 .regua_stamp` |
 | 03:06:20 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_025954.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_025954.log)"` |
 | 03:04:18 | Bash | Acompanhar | `cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_025954.log 2>/dev/null \| head -4; echo "linhas: $(wc -l < /tmp/regua_025954.log)"` |
 | 03:02:12 | Bash | Esperar a regua | `cd /home/ronald/saas-hasner && for i in $(seq 1 11); do if grep -qE '^Ran [0-9]+ test' /tmp/regua_025954.log 2>/dev/null; then break; fi; sleep 55; done; grep -E '^Ran [0-9]+ test\|^OK \(\|^FAILED\|^(FAIL\|ERROR):' /tmp/regua_025954.log \| head -4; echo "linhas: $(wc -l < /tmp/regua_025954.log)"` |
@@ -685,5 +690,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:14:02 | Bash | Como o TXT e montado a partir das linhas | `grep -n 'def montar_linhas_export' -A 12 folha/export.py \| head -16 && grep -n 'montar_linhas_export\\|def .*txt\\|join' folha/views.py \| head -8` |
 | 15:13:50 | Bash | Gerar o lote 1 com hash novo | `cd /home/ronald/saas-hasner && cat > /tmp/lote1_novo.py <<'PYEOF' # -*- coding: utf-8 -*- """LOTE 1 da 09 com HASH NOVO -- SO LEITURA, pela autoridade unica (item 5 do portao). `folha/export.py::montar_linhas_export` e a MESMA funcao que a view usa. Nada e emitido, nada e carimbado, nenhum `ExportacaoDominio` e criado: a emissao e o clique do Ronald. """ import hashlib from colaboradores.models im ...` |
 | 15:13:33 | Bash | Extrato de rubricas dos 16 | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/extrato16.py').read())" 2>&1 \| tail -20` |
-| 15:12:30 | Bash | Esperar a porta e preparar o extrato | `cd /home/ronald/saas-hasner && cat > /tmp/extrato16.py <<'PYEOF' # -*- coding: utf-8 -*- """EXTRATO DE RUBRICAS DOS 16 DA AMOSTRA -- lido da MESMA fonte do TXT (item 4 do portao da 09). A fonte e `folha/export.py::montar_linhas_export`, a mesma funcao que a view usa para gerar o arquivo. Nao ha conta nova aqui: o extrato e a leitura das linhas que iriam para o Dominio, mais os campos do `Fechament ...` |
-| 15:12:12 | Bash | Ver o progresso da porta | `cd /home/ronald/saas-hasner && tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/porta_pos.txt 2>/dev/null; echo "--- (ainda rodando? ---"; ps -eo args \| grep -c '[s]elo_leitores'` |

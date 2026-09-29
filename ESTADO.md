@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:07:31.**
+**Medido em 29/09/2026 03:13:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
+| `HEAD` local | `67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)` |
 | `origin/main` | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)
 9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
 0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
 2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
 0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
-b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha
 ```
 
 ## `git status --short`
@@ -42,13 +42,7 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/RELATO.md
- M app/ponto/models.py
- M app/ponto/services/dia_pago.py
- M app/ponto/services/fechamento.py
- M app/ponto/tests/test_dia_pago_soma.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/ponto/migrations/0068_diapago_minutos_abonados_diapago_minutos_previstos_and_more.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,14 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
-
-● Background command "Commit e push do censo do abono" completed (exit code 0)
-
-● PUSH: 0df14bf8..9104c7e9. Agora o passo que desbloqueia o leitor #3 — os três campos na lavratura:
-
-  Ran 6 shell commands
-
 ● Background command "Esperar o push" completed (exit code 0)
 
   Ran 2 shell commands
@@ -128,12 +114,20 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● O mypy pegou o dicionário vazio sem anotação (dict vazio não tem tipo inferível) — curado. Régua rodando; enquanto isso, o backfill precisa de deploy antes:
 
-● Acompanhar · 1m 11s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_025954.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_025954.log)" (1m 9s)
+  Ran 6 shell commands
+
+● Background command "Esperar a regua" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Suite OK (8.634) — o bloqueio é só a migration fora do git, a guarda de sempre. Commit, push e o deploy agendado para depois do ensaio da sombra:
+
+  Esperar o push · 19s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6wrgvohu.output; echo "=== falta: $(git log --oneline or… (18s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (2h 2m 47s · ↓ 104.8k tokens)
+✢ Thundering… (2h 8m 17s · ↓ 107.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
