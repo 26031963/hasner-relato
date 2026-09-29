@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:41:57.**
+**Medido em 29/09/2026 19:47:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `87b5303d TICKETS: rodape e placar com o ultimo push` |
-| `origin/main` | `08f8ca75 TICKETS: placar do topo` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `87b5303d TICKETS: rodape e placar com o ultimo push` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -125,18 +125,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
-● Esperar o push da cura · 3s
+● Esperar o push da cura · 5m 8s
   ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ft.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (3s)
+     origin/main..HEAD)" (5m 7s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (3h 35m 14s · ↓ 188.5k tokens)
+✢ Schlepping… (3h 40m 18s · ↓ 188.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
