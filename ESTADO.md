@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:101 AFIRMA ato sem PROVA ao lado -- ## E esta NO AR
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## E esta NO AR
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:27:01.**
+**Medido em 29/09/2026 10:32:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07` |
+| `HEAD` local | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
 | `origin/main` | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)
+d3d6c434 As 39 divergencias da competencia 10 tem UMA causa, e ela e o cartorio das 06:28 -- nao a lavratura
 ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07
 02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo
 c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
-38f18bbe A competencia paga nao podia ser lavrada, e por isso 421 colabs apareciam como divida: o 09 fecha por RETRATO
-aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 ```
 
 ## `git status --short`
@@ -42,7 +42,6 @@ aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -100,11 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Searched for 1 pattern, ran 4 shell commands
-
 ❯ REGISTRAR NO BACKLOG (so registro, nao construir): obra O-HAIKU-INVESTIGA, estado "registrada", posicao na ORDEM VIVA: depois da O-DIA-PAGO S4, antes da S5b. Linha em
   PROMPTS.md (L-010).
   O QUE E: o Haiku ganha 3 ferramentas de LEITURA -- linha_do_tempo_vinculo(colab), dia_a_dia(colab, janela) [escala plantao/folga, batidas, celula, DiaPago],
@@ -130,10 +124,15 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   3. PRONTO: espelho de 01-19/09 sem espuria nos dias pares; hash do FechamentoMensal identico antes/depois; Pauta DP publicada com as horas.
      aval de vinculo/escala retroativo !
 
-  Ler a secao 2 atual
-  ⎿  $ sed -n '55,75p' docs/RELATO.md
+  Searched for 4 patterns, read 2 files, ran 27 shell commands
 
-✢ Puttering… (18m 41s · ↓ 50.4k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Ler grade_da_celula
+  ⎿  $ sed -n "$(grep -n 'def grade_da_celula' escala/services/leitor_celula.py | cut -d: -f1),+70p" escala/services/leitor_celula.py
+
+✢ Puttering… (24m 11s · ↓ 61.7k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
