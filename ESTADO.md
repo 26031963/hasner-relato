@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:127 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:139 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 17:12:31.**
+**Medido em 29/09/2026 17:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito` |
+| `HEAD` local | `9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres` |
 | `origin/main` | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
-| commits a subir (`ahead`) | **26** |
+| commits a subir (`ahead`) | **27** |
 
 ## Fabrica
 
@@ -29,23 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9570adc8 Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres
 4a9cf5b8 O merge da raia PDF e o patch de nucleo da raia UI -- o botao nasce desligado, de proposito
 100caa63 TICKETS: placar do topo com o ultimo push do mundo
 e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja eram diferentes
 6e43cff6 O selo do placar da S3 pela lei do EXERCICIO, e as tres correcoes que a raia PDF me achou
-8c25a2da A guarda criada por incidente estava cega a worktree, e um subagente escreveu na arvore de prod
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/RELATO.md
- M app/ponto/services/dia_pago.py
- M app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py
- M app/relatorios/cartao_pela_celula.py
- M app/relatorios/tests/test_s3_cartao_le_dia_pago.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -105,7 +99,6 @@ e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Aguardar a suite e ler o log" completed (exit code 0)
 
 ● Background command "Esperar o push terminar" completed (exit code 0)
 
@@ -132,12 +125,13 @@ e4afa349 A mesma soma estava escrita duas vezes, e as duas listas de rubrica ja 
 
 ● Background command "Rodar os cinco apps mais afetados" completed (exit code 0)
 
-● Rodar seis apps com a cura do saldo · 7m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app saas-hasn… (7m 16s)
+● Pushing dos 27 commits · 3m 52s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log 2>&1; echo "rc=$?" >>
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3… (3m 49s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (1h 5m 48s · ↓ 103.2k tokens)
+✢ Schlepping… (1h 11m 18s · ↓ 106.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
