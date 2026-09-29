@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 00:15:53.**
+**Medido em 29/09/2026 00:21:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
  M app/docs/RELATO.md
  M app/folha/porta_export.py
  M app/folha/tests/test_porta_do_export.py
@@ -100,43 +101,43 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ```
 
-● Background command "Esperar a regua e o carimbo" completed (exit code 0)
+  Duas coisas que eu fiz errado e que valem escritas, porque as duas são padrão e não caso: confiei em número de produção (= 0) como se fosse selo — e foi assim que o contador
+  passou duas curas antes de eu escrever o caso que morde; e escrevi um assert de texto sem escolher a âncora, que mordeu o invariante vizinho — sétima vez nesta esteira, e a lei
+  já estava escrita.
 
-● Background command "Conferir o fim da suite" completed (exit code 0)
+  Fila 1, aberto com número e sem causa provada: as 23 divergências da competência 10. A hipótese com lastro está na docstring do próprio lavrar_dias_pagos (backfill com o motor
+  de hoje contra fechamento de 28/09 19:30) e é S1/S2, não S3 — vai medida antes de eu dizer qual lado está velho.
 
-● Background command "Esperar a regua e o carimbo" completed (exit code 0)
+  Próximo na ordem viva: leitor #2 = calendario.py:301, com a troca provadamente neutra no número (o espelho_x_dia_pago zerado na 09 é exatamente essa prova). O consumidor de
+  dia['resultado'] é um selo (test_calendario_carimbo_intra.py:74), então a troca inteira reescreve esse selo para comparar o lavrado com a folha — meia-troca deixaria o leitor
+  chamando a autoridade, e meia-correção é pior que nenhuma.
 
-● Background command "Esperar o Ran" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● Background command "Esperar a regua do contador" completed (exit code 0)
+  Ran 6 shell commands
 
-● Régua VERDE com carimbo: 8.625 testes OK, 31 selos de host. Aplico os dois patches e o placar:
+● A régua está na suite completa. O plano do leitor #2 está escrito e tem uma consequência que não vou fazer calado:
 
-  Ran 1 shell command
+  Se o calendário passa a ler o DiaPago, a 6ª testemunha da porta (calendario_x_espelho) vira a 7ª (espelho_x_dia_pago) — ela passaria a comparar DiaPago × espelho, que é
+  literalmente a outra. As duas se fundem, e isso é redução de vocabulário na porta do export: entra no mesmo commit, com a linha no RELATO dizendo que a 6ª saiu e por quê.
 
-● Background command "Esperar a suite terminar" completed (exit code 0)
+  As duas pedras do leitor #2, para não virarem meia-troca:
+  - dia['resultado'] tem dois consumidores — o selo test_calendario_carimbo_intra.py:74 (prova que o calendário desconta a pausa como a folha) e a 6ª testemunha. O selo passa a
+    comparar o lavrado com a folha, que é mais forte: é o que o TXT paga.
+  - he_contabilizavel(resultado) tem selo próprio com fixture de ResultadoMes; a assinatura passa a ser por número (os minutos de extra do dia), e o selo dele muda no mesmo ato.
 
-● Background command "Esperar a suite (espera longa)" completed (exit code 0)
+  O que não entra: manter resultado "por compatibilidade" ao lado do dia_pago (duas fontes no mesmo dict, e a próxima tela escolhe a errada), nem trocar só as badges deixando
+  autoridade_do_periodo de pé — o leitor continuaria no placar, e meia-correção é pior que nenhuma.
 
-  Ran 2 shell commands
+  O DIFF esperado é zero, e a prova disso já existe: espelho_x_dia_pago = 0 na 09, em 430 colaboradores. Assim que o carimbo sair, aplico o commit do contador (já verde em 292
+  testes), empurro os dois e começo a troca.
 
-● Background command "Esperar (a suite esta longa hoje)" completed (exit code 0)
-
-● Corrigir a ancora e rodar folha
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/folha/porta_export.py'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.index(" # ESTE CONTADOR NASCEU COMPARANDO DUAS PERGUNTAS DIFERENTES")
-     j=t.index(" dif_dp_esp.extend(dias_fora_do_dia_pago(")
-     t = …
-
-· Bootstrapping… (20m 46s · ↓ 57.8k tokens)
+✻ Worked for 24m 25s · done 12:19 AM · 14 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 14 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
