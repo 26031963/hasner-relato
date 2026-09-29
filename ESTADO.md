@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:412 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:436 AFIRMA ato sem PROVA ao lado -- ## E A COMPETENCIA 10 EXPOS UM SEGUNDO DEFEITO DO CONTADOR -- a JANELA (00:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:17:31.**
+**Medido em 29/09/2026 04:22:59.**
 
 | | |
 |---|---|
@@ -44,8 +44,12 @@ AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
+ M bin/censo_codigo_py.py
+?? app/core/censo_codigo.py
+?? app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,39 +102,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 2 shell commands
 
-● A espera pelo gate está armada e me avisa. Corrigi um diagnóstico meu antes de agir sobre ele, e isso é o produto desta última medição:
+● Sexta vez — e agora com a cura de origem: a regra de "docstring não é código" vira um módulo que serve o selo de host e o do Django, em vez de duas cópias:
 
-  Eu havia escrito que o crédito parcial seria abatido duas vezes no cartão se a troca fosse ingênua. Fui ver com arquivo:linha e é outra coisa: pdf_espelho.py:498-501 calcula o
-  abatimento e cartao_pela_celula.py::aplicar_nos_totais sobrescreve total_atraso com fe.horas_atraso — o gravado, que já é pós-crédito. Então o bloco é trabalho jogado fora
-  sempre que existe fechamento, e vivo só quando não existe.
-
-  Isso muda a cura: não se remove o bloco "para não abater duas vezes" (diagnóstico errado) — declara-se a fronteira, porque quem manda no total_atraso é o gravado.
-
-  E os dois achados da noite convergem num só: duas telas mostram número de motor onde não há folha, e nenhuma das duas diz isso — o app (17 de 80 colabs medidos) e o cartão sem
-  fechamento. O fonte_dos_totais existe desde o seu corte de 23/09 e é jogado fora nas duas.
-
-  O que está armado e não depende de mim: o gate das 04:30 → confere o ensaio da sombra de hoje → deploy.sh (migra a 0068) → backfill da 09 e da 10 → mede os três contadores →
-  escreve fatia.done com OK, PAROU_ENSAIO ou PAROU_DEPLOY.
-
-  Quando ele fechar: leio o fatia.done e o número dos contadores, publico, e só então o leitor #3 anda — com o plano já escrito e agora com o diagnóstico certo.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
+● Write(core/censo_codigo.py)
+  ⎿  Wrote 90 lines to core/censo_codigo.py
+       1 # -*- coding: utf-8 -*-
+       2 """CENSO DE UM PADRAO NAS LINHAS DE CODIGO -- prosa nao conta. UMA regra, dois chamadores.
+       3
+       4     linhas_de_codigo(fonte)                 -> {n: texto} das linhas que sao CODIGO
+       5     cita_no_codigo(fonte, padrao)           -> [(n, texto)] das que citam `padrao` em codigo
+       6     censo_na_arvore(raiz, padrao, ...)       -> [(arquivo, n, texto)]
+       7
+       8 POR QUE ELE EXISTE, e por que e UM sitio: em 29/09, **seis** selos desta casa ficaram vermelhos na mesma noite
+       9 mordendo a PROSA que explicava a cura -- o `max-width:58px` na lapide do chip, o `minutos_trabalhados` no
+      10 anti-copia da `porta_export`, o `json.load` do hook, a LICAO-PGREP e o `--cpuset-cpus` citados numa docstring,
+     … +80 lines
 
   Ran 1 shell command
 
-● São 04:17 — o gate dispara em 13 min. Uso o tempo medindo o tamanho do achado que os dois defeitos compartilham, porque é ele que decide o desenho da cura:
+● Os dois selos de host seguem mordendo o código e calando na prosa, agora com uma regra. O selo do Django passa a usar a mesma:
 
-● Quem le e quem joga fora a fonte dos totais
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sem_folha.txt <<'EOF'
-     CENSO: quem LE `fonte_dos_totais` e quem o JOGA FORA (grep, nao suposicao)
-     EOF
-     grep -rn "fonte_dos_totais" --include=*.py --include=*.html app/ …
+  Rodar o selo com a regra unica · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='/home/ronald/saas-hasner/app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ leitores = set()
+     for pasta, _d, arquivos in os.walk(APP):
+     if any(x in…
 
-· Thundering… (3h 12m 47s · ↓ 151.6k tokens · thinking)
+· Thundering… (3h 18m 14s · ↓ 163.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
