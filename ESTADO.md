@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:09:53.**
+**Medido em 29/09/2026 01:15:02.**
 
 | | |
 |---|---|
@@ -40,13 +40,17 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 
 ```
  M app/colaboradores/services/calendario.py
+ M app/colaboradores/tests/test_calendario_badge_minutos.py
+ M app/colaboradores/tests/test_calendario_carimbo_intra.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/colaboradores/tests/test_calendario_um_juiz.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/folha/porta_export.py
  M app/ponto/services/dia_pago.py
  M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_calendario_le_dia_pago.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,18 +103,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o push fechar de vez" failed with exit code 144
-
-● Background command "Esperar o push fechar (200s)" failed with exit code 144
-
-● 14 shells encerrados. O número do universo certo autoriza o leitor #2:
-
-  ┌───────┬────────────────┬───────────────────┐
-  │  dia  │ pares FECHADOS │ sem linha lavrada │
-  ├───────┼────────────────┼───────────────────┤
-  │ 26/09 │ 216            │ 1 (col924)        │
-  ├───────┼────────────────┼───────────────────┤
-  │ 27/09 │ 184            │ 2 (col43, col882) │
   ├───────┼────────────────┼───────────────────┤
   │ 28/09 │ 198            │ 2 (col43, col924) │
   └───────┴────────────────┴───────────────────┘
@@ -124,15 +116,27 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Ordem registrada (HOOK-TETO-NAO-CONTA-ESPERA) — entra por path assim que a S3 fechar o passo. Sigo o calendário:
 
-● Selo do HE e placar acompanham a troca
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """Os selos do he_contabilizavel e o placar acompanham a troca, no MESMO commit."""
-     import io, py_compile
-     # 1) o selo do HE: a assinatura passa a ser por NUMERO
-     P='/home/ronald/saas-hasner/app/colaboradores/tests/test_cale…
+  Ran 13 shell commands
 
-✢ Thundering… (5m 9s · ↓ 13.3k tokens)
+● Agora o selo da troca e a cura do teto do hook (a ordem das 01:xx), juntos:
+
+● Write(colaboradores/tests/test_calendario_le_dia_pago.py)
+  ⎿  Wrote 169 lines to colaboradores/tests/test_calendario_le_dia_pago.py
+       1 # -*- coding: utf-8 -*-
+       2 """O-DIA-PAGO S3, leitor #2: o CALENDARIO le a linha lavrada e nao pede conta a ninguem (L-095, 29/09).
+       3
+       4 A LEI: *"o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem
+       5 recalcula"*. Este sitio ja tinha sido curado uma vez -- a **E4** (28/09) tirou dele um motor proprio
+       6 (`get_motor`, sem regua CCT, um dia por vez) que divergia em **72 dia-colab de 30 colabs** na competencia 09,
+       7 quase sempre mostrando ZERO onde o espelho paga. Mas ele continuava PEDINDO a conta a cada abertura de tela.
+       8 Agora ele LE `DiaPago`, que `recalcular_fechamento_mes` lavrou no MESMO ato em que gravou o `FechamentoMensal`.
+       9
+      10 POR QUE A TROCA NAO MOVE NUMERO, e isso foi medido ANTES de tocar o codigo:
+     … +159 lines
+
+  Running 1 shell command…
+
+✻ Thundering… (10m 17s · ↓ 25.0k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
