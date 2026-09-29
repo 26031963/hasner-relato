@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:43:01.**
+**Medido em 29/09/2026 10:48:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `89a8cf3f A parte B da O-JANELA-HE vira B1 (LEITURA) e B2 (AUTORIZAR), com posicoes diferentes` |
+| `HEAD` local | `80b95f7e "Desde o inicio do vinculo" oferecia 21/09 para consertar dias de 02 a 19/09` |
 | `origin/main` | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,29 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+80b95f7e "Desde o inicio do vinculo" oferecia 21/09 para consertar dias de 02 a 19/09
+e15125d2 O carimbo da lavratura dizia o nome errado em 19.515 linhas, e a lapide que prometia o certo era minha
 89a8cf3f A parte B da O-JANELA-HE vira B1 (LEITURA) e B2 (AUTORIZAR), com posicoes diferentes
 24a7e51e Registrar a O-JANELA-HE parte B: a tela e o portao da L-097, com prazo
 5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)
-d3d6c434 As 39 divergencias da competencia 10 tem UMA causa, e ela e o cartorio das 06:28 -- nao a lavratura
-ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_calendario_le_dia_pago.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
- M app/colaboradores/tests/test_fase_12x36_tela.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/colaboradores/views_fase.py
- M app/escala/services/fase_na_tela.py
- M app/ponto/management/commands/lavrar_dias_pagos.py
- M app/ponto/services/dia_pago.py
- M app/ponto/services/fechamento.py
- M app/ponto/tests/test_retrato_exportada.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/escala/tests/test_inicio_do_vinculo_cobre_o_dia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -108,6 +99,13 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Searched for 4 patterns, read 2 files, ran 27 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Searched for 2 patterns, read 1 file, ran 10 shell commands
+
 ● Agora os dois selos, um por porta:
 
   Searched for 1 pattern, listed 1 directory, ran 10 shell commands
@@ -130,17 +128,10 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   zerado libera o export. PRAZO das duas: antes do export da 10.
   segue a fila; PAREI so em lei ou !
 
-● Registrar B1 e B2 substituindo a parte B
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     B = 'docs/BACKLOG.md'
-     ls = io.open(B, encoding='utf-8').read().split('\n')
-     i = [k for k, l in enumerate(ls) if l.startswith('| O-JANELA-HE parte B (TELAS+PORTAO) |')]
-     assert len(i) == 1, i
-     b1 = ('| O-JANELA-HE parte B1 (LEITURA) | **REGISTRADA…
+● Aplicar a linha do tempo da [nome] pela porta
+  ⎿  $ tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas.log; date '+%H:%M'
 
-· Puttering… (34m 41s · ↓ 99.1k tokens)
+✢ Puttering… (40m 11s · ↓ 115.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
