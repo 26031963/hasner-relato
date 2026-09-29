@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 21:39:01.**
+**Medido em 28/09/2026 21:44:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `10e2d912 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke` |
+| `HEAD` local | `bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux` |
 | `origin/main` | `88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,20 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bfdc165b HOOK-STOP-SAIDA-VALIDA: o hook falava fora do schema, e era ele que despejava o dump do Stop no tmux
 10e2d912 UI-GRADE-CALENDARIO: celula do mes com ALTURA fixa e texto em 2 linhas -- COMMITADO SEM PUSH, aguarda o smoke
 88b50a4f TICKETS: rodape e placar (8611 OK, ordem viva no BACKLOG)
 8b1e862d VOLTA A FILA 1: a linha INTRA ratifica o apply, o hook estava cego para metade da fila, e o BACKLOG.md passa a ser publicado
 13a4b67a TICKETS: rodape e placar (8605 OK, placar da S3)
-642eec83 O-DIA-PAGO S3 comeca pelo PLACAR: 8 leitores ainda chamam o motor, e eu tinha contado 6
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
-?? bin/tests/test_hook_stop_saida_valida.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ```
@@ -87,44 +84,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      "for UserPromptSubmit": {
-        "hookEventName": "\"UserPromptSubmit\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolUse": {
-        "hookEventName": "\"PostToolUse\"",
-        "additionalContext": "string (optional)"
-      },
-      "for PostToolBatch": {
-        "hookEventName": "\"PostToolBatch\"",
-        "additionalContext": "string (optional)"
-      },
-      "for Stop / SubagentStop": {
-        "hookEventName": "\"Stop\" | \"SubagentStop\"",
-        "additionalContext": "string (optional) - Feedback for the model; the conversation continues so the model can act on it"
-      }
-    }
-  }
+  O RED, medido antes da cura
 
-✻ Crunched for 1h 30m 16s · done 8:27 PM · 11 shells still running
+  {"decision": "allow", "reason": "o RELATO declara PAREI"}
 
-❯ HOOK-STOP-SAIDA-VALIDA · Leis: L-096. Nenhuma lei nova.
-  FONTE: bin/hook_stop_fila1.py (saida para o Stop do Claude Code)
-  MUDA: saida = JSON valido do schema do Stop ({"decision":"block","reason":...}) ou nada; nunca texto solto nem campo fora do schema.
-  RED: rodar o hook com o BACKLOG atual -> stdout passa em json.loads e tem decision/reason; tmux nao mostra mais o dump do schema ao fim do turno.
-  PROIBIDO: parar a S3 por isto alem do tempo da cura.
-  PRONTO: RELATO com o RED e commit por path.
-  segue a fila; PAREI so em lei ou !
+  O json parseia — e por isso passou despercebido. Mas decision: "allow" não existe no schema do Stop: ele conhece o bloqueio (block + reason) e conhece o silêncio. Campo fora do
+  schema é o que fazia o cliente responder imprimindo o schema inteiro no fim de cada turno.
 
-● Esperar a regua do hook
-  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_hook.log; ps -eo args | grep -c
-     '[m]anage.py test'
+  A cura é uma linha menos: liberar passou a ser sys.exit(0) sem dizer nada. Quem precisa saber por que liberou lê a trilha em logs/hook_stop_fila1.log — alarme mora no log, não
+  na voz do protocolo. É a mesma lei que tirou o PAREI escrito por máquina hoje às 10:1x.
 
-· Architecting… (29m 44s · ↓ 10.7k tokens)
+  ┌─────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │         caminho         │                                                  saída                                                  │
+  ├─────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ fila aberta             │ {"decision":"block","reason":"siga: OBRA-DE-MENTIRA X — …"} — duas chaves, reason string, nomeia o item │
+  ├─────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ PAREI no topo do RELATO │ vazio                                                                                                   │
+  └─────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  O selo mede comportamento, não texto: a 1ª versão grepava o fonte e mordeu o próprio comentário que explica a cura — sexta vez nesta esteira que um selo textual acusa a prosa. E
+  ele se pendurou 5 min na 1ª rodada porque o hook lê o payload em stdin; sem </dev/null espera para sempre. Ficou escrito no selo, para quem copiar o arquivo não tropeçar igual.
+
+  35 selos de host verdes. A suite não foi afetada — bin/ não entra na impressão digital da régua, e o app segue no Ran 8611 tests OK da mesma árvore.
+
+  Dois commits locais, nenhum empurrado
+
+  bfdc165b  HOOK-STOP-SAIDA-VALIDA
+  10e2d912  UI-GRADE-CALENDARIO  ← aguarda seu smoke
+
+  Não empurrei porque o commit do hook ficou em cima do UI-GRADE: um push levaria os dois, e você disse para não subir a UI sem o smoke. O hook curado já vale agora, porque ele
+  roda da árvore — o dump no tmux deve parar neste turno.
+
+  Se você preferir o hook no repo antes do smoke, eu reordeno os dois commits localmente (ambos são locais, nada reescrito no remoto) e empurro só ele.
+
+✻ Cogitated for 31m 26s · done 9:40 PM · 11 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ reordena e empurra so o hook
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
