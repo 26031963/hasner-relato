@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 12:08:31.**
+**Medido em 29/09/2026 12:14:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava` |
-| `origin/main` | `a0c12c3e A coluna de rubrica nao se perde: mostrar coluna e LAYOUT, o numero dela e que e dinheiro` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `d65a2d26 TICKETS: placar e rodape com o push 9b446740` |
+| `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d65a2d26 TICKETS: placar e rodape com o push 9b446740
 5297b031 A linha do PAREI comecava com ** e o hook nao a lia como trava
 a3202eb0 PAREI de volta ao TOPO do RELATO: a S3 para na L-095, que e lei sua
 9b446740 TICKETS: placar e rodape com o push a0c12c3e
 9592fc83 A lavratura descartava o adicional noturno do dia de folga trabalhada -- e os leitores ja leem a lavratura
-db358056 O resumo do cartao ja nao vem do motor para quem tem fechamento -- o plano da S3 estava errado no meio
 ```
 
 ## `git status --short`
@@ -99,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    de código está descartado porque emp1/emp3/emp4 deram hash idêntico ao byte e só a emp2 andou.
+  SMOKE NÃO SOBE. O resto são artefatos da esteira (fatia.done, esteira.out, pausas), não código.
 
-  Rodando ainda: o push do lote e a re-medição dos contadores. Sobre ela eu já disse o que espero — o "09: 1" deve estar baixo, e se for, corrijo com o mesmo destaque que dei ao
-  421 → 1. Falta relavrar a 10 para as linhas ganharem as rubricas curadas (aditivo, não toca o gravado).
+  Cinco commits locais esperando o push7, que está no arsenal:
 
-✻ Churned for 1h 57m 57s · done 12:06 PM · 6 shells still running
+  5297b031  A linha do PAREI comecava com ** e o hook nao a lia como trava
+  a3202eb0  PAREI de volta ao TOPO do RELATO
+  9b446740  TICKETS: placar e rodape
+  9592fc83  A lavratura descartava o adicional noturno do dia de folga trabalhada
+  db358056  O resumo do cartao ja nao vem do motor para quem tem fechamento
 
-● Background command "Aguardar o contador" completed (exit code 0)
+  Os dois anteriores (a0c12c3e com a linha do dia e a coluna preservada) já estão em origin, e os dois deploys do período (11:37 e 11:59) já puseram tudo isso em prod com prova de
+  casca.
 
-  Read 1 file, ran 4 shell commands
+  PAREI: o ! de dinheiro do RECALCULO-DA-10 | espera Ronald — a linha está no topo do RELATO e o hook a aceita (rodei na mão, rc=0).
 
-● O turno está no PAREI de lei, com tudo commitado e no ar. Duas coisas seguem rodando sozinhas e eu retomo por elas:
+  Retomo por conta própria quando as duas medições em voo terminarem: o push7 (se barrar no placar, é o ciclo conhecido) e a re-medição dos contadores, que deve corrigir para cima
+  o "09: 1" que publiquei de manhã.
 
-  - push7 (o lote com a cura da lavratura da folga trabalhada) — a suíte já passou nos runs anteriores; se ele barrar de novo no placar do TICKETS, é o ciclo de sempre:
-    tickets_placar --escrever, commit do TICKETS, push.
-  - re-medição dos contadores pela porta_export.medir nas duas competências — é ela que vai dizer se o "09: 1" que publiquei de manhã está baixo. Eu aposto que sim: a lavratura da
-    09 está sem as rubricas de folga trabalhada em 6 colabs, então o contador tem de dizer 6 ou 7. Quando o número vier, ele entra no RELATO com o mesmo destaque que dei ao 421 →
-    1 — número meu que estava errado se corrige no lugar onde foi publicado.
+✻ Worked for 22s · done 12:08 PM · 5 shells still running
 
-  A trava, em uma linha: o contador da 10 está em 39 e a sua própria lei da obra proíbe leitor novo lendo DiaPago antes da fatia 2 zerar. O próximo leitor da S3 é o resumo do
-  cartão, e ele não anda sem o ! do RECALCULO-DA-10 — 76 colabs em 20 campos, mais 158 que passam a ter gravado, com a tabela e a frase de reversão no PENDENTES_RONALD.json.
+● Background command "Fim do push7" completed (exit code 0)
 
-  Uma nota sobre o meu próprio placar do dia: três turnos devolvidos por detalhe de forma (o ** no PAREI, o placar do TICKETS duas vezes) custaram mais tempo que qualquer medição.
-  O hook estava certo nas três.
+  Searched for 1 pattern, ran 1 shell command
 
-✻ Crunched for 35s · done 12:08 PM · 6 shells still running
+● Background command "Esperar os dois" completed (exit code 0)
 
-● 2 background commands completed
+● Placar e primeira leitura da cegueira · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; cd app && (git diff --quiet
+     docs/TICKETS.md || git commit -q -F - -- docs/TICKETS.md <<'MSGEOF'
+     TICKETS: placar e rodape com o push 9b446740
+     Co-Authored-By:… (4s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Contador e push7
-  ⎿  $ grep -v "objects imported" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bk6nq89ux.output 2>/dev/null | head -12; echo "--- push7
-     ---"; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; pgrep…
-
-✢ Deliberating… (8s · ↓ 110 tokens · thinking)
+✢ Puttering… (1m 56s · ↓ 6.3k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
