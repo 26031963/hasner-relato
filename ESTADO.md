@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:08:01.**
+**Medido em 29/09/2026 02:13:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
+| `HEAD` local | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
 | `origin/main` | `2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
 2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
 0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
 b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha
 73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
-df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 ```
 
 ## `git status --short`
@@ -42,10 +42,7 @@ df98777a TICKETS: placar do topo em dia (ultimo push 4c26a72d)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/RELATO.md
- M app/relatorios/pdf_espelho.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
- M bin/tests/test_hook_teto_nao_conta_espera.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,12 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Regua completa em primeiro plano" completed (exit code 0)
-
-● Background command "Esperar a suite em primeiro plano" completed (exit code 0)
-
-  Searched for 1 pattern, ran 10 shell commands
-
 ● Background command "Esperar a suite" completed (exit code 0)
 
 ● Régua VERDE com carimbo: 8.631 testes OK. Commit do leitor #2 + as três curas de selo, por path:
@@ -125,12 +116,18 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● O selo de CPUSET pegou uma violação minha, de um minuto antes: eu rodei um container de teste com $TESTE_DOCKER vazio (não tinha feito source bin/recursos.sh naquele shell),
   então ele subiu sem cpuset, nos núcleos do cliente. Container morto, selo verde. É a lei do 22/09 funcionando contra mim, e registro:
 
-● Acompanhar · 1m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; grep -E '^Ran [0-9]+ test|^OK \(|^FAILED|^(FAIL|ERROR):' /tmp/regua_020049.log 2>/dev/null | head -4; echo "linhas: $(wc -l <
-     /tmp/regua_020049.log)" (1m 22s)
+  Ran 5 shell commands
+
+● Background command "Esperar a suite" completed (exit code 0)
+
+● Régua VERDE com carimbo: 8.631 OK. Commit e push, em primeiro plano:
+
+● Esperar o push · 23s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1750 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -7
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/big51wpeq.output; echo "=== falta: $(git log --oneline or… (20s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Thundering… (1h 3m 17s · ↓ 68.3k tokens)
+✢ Thundering… (1h 8m 47s · ↓ 70.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
