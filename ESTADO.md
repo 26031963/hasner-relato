@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:47:01.**
+**Medido em 29/09/2026 15:52:03.**
 
 | | |
 |---|---|
@@ -145,6 +145,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Committing test_chip_ausencia_duas_linhas.py fixes                                                                                  31m 5s · ↓ 256.2k tokens
+  ◯ general-purpose  Strengthening test_MORDE_com_o_chip_de_ANTES assertion                                                                              36m 7s · ↓ 276.7k tokens
   ⧉  index
 ```
