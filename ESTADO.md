@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 19:10:45.**
+**Medido em 29/09/2026 19:15:45.**
 
 | | |
 |---|---|
@@ -40,9 +40,11 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/folha/porta_export.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/folha/tests/test_gravado_discorda_da_propria_grade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,13 +101,6 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  com NoReverseMatch: 'colaboradores' is not a registered namespace, porque o core roda o urlconf enxuto — o erro prova em qual casca a tela mora):
-
-  ┌─────────────┬──────────────────┬─────────────────────────────────────┬───────┬───────────────────────────┐
-  │    modo     │ janela devolvida │           rótulo impresso           │ botão │ modo=competencia no HTML  │
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
-  │ mes         │ 01/09..30/09     │ Setembro/2026                       │ SIM   │ 1 (só o botão)            │
-  ├─────────────┼──────────────────┼─────────────────────────────────────┼───────┼───────────────────────────┤
   │ competencia │ 21/08..20/09     │ Competência 09/2026 · 21/08 a 20/09 │ SIM   │ 3 (botão + as duas setas) │
   └─────────────┴──────────────────┴─────────────────────────────────────┴───────┴───────────────────────────┘
 
@@ -123,15 +118,22 @@ c0c5eb49 UI-CAL-COMPETENCIA fecha com as duas metades, e a prova foi feita FORA 
 
 ● Background command "Medir os contadores da porta em prod" completed (exit code 0)
 
-  Medir a causa das 12 divergencias da 09
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/causa12.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """A causa dos 12: o ESCALAR do gravado x a GRADE que o proprio gravado carrega (leitura pura)."""
-     from folha.export import grade_do_fechamento
-     from ponto.models import FechamentoMensal, DiaPago
-     from ponto.serv…
+  Searched for 2 patterns, ran 7 shell commands
 
-· Schlepping… (3h 4m 2s · ↓ 157.5k tokens · still thinking)
+● Agora o selo com o caso que morde nas duas pontas:
+
+  O contador da 09 com a linha nova · 3m 4s
+  ⎿  $ python3 - <<'PYEOF'
+     import io, py_compile
+     P='folha/tests/test_gravado_discorda_da_propria_grade.py'
+     t=io.open(P,encoding='utf-8').read()
+     t=t.replace("""import datetime
+     from types import SimpleNamespace as NS
+     from django.test import SimpleTestCase""", """import datetime
+     from django.test import Sim… (3m 2s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Schlepping… (3h 9m 2s · ↓ 166.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
