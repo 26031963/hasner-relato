@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:240 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:315 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:00:01.**
+**Medido em 29/09/2026 15:05:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo` |
+| `HEAD` local | `f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam` |
 | `origin/main` | `9b446740 TICKETS: placar e rodape com o push a0c12c3e` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele se cruzam
+cde72f19 O resumo saiu do motor no escritor unico, e hoje ZERO colaborador recebe numero de motor
 99b355a3 O que falta da linha do dia e de TELA, e ele espera o smoke -- registrado com o motivo
 aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 96086b03 Dois contratos me pegaram no censo, e os dois estao certos
-13689993 A porta REGEN-EM-EXPORTADA era MEIA-CORRECAO, e o contador disse isso subindo de 1 para 74
-cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payload DIZ de onde veio
 ```
 
 ## `git status --short`
@@ -42,7 +42,6 @@ cc265134 S3 leitor #4 parte B: a hora do DIA no app sai da lavratura, e o payloa
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/relatorios/cartao_pela_celula.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -100,44 +99,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Não entrou hoje de propósito: é mudança de UI, e o quarteto UI-GRADE já espera o seu smoke. Somar uma segunda mudança de tela sem smoke é o apagão de 23/09 esperando — template
-  novo com urlconf velho, cinco respostas 500 na tela do calendário. Fica registrado no BACKLOG com esse motivo escrito.
-
-  Resumo do que espera você, nesta ordem de custo:
-
-  1. Smoke de clique nas duas cascas — destrava o quarteto UI-GRADE e a linha do dia na tela do espelho.
-  2. 51 propostas de fase em FAMILIA-FASE-12x36-PROPOSTAS (item 2 automático está em zero; esses 51 são os que nenhuma âncora descreve, e quatro já têm caminho conhecido).
-  3. 6 Pautas DP (842–847) com o pago × passa-a-valer da retificação da 09, mais a Pauta 841 do col334.
-  4. O TXT parcial de retificação (sha256 12aeecb5…) para os 2 que entram no TXT — os outros 4 vão pela Pauta.
-
-  E o push dos 21 commits sai sozinho quando a pista abrir.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O-DIA-PAGO S3 -- os leitores passam a LER o DiaPago (L-095): um a um, cada troca tirando uma linha do placar dos 8 que ainda ch
 
-● A S3 não fecha sem o resumo, e o lugar certo dele é o escritor único — não o PDF. Aviso a raia e faço lá.
-  ⎿  Message queued for delivery to aabd1e78f6bc1d283 at its next tool round.
-  ⎿  Allowed by auto mode classifier
+  Ran 1 shell command
 
-● Quem le o rotulo fonte_dos_totais
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'relatorios/cartao_pela_celula.py'
-     t = io.open(P, encoding='utf-8').read()
-     v = """ _tot = totais_da_folha(colaborador, _comp[0], _comp[1])
-     # SEM FECHAMENTO GRAVADO O NUMERO NAO E DA FOLHA, e a tela tem de DIZER isso (corte 19:2…
+● Há uma pergunta de lei genuína aqui, e ela é o que falta para a S3 fechar com o placar em 0. Vou formulá-la.
 
-✢ Nucleating… (1h 3m 35s · ↓ 186.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 2 shell commands
+
+● PAREI: lei: o placar da S3 conta CAMINHO ou EXERCÍCIO? duas leis suas se cruzam | espera Ronald
+
+  A S3 chegou ao ponto em que todo o dinheiro — do dia e da competência — sai da folha ou da lavratura. Medido hoje: 536 de 536 ativos com fechamento nas duas competências, zero
+  recebendo número de motor. Falta a entrega da raia PDF e falta uma decisão que é sua, porque duas leis suas se cruzam:
+
+  - Corte de 23/09 19:2x — sem fechamento gravado, mostrar o número do motor rotulado (sem apuracao ainda), porque zero seria "perda de informação disfarçada de fonte única". A
+    razão está escrita no código.
+  - L-095 / selo da S3 — "0 leitor de dinheiro chamando motor", e o selo varre AST: ele conta o caminho no código, não quantas pessoas passam por ele.
+
+  Hoje o caminho existe nos dois leitores e não é exercido por ninguém. Então:
+
+  - se o placar conta caminho, ele não chega a zero enquanto o corte de 23/09 valer — e chegar exigiria tirar o número rotulado de quem não tem nem fechamento nem lavratura,
+    contra o corte;
+  - se conta exercício, ele já está em zero, e o selo precisa mudar de pergunta: de "quem chama o motor" para "quem mostra número de motor sem rótulo".
+
+  Não escolho essa por decisão técnica — ela decide o que o selo da casa mede e qual das duas leis cede. Até você dizer, o placar fica em 2, com o censo do selo explicando por
+  quê. Placar que anda sem a prova é o número mentindo para cima, e foi exatamente isso que eu curei hoje no contador cego.
+
+  O resto anda sem você: a raia PDF mede no worktree, o fechamento da leva (api + relatorios + folha + quatro contratos) dispara quando a pista de teste abrir, e 24 commits
+  esperam esse verde. O único outro trabalho preso em você é o smoke — ele destrava o quarteto UI-GRADE e a linha do dia na tela do espelho.
+
+✻ Waiting for 1 background agent to finish
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 10 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reverting money-total block in `_resumo_pela_lavratura`                                                                            41m 33s · ↓ 329.7k tokens
+  ◯ general-purpose  Committing test_s3_cartao_le_dia_pago.py as RED                                                                                     47m 2s · ↓ 341.2k tokens
   ⧉  index
 ```
