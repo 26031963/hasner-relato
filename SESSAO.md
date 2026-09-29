@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 07:07:54.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (112.1 MB). Acoes na janela: **730**.
+**Medido em 29/09/2026 07:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (112.3 MB). Acoes na janela: **740**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:12:23 | Bash | Ver a fonte de turnos_por_dia | `sed -n 232,250p colaboradores/services/calendario.py` |
+| 07:12:02 | Bash | Ler o critério do selo S3 | `sed -n 60,175p ponto/tests/test_s3_leitor_nao_chama_motor.py` |
+| 07:11:52 | Bash | Ver turnos_por_dia e o selo S3 | `grep -n "turnos_por_dia" colaboradores/services/calendario.py \| head; echo ===; sed -n 1,60p ponto/tests/test_s3_leitor_nao_chama_motor.py` |
+| 07:11:45 | Bash | Achar a porta de geometria e testes da rubrica | `grep -n "turnos_dia\s*=\\|montar_periodos_de\\|from ponto.selecao_periodo" colaboradores/services/calendario.py \| head; echo "=== testes que citam rubricas_do_dia"; grep -rn "rubricas_do_dia" --include=*.py . \| grep tests; echo "=== selecao_periodo API"; grep -n "^def \\|-> " ponto/selecao_periodo.py \| head -20` |
+| 07:11:34 | Bash | Ler o idioma exato do leitor #2 | `sed -n 525,575p colaboradores/services/calendario.py` |
+| 07:09:20 | Bash | Ver o idioma do leitor #2 e o progresso da régua | `grep -n "linhas_do_periodo\\|rubricas_do_dia\\|montar_periodos_de\\|dia_pago\\|he_contabilizavel\\|turno_aberto" colaboradores/services/calendario.py \| head -40; echo "=== regua"; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_encadeado.log` |
+| 07:09:02 | Bash | Ler folha_manda | `sed -n 120,185p relatorios/cartao_pela_celula.py` |
+| 07:08:55 | Bash | Ver se o resumo do espelho carrega o rótulo | `grep -n "resumo\\|cartao_pela_celula\\|def espelho_do_colab" ponto/services/espelho.py \| head -30` |
+| 07:08:19 | Bash | Ler soma_da_competencia, linhas_do_periodo, rubricas_do_dia | `sed -n 182,220p ponto/services/dia_pago.py; echo "=== linhas/rubricas"; sed -n 299,360p ponto/services/dia_pago.py; echo "=== CAMPOS"; sed -n 30,46p ponto/services/dia_pago.py` |
+| 07:08:13 | Bash | Ler a API do dia_pago | `grep -n "^def \\|^CAMPOS\\|^PAGAMENTO\\|^ #" ponto/services/dia_pago.py \| head -40; echo ---; sed -n '/^def soma_do_periodo/,/^def /p' ponto/services/dia_pago.py \| head -70` |
+| 07:07:55 | Bash | Continuar api_espelho_v2 | `sed -n 1420,1620p api/views.py` |
+| 07:07:51 | Bash | Ler api_espelho_v2 | `sed -n 1339,1420p api/views.py` |
 | 07:07:42 | Bash | Achar os KPIs no api/views.py | `grep -n "horas_extras\\|horas_trabalhadas\\|banco_horas\\|def .*resumo\\|def .*espelho\\|def .*me\b\\|FechamentoMensal\\|ResultadoMes\\|motor_cct\\|calcular" api/views.py \| head -60` |
 | 07:07:37 | Bash | Listar o app api | `ls api/ && wc -l api/*.py` |
 | 07:07:27 | Bash | Ler a mensagem do último commit | `cd /home/ronald/saas-hasner && git log -1 --format=%B d7625622` |
@@ -738,5 +750,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:21:25 | Bash | Selo placar da S3 | `cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_s3_leitor_nao_chama_motor.py <<'PYEOF' # -*- coding: utf-8 -*- """O-DIA-PAGO S3: o censo dos LEITORES que ainda chamam o motor, e a lista SO ENCOLHE (L-095, 28/09). A lei: *"o dinheiro do dia e DADO lavrado uma vez pelo motor v2 no evento; todo leitor le, ninguem recalcula"*. A S3 troca os leitores um a um, e este selo e o **placar** da tro ...` |
 | 19:20:50 | Bash | Censo dos leitores que chamam o motor | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() k=t.index('\| BUG-ANCORA-NAO-REGENERA \|'); fim=t.index('\n',k) ln=t[k:fim] ln=ln.replace('\| **CURADO e SELADO** --','\| **FECHADO 28/09 (a cura)** -- o que sobra e DECISAO dele, em `PENDENTES` (`ANCORA-COL824-E-COL899`): a ancora de ec983 no col824 e os 12 dias do col899. A c ...` |
 | 19:17:17 | Bash | Commitar, empurrar e publicar a saida C | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p='/home/ronald/saas-hasner/app/docs/RELATO.md' t=io.open(p,encoding='utf-8').read() t=t.replace("""## Apply Com as tres condicoes fechadas, o apply da parte A e **ligar o cadastro**""", """## Apply FEITO PROVA: cadastro ligado nas **quatro** empresas pela porta `atualizar_empresa`, com `janela_he_ativa=True` e `janela_he_desde=2026-09-2 ...` |
-| 19:08:10 | Bash | Esperar a regua da saida C | `cd /home/ronald/saas-hasner && until grep -qE '^(OK\|FAILED\|Ran \|FALHOU)\|BLOQUEADO\|MUDOU\|OUTRA RAIA' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_c.log 2>/dev/null; do sleep 20; done; grep -E '^(OK\|FAILED\|Ran \|FALHOU)\|^(FAIL\|ERROR):\|MUDOU' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ ...` |
-| 19:08:00 | Bash | Aplicar o cadastro da janela com o ! dele | `cd /home/ronald/saas-hasner && cat > /tmp/aplicar_janela.py <<'PYEOF' # -*- coding: utf-8 -*- """APPLY da parte A da O-JANELA-HE: liga o cadastro, pela porta, com a vigencia da competencia 10. AUTORIZADO pelo `!` do Ronald (28/09 18:2x, condicional) com as tres condicoes CONFERIDAS no DIFF publicado: so os campos-alvo, nenhum colab para cima (zero linhas com HE ou trabalhadas subindo) e resto ZERO ...` |
