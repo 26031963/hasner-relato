@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:29:31.**
+**Medido em 29/09/2026 03:34:47.**
 
 | | |
 |---|---|
 | `HEAD` local | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
-| `origin/main` | `67024ef2 A lavratura passa a carregar o ABONO: os tres campos que faltavam, por dia, da mesma grade (migration 0068)` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico as 04:30` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
  M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
@@ -96,39 +97,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      53 -# fechamento, campo a campo" -- e era campo a campo de um SUBCONJUNTO.
-      48 +# POR QUE ELE EXISTE (achado 29/09 02:1x, censo do leitor #3 da S3): `fechamento_x_soma_dias_pagos` compara
-      49 +# campo a campo **os CAMPOS acima** -- isto e, os campos que a lavratura TEM. `minutos_abonados` estava no
-      50 +# `FechamentoMensal`, e DINHEIRO (hora paga sem trabalho), e NAO estava aqui: o contador dava ZERO sobre um
-      51 +# buraco de **7.610,9 h**. MEDIDO em 09/2026, **179 de 607 colaboradores** com `minutos_abonados > 0`,
-      52 +# 456.656 minutos (na 10: 19 colabs, 289,1 h). A S2 declarou "a soma dos dias E o fechamento, campo a campo"
-      53 +# -- e era campo a campo de um SUBCONJUNTO. **Contador que compara so o que ele tem e cego por construcao.**
-      54  #
-      55 -# A FONTE DO ABONO JA TEM DIA e a cura e barata: `ponto/services/fechamento.py:497` soma
-      56 -# `d['minutos_previstos']` dos dias da grade com `tipo_dia == 'ausencia'` -- a mesma lista que a lavratura
-      57 -# recebe no mesmo ponto. Idem `minutos_previstos` e `minutos_realizados` (este com cap por dia, F1 04/08).
-      58 -# Enquanto nao entram, NENHUM leitor pode ler abono do `DiaPago`, e o `relatorios/pdf_espelho.py` (leitor #3
-      59 -# da S3) mostra `dias_abono`/`horas_abono` -- ou seja, **este buraco BLOQUEIA o leitor #3**.
-      55 +# OS TRES ENTRARAM em 29/09 02:3x (`minutos_abonados`, `minutos_previstos`, `minutos_realizados`, migration
-      56 +# `ponto/0068`), e a fonte deles ja tinha dia: `ponto/services/fechamento.py` soma
-      57 +# `d['minutos_previstos']` dos dias da grade com `tipo_dia == 'ausencia'` -- a MESMA lista que a lavratura
-      58 +# recebe no mesmo ponto, sem rateio. `minutos_realizados` leva o cap POR DIA (F1 04/08).
-      59  #
-      61 -# `dias_previstos` e `dias_incertos` NAO entram nesta lista: sao CONTAGEM derivada dos dias, nao rubrica --
-      62 -# quem os quiser conta as linhas. `horas_extras` idem: e o total de 50+100, que a soma ja da.
-      60 +# O QUE FICA PROIBIDO POR ESTA LISTA ESTAR VAZIA: nenhum campo de pagamento do fechamento pode existir sem
-      61 +# par na lavratura **em silencio**. Campo novo cai VERMELHO em
-      62 +# `folha/tests/test_porta_do_export.py::test_MORDE_o_contador_do_fechamento_NAO_e_cego_a_campo_de_pagamento`,
-      63 +# e quem o criar escolhe: lavra, ou declara AQUI com o TAMANHO medido e a FONTE com dia. Ela nao e lista de
-      64 +# desculpas -- e o instrumento que fez 7.610,9 h aparecerem.
-      65 +#
-      66 +# `dias_previstos` e `dias_incertos` NAO entram no censo: sao CONTAGEM derivada dos dias, nao rubrica -- quem
-      67 +# os quiser conta as linhas. `horas_extras` idem: e o total de 50+100, que a soma ja da.
-      68  PAGAMENTO_FORA_DA_LAVRATURA: dict = {
-      69      # VAZIO desde 29/09 02:3x -- e este dicionario FICA, vazio, com o selo cobrando: campo de pagamento novo
-      70      # no `FechamentoMensal` cai VERMELHO e quem o criar escolhe (lavra, ou declara aqui com o tamanho e a
+          * A S3 vem antes da S5b porque nao depende do calculador: a versao `motor` do `DiaPago` ja bate, e a S2 deu 0 | 28/09 12:1x |
+      44  | COBRAR-SO-O-QUE-MUDA-A-FOLHA | **o Cobrar em massa manda push por chamado que nao muda folha nenhuma** -- medido: 1.117 chamados em 261 colabs, dos quais **676
+          sao da 09 (JA EXPORTADA)**, 113 **sem data** e 7 de competencia <= 08; **55 colaboradores so tem chamado sem data ou antigo** e recebem push sem dever nada. `cobr
+          ar_massa` e a **previa** passam a cobrar so o chamado cujo dia -- por `data_do_chamado` -- cai em competencia NAO exportada, pelo juiz de `ponto/services/fechamen
+          to.py`; **sem data fica FORA** (cura mais restritiva) e os 113 vao listados por `modulo_origem` para corte | **FECHADA 28/09 17:2x** -- 1.116 chamados em 261 cola
+          bs viram **322 em 136**; 681 barrados por competencia EXPORTADA e 113 sem data (todos DISPUTA: `disputa_supervisao` 102, `_manual` 8, `chamados` 3); **125 colabs
+          param de receber push por nada**. Regra com casa em `chamados/services/cobranca_folha.py`, 6 casos de selo chamando a funcao real | `chamados/views_cobrar.py::cob
+          rar_massa` | RED: colab so com chamado da 09 exportada nao recebe push; colab com furo na 10 recebe; previa = envio. PROIBIDO data literal, juiz novo de competenc
+          ia, e mexer no cobrar individual | 28/09 16:5x |
 
-* Thundering… (2h 24m 45s · ↓ 122.1k tokens)
+  Ran 1 shell command
+
+● O Bash voltou. Régua e o push que ficou pendente:
+
+  Ran 3 shell commands
+
+● O push do commit anterior ainda está com a suite no pre-push (é ele que tem a trava da régua). Espero em primeiro plano:
+
+  Ran 1 shell command
+
+● Background command "Curar o placar e empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● PUSH: 67024ef2..a3ac4421 — o gate agendado está no remoto. Régua para as lápides curadas:
+
+  Regua das lapides · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap2.log 2>&1 & sleep 95; ls -t /tmp/regua_*.log | head -1; tail -2
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (4s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Thundering… (2h 30m 3s · ↓ 126.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

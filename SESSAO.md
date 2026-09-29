@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 03:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.3 MB). Acoes na janela: **697**.
+**Medido em 29/09/2026 03:34:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (110.4 MB). Acoes na janela: **709**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:34:41 | Bash | Regua das lapides | `cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap2.log 2>&1 & sleep 95; ls -t /tmp/regua_*.log \| head -1; tail -2 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap2.log; date +%H:%M` |
+| 03:34:34 | Bash | Resultado do push | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcz4mo0sk.output; echo "=== falta empurrar: $(git log --oneline origin/main..HEAD \| wc -l)"; git log --oneline -1 origin/main` |
+| 03:32:28 | Bash | Esperar o push fechar | `cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcz4mo0sk.output; echo "=== falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
+| 03:32:17 | Bash | Quem esta com a trava da regua | `cd /home/ronald/saas-hasner && pgrep -af 'timeout 1700 git push\|git push' \| head -2; pgrep -c -f 'manage.py test' 2>/dev/null \|\| echo 'sem suite'` |
+| 03:30:36 | Bash | Regua da cura das lapides | `cd /home/ronald/saas-hasner && nohup bash /home/ronald/saas-hasner/bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap.log 2>&1 & sleep 95; ls -t /tmp/regua_*.log \| head -1; tail -2 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_lap.log; date +%H:%M` |
+| 03:30:29 | Bash | O que falta empurrar e o estado da arvore | `cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD; echo "--- arvore:"; git status --porcelain \| grep -v '^??' \| head -6` |
+| 03:30:23 | Bash | Compilar o servico | `cd /home/ronald/saas-hasner && python3 -c "import py_compile;py_compile.compile('app/ponto/services/dia_pago.py',doraise=True);print('compila')"` |
+| 03:30:18 | Edit |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
+| 03:30:05 | Edit |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
+| 03:29:45 | Read |  | `/home/ronald/saas-hasner/app/docs/BACKLOG.md` |
+| 03:29:40 | Bash | A linha do BACKLOG sobre o bloqueio | `cd /home/ronald/saas-hasner && grep -n "BLOQUEADO" app/docs/BACKLOG.md \| head -3` |
+| 03:29:33 | Bash | Compilar e ver o que falta empurrar | `cd /home/ronald/saas-hasner && python3 -c "import py_compile;py_compile.compile('app/ponto/services/dia_pago.py',doraise=True);print('compila')" && git log --oneline origin/main..HEAD \| wc -l` |
 | 03:29:29 | Edit |  | `/home/ronald/saas-hasner/app/ponto/services/dia_pago.py` |
 | 03:29:02 | Read |  | `/home/ronald/saas-hasner/app/ponto/services/dia_pago.py` |
 | 03:28:55 | Bash | Conferir o remoto | `cd /home/ronald/saas-hasner && git log --oneline -1 origin/main` |
