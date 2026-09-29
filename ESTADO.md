@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 23:09:01.**
+**Medido em 28/09/2026 23:14:04.**
 
 | | |
 |---|---|
@@ -33,10 +33,11 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 
 ```
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
-A  app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
-A  app/colaboradores/tests/test_ui_grade_calendario.py
+AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
+AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_zz_exp_longo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -89,39 +90,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Publicar o PAREI e rodar a regua" still running in background
+      311                                  'so %d template(s) desenham a grade: este caso perdeu o universo (%s)'
+      312                                  % (len(desenham), desenham))
+      313          # a pagina que o RED acima mede entra no universo: e ela que hospeda o fragmento do perfil
+      274 -        alvo = desenham + ['colaboradores/detalhe.html']
+      275 -        for rel in alvo:
+      276 -            src = fonte[rel]
+      277 -            ext = re.findall(r'{%\s*extends\s+([^%]+?)\s*%}', src)
+      278 -            for e in ext:
+      314 +        for rel in desenham + ['colaboradores/detalhe.html']:
+      315 +            for e in re.findall(r'{%\s*extends\s+([^%]+?)\s*%}', fonte[rel]):
+      316                  self.assertNotIn('base_app', e,
+      317                                   '%s passou a estender a casca do COLABORADOR (%s): medir a geometria do '
+      318                                   'chip nessa casca antes de tirar este caso' % (rel, e.strip()))
+      319                  self.assertTrue(e.strip().startswith(("'", '"')),
+      320                                  '%s passou a escolher a casca em RUNTIME (%s): a grade pode cair dentro de '
+      284 -                                '`base_app.html`, e a geometria do chip nunca foi medida la' % (rel, e.strip()))
+      321 +                                '`base_app.html`, e a geometria do chip nunca foi medida la'
+      322 +                                % (rel, e.strip()))
+      323          self.assertIn("{% extends 'base.html' %}", fonte['colaboradores/detalhe.html'],
+      324                        'a pagina medida pelo RED deste arquivo deixou de fixar a casca do admin')
 
-● Task "Esperar a regua" still running in background
+● Agora o selo de fonte, que ainda cobra nome_dia:
 
-● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
+● Medir com a coluna que encolhe
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='app/templates/colaboradores/partials/_calendario_grade.html'
+     t=io.open(P,encoding='utf-8').read()
+     v='grid-template-columns:auto 1fr;grid-template-rows:auto auto;'
+     assert t.count(v)==1
+     t=t.replace(v,'grid-template-columns:auto minmax(…
 
-● Task "Curar a saida do hook e provar" still running in background
-
-● Task "Selo por comportamento, nos dois caminhos" still running in background
-
-● Task "Publicar o RED e rodar a regua" still running in background
-
-● Task "Esperar a regua do hook" still running in background
-
-● Agora o chip lê o nome curto, guarda a frase no title, e ganha âncoras estruturais para o selo:
-
-  Searched for 4 patterns, listed 1 directory, ran 34 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 10 shell commands
-
-❯ chip do calendario: publicar no RELATO o diff de ponto/services/dia_decidido.py e colaboradores/services/calendario.py ANTES do commit e dizer por que o chip precisa de servico
-  do ponto; se for so rotulo curto, o rotulo mora no template/catalogo, nao em dia_decidido (L-096: fila 2 nao toca nucleo). Depois S3 leitor a leitor. segue a fila; PAREI so em
-  lei ou !
-
-● Ordem recebida e registrada. Ela me corrige: vou publicar os dois diffs e retirá-los — o rótulo volta para o catálogo.
-
-● Como o catalogo le o cadastro
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n "$(grep -n 'def vigente' app/ponto/catalogo/ausencias.py | head -1 | cut -d: -f1),+25p" app/ponto/catalogo/ausencias.py
-
-✢ Sprouting… (1h 5m 0s · ↓ 89.4k tokens)
+✻ Sprouting… (1h 10m 3s · ↓ 109.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
