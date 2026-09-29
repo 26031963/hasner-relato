@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 06:04:31.**
+**Medido em 29/09/2026 06:10:01.**
 
 | | |
 |---|---|
@@ -143,7 +143,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   estiver de hoje.
 
 ✻ Cogitated for 3h 50m 10s · done 4:54 AM · 3 shells still running
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                           new task? /clear to save 909.1k tokens
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ ! tira o geofence do bloco da manha; segue a fila
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
