@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:41:31.**
+**Medido em 29/09/2026 15:47:01.**
 
 | | |
 |---|---|
@@ -145,6 +145,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Running RED evidence via red.sh                                                                                                    25m 35s · ↓ 231.2k tokens
+  ◯ general-purpose  Committing test_chip_ausencia_duas_linhas.py fixes                                                                                  31m 5s · ↓ 256.2k tokens
   ⧉  index
 ```
