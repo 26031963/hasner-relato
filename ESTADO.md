@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 28/09/2026 22:47:31.**
+**Medido em 28/09/2026 22:52:40.**
 
 | | |
 |---|---|
@@ -37,6 +37,7 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
  M app/docs/RELATO.md
  M app/ponto/services/dia_decidido.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -89,9 +90,6 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Referenced file config/crons.py
-  ⎿  Read ponto/management/commands/e6_oraculo.py (182 lines)
-  ⎿  Referenced file ponto/services/espelho.py
   ⎿  Referenced file escala/models.py
 
 ● Task "Esperar o veredito da suite completa" still running in background
@@ -118,10 +116,13 @@ a1c79a64 HOOK-PAREI-DA-FILA: o PAREI se le pelo que ele TRAVA, nao pela presenca
 
 ● Agora o chip lê o nome curto, guarda a frase no title, e ganha âncoras estruturais para o selo:
 
-● Campos da Ausencia
-  ⎿  $ sed -n "$(grep -n 'class Ausencia' ponto/models.py | head -1 | cut -d: -f1),+200p" ponto/models.py | grep -n "= models\." | head -30
+  Rodar so o selo de navegador, verboso
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; time docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
+     saas-hasner-core:l…
 
-✢ Sprouting… (43m 30s · ↓ 34.1k tokens · thinking more)
+✻ Sprouting… (48m 40s · ↓ 54.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
