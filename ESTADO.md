@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 02:35:01.**
+**Medido em 29/09/2026 02:40:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
+| `HEAD` local | `9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3` |
 | `origin/main` | `0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9104c7e9 A lavratura e CEGA para o abono: 7.610,9 h que o contador da S2 nao olhava -- e isso BLOQUEIA o leitor #3
 0df14bf8 Censo do leitor #3 da S3: indice MORTO no cartao, a armadilha do credito nomeada, e dois selos que me pegaram
 2652ec8d O-DIA-PAGO S3 leitor #2: o CALENDARIO le a linha lavrada -- placar 3 -> 2, e a 6a testemunha da porta se funde na 7a
 0a918855 O contador espelho_x_dia_pago estava errado DUAS vezes, e o placar da S3 cai de 6 para 3 pelo censo
 b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 colabs mudam de numero, e os novos sao os da folha
-73061422 O-DIA-PAGO S3, 1o passo: o placar cai de 8 para 7, e nao por troca -- por erro meu de contagem
 ```
 
 ## `git status --short`
@@ -42,10 +42,6 @@ b600ea56 O-DIA-PAGO S3, 1a troca: o extrato parcial LE o DiaPago -- 227 de 540 c
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/folha/tests/test_porta_do_export.py
- M app/ponto/services/dia_pago.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,9 +95,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  docstring do lavrar_dias_pagos: backfill com o motor de hoje contra fechamento de 28/09 19:30). É S1/S2.
-
-  Próximo na fila 1: leitor #3 (pdf_espelho) pelo censo publicado — geometria (anomalias, turnos_abertos+espúria) sai pela porta de seleção primeiro, e o dias_falta/dias_abono só
   depois de medir quantos colabs mudariam, porque aí é significado no papel trabalhista e entra no seu !.
 
 ● Ran 1 stop hook
@@ -129,14 +122,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Régua VERDE: 8.632 OK. Commit e push do censo do abono:
 
-  Running 1 shell command…
+● Acompanhar o push · 1m 13s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bapspgi9i.output 2>/dev/null;
+     echo "=== falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 11s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (1h 30m 17s · ↓ 85.3k tokens)
+· Thundering… (1h 35m 47s · ↓ 86.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
