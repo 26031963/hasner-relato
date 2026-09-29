@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:11 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 re-lavrada, contador 33 -> 19, e as 19 que sobram sao de OUTRA classe (29/09 19:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:25 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:40:45.**
+**Medido em 29/09/2026 20:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `38e6d92e TICKETS: rodape e placar` |
+| `HEAD` local | `be50379e TICKETS: rodape e placar` |
 | `origin/main` | `38e6d92e TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+be50379e TICKETS: rodape e placar
+06057219 B1 item 1: a tela mostrava dinheiro do MOTOR e o placar da S3 nao via, porque varre .py
 38e6d92e TICKETS: rodape e placar
 e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19 sao de outra classe
 87b5303d TICKETS: rodape e placar com o ultimo push
-6c692ded TICKETS: placar do topo
-852b739c A minha propria lapide afirmava o contrario do codigo, e o contador da porta cobrou
 ```
 
 ## `git status --short`
@@ -99,7 +99,6 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 2 patterns, ran 7 shell commands
 
 ● Agora o selo com o caso que morde nas duas pontas:
 
@@ -126,12 +125,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
-  Suite na raia com o staticfiles montado, como o pre-push faz · 4m 13s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-b1/app:/app -v ~… (4m 11s)
+  Pushing da B1 item 1 · 1m 56s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (1m 54s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (4h 34m 2s · ↓ 215.6k tokens)
+· Schlepping… (4h 39m 2s · ↓ 221.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
