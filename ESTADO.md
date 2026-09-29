@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:36:11.**
+**Medido em 29/09/2026 15:41:31.**
 
 | | |
 |---|---|
@@ -40,11 +40,14 @@ aa487049 Dois erros meus na familia, e o contador da 09 me corrigiu uma hipotese
 
 ```
  M CLAUDE.md
+ M app/api/tests/test_espelho_app_fonte_e_geometria.py
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/core/juizes.py
  M app/docs/PROMPTS.md
+ M app/folha/porta_export.py
+ M app/relatorios/cartao_pela_celula.py
  M app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/ponto/tests/test_s3_placar_exercicio.py
@@ -104,44 +107,44 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────┼─────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 1ª     │ ponto/services/espelho.py:325 derivando             │ não é desvio: é o montador que o seu corte de 23/09 exige, e agora o selo cobra que ele seja um só          │
-  ├────────┼─────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 1ª     │ relatorios/pdf_espelho.py:483 derivando             │ não é meu — vai no pedido de merge da raia PDF                                                              │
-  └────────┴─────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Ran 1 shell command
 
-  Um selo que passa de primeira sobre código que eu acabei de escrever é o que esta casa chama de selo vazio. Esse custou quatro correções antes de valer alguma coisa, e três
-  delas eram minhas.
+● Background command "Esperar a pista livre e empurrar" completed (exit code 0)
 
-  Os 23 commits seguem prontos; o push sai com o verde.
+● A segunda correção dela é mais séria: a lavratura da 09 carrega dinheiro (403,63 h de HE50 contra 443,31 gravadas). Meu contador escondia ~40 h.
 
-✻ Waiting for 2 background agents to finish
+  Searched for 1 pattern, ran 3 shell commands
 
-● 2 background commands completed
+● A raia PDF entregou e me achou três erros. Os três já estão curados, e o mais importante é o que ela provou contra a minha própria conclusão:
 
-  Read 1 file
+  1. Eu havia quebrado o vocabulário que a minha própria docstring prometia. O total_trabalhadas do gravado são só as trabalhadas — a folga certa vai em trab_folga, separada,
+  porque é paga a 100% em rubrica própria. Eu somei as duas dentro de total_trabalhadas no _totais_da_lavratura, e a mesma chave passaria a significar duas coisas conforme
+  existisse ou não fechamento. É o BUG 139 com outro nome, e a minha docstring dizia "as duas falam o mesmo vocabulário" três linhas acima.
 
-● O selo caiu na minha própria armadilha registrada: varrer texto, não AST. Ele acusou lápides que falam de periodos.
+  2. O meu contador da exportada escondia ~40 h. Eu tinha excluído as rubricas de dinheiro do universo, argumentando que "o retrato não escreve dinheiro, então comparar é um
+  contador que nunca zera". Ela mediu e o argumento não se sustenta: a lavratura da 09 carrega dinheiro — 403,63 h de HE 50% contra 443,31 gravadas, 18.557 h de noturnas contra
+  18.472. O retrato só completou os três campos de grade por cima do que o backfill já havia escrito. Então não é ausência, é idade — e esconder era o afrouxamento que eu prometi
+  não fazer. Agora tem linha própria (lavratura_congelada_na_exportada): visível, causa nomeada, fora de falhas, como a casa faz com sem_lavratura.
 
-● Running 1 shell command…
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'ponto/tests/test_s3_placar_exercicio.py'
-     t = io.open(P, encoding='utf-8').read()
-     v = """# quem TOCA numero de motor -- e portanto tem de carregar o rotulo (criterio (a))
-     MARCAS_DE_MOTOR = ('resultado', 'periodos', 'autoridade_…
+  3. O selo era cego a ALIAS, e isso escondia um leitor inteiro. from ... import espelho_do_colab as _espelho fazia o selo comparar o nome chamado e não ver o fato. Censo dela:
+  dois sítios em prod — e um deles é ponto/views.py, a tela do espelho do admin, que lê dinheiro e nunca foi contado por nenhuma das duas listas do placar. Entrou na lista. Placar
+  que não enxerga um leitor não mede o placar: mede a lista.
 
-✢ Garnishing… (43s · ↓ 2.1k tokens)
+  Ela também reverteu a implementação que eu havia mandado fazer no lugar errado, e o DIFF dela provou o meu ponto antes de eu mandar: dos 20 campos, só dias_abono se move (57
+  colabs na 09, 12 na 10) — e é justamente a chave que o gravado não carrega e a tela tem em cópia própria. Curar no papel poria 69 colab-competência com um número no Art. 74 §2 e
+  outro no celular da mesma pessoa.
 
-› Message from @aabd1e78f6bc1d283 (ctrl+o to expand)
+  Falta responder o PAREI de lei dela (a composição de total_trabalhadas no laço do coletor), decidir o item (2) do plano — ela provou com três argumentos que montar_periodos_de
+  não é substituição 1:1 — e fazer o merge na ordem que ela pediu.
+
+✻ Waiting for 1 background agent to finish
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · /tasks to see subagents · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Backing up calendario_partial.html and index.html                                                                                  20m 15s · ↓ 209.8k tokens
+  ◯ general-purpose  Running RED evidence via red.sh                                                                                                    25m 35s · ↓ 231.2k tokens
   ⧉  index
 ```
