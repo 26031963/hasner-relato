@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:54:01.**
+**Medido em 29/09/2026 10:59:31.**
 
 | | |
 |---|---|
@@ -42,7 +42,11 @@ b66044b9 TICKETS: placar do topo com o push 5f8924b6
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
+?? app/ponto/management/commands/carimbo_gravado.py
+?? app/ponto/tests/test_carimbo_gravado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,7 +103,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -127,16 +130,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   zerado libera o export. PRAZO das duas: antes do export da 10.
   segue a fila; PAREI so em lei ou !
 
-● Procurar copia do carimbo anterior
-  ⎿  $ cd /home/ronald/saas-hasner && ls -la app/logs/carimbo_gravado_emp2_09.json; git log --oneline -1 -- app/logs/carimbo_gravado_emp2_09.json 2>/dev/null; find / -name
-     "carimbo_gravado_emp2_09*" -not -path "/proc/*" 2>/dev/null | head; ls backups/ 2>/dev/null | head -3
+● Estado do monitor do push · 50s
+  ⎿  $ until grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas3.log; do sleep 8; done; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas3.log (50s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Puttering… (45m 41s · ↓ 134.7k tokens · thinking)
+✢ Puttering… (51m 11s · ↓ 146.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
