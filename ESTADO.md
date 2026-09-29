@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:21:31.**
+**Medido em 29/09/2026 10:27:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo` |
+| `HEAD` local | `ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07` |
 | `origin/main` | `c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ed896e41 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07
 02acf574 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo
 c555591e TICKETS: placar e rodape com a regua verde de 09:46 (8.654 testes)
 38f18bbe A competencia paga nao podia ser lavrada, e por isso 421 colabs apareciam como divida: o 09 fecha por RETRATO
 aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
-9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)
 ```
 
 ## `git status --short`
@@ -130,10 +130,10 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   3. PRONTO: espelho de 01-19/09 sem espuria nos dias pares; hash do FechamentoMensal identico antes/depois; Pauta DP publicada com as horas.
      aval de vinculo/escala retroativo !
 
-● Conferir que somente_leitura nao escreve
-  ⎿  $ sed -n '550,560p;628,640p' ponto/services/fechamento.py
+  Ler a secao 2 atual
+  ⎿  $ sed -n '55,75p' docs/RELATO.md
 
-· Puttering… (13m 11s · ↓ 28.7k tokens)
+✢ Puttering… (18m 41s · ↓ 50.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

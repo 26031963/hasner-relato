@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 10:21:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (115.9 MB). Acoes na janela: **958**.
+**Medido em 29/09/2026 10:27:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (116.0 MB). Acoes na janela: **969**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:26:32 | Bash | Ler a secao 2 atual | `sed -n '55,75p' docs/RELATO.md` |
+| 10:26:28 | Bash | Secoes do RELATO | `grep -n "^## \\|^# " docs/RELATO.md \| head -20` |
+| 10:26:23 | Bash | Ver o topo do RELATO | `head -20 docs/RELATO.md \| cut -c1-200` |
+| 10:25:51 | Bash | Tabela por campo do DIFF da 10 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '/POR CAMPO/,/LINHA A LINHA/p' $S/diff10.log; grep -c "grav=" $S/diff10.log` |
+| 10:25:07 | Bash | Medir os dois desenhos de fase sem escrever | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep "^== emp" $S/diff10.log; cat > $S/neelise_fase.py <<'PYEOF' # -*- coding: utf-8 -*- """OS DOIS DESENHOS, sem escrever nada: qual fase descreve os plantoes REAIS da [nome]? DESENHO A (literal do `!`): UMA linha desde 21/07, template diurno 06:00-18:00, ancora 28/09. DESENHO B: 934 (noturno 19:00-0 ...` |
+| 10:23:25 | Bash | Reconhecimento da [nome] | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/neelise.py <<'PYEOF' # -*- coding: utf-8 -*- """RECONHECIMENTO da [nome] antes de reescrever a linha do tempo (adendo 29/09, com o `!`).""" import datetime from django.utils import timezone from colaboradores.models import Colaborador from escala.models import EscalaColaborador, CelulaDia fro ...` |
+| 10:22:29 | Bash | Ler inicio_do_vinculo | `sed -n '100,170p' escala/services/fase_na_tela.py` |
+| 10:22:25 | Bash | Progresso do diff e achar o wizard | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -c . $S/diff10.log; grep "^== emp" $S/diff10.log; echo "=== wizard: desde o inicio do vinculo ==="; cd /home/ronald/saas-hasner/app && grep -rn "desde o inicio do vinculo\\|inicio_do_vinculo\\|desde_o_inicio" --include=*.py --include=*.html . \| grep -v "/tests/" \| cut -c1-160 \| head -20` |
+| 10:22:17 | Bash | Commit do registro do ADENDO | `git commit -q -F - -- docs/PROMPTS.md docs/BACKLOG.md <<'MSGEOF' && git log --oneline -1 Registrar o ADENDO da VINCULO-LINHA-DO-TEMPO: o wizard olha o vinculo errado, e a [nome] se reescreve desde 21/07 MESMA OBRA, nao bloco novo -- ele declarou assim, e por isso o adendo entra DENTRO da linha da obra no BACKLOG, na coluna de notas, em vez de criar um item que concorreria com ela. No PROMPTS.md e ...` |
+| 10:22:02 | Bash | Registrar o ADENDO nos dois docs | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # 1) PROMPTS.md -- linha propria do ADENDO (ele mesmo disse "mesma obra, nao e bloco novo", entao # a linha diz isso na cara e aponta para a obra). P = 'docs/PROMPTS.md' ls = io.open(P, encoding='utf-8').read().split('\n') i = [k for k, l in enumerate(ls) if l.startswith('\| VINCULO-LINHA-DO-TEMPO \|')] assert len(i) == 1, i nova = ('\| VINCULO ...` |
+| 10:21:38 | Bash | DIFF completo gravado x motor de hoje na 10, sem escrever | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/diff10.py <<'PYEOF' # -*- coding: utf-8 -*- """DIFF COMPLETO da competencia 10: GRAVADO x MOTOR DE HOJE, todos os 26 campos, sem escrever nada. AVAL-DE-CRITERIO (L-Ronald 26/09): a condicao (b) -- "todo outro campo de todo colaborador da ZERO" -- tem de ser medida contra o **GRAVADO**, nao mot ...` |
 | 10:21:09 | Bash | Ver o ramo de leitura | `sed -n '550,560p;628,640p' ponto/services/fechamento.py` |
 | 10:21:06 | Bash | Conferir que somente_leitura nao escreve | `grep -n "somente_leitura" ponto/services/fechamento.py \| head -20` |
 | 10:20:23 | Bash | Ler grade_do_fechamento | `sed -n '480,520p' ponto/services/fechamento.py; echo "=== grade_do_fechamento ==="; sed -n "$(grep -n 'def grade_do_fechamento' folha/export.py \| cut -d: -f1),+55p" folha/export.py` |
