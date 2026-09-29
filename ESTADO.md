@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:35:02.**
+**Medido em 29/09/2026 07:40:31.**
 
 | | |
 |---|---|
@@ -128,39 +128,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A 0068 está aplicada ([X]), o bloco da sombra corre até ~08:40, e o fatia.done = PAROU_DEPLOY diz a verdade. Publico os dois itens e sigo para o item 3 — leitor #4:
 
-  Searched for 4 patterns, listed 1 directory, ran 10 shell commands
-  ⎿  Read core/censo_codigo.py (91 lines)
-  ⎿  Referenced file docs/BACKLOG.md
-  ⎿  Referenced file ponto/services/dia_pago.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bbprd2g16.output (8 lines)
-  ⎿  Read ../.git/refs/heads/main (2 lines)
+  Searched for 2 patterns, ran 25 shell commands
 
-● Task "Rodar o selo e ver o que o hook aponta agora" still running in background
+❯ aval Ronald: BUG-VINCULO-DUPLO-ATIVO (P7.1, entra apos o passo atual da S3). Leis: L-096 (bug provado), P13. Nenhuma lei nova.
+  FONTE: colaboradores/services/vinculo.py::julgar_vinculo/executar_vinculo.
+  CASO: [nome] -- EC 1327 (20/09, ancora 28/09, ATIVA) e EC 1326 (29/09, ancora 29/09, ATIVA), ambos abertos. O wizard (views_fase, order_by -data_inicio) le o
+  1326.
+  MUDA: vinculo novo com data_inicio anterior a vinculo ATIVO posterior do mesmo colab ABSORVE o posterior (inativa com trilha P14, antes/depois), na mesma transacao. Selo de
+  frota: colab com 2+ EscalaColaborador ativas sobrepostas = 0.
+  RED: vinculo em 29/09 existente + salvar fase a partir de 20/09 -> 1 ativo so, o de 20/09; celulas iguais.
+  PASSIVO: medir quantos colabs da frota tem 2+ ativos sobrepostos, com nomes, no RELATO.
+  APLICAR JA no caso: inativar EC 1326 com trilha, regerar e conferir as celulas 29/09-06/10 (29 folga, 30 trabalha). Demais do passivo: lista para o meu !.
+  segue a fila; PAREI so em lei ou !
 
-● Task "Curar a saida do hook e provar" still running in background
+  Searched for 1 pattern, ran 4 shell commands
 
-● Task "Selo por comportamento, nos dois caminhos" still running in background
+❯ aval Ronald: VINCULO-UM-SO-NO-BANCO (P7.1, apos o passo atual da S3). Leis: L-096 (bug provado), P13, precedente escala/0041 (CHECK NOT VALID). Nenhuma lei nova.
+  FONTE: escala.EscalaColaborador (ativa + data_inicio/data_fim = duas verdades).
+  CASO: [nome] -- EC 1327 (20/09, ATIVA) e EC 1326 (29/09, ATIVA), sobrepostos; reincidencia da classe [nome] (27/08).
+  MUDA: (1) constraint EXCLUDE no Postgres: mesmo colaborador, daterange(data_inicio, data_fim ou infinito) sobreposta = recusado (btree_gist), NOT VALID como a 0041; (2) toda
+  porta que abre vinculo ENCERRA o anterior na mesma transacao, com trilha P14; (3) censo dos leitores de ativa=True: onde houver juiz do dia (vinculo_do_dia pela celula), le o
+  juiz.
+  RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
+  PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
+  trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
+  segue a fila; PAREI so em lei ou !
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 3 patterns, read 1 file, listed 1 directory, ran 20 shell commands
-
-❯ PAREI-SO-LEI: PAREI so existe para (a) pergunta de LEI sem lei escrita ou (b) ! de dinheiro/escala/vinculo/apagar. Decisao TECNICA (horario de cron, desenho de encaixe, qual
-  caminho de codigo) o Code decide pela lei existente, registra no RELATO e SEGUE. bin/hook_stop_fila1.py: PAREI sem "lei:" ou "!" no texto nao libera o Stop. RED: PAREI
-  "bloco-da-manha-saturado" -> hook devolve block "siga". Linha na secao LEI-AKITA do CLAUDE.md. Commit por path. segue a fila; PAREI so em lei ou !
-
-  Searched for 1 pattern, ran 25 shell commands
-
-● Background command "Esperar a régua terminar" completed (exit code 0)
-
-● Ver o log interno da régua
+  Esperar a régua · 16s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do pgrep -f regua.sh >/dev/null || break; sleep 10;
-     done; tail -12 $S/regua_l4.log
+     done; echo "regua: $(pgrep -f regua.sh >/dev/null && echo rodando || echo terminou)"; grep -E "^Ran |^OK$|^FAILED|FAIL:|ERROR:… (15s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Levitating… (48m 54s · ↓ 115.7k tokens)
+✢ Levitating… (54m 23s · ↓ 121.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
