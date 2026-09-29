@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 08:17:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.8 MB). Acoes na janela: **833**.
+**Medido em 29/09/2026 08:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (113.8 MB). Acoes na janela: **835**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:21:29 | Bash | Esperar o push | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main\|rejected\|error:\|FAILED" $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/logs/sombra/resultado.tsv) de 64"; date '+%H:%M'` |
+| 08:19:32 | Bash | Curar o rodapé e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -3; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)" -- app/docs/TICKETS.md && echo commitado && nohup git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push3.log 2>&1 & sleep 110;  ...` |
 | 08:17:42 | Bash | Commitar o placar e empurrar | `cd /home/ronald/saas-hasner && git diff app/docs/TICKETS.md \| tail -4 \| cut -c1-200 && git commit -q -m "TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)" -- app/docs/TICKETS.md && nohup git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push2.log 2>&1 & sleep 100; tail -8 /tmp/claude-1001/-home-ronald-s ...` |
 | 08:17:32 | Bash | Escrever o placar do TICKETS | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -4; git diff --stat app/docs/TICKETS.md` |
 | 08:17:25 | Bash | Commit da cura do ensaio | `cd /home/ronald/saas-hasner && git add bin/tests/test_bloco_repoe_a_lavra.sh && cat > /tmp/msg2.txt <<'EOF' O ensaio da sombra reprovava no ULTIMO comando porque ele mesmo trocava a lavra -- e a cura nao rodava por um apostrofo Tres blocos da sombra perdidos hoje, e cada um ensinou uma coisa diferente. O ensaio e o que o `deploy.sh` exige (`--conferir`: carimbo de hoje + bloco inteiro sem erro), e ...` |

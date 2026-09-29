@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 08:17:51.**
+**Medido em 29/09/2026 08:23:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)` |
+| `HEAD` local | `aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)` |
 | `origin/main` | `d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 9d4fcf20 TICKETS: o placar do topo volta a bater com o mundo (regua VERDE, 8.642 OK)
 6563f03c O ensaio da sombra reprovava no ULTIMO comando porque ele mesmo trocava a lavra -- e a cura nao rodava por um apostrofo
 b6054bdc O app mostrava numero de folha sem dizer que nao era, e escondia entrada sem saida em 68 dias
 d7625622 O app do colaborador mostra numero de MOTOR com cara de FOLHA -- o rotulo existe e e jogado fora
-53c8a2a3 Duas lapides minhas passaram a MENTIR sobre o proprio codigo, e o censo do leitor #4
 ```
 
 ## `git status --short`
@@ -126,12 +126,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ❯ esclarecendo: dos tres blocos de vinculo colados, vale SO o VINCULO-LINHA-DO-TEMPO (o terceiro); BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO estao anulados. segue a fila;
   PAREI so em lei ou !
 
-● Commitar o placar e empurrar · 8s
-  ⎿  $ cd /home/ronald/saas-hasner && git diff app/docs/TICKETS.md | tail -4 | cut -c1-200 && git commit -q -m "TICKETS: o placar do topo volta a bater com o mundo (regua VERDE,
-     8.642 OK)" -- app/docs/TICKETS.md && nohup git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-… (6s · 5 lines)
+● Esperar o push · 1m 32s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -qE "main -> main|rejected|error:|FAILED"
+     $S/push3.log 2>/dev/null && break; sleep 10; done; tail -3 $S/push3.log; echo "--- bloco4: $(wc -l < /home/ronald/saas-hasner/lo… (1m 31s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Levitating… (1h 31m 43s · ↓ 175.3k tokens)
+✢ Levitating… (1h 36m 53s · ↓ 175.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
