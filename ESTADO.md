@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 04:22:59.**
+**Medido em 29/09/2026 04:28:01.**
 
 | | |
 |---|---|
@@ -43,13 +43,13 @@ M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/config/crons_duracao.json
+A  app/core/censo_codigo.py
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+A  app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
  M bin/censo_codigo_py.py
-?? app/core/censo_codigo.py
-?? app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -102,6 +102,7 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 2 shell commands
 
 ● Sexta vez — e agora com a cura de origem: a regra de "docstring não é código" vira um módulo que serve o selo de host e o do Django, em vez de duas cópias:
@@ -124,22 +125,21 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Os dois selos de host seguem mordendo o código e calando na prosa, agora com uma regra. O selo do Django passa a usar a mesma:
 
-  Rodar o selo com a regra unica · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='/home/ronald/saas-hasner/app/relatorios/tests/test_fonte_dos_totais_tem_leitor.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ leitores = set()
-     for pasta, _d, arquivos in os.walk(APP):
-     if any(x in…
+  Ran 1 shell command
 
-· Thundering… (3h 18m 14s · ↓ 163.4k tokens)
+● 3 OK — e a regra de "prosa não conta" agora é um módulo (core/censo_codigo.py) servindo o selo de host e o do Django, em vez de duas cópias que divergiriam. Régua:
+
+● Gate e regua · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 115; echo "=== gate: $(cat fatias_agendadas/abono-no-ar/fatia.done 2>/dev/null || echo 'ainda nao')"; date +%H:%M; tail -12
+     fatias_agendadas/abono-no-ar/esteira.out 2>/dev/null; echo "--- regua: $(wc -l < /tmp/regua_042316.log 2>/dev/null) linhas" (1m 21s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Thundering… (3h 23m 17s · ↓ 165.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
