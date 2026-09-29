@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 01:20:31.**
+**Medido em 29/09/2026 01:25:45.**
 
 | | |
 |---|---|
@@ -53,10 +53,11 @@ AM app/colaboradores/tests/test_ui_grade_calendario.py
  M app/ponto/services/dia_pago.py
  M app/ponto/tests/test_s3_leitor_nao_chama_motor.py
 MM app/templates/colaboradores/partials/_calendario_grade.html
+A  bin/censo_codigo_py.py
  M bin/hook_stop_fila1.py
  M bin/selo_espera_por_processo.sh
+ M bin/tests/test_cpuset_de_teste.sh
 A  bin/tests/test_hook_teto_nao_conta_espera.sh
-?? bin/censo_pgrep_py.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -110,10 +111,6 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
 
 ```
 
-● 284 OK — o selo do leitor #2 e a porta inteira. Agora a cura do teto do hook (ordem 01:xx), com o RED dos 5 turnos:
-
-  Ran 4 shell commands
-
 ● Os seis selos do hook verdes, incluindo o RED da ordem: 5 turnos de espera seguem bloqueados, e sem espera o teto ainda libera. Régua completa e, em primeiro plano, o commit:
 
   Ran 10 shell commands
@@ -133,20 +130,24 @@ A  bin/tests/test_hook_teto_nao_conta_espera.sh
      … +49 lines
   ⎿  Allowed by auto mode classifier
 
-  Selo por estrutura: cala na prosa, morde o codigo
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='/home/ronald/saas-hasner/bin/selo_espera_por_processo.sh'
-     t=io.open(P,encoding='utf-8').read()
-     v = """# A linha que comeca com `#` (com qualquer indentacao) nao e codigo. Comentario de FIM DE LINHA segue
-     # con…
+  Ran 2 shell commands
 
-✢ Thundering… (15m 47s · ↓ 42.6k tokens · thinking)
+● O selo agora cala na prosa e morde o código — provado nos dois sentidos. Régua completa, em primeiro plano:
+
+  Ran 4 shell commands
+
+● Os dois selos mordem código real e calam na prosa — provado em ambos. Régua completa, primeiro plano:
+
+  Acompanhar a regua · 1m 45s
+  ⎿  $ cd /home/ronald/saas-hasner && sleep 110; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqxrb8nrm.output 2>/dev/null; ls
+     -t /tmp/regua_*.log | head -1 (1m 41s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Thundering… (21m 0s · ↓ 47.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
