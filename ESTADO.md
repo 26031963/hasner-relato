@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 07:40:31.**
+**Medido em 29/09/2026 07:45:33.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a3ac4421 ABONO-NO-AR: o deploy da migration 0068 vai por cron.d de disparo unico
 
 ```
  M CLAUDE.md
+ M app/api/tests/test_bug139_espelho_app_mesma_fonte.py
  M app/api/views.py
  M app/chamados/tests/test_contract_crons.py
  M app/chamados/tests/test_selo_emissor_fio_mudo.py
@@ -128,39 +129,39 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 2 patterns, ran 25 shell commands
-
-❯ aval Ronald: BUG-VINCULO-DUPLO-ATIVO (P7.1, entra apos o passo atual da S3). Leis: L-096 (bug provado), P13. Nenhuma lei nova.
-  FONTE: colaboradores/services/vinculo.py::julgar_vinculo/executar_vinculo.
-  CASO: [nome] -- EC 1327 (20/09, ancora 28/09, ATIVA) e EC 1326 (29/09, ancora 29/09, ATIVA), ambos abertos. O wizard (views_fase, order_by -data_inicio) le o
-  1326.
-  MUDA: vinculo novo com data_inicio anterior a vinculo ATIVO posterior do mesmo colab ABSORVE o posterior (inativa com trilha P14, antes/depois), na mesma transacao. Selo de
-  frota: colab com 2+ EscalaColaborador ativas sobrepostas = 0.
-  RED: vinculo em 29/09 existente + salvar fase a partir de 20/09 -> 1 ativo so, o de 20/09; celulas iguais.
-  PASSIVO: medir quantos colabs da frota tem 2+ ativos sobrepostos, com nomes, no RELATO.
-  APLICAR JA no caso: inativar EC 1326 com trilha, regerar e conferir as celulas 29/09-06/10 (29 folga, 30 trabalha). Demais do passivo: lista para o meu !.
-  segue a fila; PAREI so em lei ou !
-
-  Searched for 1 pattern, ran 4 shell commands
-
-❯ aval Ronald: VINCULO-UM-SO-NO-BANCO (P7.1, apos o passo atual da S3). Leis: L-096 (bug provado), P13, precedente escala/0041 (CHECK NOT VALID). Nenhuma lei nova.
-  FONTE: escala.EscalaColaborador (ativa + data_inicio/data_fim = duas verdades).
-  CASO: [nome] -- EC 1327 (20/09, ATIVA) e EC 1326 (29/09, ATIVA), sobrepostos; reincidencia da classe [nome] (27/08).
-  MUDA: (1) constraint EXCLUDE no Postgres: mesmo colaborador, daterange(data_inicio, data_fim ou infinito) sobreposta = recusado (btree_gist), NOT VALID como a 0041; (2) toda
-  porta que abre vinculo ENCERRA o anterior na mesma transacao, com trilha P14; (3) censo dos leitores de ativa=True: onde houver juiz do dia (vinculo_do_dia pela celula), le o
-  juiz.
   RED: salvar fase a partir de 20/09 com vinculo de 29/09 existente -> 1 vigente so; insert direto sobreposto -> IntegrityError.
   PASSIVO: lista dos colabs com vinculos sobrepostos, com nomes, no RELATO. APLICAR JA so no caso: encerrar EC 1326 com trilha, regerar e conferir 29/09-06/10 (29 folga, 30
   trabalha). Demais do passivo: lista para o meu !; VALIDATE da constraint depois do passivo zerado.
   segue a fila; PAREI so em lei ou !
 
-  Esperar a régua · 16s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do pgrep -f regua.sh >/dev/null || break; sleep 10;
-     done; echo "regua: $(pgrep -f regua.sh >/dev/null && echo rodando || echo terminou)"; grep -E "^Ran |^OK$|^FAILED|FAIL:|ERROR:… (15s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 4 shell commands
 
-✢ Levitating… (54m 23s · ↓ 121.2k tokens)
+❯ aval Ronald: VINCULO-LINHA-DO-TEMPO (P7.1, apos o passo atual da S3). Leis: corte 27/08 HX-HISTORICO-ESCALA (correcao retroativa em sequencia, escritor unico), P13, L-096 bug
+  provado. Nenhuma lei nova.
+  FONTE: colaboradores/services/vinculo.py::executar_vinculo (hoje fecha so o ANTERIOR a data_inicio; o POSTERIOR sobrevive).
+  DESENHO: vinculo do colab = UMA linha do tempo. Salvar "a partir de D" REESCREVE a linha de D em diante: o vigente em D fecha em D-1, todo vinculo com inicio > D e absorvido
+  (inativo, trilha em HistoricoVinculo com de/para). Escritor unico dessa operacao; toda porta (wizard de fase, cadastro, admissao) passa por ela. O banco (EXCLUDE de vigencia
+  sobreposta, NOT VALID como a 0041) so confirma o desenho.
+  CASO: [nome] -- EC 1327 (20/09) e EC 1326 (29/09) ambos ATIVOS. Aplicar ja: absorver o 1326 pela operacao nova, regerar, conferir 29/09-06/10 (29 folga, 30
+  trabalha).
+  RED: vinculo de 29/09 existente + salvar a partir de 20/09 -> 1 vigente so, o de 20/09, historico com a absorcao; repetir = no_op.
+  PASSIVO: lista de colabs com vinculos sobrepostos, com nomes, no RELATO -> meu !.
+  segue a fila; PAREI so em lei ou !
+
+  Ran 5 shell commands
+
+❯ ignora BUG-VINCULO-DUPLO-ATIVO e VINCULO-UM-SO-NO-BANCO; vale so este:
+
+● Reescrever o selo e rodar os três · 2s
+  ⎿  $ rm -f api/tests/test_zz_sonda_anatomia.py && python3 - <<'PYEOF'
+     import io, py_compile
+     P='api/tests/test_espelho_app_fonte_e_geometria.py'
+     t=io.open(P,encoding='utf-8').read()
+     i=t.find('@freeze_time(\'2026-09-10 15:00:00\')\nclass TurnoAbertoPelaGeometriaTest(_Base):')
+     assert i>0
+     novo = '''@freez…
+
+* Levitating… (59m 25s · ↓ 133.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
