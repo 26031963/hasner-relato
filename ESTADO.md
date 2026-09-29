@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:89 AFIRMA ato sem PROVA ao lado -- # ABONO NO AR, e a VINCULO-LINHA-DO-TEMPO aplicada no col616 (29/09 08:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:101 AFIRMA ato sem PROVA ao lado -- ## E esta NO AR
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:00:45.**
+**Medido em 29/09/2026 10:05:45.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ aa1bf1bc TICKETS: rodape com o carimbo da regua verde de 08:16 (8.642 testes)
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
+ M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,6 +100,10 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Committed 6563f03c, listed 1 directory, ran 71 shell commands
+
+❯ ABONO-NO-AR NAO FECHOU: fatia.done=OK mas fechamento_x_soma_dias_pagos = 09: emp2 276, emp3 120, emp4 25 | 10: emp2 34, emp3 7. Leis: L-092, L-095, "feito so com o numero".
+  Nenhuma lei nova.
   1. 09 (exportada): o backfill levantou CompetenciaExportada e a lavratura ficou sem abono. Decisao tecnica: a lavratura da exportada e RETRATO do FechamentoMensal gravado -- os
   campos de abono/previstos/realizados por dia saem da mesma grade gravada, sem recalcular motor, sem tocar o fechamento. A guarda da L-092 bloqueia gravar FECHAMENTO, nao
   lavrar DiaPago em modo leitura. RED: 09 com contador 0 nas 3 empresas e FechamentoMensal com hash identico antes/depois.
@@ -117,16 +122,12 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Medir a lista completa da competência 10
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/lista10.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     # A LISTA INTEIRA da competencia 10: colab a colab, campo a campo. So leitura.
-     from colaboradores.models import Empresa
-     from folha.porta_export import medir
-     tot = 0
-     for e in Empresa.objects.filter(ativa=True, p…
+● Esperar emp3 e emp4 · 34s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "TOTAL 10/2026" $S/lista10.log 2>/dev/null
+     && break; sleep 10; done; grep -v "^93 objects" $S/lista10.log | tail -14; date '+%H:%M' (32s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Levitating… (3h 14m 37s · ↓ 284.5k tokens)
+· Levitating… (3h 19m 37s · ↓ 287.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ /compact manter: fila viva do BACKLOG (S3 falta so o PDF, depois S4 com lavratura por evento); ABONO-NO-AR (retrato da 09 a partir do gravado, contador 0 nas 3 empresas e nas 2
