@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:40 AFIRMA ato sem PROVA ao lado -- # ADENDO DA VINCULO-LINHA-DO-TEMPO: o wizard curado esta NO AR, e a [nome] esbarra em TRES paredes (29/09 10:5x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 10:59:31.**
+**Medido em 29/09/2026 11:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler` |
-| `origin/main` | `5f8924b6 TICKETS: o placar do topo volta a bater com o mundo (ultimo push c555591e)` |
-| commits a subir (`ahead`) | **8** |
+| `HEAD` local | `dca3c792 TICKETS: placar e rodape com o push f96eaba1` |
+| `origin/main` | `f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110` |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dca3c792 TICKETS: placar e rodape com o push f96eaba1
+d3a8887b PAREI no topo do RELATO: os dois primeiros da fila 1 esperam o ! dele
+13d8c130 Eu sobrescrevi a unica prova do intervalo, e a cura e que foto nao se sobrescreve
 75955f7f O mecanismo da divergencia e de RELOGIO, e fica escrito onde quem for mexer vai ler
 f96eaba1 TICKETS: rodape e placar com o push 5f8924b6 e a serie T 110
-6e04672e A [nome] nao pode ser reescrita desde 21/07, e os tres motivos tem numero
-b66044b9 TICKETS: placar do topo com o push 5f8924b6
-80b95f7e "Desde o inicio do vinculo" oferecia 21/09 para consertar dias de 02 a 19/09
 ```
 
 ## `git status --short`
@@ -42,11 +42,7 @@ b66044b9 TICKETS: placar do topo com o push 5f8924b6
 M  app/colaboradores/tests/test_calendario_sete_colunas.py
 AM app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 AM app/colaboradores/tests/test_ui_grade_calendario.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
 MM app/templates/colaboradores/partials/_calendario_grade.html
-?? app/ponto/management/commands/carimbo_gravado.py
-?? app/ponto/tests/test_carimbo_gravado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -103,20 +99,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 2 patterns, read 1 file, ran 10 shell commands
-
-● Agora os dois selos, um por porta:
-
-  Searched for 1 pattern, listed 1 directory, ran 10 shell commands
-
-❯ REGISTRAR NO BACKLOG (so registro, nao construir): O-JANELA-HE parte B (TELAS+PORTAO), estado "registrada", posicao: depois das telas ja previstas na ORDEM VIVA (ultimo item
-  antes do export da 10), PRAZO = antes do export da 10. Lei: L-097; nenhuma lei nova.
-  ITENS: (1) coluna Saida antecipada + Atraso no espelho e no lote PDF lendo DiaPago (E4/O51b); (2) relogio riscado no marco + tooltip "N min antes do marco · nao conta · Art. 4o
-  §2o" no espelho e PDF; (3) aba Gestao de HE com Autorizar/Nao, permissao autorizar_he, trilha por dia; (4) porta_export.medir ganha he_pendente esperado 0; (5) aviso ao admin
-  na UI quando o dia tem HE fora da janela pendente. RED: os 5 da L-097 + selo zero leitor com derivacao propria de HE.
   segue a fila; PAREI so em lei ou !
 
   Ran 6 shell commands
@@ -130,17 +112,31 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   zerado libera o export. PRAZO das duas: antes do export da 10.
   segue a fila; PAREI so em lei ou !
 
-● Estado do monitor do push · 50s
-  ⎿  $ until grep -q "^rc=" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas3.log; do sleep 8; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_curas3.log (50s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 4 patterns, listed 1 directory, ran 38 shell commands
 
-✢ Puttering… (51m 11s · ↓ 146.0k tokens)
+● Background command "Aguardar o fim do push" completed (exit code 0)
+
+● Background command "Esperar o push terminar" completed (exit code 0)
+
+● Background command "Esperar o push por ARQUIVO" completed (exit code 0)
+
+  Ran 5 shell commands
+
+● Background command "Aguardar o push final" completed (exit code 0)
+
+  Searched for 1 pattern, ran 7 shell commands
+
+● Background command "Conferir o push" completed (exit code 0)
+
+  Escrever a Pauta DP do col334
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd /home/ronald/saas-hasner/app && sed -n '40,60p' pautas/services.py
+
+✶ Puttering… (56m 41s · ↓ 159.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
