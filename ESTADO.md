@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 03:13:01.**
+**Medido em 29/09/2026 03:18:31.**
 
 | | |
 |---|---|
@@ -122,17 +122,17 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
 
 ● Suite OK (8.634) — o bloqueio é só a migration fora do git, a guarda de sempre. Commit, push e o deploy agendado para depois do ensaio da sombra:
 
-  Esperar o push · 19s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 13); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 50; done; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6wrgvohu.output; echo "=== falta: $(git log --oneline or… (18s)
+● Esperar o push fechar · 1m 41s
+  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 12); do if ! pgrep -f 'timeout 1700 git push' >/dev/null 2>&1; then break; fi; sleep 55; done; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6wrgvohu.output; echo "=== falta: $(git log --oneline or… (1m 39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Thundering… (2h 8m 17s · ↓ 107.3k tokens)
+· Thundering… (2h 13m 47s · ↓ 107.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
