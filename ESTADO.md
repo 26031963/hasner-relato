@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:405 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 10 recalculada e as duas competencias relavradas -- a 09 com hash IDENTICO (29/09 14:0x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:77 AFIRMA ato sem PROVA ao lado -- # O PATCH DE NUCLEO DA RAIA UI APLICADO NA PRINCIPAL -- e o botao continua desligado ate o deploy (29/09 16:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 16:35:02.**
+**Medido em 29/09/2026 16:40:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,13 @@ f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/calendario.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
+A  app/relatorios/tests/test_s3_cartao_le_dia_pago.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/tests/test_cal_competencia_nucleo.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -99,12 +104,6 @@ f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Cinco falhas, e quatro delas são minhas. A mais interessante: o alias que eu curei num lado do selo e não no outro.
-
-  Searched for 1 pattern, ran 15 shell commands
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push11.log (20 lines)
   ⎿  Referenced file api/tests/test_espelho_app_fonte_e_geometria.py
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bji172rog.output (5 lines)
@@ -128,15 +127,21 @@ f3688c0d PAREI de LEI: o placar da S3 conta CAMINHO ou EXERCICIO? duas leis dele
 
 ● Agora escrevo as duas funções no núcleo (uma soma, uma linha do dia) e troco os três leitores.
 
-  Acertar o placar do topo do TICKETS · 1m 31s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3500 git push origin main 2>&1 | tail -30 (1m 30s)
+  Committed e4afa349, 100caa63, searched for 1 pattern, ran 34 shell commands
+
+● Agora o RED que a raia pediu no mesmo commit:
+
+● Esperar o push terminar · 1m 27s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 22); do if grep -q '^rc=' $S/push_s3.log 2>/dev/null; then
+     break; fi; sleep 25; done; tail -22 $S/push_s3.log (1m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Schlepping… (28m 19s · ↓ 56.4k tokens)
+· Schlepping… (33m 48s · ↓ 68.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
