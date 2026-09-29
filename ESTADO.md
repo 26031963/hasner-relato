@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 15:52:03.**
+**Medido em 29/09/2026 15:57:09.**
 
 | | |
 |---|---|
@@ -145,6 +145,6 @@ MM app/templates/colaboradores/partials/_calendario_grade.html
   ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Strengthening test_MORDE_com_o_chip_de_ANTES assertion                                                                              36m 7s · ↓ 276.7k tokens
+  ◯ general-purpose  Reading renderiza and abre in test_smoke_chromium.py                                                                               41m 13s · ↓ 291.8k tokens
   ⧉  index
 ```
