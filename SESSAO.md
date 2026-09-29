@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 05:26:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **735**.
+**Medido em 29/09/2026 05:31:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (111.3 MB). Acoes na janela: **734**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -744,4 +744,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:34:34 | Bash | Reordenar a fila para a ordem dele | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() # a ordem do arquivo E a ordem da fila para o hook: a parte A vem ANTES da PROVA-DOMINIO (ordem dele 17:3x) k=t.index('\| O-JANELA-HE parte A (REGRA) \|'); fim=t.index('\n',k)+1 linha=t[k:fim] t=t[:k]+t[fim:] j=t.index('\| PROVA-DOMINIO \|') t=t[:j]+linh ...` |
 | 17:32:02 | Bash | Acertar o placar e empurrar | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; git add app/docs/TICKETS.md && git commit -q -m "TICKETS: placar do topo em dia (ultimo push 7288e90e) Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && git push 2>&1 \| tail -2` |
 | 17:31:54 | Bash | Fechar os estados no BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() def troca(nome, de, para): global t k=t.index('\| %s \|' % nome); fim=t.index('\n',k) ln=t[k:fim] assert de in ln, (nome, ln[:160]) t=t[:k]+ln.replace(de,para,1)+t[fim:] troca('BUG-HE-INTRA-DOBRADA', '\| **CURADA, SELADA, COMMITADA (`5ece3a86`). O `!` ve ...` |
-| 17:28:22 | Bash | Commitar, empurrar e publicar o COBRAR | `cd /home/ronald/saas-hasner && cat > /tmp/msg_cob.txt <<'EOF' COBRAR SO O QUE MUDA A FOLHA: 1.116 pushes viram 322, e 125 pessoas param de ser cobradas por nada O botao Cobrar mandava push por chamado que nao muda folha nenhuma. Pedir a alguem que resolva um dia que ja virou folha e pedir o impossivel: pela L-092 competencia exportada nao muda, e o sistema recusaria a correcao que a mensagem pede. ...` |
