@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:10:01.**
+**Medido em 30/09/2026 13:15:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4da39ce5 Os 9 deslogados viraram pauta para a supervisao (#852-#860), e a porta me corrigiu o remetente` |
+| `HEAD` local | `506f02b6 A (2) do UI-ANEXO esta bloqueada por falta de decodificador HEIC, e isso e janela de rebuild` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+506f02b6 A (2) do UI-ANEXO esta bloqueada por falta de decodificador HEIC, e isso e janela de rebuild
+833b5976 UI-ANEXO-AUSENCIA nao cabe em "so templates", e o historico acerta o pdf hoje POR FALHA
 4da39ce5 Os 9 deslogados viraram pauta para a supervisao (#852-#860), e a porta me corrigiu o remetente
 93ee97c6 TICKETS: placar e rodape
 1444e47a METRICA (c) ZUMBI ciclo 2: producao SUBIU +241 linhas, e o motivo e que tres das quatro sao PORTA
-9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma
-8e45f2e9 RELATO: a porta unica do vinculo do dia, e os tres tetos de query que subiram com retrato
 ```
 
 ## `git status --short`
@@ -41,9 +41,12 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/ponto/services/dia_decidido.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+ M app/templates/ponto/partials/painel_ausencia.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/tests/test_anexo_pelo_conteudo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,34 +103,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  E o primeiro dos 12 é o retrato da LEI-AKITA 12 com a 8 — a casa diz três vezes quando a noite começa, e quem decide é a quarta:
+  Searched for 1 pattern, read 1 file, ran 5 shell commands
 
-  ┌───────────────────────────────────────────────────┬─────────────────────────────────┬──────────────────────────────────────────┐
-  │                       onde                        │            o que diz            │                 quem lê                  │
-  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
-  │ PerfilApuracao.noturno_inicio                     │ cadastro, default '22:00'       │ ninguém                                  │
-  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
-  │ motor_calculo_v2.py:44-45 HORA_NOTURNA_INICIO/FIM │ constante com nome              │ ninguém — estão entre as 17 flags mortas │
-  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
-  │ motor_calculo_v2.py:101 e :103                    │ time(5,0) e time(22,0) cravados │ o cálculo                                │
-  └───────────────────────────────────────────────────┴─────────────────────────────────┴──────────────────────────────────────────┘
+● Duas medições fecharam o desenho do UI-ANEXO-AUSENCIA antes de eu escrever uma linha dele:
 
-  Enquanto os três concordarem, ninguém vê — e eles concordam hoje, que é exatamente por que isso sobreviveu.
+  A parte (1) não cabe em "só templates/". Hoje o histórico (painel_ausencia.html:191-200) desenha <img> para qualquer documento e acerta o PDF por falha — o onerror troca a
+  miniatura por um link "ver anexo". Funciona por quebrar, não por saber, e é por isso que o HEIC também "funciona" hoje, do mesmo jeito torto. Para decidir pelo tipo_real, a
+  linha do histórico tem de carregar o tipo; o detector existe e lê magic bytes (Ausencia.tipo_real_doc → tipo_real_documento, com as marcas HEIC em ausencia.py:393), mas quem
+  monta o histórico é uma view — e view não é template. Então a (1) sobe pela principal, com view + template + selo; a raia de UI fica com o que for só markup.
 
-  Medi antes de propor: existe UM PerfilApuracao no tenant e ele está com os defaults exatos — zero divergência. Então ligar o cadastro hoje não move um centavo: o DIFF é zero por
-  construção, e a cura vira barata em vez de arriscada. Segue precisando do seu ! porque toca motor_calculo_v2.py; o que mudou é o tamanho do risco, não a regra. E fica o retrato
-  de que o cadastro "por cliente" tem uma linha só — uma promessa de configuração que ninguém precisou usar ainda.
+  A parte (2) está bloqueada, e o motivo está medido: não há decodificador HEIC na imagem — pillow_heif, pyheif, wand e cv2 ausentes, e o PIL 11.0.0 sem suporte a HEIF. Sem
+  decodificador não há conversão nem na entrada nem nos 3 arquivos existentes, então ela entra na janela de rebuild, pela lei da seção 6 ("o custo é o rebuild, não o pacote"), com
+  o consumidor no mesmo ato — como freezegun, node e chromium em 13/09.
 
-  A suíte do lote 2 ainda roda (13:07, começou 13:01).
+  E a (1) não depende da (2): o leitor por tipo_real mostra HEIC como aviso + Abrir/Baixar, que é exatamente o que a sua ordem pede para esse caso.
+
+  A suíte do lote 2 segue rodando (13:12; começou 13:01).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Existe escritor de celula editada
-  ⎿  $ cd /home/ronald/wt-esmeril/app && grep -rn "origem='editada'\|origem=\"editada\"\|'editada'" --include=*.py . | grep -v "/tests" | grep -v tests_ | head -8
+● Veredito da suite do lote 2
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bp26lui2a.output 2>/dev/null | head -10; echo "rodando=$(pgrep -cf 'manage.py
+     test' || echo 0) $(date '+%H:%M')"
 
-✶ Misting… (6h 2m 8s · ↓ 508.8k tokens)
+· Misting… (6h 7m 38s · ↓ 528.3k tokens · thought for 5s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
