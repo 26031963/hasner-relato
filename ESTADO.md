@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:14:01.**
+**Medido em 30/09/2026 14:19:31.**
 
 | | |
 |---|---|
@@ -100,44 +100,44 @@ a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  batida sem a fala do colaborador) e o campo pergunta_origem fecha o resto desde 06/09. Agendar seria varrer passivo congelado todo dia. Quando as 933 saírem pela
-  REGEN-EM-EXPORTADA, ele sai de lá junto com o próprio comando — que é o destino certo de um varredor que cumpriu o propósito, e é a métrica (c) ZUMBI caindo por remoção, não por
-  tolerância.
+    (escala_auto::dry_da_frota) ou quer o vínculo corrente. Com ele dentro, o censo acusava esses sítios de escolher o vínculo de um dia sem haver dia nenhum na consulta.
+  - diagnostico_escala migrou, e era o caso fácil porque já carregava as células no formato da casa — as geradoras que a janela não alcança entram por mais=.
 
-  Aprender do selo duas vezes no mesmo dia é o que ele existe para evitar; a segunda vez custou um grep em vez de dez minutos de suíte.
+  E uma distinção que vale para não tratar tudo como dívida: espelho.py:588 é a referência, não o problema. Ele já faz Q(pk__in=_ger_esp) | Q(data_inicio__lte=...) — junta as
+  geradoras na própria query, exatamente o que a lápide da juíza manda desde 26/09. Migrá-lo é trocar consulta à mão pela porta que faz o mesmo, não consertar erro.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Um risco que quero dizer com precisão, porque ele é estrutural e não some sozinho:
-
-  A fatia UI-GRADE está VIVA em prod e não commitada. _calendario_grade.html tem +49/−4 linhas contra o HEAD e, como template não tem cached.Loader, isso já é a tela que o admin
-  vê. Os selos dela estão na árvore mas fora do git: test_ui_grade_calendario.py e test_chip_ausencia_duas_linhas.py como untracked, e test_calendario_sete_colunas.py modificado.
-
-  Isso é coerente com a lei ("arquivo de fatia só entra no ato do commit/deploy") e com o seu smoke pendente — mas tem duas consequências que vale nomear:
-
-  1. O que protege a tela não está versionado. Se a fatia cair, ninguém sabe por qual selo ela devia passar.
-  2. Voltar o arquivo ao HEAD tiraria a tela do ar — e isso é exatamente o ! da L-009 (apagar/voltar arquivo que prod usa). Ou seja: hoje o caminho de saída dessa fatia é só para
-     frente.
-
-  Não vou commitar por conta própria porque o smoke é seu e a regra diz que a fatia entra no ato dele. Mas quando você fizer o smoke, o commit leva template + os três selos juntos
-  — e eu deixo isso preparado para ser um comando só.
-
-  O gate está no fim (1.813 linhas).
+  O push da principal segue na régua.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Gate da raia
+  Searched for 1 pattern, ran 2 shell commands
 
-✢ Bootstrapping… (42m 29s · ↓ 143.1k tokens · thought for 1s)
+● Corrigi o que eu afirmei um commit antes (b7fcdb7f): escrevi que "os sete são todos a mesma forma" e que o lote 7 seria mecânico. Conferi linha por linha e está errado em
+  metade:
+
+  - Lista da janela — mecânico (3): espelho.py:588 (que é a referência, já junta as geradoras por pk__in), pdf_espelho:325 e turnos.py:1178.
+  - Um vínculo para o período inteiro — .first() sobre a janela (3): esmeril_espelho:114, pdf_espelho:312 e censo_fase_12x36:86. Essa é uma terceira pergunta — "qual vínculo
+    representa o período" — e ela não tem porta, nem deveria ter sem decisão.
+
+  E o pdf_espelho:312 é o que mais incomoda: um único vínculo descrevendo o mês inteiro no PDF quebra exatamente no caso que esta casa vive todo dia — quem troca de escala no meio
+  do mês. Não migro sem medir quantos espelhos do mês têm mais de um vínculo na janela; se forem muitos, o defeito não é a consulta, é a premissa de que um mês tem uma escala.
+
+  A distinção ficou escrita no próprio arquivo de censo, que é onde quem pegar o lote 7 vai ler — e não só na mensagem de commit, que ninguém relê.
+
+  O push da principal segue na régua.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Desfecho do push
+
+✢ Bootstrapping… (47m 59s · ↓ 158.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
