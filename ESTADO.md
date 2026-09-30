@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:23:31.**
+**Medido em 30/09/2026 10:29:01.**
 
 | | |
 |---|---|
@@ -105,6 +105,7 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  GOLDENS: col899 (dois ativos por porta pela metade; leitor mostrou folga 28/30 pela 1310), col438 (disputa_s84_retro criou batida sem resposta em folga --
   materializacao.py:589).
   CONTADORES NO ESTADO (esperado 0, publicados a cada ciclo): batidas lancadas sem resposta em dia de folga; vinculos ativos sobrepostos; leitores que escolhem vinculo sem
   perguntar ao dia; dias com escala corrigida e nao re-julgados; POST /api/ponto/foto/ 401 na ultima hora.
@@ -120,19 +121,18 @@ f4ecb106 TICKETS: rodape e placar
 
 ● Dois selos pegaram a minha porta, e os dois estão certos. O segundo é o melhor achado: a porta não deve re-medir — quem decide já tem o número na tela:
 
-● Curar os dois e rodar · 4m 23s
+● Curar o ruff e rodar os tres apps · 3m 46s
   ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
      import io, py_compile
      P='ponto/portas/he.py'
      t=io.open(P,encoding='utf-8').read()
-     # (1) a porta NAO re-mede: recebe os minutos de quem decidiu, e so confere que ha pendencia.
-     i=t.index('def _pendencia_do_dia(')
-     j=t.index('@transaction.atomic')
-     t = t[:i]… (4m 21s · 2 lines)
+     V = """ except (TypeError, ValueError):
+     raise DecisaoHERecusada('minutos invalido: %r' % (minutos,))"""
+     N = """ except (TypeError, ValueError) as _e:
+     raise DecisaoHERecusada('minutos invalido: %r… (3m 38s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (3h 15m 38s · ↓ 200.5k tokens)
+✢ Misting… (3h 21m 8s · ↓ 201.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
