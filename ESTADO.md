@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:50:45.**
+**Medido em 30/09/2026 14:56:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| `origin/main` | `c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -100,44 +100,44 @@ aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  9. a allowlist afirmando um custo que, medido, é zero.
 
-  E o padrão delas é um só, agora com nome e memória gravada: critério que casa pela forma em vez da pergunta. Oito vezes a resposta já estava numa lápide desta casa —
-  HX-CARTORIO-DISTINCT, HX-RECUSA-COM-DONO, a porta vinculo_do_dia do O69, o pk__in do espelho. A regra prática que fica é a LEI-AKITA 4 aplicada antes de medir, não depois: grep
-  na lápide antes da sonda.
+  O número ficou na lápide da própria linha, não só no relato — porque quem mexer ali depois lê o arquivo, não o RELATO.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+  E está escrito no commit, com clareza: o deploy dessa linha não sai antes do DIFF de minutos. Mudar geometria de pareamento é mudar minutos, e a condição 1 da
+  DINHEIRO-EM-COMPETENCIA-ABERTA é DIFF publicado antes. O script existe e ele declara o que ainda não faz: comparar minutos exige rodar na sombra com os dois códigos, o que pede
+  o HEAD anterior montado num worktree da sombra. Está nomeado como próximo passo em vez de suposto.
 
-  Ran 2 shell commands
+  Os quatro que restam: três de .first() sobre a janela (consulta por dia, cauda de 13 pessoas/competência) e o aplicar_09_corte_b, que sai por remoção.
 
-● Publiquei um fecho do dia no topo do RELATO (2b169abb), para você se situar em dez segundos em vez de ler 19 mil linhas — que é a correção do problema que os dois prompts
-  repetidos de hoje expuseram: eu registrava, mas não dava recibo.
-
-  Ele tem três blocos: no ar (401 com motivo, estado da disputa com um escritor), aplicado hoje (passivo 55→1, as 9 pautas de deslogados, col515 com noturnas 0,03→25,57 h,
-  UI-ANEXO, família (1) de 19 para 7) e espera você — smoke da UI-GRADE, ! do col882, TXT de retificação, as duas perguntas de lei, e o apply do passivo que só existe colab a
-  colab.
-
-  E fecha com as nove correções e o padrão delas, porque isso vale mais que as fatias: critério que casa pela forma em vez da pergunta — e em oito delas a resposta já estava
-  escrita numa lápide desta casa (HX-CARTORIO-DISTINCT, HX-RECUSA-COM-DONO, a porta vinculo_do_dia do O69, o pk__in do espelho). A regra que fica é a LEI-AKITA 4 aplicada antes da
-  sonda: grep na lápide primeiro.
-
-  O push está no control-plane, nos últimos testes.
+  O gate da raia fecha em alguns minutos e me avisa.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Provar os dois migrados nos tres apps · 7m 18s
-  ⎿  $ cd /home/ronald/wt-esmeril2 && docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check --fix . 2>&1 | tail
-     -1; docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check … (7m 15s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Read 1 file
 
-✻ Bootstrapping… (1h 19m 13s · ↓ 233.5k tokens)
+● Aguardando o gate — não edito a raia enquanto a suíte a monta, porque os imports tardios fariam a corrida medir um estado que já mudou (foi o que me custou a rodada anterior).
+
+  Estado congelado neste ponto, tudo durável:
+
+  - principal: faltam=0, 25 commits do dia em origin/main, suíte 8.764 OK;
+  - raia wt-esmeril2: censo 4, último commit c2d49e4d, árvore limpa;
+  - raia wt-ui: a cura dos 5px no rótulo (64739630), esperando o smoke junto da UI-GRADE.
+
+  A família (1) foi de 19 para 4 hoje, em oito lotes, cada um com suíte cheia verde. O que falta tem veredito escrito: três .first() que pedem consulta por dia (cauda de 13
+  pessoas/competência) e um que sai por remoção com prova.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Searching for 1 pattern…
+
+✢ Bootstrapping… (1h 24m 29s · ↓ 248.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
