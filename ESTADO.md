@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:961 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- > **Os outros quatro passos do aval estao FEITOS e no commit** (`596064b7` + `0b9152de`): (1) o passo 1
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:55:42.**
+**Medido em 30/09/2026 16:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao` |
+| `HEAD` local | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
 | `origin/main` | `59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e
+0b9152de Quatro selos da casa morderam a minha fatia da janela, e os quatro tinham razao
 c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao
 6739a1c0 PAREI da JANELA-DE-HE publicado com a tabela -- e a DERIVA da 10 saiu ZERO
 596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR
-59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro
-0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao
 ```
 
 ## `git status --short`
@@ -41,15 +41,7 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
- M app/escala/tests/test_janela_he_cadastro.py
- M app/ponto/janela_he.py
- M app/ponto/management/commands/aplicar_janela_he_total.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_b1_relogio_riscado_e_aviso.py
- M app/ponto/tests/test_janela_he_regra.py
- M app/ponto/tests/test_janela_he_saida.py
- M app/ponto/tests/test_s4_ninguem_recalcula_para_ler.py
+ M app/folha/tests/test_b1_portao_he_nasce_desligado.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -109,44 +101,44 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file, ran 5 shell commands
+  Cinco são o mesmo minuto numa rubrica derivada. O sexto eu medi em vez de supor: o col889 do dia 21/09 entra 10:52 contra marco 10:00, sai 23:00 contra 22:00, hoje tem atraso
+  zero porque a hora a mais cobria os 52 min — e passa a ter 607 min pagos mais 52 min de atraso contra previsto de 660. Esteve presente 12h08 e a conta bate duas vezes nele. É o
+  seu item 2 de 28/09 funcionando, mas horas_atraso não está nomeado no alvo deste aval.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Uma palavra decide: o atraso entra no alvo e eu aplico tudo, ou o apply espera. O comando já está pronto (carimbo do gravado antes — alvo e a 09 —, cadastro pela porta com
+  trilha, recalculo pelo escritor declarado, carimbo depois provando a 09 idêntica).
 
-  Ran 1 shell command
+  De carona
 
-● Confirmado — esse selo afirma o default antigo. Vou matar o push e curar:
+  Família (1) do ESMERIL: 19 → 2, e os dois que sobram (esmeril_espelho:114, pdf_espelho:312) alimentam o calcular_mes — esperam a S5b. Pergunta de lei no RELATO: eles migram para
+  a fila do motor (e a família fecha em 2) ou a família fica aberta? Não vou mover meu próprio universo por conta própria.
 
-  Searched for 5 patterns, ran 10 shell commands
+  O censo_fase_12x36 migrou porque a medição não era cauda: 38 colabs na 09 têm mais de uma vigência 12x36 na janela, tipicamente com âncora diferente — e era esse número que o
+  --curar usava para reescrever vínculo. E o aplicar_09_corte_b não foi removido: meu veredito de ontem estava errado, prod importa o CAMPOS dele.
 
-● O montador tem a regra inline, e é por isso que só AST a vê. Vou tirá-la para a função pura — assim o selo exercita o que o montador usa:
+  Quatro selos da casa morderam minha fatia e os quatro tinham razão — inclusive um que me proibiu de crescer uma allowlist e me fez usar o escritor que já existia.
 
-  Ran 2 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-JANELA-HE parte A2 (BLOQUEIO TOTAL) -- o desenho da L-097 e BLOQUEIO TOTAL, e o texto dela saiu ESTREITO (aval Ronald 30/09 15:1x; corrige,
+  nao e lei
 
-● Background command "Esperar o push da janela" completed (exit code 0)
+  Searched for 1 pattern, read 2 files, ran 6 shell commands
 
-  Ran 1 shell command
+❯ aval Ronald: o atraso ENTRA no alvo (e o "nao compensa" de 28/09 valendo na saida). Aplica tudo !
 
-● Os contratos da casa pegaram duas coisas minhas. Vou ler os dois:
+● O ! chegou. Registro primeiro (L-010), depois a sequência: suíte → deploy → ensaio → apply.
 
-  Declarar o censo e rodar os tres contratos
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'ponto/tests/test_s4_ninguem_recalcula_para_ler.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = """ 'ponto/management/commands/recalcular_fechamento.py': 'obra',
-     }"""
-     N = """ 'ponto/management/commands/recalcular_fechamento.py': 'obra',
-     # …
+  Running 1 shell command…
 
-✻ Bootstrapping… (2h 24m 10s · ↓ 421.4k tokens)
+· Bootstrapping… (2h 29m 12s · ↓ 438.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: os dois leitores que alimentam o calcular_mes migram para a fila do motor (S5b), com nome. A familia (1) fecha.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
