@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:52:31.**
+**Medido em 30/09/2026 13:57:33.**
 
 | | |
 |---|---|
@@ -100,21 +100,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-  Read 1 file, ran 2 shell commands
-
-● Rodei a ferramenta forense que a casa já tinha em vez de confiar só nas minhas sondas — e ela me corrigiu em dois pontos (77673456).
-
-  vinculo_do_dia_divergentes existe desde a O69 (26/09) e mede exatamente a exposição desta cura. Na competência 10, em 870 colaboradores:
-
-  DIA-COLAB em que a celula discorda da regra propria: 1.017 (em 36 colabs)
-    desses, MUDAM o numero do dia: 0     delta total: 0 min
-    dia-colab SEM geradora (a celula cala): 6.567
-    geradora que a janela NAO carregava (curado pelo pk__in): 0
-
-  1. A família (1) é vocabulário, não dinheiro. Onde a célula discorda, o número do dia é o mesmo — zero minuto em 1.017 dia-colab. Os 1.144 que eu publiquei de manhã respondem
-  outra pergunta: minha comparação era contra escala_vigente, que exigia ativa=True e por isso devolvia None; a regra própria que a ferramenta compara é mais permissiva e acha
   vínculo nesses casos. As duas medições estão certas nas suas perguntas — e quem lê só uma conclui errado.
 
   2. O mais= que eu "descobri" hoje a casa já tinha curado. A linha "geradora que a janela NÃO carregava (curado pelo pk__in): 0" e a lápide da juíza dizem isso desde 26/09: "quem
@@ -129,15 +114,30 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Veredito da raia
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bei499bm9.output 2>/dev/null; echo "rodando=$(pgrep -cf 'manage.py test' ||
-     echo 0) $(date '+%H:%M')"; tail -c 120 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratc…
+  Read 1 file, ran 3 shell commands
 
-✢ Bootstrapping… (20m 59s · ↓ 75.4k tokens · thought for 1s)
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run… ·
+     stopped
+
+● Stop Task
+  ⎿  until grep -qE '^Ran [0-9]+ test' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril4.log; do sleep 25;… ·
+     stopped
+
+  Uma forma so, e rodar os selos · 3s
+  ⎿  $ cd /home/ronald/wt-esmeril2/app && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='ponto/precedencia.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ celulas_geradoras = {_d: (_g, _tr) for _d, _g, _tr in _Cel.objects
+     .filter(colaborador=colab, data__gte=data_ini, data__lte=da…
+
+✢ Bootstrapping… (26m 1s · ↓ 89.5k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
