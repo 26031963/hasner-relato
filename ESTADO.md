@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:14:31.**
+**Medido em 30/09/2026 18:19:33.**
 
 | | |
 |---|---|
-| `HEAD` local | `f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido` |
+| `HEAD` local | `66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **15** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
 f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
 1619400c Placar e rodape do TICKETS pelos geradores
 f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-correcao, e o hook cobrou por isso
 5434d6f3 VEREDITO-VELHO-APOS-REGEN nao e bug: ZERO orfas, e o meu contador deu falso positivo DUAS vezes
-e7c303f2 VEREDITO-VELHO-APOS-REGEN: a causa esta provada, e dois tercos do numero era a DATA e nao o fato
 ```
 
 ## `git status --short`
@@ -44,7 +44,11 @@ e7c303f2 VEREDITO-VELHO-APOS-REGEN: a causa esta provada, e dois tercos do numer
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/management/commands/lavrar_deslogados.py
+?? app/ponto/services/deslogados.py
+?? app/ponto/tests/test_lista_viva_dos_deslogados.py
 ?? bin/keepalive.sh
+?? bin/lavrar_deslogados.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -100,41 +104,41 @@ e7c303f2 VEREDITO-VELHO-APOS-REGEN: a causa esta provada, e dois tercos do numer
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Esperando você, com número e nome: col882 + col502 · col900 + col309 · o passivo (933, sem caminho hoje sem novo TXT, e um terço em dia sem célula que a ordem não cobre) · S5b
-  em PAREI (−1.531,61 h em 333 dia-colab, causa não identificada) · o re-rótulo do contador da S3 · smoke da UI-GRADE · TXT parcial do col515.
+  ---
 
-  Dois itens fecharam por não serem bug, e os dois porque meu contador media a coisa errada: o VEREDITO-VELHO-APOS-REGEN (zero órfãs — era latência de fila) e a família (4) do
-  ESMERIL (o contador mede uma pergunta que seu corte matou).
+  Quando você tiver o smoke, essa é uma fatia curta: ler motivo do corpo do 401 e mostrar a frase certa para cada um dos três casos, nas duas cascas. O backend já entrega o dado.
+
+  O push dos treze commits segue na suíte.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-DISPUTA-ZUMBI -- P7.1, visivel ao colaborador: disputa com resolucao escrita e fechada_em NULO -- o app mostra "Em revisao pela
+  ⎿  Stop hook error: siga: BUG-APP-SESSAO-401 -- P7.1: col515 (u252) levou GET /api/me/ -> 401 em 26/09 01:48 e nunca mais autenticou -- 3 plantoes sem batida
 
-● O hook aponta o BUG-DISPUTA-ZUMBI, que foi curado e o passivo aplicado (55→1). Mas o dia mexeu muito no estado da disputa — vou conferir antes de marcar, como fiz no col515:
+● O hook está certo de novo: a ordem tem duas metades e eu tratei uma. A segunda — "lista dos deslogados para o admin" — não toca o pwa.js. E as 9 pautas foram criadas por mim à
+  mão; uma lista que só existe porque eu a digitei não é uma lista:
 
-  Ran 1 shell command
+  Searched for 1 pattern, listed 1 directory, ran 1 shell command
 
-● O censo confirma 1, e ela é legítima em ficar aberta — 24 perguntas vivas. O que está errado é a resolucao dizendo "todas materializadas de fato". E existe a porta que nasceu
-  hoje para exatamente isso:
+● Para saber quem está deslogado o dado está no access log — e a casa tem padrão para isso (abriu_nao_bateu: parser + comando + bin/*.sh alimentando docker logs). Vou reusar o
+  parser em vez de escrever um décimo:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Zumbis na frota: 0. O passivo fechou — 55 → 1 → zero — e a disp#2205 segue corretamente aberta com suas 24 perguntas vivas; o que saiu foi o texto que afirmava o contrário.
+● O parser existe, é público, e a lápide dele já resolve o que me morderia — as duas formas de colab= (475 com sessão, u145 do app nativo com JWT) e que "a ordem do arquivo É a
+  ordem do tempo". Vou reusá-lo:
 
-● Fechar o zumbi e registrar o simetrico
-  ⎿  $ python3 - <<'PYEOF'
+  Searched for 1 pattern, ran 2 shell commands
+
+● Agora o RED — com log de mentira, que é o que prova a regra sem depender do log real:
+
+  Selar a lista viva
+  ⎿  $ cat > ponto/tests/test_lista_viva_dos_deslogados.py <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io
-     P = 'docs/BACKLOG.md'
-     t = io.open(P, encoding='utf-8').read()
-     linhas = t.split('\n')
-     for i, L in enumerate(linhas):
-     if L.startswith('| BUG-DISPUTA-ZUMBI |'):
-     p = L.split(' | ')
-     p[2] = ('**FECHADA 30/09 18:2x -- zumbis na frota = ZERO** (55 -> …
+     """A LISTA VIVA DOS DESLOGADOS (BUG-APP-SESSAO-401, ordem Ronald 30/09: *"lista dos deslogados para o admin"*).
+     POR QUE ELA EXISTE COMO CODIGO: a lista de hoje existe porque **eu a digitei** -- as pautas #852-#8…
 
-✢ Bootstrapping… (4h 42m 59s · ↓ 865.7k tokens)
+· Bootstrapping… (4h 48m 0s · ↓ 883.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
