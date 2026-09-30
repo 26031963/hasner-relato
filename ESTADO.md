@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 23:09:31.**
+**Medido em 29/09/2026 23:15:02.**
 
 | | |
 |---|---|
@@ -120,7 +120,7 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Background command "Commit e push da cura da incoerencia" completed (exit code 0)
 
-● Committing e push do achado do pipe · 2m 4s
+● Committing e push do achado do pipe · 7m 36s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
@@ -128,10 +128,10 @@ aecbb0ff TICKETS: rodape e placar
      t=io.open(P,encoding='utf-8').read()
      ANC = """## O SMOKE DE PROD PEGOU UMA INCOERENCIA QUE EU MESMO CRIEI, e ela e de vocabulario"""
      assert t.count(ANC)==1
-     NOVO = """## O HOOK ME COBROU A B… (2m 3s · 2 lines)
+     NOVO = """## O HOOK ME COBROU A B… (7m 34s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (7h 2m 48s · ↓ 282.6k tokens)
+✽ Schlepping… (7h 8m 19s · ↓ 282.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
