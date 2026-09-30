@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:12:39.**
+**Medido em 30/09/2026 10:18:01.**
 
 | | |
 |---|---|
@@ -105,7 +105,6 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ REGISTRAR NO BACKLOG e ABRIR RAIA: obra ESMERIL-2 -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO. Lei: LEI-AKITA 2, 7, 8; contratos_estruturais.py; nenhuma lei nova.
   FASE 1 (AGORA, raia propria wt-esmeril, SO LEITURA, paralela a S4): auditoria por AST + grafo de chamadas sobre codigo de PRODUCAO (py, templates .html, static/js, management
   commands, crons, signals, migrations de dados) que NOMEIA com arquivo:linha: (a) todo campo de estado com 2+ escritores -- .save/.create/.update/bulk_*/raw SQL/F()/setattr em
   objeto salvo por outro; (b) toda pergunta de juizes.py com 2+ respondentes -- soma propria, order_by(-x).first(), comparacao de tipo gravado, if de classe em template/JS. Cron
@@ -128,11 +127,12 @@ f4ecb106 TICKETS: rodape e placar
 
 ● Minha reescrita da migration cortou um import. Corrijo:
 
-● Veredito da suite de ponto e core
+● Veredito da suite de ponto e core · 5m 24s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a…
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (5m 23s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (3h 4m 46s · ↓ 197.2k tokens)
+✢ Misting… (3h 10m 8s · ↓ 197.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
