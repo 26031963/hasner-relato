@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:777 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:817 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:30:23.**
+**Medido em 30/09/2026 14:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item` |
+| `HEAD` local | `c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **24** |
 
 ## Fabrica
 
@@ -29,22 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS
 aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item
 79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras
 eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir` ja monta a lista da frota
 f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito
-cdbf96ad VEREDITO-VELHO-APOS-REGEN: 109 celulas com DNA reescrito e veredito da versao velha, 51 delas com mais de 7 dias
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/services/materializacao.py
- M app/chamados/tests/test_a27_recusa_com_dono.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/ARQUITETURA.mmd
- M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -104,39 +100,39 @@ cdbf96ad VEREDITO-VELHO-APOS-REGEN: 109 celulas com DNA reescrito e veredito da 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    previsto antigo (12:50-21:20) -- candidato a REGEN-EM-EXPORTADA.
+  inexistente no caso R4.
 
-  Ran 1 shell command
-
-● HAIKU-FOLHA registrada com a posição que você deu — primeira janela livre, não fura o ESMERIL vínculo nem a raia UI (aa1a6e13). E os quatro achados da mesma medição viraram
-  item, um deles contra mim:
-
-  - DISPUTA-4418: ela escapou do meu critério. Eu filtrei por resolucao escrita + fechada_em nulo, e essa tem resolucao vazia — então o passivo de hoje (55 → 1) não a cobriu. O
-    critério certo é o que você descreve: pergunta viva zero e disputa aberta. Isso é limite do meu filtro, não do sistema, e está escrito assim.
-  - CHAMADO-NASCE-EM-EXPORTADA: o 27308 nasceu hoje 11:20 para 01/09, competência exportada — o dinheiro está fechado e o fio abre.
-  - GRUPO-D: 78 colabs / 399 dias acusando sem chamado e sem pergunta — o dia grita e não há canal por onde responder.
-  - COL900: é o terceiro caso do dia do mesmo padrão ([nome], col515, col900): cadastro corrigido e célula de competência exportada com o previsto velho. Registrei que, se o
-    padrão tem nome, vira varredura — não caso a caso.
-
-  E sobre a sua condição ("se o registro de ferramenta do Haiku custar mais que uma fatia, diga"): as duas ferramentas em si são pequenas — leitura pura sobre funções que já
-  existem. O único ponto que pode custar é o motivos_retencao_celula passar a devolver o dia, porque ela tem outros leitores; isso eu meço antes de mexer e digo o número.
-
-  Antes disso, preciso fechar quatro falhas que o push acusou — e uma delas me salvou de um erro sério, que reporto na sequência.
+  Vou medir isso enquanto o push corre.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Fechar a quarta falha
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='ponto/management/commands/passivo_disputa_retro.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ for _cid, _bs in _por_col_bat.items():
-     _dts = [timezone.localtime(_x.timestamp).date() for _x in _bs]
-     _col_obj = _bs[0].colaborador…
+  Ran 2 shell commands
 
-* Bootstrapping… (58m 51s · ↓ 192.4k tokens)
+● O lote 7 tem um alvo só, e ele tem número (6a753ecc):
+
+  ponto/turnos.py:1178 é o único dos três que não se corrige adiante — carrega as escalas com ativa=True e sem o pk__in das geradoras, e turnos_do_colab usa essa lista para os
+  marcos de intervalo e de borda, ou seja, para a geometria do pareamento.
+
+  Exposição medida na competência aberta: 49 colaboradores têm célula cuja geradora não entra nessa lista, e esses colaboradores têm 1.466 dia-colab na competência. É maior que os
+  28 de "geradora fora da janela" porque aqui entra também a geradora inativa, que o ativa=True exclui — o caso col515/col882.
+
+  E, aprendendo com as três afirmações minhas que a própria medição desmentiu hoje, deixei exposição e consequência em linhas separadas: o que não está medido é quanto disso muda
+  o pareamento em minutos. Lista errada faz o pareador usar os marcos da escala ativa (ou nenhum) em vez dos da que gerou a célula — se o intervalo for igual, não muda nada. Medir
+  a consequência é o primeiro passo do lote 7, e o caso R4 mostra o preço quando muda: 60 min de pausa inexistente descontados do col610.
+
+  O push segue na régua.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● A consequencia medida do lote 7
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/consequencia_turnos.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """A consequencia da lista errada no pareador: os MARCOS da escala ativa batem com os da geradora? SO LEITURA.
+     Se baterem, a lista errada na…
+
+· Bootstrapping… (1h 4m 12s · ↓ 206.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
