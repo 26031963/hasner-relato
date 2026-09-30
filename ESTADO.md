@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:45:45.**
+**Medido em 30/09/2026 14:50:45.**
 
 | | |
 |---|---|
@@ -127,12 +127,12 @@ aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados d
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Provar os dois migrados nos tres apps · 2m 17s
+● Provar os dois migrados nos tres apps · 7m 18s
   ⎿  $ cd /home/ronald/wt-esmeril2 && docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check --fix . 2>&1 | tail
-     -1; docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check … (2m 15s · 3 lines)
+     -1; docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check … (7m 15s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-* Bootstrapping… (1h 14m 13s · ↓ 233.5k tokens)
+✻ Bootstrapping… (1h 19m 13s · ↓ 233.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
