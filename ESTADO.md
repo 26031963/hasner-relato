@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:59:13.**
+**Medido em 30/09/2026 13:04:41.**
 
 | | |
 |---|---|
@@ -100,34 +100,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  "Template sem rota" tinha um falso positivo VIVO (8664f298). Fui dar veredito nos 7 candidatos e o primeiro que conferi estava em uso: core/_icone_dia_ferias.html é includado
-  por {% include dia.ausencia.icone %}, com o caminho montado no Python — 'core/_icone_dia_%s.html' % _ICONE.get(tipo, ...). Varredura de literal não acha isso, e nenhuma vai
-  achar: o nome não existe no código. O ponto cego entrou na lápide da função com a conferência obrigatória antes de qualquer remoção (grep dos nomes de template montados; em
-  30/09 há um em produção, o dos ícones). Os outros 6 não têm uma citação em .py nem em .html, conferidos arquivo por arquivo — removíveis na FASE 2, com a prova junto.
+● O gate fechou VERDE: 8.761 testes OK na raia, e a família (1) andou dois lotes:
 
-  Isso é o terceiro veredito meu que a medição derrubou hoje, e os três pelo mesmo mecanismo: critério que casa pela FORMA e não pela pergunta — o resolucao que eu atribuí aos
-  gêmeos e era reabertura; os 24 leitores que eram 19 porque cinco eram salário e férias; e agora o template "órfão" que é includado por nome montado.
+  Lote 1 (68e83bdb) — 19 → 17. Os dois primeiros eram a porta escrita à mão com outro nome: furos_vetados.py::vinculo_do_emissor se chamava literalmente "vínculo do emissor" e o
+  corpo dela virou uma linha. Prova: os 5 selos que citam os módulos + o da porta = 42 OK.
+
+  Lote 2 (em teste agora) — 17 → 14: os dois sítios do cartorio.py e o flip_auto.py. Este último perdeu o ativa=True seco, que era justamente o que deixava sem resposta o dia de
+  quem trocou de escala (lei de 16/09). Como o cartório é juiz, está rodando a suíte inteira, não a focada.
+
+  Escolhi deixar de fora, com motivo: diagnostico_escala.py:129, esmeril_espelho.py:114, precedencia.py:217 e escala_auto.py:172 carregam lista de um período, não o vínculo de um
+  dia — a pergunta ali é "quais vínculos cobrem esta janela", e a porta atual não responde essa. Vão um a um, com leitura.
+
+  E mais duas correções de critério no censo da FASE 1, as duas do mesmo tipo:
+
+  - "campo sem leitor" 22 → 21: HistoricoSalario.salario_base aparecia morto sendo lido três linhas abaixo — a varredura ignorava todo models.py ao procurar leitor. Método de
+    model lendo campo de model é a forma certa; o que se exclui é a linha da definição, não o arquivo. É literalmente o erro que fez flags_mortas dar 283 antes de virar 17.
+  - "template sem rota": 1 dos 7 está VIVO por include de nome montado no Python. O ponto cego entrou na lápide com a conferência obrigatória antes de qualquer remoção.
+
+  Dos 21 campos sem leitor, dez são as rubricas e os parâmetros do PerfilApuracao (rubrica_*, noturno_inicio, horas_para_intrajornada) — cadastro que existe, tem tela, e cujo
+  valor nenhum cálculo lê. É a LEI-AKITA 12 ao pé da letra, e casa com o que a régua CCT já havia medido em 01/09: só 3 dos 10 parâmetros dela chegam a algum cálculo.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Searched for 1 pattern, ran 6 shell commands
+  Escrever as pautas e provar a idempotencia
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec -e APLICAR=1 saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/pd.py').read())" 2>&1 |
+     grep -v "objects imported" | tail -5; echo "=== reconferir idempotencia ==="; docker exec saas_core python manage.py tenant_c…
 
-● Background command "Suite da raia com a porta unica" completed (exit code 0)
-
-● Background command "Esperar o veredito e listar falhas" completed (exit code 0)
-
-● Background command "Aguardar o veredito da suite" completed (exit code 0)
-
-  Read 1 file
-
-● Background command "Aguardar o veredito final da suite" completed (exit code 0)
-
-  Testes dos consumidores do lote 1
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a…
-
-✶ Misting… (5h 51m 20s · ↓ 474.8k tokens)
+✢ Misting… (5h 56m 48s · ↓ 492.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
