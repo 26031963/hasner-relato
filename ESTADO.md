@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:58:51.**
+**Medido em 29/09/2026 23:04:01.**
 
 | | |
 |---|---|
@@ -100,13 +100,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
-
-  Searched for 2 patterns, ran 17 shell commands
-
 ● Background command "Push do item 4" completed (exit code 0)
 
   Searched for 1 pattern, ran 4 shell commands
@@ -127,12 +120,19 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Background command "Commit e push da cura da incoerencia" completed (exit code 0)
 
-● O portao agora ve o que a tela risca · 5m 9s
-  ⎿  $ cd /home/ronald/saas-hasner && docker cp /tmp/medir_he.py saas_core:/tmp/medir_he.py >/dev/null && timeout 1500 docker exec saas_core python manage.py tenant_command shell
-     --schema=juliani --command "exec(open('/tmp/medir_he.py').read())" 2>&1 | grep -v 'objects imported' | tail -12 (5m 7s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Fechar a B1 e ver o proximo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='app/docs/BACKLOG.md'
+     linhas=io.open(P,encoding='utf-8').read().split('\n')
+     alvo=None
+     for i,ln in enumerate(linhas):
+     if ln.startswith('| O-JANELA-HE parte B1 (LEITURA) |'):
+     alvo=i; break
+     assert alvo is not None…
 
-✢ Schlepping… (6h 52m 8s · ↓ 267.3k tokens)
+✢ Schlepping… (6h 57m 18s · ↓ 268.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
