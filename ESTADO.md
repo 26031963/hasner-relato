@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:55:20.**
+**Medido em 29/09/2026 22:00:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `0436546a TICKETS: rodape e placar` |
+| `HEAD` local | `6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos` |
 | `origin/main` | `0436546a TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos
 0436546a TICKETS: rodape e placar
 d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- e nasce desligado
 be50379e TICKETS: rodape e placar
 06057219 B1 item 1: a tela mostrava dinheiro do MOTOR e o placar da S3 nao via, porque varre .py
-38e6d92e TICKETS: rodape e placar
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/escala/utils.py
- M app/ponto/janela_he.py
- M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,6 +99,13 @@ be50379e TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
+
+  Ran 1 shell command
+
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
@@ -122,19 +126,12 @@ be50379e TICKETS: rodape e placar
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Suite de ponto e escala com o marcador novo
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='ponto/services/espelho.py'
-     t=io.open(P,encoding='utf-8').read()
-     V = """ _datas_anomalia = datas_anomalia_janela(
-     resultado_v2.anomalias, data_ini, data_fim_mes, ano)
-     """
-     N = """ _datas_anomalia = datas_anomalia_janela(
-     resultado…
+● Suite na raia com a tela e o papel novos · 3m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (3m 18s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Schlepping… (5h 48m 37s · ↓ 246.3k tokens)
+✢ Schlepping… (5h 53m 58s · ↓ 254.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
