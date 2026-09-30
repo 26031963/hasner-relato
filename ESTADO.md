@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:07:31.**
+**Medido em 30/09/2026 19:12:45.**
 
 | | |
 |---|---|
@@ -41,10 +41,18 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ```
  M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/folha/export.py
+ M app/folha/management/commands/regerar_txt_dominio.py
+ M app/folha/models.py
+ M app/folha/views.py
  M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/folha/haiku_export.py
+?? app/folha/tests/test_haiku_export.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,39 +109,39 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  sem "v2". Gerar de novo entrega o mesmo nome com o conteudo novo. Backup e renomeacao sao do admin. Versao, data e hash vivem so no registro interno. RED: duas geracoes da
-  mesma competencia -> nomes IDENTICOS, conteudos diferentes, e o registro interno com as duas.
+  Ran 2 shell commands
 
-● Terceira ordem. Registro as duas novas e sigo. Primeiro os fatos que as duas REDs pedem — quantas exportações a 09 da emp2 tem, qual é a vigente, e como o nome do arquivo é
-  gerado hoje:
+● Os dois derivam o nome com a mesma expressão, duplicada. Extraindo a fonte única e tirando as não-vigentes da UI:
 
   Ran 2 shell commands
 
-● O modelo já tem tudo (conteudo, hash_sha256, gerado_em/por, invalidada_em/motivo/substituida_por) e o nome de hoje já sai de empresa+mês+ano. Conferindo se o meu regerador de
-  17:07 obedece ao mesmo nome, e os fatos da RED:
+● Agora as três ferramentas. A diferenca_entre_exportacoes precisa ler colab e rubrica do TXT, e "zero derivação" significa usar o layout que escreve, não offsets que eu invente.
+  Vendo o layout declarado:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● agregar_export_dominio já parseia o TXT ({matrícula: {rubrica: valor}}) — então a diferença reusa o parser da casa, sem derivar layout. Escrevendo a terceira ferramenta:
 
   Ran 1 shell command
 
-● As duas REDs já estão verdes em prod, e uma delas me corrige:
+● Agora a RED. Vendo a porta de registro para montar a fixture com a forma real:
 
-  - emp2 09/2026 tem 2 exportações: id20 (28/09, 238 linhas, invalidada, substituída pela 23) e id23 vigente ✓
-  - os dois têm o nome IDÊNTICO DominioCustomizavel2_J.A_Julian_092026.txt com conteúdos diferentes, e o registro guarda ambos ✓
-  - e a sua hora (17:07) contra a minha (20:07) é o meu print: imprimi gerado_em cru em UTC, contra a lei do CLAUDE.md — "toda sonda imprime timezone.localtime, nunca o timestamp
-    cru".
+  Searched for 1 pattern, read 1 file, ran 1 shell command
 
-  O que falta é o nome viver em um lugar (hoje é derivado em dois: folha/views.py:196 e o meu regerador:89) e as três ferramentas. Vendo onde moram as irmãs Haiku:
+● 11 verdes de primeira, incluindo o selo por AST que prova não haver segunda cópia do nome. Conferindo a sua RED em prod, agora com a hora local como a lei manda:
 
   Ran 1 shell command
 
-● As irmãs moram em folha/fora_da_folha.py. Registrando as duas ordens e reescrevendo a lei — a que eu escrevi às 19:xx cai inteira, porque o paga deixou de ser portão:
+● A RED reproduz exatamente: total=2, vigente id23 às 17:07 (a sua hora), a id20 de 28/09 rotulada NAO VIGENTE com o motivo da substituição. E a terceira função responde em dado
+  real: 79 colabs com diferença entre id20 e id23, nas rubricas 0150 (38), 8069 (33), 0025 (27), 0200 (12), 0243 (6), 8792 (1). Rodando a suíte do que eu toquei:
 
-  Ran 1 shell command
+● Suite do folha e contratos
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
+     saas-hasner-core:la…
 
-● Registrando as duas ordens (L-010):
-
-● Running 1 shell command…
-
-✢ Bootstrapping… (5h 35m 59s · ↓ 1.0m tokens)
+* Bootstrapping… (5h 41m 13s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
