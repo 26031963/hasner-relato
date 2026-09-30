@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:25:45.**
+**Medido em 30/09/2026 08:30:45.**
 
 | | |
 |---|---|
@@ -101,12 +101,6 @@ df62fdd7 TICKETS: rodape e placar
 
 ```
 
-  Ran 1 shell command
-
-● Background command "Push da medicao" completed (exit code 0)
-
-● O censo é a boa notícia: um único sítio captura no load — todos os outros resolvem no uso. Vou ao Erro na busca:
-
   Searched for 1 pattern, ran 1 shell command
 
 ● Agora o selo estrutural (o censo virando guarda) e o de chromium que morde:
@@ -123,20 +117,26 @@ df62fdd7 TICKETS: rodape e placar
 
 ● A terceira linha é a minha própria sonda lendo a prosa (a lápide cita o bug). Confiro sem comentário:
 
-  Committing do smoke e push da cura da busca · 2m 19s
+  Committing do smoke e push da cura da busca · 7m 19s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      import io
      P='app/docs/RELATO.md'
      t=io.open(P,encoding='utf-8').read()
      V = """**O SELO MORDEU A SI MESMO NA ESTREIA, e vale escrito:**"""
-     N = """**NO AR, e conferido pelo loader REAL do Django em prod** (template no bind-mount entra na hora, sem d… (2m 17s · 3 lines)
+     N = """**NO AR, e conferido pelo loader REAL do Django em prod** (template no bind-mount entra na hora, sem d… (7m 17s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (1h 17m 52s · ↓ 86.8k tokens)
+· Misting… (1h 22m 52s · ↓ 86.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ INCIDENTE PROD AGORA (P7.1): GET /relatorios/ -> 500 x7 em 4 min (u28, u653), get_template('relatorios/index.html') falha em 20ms -- template do catalogo (raia UI) esta na
+  arvore de prod quebrado (include/sintaxe). Medir: git status/diff de templates/relatorios/ na principal, e o erro exato (ultimas linhas do traceback). Cura: template valido no
+  ar JA (a raia termina fora da arvore -- lei de ontem: arquivo de fatia so entra no ato do commit/deploy); selo de que todo template da arvore compila (loader.get_template sobre
+  a pasta inteira, na regua). Depois: BUG-FOTO-APP-401 e BUG-BUSCA-POSTO (bloco anterior). PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
