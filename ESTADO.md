@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:38:32.**
+**Medido em 30/09/2026 16:44:01.**
 
 | | |
 |---|---|
@@ -100,44 +100,44 @@ f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
-
-● Item 1 fechado: deriva, não bug. Vou publicar e escrever a exceção nomeada, no mesmo commit:
-
   Ran 2 shell commands
 
-● Agora o código. Passo 2 e 3 precisam que a porta aceite a exceção:
+● Meu censo tem dois defeitos que eu mesmo persigo: contador infla por duplicata e a escrita deu zero falso:
 
   Ran 1 shell command
 
-● Passo 3 — o DIFF da 09 com REGRA e DERIVA em colunas separadas. E ele roda em prod, não na sombra, porque a coluna DERIVA da sombra é cega (medido às 16:1x):
+● O censo dá escrita = 0 e meu grep anterior dava 4. Vou conferir qual dos dois mente:
 
   Ran 2 shell commands
 
-● Enquanto o DIFF roda, os passos 4 e 5. O "invalidado com trilha" precisa ser estado legível, não só log:
+● O censo estava certo e meu grep mentia — contava class Batida(models.Model) como escritor. Agora vou ler os 7 antes de chamá-los de defeito:
 
-  Searched for 1 pattern, read 1 file, listed 1 directory, ran 10 shell commands
+  Ran 1 shell command
 
-● Background command "Esperar o DIFF da 09" completed (exit code 0)
+● Lendo os sete, a maioria é legítima por pergunta, e um deles descobriu outra coisa. Vou conferir:
 
-  Searched for 2 patterns, read 1 file, ran 1 shell command
+  Ran 2 shell commands
 
-● A separação que ele pediu deu a resposta decisiva. Vou publicar:
+● furos_diarios está na allowlist declarada de outro contrato — meu alarme estava errado e bem que eu conferi. O censo precisa de critério por função, não por arquivo:
+
+  Ran 1 shell command
+
+● Sobrou um. Vou ler quem o chama antes de decidir:
+
+  Ran 1 shell command
+
+● Achei a causa: _retratada_com_trilha existe para dizer que só a retratada COM trilha conta — e a leitura crua faz qualquer retratada bloquear, trilha ou não. Vou selar o censo:
 
   Ran 3 shell commands
 
-● Meu teste achou uma fragilidade real no derivado: e_vigente empata quando dois TXT têm o mesmo gerado_em:
+● Advising using Fable 5.1
 
-● Commitar e empurrar
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/folha/models.py app/folha/tests/test_txt_invalidado_com_trilha.py
-     app/folha/management/commands/regerar_txt_dominio.py app/config/crons.py && git commit -q -F - -- app/docs/RELATO.md app/folha/models.py app/folha/tests/test_txt_invalid…
-
-✻ Bootstrapping… (3h 7m 0s · ↓ 518.4k tokens · thinking)
+✢ Bootstrapping… (3h 12m 29s · ↓ 539.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
