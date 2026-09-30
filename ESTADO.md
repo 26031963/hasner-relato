@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 03:36:31.**
+**Medido em 30/09/2026 03:42:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ aecbb0ff TICKETS: rodape e placar
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
