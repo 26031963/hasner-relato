@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:337 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:373 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:29:01.**
+**Medido em 30/09/2026 10:34:19.**
 
 | | |
 |---|---|
-| `HEAD` local | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
+| `HEAD` local | `c78445c7 TICKETS: rodape e placar` |
 | `origin/main` | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c78445c7 TICKETS: rodape e placar
+336d4ae1 O nucleo da B2 escrito e PARADO, e dois selos da casa recusaram a minha primeira versao
 67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
 5a3f29e0 TICKETS: rodape e placar
 43d8b0dc S4 fechada, e o censo mudou o nome da fatia: `recalcular` nao morre -- ele fica PORTA
-f4ecb106 TICKETS: rodape e placar
-22e9a5d1 Medido sem curar: o colaborador nao respondeu em 2.483 de 2.503 -- e a constraint espera a ESMERIL-2
 ```
 
 ## `git status --short`
@@ -41,14 +41,9 @@ f4ecb106 TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/ponto/models.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/migrations/0069_decisao_he.py
-?? app/ponto/portas/he.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -105,13 +100,6 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  GOLDENS: col899 (dois ativos por porta pela metade; leitor mostrou folga 28/30 pela 1310), col438 (disputa_s84_retro criou batida sem resposta em folga --
-  materializacao.py:589).
-  CONTADORES NO ESTADO (esperado 0, publicados a cada ciclo): batidas lancadas sem resposta em dia de folga; vinculos ativos sobrepostos; leitores que escolhem vinculo sem
-  perguntar ao dia; dias com escala corrigida e nao re-julgados; POST /api/ponto/foto/ 401 na ultima hora.
-  segue a fila; PAREI so em lei ou !
-
-● Ordem recebida: a FASE 2 da ESMERIL-2 passa na frente da B2. Registro, abro a raia, e o núcleo da B2 que acabei de escrever fica parado com a posição declarada:
 
   Read 1 file, ran 4 shell commands
 
@@ -121,18 +109,25 @@ f4ecb106 TICKETS: rodape e placar
 
 ● Dois selos pegaram a minha porta, e os dois estão certos. O segundo é o melhor achado: a porta não deve re-medir — quem decide já tem o número na tela:
 
-● Curar o ruff e rodar os tres apps · 3m 46s
-  ⎿  $ python3 - <<'PYEOF'
-     import io, py_compile
-     P='ponto/portas/he.py'
-     t=io.open(P,encoding='utf-8').read()
-     V = """ except (TypeError, ValueError):
-     raise DecisaoHERecusada('minutos invalido: %r' % (minutos,))"""
-     N = """ except (TypeError, ValueError) as _e:
-     raise DecisaoHERecusada('minutos invalido: %r… (3m 38s · 2 lines)
+  Ran 4 shell commands
+
+● Agora a FASE 1 na raia — o censo de escritores, que é só leitura:
+
+  Ran 2 shell commands
+
+● O censo da FASE 1 tem a primeira tabela, e ela aponta uma família só:
+
+  Ran 1 shell command
+
+● O censo tem falso positivo meu: arquivos tests_*.py não casam no meu filtro test_*. Corrijo antes de publicar:
+
+● Pushing do nucleo parado da B2 · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b2n.log 2>&1; echo "rc=$?"; grep -E 'main -> main|^OK$|RED|error|^Ran '
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b… (3s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (3h 21m 8s · ↓ 201.4k tokens)
+· Misting… (3h 26m 26s · ↓ 212.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
