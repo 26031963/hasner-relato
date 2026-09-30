@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:08:31.**
+**Medido em 30/09/2026 14:14:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito` |
+| `HEAD` local | `79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **22** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras
+eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir` ja monta a lista da frota
 f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito
 cdbf96ad VEREDITO-VELHO-APOS-REGEN: 109 celulas com DNA reescrito e veredito da versao velha, 51 delas com mais de 7 dias
 a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar TIMESTAMP nao e comparar DNA
-3bfaba29 O contador 4 sai de "sem criterio" para 1.106, e os 207 piores leem o DNA velho
-3a0554ce Os cinco contadores do ESMERIL-MECANICO, com numero e universo -- e o col515 e UM DE 52
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  batida sem a fala do colaborador) e o campo pergunta_origem fecha o resto desde 06/09. Agendar seria varrer passivo congelado todo dia. Quando as 933 saírem pela
+  REGEN-EM-EXPORTADA, ele sai de lá junto com o próprio comando — que é o destino certo de um varredor que cumpriu o propósito, e é a métrica (c) ZUMBI caindo por remoção, não por
+  tolerância.
 
-  O gate da raia está nos minutos finais. A sequência assim que ele fechar: lote 6 (os commands, com o veredito de remover o aplicar_09_corte_b), e o push dos 21 commits da
-  principal.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-  Read 1 file, ran 3 shell commands
-
-● O diagnóstico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso foi registrado (f11d86de) em vez de virar uma causa publicada sem prova.
-
-  Rodei julgar_colab no col727 com emissor=None e ele pulou as 71 células. Isso pode ser o gate que eu procuro — ou pode ser a minha chamada, porque o command real passa um
-  emissor. É exatamente o erro que a CLAUDE.md nomeia: "não reconstruir em sonda própria a chamada que o sistema faz". Já custei sete diagnósticos errados à casa por isso; prefiro
-  registrar a dúvida.
-
-  O que a sonda achou de firme, porque é leitura de dado e não de fluxo:
-
-  - a regeneração de 15/09 deixou dna.marcos = None mantendo dna_versao=2, e o dna_anterior tinha os quatro marcos (07:00/12:00/13:00/15:00). A célula perdeu a geometria — que é o
-    caso R4 da CLAUDE.md, o mesmo que descontava 60 min de pausa inexistente;
-  - os três vínculos dele contam a história: ec#901 e ec#1174 com regua_classe=CICLO_ERRADO, e o ec#1233 (16/09) confiavel;
-  - não é o limbo: motivo_escala_errada devolve None nos dois dias.
-
-  Próximo passo escrito no item: chamar como o command chama, com emissor real e --forcar para comparar.
-
-  O gate da raia está nos últimos minutos (14:08, começou 13:58). Vou parar de abrir frentes novas e fechar o que está aberto: lote 6, commit, e o push dos 23 commits da
-  principal.
+  Aprender do selo duas vezes no mesmo dia é o que ele existe para evitar; a segunda vez custou um grep em vez de dez minutos de suíte.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Running 1 shell command…
+  Searched for 1 pattern, ran 1 shell command
 
-· Bootstrapping… (36m 59s · ↓ 126.6k tokens)
+● Um risco que quero dizer com precisão, porque ele é estrutural e não some sozinho:
+
+  A fatia UI-GRADE está VIVA em prod e não commitada. _calendario_grade.html tem +49/−4 linhas contra o HEAD e, como template não tem cached.Loader, isso já é a tela que o admin
+  vê. Os selos dela estão na árvore mas fora do git: test_ui_grade_calendario.py e test_chip_ausencia_duas_linhas.py como untracked, e test_calendario_sete_colunas.py modificado.
+
+  Isso é coerente com a lei ("arquivo de fatia só entra no ato do commit/deploy") e com o seu smoke pendente — mas tem duas consequências que vale nomear:
+
+  1. O que protege a tela não está versionado. Se a fatia cair, ninguém sabe por qual selo ela devia passar.
+  2. Voltar o arquivo ao HEAD tiraria a tela do ar — e isso é exatamente o ! da L-009 (apagar/voltar arquivo que prod usa). Ou seja: hoje o caminho de saída dessa fatia é só para
+     frente.
+
+  Não vou commitar por conta própria porque o smoke é seu e a regra diz que a fatia entra no ato dele. Mas quando você fizer o smoke, o commit leva template + os três selos juntos
+  — e eu deixo isso preparado para ser um comando só.
+
+  O gate está no fim (1.813 linhas).
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Gate da raia
+
+✢ Bootstrapping… (42m 29s · ↓ 143.1k tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
