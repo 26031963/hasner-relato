@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:54:01.**
+**Medido em 30/09/2026 12:59:13.**
 
 | | |
 |---|---|
@@ -100,34 +100,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │          │ arquivos │  +  │  −  │ delta │
-  ├──────────┼──────────┼─────┼─────┼───────┤
-  │ produção │ 7        │ 252 │ 11  │ +241  │
-  ├──────────┼──────────┼─────┼─────┼───────┤
-  │ teste    │ 2        │ 317 │ 0   │ +317  │
-  └──────────┴──────────┴─────┴─────┴───────┘
+  "Template sem rota" tinha um falso positivo VIVO (8664f298). Fui dar veredito nos 7 candidatos e o primeiro que conferi estava em uso: core/_icone_dia_ferias.html é includado
+  por {% include dia.ausencia.icone %}, com o caminho montado no Python — 'core/_icone_dia_%s.html' % _ICONE.get(tipo, ...). Varredura de literal não acha isso, e nenhuma vai
+  achar: o nome não existe no código. O ponto cego entrou na lápide da função com a conferência obrigatória antes de qualquer remoção (grep dos nomes de template montados; em
+  30/09 há um em produção, o dos ícones). Os outros 6 não têm uma citação em .py nem em .html, conferidos arquivo por arquivo — removíveis na FASE 2, com a prova junto.
 
-  Medido por git diff --numstat contra e3b87217, na mesma árvore — e isso corrigiu um vício da linha de base: ela foi medida na raia wt-esmeril, então os absolutos dela
-  (126.127/161.629) não se comparam direto com os da principal (126.108/162.859). O delta na mesma árvore é a única conta honesta entre ciclos.
-
-  As +241 são vinculo_do_dia (a porta única do vínculo do dia), limpar_resolucao_residual (a porta do passivo), reconciliar_disputa_zumbi (comando de uma vez, declarado em
-  FORA_DE_PIPELINE) e o carimbo do motivo no 401. Três das quatro são PORTA — código que existe para um caminho deixar de ser escrito à mão em N lugares, que é o oposto do
-  varredor novo que a métrica persegue. A queda vem quando os 19 leitores da família (1) migrarem.
-
-  E duas escolhas de universo ficaram escritas, porque contador sem universo mente: crons são 87 por todas_as_entradas() (a fonte que os contratos B6 leem), não os 71 do CRONS
-  fixo; e 121 dos 192 commands estão em FORA_DE_PIPELINE, cada um com motivo escrito.
-
-  O gate da família (1) ainda está rodando (~15 min por rodada na worktree). O lote 1 segue preparado e não aplicado — editar a raia agora corromperia a corrida que está medindo
-  ela.
+  Isso é o terceiro veredito meu que a medição derrubou hoje, e os três pelo mesmo mecanismo: critério que casa pela FORMA e não pela pergunta — o resolucao que eu atribuí aos
+  gêmeos e era reabertura; os 24 leitores que eram 19 porque cinco eram salário e férias; e agora o template "órfão" que é includado por nome montado.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Todo nome de template dinamico
-  ⎿  $ cd /home/ronald/wt-esmeril/app && echo "=== nomes de template montados (%s ou f-string) ===" && grep -rnE
-     "['\"][a-z_]+/[a-z_/]*%s[a-z_]*\.html['\"]|f['\"][a-z_]+/[^'\"]*\{" --include=*.py . | grep -v "/tests" | head -10
+  Searched for 1 pattern, ran 6 shell commands
 
-✢ Misting… (5h 46m 8s · ↓ 464.8k tokens)
+● Background command "Suite da raia com a porta unica" completed (exit code 0)
+
+● Background command "Esperar o veredito e listar falhas" completed (exit code 0)
+
+● Background command "Aguardar o veredito da suite" completed (exit code 0)
+
+  Read 1 file
+
+● Background command "Aguardar o veredito final da suite" completed (exit code 0)
+
+  Testes dos consumidores do lote 1
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a…
+
+✶ Misting… (5h 51m 20s · ↓ 474.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
