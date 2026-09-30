@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:10:45.**
+**Medido em 30/09/2026 07:15:45.**
 
 | | |
 |---|---|
@@ -46,6 +46,7 @@ aecbb0ff TICKETS: rodape e placar
  M app/ponto/motor_calculo_v2.py
  M app/ponto/services/dia_pago.py
  M app/ponto/services/espelho.py
+ M app/ponto/tests/test_dia_pago_soma.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -105,13 +106,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Medido em prod agora: emp2 piso 10 / teto 60 desde 21/09; emp3 19 dias, emp4 6 — col624 em 22/09 chegou 12:15 contra marco 15:00, 165 min fora. trava=False, falhas=0.
-
-  E o hook me cobrou a B1 duas vezes com ela pronta — por um caractere meu: escrevi os nomes dos filtros com o pipe literal dentro da célula do BACKLOG, o pipe terminou a célula,
-  a linha virou 10 células e o _FECHADO passou a ler o fragmento add como estado. Linha reconstruída. O censo achou mais quatro linhas assim (HOOK-PAREI-SE-APAGA, O46, O54, O60,
-  O82) — nomeadas no RELATO como próxima fatia, com o selo de host que falta.
-
   PAREI: lei (no topo do RELATO, com números): hora noturna trabalhada em dia de folga gera adicional noturno? E intervalo não registrado nesse dia gera intrajornada indenizada? O
   motor diz não para as duas, e o único corte escrito sobre folga trabalhada (27/09) decide o adicional de 100% — o noturno do Art.73 é adicional sobre hora noturna, não segunda
   paga da mesma hora. Na frota da 10: col511 28,00 h · col956 28,00 h · col960 29,16 h · col820 18,89 h que hoje não se pagam. Se a resposta for "sim", quem muda é o motor — a
@@ -127,21 +121,28 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Ronald respondeu o PAREI de lei. Registro a ordem e implemento — isso muda o motor, que é zona inviolável, e o aval é explícito sobre a lei que vive nele.
 
-  A soma unica passa a espelhar a lei
+  Ran 5 shell commands
+
+● Agora o selo, com a lei escrita — inverto de novo, e cada assertiva cita a linha do aval:
+
+● Suite dos cinco apps com a lei nova · 4m 7s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
-     P='ponto/services/espelho.py'
+     P='ponto/tests/test_dia_pago_soma.py'
      t=io.open(P,encoding='utf-8').read()
-     V = """ for p in list(periodos or ()) + list(periodos_ft or ()):
-     if dentro is not None:
-     _d = timezone.localtime(p.entrada).date()
-     if not (dentro[0] <= _d <= dentro[…
+     V = """ def test_MORDE_no_dia_com_OS_DOIS_a_rubrica_e_so_a_do_periodo_normal(self):
+     \"\"\"O dia que tem periodo NORMAL e folga trabalhada: as horas somam em… (4m 4s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (2m 52s · ↓ 11.5k tokens)
+· Misting… (7m 52s · ↓ 16.0k tokens)
+
+❯ lei Ronald: PAREI de LEI nao devolve turno. Quando faltar lei, registra a pergunta no topo do RELATO com numeros e SEGUE o proximo item da ORDEM VIVA que nao depende dela; a
+  resposta entra quando vier. So devolve turno por ! de dinheiro exportado/vinculo/apagar prod. PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
