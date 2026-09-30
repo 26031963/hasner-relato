@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 04:15:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **313**.
+**Medido em 30/09/2026 04:20:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **308**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -318,8 +318,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:21:58 | Bash | Ler o resumo inicial e a costura com a tela no PDF | `sed -n '240,270p;505,600p' relatorios/pdf_espelho.py` |
 | 16:21:50 | Bash | Ler folha_manda: quais chaves o gravado sobrescreve | `sed -n '40,90p;105,160p' relatorios/cartao_pela_celula.py` |
 | 16:21:37 | Bash | Censo de leitores das chaves do resumo | `for K in total_atraso total_saida_antecipada total_extras_50 total_extras_100 total_extras total_intra_indenizada trab_folga; do echo "--- $K"; grep -rn "$K" --include=*.py --include=*.html . \| grep -v '/tests/' \| grep -v '^\./docs' \| sed 's/^\.\///' \| head -12; done` |
-| 16:16:42 | Bash | Comparar as chaves dos dois resumos | `echo "=== resumo do PDF: chaves"; grep -n "resumo\['" relatorios/pdf_espelho.py \| sed 's/^ *//' \| head -60; echo; echo "=== resumo_mes do MONTADOR: chaves"; grep -n "resumo_mes\['\\|resumo_mes\.get\\|resumo_mes = " ponto/services/espelho.py \| head -40` |
-| 16:16:10 | Bash | Ler os tres sitios de derivacao | `echo "=== pdf_espelho 465-505"; sed -n '465,505p' relatorios/pdf_espelho.py; echo; echo "=== api/views 1495-1525"; sed -n '1495,1525p' api/views.py; echo; echo "=== espelho.py 315-335"; sed -n '315,335p' ponto/services/espelho.py` |
-| 16:16:01 | Bash | Trocar o criterio de nome por fato e reconferir | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='ponto/tests/test_s3_placar_exercicio.py' t=io.open(P,encoding='utf-8').read() v = """# quem TOCA numero de motor -- e portanto tem de carregar o rotulo (criterio (a)) NOMES_DE_MOTOR = ('resultado', 'periodos', 'periodos_ft') CHAMADAS_DE_MOTOR = ('autoridade_do_periodo', 'espelho_do_colab', 'calcular_mes') """ n = """# QUEM TOCA N ...` |
-| 16:15:21 | Bash | Onde cada leitor chama o motor | `grep -n -E 'autoridade_do_periodo\|espelho_do_colab\|calcular_mes' relatorios/views.py relatorios/pdf_espelho.py ponto/views.py colaboradores/services/ficha.py api/views.py \| grep -vn '^\s*#'` |
-| 16:15:14 | Bash | Censo: periodos_ft e quem chama motor | `echo "--- periodos_ft:"; grep -rn '\bperiodos_ft\b' --include=*.py . \| grep -v '/tests/' \| head; echo "--- quem chama motor entre os LEITORES:"; for F in relatorios/pdf_espelho.py api/views.py relatorios/views.py colaboradores/services/calendario.py colaboradores/services/ficha.py relatorios/services.py ponto/views.py; do printf '%-42s' "$F"; grep -c -E 'autoridade_do_periodo\|espelho_do_colab\| ...` |
