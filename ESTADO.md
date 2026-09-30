@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:21:02.**
+**Medido em 30/09/2026 12:26:31.**
 
 | | |
 |---|---|
@@ -100,6 +100,10 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
+
+● Stop Task
   ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-a… ·
      stopped
 
@@ -118,16 +122,12 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 
 ● Background command "Esperar o push" completed (exit code 0)
 
-● Rodar de novo o RED da familia 1
-  ⎿  $ cd /home/ronald/wt-esmeril2/app && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='escala/tests/test_escala_vigente_pergunta_a_celula.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = ''' def test_MORDE_vigencia_IMPOSSIVEL_com_celula_responde_o_vinculo_da_celula(self):
-     """fim < in…
+  Suite inteira na raia com a cura · 4m 51s
+  ⎿  $ cd /home/ronald/saas-hasner && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); echo "$LABELS" | head -c 200; echo; source bin/recursos.sh >/dev/null 2>&1; teste_envfile
+     >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENV… (4m 49s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (5h 13m 10s · ↓ 392.4k tokens)
+✢ Misting… (5h 18m 38s · ↓ 394.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
