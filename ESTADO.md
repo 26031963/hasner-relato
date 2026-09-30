@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:05:45.**
+**Medido em 30/09/2026 07:10:45.**
 
 | | |
 |---|---|
@@ -41,7 +41,11 @@ aecbb0ff TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/dia_pago.py
+ M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,25 +105,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● B1 completa, 4 de 4, no ar e medida em prod. Ordem registrada em PROMPTS.md no mesmo turno; faltam=0.
-
-  O que a B1 achou, que não estava no pedido:
-
-  1. A tela mostrava dinheiro do MOTOR e o placar da S3 não via. A linha do dia do espelho imprimia t.horas_trabalhadas / t.horas_extra de dia.turnos — períodos do motor —
-     enquanto o PDF do mesmo dia já imprimia a lavratura. Escapou porque o selo do placar varre .py por AST e a derivação estava num template. Critério que lê uma linguagem mede
-     uma linguagem, e o dinheiro aparece na tela pelo .html. Agora a linha lê dia.rubricas, ganha Atraso e Saída antecipada, e dia sem lavratura diz "sem apuração ainda". Selo
-     novo varre o MARKUP — sem {% comment %}, senão morderia a própria lápide.
-  2. Itens 2 e 3: relógio riscado no marco com o tooltip do Art. 4º §2º e crachá "HE fora da janela: N min · sem decisão". No papel a mesma informação vai como frase — decisão
-     técnica registrada: tooltip não existe em PDF, e num documento do Art.74 §2 frase legível vale mais que glifo sem legenda. O limiar virou função com dois leitores
-     (dentro_da_janela): o que decide o dinheiro e o que decide o riscado.
-  3. Item 4: he_pendente no medir, com o portão Empresa.he_pendente_trava_export nascendo desligado (migration 0053) — mede sempre, só soma em falhas com o cadastro ligado.
-
-  E o smoke de prod pegou uma incoerência minha: o portão contava só os dias acima do teto (60 min) e a tela risca a faixa inteira (acima do piso, 10) — emp2 tinha 23 dias
-  riscados contra portão zero. "Pendente" passaria a significar duas coisas conforme quem pergunta. Curado: os dois leem a mesma fonte. Com isso caiu também a lacuna que eu havia
-  declarado meia hora antes ("a faixa 10–60 exigiria tocar o motor") — não exigia, o dado já estava na célula da grade. Declarar limite é honesto; parar de procurar caminho depois
-  de declarar, não.
 
   Medido em prod agora: emp2 piso 10 / teto 60 desde 21/09; emp3 19 dias, emp4 6 — col624 em 22/09 chegou 12:15 contra marco 15:00, 165 min fora. trava=False, falhas=0.
 
@@ -135,10 +120,29 @@ aecbb0ff TICKETS: rodape e placar
   Próximo da sua ordem: S4.
 
 ✻ Brewed for 7h 21m 24s · done 11:28 PM · 17 shells still running
-                                                                                                                                             new task? /clear to save 541k tokens
+
+❯ aval Ronald lei: folga trabalhada NAO apaga rubrica. Hora noturna em dia de folga paga o adicional noturno (cl.38-d, Art.73) SOBRE a hora, alem dos 100% da folga; intra
+  suprimida em folga trabalhada gera intra indenizada; saida antecipada em folga trabalhada NAO existe (L-084: sem escala certa nao ha marco). Vale da competencia 10; a 09 nao se
+  toca. DIFF de frota antes do apply. Segue a fila: S4. PAREI so em lei ou !
+
+● Ronald respondeu o PAREI de lei. Registro a ordem e implemento — isso muda o motor, que é zona inviolável, e o aval é explícito sobre a lei que vive nele.
+
+  A soma unica passa a espelhar a lei
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='ponto/services/espelho.py'
+     t=io.open(P,encoding='utf-8').read()
+     V = """ for p in list(periodos or ()) + list(periodos_ft or ()):
+     if dentro is not None:
+     _d = timezone.localtime(p.entrada).date()
+     if not (dentro[0] <= _d <= dentro[…
+
+· Misting… (2m 52s · ↓ 11.5k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
