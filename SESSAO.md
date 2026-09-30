@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 15:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (136.4 MB). Acoes na janela: **827**.
+**Medido em 30/09/2026 15:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (136.9 MB). Acoes na janela: **844**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:16:00 | Bash | Registrar a ordem em PROMPTS e BACKLOG | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io HORA = '30/09 15:1x' # ---------- 1. PROMPTS.md : a linha da ordem ---------- P = 'docs/PROMPTS.md' t = io.open(P, encoding='utf-8').read() assert 'JANELA-DE-HE (bloqueio total)' not in t, 'ja registrado' linha = ('\| JANELA-DE-HE (bloqueio total) \| %s \| **CORRIGE a L-097, nao e lei nova** -- e o corte de 28/09 lido ' 'INTEIRO: o desenho e ** ...` |
+| 15:15:24 | Bash | Ver os itens ABERTOS da fila 1 | `awk 'NR>=22 && NR<=88' docs/BACKLOG.md \| grep -n "^\|" \| cut -c1-200 \| grep -vi "FECHADA" \| head -20` |
+| 15:15:17 | Bash | Ver as colunas das duas tabelas | `sed -n '18,24p' docs/BACKLOG.md && echo "=== OBRAS header ===" && sed -n '89,93p' docs/BACKLOG.md` |
+| 15:15:12 | Bash | Ver formato de PROMPTS e BACKLOG | `date '+%d/%m %H:%M' && echo "=== PROMPTS cabecalho ===" && sed -n '1,12p' docs/PROMPTS.md && echo "=== ultimas linhas ===" && tail -4 docs/PROMPTS.md && echo "=== BACKLOG OBRAS cabecalho ===" && grep -n "^\| *Obra\\|^\|---\\|^## " docs/BACKLOG.md \| head -12` |
+| 15:14:52 | Bash | Ver os quatro sitios de chamada | `for L in 1672 1797 2102 2404; do echo "===== $L ====="; sed -n "$((L-14)),$((L+16))p" ponto/motor_calculo_v2.py; done` |
+| 15:14:46 | Bash | Localizar a chamada do _entrada_efetiva | `grep -n "_entrada_efetiva(" ponto/motor_calculo_v2.py && echo "=== onde e chamado ===" && grep -n "_entrada_efetiva" ponto/motor_calculo_v2.py` |
+| 15:14:42 | Bash | Ver a assinatura e os chamadores do clip de entrada | `sed -n '960,1000p' ponto/motor_calculo_v2.py && echo "=== chamadores ===" && grep -n "_entrada_que_conta\\|_janela_da_entrada\\|def _clipar\\|_cadastro_nao_descreve" ponto/motor_calculo_v2.py \| head -20` |
+| 15:14:36 | Bash | Ler cadastro, tolerancia e o sitio da janela no motor | `echo "=== models 55-90 ===" && sed -n '55,90p' colaboradores/models.py && echo "=== TOLERANCIA_HE_MIN_DIA ===" && grep -rn "TOLERANCIA_HE_MIN_DIA" --include=*.py . \| head && echo "=== motor 1000-1080 ===" && sed -n '1000,1080p' ponto/motor_calculo_v2.py` |
+| 15:14:19 | Bash | Ler a regra pura da janela e seus leitores | `echo "=== janela_he.py ===" && cat ponto/janela_he.py && echo "=== leitores de janela_he_* no motor/calculador ===" && grep -rn "janela_he" ponto/ folha/ escala/ relatorios/ --include=*.py \| grep -v tests/ \| head -30` |
+| 15:14:12 | Bash | Ver commits nao empurrados, L-097 e os leitores da janela de HE | `cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD && echo "--- L-097 ---" && grep -rn "L-097" app/docs/*.md \| head -20 && echo "--- janela_he ---" && grep -rn "janela_he_saida_ativa\\|janela_he_saida_teto_min" app/ --include=*.py --include=*.html \| head -40` |
+| 15:14:06 | TaskStop |  | `-` |
+| 15:14:06 | TaskStop |  | `-` |
+| 15:14:05 | TaskStop |  | `-` |
+| 15:14:05 | TaskStop |  | `-` |
+| 15:14:04 | TaskStop |  | `-` |
+| 15:13:54 | Bash | Conferir push e abrir o censo_fase_12x36 | `cd /home/ronald/saas-hasner && date '+%H:%M' && git fetch -q origin && echo "principal faltam=$(git rev-list --count origin/main..HEAD)" && cd /home/ronald/wt-esmeril2 && git log --oneline -1 && sed -n '80,95p' bin/censo_fase_12x36.py 2>/dev/null \|\| sed -n '80,95p' /home/ronald/wt-esmeril2/app/ponto/management/commands/censo_fase_12x36.py` |
+| 15:13:51 | ToolSearch |  | `-` |
 | 15:10:22 | Bash | Gate verde e o escopo corrigido | `cd /home/ronald/wt-esmeril2 && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='bin/esmeril_vinculo_censo_de_hoje.txt' t=io.open(P,encoding='utf-8').read() _nota = """ -- GATE DO LOTE 7: **8.765 OK** (15:09). E a MEDICAO do `esmeril_espelho:114` mudou o ESCOPO da familia -- As duas provas do lote 7 estao na mao: suite cheia **8.765 OK** e **DIFF_FOLHA=0**. O codigo fica na RAIA, porque a o ...` |
 | 15:09:47 | Bash | O que assinaturas_do_colab faz com o ec | `cd /home/ronald/wt-esmeril2/app && sed -n '108,130p' ponto/services/esmeril_espelho.py` |
 | 15:09:32 | Bash | Veredito do gate | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3ts4fihn.output 2>/dev/null \| head -24; echo "--- suite=$(pgrep -cf 'manage.py test' \|\| echo 0) $(date '+%H:%M')"; grep -E '^Ran \|^OK\|^FAILED' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril6.log \| tail -2` |
