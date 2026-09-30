@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:27:01.**
+**Medido em 30/09/2026 20:32:31.**
 
 | | |
 |---|---|
@@ -101,43 +101,43 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 
 ```
 
+  Só dois são reais. Vendo o O98, que se contradiz:
+
   Ran 1 shell command
 
-● SEMEIA_PADRAO é a fonte única para setor NOVO, e a UI edita setor existente. Conferindo se a UI lê as permissões do banco (senão a ação nova não aparece lá) e alinhando a
-  semeadura:
+● O98 se contradiz: a obra abre com "CONGELADA (L-096)" e o portão diz "fila 1, DEPOIS do lote 2". Não vou resolver por adivinhação. Conferindo o que a L-096 congela, porque as
+  leis de hoje foram removendo congelamentos:
+
+  Ran 1 shell command
+
+● Resolvido sem adivinhar: a L-096 é "obra estrutural anda sozinha até o fim" — ela congela obra nova, e o portão do O98 estava dizendo a posição depois do degelo, não o estado
+  agora. As duas coisas são verdade; a coluna do estado tem de dizer o estado. E o O69 está feito, só não na palavra que o leitor conhece:
+
+  Ran 1 shell command
+
+● O próximo é o R1, um item estrutural real. Mas eu tenho uma sequência em voo (suíte de main → selos da raia → cherry-pick → push → deploy), e abrir o R1 agora significaria
+  editar a árvore de main com a suíte lendo o mesmo bind-mount. Conferindo a corrente:
 
   Ran 2 shell commands
 
-● A UI lista Permission.objects.filter(codename__startswith='rbac_') do banco — então a ação nova aparece lá sozinha, e a promessa da lápide se sustenta. Alinhando a semeadura e
-  escrevendo os selos da aba:
+● 15:55 e 100% de CPU — as corridas anteriores fecharam em 955 s, então ela está no fim. Lendo o R1 para entrar nele direto quando a sequência fechar:
 
-  Ran 1 shell command
+● Ler o item R1
+  ⎿  $ python3 -c "
+     import io
+     for l in io.open('docs/BACKLOG.md', encoding='utf-8'):
+     if l.startswith('| R1 '):
+     c = l.split('|')
+     print('OBRA:'); print(c[2].strip()[:1200]); print(); print('PORTAO:', c[3].strip()[:200]); print(); print('ONDE:', c[4].strip()[:400])
+     break
+     "
 
-● Agora o selo antigo ("sem controle que escreve") precisa ceder — a B2 chegou. Mas há um invariante que sobrevive e vale guardar: a decisão é de um dia por ato, sem lote.
-  Reescrevendo em vez de apagar:
-
-  Ran 2 shell commands
-
-● A suíte está em 9:53 e progredindo (73% de CPU, 841 linhas). Enquanto ela ocupa a pista, confiro os dois pontos do meu código que os testes pegariam — a assinatura da resposta e
-  o request no template:
-
-  Ran 1 shell command
-
-● Os dois conferem (resposta_acao bate na assinatura, e context_processors.request está ligado, então {{ request.get_full_path }} existe). E os meus testes da aba afirmam sobre o
-  banco, não sobre o corpo da resposta — que é justamente a lição (b) da lista anti-vacuidade do CLAUDE.md (resposta_acao só emite toast para htmx).
-
-  Conferindo a pista:
-
-● Conferir a suite
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite3.log; grep -E '^Ran [0-9]+ tests|^(OK|FAILED) ?\(' $L 2>/dev/null |
-     tail -2; echo "procs: $(ps -eo args | grep -c '[m]anage.py test')"; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0…
-
-✢ Bootstrapping… (6h 55m 29s · ↓ 1.2m tokens)
+· Bootstrapping… (7h 0m 59s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

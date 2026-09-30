@@ -37,7 +37,7 @@ lista — ela e o que esta EM PE._
 | **O26** | W12X36-HPD | **spec completa, posicao 2 da fila** |
 | **O27** | JANELA-EXATA | **medido; RED aberto e OUTRO** |
 | **O28** | CATALOGO-SAIDA-ANTECIPADA-DESCONTA | espera `!` |
-| **O29** | RELATORIO-ATESTADOS-FOTOS | **SUPERADO pelo O30** (virou a FATIA 3 d |
+| **O29** | RELATORIO-ATESTADOS-FOTOS | **FECHADA — SUPERADO pelo O30** (virou a |
 | **O30** | AUSENCIAS-DRAWER-E-LOTE | espera aval |
 | **O31** | ESTEIRA-RETA-FINAL | **recebido -- obra de ESTEIRA/FABRICANTE |
 | **O32** | ZUMBIDO | **recebido -- obra de ESTEIRA/FABRICANTE |
@@ -77,7 +77,7 @@ lista — ela e o que esta EM PE._
 | **O66** | BECO-FIO-FECHADO-CELULA-ABERTA | espera `!` |
 | **O67** | CASO [nome] -> QUATRO CLASSES DE FROTA | **livre** -- entra junto da O66 |
 | **O68** | APOSENTAR O PLANO B NO DINHEIRO | espera corte |
-| **O69** | VINCULO-DO-DIA | **FEITA 26/09 -- as duas metades**: dinh |
+| **O69** | VINCULO-DO-DIA | **FECHADA 26/09 -- as duas metades**: di |
 | **O70** | GERADORA-EM-TODA-CELULA | **livre** -- entra APOS a O68 |
 | **O71** | REJULGAR-09 | espera `!` |
 | **O72** | COL704-MARCO-DO-DIA-SEGUINTE | **P7.1 -- fura a fila, antes do apply da |
@@ -107,5 +107,5 @@ lista — ela e o que esta EM PE._
 | **O95** | A PAUSA DECLARADA ABSORVE QUEM NAO VOLTOU | espera aval |
 | **O96** | PAUSA MAXIMA E CADASTRO DA ESCALA, nao constante de classe | espera aval |
 | **O97** | SELO VAZIO DESDE 30/06 | **livre** |
-| **O98** | CONGELADA (L-096) -- GLOSSARIO DO DOMINIO | **fila 1, DEPOIS do lote 2** |
+| **O98** | CONGELADA (L-096) -- GLOSSARIO DO DOMINIO | **CONGELADA (L-096)** -- a lei de 28/09  |
 | **O99** | VERDADE-NAO-E-INCOMODA | espera `!` |
