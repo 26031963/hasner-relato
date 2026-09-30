@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:31:31.**
+**Medido em 29/09/2026 22:37:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `aecbb0ff TICKETS: rodape e placar` |
+| `HEAD` local | `0d048db8 TICKETS: rodape e placar` |
 | `origin/main` | `aecbb0ff TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0d048db8 TICKETS: rodape e placar
+34d8b389 O smoke de prod pegou uma incoerencia minha: o portao e a tela mediam faixas diferentes
 aecbb0ff TICKETS: rodape e placar
 98259cd5 B1 itens 2 e 3: a lei ja valia no dinheiro e era invisivel na tela -- B1 completa, 4 de 4
 6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos
-0436546a TICKETS: rodape e placar
-d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- e nasce desligado
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/folha/porta_export.py
- M app/folha/tests/test_b1_portao_he_nasce_desligado.py
- M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,7 +99,6 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
 
@@ -124,17 +120,18 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 ● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
   a mesma fonte para as duas:
 
-● Suite com o contador na fonte da tela · 5m 26s
-  ⎿  $ python3 - <<'PYEOF'
+● Committing e push da cura da incoerencia · 3m 54s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='folha/tests/test_b1_portao_he_nasce_desligado.py'
+     import io
+     P='app/docs/RELATO.md'
      t=io.open(P,encoding='utf-8').read()
-     V = """ def test_MORDE_a_mensagem_do_conferir_nomeia_a_pendencia_SO_quando_ela_trava(self):"""
-     N = ''' def test_MORDE_o_contador_le_a_MESMA_f… (5m 24s · 2 lines)
+     ANC = """## Itens 2 e 3: a lei ja valia no dinheiro e era INVISIVEL na tela"""
+     assert t.count(ANC)==1
+     NOVO = """## O SMOKE DE PROD PEGOU UMA INCOERENCIA… (3m 52s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (6h 24m 48s · ↓ 263.6k tokens)
+· Schlepping… (6h 30m 18s · ↓ 266.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
