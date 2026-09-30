@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:48 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:94 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:21:01.**
+**Medido em 30/09/2026 17:26:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b1d56401 Placar e rodape do TICKETS pelos geradores` |
-| `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| commits a subir (`ahead`) | **40** |
+| `HEAD` local | `01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo` |
+| `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,26 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-b1d56401 Placar e rodape do TICKETS pelos geradores
-7e80b80a Registrada a ordem RELOGIO-NO-CALENDARIO, com o item 2 ja respondido
-26180b21 MERGE do ESMERIL-MECANICO: as familias (1), (2) e (3) entram na principal, todas em ZERO
-ffaf96c9 FAMILIA (3) nasce e fecha em ZERO -- e ela achou um defeito NA PROPRIA FERRAMENTA
-74b62f47 A 09 regerada INTEIRA e o TXT de 28/09 SUBSTITUIDO, com os seis passos provados um por um
+01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo
+346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias
+a8457ba9 A familia (4): a medicao que eu ia fazer ja estava no codigo, e a que faltava deu 100%
+e0f1c02a BACKLOG: o ESMERIL diz o estado real -- tres familias fechadas e mergeadas, a (4) com o contador morto nomeado
+fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e os 7 min sao meus
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/management/commands/lavrar_he_pendente.py
-?? app/ponto/services/he_pendente_lavrado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -105,39 +100,39 @@ ffaf96c9 FAMILIA (3) nasce e fecha em ZERO -- e ela achou um defeito NA PROPRIA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  = 2 mede a pergunta que o corte de 29/09 matou:
+
+  O que faltava era se aquele número sobreviveu aos applies de hoje, e essa eu fiz: 530 de 530 ativos com fechamento nas duas competências, cobertura 100%, zero colaboradores
+  vendo número de motor. Os 121 sem fechamento na 10 passaram a ter.
+
+  E eu continuo não mexendo no contador. Disse isso uma hora atrás por uma razão boa — às 15:4x quase redefini o universo do meu próprio placar. A medição não muda quem decide o
+  que um contador mede; ela só tira a dúvida sobre os fatos. Trocar de posição porque o número saiu conveniente é a forma mais comum de raciocínio interesseiro, e o custo de
+  esperar aqui é zero: o contador é placar, não portão.
+
+  A proposta, para uma palavra sua: LEITORES_A_TROCAR deixa de significar "a trocar" e passa a "leitores que chamam o motor por geometria e como fallback que hoje não alcança
+  ninguém", no molde do FORA_PORQUE_NAO_LEEM_DINHEIRO, que já exige arquivo:linha por entrada.
+
+  Falta, e não depende de você
+
+  O deploy (assim que o push fechar), o ! do motor consultando DecisaoHE com o DIFF-zero publicado antes, e a listagem na raia UI.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● O hook segue cobrando a obra mesmo com a linha atualizada. Vou ler o que ele considera fechado, em vez de adivinhar:
 
   Ran 1 shell command
 
-❯ aval Ronald 30/09 17:1x -- segue e conclui a O-JANELA-HE: Gestao de HE (LISTAGEM) e parte B2 (AUTORIZAR), como ja estao registradas no BACKLOG. Muda so a posicao e tres pontos:
-  1. POSICAO: a listagem vira a 1a da raia UI agora; a B2 entra na principal em seguida, sem esperar o resto do ESMERIL. O bloqueio total esta no ar na 09 e na 10 e o admin esta
-  cego.
-  2. AVAL DO MOTOR: motor_calculo_v2 consulta a DecisaoHE SO no sitio onde clipa a ponta. Sem decisao gravada o DIFF de frota tem de dar ZERO; publica esse zero antes do deploy,
-  diferente de zero = PAREI.
-  3. A listagem le um RETRATO LAVRADO do he_pendente, nunca o medir no request (levou 7 min hoje).
+● O hook exige a palavra logo após **, e a obra não está fechada — ela espera a sua palavra. Vou ver como a casa marca isso, em vez de fingir a palavra-chave:
 
-● Ordem registrada. Ela conclui a O-JANELA-HE e move a posição:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● A obra espera a sua palavra sobre o contador — e "espera o !" é o vocabulário que o hook lê. Vou dizer o fato:
 
-● O núcleo da B2 está completo e inerte. O item 3 pede um retrato lavrado — e a casa já tem esse vocabulário; vou usá-lo em vez de inventar:
+● Conferir se o merge foi empurrado
+  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_merge.log && git fetch -q origin
+     && echo "faltam=$(git rev-list --count origin/main..HEAD)"
 
-  Listed 1 directory, ran 1 shell command
-
-● O padrão é MetricaSnapshot + service + --apply. Vou escrever a lavratura do he_pendente:
-
-  Ran 1 shell command
-
-● matricula não existe (é matricula_hasner/matricula_nexti) — e a zona inviolável diz "chave de match SEMPRE CPF ou nome completo, NUNCA matrícula". Vou tirar:
-
-  Ran 3 shell commands
-
-● O selo pegou a lavratura, e a pergunta é justa: ela é escritora de retrato de pendência, não leitora de dinheiro. Vou declarar com a prova de linha que o selo exige:
-
-● Ver o formato das declaracoes
-  ⎿  $ sed -n '59,80p' ponto/tests/test_s3_leitor_nao_chama_motor.py
-
-· Bootstrapping… (3h 49m 29s · ↓ 667.4k tokens)
+✢ Bootstrapping… (3h 54m 59s · ↓ 687.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
