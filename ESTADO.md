@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:56:41.**
+**Medido em 30/09/2026 19:02:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
@@ -102,39 +103,39 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ 07/2026 │ aprovada (nem exportada), PAGA=False │ trancada, PAGA=False  │ trancada, PAGA=False  │
-  └─────────┴──────────────────────────────────────┴───────────────────────┴───────────────────────┘
 
-  A 09 está exportada e não paga nas três — é exatamente o caso que a lei nova libera. Mas o marco paga lê lote de holerite publicado, e a 07 dá PAGA=False embora você diga que 07
-  e 08 foram pagas fora do sistema: o marco é cego a pagamento feito fora. Vou deployar o que está commitado (a lei DEPLOY JA, e código novo no disco com worker velho foi o bug
-  das 17:25) e consultar antes de mexer em dinheiro de competência exportada:
+● A função real diz 933 vivas, e as classes dela diferem das minhas — porque a minha medição à mão usou a chave errada (data local + dna.marcos) e a real usa data_turno +
+  cel.trabalha:
+
+  ┌──────────────────────────┬─────┐
+  │   classe (função real)   │  n  │
+  ├──────────────────────────┼─────┤
+  │ TRABALHO (fica, marcada) │ 536 │
+  ├──────────────────────────┼─────┤
+  │ SEM CÉLULA (não decido)  │ 243 │
+  ├──────────────────────────┼─────┤
+  │ FOLGA (retrata)          │ 114 │
+  ├──────────────────────────┼─────┤
+  │ SEM TURNO que a contenha │ 40  │
+  └──────────────────────────┴─────┘
+
+  Os "41 em folga" e os "257 sem célula" da sua ordem são os meus números de 13:4x, e estavam errados. Abrindo por competência pela classificação real:
 
   Ran 1 shell command
 
-● Deploy OK, três cascas provadas. Agora o censo que a ordem exige antes de qualquer escrita — o passivo S84 por competência e por tipo de dia, na autoridade da célula:
+● Agora tenho a tabela autoritativa. Publicando antes de qualquer escrita, com a pergunta de lei no topo (ela não devolve turno, L-...):
 
-  Ran 1 shell command
+● Escrever a lei nova no CLAUDE.md
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P = 'CLAUDE.md'
+     t = io.open(P, encoding='utf-8').read()
+     ANC = 'REGEN-EM-EXPORTADA (lei nova, Ronald 29/09 ~14:1x -- a EXCECAO NASCE COMO PORTA, nunca destravando a trava).\n'
+     assert t.count(ANC) == 1
+     NOVO = '''A …
 
-● O censo confirma os números da ordem, e fecha o escopo:
-
-  ┌─────────────┬────────────────┬────────────────┬────────────┐
-  │ competência │     FOLGA      │    TRABALHO    │ SEM CÉLULA │
-  ├─────────────┼────────────────┼────────────────┼────────────┤
-  │ 09/2026     │ 41 (17 colabs) │ 85 (44 colabs) │ 0          │
-  ├─────────────┼────────────────┼────────────────┼────────────┤
-  │ 08/2026     │ 110 (47)       │ 437 (126)      │ 2          │
-  ├─────────────┼────────────────┼────────────────┼────────────┤
-  │ 07/2026     │ 3 (1)          │ —              │ 174 (57)   │
-  ├─────────────┼────────────────┼────────────────┼────────────┤
-  │ 05+06/2026  │ —              │ —              │ 81 (18)    │
-  └─────────────┴────────────────┴────────────────┴────────────┘
-
-  Os 41 em folga e os 257 sem célula são exatamente os seus. A 09 não tem nenhuma sem célula — ela é 41 + 85, limpa. Agora a outra cura, o COL900 — e aqui uso o template, não
-  ec.marcos_do_dia (que lê a célula congelada e foi o meu erro nº 5 de hoje):
-
-  Running 1 shell command…
-
-· Bootstrapping… (5h 25m 9s · ↓ 996.5k tokens)
+✢ Bootstrapping… (5h 30m 29s · ↓ 1.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
