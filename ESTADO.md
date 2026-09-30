@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:39:41.**
+**Medido em 30/09/2026 10:45:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `c78445c7 TICKETS: rodape e placar` |
-| `origin/main` | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `c78445c7 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -100,19 +100,6 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Read 1 file, ran 4 shell commands
-
-● Minha reescrita da migration cortou um import. Corrijo:
-
-  Ran 3 shell commands
-
-● Dois selos pegaram a minha porta, e os dois estão certos. O segundo é o melhor achado: a porta não deve re-medir — quem decide já tem o número na tela:
-
-  Ran 4 shell commands
-
-● Agora a FASE 1 na raia — o censo de escritores, que é só leitura:
-
   Ran 2 shell commands
 
 ● O censo da FASE 1 tem a primeira tabela, e ela aponta uma família só:
@@ -121,14 +108,27 @@ c78445c7 TICKETS: rodape e placar
 
 ● O censo tem falso positivo meu: arquivos tests_*.py não casam no meu filtro test_*. Corrijo antes de publicar:
 
-  Pushing do nucleo parado da B2 · 5m 27s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b2n.log 2>&1; echo "rc=$?"; grep -E 'main -> main|^OK$|RED|error|^Ran '
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b… (5m 26s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 4 shell commands
 
-· Misting… (3h 31m 48s · ↓ 212.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Background command "Push do nucleo parado da B2" completed (exit code 0)
+
+● ESMERIL-2 aberta em duas fases, e a FASE 1 já tem a primeira tabela.
+
+  Raia wt-esmeril aberta (só leitura, não toca produção nem banco de prod). bin/esmeril2_censo.py — por AST, sem Django e sem banco — responde a pergunta (a) nas sete famílias:
+
+  ┌────────────────────────────────────────────────────────────────────┬────────────────────┬──────────┬───────────┐
+  │                              família                               │      modelos       │ arquivos │ veredito  │
+  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
+  │ batida · célula · turno · vínculo/escala · ausência/férias · folha │ 11 modelos         │ 1 cada   │ ok        │
+  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
+  │ chamado                                                            │ ChamadoColaborador │ 5        │ DUPLICADO │
+  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
+  │ chamado                                                            │ DisputaSupervisao  │ 5        │ DUPLICADO │
+  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
+  │ chamado                                                            │ PerguntaDisputa    │ 3        │ DUPLICADO │
+  └────────────────────────────────────────────────────────────────────┴────────────────────┴──────────┴───────────┘
+
+  14 modelos de estado com escritor; 3 com escrita em mais de um arquivo — e os três são da mesma família. Seis famílias têm escritor único por construção; a chamado não — e é
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
