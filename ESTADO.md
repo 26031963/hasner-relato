@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:01:31.**
+**Medido em 30/09/2026 15:07:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
+| `HEAD` local | `7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA` |
 | `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA
+d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento polimento
+7f2ad203 BACKLOG: a familia (1) fechou o dia em 19 -> 4, e os quatro restantes tem veredito escrito
 2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes
 427cdbd6 A nota da allowlist afirmava um custo que eu nao tinha medido -- e medido, ele e ZERO
-f31bef5c BACKLOG: COL882-O-PROXIMO-COL515 -- o unico ativo afetado pelo lote 7, esperando o `!`
-c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS
-aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  hoje ou espera.
+  │ emp4    │ 7 → 7     │ 11 → 11   │ IGUAL    │
+  └─────────┴───────────┴───────────┴──────────┘
+
+  so_antes=0 so_depois=0 · entraram=0 sairam=0 mudaram=0 (motivo 0, horas 0, apto_folha 0) · TXT=0 RETIDOS=0.
+
+  Ou seja: o pareador passar a receber o vínculo que a célula nomeia não move um centavo na competência corrente. E isso é coerente com o que a ferramenta forense da casa já dizia
+  de manhã (zero minuto de movimento) — só que agora medido pelo comando canônico, com trava, nos dois códigos, contra o gravado.
+
+  Então a condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA está cumprida com a prova certa: DIFF publicado antes do deploy, e ele é zero. O que a cura muda não é dinheiro hoje — é o
+  pareador deixar de rodar sem marcos para 1.170 dia-colab (39 colabs, sendo 38 desligados e o col882). O ganho é geometria correta e o risco medido é nenhum.
+
+  Falta só o gate da suíte fechar para a linha subir.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Read 1 file, ran 4 shell commands
+  Ran 1 shell command
 
-● O DIFF do lote 7 tem comando próprio desde 13/09, e eu estava escrevendo um caseiro (d3125090).
+● DIFF_FOLHA=0 registrado no censo e no commit (19905768), com a tabela por empresa colada — como a lápide do simular_folha manda.
 
-  bin/simular_folha.sh par <rótulo> <árvore_antes> <árvore_depois> faz o que eu precisava e mais: tira a foto dos dois lados dentro de uma trava só da sombra (flock), compara,
-  imprime DIFF_FOLHA=N, sai 3 se N≠0 — e sai 5 se as duas fotos vierem de travas diferentes, isto é, se outra escrita entrou no meio. O uso típico está escrito na lápide dele:
-  "par t7 <copia>/orig/app <copia>/cura/app → colar a saída no commit".
+  E a leitura que importa: a cura muda geometria, não dinheiro. O pareador passar a receber o vínculo que a célula nomeia não move um centavo na competência corrente, e isso
+  confirma — pelo comando canônico, com trava, contra o gravado — o que a ferramenta forense da casa já dizia de manhã. O ganho é o pareador deixar de rodar sem marcos em 1.170
+  dia-colab (39 colabs: 38 desligados e o col882), e o risco medido é nenhum.
 
-  E eu já havia montado o "antes" no lugar certo (wt-esmeril2-antes, em 73992fe0, sem a mudança do turnos). Então falta um comando:
+  A condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA está cumprida com a prova certa: DIFF publicado antes do deploy, não depois.
 
-  bin/simular_folha.sh par lote7 /home/ronald/wt-esmeril2-antes/app /home/ronald/wt-esmeril2/app
-
-  Meu script caseiro fica como registro do que eu ia fazer à mão — e do porquê não se faz: sem trava, sem garantia de foto limpa, e medindo "universo afetado" em vez de DIFF de
-  folha.
-
-  Décima primeira vez hoje que a casa já tinha a resposta escrita. E com isso o padrão do dia fica completo, em duas linhas que valem mais que as fatias: antes de medir, grep na
-  lápide; antes de escrever ferramenta, ls bin/.
-
-  Rodo o par assim que o gate liberar a pista — ele e o simular disputam o mesmo cpuset.
+  Falta só o gate da suíte. Quando ele fechar verde, a linha sobe com as duas provas juntas — suíte e DIFF — e a família (1) fica com os quatro finais, todos com veredito escrito
+  e nenhum deles cego.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Rodar o par do lote 7 de novo · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/simular_folha.sh par lote7 /home/ronald/wt-esmeril2-antes/app /home/ronald/wt-esmeril2/app >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/par_lote7b.log 2>&1 & sleep 30; head -8 /tmp/claude-1001/-home-r…
-
-✢ Bootstrapping… (1h 29m 59s · ↓ 261.4k tokens)
+✢ Bootstrapping… (1h 35m 29s · ↓ 276.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
