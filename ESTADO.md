@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:44:31.**
+**Medido em 29/09/2026 21:50:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ be50379e TICKETS: rodape e placar
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/escala/utils.py
+ M app/ponto/janela_he.py
+ M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -99,13 +102,6 @@ be50379e TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
-
-● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
   Ran 16 shell commands
@@ -120,18 +116,25 @@ be50379e TICKETS: rodape e placar
 
 ● Background command "Push do item 4" completed (exit code 0)
 
-● He_pendente medido em prod, com o portao desligado · 7m 46s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_he.py <<'PYEOF'
+  Searched for 1 pattern, ran 4 shell commands
+  ⎿  1 skill available
+
+● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
+
+● Suite de ponto e escala com o marcador novo · 1m 33s
+  ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     from colaboradores.models import Empresa
-     from folha.porta_export import medir
-     for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'):
-     d = medir(e, 10, 2026)
-     hp = d.get('he_pendente') or []
-     print(' em… (7m 45s)
+     import io, py_compile
+     P='ponto/services/espelho.py'
+     t=io.open(P,encoding='utf-8').read()
+     V = """ _datas_anomalia = datas_anomalia_janela(
+     resultado_v2.anomalias, data_ini, data_fim_mes, ano)
+     """
+     N = """ _datas_anomalia = datas_anomalia_janela(
+     resultado… (1m 31s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (5h 37m 48s · ↓ 238.4k tokens)
+* Schlepping… (5h 43m 18s · ↓ 246.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
