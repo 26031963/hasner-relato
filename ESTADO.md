@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:18:01.**
+**Medido em 30/09/2026 19:23:31.**
 
 | | |
 |---|---|
@@ -40,10 +40,15 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/config/crons.py
+ M app/ponto/management/commands/diff_janela_he_total.py
  M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/management/commands/diff_passivo_s84.py
+?? app/ponto/services/diff_frota.py
+?? app/ponto/services/passivo_s84.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,38 +106,38 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 
 ```
 
-● Deployando (a lei DEPLOY JA — folha/views.py mudou, e as telas servem o worker):
+● Religando o comando existente ao motor, preservando rótulos e a forma do JSON de reversão:
 
   Ran 1 shell command
 
-● Agora a cura 2 da O99, que a lei nova deixou sem degrau. Implementando o apply no comando:
+● Extração provada: saída byte-idêntica. Agora a classificação — ela é um juízo ("folga ou trabalho") e vai precisar de dois leitores (o DIFF e o apply), então também sai para
+  serviço:
 
   Ran 1 shell command
 
-● O DRY confirma exatamente o censo (o helper de competência concorda com a autoridade): 114 a retratar (08=80, 09=32, 07=2), e 536 + 243 + 40 ficam. Antes do apply, a ordem exige
-  DIFF por colab publicado ANTES. Vendo os instrumentos que já existem para não fabricar um terceiro:
-
-  Searched for 1 pattern
-
-● diff_janela_he_total já é exatamente a casca: gravado + dois somente_leitura dentro de transação desfeita + três tabelas. Vendo se a mutação dele é isolável, para eu não
-  duplicar um DIFF de dinheiro:
+● Religando o comando ao serviço e escrevendo o DIFF do passivo sobre o motor único:
 
   Ran 1 shell command
 
-● A mutação é uma linha; o resto é genérico. Duplicar esse laço criaria um segundo motor de DIFF — e foi exatamente uma diferença de encanamento que hoje escondeu 10 campos na
-  AVAL-DE-CRITERIO. Vou extrair o motor e provar a extração por saída idêntica. Primeiro gravo a saída de hoje, antes de tocar:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Baseline gravado (101 colabs, 2 se movem). Lendo o resto do comando para extrair o motor sem mudar o que ele mede:
+● O serviço reproduz a tabela exata. Agora o DIFF do passivo, sobre o motor único — e com o critério que a sua ordem dá: colab não tocado que se mova = PAREI:
 
   Ran 1 shell command
 
-● Extraindo o motor, com a mesma semântica exata (mutação por empresa dentro da transação desfeita):
+● Declarando a casa do comando e rodando o DIFF que a ordem exige publicar antes:
 
-● Running 1 shell command…
+● Rodar o DIFF do passivo na 09 · 1m 24s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'config/crons.py'
+     t = io.open(P, encoding='utf-8').read()
+     A = " 'diff_janela_he_total':\n"
+     assert t.count(A) == 1
+     N = (""" 'diff_passivo_s84':
+     'DIFF de frota da RETRATACAO do passivo S84 (batidas `disputa_s84_retro` sem `pergun… (1m 23s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bootstrapping… (5h 46m 29s · ↓ 1.1m tokens)
+· Bootstrapping… (5h 51m 59s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
