@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:648 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:777 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:47:01.**
+**Medido em 30/09/2026 13:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `03198511 O passivo das batidas retroativas nao e o que o aval descreve, e a medicao mudou o escopo em tres pontos` |
+| `HEAD` local | `77673456 A ferramenta da casa mede a familia (1) desde 26/09 e diz ZERO minuto -- e ela corrige duas coisas minhas` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **14** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+77673456 A ferramenta da casa mede a familia (1) desde 26/09 e diz ZERO minuto -- e ela corrige duas coisas minhas
+9d397e7e RELATO: a porta do vinculo do dia JA existia desde 26/09, e eu criei uma segunda com o mesmo nome
+1df5a837 col515: vinculo corrigido pela porta e a 09 retificada -- as horas noturnas dele eram 0,03 e passaram a 25,57
 03198511 O passivo das batidas retroativas nao e o que o aval descreve, e a medicao mudou o escopo em tres pontos
 21c9af19 TICKETS: a fatia do 401 ganha linha, e a regua estava certa em recusar o push
-8d574cf3 O anexo se desenha pelo CONTEUDO: o PDF acertava POR FALHA, e o HEIC caia no mesmo buraco sem ninguem saber
-506f02b6 A (2) do UI-ANEXO esta bloqueada por falta de decodificador HEIC, e isso e janela de rebuild
-833b5976 UI-ANEXO-AUSENCIA nao cabe em "so templates", e o historico acerta o pdf hoje POR FALHA
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    27.223 chamadas com pico às 06h contra token de 12 h; o 401 agora diz motivo; 9 deslogados viraram pautas #852–#860 para a supervisão.
-  - BUG-DISPUTA-ZUMBI: já recebido 30/09 ~11:0x, no ar (68691060+020b379b), passivo aplicado 11:50 (55 → 1, a última nomeada) — e a origem não era a limpeza: eram os dois gêmeos
-    e, em 50 dos 55 casos, reabrir_sistema deixando o texto para trás.
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  As duas repetições ensinam a mesma coisa, e é minha: publiquei no RELATO e no BACKLOG, não num recibo curto. Quem manda o prompt de novo não está relendo 18 mil linhas de
-  RELATO. O que falta não é registro, é recibo.
+  Read 1 file, ran 2 shell commands
 
-  ---
+● Rodei a ferramenta forense que a casa já tinha em vez de confiar só nas minhas sondas — e ela me corrigiu em dois pontos (77673456).
 
-  S5b registrada com a posição que você deu (depois do ESMERIL vínculo e da B2), e com a nota da L-082: o DIFF tem de ser contra o gravado, não motor-x-motor — foi exatamente isso
-  que escondeu 10 campos no apply de 26/09.
+  vinculo_do_dia_divergentes existe desde a O69 (26/09) e mede exatamente a exposição desta cura. Na competência 10, em 870 colaboradores:
 
-  O passivo das batidas retroativas: a origem está curada, e a medição mudou o escopo em três pontos (03198511):
+  DIA-COLAB em que a celula discorda da regra propria: 1.017 (em 36 colabs)
+    desses, MUDAM o numero do dia: 0     delta total: 0 min
+    dia-colab SEM geradora (a celula cala): 6.567
+    geradora que a janela NAO carregava (curado pelo pk__in): 0
 
-  1. São 942 batidas em 205 colaboradores, não 1.753 em 329. A diferença são as 814 com pergunta_origem — plantio de depois de 06/09 — e as 813 perguntas atrás delas têm TODAS a
-     hora escrita pelo colaborador. Retratar essas seria apagar a fala dele; ficam fora.
-  2. O lote não é um: u657 aprovou 568 das 942, u666 238, criação espalhada de 31/07 a 29/08.
-  3. Todas as 933 não retratadas estão em competência FECHADA — pela sua própria ordem, isso é REGEN-EM-EXPORTADA, que é um colaborador por ato. Então o apply não existe como
-     lote, e este commit traz o DRY.
+  1. A família (1) é vocabulário, não dinheiro. Onde a célula discorda, o número do dia é o mesmo — zero minuto em 1.017 dia-colab. Os 1.144 que eu publiquei de manhã respondem
+  outra pergunta: minha comparação era contra escala_vigente, que exigia ativa=True e por isso devolvia None; a regra própria que a ferramenta compara é mais permissiva e acha
+  vínculo nesses casos. As duas medições estão certas nas suas perguntas — e quem lê só uma conclui errado.
 
-  DRY publicado por colaborador: 154 em dia de FOLGA (o que o aval manda retratar), 522 em TRABALHO (ficam, recebem a marca), 257 SEM CÉLULA (não decido). Concentração: col49 com
-  38 (31 de folga), col31 com 25, col34 com 24. Tabela inteira em logs/passivo_disputa_retro_20260930_1341_dry.json.
+  2. O mais= que eu "descobri" hoje a casa já tinha curado. A linha "geradora que a janela NÃO carregava (curado pelo pk__in): 0" e a lápide da juíza dizem isso desde 26/09: "quem
+  alimenta é que tem de carregar o vínculo que a célula nomeia". Eu reinventei a solução e a chamei de achado.
 
-  A cura da origem entrou de todo jeito, porque não depende do número: materializacao.py não planta sem resposta_colab, e a guarda ficou antes do cálculo do horário — depois dele
-  a recusa saía como hora invalida (), que é a testemunha mentindo sobre a causa. E respondida_em não conta como anuência: há 8.622 perguntas com esse carimbo e nenhum texto.
+  O que sobra de dinheiro é a cauda do ativa=True, e ela tem nome: col515 e col882, sem vínculo ativo nenhum, 30 dias de 30. Para eles o None não era empate de vocabulário — era o
+  fluxo parando. E as noturnas do col515 saíram de 0,03 para 25,57 h hoje.
+
+  Isso muda o rótulo da obra, não o trabalho: a família (1) segue sendo um juiz por pergunta, mas o argumento dela é legibilidade, não recuperação de horas — e é assim que ela
+  deve ser vendida no placar.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Aplicar o vinculo do col515 pela porta
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 docker exec -e APLICAR=1 saas_core python manage.py tenant_command shell --schema=juliani --command
-     "exec(open('/tmp/c515a.py').read())" 2>&1 | grep -v "objects imported" | head -12
+● Veredito da raia
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bei499bm9.output 2>/dev/null; echo "rodando=$(pgrep -cf 'manage.py test' ||
+     echo 0) $(date '+%H:%M')"; tail -c 120 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratc…
 
-· Bootstrapping… (15m 29s · ↓ 54.7k tokens · thought for 6s)
+✢ Bootstrapping… (20m 59s · ↓ 75.4k tokens · thought for 1s)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
