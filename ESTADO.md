@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:01:01.**
+**Medido em 30/09/2026 11:06:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `e3b87217 TICKETS: rodape e placar` |
-| `origin/main` | `c78445c7 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `e3b87217 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -101,38 +101,38 @@ c78445c7 TICKETS: rodape e placar
 
 ```
 
-  Ran 3 shell commands
+  E o nome mudou por sua ordem: ESMERIL-2 → ESMERIL-MECANICO, com as três confusões que você nomeou escritas na lápide do script (o esmeril2 dos testes de chamados, o
+  esmeril_espelho A1-A11, e as fatias S1-S5). Quatro coisas com "esmeril" no nome é o vocabulário paralelo que esta obra persegue em código — começar com o nome errado seria
+  começar pelo defeito.
 
-❯ ESMERIL-MECANICO, escopo (c) ZUMBI: no mesmo censo, nomear com arquivo:linha: funcao/classe sem chamador em producao; parametro de cadastro sem leitor (LEI-AKITA 12: chave sem
-  leitor = VERMELHO); management command e cron sem efeito ou sem dono em config/crons.py; flag/setting morta; template sem rota; campo de model sem escritor ou sem leitor.
-  Veredito por linha: remover (com prova de zero chamador) / ligar / declarar 'sem efeito'. Remocao so com a prova e na FASE 2, nunca na raia de leitura. PAREI so em lei ou !
+  A guarda está de pé: bin/tests/test_esmeril_mecanico_censo.sh congela os 24 pares modelo → arquivo e morde nos dois sentidos (escritor novo e allowlist que encolheu sem a mão).
+  É selo de host por razão medida: o container não monta bin/, e minha primeira versão era um SimpleTestCase que estourou com ModuleNotFoundError.
 
-● Ordem (c) ZUMBI registrada. E antes de construir: a casa já tem guarda para vários desses — LEI-AKITA 4. Meço o que existe:
+  Raia wt-esmeril com 5 commits; principal em faltam=0.
 
-  Searched for 1 pattern, ran 2 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Três dos seis já têm guarda; três não. Implemento os dois mais valiosos que faltam:
+● A FASE 1 continua. Falta a terceira do (c) — flag/setting morta:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● A (c) tem números, e o cluster é evidente — PerfilApuracao concentra 11 dos 22:
+● 283 é falso positivo por construção: constante usada dentro do próprio módulo é normal e correta. Meu filtro excluía o arquivo que a define. Corrijo antes de publicar:
 
-● Pushing do rename e do escopo c · 8m 37s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Misting… (3h 53m 8s · ↓ 239.0k tokens)
+● 17 — e dois clusters pedem verificação antes de eu publicar, porque são o motor e a autoridade:
+
+● Conferir os dois clusters antes de publicar
+  ⎿  $ cd /home/ronald/wt-esmeril/app && sed -n '40,50p' ponto/motor_calculo_v2.py; echo "=== quem usa a janela noturna no motor:"; grep -n 'HORA_NOTURNA\|22,
+     0\|noturno_inicio\|NOTURNO_INI' ponto/motor_calculo_v2.py | head -8; echo; echo "=== e os PENDENTES_* do juizes.py:"; sed -n '820,840p' core/juiz…
+
+· Misting… (3h 58m 38s · ↓ 250.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
   da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
-
-❯ ESMERIL-MECANICO (c) ZUMBI, METRICA: publicar no ESTADO a cada ciclo -- linhas de Python de producao, linhas de teste, numero de management commands, numero de crons em
-  config/crons.py. Linha de base 30/09: ~125k prod, ~162k teste, 218 commands. Esperado: CAIR a cada migracao da FASE 2 (varredor que perdeu a razao de existir sai com prova de
-  zero chamador + teste junto). Subir exige motivo escrito no commit.
   ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
