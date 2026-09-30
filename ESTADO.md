@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:43:31.**
+**Medido em 30/09/2026 20:48:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,13 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## `git status --short`
 
 ```
+ M app/colaboradores/tests/test_gate_disputa_isento.py
+ M app/colaboradores/views.py
+ M app/docs/ARQUITETURA.mmd
+ M app/docs/BACKLOG.md
+ M app/templates/ponto/gestao_he.html
 ?? bin/keepalive.sh
+?? bin/tests/test_selo_nao_nasce_vazio.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,44 +101,44 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  são criados e velados. Lendo o juiz, que é o que o selo vazio deveria exercer:
+● Resolvido, e eu estava errado no achado. A trilha existe: col499 foi tornado isento em 21/09/2026 08:12 pelo usuário 657 — e o último batida_ausente dele é de 19/09 19:15. Os 9
+  chamados predatam a flag por 2 dias: o gate não vazou.
+
+  E o achado real é outro, mais fino: só 2 dos 15 isentos têm trilha. Os outros 13 vieram da semente por cargo da migration 0043 (ISENTO_CARGOS), que é ato declarado sem humano —
+  logo, sem trilha por construção. Corrigindo o registro que eu abri com medição errada:
 
   Ran 1 shell command
 
-● cala_para_isento bloqueia (não vela), e já tem selo: chamados/tests/test_isento_nao_nasce.py. Então o que o arquivo vazio nomeia é o que falta — a disputa. Vendo se os módulos
-  de disputa estão na lista:
+● O defeito está confirmado em colaboradores/views.py:165 — except Exception: pass engolindo a trilha de um ato que isenta alguém da jornada. Bug no caminho vem primeiro
+  (LEI-AKITA 6). Curando:
 
   Ran 1 shell command
 
-● Agora está nítido: batida_ausente está na lista dos calados — logo, pela lei declarada, isento não deveria ter esse chamado. E o censo achou 8 em setembro. Ou é legado, ou um
-  emissor não consulta o gate. Medindo qual:
+● Background command "Esperar o push por arquivo de sinal" completed (exit code 0)
+
+● O push falhou com 3 vermelhos (e note: 8.878 testes contra 8.863 — os +15 são a tela e a aba que eu fiz cherry-pick). Vendo quais:
 
   Ran 1 shell command
 
-● Um vazamento com um nome só, e ele se explica. Os 9 são todos do col499, sempre às 19:15, em dias alternados — padrão 12x36 — e param em 19/09: nada nos últimos 11 dias. Isso é
-  consistente com a flag isento_ponto dele ter sido ligada por volta de 20/09, com o emissor correto desde então.
+● Três vermelhos, os três meus, e o terceiro é um defeito de verdade: gestao_he.html:35 tem um {# #} de várias linhas, e o CLAUDE.md avisa que isso não é comentário para o Django
+  — "o texto VAZA para a página". A casa tem contrato para isso justamente porque já aconteceu. Achando todos:
 
-  Mas eu não posso confirmar, e é exatamente aí que o outro achado morde: isento_ponto não tem trilha, então ninguém consegue datar a isenção. O selo vazio do O97 é o que
-  transforma "consistente com" em "provado". Vendo o push antes de escrever:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● Convertidas e o diagrama regenerado. A pista está livre (a suíte do push terminou). Rodando os afetados e o meu selo novo pela primeira vez:
 
-● A suíte do push segue. Escrevendo o selo no scratchpad para aplicar no instante em que ela fechar. Ele precisa ser de dois lados — isento dá zero, e um não-isento idêntico dá um
-  —, senão passa por a fixture nunca disparar. Lendo o emissor:
+  Rodar os afetados e o selo novo
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
+     saas-hasner-core:la…
 
-  Searched for 1 pattern, ran 1 shell command
-
-● O gate está limpo (linha 96, no topo do laço) e há --simular-agora, que me deixa dirigir o relógio. Escrevendo os dois selos no scratchpad — o funcional de dois lados, e o que
-  impede a classe do arquivo vazio:
-
-  Running 1 shell command…
-
-· Bootstrapping… (7h 11m 59s · ↓ 1.3m tokens)
+✢ Bootstrapping… (7h 17m 13s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
