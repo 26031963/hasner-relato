@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:453 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:516 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:45:01.**
+**Medido em 30/09/2026 11:50:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4d94f6bb TICKETS: placar e rodape` |
+| `HEAD` local | `bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta a EM VOO` |
 | `origin/main` | `e3b87217 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,23 +29,30 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta a EM VOO
+020b379b Das 55 "disputas zumbis" que eu publiquei, 50 estavam abertas com razao -- quem deixava o texto era a reabertura
+88e03e39 O 401 de senha trocada saia rotulado "token_invalido" -- e quem lanca passa a nomear o motivo
 4d94f6bb TICKETS: placar e rodape
 e335f732 RELATO/PROMPTS/BACKLOG: as duas curas de P7.1, a FASE 2 por trecho e a limpeza das esperas orfas
-a4ec5612 O 401 do app nao dizia se era "renove o token" ou "entre de novo", e 9 pessoas ficaram deslogadas sem saber
-68691060 O app dizia "Em revisao pela supervisao" ha 2 meses porque o estado da disputa tinha DOIS escritores
-e3b87217 TICKETS: rodape e placar
 ```
 
 ## `git status --short`
 
 ```
  M app/api/credencial.py
+ M app/api/tests/test_401_diz_qual.py
+ M app/chamados/management/commands/reconciliar_disputa_zumbi.py
  M app/chamados/models.py
+ M app/chamados/services/acoes_disputa.py
+ M app/chamados/services/fio.py
+ M app/chamados/services/materializacao.py
  M app/chamados/tests/test_selo_resolucao_um_escritor.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/chamados/management/commands/reconciliar_disputa_zumbi.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -128,10 +135,10 @@ e3b87217 TICKETS: rodape e placar
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ler como o carimbo entra no token
-  ⎿  $ sed -n '60,100p' api/credencial.py
+● Ler a memoria do rotulo de hora
+  ⎿  $ cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/rotulo-de-hora-le-date-no-ato.md
 
-✶ Misting… (4h 37m 8s · ↓ 338.5k tokens)
+✢ Misting… (4h 42m 38s · ↓ 356.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
