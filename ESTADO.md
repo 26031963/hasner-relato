@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:00:45.**
+**Medido em 29/09/2026 21:06:01.**
 
 | | |
 |---|---|
@@ -39,8 +39,10 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## `git status --short`
 
 ```
+ M app/colaboradores/models.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/colaboradores/migrations/0053_empresa_he_pendente_trava_export.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -99,11 +101,6 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Agora o selo com o caso que morde nas duas pontas:
-
-  Searched for 2 patterns, listed 1 directory, ran 19 shell commands
-
 ● Background command "Acertar rodape e empurrar" completed (exit code 0)
 
   Searched for 1 pattern, read 1 file, listed 1 directory, ran 9 shell commands
@@ -125,18 +122,23 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
-● Esperar o push da B1 · 6m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1b.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (6m 48s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 16 shell commands
 
-✶ Schlepping… (4h 54m 3s · ↓ 221.5k tokens)
+● Background command "Push da B1 item 1" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
+
+● A migration e o conferir da porta
+  ⎿  $ grep -n "'falhas'" folha/porta_export.py | head; sed -n "$(grep -n "'falhas':" folha/porta_export.py | head -1 | cut -d: -f1),+14p" folha/porta_export.py
+
+· Schlepping… (4h 59m 18s · ↓ 227.0k tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 13 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
