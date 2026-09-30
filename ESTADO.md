@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:517 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:40:02.**
+**Medido em 30/09/2026 19:45:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
  M app/ponto/management/commands/diff_janela_he_total.py
  M app/ponto/management/commands/passivo_disputa_retro.py
  M app/ponto/management/commands/recalcular_fechamento.py
@@ -106,44 +108,44 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● A suíte segue. Preparando o patch no scratchpad para aplicar no instante em que ela terminar (não toco a árvore enquanto ela lê o mesmo bind-mount):
 
   Ran 1 shell command
 
-● 16 de 17 batem exatamente. Uma divergência real: col866 inconsistências previstas 4, gravado 2. Não vou passar por cima disso — medindo a causa:
+● A suíte segue rodando e é ela que libera o commit desta última leva. Ponto da situação:
 
-  Ran 1 shell command
+  No ar e provado (commitado):
+  - Lista viva dos deslogados — a 1ª versão lia o access log e eu ia "curar" o regex para aceitar colab=?u252; fui ler quem põe o ? e era corte seu de 09/09 dizendo que misturar
+    as duas formas "plantaria uma pessoa real na forense a pedido de quem atacasse". Era vetor de injeção. A lista passou a sair de fato da casa: 18 em série, 10 compatíveis com
+    deslogado, 8 refutados. f2301fe5, 94936565.
+  - As minhas 9 pautas de 13:04 estavam 7/9 erradas (3 desligados, 3 batendo hoje, 1 sem plantão). A cura não foi digitar de novo: a pauta passou a nascer do lavrado, e as erradas
+    fecharam por construção — 8 abertas, 7 fechadas. 0df94f5e.
+  - Lei O TXT É FOTOGRAFIA + nome canônico em fonte única (era derivado em 2 sítios) + HAIKU-EXPORT. As suas duas REDs reproduzem: emp2 09 = 2 exportações, vigente id23 às 17:07,
+    nomes idênticos; diferenca_entre_exportacoes(20,23) = 79 colabs. 711982b3, deployado.
+  - Cura 2 da O99 aplicada: 114 batidas retratadas (09=32, 08=80, 07=2), horas_folga_trabalhada −65,00 h, −9 inconsistências, só os 12 tocados se movem, reversão escrita antes,
+    114 linhas de trilha, passivo 933→819 e zero folga restante.
 
-● Causa achada, e ela é do meu instrumento, não do ato: col866 tem 9 batidas no passivo — o DIFF mediu só as 2 da 09 (22 e 24/08; a competência 09 começa em 21/08), e o apply
-  retratou todas as 9, porque 07 e 08 estavam no escopo. A pk=81952 é uma entrada 20/08 18:00, cujo turno cruza para 21/08: ela pertence à 08 pelo data_turno mas as batidas dela
-  são lidas pela janela da 09.
+  Duas coisas que eu errei e corrigi em público: a hora que eu te publiquei (20:07) saiu em UTC contra a lei do próprio CLAUDE.md; e o meu DIFF sub-previu o col866 (4 contra 2)
+  porque mutava só a 09 enquanto o apply retratava 07+08+09 — a pk=81952 é entrada de 20/08 18:00, turno da 08 cuja saída a janela da 09 lê. Instrumento curado com --escopo.
 
-  Ou seja: o meu DIFF sub-previu porque mutou um escopo menor que o apply. Curando o instrumento na origem:
+  Espera você: os 61 dos 84 dias do COL900 em que a célula está certa e o template errado — regerar para o template fabricaria 5 h de atraso/dia em quem chegou no marco. Os 10 em
+  que o template acerta vão com trilha; os 13 sem batida ficam. A cura dos 61 é mexer em vínculo, e os horários que as batidas confirmam já estão medidos: col309 08:00-16:00,
+  col438 07:00-19:00, col900 12:50-21:20, col107 07:30-16:50.
 
-  Ran 1 shell command
+  Pendente no meu lado: commit desta leva (motor único de DIFF + classificação extraída + --colabs) quando a suíte fechar, e o leitor da marca "lançada sem resposta" — patch
+  pronto, com os dois discriminantes medidos (814 têm pergunta_origem e não podem receber o rótulo; 67.062 batidas de app têm o campo vazio e também não).
 
-● Ruff pegou 3 imports órfãos que a extração deixou. Limpando:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-APP-SESSAO-401 -- P7.1: col515 (u252) levou GET /api/me/ -> 401 em 26/09 01:48 e nunca mais autenticou -- 3 plantoes sem batida
 
-  Ran 1 shell command
-
-● _Rollback ficou órfão no comando (o motor tem o seu) — dois símbolos com o mesmo nome é a confusão que esta casa persegue. Removendo e rodando a suíte inteira antes de commitar:
-
-● Suite completa · 8m 53s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'ponto/management/commands/diff_janela_he_total.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = 'class _Rollback(Exception):\n """o ensaio acabou; nada foi gravado"""\n\n\n'
-     assert t.count(V) == 1
-     io.open(P, 'w', encoding='utf-… (8m 53s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Bootstrapping… (6h 8m 29s · ↓ 1.1m tokens)
+✢ Bootstrapping… (6h 13m 59s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
