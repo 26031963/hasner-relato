@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:29:01.**
+**Medido em 30/09/2026 19:34:31.**
 
 | | |
 |---|---|
@@ -107,38 +107,38 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 
 ```
 
-  Duas linhas merecem nome, porque são contraintuitivas: col853 ganha 123 min realizados e col242 ganha 1 inconsistência ao perder uma batida — é a batida que quebrava o par.
-  Antes de aplicar, quem é o colab da DERIVA:
-
-  Ran 1 shell command
-
-● col846 tem deriva e não foi tocado — relavrar a 09 inteira escreveria a grade dele (−121 h previstas, −11 dias), que pela sua regra é PAREI. A cura é cirúrgica: relavrar só os
-  12 tocados. Vendo se o comando aceita lista de colab:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Sem --colabs, e chamar recalcular_fechamento_mes de fora seria o 13º sítio numa allowlist que só encolhe. Adicionando o argumento ao comando que já existe, e aplicando:
-
-  Ran 3 shell commands
-
-● 114 retratadas, com a reversão escrita antes do ato. Agora a relavratura cirúrgica — só os 12 tocados, para não escrever a deriva do col846:
-
-  Ran 1 shell command
-
-● Aplicado: processados=12, exatamente os tocados. Agora a PROVA que a ordem exige depois:
-
-  Ran 1 shell command
-
-● Prova forte: passivo 933 → 819, zero FOLGA restante no escopo (idempotente), 114 linhas de trilha (uma por ato, sem dobrar), e os TXT vigentes com hash intacto. Agora a prova
-  que importa — o previsto pelo DIFF contra o gravado escrito:
-
   Ran 1 shell command
 
 ● 16 de 17 batem exatamente. Uma divergência real: col866 inconsistências previstas 4, gravado 2. Não vou passar por cima disso — medindo a causa:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Bootstrapping… (5h 57m 29s · ↓ 1.1m tokens)
+● Causa achada, e ela é do meu instrumento, não do ato: col866 tem 9 batidas no passivo — o DIFF mediu só as 2 da 09 (22 e 24/08; a competência 09 começa em 21/08), e o apply
+  retratou todas as 9, porque 07 e 08 estavam no escopo. A pk=81952 é uma entrada 20/08 18:00, cujo turno cruza para 21/08: ela pertence à 08 pelo data_turno mas as batidas dela
+  são lidas pela janela da 09.
+
+  Ou seja: o meu DIFF sub-previu porque mutou um escopo menor que o apply. Curando o instrumento na origem:
+
+  Ran 1 shell command
+
+● Ruff pegou 3 imports órfãos que a extração deixou. Limpando:
+
+  Ran 1 shell command
+
+● _Rollback ficou órfão no comando (o motor tem o seu) — dois símbolos com o mesmo nome é a confusão que esta casa persegue. Removendo e rodando a suíte inteira antes de commitar:
+
+● Suite completa · 3m 23s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'ponto/management/commands/diff_janela_he_total.py'
+     t = io.open(P, encoding='utf-8').read()
+     V = 'class _Rollback(Exception):\n """o ensaio acabou; nada foi gravado"""\n\n\n'
+     assert t.count(V) == 1
+     io.open(P, 'w', encoding='utf-… (3m 22s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bootstrapping… (6h 2m 59s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
