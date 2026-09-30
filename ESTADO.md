@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:48:01.**
+**Medido em 29/09/2026 22:53:29.**
 
 | | |
 |---|---|
@@ -100,9 +100,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 16 shell commands
-
-● Background command "Push da B1 item 1" completed (exit code 0)
 
   Ran 2 shell commands
 
@@ -126,18 +123,21 @@ aecbb0ff TICKETS: rodape e placar
 ● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
   a mesma fonte para as duas:
 
-  Esperar o push da cura · 4m 47s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1e.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (4m 46s)
+  Ran 4 shell commands
+
+● Background command "Commit e push da cura da incoerencia" completed (exit code 0)
+
+  Pushing e deploy da cura · 7s
+  ⎿  $ tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1e.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo
+     "faltam=$(git rev-list --count origin/main..HEAD)"; timeout 900 bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-… (5s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (6h 41m 18s · ↓ 266.7k tokens)
+* Schlepping… (6h 46m 46s · ↓ 267.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 15 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 16 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
