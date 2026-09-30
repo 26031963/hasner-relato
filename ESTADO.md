@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:12:45.**
+**Medido em 30/09/2026 19:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados` |
+| `HEAD` local | `711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,30 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod
 d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados
 0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
 94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
 f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
-66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/folha/export.py
- M app/folha/management/commands/regerar_txt_dominio.py
- M app/folha/models.py
- M app/folha/views.py
  M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/folha/haiku_export.py
-?? app/folha/tests/test_haiku_export.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -109,39 +100,39 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
-● Os dois derivam o nome com a mesma expressão, duplicada. Extraindo a fonte única e tirando as não-vigentes da UI:
+● Deployando (a lei DEPLOY JA — folha/views.py mudou, e as telas servem o worker):
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Agora as três ferramentas. A diferenca_entre_exportacoes precisa ler colab e rubrica do TXT, e "zero derivação" significa usar o layout que escreve, não offsets que eu invente.
-  Vendo o layout declarado:
+● Agora a cura 2 da O99, que a lei nova deixou sem degrau. Implementando o apply no comando:
+
+  Ran 1 shell command
+
+● O DRY confirma exatamente o censo (o helper de competência concorda com a autoridade): 114 a retratar (08=80, 09=32, 07=2), e 536 + 243 + 40 ficam. Antes do apply, a ordem exige
+  DIFF por colab publicado ANTES. Vendo os instrumentos que já existem para não fabricar um terceiro:
+
+  Searched for 1 pattern
+
+● diff_janela_he_total já é exatamente a casca: gravado + dois somente_leitura dentro de transação desfeita + três tabelas. Vendo se a mutação dele é isolável, para eu não
+  duplicar um DIFF de dinheiro:
+
+  Ran 1 shell command
+
+● A mutação é uma linha; o resto é genérico. Duplicar esse laço criaria um segundo motor de DIFF — e foi exatamente uma diferença de encanamento que hoje escondeu 10 campos na
+  AVAL-DE-CRITERIO. Vou extrair o motor e provar a extração por saída idêntica. Primeiro gravo a saída de hoje, antes de tocar:
 
   Searched for 1 pattern, ran 1 shell command
 
-● agregar_export_dominio já parseia o TXT ({matrícula: {rubrica: valor}}) — então a diferença reusa o parser da casa, sem derivar layout. Escrevendo a terceira ferramenta:
+● Baseline gravado (101 colabs, 2 se movem). Lendo o resto do comando para extrair o motor sem mudar o que ele mede:
 
   Ran 1 shell command
 
-● Agora a RED. Vendo a porta de registro para montar a fixture com a forma real:
+● Extraindo o motor, com a mesma semântica exata (mutação por empresa dentro da transação desfeita):
 
-  Searched for 1 pattern, read 1 file, ran 1 shell command
+● Running 1 shell command…
 
-● 11 verdes de primeira, incluindo o selo por AST que prova não haver segunda cópia do nome. Conferindo a sua RED em prod, agora com a hora local como a lei manda:
-
-  Ran 1 shell command
-
-● A RED reproduz exatamente: total=2, vigente id23 às 17:07 (a sua hora), a id20 de 28/09 rotulada NAO VIGENTE com o motivo da substituição. E a terceira função responde em dado
-  real: 79 colabs com diferença entre id20 e id23, nas rubricas 0150 (38), 8069 (33), 0025 (27), 0200 (12), 0243 (6), 8792 (1). Rodando a suíte do que eu toquei:
-
-● Suite do folha e contratos
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
-     saas-hasner-core:la…
-
-* Bootstrapping… (5h 41m 13s · ↓ 1.1m tokens)
+✢ Bootstrapping… (5h 46m 29s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
