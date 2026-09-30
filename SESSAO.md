@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 07:53:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.6 MB). Acoes na janela: **123**.
+**Medido em 30/09/2026 07:59:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.6 MB). Acoes na janela: **123**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:58:47 | Bash | Registrar e achar o cabecalho do bloco OBRAS | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() ANC = "\| RAIA-UI-PERMANENTE \| 30/09 ~07:2x \|" assert t.count(ANC)==1 NOVA = ("\| UI-ANEXO-AUSENCIA \| 30/09 ~07:5x \| raia UI, **depois do catalogo**. Censo dele: **440 anexos medidos " "pelo CONTEUDO** -- 204 jpg, 161 png, 37 pdf, 35 jpeg, **3 heic ( ...` |
 | 07:48:24 | Bash | Push da lei e do catalogo | `cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_lei.log 2>&1; echo "rc=$?"; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_lei.log` |
 | 07:48:16 | Bash | Commit do DIFF e do item 1 da raia UI | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md && git commit -q -m "DIFF de frota da 10 publicado ANTES do apply -- 101 linhas, e elas tem DUAS causas O alvo da lei: horas_noturnas +154,85 h em 13 colabs (o adicional noturno de quem trabalhou a noite numa folga e recebia os 100% sem os 20%), horas_intra_indenizada +21,18 h nos mesmos 13, horas_extras_50 +0,24 em 1 e horas_trabalhadas -2 ...` |
 | 07:47:41 | Bash | RELATO no topo e arquivo de reversao | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() CAB = '# RELATO — esteira saas-hasner\n\n' assert t.startswith(CAB) ini = t.index('# A LEI DA FOLGA TRABALHADA CHEGOU') fim = t.index('# APLICADO: a 10 re-lavrada, contador 33 -> 19') bloco = t[ini:fim] t = t[:ini] + t[fim:] t = CAB + bloco + t[len(CAB):] ...` |
@@ -132,4 +133,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:14:11 | Bash | Formato do PROMPTS.md | `cd /home/ronald/saas-hasner && tail -6 app/docs/PROMPTS.md` |
 | 20:04:34 | Bash | O contador da 10 depois da re-lavratura | `cd /home/ronald/saas-hasner && cat > /tmp/medir10.py <<'PYEOF' # -*- coding: utf-8 -*- from colaboradores.models import Empresa from folha.porta_export import medir tot = 0 for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'): d = medir(e, 10, 2026) linhas = d.get('fechamento_x_soma_dias_pagos') or [] tot += len(linhas) print(' emp%s fechamento_x_soma_dias_pagos=%-3d gravado_x_grade=%- ...` |
 | 20:04:23 | Bash | Estado da re-lavratura | `tail -12 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relavra10.log; echo "--- viva=$(pgrep -cf lavrar_dias_pagos)"` |
-| 19:53:59 | Bash | Esperar a re-lavratura da 10 | `cd /home/ronald/saas-hasner && until ! pgrep -f 'lavrar_dias_pagos' >/dev/null; do sleep 30; done; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relavra10.log \| tail -20` |
