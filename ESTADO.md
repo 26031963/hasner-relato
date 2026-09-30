@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:11:09.**
+**Medido em 30/09/2026 20:16:18.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu` |
+| `HEAD` local | `882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **22** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
 bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu
 711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod
 d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados
 0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
-94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
 ```
 
 ## `git status --short`
@@ -99,39 +99,39 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● 7 verdes. Commitando a raia e depois rodando a suíte dela:
 
-● O caso morde: o censo acha só a data de código, e ignora as duas de prosa. Commitando a leva de main:
+  Committed 6f77788a
 
-  Committed bf739fad, ran 1 shell command
-
-● Commitado. A pista está livre — rodando os selos de tela da raia. A minha memória avisa que suíte em worktree precisa do staticfiles:
-
-  Listed 1 directory, ran 1 shell command
-
-● A tela renderizou (200) e só uma asserção falhou. Vendo o resumo e qual ramo do template saiu:
+● Commitado na raia. Agora fecho o buraco que eu registrei: a lavratura que a tela lê não tem horário. Ela depende de célula e cartório assentados, então é elo da mesma corrente:
 
   Ran 1 shell command
 
-● O corpo diz "Nada lavrado" — então ler() não achou o retrato, e a suspeita é a empresa que a view escolhe. Conferindo empresas_visiveis:
+● O PAPEL_DO_CRON cobra a declaração, como cobrou no irmão. Declarando:
 
   Ran 1 shell command
 
-● Achei, e é o meu fixture: empresas_visiveis() exclui CNPJ que começa com 11222333 (empresas de diagnóstico) — que é exatamente o CNPJ padrão de teste da casa, o que eu copiei do
-  irmão. A view via zero empresas.
+● 40 verdes e o diagrama com duas arestas novas. Conferindo o crontab antes de instalar:
 
-  E isso expõe uma vacuidade minha: o selo do "retrato ausente" passou pelo motivo errado — não havia empresa, não faltava retrato. Curando as duas coisas:
+  Ran 1 shell command
 
-● Corrigir o fixture e rodar
-  ⎿  $ cd /home/ronald/wt-ui/app && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'ponto/tests/test_tela_gestao_he.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = """ cls.emp = Empresa.objects.create(razao_social='GHE Juliani', cnpj='11222333000165',
-     ativa=True, em_rollout=True)"…
+● O diff mostra algo que não é meu: o crontab está sem a linha 38 7 censo_fase_12x36 --lavrar, declarada no código e nunca instalada. Instalar traria ela também, então preciso
+  saber o que ela escreve antes:
 
-✢ Bootstrapping… (6h 39m 37s · ↓ 1.2m tokens)
+  Ran 1 shell command
+
+● É lavratura de contador (MetricaSnapshot, papel de VIGIA) — nem dinheiro, nem escala, nem vínculo. Foi declarada e nunca instalada: o crontab derivou do código. Instalando:
+
+  Ran 1 shell command
+
+● Crontab em sincronia (100 linhas, com backup). Commitando e rodando a suíte completa, que é o portão do push:
+
+● Commitar o cron e iniciar a suite
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_cron.txt <<'EOF'
+     O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
+     A Gestao de HE (na raia UI) LE um retrato lavrado do…
+
+✽ Bootstrapping… (6h 44m 45s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
