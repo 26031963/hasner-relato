@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:199 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:246 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:47:01.**
+**Medido em 30/09/2026 08:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava` |
+| `HEAD` local | `ed22ec4c TICKETS: rodape e placar` |
 | `origin/main` | `4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ed22ec4c TICKETS: rodape e placar
+ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu a ZERO
 4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava
 8d664816 TICKETS: rodape e placar
 5001a457 Smoke da cura da busca pelo loader real -- e a minha sonda leu a lapide antes de eu corrigi-la
-77d0caed "Erro na busca" em toda busca de posto, e o servidor estava certo: captura no load contra defer
-df62fdd7 TICKETS: rodape e placar
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ df62fdd7 TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,34 +100,34 @@ df62fdd7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-
-❯ col899 NAO e excecao: pela VINCULO-LINHA-DO-TEMPO a EC 1311 (salva depois, a partir de 01/09) ABSORVE a 1310 (25/09) -- tipo diferente nao muda a lei, a linha e uma. Aplicar
-  pela operacao absorver_vigencias_posteriores com trilha, regerar e re-julgar 25/09->hoje; passivo 0 -> VALIDATE do EXCLUDE. E o censo: qual leitor mostrou folga 28/30 pela 1310
-  -- le -data_inicio em vez de escala_geradora (O69). PAREI so em lei ou !
-
-❯ VINCULO: o EXCLUDE e tripwire, nao desenho -- dois ativos tem que ser IMPOSSIVEL por construcao. CENSO de escritores de EscalaColaborador (create/save/update/bulk) com
-  arquivo:linha; todo escritor que nao passa por executar_vinculo (a linha do tempo) e VERMELHO e migra. Caso: quem gravou a EC 1311 do col899 (01/09, ancora 25/09) sem absorver
-  a 1310 (25/09)? Esse e o escritor fora da porta. Cura na origem; depois o passivo (col899 pela linha do tempo, sem !) e o VALIDATE. PAREI so em lei ou !
-
-● Duas ordens do VÍNCULO. Registro as duas e começo pelo censo, que é o primeiro passo da segunda e responde a pergunta da primeira:
-
-  Ran 1 shell command
-
-● Background command "Push do incidente curado" completed (exit code 0)
 
 ● Censo por AST: todo escritor de produção está num arquivo só — colaboradores/services/vinculo.py, 11 sítios. Aprofundo por função e meço quem gravou a 1311:
 
-● A trilha diz quem gravou a EC 1311
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/quem_gravou_1311.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """Quem gravou a EC 1311 do col899, pela TRILHA (leitura pura)."""
-     from escala.models import EscalaColaborador
-     from django.apps import apps
-     for pk in (1310, 1311):
-     e = EscalaColaborador.objects.filter(…
+  Ran 2 shell commands
 
-✢ Misting… (1h 39m 8s · ↓ 106.3k tokens · thinking)
+● A trilha responde: os dois passaram pela porta, pelo mesmo admin (u657), com 3 min de diferença — #1950 criou a 1310 e #1951 a "correcao" criou a 1311. Então o defeito é na
+  porta:
+
+  Ran 2 shell commands
+
+● A porta já absorve desde 29/09 (vinculo.py:178) — e o col899 é de 25/09 14:48, quatro dias antes. Não há escritor fora da porta neste caso: é passivo. Aplico pela operação
+  declarada:
+
+  Ran 2 shell commands
+
+● Absorvida — 1 ativa. Agora regenerar/re-julgar e medir o passivo, que é a condição do VALIDATE:
+
+  Ran 3 shell commands
+
+● Passivo da frota: um só — col334, duas ativas do mesmo tipo. Pela mesma lei, a de 03/08 fecha a de 21/07 em 02/08:
+
+● Pushing do vinculo · 2m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_vinc.log 2>&1; echo "rc=$?"; grep -E '^(FAIL|ERROR):|^OK$|^Ran |main ->
+     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (2m 21s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (1h 44m 38s · ↓ 118.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
