@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:533 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:589 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:32:01.**
+**Medido em 30/09/2026 12:37:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
+| `HEAD` local | `6dbf2add RELATO: a familia (1) do ESMERIL-MECANICO com numero -- 24 leitores por ordem, e 1.144 dia-colab sem resposta` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6dbf2add RELATO: a familia (1) do ESMERIL-MECANICO com numero -- 24 leitores por ordem, e 1.144 dia-colab sem resposta
 fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"
 c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje corrigidos em 3 h
 bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta a EM VOO
 020b379b Das 55 "disputas zumbis" que eu publiquei, 50 estavam abertas com razao -- quem deixava o texto era a reabertura
-88e03e39 O 401 de senha trocada saia rotulado "token_invalido" -- e quem lanca passa a nomear o motivo
 ```
 
 ## `git status --short`
@@ -100,34 +100,34 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
-     stopped
+  antigo contava as duas coisas. Primeiro migrado, escala_vigente, com DIFF de frota: 15.718 iguais, 1 divergente e 1.144 dia-colab em 46 colabs onde a ordem devolve None e a
+  célula sabe. Onze estão ativos; dois ficam 30 de 30 dias — col515 (o golden dele: vigência impossível, 02/09 a 29/08, 8 batidas) e col882 (vigência encerrada em 06/09, 20
+  batidas depois). RED evidenciado: 3 dos 6 casos ficam vermelhos sem a cura.
 
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-a… ·
-     stopped
+  Também corrigi os rótulos de hora: tudo que eu datei hoje como 13:xx–14:5x era 11:4x — 3 h adiantado, em 11 arquivos. Quem me denunciou foi o próprio sistema (o arquivo de
+  reversão nomeado por timezone.localtime()). É a terceira vez, sempre para a frente; a memória foi reforçada com o padrão.
 
-  Searched for 2 patterns, ran 11 shell commands
+  Falta fechar: a suíte inteira na raia com a cura de escala_vigente está rodando — ela toca registro_batida, então não commito a migração antes do verde.
 
-● Stop Task
-  ⎿  python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-… · stopped
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Searched for 4 patterns, read 1 file, ran 19 shell commands
+  Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Background command "Esperar a suite da raia" completed (exit code 0)
 
-  Searched for 6 patterns, read 1 file, listed 1 directory, ran 58 shell commands
+  Searched for 1 pattern, read 4 files, ran 7 shell commands
 
-● Background command "Esperar o push" completed (exit code 0)
+● Background command "Suite inteira na raia com a cura" completed (exit code 0)
 
-● Suite inteira na raia com a cura
-  ⎿  $ cd /home/ronald/saas-hasner && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); echo "$LABELS" | head -c 200; echo; source bin/recursos.sh >/dev/null 2>&1; teste_envfile
-     >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENV…
+● Background command "Esperar de verdade o fim da suite" completed (exit code 0)
 
-✢ Misting… (5h 24m 8s · ↓ 394.9k tokens)
+● Detalhe das 5 falhas
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E "^(FAIL|ERROR): " -A 22
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril1.log | grep -E "^(FAIL|AssertionError|self\.assert| |-)" | head
+     -60
+
+· Misting… (5h 29m 38s · ↓ 411.5k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
