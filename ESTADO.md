@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- > **Os outros quatro passos do aval estao FEITOS e no commit** (`596064b7` + `0b9152de`): (1) o passo 1
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:11:31.**
+**Medido em 30/09/2026 16:17:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova` |
+| `HEAD` local | `8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO` |
 | `origin/main` | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO
 f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova
 7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e
 0b9152de Quatro selos da casa morderam a minha fatia da janela, e os quatro tinham razao
 c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao
-6739a1c0 PAREI da JANELA-DE-HE publicado com a tabela -- e a DERIVA da 10 saiu ZERO
 ```
 
 ## `git status --short`
@@ -44,6 +44,7 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/smoke_he_tmp.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,38 +102,38 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 
 ```
 
-  Um ponto que quero dizer antes de aplicar, não depois: o apply move −230,06 h de trabalhadas e +18,00 h de atraso em 24 pessoas. O col889 esteve presente 12h08 no dia 21/09 e
-  passa a ter 607 min pagos mais 52 min de atraso contra previsto de 660. Você leu a tabela e disse "aplica tudo", então aplico — mas essas 24 pessoas vão ver a diferença no
-  holerite, e a lista delas está no logs/janela_he/bloqueio_total_10.json se o DP quiser avisar antes.
+  Ran 3 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-  Searched for 1 pattern, read 1 file, ran 4 shell commands
-
-● Background command "Esperar a suite terminar" completed (exit code 0)
+● Meu probe leu a pasta errada e devolveu "nada se moveu" com zero arquivos — ausência de sinal lida como sinal bom. Corrigindo, e agora ele recusa responder sem foto:
 
   Ran 1 shell command
 
-● Background command "Esperar o desfecho da suite cheia" completed (exit code 0)
+● A prova trouxe uma surpresa que preciso medir antes de escrever a causa. A 09 saiu idêntica, o alvo bateu — mas horas_noturnas veio +114,52 h onde o DIFF previa −57,81:
 
   Ran 1 shell command
 
-● Background command "Esperar o push com a suite cheia" completed (exit code 0)
+● A resposta é clara e muda a leitura: a deriva de prod não era zero — e é ela que inverteu o sinal das noturnas.
 
-  Searched for 1 pattern, ran 3 shell commands
+  Ran 1 shell command
 
-● Deploy OK — migration 0054 aplicada, três cascas juntas, três rotas provadas. Agora o apply:
+● Agora o quadro fecha. Vou registrar a cegueira do meu próprio instrumento e publicar a prova:
 
-  Medir a prova do apply nas duas competencias
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+  Ran 3 shell commands
+
+● Agora o smoke em prod — a cadeia inteira, com a ponta nova:
+
+● Smoke do portao em prod com as duas pontas · 15s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > app/smoke_he_tmp.py <<'PYEOF'
      # -*- coding: utf-8 -*-
-     """A PROVA DEPOIS: o movido real no gravado, campo por campo, das fotos antes/depois."""
-     import glob, json, collections
-     ALVO = ('horas_trabalhadas', 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna',
-     'horas_extr…
+     """SMOKE em prod: o portao ve as DUAS pontas, e a pendencia diz qual. So leitura."""
+     import collections
+     from colaboradores.models import Empresa
+     from folha.porta_export import medir
+     for eid in (2, 3, 4):
+     e … (14s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bootstrapping… (2h 39m 59s · ↓ 456.5k tokens · thinking)
+✢ Bootstrapping… (2h 45m 29s · ↓ 472.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
