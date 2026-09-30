@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:21:01.**
+**Medido em 29/09/2026 22:26:08.**
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/folha/porta_export.py
+ M app/folha/tests/test_b1_portao_he_nasce_desligado.py
+ M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -99,18 +102,6 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
-
-● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
-  derivação está no template.
-
-  Ran 16 shell commands
-
-● Background command "Push da B1 item 1" completed (exit code 0)
 
   Ran 2 shell commands
 
@@ -125,18 +116,30 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Esperar o push da B1 completa · 6m 35s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1d.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (6m 33s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 17 shell commands
 
-✢ Schlepping… (6h 14m 18s · ↓ 258.2k tokens)
+● Background command "Push da B1 completa" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
+  a mesma fonte para as duas:
+
+● Suite com o contador na fonte da tela · 2s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='folha/tests/test_b1_portao_he_nasce_desligado.py'
+     t=io.open(P,encoding='utf-8').read()
+     V = """ def test_MORDE_a_mensagem_do_conferir_nomeia_a_pendencia_SO_quando_ela_trava(self):"""
+     N = ''' def test_MORDE_o_contador_le_a_MESMA_f…
+
+✽ Schlepping… (6h 19m 25s · ↓ 263.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 14 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 15 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
