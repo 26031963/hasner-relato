@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:06:01.**
+**Medido em 30/09/2026 16:11:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
-| `origin/main` | `59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova` |
+| `origin/main` | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova
 7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e
 0b9152de Quatro selos da casa morderam a minha fatia da janela, e os quatro tinham razao
 c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao
 6739a1c0 PAREI da JANELA-DE-HE publicado com a tabela -- e a DERIVA da 10 saiu ZERO
-596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR
 ```
 
 ## `git status --short`
@@ -41,9 +41,6 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
- M app/folha/tests/test_b1_portao_he_nasce_desligado.py
- M app/ponto/management/commands/diff_janela_he_total.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -104,25 +101,6 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 
 ```
 
-  ! do atraso — registrado em PROMPTS.md, ALVO do instrumento atualizado (deixar o campo fora faria o comando seguir gritando PAREI sobre pergunta já respondida), e o ensaio do
-  apply rodou em prod: 6 fotos do gravado escritas — as três da 10/2026 são o arquivo de reversão (valor por colab e por campo, não hash), as três da 09 são a prova da L-092 —, o
-  plano de cadastro impresso (piso 10 → 0, saída False → True, vigência 21/09 intacta nas três empresas), e nada escrito. Falta o deploy e o --aplicar --motivo.
-
-  ! da família (1) — VERMELHO = 0, e os dois saíram com nome: o censo ganhou uma quarta seção, FILA DO MOTOR (S5b), e os dois seguem impressos com arquivo:linha. Não foram
-  absolvidos — mudaram de contador, porque a pergunta deles é outra. O selo respondeu OK e MORDE (base 0, e leitor novo por ordem ainda é visto). Placar da família no dia: 19 → 7
-  → 4 → 2 → 0.
-
-  Não movi isso por conta própria de propósito: mover sítio do próprio contador é redefinir o universo que ele mede, que é o defeito que fez a TRAVA JUIZ-NOVO nascer em 24/09.
-  Levei a pergunta ao topo do RELATO com os números e segui outra frente.
-
-  Sequência do apply, na ordem
-
-  1. suíte cheia (rodando, ~1 min) → push
-  2. bin/deploy.sh com migrate (a 0054 está pendente) — e o deploy também cura o que já dói: o espelho.html está no ar lendo {{ h.sentido }} que o .py no ar não emite, então hoje
-     o admin lê "9 min  do marco 07:00" enquanto o PDF diz "antes"
-  3. aplicar_janela_he_total --aplicar --motivo em prod
-  4. prova no RELATO: hash da 09 antes/depois (tem de sair idêntico) e o movido na 10
-
   Um ponto que quero dizer antes de aplicar, não depois: o apply move −230,06 h de trabalhadas e +18,00 h de atraso em 24 pessoas. O col889 esteve presente 12h08 no dia 21/09 e
   passa a ter 607 min pagos mais 52 min de atraso contra previsto de 660. Você leu a tabela e disse "aplica tudo", então aplico — mas essas 24 pessoas vão ver a diferença no
   holerite, e a lista delas está no logs/janela_he/bloqueio_total_10.json se o DP quiser avisar antes.
@@ -130,17 +108,36 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Esperar a suite e ler o desfecho · 47s
-  ⎿  $ until grep -qE "main -> main|error:|FAILED" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_j3.log 2>/dev/null; do sleep
-     15; done; sleep 2; grep -nE "^(Ran |OK$|OK \(|FAILED|FAIL:|ERROR:|main -> main|error:)" /tmp/claude-1001/-home-ronald-saas-ha… (46s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, read 1 file, ran 4 shell commands
 
-✢ Bootstrapping… (2h 34m 29s · ↓ 451.8k tokens)
+● Background command "Esperar a suite terminar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Esperar o desfecho da suite cheia" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Esperar o push com a suite cheia" completed (exit code 0)
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● Deploy OK — migration 0054 aplicada, três cascas juntas, três rotas provadas. Agora o apply:
+
+  Medir a prova do apply nas duas competencias
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """A PROVA DEPOIS: o movido real no gravado, campo por campo, das fotos antes/depois."""
+     import glob, json, collections
+     ALVO = ('horas_trabalhadas', 'horas_extras', 'horas_extras_50', 'horas_extras_50_noturna',
+     'horas_extr…
+
+✢ Bootstrapping… (2h 39m 59s · ↓ 456.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
