@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 05:08:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **201**.
+**Medido em 30/09/2026 05:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **200**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -210,4 +210,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:14:09 | Bash | Push dos 27 commits | `cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log 2>&1; echo "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log; grep -E '^(FAIL\|ERROR):\|^Ran \|^OK$\|^FAILED\|rc=\|main -> main\|error' /tmp/claude-1001/-home ...` |
 | 17:14:02 | Bash | Acertar o placar antes do push | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; if ! git diff --quiet -- app/docs/TICKETS.md; then git commit -q -m "TICKETS: placar do topo Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && echo "placar commitado"; fi; echo "faltam: $(git rev-list --count origin/main..HEAD)"` |
 | 17:13:56 | Bash | Commit dos tres achados do selo da raia | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg3.txt <<'EOF' Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres O papel contava como FALTA 15 furos que NINGUEM decidiu. FALTA-UM-SIGNIFICADO (corte Ronald 23/09) diz que falta e o que foi DECIDIDO, mas `_totais_da_lavratura` nao  ...` |
-| 17:13:28 | Bash | RELATO do terceiro achado e add por path | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() ANC = """**RESIDUO NOMEADO, para nao passar por cura:**""" assert t.count(ANC)==1 NOVO = """## (C) E um TERCEIRO, que so apareceu depois das duas curas: o saldo nao se subtraia Com a lavratura mandando, o papel passou a mostrar **`10,00 h` trabalhadas, `1 ...` |
