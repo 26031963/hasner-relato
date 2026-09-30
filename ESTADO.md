@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:50:45.**
+**Medido em 30/09/2026 19:55:45.**
 
 | | |
 |---|---|
@@ -125,7 +125,7 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ● Vou curar esse (o except: pass é intencional mas silencioso, e o selo está certo: um ensaio desfeito contra o banco de prod merece linha de log) e rodar a suíte inteira de novo
   para achar os outros cinco:
 
-  Curar e rodar a suite inteira com saida completa · 1m 56s
+  Curar e rodar a suite inteira com saida completa · 6m 56s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
@@ -137,10 +137,10 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
      return gravado, hoje, novo"""
      N = """ raise _Rollback()
      except _Rollback:
-     # NAO E `pass`, e o selo `ponto/t… (1m 55s · 2 lines)
+     # NAO E `pass`, e o selo `ponto/t… (6m 55s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Bootstrapping… (6h 19m 12s · ↓ 1.1m tokens)
+· Bootstrapping… (6h 24m 12s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
