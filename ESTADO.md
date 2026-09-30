@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:51 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:32:31.**
+**Medido em 30/09/2026 20:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo` |
+| `HEAD` local | `bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **26** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98
+e1f7a3fa B2: a aba que autoriza -- e a permissao que a ordem nomeia NAO EXISTIA como Permission
+cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e diz de quando ele e
 882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
 bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu
-711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod
-d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados
-0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/BACKLOG.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,43 +100,43 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 
 ```
 
-  Só dois são reais. Vendo o O98, que se contradiz:
+● Saída vazia — o run não chegou aos testes. Vendo o que aconteceu:
 
   Ran 1 shell command
 
-● O98 se contradiz: a obra abre com "CONGELADA (L-096)" e o portão diz "fila 1, DEPOIS do lote 2". Não vou resolver por adivinhação. Conferindo o que a L-096 congela, porque as
-  leis de hoje foram removendo congelamentos:
+● freeze_time não está importado nesse arquivo — eu adicionei o import nos outros dois, em main, e esqueci este. Corrigindo, e congelando as duas classes (o selo do relógio solto
+  cobraria a outra também):
 
   Ran 1 shell command
 
-● Resolvido sem adivinhar: a L-096 é "obra estrutural anda sozinha até o fim" — ela congela obra nova, e o portão do O98 estava dizendo a posição depois do degelo, não o estado
-  agora. As duas coisas são verdade; a coluna do estado tem de dizer o estado. E o O69 está feito, só não na palavra que o leitor conhece:
+● 14 de 15. A falha é a minha prosa outra vez — o bloco contém a palavra "decidir" na frase "decidir exige a permissão autorizar_he". Oitava vez hoje. Corrigindo para estrutura,
+  como as outras:
 
   Ran 1 shell command
 
-● O próximo é o R1, um item estrutural real. Mas eu tenho uma sequência em voo (suíte de main → selos da raia → cherry-pick → push → deploy), e abrir o R1 agora significaria
-  editar a árvore de main com a suíte lendo o mesmo bind-mount. Conferindo a corrente:
+● 32 verdes (tela + aba + o contrato que lê as permissões rbac). Commitando a B2 na raia:
 
-  Ran 2 shell commands
+  Committed 0e3e3537
 
-● 15:55 e 100% de CPU — as corridas anteriores fecharam em 955 s, então ela está no fim. Lendo o R1 para entrar nele direto quando a sequência fechar:
+● Agora o cherry-pick dos meus dois commits para main — só a tela nova e a aba, não as 7 fatias que esperam o seu clique:
 
-● Ler o item R1
-  ⎿  $ python3 -c "
-     import io
-     for l in io.open('docs/BACKLOG.md', encoding='utf-8'):
-     if l.startswith('| R1 '):
-     c = l.split('|')
-     print('OBRA:'); print(c[2].strip()[:1200]); print(); print('PORTAO:', c[3].strip()[:200]); print(); print('ONDE:', c[4].strip()[:400])
-     break
-     "
+  Cherry-picked e1f7a3fa
 
-· Bootstrapping… (7h 0m 59s · ↓ 1.3m tokens · thinking)
+● Os dois entraram limpos em main (cb19da19 a listagem, e1f7a3fa a aba). Commitando os documentos, e depois o estado de UI que está vivo sem commit — a suíte passou com ele na
+  árvore, então é seguro rastreá-lo:
+
+  Committed bf3a4c64
+
+● Agora o estado de UI que serve prod sem commit — rastreá-lo não muda nada no ar e tira o risco de um git checkout reverter a tela (o 500 de 4 min de 25/09):
+
+● Running 1 shell command…
+
+✢ Bootstrapping… (7h 6m 29s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
