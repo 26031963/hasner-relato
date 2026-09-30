@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:00:45.**
+**Medido em 30/09/2026 20:06:01.**
 
 | | |
 |---|---|
@@ -108,44 +108,44 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  toca prod):
+
+● Ambas as classes existem e são as usadas na casa. Conferindo a suíte de main para liberar a pista:
 
   Ran 1 shell command
 
-● Conflito só em dois documentos (o código mergeou limpo). Antes de resolver, vendo o que os 7 commits próprios da raia escreveram nesses docs — não quero perder linha deles:
+● Vou parar de sondar (a suíte me notifica) e fechar um buraco real que a listagem cria: ela lê um retrato, e se ninguém o lavrar de novo o admin vê foto velha. Conferindo se a
+  lavratura tem horário:
 
   Ran 1 shell command
 
-● A raia escreveu 404 linhas de RELATO próprias, e perdê-las na resolução seria apagar o registro do trabalho dela. Resolvendo por união, não por escolha — extraio o bloco da raia
-  e o mantenho abaixo do de main:
+● lavrar_he_pendente está em FORA_DE_PIPELINE — sem horário. Então a listagem leria uma foto que envelhece para sempre: exatamente o defeito que eu acabei de curar nos deslogados
+  ("lista digitada envelhece"). Vendo o que o cron precisaria:
+
+  Ran 1 shell command
+
+● Background command "Curar e rodar a suite inteira com saida completa" completed (exit code 0)
+
+● A suíte terminou. Vendo o veredito e as falhas:
+
+  Ran 1 shell command
+
+● 5 vermelhos, e os cinco são meus. Lendo as mensagens:
 
   Ran 2 shell commands
 
-● O bloco da raia começa com um PAREI: próprio (o smoke da UI-GRADE, que ainda espera), e no BACKLOG ela só alterou duas linhas de itens dela. Resolvendo: main manda no índice, e
-  o registro da raia fica preservado abaixo:
+● O selo mordeu o meu docstring — """'2026-09-25' ou '2026-09-25T07:08:57-03:00' -> '25/09'""" é um exemplo em prosa, não uma data que decide. É literalmente a minha memória
+  selo-estrutural-varre-ast-nao-texto, e hoje é a quinta vez. Vendo se a cura de origem é viável:
 
-  Ran 1 shell command
+● Achar o censo de datas cravadas
+  ⎿  $ grep -rln 'data literal que DECIDE' --include=*.py . | head -2; F=$(grep -rln 'data literal que DECIDE' --include=*.py . | head -1); grep -nE 'ast\.|re\.compile|def
+     _censo|docstring|Constant|def censo' $(dirname $F)/../*/datas_cravadas.py core/datas_cravadas.py 2>/dev/null | head -12
 
-● A raia está em dia e já tem o lavrado. Lendo a especificação exata do item e a forma do retrato:
-
-  Ler a especificacao do item
-  ⎿  $ cd /home/ronald/wt-ui && python3 -c "
-     import io
-     for l in io.open('app/docs/BACKLOG.md', encoding='utf-8'):
-     if 'Gestao de HE (LISTAGEM)' in l:
-     c = l.split('|')
-     print('OBRA:', c[2].strip()[:1400])
-     print()
-     print('PORTAO:', c[3].strip()[:200])
-     break
-     "
-
-· Bootstrapping… (6h 29m 12s · ↓ 1.1m tokens · thinking)
+✢ Bootstrapping… (6h 34m 29s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
