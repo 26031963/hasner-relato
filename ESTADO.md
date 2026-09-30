@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:28:01.**
+**Medido em 30/09/2026 16:33:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO` |
+| `HEAD` local | `35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA` |
 | `origin/main` | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA
 8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO
 f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova
 7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e
 0b9152de Quatro selos da casa morderam a minha fatia da janela, e os quatro tinham razao
-c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,21 +100,6 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. Antes: a causa das noturnas da 10 (+114,52 contra -57,81) com nome e numero no
-     RELATO. Se for bug e nao deriva, cura primeiro -- a 09 nao herda.
-  2. janela_he_desde das empresas 2, 3 e 4 recua para 21/08, pela porta, com trilha.
-  3. DIFF da 09 na sombra contra o gravado, por rubrica e por colab, REGRA e DERIVA
-     em colunas separadas. Publica e APLICA em seguida, sem nova parada, se so se
-     moverem: trabalhadas, HE50/HE100, banco, noturnas, reflexo DSR, atraso, saida
-     antecipada, intra, folga trabalhada. Campo fora dessa lista = PAREI com a tabela.
-  4. Reversao em logs/ (snapshot do gravado da 09 por colab + o TXT de 28/09 e o
-     hash dele guardados).
-  5. TXT NOVO da 09, inteiro, com hash publicado, marcado como o que SUBSTITUI o de
-     28/09. O antigo fica invalidado com trilha, nunca apagado.
-  6. Relogio riscado e he_pendente cobrindo a 09. PROVA no RELATO: HE de ponta = 0
-     na 09, e o calendario do col do print (12x36 19-07) sem "+0,2h extra 50%". !
-
-● Ordem registrada primeiro, e o item 1 é o portão de tudo. Vou medir a causa das noturnas com nome e número:
 
   Ran 2 shell commands
 
@@ -125,20 +109,35 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 
 ● Item 1 respondido: é DERIVA, não bug — e a prova é que o gravado agora é exatamente o motor:
 
-● Ver os modelos de export da folha
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from folha.models import *
-     import django.apps as _a
-     for m in _a.apps.get_app_config('folha').get_models():
-     print(m.__name__, m.objects.count())
-     " 2>&1 | grep -v "W004\|WARNINGS\…
+  Ran 4 shell commands
 
-✢ Bootstrapping… (2h 56m 29s · ↓ 479.9k tokens)
+● Item 1 fechado: deriva, não bug. Vou publicar e escrever a exceção nomeada, no mesmo commit:
+
+  Ran 2 shell commands
+
+● Agora o código. Passo 2 e 3 precisam que a porta aceite a exceção:
+
+  Ran 1 shell command
+
+● Passo 3 — o DIFF da 09 com REGRA e DERIVA em colunas separadas. E ele roda em prod, não na sombra, porque a coluna DERIVA da sombra é cega (medido às 16:1x):
+
+  Ran 2 shell commands
+
+● Enquanto o DIFF roda, os passos 4 e 5. O "invalidado com trilha" precisa ser estado legível, não só log:
+
+  Ver quem gerou o TXT de 28/09
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from django.contrib.auth import get_user_model
+     U = get_user_model()
+     for u in U.objects.filter(pk__in=[651, 652]):
+     print(u.pk, u.username, u.get_full_name(), 'staff=%s' % u.is_st…
+
+✢ Bootstrapping… (3h 1m 59s · ↓ 501.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
