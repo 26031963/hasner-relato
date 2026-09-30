@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:10:46.**
+**Medido em 30/09/2026 12:16:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| `origin/main` | `e3b87217 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **9** |
+| `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -122,12 +122,12 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar o push · 2m 0s
+● Esperar o push · 7m 15s
   ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 24); do if ! pgrep -f 'git push origin main' >/dev/null; then break; fi; sleep 25; done; grep -E "FAILED|^OK|Ran
-     [0-9]+|error:|rc=|main -> main|FAIL:" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push… (1m 59s)
+     [0-9]+|error:|rc=|main -> main|FAIL:" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push… (7m 14s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Misting… (5h 2m 53s · ↓ 388.0k tokens)
+· Misting… (5h 8m 8s · ↓ 388.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
