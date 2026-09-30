@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:07:01.**
+**Medido em 30/09/2026 15:12:31.**
 
 | | |
 |---|---|
@@ -100,44 +100,44 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ emp4    │ 7 → 7     │ 11 → 11   │ IGUAL    │
-  └─────────┴───────────┴───────────┴──────────┘
 
-  so_antes=0 so_depois=0 · entraram=0 sairam=0 mudaram=0 (motivo 0, horas 0, apto_folha 0) · TXT=0 RETIDOS=0.
+  Read 1 file
 
-  Ou seja: o pareador passar a receber o vínculo que a célula nomeia não move um centavo na competência corrente. E isso é coerente com o que a ferramenta forense da casa já dizia
-  de manhã (zero minuto de movimento) — só que agora medido pelo comando canônico, com trava, nos dois códigos, contra o gravado.
-
-  Então a condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA está cumprida com a prova certa: DIFF publicado antes do deploy, e ele é zero. O que a cura muda não é dinheiro hoje — é o
-  pareador deixar de rodar sem marcos para 1.170 dia-colab (39 colabs, sendo 38 desligados e o col882). O ganho é geometria correta e o risco medido é nenhum.
-
-  Falta só o gate da suíte fechar para a linha subir.
+● Avançando (1.819 linhas, 15:09). Aguardo o esperador.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Ran 1 shell command
+  Read 1 file
 
-● DIFF_FOLHA=0 registrado no censo e no commit (19905768), com a tabela por empresa colada — como a lápide do simular_folha manda.
-
-  E a leitura que importa: a cura muda geometria, não dinheiro. O pareador passar a receber o vínculo que a célula nomeia não move um centavo na competência corrente, e isso
-  confirma — pelo comando canônico, com trava, contra o gravado — o que a ferramenta forense da casa já dizia de manhã. O ganho é o pareador deixar de rodar sem marcos em 1.170
-  dia-colab (39 colabs: 38 desligados e o col882), e o risco medido é nenhum.
-
-  A condição 1 da DINHEIRO-EM-COMPETENCIA-ABERTA está cumprida com a prova certa: DIFF publicado antes do deploy, não depois.
-
-  Falta só o gate da suíte. Quando ele fechar verde, a linha sobe com as duas provas juntas — suíte e DIFF — e a família (1) fica com os quatro finais, todos com veredito escrito
-  e nenhum deles cego.
+● 1.825 linhas. Aguardo.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-✢ Bootstrapping… (1h 35m 29s · ↓ 276.8k tokens)
+  Searched for 1 pattern
+
+● Background command "Gate do lote 7 no turnos" completed (exit code 0)
+
+● Background command "Esperar o gate e olhar os dois" completed (exit code 0)
+
+● Gate verde e o escopo corrigido
+  ⎿  $ cd /home/ronald/wt-esmeril2 && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='bin/esmeril_vinculo_censo_de_hoje.txt'
+     t=io.open(P,encoding='utf-8').read()
+     _nota = """
+     -- GATE DO LOTE 7: **8.765 OK** (15:09). E a MEDICAO do `esmeril_espelho:114` mudou o ESCOPO da familia --
+     As duas provas…
+
+✢ Compacting conversation… (1h 40m 59s · ↓ 285.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            1% until auto-compact
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
