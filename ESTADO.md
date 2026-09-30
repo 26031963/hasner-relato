@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:19:31.**
+**Medido em 30/09/2026 14:25:02.**
 
 | | |
 |---|---|
@@ -100,44 +100,44 @@ a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    (escala_auto::dry_da_frota) ou quer o vínculo corrente. Com ele dentro, o censo acusava esses sítios de escolher o vínculo de um dia sem haver dia nenhum na consulta.
-  - diagnostico_escala migrou, e era o caso fácil porque já carregava as células no formato da casa — as geradoras que a janela não alcança entram por mais=.
+  3. Os três de .first() (esmeril_espelho:114, pdf_espelho:312, censo_fase_12x36:86) → passam a perguntar por dia, com a cauda de 13 pessoas/competência medida como justificativa.
+  4. aplicar_09_corte_b:104 → remoção com prova.
 
-  E uma distinção que vale para não tratar tudo como dívida: espelho.py:588 é a referência, não o problema. Ele já faz Q(pk__in=_ger_esp) | Q(data_inicio__lte=...) — junta as
-  geradoras na própria query, exatamente o que a lápide da juíza manda desde 26/09. Migrá-lo é trocar consulta à mão pela porta que faz o mesmo, não consertar erro.
-
-  O push da principal segue na régua.
+  Cada passo tem o número que o justifica, e nenhum deles é troca cega. Quando o push liberar a pista, começo pelo (1) — que é o único com consequência visível hoje: tela e PDF
+  discordando do vínculo para 28 pessoas.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Searched for 1 pattern, ran 2 shell commands
+  Read 1 file, ran 4 shell commands
 
-● Corrigi o que eu afirmei um commit antes (b7fcdb7f): escrevi que "os sete são todos a mesma forma" e que o lote 7 seria mecânico. Conferi linha por linha e está errado em
-  metade:
+● Corrigi uma afirmação minha de meia hora atrás, e ela era grave porque eu a vendi como o número que justificava o lote (fef1452e):
 
-  - Lista da janela — mecânico (3): espelho.py:588 (que é a referência, já junta as geradoras por pk__in), pdf_espelho:325 e turnos.py:1178.
-  - Um vínculo para o período inteiro — .first() sobre a janela (3): esmeril_espelho:114, pdf_espelho:312 e censo_fase_12x36:86. Essa é uma terceira pergunta — "qual vínculo
-    representa o período" — e ela não tem porta, nem deveria ter sem decisão.
+  Eu disse: "para 28 pessoas a tela lê um vínculo e o PDF lê outro". Está errado. Medi o trecho (a query de pdf_espelho.py:325) e concluí sobre o comportamento. Sessenta linhas
+  abaixo, em :378-389, o PDF carrega as células, calcula as geradoras que faltam e estende a lista com uma query extra, reordenando por data_inicio. A lápide do próprio bloco
+  anuncia isso: "Query extra SÓ quando falta alguém" (O69, "51 colabs medidos"). O PDF não divergem da tela.
 
-  E o pdf_espelho:312 é o que mais incomoda: um único vínculo descrevendo o mês inteiro no PDF quebra exatamente no caso que esta casa vive todo dia — quem troca de escala no meio
-  do mês. Não migro sem medir quantos espelhos do mês têm mais de um vínculo na janela; se forem muitos, o defeito não é a consulta, é a premissa de que um mês tem uma escala.
+  O que sobra de verdade:
+  - os 28 de 563 (5%) com célula apontando geradora fora da janela seguem certos — e são o universo onde a correção importa;
+  - ponto/turnos.py:1178 é o único dos três que não corrige adiante (zero menção a pk__in ou escala_geradora nas 50 linhas seguintes) e ainda exige ativa=True. Ele é o candidato
+    real do lote 7 — e a divergência dele tem de ser medida, não afirmada, exatamente como eu acabei de fazer errado.
 
-  A distinção ficou escrita no próprio arquivo de censo, que é onde quem pegar o lote 7 vai ler — e não só na mensagem de commit, que ninguém relê.
-
-  O push da principal segue na régua.
+  A lição ficou escrita no arquivo de censo porque é a mesma sete vezes hoje: ler o trecho não é ler o comportamento. Antes de afirmar divergência entre dois leitores, seguir cada
+  um até o fim da função — foi o que a lápide do PDF fazia por mim e eu não li.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Desfecho do push
+● As quatro falhas do push
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E '^(FAIL|ERROR): ' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim2.log | head
+     -6; grep -A 6 "^FAIL: " /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fi…
 
-✢ Bootstrapping… (47m 59s · ↓ 158.5k tokens)
+✽ Bootstrapping… (53m 29s · ↓ 176.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
