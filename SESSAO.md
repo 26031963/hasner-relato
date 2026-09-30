@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 21:39:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.6 MB). Acoes na janela: **911**.
+**Medido em 29/09/2026 21:44:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.6 MB). Acoes na janela: **910**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -920,4 +920,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:46:13 | Bash | Quem recalculou a exportada | `cd /home/ronald/saas-hasner && grep -rl "recalculo_de_competencia_EXPORTADA" logs/*.log 2>/dev/null \| head -3; echo "=== hoje, nos logs"; grep -h "recalculo_de_competencia_EXPORTADA" logs/*.log 2>/dev/null \| tail -5; echo "=== docker logs do core (janela 09:10-09:30)"; docker logs saas_core --since 2026-09-29T09:10:00 2>&1 \| grep -iE "EXPORTADA\|fechamento por evento\|recalcular_fechamento" \|  ...` |
 | 09:46:01 | Bash | Ver o update em lote do fechamento | `sed -n 560,575p ponto/services/fechamento.py` |
 | 09:45:50 | Bash | Censo dos escritores em lote e os campos do hash | `cd /home/ronald/saas-hasner && grep -rn "FechamentoMensal.objects.*\.update(\\|_FechM.objects.*\.update(" app/ --include=*.py \| grep -v /tests/ \| head -12; echo "=== campos do hash"; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command " from ponto.models import FechamentoMensal _fora={'id','colaborador','colaborador_id','mes','ano','criado_em','atualizado_em',' ...` |
-| 09:41:19 | Bash | Publicar o RELATO e o achado | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() sec = '''# ABONO-NO-AR: o 09 fechou por RETRATO (421 -> 1), e o 10 precisa do seu `!` (29/09 09:3x) Voce leu o contador e estava certo: `fatia.done=OK` com 462 divergencias e a fatia declarando feito o que nao estava. As tres partes, com numero. ## 1. A competencia EXPORTADA pas ...` |

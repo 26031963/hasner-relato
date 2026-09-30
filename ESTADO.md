@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:39:01.**
+**Medido em 29/09/2026 21:44:31.**
 
 | | |
 |---|---|
@@ -120,7 +120,7 @@ be50379e TICKETS: rodape e placar
 
 ● Background command "Push do item 4" completed (exit code 0)
 
-● He_pendente medido em prod, com o portao desligado · 2m 17s
+● He_pendente medido em prod, com o portao desligado · 7m 46s
   ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_he.py <<'PYEOF'
      # -*- coding: utf-8 -*-
      from colaboradores.models import Empresa
@@ -128,10 +128,10 @@ be50379e TICKETS: rodape e placar
      for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'):
      d = medir(e, 10, 2026)
      hp = d.get('he_pendente') or []
-     print(' em… (2m 15s)
+     print(' em… (7m 45s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (5h 32m 18s · ↓ 238.4k tokens)
+· Schlepping… (5h 37m 48s · ↓ 238.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
