@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:373 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:453 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:28:31.**
+**Medido em 30/09/2026 11:34:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e3b87217 TICKETS: rodape e placar` |
+| `HEAD` local | `e335f732 RELATO/PROMPTS/BACKLOG: as duas curas de P7.1, a FASE 2 por trecho e a limpeza das esperas orfas` |
 | `origin/main` | `e3b87217 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,25 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e335f732 RELATO/PROMPTS/BACKLOG: as duas curas de P7.1, a FASE 2 por trecho e a limpeza das esperas orfas
+a4ec5612 O 401 do app nao dizia se era "renove o token" ou "entre de novo", e 9 pessoas ficaram deslogadas sem saber
+68691060 O app dizia "Em revisao pela supervisao" ha 2 meses porque o estado da disputa tinha DOIS escritores
 e3b87217 TICKETS: rodape e placar
 f1a34d9c PROMPTS/BACKLOG: ESMERIL-MECANICO (rename dele) e o escopo (c) ZUMBI
-c78445c7 TICKETS: rodape e placar
-336d4ae1 O nucleo da B2 escrito e PARADO, e dois selos da casa recusaram a minha primeira versao
-67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
 ```
 
 ## `git status --short`
 
 ```
- M app/api/credencial.py
- M app/chamados/services/acoes_disputa.py
- M app/chamados/services/fio.py
- M app/chamados/services/materializacao.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/api/tests/test_401_diz_qual.py
-?? app/chamados/tests/test_selo_resolucao_um_escritor.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -106,15 +100,6 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
-     stopped
-
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
-     stopped
-
-● Stop Task
   ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
      stopped
 
@@ -130,10 +115,19 @@ c78445c7 TICKETS: rodape e placar
   ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-a… ·
      stopped
 
-● Ver quais ordens ja tem linha
-  ⎿  $ grep -c "^|" docs/PROMPTS.md; for k in "ZUMBI" "METRICA" "DISPUTA-ZUMBI" "SESSAO-401" "POR-TRECHO"; do printf "%s: %s\n" "$k" "$(grep -c "$k" docs/PROMPTS.md)"; done
+  Searched for 2 patterns, ran 11 shell commands
 
-✢ Misting… (4h 20m 38s · ↓ 293.1k tokens)
+● Stop Task
+  ⎿  python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-… · stopped
+
+● Lancar o push com a regua · 14s
+  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_p71.log 2>&1; echo
+     "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_p71.log) &
+     ech… (12s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Misting… (4h 26m 8s · ↓ 306.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
