@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:299 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:350 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:09:01.**
+**Medido em 30/09/2026 18:14:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `66c37189 O passivo das batidas retro tem o numero que faltava, e ele nao tem caminho hoje` |
+| `HEAD` local | `f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-66c37189 O passivo das batidas retro tem o numero que faltava, e ele nao tem caminho hoje
-31d36e1d COL515 fechado e CONFERIDO -- e a conferencia achou duas coisas
-843c01f0 O contador que eu deixei sem nome tinha DOIS nomes, e um deles ninguem tinha visto
-f20d9c9e PAREI da S5b: o criterio nao fecha, e eu errei a medicao da causa tres vezes
-ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado
+f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
+1619400c Placar e rodape do TICKETS pelos geradores
+f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-correcao, e o hook cobrou por isso
+5434d6f3 VEREDITO-VELHO-APOS-REGEN nao e bug: ZERO orfas, e o meu contador deu falso positivo DUAS vezes
+e7c303f2 VEREDITO-VELHO-APOS-REGEN: a causa esta provada, e dois tercos do numero era a DATA e nao o fato
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficien
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Esperando você, com número e nome: col882 + col502 · col900 + col309 · o passivo (933, sem caminho hoje sem novo TXT, e um terço em dia sem célula que a ordem não cobre) · S5b
+  em PAREI (−1.531,61 h em 333 dia-colab, causa não identificada) · o re-rótulo do contador da S3 · smoke da UI-GRADE · TXT parcial do col515.
 
-  Ran 2 shell commands
+  Dois itens fecharam por não serem bug, e os dois porque meu contador media a coisa errada: o VEREDITO-VELHO-APOS-REGEN (zero órfãs — era latência de fila) e a família (4) do
+  ESMERIL (o contador mede uma pergunta que seu corte matou).
 
-● A causa tem forma agora: 207 células (não 109 — cresceu), e o padrão é inequívoco. Veja o col418: 14 dias seguidos com regenerada_em = 29/09 14:26 e veredito_em variando de
-  01/09 a 17/09 — uma regeração em lote reescreveu o DNA e nenhum veredito foi refeito. Vou confirmar o porquê:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: BUG-DISPUTA-ZUMBI -- P7.1, visivel ao colaborador: disputa com resolucao escrita e fechada_em NULO -- o app mostra "Em revisao pela
 
-  Searched for 2 patterns, ran 1 shell command
+● O hook aponta o BUG-DISPUTA-ZUMBI, que foi curado e o passivo aplicado (55→1). Mas o dia mexeu muito no estado da disputa — vou conferir antes de marcar, como fiz no col515:
 
-● Achei o eixo: julgar_colab(..., forcar=False, ...), e quem lê regenerada_em é o supra_juiz e o gerar_celulas — para a cobrança órfã, que o CLAUDE.md declara. Ninguém o lê para o
-  veredito. Confirmando:
+  Ran 1 shell command
 
-  Searched for 3 patterns, ran 2 shell commands
+● O censo confirma 1, e ela é legítima em ficar aberta — 24 perguntas vivas. O que está errado é a resolucao dizendo "todas materializadas de fato". E existe a porta que nasceu
+  hoje para exatamente isso:
 
-● A lápide diz que a impressão inclui o dna — "hash dos INSUMOS (batidas/ausencia/chamados/dna); insumo mudou => impressao diverge => re-julga". Então o desenho previa isso. Vou
-  ver se o código cumpre:
+  Ran 1 shell command
 
-  Searched for 1 pattern
+● Zumbis na frota: 0. O passivo fechou — 55 → 1 → zero — e a disp#2205 segue corretamente aberta com suas 24 perguntas vivas; o que saiu foi o texto que afirmava o contrário.
 
-● O DNA está na impressão (impressao_insumos(bj, ..., cel.dna, ...)) — então o desenho funciona, e 2.347 foram re-julgadas. As 207 são as que o cartório não alcançou. Vou ver a
-  janela dele, que é a última pergunta:
-
-  Listed 1 directory, ran 1 shell command
-
-● A lápide do cartório diz "substitui janela por FILA... ou com impressão divergente", com mandato "nada mais escapa, 100%". Então ou a impressão não divergiu — e aí não há bug.
-  Vou testar, porque é isso que decide o item:
-
-● Testar se o insumo mudou de fato
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/veredito_causa.py <<'PYEOF'
+● Fechar o zumbi e registrar o simetrico
+  ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     """A regeracao mudou o que o JULGAMENTO LE, ou so a data? So leitura.
-     O cartorio nao tem janela -- a lapide dele d…
+     import io
+     P = 'docs/BACKLOG.md'
+     t = io.open(P, encoding='utf-8').read()
+     linhas = t.split('\n')
+     for i, L in enumerate(linhas):
+     if L.startswith('| BUG-DISPUTA-ZUMBI |'):
+     p = L.split(' | ')
+     p[2] = ('**FECHADA 30/09 18:2x -- zumbis na frota = ZERO** (55 -> …
 
-* Bootstrapping… (4h 37m 29s · ↓ 844.2k tokens)
+✢ Bootstrapping… (4h 42m 59s · ↓ 865.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
