@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:00:23.**
+**Medido em 30/09/2026 17:05:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_selo_resolucao_um_escritor.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/docs/PROMPTS.md
@@ -102,39 +103,39 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  L-092 provada na competência 08 (idêntica nas três empresas) — troquei o --mes-intacto para 08, já que a 09 está sendo mudada de propósito. 512 colabs movidos na 09.
 
-  1. Prova do passo 6 — sonda pronta: ela procura dias com ponta riscada e HE > 0 em vez de eu afirmar que não existem, e nomeia os dias do BO (as duas pontas riscadas no mesmo
-     dia).
-  2. TXT novo das três empresas — hash publicado, o de 28/09 invalidado com trilha (ids 20/21/22, hashes 8a63e3ba/6e0f1048/cb7f00fe), nunca apagado. --usuario ronald_ti, porque é
-     o seu ato e gerado_por diz de quem é.
-  3. Prova da L-092 sobre a 08 — troquei o --mes-intacto para 08, já que a 09 está sendo mudada de propósito. A 08 é a que tem de sair idêntica.
-  4. Merge da raia → suíte da main → deploy.
+  A vigência recuou no mesmo ato, com trilha nominal por empresa: 2026-09-21 → 2026-08-21, ator=sistema:aplicar_janela_he_total, antes/depois gravados. (E reparei que imprimi o
+  timestamp cru na conferência: 19:56 é UTC, o ato foi às 16:56 locais — a casa manda imprimir timezone.localtime e eu não segui na sonda.)
+
+  TXT novo, ensaio rodado: emp2 238→209 linhas (hash 0e3e008b), emp3 95→86 (5c503b95), emp4 12→9 (84c78cd0). Menos linhas = menos rubricas, consistente com a HE de ponta
+  desaparecendo. Ainda não registrei — falta o --aplicar, e antes disso quero o número de quem entra/sai do TXT medido pela autoridade certa, porque meu parser de matrícula perdeu
+  15 linhas e eu não vou publicar contagem de gente com um parser que eu chutei.
+
+  A prova do passo 6, com a ressalva que ela exige
+
+  532 colabs, zero erros: 6.224 dias com ponta riscada na 09, dos quais 6.137 (98,6%) com HE zero. O caso do seu BO está provado em escala — col55 30/08: 10 min antes do marco
+  07:00 + 10 min depois do marco 19:00 → HE 0,00, e os mesmos 20 min antes passavam da tolerância e viravam HE50.
+
+  Os 87 restantes eu não vou apresentar como problema sem compor: dos 20 que a sonda nomeou, 13 são 07/09 — feriado confirmado — com HE de 400 a 480 min, que é a dobra da Súmula
+  146 e não tem nada a ver com a janela. E a minha métrica conflaciona: eu somei toda rubrica com "extra" no nome, então feriado entra junto. A composição dos 87 está sendo medida
+  agora.
+
+  Família (3) — eu tentei curar o que a casa já tinha decidido
+
+  Migrei a cascata de desligamento para .fechar() porque a nota da allowlist, escrita por mim hoje, prometia isso. A suíte da raia me derrubou com
+  test_MORDE_o_bulk_update_do_desligamento_continua_igual — um selo que declara aquela escrita como exceção intencional, com a razão na docstring. LEI-AKITA 4, e eu prometi uma
+  migração sem grepar se a casa já a havia recusado. Revertido, e medindo os dois lados a exceção se sustenta: o signal é idempotente e a cascata já fecha os chamados antes (os
+  zero pais vivos que eu medi às 14:4x). A linha passa a ser exceção declarada com número, não dívida.
+
+  Diagrama regerado pelo gerador. Suíte cheia da raia rodando de novo — o merge das famílias (1) e (2) é caminho de dinheiro e merece o portão inteiro.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Searched for 1 pattern
+  Composicao dos 87 e a suite
 
-● Background command "Esperar o apply da 09" completed (exit code 0)
-
-● Apply da 09 fechado: L-092 provada na 08 (idêntica nas três empresas) e 512 colabs movidos na 09. Agora o TXT novo e a prova:
-
-  Ran 1 shell command
-
-● O TXT encolheu: 238→209, 95→86, 12→9 — menos rubricas. Mas linha não é colaborador, e preciso saber se alguém saiu do TXT:
-
-  Ran 1 shell command
-
-● Duas coisas, e as duas me impedem de publicar: a prova deu zero com 532 erros engolidos — ausência de sinal lida como sinal bom — e meu parser do TXT perdeu 15 linhas. Vou ver o
-  erro real:
-
-  Ran 1 shell command
-
-● Terceira vez hoje que minha própria sonda transforma "não consegui perguntar" em "a resposta é zero". Vou consertar e fazê-la recusar-se a concluir com erro:
-
-  Running 1 shell command…
-
-· Bootstrapping… (3h 28m 50s · ↓ 590.5k tokens)
+· Bootstrapping… (3h 34m 12s · ↓ 609.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
