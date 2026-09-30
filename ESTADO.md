@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:94 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:142 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:37:01.**
+**Medido em 30/09/2026 17:42:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia` |
+| `HEAD` local | `ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo
 eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia
 01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo
 346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias
 a8457ba9 A familia (4): a medicao que eu ia fazer ja estava no codigo, e a que faltava deu 100%
-e0f1c02a BACKLOG: o ESMERIL diz o estado real -- tres familias fechadas e mergeadas, a (4) com o contador morto nomeado
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ e0f1c02a BACKLOG: o ESMERIL diz o estado real -- tres familias fechadas e mergea
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,39 +101,39 @@ e0f1c02a BACKLOG: o ESMERIL diz o estado real -- tres familias fechadas e mergea
 
 ```
 
-  Ran 1 shell command
-
-● ACHEI. ImportError: cannot import name 'gerar_pdf_espelho_informacional_bytes' — a função que o lote chama na linha 182 não existe. Vou ver quando ela desapareceu:
+● Não reproduzo os 89 s: 0,85 s por data livre contra 0,69 s por competência. Mas eu passei mes=9 e a view calcula mes = data_ini.month = 8. Vou reproduzir fielmente:
 
   Ran 1 shell command
 
-● O ImportError era meu — a função vive em pdf_espelho.py e o serviço a importa de lá. Refazendo:
+● Não reproduzo os 89 s em nenhuma combinação — 0,21 a 0,87 s. E isso me leva a uma hipótese sobre a minha própria conduta, que eu preciso dizer:
 
   Ran 1 shell command
 
-● O lote funciona quando eu o chamo: n_ok=2, PDF de 13.626 bytes. Então a diferença está na request — e a única coisa que ela passa é o por=user. Vou testar com o usuário dele:
+● Confirmado: saas_core está no cpuset 0-3 (produção) e o de teste no 4-7. E todas as minhas sondas de frota de hoje rodaram via docker exec saas_core — dentro do cpuset do
+  cliente, o que a lei de 22/09 proíbe para suíte. Vou dar o instrumento certo:
 
   Ran 1 shell command
 
-● Duas pistas fortes: a view faz mes, ano = data_ini.month, data_ini.year (21/08 → mês 8), e a falha dele foi às 17:25 — antes do deploy das 17:26. Então a causa está no dado do
-  apply, não no código. Vou ler o filtro que zera o laço:
+● O instrumento lê prod do cpuset de teste. Agora o selo do item 1 — "erro diz que é erro" precisa de quem morda:
 
   Ran 1 shell command
 
-❯ aval Ronald: lote de cartoes por DATA LIVRE -- corrige a minha linha anterior, o "nao gera" era a janela merge->deploy (falhas 17:25, reload 17:26:47). Sobram DOIS defeitos:
-  1. A tela engoliu o erro e disse "sem dados", 0 gerados. Erro tem de dizer que e erro, com o motivo na trilha.
-  2. Por data livre, 1 colab de 21/08 a 30/09 levou 89 s (17:34:22, u651); por competencia leva 0,8 s. Medir onde vao os 89 s e curar; pedido desse tamanho prende thread do
-  saas_ui.
-     E a janela em si: arquivo .py novo no disco com worker velho quebrou prod por ~2 min. O merge da raia tem de cair e recarregar no MESMO ato.
+● Minha própria assertiva era sem sentido — '' or '#' sempre dá '#', então ela falhava sempre. Consertando com a pergunta que eu queria fazer:
 
-● Ele corrigiu a causa, e o item 3 é sobre o que eu fiz: o merge escreveu .py novo na árvore viva (que é o bind-mount) e o deploy só veio 10 min depois. Registro os três e começo
-  pelo que pode me morder de novo hoje:
+  Ran 2 shell commands
 
-● Localizar a lei do arquivo na arvore
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "so vai para a arvore no ato" CLAUDE.md | head -2 && grep -n "BUG 128" CLAUDE.md | head -2
+● A causa era minha, e você a achou antes de mim
 
-✢ Bootstrapping… (4h 5m 29s · ↓ 724.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  O lote quebrou às 17:25 com um ImportError, e a causa é a janela merge→deploy: mergeei o ESMERIL às 17:15 e deployei às 17:26:47. A árvore app/ é o bind-mount e o .py só entra
+  no reload — então por ~11 min o saas_ui servia services.py novo com pdf_espelho.py velho. Eu fui procurar a causa no dado e no apply da 09; era a janela que eu abri.
+
+  A lei entrou no CLAUDE.md. O texto de lá dizia "arquivo de fatia só vai para a árvore no ato do commit/deploy", tratando commit e deploy como um momento — e um merge prova que
+  não são. Um .py de fatia é uma linha; um merge são dezenas, e a chance de alguma ser importada por um módulo que o worker já tem em memória é praticamente 1. A forma agora:
+  merge → commit → bin/deploy.sh sem nada no meio, nem publicar RELATO. Virou memória também, porque ainda tenho a raia UI para mergear.
+
+  Item 1 — a tela tinha o motivo na mão e o jogava fora
+
+  O serviço captura a exceção em pulados; a view juntava só o nome. Duas coisas mentiam na mesma direção: o rótulo ("sem dados" é estado normal do caderno — existe sem_movimento
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
