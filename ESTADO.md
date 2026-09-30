@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:41:31.**
+**Medido em 30/09/2026 13:47:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `21c9af19 TICKETS: a fatia do 401 ganha linha, e a regua estava certa em recusar o push` |
+| `HEAD` local | `03198511 O passivo das batidas retroativas nao e o que o aval descreve, e a medicao mudou o escopo em tres pontos` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,26 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+03198511 O passivo das batidas retroativas nao e o que o aval descreve, e a medicao mudou o escopo em tres pontos
 21c9af19 TICKETS: a fatia do 401 ganha linha, e a regua estava certa em recusar o push
 8d574cf3 O anexo se desenha pelo CONTEUDO: o PDF acertava POR FALHA, e o HEIC caia no mesmo buraco sem ninguem saber
 506f02b6 A (2) do UI-ANEXO esta bloqueada por falta de decodificador HEIC, e isso e janela de rebuild
 833b5976 UI-ANEXO-AUSENCIA nao cabe em "so templates", e o historico acerta o pdf hoje POR FALHA
-4da39ce5 Os 9 deslogados viraram pauta para a supervisao (#852-#860), e a porta me corrigiu o remetente
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/services/materializacao.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/ponto/services/dia_decidido.py
- M app/ponto/tests/test_anexo_pelo_conteudo.py
  M app/templates/colaboradores/partials/_calendario_grade.html
- M app/templates/ponto/partials/painel_ausencia.html
-?? app/chamados/tests/test_sem_resposta_nao_planta_batida.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -107,40 +100,40 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  apos a fase corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via
-  REGEN-EM-EXPORTADA. Cura da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou ! !
+    27.223 chamadas com pico às 06h contra token de 12 h; o 401 agora diz motivo; 9 deslogados viraram pautas #852–#860 para a supervisão.
+  - BUG-DISPUTA-ZUMBI: já recebido 30/09 ~11:0x, no ar (68691060+020b379b), passivo aplicado 11:50 (55 → 1, a última nomeada) — e a origem não era a limpeza: eram os dois gêmeos
+    e, em 50 dos 55 casos, reabrir_sistema deixando o texto para trás.
 
-  Ran 1 shell command
+  As duas repetições ensinam a mesma coisa, e é minha: publiquei no RELATO e no BACKLOG, não num recibo curto. Quem manda o prompt de novo não está relendo 18 mil linhas de
+  RELATO. O que falta não é registro, é recibo.
 
-❯ aval Ronald: col515 [nome] [nome] -- EC 1220 nasceu com data_fim 29/08 < data_inicio 02/09 e ele esta SEM vinculo ativo. Pela porta unica, com trilha: 12x36
-  19:00-07:00, intervalo 02:00-03:00, vigente desde 02/09 (admin confirma que trabalhou desde entao), ancora = noites IMPARES (primeiro plantao batido 11/09); agosto 12x36
-  10:00-22:00 ancora 21/08. Regerar e re-julgar 21/08->hoje; 09 via REGEN-EM-EXPORTADA. Plantoes sem batida de 03-09/09 e 25-29/09: ele estava deslogado (401) -- entram por
-  declaracao validada pelo supervisor, sem desconto. PAREI so em lei ou ! !
+  ---
 
-  Listed 1 directory, ran 11 shell commands
+  S5b registrada com a posição que você deu (depois do ESMERIL vínculo e da B2), e com a nota da L-082: o DIFF tem de ser contra o gravado, não motor-x-motor — foi exatamente isso
+  que escondeu 10 campos no apply de 26/09.
 
-❯ BUG-APP-SESSAO-401 (P7.1, fura a fila): col515 (u252) teve GET /api/me/ -> 401 x2 em 26/09 de madrugada e NUNCA mais autenticou -- plantoes 25, 27 e 29/09 sem batida por estar
-  deslogado, sem aviso util. Hoje cedo 13+ colabs Android com 401 em /api/ponto/foto/ e /api/me/. Medir: o que invalida o token do app desde ~26/09 (deploy? chave? expiracao?),
-  quantos colabs tem 401 e nenhum 200 depois (= deslogados agora), e o que o app mostra ao receber 401. Cura na origem; o app diz com clareza 'entre de novo'; lista dos
-  deslogados para o admin. Plantao trabalhado sem batida por falha nossa entra por declaracao validada pelo supervisor, sem desconto. PAREI so em lei ou !
+  O passivo das batidas retroativas: a origem está curada, e a medição mudou o escopo em três pontos (03198511):
 
-❯ BUG-DISPUTA-ZUMBI (P7.1, visivel ao colab): DisputaSupervisao 2336 (col204) tem 'resolucao' escrita pela limpeza Q2-JA v2 ('conversa parada desde 01/08, >30 dias') mas o estado
-  segue ABERTO -- o app mostra 'Em revisao pela supervisao' ha 2 meses. Medir: qual campo o banner le e qual a limpeza escreve; censo de disputas com resolucao preenchida e
-  estado aberto. Cura na origem (a limpeza fecha pela porta que fecha, com trilha); passivo pela mesma porta. Golden da familia chamado/disputa no ESMERIL. PAREI so em lei ou !
+  1. São 942 batidas em 205 colaboradores, não 1.753 em 329. A diferença são as 814 com pergunta_origem — plantio de depois de 06/09 — e as 813 perguntas atrás delas têm TODAS a
+     hora escrita pelo colaborador. Retratar essas seria apagar a fala dele; ficam fora.
+  2. O lote não é um: u657 aprovou 568 das 942, u666 238, criação espalhada de 31/07 a 29/08.
+  3. Todas as 933 não retratadas estão em competência FECHADA — pela sua própria ordem, isso é REGEN-EM-EXPORTADA, que é um colaborador por ato. Então o apply não existe como
+     lote, e este commit traz o DRY.
 
-  Ran 1 shell command
+  DRY publicado por colaborador: 154 em dia de FOLGA (o que o aval manda retratar), 522 em TRABALHO (ficam, recebem a marca), 257 SEM CÉLULA (não decido). Concentração: col49 com
+  38 (31 de folga), col31 com 25, col34 com 24. Tabela inteira em logs/passivo_disputa_retro_20260930_1341_dry.json.
 
-❯ aval Ronald S5b: o calculador na forma do oraculo passa a ESCREVER o DiaPago da competencia 10 em diante. Criterio: DIFF de frota publicado antes contra o gravado; so mudam as
-  rubricas que o oraculo corrige, todo outro campo de todo colab da ZERO; reversao em logs/; competencia 09 e exportadas intactas. Fora do criterio = PAREI com a tabela. Entra na
-  principal depois do ESMERIL vinculo e da B2. !
+  A cura da origem entrou de todo jeito, porque não depende do número: materializacao.py não planta sem resposta_colab, e a guarda ficou antes do cálculo do horário — depois dele
+  a recusa saía como hora invalida (), que é a testemunha mentindo sobre a causa. E respondida_em não conta como anuência: há 8.622 perguntas com esse carimbo e nenhum texto.
 
-● O universo do passivo pelo campo declarado
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/split2.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O universo do passivo, pelo campo que a casa declara: `Batida.pergunta_origem`. SO LEITURA.
-     `ponto/migrations/0054` diz, no help_text: *"Pergunta de d…
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-✢ Bootstrapping… (9m 59s · ↓ 35.4k tokens)
+● Aplicar o vinculo do col515 pela porta
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 docker exec -e APLICAR=1 saas_core python manage.py tenant_command shell --schema=juliani --command
+     "exec(open('/tmp/c515a.py').read())" 2>&1 | grep -v "objects imported" | head -12
+
+· Bootstrapping… (15m 29s · ↓ 54.7k tokens · thought for 6s)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
