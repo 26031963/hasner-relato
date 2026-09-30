@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:19:33.**
+**Medido em 30/09/2026 18:25:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/config/crons.py
  M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
@@ -104,44 +105,44 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ---
-
-  Quando você tiver o smoke, essa é uma fatia curta: ler motivo do corpo do 401 e mostrar a frase certa para cada um dos três casos, nas duas cascas. O backend já entrega o dado.
-
-  O push dos treze commits segue na suíte.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-APP-SESSAO-401 -- P7.1: col515 (u252) levou GET /api/me/ -> 401 em 26/09 01:48 e nunca mais autenticou -- 3 plantoes sem batida
-
-● O hook está certo de novo: a ordem tem duas metades e eu tratei uma. A segunda — "lista dos deslogados para o admin" — não toca o pwa.js. E as 9 pautas foram criadas por mim à
-  mão; uma lista que só existe porque eu a digitei não é uma lista:
-
-  Searched for 1 pattern, listed 1 directory, ran 1 shell command
-
-● Para saber quem está deslogado o dado está no access log — e a casa tem padrão para isso (abriu_nao_bateu: parser + comando + bin/*.sh alimentando docker logs). Vou reusar o
-  parser em vez de escrever um décimo:
-
-  Ran 2 shell commands
-
-● O parser existe, é público, e a lápide dele já resolve o que me morderia — as duas formas de colab= (475 com sessão, u145 do app nativo com JWT) e que "a ordem do arquivo É a
-  ordem do tempo". Vou reusá-lo:
-
-  Searched for 1 pattern, ran 2 shell commands
 
 ● Agora o RED — com log de mentira, que é o que prova a regra sem depender do log real:
 
-  Selar a lista viva
-  ⎿  $ cat > ponto/tests/test_lista_viva_dos_deslogados.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """A LISTA VIVA DOS DESLOGADOS (BUG-APP-SESSAO-401, ordem Ronald 30/09: *"lista dos deslogados para o admin"*).
-     POR QUE ELA EXISTE COMO CODIGO: a lista de hoje existe porque **eu a digitei** -- as pautas #852-#8…
+  Ran 1 shell command
 
-· Bootstrapping… (4h 48m 0s · ↓ 883.1k tokens)
+● Quatro falhas — a casa do comando (esperada) e três dos meus testes. Vou ver quais:
+
+  Ran 1 shell command
+
+● O sintoma é o mesmo nos três: apurar devolve []. E a causa é minha — passei string onde eventos itera linhas, então ele iterou caracteres. Décimo erro, e o teste o pegou, que é
+  o ponto dele:
+
+  Ran 1 shell command
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_merge.log (21 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3dulq56k.output (30 lines)
+  ⎿  Referenced file folha/porta_export.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_janela.log (7 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqkp8gtgh.output (46 lines)
+
+● O erro é de colisão, não do meu código: database "test_juliani" does not exist é o que aparece quando outro run derruba o banco no meio — e a lei do CLAUDE.md é um run por vez.
+  Vou conferir se ainda há push/suite viva antes de reexecutar:
+
+  Ran 1 shell command
+
+● Background command "Esperar o push final" completed (exit code 0)
+
+● Nenhum run vivo — a pista está livre. Reexecutando:
+
+  Read 1 file
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bq5an5yo4.output 2>/dev/null | tail -12
+●
+
+✢ Bootstrapping… (4h 53m 29s · ↓ 887.5k tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            1% until auto-compact
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
