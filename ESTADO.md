@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:186 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:257 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:58:41.**
+**Medido em 30/09/2026 18:04:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado` |
+| `HEAD` local | `31d36e1d COL515 fechado e CONFERIDO -- e a conferencia achou duas coisas` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+31d36e1d COL515 fechado e CONFERIDO -- e a conferencia achou duas coisas
+843c01f0 O contador que eu deixei sem nome tinha DOIS nomes, e um deles ninguem tinha visto
+f20d9c9e PAREI da S5b: o criterio nao fecha, e eu errei a medicao da causa tres vezes
 ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado
 95389e29 B2: o motor consulta a DecisaoHE no sitio do clipe, e o DIFF de frota deu ZERO antes do deploy
-7b446c53 COL900 tem numero e nao esta sozinho: 84 dias em 7 colabs -- e eu errei a MESMA medicao tres vezes
-ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo
-eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia
 ```
 
 ## `git status --short`
@@ -100,39 +100,39 @@ eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dele diz, e o desenho põe a aplicação no chamador — mas não existe selo que cobre o chamador aplicar. Isso é a próxima linha da S5b, e agora tem um caso real para nomear.
+
+● A cura sobreviveu e está consistente — e a conferência achou duas coisas que valem dizer:
+
+  Ran 1 shell command
+
+● COL515 fechado — e eu conferi antes de marcar
+
+  Havia razão para conferir: a cura foi às 13:4x e a competência 09 inteira foi regerada às 16:56, com TXT novo às 17:07.
+
+  ec1220 = 02/09..None, ATIVA, PAI-12x36.5 19:00-07:00, âncora 03/09 — noites ímpares (03, 05, 07, 09, 11), e o 11/09 é o 1º plantão batido, exatamente o que o ! mandou. Zero
+  vigências impossíveis (a data_fim 29/08 < data_inicio 02/09 que originou o caso morreu) e um único vínculo ativo. Células: 31/31 regeneradas na 09, 30/30 na 10.
+
+  E a prova independente: ele não aparece entre os 7 colaboradores com DNA divergente do template que eu medi às 17:4x. Duas testemunhas que não se falam dizem que as células dele
+  ficaram certas.
+
+  A conferência achou duas coisas
+
+  As noturnas da 09 dele estão em 21,66 h, e a cura de 13:4x publicou 25,57 h. A diferença é o bloqueio total das 16:56, que cortou as pontas dele — consequência esperada, mas eu
+  não ia deixar dois números diferentes publicados no mesmo dia sem dizer qual vale e por quê.
+
+  ec1218 (22/08-01/09, 19:00-07:00) e ec1219 (21/08-01/09, 10:00-22:00) se sobrepõem por 11 dias, com horários opostos — um noturno, um diurno. Os dois inativos, sem dano medido
+  (as células estão regeneradas). Mas dois vínculos inativos cobrindo o mesmo dia com horários opostos é o tipo de cadastro que fabrica o próximo col515: se um deles for
+  reativado, o dia passa a ter duas respostas. Registrado no BACKLOG sem construir — a casa tem juiz para isso (vigencias_sobrepostas), e eu não mexo em vínculo sem o seu !.
+
+  ---
+
+  Três coisas suas na fila, todas com número e nome agora: col882 + col502 (44 e 5 dia-colab sem vínculo, formas diferentes), col900 + col309 (84 dias em 7 colabs, dois padrões),
+  e o re-rótulo do contador da S3. Mais o smoke da UI-GRADE e o TXT parcial do col515 para o Domínio.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
+  ⎿  Stop hook error: siga: DISPUTA-S84-RETRO-PASSIVO -- o ! do passivo das batidas retroativas (ordem Ronald 30/09 13:3x): 1.753 batidas em 329 colabs, lote u666 16/0
 
-  Read 1 file
-
-● Enquanto o DIFF corre, vou escrever o selo que faltava — o que cobra o chamador aplicar a janela, com o caso real que eu acabei de viver:
-
-  Ran 1 shell command
-
-● Background command "Esperar o DIFF remedido" completed (exit code 0)
-
-  Ran 1 shell command
-
-● A cura mudou o quadro, e o que sobrou pede uma verificação antes de eu nomear a causa:
-
-  ┌───────────────────┬────────────────────────────┬────────────────────┐
-  │      rubrica      │     antes (sem janela)     │ agora (com janela) │
-  ├───────────────────┼────────────────────────────┼────────────────────┤
-  │ horas_extras_50   │ +102,85 h em 204 dia-colab │ +4,42 h em 7       │
-  ├───────────────────┼────────────────────────────┼────────────────────┤
-  │ horas_trabalhadas │ −851,65 h em 1.682         │ −1.531,61 h em 333 │
-  └───────────────────┴────────────────────────────┴────────────────────┘
-
-  A janela explicava a HE50 e 1.349 dos 1.682 dias. O que sobra são 333 dia-colab em 97 colabs, com −4,6 h por dia — e o padrão é 12x36 −213. Vou verificar se é o ponto cego que o
-  oráculo declara:
-
-  Commitar a cura do DIFF e o selo novo
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/management/commands/diff_calculador.py app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py && git commit -q -F -
-     -- app/ponto/management/commands/diff_calculador.py app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py <<'MSGEOF…
-
-✢ Bootstrapping… (4h 27m 9s · ↓ 803.3k tokens)
+✢ Bootstrapping… (4h 32m 29s · ↓ 824.6k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
