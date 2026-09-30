@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 21:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.6 MB). Acoes na janela: **922**.
+**Medido em 29/09/2026 21:33:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.6 MB). Acoes na janela: **918**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -928,7 +928,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:35:43 | Bash | Ler a porta das pautas | `grep -n "^def \\|^class " pautas/services.py \| head -12; grep -n "MOTIVOS\\|class Pauta" pautas/models.py \| head -10` |
 | 09:35:38 | Bash | Ver a porta das pautas | `ls pautas/ 2>/dev/null \| head; grep -rn "def abrir\\|def criar" pautas/services*.py pautas/services/*.py 2>/dev/null \| head -8` |
 | 09:35:16 | Bash | Autopsiar o último caso da 09 | `cd /home/ronald/saas-hasner && nohup bash bin/regua.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/regua_retrato.log 2>&1 & sleep 2; cat > /tmp/col197.py <<'PYEOF' # -*- coding: utf-8 -*- # O ULTIMO da 09: col197, `minutos_realizados` gravado 10080 x retrato 10800 (+720 = 12 h = um dia de 12x36). # A pergunta: a GRADE de hoje descreve um dia que  ...` |
-| 09:32:48 | Bash | Esperar tudo | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do [ "$(grep -c '^== emp' $S/breakdown2.log)" -ge 6 ] && break; sleep 10; done; grep -v "^93 objects" $S/breakdown2.log \| tail -6; echo "=== quem escreve"; grep "TESTE" $S/quem_escreve.log` |
-| 09:30:48 | Bash | Esperar o teste do contador | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "TESTE: .* -> " $S/quem_escreve.log 2>/dev/null && break; sleep 10; done; grep -v "^93 objects" $S/quem_escreve.log \| tail -3; echo "=== breakdown ($(grep -c '^== emp' $S/breakdown2.log) de 6)"; grep -v "^93 objects" $S/breakdown2.log \| tail -8` |
-| 09:28:52 | Bash | Ler o controle e o teste | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do grep -q "TESTE:" $S/quem_escreve.log 2>/dev/null && break; sleep 10; done; grep -v "^93 objects" $S/quem_escreve.log; echo "=== breakdown"; grep -c "^== emp" $S/breakdown2.log` |
-| 09:28:14 | Bash | Descobrir quem escreve no gravado | `cd /home/ronald/saas-hasner && cat > /tmp/quem_escreve.py <<'PYEOF' # -*- coding: utf-8 -*- # QUEM MEXEU NO GRAVADO DA 09? O hash de emp2/09 mudou entre duas corridas minhas, com ZERO fechamento # `atualizado_em` hoje -- o que aponta para `queryset.update()` (que NAO dispara auto_now). # CONTROLE primeiro (so esperar), depois o TESTE (rodar o contador `medir`). So assim a mudanca se atribui. impor ...` |
