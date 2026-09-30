@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:97 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:04:31.**
+**Medido em 30/09/2026 08:10:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `3635a5be TICKETS: rodape e placar` |
+| `HEAD` local | `df62fdd7 TICKETS: rodape e placar` |
 | `origin/main` | `3635a5be TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+df62fdd7 TICKETS: rodape e placar
+40f2cc98 BUG-FOTO-APP-401: o 401 e real, nao perde foto, e a perda que existe ja tem guarda com dono
 3635a5be TICKETS: rodape e placar
 bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia da raia, provada sobre o HEAD de hoje)
 7c4edd4d DIFF de frota da 10 publicado ANTES do apply -- 101 linhas, e elas tem DUAS causas
-a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura a minha primeira versao
-50be4efd TICKETS: rodape e placar
 ```
 
 ## `git status --short`
@@ -41,9 +41,6 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -103,17 +100,6 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  do mesmo colab passa. Medir: qual auth o endpoint de foto usa vs /bater/, e o que mudou nos deploys de 29/09 (core, urls_core, middleware). RED com token valido de app. Cura na
-  origem, deploy ja, smoke com um colab real. Tela do admin nao mostra a foto = Portaria 671. PAREI so em lei ou !
-
-● P7.1 em prod. Registro e meço já — isso fura a fila.
-
-  Searched for 2 patterns, ran 3 shell commands
-
-● Achado decisivo: todo 401 tem um 200 no mesmo segundo. Meço se há perda real de foto antes de curar nada:
-
-  Ran 2 shell commands
-
 ● O 401 não perde foto — 32 de 32 têm um 200 do mesmo colab em ±15 s. A observação dele (a tela não mostra a foto) precisa de causa própria; meço:
 
   Ran 1 shell command
@@ -128,14 +114,25 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 
 ● Aqui está o caso dele: o universo certo é origem='app', e não é zero — 3 ontem, 2 anteontem. Nomeando:
 
-● O sistema sinaliza as batidas sem foto?
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/disputa_foto.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """As 12 batidas de app sem foto TEM a disputa `foto_ausente` que o sistema promete? (leitura pura)"""
-     from ponto.models import Batida
-     ALVOS = (113095, 113299, 113378, 112493, 112564, 111617, 111494, 11142…
+  Ran 2 shell commands
 
-· Misting… (56m 38s · ↓ 60.2k tokens · thinking)
+● Essa medição foi vazia — DisputaSupervisao não tem campo batida, então minha query caiu no none(). Não vale nada; acho o vínculo real:
+
+  Ran 4 shell commands
+
+● A guarda existe desde 12/09 (BUG 126, cron 07:26). Meço chamando a função real em DRY-RUN:
+
+  Ran 1 shell command
+
+● A guarda já existe e rodou hoje — corrijo o RELATO, porque eu ia construir um contador que a casa já tem:
+
+● Pushing da medicao · 3m 33s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 30s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (1h 2m 8s · ↓ 66.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
