@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:49:31.**
+**Medido em 30/09/2026 16:55:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar` |
+| `HEAD` local | `0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula` |
 | `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula
 57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar
 0463460b Placar e rodape do TICKETS pelos geradores
 fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que o meu proprio teste achou
 35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA
-8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  estruturalmente cega (o --refazer rega o gravado dela), e eu havia publicado aquele zero como "o gravado está em dia". Lápide corrigida.
 
-  Família (1) fechada, família (2) nascida medida
+  E o zero vem com um limite escrito na lápide, porque é exatamente o tipo de número que a próxima pessoa lê como "varrido": este censo olha consultas, não o que os chamadores
+  fazem com o resultado. O único defeito real que a família achou hoje não era uma consulta errada — era o uso de uma consulta certa. Censo de queryset é cego para isso por
+  construção.
 
-  Censo 19 → 0, os dois do motor com nome na fila da S5b. Família (2): escrita fora do chokepoint = 0 (a lei 1 honrada sem violação — meu grep dizia 4 e os 4 eram class
-  Batida(models.Model)) e leitura crua = 1, cujo veredito eu reescrevi como pergunta depois de perceber que "a cura é X" era uma frase minha e não uma medição.
+  O que falta e não depende de você
 
-  Falta: suíte da raia → merge da família (1) → deploy. A pista de teste está ocupada pelo push; é o próximo item e não depende de você.
+  Suíte da raia (rodando) → merge das famílias (1) e (2) na main → deploy. As curas da família (1) são caminho de dinheiro real (o pareador passando a receber o vínculo que a
+  célula nomeia) e ainda não estão em prod.
+
+  O que espera você
+
+  O ! da 09 — sim ou não sobre os oito contadores de grade que a deriva move. A regra passa o seu critério; não há terceira via.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL familia (2) batida -- as duas leis da secao 4 do CLAUDE.md, com contador -- escrita de Batida fora do chokepoint (ponto/registro_bat
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● A medição que o veredito da família (2) pede não depende da pista de teste — roda em prod, só leitura. Vou fazê-la:
+● A suíte é o portão do merge, não da família (3). Vou abrir a família (3) — ela fecha com allowlist zero, e a allowlist tem uma linha:
+
+  Ran 1 shell command
+
+● A própria nota da allowlist diz o que fazer. Vou ler a porta antes:
 
   Ran 2 shell commands
 
-● O sítio é fallback do acervo — a linha 551 já pergunta certo (batidas_plantadas.filter(retratada_em__isnull=True)), e o slot só entra quando o vínculo não existe (batida antes
-  de 06/09). Isso torna a medição precisa:
+● A nota da allowlist descreve a cura e a porta já existe. Vou migrar:
 
-  Ran 1 shell command
+  Running 1 shell command…
 
-● Medido: a brecha é 16 perguntas — e todas em competências 06/07/08, nenhuma na 09 ou 10. A cura é inerte no passivo e protege o futuro:
-
-  Ran 1 shell command
-
-● Background command "Esperar o push da 09" completed (exit code 0)
-
-● Push OK e a pista livre. Vou aplicar a cura da família (2) com RED, e rodar a suíte da raia cobrindo tudo de uma vez:
-
-  Quem mais usa o detector
-  ⎿  $ cd /home/ronald/wt-esmeril2/app && grep -rn "_batida_existente_na_janela" --include=*.py . | grep -v "^./chamados/juizes.py"
-
-· Bootstrapping… (3h 17m 59s · ↓ 553.6k tokens · thinking)
+✢ Bootstrapping… (3h 23m 29s · ↓ 573.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: SIM. A deriva entra junto e os oito contadores de grade entram no alvo. Aplica a 09, com a vigencia recuando no mesmo ato e o TXT novo substituindo o de 28/09 !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
