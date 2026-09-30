@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:03:01.**
+**Medido em 30/09/2026 14:08:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `3a0554ce Os cinco contadores do ESMERIL-MECANICO, com numero e universo -- e o col515 e UM DE 52` |
+| `HEAD` local | `f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito
+cdbf96ad VEREDITO-VELHO-APOS-REGEN: 109 celulas com DNA reescrito e veredito da versao velha, 51 delas com mais de 7 dias
+a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar TIMESTAMP nao e comparar DNA
+3bfaba29 O contador 4 sai de "sem criterio" para 1.106, e os 207 piores leem o DNA velho
 3a0554ce Os cinco contadores do ESMERIL-MECANICO, com numero e universo -- e o col515 e UM DE 52
-4e4abc5a BACKLOG: o estado da familia (1) -- 19 -> 12, quatro lotes, e a juiza que ja existia
-77673456 A ferramenta da casa mede a familia (1) desde 26/09 e diz ZERO minuto -- e ela corrige duas coisas minhas
-9d397e7e RELATO: a porta do vinculo do dia JA existia desde 26/09, e eu criei uma segunda com o mesmo nome
-1df5a837 col515: vinculo corrigido pela porta e a 09 retificada -- as horas noturnas dele eram 0,03 e passaram a 25,57
 ```
 
 ## `git status --short`
@@ -100,39 +100,39 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ┌─────┬─────────────────────────────────────────────┬────────────────────────────────────┐
-  │  #  │                  contador                   │               agora                │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 1   │ batidas sem resposta em dia de folga        │ 154 (de 933 sem pergunta_origem)   │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 2   │ vínculos ativos sobrepostos                 │ 0                                  │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 2b  │ vigências IMPOSSÍVEIS (fim < início)        │ 52 — e 22 são de colaborador ATIVO │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 3   │ leitores que escolhem vínculo por ordem     │ 12 (base de hoje: 19)              │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 4   │ dias com escala corrigida e não re-julgados │ sem critério medido                │
-  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
-  │ 5   │ 401 em /api/ponto/foto/ na última hora      │ 5                                  │
-  └─────┴─────────────────────────────────────────────┴────────────────────────────────────┘
 
-  O col515 é um de 52. Eu o tratei como caso único — ele é o primeiro que alguém abriu. Cada vigência impossível é um col515 em potencial: o ativa=True dos leitores cala, a linha
-  do tempo não acha vínculo, e o fluxo para em silêncio. Foi assim que as noturnas dele ficaram em 0,03 num 12x36 19:00-07:00. E a casa tem a função que as lista
-  (vigencias_impossiveis) desde sempre — faltava alguém ler o número. O CHECK do banco impede novas, mas ele nasceu depois do dado.
-
-  Duas notas de honestidade no caminho:
-
-  - O contador 4 ficou declarado como não medido em vez de receber número inventado. O critério precisa dizer o que é "re-julgado" (veredito lavrado depois da regenerada_em?), e
-    ele entra no próximo ciclo escrito. É a diferença entre placar e enfeite.
-  - Errei a forma do retorno de vigencias_impossiveis duas vezes antes de acertar — tratei tupla como dict e depois como objeto, e as duas medições saíram vazias ({None: 52},
-    ativa=True: 0). Só a terceira leitura, com a tupla (ec, colab, início, fim, ativa), deu os 22 ativos. É o mesmo erro do dia: supor a forma em vez de ler.
+  O gate da raia está nos minutos finais. A sequência assim que ele fechar: lote 6 (os commands, com o veredito de remover o aplicar_09_corte_b), e o push dos 21 commits da
+  principal.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Gate da raia
+  Read 1 file, ran 3 shell commands
 
-✢ Bootstrapping… (31m 29s · ↓ 107.6k tokens)
+● O diagnóstico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso foi registrado (f11d86de) em vez de virar uma causa publicada sem prova.
+
+  Rodei julgar_colab no col727 com emissor=None e ele pulou as 71 células. Isso pode ser o gate que eu procuro — ou pode ser a minha chamada, porque o command real passa um
+  emissor. É exatamente o erro que a CLAUDE.md nomeia: "não reconstruir em sonda própria a chamada que o sistema faz". Já custei sete diagnósticos errados à casa por isso; prefiro
+  registrar a dúvida.
+
+  O que a sonda achou de firme, porque é leitura de dado e não de fluxo:
+
+  - a regeneração de 15/09 deixou dna.marcos = None mantendo dna_versao=2, e o dna_anterior tinha os quatro marcos (07:00/12:00/13:00/15:00). A célula perdeu a geometria — que é o
+    caso R4 da CLAUDE.md, o mesmo que descontava 60 min de pausa inexistente;
+  - os três vínculos dele contam a história: ec#901 e ec#1174 com regua_classe=CICLO_ERRADO, e o ec#1233 (16/09) confiavel;
+  - não é o limbo: motivo_escala_errada devolve None nos dois dias.
+
+  Próximo passo escrito no item: chamar como o command chama, com emissor real e --forcar para comparar.
+
+  O gate da raia está nos últimos minutos (14:08, começou 13:58). Vou parar de abrir frentes novas e fechar o que está aberto: lote 6, commit, e o push dos 23 commits da
+  principal.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Running 1 shell command…
+
+· Bootstrapping… (36m 59s · ↓ 126.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
