@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:23:31.**
+**Medido em 30/09/2026 19:29:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
  M app/config/crons.py
  M app/ponto/management/commands/diff_janela_he_total.py
  M app/ponto/management/commands/passivo_disputa_retro.py
+ M app/ponto/management/commands/recalcular_fechamento.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -106,38 +107,38 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 
 ```
 
-● Religando o comando existente ao motor, preservando rótulos e a forma do JSON de reversão:
+  Duas linhas merecem nome, porque são contraintuitivas: col853 ganha 123 min realizados e col242 ganha 1 inconsistência ao perder uma batida — é a batida que quebrava o par.
+  Antes de aplicar, quem é o colab da DERIVA:
 
   Ran 1 shell command
 
-● Extração provada: saída byte-idêntica. Agora a classificação — ela é um juízo ("folga ou trabalho") e vai precisar de dois leitores (o DIFF e o apply), então também sai para
-  serviço:
+● col846 tem deriva e não foi tocado — relavrar a 09 inteira escreveria a grade dele (−121 h previstas, −11 dias), que pela sua regra é PAREI. A cura é cirúrgica: relavrar só os
+  12 tocados. Vendo se o comando aceita lista de colab:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Sem --colabs, e chamar recalcular_fechamento_mes de fora seria o 13º sítio numa allowlist que só encolhe. Adicionando o argumento ao comando que já existe, e aplicando:
+
+  Ran 3 shell commands
+
+● 114 retratadas, com a reversão escrita antes do ato. Agora a relavratura cirúrgica — só os 12 tocados, para não escrever a deriva do col846:
 
   Ran 1 shell command
 
-● Religando o comando ao serviço e escrevendo o DIFF do passivo sobre o motor único:
+● Aplicado: processados=12, exatamente os tocados. Agora a PROVA que a ordem exige depois:
 
   Ran 1 shell command
 
-● O serviço reproduz a tabela exata. Agora o DIFF do passivo, sobre o motor único — e com o critério que a sua ordem dá: colab não tocado que se mova = PAREI:
+● Prova forte: passivo 933 → 819, zero FOLGA restante no escopo (idempotente), 114 linhas de trilha (uma por ato, sem dobrar), e os TXT vigentes com hash intacto. Agora a prova
+  que importa — o previsto pelo DIFF contra o gravado escrito:
 
   Ran 1 shell command
 
-● Declarando a casa do comando e rodando o DIFF que a ordem exige publicar antes:
+● 16 de 17 batem exatamente. Uma divergência real: col866 inconsistências previstas 4, gravado 2. Não vou passar por cima disso — medindo a causa:
 
-● Rodar o DIFF do passivo na 09 · 1m 24s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'config/crons.py'
-     t = io.open(P, encoding='utf-8').read()
-     A = " 'diff_janela_he_total':\n"
-     assert t.count(A) == 1
-     N = (""" 'diff_passivo_s84':
-     'DIFF de frota da RETRATACAO do passivo S84 (batidas `disputa_s84_retro` sem `pergun… (1m 23s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Running 1 shell command…
 
-· Bootstrapping… (5h 51m 59s · ↓ 1.1m tokens)
+✢ Bootstrapping… (5h 57m 29s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
