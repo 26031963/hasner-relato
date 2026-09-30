@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:15:45.**
+**Medido em 29/09/2026 22:21:01.**
 
 | | |
 |---|---|
@@ -125,13 +125,13 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Esperar o push da B1 completa · 1m 18s
+● Esperar o push da B1 completa · 6m 35s
   ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1d.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (1m 17s)
+     origin/main..HEAD)" (6m 33s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-* Schlepping… (6h 9m 2s · ↓ 258.2k tokens)
+✢ Schlepping… (6h 14m 18s · ↓ 258.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

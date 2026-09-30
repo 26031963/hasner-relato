@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 22:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.8 MB). Acoes na janela: **894**.
+**Medido em 29/09/2026 22:21:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.8 MB). Acoes na janela: **886**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -896,11 +896,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:21:38 | Bash | DIFF completo gravado x motor de hoje na 10, sem escrever | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/diff10.py <<'PYEOF' # -*- coding: utf-8 -*- """DIFF COMPLETO da competencia 10: GRAVADO x MOTOR DE HOJE, todos os 26 campos, sem escrever nada. AVAL-DE-CRITERIO (L-Ronald 26/09): a condicao (b) -- "todo outro campo de todo colaborador da ZERO" -- tem de ser medida contra o **GRAVADO**, nao mot ...` |
 | 10:21:09 | Bash | Ver o ramo de leitura | `sed -n '550,560p;628,640p' ponto/services/fechamento.py` |
 | 10:21:06 | Bash | Conferir que somente_leitura nao escreve | `grep -n "somente_leitura" ponto/services/fechamento.py \| head -20` |
-| 10:20:23 | Bash | Ler grade_do_fechamento | `sed -n '480,520p' ponto/services/fechamento.py; echo "=== grade_do_fechamento ==="; sed -n "$(grep -n 'def grade_do_fechamento' folha/export.py \| cut -d: -f1),+55p" folha/export.py` |
-| 10:20:19 | Bash | Quem monta a grade no fechamento | `grep -n "grade" ponto/services/fechamento.py \| grep -in "montar\\|= grade\\|grade =\\|import\\|def " \| head -20` |
-| 10:20:03 | Bash | Ler por_dia_da_grade | `sed -n '1,60p' ponto/services/dia_pago.py \| head -70; echo "=== por_dia_da_grade ==="; sed -n "$(grep -n 'def por_dia_da_grade' ponto/services/dia_pago.py \| cut -d: -f1),+45p" ponto/services/dia_pago.py` |
-| 10:19:47 | Bash | Ler a porta do evento (recalculo na saida) | `sed -n '895,945p' ponto/services/fechamento.py` |
-| 10:19:41 | Bash | Censo dos escritores do gravado | `echo "=== quem chama recalcular/lavrar fora de teste ==="; grep -rn "recalcular_fechamento_mes\\|lavrar_dia_pago(" --include=*.py . \| grep -v "/tests/\\|test_" \| grep -v "^./ponto/services/fechamento.py" \| cut -c1-150` |
-| 10:19:15 | Bash | Corrigir a sonda e rodar | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i 's/timezone.localtime(t.entrada) if t.entrada else None/timezone.localtime(t.entrada.timestamp) if t.entrada else None/; s/timezone.localtime(t.saida) if getattr(t, .saida., None) else None/timezone.localtime(t.saida.timestamp) if getattr(t, "saida", None) else None/' $S/instante.py && grep -n " ...` |
-| 10:19:06 | Bash | Sonda do INSTANTE: saida do turno x carimbo do gravado | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/instante.py <<'PYEOF' # -*- coding: utf-8 -*- """INSTANTE, nao data (CLAUDE.md sec.6 TETO TEMPORAL): a saida do turno de 28/09 caiu antes ou depois do carimbo do gravado? E a celula do dia foi regenerada nessa noite?""" from django.utils import timezone from ponto.models import FechamentoMensa ...` |
-| 10:18:41 | Bash | Commit por path do registro | `git commit -q -F - -- docs/PROMPTS.md docs/BACKLOG.md <<'MSGEOF' && git log --oneline -1 Registrar a O-HAIKU-INVESTIGA: tres leitores e um juiz em lote, sem uma linha de codigo SO REGISTRO, como ele pediu literalmente. A obra entra na ORDEM VIVA depois da O-DIA-PAGO S4 e antes da S5b, no estado "registrada". O que ela e: o Haiku ganha tres ferramentas de LEITURA (linha_do_tempo_vinculo, dia_a_dia, ...` |
