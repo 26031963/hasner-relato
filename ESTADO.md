@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:56:01.**
+**Medido em 30/09/2026 15:01:31.**
 
 | | |
 |---|---|
@@ -100,39 +100,39 @@ aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O número ficou na lápide da própria linha, não só no relato — porque quem mexer ali depois lê o arquivo, não o RELATO.
-
-  E está escrito no commit, com clareza: o deploy dessa linha não sai antes do DIFF de minutos. Mudar geometria de pareamento é mudar minutos, e a condição 1 da
-  DINHEIRO-EM-COMPETENCIA-ABERTA é DIFF publicado antes. O script existe e ele declara o que ainda não faz: comparar minutos exige rodar na sombra com os dois códigos, o que pede
-  o HEAD anterior montado num worktree da sombra. Está nomeado como próximo passo em vez de suposto.
-
-  Os quatro que restam: três de .first() sobre a janela (consulta por dia, cauda de 13 pessoas/competência) e o aplicar_09_corte_b, que sai por remoção.
-
-  O gate da raia fecha em alguns minutos e me avisa.
+  hoje ou espera.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Read 1 file
+  Read 1 file, ran 4 shell commands
 
-● Aguardando o gate — não edito a raia enquanto a suíte a monta, porque os imports tardios fariam a corrida medir um estado que já mudou (foi o que me custou a rodada anterior).
+● O DIFF do lote 7 tem comando próprio desde 13/09, e eu estava escrevendo um caseiro (d3125090).
 
-  Estado congelado neste ponto, tudo durável:
+  bin/simular_folha.sh par <rótulo> <árvore_antes> <árvore_depois> faz o que eu precisava e mais: tira a foto dos dois lados dentro de uma trava só da sombra (flock), compara,
+  imprime DIFF_FOLHA=N, sai 3 se N≠0 — e sai 5 se as duas fotos vierem de travas diferentes, isto é, se outra escrita entrou no meio. O uso típico está escrito na lápide dele:
+  "par t7 <copia>/orig/app <copia>/cura/app → colar a saída no commit".
 
-  - principal: faltam=0, 25 commits do dia em origin/main, suíte 8.764 OK;
-  - raia wt-esmeril2: censo 4, último commit c2d49e4d, árvore limpa;
-  - raia wt-ui: a cura dos 5px no rótulo (64739630), esperando o smoke junto da UI-GRADE.
+  E eu já havia montado o "antes" no lugar certo (wt-esmeril2-antes, em 73992fe0, sem a mudança do turnos). Então falta um comando:
 
-  A família (1) foi de 19 para 4 hoje, em oito lotes, cada um com suíte cheia verde. O que falta tem veredito escrito: três .first() que pedem consulta por dia (cauda de 13
-  pessoas/competência) e um que sai por remoção com prova.
+  bin/simular_folha.sh par lote7 /home/ronald/wt-esmeril2-antes/app /home/ronald/wt-esmeril2/app
+
+  Meu script caseiro fica como registro do que eu ia fazer à mão — e do porquê não se faz: sem trava, sem garantia de foto limpa, e medindo "universo afetado" em vez de DIFF de
+  folha.
+
+  Décima primeira vez hoje que a casa já tinha a resposta escrita. E com isso o padrão do dia fica completo, em duas linhas que valem mais que as fatias: antes de medir, grep na
+  lápide; antes de escrever ferramenta, ls bin/.
+
+  Rodo o par assim que o gate liberar a pista — ele e o simular disputam o mesmo cpuset.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Searching for 1 pattern…
+  Rodar o par do lote 7 de novo · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/simular_folha.sh par lote7 /home/ronald/wt-esmeril2-antes/app /home/ronald/wt-esmeril2/app >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/par_lote7b.log 2>&1 & sleep 30; head -8 /tmp/claude-1001/-home-r…
 
-✢ Bootstrapping… (1h 24m 29s · ↓ 248.1k tokens)
+✢ Bootstrapping… (1h 29m 59s · ↓ 261.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
