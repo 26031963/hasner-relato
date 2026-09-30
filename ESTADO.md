@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:15:45.**
+**Medido em 30/09/2026 07:21:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ aecbb0ff TICKETS: rodape e placar
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/docs/PROMPTS.md
@@ -48,6 +49,8 @@ aecbb0ff TICKETS: rodape e placar
  M app/ponto/services/espelho.py
  M app/ponto/tests/test_dia_pago_soma.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+ M bin/hook_stop_fila1.py
+ M bin/tests/test_hook_parei_so_lei.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -106,9 +109,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PAREI: lei (no topo do RELATO, com números): hora noturna trabalhada em dia de folga gera adicional noturno? E intervalo não registrado nesse dia gera intrajornada indenizada? O
-  motor diz não para as duas, e o único corte escrito sobre folga trabalhada (27/09) decide o adicional de 100% — o noturno do Art.73 é adicional sobre hora noturna, não segunda
-  paga da mesma hora. Na frota da 10: col511 28,00 h · col956 28,00 h · col960 29,16 h · col820 18,89 h que hoje não se pagam. Se a resposta for "sim", quem muda é o motor — a
   lavratura segue.
 
   Próximo da sua ordem: S4.
@@ -125,24 +125,27 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Agora o selo, com a lei escrita — inverto de novo, e cada assertiva cita a linha do aval:
 
-● Suite dos cinco apps com a lei nova · 4m 7s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='ponto/tests/test_dia_pago_soma.py'
-     t=io.open(P,encoding='utf-8').read()
-     V = """ def test_MORDE_no_dia_com_OS_DOIS_a_rubrica_e_so_a_do_periodo_normal(self):
-     \"\"\"O dia que tem periodo NORMAL e folga trabalhada: as horas somam em… (4m 4s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Misting… (7m 52s · ↓ 16.0k tokens)
+  Ran 2 shell commands
 
 ❯ lei Ronald: PAREI de LEI nao devolve turno. Quando faltar lei, registra a pergunta no topo do RELATO com numeros e SEGUE o proximo item da ORDEM VIVA que nao depende dela; a
   resposta entra quando vier. So devolve turno por ! de dinheiro exportado/vinculo/apagar prod. PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Duas coisas ao mesmo tempo: a lei nova (registro e implemento no hook) e o meu selo que falhou — a assertiva estava errada, não o código.
+
+  Registrar a lei e rodar a suite dos cinco apps · 20s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='CLAUDE.md'
+     t=io.open(P,encoding='utf-8').read()
+     V = """**PAREI-SO-LEI (corte Ronald 29/09 07:3x).** `PAREI` so existe para (a) pergunta de LEI sem lei escrita
+     ou (b) `!` de dinheiro / escala / vinculo / apagar… (19s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (13m 8s · ↓ 24.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
