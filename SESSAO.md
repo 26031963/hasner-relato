@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 05:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **197**.
+**Medido em 30/09/2026 05:24:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **195**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -205,5 +205,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:25:13 | Bash | Smoke com o Host do tenant | `cd /home/ronald/saas-hasner && docker exec saas_ui python - <<'PYEOF' 2>/dev/null import urllib.request for R in ('/health/','/colaboradores/','/ponto/espelho/','/relatorios/','/colaboradores/292/'): req = urllib.request.Request('http://127.0.0.1:8000'+R, headers={'Host':'juliani.hasner.com.br'}) try: print('%-26s %s' % (R, urllib.request.urlopen(req, timeout=10).status)) except urllib.error.HTTPE ...` |
 | 17:25:03 | Bash | Smoke de rotas em prod | `cd /home/ronald/saas-hasner && for R in /health/ /colaboradores/ /ponto/espelho/ /relatorios/; do printf '%-22s %s\n' "$R" "$(docker exec saas_caddy wget -qO /dev/null -S "http://localhost$R" 2>&1 \| grep -m1 HTTP \|\| echo '-')"; done 2>/dev/null; echo "--- via ui direto:"; for R in /health/ /colaboradores/ /ponto/espelho/ /relatorios/; do printf '%-22s ' "$R"; docker exec saas_ui python -c " imp ...` |
 | 17:24:39 | Bash | Deploy da cura (sem migrate) | `cd /home/ronald/saas-hasner && timeout 900 bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy.log 2>&1; echo "rc=$?"; tail -22 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy.log` |
-| 17:24:28 | Bash | Arvore limpa, migration e ensaio da sombra | `cd /home/ronald/saas-hasner && git status --short \| head; echo "=== migrations pendentes?"; docker exec saas_core python manage.py makemigrations --check --dry-run 2>&1 \| tail -3; echo "=== sombra:"; bin/sombra.sh --conferir 2>&1 \| tail -6` |
-| 17:24:16 | Bash | Estado do push | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log; echo "push vivo=$(pgrep -cf 'git push origin main')"` |
