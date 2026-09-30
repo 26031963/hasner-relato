@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:15:31.**
+**Medido em 30/09/2026 08:20:32.**
 
 | | |
 |---|---|
 | `HEAD` local | `df62fdd7 TICKETS: rodape e placar` |
-| `origin/main` | `3635a5be TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `df62fdd7 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -100,43 +100,43 @@ bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O pipeline inteiro está medido e nada perde foto. Registro a ordem com o resultado e construo o contador — que é a cura que está no meu alcance:
-
-  Ran 2 shell commands
-
-● Aqui está o caso dele: o universo certo é origem='app', e não é zero — 3 ontem, 2 anteontem. Nomeando:
-
-  Ran 2 shell commands
-
-● Essa medição foi vazia — DisputaSupervisao não tem campo batida, então minha query caiu no none(). Não vale nada; acho o vínculo real:
-
-  Ran 4 shell commands
-
 ● A guarda existe desde 12/09 (BUG 126, cron 07:26). Meço chamando a função real em DRY-RUN:
 
   Ran 1 shell command
 
 ● A guarda já existe e rodou hoje — corrijo o RELATO, porque eu ia construir um contador que a casa já tem:
 
-● Pushing da medicao · 9m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (9m 0s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Misting… (1h 7m 38s · ↓ 66.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 2 shell commands
 
 ❯ BUGS DE PROD 30/09 (P7.1, dois): (1) BUG-FOTO-APP-401: POST /api/ponto/foto/ -> 401 em serie, 13+ colabs Android okhttp, colab=?uNNN (token nao reconhecido) com /bater/
   passando; medir auth do endpoint x /bater/ e o que mudou no core em 29/09; RED com token de app; cura na origem, deploy ja, smoke real. (2) BUG-BUSCA-POSTO-ERRO:
   postos.html:107 var escapeHtml = window.hxEsc roda ANTES de hasner-ui.js (base.html:83, defer) -> undefined -> TypeError no .map -> 'Erro na busca' em toda busca (servidor 200
   JSON ok, provado por Client; JSP02 tem as 3 permissoes). Cura na origem: inline resolve hxEsc no uso (ou o inline vira defer/DOMContentLoaded); censo de todo template que
   captura window.hx* no load; a busca nunca engole excecao sem dizer qual (L8). Selo chromium. PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● (1) já medido e refutado — resposta em uma linha abaixo. (2) é novo e tem causa nomeada; vou ler e curar.
+
+  Ran 1 shell command
+
+● Background command "Push da medicao" completed (exit code 0)
+
+● O censo é a boa notícia: um único sítio captura no load — todos os outros resolvem no uso. Vou ao Erro na busca:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Agora o selo estrutural (o censo virando guarda) e o de chromium que morde:
+
+  O selo de navegador que reproduz o bug · 2s
+  ⎿  $ cd /home/ronald/wt-busca/app && cat >> core/tests/test_hx_nao_se_captura_no_load.py <<'PYEOF'
+     class InlineAntesDoDeferEmNavegadorTest(SimpleTestCase):
+     """A MESMA pergunta, num NAVEGADOR de verdade -- porque a ordem do `defer` e cascata, nao texto.
+     O selo estrutural acima varre o markup e prende a…
+
+✽ Misting… (1h 12m 39s · ↓ 74.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
