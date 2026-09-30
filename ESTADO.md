@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:257 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:299 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:04:01.**
+**Medido em 30/09/2026 18:09:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `31d36e1d COL515 fechado e CONFERIDO -- e a conferencia achou duas coisas` |
+| `HEAD` local | `66c37189 O passivo das batidas retro tem o numero que faltava, e ele nao tem caminho hoje` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+66c37189 O passivo das batidas retro tem o numero que faltava, e ele nao tem caminho hoje
 31d36e1d COL515 fechado e CONFERIDO -- e a conferencia achou duas coisas
 843c01f0 O contador que eu deixei sem nome tinha DOIS nomes, e um deles ninguem tinha visto
 f20d9c9e PAREI da S5b: o criterio nao fecha, e eu errei a medicao da causa tres vezes
 ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado
-95389e29 B2: o motor consulta a DecisaoHE no sitio do clipe, e o DIFF de frota deu ZERO antes do deploy
 ```
 
 ## `git status --short`
@@ -101,38 +101,38 @@ ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficien
 
 ```
 
-● A cura sobreviveu e está consistente — e a conferência achou duas coisas que valem dizer:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● A causa tem forma agora: 207 células (não 109 — cresceu), e o padrão é inequívoco. Veja o col418: 14 dias seguidos com regenerada_em = 29/09 14:26 e veredito_em variando de
+  01/09 a 17/09 — uma regeração em lote reescreveu o DNA e nenhum veredito foi refeito. Vou confirmar o porquê:
 
-● COL515 fechado — e eu conferi antes de marcar
+  Searched for 2 patterns, ran 1 shell command
 
-  Havia razão para conferir: a cura foi às 13:4x e a competência 09 inteira foi regerada às 16:56, com TXT novo às 17:07.
+● Achei o eixo: julgar_colab(..., forcar=False, ...), e quem lê regenerada_em é o supra_juiz e o gerar_celulas — para a cobrança órfã, que o CLAUDE.md declara. Ninguém o lê para o
+  veredito. Confirmando:
 
-  ec1220 = 02/09..None, ATIVA, PAI-12x36.5 19:00-07:00, âncora 03/09 — noites ímpares (03, 05, 07, 09, 11), e o 11/09 é o 1º plantão batido, exatamente o que o ! mandou. Zero
-  vigências impossíveis (a data_fim 29/08 < data_inicio 02/09 que originou o caso morreu) e um único vínculo ativo. Células: 31/31 regeneradas na 09, 30/30 na 10.
+  Searched for 3 patterns, ran 2 shell commands
 
-  E a prova independente: ele não aparece entre os 7 colaboradores com DNA divergente do template que eu medi às 17:4x. Duas testemunhas que não se falam dizem que as células dele
-  ficaram certas.
+● A lápide diz que a impressão inclui o dna — "hash dos INSUMOS (batidas/ausencia/chamados/dna); insumo mudou => impressao diverge => re-julga". Então o desenho previa isso. Vou
+  ver se o código cumpre:
 
-  A conferência achou duas coisas
+  Searched for 1 pattern
 
-  As noturnas da 09 dele estão em 21,66 h, e a cura de 13:4x publicou 25,57 h. A diferença é o bloqueio total das 16:56, que cortou as pontas dele — consequência esperada, mas eu
-  não ia deixar dois números diferentes publicados no mesmo dia sem dizer qual vale e por quê.
+● O DNA está na impressão (impressao_insumos(bj, ..., cel.dna, ...)) — então o desenho funciona, e 2.347 foram re-julgadas. As 207 são as que o cartório não alcançou. Vou ver a
+  janela dele, que é a última pergunta:
 
-  ec1218 (22/08-01/09, 19:00-07:00) e ec1219 (21/08-01/09, 10:00-22:00) se sobrepõem por 11 dias, com horários opostos — um noturno, um diurno. Os dois inativos, sem dano medido
-  (as células estão regeneradas). Mas dois vínculos inativos cobrindo o mesmo dia com horários opostos é o tipo de cadastro que fabrica o próximo col515: se um deles for
-  reativado, o dia passa a ter duas respostas. Registrado no BACKLOG sem construir — a casa tem juiz para isso (vigencias_sobrepostas), e eu não mexo em vínculo sem o seu !.
+  Listed 1 directory, ran 1 shell command
 
-  ---
+● A lápide do cartório diz "substitui janela por FILA... ou com impressão divergente", com mandato "nada mais escapa, 100%". Então ou a impressão não divergiu — e aí não há bug.
+  Vou testar, porque é isso que decide o item:
 
-  Três coisas suas na fila, todas com número e nome agora: col882 + col502 (44 e 5 dia-colab sem vínculo, formas diferentes), col900 + col309 (84 dias em 7 colabs, dois padrões),
-  e o re-rótulo do contador da S3. Mais o smoke da UI-GRADE e o TXT parcial do col515 para o Domínio.
+● Testar se o insumo mudou de fato
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/veredito_causa.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """A regeracao mudou o que o JULGAMENTO LE, ou so a data? So leitura.
+     O cartorio nao tem janela -- a lapide dele d…
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: DISPUTA-S84-RETRO-PASSIVO -- o ! do passivo das batidas retroativas (ordem Ronald 30/09 13:3x): 1.753 batidas em 329 colabs, lote u666 16/0
-
-✢ Bootstrapping… (4h 32m 29s · ↓ 824.6k tokens · still thinking)
+* Bootstrapping… (4h 37m 29s · ↓ 844.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
