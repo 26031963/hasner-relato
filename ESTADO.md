@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:55:01.**
+**Medido em 30/09/2026 17:00:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula` |
+| `HEAD` local | `971c4e75 Registrado o SIM da 09: a deriva entra junto e os oito contadores entram no alvo` |
 | `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+971c4e75 Registrado o SIM da 09: a deriva entra junto e os oito contadores entram no alvo
 0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula
 57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar
 0463460b Placar e rodape do TICKETS pelos geradores
 fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que o meu proprio teste achou
-35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA
 ```
 
 ## `git status --short`
@@ -41,9 +41,11 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/prova09_tmp.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,42 +103,42 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 
 ```
 
-  E o zero vem com um limite escrito na lápide, porque é exatamente o tipo de número que a próxima pessoa lê como "varrido": este censo olha consultas, não o que os chamadores
-  fazem com o resultado. O único defeito real que a família achou hoje não era uma consulta errada — era o uso de uma consulta certa. Censo de queryset é cego para isso por
-  construção.
-
-  O que falta e não depende de você
-
-  Suíte da raia (rodando) → merge das famílias (1) e (2) na main → deploy. As curas da família (1) são caminho de dinheiro real (o pareador passando a receber o vínculo que a
-  célula nomeia) e ainda não estão em prod.
-
-  O que espera você
-
-  O ! da 09 — sim ou não sobre os oito contadores de grade que a deriva move. A regra passa o seu critério; não há terceira via.
+  1. Prova do passo 6 — sonda pronta: ela procura dias com ponta riscada e HE > 0 em vez de eu afirmar que não existem, e nomeia os dias do BO (as duas pontas riscadas no mesmo
+     dia).
+  2. TXT novo das três empresas — hash publicado, o de 28/09 invalidado com trilha (ids 20/21/22, hashes 8a63e3ba/6e0f1048/cb7f00fe), nunca apagado. --usuario ronald_ti, porque é
+     o seu ato e gerado_por diz de quem é.
+  3. Prova da L-092 sobre a 08 — troquei o --mes-intacto para 08, já que a 09 está sendo mudada de propósito. A 08 é a que tem de sair idêntica.
+  4. Merge da raia → suíte da main → deploy.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● A suíte é o portão do merge, não da família (3). Vou abrir a família (3) — ela fecha com allowlist zero, e a allowlist tem uma linha:
+  Searched for 1 pattern
+
+● Background command "Esperar o apply da 09" completed (exit code 0)
+
+● Apply da 09 fechado: L-092 provada na 08 (idêntica nas três empresas) e 512 colabs movidos na 09. Agora o TXT novo e a prova:
 
   Ran 1 shell command
 
-● A própria nota da allowlist diz o que fazer. Vou ler a porta antes:
+● O TXT encolheu: 238→209, 95→86, 12→9 — menos rubricas. Mas linha não é colaborador, e preciso saber se alguém saiu do TXT:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● A nota da allowlist descreve a cura e a porta já existe. Vou migrar:
+● Duas coisas, e as duas me impedem de publicar: a prova deu zero com 532 erros engolidos — ausência de sinal lida como sinal bom — e meu parser do TXT perdeu 15 linhas. Vou ver o
+  erro real:
+
+  Ran 1 shell command
+
+● Terceira vez hoje que minha própria sonda transforma "não consegui perguntar" em "a resposta é zero". Vou consertar e fazê-la recusar-se a concluir com erro:
 
   Running 1 shell command…
 
-✢ Bootstrapping… (3h 23m 29s · ↓ 573.6k tokens)
+· Bootstrapping… (3h 28m 50s · ↓ 590.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: SIM. A deriva entra junto e os oito contadores de grade entram no alvo. Aplica a 09, com a vigencia recuando no mesmo ato e o TXT novo substituindo o de 28/09 !
-  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
