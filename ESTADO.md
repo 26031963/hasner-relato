@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:40:46.**
+**Medido em 30/09/2026 09:46:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `f4ecb106 TICKETS: rodape e placar` |
-| `origin/main` | `c53a1dc0 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `f4ecb106 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -41,7 +41,11 @@ ed22ec4c TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/templates/colaboradores/partials/_calendario_grade.html
+ M bin/hook_stop_fila1.py
+ M bin/tests/test_hook_parei_so_lei.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -100,34 +104,34 @@ ed22ec4c TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  Vínculo, o resto: passivo da frota em zero (col899 absorvido, col334 fechado, os dois pela operação da porta, com trilha e reversão em logs/reversao/), e o golden do col899
+  respondido — não houve escritor fora da porta: os dois writes foram do mesmo admin por executar_vinculo, 3 min de diferença, em 25/09, e a porta só aprendeu a absorver em 29/09.
 
-❯ BUG-DISPUTA-S84-RETRO-FABRICA-BATIDA (P7.1, medir antes de curar): col438 [nome] tem 10 dias de FOLGA (12x36 contínuo provado pelas batidas origem=app:
-  28/08,30/08,01/09...11/09) com batidas origem='disputa_s84_retro' cravadas nos marcos 07:00/12:00/13:00/19:00, vindas de PerguntaDisputa geradas pelo cadastro errado (6x1
-  12-20). MEDIR: (a) quem respondeu cada PerguntaDisputa que virou batida (colab, supervisor, ou lote automatico -- arquivo:linha do escritor); (b) censo na frota: batidas
-  disputa_s84_retro em dia cuja celula (apos corrigir fase) e folga, por colab. Se o escritor preencheu sem resposta humana = motor fabricou batida (zona inviolavel): cura na
-  origem, e o passivo vira lista para o meu !, nunca apagar sem trilha. Caso: col438 12x36 07-19 ancora 28/08 desde 21/08 pela porta (09 via REGEN-EM-EXPORTADA). PAREI so em lei
-  ou !
+  Falta de você: o ! do passivo das batidas retroativas, e o colab/dia/tela do caso da foto.
 
-● Duas frentes. A constraint quebrou 7 selos que fabricam o estado ilegal — real e preciso resolver, e ela não está em prod. Mas a ordem nova é integridade de prod: registro e
-  meço.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: VINCULO-LINHA-DO-TEMPO -- o vinculo do colab e UMA linha do tempo: salvar "a partir de D" REESCREVE a linha de D em diante -- o vigente
 
-  Ran 5 shell commands
+● O item não fecha e não anda: o que falta dele é a ESMERIL-2. Declaro a dependência na linguagem que o hook lê, porque é a verdade:
 
-● Medição decisiva. Publico, e resolvo a árvore que a minha constraint deixou vermelha:
+  Ran 4 shell commands
+
+● Duas coisas para acertar: o col899 foi aplicado hoje e tem de sair do PENDENTES, e o que resta da FAMILIA-FASE é o seu ! nas propostas:
 
   Ran 1 shell command
 
-● A constraint achou algo que muda a ordem: 19 selos modelam dois ativos de propósito — a casa ainda fala essa língua. Seguro a constraint atrás da ESMERIL-2 e registro com os
-  nomes:
+● O-HAIKU-INVESTIGA está marcada "REGISTRADA, NAO CONSTRUIR" — por ordem dele. O hook cobra item que ele mandou não construir; curo o padrão:
 
-● Pushing da medicao e do recuo · 8m 3s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 0s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Curar o hook, sela o caso, e ver o proximo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='bin/hook_stop_fila1.py'
+     t=io.open(P,encoding='utf-8').read()
+     V = "_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando|espera o `?!|ap[oO]s o `?!|PAREI', re.I)"
+     N = ('''# ITEM DE SO-REGISTRO TAM…
 
-✽ Misting… (2h 32m 53s · ↓ 151.2k tokens)
+· Misting… (2h 38m 8s · ↓ 161.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
