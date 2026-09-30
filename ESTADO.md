@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:32:01.**
+**Medido em 30/09/2026 07:37:31.**
 
 | | |
 |---|---|
@@ -129,12 +129,12 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 
 ● Ordem da raia UI registrada. A suíte da lei da folga trabalhada está verde (4.489 OK) — agora o DIFF de frota que ele pediu antes do apply.
 
-● Esperar o DIFF de frota · 2m 16s
+● Esperar o DIFF de frota · 7m 47s
   ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported'
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_folga.log | head -45 (2m 15s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_folga.log | head -45 (7m 45s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (24m 8s · ↓ 30.7k tokens)
+✢ Misting… (29m 38s · ↓ 30.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
