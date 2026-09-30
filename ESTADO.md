@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:33:31.**
+**Medido em 29/09/2026 21:39:01.**
 
 | | |
 |---|---|
@@ -99,15 +99,6 @@ be50379e TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ ordem Ronald: B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b. Segue a fila; PAREI so em lei ou !
-
-● Ordem recebida e registrada. Antes dela, fecho a prova do apply que estava em curso: a 10 caiu de 33 para 19, e as 19 que sobram são de outra classe.
-
-  Searched for 1 pattern, ran 9 shell commands
-
-● Enquanto o push roda, sigo a B1. O primeiro item dela está meio feito e isso é achado, não suposição:
-
   Searched for 1 pattern, ran 1 shell command
 
 ● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
@@ -125,18 +116,27 @@ be50379e TICKETS: rodape e placar
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
 
-  Esperar o push do item 4 · 7m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1c.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (7m 47s)
+  Searched for 2 patterns, ran 17 shell commands
+
+● Background command "Push do item 4" completed (exit code 0)
+
+● He_pendente medido em prod, com o portao desligado · 2m 17s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/medir_he.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     from colaboradores.models import Empresa
+     from folha.porta_export import medir
+     for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'):
+     d = medir(e, 10, 2026)
+     hp = d.get('he_pendente') or []
+     print(' em… (2m 15s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (5h 26m 48s · ↓ 237.4k tokens)
+✢ Schlepping… (5h 32m 18s · ↓ 238.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 13 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 14 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
