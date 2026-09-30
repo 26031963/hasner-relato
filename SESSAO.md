@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 08:10:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.9 MB). Acoes na janela: **146**.
+**Medido em 30/09/2026 08:15:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.9 MB). Acoes na janela: **140**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -150,9 +150,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:15:56 | Bash | A lista das colunas de rubrica | `grep -n '_RUB = \\|_RUB=' -A 14 relatorios/pdf_espelho.py \| head -22; sed -n '800,820p' relatorios/pdf_espelho.py` |
 | 20:15:51 | Bash | As seis colunas de rubrica do papel | `grep -n "_rub_on\\|'HE 50'\\|rubricas'\]\[" relatorios/pdf_espelho.py \| head -14; echo "=== cabecalhos das colunas de rubrica:"; grep -n "COLS_RUB\\|_RUBRICAS_COL\\|Noturno\\|Intra\\|Atraso" relatorios/pdf_espelho.py \| head -12` |
 | 20:15:41 | Bash | O que rubricas_do_dia entrega hoje | `sed -n "$(grep -n 'def rubricas_do_dia' ponto/services/dia_pago.py \| cut -d: -f1),+40p" ponto/services/dia_pago.py` |
-| 20:15:23 | Bash | A regra e o cadastro da janela de HE | `sed -n '1,70p' ponto/janela_he.py; echo "=== cadastro da janela:"; grep -rn 'janela_he\\|JANELA_HE\\|he_piso\\|he_teto' --include=*.py . \| grep -v '/tests/\\|/migrations/' \| sed 's\|^\./\|\|' \| head -12` |
-| 20:15:17 | Bash | Commit e abrir a regra da janela de HE | `cd /home/ronald/saas-hasner && git commit -q -F - <<'EOF' Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19 sao de outra classe Quarta execucao sob DINHEIRO-EM-COMPETENCIA-ABERTA, com as quatro condicoes cumpridas: DIFF de frota publicado antes (a tabela das 33 linhas, colab e campo), reversao em logs/reversao/reversao_lavratura_ft_10_20260929.json (457 linhas, 21 colabs, com ...` |
-| 20:14:54 | Bash | Publicar a prova do apply | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() ANC = """# A MINHA PROPRIA LAPIDE AFIRMAVA O CONTRARIO DO CODIGO, e o contador da porta cobrou (29/09 19:0x)""" assert t.count(ANC)==1 NOVO = """# APLICADO: a 10 re-lavrada, contador 33 -> 19, e as 19 que sobram sao de OUTRA classe (29/09 19:5x) Quarta ex ...` |
-| 20:14:33 | Bash | Registrar a ordem e reposicionar a B1 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() ANC = "\| PAREI-SO-LEI \| 29/09 07:3x \|" assert t.count(ANC)==1 NOVA = ("\| ORDEM-B1-AGORA \| 29/09 ~19:5x \| *\"B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga " "na B2) -> S4 -> B2 -> S5b\"*. **Muda a ORDEM VIVA** (a B1 ja estava regis ...` |
-| 20:14:16 | Bash | A tabela do PROMPTS | `cd /home/ronald/saas-hasner && grep -n '^\| ' app/docs/PROMPTS.md \| tail -3` |
-| 20:14:11 | Bash | Formato do PROMPTS.md | `cd /home/ronald/saas-hasner && tail -6 app/docs/PROMPTS.md` |

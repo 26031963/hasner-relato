@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:10:01.**
+**Medido em 30/09/2026 08:15:31.**
 
 | | |
 |---|---|
@@ -100,13 +100,6 @@ bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O 401 não perde foto — 32 de 32 têm um 200 do mesmo colab em ±15 s. A observação dele (a tela não mostra a foto) precisa de causa própria; meço:
-
-  Ran 1 shell command
-
-● Refutado com número: hoje são 251 batidas, 251 com foto (100%) — e os 5 colabs do 401 têm a selfie gravada. O defeito está no LEITOR ou no arquivo, não no upload. Meço os dois:
-
-  Listed 1 directory, ran 4 shell commands
 
 ● O pipeline inteiro está medido e nada perde foto. Registro a ordem com o resultado e construo o contador — que é a cura que está no meu alcance:
 
@@ -126,17 +119,24 @@ bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia
 
 ● A guarda já existe e rodou hoje — corrijo o RELATO, porque eu ia construir um contador que a casa já tem:
 
-● Pushing da medicao · 3m 33s
+● Pushing da medicao · 9m 2s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
      app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 30s)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (9m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (1h 2m 8s · ↓ 66.7k tokens)
+✢ Misting… (1h 7m 38s · ↓ 66.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ BUGS DE PROD 30/09 (P7.1, dois): (1) BUG-FOTO-APP-401: POST /api/ponto/foto/ -> 401 em serie, 13+ colabs Android okhttp, colab=?uNNN (token nao reconhecido) com /bater/
+  passando; medir auth do endpoint x /bater/ e o que mudou no core em 29/09; RED com token de app; cura na origem, deploy ja, smoke real. (2) BUG-BUSCA-POSTO-ERRO:
+  postos.html:107 var escapeHtml = window.hxEsc roda ANTES de hasner-ui.js (base.html:83, defer) -> undefined -> TypeError no .map -> 'Erro na busca' em toda busca (servidor 200
+  JSON ok, provado por Client; JSP02 tem as 3 permissoes). Cura na origem: inline resolve hxEsc no uso (ou o inline vira defer/DOMContentLoaded); censo de todo template que
+  captura window.hx* no load; a busca nunca engole excecao sem dizer qual (L8). Selo chromium. PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
