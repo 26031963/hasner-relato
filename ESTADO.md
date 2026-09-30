@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:142 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:186 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:42:31.**
+**Medido em 30/09/2026 17:48:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo` |
+| `HEAD` local | `7b446c53 COL900 tem numero e nao esta sozinho: 84 dias em 7 colabs -- e eu errei a MESMA medicao tres vezes` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7b446c53 COL900 tem numero e nao esta sozinho: 84 dias em 7 colabs -- e eu errei a MESMA medicao tres vezes
 ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo
 eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia
 01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo
 346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias
-a8457ba9 A familia (4): a medicao que eu ia fazer ja estava no codigo, e a que faltava deu 100%
 ```
 
 ## `git status --short`
@@ -100,40 +100,40 @@ a8457ba9 A familia (4): a medicao que eu ia fazer ja estava no codigo, e a que f
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  3. só na terceira usei ec.tipo_escala.marcos_do_dia(d), o template → 84
 
-● Não reproduzo os 89 s: 0,85 s por data livre contra 0,69 s por competência. Mas eu passei mes=9 e a view calcula mes = data_ini.month = 8. Vou reproduzir fielmente:
+  As duas primeiras foram a célula comparada consigo mesma, e eu li o zero como resposta — duas vezes, no mesmo dia em que escrevi uma memória sobre não fazer isso. A diferença
+  não estava escondida: está na linha da seção 5 que nomeia os dois métodos e diz qual é qual.
+
+  O que custa decidir
+
+  A 09 teve o TXT substituído hoje às 17:07. Curar os 7 significa regerar células, relavrar e um terceiro TXT — com o segundo invalidado pela mesma porta. Tecnicamente não é caro;
+  é a terceira versão de um arquivo que sai da casa, e isso é sua decisão.
+
+  O número está na mesa: 84 dias, 7 pessoas, 2 padrões — e o maior deles não é o que você nomeou.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
+
+● O hook aponta a S5b, mas ela entra depois da B2 pelo seu aval. E a B2 depende do item 2 das 17:1x — o motor consultar a DecisaoHE com o DIFF-zero provado antes. É o próximo item
+  meu:
 
   Ran 1 shell command
 
-● Não reproduzo os 89 s em nenhuma combinação — 0,21 a 0,87 s. E isso me leva a uma hipótese sobre a minha própria conduta, que eu preciso dizer:
-
-  Ran 1 shell command
-
-● Confirmado: saas_core está no cpuset 0-3 (produção) e o de teste no 4-7. E todas as minhas sondas de frota de hoje rodaram via docker exec saas_core — dentro do cpuset do
-  cliente, o que a lei de 22/09 proíbe para suíte. Vou dar o instrumento certo:
-
-  Ran 1 shell command
-
-● O instrumento lê prod do cpuset de teste. Agora o selo do item 1 — "erro diz que é erro" precisa de quem morda:
-
-  Ran 1 shell command
-
-● Minha própria assertiva era sem sentido — '' or '#' sempre dá '#', então ela falhava sempre. Consertando com a pergunta que eu queria fazer:
+● Zero decisões gravadas — então o DIFF-zero vai medir o que deve. Vou construir em cópia do HEAD, como a lei manda:
 
   Ran 2 shell commands
 
-● A causa era minha, e você a achou antes de mim
+● Agora o portão que o aval exige — o DIFF de frota tem de dar zero sem decisão gravada:
 
-  O lote quebrou às 17:25 com um ImportError, e a causa é a janela merge→deploy: mergeei o ESMERIL às 17:15 e deployei às 17:26:47. A árvore app/ é o bind-mount e o .py só entra
-  no reload — então por ~11 min o saas_ui servia services.py novo com pdf_espelho.py velho. Eu fui procurar a causa no dado e no apply da 09; era a janela que eu abri.
+  Rodar o DIFF par do B2 · 40s
+  ⎿  $ cd /home/ronald/saas-hasner && nohup bash bin/simular_folha.sh par he_b2 /home/ronald/saas-hasner/app /home/ronald/wt-he2/app >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_b2.log 2>&1 &
+     echo "DIFF par disparado $(date '+%H:%M')"; sleep 40; ta… (39s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  A lei entrou no CLAUDE.md. O texto de lá dizia "arquivo de fatia só vai para a árvore no ato do commit/deploy", tratando commit e deploy como um momento — e um merge prova que
-  não são. Um .py de fatia é uma linha; um merge são dezenas, e a chance de alguma ser importada por um módulo que o worker já tem em memória é praticamente 1. A forma agora:
-  merge → commit → bin/deploy.sh sem nada no meio, nem publicar RELATO. Virou memória também, porque ainda tenho a raia UI para mergear.
-
-  Item 1 — a tela tinha o motivo na mão e o jogava fora
-
-  O serviço captura a exceção em pulados; a view juntava só o nome. Duas coisas mentiam na mesma direção: o rótulo ("sem dados" é estado normal do caderno — existe sem_movimento
+✢ Bootstrapping… (4h 16m 29s · ↓ 766.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
