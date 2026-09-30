@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:58:01.**
+**Medido em 30/09/2026 09:03:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ed22ec4c TICKETS: rodape e placar` |
-| `origin/main` | `4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava` |
+| `HEAD` local | `c53a1dc0 TICKETS: rodape e placar` |
+| `origin/main` | `ed22ec4c TICKETS: rodape e placar` |
 | commits a subir (`ahead`) | **2** |
 
 ## Fabrica
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c53a1dc0 TICKETS: rodape e placar
+a8fe9786 BACKLOG: ESMERIL-2 registrada, e metade do golden dela ja tem resposta e numero
 ed22ec4c TICKETS: rodape e placar
 ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu a ZERO
 4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava
-8d664816 TICKETS: rodape e placar
-5001a457 Smoke da cura da busca pelo loader real -- e a minha sonda leu a lapide antes de eu corrigi-la
 ```
 
 ## `git status --short`
@@ -100,34 +100,34 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  juizes.py com 2+ respondentes -- soma propria, order_by(-x).first(), comparacao de tipo gravado, if de classe em template/JS. Cron e command sao SUSPEITOS por padrao ate
+  provarem que passam pela porta declarada.
+  SAIDA: tabela por familia (batida, celula, turno, vinculo/escala, ausencia/ferias, chamado, folha): campo/pergunta -> canonico declarado -> outros achados (arquivo:linha) ->
+  veredito (duplicado / derivacao / ok). Numeros: campos, com 2+, leitores dissonantes. Publicada no RELATO, e o script entra na REGUA: linha fora da allowlist declarada =
+  VERMELHO no commit. Allowlist nasce = censo de hoje e SO ENCOLHE.
+  DEPOIS (fila propria, nao junto): cada duplicado migra para o escritor unico; cada derivacao vira leitura do juiz; tripwire de runtime (pre_save recusa escrita fora do
+  escritor). Constraint de banco (EXCLUDE/CHECK) = tripwire, bem-vinda, nunca a cura.
+  P7.1 VALE DENTRO DO CENSO: bug provado no caminho cura NA HORA, mesmo que o estrutural fosse mata-lo depois -- 'morre sozinho' nao e lei (col899: absorcao pela metade ontem,
+  bug vivo hoje).
+  GOLDEN: col899 -- EC 1311 (01/09) gravada sem absorver a 1310 (25/09): qual escritor, fora da porta, gravou; e qual leitor mostrou folga 28/30 pela 1310 em vez de
+  escala_geradora. PRONTO: tabela publicada, script na regua verde com allowlist = hoje, golden nomeado com escritor e leitor curados.
+  segue a fila; PAREI so em lei ou !
 
-● Censo por AST: todo escritor de produção está num arquivo só — colaboradores/services/vinculo.py, 11 sítios. Aprofundo por função e meço quem gravou a 1311:
+● Registro a ESMERIL-2 (só registro) e, no mesmo passo, meço a metade do golden que ainda está aberta — o leitor que lê -data_inicio:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● A trilha responde: os dois passaram pela porta, pelo mesmo admin (u657), com 3 min de diferença — #1950 criou a 1310 e #1951 a "correcao" criou a 1311. Então o defeito é na
-  porta:
+● Background command "Push do vinculo" completed (exit code 0)
 
-  Ran 2 shell commands
+● O censo do golden já dá o número da obra: 46 sítios escolhem vigência por -data_inicio; só cartorio.py e vigia_de_hora.py leem escala_geradora. Registro a ESMERIL-2 com isso:
 
-● A porta já absorve desde 29/09 (vinculo.py:178) — e o col899 é de 25/09 14:48, quatro dias antes. Não há escritor fora da porta neste caso: é passivo. Aplico pela operação
-  declarada:
-
-  Ran 2 shell commands
-
-● Absorvida — 1 ativa. Agora regenerar/re-julgar e medir o passivo, que é a condição do VALIDATE:
-
-  Ran 3 shell commands
-
-● Passivo da frota: um só — col334, duas ativas do mesmo tipo. Pela mesma lei, a de 03/08 fecha a de 21/07 em 02/08:
-
-● Pushing do vinculo · 7m 52s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_vinc.log 2>&1; echo "rc=$?"; grep -E '^(FAIL|ERROR):|^OK$|^Ran |main ->
-     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (7m 50s)
+● Pushing do registro da ESMERIL-2 · 1m 58s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (1m 53s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (1h 50m 8s · ↓ 118.3k tokens)
+✢ Misting… (1h 55m 38s · ↓ 122.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
