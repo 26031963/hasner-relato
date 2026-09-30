@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:53:19.**
+**Medido em 30/09/2026 17:58:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `95389e29 B2: o motor consulta a DecisaoHE no sitio do clipe, e o DIFF de frota deu ZERO antes do deploy` |
+| `HEAD` local | `ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ed02bf91 O DIFF da S5b media a pergunta errada, e o numero era grande o suficiente para decidir no lugar errado
 95389e29 B2: o motor consulta a DecisaoHE no sitio do clipe, e o DIFF de frota deu ZERO antes do deploy
 7b446c53 COL900 tem numero e nao esta sozinho: 84 dias em 7 colabs -- e eu errei a MESMA medicao tres vezes
 ea94756e BUG-LOTE-DATA-LIVRE: a janela era minha, a tela engolia o erro, e os 89 s eu nao reproduzo
 eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia
-01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funca
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Bloqueio total de HE nas competências 09 e 10, com o TXT da 09 substituído (hashes publicados, o de 28/09 invalidado com trilha e conteúdo intacto).
-
-  Esperando você
-
-  1. COL900 tem número e não está sozinho: 84 dias em 7 colabs, dois padrões — e o maior é o col309 (31 dias), não o col900. Curar significa um terceiro TXT da 09.
-  2. O re-rótulo do contador da S3 — mede uma pergunta que seu corte matou; cobertura do folha_manda deu 100%.
-  3. Smoke da UI-GRADE, o ! do col882 e o TXT parcial do col515 para o Domínio.
-
-  Correndo sozinho
-
-  O DIFF do calculador (S5b), o retrato da 10 — os dois no cpuset 4-7, pelo bin/sonda_frota.sh, não mais dentro do container do cliente.
-
-  O que eu errei hoje, e o que ficou escrito
-
-  Cinco instrumentos meus mentiram, e todos na mesma direção — "não consegui perguntar" virando "a resposta é zero": glob na pasta errada dizendo "nada se moveu" sobre 470 colabs;
-  soma sem periodos_ft dando 0,00 noturnas para quem tinha 35 h; assinatura errada engolindo 532 TypeErrors; e duas vezes comparando a célula consigo mesma ao medir o DNA — na
-  segunda, contra uma linha do CLAUDE.md que avisa isso em maiúsculas.
-
-  Viraram duas memórias e uma lei no CLAUDE.md. E a mais cara não foi de medição: eu abri uma janela de 11 minutos entre o merge e o deploy e quebrei prod — você reproduziu, e eu
-  fui procurar a causa no dado e no apply enquanto ela era minha.
+  dele diz, e o desenho põe a aplicação no chamador — mas não existe selo que cobre o chamador aplicar. Isso é a próxima linha da S5b, e agora tem um caso real para nomear.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
 
   Read 1 file
 
-● Os dois correm. Vou usar a espera lendo o que "na forma do oráculo" significa — é a chave do aval da S5b:
+● Enquanto o DIFF corre, vou escrever o selo que faltava — o que cobra o chamador aplicar a janela, com o caso real que eu acabei de viver:
 
-  Ler o oraculo
-  ⎿  $ sed -n '1,34p' ponto/management/commands/e6_oraculo.py
+  Ran 1 shell command
 
-✶ Bootstrapping… (4h 21m 47s · ↓ 782.9k tokens)
+● Background command "Esperar o DIFF remedido" completed (exit code 0)
+
+  Ran 1 shell command
+
+● A cura mudou o quadro, e o que sobrou pede uma verificação antes de eu nomear a causa:
+
+  ┌───────────────────┬────────────────────────────┬────────────────────┐
+  │      rubrica      │     antes (sem janela)     │ agora (com janela) │
+  ├───────────────────┼────────────────────────────┼────────────────────┤
+  │ horas_extras_50   │ +102,85 h em 204 dia-colab │ +4,42 h em 7       │
+  ├───────────────────┼────────────────────────────┼────────────────────┤
+  │ horas_trabalhadas │ −851,65 h em 1.682         │ −1.531,61 h em 333 │
+  └───────────────────┴────────────────────────────┴────────────────────┘
+
+  A janela explicava a HE50 e 1.349 dos 1.682 dias. O que sobra são 333 dia-colab em 97 colabs, com −4,6 h por dia — e o padrão é 12x36 −213. Vou verificar se é o ponto cego que o
+  oráculo declara:
+
+  Commitar a cura do DIFF e o selo novo
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/management/commands/diff_calculador.py app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py && git commit -q -F -
+     -- app/ponto/management/commands/diff_calculador.py app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py <<'MSGEOF…
+
+✢ Bootstrapping… (4h 27m 9s · ↓ 803.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
