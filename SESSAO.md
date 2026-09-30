@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 05:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **200**.
+**Medido em 30/09/2026 05:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **197**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -207,6 +207,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:24:39 | Bash | Deploy da cura (sem migrate) | `cd /home/ronald/saas-hasner && timeout 900 bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy.log 2>&1; echo "rc=$?"; tail -22 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy.log` |
 | 17:24:28 | Bash | Arvore limpa, migration e ensaio da sombra | `cd /home/ronald/saas-hasner && git status --short \| head; echo "=== migrations pendentes?"; docker exec saas_core python manage.py makemigrations --check --dry-run 2>&1 \| tail -3; echo "=== sombra:"; bin/sombra.sh --conferir 2>&1 \| tail -6` |
 | 17:24:16 | Bash | Estado do push | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log; echo "push vivo=$(pgrep -cf 'git push origin main')"` |
-| 17:14:09 | Bash | Push dos 27 commits | `cd /home/ronald/saas-hasner && timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log 2>&1; echo "rc=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3b.log; grep -E '^(FAIL\|ERROR):\|^Ran \|^OK$\|^FAILED\|rc=\|main -> main\|error' /tmp/claude-1001/-home ...` |
-| 17:14:02 | Bash | Acertar o placar antes do push | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -2; if ! git diff --quiet -- app/docs/TICKETS.md; then git commit -q -m "TICKETS: placar do topo Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md && echo "placar commitado"; fi; echo "faltam: $(git rev-list --count origin/main..HEAD)"` |
-| 17:13:56 | Bash | Commit dos tres achados do selo da raia | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg3.txt <<'EOF' Merge nao e copiar arquivo: o selo da raia PDF, rodado contra a principal, achou tres O papel contava como FALTA 15 furos que NINGUEM decidiu. FALTA-UM-SIGNIFICADO (corte Ronald 23/09) diz que falta e o que foi DECIDIDO, mas `_totais_da_lavratura` nao  ...` |
