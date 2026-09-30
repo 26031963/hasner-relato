@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:163 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:199 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:30:45.**
+**Medido em 30/09/2026 08:36:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `8d664816 TICKETS: rodape e placar` |
+| `HEAD` local | `4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava` |
 | `origin/main` | `df62fdd7 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava
 8d664816 TICKETS: rodape e placar
 5001a457 Smoke da cura da busca pelo loader real -- e a minha sonda leu a lapide antes de eu corrigi-la
 77d0caed "Erro na busca" em toda busca de posto, e o servidor estava certo: captura no load contra defer
 df62fdd7 TICKETS: rodape e placar
-40f2cc98 BUG-FOTO-APP-401: o 401 e real, nao perde foto, e a perda que existe ja tem guarda com dono
 ```
 
 ## `git status --short`
@@ -100,43 +100,43 @@ df62fdd7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Agora o selo estrutural (o censo virando guarda) e o de chromium que morde:
-
-  Searched for 1 pattern, ran 5 shell commands
-
-● O selo mordeu a si mesmo: o regex do veredito casou dentro do texto do próprio <script>. Curo pela origem — o script não escreve o id, ele preenche um span que já existe:
-
-  Ran 1 shell command
-
-● 0,5 s para cinco testes com navegador é rápido demais — confiro se o chromium rodou de verdade:
-
-  Ran 4 shell commands
-
-● A terceira linha é a minha própria sonda lendo a prosa (a lápide cita o bug). Confiro sem comentário:
-
-  Committing do smoke e push da cura da busca · 7m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io
-     P='app/docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     V = """**O SELO MORDEU A SI MESMO NA ESTREIA, e vale escrito:**"""
-     N = """**NO AR, e conferido pelo loader REAL do Django em prod** (template no bind-mount entra na hora, sem d… (7m 17s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Misting… (1h 22m 52s · ↓ 86.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ INCIDENTE PROD AGORA (P7.1): GET /relatorios/ -> 500 x7 em 4 min (u28, u653), get_template('relatorios/index.html') falha em 20ms -- template do catalogo (raia UI) esta na
   arvore de prod quebrado (include/sintaxe). Medir: git status/diff de templates/relatorios/ na principal, e o erro exato (ultimas linhas do traceback). Cura: template valido no
   ar JA (a raia termina fora da arvore -- lei de ontem: arquivo de fatia so entra no ato do commit/deploy); selo de que todo template da arvore compila (loader.get_template sobre
   a pasta inteira, na regua). Depois: BUG-FOTO-APP-401 e BUG-BUSCA-POSTO (bloco anterior). PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Prod em 500 por minha mão. Meço o erro exato primeiro:
+
+  Ran 1 shell command
+
+● Causa em 20 s: a lápide {% comment %} ficou antes do {% extends %}. Curo prod agora:
+
+  Ran 2 shell commands
+
+● Prod 200. Agora o selo que ele pediu — o que teria pegado isso, e que explica por que 3.830 testes verdes não pegaram:
+
+  Searched for 1 pattern
+
+● O selo da casa está certo e meu wrapper o feriu por forma: o escape tem um dono. Tiro o apelido e chamo window.hxEsc no uso:
+
+  Ran 1 shell command
+
+● Quarta vez hoje nesta classe: o selo da casa lê prosa — minha lápide cita function escapeHtml. Curo o selo na origem, como fiz com os meus:
+
+  Ran 2 shell commands
+
+● Agora o selo que ele pediu — todo template da árvore compila — que é o que teria pegado o 500:
+
+● Pushing do incidente curado · 35s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_inc.log 2>&1; echo "rc=$?"; grep -E '^(FAIL|ERROR):|^OK$|^Ran |main ->
+     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca… (34s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Misting… (1h 28m 8s · ↓ 100.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
