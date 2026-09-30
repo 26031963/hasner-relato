@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:36:01.**
+**Medido em 30/09/2026 08:41:31.**
 
 | | |
 |---|---|
@@ -100,15 +100,6 @@ df62fdd7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  arvore de prod quebrado (include/sintaxe). Medir: git status/diff de templates/relatorios/ na principal, e o erro exato (ultimas linhas do traceback). Cura: template valido no
-  ar JA (a raia termina fora da arvore -- lei de ontem: arquivo de fatia so entra no ato do commit/deploy); selo de que todo template da arvore compila (loader.get_template sobre
-  a pasta inteira, na regua). Depois: BUG-FOTO-APP-401 e BUG-BUSCA-POSTO (bloco anterior). PAREI so em lei ou !
-
-● Prod em 500 por minha mão. Meço o erro exato primeiro:
-
-  Ran 1 shell command
-
-● Causa em 20 s: a lápide {% comment %} ficou antes do {% extends %}. Curo prod agora:
 
   Ran 2 shell commands
 
@@ -126,17 +117,26 @@ df62fdd7 TICKETS: rodape e placar
 
 ● Agora o selo que ele pediu — todo template da árvore compila — que é o que teria pegado o 500:
 
-● Pushing do incidente curado · 35s
+  Pushing do incidente curado · 6m 5s
   ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_inc.log 2>&1; echo "rc=$?"; grep -E '^(FAIL|ERROR):|^OK$|^Ran |main ->
-     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca… (34s)
+     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca… (6m 4s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (1h 28m 8s · ↓ 100.8k tokens)
+✢ Misting… (1h 33m 38s · ↓ 100.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
+  Passivo de vinculo sobreposto = 0 -> VALIDATE a constraint EXCLUDE. E o leitor que mostra folga 28/30 (le -data_inicio em vez do juiz do dia) entra no censo de leitores de
+  ativa=True. !
+
+❯ col899 NAO e excecao: pela VINCULO-LINHA-DO-TEMPO a EC 1311 (salva depois, a partir de 01/09) ABSORVE a 1310 (25/09) -- tipo diferente nao muda a lei, a linha e uma. Aplicar
+  pela operacao absorver_vigencias_posteriores com trilha, regerar e re-julgar 25/09->hoje; passivo 0 -> VALIDATE do EXCLUDE. E o censo: qual leitor mostrou folga 28/30 pela 1310
+  -- le -data_inicio em vez de escala_geradora (O69). PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index

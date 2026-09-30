@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 08:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.2 MB). Acoes na janela: **150**.
+**Medido em 30/09/2026 08:41:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.2 MB). Acoes na janela: **147**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -157,6 +157,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:43:49 | Bash | Push da B1 item 1 | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet -- app/docs/TICKETS.md \|\| git commit -q -m "TICKETS: rodape e placar Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" -- app/docs/TICKETS.md; timeout 3400 git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-a ...` |
 | 20:43:40 | Bash | Commit da B1 item 1 e memoria da licao | `cd /home/ronald/saas-hasner && git commit -q -F - <<'EOF' B1 item 1: a tela mostrava dinheiro do MOTOR e o placar da S3 nao via, porque varre .py Ordem dele as 19:5x -- "B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b" -- registrada em PROMPTS.md e a B1 reposicionada para EM VOO no BACKLOG no mesmo turno. O item 1 estava METADE FEITO, e descobrir isso foi  ...` |
 | 20:43:13 | Bash | Aplicar a B1 item 1 na principal | `cd /home/ronald/saas-hasner && cp /home/ronald/wt-b1/app/templates/ponto/espelho.html app/templates/ponto/espelho.html && cp /home/ronald/wt-b1/app/ponto/tests/test_b1_linha_do_dia_le_a_lavratura.py app/ponto/tests/test_b1_linha_do_dia_le_a_lavratura.py && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() V = "O portao `he_pendente`  ...` |
-| 20:36:32 | Bash | Suite na raia com o staticfiles montado, como o pre-push faz | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v /home/ronald/wt-b1/app:/app -v ~/saas-hasner/app/staticfiles:/app/staticfiles:ro saas-hasner-core:latest python manage.py test ponto co ...` |
-| 20:36:17 | Bash | O que o arvore_do_push copia por fora do archive | `cd /home/ronald/saas-hasner && grep -n 'git archive\\|LISTA\\|copia\\|cp ' bin/arvore_do_push.sh \| head -14` |
-| 20:36:13 | Bash | A copia do pre-push vem do commit ou da arvore? | `cd /home/ronald/saas-hasner && grep -n 'prepush-arvore\\|git archive\\|cp -a\\|rsync\\|checkout-index' bin/pre-push.sh \| head -12` |
