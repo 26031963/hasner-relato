@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:38:01.**
+**Medido em 30/09/2026 20:43:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98` |
+| `HEAD` local | `f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **26** |
+| commits a subir (`ahead`) | **27** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar
 bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98
 e1f7a3fa B2: a aba que autoriza -- e a permissao que a ordem nomeia NAO EXISTIA como Permission
 cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e diz de quando ele e
 882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
-bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
-?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,44 +95,44 @@ bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Saída vazia — o run não chegou aos testes. Vendo o que aconteceu:
-
-  Ran 1 shell command
-
-● freeze_time não está importado nesse arquivo — eu adicionei o import nos outros dois, em main, e esqueci este. Corrigindo, e congelando as duas classes (o selo do relógio solto
-  cobraria a outra também):
+  são criados e velados. Lendo o juiz, que é o que o selo vazio deveria exercer:
 
   Ran 1 shell command
 
-● 14 de 15. A falha é a minha prosa outra vez — o bloco contém a palavra "decidir" na frase "decidir exige a permissão autorizar_he". Oitava vez hoje. Corrigindo para estrutura,
-  como as outras:
+● cala_para_isento bloqueia (não vela), e já tem selo: chamados/tests/test_isento_nao_nasce.py. Então o que o arquivo vazio nomeia é o que falta — a disputa. Vendo se os módulos
+  de disputa estão na lista:
 
   Ran 1 shell command
 
-● 32 verdes (tela + aba + o contrato que lê as permissões rbac). Commitando a B2 na raia:
+● Agora está nítido: batida_ausente está na lista dos calados — logo, pela lei declarada, isento não deveria ter esse chamado. E o censo achou 8 em setembro. Ou é legado, ou um
+  emissor não consulta o gate. Medindo qual:
 
-  Committed 0e3e3537
+  Ran 1 shell command
 
-● Agora o cherry-pick dos meus dois commits para main — só a tela nova e a aba, não as 7 fatias que esperam o seu clique:
+● Um vazamento com um nome só, e ele se explica. Os 9 são todos do col499, sempre às 19:15, em dias alternados — padrão 12x36 — e param em 19/09: nada nos últimos 11 dias. Isso é
+  consistente com a flag isento_ponto dele ter sido ligada por volta de 20/09, com o emissor correto desde então.
 
-  Cherry-picked e1f7a3fa
+  Mas eu não posso confirmar, e é exatamente aí que o outro achado morde: isento_ponto não tem trilha, então ninguém consegue datar a isenção. O selo vazio do O97 é o que
+  transforma "consistente com" em "provado". Vendo o push antes de escrever:
 
-● Os dois entraram limpos em main (cb19da19 a listagem, e1f7a3fa a aba). Commitando os documentos, e depois o estado de UI que está vivo sem commit — a suíte passou com ele na
-  árvore, então é seguro rastreá-lo:
+  Ran 1 shell command
 
-  Committed bf3a4c64
+● A suíte do push segue. Escrevendo o selo no scratchpad para aplicar no instante em que ela fechar. Ele precisa ser de dois lados — isento dá zero, e um não-isento idêntico dá um
+  —, senão passa por a fixture nunca disparar. Lendo o emissor:
 
-● Agora o estado de UI que serve prod sem commit — rastreá-lo não muda nada no ar e tira o risco de um git checkout reverter a tela (o 500 de 4 min de 25/09):
+  Searched for 1 pattern, ran 1 shell command
 
-● Running 1 shell command…
+● O gate está limpo (linha 96, no topo do laço) e há --simular-agora, que me deixa dirigir o relógio. Escrevendo os dois selos no scratchpad — o funcional de dois lados, e o que
+  impede a classe do arquivo vazio:
 
-✢ Bootstrapping… (7h 6m 29s · ↓ 1.3m tokens)
+  Running 1 shell command…
+
+· Bootstrapping… (7h 11m 59s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
