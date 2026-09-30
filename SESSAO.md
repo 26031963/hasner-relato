@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 06:44:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **144**.
+**Medido em 30/09/2026 06:50:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **138**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -148,9 +148,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:59:54 | Bash | Esperar e ler a nomeacao | `cd /home/ronald/saas-hasner && until [ "$(pgrep -cf nomear.py)" = "0" ]; do sleep 30; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log \| head -60` |
 | 18:59:44 | Bash | Nomear as divergencias por campo e colab | `cd /home/ronald/saas-hasner && timeout 1500 docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/nomear.py').read())" > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/nomear.log 2>&1 & sleep 5; echo lancado` |
 | 18:59:35 | Bash | Contadores da competencia 10 | `grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log \| sed -n '/competencia 10/,$p' \| cut -c1-200` |
-| 18:49:29 | Bash | Esperar a medicao da 10 | `cd /home/ronald/saas-hasner && until [ "$(pgrep -cf medir_porta)" = "0" ]; do sleep 30; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log \| sed -n '/competencia 10/,$p'` |
-| 18:49:23 | Bash | Preparar o script que nomeia por campo e colab | `cd /home/ronald/saas-hasner && cat > /tmp/nomear.py <<'PYEOF' # -*- coding: utf-8 -*- """Nomear POR CAMPO E POR COLAB as divergencias de `fechamento_x_soma_dias_pagos` (leitura pura).""" from colaboradores.models import Empresa from folha.porta_export import medir for (mes, ano) in ((9, 2026), (10, 2026)): print('=== competencia %02d/%s' % (mes, ano)) for e in Empresa.objects.filter(pk__in=(2, 3,  ...` |
-| 18:49:13 | Bash | A competencia 10 e os campos do retrato | `cd /home/ronald/saas-hasner && grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log \| sed -n '/competencia 10/,$p' \| tail -6; echo "viva=$(pgrep -cf medir_porta)"; grep -n '_CAMPOS_GRADE_DP' app/folha/porta_export.py \| head -3` |
-| 18:49:02 | Bash | Como o contador compara gravado x lavratura | `grep -n 'fechamento_x_soma_dias_pagos\\|def _medir_dia_pago\\|lavratura_congelada_na_exportada' folha/porta_export.py \| head; echo "==="; sed -n "$(grep -n 'def _medir_dia_pago' folha/porta_export.py \| cut -d: -f1),+55p" folha/porta_export.py` |
-| 18:48:51 | Bash | Resultado dos contadores | `grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/medir.log 2>/dev/null \| tail -12; echo "--- medicao viva? $(pgrep -cf medir_porta)"` |
-| 18:48:45 | Bash | Commit do censo, do tripwire e dos dois fechamentos | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() ANC = """# UI-CAL-COMPETENCIA FECHA COM AS DUAS METADES""" assert t.count(ANC)==1 NOVO = """# QUEM ESCREVE NO GRAVADO DA EXPORTADA: o CENSO respondeu, e a resposta e UM (29/09 18:2x) O hook me devolveu `siga: O-DIA-PAGO S3` e depois `siga: QUEM-ESCREVE-NO ...` |
