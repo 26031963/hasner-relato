@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:50:31.**
+**Medido em 30/09/2026 10:55:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `c78445c7 TICKETS: rodape e placar` |
+| `HEAD` local | `e3b87217 TICKETS: rodape e placar` |
 | `origin/main` | `c78445c7 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e3b87217 TICKETS: rodape e placar
+f1a34d9c PROMPTS/BACKLOG: ESMERIL-MECANICO (rename dele) e o escopo (c) ZUMBI
 c78445c7 TICKETS: rodape e placar
 336d4ae1 O nucleo da B2 escrito e PARADO, e dois selos da casa recusaram a minha primeira versao
 67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
-5a3f29e0 TICKETS: rodape e placar
-43d8b0dc S4 fechada, e o censo mudou o nome da fatia: `recalcular` nao morre -- ele fica PORTA
 ```
 
 ## `git status --short`
@@ -41,8 +41,6 @@ c78445c7 TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,14 +100,6 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O container não monta bin/ — então este selo é de HOST, que é onde a régua já os roda:
-
-  Ran 1 shell command
-
-❯ renomear ESMERIL-2 (registrada hoje) -> ESMERIL-MECANICO: e a continuacao do ESMERIL de 11-14/09 (juizes declarados em core/juizes.py, S2-S4 feitos), agora FISCALIZADO por AST
   na regua para escritores E leitores. Nao confundir com: esmeril2 dos testes de chamados, esmeril_espelho (A1-A11), nem as fatias S1-S5 da O-DIA-PAGO. Escopo e ordem nao mudam.
   PAREI so em lei ou !
 
@@ -127,9 +117,17 @@ c78445c7 TICKETS: rodape e placar
 
 ● Três dos seis já têm guarda; três não. Implemento os dois mais valiosos que faltam:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Misting… (3h 42m 38s · ↓ 233.2k tokens)
+● A (c) tem números, e o cluster é evidente — PerfilApuracao concentra 11 dos 22:
+
+  Pushing do rename e do escopo c · 3m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 18s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Misting… (3h 47m 52s · ↓ 239.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
