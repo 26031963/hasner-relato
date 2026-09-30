@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:419 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:428 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:51:16.**
+**Medido em 30/09/2026 18:56:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido` |
+| `HEAD` local | `0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **19** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
 94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
 f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
 66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
 f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
-1619400c Placar e rodape do TICKETS pelos geradores
 ```
 
 ## `git status --short`
@@ -41,15 +41,11 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/pautas/services.py
- M app/ponto/management/commands/lavrar_deslogados.py
- M app/ponto/services/pautas_do_esmeril.py
- M app/ponto/tests/test_lista_viva_dos_deslogados.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/services/pautas_dos_deslogados.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -106,39 +102,39 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A porta está toda lá: escrever(...), marcar_feita_pelo_sistema(pauta, motivo) — que é literalmente o mecanismo de premissa morta, com trilha — e pendentes_por_ancora para a
-  idempotência. Lendo as assinaturas:
+  │ 07/2026 │ aprovada (nem exportada), PAGA=False │ trancada, PAGA=False  │ trancada, PAGA=False  │
+  └─────────┴──────────────────────────────────────┴───────────────────────┴───────────────────────┘
 
-  Searched for 1 pattern, ran 2 shell commands
-
-● Há vários emissores automáticos, e o pautas_do_esmeril.py é o mais próximo (supervisão + âncora). Lendo-o como molde para não inventar idioma:
-
-  Ran 1 shell command
-
-● Molde completo: abre os novos, fecha por premissa morta, idempotente por marcador, get_user_sistema() como autor. Vendo as âncoras válidas e o que as minhas 9 pautas de fato
-  carregam, para saber se o emissor as adota ou precisa fechá-las:
+  A 09 está exportada e não paga nas três — é exatamente o caso que a lei nova libera. Mas o marco paga lê lote de holerite publicado, e a 07 dá PAGA=False embora você diga que 07
+  e 08 foram pagas fora do sistema: o marco é cego a pagamento feito fora. Vou deployar o que está commitado (a lei DEPLOY JA, e código novo no disco com worker velho foi o bug
+  das 17:25) e consultar antes de mexer em dinheiro de competência exportada:
 
   Ran 1 shell command
 
-● As minhas 9 usam exatamente ancora='colab', supervisao e o marcador [APP-401] — então o emissor as adota: as 7 de premissa morta fecham por construção, col515 e col516 ficam.
-  Escrevendo o gêmeo do esmeril:
+● Deploy OK, três cascas provadas. Agora o censo que a ordem exige antes de qualquer escrita — o passivo S84 por competência e por tipo de dia, na autoridade da célula:
 
   Ran 1 shell command
 
-● Um detalhe do molde: o esmeril tem um fallback de permissão para o usuário-sistema. Copiá-lo seria duplicação — então ele vira função única na porta, e os dois passam a lê-la:
+● O censo confirma os números da ordem, e fecha o escopo:
 
-  Ran 2 shell commands
+  ┌─────────────┬────────────────┬────────────────┬────────────┐
+  │ competência │     FOLGA      │    TRABALHO    │ SEM CÉLULA │
+  ├─────────────┼────────────────┼────────────────┼────────────┤
+  │ 09/2026     │ 41 (17 colabs) │ 85 (44 colabs) │ 0          │
+  ├─────────────┼────────────────┼────────────────┼────────────┤
+  │ 08/2026     │ 110 (47)       │ 437 (126)      │ 2          │
+  ├─────────────┼────────────────┼────────────────┼────────────┤
+  │ 07/2026     │ 3 (1)          │ —              │ 174 (57)   │
+  ├─────────────┼────────────────┼────────────────┼────────────┤
+  │ 05+06/2026  │ —              │ —              │ 81 (18)    │
+  └─────────────┴────────────────┴────────────────┴────────────┘
 
-● Agora os selos do emissor — idempotência, premissa morta e o refutado que não ganha pauta:
+  Os 41 em folga e os 257 sem célula são exatamente os seus. A 09 não tem nenhuma sem célula — ela é 41 + 85, limpa. Agora a outra cura, o COL900 — e aqui uso o template, não
+  ec.marcos_do_dia (que lê a célula congelada e foi o meu erro nº 5 de hoje):
 
-  Selos do emissor de pauta
-  ⎿  $ cat >> ponto/tests/test_lista_viva_dos_deslogados.py <<'PYEOF'
-     class PautaNasceDoLavradoTest(TestCase):
-     """O emissor: abre do lavrado, fecha por premissa morta, e nao duplica.
-     O `apurado` aqui e SINTETICO de proposito -- o que este selo mede e o EMISSOR, e dar-lhe a lista
-     pronta separa "a lista e…
+  Running 1 shell command…
 
-✽ Bootstrapping… (5h 19m 44s · ↓ 978.5k tokens)
+· Bootstrapping… (5h 25m 9s · ↓ 996.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
