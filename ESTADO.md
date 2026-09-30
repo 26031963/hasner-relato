@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:163 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:20:32.**
+**Medido em 30/09/2026 08:25:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `df62fdd7 TICKETS: rodape e placar` |
+| `HEAD` local | `8d664816 TICKETS: rodape e placar` |
 | `origin/main` | `df62fdd7 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8d664816 TICKETS: rodape e placar
+5001a457 Smoke da cura da busca pelo loader real -- e a minha sonda leu a lapide antes de eu corrigi-la
+77d0caed "Erro na busca" em toda busca de posto, e o servidor estava certo: captura no load contra defer
 df62fdd7 TICKETS: rodape e placar
 40f2cc98 BUG-FOTO-APP-401: o 401 e real, nao perde foto, e a perda que existe ja tem guarda com dono
-3635a5be TICKETS: rodape e placar
-bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia da raia, provada sobre o HEAD de hoje)
-7c4edd4d DIFF de frota da 10 publicado ANTES do apply -- 101 linhas, e elas tem DUAS causas
 ```
 
 ## `git status --short`
@@ -100,21 +100,6 @@ bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A guarda existe desde 12/09 (BUG 126, cron 07:26). Meço chamando a função real em DRY-RUN:
-
-  Ran 1 shell command
-
-● A guarda já existe e rodou hoje — corrijo o RELATO, porque eu ia construir um contador que a casa já tem:
-
-  Ran 2 shell commands
-
-❯ BUGS DE PROD 30/09 (P7.1, dois): (1) BUG-FOTO-APP-401: POST /api/ponto/foto/ -> 401 em serie, 13+ colabs Android okhttp, colab=?uNNN (token nao reconhecido) com /bater/
-  passando; medir auth do endpoint x /bater/ e o que mudou no core em 29/09; RED com token de app; cura na origem, deploy ja, smoke real. (2) BUG-BUSCA-POSTO-ERRO:
-  postos.html:107 var escapeHtml = window.hxEsc roda ANTES de hasner-ui.js (base.html:83, defer) -> undefined -> TypeError no .map -> 'Erro na busca' em toda busca (servidor 200
-  JSON ok, provado por Client; JSP02 tem as 3 permissoes). Cura na origem: inline resolve hxEsc no uso (ou o inline vira defer/DOMContentLoaded); censo de todo template que
-  captura window.hx* no load; a busca nunca engole excecao sem dizer qual (L8). Selo chromium. PAREI so em lei ou !
-
-● (1) já medido e refutado — resposta em uma linha abaixo. (2) é novo e tem causa nomeada; vou ler e curar.
 
   Ran 1 shell command
 
@@ -126,13 +111,28 @@ bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia
 
 ● Agora o selo estrutural (o censo virando guarda) e o de chromium que morde:
 
-  O selo de navegador que reproduz o bug · 2s
-  ⎿  $ cd /home/ronald/wt-busca/app && cat >> core/tests/test_hx_nao_se_captura_no_load.py <<'PYEOF'
-     class InlineAntesDoDeferEmNavegadorTest(SimpleTestCase):
-     """A MESMA pergunta, num NAVEGADOR de verdade -- porque a ordem do `defer` e cascata, nao texto.
-     O selo estrutural acima varre o markup e prende a…
+  Searched for 1 pattern, ran 5 shell commands
 
-✽ Misting… (1h 12m 39s · ↓ 74.8k tokens)
+● O selo mordeu a si mesmo: o regex do veredito casou dentro do texto do próprio <script>. Curo pela origem — o script não escreve o id, ele preenche um span que já existe:
+
+  Ran 1 shell command
+
+● 0,5 s para cinco testes com navegador é rápido demais — confiro se o chromium rodou de verdade:
+
+  Ran 4 shell commands
+
+● A terceira linha é a minha própria sonda lendo a prosa (a lápide cita o bug). Confiro sem comentário:
+
+  Committing do smoke e push da cura da busca · 2m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io
+     P='app/docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     V = """**O SELO MORDEU A SI MESMO NA ESTREIA, e vale escrito:**"""
+     N = """**NO AR, e conferido pelo loader REAL do Django em prod** (template no bind-mount entra na hora, sem d… (2m 17s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Misting… (1h 17m 52s · ↓ 86.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
