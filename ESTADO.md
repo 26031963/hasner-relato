@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:06:01.**
+**Medido em 30/09/2026 20:11:09.**
 
 | | |
 |---|---|
-| `HEAD` local | `711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod` |
+| `HEAD` local | `bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **22** |
 
 ## Fabrica
 
@@ -29,29 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bf739fad Um motor de DIFF para toda cura de dinheiro, e a retratacao do passivo S84 medida por ele -- com a divergencia que ele nao previu
 711982b3 O TXT e FOTOGRAFIA do calculo: a lei substitui a L-092 (e a minha redacao das 19:xx, que durou 20 min), e as duas REDs dele ja estavam verdes em prod
 d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados
 0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
 94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
-f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/config/crons.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/ponto/management/commands/diff_janela_he_total.py
- M app/ponto/management/commands/passivo_disputa_retro.py
- M app/ponto/management/commands/recalcular_fechamento.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/management/commands/diff_passivo_s84.py
-?? app/ponto/services/diff_frota.py
-?? app/ponto/services/passivo_s84.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -108,39 +99,39 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Ambas as classes existem e são as usadas na casa. Conferindo a suíte de main para liberar a pista:
+● O caso morde: o censo acha só a data de código, e ignora as duas de prosa. Commitando a leva de main:
+
+  Committed bf739fad, ran 1 shell command
+
+● Commitado. A pista está livre — rodando os selos de tela da raia. A minha memória avisa que suíte em worktree precisa do staticfiles:
+
+  Listed 1 directory, ran 1 shell command
+
+● A tela renderizou (200) e só uma asserção falhou. Vendo o resumo e qual ramo do template saiu:
 
   Ran 1 shell command
 
-● Vou parar de sondar (a suíte me notifica) e fechar um buraco real que a listagem cria: ela lê um retrato, e se ninguém o lavrar de novo o admin vê foto velha. Conferindo se a
-  lavratura tem horário:
+● O corpo diz "Nada lavrado" — então ler() não achou o retrato, e a suspeita é a empresa que a view escolhe. Conferindo empresas_visiveis:
 
   Ran 1 shell command
 
-● lavrar_he_pendente está em FORA_DE_PIPELINE — sem horário. Então a listagem leria uma foto que envelhece para sempre: exatamente o defeito que eu acabei de curar nos deslogados
-  ("lista digitada envelhece"). Vendo o que o cron precisaria:
+● Achei, e é o meu fixture: empresas_visiveis() exclui CNPJ que começa com 11222333 (empresas de diagnóstico) — que é exatamente o CNPJ padrão de teste da casa, o que eu copiei do
+  irmão. A view via zero empresas.
 
-  Ran 1 shell command
+  E isso expõe uma vacuidade minha: o selo do "retrato ausente" passou pelo motivo errado — não havia empresa, não faltava retrato. Curando as duas coisas:
 
-● Background command "Curar e rodar a suite inteira com saida completa" completed (exit code 0)
+● Corrigir o fixture e rodar
+  ⎿  $ cd /home/ronald/wt-ui/app && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'ponto/tests/test_tela_gestao_he.py'
+     t = io.open(P, encoding='utf-8').read()
+     V = """ cls.emp = Empresa.objects.create(razao_social='GHE Juliani', cnpj='11222333000165',
+     ativa=True, em_rollout=True)"…
 
-● A suíte terminou. Vendo o veredito e as falhas:
-
-  Ran 1 shell command
-
-● 5 vermelhos, e os cinco são meus. Lendo as mensagens:
-
-  Ran 2 shell commands
-
-● O selo mordeu o meu docstring — """'2026-09-25' ou '2026-09-25T07:08:57-03:00' -> '25/09'""" é um exemplo em prosa, não uma data que decide. É literalmente a minha memória
-  selo-estrutural-varre-ast-nao-texto, e hoje é a quinta vez. Vendo se a cura de origem é viável:
-
-● Achar o censo de datas cravadas
-  ⎿  $ grep -rln 'data literal que DECIDE' --include=*.py . | head -2; F=$(grep -rln 'data literal que DECIDE' --include=*.py . | head -1); grep -nE 'ast\.|re\.compile|def
-     _censo|docstring|Constant|def censo' $(dirname $F)/../*/datas_cravadas.py core/datas_cravadas.py 2>/dev/null | head -12
-
-✢ Bootstrapping… (6h 34m 29s · ↓ 1.2m tokens)
+✢ Bootstrapping… (6h 39m 37s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
