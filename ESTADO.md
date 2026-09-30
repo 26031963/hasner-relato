@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:12:01.**
+**Medido em 30/09/2026 11:17:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ c78445c7 TICKETS: rodape e placar
 ## `git status --short`
 
 ```
+ M app/api/credencial.py
  M app/chamados/services/acoes_disputa.py
  M app/chamados/services/fio.py
  M app/chamados/services/materializacao.py
@@ -104,40 +105,40 @@ c78445c7 TICKETS: rodape e placar
 
 ```
 
-● A porta existe e é rica: DisputaSupervisao.fechar(user, resolucao) — ela recusa fechar se há resposta do colaborador sem veredito, e grava os três campos juntos. Quem a
-  contornou:
+  Ran 1 shell command
+
+● Lista honesta: 9 deslogados, com nome — e col515 [nome] está lá desde 26/09 01:48, exatamente como você disse. A credencial não é a causa (desde nulo em 0 de 53).
+  Meço o prazo do token:
+
+  Searched for 1 pattern
+
+● ACCESS_TOKEN_LIFETIME = 12 h, REFRESH_TOKEN_LIFETIME = 30 dias, ROTATE_REFRESH_TOKENS = True. Falta saber se os 401 são rotina ou um evento:
 
   Ran 1 shell command
 
-● Só dois sítios escrevem .resolucao direto. Leio os dois:
+● É rotina, não evento: 11–17% de 401 todos os dias, estável, com pico sempre às 06h — a troca de turno, quando a frota abre o app. Não foi deploy, nem rotação de chave, nem a
+  credencial. É o access de 12 h expirando. A cura no meu alcance é o 401 dizer qual:
 
-  Ran 1 shell command
-
-● Os dois são gêmeos e o defeito é a ORDEM: escrevem resolucao antes de tentar fechar, e se o fechamento não acontece o texto fica dizendo que resolveu. Vejo como a materialização
-  fecha:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Quadro completo: resolucao é usada como CANAL de passagem do texto e fica como ESTADO quando o fechamento não acontece. Curo na origem — o texto passa por parâmetro:
-
-  Curar os dois gemeos e rodar chamados · 1m 15s
+● O 401 diz qual, e a suite de api e core · 1m 2s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
-     P='chamados/services/materializacao.py'
+     P='api/credencial.py'
      t=io.open(P,encoding='utf-8').read()
-     V = "def materializar_perguntas_validadas_da_disputa(disputa, request_user):"
-     N = "def materializar_perguntas_validadas_da_disputa(disputa, request_user, … (1m 14s · 4 lines)
+     V = """ class JWTComCredencial(base):
+     def get_user(self, validated_token):
+     user = super().get_user(validated_token)
+     ok, motivo = confere(validated_token.get(CLAIM), user, i… (59s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (4h 4m 8s · ↓ 266.0k tokens)
+✢ Misting… (4h 9m 38s · ↓ 277.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
   da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
   ctrl+x ctrl+s to send now
-                                                                                                                                                            2% until auto-compact
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
