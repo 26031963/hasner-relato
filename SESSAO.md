@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 11:17:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (129.1 MB). Acoes na janela: **212**.
+**Medido em 30/09/2026 11:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (129.1 MB). Acoes na janela: **212**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:20:29 | Bash | O selo dos tres motivos | `cat > api/tests/test_401_diz_qual.py <<'PYEOF' # -*- coding: utf-8 -*- """O 401 do app DIZ QUAL DOS TRES ELE E (BUG-APP-SESSAO-401, 30/09 13:1x). O CASO, com nome: `col515` (u252) levou `GET /api/me/` -> 401 em **26/09 01:48** e **nunca mais autenticou** -- tres plantoes sem batida por estar deslogado, sem aviso util. Ele nao e o unico: dos 17 usuarios com 401 e nenhum 200 seguinte, **8 entraram d ...` |
 | 11:16:29 | Bash | O 401 diz qual, e a suite de api e core | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='api/credencial.py' t=io.open(P,encoding='utf-8').read() V = """ class JWTComCredencial(base): def get_user(self, validated_token): user = super().get_user(validated_token) ok, motivo = confere(validated_token.get(CLAIM), user, iat=validated_token.get('iat')) if not ok: from rest_framework_simplejwt.exceptions import Authenticatio ...` |
 | 11:15:56 | Bash | A classe inteira, para curar no lugar certo | `sed -n '170,200p' api/credencial.py` |
 | 11:15:50 | Bash | A classe de autenticacao do app | `grep -n 'class JWTComCredencial' -A 40 api/credencial.py \| grep -nE 'def \|raise\|Authentication\|return\|None' \| head -16` |
@@ -221,4 +222,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:09:04 | Bash | Censo de quem le horas_noturnas | `grep -n 'adicional_noturno\\|intrajornada_diurna' folha/export.py \| head -8; echo "=== quem mais le horas_noturnas do fechamento:"; grep -rn 'horas_noturnas' --include=*.py . \| grep -v '/tests/\\|/migrations/' \| sed 's\|^\./\|\|' \| head -14` |
 | 07:08:52 | Bash | Registrar a lei e ler as propriedades do motor | `cd /home/ronald/saas-hasner && date '+%Y-%m-%d %H:%M'; python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() ANC = "\| ORDEM-B1-AGORA \| 29/09 ~19:5x \|" assert t.count(ANC)==1 NOVA = ("\| FOLGA-TRABALHADA-NAO-APAGA-RUBRICA \| 30/09 ~00:0x \| **RESPOSTA ao PAREI de lei que eu levantei as " "19:0x de 29/09**, e ela e `aval Ronald lei:`. A ...` |
 | 23:27:41 | Bash | Resultado do push final | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"; git log --oneline -1 origin/main \| cat` |
-| 23:17:33 | Bash | Esperar o push final | `cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim.log; git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |

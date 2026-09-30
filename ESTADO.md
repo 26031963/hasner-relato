@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:17:31.**
+**Medido em 30/09/2026 11:23:01.**
 
 | | |
 |---|---|
@@ -46,6 +46,7 @@ c78445c7 TICKETS: rodape e placar
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
+?? app/api/tests/test_401_diz_qual.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -105,6 +106,10 @@ c78445c7 TICKETS: rodape e placar
 
 ```
 
+  Ran 2 shell commands
+
+● Quase publiquei lista errada: last_login está em UTC e o log em local — o "+3h" que aparece em quatro linhas é o mesmo instante. Converto e remeço:
+
   Ran 1 shell command
 
 ● Lista honesta: 9 deslogados, com nome — e col515 [nome] está lá desde 26/09 01:48, exatamente como você disse. A credencial não é a causa (desde nulo em 0 de 53).
@@ -119,19 +124,15 @@ c78445c7 TICKETS: rodape e placar
 ● É rotina, não evento: 11–17% de 401 todos os dias, estável, com pico sempre às 06h — a troca de turno, quando a frota abre o app. Não foi deploy, nem rotação de chave, nem a
   credencial. É o access de 12 h expirando. A cura no meu alcance é o 401 dizer qual:
 
-● O 401 diz qual, e a suite de api e core · 1m 2s
-  ⎿  $ python3 - <<'PYEOF'
+● O selo dos tres motivos
+  ⎿  $ cat > api/tests/test_401_diz_qual.py <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='api/credencial.py'
-     t=io.open(P,encoding='utf-8').read()
-     V = """ class JWTComCredencial(base):
-     def get_user(self, validated_token):
-     user = super().get_user(validated_token)
-     ok, motivo = confere(validated_token.get(CLAIM), user, i… (59s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     """O 401 do app DIZ QUAL DOS TRES ELE E (BUG-APP-SESSAO-401, 30/09 13:1x).
+     O CASO, com nome: `col515` (u252) levou `GET /api/me/` -> 401 em **26/09 01:48** e **nunca mais autenticou** --
+     tres plantoes sem batida por estar desl…
 
-✢ Misting… (4h 9m 38s · ↓ 277.3k tokens)
+· Compacting conversation… (4h 15m 8s · ↓ 279.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
