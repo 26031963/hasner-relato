@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:18:01.**
+**Medido em 30/09/2026 15:23:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA` |
+| `HEAD` local | `0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao` |
 | `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao
 7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA
 d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento polimento
 7f2ad203 BACKLOG: a familia (1) fechou o dia em 19 -> 4, e os quatro restantes tem veredito escrito
 2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes
-427cdbd6 A nota da allowlist afirmava um custo que eu nao tinha medido -- e medido, ele e ZERO
 ```
 
 ## `git status --short`
@@ -43,6 +43,8 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/ponto/janela_he.py
+ M app/ponto/motor_calculo_v2.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,16 +104,6 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     com hash, PROVA depois). Se o DIFF mover campo fora de HE/trabalhadas/antecipada,
-     PAREI com a tabela.
-  4. he_pendente e o relogio riscado passam a cobrir os minutos novos (entrada 1-10
-     e saida). RED: 18:51 contra marco 19:00 -> conta de 19:00, 9 min riscados,
-     pendente; 07:06 contra marco 07:00 -> conta ate 07:00, 6 min riscados, pendente.
-  5. Corrigir o texto da L-097 no mesmo commit.
-     A 09 nao se toca.
-
-● Stop Task
-  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; sleep 2; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|error:|rc=|main -> main)' /tmp/claude-100… ·
      stopped
 
 ● Stop Task
@@ -133,8 +125,18 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
   Searched for 3 patterns, ran 7 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Bootstrapping… (1h 46m 29s · ↓ 294.0k tokens)
+● Ver o resto do bloco de saida antecipada
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P = 'ponto/motor_calculo_v2.py'
+     t = io.open(P, encoding='utf-8').read()
+     VELHO = """ # JANELA DE HE (L-097): a entrada que CONTA pode ser o MARCO, e ai duracao, noturnas,
+     # excedente e pontualidade seguem sozinhos -- nao ha segundo lugar para d…
+
+✢ Bootstrapping… (1h 51m 59s · ↓ 312.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
