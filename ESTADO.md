@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:31:32.**
+**Medido em 30/09/2026 17:37:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo` |
+| `HEAD` local | `eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+eae3fdbf HAIKU-FOLHA: as duas ferramentas de leitura, e o dia sai da MESMA funcao -- nao de uma copia
 01d394f3 O ESMERIL diz que espera o `!` de UMA coisa, e o hook passa a ler o fato certo
 346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias
 a8457ba9 A familia (4): a medicao que eu ia fazer ja estava no codigo, e a que faltava deu 100%
 e0f1c02a BACKLOG: o ESMERIL diz o estado real -- tres familias fechadas e mergeadas, a (4) com o contador morto nomeado
-fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e os 7 min sao meus
 ```
 
 ## `git status --short`
@@ -41,12 +41,10 @@ fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/folha/export.py
+ M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/folha/fora_da_folha.py
-?? app/folha/tests/test_haiku_fora_da_folha.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -103,39 +101,39 @@ fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (diferente de zero = PAREI). Depois a listagem na raia UI, lendo o retrato que já está lavrado: 460 colaboradores e 6.220 dias esperando decisão na 09.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: HAIKU-FOLHA -- duas ferramentas de LEITURA (aval Ronald 30/09 14:2x): fora_da_folha(empresa, mes, ano) -- quem nao entra no T
-
-● O hook avançou para a HAIKU-FOLHA. Vou começar pelas fontes que ele nomeou, e pelo protótipo:
-
-  Ran 2 shell commands
-
-● A ordem é explícita: "se for preciso expor o dia, é a MESMA função que passa a devolvê-lo, não uma cópia" — e o protótipo copia o laço. Primeiro o RED de hoje, porque a 09
-  mudou:
 
   Ran 1 shell command
 
-● O RED reproduz: 314 fora, A 6 / B 174 / C 54 / D 78 (o B era 176 antes dos applies de hoje), e o grupo D dá 399 dias — exatamente o seu número. Agora a construção, com a função
-  devolvendo o dia em vez de eu copiar o laço:
+● ACHEI. ImportError: cannot import name 'gerar_pdf_espelho_informacional_bytes' — a função que o lote chama na linha 182 não existe. Vou ver quando ela desapareceu:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Só sobrou um motivos.add, dentro do helper — os três sítios passam por ele. Agora as duas ferramentas, com alimentação em vez de consulta por dia:
+● O ImportError era meu — a função vive em pdf_espelho.py e o serviço a importa de lá. Refazendo:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● As duas ferramentas reproduzem o RED exatamente, inclusive o nominal: col900 → 04/09 cobrado, chamado 22785. Agora os selos, com o caso que morde:
+● O lote funciona quando eu o chamo: n_ok=2, PDF de 13.626 bytes. Então a diferença está na request — e a única coisa que ela passa é o por=user. Vou testar com o usuário dele:
 
-  Selar as duas ferramentas · 2s
-  ⎿  $ cat > folha/tests/test_haiku_fora_da_folha.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """AS DUAS FERRAMENTAS DE LEITURA da folha (aval Ronald 30/09 14:2x, HAIKU-FOLHA).
-     O CASO QUE MORDE E O DELE, literal: *"dia 'trabalhou' NAO conta como pendente"*. Sem ele, um selo que so
-     conferisse "o dia cobrado apa…
+  Ran 1 shell command
 
-✻ Bootstrapping… (3h 59m 59s · ↓ 703.1k tokens)
+● Duas pistas fortes: a view faz mes, ano = data_ini.month, data_ini.year (21/08 → mês 8), e a falha dele foi às 17:25 — antes do deploy das 17:26. Então a causa está no dado do
+  apply, não no código. Vou ler o filtro que zera o laço:
+
+  Ran 1 shell command
+
+❯ aval Ronald: lote de cartoes por DATA LIVRE -- corrige a minha linha anterior, o "nao gera" era a janela merge->deploy (falhas 17:25, reload 17:26:47). Sobram DOIS defeitos:
+  1. A tela engoliu o erro e disse "sem dados", 0 gerados. Erro tem de dizer que e erro, com o motivo na trilha.
+  2. Por data livre, 1 colab de 21/08 a 30/09 levou 89 s (17:34:22, u651); por competencia leva 0,8 s. Medir onde vao os 89 s e curar; pedido desse tamanho prende thread do
+  saas_ui.
+     E a janela em si: arquivo .py novo no disco com worker velho quebrou prod por ~2 min. O merge da raia tem de cair e recarregar no MESMO ato.
+
+● Ele corrigiu a causa, e o item 3 é sobre o que eu fiz: o merge escreveu .py novo na árvore viva (que é o bind-mount) e o deploy só veio 10 min depois. Registro os três e começo
+  pelo que pode me morder de novo hoje:
+
+● Localizar a lei do arquivo na arvore
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "so vai para a arvore no ato" CLAUDE.md | head -2 && grep -n "BUG 128" CLAUDE.md | head -2
+
+✢ Bootstrapping… (4h 5m 29s · ↓ 724.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
