@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 23:04:01.**
+**Medido em 29/09/2026 23:09:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0d048db8 TICKETS: rodape e placar` |
+| `HEAD` local | `50be4efd TICKETS: rodape e placar` |
 | `origin/main` | `0d048db8 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+50be4efd TICKETS: rodape e placar
+5c666613 O hook me cobrou a B1 duas vezes com ela pronta, e a culpa era de um caractere meu
 0d048db8 TICKETS: rodape e placar
 34d8b389 O smoke de prod pegou uma incoerencia minha: o portao e a tela mediam faixas diferentes
 aecbb0ff TICKETS: rodape e placar
-98259cd5 B1 itens 2 e 3: a lei ja valia no dinheiro e era invisivel na tela -- B1 completa, 4 de 4
-6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -100,6 +99,7 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● Background command "Push do item 4" completed (exit code 0)
 
   Searched for 1 pattern, ran 4 shell commands
@@ -120,19 +120,18 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Background command "Commit e push da cura da incoerencia" completed (exit code 0)
 
-● Fechar a B1 e ver o proximo
+● Committing e push do achado do pipe · 2m 4s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
-     P='app/docs/BACKLOG.md'
-     linhas=io.open(P,encoding='utf-8').read().split('\n')
-     alvo=None
-     for i,ln in enumerate(linhas):
-     if ln.startswith('| O-JANELA-HE parte B1 (LEITURA) |'):
-     alvo=i; break
-     assert alvo is not None…
+     P='app/docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     ANC = """## O SMOKE DE PROD PEGOU UMA INCOERENCIA QUE EU MESMO CRIEI, e ela e de vocabulario"""
+     assert t.count(ANC)==1
+     NOVO = """## O HOOK ME COBROU A B… (2m 3s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (6h 57m 18s · ↓ 268.9k tokens)
+✢ Schlepping… (7h 2m 48s · ↓ 282.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
