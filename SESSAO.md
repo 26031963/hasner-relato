@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 19:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (146.0 MB). Acoes na janela: **1465**.
+**Medido em 30/09/2026 19:40:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (146.0 MB). Acoes na janela: **1464**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1474,4 +1474,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:46:38 | Bash | O DIFF de frota terminou? | `grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_folga.log \| head -40; echo "--- diff vivo=$(pgrep -cf diff_folga)"` |
 | 07:40:24 | Bash | Provar o catalogo sobre o HEAD atual | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /app/.hypothesis --tmpfs /app/.mypy_cache -v /home/ronald/wt-cat/app:/app -v ~/saas-hasner/app/staticfile ...` |
 | 07:40:13 | Bash | Raia de prova do catalogo sobre o HEAD atual | `cd /home/ronald/saas-hasner && git worktree add -f --detach /home/ronald/wt-cat HEAD >/dev/null 2>&1 && cd /home/ronald/wt-cat && git checkout 3d6914e1 -- app/templates/relatorios/index.html app/templates/ponto/fechamento.html app/relatorios/tests/test_index_enxuto.py && git status --short \| head -5; echo "=== o que muda no index:"; git diff --cached --stat -- app/templates/relatorios/index.html  ...` |
-| 07:39:52 | Bash | A fatia 1 do catalogo na raia UI | `cd /home/ronald/saas-hasner && git show 3d6914e1 --stat \| cat \| tail -6; echo "=== index.html na principal x raia:"; md5sum app/templates/relatorios/index.html /home/ronald/wt-ui/app/templates/relatorios/index.html 2>/dev/null; git log --oneline -1 -- app/templates/relatorios/index.html \| cat` |

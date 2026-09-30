@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:34:31.**
+**Medido em 30/09/2026 19:40:02.**
 
 | | |
 |---|---|
@@ -127,7 +127,7 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 
 ● _Rollback ficou órfão no comando (o motor tem o seu) — dois símbolos com o mesmo nome é a confusão que esta casa persegue. Removendo e rodando a suíte inteira antes de commitar:
 
-● Suite completa · 3m 23s
+● Suite completa · 8m 53s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
@@ -135,10 +135,10 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
      t = io.open(P, encoding='utf-8').read()
      V = 'class _Rollback(Exception):\n """o ensaio acabou; nada foi gravado"""\n\n\n'
      assert t.count(V) == 1
-     io.open(P, 'w', encoding='utf-… (3m 22s · 2 lines)
+     io.open(P, 'w', encoding='utf-… (8m 53s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bootstrapping… (6h 2m 59s · ↓ 1.1m tokens)
+✽ Bootstrapping… (6h 8m 29s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
