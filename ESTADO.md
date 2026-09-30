@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:35:45.**
+**Medido em 30/09/2026 14:40:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS` |
+| `HEAD` local | `f31bef5c BACKLOG: COL882-O-PROXIMO-COL515 -- o unico ativo afetado pelo lote 7, esperando o `!`` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **24** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f31bef5c BACKLOG: COL882-O-PROXIMO-COL515 -- o unico ativo afetado pelo lote 7, esperando o `!`
 c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS
 aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item
 79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras
 eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir` ja monta a lista da frota
-f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  inexistente no caso R4.
-
-  Vou medir isso enquanto o push corre.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
   Ran 2 shell commands
 
-● O lote 7 tem um alvo só, e ele tem número (6a753ecc):
+● Esperador armado; ele me avisa no desfecho.
 
-  ponto/turnos.py:1178 é o único dos três que não se corrige adiante — carrega as escalas com ativa=True e sem o pk__in das geradoras, e turnos_do_colab usa essa lista para os
-  marcos de intervalo e de borda, ou seja, para a geometria do pareamento.
+  Fechando o estado da fila 1, que é o que o hook cobra — a família (1) do ESMERIL-MECANICO hoje:
 
-  Exposição medida na competência aberta: 49 colaboradores têm célula cuja geradora não entra nessa lista, e esses colaboradores têm 1.466 dia-colab na competência. É maior que os
-  28 de "geradora fora da janela" porque aqui entra também a geradora inativa, que o ativa=True exclui — o caso col515/col882.
+  Censo 19 → 7, em sete lotes, cada um com suíte cheia verde na raia (último gate: 8.765 OK). A juíza é uma (escala/alimentacao.py::vinculo_do_dia, que já existia desde 26/09 e eu
+  quase dupliquei), com dois carregadores.
 
-  E, aprendendo com as três afirmações minhas que a própria medição desmentiu hoje, deixei exposição e consequência em linhas separadas: o que não está medido é quanto disso muda
-  o pareamento em minutos. Lista errada faz o pareador usar os marcos da escala ativa (ou nenhum) em vez dos da que gerou a célula — se o intervalo for igual, não muda nada. Medir
-  a consequência é o primeiro passo do lote 7, e o caso R4 mostra o preço quando muda: 60 min de pausa inexistente descontados do col610.
+  O que falta, com veredito e número:
+  - turnos.py:1178 — o único alvo real. 49 colabs / 1.205 dia-colab sem a geradora na lista; 1.170 dia-colab (39 colabs) com o pareador rodando sem marcos. E o DIFF é uma pessoa
+    ativa: col882, que espera seu !.
+  - 3 de .first() sobre a janela — pedem a consulta por dia, com a cauda medida de 13 pessoas/competência.
+  - espelho.py:588 e pdf_espelho:325 — os dois já se corrigem adiante; migrar é tirar a cópia, não consertar erro.
+  - aplicar_09_corte_b — sai por remoção com prova.
 
-  O push segue na régua.
+  E a família só fecha, pela sua regra, com allowlist zero + contador zero: hoje a allowlist tem uma linha nomeada (desligamento.py:161, que fecha disputa por update() e não
+  dispara o signal do chamado-pai) e o contador da família (3) é 1 (disp#2205, resposta sem veredito). As duas escritas com o que custam.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● A consequencia medida do lote 7
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/consequencia_turnos.py <<'PYEOF'
+  Corrigir a nota da allowlist com o custo medido
+  ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     """A consequencia da lista errada no pareador: os MARCOS da escala ativa batem com os da geradora? SO LEITURA.
-     Se baterem, a lista errada na…
+     import io, py_compile
+     P='chamados/tests/test_selo_resolucao_um_escritor.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ # A cascata de desligamento fecha disputa por `QuerySet.update()` (grava os tres campos juntos, entao o
+     # estado nao fica pela metad…
 
-· Bootstrapping… (1h 4m 12s · ↓ 206.0k tokens · thinking)
+· Bootstrapping… (1h 9m 12s · ↓ 224.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
