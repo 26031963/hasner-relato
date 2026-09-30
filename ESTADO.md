@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:817 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:857 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:40:45.**
+**Medido em 30/09/2026 14:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `f31bef5c BACKLOG: COL882-O-PROXIMO-COL515 -- o unico ativo afetado pelo lote 7, esperando o `!`` |
-| `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **25** |
+| `HEAD` local | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
+| `origin/main` | `c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes
+427cdbd6 A nota da allowlist afirmava um custo que eu nao tinha medido -- e medido, ele e ZERO
 f31bef5c BACKLOG: COL882-O-PROXIMO-COL515 -- o unico ativo afetado pelo lote 7, esperando o `!`
 c9ec150b O contrato da casa me impediu de retratar 34 batidas de dias TRABALHADOS
 aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item
-79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras
-eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir` ja monta a lista da frota
 ```
 
 ## `git status --short`
@@ -100,39 +100,39 @@ eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  9. a allowlist afirmando um custo que, medido, é zero.
 
-  Ran 2 shell commands
-
-● Esperador armado; ele me avisa no desfecho.
-
-  Fechando o estado da fila 1, que é o que o hook cobra — a família (1) do ESMERIL-MECANICO hoje:
-
-  Censo 19 → 7, em sete lotes, cada um com suíte cheia verde na raia (último gate: 8.765 OK). A juíza é uma (escala/alimentacao.py::vinculo_do_dia, que já existia desde 26/09 e eu
-  quase dupliquei), com dois carregadores.
-
-  O que falta, com veredito e número:
-  - turnos.py:1178 — o único alvo real. 49 colabs / 1.205 dia-colab sem a geradora na lista; 1.170 dia-colab (39 colabs) com o pareador rodando sem marcos. E o DIFF é uma pessoa
-    ativa: col882, que espera seu !.
-  - 3 de .first() sobre a janela — pedem a consulta por dia, com a cauda medida de 13 pessoas/competência.
-  - espelho.py:588 e pdf_espelho:325 — os dois já se corrigem adiante; migrar é tirar a cópia, não consertar erro.
-  - aplicar_09_corte_b — sai por remoção com prova.
-
-  E a família só fecha, pela sua regra, com allowlist zero + contador zero: hoje a allowlist tem uma linha nomeada (desligamento.py:161, que fecha disputa por update() e não
-  dispara o signal do chamado-pai) e o contador da família (3) é 1 (disp#2205, resposta sem veredito). As duas escritas com o que custam.
+  E o padrão delas é um só, agora com nome e memória gravada: critério que casa pela forma em vez da pergunta. Oito vezes a resposta já estava numa lápide desta casa —
+  HX-CARTORIO-DISTINCT, HX-RECUSA-COM-DONO, a porta vinculo_do_dia do O69, o pk__in do espelho. A regra prática que fica é a LEI-AKITA 4 aplicada antes de medir, não depois: grep
+  na lápide antes da sonda.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Corrigir a nota da allowlist com o custo medido
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='chamados/tests/test_selo_resolucao_um_escritor.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ # A cascata de desligamento fecha disputa por `QuerySet.update()` (grava os tres campos juntos, entao o
-     # estado nao fica pela metad…
+  Ran 2 shell commands
 
-· Bootstrapping… (1h 9m 12s · ↓ 224.2k tokens · thinking)
+● Publiquei um fecho do dia no topo do RELATO (2b169abb), para você se situar em dez segundos em vez de ler 19 mil linhas — que é a correção do problema que os dois prompts
+  repetidos de hoje expuseram: eu registrava, mas não dava recibo.
+
+  Ele tem três blocos: no ar (401 com motivo, estado da disputa com um escritor), aplicado hoje (passivo 55→1, as 9 pautas de deslogados, col515 com noturnas 0,03→25,57 h,
+  UI-ANEXO, família (1) de 19 para 7) e espera você — smoke da UI-GRADE, ! do col882, TXT de retificação, as duas perguntas de lei, e o apply do passivo que só existe colab a
+  colab.
+
+  E fecha com as nove correções e o padrão delas, porque isso vale mais que as fatias: critério que casa pela forma em vez da pergunta — e em oito delas a resposta já estava
+  escrita numa lápide desta casa (HX-CARTORIO-DISTINCT, HX-RECUSA-COM-DONO, a porta vinculo_do_dia do O69, o pk__in do espelho). A regra que fica é a LEI-AKITA 4 aplicada antes da
+  sonda: grep na lápide primeiro.
+
+  O push está no control-plane, nos últimos testes.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Provar os dois migrados nos tres apps · 2m 17s
+  ⎿  $ cd /home/ronald/wt-esmeril2 && docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check --fix . 2>&1 | tail
+     -1; docker run --rm -v /home/ronald/wt-esmeril2/app:/app -w /app --network none saas-hasner-core:latest python -m ruff check … (2m 15s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+* Bootstrapping… (1h 14m 13s · ↓ 233.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
