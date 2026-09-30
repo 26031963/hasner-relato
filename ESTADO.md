@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:40:01.**
+**Medido em 30/09/2026 15:45:08.**
 
 | | |
 |---|---|
-| `HEAD` local | `596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR` |
-| `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| commits a subir (`ahead`) | **6** |
+| `HEAD` local | `c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao` |
+| `origin/main` | `59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois geradores, nada a mao
+6739a1c0 PAREI da JANELA-DE-HE publicado com a tabela -- e a DERIVA da 10 saiu ZERO
 596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR
 59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro
 0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao
-7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA
-d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento polimento
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,6 +100,7 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Stop Task
   ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; sleep 3; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|main -> main|rc=|error:)' /tmp/claude-100… ·
      stopped
 
@@ -121,19 +121,18 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 
 ● O DIFF voltou, e ele para o apply. Antes de publicar, vou nomear cada campo fora do alvo:
 
-● Publicar o PAREI com a tabela
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'docs/RELATO.md'
-     t = io.open(P, encoding='utf-8').read()
-     ANC = '# RELATO — esteira saas-hasner\n'
-     assert t.count(ANC) == 1
-     BLOCO = ANC + '''
-     # PAREI: JANELA-DE-HE, o DIFF da 10 move SEIS campos fora do alvo | espera Ronald (30/09 15:3x)
-     **…
+  Ran 21 shell commands
 
-✢ Bootstrapping… (2h 8m 29s · ↓ 377.1k tokens)
+● Stop Task
+  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; sleep 3; echo "=== push anterior terminou $(date '+%H:%M') ==="; grep -nE "^(Ran |OK$|OK… ·
+     stopped
+
+  Curar os dois selos e empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -2 && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -2 && git add app/docs/TICKETS.md
+     && git commit -q -F - -- app/docs/TICKETS.md <<'MSGEOF'
+     Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerad…
+
+✽ Bootstrapping… (2h 13m 35s · ↓ 395.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
