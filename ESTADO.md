@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:48 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:15:53.**
+**Medido em 30/09/2026 17:21:01.**
 
 | | |
 |---|---|
@@ -40,11 +40,15 @@ ffaf96c9 FAMILIA (3) nasce e fecha em ZERO -- e ela achou um defeito NA PROPRIA 
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/prova09_tmp.py
+?? app/ponto/management/commands/lavrar_he_pendente.py
+?? app/ponto/services/he_pendente_lavrado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,39 +105,39 @@ ffaf96c9 FAMILIA (3) nasce e fecha em ZERO -- e ela achou um defeito NA PROPRIA 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  diretório tests e prefixo test_, deixando passar tests.py. Três cópias de uma regra errando igual é exatamente o que a família (1) curou em vínculo e a (2) em batida — eu não ia
-  deixar a ferramenta com o defeito que ela mede. Nasceu bin/esmeril_comum.py com uma regra no lugar de três. Efeito medido: o censo da (2) caiu de 141 para 134 legítimos.
+  = 2 mede a pergunta que o corte de 29/09 matou:
 
-  E o grep mentiu pela terceira vez no dia: grep 'status_local=' deu 24 sítios, a maioria filter(status_local=...) — leitura lida como escrita. Na família (2) ele havia contado
-  class Batida(models.Model) como escritor.
+  Ran 1 shell command
 
-  criar() entrou como porta e isso foi medido antes de absolver: é o único nascimento em produção e passa pelo veto do motor. "Quem muda o estado" e "quem cria com estado" são
-  perguntas diferentes.
+❯ aval Ronald 30/09 17:1x -- segue e conclui a O-JANELA-HE: Gestao de HE (LISTAGEM) e parte B2 (AUTORIZAR), como ja estao registradas no BACKLOG. Muda so a posicao e tres pontos:
+  1. POSICAO: a listagem vira a 1a da raia UI agora; a B2 entra na principal em seguida, sem esperar o resto do ESMERIL. O bloqueio total esta no ar na 09 e na 10 e o admin esta
+  cego.
+  2. AVAL DO MOTOR: motor_calculo_v2 consulta a DecisaoHE SO no sitio onde clipa a ponta. Sem decisao gravada o DIFF de frota tem de dar ZERO; publica esse zero antes do deploy,
+  diferente de zero = PAREI.
+  3. A listagem le um RETRATO LAVRADO do he_pendente, nunca o medir no request (levou 7 min hoje).
 
-  RELOGIO-NO-CALENDARIO registrada, item 2 respondido
+● Ordem registrada. Ela conclui a O-JANELA-HE e move a posição:
 
-  Não é bug: o montador marca as duas pontas — marcar_pontas_fora trata 'E' e 'S', e a varredura da 09 deu 4.678 pontas "antes" e 3.660 "depois" em 6.224 dias riscados. O que
-  falta é o calendário, que é outro construtor e não carrega o par (fora_da_janela, minutos_fora) — o partial itera dia.status/dia.palavra_dia. É obra da raia UI, como você
-  posicionou, junto da UI-GRADE-CALENDARIO.
+  Ran 1 shell command
 
-  Push do merge rodando — a suíte cheia sobre a árvore mergeada é o último portão antes do deploy.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-● Falta a família (4) — leitores de dinheiro. O placar da S3 já faz essa pergunta; vou medir onde ele está:
+● O núcleo da B2 está completo e inerte. O item 3 pede um retrato lavrado — e a casa já tem esse vocabulário; vou usá-lo em vez de inventar:
 
   Listed 1 directory, ran 1 shell command
 
-● Uma falha: um leitor NOVO chama o motor — e é regressão minha de hoje. Vou ver qual:
+● O padrão é MetricaSnapshot + service + --apply. Vou escrever a lavratura do he_pendente:
 
-● Ver qual leitor novo chama o motor
-  ⎿  $ source ~/saas-hasner/bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
-     saas-hasner-core:latest python manag…
+  Ran 1 shell command
 
-· Bootstrapping… (3h 44m 20s · ↓ 648.3k tokens)
+● matricula não existe (é matricula_hasner/matricula_nexti) — e a zona inviolável diz "chave de match SEMPRE CPF ou nome completo, NUNCA matrícula". Vou tirar:
+
+  Ran 3 shell commands
+
+● O selo pegou a lavratura, e a pergunta é justa: ela é escritora de retrato de pendência, não leitora de dinheiro. Vou declarar com a prova de linha que o selo exige:
+
+● Ver o formato das declaracoes
+  ⎿  $ sed -n '59,80p' ponto/tests/test_s3_leitor_nao_chama_motor.py
+
+· Bootstrapping… (3h 49m 29s · ↓ 667.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
