@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:56:41.**
+**Medido em 30/09/2026 10:02:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
-| `origin/main` | `f4ecb106 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -100,6 +100,9 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● A S4 não tem linha no BACKLOG — o item pai a cita mas ela nunca foi registrada. Crio a linha com o escopo que o próprio pai declara:
+
+  Ran 2 shell commands
 
 ● A S4 agora é a próxima e está registrada. Faço o censo dela — os 46 chamadores, classificados:
 
@@ -120,15 +123,12 @@ f4ecb106 TICKETS: rodape e placar
 
 ● A régua lê CONGELAD[AO] como citação de fatia — e a lápide dela já brigou com essa classe (letra solta, "quinta vez que texto foi lido como fato"). Cura na origem, por forma:
 
-● Committing da cura da regua e push · 5m 25s
-  ⎿  $ cd /home/ronald/saas-hasner && git add bin/regua_tickets.sh && git commit -q -F - <<'EOF'
-     A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
-     O caso: um commit meu explicava o padrao do hook do Stop escrevendo o nome do grupo com colchetes, e
-     bin/regua_… (5m 24s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-✢ Misting… (2h 48m 48s · ↓ 181.3k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Background command "Commit da cura da regua e push" completed (exit code 0)
+
+● S4 fechada e no ar — f4ecb106..67c662f7, 8.741 testes OK, faltam=0.
+
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
