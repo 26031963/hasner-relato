@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:34:19.**
+**Medido em 30/09/2026 10:39:41.**
 
 | | |
 |---|---|
@@ -121,13 +121,13 @@ c78445c7 TICKETS: rodape e placar
 
 ● O censo tem falso positivo meu: arquivos tests_*.py não casam no meu filtro test_*. Corrijo antes de publicar:
 
-● Pushing do nucleo parado da B2 · 4s
+  Pushing do nucleo parado da B2 · 5m 27s
   ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b2n.log 2>&1; echo "rc=$?"; grep -E 'main -> main|^OK$|RED|error|^Ran '
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b… (3s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b… (5m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (3h 26m 26s · ↓ 212.3k tokens)
+· Misting… (3h 31m 48s · ↓ 212.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
