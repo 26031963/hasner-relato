@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:25:01.**
+**Medido em 30/09/2026 18:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele` |
+| `HEAD` local | `f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -29,27 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
 66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
 f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
 1619400c Placar e rodape do TICKETS pelos geradores
 f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-correcao, e o hook cobrou por isso
-5434d6f3 VEREDITO-VELHO-APOS-REGEN nao e bug: ZERO orfas, e o meu contador deu falso positivo DUAS vezes
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/config/crons.py
- M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/management/commands/lavrar_deslogados.py
-?? app/ponto/services/deslogados.py
-?? app/ponto/tests/test_lista_viva_dos_deslogados.py
 ?? bin/keepalive.sh
-?? bin/lavrar_deslogados.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -105,39 +99,39 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Agora o RED — com log de mentira, que é o que prova a regra sem depender do log real:
+● A célula do BACKLOG ainda diz que os 9 deslogados foram nomeados à mão — e é justamente isso que acabou de virar código. Commitando por PATH (a cura da O57), e conferindo o que
+  é meu:
+
+  Committed f2301fe5, ran 1 shell command
+
+● Agora a prova de que a lista é viva: rodando a lavratura contra o log real de prod, sem --apply, e comparando com os 9 nomes que eu digitei às 13:04:
 
   Ran 1 shell command
 
-● Quatro falhas — a casa do comando (esperada) e três dos meus testes. Vou ver quais:
+● chamadas_401 = 0 contra os 11-17% por dia que eu medi hoje não fecha. Zero contra um universo conhecido é implausível — é o teste que pegou o erro nº 8 hoje. Conferindo no log
+  cru antes de acreditar:
 
   Ran 1 shell command
 
-● O sintoma é o mesmo nos três: apurar devolve []. E a causa é minha — passei string onde eventos itera linhas, então ele iterou caracteres. Décimo erro, e o teste o pegou, que é
-  o ponto dele:
-
-  Ran 1 shell command
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_merge.log (21 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3dulq56k.output (30 lines)
-  ⎿  Referenced file folha/porta_export.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_janela.log (7 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bqkp8gtgh.output (46 lines)
-
-● O erro é de colisão, não do meu código: database "test_juliani" does not exist é o que aparece quando outro run derruba o banco no meio — e a lei do CLAUDE.md é um run por vez.
-  Vou conferir se ainda há push/suite viva antes de reexecutar:
+● Achei, e é o erro nº 11 — mas este mora no parser compartilhado, não no meu: o log marca o colab não autenticado com ? (colab=?u834), e o regex do irmão só aceita u?\d+. Ele é
+  estruturalmente cego justamente à população do 401:
 
   Ran 1 shell command
 
-● Background command "Esperar o push final" completed (exit code 0)
+● Conclusivo: as 697 linhas com ? são TODAS 401, e nenhuma outra coisa — o ? é o marcador de "identidade alegada, autenticação falhou". O parser compartilhado é cego a 697 dos 731
+  401s, e isso não é só meu: o irmão abriu_nao_bateu nunca viu um deslogado. Bug no caminho vem primeiro (LEI-AKITA 6). Lendo o consumidor antes de mexer:
 
-● Nenhum run vivo — a pista está livre. Reexecutando:
+  Ran 1 shell command
 
-  Read 1 file
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bq5an5yo4.output 2>/dev/null | tail -12
-●
+● O impacto é pior do que "meu comando viu zero": no abriu_nao_bateu, uma linha de /api/me/ entra em abriu qualquer que seja o status — então os 697 eventos invisíveis são
+  exatamente as pessoas com mais chance de ter aberto o app e não batido. O contador que existe para dar esse alarme é cego à população que o dispara. Medindo o ANTES antes de
+  tocar:
 
-✢ Bootstrapping… (4h 53m 29s · ↓ 887.5k tokens · thought for 2s)
+  Running 1 shell command…
+
+✢ Bootstrapping… (4h 58m 59s · ↓ 906.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
