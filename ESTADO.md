@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:17:01.**
+**Medido em 30/09/2026 16:22:31.**
 
 | | |
 |---|---|
@@ -101,43 +101,43 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  1. Primeiro fecha a prova da 10: as noturnas vieram +114,52 contra -57,81. Abre as
+     172 h por causa e por colab. Sem isso a medicao da 09 herda a mesma cegueira.
+  2. Na SOMBRA, a 09 (21/08-20/09) com piso 0 e saida ligada, contra o GRAVADO
+     exportado: por rubrica e por colab, empresas 2, 3 e 4.
+  3. SEPARAR em duas colunas o efeito da REGRA e a DERIVA do gravado. O numero da
+     regra sozinho e o que ele precisa ver.
+  4. Dizer quantos colabs ganham ATRASO novo e quantos perdem HE, com os 10 maiores.
+  5. Dizer o caminho de gravacao se ele mandar aplicar: TXT novo inteiro com hash
+     (substitui o de 28/09) ou retificacao, e o que a L-092 exige em cada um.
+     NADA grava na 09. Publica no topo do RELATO e segue a fila.
 
-  Ran 3 shell commands
+❯ aval Ronald 30/09 16:2x -- BLOQUEIO TOTAL DE HE VALE NA 09. APLICAR.
+  Corrige o meu bloco de 15:1x ("a 09 nao se toca"): estava errado. O TXT de 28/09
+  NAO foi importado por ninguem e a folha nao sera usada com essas HE. A ordem dele
+  desde o inicio: HE de ponta desaparece, so existe por autorizacao.
 
-● Meu probe leu a pasta errada e devolveu "nada se moveu" com zero arquivos — ausência de sinal lida como sinal bom. Corrigindo, e agora ele recusa responder sem foto:
+  EXCECAO ESCRITA, no mesmo commit: L-097 passa a valer da competencia 09; L-092
+  ganha a excecao nomeada "09/2026 regerada INTEIRA por ordem dele, TXT de 28/09
+  nao importado e SUBSTITUIDO". Nao e caminho generico: vale para esta competencia.
 
-  Ran 1 shell command
-
-● A prova trouxe uma surpresa que preciso medir antes de escrever a causa. A 09 saiu idêntica, o alvo bateu — mas horas_noturnas veio +114,52 h onde o DIFF previa −57,81:
-
-  Ran 1 shell command
-
-● A resposta é clara e muda a leitura: a deriva de prod não era zero — e é ela que inverteu o sinal das noturnas.
-
-  Ran 1 shell command
-
-● Agora o quadro fecha. Vou registrar a cegueira do meu próprio instrumento e publicar a prova:
-
-  Ran 3 shell commands
-
-● Agora o smoke em prod — a cadeia inteira, com a ponta nova:
-
-● Smoke do portao em prod com as duas pontas · 15s
-  ⎿  $ cd /home/ronald/saas-hasner && cat > app/smoke_he_tmp.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """SMOKE em prod: o portao ve as DUAS pontas, e a pendencia diz qual. So leitura."""
-     import collections
-     from colaboradores.models import Empresa
-     from folha.porta_export import medir
-     for eid in (2, 3, 4):
-     e … (14s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Bootstrapping… (2h 45m 29s · ↓ 472.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  1. Antes: a causa das noturnas da 10 (+114,52 contra -57,81) com nome e numero no
+     RELATO. Se for bug e nao deriva, cura primeiro -- a 09 nao herda.
+  2. janela_he_desde das empresas 2, 3 e 4 recua para 21/08, pela porta, com trilha.
+  3. DIFF da 09 na sombra contra o gravado, por rubrica e por colab, REGRA e DERIVA
+     em colunas separadas. Publica e APLICA em seguida, sem nova parada, se so se
+     moverem: trabalhadas, HE50/HE100, banco, noturnas, reflexo DSR, atraso, saida
+     antecipada, intra, folga trabalhada. Campo fora dessa lista = PAREI com a tabela.
+  4. Reversao em logs/ (snapshot do gravado da 09 por colab + o TXT de 28/09 e o
+     hash dele guardados).
+  5. TXT NOVO da 09, inteiro, com hash publicado, marcado como o que SUBSTITUI o de
+     28/09. O antigo fica invalidado com trilha, nunca apagado.
+  6. Relogio riscado e he_pendente cobrindo a 09. PROVA no RELATO: HE de ponta = 0
+     na 09, e o calendario do col do print (12x36 19-07) sem "+0,2h extra 50%". !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
