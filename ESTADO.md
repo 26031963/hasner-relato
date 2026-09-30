@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:00:45.**
+**Medido em 30/09/2026 12:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje corrigidos em 3 h` |
+| `HEAD` local | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
 | `origin/main` | `e3b87217 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"
 c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje corrigidos em 3 h
 bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta a EM VOO
 020b379b Das 55 "disputas zumbis" que eu publiquei, 50 estavam abertas com razao -- quem deixava o texto era a reabertura
 88e03e39 O 401 de senha trocada saia rotulado "token_invalido" -- e quem lanca passa a nomear o motivo
-4d94f6bb TICKETS: placar e rodape
 ```
 
 ## `git status --short`
@@ -100,8 +100,6 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
-     stopped
 
 ● Stop Task
   ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
@@ -122,12 +120,14 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar o push terminar · 6m 33s
-  ⎿  $ cd /home/ronald/saas-hasner && for i in $(seq 1 20); do if ! pgrep -f 'git push origin main' >/dev/null; then break; fi; sleep 25; done; grep -E "FAILED|^OK|Ran
-     [0-9]+|error:|rc=|main -> main" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_p71c.… (6m 32s)
+● Quantos orfaos estao ativos · 25s
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/quantos_ativos.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """Dos 47 colabs com celula e sem vinculo que a ORDEM ache: quantos estao ATIVOS e batendo ponto? SO LEITURA."""
+     from django.utils import timezon… (24s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (4h 52m 52s · ↓ 369.9k tokens)
+· Misting… (4h 57m 52s · ↓ 377.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
