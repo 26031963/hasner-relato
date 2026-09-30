@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 14:25:02.**
+**Medido em 30/09/2026 14:30:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras` |
+| `HEAD` local | `aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **22** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,18 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aa1a6e13 HAIKU-FOLHA registrada com a posicao que ele deu, e os quatro achados da medicao dele viram item
 79124f66 O comando do passivo ganha CASA antes de o selo cobrar -- o mesmo selo me pegou duas horas atras
 eaa0d99a A Gestao de HE (listagem) nao precisa de dado novo: `porta_export.medir` ja monta a lista da frota
 f11d86de O diagnostico do veredito velho ficou inconclusivo por culpa da minha sonda, e isso vai escrito
 cdbf96ad VEREDITO-VELHO-APOS-REGEN: 109 celulas com DNA reescrito e veredito da versao velha, 51 delas com mais de 7 dias
-a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar TIMESTAMP nao e comparar DNA
 ```
 
 ## `git status --short`
 
 ```
+ M app/chamados/services/materializacao.py
+ M app/chamados/tests/test_a27_recusa_com_dono.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/ARQUITETURA.mmd
+ M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -100,39 +104,39 @@ a9211064 O contador 4 de novo: dos 207, so 109 tiveram o DNA mudado -- comparar 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  3. Os três de .first() (esmeril_espelho:114, pdf_espelho:312, censo_fase_12x36:86) → passam a perguntar por dia, com a cauda de 13 pessoas/competência medida como justificativa.
-  4. aplicar_09_corte_b:104 → remoção com prova.
+    previsto antigo (12:50-21:20) -- candidato a REGEN-EM-EXPORTADA.
 
-  Cada passo tem o número que o justifica, e nenhum deles é troca cega. Quando o push liberar a pista, começo pelo (1) — que é o único com consequência visível hoje: tela e PDF
-  discordando do vínculo para 28 pessoas.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+● HAIKU-FOLHA registrada com a posição que você deu — primeira janela livre, não fura o ESMERIL vínculo nem a raia UI (aa1a6e13). E os quatro achados da mesma medição viraram
+  item, um deles contra mim:
 
-  Read 1 file, ran 4 shell commands
+  - DISPUTA-4418: ela escapou do meu critério. Eu filtrei por resolucao escrita + fechada_em nulo, e essa tem resolucao vazia — então o passivo de hoje (55 → 1) não a cobriu. O
+    critério certo é o que você descreve: pergunta viva zero e disputa aberta. Isso é limite do meu filtro, não do sistema, e está escrito assim.
+  - CHAMADO-NASCE-EM-EXPORTADA: o 27308 nasceu hoje 11:20 para 01/09, competência exportada — o dinheiro está fechado e o fio abre.
+  - GRUPO-D: 78 colabs / 399 dias acusando sem chamado e sem pergunta — o dia grita e não há canal por onde responder.
+  - COL900: é o terceiro caso do dia do mesmo padrão ([nome], col515, col900): cadastro corrigido e célula de competência exportada com o previsto velho. Registrei que, se o
+    padrão tem nome, vira varredura — não caso a caso.
 
-● Corrigi uma afirmação minha de meia hora atrás, e ela era grave porque eu a vendi como o número que justificava o lote (fef1452e):
+  E sobre a sua condição ("se o registro de ferramenta do Haiku custar mais que uma fatia, diga"): as duas ferramentas em si são pequenas — leitura pura sobre funções que já
+  existem. O único ponto que pode custar é o motivos_retencao_celula passar a devolver o dia, porque ela tem outros leitores; isso eu meço antes de mexer e digo o número.
 
-  Eu disse: "para 28 pessoas a tela lê um vínculo e o PDF lê outro". Está errado. Medi o trecho (a query de pdf_espelho.py:325) e concluí sobre o comportamento. Sessenta linhas
-  abaixo, em :378-389, o PDF carrega as células, calcula as geradoras que faltam e estende a lista com uma query extra, reordenando por data_inicio. A lápide do próprio bloco
-  anuncia isso: "Query extra SÓ quando falta alguém" (O69, "51 colabs medidos"). O PDF não divergem da tela.
-
-  O que sobra de verdade:
-  - os 28 de 563 (5%) com célula apontando geradora fora da janela seguem certos — e são o universo onde a correção importa;
-  - ponto/turnos.py:1178 é o único dos três que não corrige adiante (zero menção a pk__in ou escala_geradora nas 50 linhas seguintes) e ainda exige ativa=True. Ele é o candidato
-    real do lote 7 — e a divergência dele tem de ser medida, não afirmada, exatamente como eu acabei de fazer errado.
-
-  A lição ficou escrita no arquivo de censo porque é a mesma sete vezes hoje: ler o trecho não é ler o comportamento. Antes de afirmar divergência entre dois leitores, seguir cada
-  um até o fim da função — foi o que a lápide do PDF fazia por mim e eu não li.
+  Antes disso, preciso fechar quatro falhas que o push acusou — e uma delas me salvou de um erro sério, que reporto na sequência.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● As quatro falhas do push
-  ⎿  $ cd /home/ronald/saas-hasner && grep -E '^(FAIL|ERROR): ' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim2.log | head
-     -6; grep -A 6 "^FAIL: " /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fi…
+● Fechar a quarta falha
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='ponto/management/commands/passivo_disputa_retro.py'
+     t=io.open(P,encoding='utf-8').read()
+     v = """ for _cid, _bs in _por_col_bat.items():
+     _dts = [timezone.localtime(_x.timestamp).date() for _x in _bs]
+     _col_obj = _bs[0].colaborador…
 
-✽ Bootstrapping… (53m 29s · ↓ 176.5k tokens · thinking)
+* Bootstrapping… (58m 51s · ↓ 192.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
