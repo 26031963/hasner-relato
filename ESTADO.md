@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:48:45.**
+**Medido em 30/09/2026 20:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar` |
+| `HEAD` local | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **27** |
+| commits a subir (`ahead`) | **28** |
 
 ## Fabrica
 
@@ -29,23 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha
 f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar
 bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98
 e1f7a3fa B2: a aba que autoriza -- e a permissao que a ordem nomeia NAO EXISTIA como Permission
 cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e diz de quando ele e
-882c2dbd O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_gate_disputa_isento.py
  M app/colaboradores/views.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/BACKLOG.md
- M app/templates/ponto/gestao_he.html
 ?? bin/keepalive.sh
-?? bin/tests/test_selo_nao_nasce_vazio.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -101,44 +96,44 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Resolvido, e eu estava errado no achado. A trilha existe: col499 foi tornado isento em 21/09/2026 08:12 pelo usuário 657 — e o último batida_ausente dele é de 19/09 19:15. Os 9
-  chamados predatam a flag por 2 dias: o gate não vazou.
+  - A classe ficou curada: bin/tests/test_selo_nao_nasce_vazio.sh varre 1.667 módulos, morde em 0 byte e em arquivo sem def test, e está provado contra o caso histórico.
+  - col499 fechou, e eu tinha errado a medição: publiquei às 20:5x que a flag não tinha trilha, procurando em valor_depois. Ela tem — a informação vai na descrição. Com o campo
+    certo: isento em 21/09 08:12, último batida_ausente em 19/09 19:15. Os chamados predatam a flag por 2 dias e o gate não vazou. Era inferência; virou prova.
+  - E o defeito real que isso expôs, curado: aquele registrar_log estava dentro de um except Exception: pass — isentar alguém do Art. 62 podia acontecer sem ninguém saber, e foi
+    justamente essa trilha que decidiu o caso. Agora é best-effort alto.
 
-  E o achado real é outro, mais fino: só 2 dos 15 isentos têm trilha. Os outros 13 vieram da semente por cargo da migration 0043 (ISENTO_CARGOS), que é ato declarado sem humano —
-  logo, sem trilha por construção. Corrigindo o registro que eu abri com medição errada:
+  R1 também fechou como medição: 1 caso em 98 (o resto tem o gravado tão incoerente quanto o matcher), então ele deixa de ser obra estrutural — proposta no RELATO, mexer no juiz
+  do alinhamento da frota inteira por um dia de agosto não se sustenta.
 
-  Ran 1 shell command
+  Falta, na ordem: push fechar → deploy com migrate (a 0055 cria a ação autorizar_he, que hoje é letra morta).
 
-● O defeito está confirmado em colaboradores/views.py:165 — except Exception: pass engolindo a trilha de um ato que isenta alguém da jornada. Bug no caminho vem primeiro
-  (LEI-AKITA 6). Curando:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O101 -- A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO (achado de carona do O97, 30/09 20:5x -- e esta linha corrige a min
 
-  Ran 1 shell command
+● O hook nomeia o O101, e ele está meio curado: o except silencioso já foi (commit 3dc080f5). Falta o que a LEI-AKITA 7 exige por escrito — antes/depois estruturado e MOTIVO. Hoje
+  o antes/depois vai como texto na descrição e o motivo não é pedido. Vendo a tela:
 
-● Background command "Esperar o push por arquivo de sinal" completed (exit code 0)
+  Listed 1 directory
 
-● O push falhou com 3 vermelhos (e note: 8.878 testes contra 8.863 — os +15 são a tela e a aba que eu fiz cherry-pick). Vendo quais:
+● Duas formas na tela (adicionar e remover, uma por linha). Cada ato ganha o seu motivo, e a trilha passa a levar antes/depois estruturado:
 
-  Ran 1 shell command
+● Motivo obrigatorio e trilha estruturada
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'colaboradores/views.py'
+     t = io.open(P, encoding='utf-8').read()
+     V = """ if colab.isento_ponto != novo_valor:
+     antes = colab.isento_ponto
+     from colaboradores.services.colaborador import gravar as _gravar_colab
+     _gravar_colab(colab…
 
-● Três vermelhos, os três meus, e o terceiro é um defeito de verdade: gestao_he.html:35 tem um {# #} de várias linhas, e o CLAUDE.md avisa que isso não é comentário para o Django
-  — "o texto VAZA para a página". A casa tem contrato para isso justamente porque já aconteceu. Achando todos:
-
-  Ran 2 shell commands
-
-● Convertidas e o diagrama regenerado. A pista está livre (a suíte do push terminou). Rodando os afetados e o meu selo novo pela primeira vez:
-
-  Rodar os afetados e o selo novo
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
-     saas-hasner-core:la…
-
-✢ Bootstrapping… (7h 17m 13s · ↓ 1.3m tokens)
+· Bootstrapping… (7h 22m 29s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
