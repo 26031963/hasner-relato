@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:26:31.**
+**Medido em 30/09/2026 07:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `50be4efd TICKETS: rodape e placar` |
+| `HEAD` local | `a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura a minha primeira versao` |
 | `origin/main` | `50be4efd TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,28 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura a minha primeira versao
 50be4efd TICKETS: rodape e placar
 5c666613 O hook me cobrou a B1 duas vezes com ela pronta, e a culpa era de um caractere meu
 0d048db8 TICKETS: rodape e placar
 34d8b389 O smoke de prod pegou uma incoerencia minha: o portao e a tela mediam faixas diferentes
-aecbb0ff TICKETS: rodape e placar
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
- M app/ponto/services/dia_pago.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_dia_pago_soma.py
  M app/templates/colaboradores/partials/_calendario_grade.html
- M bin/hook_stop_fila1.py
- M bin/tests/test_hook_parei_so_lei.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -110,6 +102,8 @@ aecbb0ff TICKETS: rodape e placar
 
 ```
 
+✻ Brewed for 7h 21m 24s · done 11:28 PM · 17 shells still running
+
 ❯ aval Ronald lei: folga trabalhada NAO apaga rubrica. Hora noturna em dia de folga paga o adicional noturno (cl.38-d, Art.73) SOBRE a hora, alem dos 100% da folga; intra
   suprimida em folga trabalhada gera intra indenizada; saida antecipada em folga trabalhada NAO existe (L-084: sem escala certa nao ha marco). Vale da competencia 10; a 09 nao se
   toca. DIFF de frota antes do apply. Segue a fila: S4. PAREI so em lei ou !
@@ -127,25 +121,23 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Duas coisas ao mesmo tempo: a lei nova (registro e implemento no hook) e o meu selo que falhou — a assertiva estava errada, não o código.
 
-● Registrar a lei e rodar a suite dos cinco apps · 5m 51s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='CLAUDE.md'
-     t=io.open(P,encoding='utf-8').read()
-     V = """**PAREI-SO-LEI (corte Ronald 29/09 07:3x).** `PAREI` so existe para (a) pergunta de LEI sem lei escrita
-     ou (b) `!` de dinheiro / escala / vinculo / apagar… (5m 49s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Misting… (18m 38s · ↓ 24.7k tokens)
+  Ran 6 shell commands
 
 ❯ ordem Ronald: raia UI (wt-ui) PERMANENTE enquanto a fila 1 anda -- ao acabar um item de tela pega o proximo, nao devolve. Ordem: catalogo /relatorios/ -> Gestao de HE (listagem
   por colab/dia com os riscados, SEM botao Autorizar ate a S4) -> Auditoria de espelhos 5px -> UI-CAL-COMPETENCIA polimento. Nucleo intocado, deploy --sem-migrate, pista de
   teste compartilhada. B2 (Autorizar) entra na principal logo apos a S4. PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Ordem da raia UI registrada. A suíte da lei da folga trabalhada está verde (4.489 OK) — agora o DIFF de frota que ele pediu antes do apply.
+
+● Esperar o DIFF de frota · 2m 16s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported'
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_folga.log | head -45 (2m 15s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (24m 8s · ↓ 30.7k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
