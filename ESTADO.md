@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:55:45.**
+**Medido em 30/09/2026 20:00:45.**
 
 | | |
 |---|---|
@@ -108,44 +108,44 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  toca prod):
+
   Ran 1 shell command
 
-● Background command "Suite completa" completed (exit code 0)
+● Conflito só em dois documentos (o código mergeou limpo). Antes de resolver, vendo o que os 7 commits próprios da raia escreveram nesses docs — não quero perder linha deles:
 
-  Read 1 file
+  Ran 1 shell command
 
-● 6 vermelhos, e o primeiro é meu: um selo proíbe except: pass silencioso em arquivo novo. Vendo os seis:
+● A raia escreveu 404 linhas de RELATO próprias, e perdê-las na resolução seria apagar o registro do trabalho dela. Resolvendo por união, não por escolha — extraio o bloco da raia
+  e o mantenho abaixo do de main:
 
-  Searched for 1 pattern
+  Ran 2 shell commands
 
-● O arquivo só guardou a cauda (o meu | tail -12). Achando o selo que falou e rodando a família de selos estruturais, que é onde arquivo novo morde:
+● O bloco da raia começa com um PAREI: próprio (o smoke da UI-GRADE, que ainda espera), e no BACKLOG ela só alterou duas linhas de itens dela. Resolvendo: main manda no índice, e
+  o registro da raia fica preservado abaixo:
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 1 shell command
 
-● Vou curar esse (o except: pass é intencional mas silencioso, e o selo está certo: um ensaio desfeito contra o banco de prod merece linha de log) e rodar a suíte inteira de novo
-  para achar os outros cinco:
+● A raia está em dia e já tem o lavrado. Lendo a especificação exata do item e a forma do retrato:
 
-  Curar e rodar a suite inteira com saida completa · 6m 56s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'ponto/services/diff_frota.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = """ raise _Rollback()
-     except _Rollback:
-     pass
-     return gravado, hoje, novo"""
-     N = """ raise _Rollback()
-     except _Rollback:
-     # NAO E `pass`, e o selo `ponto/t… (6m 55s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ler a especificacao do item
+  ⎿  $ cd /home/ronald/wt-ui && python3 -c "
+     import io
+     for l in io.open('app/docs/BACKLOG.md', encoding='utf-8'):
+     if 'Gestao de HE (LISTAGEM)' in l:
+     c = l.split('|')
+     print('OBRA:', c[2].strip()[:1400])
+     print()
+     print('PORTAO:', c[3].strip()[:200])
+     break
+     "
 
-· Bootstrapping… (6h 24m 12s · ↓ 1.1m tokens)
+· Bootstrapping… (6h 29m 12s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
