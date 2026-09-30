@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:20:45.**
+**Medido em 30/09/2026 13:25:45.**
 
 | | |
 |---|---|
@@ -100,34 +100,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 2 patterns, read 1 file, ran 8 shell commands
-
-● Os dois gates fecharam verdes e a fila 1 andou de novo:
-
-  Lote 2 da família (1) — VERDE, 8.761 OK (e4458c5f), censo 17 → 14. Os três sítios eram caminho de juiz e de escrita, então a prova não foi focada: cartorio.py:663 (dentro do
-  ramo que emite cobrança), cartorio.py:754 e flip_auto.py:63 — este rodava com ativa=True seco, que era exatamente o que o deixava sem resposta no dia de quem trocou de escala,
-  contra a lei de 16/09. Um import EscalaColaborador morto saiu junto.
-
-  Os próximos 14 não são drop-in, e está escrito por quê: precedencia.py:217 e escala_auto.py:172 carregam lista de um período ("quais vínculos cobrem esta janela" — outra
-  pergunta, pede porta própria ou alimentação); esmeril_espelho.py:114 escolhe um vínculo para um período, não para um dia. Cada um com leitura.
-
-  UI-ANEXO parte (1) — selo 7/7 OK e commitada (8d574cf3).
-
-  E a régua me barrou o push, com razão: ela leu APP-401 nos meus commits como fatia citada sem linha em TICKETS.md. Não foi falso positivo desta vez — a citação veio na forma
-  declarada (solta, entre colchetes, maiúscula com hífen) e a fatia existe, foi ao ar às 12:19. O que faltava era a linha, e ela foi aberta com o número que importa. Diferente do
-  caso de CONGELAD[AO] de hoje cedo, aqui a regra estava certa e o meu texto estava incompleto.
-
-  O push está rodando a suíte inteira agora (commit 21c9af19), e o deploy da parte (1) vem logo atrás — o template já está no ar e degrada para o comportamento antigo até o .py
-  subir.
+  O push da UI-ANEXO segue na suíte (13:24). Quando ele fechar, rodo o RED da precedência e commito o lote 3 na raia.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  A assinatura de fatos_do_periodo
-  ⎿  $ cd /home/ronald/wt-esmeril2/app && sed -n '178,200p' ponto/precedencia.py
+  Searched for 1 pattern, ran 2 shell commands
 
-· Misting… (6h 12m 52s · ↓ 540.8k tokens)
+● Os 13 que faltam na família (1) estão agrupados por forma, e o agrupamento decide a ordem:
+
+  Lote 4 — dia único, drop-in (5): api/views.py:632 e api/views_core.py:624 (o api_bater_ponto das duas cascas), chamados/detector_anomalias.py:142 (data_batida),
+  ponto/turnos.py:1272 (_turno_aberto_calc) e escala/utils.py:544 (data_saida_esperada). É o lote de maior valor — é o caminho da batida.
+
+  Lote 5 — período/lista (4): escala_auto.py:172 (frota por empresa), diagnostico_escala.py:129, esmeril_espelho.py:114 e relatorios/pdf_espelho.py:312. Esses vão pela porta do
+  período que nasceu no lote 3, e três deles escolhem um vínculo para uma janela — o que é uma terceira pergunta e precisa de leitura, não de troca mecânica.
+
+  Lote 6 — commands (4): aplicar_09_corte_b.py:104 (aplicação de 09 já executada, provavelmente histórico), os dois do censo_fase_12x36.py e emitir_furo_retroativo.py:98. Risco
+  baixo, e um deles pode sair inteiro no (c) ZUMBI se não tiver mais razão de existir.
+
+  Estou aguardando o push fechar para rodar o RED do lote 3 — só um run por vez no juliani_db_test, e a pista está com a suíte do push.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+
+● Desfecho do push
+  ⎿  $ cd /home/ronald/wt-esmeril2/app && echo "=== api/views.py 626-640 ===" && sed -n '626,640p' api/views.py && echo "=== detector_anomalias 138-148 ===" && sed -n '138,148p'
+     chamados/detector_anomalias.py && echo "=== turnos 1266-1278 ===" && sed -n '1266,1278p' ponto/turnos.py && echo "=== utils 54…
+
+· Misting… (6h 17m 52s · ↓ 557.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
