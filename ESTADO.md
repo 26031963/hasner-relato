@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:57:33.**
+**Medido em 30/09/2026 14:03:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `77673456 A ferramenta da casa mede a familia (1) desde 26/09 e diz ZERO minuto -- e ela corrige duas coisas minhas` |
+| `HEAD` local | `3a0554ce Os cinco contadores do ESMERIL-MECANICO, com numero e universo -- e o col515 e UM DE 52` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3a0554ce Os cinco contadores do ESMERIL-MECANICO, com numero e universo -- e o col515 e UM DE 52
+4e4abc5a BACKLOG: o estado da familia (1) -- 19 -> 12, quatro lotes, e a juiza que ja existia
 77673456 A ferramenta da casa mede a familia (1) desde 26/09 e diz ZERO minuto -- e ela corrige duas coisas minhas
 9d397e7e RELATO: a porta do vinculo do dia JA existia desde 26/09, e eu criei uma segunda com o mesmo nome
 1df5a837 col515: vinculo corrigido pela porta e a 09 retificada -- as horas noturnas dele eram 0,03 e passaram a 25,57
-03198511 O passivo das batidas retroativas nao e o que o aval descreve, e a medicao mudou o escopo em tres pontos
-21c9af19 TICKETS: a fatia do 401 ganha linha, e a regua estava certa em recusar o push
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  vínculo nesses casos. As duas medições estão certas nas suas perguntas — e quem lê só uma conclui errado.
+  ┌─────┬─────────────────────────────────────────────┬────────────────────────────────────┐
+  │  #  │                  contador                   │               agora                │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 1   │ batidas sem resposta em dia de folga        │ 154 (de 933 sem pergunta_origem)   │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 2   │ vínculos ativos sobrepostos                 │ 0                                  │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 2b  │ vigências IMPOSSÍVEIS (fim < início)        │ 52 — e 22 são de colaborador ATIVO │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 3   │ leitores que escolhem vínculo por ordem     │ 12 (base de hoje: 19)              │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 4   │ dias com escala corrigida e não re-julgados │ sem critério medido                │
+  ├─────┼─────────────────────────────────────────────┼────────────────────────────────────┤
+  │ 5   │ 401 em /api/ponto/foto/ na última hora      │ 5                                  │
+  └─────┴─────────────────────────────────────────────┴────────────────────────────────────┘
 
-  2. O mais= que eu "descobri" hoje a casa já tinha curado. A linha "geradora que a janela NÃO carregava (curado pelo pk__in): 0" e a lápide da juíza dizem isso desde 26/09: "quem
-  alimenta é que tem de carregar o vínculo que a célula nomeia". Eu reinventei a solução e a chamei de achado.
+  O col515 é um de 52. Eu o tratei como caso único — ele é o primeiro que alguém abriu. Cada vigência impossível é um col515 em potencial: o ativa=True dos leitores cala, a linha
+  do tempo não acha vínculo, e o fluxo para em silêncio. Foi assim que as noturnas dele ficaram em 0,03 num 12x36 19:00-07:00. E a casa tem a função que as lista
+  (vigencias_impossiveis) desde sempre — faltava alguém ler o número. O CHECK do banco impede novas, mas ele nasceu depois do dado.
 
-  O que sobra de dinheiro é a cauda do ativa=True, e ela tem nome: col515 e col882, sem vínculo ativo nenhum, 30 dias de 30. Para eles o None não era empate de vocabulário — era o
-  fluxo parando. E as noturnas do col515 saíram de 0,03 para 25,57 h hoje.
+  Duas notas de honestidade no caminho:
 
-  Isso muda o rótulo da obra, não o trabalho: a família (1) segue sendo um juiz por pergunta, mas o argumento dela é legibilidade, não recuperação de horas — e é assim que ela
-  deve ser vendida no placar.
+  - O contador 4 ficou declarado como não medido em vez de receber número inventado. O critério precisa dizer o que é "re-julgado" (veredito lavrado depois da regenerada_em?), e
+    ele entra no próximo ciclo escrito. É a diferença entre placar e enfeite.
+  - Errei a forma do retorno de vigencias_impossiveis duas vezes antes de acertar — tratei tupla como dict e depois como objeto, e as duas medições saíram vazias ({None: 52},
+    ativa=True: 0). Só a terceira leitura, com a tupla (ec, colab, início, fim, ativa), deu os 22 ativos. É o mesmo erro do dia: supor a forma em vez de ler.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Read 1 file, ran 3 shell commands
+  Gate da raia
 
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run… ·
-     stopped
-
-● Stop Task
-  ⎿  until grep -qE '^Ran [0-9]+ test' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril4.log; do sleep 25;… ·
-     stopped
-
-  Uma forma so, e rodar os selos · 3s
-  ⎿  $ cd /home/ronald/wt-esmeril2/app && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='ponto/precedencia.py'
-     t=io.open(P,encoding='utf-8').read()
-     v = """ celulas_geradoras = {_d: (_g, _tr) for _d, _g, _tr in _Cel.objects
-     .filter(colaborador=colab, data__gte=data_ini, data__lte=da…
-
-✢ Bootstrapping… (26m 1s · ↓ 89.5k tokens)
+✢ Bootstrapping… (31m 29s · ↓ 107.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
