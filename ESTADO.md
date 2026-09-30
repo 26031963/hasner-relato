@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:64 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:44:01.**
+**Medido em 30/09/2026 16:49:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| `origin/main` | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar` |
+| `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar
 0463460b Placar e rodape do TICKETS pelos geradores
 fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que o meu proprio teste achou
 35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA
 8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO
-f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova
 ```
 
 ## `git status --short`
@@ -100,44 +100,44 @@ f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  estruturalmente cega (o --refazer rega o gravado dela), e eu havia publicado aquele zero como "o gravado está em dia". Lápide corrigida.
 
-● Meu censo tem dois defeitos que eu mesmo persigo: contador infla por duplicata e a escrita deu zero falso:
+  Família (1) fechada, família (2) nascida medida
 
-  Ran 1 shell command
+  Censo 19 → 0, os dois do motor com nome na fila da S5b. Família (2): escrita fora do chokepoint = 0 (a lei 1 honrada sem violação — meu grep dizia 4 e os 4 eram class
+  Batida(models.Model)) e leitura crua = 1, cujo veredito eu reescrevi como pergunta depois de perceber que "a cura é X" era uma frase minha e não uma medição.
 
-● O censo dá escrita = 0 e meu grep anterior dava 4. Vou conferir qual dos dois mente:
+  Falta: suíte da raia → merge da família (1) → deploy. A pista de teste está ocupada pelo push; é o próximo item e não depende de você.
 
-  Ran 2 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: ESMERIL familia (2) batida -- as duas leis da secao 4 do CLAUDE.md, com contador -- escrita de Batida fora do chokepoint (ponto/registro_bat
 
-● O censo estava certo e meu grep mentia — contava class Batida(models.Model) como escritor. Agora vou ler os 7 antes de chamá-los de defeito:
-
-  Ran 1 shell command
-
-● Lendo os sete, a maioria é legítima por pergunta, e um deles descobriu outra coisa. Vou conferir:
+● A medição que o veredito da família (2) pede não depende da pista de teste — roda em prod, só leitura. Vou fazê-la:
 
   Ran 2 shell commands
 
-● furos_diarios está na allowlist declarada de outro contrato — meu alarme estava errado e bem que eu conferi. O censo precisa de critério por função, não por arquivo:
+● O sítio é fallback do acervo — a linha 551 já pergunta certo (batidas_plantadas.filter(retratada_em__isnull=True)), e o slot só entra quando o vínculo não existe (batida antes
+  de 06/09). Isso torna a medição precisa:
 
   Ran 1 shell command
 
-● Sobrou um. Vou ler quem o chama antes de decidir:
+● Medido: a brecha é 16 perguntas — e todas em competências 06/07/08, nenhuma na 09 ou 10. A cura é inerte no passivo e protege o futuro:
 
   Ran 1 shell command
 
-● Achei a causa: _retratada_com_trilha existe para dizer que só a retratada COM trilha conta — e a leitura crua faz qualquer retratada bloquear, trilha ou não. Vou selar o censo:
+● Background command "Esperar o push da 09" completed (exit code 0)
 
-  Ran 3 shell commands
+● Push OK e a pista livre. Vou aplicar a cura da família (2) com RED, e rodar a suíte da raia cobrindo tudo de uma vez:
 
-● Advising using Fable 5.1
+  Quem mais usa o detector
+  ⎿  $ cd /home/ronald/wt-esmeril2/app && grep -rn "_batida_existente_na_janela" --include=*.py . | grep -v "^./chamados/juizes.py"
 
-✢ Bootstrapping… (3h 12m 29s · ↓ 539.8k tokens)
+· Bootstrapping… (3h 17m 59s · ↓ 553.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
