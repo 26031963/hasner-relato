@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:45:31.**
+**Medido em 30/09/2026 19:50:45.**
 
 | | |
 |---|---|
@@ -110,42 +110,42 @@ f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o me
 ```
   Ran 1 shell command
 
-● A suíte segue. Preparando o patch no scratchpad para aplicar no instante em que ela terminar (não toco a árvore enquanto ela lê o mesmo bind-mount):
+● Background command "Suite completa" completed (exit code 0)
 
-  Ran 1 shell command
+  Read 1 file
 
-● A suíte segue rodando e é ela que libera o commit desta última leva. Ponto da situação:
+● 6 vermelhos, e o primeiro é meu: um selo proíbe except: pass silencioso em arquivo novo. Vendo os seis:
 
-  No ar e provado (commitado):
-  - Lista viva dos deslogados — a 1ª versão lia o access log e eu ia "curar" o regex para aceitar colab=?u252; fui ler quem põe o ? e era corte seu de 09/09 dizendo que misturar
-    as duas formas "plantaria uma pessoa real na forense a pedido de quem atacasse". Era vetor de injeção. A lista passou a sair de fato da casa: 18 em série, 10 compatíveis com
-    deslogado, 8 refutados. f2301fe5, 94936565.
-  - As minhas 9 pautas de 13:04 estavam 7/9 erradas (3 desligados, 3 batendo hoje, 1 sem plantão). A cura não foi digitar de novo: a pauta passou a nascer do lavrado, e as erradas
-    fecharam por construção — 8 abertas, 7 fechadas. 0df94f5e.
-  - Lei O TXT É FOTOGRAFIA + nome canônico em fonte única (era derivado em 2 sítios) + HAIKU-EXPORT. As suas duas REDs reproduzem: emp2 09 = 2 exportações, vigente id23 às 17:07,
-    nomes idênticos; diferenca_entre_exportacoes(20,23) = 79 colabs. 711982b3, deployado.
-  - Cura 2 da O99 aplicada: 114 batidas retratadas (09=32, 08=80, 07=2), horas_folga_trabalhada −65,00 h, −9 inconsistências, só os 12 tocados se movem, reversão escrita antes,
-    114 linhas de trilha, passivo 933→819 e zero folga restante.
+  Searched for 1 pattern
 
-  Duas coisas que eu errei e corrigi em público: a hora que eu te publiquei (20:07) saiu em UTC contra a lei do próprio CLAUDE.md; e o meu DIFF sub-previu o col866 (4 contra 2)
-  porque mutava só a 09 enquanto o apply retratava 07+08+09 — a pk=81952 é entrada de 20/08 18:00, turno da 08 cuja saída a janela da 09 lê. Instrumento curado com --escopo.
+● O arquivo só guardou a cauda (o meu | tail -12). Achando o selo que falou e rodando a família de selos estruturais, que é onde arquivo novo morde:
 
-  Espera você: os 61 dos 84 dias do COL900 em que a célula está certa e o template errado — regerar para o template fabricaria 5 h de atraso/dia em quem chegou no marco. Os 10 em
-  que o template acerta vão com trilha; os 13 sem batida ficam. A cura dos 61 é mexer em vínculo, e os horários que as batidas confirmam já estão medidos: col309 08:00-16:00,
-  col438 07:00-19:00, col900 12:50-21:20, col107 07:30-16:50.
+  Searched for 1 pattern, ran 1 shell command
 
-  Pendente no meu lado: commit desta leva (motor único de DIFF + classificação extraída + --colabs) quando a suíte fechar, e o leitor da marca "lançada sem resposta" — patch
-  pronto, com os dois discriminantes medidos (814 têm pergunta_origem e não podem receber o rótulo; 67.062 batidas de app têm o campo vazio e também não).
+● Vou curar esse (o except: pass é intencional mas silencioso, e o selo está certo: um ensaio desfeito contra o banco de prod merece linha de log) e rodar a suíte inteira de novo
+  para achar os outros cinco:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: BUG-APP-SESSAO-401 -- P7.1: col515 (u252) levou GET /api/me/ -> 401 em 26/09 01:48 e nunca mais autenticou -- 3 plantoes sem batida
+  Curar e rodar a suite inteira com saida completa · 1m 56s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P = 'ponto/services/diff_frota.py'
+     t = io.open(P, encoding='utf-8').read()
+     V = """ raise _Rollback()
+     except _Rollback:
+     pass
+     return gravado, hoje, novo"""
+     N = """ raise _Rollback()
+     except _Rollback:
+     # NAO E `pass`, e o selo `ponto/t… (1m 55s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bootstrapping… (6h 13m 59s · ↓ 1.1m tokens · thinking)
+· Bootstrapping… (6h 19m 12s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
