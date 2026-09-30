@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:304 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:337 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:46:01.**
+**Medido em 30/09/2026 09:51:20.**
 
 | | |
 |---|---|
-| `HEAD` local | `f4ecb106 TICKETS: rodape e placar` |
+| `HEAD` local | `67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali` |
 | `origin/main` | `f4ecb106 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+67c662f7 A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
+5a3f29e0 TICKETS: rodape e placar
+43d8b0dc S4 fechada, e o censo mudou o nome da fatia: `recalcular` nao morre -- ele fica PORTA
 f4ecb106 TICKETS: rodape e placar
 22e9a5d1 Medido sem curar: o colaborador nao respondeu em 2.483 de 2.503 -- e a constraint espera a ESMERIL-2
-c53a1dc0 TICKETS: rodape e placar
-a8fe9786 BACKLOG: ESMERIL-2 registrada, e metade do golden dela ja tem resposta e numero
-ed22ec4c TICKETS: rodape e placar
 ```
 
 ## `git status --short`
@@ -41,11 +41,7 @@ ed22ec4c TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
  M app/templates/colaboradores/partials/_calendario_grade.html
- M bin/hook_stop_fila1.py
- M bin/tests/test_hook_parei_so_lei.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -104,39 +100,39 @@ ed22ec4c TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Vínculo, o resto: passivo da frota em zero (col899 absorvido, col334 fechado, os dois pela operação da porta, com trilha e reversão em logs/reversao/), e o golden do col899
-  respondido — não houve escritor fora da porta: os dois writes foram do mesmo admin por executar_vinculo, 3 min de diferença, em 25/09, e a porta só aprendeu a absorver em 29/09.
 
-  Falta de você: o ! do passivo das batidas retroativas, e o colab/dia/tela do caso da foto.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: VINCULO-LINHA-DO-TEMPO -- o vinculo do colab e UMA linha do tempo: salvar "a partir de D" REESCREVE a linha de D em diante -- o vigente
-
-● O item não fecha e não anda: o que falta dele é a ESMERIL-2. Declaro a dependência na linguagem que o hook lê, porque é a verdade:
-
-  Ran 4 shell commands
-
-● Duas coisas para acertar: o col899 foi aplicado hoje e tem de sair do PENDENTES, e o que resta da FAMILIA-FASE é o seu ! nas propostas:
+● A S4 agora é a próxima e está registrada. Faço o censo dela — os 46 chamadores, classificados:
 
   Ran 1 shell command
 
-● O-HAIKU-INVESTIGA está marcada "REGISTRADA, NAO CONSTRUIR" — por ordem dele. O hook cobra item que ele mandou não construir; curo o padrão:
+● O censo da S4 tem uma resposta de uma linha: ponto/views.py:716 é a única tela que recalcula.
 
-● Curar o hook, sela o caso, e ver o proximo
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='bin/hook_stop_fila1.py'
-     t=io.open(P,encoding='utf-8').read()
-     V = "_NAO_ANDA = re.compile(r'CONGELAD[AO]|FILA 2|aguardando|espera o `?!|ap[oO]s o `?!|PAREI', re.I)"
-     N = ('''# ITEM DE SO-REGISTRO TAM…
+  Ran 1 shell command
 
-· Misting… (2h 38m 8s · ↓ 161.5k tokens)
+● A premissa da S4 já está satisfeita, e isso é achado: views.py:716 não é testemunha recalculando — é o botão do admin (POST, permissão editar_folha, com a recusa da L-092
+  traduzida). Nenhum leitor recalcula. Falta o selo:
+
+  Ran 5 shell commands
+
+● A régua pegou uma colisão engraçada e real: eu citei o regex CONGELAD[AO] na mensagem e ela leu [AO] como fatia citada. Corrijo a mensagem:
+
+  Ran 5 shell commands
+
+● A régua lê CONGELAD[AO] como citação de fatia — e a lápide dela já brigou com essa classe (letra solta, "quinta vez que texto foi lido como fato"). Cura na origem, por forma:
+
+  Committing da cura da regua e push · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && git add bin/regua_tickets.sh && git commit -q -F - <<'EOF'
+     A regua leu um charset de regex como fatia citada -- sexta vez que texto foi lido como fato ali
+     O caso: um commit meu explicava o padrao do hook do Stop escrevendo o nome do grupo com colchetes, e
+     bin/regua_… (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Misting… (2h 43m 27s · ↓ 181.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
-! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
-  Passivo de vinculo sobreposto = 0 -> VALIDATE a constraint EXCLUDE. E o leitor que mostra folga 28/30 (le -data_inicio em vez do juiz do dia) entra no censo de leitores de
-  ativa=True. !
+! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
+  corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
+  da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
   ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
