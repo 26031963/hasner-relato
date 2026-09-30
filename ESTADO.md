@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:350 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:419 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:46:01.**
+**Medido em 30/09/2026 18:51:16.**
 
 | | |
 |---|---|
-| `HEAD` local | `f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia` |
+| `HEAD` local | `94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,26 +29,27 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
 f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
 66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
 f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
 1619400c Placar e rodape do TICKETS pelos geradores
-f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-correcao, e o hook cobrou por isso
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/config/crons.py
- M app/docs/ARQUITETURA.mmd
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
+ M app/pautas/services.py
  M app/ponto/management/commands/lavrar_deslogados.py
- M app/ponto/services/deslogados.py
+ M app/ponto/services/pautas_do_esmeril.py
  M app/ponto/tests/test_lista_viva_dos_deslogados.py
  M app/templates/colaboradores/partials/_calendario_grade.html
- M bin/lavrar_deslogados.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/services/pautas_dos_deslogados.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -105,39 +106,39 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● A porta está toda lá: escrever(...), marcar_feita_pelo_sistema(pauta, motivo) — que é literalmente o mecanismo de premissa morta, com trilha — e pendentes_por_ancora para a
+  idempotência. Lendo as assinaturas:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Há vários emissores automáticos, e o pautas_do_esmeril.py é o mais próximo (supervisão + âncora). Lendo-o como molde para não inventar idioma:
+
   Ran 1 shell command
 
-● O rótulo divide honestamente: 18 no total, 10 compatíveis com deslogado, 8 refutados (autenticaram dentro da corrida — o furo deles tem outra causa). O col515 está no grupo
-  compatível. Agora os testes — vendo o idioma de fixture da casa para não adivinhar campo:
+● Molde completo: abre os novos, fecha por premissa morta, idempotente por marcador, get_user_sistema() como autor. Vendo as âncoras válidas e o que as minhas 9 pautas de fato
+  carregam, para saber se o emissor as adota ou precisa fechá-las:
+
+  Ran 1 shell command
+
+● As minhas 9 usam exatamente ancora='colab', supervisao e o marcador [APP-401] — então o emissor as adota: as 7 de premissa morta fecham por construção, col515 e col516 ficam.
+  Escrevendo o gêmeo do esmeril:
+
+  Ran 1 shell command
+
+● Um detalhe do molde: o esmeril tem um fallback de permissão para o usuário-sistema. Copiá-lo seria duplicação — então ele vira função única na porta, e os dois passam a lê-la:
 
   Ran 2 shell commands
 
-● Tenho o idioma exato. Escrevendo os selos — e um deles codifica a lição das 7 pautas erradas:
+● Agora os selos do emissor — idempotência, premissa morta e o refutado que não ganha pauta:
 
-  Ran 2 shell commands
+  Selos do emissor de pauta
+  ⎿  $ cat >> ponto/tests/test_lista_viva_dos_deslogados.py <<'PYEOF'
+     class PautaNasceDoLavradoTest(TestCase):
+     """O emissor: abre do lavrado, fecha por premissa morta, e nao duplica.
+     O `apurado` aqui e SINTETICO de proposito -- o que este selo mede e o EMISSOR, e dar-lhe a lista
+     pronta separa "a lista e…
 
-● Duas falhas, e as duas são do meu teste, não do código: parou foi criado sem last_login (logo o rótulo certo é nunca entrou), e a minha conta de 4 ignorava que só há 4 dias no
-  fixture. Corrigindo — e dando ao parou a forma real do col515 (login em 24/09, corrida desde 25/09):
-
-  Ran 1 shell command
-
-● 9 verdes. Agora a casa do cron — e ela não é "fora de pipeline": a lavratura depende da lâmpada, então é elo da corrente do furo:
-
-  Ran 1 shell command
-
-● 24 verdes. Um cuidado antes de commitar: a própria lápide dos encadeados diz que o diagrama flagra aresta nova — regenerando e conferindo:
-
-  Ran 1 shell command
-
-● O PAPEL_DO_CRON cobra a declaração — §4a: "papel declarado em config/crons.py". Vendo os valores válidos:
-
-  Ran 3 shell commands
-
-● 39 verdes e o arquivo é meu (não do root). Commitando a reescrita:
-
-● Running 1 shell command…
-
-✢ Bootstrapping… (5h 14m 29s · ↓ 956.8k tokens)
+✽ Bootstrapping… (5h 19m 44s · ↓ 978.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
