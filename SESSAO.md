@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 06:22:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **164**.
+**Medido em 30/09/2026 06:28:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **163**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -173,4 +173,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:33:59 | Bash | Onde comeca a celula de estado da S3 | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io s=io.open('app/docs/BACKLOG.md',encoding='utf-8').read().splitlines() for ln in s: if ln.startswith('\| O-DIA-PAGO S3 \|'): c=ln.split('\|') print('celulas:', len(c)) for i,x in enumerate(c): print(' [%d] %s' % (i, x.strip()[:150])) break PYEOF` |
 | 18:33:43 | Bash | Como o hook decide o que anda | `cd /home/ronald/saas-hasner && sed -n '1,120p' bin/hook_stop_fila1.py` |
 | 18:33:15 | Bash | Resultado do push e limpar a raia de prova | `tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"; git worktree remove --force /home/ronald/wt-cal2 2>&1 \| tail -1; echo "wt-cal2 removida"` |
-| 18:23:09 | Bash | Esperar o push do item de UI | `cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ui.log; git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |
