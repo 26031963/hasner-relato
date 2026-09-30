@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:05:45.**
+**Medido em 29/09/2026 22:10:45.**
 
 | | |
 |---|---|
@@ -125,13 +125,13 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Pushing da B1 completa · 1m 25s
+● Pushing da B1 completa · 6m 24s
   ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1d.log 2>&1; echo "rc=$?"; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (1m 23s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (6m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (5h 59m 2s · ↓ 258.0k tokens)
+· Schlepping… (6h 4m 2s · ↓ 258.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

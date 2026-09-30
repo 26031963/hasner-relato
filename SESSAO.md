@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 29/09/2026 22:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.8 MB). Acoes na janela: **908**.
+**Medido em 29/09/2026 22:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (125.8 MB). Acoes na janela: **903**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -913,8 +913,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:11:10 | Bash | Ver cabecalho da tabela de obras | `sed -n '36,40p;42,44p' docs/BACKLOG.md \| cut -c1-320` |
 | 10:11:03 | Bash | Localizar o bloco OBRAS | `grep -n "OBRAS\\|ORDEM VIVA\\|O-DIA-PAGO\\|S5b" docs/BACKLOG.md \| head -30; echo "=== tamanho ==="; wc -l docs/BACKLOG.md docs/PROMPTS.md` |
 | 10:10:59 | Bash | Ver o fim do PROMPTS e a ordem viva do BACKLOG | `tail -6 docs/PROMPTS.md && echo "=== OBRAS no BACKLOG ===" && grep -n "^- \*\*O-DIA-PAGO\\|^- \*\*S5b\\|^### OBRAS\\|^## ORDEM VIVA" docs/BACKLOG.md \| head -20` |
-| 10:10:23 | Bash | Provar qual dia responde pelo delta | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/causa10b.py <<'PYEOF' # -*- coding: utf-8 -*- """Qual DIA responde pelo delta de `minutos_realizados`, e o gravado enxergava esse dia?""" from django.utils import timezone from ponto.models import FechamentoMensal, DiaPago from ponto.turnos import turnos_do_colab from ponto.janelas import peri ...` |
-| 10:09:36 | Bash | Campos do DiaPago | `grep -n "class DiaPago" -A 40 ponto/models.py \| grep -nE "= models\.\|class \|CAMPOS" \| head -30` |
-| 10:09:16 | Bash | Nomear a causa: ate que dia o gravado enxergou | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/causa10.py <<'PYEOF' # -*- coding: utf-8 -*- """NOMEAR A CAUSA dos divergentes da competencia 10 (ordem Ronald 29/09, ABONO-NO-AR item 2). Nao replica logica: le o GRAVADO (FechamentoMensal) e o LAVRADO (DiaPago), e pergunta ao relogio do proprio registro ate que DIA o gravado enxergou. """ im ...` |
-| 10:08:58 | Bash | Esperar a emp4 terminar | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; pgrep -fa "lista10" \| head -3; echo "--- espera por ARQUIVO (emp4) ---"; for i in $(seq 1 30); do grep -q "== emp4" $S/lista10.log && break; sleep 10; done; sed -n '/== emp4/,$p' $S/lista10.log; date '+%H:%M'` |
-| 10:08:27 | Bash | Ler o resto da lista da competencia 10 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/lista10.log 2>/dev/null; echo ---; tail -60 $S/lista10.log 2>/dev/null; echo ---; date '+%H:%M'` |
