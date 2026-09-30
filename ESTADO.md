@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:26:31.**
+**Medido em 30/09/2026 17:31:32.**
 
 | | |
 |---|---|
@@ -41,9 +41,12 @@ fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/folha/export.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/folha/fora_da_folha.py
+?? app/folha/tests/test_haiku_fora_da_folha.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,39 +103,39 @@ fe7250a0 O RETRATO LAVRADO do he_pendente: a listagem vai LER, nunca medir -- e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O que faltava era se aquele número sobreviveu aos applies de hoje, e essa eu fiz: 530 de 530 ativos com fechamento nas duas competências, cobertura 100%, zero colaboradores
-  vendo número de motor. Os 121 sem fechamento na 10 passaram a ter.
-
-  E eu continuo não mexendo no contador. Disse isso uma hora atrás por uma razão boa — às 15:4x quase redefini o universo do meu próprio placar. A medição não muda quem decide o
-  que um contador mede; ela só tira a dúvida sobre os fatos. Trocar de posição porque o número saiu conveniente é a forma mais comum de raciocínio interesseiro, e o custo de
-  esperar aqui é zero: o contador é placar, não portão.
-
-  A proposta, para uma palavra sua: LEITORES_A_TROCAR deixa de significar "a trocar" e passa a "leitores que chamam o motor por geometria e como fallback que hoje não alcança
-  ninguém", no molde do FORA_PORQUE_NAO_LEEM_DINHEIRO, que já exige arquivo:linha por entrada.
-
-  Falta, e não depende de você
-
-  O deploy (assim que o push fechar), o ! do motor consultando DecisaoHE com o DIFF-zero publicado antes, e a listagem na raia UI.
+  (diferente de zero = PAREI). Depois a listagem na raia UI, lendo o retrato que já está lavrado: 460 colaboradores e 6.220 dias esperando decisão na 09.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
+  ⎿  Stop hook error: siga: HAIKU-FOLHA -- duas ferramentas de LEITURA (aval Ronald 30/09 14:2x): fora_da_folha(empresa, mes, ano) -- quem nao entra no T
 
-● O hook segue cobrando a obra mesmo com a linha atualizada. Vou ler o que ele considera fechado, em vez de adivinhar:
-
-  Ran 1 shell command
-
-● O hook exige a palavra logo após **, e a obra não está fechada — ela espera a sua palavra. Vou ver como a casa marca isso, em vez de fingir a palavra-chave:
+● O hook avançou para a HAIKU-FOLHA. Vou começar pelas fontes que ele nomeou, e pelo protótipo:
 
   Ran 2 shell commands
 
-● A obra espera a sua palavra sobre o contador — e "espera o !" é o vocabulário que o hook lê. Vou dizer o fato:
+● A ordem é explícita: "se for preciso expor o dia, é a MESMA função que passa a devolvê-lo, não uma cópia" — e o protótipo copia o laço. Primeiro o RED de hoje, porque a 09
+  mudou:
 
-● Conferir se o merge foi empurrado
-  ⎿  $ cd /home/ronald/saas-hasner && tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_merge.log && git fetch -q origin
-     && echo "faltam=$(git rev-list --count origin/main..HEAD)"
+  Ran 1 shell command
 
-✢ Bootstrapping… (3h 54m 59s · ↓ 687.6k tokens · thinking)
+● O RED reproduz: 314 fora, A 6 / B 174 / C 54 / D 78 (o B era 176 antes dos applies de hoje), e o grupo D dá 399 dias — exatamente o seu número. Agora a construção, com a função
+  devolvendo o dia em vez de eu copiar o laço:
+
+  Ran 2 shell commands
+
+● Só sobrou um motivos.add, dentro do helper — os três sítios passam por ele. Agora as duas ferramentas, com alimentação em vez de consulta por dia:
+
+  Ran 2 shell commands
+
+● As duas ferramentas reproduzem o RED exatamente, inclusive o nominal: col900 → 04/09 cobrado, chamado 22785. Agora os selos, com o caso que morde:
+
+  Selar as duas ferramentas · 2s
+  ⎿  $ cat > folha/tests/test_haiku_fora_da_folha.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """AS DUAS FERRAMENTAS DE LEITURA da folha (aval Ronald 30/09 14:2x, HAIKU-FOLHA).
+     O CASO QUE MORDE E O DELE, literal: *"dia 'trabalhou' NAO conta como pendente"*. Sem ele, um selo que so
+     conferisse "o dia cobrado apa…
+
+✻ Bootstrapping… (3h 59m 59s · ↓ 703.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
