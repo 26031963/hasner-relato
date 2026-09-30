@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:42:31.**
+**Medido em 29/09/2026 22:48:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `0d048db8 TICKETS: rodape e placar` |
-| `origin/main` | `aecbb0ff TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `0d048db8 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -100,6 +100,11 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 16 shell commands
+
+● Background command "Push da B1 item 1" completed (exit code 0)
+
+  Ran 2 shell commands
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
 
@@ -121,18 +126,13 @@ aecbb0ff TICKETS: rodape e placar
 ● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
   a mesma fonte para as duas:
 
-● Committing e push da cura da incoerencia · 9m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='app/docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     ANC = """## Itens 2 e 3: a lei ja valia no dinheiro e era INVISIVEL na tela"""
-     assert t.count(ANC)==1
-     NOVO = """## O SMOKE DE PROD PEGOU UMA INCOERENCIA… (9m 22s · 3 lines)
+  Esperar o push da cura · 4m 47s
+  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1e.log; git fetch -q origin; echo "faltam=$(git rev-list --count
+     origin/main..HEAD)" (4m 46s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (6h 35m 48s · ↓ 266.4k tokens)
+· Schlepping… (6h 41m 18s · ↓ 266.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
