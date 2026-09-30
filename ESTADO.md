@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:26:08.**
+**Medido em 29/09/2026 22:31:31.**
 
 | | |
 |---|---|
@@ -102,7 +102,6 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 2 shell commands
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
@@ -125,16 +124,17 @@ d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- 
 ● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
   a mesma fonte para as duas:
 
-● Suite com o contador na fonte da tela · 2s
+● Suite com o contador na fonte da tela · 5m 26s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
      P='folha/tests/test_b1_portao_he_nasce_desligado.py'
      t=io.open(P,encoding='utf-8').read()
      V = """ def test_MORDE_a_mensagem_do_conferir_nomeia_a_pendencia_SO_quando_ela_trava(self):"""
-     N = ''' def test_MORDE_o_contador_le_a_MESMA_f…
+     N = ''' def test_MORDE_o_contador_le_a_MESMA_f… (5m 24s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Schlepping… (6h 19m 25s · ↓ 263.0k tokens)
+✢ Schlepping… (6h 24m 48s · ↓ 263.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
