@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:620 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:629 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:43:01.**
+**Medido em 30/09/2026 12:48:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8e45f2e9 RELATO: a porta unica do vinculo do dia, e os tres tetos de query que subiram com retrato` |
+| `HEAD` local | `9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma
 8e45f2e9 RELATO: a porta unica do vinculo do dia, e os tres tetos de query que subiram com retrato
 6dbf2add RELATO: a familia (1) do ESMERIL-MECANICO com numero -- 24 leitores por ordem, e 1.144 dia-colab sem resposta
 fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"
 c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje corrigidos em 3 h
-bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta a EM VOO
 ```
 
 ## `git status --short`
@@ -101,33 +101,33 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 
 ```
 
-  Falta fechar: a suíte inteira na raia com a cura de escala_vigente está rodando — ela toca registro_batida, então não commito a migração antes do verde.
+● A família (1) está com o gate rodando. Enquanto ele não volta, o estado do item:
+
+  Porta única escrita e medida (76d02764, raia wt-esmeril2): vinculo_do_dia(colab, dia, celulas=None) — a célula primeiro, a linha do tempo (lei de 16/09) só no dia sem célula.
+  escala_vigente delega; turnos.py:425 migrou.
+
+  O achado que eu não esperava: as duas formas à mão que eu supunha divergentes — turnos.py e precedencia.py — respondem idêntico nos 16.863 dia-colab medidos. A briga não era
+  entre elas; era entre as duas e a célula, que sabe em 1.047 dia-colab onde elas devolvem None.
+
+  Três tetos de query ficaram vermelhos e por isso o preço virou medição, não afirmação: 1 query no dia com célula (a mesma de antes), 2 sem célula, 0 com alimentação — selado com
+  assertNumQueries. Os três subiram com justificativa escrita ao lado do número (C8: registrar_batida 23→24, _gravar_estado 68→75, modal 2600→2830) e com a nota de que voltam
+  quando as fixtures ganharem células — as fixtures daqueles selos não criam nenhuma, inclusive a que se chama prod_like.
+
+  E corrigi o censo duas vezes: o 24 que publiquei estava inflado — cinco sítios eram salário e férias com a mesma forma (order_by('-data_inicio') não é assinatura de vínculo). A
+  primeira tentativa de filtrar por modelo errou para o outro lado e escondeu o api_bater_ponto das duas cascas, que usa apelido de import. Número honesto: 19 VERMELHOS, 19
+  legítimos, 7 de outro modelo nomeados, 1 porta — e é essa a linha de base que o selo de host defende.
+
+  Próximos da fila, já lidos e drop-in: furos_vetados.py::vinculo_do_emissor e escala_certa.py::motivo_escala_errada (mesma assinatura), depois os dois cartorio.py, flip_auto,
+  diagnostico_escala e o api_bater_ponto das duas cascas.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Ran 1 shell command
+  Esperar o veredito e listar falhas
+  ⎿  $ until grep -qE '^Ran [0-9]+ test' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril2.log; do sleep 30; done; sleep
+     3; grep -E '^(Ran |OK$|OK \(|FAILED)' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scr…
 
-● Background command "Esperar a suite da raia" completed (exit code 0)
-
-  Searched for 1 pattern, read 4 files, ran 7 shell commands
-
-● Background command "Suite inteira na raia com a cura" completed (exit code 0)
-
-● Background command "Esperar de verdade o fim da suite" completed (exit code 0)
-
-● Publicar a porta unica
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='docs/RELATO.md'
-     t=io.open(P,encoding='utf-8').read()
-     alvo = "## O censo: 47 sitios, e nem todos sao defeito"
-     assert t.count(alvo)==1
-     novo = """## A PORTA UNICA, e o achado que ela trouxe: B e C respondiam IDENTICO
-     Havia TRES formas escritas…
-
-✢ Misting… (5h 35m 8s · ↓ 428.5k tokens)
+✢ Misting… (5h 40m 38s · ↓ 447.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ bff1c00a RELATO: a correcao do numero das disputas zumbis, e a familia (3) volta
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
