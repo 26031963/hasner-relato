@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:64 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:33:31.**
+**Medido em 30/09/2026 16:38:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA` |
+| `HEAD` local | `0463460b Placar e rodape do TICKETS pelos geradores` |
 | `origin/main` | `7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0463460b Placar e rodape do TICKETS pelos geradores
+fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que o meu proprio teste achou
 35ce0d4f A 09 herda o BLOQUEIO TOTAL: passo 1 provado (DERIVA, nao bug) e a excecao da L-092 ESCRITA
 8ecbecb2 APLICADO o BLOQUEIO TOTAL na 10, com a L-092 provada -- e o apply achou um defeito no meu INSTRUMENTO
 f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela lei nova
-7cf88c2e A pendencia do portao tambem diz a PONTA, e o PAREI passa a dizer qual dos dois casos e
-0b9152de Quatro selos da casa morderam a minha fatia da janela, e os quatro tinham razao
 ```
 
 ## `git status --short`
@@ -100,15 +100,6 @@ f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● Minha sonda somou só periodos e ignorou periodos_ft — sonda mal parametrizada lida como bug. Vou ler o campo que o escritor usa:
-
-  Ran 1 shell command
-
-● Item 1 respondido: é DERIVA, não bug — e a prova é que o gravado agora é exatamente o motor:
-
   Ran 4 shell commands
 
 ● Item 1 fechado: deriva, não bug. Vou publicar e escrever a exceção nomeada, no mesmo commit:
@@ -125,19 +116,28 @@ f154b8dc Os dois avales de 16:0x registrados, e o instrumento passa a medir pela
 
 ● Enquanto o DIFF roda, os passos 4 e 5. O "invalidado com trilha" precisa ser estado legível, não só log:
 
-  Ver quem gerou o TXT de 28/09
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from django.contrib.auth import get_user_model
-     U = get_user_model()
-     for u in U.objects.filter(pk__in=[651, 652]):
-     print(u.pk, u.username, u.get_full_name(), 'staff=%s' % u.is_st…
+  Searched for 1 pattern, read 1 file, listed 1 directory, ran 10 shell commands
 
-✢ Bootstrapping… (3h 1m 59s · ↓ 501.1k tokens · thinking)
+● Background command "Esperar o DIFF da 09" completed (exit code 0)
+
+  Searched for 2 patterns, read 1 file, ran 1 shell command
+
+● A separação que ele pediu deu a resposta decisiva. Vou publicar:
+
+  Ran 3 shell commands
+
+● Meu teste achou uma fragilidade real no derivado: e_vigente empata quando dois TXT têm o mesmo gerado_em:
+
+● Commitar e empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/folha/models.py app/folha/tests/test_txt_invalidado_com_trilha.py
+     app/folha/management/commands/regerar_txt_dominio.py app/config/crons.py && git commit -q -F - -- app/docs/RELATO.md app/folha/models.py app/folha/tests/test_txt_invalid…
+
+✻ Bootstrapping… (3h 7m 0s · ↓ 518.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
