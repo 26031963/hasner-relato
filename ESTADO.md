@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:40:45.**
+**Medido em 30/09/2026 18:46:01.**
 
 | | |
 |---|---|
@@ -40,8 +40,11 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/config/crons.py
+ M app/docs/ARQUITETURA.mmd
  M app/ponto/management/commands/lavrar_deslogados.py
  M app/ponto/services/deslogados.py
+ M app/ponto/tests/test_lista_viva_dos_deslogados.py
  M app/templates/colaboradores/partials/_calendario_grade.html
  M bin/lavrar_deslogados.sh
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
@@ -102,39 +105,39 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
-● Este irmão é o molde: ele já lê todas as autoridades certas (colaboradores_em_operacao, isento_ponto, batidas_apuraveis, cobertura_ausencia_periodo, fatos_do_dia, e até o corte
-  "quem nunca bateu tem dívida de adesão, não falta"). O meu leitor difere só no eixo do tempo: corrida, não hoje. Vendo a estrutura dos crons para declarar direito:
-
-  Searched for 2 patterns, ran 1 shell command
-
-● Desenho decidido, e ele descarta o log como fonte de nome: a lista nasce só de fatos da casa. Escrevendo o serviço:
-
-  Ran 1 shell command
-
-● Agora o comando — sem stdin, e com o tripwire na forma nova: lâmpada vazia é "zero por não ter perguntado". Vendo como o irmão grava o snapshot:
+● O rótulo divide honestamente: 18 no total, 10 compatíveis com deslogado, 8 refutados (autenticaram dentro da corrida — o furo deles tem outra causa). O col515 está no grupo
+  compatível. Agora os testes — vendo o idioma de fixture da casa para não adivinhar campo:
 
   Ran 2 shell commands
 
-● Rodando contra prod, sem gravar, para ver a lista que os fatos da casa produzem:
+● Tenho o idioma exato. Escrevendo os selos — e um deles codifica a lição das 7 pautas erradas:
+
+  Ran 2 shell commands
+
+● Duas falhas, e as duas são do meu teste, não do código: parou foi criado sem last_login (logo o rótulo certo é nunca entrou), e a minha conta de 4 ignorava que só há 4 dias no
+  fixture. Corrigindo — e dando ao parou a forma real do col515 (login em 24/09, corrida desde 25/09):
 
   Ran 1 shell command
 
-● Lista sã de 18, com o col515 nos seus 3 plantões exatos. Mas ela me diz duas coisas que eu não posso maquiar. Primeira: col370 entrou em 29/09 e não bate desde 16/09 — quem
-  autentica hoje não está deslogado, então o rótulo está errado para parte da lista. Segunda: das minhas 9 pautas à mão, só 2 aparecem aqui. Medindo por que as outras 7 ficaram
-  fora antes de dizer qualquer coisa sobre elas:
+● 9 verdes. Agora a casa do cron — e ela não é "fora de pipeline": a lavratura depende da lâmpada, então é elo da corrente do furo:
 
   Ran 1 shell command
 
-● Agora sei exatamente por que cada uma ficou fora, e não é favorável a mim: col385, col437, col443 estão desligado (ex-funcionários), col189 e col328 bateram HOJE, col843 bateu
-  28/09, e col417 não tem plantão nenhum. 7 das minhas 9 pautas eram ruído, e a lista da casa acha 16 que eu nunca vi. Antes de qualquer coisa, o rótulo: quem autentica dentro da
-  corrida não está deslogado, e a testemunha tem de dizer isso:
+● 24 verdes. Um cuidado antes de commitar: a própria lápide dos encadeados diz que o diagrama flagra aresta nova — regenerando e conferindo:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-· Bootstrapping… (5h 9m 12s · ↓ 939.7k tokens)
+● O PAPEL_DO_CRON cobra a declaração — §4a: "papel declarado em config/crons.py". Vendo os valores válidos:
+
+  Ran 3 shell commands
+
+● 39 verdes e o arquivo é meu (não do root). Commitando a reescrita:
+
+● Running 1 shell command…
+
+✢ Bootstrapping… (5h 14m 29s · ↓ 956.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
