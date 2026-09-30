@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:03:31.**
+**Medido em 30/09/2026 09:09:01.**
 
 | | |
 |---|---|
@@ -121,13 +121,13 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 
 ● O censo do golden já dá o número da obra: 46 sítios escolhem vigência por -data_inicio; só cartorio.py e vigia_de_hora.py leem escala_geradora. Registro a ESMERIL-2 com isso:
 
-● Pushing do registro da ESMERIL-2 · 1m 58s
+● Pushing do registro da ESMERIL-2 · 7m 28s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
      app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (1m 53s)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (7m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (1h 55m 38s · ↓ 122.8k tokens)
+✢ Misting… (2h 1m 8s · ↓ 122.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
