@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:00:45.**
+**Medido em 30/09/2026 16:06:01.**
 
 | | |
 |---|---|
@@ -41,7 +41,9 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/folha/tests/test_b1_portao_he_nasce_desligado.py
+ M app/ponto/management/commands/diff_janela_he_total.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,44 +103,44 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Cinco são o mesmo minuto numa rubrica derivada. O sexto eu medi em vez de supor: o col889 do dia 21/09 entra 10:52 contra marco 10:00, sai 23:00 contra 22:00, hoje tem atraso
-  zero porque a hora a mais cobria os 52 min — e passa a ter 607 min pagos mais 52 min de atraso contra previsto de 660. Esteve presente 12h08 e a conta bate duas vezes nele. É o
-  seu item 2 de 28/09 funcionando, mas horas_atraso não está nomeado no alvo deste aval.
 
-  Uma palavra decide: o atraso entra no alvo e eu aplico tudo, ou o apply espera. O comando já está pronto (carimbo do gravado antes — alvo e a 09 —, cadastro pela porta com
-  trilha, recalculo pelo escritor declarado, carimbo depois provando a 09 idêntica).
+  ! do atraso — registrado em PROMPTS.md, ALVO do instrumento atualizado (deixar o campo fora faria o comando seguir gritando PAREI sobre pergunta já respondida), e o ensaio do
+  apply rodou em prod: 6 fotos do gravado escritas — as três da 10/2026 são o arquivo de reversão (valor por colab e por campo, não hash), as três da 09 são a prova da L-092 —, o
+  plano de cadastro impresso (piso 10 → 0, saída False → True, vigência 21/09 intacta nas três empresas), e nada escrito. Falta o deploy e o --aplicar --motivo.
 
-  De carona
+  ! da família (1) — VERMELHO = 0, e os dois saíram com nome: o censo ganhou uma quarta seção, FILA DO MOTOR (S5b), e os dois seguem impressos com arquivo:linha. Não foram
+  absolvidos — mudaram de contador, porque a pergunta deles é outra. O selo respondeu OK e MORDE (base 0, e leitor novo por ordem ainda é visto). Placar da família no dia: 19 → 7
+  → 4 → 2 → 0.
 
-  Família (1) do ESMERIL: 19 → 2, e os dois que sobram (esmeril_espelho:114, pdf_espelho:312) alimentam o calcular_mes — esperam a S5b. Pergunta de lei no RELATO: eles migram para
-  a fila do motor (e a família fecha em 2) ou a família fica aberta? Não vou mover meu próprio universo por conta própria.
+  Não movi isso por conta própria de propósito: mover sítio do próprio contador é redefinir o universo que ele mede, que é o defeito que fez a TRAVA JUIZ-NOVO nascer em 24/09.
+  Levei a pergunta ao topo do RELATO com os números e segui outra frente.
 
-  O censo_fase_12x36 migrou porque a medição não era cauda: 38 colabs na 09 têm mais de uma vigência 12x36 na janela, tipicamente com âncora diferente — e era esse número que o
-  --curar usava para reescrever vínculo. E o aplicar_09_corte_b não foi removido: meu veredito de ontem estava errado, prod importa o CAMPOS dele.
+  Sequência do apply, na ordem
 
-  Quatro selos da casa morderam minha fatia e os quatro tinham razão — inclusive um que me proibiu de crescer uma allowlist e me fez usar o escritor que já existia.
+  1. suíte cheia (rodando, ~1 min) → push
+  2. bin/deploy.sh com migrate (a 0054 está pendente) — e o deploy também cura o que já dói: o espelho.html está no ar lendo {{ h.sentido }} que o .py no ar não emite, então hoje
+     o admin lê "9 min  do marco 07:00" enquanto o PDF diz "antes"
+  3. aplicar_janela_he_total --aplicar --motivo em prod
+  4. prova no RELATO: hash da 09 antes/depois (tem de sair idêntico) e o movido na 10
+
+  Um ponto que quero dizer antes de aplicar, não depois: o apply move −230,06 h de trabalhadas e +18,00 h de atraso em 24 pessoas. O col889 esteve presente 12h08 no dia 21/09 e
+  passa a ter 607 min pagos mais 52 min de atraso contra previsto de 660. Você leu a tabela e disse "aplica tudo", então aplico — mas essas 24 pessoas vão ver a diferença no
+  holerite, e a lista delas está no logs/janela_he/bloqueio_total_10.json se o DP quiser avisar antes.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-JANELA-HE parte A2 (BLOQUEIO TOTAL) -- o desenho da L-097 e BLOQUEIO TOTAL, e o texto dela saiu ESTREITO (aval Ronald 30/09 15:1x; corrige,
-  nao e lei
+  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Searched for 1 pattern, read 2 files, ran 6 shell commands
+● Esperar a suite e ler o desfecho · 47s
+  ⎿  $ until grep -qE "main -> main|error:|FAILED" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_j3.log 2>/dev/null; do sleep
+     15; done; sleep 2; grep -nE "^(Ran |OK$|OK \(|FAILED|FAIL:|ERROR:|main -> main|error:)" /tmp/claude-1001/-home-ronald-saas-ha… (46s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-❯ aval Ronald: o atraso ENTRA no alvo (e o "nao compensa" de 28/09 valendo na saida). Aplica tudo !
-
-● O ! chegou. Registro primeiro (L-010), depois a sequência: suíte → deploy → ensaio → apply.
-
-  Running 1 shell command…
-
-· Bootstrapping… (2h 29m 12s · ↓ 438.8k tokens)
+✢ Bootstrapping… (2h 34m 29s · ↓ 451.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: os dois leitores que alimentam o calcular_mes migram para a fila do motor (S5b), com nome. A familia (1) fecha.
-  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
