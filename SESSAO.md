@@ -6,10 +6,45 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 11:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (129.1 MB). Acoes na janela: **212**.
+**Medido em 30/09/2026 11:28:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (129.8 MB). Acoes na janela: **246**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:28:10 | Bash | Ver quais ordens ja tem linha | `grep -c "^\|" docs/PROMPTS.md; for k in "ZUMBI" "METRICA" "DISPUTA-ZUMBI" "SESSAO-401" "POR-TRECHO"; do printf "%s: %s\n" "$k" "$(grep -c "$k" docs/PROMPTS.md)"; done` |
+| 11:28:00 | Bash | Ver o fim da tabela | `sed -n '260,272p' docs/PROMPTS.md \| cut -c1-100` |
+| 11:27:55 | Bash | Ver o cabecalho da tabela nova | `sed -n '240,256p' docs/PROMPTS.md \| cut -c1-120` |
+| 11:27:50 | Bash | Estrutura do PROMPTS.md | `grep -n "^#\\|^## " docs/PROMPTS.md \| head -20 && echo "--- linhas 30/09" && grep -n "30/09" docs/PROMPTS.md \| head -8 && wc -l docs/PROMPTS.md` |
+| 11:27:43 | Bash | Achar o cabecalho da tabela de PROMPTS | `grep -n "^\|" docs/PROMPTS.md \| head -6` |
+| 11:27:32 | Bash | Ver o que o hook cobra e onde esta o ESMERIL | `cd /home/ronald/saas-hasner && python3 bin/hook_stop_fila1.py 2>&1 \| head -5; echo "---rc=$?"; grep -n "ESMERIL-MECANICO" app/docs/BACKLOG.md \| head` |
+| 11:27:26 | Bash | Listar ids e estados das obras | `sed -n '/<!-- OBRAS:INICIO -->/,/<!-- OBRAS:FIM -->/p' docs/BACKLOG.md \| grep '^\|' \| awk -F'\|' '{print NR": "substr($2,1,42)" => "substr($4,1,60)}' \| tail -22` |
+| 11:27:18 | Bash | Ver formato de PROMPTS e OBRAS | `tail -12 docs/PROMPTS.md && echo "=== OBRAS ===" && sed -n '/<!-- OBRAS:INICIO -->/,/<!-- OBRAS:FIM -->/p' docs/BACKLOG.md \| head -30` |
+| 11:27:11 | Bash | Ancorar na classe e rodar de novo | `python3 - <<'PYEOF' import io P='chamados/tests/test_selo_resolucao_um_escritor.py' t=io.open(P,encoding='utf-8').read() v = """ _fn = [n for n in ast.walk(ast.parse(_cod)) if isinstance(n, ast.FunctionDef) and n.name == 'fechar'] self.assertTrue(_fn, 'nao achei `fechar` em chamados/models.py')""" assert t.count(v)==1 n = """ # O `fechar` SE ESCOLHE PELA CLASSE, e este selo ja errou isso: ha dois  ...` |
+| 11:26:55 | Bash | Rodar o selo do escritor unico | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /app/.hypothesis --tmpfs /app/.mypy_cache -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage ...` |
+| 11:26:46 | TaskStop |  | `-` |
+| 11:26:46 | TaskStop |  | `-` |
+| 11:26:46 | TaskStop |  | `-` |
+| 11:26:45 | TaskStop |  | `-` |
+| 11:26:45 | TaskStop |  | `-` |
+| 11:26:44 | TaskStop |  | `-` |
+| 11:26:44 | TaskStop |  | `-` |
+| 11:26:44 | TaskStop |  | `-` |
+| 11:26:43 | TaskStop |  | `-` |
+| 11:26:43 | TaskStop |  | `-` |
+| 11:26:43 | TaskStop |  | `-` |
+| 11:26:42 | TaskStop |  | `-` |
+| 11:26:42 | TaskStop |  | `-` |
+| 11:26:41 | TaskStop |  | `-` |
+| 11:26:41 | TaskStop |  | `-` |
+| 11:26:40 | TaskStop |  | `-` |
+| 11:26:40 | TaskStop |  | `-` |
+| 11:26:33 | TaskStop |  | `-` |
+| 11:26:30 | ToolSearch |  | `-` |
+| 11:26:25 | Bash | Escrever o selo do escritor unico da resolucao | `cat > chamados/tests/test_selo_resolucao_um_escritor.py <<'PYEOF' # -*- coding: utf-8 -*- """`DisputaSupervisao.resolucao` tem UM escritor, e ele grava `fechada_em` no MESMO ato. O CASO (BUG-DISPUTA-ZUMBI, medido 30/09 12:3x): a disputa **#2336** do `col204` tinha `resolucao` escrita ("conversa parada desde 01/08, >30 dias", da limpeza Q2-JA v2) e `fechada_em` **NULO** -- e o app do colaborador, q ...` |
+| 11:25:42 | Bash | Ler o fechar() para ancorar o selo | `sed -n '915,945p' chamados/models.py` |
+| 11:25:19 | Bash | Ver se ha selo do escritor unico da resolucao | `ls chamados/tests/ \| grep -i -E "zumbi\|resolucao\|um_escritor" ; echo "--- rc=$?"; grep -rln "resolucao_pedida" chamados/ \| sort` |
+| 11:25:11 | Bash | Censo dos escritores de resolucao | `echo "=== escritores de resolucao ===" && grep -rn "\.resolucao\s*=" --include=*.py . \| grep -v "/tests\?/" \| grep -v "tests_" && echo "=== materializacao ===" && cd /home/ronald/saas-hasner && git diff app/chamados/services/materializacao.py` |
+| 11:25:03 | Bash | Ver o diff das duas curas | `cd /home/ronald/saas-hasner && git diff --stat app/chamados app/api && echo "=== disputa" && git diff app/chamados/services/acoes_disputa.py app/chamados/services/fio.py \| head -70` |
+| 11:24:50 | Bash | Ver a arvore e a distancia do remoto | `cd /home/ronald/saas-hasner && git status --porcelain && echo "--- origin" && git fetch -q origin 2>/dev/null; git rev-list --count origin/main..HEAD` |
 | 11:20:29 | Bash | O selo dos tres motivos | `cat > api/tests/test_401_diz_qual.py <<'PYEOF' # -*- coding: utf-8 -*- """O 401 do app DIZ QUAL DOS TRES ELE E (BUG-APP-SESSAO-401, 30/09 13:1x). O CASO, com nome: `col515` (u252) levou `GET /api/me/` -> 401 em **26/09 01:48** e **nunca mais autenticou** -- tres plantoes sem batida por estar deslogado, sem aviso util. Ele nao e o unico: dos 17 usuarios com 401 e nenhum 200 seguinte, **8 entraram d ...` |
 | 11:16:29 | Bash | O 401 diz qual, e a suite de api e core | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='api/credencial.py' t=io.open(P,encoding='utf-8').read() V = """ class JWTComCredencial(base): def get_user(self, validated_token): user = super().get_user(validated_token) ok, motivo = confere(validated_token.get(CLAIM), user, iat=validated_token.get('iat')) if not ok: from rest_framework_simplejwt.exceptions import Authenticatio ...` |
 | 11:15:56 | Bash | A classe inteira, para curar no lugar certo | `sed -n '170,200p' api/credencial.py` |
@@ -221,4 +256,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:09:43 | Bash | Motor: a folga trabalhada nao apaga noturno nem intra | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='ponto/motor_calculo_v2.py' t=io.open(P,encoding='utf-8').read() V = """ @property def horas_noturnas(self) -> float: return sum(p.minutos_noturnos_legais for p in self.periodos) / 60 """ N = ''' @property def horas_noturnas(self) -> float: """Adicional noturno do mes. INCLUI o periodo de FOLGA TRABALHADA. FOLGA TRABALHADA NAO APA ...` |
 | 07:09:04 | Bash | Censo de quem le horas_noturnas | `grep -n 'adicional_noturno\\|intrajornada_diurna' folha/export.py \| head -8; echo "=== quem mais le horas_noturnas do fechamento:"; grep -rn 'horas_noturnas' --include=*.py . \| grep -v '/tests/\\|/migrations/' \| sed 's\|^\./\|\|' \| head -14` |
 | 07:08:52 | Bash | Registrar a lei e ler as propriedades do motor | `cd /home/ronald/saas-hasner && date '+%Y-%m-%d %H:%M'; python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() ANC = "\| ORDEM-B1-AGORA \| 29/09 ~19:5x \|" assert t.count(ANC)==1 NOVA = ("\| FOLGA-TRABALHADA-NAO-APAGA-RUBRICA \| 30/09 ~00:0x \| **RESPOSTA ao PAREI de lei que eu levantei as " "19:0x de 29/09**, e ela e `aval Ronald lei:`. A ...` |
-| 23:27:41 | Bash | Resultado do push final | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"; git log --oneline -1 origin/main \| cat` |

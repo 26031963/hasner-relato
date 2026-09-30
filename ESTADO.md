@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:23:01.**
+**Medido em 30/09/2026 11:28:31.**
 
 | | |
 |---|---|
@@ -47,6 +47,7 @@ c78445c7 TICKETS: rodape e placar
  M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/api/tests/test_401_diz_qual.py
+?? app/chamados/tests/test_selo_resolucao_um_escritor.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -105,44 +106,44 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
 
-  Ran 2 shell commands
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
 
-● Quase publiquei lista errada: last_login está em UTC e o log em local — o "+3h" que aparece em quatro linhas é o mesmo instante. Converto e remeço:
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
 
-  Ran 1 shell command
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
 
-● Lista honesta: 9 deslogados, com nome — e col515 [nome] está lá desde 26/09 01:48, exatamente como você disse. A credencial não é a causa (desde nulo em 0 de 53).
-  Meço o prazo do token:
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b… ·
+     stopped
 
-  Searched for 1 pattern
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f diff_folga >/dev/null; do sleep 45; done; grep -v 'objects imported' /tmp/claude-1001/-home-ronald-saas-hasner-a… ·
+     stopped
 
-● ACCESS_TOKEN_LIFETIME = 12 h, REFRESH_TOKEN_LIFETIME = 30 dias, ROTATE_REFRESH_TOKENS = True. Falta saber se os 401 são rotina ou um evento:
+● Ver quais ordens ja tem linha
+  ⎿  $ grep -c "^|" docs/PROMPTS.md; for k in "ZUMBI" "METRICA" "DISPUTA-ZUMBI" "SESSAO-401" "POR-TRECHO"; do printf "%s: %s\n" "$k" "$(grep -c "$k" docs/PROMPTS.md)"; done
 
-  Ran 1 shell command
-
-● É rotina, não evento: 11–17% de 401 todos os dias, estável, com pico sempre às 06h — a troca de turno, quando a frota abre o app. Não foi deploy, nem rotação de chave, nem a
-  credencial. É o access de 12 h expirando. A cura no meu alcance é o 401 dizer qual:
-
-● O selo dos tres motivos
-  ⎿  $ cat > api/tests/test_401_diz_qual.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O 401 do app DIZ QUAL DOS TRES ELE E (BUG-APP-SESSAO-401, 30/09 13:1x).
-     O CASO, com nome: `col515` (u252) levou `GET /api/me/` -> 401 em **26/09 01:48** e **nunca mais autenticou** --
-     tres plantoes sem batida por estar desl…
-
-· Compacting conversation… (4h 15m 8s · ↓ 279.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
+✢ Misting… (4h 20m 38s · ↓ 293.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
   da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
   ctrl+x ctrl+s to send now
-                                                                                                                                                            0% until auto-compact
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
