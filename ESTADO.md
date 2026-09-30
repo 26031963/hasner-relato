@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:23:31.**
+**Medido em 30/09/2026 15:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao` |
+| `HEAD` local | `59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro` |
 | `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,25 +29,33 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro
 0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao
 7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA
 d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento polimento
 7f2ad203 BACKLOG: a familia (1) fechou o dia em 19 -> 4, e os quatro restantes tem veredito escrito
-2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes
 ```
 
 ## `git status --short`
 
 ```
+ M app/colaboradores/models.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/ponto/calculador/regras.py
  M app/ponto/janela_he.py
  M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/espelho.py
+ M app/ponto/tests/test_janela_he_regra.py
+ M app/relatorios/pdf_espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
+ M app/templates/ponto/espelho.html
+?? app/colaboradores/migrations/0054_alter_empresa_janela_he_piso_min_and_more.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/tests/test_janela_he_saida.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -127,16 +135,16 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ver o resto do bloco de saida antecipada
+● Documentar a migration
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
-     P = 'ponto/motor_calculo_v2.py'
+     P = 'colaboradores/migrations/0054_alter_empresa_janela_he_piso_min_and_more.py'
      t = io.open(P, encoding='utf-8').read()
-     VELHO = """ # JANELA DE HE (L-097): a entrada que CONTA pode ser o MARCO, e ai duracao, noturnas,
-     # excedente e pontualidade seguem sozinhos -- nao ha segundo lugar para d…
+     CAB = '''# -*- coding: utf-8 -*-
+     """BLOQUEIO TOTAL: o piso nasce ZERO e a janela de SAIDA nasce LIGADA (aval Ronald 30/09 …
 
-✢ Bootstrapping… (1h 51m 59s · ↓ 312.6k tokens)
+· Bootstrapping… (1h 57m 29s · ↓ 333.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
