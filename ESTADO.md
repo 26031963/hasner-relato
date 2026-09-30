@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 11:06:31.**
+**Medido em 30/09/2026 11:12:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ c78445c7 TICKETS: rodape e placar
 ## `git status --short`
 
 ```
+ M app/chamados/services/acoes_disputa.py
+ M app/chamados/services/fio.py
+ M app/chamados/services/materializacao.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/templates/colaboradores/partials/_calendario_grade.html
@@ -101,40 +104,40 @@ c78445c7 TICKETS: rodape e placar
 
 ```
 
-  E o nome mudou por sua ordem: ESMERIL-2 → ESMERIL-MECANICO, com as três confusões que você nomeou escritas na lápide do script (o esmeril2 dos testes de chamados, o
-  esmeril_espelho A1-A11, e as fatias S1-S5). Quatro coisas com "esmeril" no nome é o vocabulário paralelo que esta obra persegue em código — começar com o nome errado seria
-  começar pelo defeito.
-
-  A guarda está de pé: bin/tests/test_esmeril_mecanico_censo.sh congela os 24 pares modelo → arquivo e morde nos dois sentidos (escritor novo e allowlist que encolheu sem a mão).
-  É selo de host por razão medida: o container não monta bin/, e minha primeira versão era um SimpleTestCase que estourou com ModuleNotFoundError.
-
-  Raia wt-esmeril com 5 commits; principal em faltam=0.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-● A FASE 1 continua. Falta a terceira do (c) — flag/setting morta:
+● A porta existe e é rica: DisputaSupervisao.fechar(user, resolucao) — ela recusa fechar se há resposta do colaborador sem veredito, e grava os três campos juntos. Quem a
+  contornou:
 
   Ran 1 shell command
 
-● 283 é falso positivo por construção: constante usada dentro do próprio módulo é normal e correta. Meu filtro excluía o arquivo que a define. Corrijo antes de publicar:
+● Só dois sítios escrevem .resolucao direto. Leio os dois:
 
   Ran 1 shell command
 
-● 17 — e dois clusters pedem verificação antes de eu publicar, porque são o motor e a autoridade:
+● Os dois são gêmeos e o defeito é a ORDEM: escrevem resolucao antes de tentar fechar, e se o fechamento não acontece o texto fica dizendo que resolveu. Vejo como a materialização
+  fecha:
 
-● Conferir os dois clusters antes de publicar
-  ⎿  $ cd /home/ronald/wt-esmeril/app && sed -n '40,50p' ponto/motor_calculo_v2.py; echo "=== quem usa a janela noturna no motor:"; grep -n 'HORA_NOTURNA\|22,
-     0\|noturno_inicio\|NOTURNO_INI' ponto/motor_calculo_v2.py | head -8; echo; echo "=== e os PENDENTES_* do juizes.py:"; sed -n '820,840p' core/juiz…
+  Searched for 1 pattern, ran 3 shell commands
 
-· Misting… (3h 58m 38s · ↓ 250.4k tokens · thinking)
+● Quadro completo: resolucao é usada como CANAL de passagem do texto e fica como ESTADO quando o fechamento não acontece. Curo na origem — o texto passa por parâmetro:
+
+  Curar os dois gemeos e rodar chamados · 1m 15s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='chamados/services/materializacao.py'
+     t=io.open(P,encoding='utf-8').read()
+     V = "def materializar_perguntas_validadas_da_disputa(disputa, request_user):"
+     N = "def materializar_perguntas_validadas_da_disputa(disputa, request_user, … (1m 14s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Misting… (4h 4m 8s · ↓ 266.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
   da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
   ctrl+x ctrl+s to send now
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
