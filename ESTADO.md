@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:857 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:927 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 15:34:31.**
+**Medido em 30/09/2026 15:40:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro` |
+| `HEAD` local | `596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR` |
 | `origin/main` | `2b169abb RELATO: o fecho do dia -- o que esta no ar, o que espera o Ronald, e as nove correcoes` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,39 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+596064b7 JANELA-DE-HE: a L-097 saiu estreita por minha mao, e o cadastro da saida passou 2 dias SEM LEITOR
 59bfd708 Rodape do TICKETS reescrito pelo gerador -- o segundo selo do push, mesma familia do primeiro
 0409b29d Placar do topo do TICKETS reescrito pelo proprio gerador -- o push cobrou, com razao
 7c3b7a7d O meu texto honesto fez o hook cobrar um item FEITO -- estado vira FECHADA
 d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento polimento
-7f2ad203 BACKLOG: a familia (1) fechou o dia em 19 -> 4, e os quatro restantes tem veredito escrito
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/models.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/config/crons.py
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/CORTES.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/ponto/calculador/regras.py
- M app/ponto/janela_he.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_b1_relogio_riscado_e_aviso.py
- M app/ponto/tests/test_janela_he_regra.py
- M app/relatorios/pdf_espelho.py
+ M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
- M app/templates/ponto/espelho.html
-?? app/colaboradores/migrations/0054_alter_empresa_janela_he_piso_min_and_more.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/ponto/management/commands/diff_janela_he_total.py
-?? app/ponto/tests/test_janela_he_saida.py
-?? bin/diff_janela_he_total.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -118,23 +101,6 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Stop Task
-  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; sleep 2; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|error:|rc=|main -> main)' /tmp/claude-100… ·
-     stopped
-
-● Stop Task
-  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; sleep 3; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|main -> main|rc=|error:)' /tmp/claude-100… ·
-     stopped
-
-● Stop Task
-  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; sleep 3; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|main -> main|rc=|error:)' /tmp/claude-100… ·
-     stopped
-
-● Stop Task
-  ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; sleep 3; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|main -> main|rc=)' /tmp/claude-1001/-home… ·
-     stopped
-
-● Stop Task
   ⎿  until ! pgrep -f 'git push origin main' >/dev/null; do sleep 20; done; sleep 3; grep -E '^(Ran |OK$|OK \(|FAILED|FAIL:|main -> main|rc=|error:)' /tmp/claude-100… ·
      stopped
 
@@ -147,15 +113,32 @@ d267e703 UI-CAL-COMPETENCIA: o item nao tem defeito medido, e eu nao invento pol
 
 ● Agora o instrumento do DIFF, contra o gravado, estendendo o comando que já existe:
 
-● Achar quem faz hash de competencia
-  ⎿  $ sed -n '1,90p' ponto/management/commands/carimbo_gravado.py
+  Searched for 5 patterns, read 2 files, ran 22 shell commands
 
-✢ Bootstrapping… (2h 2m 59s · ↓ 354.4k tokens · thought for 4s)
+● Background command "Esperar o DIFF terminar" completed (exit code 0)
+
+  Read 1 file
+
+● O DIFF voltou, e ele para o apply. Antes de publicar, vou nomear cada campo fora do alvo:
+
+● Publicar o PAREI com a tabela
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P = 'docs/RELATO.md'
+     t = io.open(P, encoding='utf-8').read()
+     ANC = '# RELATO — esteira saas-hasner\n'
+     assert t.count(ANC) == 1
+     BLOCO = ANC + '''
+     # PAREI: JANELA-DE-HE, o DIFF da 10 move SEIS campos fora do alvo | espera Ronald (30/09 15:3x)
+     **…
+
+✢ Bootstrapping… (2h 8m 29s · ↓ 377.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
