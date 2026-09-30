@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:55:45.**
+**Medido em 30/09/2026 11:01:01.**
 
 | | |
 |---|---|
@@ -100,10 +100,6 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  na regua para escritores E leitores. Nao confundir com: esmeril2 dos testes de chamados, esmeril_espelho (A1-A11), nem as fatias S1-S5 da O-DIA-PAGO. Escopo e ordem nao mudam.
-  PAREI so em lei ou !
-
-● Ordem de nome — e ela importa justamente porque colisão de nome é o que a casa combate. Renomeio tudo e registro as três confusões que ele nomeou:
 
   Ran 3 shell commands
 
@@ -121,18 +117,22 @@ c78445c7 TICKETS: rodape e placar
 
 ● A (c) tem números, e o cluster é evidente — PerfilApuracao concentra 11 dos 22:
 
-  Pushing do rename e do escopo c · 3m 21s
+● Pushing do rename e do escopo c · 8m 37s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
      app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (3m 18s)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 34s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (3h 47m 52s · ↓ 239.0k tokens)
+✢ Misting… (3h 53m 8s · ↓ 239.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
   da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
+
+❯ ESMERIL-MECANICO (c) ZUMBI, METRICA: publicar no ESTADO a cada ciclo -- linhas de Python de producao, linhas de teste, numero de management commands, numero de crons em
+  config/crons.py. Linha de base 30/09: ~125k prod, ~162k teste, 218 commands. Esperado: CAIR a cada migracao da FASE 2 (varredor que perdeu a razao de existir sai com prova de
+  zero chamador + teste junto). Subir exige motivo escrito no commit.
   ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
