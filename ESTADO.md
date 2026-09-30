@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:02:01.**
+**Medido em 30/09/2026 10:07:31.**
 
 | | |
 |---|---|
@@ -41,9 +41,14 @@ f4ecb106 TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/ponto/models.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/ponto/migrations/0069_decisao_he.py
+?? app/ponto/portas/he.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,35 +105,35 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A S4 não tem linha no BACKLOG — o item pai a cita mas ela nunca foi registrada. Crio a linha com o escopo que o próprio pai declara:
+  SO ENCOLHE. A raia nao toca codigo de producao nem banco de prod; pista de teste compartilhada.
+  P7.1 VALE: bug PROVADO que o censo achar vai para a PRINCIPAL na hora, mesmo que o estrutural fosse mata-lo depois -- 'morre sozinho' nao e lei (col899: porta pela metade, bug
+  vivo no dia seguinte).
+  FASE 2 (principal, logo apos a S4, antes de B2): cada duplicado migra para o escritor unico; cada derivacao vira leitura do juiz; tripwire de runtime (pre_save recusa escrita
+  fora do escritor); UniqueConstraint(colab, ativa) e EXCLUDE ligam SO depois dos 46 leitores de order_by('-data_inicio') migrarem. Constraint de banco = tripwire, nunca a cura.
+  GOLDENS: col899 (dois ativos por porta pela metade; leitor mostrou folga 28/30 pela 1310), col438 (disputa_s84_retro criou batida sem resposta em folga --
+  materializacao.py:589).
+  CONTADORES NO ESTADO (esperado 0, publicados a cada ciclo): batidas lancadas sem resposta em dia de folga; vinculos ativos sobrepostos; leitores que escolhem vinculo sem
+  perguntar ao dia; dias com escala corrigida e nao re-julgados; POST /api/ponto/foto/ 401 na ultima hora.
+  segue a fila; PAREI so em lei ou !
 
-  Ran 2 shell commands
+● Ordem recebida: a FASE 2 da ESMERIL-2 passa na frente da B2. Registro, abro a raia, e o núcleo da B2 que acabei de escrever fica parado com a posição declarada:
 
-● A S4 agora é a próxima e está registrada. Faço o censo dela — os 46 chamadores, classificados:
+  Read 1 file, ran 4 shell commands
 
-  Ran 1 shell command
+● Minha reescrita da migration cortou um import. Corrijo:
 
-● O censo da S4 tem uma resposta de uma linha: ponto/views.py:716 é a única tela que recalcula.
+  Imports completos e suite · 1m 6s
+  ⎿  $ python3 - <<'PYEOF'
+     import io, py_compile
+     P='ponto/migrations/0069_decisao_he.py'
+     t=io.open(P,encoding='utf-8').read()
+     if 'import django.db.models.deletion' not in t:
+     t = t.replace('from django.conf import settings', 'import django.db.models.deletion\nfrom django.conf import settings', 1)
+     io.open… (1m 5s · 8 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  Ran 1 shell command
-
-● A premissa da S4 já está satisfeita, e isso é achado: views.py:716 não é testemunha recalculando — é o botão do admin (POST, permissão editar_folha, com a recusa da L-092
-  traduzida). Nenhum leitor recalcula. Falta o selo:
-
-  Ran 5 shell commands
-
-● A régua pegou uma colisão engraçada e real: eu citei o regex CONGELAD[AO] na mensagem e ela leu [AO] como fatia citada. Corrijo a mensagem:
-
-  Ran 5 shell commands
-
-● A régua lê CONGELAD[AO] como citação de fatia — e a lápide dela já brigou com essa classe (letra solta, "quinta vez que texto foi lido como fato"). Cura na origem, por forma:
-
-  Ran 3 shell commands
-
-● Background command "Commit da cura da regua e push" completed (exit code 0)
-
-● S4 fechada e no ar — f4ecb106..67c662f7, 8.741 testes OK, faltam=0.
-
+✢ Misting… (2h 59m 38s · ↓ 196.9k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
