@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:246 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:304 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:30:45.**
+**Medido em 30/09/2026 09:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `c53a1dc0 TICKETS: rodape e placar` |
+| `HEAD` local | `f4ecb106 TICKETS: rodape e placar` |
 | `origin/main` | `c53a1dc0 TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f4ecb106 TICKETS: rodape e placar
+22e9a5d1 Medido sem curar: o colaborador nao respondeu em 2.483 de 2.503 -- e a constraint espera a ESMERIL-2
 c53a1dc0 TICKETS: rodape e placar
 a8fe9786 BACKLOG: ESMERIL-2 registrada, e metade do golden dela ja tem resposta e numero
 ed22ec4c TICKETS: rodape e placar
-ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu a ZERO
-4b9bd617 Eu derrubei /relatorios/ com uma lapide antes do extends -- curado, e com o selo que faltava
 ```
 
 ## `git status --short`
@@ -41,8 +41,6 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
- M app/escala/models.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -123,13 +121,13 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ● A constraint achou algo que muda a ordem: 19 selos modelam dois ativos de propósito — a casa ainda fala essa língua. Seguro a constraint atrás da ESMERIL-2 e registro com os
   nomes:
 
-  Recuar a constraint e provar a arvore verde · 4m 37s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp
-     app/escala/migrations/0042_ec_um_vinculo_ativo.py $S/ && cp app/escala/tests/test_um_vinculo_ativo_e_impossivel.py $S/ && rm app/escala/migrations/0042_ec_um_vincul… (4m 35s
-     · 2 lines)
+  Pushing da medicao e do recuo · 3m 2s
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
+     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (2m 59s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (2h 22m 52s · ↓ 146.7k tokens)
+· Misting… (2h 27m 52s · ↓ 151.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
