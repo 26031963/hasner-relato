@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:45:01.**
+**Medido em 30/09/2026 10:50:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ c78445c7 TICKETS: rodape e placar
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -100,35 +102,35 @@ c78445c7 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● O censo da FASE 1 tem a primeira tabela, e ela aponta uma família só:
 
   Ran 1 shell command
 
-● O censo tem falso positivo meu: arquivos tests_*.py não casam no meu filtro test_*. Corrijo antes de publicar:
+● O container não monta bin/ — então este selo é de HOST, que é onde a régua já os roda:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Background command "Push do nucleo parado da B2" completed (exit code 0)
+❯ renomear ESMERIL-2 (registrada hoje) -> ESMERIL-MECANICO: e a continuacao do ESMERIL de 11-14/09 (juizes declarados em core/juizes.py, S2-S4 feitos), agora FISCALIZADO por AST
+  na regua para escritores E leitores. Nao confundir com: esmeril2 dos testes de chamados, esmeril_espelho (A1-A11), nem as fatias S1-S5 da O-DIA-PAGO. Escopo e ordem nao mudam.
+  PAREI so em lei ou !
 
-● ESMERIL-2 aberta em duas fases, e a FASE 1 já tem a primeira tabela.
+● Ordem de nome — e ela importa justamente porque colisão de nome é o que a casa combate. Renomeio tudo e registro as três confusões que ele nomeou:
 
-  Raia wt-esmeril aberta (só leitura, não toca produção nem banco de prod). bin/esmeril2_censo.py — por AST, sem Django e sem banco — responde a pergunta (a) nas sete famílias:
+  Ran 3 shell commands
 
-  ┌────────────────────────────────────────────────────────────────────┬────────────────────┬──────────┬───────────┐
-  │                              família                               │      modelos       │ arquivos │ veredito  │
-  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
-  │ batida · célula · turno · vínculo/escala · ausência/férias · folha │ 11 modelos         │ 1 cada   │ ok        │
-  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
-  │ chamado                                                            │ ChamadoColaborador │ 5        │ DUPLICADO │
-  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
-  │ chamado                                                            │ DisputaSupervisao  │ 5        │ DUPLICADO │
-  ├────────────────────────────────────────────────────────────────────┼────────────────────┼──────────┼───────────┤
-  │ chamado                                                            │ PerguntaDisputa    │ 3        │ DUPLICADO │
-  └────────────────────────────────────────────────────────────────────┴────────────────────┴──────────┴───────────┘
+❯ ESMERIL-MECANICO, escopo (c) ZUMBI: no mesmo censo, nomear com arquivo:linha: funcao/classe sem chamador em producao; parametro de cadastro sem leitor (LEI-AKITA 12: chave sem
+  leitor = VERMELHO); management command e cron sem efeito ou sem dono em config/crons.py; flag/setting morta; template sem rota; campo de model sem escritor ou sem leitor.
+  Veredito por linha: remover (com prova de zero chamador) / ligar / declarar 'sem efeito'. Remocao so com a prova e na FASE 2, nunca na raia de leitura. PAREI so em lei ou !
 
-  14 modelos de estado com escritor; 3 com escrita em mais de um arquivo — e os três são da mesma família. Seis famílias têm escritor único por construção; a chamado não — e é
+● Ordem (c) ZUMBI registrada. E antes de construir: a casa já tem guarda para vários desses — LEI-AKITA 4. Meço o que existe:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Três dos seis já têm guarda; três não. Implemento os dois mais valiosos que faltam:
+
+● Running 1 shell command…
+
+✢ Misting… (3h 42m 38s · ↓ 233.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
   corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
