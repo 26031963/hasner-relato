@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- # APLICADO: JANELA-DE-HE em BLOQUEIO TOTAL na competencia 10 (30/09 16:09-16:11)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:05:45.**
+**Medido em 30/09/2026 17:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `971c4e75 Registrado o SIM da 09: a deriva entra junto e os oito contadores entram no alvo` |
+| `HEAD` local | `74b62f47 A 09 regerada INTEIRA e o TXT de 28/09 SUBSTITUIDO, com os seis passos provados um por um` |
 | `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+74b62f47 A 09 regerada INTEIRA e o TXT de 28/09 SUBSTITUIDO, com os seis passos provados um por um
 971c4e75 Registrado o SIM da 09: a deriva entra junto e os oito contadores entram no alvo
 0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula
 57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar
 0463460b Placar e rodape do TICKETS pelos geradores
-fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que o meu proprio teste achou
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_selo_resolucao_um_escritor.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
  M app/docs/PROMPTS.md
@@ -103,39 +102,39 @@ fc3a5c62 PAREI da 09 com as tres colunas, o regerador do TXT -- e um empate que 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  L-092 provada na competência 08 (idêntica nas três empresas) — troquei o --mes-intacto para 08, já que a 09 está sendo mudada de propósito. 512 colabs movidos na 09.
+  6. A prova: 532 colabs, zero erros, 6.224 dias com ponta riscada, 6.137 (98,6%) com HE zero. O seu BO em escala: col55 30/08 — 10 min antes do marco 07:00 + 10 min depois do
+  marco 19:00 → HE 0,00, exatamente os 20 min que passavam da tolerância.
 
-  A vigência recuou no mesmo ato, com trilha nominal por empresa: 2026-09-21 → 2026-08-21, ator=sistema:aplicar_janela_he_total, antes/depois gravados. (E reparei que imprimi o
-  timestamp cru na conferência: 19:56 é UTC, o ato foi às 16:56 locais — a casa manda imprimir timezone.localtime e eu não segui na sonda.)
+  Dos 87 com HE > 0, compostos no universo: 50 em 07/09 (feriado) + 21 em 08/09 (a mesma dobra no dia que o turno atravessa) = 71; os 16 restantes têm HE menor que a ponta
+  riscada, que é o comportamento certo.
 
-  TXT novo, ensaio rodado: emp2 238→209 linhas (hash 0e3e008b), emp3 95→86 (5c503b95), emp4 12→9 (84c78cd0). Menos linhas = menos rubricas, consistente com a HE de ponta
-  desaparecendo. Ainda não registrei — falta o --aplicar, e antes disso quero o número de quem entra/sai do TXT medido pela autoridade certa, porque meu parser de matrícula perdeu
-  15 linhas e eu não vou publicar contagem de gente com um parser que eu chutei.
+  A L-092 foi provada sobre a 08, não sobre a 09 — troquei o --mes-intacto porque a 09 está sendo mudada de propósito, e a 08 é a que importa: 07 e 08 foram pagas fora do sistema.
+  Saiu idêntica nas três.
 
-  A prova do passo 6, com a ressalva que ela exige
+  Três erros meus de instrumento, todos publicados
 
-  532 colabs, zero erros: 6.224 dias com ponta riscada na 09, dos quais 6.137 (98,6%) com HE zero. O caso do seu BO está provado em escala — col55 30/08: 10 min antes do marco
-  07:00 + 10 min depois do marco 19:00 → HE 0,00, e os mesmos 20 min antes passavam da tolerância e viravam HE50.
+  A prova deu "zero" com 532 TypeErrors engolidos — terceira vez hoje que uma sonda minha vira "não consegui perguntar" em "a resposta é zero"; virou memória e a sonda agora
+  recusa concluir com erro. O parser do TXT estava deslocado em um caractere e perdia 15 das 238 linhas — eu quase publiquei contagem de gente com parser chutado. E imprimi
+  timestamp cru na conferência da trilha.
 
-  Os 87 restantes eu não vou apresentar como problema sem compor: dos 20 que a sonda nomeou, 13 são 07/09 — feriado confirmado — com HE de 400 a 480 min, que é a dobra da Súmula
-  146 e não tem nada a ver com a janela. E a minha métrica conflaciona: eu somei toda rubrica com "extra" no nome, então feriado entra junto. A composição dos 87 está sendo medida
-  agora.
+  Um achado de carona, registrado sem construir
 
-  Família (3) — eu tentei curar o que a casa já tinha decidido
+  col945 12/09 com 890,29 min de HE (14h50) em um dia, ponta de 1 min. A janela não explica nada ali.
 
-  Migrei a cascata de desligamento para .fechar() porque a nota da allowlist, escrita por mim hoje, prometia isso. A suíte da raia me derrubou com
-  test_MORDE_o_bulk_update_do_desligamento_continua_igual — um selo que declara aquela escrita como exceção intencional, com a razão na docstring. LEI-AKITA 4, e eu prometi uma
-  migração sem grepar se a casa já a havia recusado. Revertido, e medindo os dois lados a exceção se sustenta: o signal é idempotente e a cascata já fecha os chamados antes (os
-  zero pais vivos que eu medi às 14:4x). A linha passa a ser exceção declarada com número, não dívida.
-
-  Diagrama regerado pelo gerador. Suíte cheia da raia rodando de novo — o merge das famílias (1) e (2) é caminho de dinheiro e merece o portão inteiro.
+  Falta o portão da suíte da raia (rodando) para o merge das famílias (1) e (2).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Composicao dos 87 e a suite
+● Famílias (1) e (2) fechadas. Família (3) é o estado do chamado, não só da disputa — vou medir quem escreve status_local fora do chokepoint:
 
-· Bootstrapping… (3h 34m 12s · ↓ 609.2k tokens · thinking)
+  Ran 1 shell command
+
+● Meu grep conta filter(status_local=...) como escritor — leitura lida como escrita. Vou usar AST com a mesma disciplina das outras duas famílias:
+
+● Running 1 shell command…
+
+· Bootstrapping… (3h 39m 12s · ↓ 627.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
