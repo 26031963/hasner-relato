@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:36:01.**
+**Medido em 30/09/2026 13:41:31.**
 
 | | |
 |---|---|
@@ -48,6 +48,7 @@ RELATO, com a lista de nomes do banco como autoridade._
  M app/ponto/tests/test_anexo_pelo_conteudo.py
  M app/templates/colaboradores/partials/_calendario_grade.html
  M app/templates/ponto/partials/painel_ausencia.html
+?? app/chamados/tests/test_sem_resposta_nao_planta_batida.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
 ?? bin/keepalive.sh
@@ -106,26 +107,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O push da UI-ANEXO está terminando (13:27). Na sequência: RED do lote 3, suíte da raia com os lotes 3 e 4, e commit.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
-
-  Read 2 files, ran 11 shell commands
-  ⎿  Interrupted · What should Claude do instead?
-
-! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
-  corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via REGEN-EM-EXPORTADA. Cura
-  da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !
-  ⎿  /bin/bash: eval: line 1: syntax error near unexpected token `('
-     /bin/bash: eval: line 1: `passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de
-     FOLGA pela celula apos a fase corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada
-     so via REGEN-EM-EXPORTADA. Cura da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou !'
-
-
-  Read 1 file, ran 1 shell command
-
-❯ aval Ronald: passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula
   apos a fase corrigida; as de dia de TRABALHO ficam, marcadas 'lancada sem resposta' visivel no espelho. DRY por colab publicado antes; competencia exportada so via
   REGEN-EM-EXPORTADA. Cura da origem: materializacao.py:589 nao cria batida sem resposta humana. PAREI so em lei ou ! !
 
@@ -136,10 +117,30 @@ RELATO, com a lista de nomes do banco como autoridade._
   10:00-22:00 ancora 21/08. Regerar e re-julgar 21/08->hoje; 09 via REGEN-EM-EXPORTADA. Plantoes sem batida de 03-09/09 e 25-29/09: ele estava deslogado (401) -- entram por
   declaracao validada pelo supervisor, sem desconto. PAREI so em lei ou ! !
 
-● Fixture de materializacao para copiar
-  ⎿  $ sed -n '1,70p' chamados/tests/test_materializar_carimba_respondida.py
+  Listed 1 directory, ran 11 shell commands
 
-✢ Bootstrapping… (4m 29s · ↓ 15.6k tokens)
+❯ BUG-APP-SESSAO-401 (P7.1, fura a fila): col515 (u252) teve GET /api/me/ -> 401 x2 em 26/09 de madrugada e NUNCA mais autenticou -- plantoes 25, 27 e 29/09 sem batida por estar
+  deslogado, sem aviso util. Hoje cedo 13+ colabs Android com 401 em /api/ponto/foto/ e /api/me/. Medir: o que invalida o token do app desde ~26/09 (deploy? chave? expiracao?),
+  quantos colabs tem 401 e nenhum 200 depois (= deslogados agora), e o que o app mostra ao receber 401. Cura na origem; o app diz com clareza 'entre de novo'; lista dos
+  deslogados para o admin. Plantao trabalhado sem batida por falha nossa entra por declaracao validada pelo supervisor, sem desconto. PAREI so em lei ou !
+
+❯ BUG-DISPUTA-ZUMBI (P7.1, visivel ao colab): DisputaSupervisao 2336 (col204) tem 'resolucao' escrita pela limpeza Q2-JA v2 ('conversa parada desde 01/08, >30 dias') mas o estado
+  segue ABERTO -- o app mostra 'Em revisao pela supervisao' ha 2 meses. Medir: qual campo o banner le e qual a limpeza escreve; censo de disputas com resolucao preenchida e
+  estado aberto. Cura na origem (a limpeza fecha pela porta que fecha, com trilha); passivo pela mesma porta. Golden da familia chamado/disputa no ESMERIL. PAREI so em lei ou !
+
+  Ran 1 shell command
+
+❯ aval Ronald S5b: o calculador na forma do oraculo passa a ESCREVER o DiaPago da competencia 10 em diante. Criterio: DIFF de frota publicado antes contra o gravado; so mudam as
+  rubricas que o oraculo corrige, todo outro campo de todo colab da ZERO; reversao em logs/; competencia 09 e exportadas intactas. Fora do criterio = PAREI com a tabela. Entra na
+  principal depois do ESMERIL vinculo e da B2. !
+
+● O universo do passivo pelo campo declarado
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/split2.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O universo do passivo, pelo campo que a casa declara: `Batida.pergunta_origem`. SO LEITURA.
+     `ponto/migrations/0054` diz, no help_text: *"Pergunta de d…
+
+✢ Bootstrapping… (9m 59s · ↓ 35.4k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
