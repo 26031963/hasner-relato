@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 12:48:31.**
+**Medido em 30/09/2026 12:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma` |
+| `HEAD` local | `93ee97c6 TICKETS: placar e rodape` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+93ee97c6 TICKETS: placar e rodape
+1444e47a METRICA (c) ZUMBI ciclo 2: producao SUBIU +241 linhas, e o motivo e que tres das quatro sao PORTA
 9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma
 8e45f2e9 RELATO: a porta unica do vinculo do dia, e os tres tetos de query que subiram com retrato
 6dbf2add RELATO: a familia (1) do ESMERIL-MECANICO com numero -- 24 leitores por ordem, e 1.144 dia-colab sem resposta
-fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"
-c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje corrigidos em 3 h
 ```
 
 ## `git status --short`
@@ -100,34 +100,34 @@ c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │          │ arquivos │  +  │  −  │ delta │
+  ├──────────┼──────────┼─────┼─────┼───────┤
+  │ produção │ 7        │ 252 │ 11  │ +241  │
+  ├──────────┼──────────┼─────┼─────┼───────┤
+  │ teste    │ 2        │ 317 │ 0   │ +317  │
+  └──────────┴──────────┴─────┴─────┴───────┘
 
-● A família (1) está com o gate rodando. Enquanto ele não volta, o estado do item:
+  Medido por git diff --numstat contra e3b87217, na mesma árvore — e isso corrigiu um vício da linha de base: ela foi medida na raia wt-esmeril, então os absolutos dela
+  (126.127/161.629) não se comparam direto com os da principal (126.108/162.859). O delta na mesma árvore é a única conta honesta entre ciclos.
 
-  Porta única escrita e medida (76d02764, raia wt-esmeril2): vinculo_do_dia(colab, dia, celulas=None) — a célula primeiro, a linha do tempo (lei de 16/09) só no dia sem célula.
-  escala_vigente delega; turnos.py:425 migrou.
+  As +241 são vinculo_do_dia (a porta única do vínculo do dia), limpar_resolucao_residual (a porta do passivo), reconciliar_disputa_zumbi (comando de uma vez, declarado em
+  FORA_DE_PIPELINE) e o carimbo do motivo no 401. Três das quatro são PORTA — código que existe para um caminho deixar de ser escrito à mão em N lugares, que é o oposto do
+  varredor novo que a métrica persegue. A queda vem quando os 19 leitores da família (1) migrarem.
 
-  O achado que eu não esperava: as duas formas à mão que eu supunha divergentes — turnos.py e precedencia.py — respondem idêntico nos 16.863 dia-colab medidos. A briga não era
-  entre elas; era entre as duas e a célula, que sabe em 1.047 dia-colab onde elas devolvem None.
+  E duas escolhas de universo ficaram escritas, porque contador sem universo mente: crons são 87 por todas_as_entradas() (a fonte que os contratos B6 leem), não os 71 do CRONS
+  fixo; e 121 dos 192 commands estão em FORA_DE_PIPELINE, cada um com motivo escrito.
 
-  Três tetos de query ficaram vermelhos e por isso o preço virou medição, não afirmação: 1 query no dia com célula (a mesma de antes), 2 sem célula, 0 com alimentação — selado com
-  assertNumQueries. Os três subiram com justificativa escrita ao lado do número (C8: registrar_batida 23→24, _gravar_estado 68→75, modal 2600→2830) e com a nota de que voltam
-  quando as fixtures ganharem células — as fixtures daqueles selos não criam nenhuma, inclusive a que se chama prod_like.
-
-  E corrigi o censo duas vezes: o 24 que publiquei estava inflado — cinco sítios eram salário e férias com a mesma forma (order_by('-data_inicio') não é assinatura de vínculo). A
-  primeira tentativa de filtrar por modelo errou para o outro lado e escondeu o api_bater_ponto das duas cascas, que usa apelido de import. Número honesto: 19 VERMELHOS, 19
-  legítimos, 7 de outro modelo nomeados, 1 porta — e é essa a linha de base que o selo de host defende.
-
-  Próximos da fila, já lidos e drop-in: furos_vetados.py::vinculo_do_emissor e escala_certa.py::motivo_escala_errada (mesma assinatura), depois os dois cartorio.py, flip_auto,
-  diagnostico_escala e o api_bater_ponto das duas cascas.
+  O gate da família (1) ainda está rodando (~15 min por rodada na worktree). O lote 1 segue preparado e não aplicado — editar a raia agora corromperia a corrida que está medindo
+  ela.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Esperar o veredito e listar falhas
-  ⎿  $ until grep -qE '^Ran [0-9]+ test' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_esmeril2.log; do sleep 30; done; sleep
-     3; grep -E '^(Ran |OK$|OK \(|FAILED)' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scr…
+● Todo nome de template dinamico
+  ⎿  $ cd /home/ronald/wt-esmeril/app && echo "=== nomes de template montados (%s ou f-string) ===" && grep -rnE
+     "['\"][a-z_]+/[a-z_/]*%s[a-z_]*\.html['\"]|f['\"][a-z_]+/[^'\"]*\{" --include=*.py . | grep -v "/tests" | head -10
 
-✢ Misting… (5h 40m 38s · ↓ 447.6k tokens)
+✢ Misting… (5h 46m 8s · ↓ 464.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
@@ -138,6 +138,6 @@ c2db7dca O passivo das disputas aplicado (55 -> 1), e os rotulos de hora de hoje
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
