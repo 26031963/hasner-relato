@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 17:10:45.**
+**Medido em 30/09/2026 17:15:53.**
 
 | | |
 |---|---|
-| `HEAD` local | `74b62f47 A 09 regerada INTEIRA e o TXT de 28/09 SUBSTITUIDO, com os seis passos provados um por um` |
+| `HEAD` local | `b1d56401 Placar e rodape do TICKETS pelos geradores` |
 | `origin/main` | `0463460b Placar e rodape do TICKETS pelos geradores` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **40** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b1d56401 Placar e rodape do TICKETS pelos geradores
+7e80b80a Registrada a ordem RELOGIO-NO-CALENDARIO, com o item 2 ja respondido
+26180b21 MERGE do ESMERIL-MECANICO: as familias (1), (2) e (3) entram na principal, todas em ZERO
+ffaf96c9 FAMILIA (3) nasce e fecha em ZERO -- e ela achou um defeito NA PROPRIA FERRAMENTA
 74b62f47 A 09 regerada INTEIRA e o TXT de 28/09 SUBSTITUIDO, com os seis passos provados um por um
-971c4e75 Registrado o SIM da 09: a deriva entra junto e os oito contadores entram no alvo
-0e5d023b BACKLOG: familia (2) do ESMERIL fecha em zero, com o limite do contador dito na propria celula
-57cfd367 O meu PAREI da 09 oferecia uma escolha que nao existe, e eu inverti a ordem dele sem registrar
-0463460b Placar e rodape do TICKETS pelos geradores
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -102,44 +101,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  6. A prova: 532 colabs, zero erros, 6.224 dias com ponta riscada, 6.137 (98,6%) com HE zero. O seu BO em escala: col55 30/08 — 10 min antes do marco 07:00 + 10 min depois do
-  marco 19:00 → HE 0,00, exatamente os 20 min que passavam da tolerância.
+  diretório tests e prefixo test_, deixando passar tests.py. Três cópias de uma regra errando igual é exatamente o que a família (1) curou em vínculo e a (2) em batida — eu não ia
+  deixar a ferramenta com o defeito que ela mede. Nasceu bin/esmeril_comum.py com uma regra no lugar de três. Efeito medido: o censo da (2) caiu de 141 para 134 legítimos.
 
-  Dos 87 com HE > 0, compostos no universo: 50 em 07/09 (feriado) + 21 em 08/09 (a mesma dobra no dia que o turno atravessa) = 71; os 16 restantes têm HE menor que a ponta
-  riscada, que é o comportamento certo.
+  E o grep mentiu pela terceira vez no dia: grep 'status_local=' deu 24 sítios, a maioria filter(status_local=...) — leitura lida como escrita. Na família (2) ele havia contado
+  class Batida(models.Model) como escritor.
 
-  A L-092 foi provada sobre a 08, não sobre a 09 — troquei o --mes-intacto porque a 09 está sendo mudada de propósito, e a 08 é a que importa: 07 e 08 foram pagas fora do sistema.
-  Saiu idêntica nas três.
+  criar() entrou como porta e isso foi medido antes de absolver: é o único nascimento em produção e passa pelo veto do motor. "Quem muda o estado" e "quem cria com estado" são
+  perguntas diferentes.
 
-  Três erros meus de instrumento, todos publicados
+  RELOGIO-NO-CALENDARIO registrada, item 2 respondido
 
-  A prova deu "zero" com 532 TypeErrors engolidos — terceira vez hoje que uma sonda minha vira "não consegui perguntar" em "a resposta é zero"; virou memória e a sonda agora
-  recusa concluir com erro. O parser do TXT estava deslocado em um caractere e perdia 15 das 238 linhas — eu quase publiquei contagem de gente com parser chutado. E imprimi
-  timestamp cru na conferência da trilha.
+  Não é bug: o montador marca as duas pontas — marcar_pontas_fora trata 'E' e 'S', e a varredura da 09 deu 4.678 pontas "antes" e 3.660 "depois" em 6.224 dias riscados. O que
+  falta é o calendário, que é outro construtor e não carrega o par (fora_da_janela, minutos_fora) — o partial itera dia.status/dia.palavra_dia. É obra da raia UI, como você
+  posicionou, junto da UI-GRADE-CALENDARIO.
 
-  Um achado de carona, registrado sem construir
-
-  col945 12/09 com 890,29 min de HE (14h50) em um dia, ponta de 1 min. A janela não explica nada ali.
-
-  Falta o portão da suíte da raia (rodando) para o merge das famílias (1) e (2).
+  Push do merge rodando — a suíte cheia sobre a árvore mergeada é o último portão antes do deploy.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-● Famílias (1) e (2) fechadas. Família (3) é o estado do chamado, não só da disputa — vou medir quem escreve status_local fora do chokepoint:
+● Falta a família (4) — leitores de dinheiro. O placar da S3 já faz essa pergunta; vou medir onde ele está:
 
-  Ran 1 shell command
+  Listed 1 directory, ran 1 shell command
 
-● Meu grep conta filter(status_local=...) como escritor — leitura lida como escrita. Vou usar AST com a mesma disciplina das outras duas famílias:
+● Uma falha: um leitor NOVO chama o motor — e é regressão minha de hoje. Vou ver qual:
 
-● Running 1 shell command…
+● Ver qual leitor novo chama o motor
+  ⎿  $ source ~/saas-hasner/bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app \
+     saas-hasner-core:latest python manag…
 
-· Bootstrapping… (3h 39m 12s · ↓ 627.7k tokens)
+· Bootstrapping… (3h 44m 20s · ↓ 648.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
