@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 22:00:41.**
+**Medido em 29/09/2026 22:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos` |
+| `HEAD` local | `aecbb0ff TICKETS: rodape e placar` |
 | `origin/main` | `0436546a TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aecbb0ff TICKETS: rodape e placar
+98259cd5 B1 itens 2 e 3: a lei ja valia no dinheiro e era invisivel na tela -- B1 completa, 4 de 4
 6448790f B1 itens 2 e 3, metade de NUCLEO: a celula de entrada diz se ficou fora da janela, e quantos minutos
 0436546a TICKETS: rodape e placar
 d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- e nasce desligado
-be50379e TICKETS: rodape e placar
-06057219 B1 item 1: a tela mostrava dinheiro do MOTOR e o placar da S3 nao via, porque varre .py
 ```
 
 ## `git status --short`
@@ -99,7 +99,6 @@ be50379e TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Searched for 1 pattern, ran 1 shell command
 
 ● Background command "Publicar a prova e a ordem registrada" completed (exit code 0)
@@ -126,12 +125,13 @@ be50379e TICKETS: rodape e placar
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Suite na raia com a tela e o papel novos · 3m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (3m 18s)
+● Pushing da B1 completa · 1m 25s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1d.log 2>&1; echo "rc=$?"; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (1m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (5h 53m 58s · ↓ 254.2k tokens)
+· Schlepping… (5h 59m 2s · ↓ 258.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
