@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 23:25:45.**
+**Medido em 29/09/2026 23:30:45.**
 
 | | |
 |---|---|
@@ -99,44 +99,44 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
+● B1 completa, 4 de 4, no ar e medida em prod. Ordem registrada em PROMPTS.md no mesmo turno; faltam=0.
 
-  Searched for 2 patterns, ran 17 shell commands
+  O que a B1 achou, que não estava no pedido:
 
-● Background command "Push do item 4" completed (exit code 0)
+  1. A tela mostrava dinheiro do MOTOR e o placar da S3 não via. A linha do dia do espelho imprimia t.horas_trabalhadas / t.horas_extra de dia.turnos — períodos do motor —
+     enquanto o PDF do mesmo dia já imprimia a lavratura. Escapou porque o selo do placar varre .py por AST e a derivação estava num template. Critério que lê uma linguagem mede
+     uma linguagem, e o dinheiro aparece na tela pelo .html. Agora a linha lê dia.rubricas, ganha Atraso e Saída antecipada, e dia sem lavratura diz "sem apuração ainda". Selo
+     novo varre o MARKUP — sem {% comment %}, senão morderia a própria lápide.
+  2. Itens 2 e 3: relógio riscado no marco com o tooltip do Art. 4º §2º e crachá "HE fora da janela: N min · sem decisão". No papel a mesma informação vai como frase — decisão
+     técnica registrada: tooltip não existe em PDF, e num documento do Art.74 §2 frase legível vale mais que glifo sem legenda. O limiar virou função com dois leitores
+     (dentro_da_janela): o que decide o dinheiro e o que decide o riscado.
+  3. Item 4: he_pendente no medir, com o portão Empresa.he_pendente_trava_export nascendo desligado (migration 0053) — mede sempre, só soma em falhas com o cadastro ligado.
 
-  Searched for 1 pattern, ran 4 shell commands
-  ⎿  1 skill available
+  E o smoke de prod pegou uma incoerência minha: o portão contava só os dias acima do teto (60 min) e a tela risca a faixa inteira (acima do piso, 10) — emp2 tinha 23 dias
+  riscados contra portão zero. "Pendente" passaria a significar duas coisas conforme quem pergunta. Curado: os dois leem a mesma fonte. Com isso caiu também a lacuna que eu havia
+  declarado meia hora antes ("a faixa 10–60 exigiria tocar o motor") — não exigia, o dado já estava na célula da grade. Declarar limite é honesto; parar de procurar caminho depois
+  de declarar, não.
 
-● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
+  Medido em prod agora: emp2 piso 10 / teto 60 desde 21/09; emp3 19 dias, emp4 6 — col624 em 22/09 chegou 12:15 contra marco 15:00, 165 min fora. trava=False, falhas=0.
 
-  Searched for 1 pattern, ran 17 shell commands
+  E o hook me cobrou a B1 duas vezes com ela pronta — por um caractere meu: escrevi os nomes dos filtros com o pipe literal dentro da célula do BACKLOG, o pipe terminou a célula,
+  a linha virou 10 células e o _FECHADO passou a ler o fragmento add como estado. Linha reconstruída. O censo achou mais quatro linhas assim (HOOK-PAREI-SE-APAGA, O46, O54, O60,
+  O82) — nomeadas no RELATO como próxima fatia, com o selo de host que falta.
 
-● Background command "Push da B1 completa" completed (exit code 0)
+  PAREI: lei (no topo do RELATO, com números): hora noturna trabalhada em dia de folga gera adicional noturno? E intervalo não registrado nesse dia gera intrajornada indenizada? O
+  motor diz não para as duas, e o único corte escrito sobre folga trabalhada (27/09) decide o adicional de 100% — o noturno do Art.73 é adicional sobre hora noturna, não segunda
+  paga da mesma hora. Na frota da 10: col511 28,00 h · col956 28,00 h · col960 29,16 h · col820 18,89 h que hoje não se pagam. Se a resposta for "sim", quem muda é o motor — a
+  lavratura segue.
 
-  Ran 2 shell commands
+  Próximo da sua ordem: S4.
 
-● O smoke achou uma incoerência que eu mesmo criei: a tela risca 23 dias (faixa 10–60 min) e o portão diz 0 (só acima de 60). Duas perguntas com nomes parecidos — curo agora, com
-  a mesma fonte para as duas:
-
-  Ran 4 shell commands
-
-● Background command "Commit e push da cura da incoerencia" completed (exit code 0)
-
-● Esperar o push final · 8m 10s
-  ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_fim.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (8m 10s)
-  ⎿  1 skill available
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Schlepping… (7h 19m 2s · ↓ 282.9k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Brewed for 7h 21m 24s · done 11:28 PM · 17 shells still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 16 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 17 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
