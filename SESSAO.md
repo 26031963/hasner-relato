@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 10:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (128.3 MB). Acoes na janela: **173**.
+**Medido em 30/09/2026 10:23:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (128.3 MB). Acoes na janela: **174**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:19:08 | Bash | Curar os dois e rodar | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='ponto/portas/he.py' t=io.open(P,encoding='utf-8').read() # (1) a porta NAO re-mede: recebe os minutos de quem decidiu, e so confere que ha pendencia. i=t.index('def _pendencia_do_dia(') j=t.index('@transaction.atomic') t = t[:i] + t[j:] t = t.replace("""def decidir_he(colaborador, data, estado, *, autor, motivo='', request=None): ...` |
 | 10:12:36 | Bash | Veredito da suite de ponto e core | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /app/.hypothesis --tmpfs /app/.mypy_cache -v ~/saas-hasner/app:/app -v ~/saas-hasner/app/staticfiles:/app ...` |
 | 10:06:24 | Bash | Imports completos e suite | `python3 - <<'PYEOF' import io, py_compile P='ponto/migrations/0069_decisao_he.py' t=io.open(P,encoding='utf-8').read() if 'import django.db.models.deletion' not in t: t = t.replace('from django.conf import settings', 'import django.db.models.deletion\nfrom django.conf import settings', 1) io.open(P,'w',encoding='utf-8').write(t) py_compile.compile(P, doraise=True) print('imports completos:', [l fo ...` |
 | 10:06:10 | Bash | Devolver o import e rodar | `head -6 /tmp/m0069.py; python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P='ponto/migrations/0069_decisao_he.py' t=io.open(P,encoding='utf-8').read() assert 'from django.conf import settings' not in t t = t.replace('from django.db import', 'from django.conf import settings\nfrom django.db import', 1) io.open(P,'w',encoding='utf-8').write(t) py_compile.compile(P, doraise=True) print ...` |

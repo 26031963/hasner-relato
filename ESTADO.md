@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 10:18:01.**
+**Medido em 30/09/2026 10:23:31.**
 
 | | |
 |---|---|
@@ -105,17 +105,6 @@ f4ecb106 TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  FASE 1 (AGORA, raia propria wt-esmeril, SO LEITURA, paralela a S4): auditoria por AST + grafo de chamadas sobre codigo de PRODUCAO (py, templates .html, static/js, management
-  commands, crons, signals, migrations de dados) que NOMEIA com arquivo:linha: (a) todo campo de estado com 2+ escritores -- .save/.create/.update/bulk_*/raw SQL/F()/setattr em
-  objeto salvo por outro; (b) toda pergunta de juizes.py com 2+ respondentes -- soma propria, order_by(-x).first(), comparacao de tipo gravado, if de classe em template/JS. Cron
-  e command sao SUSPEITOS por padrao ate provarem que passam pela porta. SAIDA: tabela por familia (batida, celula, turno, vinculo/escala, ausencia/ferias, chamado, folha):
-  campo/pergunta -> canonico -> outros achados -> veredito (duplicado/derivacao/ok), com numeros; publicada no RELATO; o script entra na REGUA com allowlist = censo de hoje, que
-  SO ENCOLHE. A raia nao toca codigo de producao nem banco de prod; pista de teste compartilhada.
-  P7.1 VALE: bug PROVADO que o censo achar vai para a PRINCIPAL na hora, mesmo que o estrutural fosse mata-lo depois -- 'morre sozinho' nao e lei (col899: porta pela metade, bug
-  vivo no dia seguinte).
-  FASE 2 (principal, logo apos a S4, antes de B2): cada duplicado migra para o escritor unico; cada derivacao vira leitura do juiz; tripwire de runtime (pre_save recusa escrita
-  fora do escritor); UniqueConstraint(colab, ativa) e EXCLUDE ligam SO depois dos 46 leitores de order_by('-data_inicio') migrarem. Constraint de banco = tripwire, nunca a cura.
-  GOLDENS: col899 (dois ativos por porta pela metade; leitor mostrou folga 28/30 pela 1310), col438 (disputa_s84_retro criou batida sem resposta em folga --
   materializacao.py:589).
   CONTADORES NO ESTADO (esperado 0, publicados a cada ciclo): batidas lancadas sem resposta em dia de folga; vinculos ativos sobrepostos; leitores que escolhem vinculo sem
   perguntar ao dia; dias com escala corrigida e nao re-julgados; POST /api/ponto/foto/ 401 na ultima hora.
@@ -127,12 +116,23 @@ f4ecb106 TICKETS: rodape e placar
 
 ● Minha reescrita da migration cortou um import. Corrijo:
 
-● Veredito da suite de ponto e core · 5m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (5m 23s)
+  Ran 3 shell commands
+
+● Dois selos pegaram a minha porta, e os dois estão certos. O segundo é o melhor achado: a porta não deve re-medir — quem decide já tem o número na tela:
+
+● Curar os dois e rodar · 4m 23s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='ponto/portas/he.py'
+     t=io.open(P,encoding='utf-8').read()
+     # (1) a porta NAO re-mede: recebe os minutos de quem decidiu, e so confere que ha pendencia.
+     i=t.index('def _pendencia_do_dia(')
+     j=t.index('@transaction.atomic')
+     t = t[:i]… (4m 21s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (3h 10m 8s · ↓ 197.5k tokens)
+✢ Misting… (3h 15m 38s · ↓ 200.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
