@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 18:30:31.**
+**Medido em 30/09/2026 18:35:45.**
 
 | | |
 |---|---|
@@ -99,39 +99,39 @@ f629485a Eu corrigi uma linha do ESMERIL as 17:2x e esqueci a IRMA -- meia-corre
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● A célula do BACKLOG ainda diz que os 9 deslogados foram nomeados à mão — e é justamente isso que acabou de virar código. Commitando por PATH (a cura da O57), e conferindo o que
-  é meu:
-
-  Committed f2301fe5, ran 1 shell command
-
-● Agora a prova de que a lista é viva: rodando a lavratura contra o log real de prod, sem --apply, e comparando com os 9 nomes que eu digitei às 13:04:
+● Isto muda a cura por completo. O escritor põe o ? de propósito e declara que mantê-lo fora do contador é o certo. Lendo a lápide inteira:
 
   Ran 1 shell command
 
-● chamadas_401 = 0 contra os 11-17% por dia que eu medi hoje não fecha. Zero contra um universo conhecido é implausível — é o teste que pegou o erro nº 8 hoje. Conferindo no log
-  cru antes de acreditar:
+● A lei existe, é corte do Ronald de 09/09, e está escrita no escritor:
+
+  ▎ "um ?u1 no log e uma AFIRMACAO DO CLIENTE, nao um fato da casa. Misturar as duas formas plantaria uma pessoa real na forense a pedido de quem atacasse. (...) o ? o mantem fora
+  ▎ do contador, que e o certo -- contador nao se alimenta de afirmacao nao conferida."
+
+  A minha cura planejada era um vetor de injeção: qualquer um forja um JWT com user_id=N e põe o colaborador N na lista de deslogados e na pauta do supervisor. LEI-AKITA 4 — a
+  pergunta nunca era "qual a regra", era "qual leitor não migrou". Vendo que fatos da casa respondem a pergunta sem claim nenhum:
 
   Ran 1 shell command
 
-● Achei, e é o erro nº 11 — mas este mora no parser compartilhado, não no meu: o log marca o colab não autenticado com ? (colab=?u834), e o regex do irmão só aceita u?\d+. Ele é
-  estruturalmente cego justamente à população do 401:
+● Sem token_blacklist, a casa não guarda token — então não há registro de emissão. Mas há um fato da casa que responde a pergunta inteira, e o col515 é o teste: corrida de
+  plantões sem batida + zero atividade autenticada na janela. Medindo na fonte antes de redesenhar:
 
   Ran 1 shell command
 
-● Conclusivo: as 697 linhas com ? são TODAS 401, e nenhuma outra coisa — o ? é o marcador de "identidade alegada, autenticação falhou". O parser compartilhado é cego a 697 dos 731
-  401s, e isso não é só meu: o irmão abriu_nao_bateu nunca viu um deslogado. Bug no caminho vem primeiro (LEI-AKITA 6). Lendo o consumidor antes de mexer:
+● Os fatos da casa respondem com precisão, e sem claim nenhum: last_login 24/09 02:51, última batida 24/09 07:08, e de 25/09 a 30/09 zero batidas com plantões no meio. Antes de
+  construir sobre o last_login, preciso saber se ele se move no refresh do token ou só no login por senha — se só no login, eu marcaria gente saudável:
 
   Ran 1 shell command
 
-● O impacto é pior do que "meu comando viu zero": no abriu_nao_bateu, uma linha de /api/me/ entra em abriu qualquer que seja o status — então os 697 eventos invisíveis são
-  exatamente as pessoas com mais chance de ter aberto o app e não batido. O contador que existe para dar esse alarme é cego à população que o dispara. Medindo o ANTES antes de
-  tocar:
+● last_login se move (p50 = 0 dias), mas 16 pessoas que bateram hoje têm last_login com mais de 7 dias, e o máximo é 26 — então ele não serve de critério, só de coluna
+  informativa. Usá-lo como critério marcaria gente saudável: é a 12ª armadilha de instrumento, evitada por medir. O critério tem de ser o furo, e o furo já tem juiz — preciso ler
+  a lâmpada, não re-julgar:
 
-  Running 1 shell command…
+  Achar a lampada do furo
 
-✢ Bootstrapping… (4h 58m 59s · ↓ 906.1k tokens)
+· Bootstrapping… (5h 4m 12s · ↓ 919.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
