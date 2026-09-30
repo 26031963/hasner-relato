@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:16:18.**
+**Medido em 30/09/2026 20:21:41.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/docs/BACKLOG.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -99,44 +100,44 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● 7 verdes. Commitando a raia e depois rodando a suíte dela:
+  do apagão de 23/09, pego pelo selo que renderiza), e o CNPJ de fixture 11222333… é excluído por empresas_visiveis — o que fez um selo meu passar vazio, achando que faltava
+  retrato quando faltava empresa.
 
-  Committed 6f77788a
+  Onde está a fila 1 agora: a aba Autorizar/Não da B2. O motor dela já está no ar (95389e29) e a porta também existe (ponto/portas/he.py::decidir_he, idempotente, permissão dentro
+  dela, trilha). Falta a aba — e ela depende da listagem estar em main, o que eu resolvo por cherry-pick do meu commit (tela nova, não toca base nem static/js/), não pelo merge
+  das 7 fatias que esperam o seu clique.
 
-● Commitado na raia. Agora fecho o buraco que eu registrei: a lavratura que a tela lê não tem horário. Ela depende de célula e cartório assentados, então é elo da mesma corrente:
+  Espera você: os 61 dos 84 dias do COL900 (célula certa, template errado — os horários que as batidas confirmam já estão medidos), e o smoke de clique para o merge da raia.
 
-  Ran 1 shell command
-
-● O PAPEL_DO_CRON cobra a declaração, como cobrou no irmão. Declarando:
-
-  Ran 1 shell command
-
-● 40 verdes e o diagrama com duas arestas novas. Conferindo o crontab antes de instalar:
-
-  Ran 1 shell command
-
-● O diff mostra algo que não é meu: o crontab está sem a linha 38 7 censo_fase_12x36 --lavrar, declarada no código e nunca instalada. Instalar traria ela também, então preciso
-  saber o que ela escreve antes:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O-JANELA-HE parte B2 (AUTORIZAR) -- METADE NO AR; a outra metade e a TELA, e ela e a FILA 1 AGORA. A ordem de 30/09 17:1x revogou o "NAO
+  CONSTRUIR
 
   Ran 1 shell command
 
-● É lavratura de contador (MetricaSnapshot, papel de VIGIA) — nem dinheiro, nem escala, nem vínculo. Foi declarada e nunca instalada: o crontab derivou do código. Instalando:
+● A suíte segue ocupando a pista de main, então construo a aba na raia, onde a tela vive — e as duas descem juntas no mesmo ato, que é o que a lei do merge pede. Lendo o resto da
+  porta e o que ela faz com o DiaPago:
 
   Ran 1 shell command
 
-● Crontab em sincronia (100 linhas, com backup). Commitando e rodando a suíte completa, que é o portão do push:
+● A porta valida tudo, mas falta o que a ordem pede: "Autorizar RE-LAVRA o DiaPago daquele dia no evento". Vendo o fim dela:
 
-● Commitar o cron e iniciar a suite
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_cron.txt <<'EOF'
-     O retrato que a tela le ganha HORARIO, e o crontab estava com uma linha a menos que o codigo
-     A Gestao de HE (na raia UI) LE um retrato lavrado do…
+  Ran 1 shell command
 
-✽ Bootstrapping… (6h 44m 45s · ↓ 1.2m tokens)
+● A porta não relavra. Pelo idioma da casa (o registrar_batida chama _fechamento_por_evento), a consequência mora na porta. Vendo a assinatura do recálculo por evento:
+
+  Ran 1 shell command
+
+● Exatamente o que a ordem pede: recalcula a competência daquele dia, agendado em on_commit, nunca levanta. Ligando na porta:
+
+  Running 1 shell command…
+
+✢ Bootstrapping… (6h 50m 9s · ↓ 1.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
