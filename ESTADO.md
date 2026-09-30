@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:629 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:648 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 13:04:41.**
+**Medido em 30/09/2026 13:10:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `93ee97c6 TICKETS: placar e rodape` |
+| `HEAD` local | `4da39ce5 Os 9 deslogados viraram pauta para a supervisao (#852-#860), e a porta me corrigiu o remetente` |
 | `origin/main` | `fdd7f7f8 O comando do passivo nao tinha CASA -- e a pergunta certa era "ele e pipeline ou e de uma vez?"` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4da39ce5 Os 9 deslogados viraram pauta para a supervisao (#852-#860), e a porta me corrigiu o remetente
 93ee97c6 TICKETS: placar e rodape
 1444e47a METRICA (c) ZUMBI ciclo 2: producao SUBIU +241 linhas, e o motivo e que tres das quatro sao PORTA
 9c35c4ac RELATO: o censo da familia (1) e 19, nao 24 -- cinco eram salario e ferias com a mesma forma
 8e45f2e9 RELATO: a porta unica do vinculo do dia, e os tres tetos de query que subiram com retrato
-6dbf2add RELATO: a familia (1) do ESMERIL-MECANICO com numero -- 24 leitores por ordem, e 1.144 dia-colab sem resposta
 ```
 
 ## `git status --short`
@@ -100,34 +100,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O gate fechou VERDE: 8.761 testes OK na raia, e a família (1) andou dois lotes:
 
-  Lote 1 (68e83bdb) — 19 → 17. Os dois primeiros eram a porta escrita à mão com outro nome: furos_vetados.py::vinculo_do_emissor se chamava literalmente "vínculo do emissor" e o
-  corpo dela virou uma linha. Prova: os 5 selos que citam os módulos + o da porta = 42 OK.
+  E o primeiro dos 12 é o retrato da LEI-AKITA 12 com a 8 — a casa diz três vezes quando a noite começa, e quem decide é a quarta:
 
-  Lote 2 (em teste agora) — 17 → 14: os dois sítios do cartorio.py e o flip_auto.py. Este último perdeu o ativa=True seco, que era justamente o que deixava sem resposta o dia de
-  quem trocou de escala (lei de 16/09). Como o cartório é juiz, está rodando a suíte inteira, não a focada.
+  ┌───────────────────────────────────────────────────┬─────────────────────────────────┬──────────────────────────────────────────┐
+  │                       onde                        │            o que diz            │                 quem lê                  │
+  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
+  │ PerfilApuracao.noturno_inicio                     │ cadastro, default '22:00'       │ ninguém                                  │
+  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
+  │ motor_calculo_v2.py:44-45 HORA_NOTURNA_INICIO/FIM │ constante com nome              │ ninguém — estão entre as 17 flags mortas │
+  ├───────────────────────────────────────────────────┼─────────────────────────────────┼──────────────────────────────────────────┤
+  │ motor_calculo_v2.py:101 e :103                    │ time(5,0) e time(22,0) cravados │ o cálculo                                │
+  └───────────────────────────────────────────────────┴─────────────────────────────────┴──────────────────────────────────────────┘
 
-  Escolhi deixar de fora, com motivo: diagnostico_escala.py:129, esmeril_espelho.py:114, precedencia.py:217 e escala_auto.py:172 carregam lista de um período, não o vínculo de um
-  dia — a pergunta ali é "quais vínculos cobrem esta janela", e a porta atual não responde essa. Vão um a um, com leitura.
+  Enquanto os três concordarem, ninguém vê — e eles concordam hoje, que é exatamente por que isso sobreviveu.
 
-  E mais duas correções de critério no censo da FASE 1, as duas do mesmo tipo:
+  Medi antes de propor: existe UM PerfilApuracao no tenant e ele está com os defaults exatos — zero divergência. Então ligar o cadastro hoje não move um centavo: o DIFF é zero por
+  construção, e a cura vira barata em vez de arriscada. Segue precisando do seu ! porque toca motor_calculo_v2.py; o que mudou é o tamanho do risco, não a regra. E fica o retrato
+  de que o cadastro "por cliente" tem uma linha só — uma promessa de configuração que ninguém precisou usar ainda.
 
-  - "campo sem leitor" 22 → 21: HistoricoSalario.salario_base aparecia morto sendo lido três linhas abaixo — a varredura ignorava todo models.py ao procurar leitor. Método de
-    model lendo campo de model é a forma certa; o que se exclui é a linha da definição, não o arquivo. É literalmente o erro que fez flags_mortas dar 283 antes de virar 17.
-  - "template sem rota": 1 dos 7 está VIVO por include de nome montado no Python. O ponto cego entrou na lápide com a conferência obrigatória antes de qualquer remoção.
-
-  Dos 21 campos sem leitor, dez são as rubricas e os parâmetros do PerfilApuracao (rubrica_*, noturno_inicio, horas_para_intrajornada) — cadastro que existe, tem tela, e cujo
-  valor nenhum cálculo lê. É a LEI-AKITA 12 ao pé da letra, e casa com o que a régua CCT já havia medido em 01/09: só 3 dos 10 parâmetros dela chegam a algum cálculo.
+  A suíte do lote 2 ainda roda (13:07, começou 13:01).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: ESMERIL-MECANICO -- CENSO DE ESCRITORES E LEITORES DO SISTEMA INTEIRO -- renomeada de ESMERIL-2 em 30/09 12:0x por ordem dele: e a
 
-  Escrever as pautas e provar a idempotencia
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec -e APLICAR=1 saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/pd.py').read())" 2>&1 |
-     grep -v "objects imported" | tail -5; echo "=== reconferir idempotencia ==="; docker exec saas_core python manage.py tenant_c…
+  Existe escritor de celula editada
+  ⎿  $ cd /home/ronald/wt-esmeril/app && grep -rn "origem='editada'\|origem=\"editada\"\|'editada'" --include=*.py . | grep -v "/tests" | grep -v tests_ | head -8
 
-✢ Misting… (5h 56m 48s · ↓ 492.1k tokens)
+✶ Misting… (6h 2m 8s · ↓ 508.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! passivo disputa_s84_retro (1.753 batidas, 329 colabs, lote u666 16/08 13:52, sem resposta do colab): RETRATAR com trilha SO as que caem em dia de FOLGA pela celula apos a fase
