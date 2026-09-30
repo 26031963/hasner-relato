@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:50:01.**
+**Medido em 29/09/2026 21:55:20.**
 
 | | |
 |---|---|
@@ -102,6 +102,7 @@ be50379e TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
   Ran 16 shell commands
@@ -121,7 +122,7 @@ be50379e TICKETS: rodape e placar
 
 ● Itens 2 e 3 da B1 (relógio riscado + aviso), numa fatia só — a regra fica num sítio:
 
-● Suite de ponto e escala com o marcador novo · 1m 33s
+● Suite de ponto e escala com o marcador novo
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io, py_compile
@@ -131,10 +132,9 @@ be50379e TICKETS: rodape e placar
      resultado_v2.anomalias, data_ini, data_fim_mes, ano)
      """
      N = """ _datas_anomalia = datas_anomalia_janela(
-     resultado… (1m 31s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+     resultado…
 
-* Schlepping… (5h 43m 18s · ↓ 246.3k tokens)
+✻ Schlepping… (5h 48m 37s · ↓ 246.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
