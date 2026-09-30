@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 16:22:31.**
+**Medido em 30/09/2026 16:28:01.**
 
 | | |
 |---|---|
@@ -41,10 +41,10 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/smoke_he_tmp.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,26 +101,6 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. Primeiro fecha a prova da 10: as noturnas vieram +114,52 contra -57,81. Abre as
-     172 h por causa e por colab. Sem isso a medicao da 09 herda a mesma cegueira.
-  2. Na SOMBRA, a 09 (21/08-20/09) com piso 0 e saida ligada, contra o GRAVADO
-     exportado: por rubrica e por colab, empresas 2, 3 e 4.
-  3. SEPARAR em duas colunas o efeito da REGRA e a DERIVA do gravado. O numero da
-     regra sozinho e o que ele precisa ver.
-  4. Dizer quantos colabs ganham ATRASO novo e quantos perdem HE, com os 10 maiores.
-  5. Dizer o caminho de gravacao se ele mandar aplicar: TXT novo inteiro com hash
-     (substitui o de 28/09) ou retificacao, e o que a L-092 exige em cada um.
-     NADA grava na 09. Publica no topo do RELATO e segue a fila.
-
-❯ aval Ronald 30/09 16:2x -- BLOQUEIO TOTAL DE HE VALE NA 09. APLICAR.
-  Corrige o meu bloco de 15:1x ("a 09 nao se toca"): estava errado. O TXT de 28/09
-  NAO foi importado por ninguem e a folha nao sera usada com essas HE. A ordem dele
-  desde o inicio: HE de ponta desaparece, so existe por autorizacao.
-
-  EXCECAO ESCRITA, no mesmo commit: L-097 passa a valer da competencia 09; L-092
-  ganha a excecao nomeada "09/2026 regerada INTEIRA por ordem dele, TXT de 28/09
-  nao importado e SUBSTITUIDO". Nao e caminho generico: vale para esta competencia.
-
   1. Antes: a causa das noturnas da 10 (+114,52 contra -57,81) com nome e numero no
      RELATO. Se for bug e nao deriva, cura primeiro -- a 09 nao herda.
   2. janela_he_desde das empresas 2, 3 e 4 recua para 21/08, pela porta, com trilha.
@@ -134,10 +114,30 @@ c81aca40 Placar e rodape do TICKETS depois do push de 59bfd708 -- os dois gerado
      28/09. O antigo fica invalidado com trilha, nunca apagado.
   6. Relogio riscado e he_pendente cobrindo a 09. PROVA no RELATO: HE de ponta = 0
      na 09, e o calendario do col do print (12x36 19-07) sem "+0,2h extra 50%". !
-  ctrl+x ctrl+s to send now
+
+● Ordem registrada primeiro, e o item 1 é o portão de tudo. Vou medir a causa das noturnas com nome e número:
+
+  Ran 2 shell commands
+
+● Minha sonda somou só periodos e ignorou periodos_ft — sonda mal parametrizada lida como bug. Vou ler o campo que o escritor usa:
+
+  Ran 1 shell command
+
+● Item 1 respondido: é DERIVA, não bug — e a prova é que o gravado agora é exatamente o motor:
+
+● Ver os modelos de export da folha
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from folha.models import *
+     import django.apps as _a
+     for m in _a.apps.get_app_config('folha').get_models():
+     print(m.__name__, m.objects.count())
+     " 2>&1 | grep -v "W004\|WARNINGS\…
+
+✢ Bootstrapping… (2h 56m 29s · ↓ 479.9k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
