@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:06:01.**
+**Medido em 29/09/2026 21:11:31.**
 
 | | |
 |---|---|
@@ -41,10 +41,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ```
  M app/colaboradores/models.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
+ M app/folha/porta_export.py
+ M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/migrations/0053_empresa_he_pendente_trava_export.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/folha/tests/test_b1_portao_he_nasce_desligado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,8 +104,6 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Acertar rodape e empurrar" completed (exit code 0)
-
   Searched for 1 pattern, read 1 file, listed 1 directory, ran 9 shell commands
 
 ❯ ordem Ronald: B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b. Segue a fila; PAREI so em lei ou !
@@ -130,10 +131,12 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
 
-● A migration e o conferir da porta
-  ⎿  $ grep -n "'falhas'" folha/porta_export.py | head; sed -n "$(grep -n "'falhas':" folha/porta_export.py | head -1 | cut -d: -f1),+14p" folha/porta_export.py
+  Suite dos quatro apps com o portao novo · 3m 52s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app -v ~/saas… (3m 50s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Schlepping… (4h 59m 18s · ↓ 227.0k tokens · thought for 4s)
+✢ Schlepping… (5h 4m 48s · ↓ 233.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
