@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:48:31.**
+**Medido em 30/09/2026 07:53:51.**
 
 | | |
 |---|---|
@@ -101,13 +101,6 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 
 ```
 
-● Agora o selo, com a lei escrita — inverto de novo, e cada assertiva cita a linha do aval:
-
-  Ran 2 shell commands
-
-❯ lei Ronald: PAREI de LEI nao devolve turno. Quando faltar lei, registra a pergunta no topo do RELATO com numeros e SEGUE o proximo item da ORDEM VIVA que nao depende dela; a
-  resposta entra quando vier. So devolve turno por ! de dinheiro exportado/vinculo/apagar prod. PAREI so em lei ou !
-
 ● Duas coisas ao mesmo tempo: a lei nova (registro e implemento no hook) e o meu selo que falhou — a assertiva estava errada, não o código.
 
   Ran 6 shell commands
@@ -126,17 +119,24 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 
 ● O DIFF saiu. Publico antes do apply, como ele pediu:
 
-● Pushing da lei e do catalogo · 6s
+● Pushing da lei e do catalogo · 5m 27s
   ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_lei.log 2>&1; echo "rc=$?"; tail -4
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (3s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (5m 24s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (40m 38s · ↓ 39.4k tokens)
+✢ Misting… (45m 58s · ↓ 39.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ UI-ANEXO-AUSENCIA (raia UI, depois do catalogo): 440 anexos medidos pelo CONTEUDO: 204 jpg, 161 png, 37 pdf, 35 jpeg, 3 heic (2 gravados como .jpg). (1) historico
+  (painel_ausencia.html:195-197) e lista (ausencias.html:169-171) passam a decidir pelo MESMO tipo_real do painel (HX-TIPO-REAL-DOC), nunca pelo nome: pdf -> iframe/lightbox de
+  pdf, heic -> aviso + Abrir/Baixar, imagem -> img. (2) HEIC: converter para jpg NA ENTRADA (anexar_documento_ausencia e o endpoint do app), guardando o original; os 3 existentes
+  convertidos por comando idempotente com trilha. RED: fixture com pdf nomeado .jpg e heic nomeado .jpg renderizam certo no historico; selo MORDE nas duas cascas. Sem tocar
+  nucleo. PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
