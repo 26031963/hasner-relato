@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:428 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:517 AFIRMA ato sem PROVA ao lado -- # APLICADO: a 09 REGERADA INTEIRA e o TXT de 28/09 SUBSTITUIDO (30/09 16:56-17:07)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 19:02:01.**
+**Medido em 30/09/2026 19:07:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao` |
+| `HEAD` local | `d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados` |
 | `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela mediu foi que os numeros da ordem eram OS MEUS, errados
 0df94f5e A cura das minhas 7 pautas erradas nao e eu digitar de novo: a pauta passa a NASCER do lavrado, e as erradas fecham por construcao
 94936565 A lista dos deslogados lia o log e ia plantar gente na forense a pedido de quem atacasse -- a lei estava escrita e eu nao a tinha lido
 f2301fe5 Lista digitada nao e lista: os deslogados passam a ser LAVRADOS, e o meu DIFF parou de recalcular o dia
 66f46a26 BUG-APP-SESSAO-401: metade no ar, e a outra metade e FRONT e espera o smoke dele
-f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que ninguem tinha medido
 ```
 
 ## `git status --short`
@@ -41,9 +41,7 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ```
  M CLAUDE.md
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
+ M app/ponto/management/commands/passivo_disputa_retro.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -103,39 +101,39 @@ f15c29b8 BUG-DISPUTA-ZUMBI fecha em ZERO, e conferi-lo achou o SIMETRICO que nin
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  sem "v2". Gerar de novo entrega o mesmo nome com o conteudo novo. Backup e renomeacao sao do admin. Versao, data e hash vivem so no registro interno. RED: duas geracoes da
+  mesma competencia -> nomes IDENTICOS, conteudos diferentes, e o registro interno com as duas.
 
-● A função real diz 933 vivas, e as classes dela diferem das minhas — porque a minha medição à mão usou a chave errada (data local + dna.marcos) e a real usa data_turno +
-  cel.trabalha:
+● Terceira ordem. Registro as duas novas e sigo. Primeiro os fatos que as duas REDs pedem — quantas exportações a 09 da emp2 tem, qual é a vigente, e como o nome do arquivo é
+  gerado hoje:
 
-  ┌──────────────────────────┬─────┐
-  │   classe (função real)   │  n  │
-  ├──────────────────────────┼─────┤
-  │ TRABALHO (fica, marcada) │ 536 │
-  ├──────────────────────────┼─────┤
-  │ SEM CÉLULA (não decido)  │ 243 │
-  ├──────────────────────────┼─────┤
-  │ FOLGA (retrata)          │ 114 │
-  ├──────────────────────────┼─────┤
-  │ SEM TURNO que a contenha │ 40  │
-  └──────────────────────────┴─────┘
+  Ran 2 shell commands
 
-  Os "41 em folga" e os "257 sem célula" da sua ordem são os meus números de 13:4x, e estavam errados. Abrindo por competência pela classificação real:
+● O modelo já tem tudo (conteudo, hash_sha256, gerado_em/por, invalidada_em/motivo/substituida_por) e o nome de hoje já sai de empresa+mês+ano. Conferindo se o meu regerador de
+  17:07 obedece ao mesmo nome, e os fatos da RED:
 
   Ran 1 shell command
 
-● Agora tenho a tabela autoritativa. Publicando antes de qualquer escrita, com a pergunta de lei no topo (ela não devolve turno, L-...):
+● As duas REDs já estão verdes em prod, e uma delas me corrige:
 
-● Escrever a lei nova no CLAUDE.md
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'CLAUDE.md'
-     t = io.open(P, encoding='utf-8').read()
-     ANC = 'REGEN-EM-EXPORTADA (lei nova, Ronald 29/09 ~14:1x -- a EXCECAO NASCE COMO PORTA, nunca destravando a trava).\n'
-     assert t.count(ANC) == 1
-     NOVO = '''A …
+  - emp2 09/2026 tem 2 exportações: id20 (28/09, 238 linhas, invalidada, substituída pela 23) e id23 vigente ✓
+  - os dois têm o nome IDÊNTICO DominioCustomizavel2_J.A_Julian_092026.txt com conteúdos diferentes, e o registro guarda ambos ✓
+  - e a sua hora (17:07) contra a minha (20:07) é o meu print: imprimi gerado_em cru em UTC, contra a lei do CLAUDE.md — "toda sonda imprime timezone.localtime, nunca o timestamp
+    cru".
 
-✢ Bootstrapping… (5h 30m 29s · ↓ 1.0m tokens · thinking)
+  O que falta é o nome viver em um lugar (hoje é derivado em dois: folha/views.py:196 e o meu regerador:89) e as três ferramentas. Vendo onde moram as irmãs Haiku:
+
+  Ran 1 shell command
+
+● As irmãs moram em folha/fora_da_folha.py. Registrando as duas ordens e reescrevendo a lei — a que eu escrevi às 19:xx cai inteira, porque o paga deixou de ser portão:
+
+  Ran 1 shell command
+
+● Registrando as duas ordens (L-010):
+
+● Running 1 shell command…
+
+✢ Bootstrapping… (5h 35m 59s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
