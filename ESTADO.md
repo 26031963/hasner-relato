@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:35:45.**
+**Medido em 30/09/2026 09:40:46.**
 
 | | |
 |---|---|
@@ -121,13 +121,13 @@ ed22ec4c TICKETS: rodape e placar
 ● A constraint achou algo que muda a ordem: 19 selos modelam dois ativos de propósito — a casa ainda fala essa língua. Seguro a constraint atrás da ESMERIL-2 e registro com os
   nomes:
 
-  Pushing da medicao e do recuo · 3m 2s
+● Pushing da medicao e do recuo · 8m 3s
   ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
      app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (2m 59s)
+     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (8m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (2h 27m 52s · ↓ 151.2k tokens)
+✽ Misting… (2h 32m 53s · ↓ 151.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.

@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 09:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.8 MB). Acoes na janela: **157**.
+**Medido em 30/09/2026 09:40:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.8 MB). Acoes na janela: **155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -165,5 +165,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:47:08 | Bash | O sinal do delta da celula | `sed -n '245,262p' escala/utils.py` |
 | 21:46:46 | Bash | O que realizado_grade entrega por celula | `sed -n '690,712p' escala/utils.py` |
 | 21:46:37 | Bash | A celula da grade carrega o desvio em minutos? | `grep -n "'status': \\|'hora': \\|_dist_marco\\|'delta'\\|minutos" escala/utils.py \| grep -n "celula\\|'hora'\\|status\\|delta" \| head -12` |
-| 21:36:44 | Bash | he_pendente medido em prod, com o portao desligado | `cd /home/ronald/saas-hasner && cat > /tmp/medir_he.py <<'PYEOF' # -*- coding: utf-8 -*- from colaboradores.models import Empresa from folha.porta_export import medir for e in Empresa.objects.filter(pk__in=(2, 3, 4)).order_by('pk'): d = medir(e, 10, 2026) hp = d.get('he_pendente') or [] print(' emp%s he_pendente=%-3d trava=%-5s falhas=%s' % (e.pk, len(hp), d.get('he_pendente_trava'), d.get('falhas' ...` |
-| 21:36:20 | Bash | Push e deploy COM migrate do item 4 | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1c.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"; timeout 900 bin/deploy.sh > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy4.log 2>&1; echo "deploy rc=$?"; grep -E 'migra ...` |
