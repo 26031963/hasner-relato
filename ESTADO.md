@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:61 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:97 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:59:01.**
+**Medido em 30/09/2026 08:04:31.**
 
 | | |
 |---|---|
@@ -41,7 +41,9 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,43 +103,43 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  do mesmo colab passa. Medir: qual auth o endpoint de foto usa vs /bater/, e o que mudou nos deploys de 29/09 (core, urls_core, middleware). RED com token valido de app. Cura na
+  origem, deploy ja, smoke com um colab real. Tela do admin nao mostra a foto = Portaria 671. PAREI so em lei ou !
 
-● Ordem da raia UI registrada. A suíte da lei da folga trabalhada está verde (4.489 OK) — agora o DIFF de frota que ele pediu antes do apply.
+● P7.1 em prod. Registro e meço já — isso fura a fila.
 
-  Ran 4 shell commands
+  Searched for 2 patterns, ran 3 shell commands
 
-● Enquanto o DIFF roda, abro a raia UI no primeiro item da ordem dela (catálogo /relatorios/) — ela já tem a fatia 1 construída:
+● Achado decisivo: todo 401 tem um 200 no mesmo segundo. Meço se há perda real de foto antes de curar nada:
 
-  Searched for 1 pattern, ran 4 shell commands
+  Ran 2 shell commands
 
-● O DIFF saiu. Publico antes do apply, como ele pediu:
-
-  Ran 4 shell commands
-
-❯ UI-ANEXO-AUSENCIA (raia UI, depois do catalogo): 440 anexos medidos pelo CONTEUDO: 204 jpg, 161 png, 37 pdf, 35 jpeg, 3 heic (2 gravados como .jpg). (1) historico
-  (painel_ausencia.html:195-197) e lista (ausencias.html:169-171) passam a decidir pelo MESMO tipo_real do painel (HX-TIPO-REAL-DOC), nunca pelo nome: pdf -> iframe/lightbox de
-  pdf, heic -> aviso + Abrir/Baixar, imagem -> img. (2) HEIC: converter para jpg NA ENTRADA (anexar_documento_ausencia e o endpoint do app), guardando o original; os 3 existentes
-  convertidos por comando idempotente com trilha. RED: fixture com pdf nomeado .jpg e heic nomeado .jpg renderizam certo no historico; selo MORDE nas duas cascas. Sem tocar
-  nucleo. PAREI so em lei ou !
-
-● Ordem registrada. O push da lei + catálogo está rodando; registro a UI-ANEXO-AUSENCIA no mesmo turno:
+● O 401 não perde foto — 32 de 32 têm um 200 do mesmo colab em ±15 s. A observação dele (a tela não mostra a foto) precisa de causa própria; meço:
 
   Ran 1 shell command
 
-● Background command "Push da lei e do catalogo" completed (exit code 0)
+● Refutado com número: hoje são 251 batidas, 251 com foto (100%) — e os 5 colabs do 401 têm a selfie gravada. O defeito está no LEITOR ou no arquivo, não no upload. Meço os dois:
 
-  Running 1 shell command…
+  Listed 1 directory, ran 4 shell commands
 
-✢ Misting… (51m 8s · ↓ 41.4k tokens)
+● O pipeline inteiro está medido e nada perde foto. Registro a ordem com o resultado e construo o contador — que é a cura que está no meu alcance:
+
+  Ran 2 shell commands
+
+● Aqui está o caso dele: o universo certo é origem='app', e não é zero — 3 ontem, 2 anteontem. Nomeando:
+
+● O sistema sinaliza as batidas sem foto?
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/disputa_foto.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """As 12 batidas de app sem foto TEM a disputa `foto_ausente` que o sistema promete? (leitura pura)"""
+     from ponto.models import Batida
+     ALVOS = (113095, 113299, 113378, 112493, 112564, 111617, 111494, 11142…
+
+· Misting… (56m 38s · ↓ 60.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ BUG-FOTO-APP-401 (P7.1, prod AGORA): POST /api/ponto/foto/ -> 401 em serie desde a madrugada, 13+ colabs Android (okhttp), colab=?uNNN (token nao reconhecido) enquanto /bater/
-  do mesmo colab passa. Medir: qual auth o endpoint de foto usa vs /bater/, e o que mudou nos deploys de 29/09 (core, urls_core, middleware). RED com token valido de app. Cura na
-  origem, deploy ja, smoke com um colab real. Tela do admin nao mostra a foto = Portaria 671. PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 18 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
