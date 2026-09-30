@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 08:52:31.**
+**Medido em 30/09/2026 08:58:01.**
 
 | | |
 |---|---|
@@ -121,13 +121,13 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 
 ● Passivo da frota: um só — col334, duas ativas do mesmo tipo. Pela mesma lei, a de 03/08 fecha a de 21/07 em 02/08:
 
-● Pushing do vinculo · 2m 23s
+● Pushing do vinculo · 7m 52s
   ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_vinc.log 2>&1; echo "rc=$?"; grep -E '^(FAIL|ERROR):|^OK$|^Ran |main ->
-     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (2m 21s)
+     main|error' /tmp/claude-1001/-home-ronald-saas-hasner-app/c… (7m 50s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (1h 44m 38s · ↓ 118.3k tokens)
+✢ Misting… (1h 50m 8s · ↓ 118.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.

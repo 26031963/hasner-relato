@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 08:52:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.4 MB). Acoes na janela: **157**.
+**Medido em 30/09/2026 08:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (127.4 MB). Acoes na janela: **156**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -166,4 +166,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:04:54 | Bash | O minuto fora da janela e persistido? | `grep -n 'entrada_efetiva\\|minutos_fora\\|janela_he' ponto/motor_calculo_v2.py \| head -14; echo "=== o minuto fora fica gravado em algum lugar?"; grep -rn 'he_fora\\|minutos_fora\\|janela_he_min' --include=*.py . \| grep -v '/tests/\\|janela_he.py\\|motor_calculo_v2' \| sed 's\|^\./\|\|' \| head` |
 | 21:04:29 | Bash | Smoke em prod da linha do dia com atraso | `cd /home/ronald/saas-hasner && cat > /tmp/smoke_b1.py <<'PYEOF' # -*- coding: utf-8 -*- """Smoke da linha do dia em prod: render real da tela do espelho (leitura pura).""" import re from django.template.loader import render_to_string from colaboradores.models import Colaborador from ponto.views import espelho_ponto # noqa: F401 (garante o urlconf da casca) from ponto.services.espelho import espelh ...` |
 | 21:04:04 | Bash | Resultado do push e deploy da B1 item 1 | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1b.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"; timeout 900 bin/deploy.sh --sem-migrate > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy3.log 2>&1; echo "deploy rc=$?";  ...` |
-| 20:53:55 | Bash | Esperar o push da B1 | `cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1b.log; git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |
