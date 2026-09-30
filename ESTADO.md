@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:25 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:61 AFIRMA ato sem PROVA ao lado -- **POR QUE O PLACAR DA S3 FICOU VERDE COM ISSO NO AR:** `ponto/tests/test_s3_placar_exercicio.py` varre **`.py`
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:43:01.**
+**Medido em 30/09/2026 07:48:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura a minha primeira versao` |
+| `HEAD` local | `3635a5be TICKETS: rodape e placar` |
 | `origin/main` | `50be4efd TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3635a5be TICKETS: rodape e placar
+bb7d5f2d Raia UI, item 1: o catalogo /relatorios/ cai de 15 para 13 cards (fatia da raia, provada sobre o HEAD de hoje)
+7c4edd4d DIFF de frota da 10 publicado ANTES do apply -- 101 linhas, e elas tem DUAS causas
 a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura a minha primeira versao
 50be4efd TICKETS: rodape e placar
-5c666613 O hook me cobrou a B1 duas vezes com ela pronta, e a culpa era de um caractere meu
-0d048db8 TICKETS: rodape e placar
-34d8b389 O smoke de prod pegou uma incoerencia minha: o portao e a tela mediam faixas diferentes
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
@@ -101,11 +100,6 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  toca. DIFF de frota antes do apply. Segue a fila: S4. PAREI so em lei ou !
-
-● Ronald respondeu o PAREI de lei. Registro a ordem e implemento — isso muda o motor, que é zona inviolável, e o aval é explícito sobre a lei que vive nele.
-
-  Ran 5 shell commands
 
 ● Agora o selo, com a lei escrita — inverto de novo, e cada assertiva cita a linha do aval:
 
@@ -128,12 +122,17 @@ a6b653ad Folga trabalhada nao apaga rubrica -- a lei chegou, e ela nao restaura 
 
 ● Enquanto o DIFF roda, abro a raia UI no primeiro item da ordem dela (catálogo /relatorios/) — ela já tem a fatia 1 construída:
 
-  Provar o catalogo sobre o HEAD atual · 2m 37s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (2m 35s)
+  Searched for 1 pattern, ran 4 shell commands
+
+● O DIFF saiu. Publico antes do apply, como ele pediu:
+
+● Pushing da lei e do catalogo · 6s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_lei.log 2>&1; echo "rc=$?"; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (3s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Misting… (35m 8s · ↓ 32.3k tokens)
+· Misting… (40m 38s · ↓ 39.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
