@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:21:41.**
+**Medido em 30/09/2026 20:27:01.**
 
 | | |
 |---|---|
@@ -100,39 +100,39 @@ d57d16b7 A VERDADE NAO E INCOMODA entra como lei, e a primeira coisa que ela med
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  do apagão de 23/09, pego pelo selo que renderiza), e o CNPJ de fixture 11222333… é excluído por empresas_visiveis — o que fez um selo meu passar vazio, achando que faltava
-  retrato quando faltava empresa.
-
-  Onde está a fila 1 agora: a aba Autorizar/Não da B2. O motor dela já está no ar (95389e29) e a porta também existe (ponto/portas/he.py::decidir_he, idempotente, permissão dentro
-  dela, trilha). Falta a aba — e ela depende da listagem estar em main, o que eu resolvo por cherry-pick do meu commit (tela nova, não toca base nem static/js/), não pelo merge
-  das 7 fatias que esperam o seu clique.
-
-  Espera você: os 61 dos 84 dias do COL900 (célula certa, template errado — os horários que as batidas confirmam já estão medidos), e o smoke de clique para o merge da raia.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O-JANELA-HE parte B2 (AUTORIZAR) -- METADE NO AR; a outra metade e a TELA, e ela e a FILA 1 AGORA. A ordem de 30/09 17:1x revogou o "NAO
-  CONSTRUIR
 
   Ran 1 shell command
 
-● A suíte segue ocupando a pista de main, então construo a aba na raia, onde a tela vive — e as duas descem juntas no mesmo ato, que é o que a lei do merge pede. Lendo o resto da
-  porta e o que ela faz com o DiaPago:
+● SEMEIA_PADRAO é a fonte única para setor NOVO, e a UI edita setor existente. Conferindo se a UI lê as permissões do banco (senão a ação nova não aparece lá) e alinhando a
+  semeadura:
+
+  Ran 2 shell commands
+
+● A UI lista Permission.objects.filter(codename__startswith='rbac_') do banco — então a ação nova aparece lá sozinha, e a promessa da lápide se sustenta. Alinhando a semeadura e
+  escrevendo os selos da aba:
 
   Ran 1 shell command
 
-● A porta valida tudo, mas falta o que a ordem pede: "Autorizar RE-LAVRA o DiaPago daquele dia no evento". Vendo o fim dela:
+● Agora o selo antigo ("sem controle que escreve") precisa ceder — a B2 chegou. Mas há um invariante que sobrevive e vale guardar: a decisão é de um dia por ato, sem lote.
+  Reescrevendo em vez de apagar:
+
+  Ran 2 shell commands
+
+● A suíte está em 9:53 e progredindo (73% de CPU, 841 linhas). Enquanto ela ocupa a pista, confiro os dois pontos do meu código que os testes pegariam — a assinatura da resposta e
+  o request no template:
 
   Ran 1 shell command
 
-● A porta não relavra. Pelo idioma da casa (o registrar_batida chama _fechamento_por_evento), a consequência mora na porta. Vendo a assinatura do recálculo por evento:
+● Os dois conferem (resposta_acao bate na assinatura, e context_processors.request está ligado, então {{ request.get_full_path }} existe). E os meus testes da aba afirmam sobre o
+  banco, não sobre o corpo da resposta — que é justamente a lição (b) da lista anti-vacuidade do CLAUDE.md (resposta_acao só emite toast para htmx).
 
-  Ran 1 shell command
+  Conferindo a pista:
 
-● Exatamente o que a ordem pede: recalcula a competência daquele dia, agendado em on_commit, nunca levanta. Ligando na porta:
+● Conferir a suite
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite3.log; grep -E '^Ran [0-9]+ tests|^(OK|FAILED) ?\(' $L 2>/dev/null |
+     tail -2; echo "procs: $(ps -eo args | grep -c '[m]anage.py test')"; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0…
 
-  Running 1 shell command…
-
-✢ Bootstrapping… (6h 50m 9s · ↓ 1.2m tokens · thinking)
+✢ Bootstrapping… (6h 55m 29s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
