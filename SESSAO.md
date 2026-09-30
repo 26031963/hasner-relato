@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 03:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **353**.
+**Medido em 30/09/2026 03:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **348**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -358,8 +358,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:33:18 | Bash | Quem falha o criterio (a) e por que | `for f in relatorios/views.py colaboradores/services/calendario.py colaboradores/services/ficha.py relatorios/services.py; do printf "%-44s rotulo=%s folha_manda=%s espelho_do_colab=%s totais_da_folha=%s\n" "$f" "$(grep -c fonte_dos_totais $f)" "$(grep -c folha_manda $f)" "$(grep -c espelho_do_colab $f)" "$(grep -c totais_da_folha $f)"; done` |
 | 15:32:47 | Bash | A derivacao de dinheiro no espelho | `sed -n '316,332p' ponto/services/espelho.py` |
 | 15:32:39 | Bash | A conferencia dos selos | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/fecha2.log 2>/dev/null \| head -24; echo "[--- pista ---]"; docker ps --format '{{.Names}} {{.Status}}' \| grep -vE 'saas_\|mensageria\|juliani_db_test' \| head -2; date '+%H:%M'` |
-| 15:22:56 | Bash | Armar a conferencia dos selos curados | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/fecha2.sh <<'EOF' #!/usr/bin/env bash set -uo pipefail cd /home/ronald/saas-hasner until [ -z "$(docker ps --format '{{.Names}}' \| grep -vE 'saas_\|mensageria\|juliani_db_test')" ]; do sleep 30; done echo "== pista livre $(date '+%H:%M') ==" source bin/recursos.sh >/dev/null 2>&1; teste_envfi ...` |
-| 15:22:43 | Bash | Pista, arvore e commits pendentes | `docker ps --format '{{.Names}} {{.Status}}' \| grep -vE 'saas_\|mensageria\|juliani_db_test' \| head -3; echo "---"; cd /home/ronald/saas-hasner/app && git status --short \| head -5; git log --oneline origin/main..HEAD \| cat \| wc -l` |
-| 15:21:19 | Bash | O selo do rotulo nos tres estados | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P = 'relatorios/tests/test_fonte_dos_totais_tem_leitor.py' t = io.open(P, encoding='utf-8').read() v = ''' def test_RED_a_chave_tem_escritor_e_leitor(self): """Se um dos dois lados cair, o rotulo morre calado -- e o numero volta a sair sem fonte.""" esc = _fonte(ESCRITOR) self.assertIn("'fonte_dos_totais'", esc, 'o ESCRITOR do rotul ...` |
-| 15:21:02 | Bash | Curar o pendente e ver o selo do rotulo | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, py_compile P = 'core/juizes.py' t = io.open(P, encoding='utf-8').read() v = """ _p(_TT4, 'api/views.py', 'horas_dia = round(p.minutos_trabalhados / 60, 1) if p else 0.0', TELA, '4 espelho/cartao: horas e status do card -- classe C; deveria ler realizado_do_dia + veredito'), """ assert t.count(v) == 1 n = """ # CURADO 29/09 15:0x (S3 leitor #4  ...` |
-| 15:20:49 | Bash | A linha do pendente curado | `sed -n '480,490p' core/juizes.py` |
