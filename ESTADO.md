@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 07:21:01.**
+**Medido em 30/09/2026 07:26:31.**
 
 | | |
 |---|---|
@@ -109,11 +109,6 @@ aecbb0ff TICKETS: rodape e placar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lavratura segue.
-
-  Próximo da sua ordem: S4.
-
-✻ Brewed for 7h 21m 24s · done 11:28 PM · 17 shells still running
 
 ❯ aval Ronald lei: folga trabalhada NAO apaga rubrica. Hora noturna em dia de folga paga o adicional noturno (cl.38-d, Art.73) SOBRE a hora, alem dos 100% da folga; intra
   suprimida em folga trabalhada gera intra indenizada; saida antecipada em folga trabalhada NAO existe (L-084: sem escala certa nao ha marco). Vale da competencia 10; a 09 nao se
@@ -132,20 +127,25 @@ aecbb0ff TICKETS: rodape e placar
 
 ● Duas coisas ao mesmo tempo: a lei nova (registro e implemento no hook) e o meu selo que falhou — a assertiva estava errada, não o código.
 
-  Registrar a lei e rodar a suite dos cinco apps · 20s
+● Registrar a lei e rodar a suite dos cinco apps · 5m 51s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
      P='CLAUDE.md'
      t=io.open(P,encoding='utf-8').read()
      V = """**PAREI-SO-LEI (corte Ronald 29/09 07:3x).** `PAREI` so existe para (a) pergunta de LEI sem lei escrita
-     ou (b) `!` de dinheiro / escala / vinculo / apagar… (19s · 3 lines)
+     ou (b) `!` de dinheiro / escala / vinculo / apagar… (5m 49s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Misting… (13m 8s · ↓ 24.7k tokens)
+✢ Misting… (18m 38s · ↓ 24.7k tokens)
+
+❯ ordem Ronald: raia UI (wt-ui) PERMANENTE enquanto a fila 1 anda -- ao acabar um item de tela pega o proximo, nao devolve. Ordem: catalogo /relatorios/ -> Gestao de HE (listagem
+  por colab/dia com os riscados, SEM botao Autorizar ate a S4) -> Auditoria de espelhos 5px -> UI-CAL-COMPETENCIA polimento. Nucleo intocado, deploy --sem-migrate, pista de
+  teste compartilhada. B2 (Autorizar) entra na principal logo apos a S4. PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 17 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
