@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 05:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **178**.
+**Medido em 30/09/2026 06:00:47.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (126.1 MB). Acoes na janela: **177**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -187,4 +187,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:09:31 | Bash | Isolar o commit do item e abrir raia de prova | `cd /home/ronald/saas-hasner && git show c20dc012 --stat \| cat \| tail -6; rm -rf /home/ronald/wt-cal2 2>/dev/null; git worktree add -f --detach /home/ronald/wt-cal2 main 2>&1 \| tail -2` |
 | 18:09:23 | Bash | O que a raia UI tem para mergear | `cd /home/ronald/saas-hasner && git log --oneline main..raia-ui \| cat; echo "--- arquivos:"; git diff --stat main...raia-ui \| cat \| tail -12` |
 | 18:08:22 | Bash | Resultado do push final | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3e.log; cd /home/ronald/saas-hasner && git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |
-| 17:58:15 | Bash | Esperar o push final | `cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s3e.log; git fetch -q origin; echo "faltam=$(git rev-list --count origin/main..HEAD)"` |
