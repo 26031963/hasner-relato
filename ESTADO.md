@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 21:11:31.**
+**Medido em 29/09/2026 21:17:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `be50379e TICKETS: rodape e placar` |
+| `HEAD` local | `0436546a TICKETS: rodape e placar` |
 | `origin/main` | `be50379e TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,25 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0436546a TICKETS: rodape e placar
+d18bb00e B1 item 4: o portao he_pendente mede sempre e trava so por cadastro -- e nasce desligado
 be50379e TICKETS: rodape e placar
 06057219 B1 item 1: a tela mostrava dinheiro do MOTOR e o placar da S3 nao via, porque varre .py
 38e6d92e TICKETS: rodape e placar
-e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19 sao de outra classe
-87b5303d TICKETS: rodape e placar com o ultimo push
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/models.py
  M app/colaboradores/tests/test_calendario_sete_colunas.py
- M app/folha/porta_export.py
- M app/ponto/services/espelho.py
  M app/templates/colaboradores/partials/_calendario_grade.html
-?? app/colaboradores/migrations/0053_empresa_he_pendente_trava_export.py
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
-?? app/folha/tests/test_b1_portao_he_nasce_desligado.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -104,7 +99,6 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, read 1 file, listed 1 directory, ran 9 shell commands
 
 ❯ ordem Ronald: B1 AGORA (portao he_pendente NASCE DESLIGADO por cadastro, liga na B2) -> S4 -> B2 -> S5b. Segue a fila; PAREI so em lei ou !
 
@@ -131,12 +125,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 
 ● Sigo a B1. Item 4 — o portão he_pendente nascendo desligado por cadastro:
 
-  Suite dos quatro apps com o portao novo · 3m 52s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs -v ~/saas-hasner/app:/app -v ~/saas… (3m 50s)
+● Pushing do item 4 · 1m 24s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 3400 git push origin main >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1c.log 2>&1; echo "rc=$?"; tail -4
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p… (1m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Schlepping… (5h 4m 48s · ↓ 233.4k tokens)
+✢ Schlepping… (5h 10m 18s · ↓ 237.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
