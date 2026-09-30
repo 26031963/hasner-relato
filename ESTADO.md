@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:20:01.**
+**Medido em 30/09/2026 09:25:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/docs/PROMPTS.md
  M app/escala/models.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
@@ -103,21 +104,6 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Quatro vezes hoje um selo mordeu a prosa que explica a cura — três minhas e uma da casa, esta última curada na origem. Deixei escrito como padrão com nome.
-
-  ESMERIL-2 registrada, e metade do golden dela já tem número: 46 sítios escolhem vigência por -data_inicio contra 2 que leem escala_geradora.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: VINCULO-LINHA-DO-TEMPO -- o vinculo do colab e UMA linha do tempo: salvar "a partir de D" REESCREVE a linha de D em diante -- o vigente
-
-  Ran 1 shell command
-
-● Background command "Push do registro da ESMERIL-2" completed (exit code 0)
-
-● O último bloqueio do item era a constraint esperando o passivo em 0 — e ele está em 0 agora. Fecho com ela:
-
-  Ran 2 shell commands
-
 ● btree_gist está disponível — mas medi uma coisa que muda a escolha: o EXCLUDE não pegaria o col334. As vigências dele eram adjacentes ([21/07,02/08] e [03/08,∞)), não
   sobrepostas, e ambas ativas. Aplico a mais restritiva:
 
@@ -125,12 +111,27 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 
 ● Agora o selo que morde — tentar dois ativos tem de estourar no banco:
 
-● Suite dos quatro apps com a constraint nova · 4m 32s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 --tmpfs /app/logs --tmpfs /app/.ruff_cache --tmpfs /a… (4m 30s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Misting… (2h 12m 8s · ↓ 136.0k tokens)
+❯ BUG-DISPUTA-S84-RETRO-FABRICA-BATIDA (P7.1, medir antes de curar): col438 [nome] tem 10 dias de FOLGA (12x36 contínuo provado pelas batidas origem=app:
+  28/08,30/08,01/09...11/09) com batidas origem='disputa_s84_retro' cravadas nos marcos 07:00/12:00/13:00/19:00, vindas de PerguntaDisputa geradas pelo cadastro errado (6x1
+  12-20). MEDIR: (a) quem respondeu cada PerguntaDisputa que virou batida (colab, supervisor, ou lote automatico -- arquivo:linha do escritor); (b) censo na frota: batidas
+  disputa_s84_retro em dia cuja celula (apos corrigir fase) e folga, por colab. Se o escritor preencheu sem resposta humana = motor fabricou batida (zona inviolavel): cura na
+  origem, e o passivo vira lista para o meu !, nunca apagar sem trilha. Caso: col438 12x36 07-19 ancora 28/08 desde 21/08 pela porta (09 via REGEN-EM-EXPORTADA). PAREI so em lei
+  ou !
+
+● Duas frentes. A constraint quebrou 7 selos que fabricam o estado ilegal — real e preciso resolver, e ela não está em prod. Mas a ordem nova é integridade de prod: registro e
+  meço.
+
+  Ran 5 shell commands
+
+● Medição decisiva. Publico, e resolvo a árvore que a minha constraint deixou vermelha:
+
+● Quais selos a constraint quebrou, nomeados
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E '^(FAIL|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_ec.log | sed 's/
+     (.*//' | sort -u | head -12; echo "--- total:"; grep -cE '^(FAIL|ERROR):' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b…
+
+✢ Misting… (2h 17m 38s · ↓ 144.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
