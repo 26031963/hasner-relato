@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 09:09:01.**
+**Medido em 30/09/2026 09:14:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `c53a1dc0 TICKETS: rodape e placar` |
-| `origin/main` | `ed22ec4c TICKETS: rodape e placar` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `c53a1dc0 TICKETS: rodape e placar` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -41,9 +41,11 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ```
  M app/colaboradores/tests/test_calendario_sete_colunas.py
  M app/config/crons_duracao.json
+ M app/escala/models.py
  M app/templates/colaboradores/partials/_calendario_grade.html
 ?? app/colaboradores/tests/test_chip_ausencia_duas_linhas.py
 ?? app/colaboradores/tests/test_ui_grade_calendario.py
+?? app/escala/migrations/0042_ec_um_vinculo_ativo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,34 +102,34 @@ ac17cdf3 Vinculo: o escritor fora da porta nao existe, e o passivo da frota caiu
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  juizes.py com 2+ respondentes -- soma propria, order_by(-x).first(), comparacao de tipo gravado, if de classe em template/JS. Cron e command sao SUSPEITOS por padrao ate
-  provarem que passam pela porta declarada.
-  SAIDA: tabela por familia (batida, celula, turno, vinculo/escala, ausencia/ferias, chamado, folha): campo/pergunta -> canonico declarado -> outros achados (arquivo:linha) ->
-  veredito (duplicado / derivacao / ok). Numeros: campos, com 2+, leitores dissonantes. Publicada no RELATO, e o script entra na REGUA: linha fora da allowlist declarada =
-  VERMELHO no commit. Allowlist nasce = censo de hoje e SO ENCOLHE.
-  DEPOIS (fila propria, nao junto): cada duplicado migra para o escritor unico; cada derivacao vira leitura do juiz; tripwire de runtime (pre_save recusa escrita fora do
-  escritor). Constraint de banco (EXCLUDE/CHECK) = tripwire, bem-vinda, nunca a cura.
-  P7.1 VALE DENTRO DO CENSO: bug provado no caminho cura NA HORA, mesmo que o estrutural fosse mata-lo depois -- 'morre sozinho' nao e lei (col899: absorcao pela metade ontem,
-  bug vivo hoje).
-  GOLDEN: col899 -- EC 1311 (01/09) gravada sem absorver a 1310 (25/09): qual escritor, fora da porta, gravou; e qual leitor mostrou folga 28/30 pela 1310 em vez de
-  escala_geradora. PRONTO: tabela publicada, script na regua verde com allowlist = hoje, golden nomeado com escritor e leitor curados.
-  segue a fila; PAREI so em lei ou !
 
-● Registro a ESMERIL-2 (só registro) e, no mesmo passo, meço a metade do golden que ainda está aberta — o leitor que lê -data_inicio:
+  Quatro vezes hoje um selo mordeu a prosa que explica a cura — três minhas e uma da casa, esta última curada na origem. Deixei escrito como padrão com nome.
+
+  ESMERIL-2 registrada, e metade do golden dela já tem número: 46 sítios escolhem vigência por -data_inicio contra 2 que leem escala_geradora.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: VINCULO-LINHA-DO-TEMPO -- o vinculo do colab e UMA linha do tempo: salvar "a partir de D" REESCREVE a linha de D em diante -- o vigente
 
   Ran 1 shell command
 
-● Background command "Push do vinculo" completed (exit code 0)
+● Background command "Push do registro da ESMERIL-2" completed (exit code 0)
 
-● O censo do golden já dá o número da obra: 46 sítios escolhem vigência por -data_inicio; só cartorio.py e vigia_de_hora.py leem escala_geradora. Registro a ESMERIL-2 com isso:
+● O último bloqueio do item era a constraint esperando o passivo em 0 — e ele está em 0 agora. Fecho com ela:
 
-● Pushing do registro da ESMERIL-2 · 7m 28s
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever >/dev/null 2>&1; bash bin/tickets_placar.sh --escrever >/dev/null 2>&1; git diff --quiet --
-     app/docs/TICKETS.md || git commit -q -m "TICKETS: rodape e placar
-     Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" --… (7m 23s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Misting… (2h 1m 8s · ↓ 122.8k tokens)
+● btree_gist está disponível — mas medi uma coisa que muda a escolha: o EXCLUDE não pegaria o col334. As vigências dele eram adjacentes ([21/07,02/08] e [03/08,∞)), não
+  sobrepostas, e ambas ativas. Aplico a mais restritiva:
+
+● Migration como meu usuario, com lapide
+  ⎿  $ cp escala/migrations/0042_ec_um_vinculo_ativo.py /tmp/m0042.py && rm -f escala/migrations/0042_ec_um_vinculo_ativo.py && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     t = io.open('/tmp/m0042.py', encoding='utf-8').read()
+     V = "from django.db import migrations, models"
+     N = '''""…
+
+· Misting… (2h 6m 38s · ↓ 132.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! col899: absorver EC 1310 (12x36, nunca exercida -- batidas 21-30/09 sao 6x1 08-16) pela porta unica, com trilha; fica so a 1311; regerar e re-julgar celulas 25/09->hoje.
