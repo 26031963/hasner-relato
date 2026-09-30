@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 29/09/2026 20:55:45.**
+**Medido em 29/09/2026 21:00:45.**
 
 | | |
 |---|---|
@@ -125,13 +125,13 @@ e75a74d7 Aplicado: a 10 re-lavrada com o FT curado -- contador 33 -> 19, e as 19
 ● Achado que muda a B1: a linha do dia da tela mostra t.horas_trabalhadas / t.horas_extra — do MOTOR, não da lavratura. O selo do placar da S3 não pega isso porque varre .py e a
   derivação está no template.
 
-● Esperar o push da B1 · 1m 49s
+● Esperar o push da B1 · 6m 50s
   ⎿  $ cd /home/ronald/saas-hasner && until ! pgrep -f 'git push origin main' >/dev/null; do sleep 25; done; tail -4
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_b1b.log; git fetch -q origin; echo "faltam=$(git rev-list --count
-     origin/main..HEAD)" (1m 48s)
+     origin/main..HEAD)" (6m 48s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Schlepping… (4h 49m 2s · ↓ 221.5k tokens)
+✶ Schlepping… (4h 54m 3s · ↓ 221.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
