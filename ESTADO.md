@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 00:40:45.**
+**Medido em 30/09/2026 00:45:45.**
 
 | | |
 |---|---|
@@ -133,7 +133,7 @@ aecbb0ff TICKETS: rodape e placar
   Próximo da sua ordem: S4.
 
 ✻ Brewed for 7h 21m 24s · done 11:28 PM · 17 shells still running
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                             new task? /clear to save 541k tokens
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
