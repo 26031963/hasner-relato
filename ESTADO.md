@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:25:50.**
+**Medido em 01/10/2026 16:30:50.**
 
 | | |
 |---|---|
@@ -108,6 +108,7 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● Censo final: 7, não 33. Migrando os últimos.
 
   Ran 4 shell commands
@@ -130,14 +131,13 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 
 ● O colisão de pista derrubou os quatro pushes — minha própria lei. Serializando.
 
-  Rodar a suite inteira sozinha na pista · 9m 10s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
-     LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh)
-     timeout 560 docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 …
-     (9m 10s)
+● Esperar a suite e ler o veredito · 4m 36s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 50; if grep -q "^RC=" $S/suite_o20.log 2>/dev/null; then break; fi; done; grep -E "^(OK|FAILED|Ran|FAIL:|ERROR:)|^RC=" $S/suite_o20.log
+     | … (4m 35s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Pouncing… (8h 53m 14s · ↓ 1.0m tokens)
+✽ Pouncing… (8h 58m 14s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
