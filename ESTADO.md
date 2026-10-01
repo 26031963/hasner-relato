@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:55:01.**
+**Medido em 01/10/2026 01:00:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
-| `origin/main` | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,39 +95,39 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Fechar o O104, commitar e empurrar" completed (exit code 0)
+  cobra entrada sem par.
+
+  Aplicado, escopado ao col900: os 3 dias acenderam — ch27484 (03/09), ch27485 (06/09), ch27486 (11/09), abertos, supervisão, urgente. A lavra baixou 9,13 h dele e agora existe a
+  pergunta que devolve a hora — era o preço que eu havia publicado às 23:2x sem ter como pagar. Segunda passada: emitidos=0, ja_existia=3.
+
+  Um defeito meu curado no sítio: a 1ª versão deduplicava só em turno_aberto e eu crio turno_aberto_24h, então a 2ª passada imprimia a linha de emissão para dias que a porta ia
+  recusar — número certo, linha mentindo. 9 selos, sete MORDE.
+
+  E o selo do diagrama me cobrou por um motivo melhor que "falta regerar". Eu escrevi na lápide do comando "a ordem mandou marcar e não retratar as 257 batidas" — e o gerador
+  casava a palavra no arquivo inteiro, docstring incluída. Uma frase em português virou aresta de código no documento que o CLAUDE.md apresenta como "a visão de 1 página, gerada
+  do código".
+
+  A regra "prosa não conta" já existia em core/censo_codigo.py, de 29/09; o gerador era o leitor que não migrou. Migrado, os números caíram:
+
+  - julgar_celula 18 → 11
+  - registrar_batida 17 → 10 — sete chamadores fantasmas no chokepoint único de escrita de batida, zona inviolável
+  - criar_ausencia 8 → 6
+
+  Quem chegasse por esse desenho — que é o uso declarado dele — contava sete portas que não existem no sítio mais sensível do sistema.
+
+  Empurrado: ace162de..cab53e2f. Continuam esperando você: o ! do TXT da emp2, a resposta da pergunta do S5b, e o smoke da Gestão de HE e do calendário.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O4 -- ACESSO-NUNCA-EM-LOTE (lei, 23/09 08:4x) -- (1) credencial so morre por evento dela; selo conta escritores capa
 
   Ran 1 shell command
 
-● Background command "Reescrever a mensagem sem colchetes e reempurrar" completed (exit code 0)
+● O4 está livre, e são 6 itens. Antes de construir, medir cada um — e já registro que o item (4) proíbe deploy de auth nesta faixa (23:20–06:00), e são 00:5x. Começando pelo censo
+  do item (1):
 
-  Searched for 1 pattern
+  Censar os modelos e escritores de credencial
 
-● O selo do diagrama: o comando novo acrescentou uma aresta. Regerando (cura que o próprio selo nomeia):
-
-  Ran 3 shell commands
-
-● O gerador contou um 32º chamador que não existe: a palavra "retratar" aparece na prosa do meu docstring. Conferindo se ele conta por texto ou por AST:
-
-  Ran 2 shell commands
-
-● A casa já tem core/censo_codigo.py — "CENSO DE UM PADRAO NAS LINHAS DE CODIGO — prosa nao conta". Vendo se o gerador do diagrama o usa:
-
-  Ran 1 shell command
-
-● O leitor que não migrou é o gerador. Lendo chamadores() para trocá-lo pelo censo da casa:
-
-  Ran 2 shell commands
-
-● Correção grande e real: o desenho inflava os chamadores por causa de prosa — julgar_celula 18→11, registrar_batida 17→10, criar_ausencia 8→6. O chokepoint de escrita de batida
-  aparecia com 7 chamadores fantasmas. Rodando os selos:
-
-● Commitar a cura do gerador e empurrar · 6m 39s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_diag.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 38s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Percolating… (2h 52m 26s · ↓ 298.5k tokens)
+✢ Percolating… (2h 57m 55s · ↓ 302.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
