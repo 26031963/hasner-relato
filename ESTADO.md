@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:623 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:644 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:25:59.**
+**Medido em 01/10/2026 19:31:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `3cbfd495 A guarda lia p.entrada direto e derrubou 20 testes: periodo de selo e SimpleNamespace` |
+| `HEAD` local | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
 | `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,22 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois
+f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o vigia cego para um id
 3cbfd495 A guarda lia p.entrada direto e derrubou 20 testes: periodo de selo e SimpleNamespace
 19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga
 0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo
-867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO
-c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M bin/hook_stop_fila1.py
- M bin/tests/test_hook_nao_cobra_congelado.sh
- M bin/tests/test_hook_teto_nao_conta_espera.sh
+ M app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,44 +97,44 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+    o hook. Agora o selo importa o hook — raspar a fonte para não copiar vocabulário é copiar por outro meio.
+  - test_hook_teto_nao_conta_espera rodava contra a árvore viva, e o hook libera quando o RELATO declara PAREI. Com um PAREI legítimo no topo — o estado
+    normal de uma fila esperando o ! — ele acusava "o teto gastou espera" sem exercitar o teto. Agora monta a própria árvore por HOOK_STOP_RAIZ, como os
+    irmãos já faziam.
+  - E o vigia era cego para a linha que você autorizou: _linha_de_item_re() exigia [A-Z] no primeiro caractere, então | 09-TURNO-ABERTO-EXPOSTA | não era
+    pulado por estado — não existia para ele. Mesmo buraco da lápide de 28/09, com outra forma.
 
-● Background command "Esperar a suite fechar" completed (exit code 0)
+  51 selos de host, 0 vermelhos. Tentei curar isso pelo lado errado antes (fiz o hook preferir o marcador ORDEM-VIVA-TOPO) e revertí no mesmo turno: o
+  selo do congelado já exige que o 1º aberto seja o declarado, e um segundo mecanismo para a mesma pergunta é juiz paralelo. A ordem mora na ordem da
+  tabela; o marcador a confirma — e agora ele aponta 09-TURNO-ABERTO-EXPOSTA, que é a sua sequência de 19:0x.
 
-  Ran 4 shell commands
+  Correção do número da 09, antes do apply: são 48,26 h em 6 dia-colab, não 61,30 em 14. A conta tomou três versões e as duas primeiras estavam erradas
+  por motivos diferentes — a primeira por forma (batidas em número ímpar: 169 dia-colab), a segunda porque autoridade_do_periodo busca batida só até
+  meio-dia do dia 20: os oito "turnos abertos" caíam todos em 20/09 e nenhum estava aberto — col905 bateu 19:31S, col441 23:05S, col704 23:12S. O que de
+  fato está exposto: col820 (07, 15 e 17/09, 11,00 h cada), col890 14/09 10,64, col60 07/09 4,45, col922 13/09 0,17.
 
-● Monitor(veredito da 2a suite da PONTUALIDADE-EM-TURNO-ABERTO)
-  ⎿  Monitor started · task bty52ovv9 · timeout 1800s
-  ⎿  Allowed by auto mode classifier
+  Isso destapou um achado próprio, medido na frota: 109 colabs têm a saída do dia 20 fora da janela da tela (324 batidas em 172 colabs), então o espelho e
+  o PDF de uma competência já paga mostram o último dia como turno aberto enquanto a folha o pagou fechado. A lição já estava escrita três vezes na casa,
+  sempre no chamador (porta_export.py:66, calendario.py:296, e agora eu) — e o +1 dia no chamador é o band-aid. Registrado como
+  JANELA-DA-AUTORIDADE-PERDE-O-DIA-20, depois da S5b, com a nota de que a cura não é copiar o +1 dia para dentro: aquele alarga a competência junto, e a
+  folha alarga só a busca.
 
-● Correção minha, dita de frente: a primeira versão da guarda derrubou 20 testes. Eu li p.entrada direto, e os selos test_l093_trabalhado_real e
-  test_s5b_regra_pontualidade montam o período como types.SimpleNamespace — AttributeError em 20 casos. A linha vizinha, que já existia, sempre usou
-  getattr(p, 'turno_aberto', False) exatamente por isso.
+✻ Churned for 15m 14s · done 7:27 PM · 2 shells, 1 monitor still running
 
-  O que me pegou não foi o descuido, foi a ordem: rodei só o selo novo (6 casos, OK em 0,06 s) e chamei a cura de provada; a suíte cheia respondeu FAILED
-  (errors=20) dezoito minutos depois. Os vizinhos do sítio tocado custam 73 testes em 2,5 s — já rodaram, OK — e passam a vir antes. Está escrito no
-  RELATO, no commit 3cbfd495 e na memória da sessão.
+❯ aval Ronald 01/10 19:3x col369 VINCULO: o vinculo 1296 (ARCOS - PSR 6x1, folga na SEXTA) vale de 22/09 em diante; corrigir a vigencia impossivel dele
+  (22/09..18/09) e absorver o 1313 pela porta absorver_vigencias_posteriores, com trilha -- nunca update solto. Efeito esperado, ja medido: -4 furos
+  (sextas 25/09, 02/10, 09/10, 16/10), ZERO hora movida. Se o DIFF mover qualquer hora, PAREI com a tabela. Entra depois do deploy da pontualidade; nao
+  corta a S5b !
 
-  A suíte canônica está rodando de novo com a guarda curada. O deploy espera o verde dela — e por isso a palavra "NO AR" na célula ainda não é verdade;
-  ela vira verdade no mesmo ato do deploy.sh, com o smoke dos três casos.
+  Ran 8 shell commands
 
-  Registrei também, do preparo do DIFF da 09, que não é REGEN-EM-EXPORTADA: aquela porta é um colab por ato, limite que a sua própria lei de 30/09
-  derrubou. O caminho é lote com DIFF, reversão e prova, mais regerar_txt_dominio --aplicar, que invalida o anterior pela porta sem tocar conteudo nem
-  hash_sha256.
+● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
 
-✻ Cogitated for 2m 17s · done 7:07 PM · 1 shell, 2 monitors still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-● Rodar a pasta inteira de selos de host
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== PASTA INTEIRA DE SELOS DE HOST ==="; _f=0; for s in bin/tests/test_*.sh; do printf '%-50s ' "$(basename
-     $s)"; if bash $s >/dev/null 2>&1; then echo OK; else echo "VERMELHO"; _f=$((_f+1)); fi; done; echo "vermelhos: $_f"; echo "=== suite 2 ==="; grep -E
-     "^R…
-
-✢ Flambéing… (13m 22s · ↓ 43.4k tokens)
+✢ Wibbling… (1m 57s · ↓ 7.0k tokens · thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
