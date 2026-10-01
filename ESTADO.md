@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:47:01.**
+**Medido em 01/10/2026 06:52:31.**
 
 | | |
 |---|---|
@@ -100,18 +100,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  A inversão é o achado mais importante do ciclo. O item diz "o PDF chama espelho_do_colab e só desenha" — e eu vinha medindo para cumprir isso. A medição diz o contrário: a
-  montagem completa do motor é a do PDF; a pobre é a do espelho. Trocar agora importaria o buraco para o cartão do Art.74 §2º e para a folha que o lê. A ordem certa é primeiro
-  enriquecer o espelho — que é a tela do admin e o app dos ~750 — e só depois o PDF ler dele.
-
-  Nada de produção mudou neste commit: é escopo medido. Empurrado a887f990..e860aef1.
-
-  ---
-
-  O turno foi longo e a fila andou bastante. Com você, acumulado: o ! do TXT da emp2; a resposta da pergunta do S5b (decide 118 dia-colab); os dois smokes (Gestão de HE e relógio
-  no calendário). E agora o O108, que é o bloqueio do O9 e mexe no que ~750 pessoas veem no app — o DIFF dele vem antes de qualquer cura, pela mesma lei que segurou o cartão.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
@@ -130,9 +118,21 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
 ● O DIFF funciona e o resultado é decisivo em 15 colabs: A (hoje) dá datas_falta = 0 em todos, B move 6, C move 7 — e nenhum campo de dinheiro se move. Rodando a frota:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✢ Percolating… (8h 44m 25s · ↓ 605.5k tokens)
+● DIFF de frota completo, e ele traz a informação de segurança que importa:
+
+  ┌────────────────────────────────────────┬──────────────────┬──────────────────────────┐
+  │                 campo                  │ B (só previstas) │ C (previstas + vínculos) │
+  ├────────────────────────────────────────┼──────────────────┼──────────────────────────┤
+  │ datas_falta / dias_falta / horas_falta │ 324              │ 408                      │
+  └────────────────────────────────────────┴──────────────────┴──────────────────────────┘
+
+  862 comparados, 0 erros — e nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50/100 e dias_abono não aparecem na tabela. Publicando:
+
+● Running 1 shell command…
+
+✢ Percolating… (8h 49m 56s · ↓ 607.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
