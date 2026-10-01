@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:51 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:25:45.**
+**Medido em 01/10/2026 10:30:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%` |
+| `HEAD` local | `b6b9a620 S5b: o DIFF por rubrica esta na mesa, e com ele a razao de nao subir a troca sem o `!`` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **19** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b6b9a620 S5b: o DIFF por rubrica esta na mesa, e com ele a razao de nao subir a troca sem o `!`
 fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
 5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo
 104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia
 7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
-f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +96,44 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  B — Uma linha por pessoa, com a forma do mês desenhada (molde HX-RESUMO-COLAB)
-  1. Uma linha colapsada por colaborador, e dentro dela uma tira dos dias da competência: um traço por dia, altura = minutos de ponta.
-  2. Hábito é pente baixo e regular; evento é uma espiga. Não há número para ler — a forma responde.
-  3. A linha diz em palavras de onde vem: "9 min antes em 12 de 15 plantões" · "165 min em 1 dia de 21".
-  4. No topo, um gesto: "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", com a conta na cara antes de confirmar.
-  5. Clicar abre o drawer da pessoa: os dias, as duas pontas separadas, hora × marco, e AUTORIZAR naquele dia.
-  6. Busca por nome ou CPF só reduz a lista; não há quadro de filtros.
-  7. Reusa o partial e o agrupamento de chamados; nenhuma tela nova por fora.
-  8. A classificação fica com o humano: o sistema desenha, ele conclui.
 
-  Eu escolheria a B, por uma razão e não por gosto: a A precisa que o sistema decida o que é hábito, e isso é um juiz novo com um limiar que ninguém cadastrou — a casa chama isso
-  de vocabulário paralelo e cobra cadastro (LEI-AKITA 12). A B faz o que o mini calendário de fase fez: responde pela forma, diz de onde veio o número e mostra a consequência
-  antes do clique, deixando o juízo com o admin. E ela cabe no molde que já existe, em vez de inventar duas pilhas.
+  Uma escolha que tomei na cura: os índices são dos marcos, não das batidas. Se a 1ª entrada não foi batida, a 2ª E da grade é a volta do intervalo — promovê-la a ponta cobraria
+  atraso de almoço como entrada. Dia sem a 1ª entrada batida não tem ponta de entrada, e há selo.
 
-  Ran 9 shell commands
+  Os três ajustes, feitos:
+  1. Cura + relavra vieram antes de construir.
+  2. A lista desce pela maior espiga, e não existe campo de classe em lugar nenhum — um selo proíbe eh_habito/classe/tipo_padrao na linha. Ordenar não é classificar.
+  3. Escala única, teto de 120 min declarado na tela. Escolhi 120 porque é o dobro do teto de entrada da L-097: o que passa daí não é "esticou o horário", é dia em outro turno — e
+     a L-084 já manda esse dia para CADASTRO × REALIDADE. O opcional entrou: traço para cima = antes da entrada, para baixo = depois da saída. E a tira cobre o período inteiro,
+     não só os dias com ponta, senão "12 de 15 plantões" e "12 de 60 dias" viram o mesmo pente cheio.
 
-❯ aval Ronald 01/10 10:1x -- Gestao de HE: a B. Com tres ajustes, e na ordem:
-  1. ANTES de construir: curar marcar_pontas_fora (item 1 do col369) e relavrar o retrato. Senao o pente desenha almoco.
-  2. A lista ordena pela MAIOR ESPIGA (o maior dia de cada colaborador, decrescente). Ordenar nao e classificar: a excecao sobe sozinha e nao nasce juiz de "habito".
-  3. ESCALA UNICA na tira: a mesma altura vale os mesmos minutos em todas as linhas, com teto visual declarado. Tira que se ajusta ao proprio maximo faz 9 min e 165 min parecerem
-  iguais.
-     Opcional, se couber sem custo: traco para cima = antes da entrada, para baixo = depois da saida.
-     No AUTORIZAR, a consequencia antes do clique: "+N min de HE neste dia". Constroi na raia; merge e deploy no mesmo ato; o smoke eu faco no ar.
+  No AUTORIZAR, o botão diz "+N min de HE" antes do clique. 53 selos verdes, 11 novos.
 
-  Cherry-picked 756edc48, ran 21 shell commands
+  Um achado de desenho no caminho: o estado de cada dia no retrato é foto da hora da lavratura — a tela repetia o botão sobre o dia que o admin acabou de decidir. Agora a
+  pendência vem do retrato (medi-la custa 7 min) e a decisão vem do DecisaoHE (uma query), e nenhum dos dois recalcula o outro. Quem achou foi o selo do seu item 7.
 
-● Background command "Relavrar o retrato das competencias 9 e 10" completed (exit code 0)
+  Uma decisão minha, para você derrubar se quiser: ficou página, não drawer. A ordem de 09:4x pedia drawer e a de 09:5x o rebaixou a referência ("use se servirem à pergunta");
+  drawer serve para ver detalhe sem perder a lista, e aqui a lista é a tela — o detalhe é a própria linha que abre. A página também é linkável, imprimível, e é onde o PDF mora.
 
-  Esperar a suite da forma B
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; while pgrep -f "docker run.*manage.py test ponto relatorios core colaboradores"
-     >/dev/null 2>&1; do sleep 45; done; echo "=== VEREDITO ==="; grep -E "^(FAIL|ERROR):|^Ran |^OK$|^FAILED" $S/scratchpad/formab_suite…
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
 
-· Pouncing… (2h 53m 9s · ↓ 285.8k tokens · thought for 9s)
+  Ajustar a redacao e conferir o hook · 34s
+  ⎿  $ python3 - <<'PYEOF'
+     import io
+     P='docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     a = '**A LEI CHEGOU (BUG-144) e o DIFF POR RUBRICA esta PUBLICADO: a obra espera SO o `!` dele.**'
+     assert t.count(a)==1
+     # o hook le a frase `espera o \`!` -- escrever "espera SO o" nao casa, e a celula ficaria … (33s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Pouncing… (2h 58m 9s · ↓ 293.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
