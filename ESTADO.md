@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 08:55:45.**
+**Medido em 01/10/2026 09:00:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 ## `git status --short`
 
 ```
+?? bin/import_tardio_contra_o_ar.py
 ?? bin/keepalive.sh
+?? bin/tests/test_import_tardio_contra_o_ar.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,15 +97,6 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Refazer o ensaio da sombra com o inventario curado" completed (exit code 0)
-
-  Ran 10 shell commands
-
-● Background command "Rodar a suite da raia inteira com saida completa" completed (exit code 0)
-
-  Committed 8ce7eebf, 337b5e88, bd217a94, searched for 1 pattern, read 1 file, ran 16 shell commands
-
 ❯ aval Ronald 01/10 08:5x:
   1. TXT emp2: NAO substitui ainda. Autopsia do col881 02/09 primeiro -- e o seu RELATO de 19:3x diz que ele perdeu 5 h na cura S84, entao ele FOI tocado ontem; reconciliar com o
   "atualizado_em 28/09". Cura de origem: o bloco de FALTA do TXT passa a sair do GRAVADO como o resto (o TXT e funcao pura do gravado). Depois regera a emp2.
@@ -124,15 +117,24 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 
 ● BUG EM PROD — você está certo e eu estava errado: a janela machucou. Deploy imediato.
 
-  Procurar o registro do commit que esta no ar
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '310,325p' bin/deploy.sh; echo "=== o carimbo existe? ==="; ls -l --time-style='+%d/%m %H:%M' logs/deploy_carimbo* logs/publicado*
-     2>/dev/null; grep -n "CARIMBO\|carimbo" bin/deploy.sh | head -5
+  Ran 7 shell commands
 
-✻ Waiting for API response · will retry in 2m 36s · check your network
+● Background command "Reensaiar o bloco da manha na sombra" completed (exit code 0)
+
+● Criar e rodar o selo com a mordida da historia real · 5s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > bin/tests/test_import_tardio_contra_o_ar.sh <<'SHEOF'
+     #!/usr/bin/env bash
+     # SELO DE HOST: nenhum import TARDIO pede simbolo que o codigo NO AR nao tem.
+     #
+     # BUG EM PROD que o criou -- 01/10, u28 as 08:28, 08:28 e 08:43: "Lote de cartoes por DATA LIVRE -> 0 gera… (5s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Pouncing… (1h 28m 9s · ↓ 161.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
