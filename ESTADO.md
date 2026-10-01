@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:59:31.**
+**Medido em 01/10/2026 10:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele` |
+| `HEAD` local | `104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **15** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia
 7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
 f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b
 71f16546 A Gestao de HE esta NO AR e o que falta e o smoke dele
 843f74e8 MERGE da Gestao de HE completa: listagem, aba Autorizar, lote de "Nao", busca, filtros, totais, PDF e o atalho da Central
-0251070a Item 1: a autopsia do col881 esta no topo do RELATO, e ela desmente a minha propria leitura de ontem
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PROMPTS.md
- M app/templates/ponto/gestao_he.html
- M app/templates/relatorios/index.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,8 +95,6 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  QUEM USA E O QUE PRECISA:
-  O admin da folha. A regra ja esta decidida: toda HE de ponta chega BLOQUEADA. Ele nao vem decidir a regra. Vem para:
   (1) SUPERVISIONAR. O sistema nao pode bloquear a frota inteira sem que alguem olhe. Ele quer ver o geral, concluir "e isso mesmo, ninguem a autorizar", e dar o ok em quase tudo
   de uma vez.
   (2) ACHAR A EXCECAO. Buscar uma pessoa, ver os dias dela e autorizar um ou alguns -- so ai a hora conta.
@@ -131,10 +126,12 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
   3. Ausencia 4538 cobre 28-30/09 e ele trabalhou 29 e 30: trabalhadas 7,01 e 6,77 com minutos_realizados ZERO no mesmo DiaPago. A linha discorda de si mesma.
   4. Vinculo 1296 (ARCOS-PSR 6x1, folga SEXTA) nasceu com inicio 22/09 e fim 18/09 e esta inativo; o ativo 1313 e 6x1 generico SEM folga: 14 dias seguidos de trabalho na celula,
   e a sexta 25/09 sem batida virou "indefinida". Mesmo padrao do col515. NAO mexer no vinculo sem o meu !: publicar o que mudaria.
-  ctrl+x ctrl+s to send now
+
+✽ Pouncing… (2h 32m 15s · ↓ 229.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
