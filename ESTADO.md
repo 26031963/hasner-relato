@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:43:31.**
+**Medido em 01/10/2026 09:48:46.**
 
 | | |
 |---|---|
@@ -95,39 +95,39 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O bug em prod, na sua ordem:
-  1. Deploy 08:52 — conferi antes que o disco era mudança NULA (as duas extrações são byte a byte, 3.717 selos; o único comportamento novo era celulas_do_periodo recusar escalar,
-     e os 10 chamadores passam lista). A cura do O108 não subiu nisso.
-  2. Smoke 21/08–20/09 pela função real (sem POST em porta de prod): col61 → 1 gerado, 5.450 bytes · col929 → 1 gerado, 4.749 bytes.
-  3. Selo, não promessa: bin/import_tardio_contra_o_ar.py pergunta, para cada from <módulo local> import <s> escrito dentro de função, se o símbolo existe na versão que está no ar
-     (commit de logs/deploy.stamp). 4.117 imports tardios, 0 acusados, e ele morde com a sua história: força o ar para a216cd89^ e exige que acuse pdf_espelho.py. O número caiu
-     por cura do instrumento (270 → 10 → 1 → 0: submódulo, desempacotamento, PEP 562), nunca por afrouxamento.
+  - DAR CIENCIA = "vi, segue bloqueado". Em LOTE. Nao move dinheiro. E o "Nao" de hoje.
+  - AUTORIZAR = desfaz o bloqueio daquele dia e a HE passa a contar. Por DIA, com motivo. Move dinheiro e re-lavra o dia.
+    A palavra "validar" NAO aparece na tela: ela servia aos dois atos e confundia.
 
-  Ele achou um 500 vivo que não é janela: chamados/services/lembrete_app.py não existe (nem no disco nem no git) e api/views_mensageria.py:2125 o importa —
-  api_mensageria_lembrete_app dá 500 desde 19/09. Declarado em DEFEITOS_CONHECIDOS (censo que só encolhe). Escrever o módulo ou remover a rota é seu.
+  A FORMA:
+  1. Molde HX-RESUMO-COLAB (chamados/partials/_lista_resumo.html, chamados/services/painel.py): UMA linha por colaborador, COLAPSADA; abre nos dias quando se clica. Reusar o
+  partial e o agrupamento, nao reescrever.
+  2. A linha colapsada responde de relance "e habito ou dia solto": nome, quantos dias com ponta, total de minutos, e o padrao (ex.: "9 min antes em 12 de 15 plantoes" x "60 min
+  em 1 dia").
+  3. Aberta, mostra cada dia com as DUAS pontas separadas (antes da entrada / depois da saida), o horario batido contra o marco, e o botao AUTORIZAR naquele dia.
+  4. No topo, UM gesto: "Dar ciencia em tudo que esta sem decisao" -- com a contagem na cara antes de confirmar (N dias, M colaboradores).
+  5. Busca rapida por nome ou CPF; ela so reduz a lista.
+  6. Abre como DRAWER a partir do atalho HE da Central, como as outras gestoes da casa. Empresa real por padrao, nunca a de teste.
+  7. Depois da ciencia em lote, dia novo que chegar bloqueado volta a aparecer como sem decisao.
 
-  Item 1 — autópsia do col881, e ela desmente o que eu disse às 19:3x: não é falta nem 02/09 (li o layout com 4 decimais; tem 2). A rubrica é 0200, de 10,00 h → 5,00 h, e são dois
-  colabs: o col864 ganha 7,29 h. O gravado do col881 não foi tocado (atualizado_em 28/09 00:45, e o único escritor com update_fields nesse modelo não mexe em número e põe status
-  aberto, que não é o dele). Quem moveu foi o emissor — e o col864 prova pelo outro lado: gravado atualizado 19:57, dez minutos antes do TXT, já com 7,29, e o TXT daquela hora não
-  emitiu a linha. A pergunta que separa: na rubrica 0200 o Domínio espera as horas de folga trabalhada (5,00) ou o dobro (10,00)? Não substituí nada. E o bloco de FALTA não é o
-  que moveu (sai de datas_falta, que lê ausência lançada), então não curei ali — quando você responder, entram juntas a falta pelo gravado e o TXT carimbando o commit que o gerou.
+  PRIMEIRO: tirar do ar os quatro comentarios {# #} multilinha que estao renderizando na pagina, com selo que varra todo template.
+  ANTES DE CODAR A FORMA: devolver em ate 10 linhas o que o admin ve em cada um dos tres momentos (lista fechada, colaborador aberto, confirmacao do lote), para ele aprovar o
+  desenho.
+  A decisao segue por DIA INTEIRO; autorizar so uma ponta fica como pergunta para ele.
 
-  Item 2 — S5b: lei registrada (BUG-144), fecha a pergunta que eu havia publicado e confirma a conta à mão em 3 de 3. O DIFF por rubrica é o próximo ato na sombra, e o comando já
-  existe e já nasceu "por rubrica".
+  Censo dos comentarios multilinha que renderizam
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, os, re
+     APP='app/templates'
+     achados=[]
+     for base,dirs,arqs in os.walk(APP):
+     dirs[:]=[d for d in dirs if not d.startswith('.')]
+     for a in arqs:
+     if not a.endswith('.html'): continue
+     p=os.path.join(base,a)
+     src=io.open(p,encoding='utf-8').rea…
 
-  Item 3 — O108: escrevi a cura e NÃO a subi. A suite deu 5.467 testes com 3 vermelhos, todos de test_palavra_do_dia.py: o topo ganhou 23 e 24/07 que a linha não marca, e a tela
-  diz "Em aberto" no 22/07 onde o cartão diz ''. É o invariante CARTÃO=ESPELHO (seu corte de 23/09) dizendo que enriquecer só a tela faz os dois divergirem pelo outro lado —
-  meia-correção. O ato completo é o que a própria célula escreveu: enriquecer o espelho e o cartão passar a ler daqui, que é o O9. A cura está commitada na raia (9d68ca04), fora
-  da árvore viva.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
-
-● Ler os argumentos do diff por rubrica
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "add_argument" app/ponto/management/commands/diff_calculador.py | head -12; echo "=== casa no crons.py? ==="; grep -c
-     "diff_calculador" app/config/crons.py
-
-✢ Pouncing… (2h 10m 55s · ↓ 217.6k tokens)
+✽ Pouncing… (2h 16m 10s · ↓ 220.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
