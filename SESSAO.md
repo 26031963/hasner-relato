@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 13:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.2 MB). Acoes na janela: **931**.
+**Medido em 01/10/2026 13:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.2 MB). Acoes na janela: **934**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:16:14 | Bash | Esperar o push e ler o veredito | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && until ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do sleep 40; done; tail -8 $S/push_s5b.log; echo "=== a empurrar ==="; git fetch -q 2>/dev/null; git log --oneline origin/main..HEAD \| wc -l` |
+| 13:16:05 | Bash | Corrigir o feriado_em_dobra | `python3 - <<'PYEOF' import io P='ponto/management/commands/diff_calculador.py' t=io.open(P,encoding='utf-8').read() a = """ _cct_pro = bool(getattr(_mcct, 'prorrogacao_noturna_pos5h', False)) _cct_hr = bool(getattr(_mcct, 'hora_reduzida_afastada', False)) except Exception: # noqa: BLE001 T['erro_cct'] += 1 _cct_pro = _cct_hr = False""" assert t.count(a)==1 t=t.replace(a, """ _cct_pro = bool(getatt ...` |
+| 13:15:51 | Bash | Ligar o chamador as regras 3 e 4 | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='ponto/management/commands/diff_calculador.py' t=io.open(P,encoding='utf-8').read() # 1. a lavra do esmeril, lida UMA vez a = """ for e in Empresa.objects.filter(ativa=True).order_by('pk'): ini, fim = janelas.janela_fechamento(MES, ANO, e) """ assert t.count(a)==1 t=t.replace(a, """ # A LAVRA DO ESMERIL, lida UMA vez para o mes inteiro -- e e ...` |
 | 13:15:26 | Bash | Escrever os testes das regras 3 e 4 | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='ponto/tests/test_s5b_regra_pontualidade.py' t=io.open(P,encoding='utf-8').read() a = """ def test_NAO_DECIDE_do_modulo_ficou_so_com_o_que_NAO_TEM_REGRA(self): \"\"\"Resultado observavel 1 da ordem: `NAO_DECIDE` so com o item 5 (a ligacao) e as duas que a S5b ainda vai escrever (dobra de feriado e folga trabalhada).\"\"\" self.assertNotIn('ho ...` |
 | 13:14:23 | Bash | Conferir o NAO_DECIDE final | `sed -n '/^NAO_DECIDE = {/,/^}/p' ponto/calculador/regras.py` |
 | 13:14:19 | Bash | Corrigir o dia e a faixa de 100% | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='ponto/calculador/regras.py' t=io.open(P,encoding='utf-8').read() # 1. sem `dia` a folga nao se decide -- e isso se DECLARA, nao se chuta com hoje a = """ if not intermitente and escala_certa is not None: _certa, _sem = folga_trabalhada_do_dia( dia or _dt_hoje(), trab, eh_dia_trabalho=False, intermitente=False,""" assert t.count(a)==1 t=t.rep ...` |
