@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:47 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:110 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:05:31.**
+**Medido em 01/10/2026 13:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `73a82f83 S5b regra 2 (atraso + saida antecipada) com os dois REDs dele, e a distincao SEM_ENTRADA x NAO_DECIDE` |
+| `HEAD` local | `07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS
 73a82f83 S5b regra 2 (atraso + saida antecipada) com os dois REDs dele, e a distincao SEM_ENTRADA x NAO_DECIDE
 1194a0c5 A L-093 esta NO AR; a relavra da 10 espera um clique seu -- e a FERRAMENTA que recusou, nao a lei
 6e4251a6 Guarda estrutural do O13 por AST -- e a 4a vez que o selo de texto morde a prosa que explica a cura
 8185a720 DIFF de frota da L-093 publicado ANTES do apply: uma rubrica, um sentido, -7,60 h no TXT
-e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,11 +95,6 @@ e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turn
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 14 shell commands
-
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do
-     sleep 40; done; ech… · stopped
 
 ● Stop Task
   ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do
@@ -123,12 +117,17 @@ e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turn
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Rodar o DIFF em amostra pequena
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && timeout 560
-     docker exec saas_core python manage.py tenant_command diff_calculador --schema=juliani --mes 10 --ano 2026 --pares-da-autoridade --contra-gravado
-     --limite-…
+● Publicar a lei e o censo
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='## PRECISO DE UM CLIQUE SEU AQUI'
+     assert t.count(A)==1
+     NOVO = '''## LEI (nao devolve turno, segue no topo com o numero): **DOIS juizes de "a entrada esta longe do marco", os dois a 180…
 
-✢ Pouncing… (5h 32m 55s · ↓ 652.6k tokens · still thinking)
+· Pouncing… (5h 38m 9s · ↓ 675.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
