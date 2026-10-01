@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:51:31.**
+**Medido em 01/10/2026 20:57:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +97,44 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  mesma suíte.
+  com a confirmacao e o motivo que ela ja pede; a tabela vira apoio, sem botao repetido. Sem view nova, sem migration, sem limite, sem barra de lote.
+  Selos de tela nas duas cascas na raia -> merge -> AVAIS com o meu smoke. Nao espera a pista da S5b. FATIA 2 (barra de lote, limite por cadastro com a
+  opcao b) fica registrada para depois da troca da S5b. Segue a fila !
 
-✻ Crunched for 2m 8s · done 8:43 PM · 1 shell, 2 monitors still running
+  Ran 1 shell command
+  ⎿  Resuming agent a6628ec
+  ⎿  Allowed by auto mode classifier
 
 ● Monitor event: "veredito da suite do marco do AVAIS"
 
-  Ran 1 shell command
+● A GESTAO-HE partida em duas está registrada, e a fatia 2 não se perdeu — o código dos três patches está em duas cópias: o pedido de patch com
+  arquivo:linha no RELATO da raia (21c4826e) e uma cópia de trabalho onde eu já havia aplicado os patches 1 e 3, compilando. A célula
+  GESTAO-HE-FATIA-2-LOTE-E-LIMITE guarda os dois ponteiros, mais os REDs a escrever e a sua decisão do limite (opção b, o limite filtra contador e ato),
+  para quando ela tiver a vez depois da troca da S5b.
 
-● Monitor event: "veredito final da suite do AVAIS"
+  Um detalhe do que eu já tinha construído na cópia, que vale guardar: eu pus o <= do limite em um sítio só (enriquecer, quando linha['dias'] nasce), e
+  fiz a tira e os dois contadores lerem a chave em vez de recomparar — dois <= para a mesma pergunta divergem na primeira borda, e a borda aqui é o minuto
+  exato do limite.
 
-  Searched for 1 pattern, read 1 file, ran 6 shell commands
+  A fatia 1 voltou para o agente na raia, com o que a sua ordem muda no desenho dele: o fundo cheio no dia de HE é novo, a barra única sai (vira fatia 2)
+  e o clique passa a disparar a porta por dia que já existe — ponto:decidir_he, a mesma do botão "Autorizar +N min" da linha, com a confirmação e o motivo
+  que ela já pede. Instruí explicitamente a não apagar nada: a barra, o limite e os selos que afirmam sobre eles mudam de fatia, não desaparecem — e
+  nenhum selo verde pode afirmar sobre coisa que não está na tela.
 
-● A suíte cheia voltou com duas falhas, as duas minhas, e a lição é a mesma de uma volta antes.
+  E há uma consequência boa dessa partição que vale dizer: a fatia 1 não tem janela de perigo. Ela usa uma porta que já está no ar, então merge e deploy
+  não dependem de nenhum .py antes — o problema de ordem que eu levantei (patch 1 → deploy → merge) passa a valer só para a fatia 2.
 
-  - corrigir_vinculo_vigencia estava sem casa (B6.1): todo management command tem de estar no CRONS ou declarado em FORA_DE_PIPELINE com motivo. Declarado
-    — e o motivo é o que ele é: ato de cadastro sob !, que agendar seria um cron mudando escala sozinho. E vale registrar que o ! de 19:3x terminou em
-    não trocar, que é exatamente o uso certo do dry-run.
-  - core/fila_pendentes.py::DECISAO não conhecia lei nem ok-desenho, e o selo mordeu o item ui-resposta-diz-o-que-e-desenho. Os dois tipos vêm da sua
-    ordem de 18:4x, que nomeia os quatro com as suas palavras. A linha do módulo diz "tipo novo entra aqui por ato, nunca por esquecimento" — essa ordem é
-    o ato. Os rótulos antigos ficam: 163 itens usam aval/corte/corte-dado, e renomeá-los seria reescrever o registro para caber numa ordem de hoje; quem
-    traduz para a exibição é o TIPO_EXIBE do gerador, que mapeia sem tocar o dado.
+  Enquanto isso a suíte cheia da main terminou de rodar sobre as duas curas de contrato; vou ler o veredito e, com ela verde, fazer o deploy que o selo do
+  import tardio cobra e então as três curas da S5b — que é o que a sua ordem anterior pedia para eu preparar em cópia.
 
-  A lição, dita de frente: eu rodei os vizinhos por IMPORT e não os contratos que ENUMERAM. Os 87 testes de vigência e pontualidade passaram porque
-  importam o que eu mexi; nenhum dos dois contratos importa meu código — um varre */management/commands/*.py e o outro varre o JSON. Arquivo novo de um
-  tipo que a casa enumera tem como vizinho o contrato da enumeração. Está na memória da sessão, ao lado da lição das 20:0x.
-
-  Os dois contratos depois da cura: 25 testes, OK. A suíte cheia foi relançada, e atrás dela ficam, na ordem: o deploy que o selo do import tardio cobra,
-  as três curas da S5b que você autorizou (guarda de turno aberto importada, guarda do T8, hora negativa) com o DIFF refeito, o patch 3 com a opção (b) —
-  limite filtrando contador e ato —, a ordem de subida da GESTAO-HE, o DIFF do emp3=CLT e a outra metade da resposta (3), a causa por colab dos que têm
-  vínculo.
-
-  O AVAIS está com 1 item: o seu smoke.
-
-✻ Sautéed for 2m 9s · done 8:47 PM · 1 shell, 2 monitors still running
+✻ Waiting for 1 background agent to finish
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so com a lista inteira travada !
+❯ segue a fila; PAREI so com a lista inteira travada
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 2 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 1 monitor · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading hxPerguntar in _dialogo.html                                                                          45s · ↓ 295.0k tokens
   ⧉  index
 ```
