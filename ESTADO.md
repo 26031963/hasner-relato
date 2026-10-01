@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:25:31.**
+**Medido em 01/10/2026 02:30:38.**
 
 | | |
 |---|---|
-| `HEAD` local | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
+| `HEAD` local | `96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando` |
 | `origin/main` | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando
 c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela
 e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos
 2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
 d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
-2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
 ```
 
 ## `git status --short`
 
 ```
- M app/static/css/hasner-ponto.css
-?? app/ponto/services/procedencia_batida.py
-?? app/templates/core/_origem_batida.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,18 +95,6 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Item (2) respondido com lastro: as 7 são disputa_s84_retro e cada uma carrega pergunta_origem_id — vieram da materialização de uma pergunta nomeável. E o universo: 809 de 27.139
-  (3,0%) não vieram do relógio. Agora a cura estrutural — vendo os campos disponíveis:
-
-  Ran 2 shell commands
-
-● Achado de passagem: disputa_s84_retro não está em ORIGEM_CHOICES — 569 batidas com um valor que o vocabulário do próprio modelo não conhece. Construindo a derivação única:
-
-  Ran 1 shell command
-
 ● Agora o markup único e os dois montadores. O partial:
 
   Searched for 2 patterns, ran 3 shell commands
@@ -117,25 +102,37 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 ● A célula da grade não carrega o pk da batida — então o espelho não consegue identificá-la sem tocar _match_marcos, um juiz compartilhado. Faço o calendário (que tem objetos
   Batida de verdade) e registro essa metade medida:
 
-  Running 1 shell command…
+  Ran 3 shell commands
+
+● Agora o template do calendário — nos três pontos onde a marcação aparece:
+
+  Searched for 2 patterns, ran 3 shell commands
+
+● 9 OK. O template já está no ar e {% if b.procedencia %} é falso sem o atributo, então nada quebra. Agora a metade do PDF:
+
+  Ran 1 shell command
+
+● O PDF lê dia['batidas'], que são objetos Batida reais do montador do espelho — então ele pode receber a procedência pelo mesmo caminho. Achando onde o montador marca a batida:
+
+  Searched for 2 patterns, ran 4 shell commands
+
+● 243 OK, incluindo o app relatorios inteiro. Fechando o O7:
+
+● Fechar o O7, commitar e empurrar
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
-     P='colaboradores/services/calendario.py'; t=io.open(P,encoding='utf-8').read()
-     v = """ _p = _hf.get(_hhmm)
-     if _p:
-     b.fora_da_janela = True
-     b.minutos_fora = _p.get('minutos')
-     b.sentido_fora = _p.get('sentido')
-     b.marco_fora = _p.get('marco')"""
-     a…
+     P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read()
+     i=t.find('| O7 |'); fim=t.index('\n',i); c=t[i:fim].split('|')
+     c[3]=(' **FECHADA 01/10 02:3x -- as duas medicoes respondidas e a cura estrutural no ar; nada retratado** ')
+     c[4]=(' **(1)…
 
-✢ Percolating… (4h 22m 56s · ↓ 449.2k tokens)
+✶ Percolating… (4h 28m 3s · ↓ 464.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
