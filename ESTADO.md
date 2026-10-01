@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:55:02.**
+**Medido em 01/10/2026 13:00:12.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ ae0de406 L-093-TRABALHADO-REAL aplicada no motor: o minuto bloqueado pela janela
 ## `git status --short`
 
 ```
+ M app/ponto/calculador/regras.py
+?? app/ponto/tests/test_s5b_regra_pontualidade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +97,7 @@ ae0de406 L-093-TRABALHADO-REAL aplicada no motor: o minuto bloqueado pela janela
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do
      sleep 40; done; ech… · stopped
 
 ● Stop Task
@@ -118,16 +121,15 @@ ae0de406 L-093-TRABALHADO-REAL aplicada no motor: o minuto bloqueado pela janela
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Medir os REDs de pontualidade (corrigido)
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
-     $S/red_pont.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import datetime as dt
-     from django.utils import timezone as tz
-     from colaboradores.models import Colaborador
-     from …
+● Testar a ligacao e os vizinhos · 6s
+  ⎿  $ cat >> ponto/tests/test_s5b_regra_pontualidade.py <<'PYEOF'
+     class DoDiaLigaAsRegrasTest(SimpleTestCase):
+     """A LIGACAO: `do_dia` passa a decidir as duas rubricas -- e a se RECUSAR quando nao recebe o dado.
+     Esta classe existe por causa de um risco concreto do desenho, e nao por simetria: tirar
+     `hor… (6s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Pouncing… (5h 22m 26s · ↓ 611.4k tokens · still thinking)
+✽ Pouncing… (5h 27m 36s · ↓ 634.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
