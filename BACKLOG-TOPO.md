@@ -19,8 +19,8 @@ lista — ela e o que esta EM PE._
 | **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **FECHADA 01/10 03:0x no (a) e no PENDEN |
 | **O10** | TROCA-DE-PLANTAO | espera corte |
 | **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera aval |
-| **O12** | CHAVE-MORTA-TRAB-FERIADO | **livre** |
-| **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | **em esteira** |
+| **O12** | CHAVE-MORTA-TRAB-FERIADO | **FECHADO 01/10 12:4x -- e o censo de ho |
+| **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | espera aval |
 | **O14** | ESPELHO-APP-DERIVA-DIA | espera aval |
 | **O15** | PAUTA-DP-DIAS-EM-ABERTO | **em curso** |
 | **O16** | PORTAS-SEM-CAUSA-CONHECIDA | **em esteira** |

@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:17:31.**
+**Medido em 01/10/2026 12:22:48.**
 
 | | |
 |---|---|
-| `HEAD` local | `ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam` |
+| `HEAD` local | `69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **26** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou
+f26fd56b TICKETS: placar e rodape antes do push do lote
+35803556 O12 FECHADO: as duas opcoes da cura ja tinham acontecido, e o que faltava era a guarda
 ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam
 f49f2b25 O11: os tres contratos que ainda cravavam numero passam a DERIVAR, e a prova veio no mesmo minuto
-7c23ae78 O10: o censo antes de codar, e ele corrige o numero de 23/09 -- 16 lancamentos, nao 11
-14a12d06 col369 achado 4: publicado o que mudaria, sem aplicar -- 4 furos desaparecem e zero hora se move
-88163450 S5b item 2: as 132,19 h de HE50 abertas por origem e por colab -- a janela ESTA aplicada, e a mao bate 3 de 3
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +97,44 @@ f49f2b25 O11: os tres contratos que ainda cravavam numero passam a DERIVAR, e a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  As três passaram a derivar na mesma forma: total como teto (assertLessEqual do valor medido hoje — teto acima do que a lista tem afrouxa a guarda), soma
-  do vetor de zonas comparada com len(pend), e teto por zona elemento a elemento.
 
-  Esse "elemento a elemento" foi erro meu de cinco minutos: eu havia escrito assertLessEqual(_zonas, (0,0,0,1)) sobre tuplas, e tupla compara
-  lexicograficamente — (0,0,0,5) <= (0,0,1,0) é True, então a zona da tela podia crescer de 1 para 5 e o selo passava.
+  - A função do laço próprio não existe mais — só a lápide em espelho.py:426 conta o que era.
+  - montar_dias pergunta ao juiz: dia_das_batidas(colaborador, data_ini, data_fim_mes), a mesma autoridade do cartão, com a ponte instante → pk → dia e
+    None como resposta legítima ("fora da janela apresentada"), nunca dia inventado.
+  - Os quatro casos de comportamento já existiam em test_espelho_tela_le_o_juiz_do_dia.py (a saída da madrugada na linha da entrada, a borda direita, o
+    turno aberto, o card junto das batidas).
 
-  E a prova veio sozinha, no mesmo minuto: o test_MORDE_pendente_curado_sai_da_lista ficou vermelho porque o O9 passo 1 apagou if not _fatia_unica: do
-  pdf_espelho.py e o pendente seguia declarado em core/juizes.PENDENTES. Tirei o pendente e nenhum contador precisou ser mexido — que é exatamente o que o
-  item pedia.
+  O que escrevi foi a guarda estrutural — três casos a mais, porque comportamento certo com regra própria dentro volta a divergir no primeiro ajuste:
+  1. montar_dias pergunta ao juiz e não deriva (por regex sobre a fonte da função: nenhum localtime(...timestamp...).date()).
+  2. timestamps_continuacao não volta.
+  3. E um caso que distingue janela de dia — sem ele o selo proibiria os dois usos legítimos de .date() (piso_visual, que diz onde a tela começa, e
+     somar_periodos(dentro=), que recorta a competência) e empurraria a cura para o lado errado. Janela recorta; dia atribui.
 
-  O mecanismo morreu: ajustar_contadores, _desce_total e _desce_grupo removidos com lápide; a chamada saiu do integrador; e contadores_a_ajustar virou
-  baixas_por_familia, porque o nome passou a mentir — ela sempre só contou baixas por família para o log.
-
-  O que guarda a volta: um selo acusa se o descedor reaparecer (por hasattr e por texto no integrador) e outro varre os quatro contratos recusando
-  assertEqual(len(pend), N), exigindo o teto que só encolhe — com a mensagem dizendo a cura certa: fazer aquele contrato derivar, nunca ressuscitar o
-  mecanismo.
-
-  43 selos verdes, test_baixa_diferida_host.sh OK (61 pacotes na esteira), ruff limpo. Falta empurrar — e aí a fila 1 segue para o próximo item.
+  E o push do lote esbarrou num selo que trabalhou certo: HAIKU-DENTES.md é gerado do código e ficou fora de sincronia — porque a rota morta da mensageria
+  saiu, e o documento contava 41 endpoints GET; agora conta 40. Regenerado pelo próprio gerador e recommitado; o push está rodando.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O12 -- CHAVE-MORTA-TRAB-FERIADO (achado da PDF-SEM-REGRA-PROPRIA, 24/09) -- relatorios/pdf_espelho.py:464-470 classif
+  ⎿  Stop hook error: siga: O13 -- ESPELHO-TELA-TAMBEM-DERIVA-DIA (achado da PDF-SEM-REGRA-PROPRIA, 24/09) -- curado o cartao, o leitor de aprese
 
-● Ler o escopo do O12
-  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+● Registrar o estado do O13 e rodar o ruff
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
      import io
-     for l in io.open('app/docs/BACKLOG.md',encoding='utf-8'):
-     if l.startswith('| O12 '):
-     c=l.split('|')
-     print('=== ESCOPO ==='); print(c[2].strip()[:1100])
-     print(); print('=== ESTADO ==='); print(c[3].strip()[:300])
-     "
+     P='docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     i=t.find('| O13 ')
+     assert i>0
+     fim=t.index('\n',i)
+     c=t[i:fim].split('|')
+     c[3]=(' **O CODIGO JA ESTA CURADO -- medido 01/10 12:5x -- e o que escrevi foi a GUARDA; os selos novos '
+     'aguarda…
 
-✢ Pouncing… (4h 44m 55s · ↓ 504.6k tokens)
+* Pouncing… (4h 50m 12s · ↓ 522.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
