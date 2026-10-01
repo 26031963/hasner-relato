@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 08:50:45.**
+**Medido em 01/10/2026 08:55:45.**
 
 | | |
 |---|---|
@@ -96,22 +96,13 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 
 ```
 
-  Ran 2 shell commands
-
-● Background command "Rodar ponto, relatorios e core na raia" completed (exit code 0)
-
-  Ran 8 shell commands
-
 ● Background command "Refazer o ensaio da sombra com o inventario curado" completed (exit code 0)
 
   Ran 10 shell commands
 
 ● Background command "Rodar a suite da raia inteira com saida completa" completed (exit code 0)
 
-  Conferir o registro dos prompts da noite
-  ⎿  $ tail -12 docs/PROMPTS.md
-
-✻ Waiting for API response · will retry in 2m 31s · check your network
+  Committed 8ce7eebf, 337b5e88, bd217a94, searched for 1 pattern, read 1 file, ran 16 shell commands
 
 ❯ aval Ronald 01/10 08:5x:
   1. TXT emp2: NAO substitui ainda. Autopsia do col881 02/09 primeiro -- e o seu RELATO de 19:3x diz que ele perdeu 5 h na cura S84, entao ele FOI tocado ontem; reconciliar com o
@@ -119,6 +110,8 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
   2. S5b: a lei ja existe -- dia impar ou malformado vale a soma dos PARES FECHADOS (BUG-144), aparece EM ABERTO com o que falta, e a hora volta pela resposta. O calculador esta
   certo. Segue a sombra com isso; a troca continua esperando o meu ! com o DIFF por rubrica.
   3. O108: aplica. A tela passa a dizer a verdade sobre furo e abono !
+
+● Background command "Rodar a suite da raia depois do merge" completed (exit code 0)
 
 ❯ aval Ronald 01/10 08:5x -- BUG EM PROD AGORA, fura tudo. Lote de cartoes por DATA LIVRE: u28 08:28, 08:28 e 08:43 -> 0 gerados. A trilha diz o erro: "cannot import name
   'previstas_do_periodo' from 'escala.alimentacao'". E a janela que voce escreveu que "nao machucou": o .py do O108 esta na arvore viva e o saas_ui nao recarregou -- um import
@@ -128,10 +121,17 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
   2. Smoke: lote por data livre, 21/08 a 20/09, col61 e col929, gerando.
   3. A cura de classe: arquivo .py de fatia NAO fica na arvore viva sem reload, nem por minutos. Selo que morda (import tardio de simbolo que o HEAD carregado nao tem), nao uma
   promessa no RELATO.
-  ctrl+x ctrl+s to send now
+
+● BUG EM PROD — você está certo e eu estava errado: a janela machucou. Deploy imediato.
+
+  Procurar o registro do commit que esta no ar
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '310,325p' bin/deploy.sh; echo "=== o carimbo existe? ==="; ls -l --time-style='+%d/%m %H:%M' logs/deploy_carimbo* logs/publicado*
+     2>/dev/null; grep -n "CARIMBO\|carimbo" bin/deploy.sh | head -5
+
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
