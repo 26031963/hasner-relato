@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:107 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:147 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:59:31.**
+**Medido em 30/09/2026 21:05:02.**
 
 | | |
 |---|---|
 | `HEAD` local | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| `origin/main` | `346ad7ab O retrato lavrado da 09 existe, e ele mede a cegueira: 460 colaboradores e 6.220 dias` |
-| commits a subir (`ahead`) | **28** |
+| `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,7 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
  M app/colaboradores/views.py
  M app/docs/BACKLOG.md
  M app/docs/RELATO.md
+ M app/ponto/tests/test_contract_no_batida_date.py
  M app/templates/colaboradores/passe_livre.html
 ?? app/colaboradores/tests/test_passe_livre_trilha.py
 ?? bin/keepalive.sh
@@ -100,44 +101,44 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Duas coisas que eu errei e corrigi em público neste bloco: publiquei que a flag isento_ponto não tinha trilha (procurei em valor_depois; ela está na descrição — 14º erro de
-  instrumento do dia), e citei um rótulo de log entre colchetes numa mensagem de commit, o que fez o regua_tickets recusar o push — e na segunda tentativa expliquei o problema
-  usando o problema.
+
+  Ran 1 shell command
+
+● Corrigido e publicado. O achado principal deste bloco é desconfortável e vale dito curto:
+
+  O item (1) do O1 já estava feito desde 23/09. A cura existia, a lápide a declarava dentro do próprio arquivo, e o que sobrou foi a entrada na allowlist apodrecendo por uma
+  semana — levando o item do backlog com ela. Eu fui "fazer" e já estava feito; se tivesse começado a migrar antes de ler o sítio, teria reescrito uma cura existente.
+
+  A causa do apodrecimento é exata e curável: a ALLOWLIST antiga não tinha o teste anti-podre que a irmã LOOKUP_ALLOWLIST tem desde 04/09. O cabeçalho dela sempre disse "a lista
+  só pode diminuir" — mas sem o teste isso era disciplina, e a irmã, que tem o teste, nunca apodreceu. A diferença entre as duas não era idade nem cuidado: era o selo. Adicionei
+  test_allowlist_nao_esta_podre e as 7 entradas podres saíram, com o comentário de cada uma preservado onde estava.
+
+  E o meu censo de 20 minutos antes estava errado pelo mesmo motivo de sempre: eu medi a lista, não o mundo. O número real é 12 ofensores, não 19 — e os "13 sem declaração" caem
+  para 6, porque 7 deles eram as podres.
+
+  Falta, na ordem: o push fechar (7:31 de ~16 min, espera armada por arquivo) → rodar o selo do O101 e o anti-podre → commitar → deploy com migrate.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O1 -- COERENCIA-PORTAO — (1) PDF-lote le o dia do turno do MESMO juiz do espelho (pdf_espelho.py:436-475, caso col37
 
-● O hook está certo: o O1 tem itens (1) e (2) de pé. Fazendo o (1), que é o cutover que o próprio censo apontou como primeiro. Lendo o sítio:
+● O que resta no O1 é o item (2): cartao_x_txt 10 → 0 com autópsia por classe. É medição também. Achando o contador:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 1 shell command
 
-● A lápide responde: o item (1) já foi curado em 23/09 — "PDF-SEM-REGRA-PROPRIA (corte Ronald 23/09 17:5x): o cartao NAO tem regra de dia (...) pergunta a dia_das_batidas e repete
-  a resposta". Então ou sobrou um .date() de outra natureza no arquivo, ou a entrada na allowlist está podre. Medindo pela função real do selo:
+● cartao_x_txt_divergentes = 0 na 09/2026 — a meta do item (2) já está cumprida ali. Medindo a 10, que é a competência corrente:
 
-  Ran 1 shell command
+  Medir a 10 e o portao inteiro · 1m 27s
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 10 --ano 2026 2>&1 | tail -8; echo "===
+     e o pdf_x_espelho? ==="; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
+     from folha… (1m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Isto corrige o meu próprio censo de 20 minutos atrás, e para melhor. Eu medi a declaração em vez do fato:
-
-  - ofensores reais agora: 12 (não 19)
-  - 7 entradas estão PODRES — estão na allowlist e não ofendem mais: api/views.py, chamados/models.py, colaboradores/views.py, core/views.py, calibrar_ancoras.py,
-    triagem_batida.py e relatorios/pdf_espelho.py
-
-  Ou seja: o item (1) do O1 está FEITO — a cura de 23/09 pegou, e a entrada ficou podre. Conferindo se falta o selo anti-podre nessa lista (a do lookup tem):
-
-  Searched for 1 pattern
-
-● Confirmado: existe test_allowlist_de_lookup_nao_esta_podre para a lista nova e nenhum equivalente para a antiga — foi por isso que 7 entradas apodreceram sem ninguém ver.
-  Espelhando o selo que falta e limpando as 7:
-
-  Ler o selo anti-podre existente
-  ⎿  $ sed -n '240,258p' ponto/tests/test_contract_no_batida_date.py
-
-✢ Bootstrapping… (7h 27m 59s · ↓ 1.4m tokens)
+✽ Bootstrapping… (7h 33m 29s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```

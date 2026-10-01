@@ -9,7 +9,7 @@ lista — ela e o que esta EM PE._
 
 | ID | obra | estado |
 |---|---|---|
-| **O1** | COERENCIA-PORTAO | **(4) FEITO 28/09 · (3) CENSO FEITO 30/0 |
+| **O1** | COERENCIA-PORTAO | **(4) FEITO 28/09 · (1) JA ESTAVA FEITO  |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | espera aval |
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | espera corte |
 | **O4** | ACESSO-NUNCA-EM-LOTE | **livre** |
