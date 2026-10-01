@@ -6,10 +6,33 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 18:12:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (172.4 MB). Acoes na janela: **1100**.
+**Medido em 01/10/2026 18:17:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (172.7 MB). Acoes na janela: **1122**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:17:08 | Bash | Montar as duas copias do HEAD e conferir a sombra | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; D=$S/pta; rm -rf $D; mkdir -p $D/orig $D/cura git archive HEAD app \| tar -x -C $D/orig cp -a $D/orig/app $D/cura/app git diff HEAD -- app/ponto/motor_calculo_v2.py > $D/guarda.patch ( cd $D/cura && patch -p1 --silent < $D/guarda.patch ) && echo "patch aplicado na copia"  ...` |
+| 18:16:52 | Bash | Ler o simular_folha | `cd /home/ronald/saas-hasner && sed -n 1,60p bin/simular_folha.sh` |
+| 18:16:28 | Bash | Rodar a forense dos cinco dias | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i 's/janela_atual(c.empresa, dia)/janela_atual(dia, c.empresa)/' $S/periodos_abertos.py && docker cp $S/periodos_abertos.py saas_core:/tmp/periodos_abertos.py >/dev/null && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/periodos_abertos.py') ...` |
+| 18:16:21 | Bash | Ler as assinaturas de janela | `sed -n 20,70p ponto/janelas.py` |
+| 18:16:06 | Bash | Forense dos cinco dias com o motor real | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/periodos_abertos.py <<'PYEOF' # -*- coding: utf-8 -*- """FORENSE do PONTUALIDADE-EM-TURNO-ABERTO: o que o motor REAL ve em cada dia citado. SO LEITURA (SELECT + calculo em memoria). Chama a porta canonica `ponto/services/espelho.py::autoridade_do_periodo` -- a MESMA que a folha e o espelho usa ...` |
+| 18:15:41 | Bash | Ler a invocacao de sombra | `cd /home/ronald/saas-hasner && sed -n 25,45p bin/diff_janela_he_total.sh` |
+| 18:15:37 | Bash | Ver como se roda na sombra | `cd /home/ronald/saas-hasner && grep -rn "settings.sombra" bin/*.sh \| head -8` |
+| 18:15:22 | Bash | Ler autoridade_do_periodo | `sed -n 814,868p ponto/services/espelho.py` |
+| 18:15:19 | Bash | Achar a porta canonica do motor | `grep -rn "def autoridade_do_periodo\\|def espelho_do_colab\\|def calcular_mes_colab\\|get_motor_cct" --include=*.py . \| grep "def \\|^./core/regua_cct" \| head -10` |
+| 18:15:13 | Bash | Reler a sonda de dias abertos com antecipada | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $S/aberto_com_antecipada.py 2>/dev/null \| head -60` |
+| 18:15:09 | Bash | Ver o scratchpad | `ls /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ 2>/dev/null \| head -40; echo "=== sondas de motor ja escritas ==="; ls /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/*.py 2>/dev/null \| tail -20` |
+| 18:14:55 | Bash | Procurar a definicao de par nulo e relampago na casa | `grep -rn "par nulo\\|par_nulo\\|nulo" ponto/*.py ponto/calculador/*.py core/juizes.py 2>/dev/null \| head -20; echo "=== relampago ==="; grep -rn "RELAMPAGO\\|relampago" ponto/turnos.py core/juizes.py ponto/management/commands/detectar_par_relampago.py 2>/dev/null \| head -20` |
+| 18:14:49 | Bash | Ver se periodo aberto entra no mapa | `echo "=== MotorBase 1557-1600 ==="; sed -n 1580,1600p ponto/motor_calculo_v2.py; echo "=== TurnoPartido 2003-2018 ==="; sed -n 2003,2018p ponto/motor_calculo_v2.py; echo "=== Comercial 2353-2360 ==="; sed -n 2353,2360p ponto/motor_calculo_v2.py` |
+| 18:14:43 | Bash | Onde os mapas dia-por-periodo sao montados | `grep -n "_dia_jornada_por_periodo\\|dia_da_jornada\[id(\\|dia_da_jornada =" ponto/motor_calculo_v2.py \| head -20` |
+| 18:14:39 | Bash | Conferir pista de teste livre e diff pendente | `cd /home/ronald/saas-hasner && echo "=== containers de teste ==="; docker ps --format '{{.Names}} {{.Command}}' \| grep -i test \| head; echo "(fim)"; echo "=== sessoes no juliani_db_test ==="; docker exec juliani_db_test psql -U juliani -d juliani -tAc "select count(*) from pg_stat_activity where datname='juliani' and pid<>pg_backend_pid()" 2>&1 \| tail -1; echo "=== diff nao commitado ==="; git  ...` |
+| 18:14:33 | TaskStop |  | `-` |
+| 18:14:30 | TaskStop |  | `-` |
+| 18:14:28 | TaskStop |  | `-` |
+| 18:14:26 | TaskStop |  | `-` |
+| 18:14:24 | TaskStop |  | `-` |
+| 18:14:22 | TaskStop |  | `-` |
+| 18:14:20 | TaskStop |  | `-` |
+| 18:14:17 | ToolSearch |  | `-` |
 | 18:11:41 | Bash | Mapear metodos por classe e estado do repo | `python3 - <<'PYEOF' import ast,io t=ast.parse(io.open('ponto/motor_calculo_v2.py',encoding='utf-8').read()) for cls in [n for n in t.body if isinstance(n,ast.ClassDef)]: ms=[n.name for n in cls.body if isinstance(n,ast.FunctionDef)] print(cls.name, '<-', [b.id for b in cls.bases if hasattr(b,'id')], ':', ms) PYEOF echo "=== estado do push/fila ==="; cd /home/ronald/saas-hasner && git log --oneline ...` |
 | 18:11:32 | Bash | Identificar os metodos dos sitios | `python3 - <<'PYEOF' import ast,io src=io.open('ponto/motor_calculo_v2.py',encoding='utf-8').read() t=ast.parse(src) alvos=[1793,2238,2526,2724,2133] for cls in [n for n in t.body if isinstance(n,ast.ClassDef)]: for fn in [n for n in cls.body if isinstance(n,(ast.FunctionDef,))]: for a in alvos: if fn.lineno<=a<=fn.end_lineno: print(a, cls.name+'.'+fn.name, '(%d-%d)'%(fn.lineno,fn.end_lineno)) PYEO ...` |
 | 18:11:21 | Bash | Mapear classes e chamadas de tolerancia | `grep -n "^class \\|aplicar_tolerancia(" ponto/motor_calculo_v2.py \| awk -F: '{print $1" "$2$3}' \| head -40` |
@@ -1109,4 +1132,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:24:32 | Bash | Conferir o push do escopo | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_esc.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
 | 06:24:26 | Bash | Publicar o escopo do O108 e empurrar | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read() i=t.find('\| O108 \|'); fim=t.index('\n',i); c=t[i:fim].split('\|') c[4]=(c[4].rstrip() + ' **O ESCOPO E MAIOR QUE UM KWARG, e tem TRES partes medidas (05:4x).** O PDF passa ao ' '`get_motor_cct` tres coisas que a `autoridade_do_periodo` nao passa: **(1) `datas_previstas_trabalho`** -- ' ...` |
 | 06:23:44 | Bash | Medir quantos colabs tem mais de um vinculo na janela | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/multi.py <<'PYEOF' # -*- coding: utf-8 -*- import datetime as dt from django.db import connection connection.set_schema('juliani') from django.db.models import Q from colaboradores.models import Colaborador from escala.models import EscalaColaborador ini, fim = dt.date ...` |
-| 06:12:19 | Bash | Ler a construcao do datas_previstas_trabalho | `sed -n '405,424p' relatorios/pdf_espelho.py` |
