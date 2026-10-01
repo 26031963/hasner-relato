@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:11:01.**
+**Medido em 01/10/2026 04:16:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+?? app/relatorios/management/commands/diff_pdf_x_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,38 +99,38 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 
 ```
 
+  O que fica nomeado para a próxima: o DIFF de frota do PDF antes de mexer nas nove vivas, com a regra que a própria célula escreve — mudança que o espelho não tem é bug do
+  espelho e vira item próprio.
+
+  Com você, sem mudança: o ! do TXT da emp2, a resposta do S5b, e os dois smokes (Gestão de HE e o relógio no calendário).
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
+
+● O item segue aberto nas 9 vivas, e o passo nomeado é o DIFF. Construindo-o — vendo o que o coletor devolve para comparar com o espelho:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O PDF já tem o resumo do espelho (linha 582) e lê uma chave dele, calculando o resto. Então o DIFF é: resumo do PDF × resumo do espelho, chave por chave. Vendo as chaves:
+
+  Read 1 file, ran 2 shell commands
+
+● O meu || quebrou o heredoc. Criando a pasta primeiro e escrevendo limpo:
+
   Ran 2 shell commands
 
-● Descoberta que muda o plano: o desenho já lê o dict do espelho (dia.get('rubricas'), pago_h, turnos…). Então a pergunta certa antes do DIFF é: o resultado dos 10 cálculos ainda
-  é usado? Censando:
-
-  Ran 1 shell command
-
-● Achado de zero risco: _rotulo_por_data é escrito e nunca lido — só 2 usos, a criação e a escrita. Era o rótulo que o O8 provou ter morrido (a autoridade virou palavra_dia).
-  Confirmando antes de remover:
+● O heredoc quebrado engoliu a linha de shell para dentro do arquivo. Reescrevendo limpo:
 
   Searched for 1 pattern, ran 3 shell commands
 
-● _CATR segue usado para ABONA/SUPRIME, e rotulo_vigente só aparece na minha prosa. Provando que remover código morto não mudou saída:
+● O DIFF não é zero — e isso é o achado. Mas minha comparação conta "chave que só existe num lado" como divergência (total_relogio), o que é outra coisa. Separando as duas:
 
-  Ran 1 shell command
-
-● 217 OK e ruff limpo. Agora o tripwire que o item pede, com os 9 restantes como allowlist que só encolhe:
-
-  Ran 1 shell command
-
-● 5 OK, e rodei o ruff antes do push desta vez. Fechando o incremento do O9:
-
-  Ran 2 shell commands
-
-● Background command "Commitar o incremento do O9 e empurrar" completed (exit code 0)
-
-● Deployar o incremento do O9 · 2m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 1500 bin/deploy.sh --sem-sombra 'O9 incremento: sai a escrita MORTA do PDF (rotulo_por_data, escrito e nunca lido) e entra o tripwire
-     de calculo em relatorios/pdf_*.py. Portao da sombra cego entre 00:00 e 04:00. Codigo que ninguem le nao muda saida: 217 selo… (2m 47s)
+  Esperar o DIFF de frota · 1m 46s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o9.log; for i in $(seq 1 58); do grep -q '^RC=' "$L" 2>/dev/null &&
+     break; sleep 10; done; sed -n '1,30p' "$L" 2>/dev/null (1m 45s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (6h 8m 26s · ↓ 520.6k tokens)
+✢ Percolating… (6h 13m 55s · ↓ 532.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
