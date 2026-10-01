@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:20:01.**
+**Medido em 01/10/2026 02:25:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
-| `origin/main` | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,9 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 ## `git status --short`
 
 ```
+ M app/static/css/hasner-ponto.css
+?? app/ponto/services/procedencia_batida.py
+?? app/templates/core/_origem_batida.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,39 +98,39 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Ran 1 shell command
 
-● As rotas existem com views próprias. Vendo a porta e se há selo:
-
-  Searched for 1 pattern
-
-● A fatia foi construída: porta humana (ponto/services/retratar_humano.py), rotas, views e selo próprio. Conferindo se ela passa e se o caso do Ronald foi resolvido:
+● Item (2) respondido com lastro: as 7 são disputa_s84_retro e cada uma carrega pergunta_origem_id — vieram da materialização de uma pergunta nomeável. E o universo: 809 de 27.139
+  (3,0%) não vieram do relógio. Agora a cura estrutural — vendo os campos disponíveis:
 
   Ran 2 shell commands
 
-● A batida 93752 — o caso que criou o item — está retratada desde 23/09 10:58, e a porta tem uso real: retratar_batida_admin 3 vezes, mais um desretratar. Conferindo as quatro
-  propriedades de porta antes de fechar:
+● Achado de passagem: disputa_s84_retro não está em ORIGEM_CHOICES — 569 batidas com um valor que o vocabulário do próprio modelo não conhece. Construindo a derivação única:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● A permissão é conferida só na view — e a lei desta casa (a mesma que escrevi na porta de HE hoje) diz "permissão conferida AQUI, não na tela; tela é casca". Um segundo
-  consumidor chamando a porta passaria direto. Curando:
+● Agora o markup único e os dois montadores. O partial:
 
-  Ran 2 shell commands
+  Searched for 2 patterns, ran 3 shell commands
 
-● 10 de 11 quebraram — os selos chamavam a porta sem ator com permissão, o que é a prova de que a guarda não existia. Dando um ator permitido às fixtures e acrescentando o caso
-  que morde:
+● A célula da grade não carrega o pk da batida — então o espelho não consegue identificá-la sem tocar _match_marcos, um juiz compartilhado. Faço o calendário (que tem objetos
+  Batida de verdade) e registro essa metade medida:
 
-  Searched for 1 pattern, ran 1 shell command
+  Running 1 shell command…
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='colaboradores/services/calendario.py'; t=io.open(P,encoding='utf-8').read()
+     v = """ _p = _hf.get(_hhmm)
+     if _p:
+     b.fora_da_janela = True
+     b.minutos_fora = _p.get('minutos')
+     b.sentido_fora = _p.get('sentido')
+     b.marco_fora = _p.get('marco')"""
+     a…
 
-● 14 OK. Rodando os vizinhos que consomem a porta antes de fechar:
-
-● Conferir o push do O6 · 9m 34s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o6.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (9m 34s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-* Percolating… (4h 17m 26s · ↓ 434.6k tokens)
+✢ Percolating… (4h 22m 56s · ↓ 449.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
