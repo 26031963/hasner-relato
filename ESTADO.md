@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:49 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:20:45.**
+**Medido em 30/09/2026 21:25:45.**
 
 | | |
 |---|---|
@@ -39,8 +39,11 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 ## `git status --short`
 
 ```
+ M app/config/crons.py
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/docs/TICKETS.md
+?? app/ponto/management/commands/diff_col900.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,25 +100,6 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Ordem recebida, e o item 2 é uma correção séria da minha medição. Registro primeiro (L-010) e conserto o push, que falhou no placar do topo:
-
-  Ran 1 shell command
-
-● Agora o item 2, que é o que decide tudo. A sua correção está exata: eu media a entrada do turno, e o turno é montado a partir da célula — então eu pedia à célula para escolher
-  qual batida é a entrada e depois julgava a célula com isso. Circular. Refazendo pela primeira batida crua do dia:
-
-  Ran 1 shell command
-
-● A remedição inverte o quadro, e o seu exemplo reproduz exato (col900 01/09: real 06:56, template 07:00 −4 min, célula 12:50 −354 min):
-
-  ┌──────────────────────────┬──────────────────┬───────────────────────────┐
-  │          classe          │ v1 (contaminada) │ v2 (primeira batida crua) │
-  ├──────────────────────────┼──────────────────┼───────────────────────────┤
-  │ CÉLULA acerta → fica     │ 61               │ 50                        │
-  ├──────────────────────────┼──────────────────┼───────────────────────────┤
-  │ TEMPLATE acerta → regera │ 10               │ 24                        │
-  ├──────────────────────────┼──────────────────┼───────────────────────────┤
   │ sem batida → fica        │ 13               │ 10                        │
   └──────────────────────────┴──────────────────┴───────────────────────────┘
 
@@ -127,9 +111,28 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
   min). Nesses dois nenhum marco descreve o dia, que é a classe da L-084 que nasceu hoje de manhã: eles vão para CADASTRO x REALIDADE, não para regeneração. Publicando antes de
   aplicar, como a ordem manda:
 
-● Running 1 shell command…
+  Searched for 4 patterns, ran 2 shell commands
 
-· Bootstrapping… (7h 49m 12s · ↓ 1.4m tokens)
+● A porta é regenerar_celulas_vinculo(ec, desde, ate, ...) com guarda de competência exportada (e apesar_da_lavra como a exceção declarada, que a lei de hoje autoriza). Vou
+  chamá-la dia a dia — 22 chamadas, precisão exata, sem tocar o 11/09 do col900. Primeiro o DIFF, no motor que eu extraí hoje:
+
+  Ran 1 shell command
+
+● Declarando a casa dele e rodando o DIFF:
+
+  Declarar e rodar o DIFF do COL900 · 3m 32s
+  ⎿  $ python3 - <<'PYEOF'
+     import io, py_compile
+     P = 'config/crons.py'
+     t = io.open(P, encoding='utf-8').read()
+     A = " 'diff_passivo_s84':\n"
+     assert t.count(A) == 1
+     N = (""" 'diff_col900':
+     'DIFF de frota da regeneracao COL900 -- os dias em que a PRIMEIRA BATIDA CRUA do dia confirma o '
+     'TEMPLATE e nao a c… (3m 32s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Bootstrapping… (7h 54m 12s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
