@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:08:01.**
+**Medido em 30/09/2026 22:13:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `57c23083 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu` |
+| `HEAD` local | `f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu` |
 | `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-57c23083 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
+f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
 b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar
 7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
 e9e49d37 Merge branch 'raia-ui'
@@ -39,6 +39,7 @@ e9e49d37 Merge branch 'raia-ui'
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,41 +96,41 @@ e9e49d37 Merge branch 'raia-ui'
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bt186hvo0.output (12 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push2.log (6 lines)
 
-● hoje está no escopo dos dois. Escrevendo o selo — regra pura, mais o estrutural de que os dois caminhos leem a mesma função e nenhum tem comparação própria:
-
-  Ran 1 shell command
-
-● A rota existe. Conferindo a pista antes de rodar (um run por vez):
+● Deploy OK — três rotas provadas, importerror_500=0. Agora o push pela régua:
 
   Ran 1 shell command
 
-● A suíte de negócio do push fechou OK (8.897 testes) e o control-plane está rodando. Esperando ele para liberar a pista:
+❯ aval Ronald 30/09 22:1x -- o relogio riscado saiu com 16px e o desenho da L-097 pede 10px. core/_relogio_riscado.html usa a classe icone-dia (16x16, a dos icones de DIA); ao
+  lado da batida em fonte 9px do calendario fica o dobro do texto. O relogio ganha tamanho PROPRIO de 10px (classe dele, nao a dos icones de dia), o risco acompanha, e o selo
+  cobra o numero. Vale para espelho, calendario e PDF, que leem o mesmo partial.
 
-  Ran 1 shell command
+❯ aval Ronald 30/09 22:1x -- COL900, a saida: (a) a porta ganha o modo DIA (regenerar_celulas_dia), mesmo DNA e mesma trilha, com RED de que pedir 1 dia toca 1 celula. Aplica nos
+  dias em que a 1a batida crua confirma o template -- col900 primeiro (16 dias). col438 e col309 NAO se regeneram dia a dia: o cadastro deles nao descreve a rotina, vao para
+  CADASTRO x REALIDADE com o horario real ao lado, para o admin corrigir o vinculo. Depois: relavra, DIFF, PROVA e o TXT da 09. !
 
-● Push liberado: b6f267f8..b7a2b6b2. Tudo empurrado. Rodando o selo do O2:
+● Dois avais chegaram. Registro os dois e começo pelo push que já estava na mão:
 
-  Ran 1 shell command
+  Read 1 file, ran 2 shell commands
 
-● Background command "Esperar o push por arquivo" completed (exit code 0)
+● Background command "Armar o push do O2 em segundo plano" completed (exit code 0)
 
-● 9 verdes. Fechando a célula, commitando e deployando (a regra está em views.py, então só entra no ar com reload):
+  Read 1 file
 
-  Fechar o O2, commitar e deployar · 4s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P = 'docs/BACKLOG.md'
-     t = io.open(P, encoding='utf-8').read()
-     i = t.find('| O2 |'); assert i > 0
-     fim = t.index('\n', i); c = t[i:fim].split('|')
-     assert c[3].strip() == '**corte**', repr(c[3])
-     c[3] = (' **FECHADA 30/09 22:0x -- e a trava era um… (4s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Cura conhecida (pré-aprovada, causa em uma linha: o placar do topo guardava o push anterior). Curo, emendo e reempurro:
 
-✢ Percolating… (5m 26s · ↓ 15.7k tokens)
-                                                                                                                                                            0% until auto-compact
+  Searched for 1 pattern, ran 2 shell commands
+
+● A célula do O2 saiu com um | duplicado (deixei o pipe no texto). Corrigindo:
+
+  Ran 3 shell commands
+
+● Background command "Curar o placar do topo e reempurrar" completed (exit code 0)
+
+✢ Percolating… (10m 56s · ↓ 20.0k tokens)
+                                                                                                                                           ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
