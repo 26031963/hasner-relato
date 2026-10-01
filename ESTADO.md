@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:7 AFIRMA ato sem PROVA ao lado -- ## O9 passo 1 FEITO e verde; e o passo 3 achou TRES numeros para a mesma pergunta
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:48 AFIRMA ato sem PROVA ao lado -- ## O9 passo 1 FEITO e verde; e o passo 3 achou TRES numeros para a mesma pergunta
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:02:31.**
+**Medido em 01/10/2026 11:08:01.**
 
 | | |
 |---|---|
@@ -40,8 +40,17 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 
 ```
  M app/api/views_mensageria.py
+ M app/chamados/management/commands/carimbar_por_batida_coincidente.py
+ M app/chamados/services/celula_carimbada.py
+ M app/chamados/services/silencio_ausencia.py
+ M app/docs/RELATO.md
+ M app/escala/services/agenda.py
+ M app/ferias/services.py
+ M app/pautas/services.py
+ M app/ponto/services/ausencia.py
  M app/ponto/services/fechamento.py
  M bin/import_tardio_contra_o_ar.py
+?? app/ponto/tests/test_carimbo_acompanha_a_escrita.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,39 +107,39 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Re-expressar o selo e rodar relatorios e ponto" completed (exit code 0)
-
-  Ran 2 shell commands
-
-❯ aval Ronald 01/10 11:0x:
-  1. TXT emp2 / rubrica 0200: vou perguntar ao contador se o Dominio espera a hora ou o dobro. Enquanto isso, NOMEAR o commit que mudou a emissao entre 30/09 20:07 e hoje, e
-  dizer se a mudanca foi deliberada. O TXT passa a carimbar o commit que o gerou.
-  2. S5b: antes de qualquer outra coisa, abrir as 132,19 h de HE50 do calculador (motor 3,35) por ORIGEM e por colab. Com o bloqueio total no ar, HE so nasce por autorizacao: se
-  o calculador nao aplica a janela nas duas pontas, ele esta errado. 3 casos a mao.
-  3. Rota do lembrete da mensageria (500 desde 19/09): medir quantas chamadas ela recebeu nos ultimos 7 dias e de quem. Se ninguem chama, remove a rota com o ! deste aval; se
-  alguem chama, PAREI com o numero.
-  4. col369: publicar o que mudaria com o vinculo 1296 valendo desde 22/09 (folga sexta), sem aplicar.
-
-  Ran 3 shell commands
-
-● Background command "Aguardar e ler a sonda da fatia por vigencia" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Curar o rodape e empurrar" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Aguardar a sonda da fatia" completed (exit code 0)
-
-  Ran 8 shell commands
-
 ● Background command "Ler o DIFF sem fatia e com a cura" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Aguardar relatorios+ponto e conferir o push" completed (exit code 0)
+
+  Ran 13 shell commands
+
+● Background command "Aguardar a suite e conferir o push" completed (exit code 0)
+
+  Ran 1 shell command
+
+❯ aval Ronald 01/10 11:1x -- Gestao de HE forma B: o caminho esta certo, a execucao do EXPANDIDO nao. Tres defeitos de dado primeiro, depois a forma.
+
+  DEFEITOS, medidos no print dele (col616, emp2, competencia 10):
+  1. A lista da competencia 10 (21/09 a 20/10) mostra dias de 02/09 a 20/09 -- nove dias da 09 somados no "14 sem decisao". A janela da tela tem de sair de janela_fechamento.
+  2. O almoco ainda aparece como ponta: "depois da saida: bateu 12:01, marco 12:00" e "antes da entrada: bateu 12:59, marco 13:00". O cabecalho diz "retrato de 01/10 06:36",
+  ANTERIOR a cura das 10:08. Voce escreveu que relavrou 10:11 e 10:14: a tela esta lendo outro retrato, ou a relavra nao pegou. Medir e dizer qual.
+  3. Datas em formato de maquina (2026-09-02). Na tela e dd/mm.
+
+  A FORMA do expandido -- a critica dele, nas palavras dele: "coluna com o mesmo texto repetido" e poluicao. Catorze linhas repetem a mesma frase e os mesmos tres controles; a
+  tira ficou pequena demais para responder alguma coisa.
+  - Ao abrir a pessoa, o que ele ve primeiro e o PERIODO DELA DESENHADO, no espirito do mini calendario do "Vincular escala": os dias com ponta marcados, intensidade pelos
+  minutos, antes/depois distinguiveis. O padrao inteiro de uma vez. Nao e para copiar o componente; e o mesmo modo de responder pela forma.
+  - A tabela de dias FICA, como texto de apoio (o papel que a frase "paridade real, 93%" cumpre la), mas LIMPA: colunas (dia, ponta, bateu, marco, minutos), sem repetir rotulo em
+  cada linha.
+  - DAR CIENCIA e UMA opcao por pessoa, nao um botao por dia. AUTORIZAR segue por dia, e o campo de motivo so aparece quando ele escolhe autorizar aquele dia.
+  - A tira da linha colapsada precisa ser legivel no tamanho em que esta.
+    Antes de codar: 6 linhas dizendo o que ele ve ao abrir uma pessoa. Depois constroi, merge e deploy no mesmo ato.
 
 ● Running 1 shell command…
 
-✢ Pouncing… (3h 29m 55s · ↓ 367.0k tokens)
+✢ Pouncing… (3h 35m 25s · ↓ 381.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
