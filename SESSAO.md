@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 13:31:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.4 MB). Acoes na janela: **932**.
+**Medido em 01/10/2026 13:36:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.4 MB). Acoes na janela: **930**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -940,5 +940,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:42:46 | Bash | Ver o material do deck | `ls -la ~/deck-30dias/ 2>/dev/null \| head -20; echo "=== COMO_ATUALIZAR ==="; head -40 ~/deck-30dias/COMO_ATUALIZAR.md 2>/dev/null` |
 | 01:42:36 | Bash | Ler a celula do O5 | `python3 - <<'PYEOF' import io t=io.open('docs/BACKLOG.md',encoding='utf-8').read() for l in t.split('\n'): if l.startswith('\| O5 \|'): for n,c in enumerate(l.split('\|')): if c.strip(): print('--- col%d ---\n%s\n' % (n, c.strip()[:1200])) break PYEOF` |
 | 01:41:24 | Bash | Conferir o push | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 55); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
-| 01:31:17 | Bash | Conferir o push do replay | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
-| 01:31:12 | Bash | Fechar o O4 e empurrar | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read() i=t.find('\| O4 \|'); fim=t.index('\n',i); c=t[i:fim].split('\|') c[3]=' **FECHADA 01/10 01:4x -- os SEIS itens** ' c[4]=c[4].replace('**FALTA**: o replay de 50 ' 'tokens reais na sombra ', '**(4) COMPLETO 01:4x**: `core/management/commands/replay_credenciais.py` + selo (7 casos). Ele pe ...` |

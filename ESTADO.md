@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:31:01.**
+**Medido em 01/10/2026 13:36:31.**
 
 | | |
 |---|---|
@@ -102,38 +102,38 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
-● Stop Task
-  ⎿  python3 - <<'PYEOF'
-     import io… · stopped
+  O DESENHO PEDIDO (palavras dele + as minhas, aprovadas):
+  - a celula do dia mostra o NUMERO: ▲19 antes da entrada, ▼5 depois da saida, as duas quando houver. Sem "HE" e sem "min" repetidos; a legenda diz uma
+  vez.
+  - dia com HE tem fundo cheio e numero escuro; dia sem HE fica claro.
+  - tres estados, nunca so por cor: sem decisao (led cinza vazado, numero riscado) · com ciencia (led cinza cheio, numero riscado) · autorizado (led
+  verde, numero normal).
+  - o dia e CLICAVEL: clicar MARCA; uma barra unica confirma "Autorizar N dias, +M min" com motivo. Nada de interruptor que grava no clique.
+  - a tabela vira apoio de conferencia (dia, ponta, bateu, marco, min), sem botao por linha, recolhida por padrao.
+  - LIMITE DE DECISAO por cadastro da empresa (corte Ronald: nasce, default 10 min, so de TELA): dia abaixo do limite segue bloqueado, aparece apagado e
+  NAO conta em "sem decisao"; acima, aparece forte e pede decisao. Nao muda dinheiro nem a L-097.
+  - a frase do padrao ("6 min antes da entrada em 13 de 16 plantoes") ganha a propria acao: dar ciencia no padrao.
 
-  Searched for 1 pattern, ran 4 shell commands
+  RESULTADOS OBSERVAVEIS (todos, ou INCOMPLETO com a lista):
+   (1) print do calendario com numeros e os tres estados distinguiveis em tons de cinza.
+   (2) marcar 3 dias + 1 confirmacao = 3 autorizacoes pela porta existente (decidir_he), 3 trilhas com usuario, antes/depois e motivo.
+   (3) col616 comp 09: "sem decisao" cai de 13 para os dias acima do limite, com o numero publicado.
+   (4) tabela sem botao por linha.
+   (5) limite lido do cadastro, com leitor e rotulo; chave sem leitor = vermelho.
+   (6) autorizar e desfazer movem o numero do dia no espelho; ciencia nao move nada.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  SELO: autorizar em lote chama a MESMA porta do autorizar por dia (grep de escrita fora dela = 0); um caso que morde por estado; selo de front nas DUAS
+  cascas.
+  PROIBIDO: regra de HE no template ou no JS; autoridade nova; gravar no clique; cor como unico sinal; tocar motor ou celula.
+  PRONTO: RELATO com os prints, PROVA: ao lado de cada ato, commit na raia. Merge so com o smoke dele.
+  LEI-AKITA: origem=retrato lavrado he_pendente + porta decidir_he; testemunha=o retrato; RED=lote grava N trilhas; quem-mais-le=PDF da Gestao de HE;
+  juizes novos=0 (o limite e cadastro de tela, nao juiz).
+  HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa, rotulo de admin; (b) golden: "quantos dias de HE da col616 na 09 pedem
+  decisao?"; (c) degrau: leitura.
+  LEI: nenhuma lei nova de dinheiro; cadastro novo de tela = corte dado acima. A migration do cadastro NAO cabe no --sem-migrate da raia: ela sobe pela
+  main, no deploy normal.
 
-  Searched for 14 patterns, listed 1 directory, ran 61 shell commands
-
-❯ aval Ronald 01/10 lei: a L-084 manda sobre o TURNO-T8. O gate entrada_fora_do_inicio deixa de zerar pontualidade no calcular_periodo do comercial
-  (motor_calculo_v2.py, aval explicito para tocar o motor); o carimbo HORARIO_DESLOCADO fica como aviso ao admin, sem efeito no numero. Alcance esperado
-  na 10: 6 dia-colab, ~31 h. Fora desta cura: col473 21/09 e col399 30/09 (par nulo, familia relampago) e os 36 dias abertos
-  (PONTUALIDADE-EM-TURNO-ABERTO). DIFF de frota antes, reversao em logs, 09 intacta. Segue a fila.
-
-● The law arrived. Registering it and measuring before touching the motor.
-
-  Ran 1 shell command
-
-● Measured before touching anything — and the mechanism does not match the expected reach. Applying the cure as ordered, then publishing the gap.
-
-● Esperar e ler o DIFF da cura T8 · 32s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 50; if ! pgrep -f "simular_folha" >/dev/null 2>&1; then break; fi; done; echo "=== DIFF DA CURA T8 ==="; cat $S/t8/diff.log | grep -vE
-     "^W… (33s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Pouncing… (5h 58m 25s · ↓ 718.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
+  Segue a fila; PAREI so em lei ou !.
   ctrl+x ctrl+s to send now
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
