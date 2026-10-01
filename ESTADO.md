@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:30:46.**
+**Medido em 01/10/2026 06:36:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
-| `origin/main` | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,39 +97,39 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  sem célula e sem colaborador_id". A célula e o id entraram naquele dia; o datas_previstas_trabalho ficou — a mesma cura, pela metade.
+● Background command "Publicar o escopo do O108 e empurrar" completed (exit code 0)
 
-  O O9 está bloqueado pelo O108, e isso agora está escrito nas duas células: trocar o motor do PDF pelo do espelho importaria o buraco para o cartão do Art.74 §2º.
+  Ran 1 shell command
 
-  Empurrado: 8ac8790b..a887f990.
+● Background command "Conferir o push do escopo" completed (exit code 0)
+
+● O escopo do O108 tem três partes medidas — e uma delas inverte a direção que o O9 assumia.
+
+  (1) datas_previstas_trabalho ausente — a causa do zero furo, provada somando uma entrada por vez: 302 colabs.
+
+  (2) O vínculo, e esta eu não esperava. O PDF monta a lista sobre todos os vínculos do período, por fatia, com eh_dia_trabalho(cur, celulas=…, folgas=…) — o juiz declarado. O
+  espelho usa um só, o ativa=True. Na janela 21/08–20/09, de 570 colabs com vínculo, 87 (15,3%) têm mais de um, e 10 têm o ativa=True fora da janela — para esses dez, o motor da
+  tela roda com uma escala que nem cobre o período pedido.
+
+  (3) datas_justificadas e os dias suprimidos, que saem do laço de ausência do PDF.
+
+  E isso explica um dos quatro REDs do O9: o col823, listado lá como "(janela)", está entre os 87 com dois vínculos. O RED que o item chamou de janela é, na verdade, vínculo.
+
+  A inversão é o achado mais importante do ciclo. O item diz "o PDF chama espelho_do_colab e só desenha" — e eu vinha medindo para cumprir isso. A medição diz o contrário: a
+  montagem completa do motor é a do PDF; a pobre é a do espelho. Trocar agora importaria o buraco para o cartão do Art.74 §2º e para a folha que o lê. A ordem certa é primeiro
+  enriquecer o espelho — que é a tela do admin e o app dos ~750 — e só depois o PDF ler dele.
+
+  Nada de produção mudou neste commit: é escopo medido. Empurrado a887f990..e860aef1.
+
+  ---
+
+  O turno foi longo e a fila andou bastante. Com você, acumulado: o ! do TXT da emp2; a resposta da pergunta do S5b (decide 118 dia-colab); os dois smokes (Gestão de HE e relógio
+  no calendário). E agora o O108, que é o bloqueio do O9 e mexe no que ~750 pessoas veem no app — o DIFF dele vem antes de qualquer cura, pela mesma lei que segurou o cartão.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
-● O107 fechou; agora o O108, e a minha própria célula manda DIFF antes. Lendo como o PDF constrói a lista, para a cura não nascer com uma segunda derivação:
-
-  Ran 1 shell command
-
-● Background command "Conferir o push do O108" completed (exit code 0)
-
-● A cura é maior do que um kwarg: o PDF passa três coisas que o espelho não tem (datas_previstas_trabalho, datas_justificadas, e os suprimidos), e constrói a lista sobre todos os
-  vínculos do período por fatia — enquanto o espelho usa só o ativa=True. Medindo o tamanho disso:
-
-  Ran 1 shell command
-
-● Medição que fecha o escopo do O108 — e ela explica um dos quatro REDs do O9:
-
-  - 570 colabs com vínculo na janela
-  - 87 (15,3%) têm mais de um vínculo nela
-  - 10 cujo vínculo ativa=True está fora da janela — para esses, o motor do espelho roda com a escala errada
-  - e col823, um dos quatro REDs do O9 ("janela"), está nessa lista
-
-● Conferir o push do escopo · 6m 13s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_esc.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 13s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Percolating… (8h 28m 10s · ↓ 595.1k tokens)
+✢ Percolating… (8h 33m 25s · ↓ 596.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
