@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:10:45.**
+**Medido em 01/10/2026 13:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS` |
+| `HEAD` local | `2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)
 07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS
 73a82f83 S5b regra 2 (atraso + saida antecipada) com os dois REDs dele, e a distincao SEM_ENTRADA x NAO_DECIDE
 1194a0c5 A L-093 esta NO AR; a relavra da 10 espera um clique seu -- e a FERRAMENTA que recusou, nao a lei
 6e4251a6 Guarda estrutural do O13 por AST -- e a 4a vez que o selo de texto morde a prosa que explica a cura
-8185a720 DIFF de frota da L-093 publicado ANTES do apply: uma rubrica, um sentido, -7,60 h no TXT
 ```
 
 ## `git status --short`
 
 ```
+ M app/ponto/calculador/regras.py
+ M app/ponto/tests/test_s5b_regra_pontualidade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +97,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     sleep 40; done; ech… · stopped
 
 ● Stop Task
   ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do
@@ -117,17 +120,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Publicar a lei e o censo
+● Escrever os testes das regras 3 e 4
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
      import io
-     P='docs/RELATO.md'
+     P='ponto/tests/test_s5b_regra_pontualidade.py'
      t=io.open(P,encoding='utf-8').read()
-     A='## PRECISO DE UM CLIQUE SEU AQUI'
-     assert t.count(A)==1
-     NOVO = '''## LEI (nao devolve turno, segue no topo com o numero): **DOIS juizes de "a entrada esta longe do marco", os dois a 180…
+     a = """ def test_NAO_DECIDE_do_modulo_ficou_so_com_o_que_NAO_TEM_REGRA(self):
+     \"\"\"Resultado observavel 1 da ordem: `NAO_DECIDE` so com o item 5 (a ligacao) e…
 
-· Pouncing… (5h 38m 9s · ↓ 675.3k tokens · thinking)
+· Pouncing… (5h 43m 9s · ↓ 698.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
