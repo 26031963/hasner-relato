@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:14:01.**
+**Medido em 01/10/2026 17:19:31.**
 
 | | |
 |---|---|
@@ -122,13 +122,13 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 
 ● Pista comprovadamente vazia (0 sessões, 0 containers). Empurrando um só, como você pediu.
 
-  Esperar o push unico · 3m 2s
+● Esperar o push unico · 8m 33s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
      11); do sleep 55; if grep -q "^RC=" $S/push_unico.log 2>/dev/null; then break; fi; done; grep -E "^(OK$|FAILED|Ran |FAIL:|ERROR:)|main
-     ->|ALARME|^RC=|er… (3m 2s)
+     ->|ALARME|^RC=|er… (8m 32s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Fermenting… (7m 51s · ↓ 11.8k tokens)
+· Fermenting… (13m 21s · ↓ 11.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
