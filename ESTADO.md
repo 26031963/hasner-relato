@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:472 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:474 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:06:31.**
+**Medido em 01/10/2026 18:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO` |
+| `HEAD` local | `0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo` |
 | `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo
 867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO
 c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
 92a1c4e6 A segunda causa tambem estava escrita na casa: a L-084 julga ANTES da janela. Noturnas -47,80 -> +0,67 h
 5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219
-5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b
 ```
 
 ## `git status --short`
 
 ```
+ M app/ponto/motor_calculo_v2.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,41 +96,41 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Também na mesa: ! da troca, o recorte do T8, os 223 colabs sem pontualidade, e a escolha (A)/(B) da UI-RESPOSTA-DIZ-O-QUE-E.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-TROCA-NAO-CRIA-DESCONTO -- LEI (2), Ronald 01/10 17:2x: a troca NAO cria desconto novo. Pontualidade em
-  MotorComercial, Motor12x36 e Moto
-
-  Ran 1 shell command
-
-● 12x36 +53 em trabalhadas e −53 em folga: as mesmas 53. E col43/col924 com gravado 0,00.
-
-  Ran 1 shell command
-
-● Dois colabs ativos com 38 e 37 batidas e zero horas no fechamento. Isso é dinheiro. Medindo a frota.
-
-  Ran 1 shell command
-
-● Sete colaboradores ativos, 107 batidas, fechamento zerado. E o calculador está certo — o gravado está vazio.
-
-  Ran 1 shell command
-
-❯ aval Ronald 01/10 18:1x lei (1): a cura do T8 vale RECORTADA -- L-084 so no dia que DECLARA intervalo; sem marco de intervalo o gate de 14/09 segue. A
-  literal esta descartada (cobrava 720 min de quem bateu a SAIDA; col473, col399). Tirar as duas linhas de lei do topo do RELATO: (1) e (2) estao
-  respondidas.
-  aval Ronald 01/10 18:1x PONTUALIDADE-EM-TURNO-ABERTO: o motor NAO julga atraso nem saida antecipada em turno aberto ou par nulo -- lei existente, TETO
-  TEMPORAL secao 6 (b): so fato encerrado. Aval explicito para tocar motor_calculo_v2.py. DIFF de frota da 10 publicado antes, reversao em logs, 09
   intacta, so pode DESCER desconto. RED: col890 22/09, col221 e col99 01/10. Segue a fila pela S5b !
 
 ● Dois avais. Registro, as duas linhas de lei saem do topo, e o aval do motor é explícito.
 
-● Running 1 shell command…
+  Ran 1 shell command
+  ⎿  1 skill available
 
-✢ Fermenting… (1h 0m 21s · ↓ 101.7k tokens)
+● Agora a cura, com o aval explícito. Primeiro o RED, depois o motor.
+
+  Searched for 4 patterns, ran 7 shell commands
+  ⎿  Read core/tests/test_contract_btn_pdf.py (142 lines)
+  ⎿  Referenced file ponto/tests/test_l084_vence_o_t8.py
+  ⎿  Referenced file ponto/motor_calculo_v2.py
+  ⎿  Referenced file docs/PROMPTS.md
+  ⎿  Referenced file ponto/calculador/regras.py
+
+● Task "Esperar a suite terminar de verdade e ler o veredito" still running in background
+
+● Task "Esperar o push e ler os dois resultados" still running in background
+
+● Task "Esperar a suite da forma B" still running in background
+
+● Task "Aguardar o push do lote" still running in background
+
+● Task "Aguardar o DIFF e o push, e ler os dois" still running in background
+
+● Task "Esperar o push e ler o veredito" still running in background
+
+● Task "Declarar o estado da higiene e conferir o hook" still running in background
+
+● Advising using Fable 5.1
+
+· Fermenting… (1h 5m 51s · ↓ 110.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                   1% until auto-compact
+                                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
