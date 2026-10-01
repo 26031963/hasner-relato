@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:15:45.**
+**Medido em 01/10/2026 06:20:45.**
 
 | | |
 |---|---|
@@ -97,7 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ + datas_previstas_trabalho  │ 22                │
   ├─────────────────────────────┼───────────────────┤
   │ + as duas (= o PDF)         │ 22                │
   └─────────────────────────────┴───────────────────┘
@@ -130,7 +129,8 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
 ● Background command "Conferir o push do O108" completed (exit code 0)
 
-✻ Waiting for API response · will retry in 2m 35s · check your network
+· Percolating… (8h 18m 9s · ↓ 591.9k tokens · deep in thought)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
