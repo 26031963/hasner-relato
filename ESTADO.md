@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:36:01.**
+**Medido em 01/10/2026 06:41:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/escala/alimentacao.py
+ M app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,18 +99,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Publicar o escopo do O108 e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Conferir o push do escopo" completed (exit code 0)
-
-● O escopo do O108 tem três partes medidas — e uma delas inverte a direção que o O9 assumia.
-
-  (1) datas_previstas_trabalho ausente — a causa do zero furo, provada somando uma entrada por vez: 302 colabs.
-
-  (2) O vínculo, e esta eu não esperava. O PDF monta a lista sobre todos os vínculos do período, por fatia, com eh_dia_trabalho(cur, celulas=…, folgas=…) — o juiz declarado. O
-  espelho usa um só, o ativa=True. Na janela 21/08–20/09, de 570 colabs com vínculo, 87 (15,3%) têm mais de um, e 10 têm o ativa=True fora da janela — para esses dez, o motor da
   tela roda com uma escala que nem cobre o período pedido.
 
   (3) datas_justificadas e os dias suprimidos, que saem do laço de ausência do PDF.
@@ -129,7 +119,19 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
-✢ Percolating… (8h 33m 25s · ↓ 596.2k tokens · thinking)
+● O DIFF precisa da lista rica, e construí-la no comando seria uma segunda derivação. Extraio primeiro para um sítio compartilhado — mudança nula de comportamento, que os 217
+  selos de relatorios provam:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● O ruff pegou antes do push (o hábito novo funcionando): o import do _DIO ficou órfão. Removendo e provando que a extração não mudou nada:
+
+● Remover o import orfao e rodar relatorios e escala · 4m 14s
+  ⎿  $ sed -i '323d' relatorios/pdf_espelho.py && sed -n '320,325p' relatorios/pdf_espelho.py && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run
+     --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app -w /app saas-hasner-core:latest ruff check . --output-format concise 2>&1 | tail… (4m 11s · 7 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Percolating… (8h 38m 56s · ↓ 600.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
