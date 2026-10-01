@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:55:31.**
+**Medido em 01/10/2026 16:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `be51b833 O20: celula dentro do teto (301 -> 290)` |
+| `HEAD` local | `8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **19** |
 
 ## Fabrica
 
@@ -24,29 +24,36 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **75** (baseline divergiu 41, nunca lancada 29, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **76** (baseline divergiu 41, nunca lancada 30, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
 ```
+8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 be51b833 O20: celula dentro do teto (301 -> 290)
 5696af56 O20 fatia 3: 8 contratos a mais, e a migracao expos um FALSO VERDE no contrato do TETO TEMPORAL
 8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA
 d7fb0fe2 O20: celula dentro do teto (319 -> 296)
-3df84d9d O20 fatia 1: nasce core/censo_fonte.py, e a implementacao NAO e minha -- a casa ja tinha uma melhor
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_contract_filtros_painel.py
- M app/chamados/tests/test_contract_js_colab_legado.py
- M app/core/censo_fonte.py
- M app/core/tests/test_contract_copiloto_dataset.py
- M app/core/tests/test_o20_contrato_julga_codigo.py
- M app/docs/HANDOFF-SESSAO.md
+ M app/api/tests/test_contract_mensageria_le_o_juiz.py
+ M app/chamados/tests/test_contract_dia_do_fato.py
+ M app/core/tests/test_contract_btn_pdf.py
+ M app/core/tests/test_contract_configuracao_nao_mente.py
+ M app/core/tests/test_contract_feriado.py
+ M app/core/tests/test_contract_import_local_resolve.py
+ M app/core/tests/test_contract_l8_dialogo.py
+ M app/core/tests/test_contract_reciclagem.py
+ M app/core/tests/test_contract_template_bem_formado.py
+ M app/core/tests/test_contract_trilha.py
  M app/docs/RELATO.md
- M app/ponto/tests/test_b1_linha_do_dia_le_a_lavratura.py
+ M app/escala/tests/test_contract_fase_declarada.py
+ M app/ponto/tests/test_contract_espelho_sem_emoji.py
+ M app/ponto/tests/test_contract_geofence_juiz_unico.py
+ M app/ponto/tests/test_contract_um_produtor_de_ausencia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -103,36 +110,36 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  selo que existe para curá-la.
+    eu devia ter feito antes.
+  - O selo se acusou a si mesmo, escrevendo o nome da função inteiro na própria assertion — a doença do O20 dentro do selo que existe para curá-la.
 
-  7 contratos varrendo código, selo de 8 casos, ruff limpo na árvore inteira. Faltam 17, dos quais 4 precisam do remédio de template.
+  E o selo não virou porta, virou teto: exigir os 33 agora me faria declarar 33 razões em meia hora, e razão escrita em lote não é razão — é o saco com
+  outro nome.
+
+  Um segundo caso trava os 18 que já migraram, porque o teto só conta e não notaria uma volta.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O20 -- CONTRATO-VARRE-COMENTARIO (classe achada 24/09, 2 vezes no mesmo dia) -- contratos de arvore que procuram idio
 
-  Ran 8 shell commands
+  Ran 1 shell command
 
-● Essa falha é na direção contrária — vale olhar.
+● Quarta correção do censo, e a melhor: ~14 deles já passam por ast.parse, que não tem nó de comentário — são imunes por construção.
 
-  Searched for 2 patterns, ran 1 shell command
+  Listed 1 directory, ran 5 shell commands
 
-● O20 não só evita falso-vermelho: acabou de expor um falso-verde no contrato do TETO TEMPORAL.
+● Censo final: 7, não 33. Migrando os últimos.
 
-  Searched for 1 pattern, ran 5 shell commands
+  Migrar os quatro com ancora
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, re
+     IMP_PY = ('from core.censo_fonte import codigo_de as _codigo '
+     '# O20: contrato julga CODIGO, nao a prosa que o explica')
+     IMP_MK = ('from core.censo_fonte import markup_de as _markup '
+     '# O20: contrato de template julga o que RENDERIZA')
+     d…
 
-● A terceira vez que meu censo conta pela forma: 3 dos 9 leem cru com razão.
-
-  Ran 7 shell commands
-
-● O censo verdadeiro é bem maior do que eu contei. Medindo e declarando o número real.
-
-● Fechar a fatia 4 do O20 · 7m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); [ $? -ne 0 ] && { echo "### VERMELHO: $f"; echo "$out"|head
-     -3; }; done; echo "--- selos de host ok ---"
-     python3 bin/backlog_estado.py "O20" '**18 contratos migrados** para `core/censo_fonte.py` (`codigo_de` pa… (7m 47s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Pouncing… (8h 22m 55s · ↓ 1.0m tokens)
+· Pouncing… (8h 28m 9s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
@@ -141,6 +148,6 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
