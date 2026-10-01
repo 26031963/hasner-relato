@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:05:48.**
+**Medido em 01/10/2026 16:10:48.**
 
 | | |
 |---|---|
@@ -39,13 +39,19 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_contract_dia_do_fato.py
  M app/chamados/tests/test_contract_texto_com_carimbo.py
  M app/core/censo_fonte.py
+ M app/core/tests/test_contract_btn_pdf.py
+ M app/core/tests/test_contract_feriado.py
+ M app/core/tests/test_contract_trilha.py
  M app/core/tests/test_o20_contrato_julga_codigo.py
  M app/docs/RELATO.md
  M app/escala/tests/test_contract_fase_declarada.py
  M app/pautas/tests/test_contract_um_escritor.py
+ M app/ponto/tests/test_contract_geofence_juiz_unico.py
  M app/ponto/tests/test_contract_no_batida_date.py
+ M app/ponto/tests/test_contract_um_produtor_de_ausencia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -102,6 +108,7 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Quarta correção do censo, e a melhor: ~14 deles já passam por ast.parse, que não tem nó de comentário — são imunes por construção.
 
   Listed 1 directory, ran 5 shell commands
 
@@ -119,19 +126,18 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 
 ● O helper tem um limite real: docstring que é o único corpo de um bloco deixa bloco vazio. Curando.
 
-● Ensinar a imunidade por AST ao selo · 2s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='core/tests/test_o20_contrato_julga_codigo.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = """ if not any(k in fonte for k in ('.read()', 'read_text')):
-     continue # nao le arquivo: nao e desta conversa
-     if rel in CRU_COM_RAZAO:
-     continue
-     fora.appe…
+  Searched for 1 pattern, ran 6 shell commands
 
-✽ Pouncing… (8h 33m 12s · ↓ 1.0m tokens)
+● O selo tem um buraco: ter o import não é usá-lo em todas as leituras. Fechando os dois.
+
+● Rodar a suite inteira · 2m 34s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
+     LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh)
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-ha…
+     (2m 33s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Pouncing… (8h 38m 12s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
