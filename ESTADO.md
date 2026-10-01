@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:06:31.**
+**Medido em 30/09/2026 23:12:01.**
 
 | | |
 |---|---|
@@ -39,8 +39,11 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
+ M app/ponto/management/commands/aplicar_col900.py
 ?? bin/artefatos_de_estado.txt
 ?? bin/keepalive.sh
+?? bin/tests/test_artefato_de_estado.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,39 +99,39 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Medindo antes de escrever, como ele pediu:
+● O ! chegou. Registro primeiro (L-010) e vou pelo portão que ele nomeou — confirmar que o col900 fica FORA do TXT antes de qualquer lavra:
 
   Ran 1 shell command
 
-● Achado medido: o fatia.done carrega o próprio QUANDO= e o esperar_fatia nunca o lê — e o comentário de armar_fim_de_fatia diz "apaga o fim velho" e o corpo não apaga nada.
-  Conferindo:
-
-  Ran 4 shell commands
-
-● O caso do pronta.json já tem reader declarado: core/esteira_vigia.py::pronta_de_verdade. Lendo a resposta que a casa já deu, para o selo cobrar ela e não inventar outra:
+● O juiz é classificar_export, com um portão furo_espelho. Vou provar o veredito antes de escrever, simulando a lavra em transação desfeita:
 
   Ran 1 shell command
 
-● A casa já respondeu esta classe quatro vezes em camadas (pronta_de_verdade consulta 4 testemunhas). Então o selo cobra o reader declarado, não inventa um novo. Conferindo os
-  nomes do censo antes de escrevê-lo:
+● Portão PROVADO: fora com motivo furo_espelho antes e depois da lavra — a condição dele está cumprida, não há PAREI. Agora a reposição dos 3 dias, por comando (não por shell):
+
+  Ran 2 shell commands
+
+● DRY confere: os 3 dias voltam de 07:00 para FOLGA. Aplicando a reposição (com a guarda da lavra aberta por ato, porque a 09 está exportada):
 
   Ran 1 shell command
 
-● Nomes todos confirmados. Vendo o idioma de um selo de host antes de escrever o meu:
+● 3 repostos. DIFF novo (a reposição muda o número) e o arquivo de reversão, antes de lavrar:
 
   Ran 1 shell command
 
-● Idioma claro. Escrevendo o censo declarado:
+● A reposição curou exatamente o DSR: semanas_dsr_perdido +2 desapareceu (de 8 campos para 7) — a lei "sem batida, fica" estava certa. Lavrando:
 
   Ran 1 shell command
 
-● Agora o selo de classe. Ele cobra o reader declarado, distingue estado de flag (para não morder a lei da pausa) e tem os três MORDE dos três mecanismos:
+● Lavrado: fechamentos_mexidos=1 de 607, só o col900. Agora acender os 3 dias pelo caminho normal — achando quem emite "saída não registrada":
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O caminho normal é o detectar_ausencias (*/5), que já rodou muitas vezes desde a regeneração das 21:27. Medindo se os 3 dias já acenderam, em vez de supor:
 
 ● Running 1 shell command…
 
-✢ Percolating… (1h 3m 56s · ↓ 153.7k tokens)
+✢ Percolating… (1h 9m 25s · ↓ 172.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
