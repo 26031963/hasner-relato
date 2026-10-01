@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:55:46.**
+**Medido em 30/09/2026 23:01:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
-| `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| commits a subir (`ahead`) | **9** |
+| `origin/main` | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,40 +95,40 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Commitar a casa e reempurrar" completed (exit code 0)
 
   Ran 1 shell command
 
-● Background command "Empurrar com a suite como portao" completed (exit code 0)
+● A suíte de negócio passou (8929 OK); está no control-plane:
 
   Ran 1 shell command
 
-● CSS no ar (3 regras). Agora a pergunta do feriado, que muda o pedido — 07/09 é Independência:
+● Background command "Esperar o push pelo arquivo de sinal" completed (exit code 0)
+
+● Push: b7a2b6b2..e131e98b, 8929 testes OK + control-plane OK. Deploy do crons.py que entrou depois do último:
 
   Ran 1 shell command
 
-● O advisor acertou: 07/09 é Independência e fatos_do_dia devolve tipo_do_dia: 'feriado', suprimindo folga. Então aquele dia não é "template diz folga": é o juiz do FERIADO, e o
-  +7,37 é a casa pagando feriado trabalhado que o gravado subpagou. Agora medir a origem de cada delta em vez de inferir:
+● Fila andada. Resumo do que entrou e do que ficou com você.
 
-  Ran 2 shell commands
+  No ar e empurrado (b7a2b6b2..e131e98b, 8929 testes OK + control-plane, dois deploys com três rotas provadas):
 
-● Dois fatos decisivos: o gravado foi escrito 30/09 16:58, antes da regeneração das 21:27 (então o DIFF é de fato o efeito dela); e minutos_previstos é 12150 nos dois lados — os 3
-  dias sem batida não mudaram previsto nem geraram falta, logo eu não posso atribuir a eles o turnos_abertos +3. Isolando:
+  - O2 FILTRO-COERENTE fechado — e a trava era ponteiro morto: o portão esperava "a decisão 1/2/3 do _F6", o _F6 foi declarado em 22/09, a scratchpad/f6 não existe mais e as
+    opções 1/2/3 não estão escritas em lugar nenhum. A regra estava na própria obra, então decidi e segui. Uma função (recusa_por_data_final), os dois caminhos de cartão a leem, 9
+    selos.
+  - Os dois avais das 22:1x registrados no PROMPTS e como O102/O103 no mesmo turno.
+  - O102 relógio 10px — classe própria .relogio-riscado. RED literal: no HEAD ele herdava .icone-dia = 16px e não tinha classe nenhuma. O PDF não entra porque não lê o partial (no
+    papel a marca é texto, por decisão já registrada). 8 selos, três MORDE.
+  - O103 (a)/(a2) — regenerar_celulas_dia (RED vivo: 1 célula pela porta de DIA contra 2 pela de VÍNCULO na mesma fixture) e reverter_regeneracao_dia, que faltava: ontem repus 8
+    células por shell, escritor não declarado que o gate não vê. Selo anti-ping-pong — desfazer simétrico alternaria dinheiro a cada chamada.
+  - O103 (b) — censo refeito pela primeira batida crua, como comando. regera = 0 porque o col900 já estava regenerado: 16 dias de 12:50 → 07:00, confirmados a 0–5 min contra 350+
+    do marco antigo. Os seus 16, pelo nome.
+  - (c) col438 e col309 não precisaram de lista nova — já estão na tela cadastro_x_realidade, e a maior parte dos dias deles cai em "a célula acerta", isto é fica.
 
-  Searched for 1 pattern, ran 1 shell command
+  A lavra e o TXT da 09 não saíram, e o motivo mudou duas vezes porque eu fui medir em vez de confiar na minha leitura. Minha primeira autópsia estava errada nas duas pontas:
+  07/09 é feriado (Independência) — o +7,37 h é a casa pagando feriado trabalhado que o gravado subpagava, e reverter aquele dia restauraria a subpaga; e os 3 turnos abertos são
+  09-03, 09-06 e 09-11, dos dias certos — entradas 06:59, 16:12 e 15:51 sem saída, que o marco de 12:50 pareava fechando turnos que não fecham.
 
-● Agora os três deltas estão isolados, e a minha atribuição anterior estava errada nas duas pontas. Reescrevendo o RELATO com o que foi medido:
-
-  Ran 5 shell commands
-
-● O selo está certo: todo comando precisa de casa declarada no crons.py. Declarando o censo_col900:
-
-  Esperar o push pelo arquivo de sinal · 6m 9s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103b.log; for i in $(seq 1 70); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -6 "$L"; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD | cat (6m 8s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Percolating… (53m 10s · ↓ 133.4k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

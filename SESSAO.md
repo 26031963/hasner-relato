@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 30/09/2026 22:55:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (152.4 MB). Acoes na janela: **1743**.
+**Medido em 30/09/2026 23:01:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (152.5 MB). Acoes na janela: **1746**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:00:32 | Bash | Deployar o ultimo commit | `cd /home/ronald/saas-hasner && timeout 1500 bin/deploy.sh --sem-migrate 2>&1 \| tail -4` |
+| 22:59:47 | Bash | Esperar o fim do push | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103b.log; for i in $(seq 1 40); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -5 "$L"; echo "=== falta ==="; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD \| wc -l` |
+| 22:59:42 | Bash | Conferir o estado do push | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103b.log; tail -6 "$L"; echo "=== falta empurrar ==="; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD \| cat` |
 | 22:49:36 | Bash | Esperar o push pelo arquivo de sinal | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103b.log; for i in $(seq 1 70); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -6 "$L"; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD \| cat` |
 | 22:49:31 | Bash | Commitar a casa e reempurrar | `cd /home/ronald/saas-hasner && git add app/config/crons.py && git commit -q -F - -- app/config/crons.py <<'EOF' Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script `chamados.tests.test_contract_crons::test_todo_command_tem_casa` ficou VERMELHO com `['censo_col900'] != []`. Esta certo: comando sem casa em `config/crons.py` e comando sem dono -- ninguem sabe  ...` |
 | 22:49:17 | Bash | Declarar a casa do censo e rodar o selo | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='config/crons.py'; t=io.open(P,encoding='utf-8').read() anc=" 'diff_col900':" assert t.count(anc)==1 novo = """ 'censo_col900': 'CENSO da pergunta "qual lado a PRIMEIRA BATIDA CRUA do dia confirma" (lei Ronald 30/09 21:2x). NAO ' 'ESCREVE NADA: produz a lista que o `diff_col900` e o `aplicar_col900` leem. Existe como COMANDO ' 'porque a lista ...` |
