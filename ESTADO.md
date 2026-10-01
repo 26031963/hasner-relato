@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:314 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:357 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:50:45.**
+**Medido em 01/10/2026 17:55:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b` |
+| `HEAD` local | `5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219` |
 | `origin/main` | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,19 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219
 5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b
 4cd56242 UI-RESPOSTA-DIZ-O-QUE-E: celula dentro do teto, com o obstaculo nomeado
 37912998 UI-RESPOSTA-DIZ-O-QUE-E: as 4 frases publicadas com caso real -- e um obstaculo que decide a fatia
 83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas
-e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/nucleo.py
+ M app/docs/RELATO.md
  M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,39 +97,39 @@ e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: qu
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o push e confirmar" completed (exit code 0)
+  terceira categoria, e a lei vem antes do dado: passar os marcos não autoriza cobrar.
+
+  Esperando você
+
+  1. ! da troca — sobram três, nomeados: atraso +114,00 h (classe que julga, divergência de regra), trabalhadas −219,45 h, noturnas −47,80 h (a única que
+     não se moveu em nenhuma rodada).
+  2. UI-RESPOSTA-DIZ-O-QUE-E — as 4 frases estão publicadas com caso real, e há um obstáculo: delta_da_resposta devolve abs, sem sinal. A direção pede o
+     juiz devolver sinal_min (.py, main) ou conta no template, que você vetou. Censo: 153 atraso · 178 antecipada · 426 fora do marco — 757 chamadas de
+     "discrepância" hoje. E o Reabrir expõe 3.318 respostas.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-TROCA-NAO-CRIA-DESCONTO -- LEI (2), Ronald 01/10 17:2x: a troca NAO cria desconto novo. Pontualidade em
+  MotorComercial, Motor12x36 e Moto
 
   Ran 1 shell command
 
-● delta_da_resposta devolve abs — o sinal não existe. Isso muda a proposta. Medindo os casos reais.
-
-  Searched for 1 pattern, ran 6 shell commands
-
-● Os quatro casos reais, com censo. Agora as 4 frases — e um obstáculo que muda a proposta.
-
-  Ran 5 shell commands
-
-● Tudo medido. Publicando a proposta — com um obstáculo que ele precisa decidir.
-
-  Ran 8 shell commands
-
-● A fila volta à S5b, e o que falta é a atribuição de dia. Vendo se o núcleo aceita o dia do juiz.
+● col592 com −3,98 h trabalhadas no calculador. Hora negativa é bug, e fura a fila.
 
   Ran 1 shell command
 
-● O núcleo chaveia por _e.date() — regra própria de dia, a mesma doença do O13/O14. Curando.
+● Não é o pareamento. Então é a janela de HE invertendo o par. Medindo com o clip.
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Minha aritmética: 367 + 300 = 667, não 727 — eu somei o intervalo.
+● 41 de 2.416 pares invertidos — e a cura já está escrita na casa: a L-084 julga antes da janela.
 
   Ran 2 shell commands
 
-● Uma linha. A folga cai +1.035,67 → +23,87 h e as trabalhadas −1.231 → −219.
+● A rubrica que não se movia zerou: noturnas −47,80 → +0,67 h. E 71 dia-colab saíram da janela pela L-084.
 
 ● Running 1 shell command…
 
-✶ Fermenting… (44m 35s · ↓ 70.8k tokens)
+✻ Fermenting… (49m 36s · ↓ 83.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
