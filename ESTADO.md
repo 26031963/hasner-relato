@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:05:45.**
+**Medido em 01/10/2026 09:11:01.**
 
 | | |
 |---|---|
@@ -95,9 +95,6 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Rodar a suite da raia inteira com saida completa" completed (exit code 0)
-
-  Committed 8ce7eebf, 337b5e88, bd217a94, searched for 1 pattern, read 1 file, ran 16 shell commands
 
 ❯ aval Ronald 01/10 08:5x:
   1. TXT emp2: NAO substitui ainda. Autopsia do col881 02/09 primeiro -- e o seu RELATO de 19:3x diz que ele perdeu 5 h na cura S84, entao ele FOI tocado ontem; reconciliar com o
@@ -123,11 +120,14 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 
 ● Background command "Reensaiar o bloco da manha na sombra" completed (exit code 0)
 
-● Procurar escritor com update_fields no fechamento
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rn "update_fields" app --include=*.py | grep -i "fech" | head -10; echo "=== quem salva FechamentoMensal com update_fields ==="; grep
-     -rn -B3 "save(update_fields" app/ponto/services/fechamento.py | grep -n "fech\|update_fields" | head -12
+● Medir o ciclo, a dobra e as extras de feriado dos dois
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/a2.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     from colaboradores.models import Empresa
+     from folha.export import _ciclo_do_colab, feriado_12x36_em_dobra
+     from ponto.models im…
 
-✶ Pouncing… (1h 33m 9s · ↓ 178.9k tokens · thought for 21s)
+✢ Pouncing… (1h 38m 25s · ↓ 179.8k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

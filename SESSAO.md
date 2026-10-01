@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 09:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (160.8 MB). Acoes na janela: **821**.
+**Medido em 01/10/2026 09:11:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (160.8 MB). Acoes na janela: **822**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:05:53 | Bash | Medir o ciclo, a dobra e as extras de feriado dos dois | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/a2.py <<'PYEOF' # -*- coding: utf-8 -*- from colaboradores.models import Empresa from folha.export import _ciclo_do_colab, feriado_12x36_em_dobra from ponto.models import FechamentoMensal from escala.models import EscalaColaborador for cid in (881, 864): f = Fechamento ...` |
 | 09:05:20 | Bash | Procurar escritor com update_fields no fechamento | `cd /home/ronald/saas-hasner && grep -rn "update_fields" app --include=*.py \| grep -i "fech" \| head -10; echo "=== quem salva FechamentoMensal com update_fields ==="; grep -rn -B3 "save(update_fields" app/ponto/services/fechamento.py \| grep -n "fech\\|update_fields" \| head -12` |
 | 09:05:12 | Bash | Confirmar o campo atualizado_em do FechamentoMensal | `cd /home/ronald/saas-hasner && awk 'NR>=366 && NR<=460' app/ponto/models.py \| grep -n "atualizado_em\\|criado_em\\|update_fields" \| head -5; echo "=== linha absoluta ==="; grep -n "atualizado_em = models" app/ponto/models.py` |
 | 09:05:06 | Bash | Ver se atualizado_em e auto_now | `cd /home/ronald/saas-hasner && grep -n "atualizado_em\\|criado_em" app/ponto/models.py \| sed -n '1,30p' \| grep -n "Field" \| head; echo "---"; awk 'NR>=340 && NR<=378' app/ponto/models.py \| grep -n "atualizado_em\\|criado_em\\|class "` |
