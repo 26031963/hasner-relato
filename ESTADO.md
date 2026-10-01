@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:49:31.**
+**Medido em 01/10/2026 00:55:01.**
 
 | | |
 |---|---|
@@ -122,12 +122,12 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ● Correção grande e real: o desenho inflava os chamadores por causa de prosa — julgar_celula 18→11, registrar_batida 17→10, criar_ausencia 8→6. O chokepoint de escrita de batida
   aparecia com 7 chamadores fantasmas. Rodando os selos:
 
-● Commitar a cura do gerador e empurrar · 1m 8s
+● Commitar a cura do gerador e empurrar · 6m 39s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_diag.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 8s)
+     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 38s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (2h 46m 55s · ↓ 298.5k tokens)
+✢ Percolating… (2h 52m 26s · ↓ 298.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
