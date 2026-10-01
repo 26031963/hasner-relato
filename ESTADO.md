@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:00:31.**
+**Medido em 01/10/2026 01:05:33.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ## `git status --short`
 
 ```
+?? app/api/tests/test_regressao_p0_relogio.py
+?? app/core/tests/test_acesso_nunca_em_lote.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,39 +97,39 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  cobra entrada sem par.
-
-  Aplicado, escopado ao col900: os 3 dias acenderam — ch27484 (03/09), ch27485 (06/09), ch27486 (11/09), abertos, supervisão, urgente. A lavra baixou 9,13 h dele e agora existe a
-  pergunta que devolve a hora — era o preço que eu havia publicado às 23:2x sem ter como pagar. Segunda passada: emitidos=0, ja_existia=3.
-
-  Um defeito meu curado no sítio: a 1ª versão deduplicava só em turno_aberto e eu crio turno_aberto_24h, então a 2ª passada imprimia a linha de emissão para dias que a porta ia
-  recusar — número certo, linha mentindo. 9 selos, sete MORDE.
-
-  E o selo do diagrama me cobrou por um motivo melhor que "falta regerar". Eu escrevi na lápide do comando "a ordem mandou marcar e não retratar as 257 batidas" — e o gerador
-  casava a palavra no arquivo inteiro, docstring incluída. Uma frase em português virou aresta de código no documento que o CLAUDE.md apresenta como "a visão de 1 página, gerada
-  do código".
-
-  A regra "prosa não conta" já existia em core/censo_codigo.py, de 29/09; o gerador era o leitor que não migrou. Migrado, os números caíram:
-
-  - julgar_celula 18 → 11
-  - registrar_batida 17 → 10 — sete chamadores fantasmas no chokepoint único de escrita de batida, zona inviolável
-  - criar_ausencia 8 → 6
-
-  Quem chegasse por esse desenho — que é o uso declarado dele — contava sete portas que não existem no sítio mais sensível do sistema.
-
-  Empurrado: ace162de..cab53e2f. Continuam esperando você: o ! do TXT da emp2, a resposta da pergunta do S5b, e o smoke da Gestão de HE e do calendário.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O4 -- ACESSO-NUNCA-EM-LOTE (lei, 23/09 08:4x) -- (1) credencial so morre por evento dela; selo conta escritores capa
+● O (5) não está feito como a lei escreve: o selo atual envelhece o token, não anda o relógio — e o (4) não existe. Os dois são construíveis agora. Lendo o selo do bridge:
 
   Ran 1 shell command
 
-● O4 está livre, e são 6 itens. Antes de construir, medir cada um — e já registro que o item (4) proíbe deploy de auth nesta faixa (23:20–06:00), e são 00:5x. Começando pelo censo
-  do item (1):
+● Procurando o P0 de 20/09 para a lápide não inventar o caso:
 
-  Censar os modelos e escritores de credencial
+  Searched for 2 patterns, ran 1 shell command
 
-✢ Percolating… (2h 57m 55s · ↓ 302.7k tokens)
+● Achei o P0: "o prazo do token legado do R15 venceu a meia-noite de 19→20/09" — um teto por DATA (hoje <= ATE) que virou falso às 00:00. Lendo o sítio:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● O teto por data saiu (item 2 feito). Falta o selo de regressão do (5). E a casa já tem censo de data cravada — conferindo a API dele antes de escrever outro:
+
+  Ran 1 shell command
+
+● A metade estrutural do (5) já existe (core/datas_cravadas.py, nascido deste mesmo P0). Falta só a funcional — "anda o relógio, token válido segue válido". Lendo o resto do
+  confere para a fixture:
+
+  Ran 2 shell commands
+
+● O selo me pegou numa premissa errada minha, e o comportamento é o certo: eu troquei a senha antes de a credencial ter sido observada uma vez, e a primeira observação é a linha
+  de base — sem ela, observar invalidaria todo mundo, que é o P0 de novo. Corrigindo o teste e registrando a propriedade:
+
+● Corrigir e rodar os selos do O4
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='api/tests/test_regressao_p0_relogio.py'; t=io.open(P,encoding='utf-8').read()
+     v = ''' def test_MORDE_e_a_recusa_por_senha_trocada_tambem_nao_depende_do_relogio(self):
+     """A simetria: se o relogio nao pode invalidar, ele tambem nao pode RE-va…
+
+✶ Percolating… (3h 2m 58s · ↓ 320.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
