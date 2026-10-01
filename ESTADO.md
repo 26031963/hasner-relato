@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:25:45.**
+**Medido em 01/10/2026 06:30:46.**
 
 | | |
 |---|---|
@@ -124,12 +124,12 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
   - 10 cujo vínculo ativa=True está fora da janela — para esses, o motor do espelho roda com a escala errada
   - e col823, um dos quatro REDs do O9 ("janela"), está nessa lista
 
-● Conferir o push do escopo · 1m 13s
+● Conferir o push do escopo · 6m 13s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_esc.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 12s)
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 13s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Percolating… (8h 23m 10s · ↓ 595.1k tokens)
+✽ Percolating… (8h 28m 10s · ↓ 595.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
