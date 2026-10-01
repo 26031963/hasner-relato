@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:17:31.**
+**Medido em 01/10/2026 15:23:01.**
 
 | | |
 |---|---|
@@ -24,7 +24,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **72** (baseline divergiu 42, nunca lancada 25, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **72** (baseline divergiu 41, nunca lancada 26, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
@@ -39,7 +39,10 @@ ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
+ M bin/esteira_classes.py
 ?? bin/keepalive.sh
+?? bin/tests/test_apagar_residuo_tudo_ou_nada.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,15 +98,6 @@ ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  aplicar_tolerancia à mão e li o resultado como se fosse o do motor. Quem me pegou foi o próprio RED (dava zero até no caso de 90 min). O achado
-  verdadeiro é maior: 223 de 571 colabs com horas_atraso = 0,00 h exato — três classes de motor nunca julgam pontualidade.
-
-  (2) Publiquei que as +1.035,67 h de folga eram fonte errada no chamador. Troquei o juiz, rodei o DIFF: as mesmas 1.035,67 h. E há três números para a
-  mesma rubrica — motor 595,23 · gravado 217,64 · calculador 1.253,31. Não escolho qual está certo: folga trabalhada paga 100%.
-
-  Esperando você
-
-  1. T8: vale o recorte, ou a versão literal com col473/col399 dentro?
   2. 223 colabs sem pontualidade — é deliberado?
   3. Folga: por que o motor vivo discorda do gravado?
   4. Relavra da 10 — o comando está no RELATO; meu ambiente barrou a escrita.
@@ -119,12 +113,21 @@ ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67
 
 ● O17 está feito — mas o contador dele acusa 132 h sem ler a pausa declarada. Curando isso.
 
-● Achar onde as paradas apareciam · 2m 50s
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rln "paradas" bin/ | head -5; echo "---"; grep -rn "pacotes_parad\|paradas=" bin/*.sh bin/*.py 2>/dev/null |
-     head -5; echo "=== o placar mostra os 4? ==="; bash bin/placar_code.sh 2>/dev/null | grep -iE "pacote|esteira|parad" | head -8 (2m 50s · 8 lines)
+  Read 1 file, ran 9 shell commands
+
+● Background command "Achar onde as paradas apareciam" completed (exit code 0)
+
+  Ran 1 shell command
+
+● The delete left 4 stuck — and they got reclassified instead of staying visible. That's the saco the item exists to prevent.
+
+  Varrer os selos e fechar o O18 · 28s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); [ $? -ne 0 ] && { echo "### VERMELHO: $f"; echo "$out" |
+     head -3; }; done; echo "--- varredura ok ---"
+     python3 bin/backlog_estado.py "O18" '**FECHADA**: `pacotes_sem_classe=0`, as 4 classes vivas, `esteira_stat… (28s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (7h 44m 55s · ↓ 931.6k tokens)
+✢ Pouncing… (7h 50m 25s · ↓ 939.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
