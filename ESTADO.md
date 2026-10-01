@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:48:31.**
+**Medido em 01/10/2026 05:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor` |
+| `HEAD` local | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
 | `origin/main` | `8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22
 8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor
 ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate
 b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe
 8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
-4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes
 ```
 
 ## `git status --short`
@@ -97,26 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ 21/08..01/10 (até hoje, o que o espelho roda)  │ 0           │
-  └────────────────────────────────────────────────┴─────────────┘
-
-  E o _coletar_dados_espelho do PDF dá 22. As duas janelas dão zero — a janela não é a causa.
-
-  O que difere é a alimentação: o PDF entrega ao motor celulas_alimentadas, folgas_alimentadas, datas_previstas_trabalho, mais as batidas de batidas_apuraveis, tipo_escala,
-  escala_colaborador e colaborador_id; a autoridade_do_periodo monta as dela. Dois motores com alimentação diferente dão furo diferente — e o furo é o que o cartão imprime.
-
-  A próxima pergunta já está estreita, e é por isso que valeu derrubar a hipótese em vez de seguir com ela: qual das quatro entradas muda o datas_falta? Responde-se alimentando a
-  autoridade_do_periodo com as do PDF, uma a uma, no mesmo col41 — quatro medidas, cada uma com resposta de sim ou não.
-
-  Registrei o padrão no commit porque ele se repetiu três vezes nesta noite: o 252 do O106 virou 4, o censo de cinco autoridades virou dez, e agora a janela virou alimentação. As
-  três por medir em vez de deduzir — e nas três a hipótese errada era a que encaixava bem.
-
-  Empurrado: ef37ec93..8ac8790b.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
-● A pergunta estreita: qual das quatro entradas move o datas_falta. Comparando os dois sítios linha a linha:
 
   Ran 1 shell command
 
@@ -125,11 +105,31 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● Os dois sítios diferem em três coisas: o PDF alimenta folgas_alimentadas e passa datas_previstas_trabalho, que o espelho não tem; e o espelho usa o vínculo ativa=True. Vendo o
   terceiro no PDF:
 
-  Ver o esc e o datas_previstas do PDF
-  ⎿  $ sed -n '404,426p' relatorios/pdf_espelho.py | grep -nE 'esc =|esc=|datas_previstas_trabalho|get_motor_cct|motor =' ; echo "---"; grep -n 'datas_previstas_trabalho = \|esc =
-     ' relatorios/pdf_espelho.py | head -5
+  Searched for 1 pattern, ran 3 shell commands
 
-✢ Percolating… (7h 45m 56s · ↓ 584.0k tokens)
+● Decisivo. A entrada é datas_previstas_trabalho:
+
+  ┌────────────────────────────────┬───────────────────┐
+  │            montagem            │    datas_falta    │
+  ├────────────────────────────────┼───────────────────┤
+  │ base (= autoridade_do_periodo) │ 0                 │
+  ├────────────────────────────────┼───────────────────┤
+  │ + folgas_alimentadas           │ 0 (não é a causa) │
+  ├────────────────────────────────┼───────────────────┤
+  │ + datas_previstas_trabalho     │ 22                │
+  ├────────────────────────────────┼───────────────────┤
+  │ + as duas (= o PDF)            │ 22                │
+  └────────────────────────────────┴───────────────────┘
+
+  O autoridade_do_periodo não passa datas_previstas_trabalho, e sem ela o motor reporta zero falta para quem trabalhou 12,73 h de 176,67 previstas com 25 dias previstos pela
+  célula. O PDF está certo e o espelho tem buraco — e o espelho é a tela do admin e o app dos ~750:
+
+● Conferir o push do O108 · 1m 25s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o108.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 24s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Percolating… (7h 51m 25s · ↓ 589.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
