@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:01:20.**
+**Medido em 01/10/2026 12:06:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `66e9fb39 Rubrica 0200: um colaborador, 5,00 h -- o TXT da emp2 regerado, e o emissor nunca multiplicou` |
+| `HEAD` local | `8706851f MERGE: a Gestao de HE com o expandido refeito e os tres defeitos de dado curados` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8706851f MERGE: a Gestao de HE com o expandido refeito e os tres defeitos de dado curados
+43b4cf3e Os tres defeitos de dado dele, e tres achados dos meus proprios selos na forma nova
+662f0853 Merge branch 'main' into raia-ui
 66e9fb39 Rubrica 0200: um colaborador, 5,00 h -- o TXT da emp2 regerado, e o emissor nunca multiplicou
 7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista
-04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado
-59429b00 O9 passo 1 verde, e o passo 3 achou TRES numeros para a mesma pergunta
-6ce20522 O rodape do TICKETS volta a bater com origin/main
 ```
 
 ## `git status --short`
 
 ```
+ M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +96,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ┌──────┬─────────┬───────┬────────┬───────────────────────────────────────────┐
-  │ mat  │ rubrica │ antes │ depois │                   quem                    │
-  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
-  │ 2038 │ 0200    │ 10,00 │ 5,00   │ col881 — a dobra corrigida                │
-  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
-  │ 2026 │ 0200    │ —     │ 7,29   │ col864 — feriado 100% que não era emitido │
-  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
-  │ 756  │ 0243    │ —     │ 12,00  │ col237 — intra indenizada                 │
-  └──────┴─────────┴───────┴────────┴───────────────────────────────────────────┘
+● No ar: o expandido refeito e os três defeitos de dado. Merge 8706851f + deploy no mesmo ato, e a relavra está rodando — agora com --apply.
 
-  As três batem exatamente com o gravado. Nenhuma surpresa: cada linha que se move é o TXT alcançando o gravado.
+  Os três defeitos:
+  1. Dia fora da janela — curado no escritor (04c027ed), medido em 4.198 de 5.767 dias fora de 21/09–20/10 na competência 10.
+  2. A relavra que não pegou — meu erro de execução: faltou --apply. Está rodando agora, com o filtro de janela já no ar.
+  3. Data de máquina — fechou nos dois lugares: os dias da tabela e a faixa do retrato (Competência 09/2026 (2026-08-21 a 2026-09-20)), que eu havia
+     esquecido. Quem achou foi o meu próprio selo, varrendo o que o navegador mostra em vez do markup.
 
-  Aplicado 11:57 — vigente id=26, hash 0ae5da67364c, 211 linhas; a anterior id=23 invalidada pela porta, com conteúdo e hash intactos; reversão em
-  logs/txt_dominio/; nome canônico inalterado (DominioCustomizavel2_J.A_Julian_092026.txt).
+  E o formato voltou para o leitor depois de eu o pôr no lugar errado: derivar o dd/mm no escritor obrigaria a re-lavrar o retrato para mudar uma vírgula
+  na tela, e deixaria o retrato velho renderizando ( a ) na faixa entre o deploy e a próxima lavratura. O retrato guarda ISO; o dd/mm é da view.
 
-  O selo que você pediu está verde: por AST, nenhum campo de hora do gravado sai multiplicado do emissor — nas três formas, com a divisão por 60
-  explicitamente fora (é unidade, não escala) e um caso que morde cada forma. A lápide cita a fonte: rubricas_dominio.txt, coluna 32, percentual 200,0000.
+  Mais dois achados dos meus próprios selos: a frase do padrão aparecia duas vezes (colapsada + cabeçalho do aberto) — ficou só na colapsada, porque
+  aberto quem responde é o desenho; e o botão passou a dizer as suas palavras, "Autorizar +N min de HE".
 
-  A suite limpa da main fechou em 9.033 testes OK, então o que está no ar está provado.
+  E um selo re-expresso, não afrouxado: o que cobrava value="nao" por dia agora cobra os dois atos nas formas novas — AUTORIZAR por dia (decidir_he) e
+  CIÊNCIA por pessoa (todos_sem_decisao). O ato não morreu, mudou de lugar por sua ordem.
+
+  57 selos verdes nos três arquivos da tela, ruff limpo, e a suite da main em 9.033 OK.
+
+  Quando a relavra fechar, a tela mostra a competência certa, sem almoço, em dd/mm, com a grade do período e o denominador na frase — e aí o smoke é seu.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O10 -- TROCA-DE-PLANTAO (corte Ronald 23/09 18:3x, detalhado as 20:3x: nasce como 4a opcao do Resolver dia -- "Trocou
 
-● Mover o formato para o leitor e rodar os selos e o ruff
-  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     # o FORMATO E DO LEITOR: tirar do escritor e derivar na view, para o retrato VELHO (sem `*_br`) nao
-     # renderizar "( a )" na faixa entre o deploy e a relavra.
-     P='app/ponto/services/he_pendente_lavrado.py'
-     t=…
+  Ran 9 shell commands
 
-✶ Pouncing… (4h 28m 44s · ↓ 452.5k tokens)
+● Background command "Abrir a HE50 por origem e por colab na sombra" completed (exit code 0)
+
+  Ler a HE50 aberta por origem e por colab
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; sed -n '/HE50 DO CALCULADOR ABERTA/,/^PADROES/p'
+     $S/scratchpad/he50_aberta.log | head -42
+
+✢ Pouncing… (4h 34m 5s · ↓ 462.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
