@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:11:01.**
+**Medido em 01/10/2026 00:16:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
-| `origin/main` | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,39 +95,39 @@ c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turn
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  A pergunta que separa as três hipóteses está no RELATO, em uma linha: "ele saiu às 14:00 e voltou sem bater, ou foi embora e a batida das 19:00 não é jornada dele?"
 
-  Também fechou o O3 (selo de classe, com o anti-podre me pegando na primeira corrida) e o relógio de 10px está no ar. Falta seu smoke em /ponto/gestao-he/ e no calendário; a raia
-  UI da Gestão de HE é a próxima.
+  No ar e empurrado (db84cf30..4c8ed85a): o ! da saída (i) do col900 cumprido, o S5b investigado, o O3 e o O2 fechados, o relógio de 10px.
+
+  S5b — a causa inverte o sinal. O calculador acerta 3 de 3 contra a conta à mão (col43 5,53 · col698 7,00 · col465 1,07) e o motor dá 28,69 h num único dia no col43. Causa: dia
+  de sequência ímpar — o calculador soma pares fechados, o motor faz ponte com a última saída. Então o delta negativo não é o calculador perdendo hora, é o motor creditando hora
+  que as batidas não sustentam. Descartei os 3 primeiros casos que sorteei: dois eram do col950, "[nome]", com batidas sintéticas — e quase publiquei com eles.
+
+  Não parei em "não sei": três hipóteses no RELATO, cada uma com o que a desmentiria, e a pergunta para o admin em uma linha — "ele saiu às 14:00 e voltou sem bater, ou foi embora
+  e a batida das 19:00 não é jornada dele? E a casa paga até a primeira saída ou até a última?". Ela decide os 118 dia-colab de uma vez, porque é a mesma forma em todos. A célula
+  agora diz PAREI no vocabulário que o hook lê — antes dizia "esperando o !", e "esperando" não casa com "espera o", então o hook me devolvia siga com a trava de pé.
+
+  Raia UI — o "Não" em lote, e havia um conflito real. O selo da B2 proibia lote com a L-081 escrita como razão (lote de dinheiro sem DIFF). Em vez de revogar a razão, olhei de
+  que lado dela o seu pedido cai — e o seu próprio texto responde: você pediu "Não" em lote, nunca "autorizar em lote". Autorizar move dinheiro e fica um dia por ato; recusar é o
+  padrão da lei e não move centavo, grava ciência. Lote de ciência não é lote de dinheiro. O lote chama a porta dia a dia, então não nasce um segundo escritor — e há selo por AST
+  provando isso. 22 selos (eram 15), na raia, nada no ar.
+
+  Esperando você:
+  - o ! do TXT da emp2: uma linha move (col881, 02/09, falta 1 dia → meio dia) e ele não foi tocado hoje — o bloco de falta do TXT é derivado ao vivo (export.py:388), então o TXT
+    não é função pura do gravado. Os dois arquivos estão em logs/txt_dominio/, nada no banco.
+  - a resposta da pergunta do S5b.
+  - o smoke em /ponto/gestao-he/ e no calendário (relógio agora 10px).
+
+  Falta para concluir a Gestão de HE: multisseleção no template, busca nome+CPF, filtros, totais da competência, PDF e o atalho na Central com contador — é o próximo, na raia, com
+  a lista do que clicar no fim.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
+  ⎿  Stop hook error: siga: O106 -- 252 CELULAS FORAM JULGADAS ANTES DE SEREM REESCRITAS (achado MEDIDO 30/09 23:2x, de carona no COL900) -- vered
 
-● A célula do S5b ficou com "esperando o !", que o hook não lê — ele reconhece PAREI e espera o !. E a trava é real e nomeada: pergunta de LEI publicada com número. Corrigindo o
-  vocabulário:
+● O106: falta a conta pela autoridade. Lendo como o cartório monta a impressão, para chamar a mesma montagem em vez de re-derivar:
 
-  Ran 1 shell command
+● Ler julgar_colab para reusar a montagem da impressao
 
-● O hook espera stdin quando chamado à mão — não é para rodar assim. Conferindo a célula e commitando:
-
-  Searched for 1 pattern
-
-● O | que escrevi dentro da célula virou coluna. Trocando por --:
-
-  Ran 2 shell commands
-
-● Enquanto o push roda, o item 2 da noite — a raia UI. Orientando na raia e no estado da Gestão de HE:
-
-  Ran 1 shell command
-
-● Background command "Commitar e empurrar a correcao da celula" completed (exit code 0)
-
-  Conferir o push · 9m 17s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_hook.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L" (9m 16s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Percolating… (2h 8m 25s · ↓ 236.3k tokens)
+✢ Percolating… (2h 13m 56s · ↓ 254.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
