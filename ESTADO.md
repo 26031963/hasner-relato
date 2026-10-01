@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:28:01.**
+**Medido em 01/10/2026 12:33:21.**
 
 | | |
 |---|---|
-| `HEAD` local | `1f28c5ea S5b-4-REGRAS registrada e com as dez linhas citadas CONFERIDAS no HEAD local` |
+| `HEAD` local | `20f48d17 ARQUITETURA.mmd regenerado: ele e GERADO do codigo e defendido por selo` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **27** |
+| commits a subir (`ahead`) | **29** |
 
 ## Fabrica
 
@@ -29,19 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+20f48d17 ARQUITETURA.mmd regenerado: ele e GERADO do codigo e defendido por selo
+086f3b6d S5b regra 1 (noturnas) por IMPORTACAO, com os dois REDs dele, e a lei nova do teto registrada
 1f28c5ea S5b-4-REGRAS registrada e com as dez linhas citadas CONFERIDAS no HEAD local
 69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou
 f26fd56b TICKETS: placar e rodape antes do push do lote
-35803556 O12 FECHADO: as duas opcoes da cura ja tinham acontecido, e o que faltava era a guarda
-ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/regras.py
+ M app/ponto/motor_calculo_v2.py
  M app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py
-?? app/ponto/tests/test_s5b_regra_noturnas.py
+?? app/ponto/tests/test_l093_trabalhado_real.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,41 +98,41 @@ ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro f
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ calcular_mes               │ :1552  │ definida em :1403; o :1552 é o sítio da folga que você cita — confirmado (folga_pelo_dia /                   │
-  │                            │        │ pergunta_ao_vinculo)                                                                                         │
-  ├────────────────────────────┼────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ intermitente               │ :1475  │ :1474, uma linha antes                                                                                       │
-  └────────────────────────────┴────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  O origin 113bc9c e o meu HEAD local concordam onde importa. O item nasceu no BACKLOG no mesmo turno, com as quatro fontes a importar (nunca reescrever),
-  os REDs com número ao lado, os seis resultados observáveis, os dois itens de fila para medir e o selo que proíbe regra copiada do motor.
-
-  Nada codado ainda — e digo em que ordem vou: regra (1) noturnas primeiro, porque é a que tem dois REDs seus com número exato (col898 0,14 e col331 9,82)
-  e a importação é a mais direta (minutos_noturnos é função de módulo, não método); depois (2) pontualidade, que é a mais cara em dinheiro; (3) dobra de
-  feriado, que exige escolher os dois casos de 07/09 só em leitura; e (4) folga trabalhada, que fecha o +257,40 h do intermitente.
-
-  Uma trava que você já conhece e que vale nomear agora: três das quatro fontes são métodos de MotorBase (aplicar_tolerancia, _aplicar_teto_pontualidade,
-  _feriado_dobra_no_dia, _noturno_dos_intervalos), não funções puras. Importar método exige uma instância de motor — e o calculador existe justamente para
-  não montar motor. Vou medir se cada um depende só de self que o calculador tem (cadastro, marcos) ou se arrasta o motor inteiro; onde arrastar, a saída
-  que respeita o seu "proibido reescrever" é extrair a função pura para ponto/janela_he.py-style módulo e os dois chamarem — o que a casa já fez com
-  entrada_efetiva/saida_efetiva. Se eu achar que precisa disso, publico antes de escrever.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-4-REGRAS -- as QUATRO regras que faltam ao calculador, por IMPORTACAO do motor -- nunca reescritas (ordem Ronald
-  01/10 12:
-
   Ran 6 shell commands
 
-❯ aval Ronald 01/10 lei: o teto da L-093 usa o trabalhado REAL do dia (antes da janela de HE da L-097); minuto bloqueado como HE nao autorizada nunca
-  vira saida antecipada nem atraso. RED col890 22/09: antecipada 10,66 -> 8,23. DIFF de frota da 10 publicado antes; 09 intacta. E medir a parte: dia em
-  aberto ou turno em curso lavrado com saida antecipada (col221 e col99 em 01/10, col890 22/09). Segue a fila.
+● Lei aplicada no motor, e o escopo está provado nos três sítios.
 
-● Ler o teto da pontualidade, o sitio da lei nova
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '812,845p' app/ponto/motor_calculo_v2.py
+  - PeriodoCalculo ganhou minutos_fora_janela (:153) — o minuto que a janela tirou não desaparece mais: ele viaja para o teto.
+  - Os três calcular_periodo (MotorBase :1819, MotorTurnoPartido :1928, MotorComercial :2259) o preenchem, e provei que _min_fora_janela e _min_fora_saida
+    estão no escopo de cada um — eram variáveis locais que morriam na função.
+  - O teto (:843) passa a somar trabalhado + fora como o real.
 
-✢ Pouncing… (4h 55m 25s · ↓ 544.0k tokens)
+  A lei em uma frase, escrita na lápide: minuto bloqueado como HE não autorizada foi trabalhado — ele só não conta como extra. Então entra no trabalhado
+  para efeito de teto, e nunca vira atraso nem saída antecipada. Com o pós-janela, teto = previsto − trabalhado crescia justamente nos dias em que a
+  janela bloqueou minuto, e o desconto cobrava tempo em que a pessoa estava presente.
+
+  Ruff limpo, campo provado (minutos_fora_janela = 0.0 por padrão, então período que não passou por janela não muda nada).
+
+  O que falta antes de isso valer em prod, e nessa ordem: o DIFF de frota da 10 contra o gravado com o RED do col890 (10,66 → 8,23) nomeado — e a 09
+  intacta. A pista está com o push dos 17 commits; quando liberar, rodo o DIFF e publico antes de qualquer apply. É zona inviolável, e o aval da sua lei
+  autoriza a mudança, não o atalho de aplicar sem medir.
+
+  E fica registrado o que você mandou medir à parte (não é esta cura): dia em aberto ou turno em curso lavrado com saída antecipada — col221 e col99 em
+  01/10, col890 22/09.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: L-093-TRABALHADO-REAL -- o teto da pontualidade usa o trabalhado REAL do dia, antes da janela de HE (lei Ronald 01/10
+  13:0x). Minuto bl
+
+● Escrever o RED da lei nova
+  ⎿  $ cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_l093_trabalhado_real.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """L-093-TRABALHADO-REAL (lei Ronald 01/10 13:0x): o teto da pontualidade usa o trabalhado REAL do dia.
+     A LEI, literal: *"o teto da L-093 usa o trabalhado REAL do dia (antes da jane…
+
+✻ Pouncing… (5h 0m 46s · ↓ 562.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                                   2% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
