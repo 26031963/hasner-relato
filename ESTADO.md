@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:474 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:568 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:39:01.**
+**Medido em 01/10/2026 18:44:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/ponto/motor_calculo_v2.py
 ?? app/ponto/tests/test_pontualidade_em_turno_aberto.py
 ?? bin/keepalive.sh
@@ -97,18 +99,6 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-… · stopped
-
-● Esperar o DIFF e ler · 7m 19s
-  ⎿  $ sleep 0; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; for i in $(seq 1 9); do pgrep -f simular_folha
-     >/dev/null || break; sleep 55; done; tail -45 $S/scratchpad/pta_diff.log (7m 18s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Fermenting… (1h 32m 51s · ↓ 136.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald 01/10 18:3x UI-RESPOSTA-DIZ-O-QUE-E: OK nas 4 frases e na confirmacao do Reabrir. Escolha (A): delta_da_resposta devolve sinal_min ao lado
   de delta_min, mesma funcao, juiz novo = 0; sobe pela main junto do item 5. DOIS AJUSTES: (1) a faixa "atraso/saida antecipada admitidos" comeca na
   tolerancia com que a FOLHA julga (TOLERANCIA_CONFORMIDADE_MIN, a mesma de _envelope_lote_min), nao em 5 -- a frase nunca promete desconto que a folha
   nao faz (RED col290 +7 min); (2) no regime em que o motor nao julga pontualidade (lei 2), a frase diz so "Validar grava HH:MM no espelho", sem "vai
@@ -130,10 +120,22 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
      PROIBIDO: apagar historia do JSON (estado muda, texto fica); triar os 163 antigos (isso e do chat).
      CUSTO: 1 campo a mais por item e fechar o item ao receber o aval.
      Segue a fila.
-  ctrl+x ctrl+s to send now
+
+● Atualizar as tres celulas de estado do BACKLOG
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     antes_prox = (H._proximo_da_fila() or 'nenhum').split(' -- ')[0]
+     def troca_estado(ancora, no…
+
+✢ Fermenting… (1h 38m 21s · ↓ 154.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
