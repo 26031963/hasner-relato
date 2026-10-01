@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 03:22:31.**
+**Medido em 01/10/2026 03:28:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada` |
-| `origin/main` | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,39 +95,39 @@ e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora o montador precisa passar a pendente. Vendo se alguma autoridade existente também vê a rejeitada:
+  └────────────────────────────┴──────────────────────┴───────────────────────────────┘
 
-  Searched for 1 pattern
+  Veredito de 20/08 intacto em trabalhou. Dias com ausência e palavra muda no mês: 1 → 0. Como a palavra é uma, a tela ganhou o mesmo texto sem uma linha adicional — era o ponto
+  do CARTÃO=ESPELHO.
 
-● para='cobranca' exclui rejeitada e não há para declarado que a inclua — então faço a pendente (que é o RED) e registro a rejeitada medida. Ligando no montador:
+  8 selos, quatro MORDE — inclusive 273 min saindo 4h33 e não 4h30 (arredondar seria o papel mentindo por três minutos), e o pendente provado não mudando o veredito, lado a lado
+  com o mesmo dia sem ele.
+
+  A rejeitada não foi feita, e a razão é medida: nenhum para declarado de _pelo_efeito devolve ausência rejeitada — cobranca a exclui e folha só vê aprovada. Mostrá-la exige um
+  para novo num juiz compartilhado: fatia própria.
+
+  Empurrado a8ed55ca..8f57dea2 e no ar. E a trilha do --sem-sombra que curei há pouco funcionou: a linha deste deploy está em logs/deploy_sem_sombra.log.
+
+  Um custo meu da noite: três ciclos de push perdidos por import morto em selo novo (~27 min). Guardei o hábito de rodar o ruff antes — são 5 segundos e não disputa a pista.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
   Ran 1 shell command
 
-● 2840 testes OK em ponto e relatorios. Provando o RED em prod (leitura só):
+● O9 supera o O8 e o item manda medir primeiro. E hoje já vi pdf_espelho.py:580 desenhando _tela['dias'] e o contador tela_x_pdf: []. Medindo as três verificações que o item
+  nomeia:
 
-  Ran 1 shell command
-
-● RED curado literalmente: 06/08 → 'Declaração 4h30 (abonado)' e 20/08 → 'Declaração aguardando decisao' com veredito trabalhou (aparece sem abonar). Dias com ausência e palavra
-  muda: 0. O selo:
-
-  Ran 1 shell command
-
-● 8 OK. Fechando o O8 — com a metade da rejeitada registrada com a razão medida:
-
-  Ran 2 shell commands
-
-● Background command "Fechar o O8, commitar e empurrar" completed (exit code 0)
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Terceira vez nesta noite que um import morto num selo novo custa um ciclo de push. Curando e guardando a lição:
-
-  Conferir o push · 9m 50s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o8b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (9m 50s)
+● Medir o contador pdf x espelho na frota · 3m 3s
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o9.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     from django.db import connection
+     connection.set_schema('juliani')
+     from colaboradores.models import Empresa
+     from folha.porta_ex… (3m 2s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (5h 19m 55s · ↓ 492.8k tokens)
+✢ Percolating… (5h 25m 26s · ↓ 496.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
