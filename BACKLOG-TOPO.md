@@ -12,7 +12,7 @@ lista — ela e o que esta EM PE._
 | **O1** | COERENCIA-PORTAO | **FECHADA 30/09 21:5x -- os quatro itens |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | PAREI |
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | **FECHADA 30/09 23:0x** -- e a trava era |
-| **O4** | ACESSO-NUNCA-EM-LOTE | **livre** |
+| **O4** | ACESSO-NUNCA-EM-LOTE | espera corte |
 | **O5** | DECK-30DIAS | **livre** |
 | **O6** | PORTA-RETRATAR-BATIDA | **em curso** |
 | **O7** | COL857 / ORIGEM-DA-BATIDA | **em fila** |

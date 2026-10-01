@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:05:33.**
+**Medido em 01/10/2026 01:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
+| `HEAD` local | `2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes` |
 | `origin/main` | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
 cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
 bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
 ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
 4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
-db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
 ```
 
 ## `git status --short`
 
 ```
-?? app/api/tests/test_regressao_p0_relogio.py
-?? app/core/tests/test_acesso_nunca_em_lote.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,39 +95,39 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O (5) não está feito como a lei escreve: o selo atual envelhece o token, não anda o relógio — e o (4) não existe. Os dois são construíveis agora. Lendo o selo do bridge:
 
   Ran 1 shell command
 
-● Procurando o P0 de 20/09 para a lápide não inventar o caso:
+● api/views_auth.py não existe — achando onde o login mora de verdade, em vez de declarar um arquivo inventado:
 
-  Searched for 2 patterns, ran 1 shell command
+  Listed 1 directory, ran 2 shell commands
 
-● Achei o P0: "o prazo do token legado do R15 venceu a meia-noite de 19→20/09" — um teto por DATA (hoje <= ATE) que virou falso às 00:00. Lendo o sítio:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O teto por data saiu (item 2 feito). Falta o selo de regressão do (5). E a casa já tem censo de data cravada — conferindo a API dele antes de escrever outro:
+● Para o selo poder morder as bordas sem um segundo escritor da regra, a janela ganha uma costura declarada de relógio:
 
   Ran 1 shell command
 
-● A metade estrutural do (5) já existe (core/datas_cravadas.py, nascido deste mesmo P0). Falta só a funcional — "anda o relógio, token válido segue válido". Lendo o resto do
-  confere para a fixture:
+● A lógica da janela não roda quando nada de auth mudou — o selo precisa interrogá-la direto. Adicionando um modo declarado só para isso:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● O selo me pegou numa premissa errada minha, e o comportamento é o certo: eu troquei a senha antes de a credencial ter sido observada uma vez, e a primeira observação é a linha
-  de base — sem ela, observar invalidaria todo mundo, que é o P0 de novo. Corrigindo o teste e registrando a propriedade:
+● Nove bordas certas. O selo de host que tranca isso:
 
-● Corrigir e rodar os selos do O4
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='api/tests/test_regressao_p0_relogio.py'; t=io.open(P,encoding='utf-8').read()
-     v = ''' def test_MORDE_e_a_recusa_por_senha_trocada_tambem_nao_depende_do_relogio(self):
-     """A simetria: se o relogio nao pode invalidar, ele tambem nao pode RE-va…
+  Ran 1 shell command
 
-✶ Percolating… (3h 2m 58s · ↓ 320.7k tokens)
+● O selo cobra exatamente o que falta. Ligando a guarda no deploy.sh:
+
+  Ran 3 shell commands
+
+● 43 verdes, 2 vermelhos — os mesmos de antes de eu tocar em nada. Commitando o O4 primeiro e depois cuido deles:
+
+  Ran 1 shell command
+
+● Agora os 2 vermelhos. O do cpuset primeiro:
+
+  Ver o vermelho do cpuset
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_cpuset_de_teste.sh 2>&1 | head -12; echo "=== o sitio ==="; sed -n '20,30p' bin/sonda_frota.sh
+
+· Percolating… (3h 8m 9s · ↓ 337.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
