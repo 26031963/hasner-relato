@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:10:45.**
+**Medido em 01/10/2026 05:15:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe` |
+| `HEAD` local | `ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate` |
 | `origin/main` | `b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate
 b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe
 8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
 4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes
 1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido
-8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada
 ```
 
 ## `git status --short`
@@ -98,9 +98,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
 ```
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
 ● A triagem dos 5 campos. Começando pelo que explica três deles — o portão do folha_manda:
 
   Searched for 1 pattern
@@ -127,9 +124,12 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
   E isso explica por que total_trabalhadas bate: ele vem da folha. O que não bate vem do motor — que os dois rodam duas vezes, com entradas diferentes. Publicando:
 
-  Running 1 shell command…
+  Conferir o push da triagem · 4m 11s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_tri.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (4m 10s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (7h 8m 9s · ↓ 569.7k tokens)
+✻ Percolating… (7h 13m 10s · ↓ 572.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
