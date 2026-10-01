@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:52:31.**
+**Medido em 01/10/2026 06:58:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
+| `HEAD` local | `b3080a63 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
 | `origin/main` | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b3080a63 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862
 e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia
 a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22
 8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor
 ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate
-b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe
 ```
 
 ## `git status --short`
@@ -41,9 +41,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
- M app/escala/alimentacao.py
- M app/relatorios/pdf_espelho.py
-?? app/ponto/management/commands/diff_espelho_alimentacao.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,9 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
-
 ● O DIFF precisa da lista rica, e construí-la no comando seria uma segunda derivação. Extraio primeiro para um sítio compartilhado — mudança nula de comportamento, que os 217
   selos de relatorios provam:
 
@@ -130,11 +124,14 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
   862 comparados, 0 erros — e nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50/100 e dias_abono não aparecem na tabela. Publicando:
 
-● Running 1 shell command…
+● Conferir o push · 5m 10s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_d108.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (5m 8s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (8h 49m 56s · ↓ 607.1k tokens)
+✢ Percolating… (8h 55m 26s · ↓ 609.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
+                                                                                                                                                            2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
