@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:36:41.**
+**Medido em 01/10/2026 01:42:01.**
 
 | | |
 |---|---|
@@ -95,10 +95,6 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O replay roda, mas o resultado expõe um limite do universo que eu escolhi: legado: 0/50 — saturado em zero, então uma regressão que passasse a RECUSAR legado não apareceria.
   Medindo a população que importa:
 
   Ran 1 shell command
@@ -122,17 +118,21 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 
 ● 29 OK. O4 completo nos seis itens. Fechando e empurrando:
 
-  Conferir o push do replay · 5m 23s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
-     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (5m 22s)
+  Ran 2 shell commands
+
+● Background command "Fechar o O4 e empurrar" completed (exit code 0)
+
+● Conferir o push · 36s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 55); do grep -q '^RC=' "$L" && break;
+     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (37s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (3h 34m 5s · ↓ 373.5k tokens)
+✢ Percolating… (3h 39m 25s · ↓ 373.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
