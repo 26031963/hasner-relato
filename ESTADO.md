@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:121 AFIRMA ato sem PROVA ao lado -- **APLICADO 01/10 11:57** com usuario e motivo: vigente **id=26, hash `0ae5da67364c`, 211 linhas**; a anterior
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:66 AFIRMA ato sem PROVA ao lado -- **E HA UM SEGUNDO DEFEITO NA MESMA LINHA, que o numero denuncia sozinho**: o col221 tem `previstos=139` e
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:33:21.**
+**Medido em 01/10/2026 12:38:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `20f48d17 ARQUITETURA.mmd regenerado: ele e GERADO do codigo e defendido por selo` |
+| `HEAD` local | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **29** |
+| commits a subir (`ahead`) | **31** |
 
 ## Fabrica
 
@@ -29,19 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora
+ae0de406 L-093-TRABALHADO-REAL aplicada no motor: o minuto bloqueado pela janela FOI trabalhado, e o teto passa a saber
 20f48d17 ARQUITETURA.mmd regenerado: ele e GERADO do codigo e defendido por selo
 086f3b6d S5b regra 1 (noturnas) por IMPORTACAO, com os dois REDs dele, e a lei nova do teto registrada
 1f28c5ea S5b-4-REGRAS registrada e com as dez linhas citadas CONFERIDAS no HEAD local
-69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou
-f26fd56b TICKETS: placar e rodape antes do push do lote
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/motor_calculo_v2.py
  M app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py
-?? app/ponto/tests/test_l093_trabalhado_real.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,44 +96,44 @@ f26fd56b TICKETS: placar e rodape antes do push do lote
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 6 shell commands
 
-● Lei aplicada no motor, e o escopo está provado nos três sítios.
+● Esperando os dois, sem abrir mais nada.
 
-  - PeriodoCalculo ganhou minutos_fora_janela (:153) — o minuto que a janela tirou não desaparece mais: ele viaja para o teto.
-  - Os três calcular_periodo (MotorBase :1819, MotorTurnoPartido :1928, MotorComercial :2259) o preenchem, e provei que _min_fora_janela e _min_fora_saida
-    estão no escopo de cada um — eram variáveis locais que morriam na função.
-  - O teto (:843) passa a somar trabalhado + fora como o real.
+  O DIFF de frota passou a guarda de cobertura (sombra_cobre=sim, completa de hoje) e está recalculando a competência inteira nas duas árvores, dentro de
+  uma trava só da sombra. O push dos 18 commits segue na régua.
 
-  A lei em uma frase, escrita na lápide: minuto bloqueado como HE não autorizada foi trabalhado — ele só não conta como extra. Então entra no trabalhado
-  para efeito de teto, e nunca vira atraso nem saída antecipada. Com o pós-janela, teto = previsto − trabalhado crescia justamente nos dias em que a
-  janela bloqueou minuto, e o desconto cobrava tempo em que a pessoa estava presente.
+  Fiz uma escolha que vale explicar: o DIFF roda na sombra e o push na pista de teste — bancos diferentes, então os dois podem andar juntos sem violar o
+  "um run por vez", que é sobre o juliani_db_test. Foi assim que medi a lei sem esperar a fila.
 
-  Ruff limpo, campo provado (minutos_fora_janela = 0.0 por padrão, então período que não passou por janela não muda nada).
+  O que sai quando eles voltarem, publicado junto: o DIFF_FOLHA da frota da 10 com o col890 nomeado (e a confirmação de que a 09 ficou intacta), mais os
+  selos da lei do teto, da regra 1 das noturnas e da guarda do O13.
 
-  O que falta antes de isso valer em prod, e nessa ordem: o DIFF de frota da 10 contra o gravado com o RED do col890 (10,66 → 8,23) nomeado — e a 09
-  intacta. A pista está com o push dos 17 commits; quando liberar, rodo o DIFF e publico antes de qualquer apply. É zona inviolável, e o aval da sua lei
-  autoriza a mudança, não o atalho de aplicar sem medir.
-
-  E fica registrado o que você mandou medir à parte (não é esta cura): dia em aberto ou turno em curso lavrado com saída antecipada — col221 e col99 em
-  01/10, col890 22/09.
+  Depois disso, nas suas ordens: as regras 2, 3 e 4 do S5b — pontualidade (que agora herda a lei nova), dobra de feriado com os dois casos de 07/09 em
+  leitura, e folga trabalhada, que é a que fecha o +257,40 h do intermitente. E os dois itens de medição que você separou: o col890/col221/col99 com saída
+  antecipada em dia aberto, e as noturnas acima de 10 h do col820.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: L-093-TRABALHADO-REAL -- o teto da pontualidade usa o trabalhado REAL do dia, antes da janela de HE (lei Ronald 01/10
   13:0x). Minuto bl
 
-● Escrever o RED da lei nova
-  ⎿  $ cd /home/ronald/saas-hasner && cat > app/ponto/tests/test_l093_trabalhado_real.py <<'PYEOF'
+● Publicar a medicao a parte e criar o item
+  ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     """L-093-TRABALHADO-REAL (lei Ronald 01/10 13:0x): o teto da pontualidade usa o trabalhado REAL do dia.
-     A LEI, literal: *"o teto da L-093 usa o trabalhado REAL do dia (antes da jane…
+     import io
+     P='docs/RELATO.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='## S5b item 2: as 132,19 h de HE50 abertas'
+     assert t.count(A)==1
+     NOVO = '''## A MEDICAO A PARTE que voce pediu: os tres dias tem a MESMA forma, e dois estao EM CURSO agora
+     Ordem de 13:…
 
-✻ Pouncing… (5h 0m 46s · ↓ 562.1k tokens)
+✢ Compacting conversation… (5h 6m 15s · ↓ 577.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 48%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                   2% until auto-compact
+                                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
