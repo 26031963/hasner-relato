@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:579 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:623 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:15:45.**
+**Medido em 01/10/2026 19:20:46.**
 
 | | |
 |---|---|
@@ -39,6 +39,10 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+ M bin/hook_stop_fila1.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +99,7 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ● Background command "Esperar a suite fechar" completed (exit code 0)
 
   Ran 4 shell commands
@@ -122,13 +127,12 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 
 ❯ segue a fila; PAREI so em lei ou !
 
-  Medir a exposicao da 09 com a janela da folha
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/exposicao_09c.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """EXPOSICAO DA 09, 3a medicao -- agora com a janela que a FOLHA usa. SO LEITURA.
-     A 2a medicao (pela autoridade) disse 14 dia-colab / 61,30 …
+● Medir se os dois selos ja estavam vermelhos antes
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; rm -rf $S/wtseal;
+     git worktree add -q --detach $S/wtseal 0ba9872f 2>&1 | tail -2; for s in test_hook_nao_cobra_congelado test_hook_teto_nao_conta_espera; do printf
+     '%-40…
 
-· Flambéing… (3m 8s · ↓ 9.8k tokens · thinking)
+✽ Flambéing… (8m 9s · ↓ 29.9k tokens · thought for 2s)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
