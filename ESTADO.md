@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:57:31.**
+**Medido em 30/09/2026 22:03:01.**
 
 | | |
 |---|---|
@@ -96,16 +96,6 @@ e9e49d37 Merge branch 'raia-ui'
 
 ```
 
-● O log responde o que importa: nenhum 500 em /relatorios/ nos últimos 40 min — ninguém pegou a janela. Conferindo os templates pela casca certa:
-
-  Ran 1 shell command
-
-● Os seis compilam em prod, e ninguém pediu /relatorios/ na janela — o template quebrado não serviu 500 a humano nenhum. Sorte, e vale dito assim.
-
-  Agora os outros dois: o selo que já existia do passe livre POSTa sem motivo, e eu tornei o motivo obrigatório. Lendo-o para atualizar com fidelidade:
-
-  Searched for 1 pattern, ran 1 shell command
-
 ● 13 verdes. E há a lição que já me pegou uma vez hoje: a raia tem a mesma cópia do relatorios/index.html, e o próximo merge reintroduziria o defeito. Curando lá também:
 
   Ran 2 shell commands
@@ -129,10 +119,20 @@ e9e49d37 Merge branch 'raia-ui'
   O push está rodando com esses dois curados. Aviso o veredito.
 
 ✻ Sautéed for 3m 0s · done 9:56 PM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Já recebido — "PAREI só em lei ou !" é a PAREI-SO-LEI, e "segue a fila" é a TURNO-NAO-TERMINA; as duas já têm linha no PROMPTS.md. Sigo sem refazer registro.
+
+● Pushing e proximo item
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; grep -E '^Ran |^(OK|FAILED)|push liberado|main ->
+     main|failed|ALARME' $L 2>/dev/null | tail -4; echo "procs: $(ps -eo args | grep -c '[m]anage.py test')"; cd /home/ronald/saas-hasner && pyth…
+
+✢ Percolating… (25s · ↓ 1.1k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ avisa quando o push fechar
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
