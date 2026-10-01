@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:54:01.**
+**Medido em 01/10/2026 05:59:31.**
 
 | | |
 |---|---|
@@ -124,12 +124,12 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
   O autoridade_do_periodo não passa datas_previstas_trabalho, e sem ela o motor reporta zero falta para quem trabalhou 12,73 h de 176,67 previstas com 25 dias previstos pela
   célula. O PDF está certo e o espelho tem buraco — e o espelho é a tela do admin e o app dos ~750:
 
-● Conferir o push do O108 · 1m 25s
+● Conferir o push do O108 · 6m 55s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o108.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 24s)
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 54s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (7h 51m 25s · ↓ 589.8k tokens)
+✢ Percolating… (7h 56m 56s · ↓ 589.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
