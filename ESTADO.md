@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:486 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:517 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:40:46.**
+**Medido em 01/10/2026 20:46:01.**
 
 | | |
 |---|---|
@@ -39,9 +39,11 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## `git status --short`
 
 ```
+ M app/core/fila_pendentes.py
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,44 +101,44 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  38). Nenhum vínculo foi inventado: a pauta pergunta.
 
-● O DIFF do emp3 = CLT está escrito e esperando a pista — ele faz o toggle de Empresa.regime_trabalhista dentro de atomic() com raise no fim, calcula por
-  somente_leitura=True (que não grava) e, antes de qualquer coisa, confere que o banco é a sombra e aborta se não for. Script que decide regime não se
-  aproxima de prod — é a lei do incidente de 27/08. A 08 não entra: foi paga fora do sistema e não se retifica.
+  E duas pautas que eu abri eu mesmo cancelei no minuto seguinte, porque não eram frota: a 917 era col950, "[nome]", da empresa 1 — a de
+  teste; e a 921 era col677, "[nome]", sem data de admissão. Pauta à supervisão sobre esses dois é ruído num departamento de gente. Canceladas
+  pela porta, e a pauta cancelada fica na trilha. Sobram 8 vivas.
 
-  Estado da fila da noite, para situar:
+  Isso corrige o censo que publiquei às 21:4x: dos 13 colab-mês sem vínculo, 2 não são gente da frota. A lição estava na minha memória de sessão — "colab
+  de teste não é prova de frota" — e eu a apliquei meia volta atrasado: filtrei depois de escrever, não antes.
 
-  ┌────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │            item            │                                                        estado                                                        │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (1) S5b, os dois passos    │ medido e publicado → tabela no AVAIS, espera o !                                                                     │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (2) AVAIS-NA-MESA          │ no ar — 5 abertos com a frase pronta                                                                                 │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (3) GESTAO-HE              │ metade de TELA pronta na raia (21c4826e); a parte da main está listada com arquivo:linha, e duas travas foram para o │
-  │                            │  AVAIS (a pergunta de lei do contador e a ordem de subida)                                                           │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (4) UI-RESPOSTA            │ não começou                                                                                                          │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (5)                        │ não começou                                                                                                          │
-  │ SUITE-UMA-VEZ-POR-ARVORE   │                                                                                                                      │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (6) leitura                │ censo feito e publicado; DIFF emp3=CLT escrito, espera a pista                                                       │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (7) Pautas                 │ 4 abertas (908–911), idempotentes e provadas                                                                         │
-  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (8) fila 1 do BACKLOG      │ depois                                                                                                               │
-  └────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  O que as suas respostas põem na fila agora, e nenhuma delas pode começar enquanto a suíte cheia ocupa a pista:
 
-  Nenhum item devolveu o turno: os que travaram viraram linha no AVAIS e eu passei ao próximo, como a sua regra manda. O que segura a pista agora é a
-  suíte cheia do marco do AVAIS — e atrás dela vêm, no mesmo turno, o deploy que o selo test_import_tardio_contra_o_ar está cobrando (a porta
-  reabrir_vigencia_impossivel está no disco e não na memória do worker), o DIFF do emp3, e então os itens (4) e (5).
+  1. as três curas da S5b — importar a guarda de turno aberto no _PeriodoPontualidade (ele não tem entrada/saida/turno_aberto, e é por isso que a guarda é
+     muda lá), a guarda do T8 e a cura da hora negativa — e então o DIFF refeito. Você disse que não sobe como está, e é o que vou provar com número
+     antes de voltar a pedir.
+  2. o patch 3 da GESTAO-HE com a opção (b): o limite filtra o contador e o ato, então dia abaixo do limite não pede nem recebe ciência — e o sem_decisao
+     volta a ser contador == universo nos quatro leitores. Isso muda o patch que a raia listou, e vou escrever a linha do ato junto do filtro.
+  3. a ordem de subida da GESTAO-HE: patch 1 → deploy.sh → merge e deploy no mesmo ato.
+  4. a outra metade da resposta (3): causa por colab e DIFF dos que têm vínculo.
 
-✻ Brewed for 52s · done 8:39 PM · 1 shell, 3 monitors still running
+  Mais o deploy que o selo test_import_tardio_contra_o_ar está cobrando desde o commit da porta, e o DIFF do emp3=CLT que já está escrito. Tudo atrás da
+  mesma suíte.
+
+✻ Crunched for 2m 8s · done 8:43 PM · 1 shell, 2 monitors still running
+
+● Monitor event: "veredito da suite do marco do AVAIS"
+
+  Ran 1 shell command
+
+● Monitor event: "veredito final da suite do AVAIS"
+
+  Ver a forma de uma entrada do FORA_DE_PIPELINE
+  ⎿  $ sed -n 697,705p config/crons.py
+
+· Jitterbugging… (1m 3s · ↓ 3.0k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so com a lista inteira travada
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

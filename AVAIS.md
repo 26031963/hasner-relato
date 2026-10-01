@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 5
+# AVAIS NA MESA — 1
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -6,15 +6,11 @@
 
 | # | id | tipo | desde | o numero | frase PRONTA para colar |
 |---|---|---|---|---|---|
-| 1 | `s5b-troca-do-calculador` | **!** | 2026-10-01T17:20 | a troca AINDA cria desconto: horas_atraso +129,70 h em 22 colabs e antecipada +11,97 h em 10 (465 colabs, modo --pares-da-autoridade). Dos 38 dia-colab divergentes, 14 sao turno ABERTO ou par NULO (+61,27 h) e caem com a | `aval Ronald: a troca da S5b sobe depois de (a) importar a guarda de turno aberto no _PeriodoPontualidade, (b) a guarda do T8 e (c) a cura da hora negativa -- com o DIFF refeito e atraso/antecipada em faixa. OU: sobe como esta, com os +129,70 h declarados` |
-| 2 | `he-limite-encolhe-o-contador-ou-o-ato` | **lei** | 2026-10-01T21:50 | L1 CONTADOR == UNIVERSO. O limite de decisao (default 10 min, "so de TELA") encolhe o contador `sem_decisao`, e esse contador e o MESMO em QUATRO leitores: o chip, o total, o botao "Dar ciencia em tudo" e o universo que  | `aval Ronald: o limite de decisao filtra (a) SO o contador -- o ato de ciencia segue alcancando os 12 dias, e o botao passa a dizer o numero do ATO, nao do contador; OU (b) o contador E o ato -- dia abaixo do limite deixa de pedir e de receber ciencia` |
-| 3 | `folha-zero-com-batida-7-colabs` | **!** | 2026-10-01T16:00 | 7 colaboradores ATIVOS bateram ponto na competencia 10 e tem fechamento ZERO: 107 batidas, e 4 deles SEM VINCULO. Mexer em vinculo e `!` dele pela L-009. | `aval Ronald: cadastrar o vinculo dos 4 sem vinculo e relavrar os 7 da folha-zero (competencia 10, aberta) -- com DIFF publicado antes` |
-| 4 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | desenho aprovado 18:3x e em construcao na raia wt-ui por um agente (ordem de 20:1x). O MERGE e o DEPLOY esperam o smoke de clique DELE nas DUAS cascas -- e lei da casa desde 07/09 (BUG 73): suite verde nao ve tela. | `smoke Ronald: cliquei no calendario de HE nas duas cascas, marquei dia e confirmei pela barra -- pode mergear a raia wt-ui e deployar` |
-| 5 | `gestao-he-ordem-do-merge-patch1-primeiro` | **!** | 2026-10-01T21:50 | A tela nova TIROU o botao Autorizar por linha (o desenho aprovado diz "tabela recolhida e sem botao por linha") e a barra nasce DESLIGADA ate a rota da main existir. Entao entre o MERGE da tela e o DEPLOY do patch 1 a te | `aval Ronald: subir na ordem patch 1 (view do laco + url) -> bin/deploy.sh -> merge da raia, ou merge e deploy sem nada no meio; nunca a tela primeiro` |
+| 1 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | desenho aprovado 18:3x e em construcao na raia wt-ui por um agente (ordem de 20:1x). O MERGE e o DEPLOY esperam o smoke de clique DELE nas DUAS cascas -- e lei da casa desde 07/09 (BUG 73): suite verde nao ve tela. | `smoke Ronald: cliquei no calendario de HE nas duas cascas, marquei dia e confirmei pela barra -- pode mergear a raia wt-ui e deployar` |
 
 ---
 
-Total no JSON: **172** · aberto **5** · respondido **4** · sem-motivo **163**.
+Total no JSON: **172** · aberto **1** · respondido **8** · sem-motivo **163**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
