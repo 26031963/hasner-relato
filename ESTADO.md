@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:20:46.**
+**Medido em 01/10/2026 01:26:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
-| `origin/main` | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,39 +95,39 @@ ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superesti
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  (5) A regressão do P0 de 20/09, e não é o selo que já existia: core/datas_cravadas.py proíbe a forma (literal de data); faltava proibir o efeito. O relógio um dia, um mês e um
+  ano à frente não invalida; o argumento hoje não muda a resposta para nenhuma data entre 1999 e 2099 — era exatamente hoje <= ATE o mecanismo que levou os ~750 ao login às 00:00.
 
-● Agora os 2 vermelhos. O do cpuset primeiro:
+  Um caso nasceu de erro meu e ficou como selo próprio: troquei a senha antes da primeira observação e acusei "o relógio re-validou". Era a linha de base — se ela carimbasse
+  desde, a primeira requisição de cada aparelho deslogaria a frota, o P0 com outro gatilho.
+
+  (4) A janela tem dentes: bin/janela_auth.sh olha o diff contra 10 sítios declarados e recusa sexta 18h+, fim de semana e 23:20–06:00 — ligada no deploy.sh, com saída de
+  emergência que grita no log. O selo interroga a guarda (modo --janela) em vez de reimplementar as bordas, e pegou que eu havia declarado api/views_auth.py, arquivo que nunca
+  existiu. Falta só o replay de 50 tokens na sombra.
+
+  E a pasta de selos de host fecha em 45/0. Os dois vermelhos que estavam lá desde o começo da noite eram a mesma família: regra escrita duas vezes, com a segunda cópia
+  envelhecendo. O cpuset à mão em dois scripts que já sourceavam a fonte única; e o topo da ORDEM VIVA cravado num literal do selo — a S3 fechou em 29/09, a S4 em 30/09, a fila
+  andou e o selo seguia cobrando a S3. A própria mensagem dele dizia a verdade sem saber: "ou a ordem mudou e o selo precisa saber". Matei a cópia com um marcador declarado no
+  BACKLOG, que os dois lados leem.
+
+  O pre-push não roda essa pasta (a régua roda), e é por isso que os dois passaram a noite vermelhos sem nenhum push reclamar.
+
+  Empurrado: cab53e2f..d6a08a38. Nada subiu para prod nestes dois commits (só bin/, selos e docs) — e a guarda nova, se eu tentasse, me barraria agora mesmo: são 01:2x.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O4 -- ACESSO-NUNCA-EM-LOTE (lei, 23/09 08:4x) -- (1) credencial so morre por evento dela; selo conta escritores capa
+
+● O item que falta é o replay de 50 tokens na sombra — não é travado por lei nem !, então construo. Vendo o que a sombra tem e de onde sai o claim:
 
   Ran 1 shell command
 
-● Os dois já sourceiam a fonte única e usam TESTE_CPUSET, mas escrevem as flags à mão em vez de usar o $TESTE_DOCKER que ela exporta — que é exatamente o que o selo cobra. Curando
-  pela fonte única:
+● Background command "Conferir o push" completed (exit code 0)
 
-  Ran 1 shell command
+● versao(user) sai de get_session_auth_hash()[:12], então o replay reconstrói o claim de cada usuário real na sombra. Escrevendo — e o arquivo guarda só a resposta, nunca o claim:
 
-● Verde. Agora o segundo: a ORDEM VIVA aponta para a S3, que está fechada. Lendo o que o selo compara:
+● Running 1 shell command…
 
-  Ran 2 shell commands
-
-● O selo carrega uma cópia do topo da ORDEM VIVA num literal, e a S3 fechou — então a divergência é a cópia envelhecendo, não a fila. Matando a cópia: um marcador declarado que os
-  dois lados leem:
-
-  Ran 2 shell commands
-
-● 45 verdes, 0 vermelhos — a pasta inteira limpa. Commitando e empurrando:
-
-  Ran 2 shell commands
-
-● Background command "Commitar as duas curas e empurrar" completed (exit code 0)
-
-● Cura do rodapé pela terceira vez nesta noite (é a friction do O90). Curando e reempurrando:
-
-● Conferir o push · 6m 52s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o4b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 51s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Percolating… (3h 18m 10s · ↓ 345.9k tokens)
+✢ Percolating… (3h 23m 26s · ↓ 350.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
