@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:03:31.**
+**Medido em 01/10/2026 20:09:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00` |
+| `HEAD` local | `d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS
 02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00
 b17b4689 PAREI com a tabela: o vinculo do col369 move 7,07 h e os -4 furos NAO acontecem
 b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`
 76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO
-d97b779f A celula da 09 declara o DIFF publicado e a frota recusada
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ d97b779f A celula da 09 declara o DIFF publicado e a frota recusada
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  6x1 SEM folga declarada -- qual e o dia de folga? Sexta 25/09 nao tem batida, e segunda 28/09 tambem nao. (2) Registrar e MEDIR, nao curar: em 5 dos 11
-  dias (19, 20, 23, 26, 27/09) a volta da pausa esta tipada S e a saida final tipada E; medir se e isso que gera as 2,00 h de intra indenizada e as 5,07
-  h de trabalhadas a mais. (3) A porta reabrir_vigencia_impossivel fica; o 1296 segue inativo, no passivo. Volta para a S5b.
+  Duas curas, porque há duas contas: por dia-colab a rubrica declarada sai da comparação e entra num contador cego_<rubrica>; e contra o gravado, soma
+  parcial não se compara com total — se qualquer dia do colab saiu declarado naquela rubrica, o mês dele está incompleto por cegueira do instrumento, e
+  ele sai daquela rubrica. A tabela ganhou a coluna "colabs CEGOS (fora da conta)", porque tabela que não diz quantos deixou de fora é a mesma tabela que
+  mentia com zero, só mais discreta.
 
-  Ran 3 shell commands
+  Prova em 12 colabs (181 dia-colab), antes → depois:
 
-● col369 fechado pela sua decisão (02da1822), e nada a reverter — o PAREI com a tabela existia exatamente para essa escolha. Sua medição fecha o caso: a
-  pausa real é 12:09–14:04 nos 11 dias, e o intervalo 11:00–12:00 do TE 538 não descreve o colaborador. Os dois achados ficaram registrados e não curados,
-  como você mandou:
+  ┌────────────────────────┬────────────────────────┬──────────────────────────────────┐
+  │        rubrica         │         antes          │              depois              │
+  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
+  │ horas_noturnas         │ −454,70 h em 13 colabs │ +0,00 · 0 divergentes · 30 CEGOS │
+  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
+  │ horas_atraso           │ −0,60 h em 2 colabs    │ +0,00 · 0 divergentes · 30 CEGOS │
+  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
+  │ horas_saida_antecipada │ 0,00                   │ +0,00 · 0 divergentes · 30 CEGOS │
+  └────────────────────────┴────────────────────────┴──────────────────────────────────┘
 
-  - COL369-FOLGA-NAO-DECLARADA — Pauta da supervisão: o 1313 é 6x1 e não declara folga, e os dois candidatos estão medidos (sexta 25/09 sem batida,
-    segunda 28/09 também sem).
-  - COL369-TIPOS-INVERTIDOS — medir, não curar: 5 dos 11 dias com a volta da pausa tipada S e a saída final tipada E; a pergunta é se é isso que gera as
-    2,00 h de intra indenizada e as 5,07 h de trabalhadas.
+  E as que não dependem de par seguem falando: trabalhadas +11,35 h, intra −3,38, extras 50 +7,41, extras 100 +8,03, folga +13,92. Por dia-colab:
+  cego_horas_noturnas=170 de 181.
 
-  A porta reabrir_vigencia_impossivel fica, e o 1296 segue inativo no passivo.
+  O que isso não resolve, e fica nomeado: o instrumento continua sem modo que alimente par. Os dois que existem são o por sequência (cego em noturna e
+  pontualidade, por construção declarada em :336) e o --pares-da-autoridade, que a própria flag descreve como "MEDIDO em 28/09 e AINDA PIOR". Então o ! da
+  troca só pode ser pedido sobre as rubricas que não dependem de par — e a frota inteira está rodando agora com o instrumento curado para dar esse
+  número.
 
-  De volta à S5b, e tenho um achado que impede pedir o seu !: o DIFF que decidiria a troca está cego por construção — e o próprio comando diz isso. No
-  caminho por sequência (o único que a casa não declarou "pior"; o --pares-da-autoridade ela mesma marca como "MEDIDO em 28/09 e AINDA PIOR"), os mapas de
-  par ficam vazios de propósito, e diff_calculador.py:336 promete que as rubricas saem declaradas em SEM_ENTRADA, "nunca zero". O relatório não cumpre:
-  imprime 0,00 e soma como divergência — 909 linhas de horas_noturnas no CSV, −5.786,47 h em 192 colabs, mais 60 de atraso e 49 de antecipada. O alvo da
-  linha 63 exclui apenas o NAO_DECIDE do módulo, não o _nd que cada chamada declara. É o [] de dois sentidos uma camada acima de onde o docstring o
-  proibiu.
+  Em paralelo, a GESTAO-HE-CALENDARIO-CONTROLE está sendo construída por um agente na raia wt-ui, com os limites literais da sua ordem: só templates/,
+  static/ e teste de tela nas duas cascas, sem suíte cheia porque a pista é da S5b, o que precisar de .py ou da migration do limite por cadastro vai
+  listado para a main (sem ponte inventada nem valor cravado), e merge e deploy só com o seu smoke. A célula está em CONSTRUINDO na raia, e a sessão
+  principal não parou.
 
-  Consequência direta: os números que estão na célula da S5b (+113,52 h de trabalhadas, +31,47 de folga) vieram de outra medição e não reproduzem nesta;
-  os que dependem de par não são número, são cegueira medida. Não vou pedir o ! da troca sobre essa tabela — a cura do instrumento vem antes, e é o
-  próximo passo: o relatório tem de excluir a rubrica que a chamada declarou, do mesmo jeito que o alvo já exclui a do módulo.
-
-  Registrei também, no mesmo ato, a SUITE-UMA-VEZ-POR-ARVORE (entra depois do ! da troca) e a sua ordem que põe o LOTE 1 depois do !.
-
-✻ Worked for 3m 54s · done 8:02 PM · 1 shell, 3 monitors still running
-
-● How is Claude doing this session? (optional)
-  1: Bad    2: Fine   3: Good   0: Dismiss
+✻ Waiting for 1 background agent to finish
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ cura o instrumento e refaz o DIFF
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading test_ui_cal_competencia.py gate precedent                                                          2m 14s · ↓ 132.1k tokens
   ⧉  index
 ```
