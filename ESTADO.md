@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:03:01.**
+**Medido em 30/09/2026 22:08:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| commits a subir (`ahead`) | **20** |
+| `HEAD` local | `57c23083 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu` |
+| `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+57c23083 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
 b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar
 7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
 e9e49d37 Merge branch 'raia-ui'
 42b3be2d COL900: a minha medicao estava contaminada TRES vezes, a porta nao faz o que a lei pede, e eu revertei 8 celulas
-965bdde7 Duas curas que o merge exigia: a lapide multilinha voltaria a vazar, e o selo do espelho nao sabia seguir o include
 ```
 
 ## `git status --short`
@@ -96,43 +96,43 @@ e9e49d37 Merge branch 'raia-ui'
 
 ```
 
-● 13 verdes. E há a lição que já me pegou uma vez hoje: a raia tem a mesma cópia do relatorios/index.html, e o próximo merge reintroduziria o defeito. Curando lá também:
+● hoje está no escopo dos dois. Escrevendo o selo — regra pura, mais o estrutural de que os dois caminhos leem a mesma função e nenhum tem comparação própria:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Achei um defeito que estava no ar, e o selo me pegou depois do deploy.
+● A rota existe. Conferindo a pista antes de rodar (um run por vez):
 
-  templates/relatorios/index.html tinha 38 linhas de {% comment %} antes do {% extends %} — e o Django exige que o extends seja a primeira tag. A ironia está dentro do arquivo: a
-  lápide logo depois do extends diz, textual, "o {% extends %} É A PRIMEIRA LINHA, e isso não é estilo: o Django exige que ele seja o primeiro". Eu escrevi a frase certa e pus o
-  bloco acima dela.
+  Ran 1 shell command
 
-  Como template é vivo, /relatorios/ ficou com o template quebrado no ar entre o deploy de 21:43 e a cura. Medido: zero requests a /relatorios/ na janela — ninguém pegou o 500.
-  Isso foi sorte, não desenho, e é exatamente por isso que o selo existe. Os seis templates que eu toquei agora compilam em prod, conferidos um a um.
+● A suíte de negócio do push fechou OK (8.897 testes) e o control-plane está rodando. Esperando ele para liberar a pista:
 
-  Curei nas duas árvores no mesmo ato, e não por zelo: a mesma classe me pegou uma hora antes com as lápides multilinha do gestao_he.html — curei só em main, e a raia seguiu com a
-  versão velha que o merge reintroduziria. Arquivo que existe nas duas se cura nas duas.
+  Ran 1 shell command
 
-  E o outro vermelho era um selo certo me cobrando. test_post_add/test_post_remove do passe livre POSTavam sem motivo, e eu tornei o motivo obrigatório às 21:2x. Ele afirmava o
-  contrato antigo e quebrou com razão. Os dois ganharam motivo — e junto um caso novo que morde: test_MORDE_sem_motivo_a_tela_NAO_muda_a_flag. Sem ele, "atualizar os dois POSTs"
-  seria esconder a lei: o selo diria OK tanto com a exigência quanto sem ela.
+● Push liberado: b6f267f8..b7a2b6b2. Tudo empurrado. Rodando o selo do O2:
 
-  O push está rodando com esses dois curados. Aviso o veredito.
+  Ran 1 shell command
 
-✻ Sautéed for 3m 0s · done 9:56 PM · 1 shell still running
+● Background command "Esperar o push por arquivo" completed (exit code 0)
 
-❯ segue a fila; PAREI so em lei ou !
+● 9 verdes. Fechando a célula, commitando e deployando (a regra está em views.py, então só entra no ar com reload):
 
-● Já recebido — "PAREI só em lei ou !" é a PAREI-SO-LEI, e "segue a fila" é a TURNO-NAO-TERMINA; as duas já têm linha no PROMPTS.md. Sigo sem refazer registro.
+  Fechar o O2, commitar e deployar · 4s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P = 'docs/BACKLOG.md'
+     t = io.open(P, encoding='utf-8').read()
+     i = t.find('| O2 |'); assert i > 0
+     fim = t.index('\n', i); c = t[i:fim].split('|')
+     assert c[3].strip() == '**corte**', repr(c[3])
+     c[3] = (' **FECHADA 30/09 22:0x -- e a trava era um… (4s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Pushing e proximo item
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push7.log; grep -E '^Ran |^(OK|FAILED)|push liberado|main ->
-     main|failed|ALARME' $L 2>/dev/null | tail -4; echo "procs: $(ps -eo args | grep -c '[m]anage.py test')"; cd /home/ronald/saas-hasner && pyth…
-
-✢ Percolating… (25s · ↓ 1.1k tokens · thinking)
-                                                                                                                                           ✔ Update installed · Restart to update
+✢ Percolating… (5m 26s · ↓ 15.7k tokens)
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
 ```
