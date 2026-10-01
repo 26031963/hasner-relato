@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:15:49.**
+**Medido em 01/10/2026 16:20:49.**
 
 | | |
 |---|---|
@@ -108,10 +108,6 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Quarta correção do censo, e a melhor: ~14 deles já passam por ast.parse, que não tem nó de comentário — são imunes por construção.
-
-  Listed 1 directory, ran 5 shell commands
-
 ● Censo final: 7, não 33. Migrando os últimos.
 
   Ran 4 shell commands
@@ -130,14 +126,18 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 
 ● O selo tem um buraco: ter o import não é usá-lo em todas as leituras. Fechando os dois.
 
-  Rodar a suite inteira · 7m 35s
+  Searched for 1 pattern, ran 9 shell commands
+
+● O colisão de pista derrubou os quatro pushes — minha própria lei. Serializando.
+
+  Rodar a suite inteira sozinha na pista · 4m 10s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
      LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh)
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-ha…
-     (7m 33s)
+     timeout 560 docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 …
+     (4m 9s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (8h 43m 13s · ↓ 1.0m tokens)
+✢ Pouncing… (8h 48m 13s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply

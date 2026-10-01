@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 16:15:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (170.7 MB). Acoes na janela: **1048**.
+**Medido em 01/10/2026 16:20:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (170.7 MB). Acoes na janela: **1051**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:16:39 | Bash | Rodar a suite inteira sozinha na pista | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1 LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) timeout 560 docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test $LABELS --settings=config.setti ...` |
+| 16:16:30 | Bash | Ver por que os pushes falharam | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -5 $S/push_o20d.log; echo "=== a empurrar ==="; git fetch -q 2>/dev/null; git log --oneline origin/main..HEAD \| wc -l` |
+| 16:16:26 | Bash | Ver se ha push na pista | `cd /home/ronald/saas-hasner && pgrep -af "pre-push.sh" \| grep -v shell-snapshots \| head -3; echo "---"; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for l in push_o20.log push_o20b.log push_o20c.log push_o20d.log; do [ -f $S/$l ] && echo "$l: $(grep -cE '^RC=' $S/$l) fim · $(tail -1 $S/$l)"; done` |
 | 16:08:13 | Bash | Rodar a suite inteira | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1 LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh) docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py test $LABELS --settings=config.settings.ci --noi ...` |
 | 16:07:58 | Bash | Fechar a ultima e rodar o selo | `python3 - <<'PYEOF' import io P='core/tests/test_contract_btn_pdf.py' t=io.open(P,encoding='utf-8').read() a = """ src = open(os.path.join(TPL, 'core', '_icone_pdf.html'), encoding='utf-8').read()""" assert t.count(a)==1 t=t.replace(a, """ src = _markup(os.path.join(TPL, 'core', '_icone_pdf.html'))""") io.open(P,'w',encoding='utf-8').write(t) print('a ultima leitura crua do btn_pdf trocada') PYEOF ...` |
 | 16:07:50 | Bash | Ver o contexto da ultima leitura | `sed -n '136,141p' core/tests/test_contract_btn_pdf.py` |
