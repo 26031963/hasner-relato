@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:00:45.**
+**Medido em 01/10/2026 16:05:48.**
 
 | | |
 |---|---|
-| `HEAD` local | `8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce` |
+| `HEAD` local | `4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,31 +29,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 be51b833 O20: celula dentro do teto (301 -> 290)
 5696af56 O20 fatia 3: 8 contratos a mais, e a migracao expos um FALSO VERDE no contrato do TETO TEMPORAL
 8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA
-d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ```
 
 ## `git status --short`
 
 ```
- M app/api/tests/test_contract_mensageria_le_o_juiz.py
- M app/chamados/tests/test_contract_dia_do_fato.py
- M app/core/tests/test_contract_btn_pdf.py
- M app/core/tests/test_contract_configuracao_nao_mente.py
- M app/core/tests/test_contract_feriado.py
- M app/core/tests/test_contract_import_local_resolve.py
- M app/core/tests/test_contract_l8_dialogo.py
- M app/core/tests/test_contract_reciclagem.py
- M app/core/tests/test_contract_template_bem_formado.py
- M app/core/tests/test_contract_trilha.py
+ M app/chamados/tests/test_contract_texto_com_carimbo.py
+ M app/core/censo_fonte.py
+ M app/core/tests/test_o20_contrato_julga_codigo.py
  M app/docs/RELATO.md
  M app/escala/tests/test_contract_fase_declarada.py
- M app/ponto/tests/test_contract_espelho_sem_emoji.py
- M app/ponto/tests/test_contract_geofence_juiz_unico.py
- M app/ponto/tests/test_contract_um_produtor_de_ausencia.py
+ M app/pautas/tests/test_contract_um_escritor.py
+ M app/ponto/tests/test_contract_no_batida_date.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -110,36 +102,36 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    eu devia ter feito antes.
-  - O selo se acusou a si mesmo, escrevendo o nome da função inteiro na própria assertion — a doença do O20 dentro do selo que existe para curá-la.
-
-  E o selo não virou porta, virou teto: exigir os 33 agora me faria declarar 33 razões em meia hora, e razão escrita em lote não é razão — é o saco com
-  outro nome.
-
-  Um segundo caso trava os 18 que já migraram, porque o teto só conta e não notaria uma volta.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O20 -- CONTRATO-VARRE-COMENTARIO (classe achada 24/09, 2 vezes no mesmo dia) -- contratos de arvore que procuram idio
-
-  Ran 1 shell command
-
-● Quarta correção do censo, e a melhor: ~14 deles já passam por ast.parse, que não tem nó de comentário — são imunes por construção.
 
   Listed 1 directory, ran 5 shell commands
 
 ● Censo final: 7, não 33. Migrando os últimos.
 
-  Migrar os quatro com ancora
+  Ran 4 shell commands
+
+● O teste pulava a docstring à mão com split('"""') — o helper já faz isso. Simplificando.
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Background command "Fechar a fatia 4 do O20" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● O helper tem um limite real: docstring que é o único corpo de um bloco deixa bloco vazio. Curando.
+
+● Ensinar a imunidade por AST ao selo · 2s
   ⎿  $ python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-
-     import io, re
-     IMP_PY = ('from core.censo_fonte import codigo_de as _codigo '
-     '# O20: contrato julga CODIGO, nao a prosa que o explica')
-     IMP_MK = ('from core.censo_fonte import markup_de as _markup '
-     '# O20: contrato de template julga o que RENDERIZA')
-     d…
+     import io
+     P='core/tests/test_o20_contrato_julga_codigo.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ if not any(k in fonte for k in ('.read()', 'read_text')):
+     continue # nao le arquivo: nao e desta conversa
+     if rel in CRU_COM_RAZAO:
+     continue
+     fora.appe…
 
-· Pouncing… (8h 28m 9s · ↓ 1.0m tokens)
+✽ Pouncing… (8h 33m 12s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
@@ -148,6 +140,6 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
