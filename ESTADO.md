@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:225 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:30:31.**
+**Medido em 01/10/2026 17:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava` |
+| `HEAD` local | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
 | `origin/main` | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas
 e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava
 8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash
 fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero da sombra era 32/0
 3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas
-4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/regras.py
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_s5b_regra_pontualidade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,14 +95,6 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Lei nova registrada e aplicada. Primeiro o registro, no mesmo turno.
-
-  Ran 4 shell commands
-
-● Agora a segunda metade da ordem: medir a folga do 12x36 pelas duas hipóteses.
-
-  Ran 1 shell command
-
 ● As duas hipóteses dele caem: o motor produz periodos_ft = 0. Medindo por que.
 
   Ran 2 shell commands
@@ -129,9 +118,17 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 
 ● Lei (2) mordeu: antecipada +184,32 → +0,80. A folga não se moveu — então é a terceira causa. Medindo-a.
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Fermenting… (24m 21s · ↓ 37.0k tokens)
+● Confirmado, e são duas causas no mesmo número. Publicando.
+
+  Esperar o push e confirmar · 3m 38s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 55; if grep -q "^RC=" $S/push_lei2.log 2>/dev/null; then break; fi; done; grep -E "main ->|^RC=|error:|^(FAIL|ERROR):|^(OK|FAILED)"
+     $S/pus… (3m 38s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Fermenting… (29m 34s · ↓ 43.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
