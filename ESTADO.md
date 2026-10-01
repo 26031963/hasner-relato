@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:06:31.**
+**Medido em 01/10/2026 15:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta` |
+| `HEAD` local | `ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67 pacotes da esteira` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67 pacotes da esteira
+541a4878 O15 FECHADA: a pauta do DP esta VIVA em prod, e eu conferi em vez de refazer
 11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta
 f55d5526 O14 publicado e no ar; a celula diz o numero e o smoke que falta
 099fa332 O14: o app dos ~750 para de inventar turno aberto no cross-meia-noite -- 1.349 avisos FALSOS saem, 0 batidas somem
-1c1ac3e0 O13 FECHADA: o codigo estava curado e a guarda que faltava esta verde (8 casos, por AST)
-c69aadf2 S5b-4-REGRAS: celula de estado dentro do teto, com os 5 observaveis feitos e o ! nomeado
 ```
 
 ## `git status --short`
@@ -95,11 +95,6 @@ c69aadf2 S5b-4-REGRAS: celula de estado dentro do teto, com os 5 observaveis fei
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Duas vezes eu estava errado, e disse onde
-
-  (1) Atribuí o zero do col142 ao gate do T8 e pedi a lei em cima disso. Ele é MotorComercial, e o gate não está no caminho dele — eu havia chamado
-  aplicar_tolerancia à mão e li o resultado como se fosse o do motor. Quem me pegou foi o próprio RED (dava zero até no caso de 90 min). O achado
-  verdadeiro é maior: 223 de 571 colabs com horas_atraso = 0,00 h exato — três classes de motor nunca julgam pontualidade.
 
   (2) Publiquei que as +1.035,67 h de folga eram fonte errada no chamador. Troquei o juiz, rodei o DIFF: as mesmas 1.035,67 h. E há três números para a
   mesma rubrica — motor 595,23 · gravado 217,64 · calculador 1.253,31. Não escolho qual está certo: folga trabalhada paga 100%.
@@ -118,13 +113,18 @@ c69aadf2 S5b-4-REGRAS: celula de estado dentro do teto, com os 5 observaveis fei
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O15 -- PAUTA-DP-DIAS-EM-ABERTO (Ronald 24/09 08:4x, prazo 10:00) -- folha de hoje: Pauta pro DP com dias_em_aberto (2
 
-● Ver o cron e rodar a pauta em dry · 1m 34s
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '920,932p' app/config/crons.py; echo "=== DRY em prod (so leitura) ==="; timeout 520 docker exec saas_core
-     python manage.py tenant_command pauta_dia_em_aberto --schema=juliani --por admin --dry 2>&1 | grep -vE "objects imported" | head -22 (1m 33s · 15
-     lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Fechar o O16 com a prova
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='| O16 '
+     i=t.find(A); fim=t.index('\n', i)
+     c=t[i:fim].split('|')
+     novo = (' **FECHADA: conferido hoje, a classe DES…
 
-· Pouncing… (7h 33m 55s · ↓ 913.1k tokens)
+✢ Pouncing… (7h 39m 25s · ↓ 920.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
