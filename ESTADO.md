@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:130 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:216 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:52:31.**
+**Medido em 01/10/2026 19:58:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +98,44 @@ c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Agora o vínculo do col369, e os dados confirmaram a sua ordem ao pé da letra: EC 1296 é ARCOS - PSR, ciclo 6x1, folga_dia_semana='4' = sexta; EC 1313 é
-  6x1 com folga_dia_semana='' — não declara folga nenhuma. O dry-run das duas leituras tornou a divergência um fato medido, não opinião:
-
-  - doutrina (o vigente em D fecha em D−1): 1296 reaberto, 1313 fechado em 21/09, absorver não pega nada → sem buraco.
-  - literal (absorver de 19/09): 1296 reaberto, 1313 absorvido → 19 a 21/09 fica sem vínculo ativo nenhum, porque o EC 322 termina em 21/09 e está
-    inativo.
-
-  O DIFF de folha da leitura correta está rodando na sombra. Se mover qualquer hora, é PAREI com a tabela. A porta reabrir_vigencia_impossivel — que não
-  existia e sem a qual só restava o update solto que você proibiu — passou com 21 testes OK, incluindo o selo de AST que exige que todo escritor de
-  data_fim chame o juiz único.
-
-✻ Baked for 11m 18s · done 7:48 PM · 1 shell, 3 monitors still running
-
-● Monitor event: "DIFF de folha do vinculo 1296 na sombra"
+     --line-buffered "DI… · stopped
 
   Ran 4 shell commands
 
-● Monitor(DIFF de folha do vinculo 1296 na sombra (2a tentativa))
-  ⎿  Monitor started · task by3lad6ua · timeout 1800s
+❯ aval Ronald 01/10 20:0x -- LOTE 1 de pendentes; entra depois do col369, nao corta a S5b. Re-medir cada um antes de agir; fechar o item no PENDENTES ao
+  cumprir.
+  1. FOLHA-ZERO-COM-BATIDA (col924, col43): autorizado o CENSO de frota, so leitura -- quantos colabs com batida apuravel e folha zero, por causa e por
+  competencia. Publicar a tabela; a cura vem depois, com numero.
+  2. REGIME emp3 = CLT (corte dado em 21/09): vale da competencia 09 em diante; 08 e anteriores ficam como estao (pagas fora do sistema, corte 27/09).
+  NAO aplicar ainda: publicar o DIFF de frota da 09 e da 10 por rubrica e por colab e PARAR com a tabela para o meu ! final.
+  3. col650: abrir Pauta DP pedindo a data de fim da ausencia #3186 (hoje sem fim, dias_corridos=1). Depois do cadastro: retratar pela porta os chamados
+  abertos contra ela e relavrar a competencia aberta. 08 nao se retifica.
+  4. col935: abrir Pauta DP com os dois numeros -- batidas em 05 e 06/09, admissao/vinculo em 07/09, diferenca de 9,11 h de adicional noturno. O DP
+  decide: admissao em 05/09, ou as batidas nao valem. Nada se aplica sem a resposta.
+  5. FASE-12x36-PROPOSTAS (51 colabs abaixo de 90%): nenhuma proposta se aplica. A lista vira pauta da supervisao "tipo de escala nao descreve o
+  colaborador" (ex.: col221 trabalha 5x2). Os 3 de caminho conhecido (col899 vinculo duplo, col334 dois vinculos ativos, col451 batida retroativa):
+  publicar o DIFF de cada um e trazer para o !.
+     Segue a fila.
 
-● O DIFF do vínculo falhou na primeira tentativa por um erro meu de cópia velha: montei a árvore com git archive HEAD quando o HEAD ainda era de antes de
-  eu escrever o comando, e a sombra respondeu Unknown command: 'corrigir_vinculo_vigencia' (exit 91, nenhuma escrita). Reconstruí do HEAD atual e relancei
-  — a foto do antes já tinha saído e será refeita no mesmo par, sob uma trava só, que é a condição para o par valer.
+  Ran 3 shell commands
 
-  Também commitei uma correção pequena que o selo pegou: passei motivo='vigencia impossivel reparada' num campo que é CHOICE de 20 chars (admissao |
-  transferencia | desligamento | mudanca | correcao) — três casos voltaram DataError. O valor certo para este ato é correcao ("Correção retroativa") e a
-  prosa vai em obs, que tem 400. Depois disso, 21 testes de vigência OK, incluindo o selo de AST que exige que todo escritor de data_fim passe pelo juiz
-  único.
+❯ aval Ronald 01/10 20:0x: ordem -- terminar o col369 (ja em curso) e voltar para a S5b ate o DIFF fechar; o LOTE 1 de pendentes so entra DEPOIS do ! da
+  troca. Segue a fila.
 
-  Estado da fila, para situar: a pontualidade em turno aberto está no ar e empurrada (c965b638..c07a13c5); a 09 está aplicada, provada e com TXT novo pela
-  porta; o vínculo do col369 está medindo na sombra. Depois dele a ORDEM VIVA volta para a S5b, que espera o seu ! da troca — e ficam registrados, com
-  número, o JANELA-DA-AUTORIDADE-PERDE-O-DIA-20 (109 colabs com a saída do dia 20 fora da janela da tela) e o PREVISTO-EM-DUAS-FONTES.
+● Commitar o PAREI do vinculo e a ordem da fila
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='app/docs/PROMPTS.md'
+     t=io.open(P,encoding='utf-8').read()
+     nova = ("- **01/10 ~20:0x — ORDEM da fila**: terminar o **col369** (ja em curso) e **voltar para a S5b ate o DIFF "
+     "fechar**; o **LOTE 1 de pendentes …
 
-✻ Cooked for 51s · done 7:51 PM · 1 shell, 3 monitors still running
+✢ Perambulating… (3m 32s · ↓ 13.9k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
