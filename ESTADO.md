@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 03:01:15.**
+**Medido em 01/10/2026 03:06:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
+| `HEAD` local | `a364dbe1 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada` |
 | `origin/main` | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a364dbe1 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada
 a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia
 96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando
 c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela
 e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos
-2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/services/dia_decidido.py
- M app/ponto/services/espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,14 +95,6 @@ e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Medido com precisão: (a) a parcial NÃO está muda — 06/08 diz 'Declaração (abonado)'; falta só o 4h30 que a ordem pede. (b) a pendente está muda — 20/08 dá palavra='', exatamente
-  o descrito. Lendo a autoridade da palavra:
-
-  Ran 1 shell command
-
 ● A autoridade real é ponto/services/dia_decidido.py::do_dia. Lendo-a para encaixar as duas coisas:
 
   Searched for 3 patterns, ran 1 shell command
@@ -119,17 +109,25 @@ e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio 
 
 ● para='cobranca' exclui rejeitada e não há para declarado que a inclua — então faço a pendente (que é o RED) e registro a rejeitada medida. Ligando no montador:
 
-  Ligar a pendente e rodar ponto e relatorios
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='ponto/services/espelho.py'; t=io.open(P,encoding='utf-8').read()
-     v = " '_cobertura_folha': _aus_folha_por_data.get(data),"
-     assert t.count(v)==1
-     n = """ '_cobertura_folha': _aus_folha_por_data.get(data),
-     # O PEDIDO QUE NINGUEM DECIDIU (O8): …
+  Ran 1 shell command
 
-· Percolating… (4h 58m 39s · ↓ 482.8k tokens)
+● 2840 testes OK em ponto e relatorios. Provando o RED em prod (leitura só):
+
+  Ran 1 shell command
+
+● RED curado literalmente: 06/08 → 'Declaração 4h30 (abonado)' e 20/08 → 'Declaração aguardando decisao' com veredito trabalhou (aparece sem abonar). Dias com ausência e palavra
+  muda: 0. O selo:
+
+  Ran 1 shell command
+
+● 8 OK. Fechando o O8 — com a metade da rejeitada registrada com a razão medida:
+
+  Conferir o push do O8 · 3m 39s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o8.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (3m 38s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (5h 4m 5s · ↓ 490.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

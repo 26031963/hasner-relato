@@ -16,7 +16,7 @@ lista — ela e o que esta EM PE._
 | **O5** | DECK-30DIAS | **FECHADA 01/10 01:5x -- NO AR** |
 | **O6** | PORTA-RETRATAR-BATIDA | **FECHADA 01/10 02:0x -- a fatia estava  |
 | **O7** | COL857 / ORIGEM-DA-BATIDA | **FECHADA 01/10 02:3x -- as duas medicoe |
-| **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **em fila** |
+| **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **FECHADA 01/10 03:0x no (a) e no PENDEN |
 | **O9** | PDF-E-O-ESPELHO | espera corte |
 | **O10** | TROCA-DE-PLANTAO | espera corte |
 | **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera aval |
