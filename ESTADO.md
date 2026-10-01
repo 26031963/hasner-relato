@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:50:46.**
+**Medido em 01/10/2026 14:55:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `6bbfc0fe HIGIENE-DE-CONTEXTO: itens 1-4 e 6 FECHADOS; o 5 espera uma linha dele, e a razao e a propria proibicao da ordem` |
+| `HEAD` local | `c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- desenho publicado, obra esperando o !` |
 | `origin/main` | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- desenho publicado, obra esperando o !
+a642dbb0 HIGIENE-DE-CONTEXTO: celula de estado dentro do teto de 300 que ela mesma criou
 6bbfc0fe HIGIENE-DE-CONTEXTO: itens 1-4 e 6 FECHADOS; o 5 espera uma linha dele, e a razao e a propria proibicao da ordem
 ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da folga MUDOU DE LUGAR
 2b7e3691 Duas rubricas saiam CALADAS do ramo da folga, e o selo que eu escrevi hoje para isso pegou as duas
-318c69fc Dieta parte 2: celulas do BACKLOG de 67.882 para 22.288 chars, 0 acima de 300 -- e o item 5 fica INCOMPLETO
-2082e03d Dieta, parte 1: o RELATO cai de 1,77 MB para 393 KB (-78%), e o handoff passa a ler TRAVAS em vez de processos
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +97,9 @@ ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  E eu errei a causa do col142, no meio disso. Atribuí o zero dele ao gate do T8 e pedi a lei em cima disso — ele é MotorComercial, e o gate não está no
+  caminho dele. Quem me pegou foi o próprio RED. Corrigi onde estava escrito, e o achado verdadeiro é maior: MotorComercial, Motor12x36 e
   MotorIntermitente não chamam aplicar_tolerancia — 223 de 571 colabs da 10 com horas_atraso = 0,00 h exato. É deliberado?
 
   S5b-4-REGRAS — as 4 regras escritas por importação, NAO_DECIDE só com o item 5, DIFF contra o gravado publicado. A regra 4 tirou o intermitente (ele
@@ -111,20 +116,17 @@ ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da
   ⎿  Stop hook error: siga: HIGIENE-DE-CONTEXTO -- Infra de sessao (ordem Ronald 01/10 14:0x), nenhuma lei de negocio. bin/handoff_sessao.sh ->
   app/docs/HANDOFF-
 
-● Declarar o estado da higiene e conferir o hook · 1m 43s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, re, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     A='| HIGIENE-DE-CONTEXTO |'
-     assert t.count(A)==1
-     i=t.find(A); fim=t.index('\n', i)
-     c=t[i… (1m 43s · 5 lines)
+  Read 1 file, ran 9 shell commands
+
+● The fila's next item is one I can still advance myself — the folga gap is in my own chamador.
+
+  Ler o DIFF v2 · 1m 29s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 50; if grep -q "^RC=" $S/diff_s5b_v2.log 2>/dev/null; then break; fi; done
+     sed -n '/DIFF DE FROTA CONTRA O GRAVADO/,/^$/p' $S/diff_s5b_v2.… (1m 28s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Pouncing… (7h 18m 10s · ↓ 866.4k tokens)
+✽ Pouncing… (7h 23m 10s · ↓ 879.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
@@ -133,6 +135,6 @@ ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
