@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:23:01.**
+**Medido em 01/10/2026 15:28:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia` |
+| `HEAD` local | `c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar
+f21721aa O19 lado SERVIDOR: a causa do "o servidor nao recebe o POST" era o LUGAR do log, e o numero explica o BO
+65838e75 O18 FECHADA -- e apagando o residuo eu causei o proprio defeito que a obra existe para acabar
 1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia
 dfe50274 bin/backlog_estado.py: a celula de estado passa a ser escrita por comando, com o teto e o veredito guardados
-ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67 pacotes da esteira
-541a4878 O15 FECHADA: a pauta do DP esta VIVA em prod, e eu conferi em vez de refazer
-11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M bin/esteira_classes.py
 ?? bin/keepalive.sh
-?? bin/tests/test_apagar_residuo_tudo_ou_nada.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -98,36 +95,36 @@ ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2. 223 colabs sem pontualidade — é deliberado?
-  3. Folga: por que o motor vivo discorda do gravado?
-  4. Relavra da 10 — o comando está no RELATO; meu ambiente barrou a escrita.
-  5. Gestão de HE — desenho publicado (col616: 13 → 3 com o limite), espero seu ok.
-  6. CLAUDE.md: dos 27 parágrafos, zero é só história. Destrava com "pode quebrar o parágrafo em dois, sem mudar palavra".
 
-  Fila 1 agora aponta O15 (Pauta DP dias em aberto), que eu não toquei.
+  O contador da trava A lia errado o próprio número. Dizia "132 h — o fabricante NÃO disse 'sem item livre', olhe o log". O número está certo; a leitura
+  mandava procurar causa onde ela não está: a esteira está pausada pelo Ronald desde 26/09 10:01, com QUEM, POR_QUE e SAÍDA escritos em esteira.pausada.
+  Mandar o leitor ao log para redescobrir um fato declarado num arquivo é o que ensina o admin a ignorar o contador. Curado, com selo que morde dos dois
+  lados.
+
+  Apagando o resíduo eu recriei o defeito que a obra existe para acabar. Dos 12, 8 saíram e 4 ficaram com um arquivo de root — e a casca perdeu o
+  msg_commit.txt, que é justamente o que faz um pacote ser resíduo. Os 4 mudaram de classe: pacotes_portao 17 → 21. O apagar parcial escondeu quatro
+  pacotes em "espera o mundo". Repus da cópia, e a porta agora pergunta o dono antes e é tudo-ou-nada por pacote.
+
+  Ferramenta nova
+
+  bin/backlog_estado.py — escrevo célula por comando. Eu havia passado do teto de 300 cinco vezes à mão; e ele guarda o veredito do hook antes/depois, que
+  foi o que pegou o espera o ! perdido no encurtamento em lote.
+
+  Próximo da fila: O19, não tocado. As seis perguntas suas do relato anterior seguem abertas.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O15 -- PAUTA-DP-DIAS-EM-ABERTO (Ronald 24/09 08:4x, prazo 10:00) -- folha de hoje: Pauta pro DP com dias_em_aberto (2
+  ⎿  Stop hook error: siga: O19 -- BO-APP-ANDROID-ATESTADO (Ronald 24/09 10:2x, col878) -- "Erro ao enviar" em Nova ausencia COM foto da CAMERA,
 
-  Listed 1 directory, ran 21 shell commands
+  Ran 4 shell commands
 
-● O17 está feito — mas o contador dele acusa 132 h sem ler a pausa declarada. Curando isso.
+● O19 lado servidor: medi o limite e a hipótese fecha com o BO. Curando o que é do servidor.
 
-  Read 1 file, ran 9 shell commands
+● Encurtar e fechar a celula do O19
+  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/backlog_estado.py "O19" '**LADO SERVIDOR no ar** (deploy 15:28; o lado APP e o fork de 24/09). A causa
+     do "servidor nao recebe" era o LUGAR do log -- vinha depois de `request.data`, que parseia, e parse que estoura mata o log. O `CONTENT_LENGTH` sai
+     ANTE…
 
-● Background command "Achar onde as paradas apareciam" completed (exit code 0)
-
-  Ran 1 shell command
-
-● The delete left 4 stuck — and they got reclassified instead of staying visible. That's the saco the item exists to prevent.
-
-  Varrer os selos e fechar o O18 · 28s
-  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); [ $? -ne 0 ] && { echo "### VERMELHO: $f"; echo "$out" |
-     head -3; }; done; echo "--- varredura ok ---"
-     python3 bin/backlog_estado.py "O18" '**FECHADA**: `pacotes_sem_classe=0`, as 4 classes vivas, `esteira_stat… (28s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Pouncing… (7h 50m 25s · ↓ 939.5k tokens)
+✢ Pouncing… (7h 55m 55s · ↓ 954.8k tokens · thought for 5s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
