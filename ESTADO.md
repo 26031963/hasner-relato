@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:24:31.**
+**Medido em 01/10/2026 14:30:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
-| `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **12** |
+| `origin/main` | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -42,6 +42,9 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/ponto/management/commands/diff_calculador.py
+ M bin/handoff_sessao.sh
+ M bin/tests/test_handoff_sessao.sh
+ M bin/tests/test_trava_teste.sh
 ?? app/docs/RELATO-ARQUIVO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -99,11 +102,6 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  linhas PAREI do topo do RELATO, avais recebidos hoje ainda nao cumpridos (de PROMPTS.md), processos de fundo vivos, proximo passo em 1 linha. Teto: 60
-  linhas.
-  2. Hook PreCompact (manual e auto) chama o script. Hook SessionStart com matcher compact imprime o HANDOFF-SESSAO.md (stdout entra no contexto).
-  3. Regra no CLAUDE.md, secao 7b: ao FECHAR marco, rodar o script e escrever no painel "MARCO FECHADO -- pode compactar". Nunca no meio de DIFF ou
-  apply.
   4. Dieta de prosa: celula de estado do BACKLOG com no maximo 300 caracteres (fato, numero, commit); a historia mora so no RELATO. RELATO com mais de 3
   dias vai para RELATO-ARQUIVO.md no mesmo commit; o publicado continua lendo o vivo.
   5. CLAUDE.md: as historias "nasceu medida" saem para app/docs/LAPIDES.md com ponteiro; ficam as regras. Meta: metade do tamanho.
@@ -123,12 +121,17 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 
 ● The item in curso closed. Building the handoff (reusing the Stop hook's readers, not writing new ones).
 
-● Rodar todos os selos de host · 2m 26s
-  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; if [ $rc -ne 0 ]; then echo "### VERMELHO: $f"; echo
-     "$out" | head -5; fi; done; echo "--- varredura concluida ---" (2m 25s · 9 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Trocar processos por travas e partir os literais
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='bin/handoff_sessao.sh'
+     t=io.open(P,encoding='utf-8').read()
+     i=t.index(' echo "## PROCESSOS DE FUNDO"')
+     j=t.index(' echo "## PROXIMO PASSO"')
+     NOVO = ''' # RECURSO TOMADO, NAO PROCESSO VIVO -- e a troca nao e co…
 
-· Pouncing… (6h 51m 55s · ↓ 812.1k tokens)
+✢ Pouncing… (6h 57m 25s · ↓ 822.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
