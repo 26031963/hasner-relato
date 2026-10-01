@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:48 AFIRMA ato sem PROVA ao lado -- ## O9 passo 1 FEITO e verde; e o passo 3 achou TRES numeros para a mesma pergunta
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:45 AFIRMA ato sem PROVA ao lado -- **APLICADO 01/10 11:57** com usuario e motivo: vigente **id=26, hash `0ae5da67364c`, 211 linhas**; a anterior
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:56:01.**
+**Medido em 01/10/2026 12:01:20.**
 
 | | |
 |---|---|
-| `HEAD` local | `7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista` |
+| `HEAD` local | `66e9fb39 Rubrica 0200: um colaborador, 5,00 h -- o TXT da emp2 regerado, e o emissor nunca multiplicou` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+66e9fb39 Rubrica 0200: um colaborador, 5,00 h -- o TXT da emp2 regerado, e o emissor nunca multiplicou
 7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista
 04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado
 59429b00 O9 passo 1 verde, e o passo 3 achou TRES numeros para a mesma pergunta
 6ce20522 O rodape do TICKETS volta a bater com origin/main
-cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava o O9
 ```
 
 ## `git status --short`
 
 ```
-?? app/folha/tests/test_emissor_nao_multiplica.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,39 +95,39 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────┼─────────────┼───────────────────┼────────────┼──────────────┤
-  │ emp4 (84c78cd0) │ 0           │ —                 │ 0          │ 0            │
-  └─────────────────┴─────────────┴───────────────────┴────────────┴──────────────┘
+  ┌──────┬─────────┬───────┬────────┬───────────────────────────────────────────┐
+  │ mat  │ rubrica │ antes │ depois │                   quem                    │
+  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
+  │ 2038 │ 0200    │ 10,00 │ 5,00   │ col881 — a dobra corrigida                │
+  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
+  │ 2026 │ 0200    │ —     │ 7,29   │ col864 — feriado 100% que não era emitido │
+  ├──────┼─────────┼───────┼────────┼───────────────────────────────────────────┤
+  │ 756  │ 0243    │ —     │ 12,00  │ col237 — intra indenizada                 │
+  └──────┴─────────┴───────┴────────┴───────────────────────────────────────────┘
 
-  Um colaborador, 5,00 h. E a conclusão importa: o emissor não multiplica — 13 de 14 linhas batem exatamente com o gravado. O 10,00 do col881 veio do
-  gravado dele, que ainda carregava o valor da lavra antiga quando o TXT saiu.
+  As três batem exatamente com o gravado. Nenhuma surpresa: cada linha que se move é o TXT alcançando o gravado.
 
-  O commit, nomeado, e a dobra era deliberada:
-  - Nasceu 19/09 15:10, 77b86932 — "[CLASSE3-FOLGA-100] o plantão batido em dia de folga, com a escala certa, paga 100% na rubrica 200". Deliberada: a
-    intenção era pagar dobrado.
-  - Saiu 27/09 00:53, c6c3785b, quando a lavra passou a somar a hora limpa (minutos_trabalhados / 60).
-  - Não era o cadastro feriado_12x36_em_dobra: no col881 ele é False e horas_extras_100_feriado é 0,00 — os 10,00 vinham de horas_folga_trabalhada.
+  Aplicado 11:57 — vigente id=26, hash 0ae5da67364c, 211 linhas; a anterior id=23 invalidada pela porta, com conteúdo e hash intactos; reversão em
+  logs/txt_dominio/; nome canônico inalterado (DominioCustomizavel2_J.A_Julian_092026.txt).
 
-  Com a sua informação nova, a intenção de 19/09 estava errada na origem: o Domínio já aplica 200% na rubrica, então mandar a hora dobrada paga 400%.
+  O selo que você pediu está verde: por AST, nenhum campo de hora do gravado sai multiplicado do emissor — nas três formas, com a divisão por 60
+  explicitamente fora (é unidade, não escala) e um caso que morde cada forma. A lápide cita a fonte: rubricas_dominio.txt, coluna 32, percentual 200,0000.
 
-  O selo pedido está escrito e verde (folha/tests/test_emissor_nao_multiplica.py): por AST, nenhum campo de hora do gravado pode sair multiplicado do
-  emissor — nas três formas (fech.x * 2, 2 * fech.x, getattr(fech,'x') * 2), com a divisão por 60 explicitamente fora (é unidade, não escala), e um caso
-  que morde cada forma. A lápide cita a fonte da lei: rubricas_dominio.txt, coluna 32, percentual 200,0000.
-
-  E a suite limpa da main fechou: 9.033 testes, OK — os 14 carimbos, a rota morta e o filtro de janela do retrato estão provados.
-
-  Próximo ato, agora que nomear e medir estão feitos: regerar a emp2 (uma linha muda, de 10,00 para 5,00 no col881, e o DIFF já está publicado), depois
-  merge+deploy do expandido e lavrar_he_pendente --apply.
+  A suite limpa da main fechou em 9.033 testes OK, então o que está no ar está provado.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O10 -- TROCA-DE-PLANTAO (corte Ronald 23/09 18:3x, detalhado as 20:3x: nasce como 4a opcao do Resolver dia -- "Trocou
 
-● Ler o DIFF do TXT antes de aplicar
-  ⎿  $ cd /home/ronald/saas-hasner && A=$(ls -t logs/txt_dominio/ANTERIOR_emp2_092026_* | head -1); N=$(ls -t logs/txt_dominio/NOVO_emp2_092026_* | head
-     -1); echo "ANTERIOR=$A"; echo "NOVO=$N"; echo "=== o DIFF, linha a linha ==="; diff <(sort "$A") <(sort "$N") | head -20; echo "=== decodificado
-     ==="; …
+● Mover o formato para o leitor e rodar os selos e o ruff
+  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     # o FORMATO E DO LEITOR: tirar do escritor e derivar na view, para o retrato VELHO (sem `*_br`) nao
+     # renderizar "( a )" na faixa entre o deploy e a relavra.
+     P='app/ponto/services/he_pendente_lavrado.py'
+     t=…
 
-✢ Pouncing… (4h 23m 25s · ↓ 438.1k tokens)
+✶ Pouncing… (4h 28m 44s · ↓ 452.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
