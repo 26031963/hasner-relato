@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:313 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:367 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:13:51.**
+**Medido em 01/10/2026 14:19:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL` |
+| `HEAD` local | `02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,22 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO
 62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL
 baa66320 CORRECAO: eu errei a causa do col142, e foi o meu proprio RED que pegou -- e o achado verdadeiro e maior
 f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha no alcance declarado -- PAREI com o numero
 8b8c0af4 LEI recebida (L-084 vence o T8): registrada, com item e com a MEDICAO que nao fecha no alcance declarado
-2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
  M app/ponto/management/commands/diff_calculador.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/tests/test_l084_vence_o_t8.py
+?? app/docs/HANDOFF-SESSAO.md
+?? bin/handoff_sessao.sh
 ?? bin/keepalive.sh
+?? bin/tests/test_handoff_sessao.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -100,11 +99,6 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Found it: the cure as ordered creates false atraso on exactly the two cases he excluded. The mechanism names itself.
-
-  Ran 1 shell command
-
-❯ aval Ronald 01/10 14:0x -- HIGIENE-DE-CONTEXTO, infra da sessao, nenhuma lei de negocio. Entra ao fechar o item em curso; nao corta a S5b.
 
   1. bin/handoff_sessao.sh: grava app/docs/HANDOFF-SESSAO.md por COMANDO, sem prosa -- HEAD e origin, git status curto, ORDEM VIVA e o item em curso,
   linhas PAREI do topo do RELATO, avais recebidos hoje ainda nao cumpridos (de PROMPTS.md), processos de fundo vivos, proximo passo em 1 linha. Teto: 60
@@ -123,13 +117,18 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
   CUSTO: 1 comando por marco; a celula curta obriga a abrir o RELATO para o detalhe.
   Segue a fila; PAREI so em lei ou !.
 
-● Ler o DIFF do recorte · 9m 4s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 50; if ! pgrep -f "simular_folha" >/dev/null 2>&1; then break; fi; done
-     grep -E "DIFF_FOLHA|mudaram=|comparar rc|RC=|FALHOU" $S/t8b/diff.l… (9m 3s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 5 shell commands
 
-✢ Pouncing… (6h 41m 15s · ↓ 778.0k tokens)
+● DIFF_FOLHA=0 with the recorte. Measuring why, because that zero is the answer.
+
+  Ran 4 shell commands
+
+● The item in curso closed. Building the handoff (reusing the Stop hook's readers, not writing new ones).
+
+● Ver o topo do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && head -6 app/docs/RELATO.md
+
+✢ Pouncing… (6h 46m 25s · ↓ 799.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
