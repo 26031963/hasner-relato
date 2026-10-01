@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:50:46.**
+**Medido em 01/10/2026 02:56:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
-| `origin/main` | `96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,39 +95,39 @@ e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Achado de passagem: disputa_s84_retro não está em ORIGEM_CHOICES — 569 marcações com um valor que o vocabulário do próprio modelo não conhece. Entrou numa lista que só encolhe,
+  com selo. E registrei, medido, que a célula da grade não carrega o pk da batida: marcar por marco exige tocar _match_marcos, juiz compartilhado — fatia própria. Nada retratado,
+  como a ordem manda.
 
-● O PDF lê dia['batidas'], que são objetos Batida reais do montador do espelho — então ele pode receber a procedência pelo mesmo caminho. Achando onde o montador marca a batida:
+  E usar a porta duas vezes revelou que ela não cumpria a própria promessa: a lápide diz que --sem-sombra grava o motivo na trilha, e o deploy.sh só fazia echo — o motivo só
+  virava arquivo quando o integrador redirecionava a saída. Em deploy manual, que é justamente quando a trilha importa, a frase morria com a sessão. Agora o deploy escreve a
+  própria linha; as duas passadas de hoje ganharam a sua, com a nota de que foram escritas depois. E o motivo do segundo saiu sem palavras porque eu passei backtick dentro de
+  aspas duplas e o bash executou — guardei a generalização na memória.
 
-  Searched for 2 patterns, ran 4 shell commands
+  Empurrado: c00d62c3..a8ed55ca, com deploy nas três cascas e importerror_500=0. Continuam com você o ! do TXT da emp2, a resposta do S5b e os dois smokes.
 
-● 243 OK, incluindo o app relatorios inteiro. Fechando o O7:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O8 -- PDF-ROTULO-PARCIAL-E-PENDENTE (23/09 11:xx, medido col42) -- relatorios/pdf_espelho.py:360 faz continue na aus
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Background command "Fechar o O7, commitar e empurrar" completed (exit code 0)
+● O8 é cura de tela com a regra "o rótulo sai da MESMA autoridade do espelho". Lendo o continue e procurando o leitor do espelho:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● Background command "Conferir o push do O7" completed (exit code 0)
+● Achado importante: o rotulo_ausencia do espelho morreu e a autoridade virou palavra_dia — que o PDF já imprime. Então a pergunta é se a palavra cobre parcial e pendente. Medindo
+  os dois dias do RED:
 
-● O backtick no argumento --sem-sombra foi executado pelo bash e comeu palavras do motivo — a mesma família da lição que já está na minha memória sobre -m em commit. Conferindo o
-  que ficou gravado:
+  Searched for 1 pattern, ran 2 shell commands
 
-  Ran 2 shell commands
+● Medido com precisão: (a) a parcial NÃO está muda — 06/08 diz 'Declaração (abonado)'; falta só o 4h30 que a ordem pede. (b) a pendente está muda — 20/08 dá palavra='', exatamente
+  o descrito. Lendo a autoridade da palavra:
 
-● Dois achados. O meu backtick comeu palavras — mas o maior é que o motivo não é persistido em deploy manual: a lápide promete "com o motivo gravado na trilha do log do deploy", e
-  isso só acontece quando o integrador redireciona a saída. Curando a promessa:
+  Ler a autoridade da palavra do dia
+  ⎿  $ grep -rn 'def aplicar_palavra_do_dia' --include=*.py . | head -2; F=$(grep -rln 'def aplicar_palavra_do_dia' --include=*.py . | head -1); echo "arquivo: $F"; grep -n 'def
+     aplicar_palavra_do_dia' -A 46 "$F" | head -52
 
-  Ran 4 shell commands
-
-● Background command "Commitar a cura da trilha e registrar a licao" completed (exit code 0)
-
-  Curar o placar e reempurrar · 7m 28s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_trilha2.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
-     sleep 10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 27s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✽ Percolating… (4h 48m 10s · ↓ 470.2k tokens)
+✢ Percolating… (4h 53m 25s · ↓ 476.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
