@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:568 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:571 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:50:01.**
+**Medido em 01/10/2026 18:55:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +97,44 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Searched for 1 pattern, ran 7 shell commands
 
-  Searched for 4 patterns, read 1 file, listed 1 directory, ran 33 shell commands
+● Background command "Aguardar o veredito da suite" completed (exit code 0)
 
-● Background command "Esperar e ler o DIFF de frota" completed (exit code 0)
+  Read 1 file, ran 4 shell commands
 
-❯ aval Ronald 01/10 18:3x UI-RESPOSTA-DIZ-O-QUE-E: OK nas 4 frases e na confirmacao do Reabrir. Escolha (A): delta_da_resposta devolve sinal_min ao lado
-  de delta_min, mesma funcao, juiz novo = 0; sobe pela main junto do item 5. DOIS AJUSTES: (1) a faixa "atraso/saida antecipada admitidos" comeca na
-  tolerancia com que a FOLHA julga (TOLERANCIA_CONFORMIDADE_MIN, a mesma de _envelope_lote_min), nao em 5 -- a frase nunca promete desconto que a folha
-  nao faz (RED col290 +7 min); (2) no regime em que o motor nao julga pontualidade (lei 2), a frase diz so "Validar grava HH:MM no espelho", sem "vai
-  para a folha". Fila 2: nao corta a S5b. Segue a fila.
+● Enquanto a suite roda, o estado do marco:
 
-❯ aval Ronald 01/10 18:3x GESTAO-HE-CALENDARIO-CONTROLE: OK no desenho da 2a volta -- celula com numero (▲ antes, ▼ depois), tres estados por led + risco
-  + fundo, clicar MARCA e a barra unica confirma com motivo pela porta decidir_he, limite de decisao por cadastro (default 10 min, so de tela), ciencia
-  no padrao. Construir na raia wt-ui; a migration do cadastro sobe pela main. Fila 2: nao corta a S5b. Merge so com o meu smoke. Segue a fila !
+  PONTUALIDADE-EM-TURNO-ABERTO está commitada em 19e17c5f, com a lei que você citou (TETO TEMPORAL, seção 6 (b), de 08/08) e juiz novo = 0.
 
-❯ aval Ronald 01/10 18:4x -- AVAIS-NA-MESA, infra de sessao, nenhuma lei de negocio; nao corta a S5b.
-  1. bin/gerar_avais.py le app/docs/PENDENTES_RONALD.json e escreve app/docs/AVAIS.md: SO itens ABERTOS, uma linha cada -- id · tipo (! | lei |
-  ok-desenho | smoke) · desde · 1 frase com o numero · a FRASE PRONTA para eu colar (aval Ronald ...). Ordem: o que trava a fila 1 primeiro.
-  2. Todo item do JSON ganha estado (aberto | respondido | sem-motivo) e respondido_em; ao receber meu aval, o item FECHA no mesmo commit. Proposta
-  "antes do codigo" e smoke pendente tambem sao itens.
-  3. bin/relato.sh publica AVAIS.md no hasner-relato como arquivo proprio, fora da retencao por PROVA.
-  4. O painel escreve "AVAIS NA MESA: N" a cada fim de marco.
-     RESULTADOS OBSERVAVEIS: (1) AVAIS.md publicado com os itens de hoje (GESTAO-HE-CALENDARIO-CONTROLE, UI-RESPOSTA-DIZ-O-QUE-E, troca S5b, col369
-  vinculo 1296); (2) item respondido some na proxima geracao; (3) selo de host: item sem estado = vermelho, item aberto sem frase pronta = vermelho.
-     PROIBIDO: apagar historia do JSON (estado muda, texto fica); triar os 163 antigos (isso e do chat).
-     CUSTO: 1 campo a mais por item e fechar o item ao receber o aval.
-     Segue a fila.
+  - Onde a guarda mora: no laço por dia de MotorBase._aplicar_teto_pontualidade (:849), não em aplicar_tolerancia — a tolerância vê um par, e o par que
+    recebeu os 8,23 h do col890 (07:34→10:20) está fechado. Quem não fechou foi o turno, que é fato do dia. Os três caminhos que recalculam pontualidade
+    chamam esse laço, então a lei vale nos três sem se escrever três vezes.
+  - Par nulo é literal: col399 18:30E 18:30S, duração 0,0 min. Não criei limiar de duração ínfima — essa pergunta tem juiz próprio
+    (detectar_par_relampago, e core/juizes.py diz que nenhum outro leitor pergunta). O col473 (19:00E 19:23S, 23,6 min) não é nulo e a guarda não o toca.
+  - RED: 6 casos, 5 vermelhos na árvore do HEAD, OK na curada. O 6º (dia fechado, 40 min de atraso) passa nos dois mundos — é o que morde.
+  - DIFF de frota da 10, publicado antes: DIFF_FOLHA=7, 7 campo-colab descem, 0 sobe (antecipada −28,55 h, atraso −0,79 h, 5 colabs de emp2). No TXT muda
+    uma linha em toda a frota: emp3 col81, rubrica 8069 (horas faltas parcial), 5,12 → 2,61 h.
+  - A 09 está intacta — e a exposição dela é sua decisão: 61,30 h em 14 dia-colab de pontualidade lavrada sobre dia que o motor diz aberto, os maiores
+    col820 07/09 e 15/09 com 11,00 h cada. Item 09-TURNO-ABERTO-EXPOSTA, espera o !.
 
-  Searched for 4 patterns, read 1 file, listed 1 directory, ran 26 shell commands
+  Duas correções minhas, ditas onde estavam escritas: a primeira conta da exposição foi por forma (batidas em número ímpar) e dava 169 dia-colab / 126,29
+  h — inflava 12×; e eu escrevi "NO AR" no BACKLOG antes de deployar, o que ainda não é verdade: o .py só entra com o deploy.sh, que vem assim que a suíte
+  fechar.
 
-● Advising using Fable 5.1
+  As três ordens de 18:3x/18:4x estão registradas no mesmo ato (PROMPTS + células): UI-RESPOSTA com a escolha (A) e os dois ajustes (a faixa começa em
+  TOLERANCIA_CONFORMIDADE_MIN, não em 5; sem pontualidade a frase para em "grava no espelho"), GESTAO-HE-CALENDARIO-CONTROLE com o desenho aprovado e
+  merge só com o seu smoke, e AVAIS-NA-MESA como item novo. O hook continua nomeando a S5b, antes e depois da escrita.
 
-* Fermenting… (1h 43m 51s · ↓ 171.9k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Dois achados medidos no caminho, registrados e não curados: PREVISTO-EM-DUAS-FONTES (o teto lê 660 min para o col221 01/10, o DiaPago gravado diz 139 —
+  exatamente a duração do primeiro par) e a hipótese (b) da folga do 12x36, que morre pelo sinal: ela prevê troca (folga desce, trabalhadas sobe) e o DIFF
+  mostra os dois subindo, o que é dupla contagem, não fonte trocada.
+
+✻ Crunched for 1h 46m 52s · done 6:53 PM · 2 shells still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ deploya e roda o smoke do col890 em prod
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
