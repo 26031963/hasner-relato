@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:13:31.**
+**Medido em 30/09/2026 22:19:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu` |
+| `HEAD` local | `202edd94 Dois avais das 22:1x registrados: o modo DIA da porta (que e a saida do PAREI) e o relogio de 10px` |
 | `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,17 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+202edd94 Dois avais das 22:1x registrados: o modo DIA da porta (que e a saida do PAREI) e o relogio de 10px
 f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
 b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar
 7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
 e9e49d37 Merge branch 'raia-ui'
-42b3be2d COL900: a minha medicao estava contaminada TRES vezes, a porta nao faz o que a lei pede, e eu revertei 8 celulas
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
+ M app/static/css/hasner-ponto.css
+ M app/templates/core/_relogio_riscado.html
+?? app/core/tests/test_relogio_riscado_tamanho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,40 +98,40 @@ e9e49d37 Merge branch 'raia-ui'
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bt186hvo0.output (12 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push2.log (6 lines)
-
-● Deploy OK — três rotas provadas, importerror_500=0. Agora o push pela régua:
+● Background command "Curar rodape e placar, commitar os registros e empurrar" completed (exit code 0)
 
   Ran 1 shell command
 
-❯ aval Ronald 30/09 22:1x -- o relogio riscado saiu com 16px e o desenho da L-097 pede 10px. core/_relogio_riscado.html usa a classe icone-dia (16x16, a dos icones de DIA); ao
-  lado da batida em fonte 9px do calendario fica o dobro do texto. O relogio ganha tamanho PROPRIO de 10px (classe dele, nao a dos icones de dia), o risco acompanha, e o selo
-  cobra o numero. Vale para espelho, calendario e PDF, que leem o mesmo partial.
+● O PDF não lê o partial — ele imprime TEXTO por decisão técnica já registrada (tooltip não existe em PDF). Conferindo o resto antes de mexer:
 
-❯ aval Ronald 30/09 22:1x -- COL900, a saida: (a) a porta ganha o modo DIA (regenerar_celulas_dia), mesmo DNA e mesma trilha, com RED de que pedir 1 dia toca 1 celula. Aplica nos
-  dias em que a 1a batida crua confirma o template -- col900 primeiro (16 dias). col438 e col309 NAO se regeneram dia a dia: o cadastro deles nao descreve a rotina, vao para
-  CADASTRO x REALIDADE com o horario real ao lado, para o admin corrigir o vinculo. Depois: relavra, DIFF, PROVA e o TXT da 09. !
+  Searched for 1 pattern
 
-● Dois avais chegaram. Registro os dois e começo pelo push que já estava na mão:
+● Vou ver se algum selo existente crava icone-dia no riscado — se crava, ele quebra e está certo em quebrar:
+
+  Ran 2 shell commands
+
+● Nenhum selo existente crava icone-dia no relógio (a varredura L11 cobra o atributo width=, não a classe), então a cura não briga com a L11 — o relógio só ganha o seu número,
+  ainda uma vez, no CSS:
+
+  Ran 1 shell command
+
+● Agora o selo que cobra o número. Ele lê o CSS pela mesma função nos dois casos, para o 16 voltar VERMELHO:
 
   Read 1 file, ran 2 shell commands
 
-● Background command "Armar o push do O2 em segundo plano" completed (exit code 0)
+● O selo é unittest puro, sem Django nem banco — então roda sem disputar a pista com a suíte do push:
 
-  Read 1 file
+  Ran 1 shell command
 
-● Cura conhecida (pré-aprovada, causa em uma linha: o placar do topo guardava o push anterior). Curo, emendo e reempurro:
+● RED evidenciado contra o arquivo do HEAD (o que está no ar agora):
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● A célula do O2 saiu com um | duplicado (deixei o pipe no texto). Corrigindo:
+● 8 verdes, e o RED é literal: no HEAD o relógio herda .icone-dia = 16px e não tem classe própria. Fechando a célula e commitando:
 
-  Ran 3 shell commands
+● Running 1 shell command…
 
-● Background command "Curar o placar do topo e reempurrar" completed (exit code 0)
-
-✢ Percolating… (10m 56s · ↓ 20.0k tokens)
+✢ Percolating… (16m 25s · ↓ 38.9k tokens)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
