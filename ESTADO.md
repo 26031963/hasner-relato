@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:26:01.**
+**Medido em 01/10/2026 01:31:18.**
 
 | | |
 |---|---|
-| `HEAD` local | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
+| `HEAD` local | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
 | `origin/main` | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
 d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
 2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
 cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
 bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
-ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superesti
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (5) A regressão do P0 de 20/09, e não é o selo que já existia: core/datas_cravadas.py proíbe a forma (literal de data); faltava proibir o efeito. O relógio um dia, um mês e um
-  ano à frente não invalida; o argumento hoje não muda a resposta para nenhuma data entre 1999 e 2099 — era exatamente hoje <= ATE o mecanismo que levou os ~750 ao login às 00:00.
-
-  Um caso nasceu de erro meu e ficou como selo próprio: troquei a senha antes da primeira observação e acusei "o relógio re-validou". Era a linha de base — se ela carimbasse
-  desde, a primeira requisição de cada aparelho deslogaria a frota, o P0 com outro gatilho.
-
-  (4) A janela tem dentes: bin/janela_auth.sh olha o diff contra 10 sítios declarados e recusa sexta 18h+, fim de semana e 23:20–06:00 — ligada no deploy.sh, com saída de
-  emergência que grita no log. O selo interroga a guarda (modo --janela) em vez de reimplementar as bordas, e pegou que eu havia declarado api/views_auth.py, arquivo que nunca
-  existiu. Falta só o replay de 50 tokens na sombra.
-
-  E a pasta de selos de host fecha em 45/0. Os dois vermelhos que estavam lá desde o começo da noite eram a mesma família: regra escrita duas vezes, com a segunda cópia
-  envelhecendo. O cpuset à mão em dois scripts que já sourceavam a fonte única; e o topo da ORDEM VIVA cravado num literal do selo — a S3 fechou em 29/09, a S4 em 30/09, a fila
-  andou e o selo seguia cobrando a S3. A própria mensagem dele dizia a verdade sem saber: "ou a ordem mudou e o selo precisa saber". Matei a cópia com um marcador declarado no
-  BACKLOG, que os dois lados leem.
-
-  O pre-push não roda essa pasta (a régua roda), e é por isso que os dois passaram a noite vermelhos sem nenhum push reclamar.
-
-  Empurrado: cab53e2f..d6a08a38. Nada subiu para prod nestes dois commits (só bin/, selos e docs) — e a guarda nova, se eu tentasse, me barraria agora mesmo: são 01:2x.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O4 -- ACESSO-NUNCA-EM-LOTE (lei, 23/09 08:4x) -- (1) credencial so morre por evento dela; selo conta escritores capa
-
-● O item que falta é o replay de 50 tokens na sombra — não é travado por lei nem !, então construo. Vendo o que a sombra tem e de onde sai o claim:
+● core é app de tenant, então a tabela mora no schema juliani — rodando por tenant_command:
 
   Ran 1 shell command
 
-● Background command "Conferir o push" completed (exit code 0)
+● O replay roda, mas o resultado expõe um limite do universo que eu escolhi: legado: 0/50 — saturado em zero, então uma regressão que passasse a RECUSAR legado não apareceria.
+  Medindo a população que importa:
 
-● versao(user) sai de get_session_auth_hash()[:12], então o replay reconstrói o claim de cada usuário real na sombra. Escrevendo — e o arquivo guarda só a resposta, nunca o claim:
+  Ran 1 shell command
 
-● Running 1 shell command…
+● O universo que eu escolhi era o oposto da população em risco. Só 51 usuários têm linha de credencial; 850 nunca foram observados — e são justamente esses que tomam o caminho
+  legado e que o P0 derrubou. Corrigindo o universo para o acervo real de aparelhos:
 
-✢ Percolating… (3h 23m 26s · ↓ 350.1k tokens)
+  Ran 1 shell command
+
+● legado: 42/55 — os dois lados representados agora, e o comando avisa honestamente que o outro lado está saturado. Provando o --conferir:
+
+  Ran 1 shell command
+
+● Um defeito real: no --conferir o universo é re-sorteado e 5 da baseline não foram reconferidas. O universo tem de vir da própria baseline:
+
+  Ran 1 shell command
+
+● 55/55 comparadas, zero perdidas. O selo:
+
+  Ran 1 shell command
+
+● 29 OK. O4 completo nos seis itens. Fechando e empurrando:
+
+● Fechar o O4 e empurrar
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
+     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)"
+
+✻ Percolating… (3h 28m 42s · ↓ 373.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
