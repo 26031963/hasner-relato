@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:36:01.**
+**Medido em 01/10/2026 10:41:07.**
 
 | | |
 |---|---|
-| `HEAD` local | `9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato` |
+| `HEAD` local | `9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **25** |
+| commits a subir (`ahead`) | **29** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela
+1eb48a03 As tres ordens da manha entram em PROMPTS.md, e os tres achados restantes do col369 viram item
+83fe03cd A linha do TICKETS troca a forma antiga pela nova
+837a82e0 A Gestao de HE em forma B esta NO AR e o que falta e o smoke dele
 9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato
-b2575070 A FORMA B da Gestao de HE: a tira do periodo responde habito x evento sem o admin montar a conta de cabeca
-42b9b707 A celula do S5b passa a dizer 'espera o `!`' com as palavras que o hook le
-b6b9a620 S5b: o DIFF por rubrica esta na mesa, e com ele a razao de nao subir a troca sem o `!`
-fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-
-● Background command "Esperar o veredito da suite aparecer no log" completed (exit code 0)
-
-  Ran 4 shell commands
-
-● No ar. Merge 9f3deacb + bin/deploy.sh no mesmo ato, sem .py na árvore viva antes do reload. Relavrando o retrato agora para o denominador entrar na frase, e empurrando pela
-  régua.
-
-  Os 13 passos, atualizados para a forma B — /ponto/gestao-he/ (admin com autorizar_he):
-
-  1. Abrir com empresa/mês/ano → uma linha por colaborador, com a tira do período e a hora do retrato no topo.
-  2. A lista desce pela maior espiga: o dia de 165 min vem antes do de 9 min em doze.
-  3. Olhar duas linhas e não ler número: hábito é pente espaçado e baixo; evento é uma espiga sozinha.
-  4. Conferir a frase ao lado: "9 min antes da entrada em 12 de 15 plantões" × "165 min … em 1 dia de 21 trabalhados".
-  5. Traço para cima = antes da entrada; para baixo = depois da saída. A legenda acima diz o teto: cheio a partir de 120 min.
-  6. Digitar um nome ou CPF → a lista só reduz (não há quadro de filtros).
-  7. Clicar a linha → abre nos dias: cada dia com as duas pontas separadas, hora batida contra o marco, e os totais da competência dele.
-  8. No dia, "Autorizar +N min de HE" — a consequência está no botão, antes do clique.
-  9. Autorizar sem motivo → recusado, com a frase da porta.
-  10. Autorizar com motivo (≥10 caracteres) → toast dizendo que o fechamento foi para a fila de recálculo, e a tira daquele dia fica verde.
-  11. "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", no topo → o diálogo da casa (não o do navegador) com a conta e a consequência; depois do sim, o
-      contador vai a zero e as tiras ficam cinza.
-  12. Em /relatorios/: o cartão Gestão de HE com o contador; empresa sem retrato aparece como "Não lavrado ainda: <empresa>".
-  13. Reabrir a tela depois da ciência → os dias decididos não voltam com botão; só um dia novo bloqueado volta como sem decisão.
-
-  Duas coisas que mudaram no caminho e que você vai ver: a lista encolheu 13,7% (era almoço) e o estado de cada dia agora vem do DecisaoHE vivo, não da foto — era por isso que a
-  tela repetia o botão sobre o dia recém-decidido.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: GESTAO-HE-FORMA -- a FORMA da Gestao de HE se refaz; a funcao e os dados FICAM (ordem Ronald 01/10 09:4x). A pagina de hoje -- qu
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-✢ Pouncing… (3h 3m 25s · ↓ 303.3k tokens · thinking)
+  Ran 5 shell commands
+
+● O9 — o primeiro obstáculo tem nome, e li no código em vez de supor:
+
+  - A janela não é a diferença. pdf_espelho.py:302 faz data_fim_mes = data_fim — o PDF usa o período pedido, o mesmo do espelho.
+  - A assimetria é estrutural: o PDF fatia o período por vigência de EC e roda o motor por fatia, somando numéricos e concatenando listas (:197-208, caso Janerson col49 30/07),
+    enquanto autoridade_do_periodo roda um motor na janela inteira.
+
+  Enquanto isso existir, "o PDF lê o espelho" não é trocar a chamada: é decidir se o cartão perde a fatia por vigência — e ela nasceu curando 720 min/dia de antecipada fantasma.
+  Essa é uma decisão de desenho que eu levo medida para você, não resolvo por conveniência.
+
+  O passo 1 do O108 está commitado em 9d68ca04 e volta por git cherry-pick; ele não sobe sozinho porque derruba três selos do test_palavra_do_dia — o topo ganha 23 e 24/07 que a
+  linha não marca, e a tela diz "Em aberto" no 22/07 onde o cartão diz ''. É o CARTÃO=ESPELHO avisando que enriquecer um lado só troca o sinal da divergência de lado.
+
+  Próximo ato, com a pista livre: o DIFF por dia PDF × espelho com a cura aplicada. O comando já existe (diff_pdf_x_espelho) e o tripwire que a lei da fatia pede também
+  (test_pdf_nao_calcula, dívida 6 entradas / 7 chamadas, que só encolhe).
+
+  Estado agora: retrato da 09 relavrado às 10:38 já com o denominador (5.370 dias, 451 colabs); a 10 está rodando; o push está na régua. A Gestão de HE em forma B está no ar
+  esperando seu smoke.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
+
+● Aguardar e ler o DIFF do O9 · 33s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; for i in $(seq 1 10); do pgrep -f "diff_pdf_x_espelho" >/dev/null || break; sleep 40;
+     done; echo "=== DIFF PDF x ESPELHO, COM a cura do O108 ==="; tail -26 $S/scratchpad/o9_diff_com_cura.log; echo; echo "=== pus… (32s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Pouncing… (3h 8m 31s · ↓ 320.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
