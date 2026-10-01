@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:44:31.**
+**Medido em 01/10/2026 15:50:02.**
 
 | | |
 |---|---|
@@ -43,6 +43,9 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
  M app/chamados/tests/test_contract_js_colab_legado.py
  M app/core/censo_fonte.py
  M app/core/tests/test_contract_copiloto_dataset.py
+ M app/core/tests/test_o20_contrato_julga_codigo.py
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/ponto/tests/test_b1_linha_do_dia_le_a_lavratura.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -100,6 +103,7 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  selo que existe para curá-la.
 
   7 contratos varrendo código, selo de 8 casos, ruff limpo na árvore inteira. Faltam 17, dos quais 4 precisam do remédio de template.
 
@@ -118,18 +122,17 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 
 ● A terceira vez que meu censo conta pela forma: 3 dos 9 leem cru com razão.
 
-● Migrar os tres de markup e rodar
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, re
-     IMP = ('from core.censo_fonte import markup_de as _markup '
-     '# O20: contrato de template julga o que RENDERIZA')
-     def _poe(t):
-     if 'censo_fonte' in t: return t
-     ms = [m for m in re.finditer(r'^(?:from|import) [^(\n]+$', t, flags=re.M)]
-     pos = …
+  Ran 7 shell commands
 
-✢ Pouncing… (8h 11m 55s · ↓ 1.0m tokens)
+● O censo verdadeiro é bem maior do que eu contei. Medindo e declarando o número real.
+
+● Fechar a fatia 4 do O20 · 2m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); [ $? -ne 0 ] && { echo "### VERMELHO: $f"; echo "$out"|head
+     -3; }; done; echo "--- selos de host ok ---"
+     python3 bin/backlog_estado.py "O20" '**18 contratos migrados** para `core/censo_fonte.py` (`codigo_de` pa… (2m 18s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Pouncing… (8h 17m 26s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
