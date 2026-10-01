@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:10:31.**
+**Medido em 30/09/2026 21:15:43.**
 
 | | |
 |---|---|
-| `HEAD` local | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
+| `HEAD` local | `d07f8e74 O1 fecha em ZERO, e tres dos quatro itens dele ja estavam cumpridos sem ninguem ter medido` |
 | `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d07f8e74 O1 fecha em ZERO, e tres dos quatro itens dele ja estavam cumpridos sem ninguem ter medido
+5b4593e4 A allowlist apodreceu porque faltava o selo que a irma tinha -- e com ela apodreceu um item do backlog que ja estava feito
 b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha
 f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar
 bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98
-e1f7a3fa B2: a aba que autoriza -- e a permissao que a ordem nomeia NAO EXISTIA como Permission
-cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e diz de quando ele e
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/views.py
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/ponto/tests/test_contract_no_batida_date.py
- M app/templates/colaboradores/passe_livre.html
-?? app/colaboradores/tests/test_passe_livre_trilha.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,39 +95,39 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Esperar o push por arquivo" completed (exit code 0)
+
+● O push fechou. Vendo o veredito:
+
+  Read 1 file
+
+● Push liberado: 346ad7ab..b6f267f8, com 8.881 testes OK mais os 22 do control-plane. A pista de teste está livre (a medição da 10 roda contra prod, não contra o banco de teste).
+  Rodando os selos pendentes:
 
   Ran 1 shell command
 
-● Corrigido e publicado. O achado principal deste bloco é desconfortável e vale dito curto:
+● 13 verdes. Commitando e indo ao deploy:
 
-  O item (1) do O1 já estava feito desde 23/09. A cura existia, a lápide a declarava dentro do próprio arquivo, e o que sobrou foi a entrada na allowlist apodrecendo por uma
-  semana — levando o item do backlog com ela. Eu fui "fazer" e já estava feito; se tivesse começado a migrar antes de ler o sítio, teria reescrito uma cura existente.
+  Committed 5b4593e4
 
-  A causa do apodrecimento é exata e curável: a ALLOWLIST antiga não tinha o teste anti-podre que a irmã LOOKUP_ALLOWLIST tem desde 04/09. O cabeçalho dela sempre disse "a lista
-  só pode diminuir" — mas sem o teste isso era disciplina, e a irmã, que tem o teste, nunca apodreceu. A diferença entre as duas não era idade nem cuidado: era o selo. Adicionei
-  test_allowlist_nao_esta_podre e as 7 entradas podres saíram, com o comentário de cada uma preservado onde estava.
+● Background command "Medir a 10 e o portao inteiro" completed (exit code 0)
 
-  E o meu censo de 20 minutos antes estava errado pelo mesmo motivo de sempre: eu medi a lista, não o mundo. O número real é 12 ofensores, não 19 — e os "13 sem declaração" caem
-  para 6, porque 7 deles eram as podres.
+  Read 1 file
 
-  Falta, na ordem: o push fechar (7:31 de ~16 min, espera armada por arquivo) → rodar o selo do O101 e o anti-podre → commitar → deploy com migrate.
+● cartao_x_txt_divergentes = 0 na 10 também (com 100 dias em aberto em 18 colabs), e o portão inteiro da 09 responde tela_x_pdf: [], topo_x_coluna: [], cartao_x_txt: 0. O
+  he_pendente confirma o bloqueio total medindo as duas pontas: col226 com 18:51 contra marco 19:00 (9 min antes), 02:08 contra 02:00 e 07:02 contra 07:00.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O1 -- COERENCIA-PORTAO — (1) PDF-lote le o dia do turno do MESMO juiz do espelho (pdf_espelho.py:436-475, caso col37
+  Com isso o O1 fecha: (1) já estava feito, (2) está em zero nas duas competências, (3) censo feito, (4) feito em 28/09:
 
-● O que resta no O1 é o item (2): cartao_x_txt 10 → 0 com autópsia por classe. É medição também. Achando o contador:
+  Committed d07f8e74
 
-  Searched for 1 pattern, ran 1 shell command
+● Agora o deploy, que é o ato que faltava — com migrate, porque a 0055 é nova:
 
-● cartao_x_txt_divergentes = 0 na 09/2026 — a meta do item (2) já está cumprida ali. Medindo a 10, que é a competência corrente:
-
-● Medir a 10 e o portao inteiro · 6m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 10 --ano 2026 2>&1 | tail -8; echo "===
-     e o pdf_x_espelho? ==="; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from folha… (6m 55s · 6 lines)
+● Deployar com migrate · 6s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 1500 bin/deploy.sh 2>&1 | tail -22 (6s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bootstrapping… (7h 38m 59s · ↓ 1.4m tokens)
+✢ Bootstrapping… (7h 44m 11s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
