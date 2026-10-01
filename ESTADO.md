@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:125 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:158 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:46:31.**
+**Medido em 01/10/2026 10:51:35.**
 
 | | |
 |---|---|
-| `HEAD` local | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **30** |
+| `HEAD` local | `6ce20522 O rodape do TICKETS volta a bater com origin/main` |
+| `origin/main` | `9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato` |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6ce20522 O rodape do TICKETS volta a bater com origin/main
+cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava o O9
 113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia
 9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela
 1eb48a03 As tres ordens da manha entram em PROMPTS.md, e os tres achados restantes do col369 viram item
-83fe03cd A linha do TICKETS troca a forma antiga pela nova
-837a82e0 A Gestao de HE em forma B esta NO AR e o que falta e o smoke dele
 ```
 
 ## `git status --short`
@@ -95,39 +95,39 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     col866  cortes=['2026-09-05']  turnos 14 x 9
 
-  ┌───────┬─────────┬─────────────────────────────────┐
-  │ colab │   PDF   │       espelho com a cura        │
-  ├───────┼─────────┼─────────────────────────────────┤
-  │ col87 │ 10 dias │ 31 dias — a competência inteira │
-  ├───────┼─────────┼─────────────────────────────────┤
-  │ col82 │ 3       │ 8                               │
-  ├───────┼─────────┼─────────────────────────────────┤
-  │ col73 │ 0       │ 5                               │
-  └───────┴─────────┴─────────────────────────────────┘
+  113 de 114 dão o mesmo cartão. O único que difere, difere em um campo — turnos — e ali a versão fatiada é a que carrega o bug que a própria lápide do arquivo declara desde
+  23/09: no ramo da fatia o turno da fronteira conta duas vezes. Tirar a fatia também cura o único caso em que ela muda algo. Zero campo de dinheiro, zero de furo, zero dia.
 
-  31 dias de furo numa competência de 31 dias não é a tela dizendo a verdade — é a lista de previstos ficando generosa ao somar todos os vínculos do período. O 340 era o número de
-  colabs cujo furo se move; nunca foi prova de que o valor novo está certo, e eu não fiz essa distinção com clareza suficiente.
+  O que segurava o O9 não era um risco: era um remendo que a cura de origem aposentou e que ninguém mediu depois.
 
-  O que isso decide: o ato correto é o do O9 — uma montagem, lida pelos dois (_coletar_dados_espelho deixa de calcular) — e não enriquecer um lado. Segurar o apply estava certo, e
-  agora há número que explica por quê.
+  A ordem do O9, cada passo com RED:
+  1. Tirar a fatia do cartão — os 114 colabs são a prova de neutralidade, com o col866 nomeado.
+  2. Trazer o O108 passo 1 (git cherry-pick 9d68ca04).
+  3. O cartão passa a ler espelho_do_colab; os três selos de test_palavra_do_dia + o diff_pdf_x_espelho são o veredito.
+  4. A dívida do test_pdf_nao_calcula cai de 6/7 para 0.
 
-  A decisão que é sua, e vai medida: o cartão fatia o período por vigência de EC e roda o motor por fatia (pdf_espelho.py:197-208, caso Janerson col49 — a fatia nasceu curando 720
-  min/dia de antecipada fantasma), e autoridade_do_periodo roda um motor na janela inteira. A janela não é a diferença (:302). Unificar exige decidir se o cartão perde a fatia
-  por vigência — e isso eu não resolvo por conveniência.
-
-  A cura saiu da raia de novo depois da medição (git cherry-pick 9d68ca04 a traz quando o O9 decidir a montagem). Retrato das duas competências relavrado com o denominador (09 às
-  10:38, 10 às 10:41). Push na régua.
+  Estado: Gestão de HE em forma B no ar e empurrada (2b7a8537..9f3deacb), esperando seu smoke pelos 13 passos. Retrato das duas competências relavrado com o denominador. O push
+  dos documentos tinha caído pelo placar do topo do TICKETS — reescrito e reempurrado.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-● Ler o resultado da sonda da fatia · 1m 9s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; for i in $(seq 1 10); do pgrep -f "o9f.py|tenant_command shell" >/dev/null || break;
-     sleep 40; done; tail -26 $S/scratchpad/o9_fatia.log 2>/dev/null; echo "=== push ==="; tail -5 $S/tasks/bghme4143.output (1m 8s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Pouncing… (3h 13m 55s · ↓ 330.5k tokens)
+● Background command "Publicar a morte da fatia e empurrar" completed (exit code 0)
+
+  Re-expressar o selo e rodar relatorios e ponto
+  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/relatorios/tests/test_falta_um_significado.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ self.assertIn(" _folha_manda(colaborador, data_ini, data_fim, _out['resumo'])\\n return _out",
+     fonte, 'o ra…
+
+* Pouncing… (3h 18m 59s · ↓ 340.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
