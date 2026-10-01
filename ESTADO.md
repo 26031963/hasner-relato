@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:37:31.**
+**Medido em 01/10/2026 05:43:01.**
 
 | | |
 |---|---|
@@ -97,40 +97,40 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern
-
-● Os dois chamam folha_manda com a mesma janela — então a diferença está nos argumentos do motor. Comparando os dois sítios de chamada:
-
-  Ran 1 shell command
-
-● Achei. Linha 901: o espelho roda o motor em autoridade_do_periodo(colaborador, vis_ini, hoje) — a janela visual, não o período pedido. O PDF roda na competência. Confirmando com
-  números:
-
-  Ran 1 shell command
-
-● A medição refuta minha própria hipótese: autoridade_do_periodo dá datas_falta = 0 nas duas janelas — a competência e até hoje. Então a janela não é a causa; o que difere é o que
-  cada um alimenta no motor. Publicando a refutação:
-
-  Ran 2 shell commands
-
-● Background command "Publicar a refutacao e empurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● A minha hipótese caiu, e isso é o resultado do ciclo.
-
-  Eu havia escrito que a causa dos 392 seria a janela — o espelho roda o motor em vis_ini..hoje e o PDF na competência, e o defeito do piso_visual já está registrado nos
-  PENDENTES. Encaixava num defeito conhecido, o que a fazia parecer conclusão.
-
-  Medi no col41, chamando autoridade_do_periodo nas duas janelas:
-
-  ┌────────────────────────────────────────────────┬─────────────┐
-  │                     janela                     │ datas_falta │
   ├────────────────────────────────────────────────┼─────────────┤
-  │ 21/08..20/09 (a competência, o que o PDF roda) │ 0           │
+  │ 21/08..01/10 (até hoje, o que o espelho roda)  │ 0           │
   └────────────────────────────────────────────────┴─────────────┘
 
-✻ Waiting for API response · will retry in 2m 40s · check your network
+  E o _coletar_dados_espelho do PDF dá 22. As duas janelas dão zero — a janela não é a causa.
+
+  O que difere é a alimentação: o PDF entrega ao motor celulas_alimentadas, folgas_alimentadas, datas_previstas_trabalho, mais as batidas de batidas_apuraveis, tipo_escala,
+  escala_colaborador e colaborador_id; a autoridade_do_periodo monta as dela. Dois motores com alimentação diferente dão furo diferente — e o furo é o que o cartão imprime.
+
+  A próxima pergunta já está estreita, e é por isso que valeu derrubar a hipótese em vez de seguir com ela: qual das quatro entradas muda o datas_falta? Responde-se alimentando a
+  autoridade_do_periodo com as do PDF, uma a uma, no mesmo col41 — quatro medidas, cada uma com resposta de sim ou não.
+
+  Registrei o padrão no commit porque ele se repetiu três vezes nesta noite: o 252 do O106 virou 4, o censo de cinco autoridades virou dez, e agora a janela virou alimentação. As
+  três por medir em vez de deduzir — e nas três a hipótese errada era a que encaixava bem.
+
+  Empurrado: ef37ec93..8ac8790b.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
+
+● A pergunta estreita: qual das quatro entradas move o datas_falta. Comparando os dois sítios linha a linha:
+
+  Ran 1 shell command
+
+● Background command "Conferir o push" completed (exit code 0)
+
+● Os dois sítios diferem em três coisas: o PDF alimenta folgas_alimentadas e passa datas_previstas_trabalho, que o espelho não tem; e o espelho usa o vínculo ativa=True. Vendo o
+  terceiro no PDF:
+
+● Ver o esc e o datas_previstas do PDF
+  ⎿  $ sed -n '404,426p' relatorios/pdf_espelho.py | grep -nE 'esc =|esc=|datas_previstas_trabalho|get_motor_cct|motor =' ; echo "---"; grep -n 'datas_previstas_trabalho = \|esc =
+     ' relatorios/pdf_espelho.py | head -5
+
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
