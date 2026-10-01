@@ -23,8 +23,8 @@ lista — ela e o que esta EM PE._
 | **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | **FECHADA 01/10**: o codigo ja estava cu |
 | **O14** | ESPELHO-APP-DERIVA-DIA | espera aval |
 | **O15** | PAUTA-DP-DIAS-EM-ABERTO | **FECHADA: esta VIVA em prod, confirmado |
-| **O16** | PORTAS-SEM-CAUSA-CONHECIDA | **em esteira** |
-| **O17** | TRAVA-A-VAZIA-8H | **feito pela sessao principal (sem commi |
+| **O16** | PORTAS-SEM-CAUSA-CONHECIDA | **FECHADA: conferido hoje, a classe DESA |
+| **O17** | TRAVA-A-VAZIA-8H | **FECHADA**: o contador existe, esta com |
 | **O18** | PARADAS-NAO-SAO-PARADAS | espera aval |
 | **O19** | BO-APP-ANDROID-ATESTADO | **em curso** |
 | **O20** | CONTRATO-VARRE-COMENTARIO | **livre** |

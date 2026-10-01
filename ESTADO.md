@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:12:01.**
+**Medido em 01/10/2026 15:17:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67 pacotes da esteira` |
+| `HEAD` local | `1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia
+dfe50274 bin/backlog_estado.py: a celula de estado passa a ser escrita por comando, com o teto e o veredito guardados
 ea5dd942 O16 FECHADA: "fim sem causa conhecida" nao existe mais em nenhum dos 67 pacotes da esteira
 541a4878 O15 FECHADA: a pauta do DP esta VIVA em prod, e eu conferi em vez de refazer
 11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta
-f55d5526 O14 publicado e no ar; a celula diz o numero e o smoke que falta
-099fa332 O14: o app dos ~750 para de inventar turno aberto no cross-meia-noite -- 1.349 avisos FALSOS saem, 0 batidas somem
 ```
 
 ## `git status --short`
@@ -95,6 +95,8 @@ f55d5526 O14 publicado e no ar; a celula diz o numero e o smoke que falta
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  aplicar_tolerancia à mão e li o resultado como se fosse o do motor. Quem me pegou foi o próprio RED (dava zero até no caso de 90 min). O achado
+  verdadeiro é maior: 223 de 571 colabs com horas_atraso = 0,00 h exato — três classes de motor nunca julgam pontualidade.
 
   (2) Publiquei que as +1.035,67 h de folga eram fonte errada no chamador. Troquei o juiz, rodei o DIFF: as mesmas 1.035,67 h. E há três números para a
   mesma rubrica — motor 595,23 · gravado 217,64 · calculador 1.253,31. Não escolho qual está certo: folga trabalhada paga 100%.
@@ -113,18 +115,16 @@ f55d5526 O14 publicado e no ar; a celula diz o numero e o smoke que falta
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O15 -- PAUTA-DP-DIAS-EM-ABERTO (Ronald 24/09 08:4x, prazo 10:00) -- folha de hoje: Pauta pro DP com dias_em_aberto (2
 
-● Fechar o O16 com a prova
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     A='| O16 '
-     i=t.find(A); fim=t.index('\n', i)
-     c=t[i:fim].split('|')
-     novo = (' **FECHADA: conferido hoje, a classe DES…
+  Listed 1 directory, ran 21 shell commands
 
-✢ Pouncing… (7h 39m 25s · ↓ 920.8k tokens)
+● O17 está feito — mas o contador dele acusa 132 h sem ler a pausa declarada. Curando isso.
+
+● Achar onde as paradas apareciam · 2m 50s
+  ⎿  $ cd /home/ronald/saas-hasner && grep -rln "paradas" bin/ | head -5; echo "---"; grep -rn "pacotes_parad\|paradas=" bin/*.sh bin/*.py 2>/dev/null |
+     head -5; echo "=== o placar mostra os 4? ==="; bash bin/placar_code.sh 2>/dev/null | grep -iE "pacote|esteira|parad" | head -8 (2m 50s · 8 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Pouncing… (7h 44m 55s · ↓ 931.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
