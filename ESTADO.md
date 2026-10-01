@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:22:01.**
+**Medido em 01/10/2026 04:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
+| `HEAD` local | `461564e0 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
 | `origin/main` | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+461564e0 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
 4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes
 1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido
 8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada
 a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia
-96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
-?? app/relatorios/management/commands/diff_pdf_x_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,38 +98,38 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 
 ```
 
-  O que fica nomeado para a próxima: o DIFF de frota do PDF antes de mexer nas nove vivas, com a regra que a própria célula escreve — mudança que o espelho não tem é bug do
-  espelho e vira item próprio.
-
-  Com você, sem mudança: o ! do TXT da emp2, a resposta do S5b, e os dois smokes (Gestão de HE e o relógio no calendário).
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
-● O item segue aberto nas 9 vivas, e o passo nomeado é o DIFF. Construindo-o — vendo o que o coletor devolve para comparar com o espelho:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O PDF já tem o resumo do espelho (linha 582) e lê uma chave dele, calculando o resto. Então o DIFF é: resumo do PDF × resumo do espelho, chave por chave. Vendo as chaves:
-
-  Read 1 file, ran 2 shell commands
-
-● O meu || quebrou o heredoc. Criando a pasta primeiro e escrevendo limpo:
-
   Ran 2 shell commands
 
-● O heredoc quebrado engoliu a linha de shell para dentro do arquivo. Reescrevendo limpo:
+● Background command "Corrigir o comparador e rodar o DIFF de frota" completed (exit code 0)
 
-  Searched for 1 pattern, ran 3 shell commands
+● 862 colaboradores, e cada um roda o motor duas vezes. Esperando:
 
-● O DIFF não é zero — e isso é o achado. Mas minha comparação conta "chave que só existe num lado" como divergência (total_relogio), o que é outra coisa. Separando as duas:
+  Ran 1 shell command
 
-● Esperar o DIFF de frota · 7m 16s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o9.log; for i in $(seq 1 58); do grep -q '^RC=' "$L" 2>/dev/null &&
-     break; sleep 10; done; sed -n '1,30p' "$L" 2>/dev/null (7m 15s)
+● DIFF de frota entregue, e ele diz que a migração NÃO é de graça:
+
+  ┌────────────────────┬──────────────────────────────┐
+  │       campo        │ colabs que divergem (de 862) │
+  ├────────────────────┼──────────────────────────────┤
+  │ datas_furo_apurado │ 302                          │
+  ├────────────────────┼──────────────────────────────┤
+  │ datas_em_aberto    │ 282                          │
+  ├────────────────────┼──────────────────────────────┤
+  │ dias_em_aberto     │ 282                          │
+  ├────────────────────┼──────────────────────────────┤
+  │ dias_abono         │ 156                          │
+  ├────────────────────┼──────────────────────────────┤
+  │ turnos             │ 97                           │
+  └────────────────────┴──────────────────────────────┘
+
+  392 colabs (45%) mudariam pelo menos um campo. Publicando:
+
+● Conferir o push · 1m 42s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9c.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 41s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (6h 19m 26s · ↓ 532.3k tokens)
+✢ Percolating… (6h 24m 56s · ↓ 536.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
