@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:174 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:201 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:45:45.**
+**Medido em 30/09/2026 22:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso` |
+| `HEAD` local | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
 | `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
+c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
 e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
 2b8c0044 Ato cirurgico sem desfazer na porta: ontem eu repus 8 celulas por shell, que e escritor nao declarado
 c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenerar, e o 16 do Ronald bate
-863a6633 A porta ganha o modo DIA, e a frase que eu tinha escrito no crons era uma armadilha
-4b20a0d4 O relogio riscado anotava uma batida de 9px com um glifo de 16: ganha a medida dele, 10px
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,16 +95,6 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● Push (a suíte é o portão) e depois deploy — o CSS precisa de collectstatic e os .py de reload:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Certo nos três pontos, e o #1 é defeito no ar: o template já está servindo class="relogio-riscado" e o CSS do staticfiles ainda não tem a regra. Deploy agora:
 
   Ran 1 shell command
 
@@ -120,15 +109,25 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ● O advisor acertou: 07/09 é Independência e fatos_do_dia devolve tipo_do_dia: 'feriado', suprimindo folga. Então aquele dia não é "template diz folga": é o juiz do FERIADO, e o
   +7,37 é a casa pagando feriado trabalhado que o gravado subpagou. Agora medir a origem de cada delta em vez de inferir:
 
-  Medir a idade do gravado e os numeros de hoje
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/origem_delta.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import datetime as dt
-     from django.db import connection
-     connection.set_schema('juliani')
-     from django.utils import tim…
+  Ran 2 shell commands
 
-· Percolating… (43m 9s · ↓ 118.9k tokens · thinking)
+● Dois fatos decisivos: o gravado foi escrito 30/09 16:58, antes da regeneração das 21:27 (então o DIFF é de fato o efeito dela); e minutos_previstos é 12150 nos dois lados — os 3
+  dias sem batida não mudaram previsto nem geraram falta, logo eu não posso atribuir a eles o turnos_abertos +3. Isolando:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Agora os três deltas estão isolados, e a minha atribuição anterior estava errada nas duas pontas. Reescrevendo o RELATO com o que foi medido:
+
+  Ran 5 shell commands
+
+● O selo está certo: todo comando precisa de casa declarada no crons.py. Declarando o censo_col900:
+
+  Esperar o push pelo arquivo de sinal · 1m 9s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103b.log; for i in $(seq 1 70); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -6 "$L"; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD | cat (1m 7s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (48m 9s · ↓ 133.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
