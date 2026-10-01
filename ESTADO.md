@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:51:31.**
+**Medido em 01/10/2026 07:57:01.**
 
 | | |
 |---|---|
@@ -95,6 +95,7 @@ a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
 ❯ segue a fila; PAREI so em lei ou !
 
   Ran 2 shell commands
@@ -121,11 +122,10 @@ a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e p
 
 ● Background command "Ler o selo do mypy e rodar com o env certo" completed (exit code 0)
 
-● Ler a API do retrato e o modelo DecisaoHE
-  ⎿  $ cd /home/ronald/wt-ui && sed -n '80,140p' app/ponto/services/he_pendente_lavrado.py; echo "=== DecisaoHE modelo ==="; grep -n "class DecisaoHE" -A 30 app/ponto/models.py |
-     head -40
+● Ver os campos do DiaPago
+  ⎿  $ cd /home/ronald/wt-ui && grep -n "class DiaPago" -A 45 app/ponto/models.py | grep -n "models\.\|TIPO_DIA\|versao" | head -25
 
-✢ Pouncing… (18m 55s · ↓ 42.6k tokens · thinking)
+✢ Pouncing… (24m 25s · ↓ 66.7k tokens)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
