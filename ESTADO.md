@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:58:01.**
+**Medido em 01/10/2026 07:03:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b3080a63 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
+| `HEAD` local | `a216cd89 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
 | `origin/main` | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-b3080a63 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862
+a216cd89 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862
 e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia
 a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22
 8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor
@@ -97,14 +97,6 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O DIFF precisa da lista rica, e construí-la no comando seria uma segunda derivação. Extraio primeiro para um sítio compartilhado — mudança nula de comportamento, que os 217
-  selos de relatorios provam:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O ruff pegou antes do push (o hábito novo funcionando): o import do _DIO ficou órfão. Removendo e provando que a extração não mudou nada:
-
-  Ran 1 shell command
 
 ● 1086 testes OK em relatorios + escala, ruff limpo — extração provada neutra. Agora o DIFF do O108:
 
@@ -124,12 +116,20 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 
   862 comparados, 0 erros — e nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50/100 e dias_abono não aparecem na tabela. Publicando:
 
-● Conferir o push · 5m 10s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_d108.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (5m 8s)
+  Ran 2 shell commands
+
+● Background command "Publicar o DIFF do O108 e empurrar" completed (exit code 0)
+
+  Searched for 1 pattern
+
+● A casa do comando novo, de novo — segunda vez no turno. Declarando e guardando junto do hábito:
+
+● Conferir o push · 56s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_d108b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (8h 55m 26s · ↓ 609.4k tokens)
+· Percolating… (9h 0m 55s · ↓ 611.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                             2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
