@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:49:31.**
+**Medido em 01/10/2026 04:55:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
-| `origin/main` | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,39 +97,39 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Pela regra da própria célula, a troca agora espera a triagem dos 5 campos e das 7 chaves — cada um é (i) PDF certo e espelho com buraco, (ii) espelho certo e PDF com regra
+  velha, ou (iii) janela diferente.
+
+  No caminho, dois selos me pararam e os dois tinham razão:
+
+  O mypy pegou que eu reusei o nome e do except num laço — o Python apaga esse nome ao sair do bloco. E, ao curar, apareceu um segundo erro em chamados/models.py: uma constante
+  que era só inferida, e cuja inferência quebrou quando a cadeia de import do meu comando mudou a ordem. Anotei o tipo — cura na origem, não afrouxamento. mypy limpo em 719
+  arquivos.
+
+  O selo B6 das crons pegou sombra.sh@04:08 (até 04:41) invade python3@04:40. Não era meu: a duração da sombra é medida e só cresce — 1264 s em 15/09, ~1500 s em 20/09, 1947 s
+  (32,5 min) agora. É a terceira vez que a mesma colisão acontece. Movi o vizinho para 04:45 (folga declarada no próprio arquivo) e instalei o crontab, porque a sombra não pode
+  começar antes das 04:05 — ela depende do dump das 04:00. Mas mover o vizinho é band-aid de terceira geração: a cura de origem é o horário sair da medida em vez de ser literal, e
+  isso virou O107, com o selo B6 como cobrador da quarta vez.
+
+  Guardei na memória a receita do mypy no container — ele precisa de DJANGO_SETTINGS_MODULE no ambiente, senão falha com erro interno do plugin.
+
+  Empurrado: 4b541969..8dab8b82.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O107 -- O HORARIO DA SOMBRA E LITERAL E A SOMBRA CRESCE: a MESMA colisao pela TERCEIRA vez (achado 01/10 04:4x, pego p
+
+● O107 é a cura de origem: o horário da sombra sair da medida. Antes, uma pergunta que decide o desenho — o crons.sh check é vigiado por alguém?
 
   Ran 1 shell command
 
-● Outro selo quebrou — "sem sobreposição no bloco diário". Isso sugere que minha entrada caiu na estrutura errada. Conferindo onde ela foi:
+● Background command "Conferir o push" completed (exit code 0)
 
-  Searched for 1 pattern
+● O drift é vigiado: o placar_code.sh roda o check e anuncia cron fora do crontab. Então derivar o horário é seguro. Lendo a entrada da sombra:
 
-● Minha entrada caiu na estrutura certa (as casas, depois de FORA_DE_PIPELINE), e o selo lê CRONS/DUR_MAX_S, que eu não toquei. Vendo a mensagem:
+● Ler a entrada da sombra e os helpers do arquivo
+  ⎿  $ sed -n '150,162p' config/crons.py; echo "=== helpers que o arquivo ja tem ==="; grep -n '^def \|^def _' config/crons.py | head -12
 
-  Ran 1 shell command
-
-● sombra.sh@04:08 (até 04:41) invade python3@04:40 — nada a ver com a minha entrada. Vendo se a duração é lida de arquivo (ela é medida às 04:05, 40 min atrás):
-
-  Searched for 1 pattern
-
-● A duração MEDIDA vence a declarada (DUR_MAX_S.update(_dur_medida())), lida do placar no import — então o selo ficou vermelho por um fato real medido às 04:05, não pela minha
-  entrada. Vendo os dois crons:
-
-  Ran 1 shell command
-
-● sombra.sh mede 1947 s (32,5 min): começa 04:08 e termina 04:40:27 — e a lápide da linha 155 diz que isso já aconteceu em 20/09, quando ela media 25 min. É a terceira vez. Vendo
-  o vizinho:
-
-  Ran 2 shell commands
-
-● 22 OK. O comentário promete item, então ele vira item — e o crontab precisa ser renderizado:
-
-● Conferir o push · 7m 23s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9d.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 22s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Percolating… (6h 46m 56s · ↓ 551.1k tokens)
+✢ Percolating… (6h 52m 25s · ↓ 554.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
