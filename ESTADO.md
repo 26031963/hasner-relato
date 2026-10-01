@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 03:17:01.**
+**Medido em 01/10/2026 03:22:31.**
 
 | | |
 |---|---|
@@ -122,12 +122,12 @@ e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio 
 
 ● Terceira vez nesta noite que um import morto num selo novo custa um ciclo de push. Curando e guardando a lição:
 
-● Conferir o push · 4m 21s
+  Conferir o push · 9m 50s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o8b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (4m 20s)
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (9m 50s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (5h 14m 25s · ↓ 492.8k tokens)
+· Percolating… (5h 19m 55s · ↓ 492.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
