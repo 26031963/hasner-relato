@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:24:31.**
+**Medido em 30/09/2026 22:30:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4b20a0d4 O relogio riscado anotava uma batida de 9px com um glifo de 16: ganha a medida dele, 10px` |
+| `HEAD` local | `863a6633 A porta ganha o modo DIA, e a frase que eu tinha escrito no crons era uma armadilha` |
 | `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+863a6633 A porta ganha o modo DIA, e a frase que eu tinha escrito no crons era uma armadilha
 4b20a0d4 O relogio riscado anotava uma batida de 9px com um glifo de 16: ganha a medida dele, 10px
 202edd94 Dois avais das 22:1x registrados: o modo DIA da porta (que e a saida do PAREI) e o relogio de 10px
 f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
 b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar
-7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/portas/celula.py
-?? app/ponto/tests/test_porta_celula_dia.py
+?? app/ponto/management/commands/censo_col900.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,39 +97,39 @@ b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo d
 
 ```
 
-● RED evidenciado contra o arquivo do HEAD (o que está no ar agora):
-
-  Ran 1 shell command
-
-● 8 verdes, e o RED é literal: no HEAD o relógio herda .icone-dia = 16px e não tem classe própria. Fechando a célula e commitando:
-
-  Ran 1 shell command
-
-● O102 commitado. Agora o O103 — a porta de DIA. Orientando primeiro na porta que existe:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Tenho a causa exata na mão: HX-REGEN-ALCANCA-O-HORIZONTE (celula.py:109-124) estende o ate até o fim da competência — é por isso que pedir 1 dia reescreve dezenas. Antes de
-  escrever a porta, vou consultar o revisor:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Vou conferir o gate das OPERACOES e a família do juiz de marco antes de escrever:
-
   Searched for 1 pattern, ran 2 shell commands
 
 ● O juiz de proximidade já existe (ponto/turnos.py::_dist_marco, registrado). Escrevendo a porta de DIA — mesmo corpo, mesma trilha, só sem a extensão de horizonte:
 
-● Escrever o selo da porta de dia, parte 1
-  ⎿  $ cat > ponto/tests/test_porta_celula_dia.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """A PORTA DE DIA TOCA UM DIA (`!` Ronald 30/09 22:1x).
-     RED que a ordem pediu com estas palavras -- *"com RED de que pedir 1 dia toca 1
-     celula"*. Antes desta fatia nao havia como pedir um dia: a porta por vinculo
-     estende…
+  Searched for 4 patterns, read 1 file, ran 7 shell commands
 
-✢ Percolating… (21m 56s · ↓ 53.2k tokens)
+● Import morto no selo do O2. Curo e passo o ruff sobre tudo o que escrevi hoje:
+
+  Ran 1 shell command
+
+● Ruff limpo. Agora os selos novos e os vizinhos que a cura toca:
+
+  Ran 1 shell command
+
+● 76 OK. O RED não é transitório — ele ficou vivo no contra-exemplo: a mesma fixture, pela porta de vínculo, toca 2 células; pela porta de dia, 1. Agora a frase do crons.py que
+  afirmava o contrário:
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● Agora a sonda refeita. Primeiro: de onde sai a tolerância da casa (não vou inventar número):
+
+  Searched for 3 patterns, ran 2 shell commands
+
+● Escrevendo a sonda como comando (a lista de ontem saiu de script avulso, irrepetível):
+
+  Ran 1 shell command
+
+● Rodando o censo em prod (leitura só, nada escrito):
+
+  Corrigir a importacao da janela
+  ⎿  $ sed -n '44,60p' folha/export.py
+
+✢ Percolating… (27m 26s · ↓ 73.3k tokens · thinking)
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
