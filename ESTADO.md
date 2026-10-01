@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:10:31.**
+**Medido em 01/10/2026 06:15:45.**
 
 | | |
 |---|---|
@@ -97,11 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────────────────┼───────────────────┤
-  │ base (como o espelho monta) │ 0                 │
-  ├─────────────────────────────┼───────────────────┤
-  │ + folgas_alimentadas        │ 0 — não é a causa │
-  ├─────────────────────────────┼───────────────────┤
   │ + datas_previstas_trabalho  │ 22                │
   ├─────────────────────────────┼───────────────────┤
   │ + as duas (= o PDF)         │ 22                │
@@ -129,8 +124,13 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
-✢ Percolating… (8h 7m 56s · ↓ 590.9k tokens · deep in thought)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● O107 fechou; agora o O108, e a minha própria célula manda DIFF antes. Lendo como o PDF constrói a lista, para a cura não nascer com uma segunda derivação:
+
+  Ran 1 shell command
+
+● Background command "Conferir o push do O108" completed (exit code 0)
+
+✻ Waiting for API response · will retry in 2m 35s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
