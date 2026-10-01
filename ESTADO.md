@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:216 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:260 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:58:01.**
+**Medido em 01/10/2026 20:03:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`` |
+| `HEAD` local | `02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00
+b17b4689 PAREI com a tabela: o vinculo do col369 move 7,07 h e os -4 furos NAO acontecem
 b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`
 76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO
 d97b779f A celula da 09 declara o DIFF publicado e a frota recusada
-80ba806c A 09: DIFF publicado ANTES, e o recalculo de FROTA esta RECUSADO -- 19 rubricas, 47 campos SUBINDO
-c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,44 +95,44 @@ c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     --line-buffered "DI… · stopped
-
-  Ran 4 shell commands
-
-❯ aval Ronald 01/10 20:0x -- LOTE 1 de pendentes; entra depois do col369, nao corta a S5b. Re-medir cada um antes de agir; fechar o item no PENDENTES ao
-  cumprir.
-  1. FOLHA-ZERO-COM-BATIDA (col924, col43): autorizado o CENSO de frota, so leitura -- quantos colabs com batida apuravel e folha zero, por causa e por
-  competencia. Publicar a tabela; a cura vem depois, com numero.
-  2. REGIME emp3 = CLT (corte dado em 21/09): vale da competencia 09 em diante; 08 e anteriores ficam como estao (pagas fora do sistema, corte 27/09).
-  NAO aplicar ainda: publicar o DIFF de frota da 09 e da 10 por rubrica e por colab e PARAR com a tabela para o meu ! final.
-  3. col650: abrir Pauta DP pedindo a data de fim da ausencia #3186 (hoje sem fim, dias_corridos=1). Depois do cadastro: retratar pela porta os chamados
-  abertos contra ela e relavrar a competencia aberta. 08 nao se retifica.
-  4. col935: abrir Pauta DP com os dois numeros -- batidas em 05 e 06/09, admissao/vinculo em 07/09, diferenca de 9,11 h de adicional noturno. O DP
-  decide: admissao em 05/09, ou as batidas nao valem. Nada se aplica sem a resposta.
-  5. FASE-12x36-PROPOSTAS (51 colabs abaixo de 90%): nenhuma proposta se aplica. A lista vira pauta da supervisao "tipo de escala nao descreve o
-  colaborador" (ex.: col221 trabalha 5x2). Os 3 de caminho conhecido (col899 vinculo duplo, col334 dois vinculos ativos, col451 batida retroativa):
-  publicar o DIFF de cada um e trazer para o !.
-     Segue a fila.
+  6x1 SEM folga declarada -- qual e o dia de folga? Sexta 25/09 nao tem batida, e segunda 28/09 tambem nao. (2) Registrar e MEDIR, nao curar: em 5 dos 11
+  dias (19, 20, 23, 26, 27/09) a volta da pausa esta tipada S e a saida final tipada E; medir se e isso que gera as 2,00 h de intra indenizada e as 5,07
+  h de trabalhadas a mais. (3) A porta reabrir_vigencia_impossivel fica; o 1296 segue inativo, no passivo. Volta para a S5b.
 
   Ran 3 shell commands
 
-❯ aval Ronald 01/10 20:0x: ordem -- terminar o col369 (ja em curso) e voltar para a S5b ate o DIFF fechar; o LOTE 1 de pendentes so entra DEPOIS do ! da
-  troca. Segue a fila.
+● col369 fechado pela sua decisão (02da1822), e nada a reverter — o PAREI com a tabela existia exatamente para essa escolha. Sua medição fecha o caso: a
+  pausa real é 12:09–14:04 nos 11 dias, e o intervalo 11:00–12:00 do TE 538 não descreve o colaborador. Os dois achados ficaram registrados e não curados,
+  como você mandou:
 
-● Commitar o PAREI do vinculo e a ordem da fila
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='app/docs/PROMPTS.md'
-     t=io.open(P,encoding='utf-8').read()
-     nova = ("- **01/10 ~20:0x — ORDEM da fila**: terminar o **col369** (ja em curso) e **voltar para a S5b ate o DIFF "
-     "fechar**; o **LOTE 1 de pendentes …
+  - COL369-FOLGA-NAO-DECLARADA — Pauta da supervisão: o 1313 é 6x1 e não declara folga, e os dois candidatos estão medidos (sexta 25/09 sem batida,
+    segunda 28/09 também sem).
+  - COL369-TIPOS-INVERTIDOS — medir, não curar: 5 dos 11 dias com a volta da pausa tipada S e a saída final tipada E; a pergunta é se é isso que gera as
+    2,00 h de intra indenizada e as 5,07 h de trabalhadas.
 
-✢ Perambulating… (3m 32s · ↓ 13.9k tokens)
+  A porta reabrir_vigencia_impossivel fica, e o 1296 segue inativo no passivo.
+
+  De volta à S5b, e tenho um achado que impede pedir o seu !: o DIFF que decidiria a troca está cego por construção — e o próprio comando diz isso. No
+  caminho por sequência (o único que a casa não declarou "pior"; o --pares-da-autoridade ela mesma marca como "MEDIDO em 28/09 e AINDA PIOR"), os mapas de
+  par ficam vazios de propósito, e diff_calculador.py:336 promete que as rubricas saem declaradas em SEM_ENTRADA, "nunca zero". O relatório não cumpre:
+  imprime 0,00 e soma como divergência — 909 linhas de horas_noturnas no CSV, −5.786,47 h em 192 colabs, mais 60 de atraso e 49 de antecipada. O alvo da
+  linha 63 exclui apenas o NAO_DECIDE do módulo, não o _nd que cada chamada declara. É o [] de dois sentidos uma camada acima de onde o docstring o
+  proibiu.
+
+  Consequência direta: os números que estão na célula da S5b (+113,52 h de trabalhadas, +31,47 de folga) vieram de outra medição e não reproduzem nesta;
+  os que dependem de par não são número, são cegueira medida. Não vou pedir o ! da troca sobre essa tabela — a cura do instrumento vem antes, e é o
+  próximo passo: o relatório tem de excluir a rubrica que a chamada declarou, do mesmo jeito que o alvo já exclui a do módulo.
+
+  Registrei também, no mesmo ato, a SUITE-UMA-VEZ-POR-ARVORE (entra depois do ! da troca) e a sua ordem que põe o LOTE 1 depois do !.
+
+✻ Worked for 3m 54s · done 8:02 PM · 1 shell, 3 monitors still running
+
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ cura o instrumento e refaz o DIFF
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
