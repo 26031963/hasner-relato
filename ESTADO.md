@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:38:01.**
+**Medido em 01/10/2026 09:43:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b` |
+| `HEAD` local | `7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
 f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b
 71f16546 A Gestao de HE esta NO AR e o que falta e o smoke dele
 843f74e8 MERGE da Gestao de HE completa: listagem, aba Autorizar, lote de "Nao", busca, filtros, totais, PDF e o atalho da Central
 0251070a Item 1: a autopsia do col881 esta no topo do RELATO, e ela desmente a minha propria leitura de ontem
-64c65c60 A janela machucou: o 500 do lote por DATA LIVRE era disco novo contra memoria velha, e agora ha selo que morde
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O smoke eu faco NO AR pelos 13 passos; se falhar, volta pelo revert. Cola aqui os 13 passos em lista curta, um por linha, com o endereco de cada tela.
+  O bug em prod, na sua ordem:
+  1. Deploy 08:52 — conferi antes que o disco era mudança NULA (as duas extrações são byte a byte, 3.717 selos; o único comportamento novo era celulas_do_periodo recusar escalar,
+     e os 10 chamadores passam lista). A cura do O108 não subiu nisso.
+  2. Smoke 21/08–20/09 pela função real (sem POST em porta de prod): col61 → 1 gerado, 5.450 bytes · col929 → 1 gerado, 4.749 bytes.
+  3. Selo, não promessa: bin/import_tardio_contra_o_ar.py pergunta, para cada from <módulo local> import <s> escrito dentro de função, se o símbolo existe na versão que está no ar
+     (commit de logs/deploy.stamp). 4.117 imports tardios, 0 acusados, e ele morde com a sua história: força o ar para a216cd89^ e exige que acuse pdf_espelho.py. O número caiu
+     por cura do instrumento (270 → 10 → 1 → 0: submódulo, desempacotamento, PEP 562), nunca por afrouxamento.
 
-● Os 13 passos, um por linha:
+  Ele achou um 500 vivo que não é janela: chamados/services/lembrete_app.py não existe (nem no disco nem no git) e api/views_mensageria.py:2125 o importa —
+  api_mensageria_lembrete_app dá 500 desde 19/09. Declarado em DEFEITOS_CONHECIDOS (censo que só encolhe). Escrever o módulo ou remover a rota é seu.
 
-  /ponto/gestao-he/ (admin, com a ação autorizar_he)
-  1. Abrir com empresa/mês/ano → a lista aparece com a hora do retrato no topo.
-  2. Digitar um nome em "Nome ou CPF" → Ver → a lista encolhe.
-  3. Digitar um CPF com pontos → encolhe igual.
-  4. Digitar algo que não existe → a frase do vazio tem de falar de filtro, não de competência.
-  5. Escolher uma Praça → encolhe. Escolher um Posto → encolhe.
-  6. Estado do dia = autorizado → só dias autorizados, e as colunas "Dias"/"Minutos fora" da linha acompanham.
-  7. Marcar 2 ou 3 caixas → "Marcar selecionados como 'Não'" → o toast conta quantos, os dias ganham o selo nao, o contador "Sem decisão" desce.
-  8. Clicar o mesmo lote de novo → o toast diz que já estavam assim (nenhuma trilha nova).
-  9. Autorizar um dia SEM motivo → tem de ser recusado, com a frase da porta.
-  10. Autorizar com motivo (≥10 caracteres) → toast dizendo que o fechamento foi para a fila de recálculo.
-  11. Botão PDF → abre com o mesmo filtro da tela, hash no rodapé, nome gestao-he-emp<N>-09-2026.pdf.
+  Item 1 — autópsia do col881, e ela desmente o que eu disse às 19:3x: não é falta nem 02/09 (li o layout com 4 decimais; tem 2). A rubrica é 0200, de 10,00 h → 5,00 h, e são dois
+  colabs: o col864 ganha 7,29 h. O gravado do col881 não foi tocado (atualizado_em 28/09 00:45, e o único escritor com update_fields nesse modelo não mexe em número e põe status
+  aberto, que não é o dele). Quem moveu foi o emissor — e o col864 prova pelo outro lado: gravado atualizado 19:57, dez minutos antes do TXT, já com 7,29, e o TXT daquela hora não
+  emitiu a linha. A pergunta que separa: na rubrica 0200 o Domínio espera as horas de folga trabalhada (5,00) ou o dobro (10,00)? Não substituí nada. E o bloco de FALTA não é o
+  que moveu (sai de datas_falta, que lê ausência lançada), então não curei ali — quando você responder, entram juntas a falta pelo gravado e o TXT carimbando o commit que o gerou.
 
-  /relatorios/ (a Central)
-  12. O cartão "Gestão de HE" com o contador vermelho; empresa sem retrato aparece como "Não lavrado ainda: <empresa>" — e isso não é zero pendência.
-  13. Clicar o cartão → cai na tela.
+  Item 2 — S5b: lei registrada (BUG-144), fecha a pergunta que eu havia publicado e confirma a conta à mão em 3 de 3. O DIFF por rubrica é o próximo ato na sombra, e o comando já
+  existe e já nasceu "por rubrica".
 
-  Ran 14 shell commands
+  Item 3 — O108: escrevi a cura e NÃO a subi. A suite deu 5.467 testes com 3 vermelhos, todos de test_palavra_do_dia.py: o topo ganhou 23 e 24/07 que a linha não marca, e a tela
+  diz "Em aberto" no 22/07 onde o cartão diz ''. É o invariante CARTÃO=ESPELHO (seu corte de 23/09) dizendo que enriquecer só a tela faz os dois divergirem pelo outro lado —
+  meia-correção. O ato completo é o que a própria célula escreveu: enriquecer o espelho e o cartão passar a ler daqui, que é o O9. A cura está commitada na raia (9d68ca04), fora
+  da árvore viva.
 
-● Background command "Esperar e conferir a suite do O108" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
 
-  Ran 14 shell commands
+● Ler os argumentos do diff por rubrica
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "add_argument" app/ponto/management/commands/diff_calculador.py | head -12; echo "=== casa no crons.py? ==="; grep -c
+     "diff_calculador" app/config/crons.py
 
-● Background command "Aplicar o O108 na copia e rodar a suite com o staticfiles montado" completed (exit code 0)
-
-  Ler os dois casos que ficaram vermelhos
-  ⎿  $ cd /home/ronald/wt-ui && sed -n '112,135p;166,180p' app/relatorios/tests/test_palavra_do_dia.py
-
-✢ Pouncing… (2h 5m 25s · ↓ 211.0k tokens · deep in thought)
+✢ Pouncing… (2h 10m 55s · ↓ 217.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
