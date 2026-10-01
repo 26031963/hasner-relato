@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:05:02.**
+**Medido em 30/09/2026 21:10:31.**
 
 | | |
 |---|---|
@@ -127,13 +127,13 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 
 ● cartao_x_txt_divergentes = 0 na 09/2026 — a meta do item (2) já está cumprida ali. Medindo a 10, que é a competência corrente:
 
-  Medir a 10 e o portao inteiro · 1m 27s
+● Medir a 10 e o portao inteiro · 6m 55s
   ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command cartao_x_txt_divergentes --schema=juliani --mes 10 --ano 2026 2>&1 | tail -8; echo "===
      e o pdf_x_espelho? ==="; docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "
-     from folha… (1m 26s)
+     from folha… (6m 55s · 6 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Bootstrapping… (7h 33m 29s · ↓ 1.4m tokens)
+✢ Bootstrapping… (7h 38m 59s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
