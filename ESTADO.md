@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:25:31.**
+**Medido em 01/10/2026 07:30:45.**
 
 | | |
 |---|---|
@@ -102,8 +102,6 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 
 ```
 
-  Empurrado: e860aef1..a216cd89.
-
   Duas vezes neste turno esqueci a casa do comando novo em config/crons.py (9 min por ciclo). Guardei o trio de pré-push na memória: ruff · mypy · casa do comando.
 
 ● Ran 1 stop hook
@@ -131,14 +129,16 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 
 ● A cura completa (D) é muito menor que o teto: datas_falta cai de 7 para 3 em 15, e o dias_abono passa a aparecer (4). Rodando a frota:
 
-● Running 1 shell command…
+● API Error: Server error mid-response. The response above may be incomplete.
 
-✢ Percolating… (9h 22m 55s · ↓ 622.1k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Churned for 9h 26m 23s · done 7:28 AM · 1 shell still running
+
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
                                                                                                                                                             0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
