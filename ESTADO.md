@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:59:31.**
+**Medido em 01/10/2026 06:05:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
-| `origin/main` | `8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,40 +97,40 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │          montagem           │    datas_falta    │
+  ├─────────────────────────────┼───────────────────┤
+  │ base (como o espelho monta) │ 0                 │
+  ├─────────────────────────────┼───────────────────┤
+  │ + folgas_alimentadas        │ 0 — não é a causa │
+  ├─────────────────────────────┼───────────────────┤
+  │ + datas_previstas_trabalho  │ 22                │
+  ├─────────────────────────────┼───────────────────┤
+  │ + as duas (= o PDF)         │ 22                │
+  └─────────────────────────────┴───────────────────┘
 
-  Ran 1 shell command
+  Não era a janela (refutada no ciclo anterior) e não é a folga: é a lista de dias previstos, que o PDF passa e a autoridade_do_periodo não.
 
-● Background command "Conferir o push" completed (exit code 0)
+  E isso decide o veredito: o col41 trabalhou 12,73 h de 176,67 previstas e tem 25 dias previstos pela célula. Vinte e dois dias de furo é o número certo — e o espelho diz zero. O
+  PDF está certo; o espelho tem buraco. Pela regra que a própria célula do O9 escreve, isso vira item próprio: O108.
 
-● Os dois sítios diferem em três coisas: o PDF alimenta folgas_alimentadas e passa datas_previstas_trabalho, que o espelho não tem; e o espelho usa o vínculo ativa=True. Vendo o
-  terceiro no PDF:
+  Tamanho: datas_furo_apurado divergia em 302 colabs e datas_em_aberto/dias_em_aberto em 282, de 862. E não é enfeite — o próprio espelho.py:908 diz que o folha_manda lê dessa
+  lista, então a tela monta dias_em_aberto sobre uma lista vazia. Quem lê isso é a tela do admin e o app do colaborador (fonte única desde o BUG 139), mais a palavra do dia e o
+  topo do cartão.
 
-  Searched for 1 pattern, ran 3 shell commands
+  Não curei agora, de propósito: mexer na alimentação do motor da tela muda o número de 302 colaboradores e o que ~750 pessoas veem no app. Exige DIFF próprio — seria incoerente
+  eu exigir DIFF do cartão e dispensar o da tela.
 
-● Decisivo. A entrada é datas_previstas_trabalho:
+  E um detalhe que a lápide já contava e eu só entendi agora: autoridade_do_periodo diz, desde 26/09, que rodava o motor "com MENOS alimentação do que o recalcular_fechamento_mes:
+  sem célula e sem colaborador_id". A célula e o id entraram naquele dia; o datas_previstas_trabalho ficou — a mesma cura, pela metade.
 
-  ┌────────────────────────────────┬───────────────────┐
-  │            montagem            │    datas_falta    │
-  ├────────────────────────────────┼───────────────────┤
-  │ base (= autoridade_do_periodo) │ 0                 │
-  ├────────────────────────────────┼───────────────────┤
-  │ + folgas_alimentadas           │ 0 (não é a causa) │
-  ├────────────────────────────────┼───────────────────┤
-  │ + datas_previstas_trabalho     │ 22                │
-  ├────────────────────────────────┼───────────────────┤
-  │ + as duas (= o PDF)            │ 22                │
-  └────────────────────────────────┴───────────────────┘
+  O O9 está bloqueado pelo O108, e isso agora está escrito nas duas células: trocar o motor do PDF pelo do espelho importaria o buraco para o cartão do Art.74 §2º.
 
-  O autoridade_do_periodo não passa datas_previstas_trabalho, e sem ela o motor reporta zero falta para quem trabalhou 12,73 h de 176,67 previstas com 25 dias previstos pela
-  célula. O PDF está certo e o espelho tem buraco — e o espelho é a tela do admin e o app dos ~750:
+  Empurrado: 8ac8790b..a887f990.
 
-● Conferir o push do O108 · 6m 55s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o108.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 54s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
-✢ Percolating… (7h 56m 56s · ↓ 589.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Waiting for API response · will retry in 2m 31s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
