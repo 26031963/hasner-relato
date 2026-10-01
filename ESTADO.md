@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:27:31.**
+**Medido em 01/10/2026 00:33:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
-| `origin/main` | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por
 ## `git status --short`
 
 ```
+ M app/config/crons.py
+?? app/ponto/management/commands/emitir_turno_aberto_retroativo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,39 +97,39 @@ e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: O106 -- 252 CELULAS FORAM JULGADAS ANTES DE SEREM REESCRITAS (achado MEDIDO 30/09 23:2x, de carona no COL900) -- vered
+  Próximo na raia UI: concluir a Gestão de HE — multisseleção no template (a porta do "Não" em lote já está pronta e selada), busca nome+CPF, filtros, totais da competência, PDF e
+  o atalho na Central com contador.
 
-● O106: falta a conta pela autoridade. Lendo como o cartório monta a impressão, para chamar a mesma montagem em vez de re-derivar:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O104 -- ENTRADA SEM PAR DE 20 DIAS ATRAS NAO TEM COMO ACENDER (achado MEDIDO 30/09 23:2x, no caminho do ! da saida (i)
 
-  Searched for 1 pattern
-
-● A medida pela autoridade é rodar julgar_colab em DRY nos 26 colabs e ver quais dos 252 dias ele julga (impressão divergiu) contra os que pula. Vendo como o comando monta o
-  emissor:
-
-  Ran 2 shell commands
-
-● A autoridade responde 75, não 252 — o meu número pela forma superestimava 3,4×. Mas falta a pergunta adversarial: a impressão só guarda dna_versao + marcos, então ela é cega a
-  outras mudanças de DNA. Medindo:
-
-  Ran 1 shell command
-
-● A pergunta adversarial achou o ponto cego: entre as 177 que a impressão pula, o DNA mudou em chaves que ela não vê — minutos_jornada em 44 e tipo_ciclo em 6. Conferindo se o
-  julgamento usa essas chaves:
+● O104 está em **corte**, que o hook lê como andável. Antes de aceitar que é "desenho novo", a pergunta da LEI-AKITA 4: a casa já tem a categoria? Medindo quem emite turno_aberto:
 
   Searched for 1 pattern
 
-● classificar_dia não lê essas chaves — então a cegueira pode ser inofensiva. A prova definitiva é forçar o re-julgamento e ver se o veredito muda:
+● processar_alertas_avancados (*/30) emite turno_aberto_24h. Vendo a janela dele, que é onde o buraco está:
 
   Ran 1 shell command
 
-● A autoridade fecha o número: 4, não 252. Escrevendo:
+● Buraco confirmado: ele só olha ontem. E o padrão para isso já existe — o "passe retroativo sob ordem". Lendo-o para espelhar os gates em vez de inventar:
 
-● Conferir o push do O106 · 8m 21s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o106.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (8m 20s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 4 shell commands
 
-· Percolating… (2h 24m 55s · ↓ 264.7k tokens)
+● Tenho tudo. Escrevendo o passe retroativo de turno aberto — mesmos gates, mesmo emissor canônico, nenhuma regra nova:
+
+  Ran 1 shell command
+
+● Declarando a casa dele (o selo cobra) e rodando em DRY nos 3 dias do col900 — que é a prova de que o caminho passou a existir:
+
+  Ran 1 shell command
+
+● O DRY acha exatamente os 3 dias que eu havia isolado por turnos_do_colab — o caminho passou a existir. Aplicando, escopado ao col900 como o ! pede:
+
+● Aplicar e provar a idempotencia
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command emitir_turno_aberto_retroativo --schema=juliani --empresa 3 --colab 900 --ini
+     2026-09-01 --fim 2026-09-20 --apply 2>&1 | tail -8; echo "=== 2a passada (idempotencia) ==="; docker exec saas_core python manage.py t…
+
+✢ Percolating… (2h 30m 26s · ↓ 277.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
