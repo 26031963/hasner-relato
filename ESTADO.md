@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:45:45.**
+**Medido em 01/10/2026 11:50:45.**
 
 | | |
 |---|---|
@@ -95,44 +95,44 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dias em 5.767; aqui, de 18 datas em 28 no pior caso.
+  - Passo 2 refutado como causa: com a cura do O108 de volta numa cópia, o DIFF PDF × espelho deu o mesmo 22 de 40 — a fatia não era a causa.
+  - Passo 3, pré-requisito achado e curado (d83d35f6): o resumo do espelho promete "os totais só da competência" e entregava a janela visual. No col87: 89
+    dias de janela, 28 datas de furo no resumo, 10 na autoridade dentro da competência, 0 no cartão. Recortado para [apur_ini, apur_fim].
 
-  Curado na raia (d83d35f6) e falta o DIFF de frota antes de ir à main — muda dias_em_aberto na tela de quem tem janela visual maior que a
-  competência, e isso é o que ~750 pessoas veem.
+  A trava é a pista, e ela tem nome: falta o DIFF de frota desse recorte — ele muda dias_em_aberto na tela de quem tem janela visual maior que a
+  competência — e há uma suite rodando. Não vou rodar duas: às 11:2x eu fiz isso e colhi 665 errors falsos com deadlock, que é precisamente o que a lei
+  "um run por vez" prevê.
 
-  Uma coisa que não vou repetir: às 11:2x eu rodei duas suites ao mesmo tempo no juliani_db_test e colhi 665 errors falsos com deadlock —
-  exatamente o que a lei "um run por vez" prevê. A regra é minha e eu a quebrei; agora há uma suite na pista e eu espero por ela antes de
-  qualquer outro run.
-
-  Fila do meu lado, em ordem: suite verde → merge + deploy do expandido e das curas → lavrar_he_pendente --apply → DIFF de frota do recorte do
-  furo → S5b (as 132,19 h de HE50 por origem, com 3 casos à mão) → col369 item 4 (o que mudaria com o vínculo 1296, sem aplicar).
+  Assim que a suite fechar, na ordem: merge + deploy do expandido e das curas → lavrar_he_pendente --apply → DIFF de frota do recorte → S5b (as 132,19 h
+  de HE50 por origem, 3 casos à mão) → col369 item 4.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8
-  PDF-ROTULO-PARCIAL-E-PENDENTE,
+  ⎿  Stop hook error: siga: O10 -- TROCA-DE-PLANTAO (corte Ronald 23/09 18:3x, detalhado as 20:3x: nasce como 4a opcao do Resolver dia -- "Trocou
 
-  Ran 2 shell commands
+  Ran 4 shell commands
 
-● O9 está andando, com o estado registrado na célula e a trava nomeada.
+● Background command "Rodar UMA suite limpa, sem colisao" completed (exit code 0)
 
-  - Passo 1 fechado (95c5bb25): a fatia por vigência saiu do cartão, medida em 114 colabs — 113 com cartão idêntico, e o único que diferia
-    (col866, turnos 14 × 9) diferia para pior no ramo fatiado. 2.894 selos de relatorios+ponto verdes.
-  - Passo 2 refutado como causa: com a cura do O108 de volta numa cópia, o DIFF PDF × espelho deu o mesmo 22 de 40 — a fatia não era a causa.
-  - Passo 3, pré-requisito achado e curado (d83d35f6): o resumo do espelho promete "os totais só da competência" e entregava a janela visual.
-    No col87: 89 dias de janela, 28 datas de furo no resumo, 10 na autoridade dentro da competência, 0 no cartão. Recortado para [apur_ini,
-    apur_fim].
+● Background command "Esperar a suite da main terminar" completed (exit code 0)
 
-  A trava é a pista, e ela tem nome: falta o DIFF de frota desse recorte — ele muda dias_em_aberto na tela de quem tem janela visual maior que
-  a competência — e há uma suite rodando. Não vou rodar duas: às 11:2x eu fiz isso e colhi 665 errors falsos com deadlock, que é precisamente
-  o que a lei "um run por vez" prevê.
+● Background command "Esperar o processo da suite morrer e ler o veredito" completed (exit code 0)
 
-  Assim que a suite fechar, na ordem: merge + deploy do expandido e das curas → lavrar_he_pendente --apply → DIFF de frota do recorte → S5b
+❯ aval Ronald 01/10 11:4x -- rubrica 0200: o Dominio aplica o percentual. A listagem oficial (~/nexti_ref/rubricas_dominio.txt, coluna 32) da 200 = HORAS
+  EXTRAS 100%, unidade H, percentual 200,0000 nas empresas 1, 2 (filiais 2 e 5) e 3 -- conferido por awk. Enviamos a HORA TRABALHADA, nunca o dobro:
+  col881 = 5,00. O TXT de 30/09 20:07 mandou 10,00 e estava errado. NOMEAR o commit que tirou a dobra e desde quando ela existia (e se era deliberada
+  pelo cadastro de feriado 12x36 em dobra), medir quantos colabs e horas sairam dobrados no TXT vigente da 09 (as tres empresas), e so entao regerar.
+  Selo: nenhuma rubrica com percentual no catalogo recebe quantidade multiplicada pelo emissor.
 
-✻ Waiting for API response · will retry in 2m 40s · check your network
-                                                                                                      ✔ Update installed · Restart to update
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+● Veredito da suite e historico da lavratura da folga
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; tail -c 200 $S/scratchpad/suite_limpa.log; echo; cd
+     /home/ronald/saas-hasner && echo "=== quem mexeu em horas_folga_trabalhada na LAVRATURA ==="; git log --format='%h %ad %s' --date=format:'%d/%m
+     %H:%M' -S'horas…
+
+✻ Waiting for API response · will retry in 2m 37s · check your network
+                                                                                                                  ✔ Update installed · Restart to update
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
