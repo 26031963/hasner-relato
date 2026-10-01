@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:20:49.**
+**Medido em 01/10/2026 16:25:50.**
 
 | | |
 |---|---|
@@ -24,7 +24,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **77** (baseline divergiu 41, nunca lancada 31, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **78** (baseline divergiu 41, nunca lancada 32, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
@@ -130,14 +130,14 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 
 ● O colisão de pista derrubou os quatro pushes — minha própria lei. Serializando.
 
-  Rodar a suite inteira sozinha na pista · 4m 10s
+  Rodar a suite inteira sozinha na pista · 9m 10s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1
      LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh)
      timeout 560 docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 …
-     (4m 9s)
+     (9m 10s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (8h 48m 13s · ↓ 1.0m tokens)
+✻ Pouncing… (8h 53m 14s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply

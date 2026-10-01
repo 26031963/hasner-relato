@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 16:20:49.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (170.7 MB). Acoes na janela: **1051**.
+**Medido em 01/10/2026 16:25:50.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (170.7 MB). Acoes na janela: **1048**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1058,6 +1058,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:35:06 | Bash | Ver como o selo chama o mypy | `grep -n 'mypy' core/tests/test_contract_mypy.py \| head -6; echo "=== como o selo chama ==="; grep -n "_run\\|'mypy'" core/tests/test_contract_mypy.py \| head -5` |
 | 04:34:53 | Bash | Rodar o mypy para ver o ofensor | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app -w /app saas-hasner-core:latest mypy --config-file mypy.ini . 2>&1 \| tail -6` |
 | 04:34:44 | Bash | Ver quais dois selos quebraram | `grep -n 'FAIL:' -A 10 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9c.log \| head -24` |
-| 04:25:48 | Bash | Conferir o push | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9c.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
-| 04:25:43 | Bash | Publicar o DIFF do O9 e empurrar | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read() i=t.find('\| O9 \|'); fim=t.index('\n',i); c=t[i:fim].split('\|') c[3]=(' **DIFF DE FROTA PUBLICADO 01/10 04:3x, e ele REPROVA a migracao direta: 392 de 862 colabs (45%) ' 'mudariam. A troca das 9 autoridades espera a TRIAGEM dos 5 campos** ') c[4]=(c[4].rstrip() + ' **O DIFF QUE A CELUL ...` |
-| 04:24:33 | Bash | Esperar o DIFF de frota | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o9.log; for i in $(seq 1 58); do grep -q '^RC=' "$L" 2>/dev/null && break; sleep 10; done; grep -q '^RC=' "$L" && sed -n '1,34p' "$L" \|\| echo "(ainda rodando; $(wc -l < "$L") linha(s))"` |
