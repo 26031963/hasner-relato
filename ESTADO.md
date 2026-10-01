@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:20:02.**
+**Medido em 01/10/2026 07:25:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/ponto/management/commands/diff_espelho_alimentacao.py
  M app/relatorios/pdf_espelho.py
  M app/relatorios/tests/test_pdf_nao_calcula.py
 ?? app/ponto/services/efeito_ausencia.py
@@ -100,6 +101,7 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Empurrado: e860aef1..a216cd89.
 
   Duas vezes neste turno esqueci a casa do comando novo em config/crons.py (9 min por ciclo). Guardei o trio de pré-push na memória: ruff · mypy · casa do comando.
@@ -121,20 +123,19 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 
 ● A dívida encolheu de 8 entradas para 6 — ausencias_do_periodo e cobertura_ausencia_periodo saíram. Atualizando a lista, como o selo exige:
 
-  Atualizar a divida e rodar os tres apps · 3m 57s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='relatorios/tests/test_pdf_nao_calcula.py'; t=io.open(P,encoding='utf-8').read()
-     i = t.index('DIVIDA = {'); j = t.index('}\n', i) + 2
-     novo = """DIVIDA = {
-     ('pdf_espelho.py', 'batidas_apuraveis'): 1,
-     ('pdf_espelho.py', 'celulas_do_periodo'): … (3m 56s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✽ Percolating… (9h 17m 26s · ↓ 619.0k tokens)
+● 3717 testes OK em relatorios + ponto + escala. Agora o DIFF completo, com as justificadas que acabaram de ganhar sítio próprio:
+
+  Ran 1 shell command
+
+● A cura completa (D) é muito menor que o teto: datas_falta cai de 7 para 3 em 15, e o dias_abono passa a aparecer (4). Rodando a frota:
+
+● Running 1 shell command…
+
+✢ Percolating… (9h 22m 55s · ↓ 622.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            1% until auto-compact
+                                                                                                                                                            0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
