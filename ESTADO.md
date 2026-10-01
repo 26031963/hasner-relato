@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:35:45.**
+**Medido em 01/10/2026 20:40:46.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -97,44 +99,44 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
-  │ fechamento ZERO e situação desligado │ 3   │ 2   │ 1   │ 6     │
-  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
-  │ SEM linha de fechamento              │ 0   │ 1   │ 0   │ 1     │
-  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
-  │ (com batida apurável na janela)      │ 516 │ 528 │ 472 │       │
-  └──────────────────────────────────────┴─────┴─────┴─────┴───────┘
 
-  42 em 1.516 colab-mês com batida — 2,8%. O achado de prod das 16:0x está aqui dentro e confere: na 10 são 7 ativos com vínculo e 4 sem vínculo, os 11
-  que eu publiquei. Os que mais doem por volume: col43 nas competências 09 (24 batidas) e 10 (38), sempre sem vínculo que cubra a janela; col924 com 41
-  batidas na 10; col882 com 23. Gente batendo ponto todo dia cuja folha não existe porque o cadastro não a alcança. Nada aplicado — e a cura não é uma: as
-  quatro causas pedem quatro curas, e duas são dado de cadastro, que a L-009 põe sob o seu !.
+● O DIFF do emp3 = CLT está escrito e esperando a pista — ele faz o toggle de Empresa.regime_trabalhista dentro de atomic() com raise no fim, calcula por
+  somente_leitura=True (que não grava) e, antes de qualquer coisa, confere que o banco é a sombra e aborta se não for. Script que decide regime não se
+  aproxima de prod — é a lei do incidente de 27/08. A 08 não entra: foi paga fora do sistema e não se retifica.
 
-  Item (7) — as quatro Pautas escritas, pelo escritor único, assinadas como sistema, cada uma com âncora: 908 supervisão/colab:369 (qual é o dia de folga
-  — o 1313 é 6x1 e não declara folga, e os dois candidatos, sexta 25/09 e segunda 28/09, estão ambos sem batida), 909 DP/colab:650 (data de fim da
-  ausência #3186), 910 DP/colab:935 (batidas em 05-06/09 contra admissão em 07/09, 9,11 h de adicional noturno), 911 supervisão/colab:221 (os 51 da fase
-  12x36, nenhuma proposta se aplica). Idempotentes e provado na hora: a segunda chamada respondeu já existe — nada criado nas quatro.
+  Estado da fila da noite, para situar:
 
-  Item (2) — AVAIS-NA-MESA já estava no ar, com os 3 abertos e a frase pronta.
+  ┌────────────────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │            item            │                                                        estado                                                        │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (1) S5b, os dois passos    │ medido e publicado → tabela no AVAIS, espera o !                                                                     │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (2) AVAIS-NA-MESA          │ no ar — 5 abertos com a frase pronta                                                                                 │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (3) GESTAO-HE              │ metade de TELA pronta na raia (21c4826e); a parte da main está listada com arquivo:linha, e duas travas foram para o │
+  │                            │  AVAIS (a pergunta de lei do contador e a ordem de subida)                                                           │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (4) UI-RESPOSTA            │ não começou                                                                                                          │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (5)                        │ não começou                                                                                                          │
+  │ SUITE-UMA-VEZ-POR-ARVORE   │                                                                                                                      │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (6) leitura                │ censo feito e publicado; DIFF emp3=CLT escrito, espera a pista                                                       │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (7) Pautas                 │ 4 abertas (908–911), idempotentes e provadas                                                                         │
+  ├────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (8) fila 1 do BACKLOG      │ depois                                                                                                               │
+  └────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Sobre o item (6b), o DIFF emp3=CLT: encontrei a medição de 25/09 no JSON de pendentes (08 movia 87 de 128 colabs, +979,40 h de noturno; 09 movia 48 de
-  123, +1.279,27 h), mas ela é de antes de uma dúzia de curas e não serve para o seu ! final. O DIFF novo precisa alternar Empresa.regime_trabalhista na
-  sombra com rollback — nunca em prod, que é a lei do incidente de 27/08 — e a sombra usa os mesmos núcleos da suíte que está rodando. Entra assim que ela
-  fechar, junto do deploy que o selo test_import_tardio_contra_o_ar está cobrando.
+  Nenhum item devolveu o turno: os que travaram viraram linha no AVAIS e eu passei ao próximo, como a sua regra manda. O que segura a pista agora é a
+  suíte cheia do marco do AVAIS — e atrás dela vêm, no mesmo turno, o deploy que o selo test_import_tardio_contra_o_ar está cobrando (a porta
+  reabrir_vigencia_impossivel está no disco e não na memória do worker), o DIFF do emp3, e então os itens (4) e (5).
 
-✻ Waiting for 1 background agent to finish
-
-› Message from @a6628ec7e07379c89 (ctrl+o to expand)
-
-· Zesting… (9s · thinking)
-  ⎿  Tip: Run /ultrareview for a cloud-based multi-agent review that finds and verifies bugs in your branch — 3 free reviews left
+✻ Brewed for 52s · done 8:39 PM · 1 shell, 3 monitors still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so com a lista inteira travada
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Stopping the pista-waiting background task                                                                28m 58s · ↓ 287.4k tokens
+  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
