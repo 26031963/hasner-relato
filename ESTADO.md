@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:435 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:463 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:25:21.**
+**Medido em 01/10/2026 20:30:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU` |
+| `HEAD` local | `060dd4a2 AVAIS NA MESA no ar: 3 abertos com a frase pronta, 4 respondidos que ja somem, 163 sem triagem` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,25 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+060dd4a2 AVAIS NA MESA no ar: 3 abertos com a frase pronta, 4 respondidos que ja somem, 163 sem triagem
 61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU
 edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs
 48a202f0 A tabela honesta da S5b: 3 rubricas 100% CEGAS, trabalhadas divergindo em 445 de 464, e o `!` NAO se pede
 d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS
-02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M bin/handoff_sessao.sh
- M bin/relato.sh
-?? app/docs/AVAIS.md
-?? bin/gerar_avais.py
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
-?? bin/tests/test_avais_na_mesa.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -103,44 +97,44 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  linha no AVAIS com a frase pronta e voce PASSA AO PROXIMO no mesmo turno. So devolve turno com a lista inteira travada. Um push por marco; vizinhos do
-  sitio tocado antes da suite cheia.
-  1. S5b: (a) horas_atraso +129,70 h em 22 -- medir quantos sao turno ABERTO ou par nulo; hipotese: o calculador nao le a guarda que entrou no motor as
-  19:26 (_aplicar_teto_pontualidade); se for, IMPORTAR a guarda. (b) trabalhadas +107,23 h em 27 e folga +31,48 h em 3: abrir por causa, 3 casos a mao,
-  dizer quem esta certo e se a contagem em dobro morreu. Tabela final -> AVAIS, espera o ! da troca.
-  2. AVAIS-NA-MESA (ordem de 18:4x): gerar e publicar AVAIS.md.
-  3. GESTAO-HE-CALENDARIO-CONTROLE, parte da main: view do laco (N atos por decidir_he), cadastro he_limite_decisao_min com migration, leitor mandando
-  abaixo_limite, url no contexto; merge da raia + deploy no mesmo ato -> smoke meu no AVAIS.
-  4. UI-RESPOSTA-DIZ-O-QUE-E (ordens de 17:4x e 18:3x): sinal_min no juiz, as 4 frases, Reabrir com aviso, "30 min" lido da fonte.
-  5. SUITE-UMA-VEZ-POR-ARVORE (ordem de 20:0x).
-  6. So LEITURA, publicar e nao aplicar: censo FOLHA-ZERO-COM-BATIDA na frota; DIFF emp3=CLT da 09 e da 10 por rubrica e por colab.
-  7. Pautas, sem escrita de dinheiro: col369 (folga nao declarada no 1313), col650 (data de fim da ausencia 3186), col935 (admissao 05 ou 07/09), lista
-  dos 51 da fase 12x36 para a supervisao.
-  8. Fila 1 do BACKLOG na ordem do hook (O21 em diante).
-     Segue a fila; PAREI so com a lista inteira travada !
+  Os quatro respondidos já somem da tabela — e dois deles (ui-resposta-diz-o-que-e-desenho e col369-vinculo-1296) são justamente dois dos quatro que o seu
+  observável (1) citava: não aparecem porque você já respondeu. E os 163 antigos não foram triados: receberam sem-motivo, o terceiro valor que a sua
+  ordem nomeia, e dos 8 que já tinham estado em texto livre o texto foi preservado em estado_texto.
 
-  Ran 8 shell commands
+  Vizinhos do sítio tocado primeiro, como a fila manda: 87 testes, OK. A suíte cheia está rodando e o deploy vai atrás dela — o selo
+  test_import_tardio_contra_o_ar já acusa o que falta: corrigir_vinculo_vigencia.py:48 importa reabrir_vigencia_impossivel, que está no disco e não na
+  memória do worker. O selo está certo, e a cura é o deploy.
 
-● Monitor event: "DIFF de folha do vinculo 1296 na sombra (2a tentativa)"
+✻ Waiting for 1 background agent to finish
 
-● Fechar a celula e rodar os vizinhos
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     A='| AVAIS-NA-MESA |'
-     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
-     novo = (' **FECHADA 01/10 21:3x.** `b…
+● Monitor event: "resultado do diff_calculador da competencia 10"
 
-* Discombobulating… (10m 12s · ↓ 34.8k tokens)
+● Monitor event: "resultado do diff_calculador da competencia 10"
+
+  Listed 1 directory, ran 1 shell command
+
+● Monitor event: "veredito da suite do marco do AVAIS"
+
+  Ler todos os campos do item do regime
+  ⎿  $ python3 - <<'PY'
+     import json,io
+     d=json.load(io.open('docs/PENDENTES_RONALD.json',encoding='utf-8'))
+     for x in d:
+     if x['id']=='regime-por-empresa-apply-emp3-clt':
+     for k in sorted(x):
+     print('--- %s: %s' % (k, str(x[k])[:600]))
+     break
+     PY
+
+· Swirling… (2m 22s · ↓ 8.4k tokens · thought for 11s)
+  ⎿  Tip: Run /ultrareview for a cloud-based multi-agent review that finds and verifies bugs in your branch — 3 free reviews left
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting RELATO.md header lines                                                                         18m 34s · ↓ 235.2k tokens
+  ◯ general-purpose  Checking ba14jhui5.output for lane availability                                                           23m 58s · ↓ 260.4k tokens
   ⧉  index
 ```
