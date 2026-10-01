@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:47:05.**
+**Medido em 01/10/2026 19:52:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO` |
+| `HEAD` local | `b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`
 76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO
 d97b779f A celula da 09 declara o DIFF publicado e a frota recusada
 80ba806c A 09: DIFF publicado ANTES, e o recalculo de FROTA esta RECUSADO -- 19 rubricas, 47 campos SUBINDO
 c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois
-f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o vigia cego para um id
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/vinculo.py
- M app/docs/HANDOFF-SESSAO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,44 +95,44 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  inativo). Então o plano fecha o 1313 em 21/09 pela fechar_vigencia, e a flag --absorver-de mede a leitura literal na sombra para a diferença sair com
-  número, não com opinião. Se qualquer hora se mover em qualquer das duas, é PAREI com a tabela.
+  Agora o vínculo do col369, e os dados confirmaram a sua ordem ao pé da letra: EC 1296 é ARCOS - PSR, ciclo 6x1, folga_dia_semana='4' = sexta; EC 1313 é
+  6x1 com folga_dia_semana='' — não declara folga nenhuma. O dry-run das duas leituras tornou a divergência um fato medido, não opinião:
 
-  Nada disso rodou ainda: o push do marco da pontualidade está com a pista de teste ocupada (arsenal do pre-push), e o DIFF na sombra usa os mesmos
-  núcleos — um run por vez. Assim que o push fechar: selo do vínculo, DIFF do 1296 pelas duas leituras, e então a 09, que é o item que o vigia nomeia
-  agora.
+  - doutrina (o vigente em D fecha em D−1): 1296 reaberto, 1313 fechado em 21/09, absorver não pega nada → sem buraco.
+  - literal (absorver de 19/09): 1296 reaberto, 1313 absorvido → 19 a 21/09 fica sem vínculo ativo nenhum, porque o EC 322 termina em 21/09 e está
+    inativo.
 
-✻ Cooked for 5m 59s · done 7:35 PM · 1 shell, 1 monitor still running
+  O DIFF de folha da leitura correta está rodando na sombra. Se mover qualquer hora, é PAREI com a tabela. A porta reabrir_vigencia_impossivel — que não
+  existia e sem a qual só restava o update solto que você proibiu — passou com 21 testes OK, incluindo o selo de AST que exige que todo escritor de
+  data_fim chame o juiz único.
 
-● Monitor event: "veredito do push do marco da pontualidade"
+✻ Baked for 11m 18s · done 7:48 PM · 1 shell, 3 monitors still running
 
-  Ran 2 shell commands
-
-● Monitor event: "veredito da 2a suite da PONTUALIDADE-EM-TURNO-ABERTO"
+● Monitor event: "DIFF de folha do vinculo 1296 na sombra"
 
   Ran 4 shell commands
 
-● Monitor event: "veredito do push do marco da pontualidade"
+● Monitor(DIFF de folha do vinculo 1296 na sombra (2a tentativa))
+  ⎿  Monitor started · task by3lad6ua · timeout 1800s
 
-● Background command "Empurrar o marco, um push so" completed (exit code 0)
+● O DIFF do vínculo falhou na primeira tentativa por um erro meu de cópia velha: montei a árvore com git archive HEAD quando o HEAD ainda era de antes de
+  eu escrever o comando, e a sombra respondeu Unknown command: 'corrigir_vinculo_vigencia' (exit 91, nenhuma escrita). Reconstruí do HEAD atual e relancei
+  — a foto do antes já tinha saído e será refeita no mesmo par, sob uma trava só, que é a condição para o par valer.
 
-● Monitor event: "veredito do push do marco da pontualidade"
+  Também commitei uma correção pequena que o selo pegou: passei motivo='vigencia impossivel reparada' num campo que é CHOICE de 20 chars (admissao |
+  transferencia | desligamento | mudanca | correcao) — três casos voltaram DataError. O valor certo para este ato é correcao ("Correção retroativa") e a
+  prosa vai em obs, que tem 400. Depois disso, 21 testes de vigência OK, incluindo o selo de AST que exige que todo escritor de data_fim passe pelo juiz
+  único.
 
-● Acertar o motivo do historico e rodar os selos
-  ⎿  $ python3 - <<'PYEOF'
-     import io
-     P='colaboradores/services/vinculo.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = """ motivo='vigencia impossivel reparada')"""
-     assert t.count(a)==1
-     # O `motivo` do HistoricoVinculo e um CHOICE de 20 chars, nao prosa: o valor certo para este ato e
-     # `correcao` ("Correca…
+  Estado da fila, para situar: a pontualidade em turno aberto está no ar e empurrada (c965b638..c07a13c5); a 09 está aplicada, provada e com TXT novo pela
+  porta; o vínculo do col369 está medindo na sombra. Depois dele a ORDEM VIVA volta para a S5b, que espera o seu ! da troca — e ficam registrados, com
+  número, o JANELA-DA-AUTORIDADE-PERDE-O-DIA-20 (109 colabs com a saída do dia 20 fora da janela da tela) e o PREVISTO-EM-DUAS-FONTES.
 
-✢ Propagating… (9m 47s · ↓ 28.1k tokens)
+✻ Cooked for 51s · done 7:51 PM · 1 shell, 3 monitors still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
