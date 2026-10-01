@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:25:45.**
+**Medido em 30/09/2026 21:30:45.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+?? app/ponto/management/commands/aplicar_col900.py
 ?? app/ponto/management/commands/diff_col900.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -100,39 +101,39 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ sem batida → fica        │ 13               │ 10                        │
-  └──────────────────────────┴──────────────────┴───────────────────────────┘
+  ├───────────────────────────┼───────┼───────────────┼─────────────────┤
+  │ 06, 08, 10, 12, 14, 18/09 │ 07:00 │ 07:00 (0 min) │ 12:00 (300 min) │
+  └───────────────────────────┴───────┴───────────────┴─────────────────┘
 
-  O col900 virou por inteiro: 16 dias de template, zero de célula. Mas dentro dos 24 há dois que me incomodam — vou medi-los antes de aplicar:
+  Seis dias em que a célula estava PERFEITA foram sobrescritos por um template 5 h errado. A causa: a porta regenera o período do vínculo até o horizonte, não o dia — e o template
+  do col438 (12:00) acerta em 2 dias e erra nos outros. Regenerá-lo foi violar a própria lei que eu estava implementando.
 
-  Ran 1 shell command
-
-● 22 dias regeneram (template confirmado, erro máximo 23 min) e 62 ficam — incluindo dois que eu separo com nome: col900 11/09 (template errado por 117 min) e col945 11/09 (178
-  min). Nesses dois nenhum marco descreve o dia, que é a classe da L-084 que nasceu hoje de manhã: eles vão para CADASTRO x REALIDADE, não para regeneração. Publicando antes de
-  aplicar, como a ordem manda:
-
-  Searched for 4 patterns, ran 2 shell commands
-
-● A porta é regenerar_celulas_vinculo(ec, desde, ate, ...) com guarda de competência exportada (e apesar_da_lavra como a exceção declarada, que a lei de hoje autoriza). Vou
-  chamá-la dia a dia — 22 chamadas, precisão exata, sem tocar o 11/09 do col900. Primeiro o DIFF, no motor que eu extraí hoje:
+  O gravado não se moveu (não relavrei). Revertendo os 6 agora:
 
   Ran 1 shell command
 
-● Declarando a casa dele e rodando o DIFF:
+● Revertidos os 6 — todos de volta a 07:00, batendo exatamente com a primeira batida. Mas a conferência expôs outra contaminação no meu instrumento: 02/09 do col438 ficou com
+  celula_hi=None, isto é, folga — e ele bateu 12:00 nesse dia. Eu comparei contra te.marcos_do_dia(), que é o template sem a fase, e o CLAUDE.md diz em letras próprias que "o do
+  template não sabe a fase". Décimo quinto erro de instrumento.
 
-  Declarar e rodar o DIFF do COL900 · 3m 32s
-  ⎿  $ python3 - <<'PYEOF'
-     import io, py_compile
-     P = 'config/crons.py'
-     t = io.open(P, encoding='utf-8').read()
-     A = " 'diff_passivo_s84':\n"
-     assert t.count(A) == 1
-     N = (""" 'diff_col900':
-     'DIFF de frota da regeneracao COL900 -- os dias em que a PRIMEIRA BATIDA CRUA do dia confirma o '
-     'TEMPLATE e nao a c… (3m 32s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Não vou relavrar sobre isso. Antes, a verificação que decide: o estado atual é melhor que o anterior em todos os dias?
 
-· Bootstrapping… (7h 54m 12s · ↓ 1.4m tokens)
+  Ran 1 shell command
+
+● O veredito é melhor do que eu temia e pior do que eu disse: 21 dias melhoraram, nenhum ficou pior no marco — mas 4 viraram FOLGA tendo batida no dia, e a minha própria
+  classificação os separou em vez de chamar isso de piora. Dois são regressão clara:
+
+  - col438 16/09 e 20/09: célula tinha 07:00 = real 07:00 (certo) e viraram folga.
+
+  Revertendo esses dois:
+
+● Reverter os dois dias que viraram folga com marco certo
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/reverter438b.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """REVERSAO 2: os dias do col438 em que a celula tinha o marco CERTO e a regeneracao os virou FOLGA."""
+     import…
+
+· Bootstrapping… (7h 59m 12s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
