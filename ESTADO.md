@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:44:01.**
+**Medido em 01/10/2026 00:49:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe` |
+| `HEAD` local | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
 | `origin/main` | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
 bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
 ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
 4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
 db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
-74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 ```
 
 ## `git status --short`
@@ -95,39 +95,39 @@ db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Defeito no meu próprio output: o pré-check só olha turno_aberto e eu crio turno_aberto_24h, então a 2ª passada imprime [EMITE] para algo que não emite — a linha mente. Curando
-  no sítio (o cron checa os dois):
-
-  Ran 1 shell command
-
-● Agora o output não mente (emitidos=0 ja_existia=3, zero linhas [EMITE]). Escrevendo o selo:
-
-  Ran 2 shell commands
-
-● Só a fixture da ausência (precisa de registrado_por). Corrigindo:
-
-  Ran 1 shell command
-
-● 31 OK. PROVA em prod de que os 3 acenderam e estão vivos:
-
-  Ran 2 shell commands
-
-● Os 3 estão vivos em prod (ch27484/85/86, abertos, supervisão). O ! da saída (i) está inteiro agora. Fechando o O104:
-
-  Ran 2 shell commands
-
-● A régua leu [EMITE] da minha mensagem como citação de fatia — mesma família do [VETO_SEM_CELULA]. Tirando os colchetes:
-
-  Ran 1 shell command
-
 ● Background command "Fechar o O104, commitar e empurrar" completed (exit code 0)
 
-● Conferir o push · 7m 29s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o104b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 28s)
+  Ran 1 shell command
+
+● Background command "Reescrever a mensagem sem colchetes e reempurrar" completed (exit code 0)
+
+  Searched for 1 pattern
+
+● O selo do diagrama: o comando novo acrescentou uma aresta. Regerando (cura que o próprio selo nomeia):
+
+  Ran 3 shell commands
+
+● O gerador contou um 32º chamador que não existe: a palavra "retratar" aparece na prosa do meu docstring. Conferindo se ele conta por texto ou por AST:
+
+  Ran 2 shell commands
+
+● A casa já tem core/censo_codigo.py — "CENSO DE UM PADRAO NAS LINHAS DE CODIGO — prosa nao conta". Vendo se o gerador do diagrama o usa:
+
+  Ran 1 shell command
+
+● O leitor que não migrou é o gerador. Lendo chamadores() para trocá-lo pelo censo da casa:
+
+  Ran 2 shell commands
+
+● Correção grande e real: o desenho inflava os chamadores por causa de prosa — julgar_celula 18→11, registrar_batida 17→10, criar_ausencia 8→6. O chokepoint de escrita de batida
+  aparecia com 7 chamadores fantasmas. Rodando os selos:
+
+● Commitar a cura do gerador e empurrar · 1m 8s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_diag.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 8s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (2h 41m 26s · ↓ 290.9k tokens)
+✢ Percolating… (2h 46m 55s · ↓ 298.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

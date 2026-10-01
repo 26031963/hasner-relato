@@ -123,30 +123,29 @@ flowchart TD
 
   %% (c) PORTAS CANONICAS — fonte: AST/grep sobre app/
   subgraph PORTAS["escritores unicos / portas canonicas"]
-    p_julgar_celula(["julgar_celula()<br/>celula julgada<br/>18 chamador(es)"])
-    x_api_views_py["api/views.py"] --> p_julgar_celula
-    x_chamados_management_commands_auditar_invariantes_chamados_py["chamados/management/commands/auditar_invariantes_chamados.py"] --> p_julgar_celula
+    p_julgar_celula(["julgar_celula()<br/>celula julgada<br/>11 chamador(es)"])
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_julgar_celula
     x_chamados_services_cobrar_dia_py["chamados/services/cobrar_dia.py"] --> p_julgar_celula
     x_chamados_signals_py["chamados/signals.py"] --> p_julgar_celula
-    mais_julgar_celula["... +13 chamadores"] --> p_julgar_celula
-    p_criar_ausencia(["criar_ausencia()<br/>ausencia<br/>8 chamador(es)"])
+    x_colaboradores_services_pos_vinculo_py["colaboradores/services/pos_vinculo.py"] --> p_julgar_celula
+    x_config_crons_py["config/crons.py"] --> p_julgar_celula
+    mais_julgar_celula["... +6 chamadores"] --> p_julgar_celula
+    p_criar_ausencia(["criar_ausencia()<br/>ausencia<br/>6 chamador(es)"])
     x_api_views_py["api/views.py"] --> p_criar_ausencia
     x_chamados_services_materializacao_py["chamados/services/materializacao.py"] --> p_criar_ausencia
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_criar_ausencia
-    x_ponto_forms_py["ponto/forms.py"] --> p_criar_ausencia
-    x_ponto_precedencia_py["ponto/precedencia.py"] --> p_criar_ausencia
-    mais_criar_ausencia["... +3 chamadores"] --> p_criar_ausencia
-    p_registrar_batida(["registrar_batida()<br/>batida<br/>17 chamador(es)"])
+    x_ponto_services_checar_ausencia_py["ponto/services/checar_ausencia.py"] --> p_criar_ausencia
+    x_ponto_services_veredito_celula_py["ponto/services/veredito_celula.py"] --> p_criar_ausencia
+    mais_criar_ausencia["... +1 chamadores"] --> p_criar_ausencia
+    p_registrar_batida(["registrar_batida()<br/>batida<br/>10 chamador(es)"])
     x_api_views_py["api/views.py"] --> p_registrar_batida
     x_api_views_core_py["api/views_core.py"] --> p_registrar_batida
-    x_chamados_management_commands_reconciliar_chamados_py["chamados/management/commands/reconciliar_chamados.py"] --> p_registrar_batida
-    x_chamados_models_py["chamados/models.py"] --> p_registrar_batida
-    x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_registrar_batida
-    mais_registrar_batida["... +12 chamadores"] --> p_registrar_batida
-    p_relavrar(["relavrar()<br/>via da pergunta<br/>3 chamador(es)"])
+    x_chamados_services_acoes_chamado_py["chamados/services/acoes_chamado.py"] --> p_registrar_batida
+    x_chamados_services_materializacao_py["chamados/services/materializacao.py"] --> p_registrar_batida
+    x_chamados_services_regularizacao_ext_py["chamados/services/regularizacao_ext.py"] --> p_registrar_batida
+    mais_registrar_batida["... +5 chamadores"] --> p_registrar_batida
+    p_relavrar(["relavrar()<br/>via da pergunta<br/>2 chamador(es)"])
     x_chamados_management_commands_relavrar_via_i6_py["chamados/management/commands/relavrar_via_i6.py"] --> p_relavrar
-    x_config_crons_py["config/crons.py"] --> p_relavrar
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_relavrar
     p_desfazer_carimbo_sem_lastro(["desfazer_carimbo_sem_lastro()<br/>carimbo desfeito<br/>2 chamador(es)"])
     x_chamados_services_fabrica_da_celula_py["chamados/services/fabrica_da_celula.py"] --> p_desfazer_carimbo_sem_lastro
@@ -157,13 +156,13 @@ flowchart TD
     x_chamados_services_fio_py["chamados/services/fio.py"] --> p_materializar_perguntas_validadas_da_disputa
     x_chamados_services_validacao_py["chamados/services/validacao.py"] --> p_materializar_perguntas_validadas_da_disputa
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_materializar_perguntas_validadas_da_disputa
-    p_retratar(["retratar()<br/>retratacao S128<br/>31 chamador(es)"])
+    p_retratar(["retratar()<br/>retratacao S128<br/>18 chamador(es)"])
     x_chamados_catalogo_premissa_py["chamados/catalogo/premissa.py"] --> p_retratar
-    x_chamados_juizes_py["chamados/juizes.py"] --> p_retratar
-    x_chamados_management_commands_auditar_invariantes_chamados_py["chamados/management/commands/auditar_invariantes_chamados.py"] --> p_retratar
     x_chamados_management_commands_retratar_chamados_lei_cala_py["chamados/management/commands/retratar_chamados_lei_cala.py"] --> p_retratar
-    x_chamados_veredito_lavrado_py["chamados/veredito_lavrado.py"] --> p_retratar
-    mais_retratar["... +26 chamadores"] --> p_retratar
+    x_config_crons_py["config/crons.py"] --> p_retratar
+    x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_retratar
+    x_escala_management_commands_termometro_regua_py["escala/management/commands/termometro_regua.py"] --> p_retratar
+    mais_retratar["... +13 chamadores"] --> p_retratar
     p_reapontar_resolvedora(["reapontar_resolvedora()<br/>reapontar fio<br/>2 chamador(es)"])
     x_chamados_reconciliador_py["chamados/reconciliador.py"] --> p_reapontar_resolvedora
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_reapontar_resolvedora
