@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:55:31.**
+**Medido em 01/10/2026 00:00:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
-| `origin/main` | `74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,39 +96,39 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  casos negativos para calcular à mão, como ele exigiu:
+  PAREI novo, que não estava na mesa
 
-  Ran 1 shell command
+  Regerei a 09 das três: emp3 e emp4 idênticas, emp2 move UMA linha — col881, 02/09, falta_diurna, um dia virando meio dia. Ele não foi tocado hoje (fechamento de 28/09 00:45,
+  zero trilha). O gravado não se moveu e o arquivo se moveu: export.py:388 tira o bloco de falta de datas_falta(...) derivado na hora da geração. O TXT não é função pura do
+  gravado. Não substituí.
 
-● Três casos, e dois deles têm o calculador em 0,0 contra motor com horas. Calculando à mão pelas batidas cruas:
+  S5b — a causa inverte o sinal
 
-  Ran 1 shell command
+  O calculador acerta 3 de 3 contra a mão (col43 5,53 · col698 7,00 · col465 1,07), e o motor dá 28,69 h num único dia no col43. Causa: dia com sequência ímpar; o calculador soma
+  pares fechados, o motor faz ponte com a última saída. O delta negativo não é o calculador perdendo hora — é o motor creditando hora que as batidas não sustentam. Descartei os 3
+  primeiros casos que sorteei: dois eram do col950, "[nome]", com batidas sintéticas.
 
-● Três cálculos à mão, e duas descobertas: a causa tem três mecanismos distintos — e col950 é "[nome]", com batidas sintéticas disputa_s84_retro, então não serve de
-  prova de frota. Repetindo com colabs reais:
+  A pergunta que separa as três hipóteses está no RELATO, em uma linha: "ele saiu às 14:00 e voltou sem bater, ou foi embora e a batida das 19:00 não é jornada dele?"
 
-  Ran 1 shell command
+  Também fechou o O3 (selo de classe, com o anti-podre me pegando na primeira corrida) e o relógio de 10px está no ar. Falta seu smoke em /ponto/gestao-he/ e no calendário; a raia
+  UI da Gestão de HE é a próxima.
 
-● col43 tem o motor marcando 28,69 h num único dia — impossível. Calculando à mão três casos reais, com esse na frente:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
+● A célula do S5b ficou com "esperando o !", que o hook não lê — ele reconhece PAREI e espera o !. E a trava é real e nomeada: pergunta de LEI publicada com número. Corrigindo o
+  vocabulário:
 
-● Causa encontrada, e ela inverte a leitura do sinal. Escrevendo:
-
-  Ran 1 shell command
-
-● O 8 está certo aqui: a tabela do S5b tem 6 colunas (a das OBRAS tem 5). Conferindo contra uma irmã e commitando:
-
-  Ran 1 shell command
-
-● Colunas certas (as irmãs também têm 8). Empurrando:
-
-● Empurrar o S5b · 8m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s5b.log 2>&1; echo
-     "RC=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s5b.log) & sle… (8m 16s)
+  Pôr a trava do S5b no vocabulario do hook e conferir · 1m 46s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read()
+     i=t.find('| S5b-CALCULADOR-ESCREVE |'); fim=t.index('\n',i); c=t[i:fim].split('|')
+     c[3]=(' **PAREI: qual pareamento e o devido num dia de sequencia IMPAR** -- pergunta de LEI, publicada… (1m 46s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (1h 52m 55s · ↓ 229.7k tokens)
+· Percolating… (1h 58m 9s · ↓ 233.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
