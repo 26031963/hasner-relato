@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 03:50:01.**
+**Medido em 01/10/2026 03:55:29.**
 
 | | |
 |---|---|
 | `HEAD` local | `1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido` |
-| `origin/main` | `8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,6 +40,7 @@ c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permi
 
 ```
  M app/docs/RELATO.md
+ M app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,39 +97,39 @@ c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  E a resposta do "medir primeiro": o espelho já devolve tudo o que o PDF recalcula. O dia dele carrega 27 chaves — batidas, turnos, previsto, folga, ausência, palavra_dia,
+  dia_pago, rubricas, falta_marcos, he_fora_da_janela… — mais resultado (o próprio motor) e resumo. A migração é mecânica.
 
-● O9 supera o O8 e o item manda medir primeiro. E hoje já vi pdf_espelho.py:580 desenhando _tela['dias'] e o contador tela_x_pdf: []. Medindo as três verificações que o item
-  nomeia:
+  Não comecei a migração, e a razão está na própria célula: ela exige "DIFF antes de subir — o que muda no PDF de cada um e por que", com a regra de que mudança que o espelho não
+  tem é bug do espelho e vira item próprio. Rasgar dez laços de um documento do Art.74 §2º sem esse DIFF publicado seria o oposto do que o item manda — e é o próximo passo,
+  nomeado na célula.
 
-  Searched for 2 patterns, ran 2 shell commands
+  Empurrado: 8f57dea2..1c3513ca.
 
-● A medição de frota ficou em segundo plano. Enquanto roda, a verificação (1) — o censo de cálculo dentro de relatorios/:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-  Ran 1 shell command
+● O hook está certo: a migração não foi feita. O próximo passo nomeado é o DIFF — e ele é o mesmo instrumento do selo de coerência dia-a-dia. Vendo o que o PDF desenha por dia:
 
-● O censo perdeu os apelidos (_aus_periodo, _cob_periodo) — ele casava o nome da chamada, não o import. Refazendo resolvendo o alias:
+  Ran 2 shell commands
 
-  Ran 1 shell command
-
-● O censo honesto: o PDF chama 10 autoridades por conta própria, incluindo calcular_mes (o motor) — e chama espelho_do_colab. Ele faz os dois. Agora a pergunta que o item manda
-  fazer primeiro: o que o espelho já devolve?
-
-  Ran 3 shell commands
-
-● O espelho já devolve tudo o que o PDF recalcula. Montando a tabela que o item pede como primeiro passo, e conferindo a medição de frota:
+● Descoberta que muda o plano: o desenho já lê o dict do espelho (dia.get('rubricas'), pago_h, turnos…). Então a pergunta certa antes do DIFF é: o resultado dos 10 cálculos ainda
+  é usado? Censando:
 
   Ran 1 shell command
 
-● Background command "Medir o contador pdf x espelho na frota" completed (exit code 0)
+● Achado de zero risco: _rotulo_por_data é escrito e nunca lido — só 2 usos, a criação e a escrita. Era o rótulo que o O8 provou ter morrido (a autoridade virou palavra_dia).
+  Confirmando antes de remover:
 
-● tela_x_pdf = 0 nas seis combinações (emp 2/3/4 × competências 09 e 10, 341 colabs). Escrevendo o estado medido do O9:
+  Searched for 1 pattern, ran 3 shell commands
 
-  Conferir o push do O9 · 7m 56s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 55s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● _CATR segue usado para ABONA/SUPRIME, e rotulo_vigente só aparece na minha prosa. Provando que remover código morto não mudou saída:
 
-✢ Percolating… (5h 47m 26s · ↓ 506.3k tokens)
+  Rodar relatorios e o ruff
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te…
+
+· Percolating… (5h 52m 53s · ↓ 512.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
