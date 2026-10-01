@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:30:01.**
+**Medido em 01/10/2026 11:35:31.**
 
 | | |
 |---|---|
@@ -96,44 +96,44 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Defeito 2 — a relavra NÃO pegou, e a culpa é minha: faltou --apply. Medido: existem 2 linhas de he_pendente para a emp2, de 30/09 17:23 (09) e 01/10 06:36 (10). Nenhuma é das
-  10:11/10:41. O comando lavrar_he_pendente só escreve com --apply e eu rodei sem — ele mediu e imprimiu, e eu publiquei "retrato relavrado" lendo o print como se fosse escrita.
-  Os 13,7% do almoço são válidos (é a medição), mas o retrato em prod nunca foi reescrito. Vou relavrar de verdade depois do defeito 1, senão gravaria os 4.198 dias de novo.
-
-  Defeito 3 — dd/mm na tela: entra com a forma.
-
-  E o item 1 do aval anterior, que desfaz a minha própria conclusão: não houve commit de emissão. O único que toca folha/export.py desde 29/09 é 711982b3 (30/09 19:13) e são 17
-  inserções, 0 deleções — só acrescentou nome_canonico. O que mudou foi o gravado, e a minha "prova" de que ele não havia sido tocado estava errada: o escritor canônico dos
-  números é um queryset.update(), e auto_now só dispara no save(). O carimbo ficava parado em 28/09 enquanto as horas eram reescritas — a mesma família que a seção 4 do CLAUDE.md
-  descreve para a célula, e eu usei o campo como prova em vez de desconfiar dele. O selo novo achou 14 sítios em 8 arquivos com o mesmo defeito; todos curados, allowlist zero. E a
-  rota morta da mensageria saiu com o seu !: das 42 funções api_mensageria_*, 41 estavam roteadas — não é que ninguém chamava, não havia como chamar.
+  ficava parado em 28/09 enquanto as horas eram reescritas — a mesma família que a seção 4 do CLAUDE.md descreve para a célula, e eu usei o
+  campo como prova em vez de desconfiar dele. O selo novo achou 14 sítios em 8 arquivos com o mesmo defeito; todos curados, allowlist zero. E
+  a rota morta da mensageria saiu com o seu !: das 42 funções api_mensageria_*, 41 estavam roteadas — não é que ninguém chamava, não havia
+  como chamar.
 
   As 6 linhas do expandido, antes de codar:
-  1. O período dela desenhado grande, em semanas: uma célula por dia de 21→20, as com ponta pintadas, intensidade pelos minutos na escala única com o teto declarado.
+  1. O período dela desenhado grande, em semanas: uma célula por dia de 21→20, as com ponta pintadas, intensidade pelos minutos na escala
+     única com o teto declarado.
   2. Dentro da célula, a direção: metade de cima = antes da entrada, metade de baixo = depois da saída; dia com as duas aparece dividido.
   3. Uma frase sobre o desenho: "9 min antes da entrada em 12 de 15 plantões · maior dia 22 min · 110 min no total".
-  4. Abaixo, a tabela limpa, como texto de apoio: dia (dd/mm) · ponta · bateu · marco · minutos — rótulo no cabeçalho, nunca repetido por linha.
+  4. Abaixo, a tabela limpa, como texto de apoio: dia (dd/mm) · ponta · bateu · marco · minutos — rótulo no cabeçalho, nunca repetido por
+     linha.
   5. No topo do expandido, uma opção: "Dar ciência nos N dias sem decisão desta pessoa".
   6. Autorizar segue por dia, e o campo de motivo só nasce quando ele escolhe autorizar aquele dia.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8
+  PDF-ROTULO-PARCIAL-E-PENDENTE,
 
   Ran 4 shell commands
 
 ● Background command "Rodar a suite inteira com os 14 carimbos curados" completed (exit code 0)
 
-● Rodar UMA suite limpa, sem colisao
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source bin/recursos.sh >/dev/null 2>&1;
-     teste_envfile >/dev/null 2>&1; LABELS=$(grep -oP '^LABELS="\K[^"]+' bin/regua.sh); docker run --rm $TESTE_DOCKER --network saas…
+● Curar o comentario, pôr o JS e engrossar a tira
+  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, re
+     P='app/templates/ponto/gestao_he.html'
+     t=io.open(P,encoding='utf-8').read()
+     # 1. o comentario multilinha que eu acabei de escrever vira {% comment %}
+     a = """ {# A GRADE DO PERIODO: celula por dia, em semanas. Para …
 
-✢ Pouncing… (3h 57m 25s · ↓ 400.0k tokens)
+✢ Pouncing… (4h 2m 55s · ↓ 406.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                           ✔ Update installed · Restart to update
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                      ✔ Update installed · Restart to update
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
