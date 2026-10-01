@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:05:45.**
+**Medido em 01/10/2026 04:11:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
-| `origin/main` | `1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,10 +97,6 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
-● O hook está certo: a migração não foi feita. O próximo passo nomeado é o DIFF — e ele é o mesmo instrumento do selo de coerência dia-a-dia. Vendo o que o PDF desenha por dia:
 
   Ran 2 shell commands
 
@@ -124,12 +120,16 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 
 ● 5 OK, e rodei o ruff antes do push desta vez. Fechando o incremento do O9:
 
-  Conferir o push do O9 · 8m 37s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (8m 36s)
+  Ran 2 shell commands
+
+● Background command "Commitar o incremento do O9 e empurrar" completed (exit code 0)
+
+● Deployar o incremento do O9 · 2m 48s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 1500 bin/deploy.sh --sem-sombra 'O9 incremento: sai a escrita MORTA do PDF (rotulo_por_data, escrito e nunca lido) e entra o tripwire
+     de calculo em relatorios/pdf_*.py. Portao da sombra cego entre 00:00 e 04:00. Codigo que ninguem le nao muda saida: 217 selo… (2m 47s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (6h 3m 9s · ↓ 519.9k tokens)
+✢ Percolating… (6h 8m 26s · ↓ 520.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
