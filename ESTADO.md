@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:19:31.**
+**Medido em 01/10/2026 17:25:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
-| `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **23** |
+| `origin/main` | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## `git status --short`
 
 ```
+ M app/docs/HANDOFF-SESSAO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,40 +96,40 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       col370    inconsistencias 1.00->0.00, minutos_abonados 0.00->5100.00, saldo_banco_horas 0.00->-190.67
-       col371    minutos_abonados 3780.00->4200.00
-       col379    inconsistencias 1.00->0.00, saldo_banco_horas 0.00->-190.67
-       ... e mais 33
+  E (entrada que não fechou). É o PONTUALIDADE-EM-TURNO-ABERTO outra vez, o item que já está esperando seu !, com a lei escrita desde 08/08. A L-093 não
+  pode subir pontualidade de ninguém; o que subiu foi a pontualidade errada de um turno aberto, gravada quando o recálculo trouxe aquele fechamento ao
+  presente.
 
-● Ele aplicou. Devo a PROVA — e ela tem duas metades que não se misturam.
+  Exportada intacta, por hash do GRAVADO — não do TXT, que é string guardada e não provaria nada: mes=09 9b61e18ba18a1f76 antes e depois; mes=08 idem; só
+  a 10 mudou.
 
-  Ran 1 shell command
+  E a deriva, separada (foi ela que me pegou em 26/09): dos 73 fechamentos mexidos, a maior parte não é da lei — minutos_abonados +37.770 em 22 colabs é o
+  backfill do abono (ponto/0068, fatia abono-no-ar): 629,5 h que já existiam e agora estão no gravado. Mais minutos_previstos −10.988 em 4, horas_falta
+  +19,33 h em 2 (dinheiro para o outro lado, com dono) e saldo_banco_horas −569,91. Nenhuma rubrica de HE, folga trabalhada ou intra se move — 0,00 nos
+  572.
 
-❯ aval Ronald 01/10 17:0x: recalculo da competencia 10 aplicado por mim (572 fechamentos). Publicar a PROVA no RELATO: col890 22/09 saida antecipada
-  antes/depois, os 32 campo-colab que descem e 0 que sobem, exportada intacta por hash. Retomar o push interrompido, UM so. Depois compactar (marco
-  fechado) e seguir a fila pela S5b.
+  Próximo da fila: O21. Sigo pela S5b como você mandou.
 
-● A 09 está intacta — hash idêntico (9b61e18ba18a1f76). Agora a prova, da foto do próprio apply.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
 
-  Ran 1 shell command
+  Searched for 2 patterns, ran 3 shell commands
 
-● O número real difere do da sombra: 45 descem e 2 SOBEM, não 32/0. Nomeando os dois.
+● O serviço já existe com 9 selos e a grade já está pronta. Medindo o cartão e o app.
 
-  Ran 2 shell commands
+  Searched for 1 pattern
 
-● O aumento é um colab, um dia — e o dia é turno ABERTO: o item que já está esperando o seu !.
+● O buraco é o APP: api/views.py tem 0. Os ~750 veem dia decidido sem saber o quê.
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● Pista comprovadamente vazia (0 sessões, 0 containers). Empurrando um só, como você pediu.
+❯ aval Ronald 01/10 lei (2): a troca da S5b NAO cria desconto novo. Pontualidade em MotorComercial, Motor12x36 e MotorIntermitente fica em NAO_DECIDE no
+  calculador (declarado, com o numero: +272,67 h atraso, +184,32 h antecipada), igual ao motor de hoje. Ligar pontualidade no comercial com marcos e obra
+  propria (L-084), com DIFF e aviso ao admin, depois da troca. E medir a folga do 12x36 pelas DUAS hipoteses: fonte do dia_de_trabalho e o passo
+  escala_certa (fechamento.py:429-461: sem escala certa a hora vai para trabalhadas). Refazer o DIFF; o ! da troca so com as rubricas-alvo se movendo.
+  Segue a fila.
 
-● Esperar o push unico · 8m 33s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 55; if grep -q "^RC=" $S/push_unico.log 2>/dev/null; then break; fi; done; grep -E "^(OK$|FAILED|Ran |FAIL:|ERROR:)|main
-     ->|ALARME|^RC=|er… (8m 32s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Fermenting… (13m 21s · ↓ 11.8k tokens)
+✢ Fermenting… (18m 51s · ↓ 16.1k tokens · still thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
