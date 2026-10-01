@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:103 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:165 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:08:31.**
+**Medido em 01/10/2026 17:14:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas` |
+| `HEAD` local | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash
+fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero da sombra era 32/0
 3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas
 4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
-be51b833 O20: celula dentro do teto (301 -> 290)
-5696af56 O20 fatia 3: 8 contratos a mais, e a migracao expos um FALSO VERDE no contrato do TETO TEMPORAL
 ```
 
 ## `git status --short`
@@ -95,26 +95,6 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       col214    inconsistencias 1.00->0.00, minutos_abonados 0.00->5500.00, saldo_banco_horas 0.00->-188.57
-       col225    inconsistencias 1.00->0.00
-       col237    inconsistencias 1.00->0.00, minutos_abonados 0.00->4320.00
-       col238    horas_saida_antecipada 0.41->0.00
-       col246    horas_atraso 0.83->0.00
-       col247    horas_saida_antecipada 0.21->0.00
-       col250    inconsistencias 2.00->3.00
-       col254    minutos_abonados 0.00->1440.00
-       col272    inconsistencias 1.00->0.00, minutos_abonados 0.00->3300.00
-       col288    horas_atraso 0.20->0.16
-       col289    minutos_abonados 0.00->2640.00
-       col290    horas_saida_antecipada 0.68->0.51
-       col292    minutos_abonados 1680.00->2100.00
-       col303    horas_atraso 2.42->2.08
-       col306    minutos_abonados 0.00->660.00
-       col318    minutos_abonados 4320.00->4860.00
-       col327    minutos_abonados 480.00->960.00
-       col332    horas_saida_antecipada 1.77->0.01
-       col340    minutos_abonados 2640.00->3300.00
-       col346    horas_atraso 0.21->0.00
        col370    inconsistencias 1.00->0.00, minutos_abonados 0.00->5100.00, saldo_banco_horas 0.00->-190.67
        col371    minutos_abonados 3780.00->4200.00
        col379    inconsistencias 1.00->0.00, saldo_banco_horas 0.00->-190.67
@@ -128,7 +108,27 @@ be51b833 O20: celula dentro do teto (301 -> 290)
   antes/depois, os 32 campo-colab que descem e 0 que sobem, exportada intacta por hash. Retomar o push interrompido, UM so. Depois compactar (marco
   fechado) e seguir a fila pela S5b.
 
-· Fermenting… (2m 21s · ↓ 1.7k tokens · thinking)
+● A 09 está intacta — hash idêntico (9b61e18ba18a1f76). Agora a prova, da foto do próprio apply.
+
+  Ran 1 shell command
+
+● O número real difere do da sombra: 45 descem e 2 SOBEM, não 32/0. Nomeando os dois.
+
+  Ran 2 shell commands
+
+● O aumento é um colab, um dia — e o dia é turno ABERTO: o item que já está esperando o seu !.
+
+  Ran 2 shell commands
+
+● Pista comprovadamente vazia (0 sessões, 0 containers). Empurrando um só, como você pediu.
+
+  Esperar o push unico · 3m 2s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 55; if grep -q "^RC=" $S/push_unico.log 2>/dev/null; then break; fi; done; grep -E "^(OK$|FAILED|Ran |FAIL:|ERROR:)|main
+     ->|ALARME|^RC=|er… (3m 2s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Fermenting… (7m 51s · ↓ 11.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
