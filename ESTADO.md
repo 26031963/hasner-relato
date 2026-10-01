@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:24 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:51 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:20:45.**
+**Medido em 01/10/2026 10:25:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo` |
+| `HEAD` local | `fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
 5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo
 104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia
 7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
 f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b
-71f16546 A Gestao de HE esta NO AR e o que falta e o smoke dele
 ```
 
 ## `git status --short`
@@ -95,6 +95,8 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  B — Uma linha por pessoa, com a forma do mês desenhada (molde HX-RESUMO-COLAB)
+  1. Uma linha colapsada por colaborador, e dentro dela uma tira dos dias da competência: um traço por dia, altura = minutos de ponta.
   2. Hábito é pente baixo e regular; evento é uma espiga. Não há número para ler — a forma responde.
   3. A linha diz em palavras de onde vem: "9 min antes em 12 de 15 plantões" · "165 min em 1 dia de 21".
   4. No topo, um gesto: "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", com a conta na cara antes de confirmar.
@@ -121,18 +123,16 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 
 ● Background command "Relavrar o retrato das competencias 9 e 10" completed (exit code 0)
 
-  Escrever e rodar os selos da forma B
-  ⎿  $ cd /home/ronald/wt-ui && cat > app/ponto/tests/test_tela_gestao_he_forma_b.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """GESTAO DE HE -- A FORMA B, e os invariantes que ELA cria (desenho aprovado 01/10 10:1x).
-     A forma anterior era uma lista empilhada -- filtros em cima, cinco contadores, tabela de oito…
+  Esperar a suite da forma B
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; while pgrep -f "docker run.*manage.py test ponto relatorios core colaboradores"
+     >/dev/null 2>&1; do sleep 45; done; echo "=== VEREDITO ==="; grep -E "^(FAIL|ERROR):|^Ran |^OK$|^FAILED" $S/scratchpad/formab_suite…
 
-· Pouncing… (2h 48m 9s · ↓ 276.4k tokens · deep in thought)
+· Pouncing… (2h 53m 9s · ↓ 285.8k tokens · thought for 9s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
