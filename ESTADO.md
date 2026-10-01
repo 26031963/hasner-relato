@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:33:39.**
+**Medido em 01/10/2026 15:39:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a2d374a3 O19: lado servidor no ar, e o lado APP espera o `!` porque o fork de 24/09 nao deixou rastro` |
+| `HEAD` local | `8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **13** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA
+d7fb0fe2 O20: celula dentro do teto (319 -> 296)
+3df84d9d O20 fatia 1: nasce core/censo_fonte.py, e a implementacao NAO e minha -- a casa ja tinha uma melhor
 a2d374a3 O19: lado servidor no ar, e o lado APP espera o `!` porque o fork de 24/09 nao deixou rastro
 c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar
-f21721aa O19 lado SERVIDOR: a causa do "o servidor nao recebe o POST" era o LUGAR do log, e o numero explica o BO
-65838e75 O18 FECHADA -- e apagando o residuo eu causei o proprio defeito que a obra existe para acabar
-1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia
 ```
 
 ## `git status --short`
 
 ```
- M app/core/tests/test_contract_escritores_estado.py
- M app/docs/RELATO.md
- M app/ponto/tests/test_contract_juiz_celula.py
- M app/ponto/tests/test_contract_juiz_feriado.py
-?? app/core/censo_fonte.py
-?? app/core/tests/test_o20_contrato_julga_codigo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,8 +95,6 @@ f21721aa O19 lado SERVIDOR: a causa do "o servidor nao recebe o POST" era o LUGA
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O19 -- BO-APP-ANDROID-ATESTADO (Ronald 24/09 10:2x, col878) -- "Erro ao enviar" em Nova ausencia COM foto da CAMERA,
 
   Ran 4 shell commands
 
@@ -120,18 +112,20 @@ f21721aa O19 lado SERVIDOR: a causa do "o servidor nao recebe o POST" era o LUGA
 
 ● The two failures are the same lesson twice — including inside the seal I wrote to prevent it.
 
-● Separar marco de violacao e curar a auto-acusacao
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     # (a) a MARCA do pendente e OUTRA PERGUNTA: ela pode ser prosa de proposito.
-     P='ponto/tests/test_contract_juiz_feriado.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = """ if p['impressao'] not in _codigo(os.path.join(APP, p['arquivo']))]"""
-     asser…
+  Ran 4 shell commands
 
-* Pouncing… (8h 1m 3s · ↓ 971.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Meu censo dos 28 contou pela forma. Medindo o fato.
+
+  Ran 3 shell commands
+
+● O swap cego quebrou: codigo_de tokeniza Python, e vários desses contratos leem template e JS. Revertendo.
+
+  Ran 11 shell commands
+
+● MARCO FECHADO — pode compactar. A fila andou mais: O19 (lado servidor) e O20 (duas fatias).
+
+  O19 — a causa do "o servidor não recebe o POST"
+
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
   ctrl+x ctrl+s to send now
