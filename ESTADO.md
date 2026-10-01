@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:101 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:174 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 22:35:31.**
+**Medido em 30/09/2026 22:40:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenerar, e o 16 do Ronald bate` |
+| `HEAD` local | `e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso` |
 | `origin/main` | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
+2b8c0044 Ato cirurgico sem desfazer na porta: ontem eu repus 8 celulas por shell, que e escritor nao declarado
 c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenerar, e o 16 do Ronald bate
 863a6633 A porta ganha o modo DIA, e a frase que eu tinha escrito no crons era uma armadilha
 4b20a0d4 O relogio riscado anotava uma batida de 9px com um glifo de 16: ganha a medida dele, 10px
-202edd94 Dois avais das 22:1x registrados: o modo DIA da porta (que e a saida do PAREI) e o relogio de 10px
-f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado esperando opcoes que ninguem escreveu
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,43 +97,43 @@ f71d1ec4 O2 fecha, e a trava dele era um ponteiro morto: oito dias parado espera
 
 ```
 
-  Ran 1 shell command
-
-● Confirmado, e o número é exatamente o dele: 16 dias do col900 com dna_anterior.hi = 12:50 → hoje 07:00, e a primeira batida crua cai a 0–5 min do marco novo em 13 dos 16. As
-  células já foram regeneradas ontem às 21:27 — e a trilha mostra o bug do horizonte na própria frase (2026-09-01..2026-10-20). O que ficou de pé é a lavra:
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● DIFF da lavra do col900, publicado ANTES (sem --apply, só fotografa):
+● 37 OK. Commitando o desfazer:
 
   Ran 1 shell command
 
-● O comando em DRY imprime totais, não o delta. Medindo o delta do col900 pela função real, escopada:
+● A lista CADASTRO x REALIDADE já é citada pela L-084 — conferindo se ela existe antes de criar uma segunda:
+
+  Searched for 2 patterns, ran 1 shell command
+
+● A lista já existe e é produzida pelo próprio motor (dias_cadastro_x_realidade). Então a pergunta certa é qual leitor a mostra — medindo os dois:
 
   Searched for 1 pattern, ran 1 shell command
 
-● O DIFF surpreende, e a causa aparece na própria sonda: folga_trabalhada +7,37, turnos_abertos 0→3, dsr_perdido 0→2. O dia 09-07 tem template FOLGA e batida real às 06:56 — pela
-  lei dele aquele dia não devia ter sido regenerado. Medindo quais dos 20 foram regenerados contra a lei:
+● Há tela (escala:cadastro_x_realidade). Conferindo de qual autoridade ela lê:
+
+  Searched for 1 pattern
+
+● A tela lê as assinaturas do ESMERIL, não a lista do motor — são duas populações com o mesmo nome. Medindo se o col438 e o col309 chegam na tela:
 
   Ran 1 shell command
 
-● Minha própria etiqueta estava frouxa: a lei dele tem três baldes, e "sem batida, fica". Então 09-09, 09-15 e 09-20 (sem batida, viraram trabalho) também foram regenerados contra
-  a lei — e são exatamente os turnos_abertos +3. São 4 dias, não 1:
+● col438 e col309 já estão na tela — a lei existia e o leitor tem os dois, então não nasce segunda lista. O que não chega é o col945. Atualizando o topo do RELATO com o estado e o
+  número:
 
-  Listed 1 directory
+  Ran 2 shell commands
 
-● O DIFF está contaminado pelos 4 dias fora da lei — lavrar agora gravaria um número que a própria lei dele diz estar errado. E repor célula é dado de ESCALA, que nunca é
-  pré-aprovado. Então publico a pergunta com os números e sigo com a parte que não depende dela:
+● Push (a suíte é o portão) e depois deploy — o CSS precisa de collectstatic e os .py de reload:
 
-● Procurar o reverter_regeneracao_celula
-  ⎿  $ ls docs/ | head -30; echo "---"; ls docs/RELATO* 2>/dev/null; ls ../PENDENTES_RONALD.json 2>/dev/null; ls PENDENTES_RONALD.json 2>/dev/null
+● Empurrar com a suite como portao
+  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103.log 2>&1;
+     echo "RC=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o103.log) & s…
 
-✢ Percolating… (32m 56s · ↓ 92.3k tokens · thinking more)
+✻ Percolating… (37m 56s · ↓ 112.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
