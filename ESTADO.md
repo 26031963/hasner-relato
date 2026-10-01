@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:57:01.**
+**Medido em 01/10/2026 08:02:20.**
 
 | | |
 |---|---|
 | `HEAD` local | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| `origin/main` | `a216cd89 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e p
 ## `git status --short`
 
 ```
+ M bin/sombra_regras_pessoais.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,12 +96,6 @@ a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ segue a fila; PAREI so em lei ou !
-
-  Ran 2 shell commands
-  ⎿  Read ponto/management/commands/aplicar_col900.py (134 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o2c.log (19 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o2.log (8 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b21tv22ui.output (13 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bixy913u0.output (6 lines)
@@ -122,10 +117,16 @@ a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e p
 
 ● Background command "Ler o selo do mypy e rodar com o env certo" completed (exit code 0)
 
-● Ver os campos do DiaPago
-  ⎿  $ cd /home/ronald/wt-ui && grep -n "class DiaPago" -A 45 app/ponto/models.py | grep -n "models\.\|TIPO_DIA\|versao" | head -25
+  Committed 5236b9a5, 2b7a8537, read 1 file, ran 49 shell commands
 
-✢ Pouncing… (24m 25s · ↓ 66.7k tokens)
+● Background command "Empurrar os dois commits pela regua" completed (exit code 0)
+
+  Refazer o ensaio da sombra com o inventario curado
+  ⎿  $ cd /home/ronald/saas-hasner && (bash bin/sombra.sh --refazer && bash bin/sombra.sh --bloco) >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sombra_refazer.log 2>&1; echo "RC=$?"; tail -5
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40…
+
+✻ Pouncing… (29m 44s · ↓ 79.7k tokens · thinking)
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
