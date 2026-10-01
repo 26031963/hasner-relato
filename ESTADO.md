@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:10:31.**
+**Medido em 01/10/2026 10:15:45.**
 
 | | |
 |---|---|
@@ -95,6 +95,11 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  B — Uma linha por pessoa, com a forma do mês desenhada (molde HX-RESUMO-COLAB)
+  1. Uma linha colapsada por colaborador, e dentro dela uma tira dos dias da competência: um traço por dia, altura = minutos de ponta.
+  2. Hábito é pente baixo e regular; evento é uma espiga. Não há número para ler — a forma responde.
+  3. A linha diz em palavras de onde vem: "9 min antes em 12 de 15 plantões" · "165 min em 1 dia de 21".
   4. No topo, um gesto: "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", com a conta na cara antes de confirmar.
   5. Clicar abre o drawer da pessoa: os dias, as duas pontas separadas, hora × marco, e AUTORIZAR naquele dia.
   6. Busca por nome ou CPF só reduz a lista; não há quadro de filtros.
@@ -115,24 +120,19 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
      Opcional, se couber sem custo: traco para cima = antes da entrada, para baixo = depois da saida.
      No AUTORIZAR, a consequencia antes do clique: "+N min de HE neste dia". Constroi na raia; merge e deploy no mesmo ato; o smoke eu faco no ar.
 
-● Pôr o denominador no retrato lavrado
-  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/ponto/services/he_pendente_lavrado.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = """ _dias = []
-     for d in (esp.get('dias') or []):"""
-     assert t.count(a)==1
-     b = """ _dias, _dias_batidos = [], 0
-     for d in …
+  Cherry-picked 756edc48, ran 21 shell commands
 
-✢ Pouncing… (2h 37m 55s · ↓ 247.5k tokens)
+● Background command "Relavrar o retrato das competencias 9 e 10" completed (exit code 0)
+
+  Ler o selo dos dois lados da permissao
+  ⎿  $ cd /home/ronald/wt-ui && sed -n '280,310p' app/ponto/tests/test_tela_gestao_he.py
+
+· Pouncing… (2h 43m 9s · ↓ 266.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
