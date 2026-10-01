@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:357 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:432 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:55:46.**
+**Medido em 01/10/2026 18:01:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219` |
+| `HEAD` local | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
 | `origin/main` | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
+92a1c4e6 A segunda causa tambem estava escrita na casa: a L-084 julga ANTES da janela. Noturnas -47,80 -> +0,67 h
 5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219
 5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b
 4cd56242 UI-RESPOSTA-DIZ-O-QUE-E: celula dentro do teto, com o obstaculo nomeado
-37912998 UI-RESPOSTA-DIZ-O-QUE-E: as 4 frases publicadas com caso real -- e um obstaculo que decide a fatia
-83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,18 +95,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  terceira categoria, e a lei vem antes do dado: passar os marcos não autoriza cobrar.
-
-  Esperando você
-
-  1. ! da troca — sobram três, nomeados: atraso +114,00 h (classe que julga, divergência de regra), trabalhadas −219,45 h, noturnas −47,80 h (a única que
-     não se moveu em nenhuma rodada).
-  2. UI-RESPOSTA-DIZ-O-QUE-E — as 4 frases estão publicadas com caso real, e há um obstáculo: delta_da_resposta devolve abs, sem sinal. A direção pede o
-     juiz devolver sinal_min (.py, main) ou conta no template, que você vetou. Censo: 153 atraso · 178 antecipada · 426 fora do marco — 757 chamadas de
-     "discrepância" hoje. E o Reabrir expõe 3.318 respostas.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-TROCA-NAO-CRIA-DESCONTO -- LEI (2), Ronald 01/10 17:2x: a troca NAO cria desconto novo. Pontualidade em
   MotorComercial, Motor12x36 e Moto
 
   Ran 1 shell command
@@ -127,11 +113,23 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● A rubrica que não se movia zerou: noturnas −47,80 → +0,67 h. E 71 dia-colab saíram da janela pela L-084.
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✻ Fermenting… (49m 36s · ↓ 83.7k tokens)
+● Falta o horas_atraso +114,00 h. Medindo quanto dele é o item que já espera o seu !.
+
+  Ran 1 shell command
+
+● 8 dos 10 maiores têm turno aberto ou par nulo — é o item que já espera seu !.
+
+● Esperar o push e ver o veredito · 3m 41s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 55; if grep -q "^RC=" $S/push_v4.log 2>/dev/null; then break; fi; done; grep -E "main ->|^RC=|error:|^(FAIL|ERROR):|^(OK|FAILED)"
+     $S/push_… (3m 40s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Fermenting… (54m 51s · ↓ 90.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                                   2% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
