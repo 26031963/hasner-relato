@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 17:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (171.4 MB). Acoes na janela: **1051**.
+**Medido em 01/10/2026 17:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (171.4 MB). Acoes na janela: **1049**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1059,5 +1059,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:51:34 | Bash | Corrigir o import e medir | `cd /home/ronald/saas-hasner && sed -i 's\|from core.feriados import feriados_do_colab\|from ponto.services.espelho import feriados_do_colab\|' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/qual_entrada.py && docker cp /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/qual_entrada.py saas_core:/tmp/qual_entr ...` |
 | 05:51:14 | Bash | Achar de onde vem o feriados_do_colab | `grep -n 'feriados_do_colab' ponto/services/espelho.py \| head -2; grep -rn 'def feriados_do_colab' --include=*.py . \| head -2` |
 | 05:51:03 | Bash | Medir qual entrada move o datas_falta | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/qual_entrada.py <<'PYEOF' # -*- coding: utf-8 -*- """Qual das entradas move o `datas_falta`? Uma por vez, no mesmo col41.""" import datetime as _dt from django.db import connection connection.set_schema('juliani') from django.utils import timezone from colaboradores.mo ...` |
-| 05:38:55 | Bash | Ver o esc e o datas_previstas do PDF | `sed -n '404,426p' relatorios/pdf_espelho.py \| grep -nE 'esc =\|esc=\|datas_previstas_trabalho\|get_motor_cct\|motor =' ; echo "---"; grep -n 'datas_previstas_trabalho = \\|esc = ' relatorios/pdf_espelho.py \| head -5` |
-| 05:38:40 | Bash | Ler a montagem do motor no espelho | `sed -n '840,872p' ponto/services/espelho.py` |

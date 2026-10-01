@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:35:45.**
+**Medido em 01/10/2026 17:40:45.**
 
 | | |
 |---|---|
@@ -122,13 +122,13 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 
 ● Confirmado, e são duas causas no mesmo número. Publicando.
 
-  Esperar o push e confirmar · 3m 38s
+  Esperar o push e confirmar · 8m 38s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
      11); do sleep 55; if grep -q "^RC=" $S/push_lei2.log 2>/dev/null; then break; fi; done; grep -E "main ->|^RC=|error:|^(FAIL|ERROR):|^(OK|FAILED)"
-     $S/pus… (3m 38s)
+     $S/pus… (8m 38s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Fermenting… (29m 34s · ↓ 43.8k tokens)
+· Fermenting… (34m 35s · ↓ 43.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
