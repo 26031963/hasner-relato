@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:05:01.**
+**Medido em 01/10/2026 10:10:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia` |
+| `HEAD` local | `5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo
 104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia
 7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
 f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde foi escrita, a HE no ar e a lei do S5b
 71f16546 A Gestao de HE esta NO AR e o que falta e o smoke dele
-843f74e8 MERGE da Gestao de HE completa: listagem, aba Autorizar, lote de "Nao", busca, filtros, totais, PDF e o atalho da Central
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (1) SUPERVISIONAR. O sistema nao pode bloquear a frota inteira sem que alguem olhe. Ele quer ver o geral, concluir "e isso mesmo, ninguem a autorizar", e dar o ok em quase tudo
-  de uma vez.
-  (2) ACHAR A EXCECAO. Buscar uma pessoa, ver os dias dela e autorizar um ou alguns -- so ai a hora conta.
-  A pergunta que a tela tem de responder SEM ele ler tabela: "quem esta esticando o horario, e habito ou foi um dia, e o que eu faco?"
+  4. No topo, um gesto: "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", com a conta na cara antes de confirmar.
+  5. Clicar abre o drawer da pessoa: os dias, as duas pontas separadas, hora × marco, e AUTORIZAR naquele dia.
+  6. Busca por nome ou CPF só reduz a lista; não há quadro de filtros.
+  7. Reusa o partial e o agrupamento de chamados; nenhuma tela nova por fora.
+  8. A classificação fica com o humano: o sistema desenha, ele conclui.
 
-  DOIS CASOS REAIS, opostos, que a forma tem de distinguir de relance:
-  - o col do print dele (12x36 19:00-07:00, Shopping Boulevard): chega ~9 min antes e sai ~3 min depois em QUASE TODO plantao. E habito.
-  - col624 em 22/09: chegou 12:15 contra marco 15:00, 165 min, um dia. E evento.
-    Numa tabela os dois viram uma linha com um total. Nao sao a mesma decisao.
-    O tamanho: na 09 sao 460 colaboradores e 6.220 dias com ponta. Quase tudo e ciencia; a excecao e rara.
+  Eu escolheria a B, por uma razão e não por gosto: a A precisa que o sistema decida o que é hábito, e isso é um juiz novo com um limiar que ninguém cadastrou — a casa chama isso
+  de vocabulário paralelo e cobra cadastro (LEI-AKITA 12). A B faz o que o mini calendário de fase fez: responde pela forma, diz de onde veio o número e mostra a consequência
+  antes do clique, deixando o juízo com o admin. E ela cabe no molde que já existe, em vez de inventar duas pilhas.
 
-  O QUE NAO MUDA (principios, nao itens):
-  - Dois atos, com estes nomes: DAR CIENCIA ("vi, segue bloqueado", em lote, nao move dinheiro) e AUTORIZAR (desfaz o bloqueio do dia, com motivo, move dinheiro, re-lavra). A
-  palavra "validar" nao aparece.
-  - Le o retrato lavrado e a porta decidir_he. Zero derivacao nova.
-  - As leis de UI da casa. Empresa real por padrao.
-  - Ele gosta de como a UI de chamados colapsa por colaborador e abre no detalhe, e de gestao em drawer. Sao REFERENCIAS da casa, nao receita: use se servirem a pergunta.
+  Ran 9 shell commands
 
-  O QUE EU QUERO ANTES DE QUALQUER CODIGO:
-  DUAS propostas de forma, diferentes entre si, cada uma em ate 8 linhas: o que o admin ve primeiro, como "habito x evento" aparece sem ele calcular, onde ele da a ciencia em
-  lote e onde autoriza um dia. Diga qual voce escolheria e por que. Ele escolhe; so entao constroi.
+❯ aval Ronald 01/10 10:1x -- Gestao de HE: a B. Com tres ajustes, e na ordem:
+  1. ANTES de construir: curar marcar_pontas_fora (item 1 do col369) e relavrar o retrato. Senao o pente desenha almoco.
+  2. A lista ordena pela MAIOR ESPIGA (o maior dia de cada colaborador, decrescente). Ordenar nao e classificar: a excecao sobe sozinha e nao nasce juiz de "habito".
+  3. ESCALA UNICA na tira: a mesma altura vale os mesmos minutos em todas as linhas, com teto visual declarado. Tira que se ajusta ao proprio maximo faz 9 min e 165 min parecerem
+  iguais.
+     Opcional, se couber sem custo: traco para cima = antes da entrada, para baixo = depois da saida.
+     No AUTORIZAR, a consequencia antes do clique: "+N min de HE neste dia". Constroi na raia; merge e deploy no mesmo ato; o smoke eu faco no ar.
 
-❯ aval Ronald 01/10 10:0x -- col369, quatro achados medidos, por ordem de alcance:
-  1. BUG DE TELA E DE CONTADOR: marcar_pontas_fora risca a S e a E do INTERVALO. col369 30/09: batidas 07:05 12:45 13:53 15:00, marcos 07:00/12:00/13:00/15:00 -> a tela diz "HE
-  fora da janela: 45 min" e o lavrado esta certo (6,77 h). Ponta e a 1a entrada e a ultima saida do turno, nunca o intervalo. Curar, e RE-MEDIR o retrato da 09 (460 colabs /
-  6.220 dias): quanto era almoco.
-  2. 26 e 27/09: pausa de 73 e 64 min batida com tipos invertidos (S S E no fim) -> lavrado 7,89 e 7,98 h MAIS intra indenizada 1,00, como se nao houvesse intervalo. Em 23/09 a
-  mesma inversao deu certo (6,99). Achar a diferenca; "o marco manda, nunca o tipo gravado" (L-087).
-  3. Ausencia 4538 cobre 28-30/09 e ele trabalhou 29 e 30: trabalhadas 7,01 e 6,77 com minutos_realizados ZERO no mesmo DiaPago. A linha discorda de si mesma.
-  4. Vinculo 1296 (ARCOS-PSR 6x1, folga SEXTA) nasceu com inicio 22/09 e fim 18/09 e esta inativo; o ativo 1313 e 6x1 generico SEM folga: 14 dias seguidos de trabalho na celula,
-  e a sexta 25/09 sem batida virou "indefinida". Mesmo padrao do col515. NAO mexer no vinculo sem o meu !: publicar o que mudaria.
+● Pôr o denominador no retrato lavrado
+  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/ponto/services/he_pendente_lavrado.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ _dias = []
+     for d in (esp.get('dias') or []):"""
+     assert t.count(a)==1
+     b = """ _dias, _dias_batidos = [], 0
+     for d in …
 
-✽ Pouncing… (2h 32m 15s · ↓ 229.6k tokens)
+✢ Pouncing… (2h 37m 55s · ↓ 247.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
