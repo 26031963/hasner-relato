@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:36:31.**
+**Medido em 01/10/2026 19:42:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| commits a subir (`ahead`) | **6** |
+| `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -101,24 +101,6 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (sextas 25/09, 02/10, 09/10, 16/10), ZERO hora movida. Se o DIFF mover qualquer hora, PAREI com a tabela. Entra depois do deploy da pontualidade; nao
-  corta a S5b !
-
-  Ran 8 shell commands
-
-● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
-
-  Searched for 1 pattern, ran 11 shell commands
-
-● Monitor(veredito do push do marco da pontualidade)
-  ⎿  Monitor started · task bj73je78b · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-● O ! do vínculo está registrado (PROMPTS + célula COL369-VINCULO-1296), e a preparação achou um buraco que muda a forma do ato — não havia porta para
-  consertar vigência impossível. A casa sabia contar essa classe em quatro sítios (vigencias_impossiveis, o serviço da lavra, o contador da tela, o do
-  copiloto) e não tinha por onde reparar uma: fechar_vigencia é o escritor único de (ativa=False, data_fim) e recusa exatamente esses pks;
-  absorver_vigencias_posteriores marca ativa=False e não toca data_fim, de propósito; e ativa=True só é escrito em create(), nunca para reviver uma linha.
-  O único caminho que restava era o update solto — o que a sua ordem proíbe nessas palavras.
 
   Então nasceu reabrir_vigencia_impossivel como porta, não como exceção destravando a trava: só aceita linha cuja vigência de hoje é impossível pelo juiz
   único, valida a vigência nova pelo mesmo juiz, exige motivo escrito com autor, grava dado e trilha no mesmo atomic, e é idempotente — chamar 2× não muda
@@ -134,11 +116,29 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
   núcleos — um run por vez. Assim que o push fechar: selo do vínculo, DIFF do 1296 pelas duas leituras, e então a 09, que é o item que o vigia nomeia
   agora.
 
-✻ Cooked for 5m 59s · done 7:35 PM · 2 shells, 2 monitors still running
+✻ Cooked for 5m 59s · done 7:35 PM · 1 shell, 1 monitor still running
+
+● Monitor event: "veredito do push do marco da pontualidade"
+
+  Ran 2 shell commands
+
+● Monitor event: "veredito da 2a suite da PONTUALIDADE-EM-TURNO-ABERTO"
+
+  Ran 4 shell commands
+
+● Monitor event: "veredito do push do marco da pontualidade"
+
+● Background command "Empurrar o marco, um push so" completed (exit code 0)
+
+● Monitor event: "veredito do push do marco da pontualidade"
+
+● Ver as flags do recalcular_fechamento
+
+✢ Propagating… (4m 43s · ↓ 11.0k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 2 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
