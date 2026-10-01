@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:09:01.**
+**Medido em 01/10/2026 07:14:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `a216cd89 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
-| `origin/main` | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `a216cd89 O DIFF do O108: a cura move o furo de 408 colabs e NAO move dinheiro em nenhum dos 862` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,41 +97,41 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ C — + os vínculos do período, por fatia │ 408                            │
+  └─────────────────────────────────────────┴────────────────────────────────┘
 
-● 1086 testes OK em relatorios + escala, ruff limpo — extração provada neutra. Agora o DIFF do O108:
+  E nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50, horas_extras_100 e dias_abono não aparecem na tabela de divergência em 862 colaboradores. A cura
+  mexe no furo — no que a tela diz que falta —, não no que se paga. Casos: col41 0 → 22, col53 0 → 16, col56 0 → 9.
 
-  Ran 2 shell commands
+  O DIFF é parcial e ele mesmo diz isso na primeira linha: falta datas_justificadas, e sem ela o furo sai superestimado. Os 408 são teto, não previsão. Replicar essa derivação
+  dentro do instrumento seria a terceira cópia do mesmo previsto — preferi um número declarado como teto a um número preciso obtido por cópia.
 
-● O DIFF funciona e o resultado é decisivo em 15 colabs: A (hoje) dá datas_falta = 0 em todos, B move 6, C move 7 — e nenhum campo de dinheiro se move. Rodando a frota:
+  Preparo feito com saída provada: o laço do previsto saiu do PDF para escala/alimentacao.py::previstas_do_periodo, byte a byte, para que a cura da tela use a mesma função do
+  cartão em vez de uma segunda derivação de um previsto que já tem fonte única. 1.086 selos de relatorios + escala verdes depois da extração, e o ruff pegou o import órfão que ela
+  deixou — antes do push.
+
+  O que falta para aplicar: extrair as datas_justificadas, refazer o DIFF completo, e o seu ! — porque "não move dinheiro" não é "não muda nada": um colaborador que hoje vê zero
+  falta passará a ver 22, no app.
+
+  Empurrado: e860aef1..a216cd89.
+
+  Duas vezes neste turno esqueci a casa do comando novo em config/crons.py (9 min por ciclo). Guardei o trio de pré-push na memória: ruff · mypy · casa do comando.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
+
+● O passo nomeado do O108 (e o desbloqueio do O9) é extrair as datas_justificadas. Lendo o laço exato:
 
   Ran 1 shell command
 
-● DIFF de frota completo, e ele traz a informação de segurança que importa:
+● datas_justificadas já existe antes do laço — a extração tem de somar, não substituir. Vendo de onde ela vem:
 
-  ┌────────────────────────────────────────┬──────────────────┬──────────────────────────┐
-  │                 campo                  │ B (só previstas) │ C (previstas + vínculos) │
-  ├────────────────────────────────────────┼──────────────────┼──────────────────────────┤
-  │ datas_falta / dias_falta / horas_falta │ 324              │ 408                      │
-  └────────────────────────────────────────┴──────────────────┴──────────────────────────┘
+● Ver a origem do datas_justificadas
+  ⎿  $ sed -n '336,344p' relatorios/pdf_espelho.py
 
-  862 comparados, 0 erros — e nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50/100 e dias_abono não aparecem na tabela. Publicando:
-
-  Ran 2 shell commands
-
-● Background command "Publicar o DIFF do O108 e empurrar" completed (exit code 0)
-
-  Searched for 1 pattern
-
-● A casa do comando novo, de novo — segunda vez no turno. Declarando e guardando junto do hábito:
-
-  Conferir o push · 6m 27s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_d108b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (6m 26s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Percolating… (9h 6m 26s · ↓ 611.6k tokens)
+✢ Percolating… (9h 11m 55s · ↓ 614.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                                            2% until auto-compact
+                                                                                                                                                            1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
