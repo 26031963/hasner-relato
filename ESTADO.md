@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:225 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:314 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:45:45.**
+**Medido em 01/10/2026 17:50:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
+| `HEAD` local | `5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b` |
 | `origin/main` | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,18 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b
+4cd56242 UI-RESPOSTA-DIZ-O-QUE-E: celula dentro do teto, com o obstaculo nomeado
+37912998 UI-RESPOSTA-DIZ-O-QUE-E: as 4 frases publicadas com caso real -- e um obstaculo que decide a fatia
 83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas
 e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava
-8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash
-fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero da sombra era 32/0
-3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
+ M app/ponto/calculador/nucleo.py
+ M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/tests/test_e6_oraculo_julga_impar.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,22 +98,6 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PROIBIDO: mudar o envelope do lote, criar grupo validavel em lote, regra nova de validacao, conta de delta no template, autoridade nova.
-  FORA DESTA FATIA (registrar no BACKLOG, nao construir): lote "atraso admitido" com teto por cadastro e DIFF -- move dinheiro, obra propria depois da
-  S5b.
-  PRONTO: RELATO com os prints, PROVA: ao lado de cada ato, commit. Merge so com o smoke dele.
-  LEI-AKITA: origem=chamados/juizes.py::delta_da_resposta; testemunha=o cartao le o juiz; RED=col267 ch8954; quem-mais-le=fila_validar_classificada e o
-  copiloto (rotulo do lote); juizes novos=0.
-  HAIKU: (a) contador "respostas com atraso ou saida antecipada admitidos, aguardando validacao" por empresa; (b) golden: "a resposta da col267 de 28/09
-  era erro ou atraso?"; (c) degrau: leitura.
-  LEI: nenhuma lei nova.
-
-  Segue a fila; PAREI so em lei ou !.
-
-● Ordem registrada. Ela pede proposta antes do código — então: registro, leitura do juiz, e as 4 frases com casos reais.
-
-  Ran 1 shell command
-
 ● Background command "Esperar o push e confirmar" completed (exit code 0)
 
   Ran 1 shell command
@@ -127,9 +112,25 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 
 ● Tudo medido. Publicando a proposta — com um obstáculo que ele precisa decidir.
 
-  Running 1 shell command…
+  Ran 8 shell commands
 
-· Fermenting… (39m 35s · ↓ 56.3k tokens)
+● A fila volta à S5b, e o que falta é a atribuição de dia. Vendo se o núcleo aceita o dia do juiz.
+
+  Ran 1 shell command
+
+● O núcleo chaveia por _e.date() — regra própria de dia, a mesma doença do O13/O14. Curando.
+
+  Ran 3 shell commands
+
+● Minha aritmética: 367 + 300 = 667, não 727 — eu somei o intervalo.
+
+  Ran 2 shell commands
+
+● Uma linha. A folga cai +1.035,67 → +23,87 h e as trabalhadas −1.231 → −219.
+
+● Running 1 shell command…
+
+✶ Fermenting… (44m 35s · ↓ 70.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
