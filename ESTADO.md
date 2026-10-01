@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:150 AFIRMA ato sem PROVA ao lado -- | (1) `NAO_DECIDE` vazio ou so o item 5 | **FEITO** -- so `horas_falta`, `horas_reflexo_dsr`, `saldo_banco_horas`, com selo que exige a caus
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:212 AFIRMA ato sem PROVA ao lado -- | (1) `NAO_DECIDE` vazio ou so o item 5 | **FEITO** -- so `horas_falta`, `horas_reflexo_dsr`, `saldo_banco_horas`, com selo que exige a caus
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:55:46.**
+**Medido em 01/10/2026 15:01:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- desenho publicado, obra esperando o !` |
-| `origin/main` | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
-| commits a subir (`ahead`) | **7** |
+| `HEAD` local | `1c1ac3e0 O13 FECHADA: o codigo estava curado e a guarda que faltava esta verde (8 casos, por AST)` |
+| `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1c1ac3e0 O13 FECHADA: o codigo estava curado e a guarda que faltava esta verde (8 casos, por AST)
+c69aadf2 S5b-4-REGRAS: celula de estado dentro do teto, com os 5 observaveis feitos e o ! nomeado
+bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado
+1766ebbb CORRECAO: a hipotese da folga estava errada -- troquei o juiz, o numero NAO se moveu, e ha TRES numeros
 c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- desenho publicado, obra esperando o !
-a642dbb0 HIGIENE-DE-CONTEXTO: celula de estado dentro do teto de 300 que ela mesma criou
-6bbfc0fe HIGIENE-DE-CONTEXTO: itens 1-4 e 6 FECHADOS; o 5 espera uma linha dele, e a razao e a propria proibicao da ordem
-ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da folga MUDOU DE LUGAR
-2b7e3691 Duas rubricas saiam CALADAS do ramo da folga, e o selo que eu escrevi hoje para isso pegou as duas
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,19 +95,6 @@ ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  E eu errei a causa do col142, no meio disso. Atribuí o zero dele ao gate do T8 e pedi a lei em cima disso — ele é MotorComercial, e o gate não está no
-  caminho dele. Quem me pegou foi o próprio RED. Corrigi onde estava escrito, e o achado verdadeiro é maior: MotorComercial, Motor12x36 e
-  MotorIntermitente não chamam aplicar_tolerancia — 223 de 571 colabs da 10 com horas_atraso = 0,00 h exato. É deliberado?
-
-  S5b-4-REGRAS — as 4 regras escritas por importação, NAO_DECIDE só com o item 5, DIFF contra o gravado publicado. A regra 4 tirou o intermitente (ele
-  saiu dos padrões), e o problema mudou de lugar: 12x36, +1.035,67 h, por fonte errada no chamador (_cel.trabalha x eh_dia_trabalho). INCOMPLETO com 5
-  itens nomeados.
-
-  Gestão de HE — desenho publicado antes do código, com col207 (hábito) e col616 (13 → 3 com o limite de 10 min). Espero seu ok.
-
-  Higiene de contexto — handoff + hooks + selo. Item 5 INCOMPLETO: dos 27 parágrafos do CLAUDE.md, zero é inteiramente história — separar exige
-  reescrever, e sua ordem proíbe. Destrava com uma linha sua: "pode quebrar o parágrafo em dois, sem mudar palavra". RELATO −78%, células do BACKLOG −67%,
   0 acima de 300, com o veredito do hook idêntico antes e depois.
 
 ● Ran 1 stop hook
@@ -120,13 +105,26 @@ ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da
 
 ● The fila's next item is one I can still advance myself — the folga gap is in my own chamador.
 
-  Ler o DIFF v2 · 1m 29s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 50; if grep -q "^RC=" $S/diff_s5b_v2.log 2>/dev/null; then break; fi; done
-     sed -n '/DIFF DE FROTA CONTRA O GRAVADO/,/^$/p' $S/diff_s5b_v2.… (1m 28s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern, ran 4 shell commands
 
-✽ Pouncing… (7h 23m 10s · ↓ 879.7k tokens)
+● My hypothesis was wrong — the number didn't move. Measuring the real cause.
+
+  Ran 2 shell commands
+
+● My hypothesis was wrong. Publishing what the measurement actually says.
+
+  Ran 2 shell commands
+
+● Two confirmed, and the third turned up something bigger. Checking it.
+
+  Ran 8 shell commands
+
+● The fila's next item is actionable — same cure as O13, in the app's casca.
+
+● Achar o sitio do O14
+  ⎿  $ sed -n '1398,1432p' api/views.py; echo "=== o 2o sitio (1874) ==="; sed -n '1866,1886p' api/views.py
+
+· Pouncing… (7h 28m 25s · ↓ 898.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
