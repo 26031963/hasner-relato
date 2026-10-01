@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:54:01.**
+**Medido em 01/10/2026 09:59:31.**
 
 | | |
 |---|---|
@@ -98,16 +98,6 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald 01/10 09:5x -- GESTAO DE HE: a pagina que subiu sai. A funcao e os dados ficam. Desta vez NAO ha lista de itens: ha um problema, e a forma e sua.
-
-  PRIMEIRO, o bug: quatro comentarios {# #} multilinha estao renderizando como texto na pagina. Tirar, com selo que varra todo template.
-
-  O ERRO DA VEZ PASSADA, para nao repetir: o pedido de 30/09 23:1x era uma lista (busca, filtros, multisselecao, totais, PDF, atalho) e saiu uma lista empilhada -- filtros em
-  cima, cinco contadores, tabela de oito colunas. O admin tem de montar a resposta de cabeca.
-  O ACERTO QUE ELE APONTA: o mini calendario de fase no "Vincular escala". Ninguem pediu um calendario. Alguem perguntou "o que acontece com os dias se eu trocar a fase?" e
-  respondeu PELA FORMA, com uma linha dizendo de onde veio ("paridade real, 93% dos dias") e a consequencia antes do clique ("furos antes -> 0 depois"). E esse MODO DE RACIOCINIO
-  que ele quer -- nao e para copiar o calendario.
-
   QUEM USA E O QUE PRECISA:
   O admin da folha. A regra ja esta decidida: toda HE de ponta chega BLOQUEADA. Ele nao vem decidir a regra. Vem para:
   (1) SUPERVISIONAR. O sistema nao pode bloquear a frota inteira sem que alguem olhe. Ele quer ver o geral, concluir "e isso mesmo, ninguem a autorizar", e dar o ok em quase tudo
@@ -131,6 +121,16 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
   O QUE EU QUERO ANTES DE QUALQUER CODIGO:
   DUAS propostas de forma, diferentes entre si, cada uma em ate 8 linhas: o que o admin ve primeiro, como "habito x evento" aparece sem ele calcular, onde ele da a ciencia em
   lote e onde autoriza um dia. Diga qual voce escolheria e por que. Ele escolhe; so entao constroi.
+
+❯ aval Ronald 01/10 10:0x -- col369, quatro achados medidos, por ordem de alcance:
+  1. BUG DE TELA E DE CONTADOR: marcar_pontas_fora risca a S e a E do INTERVALO. col369 30/09: batidas 07:05 12:45 13:53 15:00, marcos 07:00/12:00/13:00/15:00 -> a tela diz "HE
+  fora da janela: 45 min" e o lavrado esta certo (6,77 h). Ponta e a 1a entrada e a ultima saida do turno, nunca o intervalo. Curar, e RE-MEDIR o retrato da 09 (460 colabs /
+  6.220 dias): quanto era almoco.
+  2. 26 e 27/09: pausa de 73 e 64 min batida com tipos invertidos (S S E no fim) -> lavrado 7,89 e 7,98 h MAIS intra indenizada 1,00, como se nao houvesse intervalo. Em 23/09 a
+  mesma inversao deu certo (6,99). Achar a diferenca; "o marco manda, nunca o tipo gravado" (L-087).
+  3. Ausencia 4538 cobre 28-30/09 e ele trabalhou 29 e 30: trabalhadas 7,01 e 6,77 com minutos_realizados ZERO no mesmo DiaPago. A linha discorda de si mesma.
+  4. Vinculo 1296 (ARCOS-PSR 6x1, folga SEXTA) nasceu com inicio 22/09 e fim 18/09 e esta inativo; o ativo 1313 e 6x1 generico SEM folga: 14 dias seguidos de trabalho na celula,
+  e a sexta 25/09 sem batida virou "indefinida". Mesmo padrao do col515. NAO mexer no vinculo sem o meu !: publicar o que mudaria.
   ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
