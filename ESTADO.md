@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:25:45.**
+**Medido em 01/10/2026 13:31:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)` |
+| `HEAD` local | `8b8c0af4 LEI recebida (L-084 vence o T8): registrada, com item e com a MEDICAO que nao fecha no alcance declarado` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8b8c0af4 LEI recebida (L-084 vence o T8): registrada, com item e com a MEDICAO que nao fecha no alcance declarado
 2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)
 07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS
 73a82f83 S5b regra 2 (atraso + saida antecipada) com os dois REDs dele, e a distincao SEM_ENTRADA x NAO_DECIDE
 1194a0c5 A L-093 esta NO AR; a relavra da 10 espera um clique seu -- e a FERRAMENTA que recusou, nao a lei
-6e4251a6 Guarda estrutural do O13 por AST -- e a 4a vez que o selo de texto morde a prosa que explica a cura
 ```
 
 ## `git status --short`
@@ -41,7 +41,10 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
  M app/ponto/calculador/regras.py
  M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/motor_calculo_v2.py
  M app/ponto/tests/test_s5b_regra_pontualidade.py
+ M app/ponto/tests/test_turno_entrada_3h_suspeita_de_escala.py
+?? app/ponto/tests/test_l084_vence_o_t8.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,14 +103,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ```
 
 ● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; while pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; do sleep
-     50; done; echo… · stopped
-
-● Stop Task
-  ⎿  python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-… · stopped
-
-● Stop Task
   ⎿  python3 - <<'PYEOF'
      import io… · stopped
 
@@ -116,26 +111,34 @@ RELATO, com a lista de nomes do banco como autoridade._
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Esperar o push e ler o veredito · 9m 31s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && until ! pgrep -f
-     "bin/pre-push.sh" >/dev/null 2>&1; do sleep 40; done; tail -8 $S/push_s5b.log; echo "=== a empurrar ==="; git fetch -q 2>/dev/null; git log --oneline
-     … (9m 30s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✶ Pouncing… (5h 53m 9s · ↓ 700.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
+  Searched for 14 patterns, listed 1 directory, ran 61 shell commands
 
 ❯ aval Ronald 01/10 lei: a L-084 manda sobre o TURNO-T8. O gate entrada_fora_do_inicio deixa de zerar pontualidade no calcular_periodo do comercial
   (motor_calculo_v2.py, aval explicito para tocar o motor); o carimbo HORARIO_DESLOCADO fica como aviso ao admin, sem efeito no numero. Alcance esperado
   na 10: 6 dia-colab, ~31 h. Fora desta cura: col473 21/09 e col399 30/09 (par nulo, familia relampago) e os 36 dias abertos
   (PONTUALIDADE-EM-TURNO-ABERTO). DIFF de frota antes, reversao em logs, 09 intacta. Segue a fila.
+
+● The law arrived. Registering it and measuring before touching the motor.
+
+  Ran 1 shell command
+
+● Measured before touching anything — and the mechanism does not match the expected reach. Applying the cure as ordered, then publishing the gap.
+
+● Esperar e ler o DIFF da cura T8 · 32s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 50; if ! pgrep -f "simular_folha" >/dev/null 2>&1; then break; fi; done; echo "=== DIFF DA CURA T8 ==="; cat $S/t8/diff.log | grep -vE
+     "^W… (33s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Pouncing… (5h 58m 25s · ↓ 718.5k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
   ctrl+x ctrl+s to send now
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
