@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:27:31.**
+**Medido em 01/10/2026 04:33:01.**
 
 | | |
 |---|---|
@@ -124,12 +124,12 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 
   392 colabs (45%) mudariam pelo menos um campo. Publicando:
 
-● Conferir o push · 1m 42s
+● Conferir o push · 7m 12s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9c.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 41s)
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 11s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (6h 24m 56s · ↓ 536.7k tokens)
+· Percolating… (6h 30m 25s · ↓ 536.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
