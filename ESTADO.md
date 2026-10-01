@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:04:01.**
+**Medido em 01/10/2026 02:09:29.**
 
 | | |
 |---|---|
 | `HEAD` local | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
-| `origin/main` | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de bat
 ## `git status --short`
 
 ```
+ M app/ponto/services/retratar_humano.py
+ M app/ponto/tests/test_porta_retratar_batida.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,38 +98,38 @@ cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de bat
 
 ```
 
-● 8/22 verdes, 18 declaradas, pela função da própria casa. Tenho tudo. Escrevendo o edit do deck:
-
   Ran 1 shell command
 
-● Agora as quatro páginas novas e o fecho. Cada bullet com lastro em commit real da semana:
+● As rotas existem com views próprias. Vendo a porta e se há selo:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Agora o fecho — a página de resumo passa a cobrir o período inteiro:
+● A fatia foi construída: porta humana (ponto/services/retratar_humano.py), rotas, views e selo próprio. Conferindo se ela passa e se o caso do Ronald foi resolvido:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● 12 páginas, e a armadilha da receita conferida (os valores da última semana aparecem acesos). Agora o selo que o item pede e a publicação:
+● A batida 93752 — o caso que criou o item — está retratada desde 23/09 10:58, e a porta tem uso real: retratar_batida_admin 3 vezes, mais um desretratar. Conferindo as quatro
+  propriedades de porta antes de fechar:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 2 shell commands
 
-● Selo verde. Publicando e corrigindo as duas divergências que a receita tinha:
+● A permissão é conferida só na view — e a lei desta casa (a mesma que escrevi na porta de HE hoje) diz "permissão conferida AQUI, não na tela; tela é casca". Um segundo
+  consumidor chamando a porta passaria direto. Curando:
 
-  Listed 1 directory
+  Ran 2 shell commands
 
-● O alvo é app/media/plano/ (montado como /srv/media no Caddy). Publicando:
+● 10 de 11 quebraram — os selos chamavam a porta sem ator com permissão, o que é a prova de que a guarda não existia. Dando um ator permitido às fixtures e acrescentando o caso
+  que morde:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 1 shell command
 
-● No ar: HTTP 200, 89.858 bytes (era 50.432). Corrigindo a receita com as duas divergências que achei e a minha própria conclusão errada:
+● 14 OK. Rodando os vizinhos que consomem a porta antes de fechar:
 
-● Conferir o push do deck · 9m 23s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_deck.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (9m 21s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Rodar os selos vizinhos
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te…
 
-✢ Percolating… (4h 1m 26s · ↓ 420.0k tokens)
+· Percolating… (4h 6m 53s · ↓ 431.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
