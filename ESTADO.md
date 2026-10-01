@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:40:45.**
+**Medido em 01/10/2026 17:45:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
-| `origin/main` | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,8 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,40 +97,40 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● As duas hipóteses dele caem: o motor produz periodos_ft = 0. Medindo por que.
+  PROIBIDO: mudar o envelope do lote, criar grupo validavel em lote, regra nova de validacao, conta de delta no template, autoridade nova.
+  FORA DESTA FATIA (registrar no BACKLOG, nao construir): lote "atraso admitido" com teto por cadastro e DIFF -- move dinheiro, obra propria depois da
+  S5b.
+  PRONTO: RELATO com os prints, PROVA: ao lado de cada ato, commit. Merge so com o smoke dele.
+  LEI-AKITA: origem=chamados/juizes.py::delta_da_resposta; testemunha=o cartao le o juiz; RED=col267 ch8954; quem-mais-le=fila_validar_classificada e o
+  copiloto (rotulo do lote); juizes novos=0.
+  HAIKU: (a) contador "respostas com atraso ou saida antecipada admitidos, aguardando validacao" por empresa; (b) golden: "a resposta da col267 de 28/09
+  era erro ou atraso?"; (c) degrau: leitura.
+  LEI: nenhuma lei nova.
 
-  Ran 2 shell commands
+  Segue a fila; PAREI so em lei ou !.
 
-● Terceira causa, e nenhuma das duas dele — e metade dela é minha. Conferindo a chave da alimentação.
-
-  Ran 1 shell command
-
-● É a chave. celulas.get((colab_id, data)) e eu passei {data: cel} — sempre miss, sempre fallback aritmético.
-
-  Ran 1 shell command
-
-❯ aval Ronald 01/10 17:3x: (1) a linha ORDEM-VIVA-TOPO do BACKLOG passa a ser S5b-CALCULADOR-ESCREVE; o hook cobra a S5b ate fechar, e a O21 volta para a
-  fila depois dela. (2) escrever a PROVA: da secao O14 (RELATO:165) e republicar. Segue a fila.
-
-  Ran 1 shell command
-
-● Duas ordens. A linha da ORDEM VIVA e a PROVA: do O14.
-
-  Ran 2 shell commands
-
-● Lei (2) mordeu: antecipada +184,32 → +0,80. A folga não se moveu — então é a terceira causa. Medindo-a.
+● Ordem registrada. Ela pede proposta antes do código — então: registro, leitura do juiz, e as 4 frases com casos reais.
 
   Ran 1 shell command
 
-● Confirmado, e são duas causas no mesmo número. Publicando.
+● Background command "Esperar o push e confirmar" completed (exit code 0)
 
-  Esperar o push e confirmar · 8m 38s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 55; if grep -q "^RC=" $S/push_lei2.log 2>/dev/null; then break; fi; done; grep -E "main ->|^RC=|error:|^(FAIL|ERROR):|^(OK|FAILED)"
-     $S/pus… (8m 38s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Fermenting… (34m 35s · ↓ 43.8k tokens)
+● delta_da_resposta devolve abs — o sinal não existe. Isso muda a proposta. Medindo os casos reais.
+
+  Searched for 1 pattern, ran 6 shell commands
+
+● Os quatro casos reais, com censo. Agora as 4 frases — e um obstáculo que muda a proposta.
+
+  Ran 5 shell commands
+
+● Tudo medido. Publicando a proposta — com um obstáculo que ele precisa decidir.
+
+  Running 1 shell command…
+
+· Fermenting… (39m 35s · ↓ 56.3k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
