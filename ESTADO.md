@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:20:46.**
+**Medido em 01/10/2026 19:25:59.**
 
 | | |
 |---|---|
@@ -43,6 +43,8 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M bin/hook_stop_fila1.py
+ M bin/tests/test_hook_nao_cobra_congelado.sh
+ M bin/tests/test_hook_teto_nao_conta_espera.sh
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -123,20 +125,20 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
   derrubou. O caminho é lote com DIFF, reversão e prova, mais regerar_txt_dominio --aplicar, que invalida o anterior pela porta sem tocar conteudo nem
   hash_sha256.
 
-✻ Cogitated for 2m 17s · done 7:07 PM · 2 shells, 2 monitors still running
+✻ Cogitated for 2m 17s · done 7:07 PM · 1 shell, 2 monitors still running
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Medir se os dois selos ja estavam vermelhos antes
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; rm -rf $S/wtseal;
-     git worktree add -q --detach $S/wtseal 0ba9872f 2>&1 | tail -2; for s in test_hook_nao_cobra_congelado test_hook_teto_nao_conta_espera; do printf
-     '%-40…
+● Rodar a pasta inteira de selos de host
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== PASTA INTEIRA DE SELOS DE HOST ==="; _f=0; for s in bin/tests/test_*.sh; do printf '%-50s ' "$(basename
+     $s)"; if bash $s >/dev/null 2>&1; then echo OK; else echo "VERMELHO"; _f=$((_f+1)); fi; done; echo "vermelhos: $_f"; echo "=== suite 2 ==="; grep -E
+     "^R…
 
-✽ Flambéing… (8m 9s · ↓ 29.9k tokens · thought for 2s)
+✢ Flambéing… (13m 22s · ↓ 43.4k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
