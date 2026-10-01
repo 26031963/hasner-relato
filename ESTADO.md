@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:51 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:107 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 20:54:01.**
+**Medido em 30/09/2026 20:59:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,10 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 
 ```
  M app/colaboradores/views.py
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
+ M app/templates/colaboradores/passe_livre.html
+?? app/colaboradores/tests/test_passe_livre_trilha.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,39 +100,39 @@ cb19da19 Gestao de HE: a listagem que desencega o admin -- ela LE um retrato e d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - A classe ficou curada: bin/tests/test_selo_nao_nasce_vazio.sh varre 1.667 módulos, morde em 0 byte e em arquivo sem def test, e está provado contra o caso histórico.
-  - col499 fechou, e eu tinha errado a medição: publiquei às 20:5x que a flag não tinha trilha, procurando em valor_depois. Ela tem — a informação vai na descrição. Com o campo
-    certo: isento em 21/09 08:12, último batida_ausente em 19/09 19:15. Os chamados predatam a flag por 2 dias e o gate não vazou. Era inferência; virou prova.
-  - E o defeito real que isso expôs, curado: aquele registrar_log estava dentro de um except Exception: pass — isentar alguém do Art. 62 podia acontecer sem ninguém saber, e foi
-    justamente essa trilha que decidiu o caso. Agora é best-effort alto.
-
-  R1 também fechou como medição: 1 caso em 98 (o resto tem o gravado tão incoerente quanto o matcher), então ele deixa de ser obra estrutural — proposta no RELATO, mexer no juiz
-  do alinhamento da frota inteira por um dia de agosto não se sustenta.
-
-  Falta, na ordem: push fechar → deploy com migrate (a 0055 cria a ação autorizar_he, que hoje é letra morta).
+  Duas coisas que eu errei e corrigi em público neste bloco: publiquei que a flag isento_ponto não tinha trilha (procurei em valor_depois; ela está na descrição — 14º erro de
+  instrumento do dia), e citei um rótulo de log entre colchetes numa mensagem de commit, o que fez o regua_tickets recusar o push — e na segunda tentativa expliquei o problema
+  usando o problema.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O101 -- A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO (achado de carona do O97, 30/09 20:5x -- e esta linha corrige a min
+  ⎿  Stop hook error: siga: O1 -- COERENCIA-PORTAO — (1) PDF-lote le o dia do turno do MESMO juiz do espelho (pdf_espelho.py:436-475, caso col37
 
-● O hook nomeia o O101, e ele está meio curado: o except silencioso já foi (commit 3dc080f5). Falta o que a LEI-AKITA 7 exige por escrito — antes/depois estruturado e MOTIVO. Hoje
-  o antes/depois vai como texto na descrição e o motivo não é pedido. Vendo a tela:
+● O hook está certo: o O1 tem itens (1) e (2) de pé. Fazendo o (1), que é o cutover que o próprio censo apontou como primeiro. Lendo o sítio:
 
-  Listed 1 directory
+  Ran 1 shell command
 
-● Duas formas na tela (adicionar e remover, uma por linha). Cada ato ganha o seu motivo, e a trilha passa a levar antes/depois estruturado:
+● A lápide responde: o item (1) já foi curado em 23/09 — "PDF-SEM-REGRA-PROPRIA (corte Ronald 23/09 17:5x): o cartao NAO tem regra de dia (...) pergunta a dia_das_batidas e repete
+  a resposta". Então ou sobrou um .date() de outra natureza no arquivo, ou a entrada na allowlist está podre. Medindo pela função real do selo:
 
-● Motivo obrigatorio e trilha estruturada
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P = 'colaboradores/views.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = """ if colab.isento_ponto != novo_valor:
-     antes = colab.isento_ponto
-     from colaboradores.services.colaborador import gravar as _gravar_colab
-     _gravar_colab(colab…
+  Ran 1 shell command
 
-· Bootstrapping… (7h 22m 29s · ↓ 1.3m tokens)
+● Isto corrige o meu próprio censo de 20 minutos atrás, e para melhor. Eu medi a declaração em vez do fato:
+
+  - ofensores reais agora: 12 (não 19)
+  - 7 entradas estão PODRES — estão na allowlist e não ofendem mais: api/views.py, chamados/models.py, colaboradores/views.py, core/views.py, calibrar_ancoras.py,
+    triagem_batida.py e relatorios/pdf_espelho.py
+
+  Ou seja: o item (1) do O1 está FEITO — a cura de 23/09 pegou, e a entrada ficou podre. Conferindo se falta o selo anti-podre nessa lista (a do lookup tem):
+
+  Searched for 1 pattern
+
+● Confirmado: existe test_allowlist_de_lookup_nao_esta_podre para a lista nova e nenhum equivalente para a antiga — foi por isso que 7 entradas apodreceram sem ninguém ver.
+  Espelhando o selo que falta e limpando as 7:
+
+  Ler o selo anti-podre existente
+  ⎿  $ sed -n '240,258p' ponto/tests/test_contract_no_batida_date.py
+
+✢ Bootstrapping… (7h 27m 59s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

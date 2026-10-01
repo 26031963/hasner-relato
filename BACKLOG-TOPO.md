@@ -9,7 +9,7 @@ lista — ela e o que esta EM PE._
 
 | ID | obra | estado |
 |---|---|---|
-| **O1** | COERENCIA-PORTAO | **item (4) FEITO 28/09** -- o TXT RECUSA |
+| **O1** | COERENCIA-PORTAO | **(4) FEITO 28/09 · (3) CENSO FEITO 30/0 |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | espera aval |
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | espera corte |
 | **O4** | ACESSO-NUNCA-EM-LOTE | **livre** |
@@ -106,7 +106,7 @@ lista — ela e o que esta EM PE._
 | **O94** | TURNO ABERTO DEIXA DE SER PAGO | espera `!` |
 | **O95** | A PAUSA DECLARADA ABSORVE QUEM NAO VOLTOU | espera aval |
 | **O96** | PAUSA MAXIMA E CADASTRO DA ESCALA, nao constante de classe | espera aval |
-| **O97** | SELO VAZIO DESDE 30/06 | espera aval |
+| **O97** | SELO VAZIO DESDE 30/06 | **FECHADA 30/09 21:1x -- os DOIS selos v |
 | **O98** | CONGELADA (L-096) -- GLOSSARIO DO DOMINIO | **CONGELADA (L-096)** -- a lei de 28/09  |
 | **O99** | VERDADE-NAO-E-INCOMODA | espera `!` |
-| **O101** | A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO | **livre** |
+| **O101** | A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO | espera aval |
