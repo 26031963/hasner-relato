@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:58:01.**
+**Medido em 01/10/2026 14:03:02.**
 
 | | |
 |---|---|
@@ -39,7 +39,10 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/motor_calculo_v2.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,36 +99,36 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa, rotulo de admin; (b) golden: "quantos dias de HE da col616 na 09 pedem
-  decisao?"; (c) degrau: leitura.
-  LEI: nenhuma lei nova de dinheiro; cadastro novo de tela = corte dado acima. A migration do cadastro NAO cabe no --sem-migrate da raia: ela sobe pela
-  main, no deploy normal.
 
+❯ aval Ronald 01/10 14:0x -- HIGIENE-DE-CONTEXTO, infra da sessao, nenhuma lei de negocio. Entra ao fechar o item em curso; nao corta a S5b.
+
+  1. bin/handoff_sessao.sh: grava app/docs/HANDOFF-SESSAO.md por COMANDO, sem prosa -- HEAD e origin, git status curto, ORDEM VIVA e o item em curso,
+  linhas PAREI do topo do RELATO, avais recebidos hoje ainda nao cumpridos (de PROMPTS.md), processos de fundo vivos, proximo passo em 1 linha. Teto: 60
+  linhas.
+  2. Hook PreCompact (manual e auto) chama o script. Hook SessionStart com matcher compact imprime o HANDOFF-SESSAO.md (stdout entra no contexto).
+  3. Regra no CLAUDE.md, secao 7b: ao FECHAR marco, rodar o script e escrever no painel "MARCO FECHADO -- pode compactar". Nunca no meio de DIFF ou
+  apply.
+  4. Dieta de prosa: celula de estado do BACKLOG com no maximo 300 caracteres (fato, numero, commit); a historia mora so no RELATO. RELATO com mais de 3
+  dias vai para RELATO-ARQUIVO.md no mesmo commit; o publicado continua lendo o vivo.
+  5. CLAUDE.md: as historias "nasceu medida" saem para app/docs/LAPIDES.md com ponteiro; ficam as regras. Meta: metade do tamanho.
+  6. Push: um por marco, nao um por commit.
+
+  RESULTADOS OBSERVAVEIS: (1) /compact manual gera o arquivo e a sessao seguinte o cita sem eu colar; (2) BACKLOG sem celula acima de 300; (3) tamanho do
+  CLAUDE.md e do RELATO antes/depois publicado; (4) selo de host: hook existe e o script roda sem Django.
+  PROIBIDO: apagar historia (move, nao apaga); tocar regra ao mover.
+  CUSTO: 1 comando por marco; a celula curta obriga a abrir o RELATO para o detalhe.
   Segue a fila; PAREI so em lei ou !.
 
-  Ran 3 shell commands
+  Registrar a higiene e rodar os selos do T8
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='app/docs/PROMPTS.md'
+     t=io.open(P,encoding='utf-8').read()
+     linha = ('- **01/10 ~14:0x — HIGIENE-DE-CONTEXTO** (infra da sessao, nenhuma lei de negocio; entra ao FECHAR o '
+     'item em curso, nao corta a S5b). `bin…
 
-● Opening the DIFF changed the picture in a way worth stating precisely. Publishing both that and the new order.
-
-  Searched for 2 patterns, ran 7 shell commands
-
-● Found a real error in my own diagnosis. Correcting it before anything else.
-
-  Ran 6 shell commands
-
-● The test caught my own diagnostic error. Correcting it where it was written.
-
-  Ran 7 shell commands
-
-● Both cases measured from the real retrato. Publishing the design.
-
-● Esperar o push e ler o veredito · 6m 42s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 50; if ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; then break; fi; done; grep -E "^(OK|FAILED|Ran|FAIL:|ERROR:)|main
-     ->|RC=|AssertionErr… (6m 41s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Pouncing… (6h 25m 25s · ↓ 763.2k tokens)
+✽ Pouncing… (6h 30m 26s · ↓ 772.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
