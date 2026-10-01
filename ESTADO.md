@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:41:25.**
+**Medido em 30/09/2026 21:46:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `86879e4f Gestao de HE no ar com a aba Autorizar, e o SEED da minha migration nao alcancou ninguem` |
+| `HEAD` local | `7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou` |
 | `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **19** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-86879e4f Gestao de HE no ar com a aba Autorizar, e o SEED da minha migration nao alcancou ninguem
-d07f8e74 O1 fecha em ZERO, e tres dos quatro itens dele ja estavam cumpridos sem ninguem ter medido
-5b4593e4 A allowlist apodreceu porque faltava o selo que a irma tinha -- e com ela apodreceu um item do backlog que ja estava feito
-b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha
-f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar
+7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
+e9e49d37 Merge branch 'raia-ui'
+42b3be2d COL900: a minha medicao estava contaminada TRES vezes, a porta nao faz o que a lei pede, e eu revertei 8 celulas
+965bdde7 Duas curas que o merge exigia: a lapide multilinha voltaria a vazar, e o selo do espelho nao sabia seguir o include
+7859e7fa Placar do topo do TICKETS reescrito pelo gerador
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons.py
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
-?? app/ponto/management/commands/aplicar_col900.py
-?? app/ponto/management/commands/diff_col900.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -102,43 +96,43 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 
 ```
 
-  Ran 1 shell command
-
-● 7 verdes — incluindo a sua RED das duas pontas e o caso que achou o defeito do marco None. Commitando e rodando os selos que o espelho e o calendário têm, porque eu mexi nos
-  dois templates:
+● O push recusou em tickets_rodape_vs_git — o rodapé do TICKETS contra o git, que o merge desatualizou. Vendo a cura que ele mesmo nomeia:
 
   Ran 1 shell command
 
-● Dois vermelhos, os dois legítimos:
+● A cura que ele nomeia é bin/tickets_rodape.sh --escrever (o rodapé diz 346ad7ab, 28 commits atrás). Rodando e empurrando:
 
-  1. O selo do espelho afirma que data-he-riscado está no fonte daquele arquivo — e eu extraí o markup para um include. A intenção do selo (o espelho desenha o riscado) continua
-     válida; a implementação dele tem de seguir o include.
-  2. gestao_he.html:35 tem lápide multilinha na raia — eu corrigi em main depois do cherry-pick, então o merge reintroduziria o defeito. Achado de peso.
+  Ran 2 shell commands
 
-  Curando os dois:
+● O push está correndo com a suíte como portão (~16 min). A recusa anterior foi do tickets_rodape_vs_git, e a causa não é descuido: o merge trouxe 18 commits de uma vez, e o
+  rodapé mede distância contra o remoto — nenhum commit individual estourava o teto de 5, o merge estourou. Curado pelo gerador que o próprio selo nomeia.
 
-  Ran 1 shell command
+  Enquanto isso, o estado do que você pediu:
 
-● O selo afirma sobre o fonte do espelho: data-he-riscado, c.fora_da_janela, c.minutos_fora e Art. 4. Dois deles mudaram de arquivo. Fazendo o selo seguir o include, o que
-  preserva a intenção e fica mais forte (ele também cai se o include desaparecer):
+  ┌───────────────────────────────┬───────────────────────────────────────────────────────────────────────────────┐
+  │             item              │                                    estado                                     │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+  │ 1. autorizar_he → DP e hasner │ no ar, 5 setores, supervisão fora, com trilha                                 │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+  │ 2. COL900                     │ PAREI — o gravado não se moveu, 8 células revertidas, PAREI no topo do RELATO │
+  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
+  │ 3. merge + deploy             │ no ar — deploy no mesmo ato do merge, 3 rotas provadas, importerror_500=0     │
+  └───────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┘
 
-  Fazer o selo seguir o include e rodar
-  ⎿  $ cd /home/ronald/wt-ui/app && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile, re
-     P = 'ponto/tests/test_b1_relogio_riscado_e_aviso.py'
-     t = io.open(P, encoding='utf-8').read()
-     V = """class JanelaDeHeApareceNoDiaTest(SimpleTestCase):
-     def setUp(self):
-     self.tela = _vivo(TELA)"""
-     N = …
+  A tela está servindo agora para o seu smoke: /ponto/gestao-he/ com a aba Autorizar/Não, e o calendário com o relógio riscado nas duas pontas.
 
-* Bootstrapping… (8h 9m 53s · ↓ 1.5m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  O que o item 2 precisa de você, e é a única coisa que me trava ali: a porta regenerar_celulas_vinculo alcança o horizonte do vínculo, não o dia — então a sua lei ("regera só os
+  dias em que o template acerta") não cabe nela. As três saídas estão no RELATO com os números: a porta ganhar modo DIA, corrigir o cadastro do col438 (vínculo, seu !), ou tudo ir
+  para CADASTRO x REALIDADE. O col900 é o caso em que a sua lei funcionou limpa — 15 dias com o template confirmado por 1 a 5 min.
+
+  E registro o saldo do dia sem adoçar: quinze erros de instrumento, três deles no mesmo censo do COL900, e a sua correção das 21:2x foi a que abriu os outros dois. O padrão é um
+  só e já está na memória — medir a declaração em vez do fato, ou usar como régua a autoridade que está sendo julgada.
+
+✻ Worked for 54s · done 9:45 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
