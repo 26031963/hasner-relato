@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:31:01.**
+**Medido em 01/10/2026 19:36:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,12 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/vinculo.py
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+?? app/escala/management/commands/corrigir_vinculo_vigencia.py
+?? app/escala/tests/test_porta_repara_vigencia_impossivel.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,32 +101,6 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    o hook. Agora o selo importa o hook — raspar a fonte para não copiar vocabulário é copiar por outro meio.
-  - test_hook_teto_nao_conta_espera rodava contra a árvore viva, e o hook libera quando o RELATO declara PAREI. Com um PAREI legítimo no topo — o estado
-    normal de uma fila esperando o ! — ele acusava "o teto gastou espera" sem exercitar o teto. Agora monta a própria árvore por HOOK_STOP_RAIZ, como os
-    irmãos já faziam.
-  - E o vigia era cego para a linha que você autorizou: _linha_de_item_re() exigia [A-Z] no primeiro caractere, então | 09-TURNO-ABERTO-EXPOSTA | não era
-    pulado por estado — não existia para ele. Mesmo buraco da lápide de 28/09, com outra forma.
-
-  51 selos de host, 0 vermelhos. Tentei curar isso pelo lado errado antes (fiz o hook preferir o marcador ORDEM-VIVA-TOPO) e revertí no mesmo turno: o
-  selo do congelado já exige que o 1º aberto seja o declarado, e um segundo mecanismo para a mesma pergunta é juiz paralelo. A ordem mora na ordem da
-  tabela; o marcador a confirma — e agora ele aponta 09-TURNO-ABERTO-EXPOSTA, que é a sua sequência de 19:0x.
-
-  Correção do número da 09, antes do apply: são 48,26 h em 6 dia-colab, não 61,30 em 14. A conta tomou três versões e as duas primeiras estavam erradas
-  por motivos diferentes — a primeira por forma (batidas em número ímpar: 169 dia-colab), a segunda porque autoridade_do_periodo busca batida só até
-  meio-dia do dia 20: os oito "turnos abertos" caíam todos em 20/09 e nenhum estava aberto — col905 bateu 19:31S, col441 23:05S, col704 23:12S. O que de
-  fato está exposto: col820 (07, 15 e 17/09, 11,00 h cada), col890 14/09 10,64, col60 07/09 4,45, col922 13/09 0,17.
-
-  Isso destapou um achado próprio, medido na frota: 109 colabs têm a saída do dia 20 fora da janela da tela (324 batidas em 172 colabs), então o espelho e
-  o PDF de uma competência já paga mostram o último dia como turno aberto enquanto a folha o pagou fechado. A lição já estava escrita três vezes na casa,
-  sempre no chamador (porta_export.py:66, calendario.py:296, e agora eu) — e o +1 dia no chamador é o band-aid. Registrado como
-  JANELA-DA-AUTORIDADE-PERDE-O-DIA-20, depois da S5b, com a nota de que a cura não é copiar o +1 dia para dentro: aquele alarga a competência junto, e a
-  folha alarga só a busca.
-
-✻ Churned for 15m 14s · done 7:27 PM · 2 shells, 1 monitor still running
-
-❯ aval Ronald 01/10 19:3x col369 VINCULO: o vinculo 1296 (ARCOS - PSR 6x1, folga na SEXTA) vale de 22/09 em diante; corrigir a vigencia impossivel dele
-  (22/09..18/09) e absorver o 1313 pela porta absorver_vigencias_posteriores, com trilha -- nunca update solto. Efeito esperado, ja medido: -4 furos
   (sextas 25/09, 02/10, 09/10, 16/10), ZERO hora movida. Se o DIFF mover qualquer hora, PAREI com a tabela. Entra depois do deploy da pontualidade; nao
   corta a S5b !
 
@@ -130,11 +108,37 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 
 ● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
 
-✢ Wibbling… (1m 57s · ↓ 7.0k tokens · thinking)
+  Searched for 1 pattern, ran 11 shell commands
+
+● Monitor(veredito do push do marco da pontualidade)
+  ⎿  Monitor started · task bj73je78b · timeout 1800s
+  ⎿  Allowed by auto mode classifier
+
+● O ! do vínculo está registrado (PROMPTS + célula COL369-VINCULO-1296), e a preparação achou um buraco que muda a forma do ato — não havia porta para
+  consertar vigência impossível. A casa sabia contar essa classe em quatro sítios (vigencias_impossiveis, o serviço da lavra, o contador da tela, o do
+  copiloto) e não tinha por onde reparar uma: fechar_vigencia é o escritor único de (ativa=False, data_fim) e recusa exatamente esses pks;
+  absorver_vigencias_posteriores marca ativa=False e não toca data_fim, de propósito; e ativa=True só é escrito em create(), nunca para reviver uma linha.
+  O único caminho que restava era o update solto — o que a sua ordem proíbe nessas palavras.
+
+  Então nasceu reabrir_vigencia_impossivel como porta, não como exceção destravando a trava: só aceita linha cuja vigência de hoje é impossível pelo juiz
+  único, valida a vigência nova pelo mesmo juiz, exige motivo escrito com autor, grava dado e trilha no mesmo atomic, e é idempotente — chamar 2× não muda
+  estado nem grava segunda linha de história. Selo com 6 casos escrito; o comando corrigir_vinculo_vigencia serve sombra e prod pelo mesmo código.
+
+  Divirjo da letra em um passo, e vou medir os dois. Você disse "absorver o 1313 pela porta absorver_vigencias_posteriores", mas o 1313 começa em 19/09,
+  antes do vale-de 22/09, e aquela porta filtra data_inicio__gte=D — ela não o alcança. A doutrina da própria porta é "o vigente em D fecha em D-1, todo
+  vínculo com início > D é absorvido", e absorver quem começou antes deixaria 19 a 21/09 sem vínculo ativo nenhum (o EC 322 termina em 21/09 e está
+  inativo). Então o plano fecha o 1313 em 21/09 pela fechar_vigencia, e a flag --absorver-de mede a leitura literal na sombra para a diferença sair com
+  número, não com opinião. Se qualquer hora se mover em qualquer das duas, é PAREI com a tabela.
+
+  Nada disso rodou ainda: o push do marco da pontualidade está com a pista de teste ocupada (arsenal do pre-push), e o DIFF na sombra usa os mesmos
+  núcleos — um run por vez. Assim que o push fechar: selo do vínculo, DIFF do 1296 pelas duas leituras, e então a 09, que é o item que o vigia nomeia
+  agora.
+
+✻ Cooked for 5m 59s · done 7:35 PM · 2 shells, 2 monitors still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 2 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
