@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:20:02.**
+**Medido em 01/10/2026 20:25:21.**
 
 | | |
 |---|---|
@@ -39,7 +39,15 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M bin/handoff_sessao.sh
+ M bin/relato.sh
+?? app/docs/AVAIS.md
+?? bin/gerar_avais.py
 ?? bin/keepalive.sh
+?? bin/tests/test_avais_na_mesa.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,12 +103,6 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  certo (motor ou calculador) e se a suspeita de contagem em dobro morreu. Com (1) e (2) publicados, trazer a tabela final para o ! da troca. Segue a
-  fila.
-
-  Ran 6 shell commands
-
-❯ aval Ronald 01/10 20:2x -- FILA DA NOITE. A ORDEM VIVA passa a ser esta LISTA, nao um item. Regra unica: item que travar em !, lei ou smoke meu vira
   linha no AVAIS com a frase pronta e voce PASSA AO PROXIMO no mesmo turno. So devolve turno com a lista inteira travada. Um push por marco; vizinhos do
   sitio tocado antes da suite cheia.
   1. S5b: (a) horas_atraso +129,70 h em 22 -- medir quantos sao turno ABERTO ou par nulo; hipotese: o calculador nao le a guarda que entrou no motor as
@@ -117,22 +119,28 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
   8. Fila 1 do BACKLOG na ordem do hook (O21 em diante).
      Segue a fila; PAREI so com a lista inteira travada !
 
-  Ver a frase pronta e a lista do relato.sh
-  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
-     import json,io
-     d=json.load(io.open('app/docs/PENDENTES_RONALD.json',encoding='utf-8'))
-     for x in d:
-     if x.get('frase'):
-     print('id:', x['id']); print('tipo:', x['tipo']); print('desde:', x.get('desde')); print('frase:', x['frase'][:220]); print('o_que:', x…
+  Ran 8 shell commands
 
-✻ Discombobulating… (4m 53s · ↓ 19.9k tokens · thinking)
+● Monitor event: "DIFF de folha do vinculo 1296 na sombra (2a tentativa)"
+
+● Fechar a celula e rodar os vizinhos
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='| AVAIS-NA-MESA |'
+     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
+     novo = (' **FECHADA 01/10 21:3x.** `b…
+
+* Discombobulating… (10m 12s · ↓ 34.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 4 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Scanning gestao_he.html for template comparisons                                                          13m 14s · ↓ 202.9k tokens
+  ◯ general-purpose  Inspecting RELATO.md header lines                                                                         18m 34s · ↓ 235.2k tokens
   ⧉  index
 ```
