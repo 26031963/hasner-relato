@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:44:31.**
+**Medido em 01/10/2026 18:50:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo` |
+| `HEAD` local | `19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga` |
 | `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga
 0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo
 867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO
 c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
 92a1c4e6 A segunda causa tambem estava escrita na casa: a L-084 julga ANTES da janela. Noturnas -47,80 -> +0,67 h
-5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/motor_calculo_v2.py
-?? app/ponto/tests/test_pontualidade_em_turno_aberto.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,6 +95,12 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Searched for 4 patterns, read 1 file, listed 1 directory, ran 33 shell commands
+
+● Background command "Esperar e ler o DIFF de frota" completed (exit code 0)
+
+❯ aval Ronald 01/10 18:3x UI-RESPOSTA-DIZ-O-QUE-E: OK nas 4 frases e na confirmacao do Reabrir. Escolha (A): delta_da_resposta devolve sinal_min ao lado
   de delta_min, mesma funcao, juiz novo = 0; sobe pela main junto do item 5. DOIS AJUSTES: (1) a faixa "atraso/saida antecipada admitidos" comeca na
   tolerancia com que a FOLHA julga (TOLERANCIA_CONFORMIDADE_MIN, a mesma de _envelope_lote_min), nao em 5 -- a frase nunca promete desconto que a folha
   nao faz (RED col290 +7 min); (2) no regime em que o motor nao julga pontualidade (lei 2), a frase diz so "Validar grava HH:MM no espelho", sem "vai
@@ -121,22 +123,16 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
      CUSTO: 1 campo a mais por item e fechar o item ao receber o aval.
      Segue a fila.
 
-● Atualizar as tres celulas de estado do BACKLOG
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     antes_prox = (H._proximo_da_fila() or 'nenhum').split(' -- ')[0]
-     def troca_estado(ancora, no…
+  Searched for 4 patterns, read 1 file, listed 1 directory, ran 26 shell commands
 
-✢ Fermenting… (1h 38m 21s · ↓ 154.0k tokens)
+● Advising using Fable 5.1
+
+* Fermenting… (1h 43m 51s · ↓ 171.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
