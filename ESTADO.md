@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:10:45.**
+**Medido em 01/10/2026 19:15:45.**
 
 | | |
 |---|---|
@@ -95,16 +95,6 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
-
-  Ran 1 shell command
-
-● Background command "Rodar a suite canonica inteira" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Background command "Esperar a suite fechar e ler o veredito" completed (exit code 0)
-
 ● Background command "Esperar a suite fechar" completed (exit code 0)
 
   Ran 4 shell commands
@@ -129,10 +119,20 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
   hash_sha256.
 
 ✻ Cogitated for 2m 17s · done 7:07 PM · 2 shells, 2 monitors still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+  Medir a exposicao da 09 com a janela da folha
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/exposicao_09c.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """EXPOSICAO DA 09, 3a medicao -- agora com a janela que a FOLHA usa. SO LEITURA.
+     A 2a medicao (pela autoridade) disse 14 dia-colab / 61,30 …
+
+· Flambéing… (3m 8s · ↓ 9.8k tokens · thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ suite verde: deploy, smoke dos tres, push
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 2 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
