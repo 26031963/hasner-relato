@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:644 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:130 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:42:01.**
+**Medido em 01/10/2026 19:47:05.**
 
 | | |
 |---|---|
-| `HEAD` local | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
+| `HEAD` local | `76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,22 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO
+d97b779f A celula da 09 declara o DIFF publicado e a frota recusada
+80ba806c A 09: DIFF publicado ANTES, e o recalculo de FROTA esta RECUSADO -- 19 rubricas, 47 campos SUBINDO
 c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois
 f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o vigia cego para um id
-3cbfd495 A guarda lia p.entrada direto e derrubou 20 testes: periodo de selo e SimpleNamespace
-19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga
-0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo
 ```
 
 ## `git status --short`
 
 ```
  M app/colaboradores/services/vinculo.py
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
-?? app/escala/management/commands/corrigir_vinculo_vigencia.py
-?? app/escala/tests/test_porta_repara_vigencia_impossivel.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,14 +97,6 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Então nasceu reabrir_vigencia_impossivel como porta, não como exceção destravando a trava: só aceita linha cuja vigência de hoje é impossível pelo juiz
-  único, valida a vigência nova pelo mesmo juiz, exige motivo escrito com autor, grava dado e trilha no mesmo atomic, e é idempotente — chamar 2× não muda
-  estado nem grava segunda linha de história. Selo com 6 casos escrito; o comando corrigir_vinculo_vigencia serve sombra e prod pelo mesmo código.
-
-  Divirjo da letra em um passo, e vou medir os dois. Você disse "absorver o 1313 pela porta absorver_vigencias_posteriores", mas o 1313 começa em 19/09,
-  antes do vale-de 22/09, e aquela porta filtra data_inicio__gte=D — ela não o alcança. A doutrina da própria porta é "o vigente em D fecha em D-1, todo
-  vínculo com início > D é absorvido", e absorver quem começou antes deixaria 19 a 21/09 sem vínculo ativo nenhum (o EC 322 termina em 21/09 e está
   inativo). Então o plano fecha o 1313 em 21/09 pela fechar_vigencia, e a flag --absorver-de mede a leitura literal na sombra para a diferença sair com
   número, não com opinião. Se qualquer hora se mover em qualquer das duas, é PAREI com a tabela.
 
@@ -132,9 +120,17 @@ f794d405 A REGUA ESTAVA VERMELHA e nao era pelo codigo: dois selos de host, e o 
 
 ● Monitor event: "veredito do push do marco da pontualidade"
 
-● Ver as flags do recalcular_fechamento
+● Acertar o motivo do historico e rodar os selos
+  ⎿  $ python3 - <<'PYEOF'
+     import io
+     P='colaboradores/services/vinculo.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ motivo='vigencia impossivel reparada')"""
+     assert t.count(a)==1
+     # O `motivo` do HistoricoVinculo e um CHOICE de 20 chars, nao prosa: o valor certo para este ato e
+     # `correcao` ("Correca…
 
-✢ Propagating… (4m 43s · ↓ 11.0k tokens)
+✢ Propagating… (9m 47s · ↓ 28.1k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
