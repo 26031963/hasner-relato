@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:12:01.**
+**Medido em 30/09/2026 23:17:31.**
 
 | | |
 |---|---|
@@ -99,39 +99,39 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O ! chegou. Registro primeiro (L-010) e vou pelo portão que ele nomeou — confirmar que o col900 fica FORA do TXT antes de qualquer lavra:
 
-  Ran 1 shell command
-
-● O juiz é classificar_export, com um portão furo_espelho. Vou provar o veredito antes de escrever, simulando a lavra em transação desfeita:
-
-  Ran 1 shell command
-
-● Portão PROVADO: fora com motivo furo_espelho antes e depois da lavra — a condição dele está cumprida, não há PAREI. Agora a reposição dos 3 dias, por comando (não por shell):
+● O DNA está na impressão (cartorio.py:97), então os 3 dias já estão na fila e o cartório das 06:28 os julga. Provando pela autoridade em vez de afirmar — cartório em DRY:
 
   Ran 2 shell commands
 
-● DRY confere: os 3 dias voltam de 07:00 para FOLGA. Aplicando a reposição (com a guarda da lavra aberta por ato, porque a 09 está exportada):
+❯ aval Ronald 30/09 23:1x, para a noite -- duas frentes que se revezam:
+  1. S5b: INVESTIGA a causa dos 333 dia-colab (-1.531,61 h). So leitura, chamando a funcao real, um instrumento por vez e conferido contra 3 casos calculados a mao antes de valer
+  para a frota. NAO troca, NAO aplica. Publica a causa com nome e numero.
+  2. Raia UI, enquanto as sondas rodam: CONCLUI a Gestao de HE como registrada no BACKLOG -- decisao por colab e multisselecao, "Nao" em lote, busca nome+CPF, filtros, totais da
+  competencia, PDF e o atalho HE na Central com contador. Nada sobe sem o smoke dele: deixa pronta na raia, com a lista do que clicar.
+  3. ESMERIL: re-rotulo do contador da S3 aprovado, desde que o rotulo diga o que a conta faz. Fecha a obra.
+  4. COL882 fica esperando.
+
+● O cartório em DRY julgaria 76 na emp3 e o col900 não está entre eles — então os 3 dias não acenderiam amanhã. Lendo o pré-filtro da fila, que é onde isso se decide:
 
   Ran 1 shell command
 
-● 3 repostos. DIFF novo (a reposição muda o número) e o arquivo de reversão, antes de lavrar:
+● Minha inferência estava frouxa: o DRY só imprime [EMITE], e julgadas=76 conta julgamentos sem linha. O col900 é julgado e não emite — porque o cartório julga furo de marco, e
+  "saída não registrada" (orfao_14h) sai do detectar_ausencias, cuja janela é hoje/ontem. A casa cita um emissor retroativo; procurando:
 
   Ran 1 shell command
 
-● A reposição curou exatamente o DSR: semanas_dsr_perdido +2 desapareceu (de 8 campos para 7) — a lei "sem batida, fica" estava certa. Lavrando:
+● emitir_furo_retroativo — "passe retroativo sob ordem". É exatamente este caminho, e eu tenho a ordem. Vendo os argumentos:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Lavrado: fechamentos_mexidos=1 de 607, só o col900. Agora acender os 3 dias pelo caminho normal — achando quem emite "saída não registrada":
+● É o emissor declarado. Rodando em DRY na janela dos 3 dias para medir o efeito de frota antes de qualquer emissão:
 
-  Searched for 1 pattern, ran 1 shell command
+● DRY do emissor retroativo na janela dos 3 dias
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 docker exec saas_core python manage.py tenant_command emitir_furo_retroativo --schema=juliani --empresa 3 --ini 2026-09-03 --fim
+     2026-09-11 2>&1 | tail -22
 
-● O caminho normal é o detectar_ausencias (*/5), que já rodou muitas vezes desde a regeneração das 21:27. Medindo se os 3 dias já acenderam, em vez de supor:
-
-● Running 1 shell command…
-
-✢ Percolating… (1h 9m 25s · ↓ 172.1k tokens)
+· Percolating… (1h 14m 55s · ↓ 187.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
