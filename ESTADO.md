@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:48:46.**
+**Medido em 01/10/2026 09:54:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,9 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
+ M app/templates/ponto/gestao_he.html
+ M app/templates/relatorios/index.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,43 +98,43 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - DAR CIENCIA = "vi, segue bloqueado". Em LOTE. Nao move dinheiro. E o "Nao" de hoje.
-  - AUTORIZAR = desfaz o bloqueio daquele dia e a HE passa a contar. Por DIA, com motivo. Move dinheiro e re-lavra o dia.
-    A palavra "validar" NAO aparece na tela: ela servia aos dois atos e confundia.
+❯ aval Ronald 01/10 09:5x -- GESTAO DE HE: a pagina que subiu sai. A funcao e os dados ficam. Desta vez NAO ha lista de itens: ha um problema, e a forma e sua.
 
-  A FORMA:
-  1. Molde HX-RESUMO-COLAB (chamados/partials/_lista_resumo.html, chamados/services/painel.py): UMA linha por colaborador, COLAPSADA; abre nos dias quando se clica. Reusar o
-  partial e o agrupamento, nao reescrever.
-  2. A linha colapsada responde de relance "e habito ou dia solto": nome, quantos dias com ponta, total de minutos, e o padrao (ex.: "9 min antes em 12 de 15 plantoes" x "60 min
-  em 1 dia").
-  3. Aberta, mostra cada dia com as DUAS pontas separadas (antes da entrada / depois da saida), o horario batido contra o marco, e o botao AUTORIZAR naquele dia.
-  4. No topo, UM gesto: "Dar ciencia em tudo que esta sem decisao" -- com a contagem na cara antes de confirmar (N dias, M colaboradores).
-  5. Busca rapida por nome ou CPF; ela so reduz a lista.
-  6. Abre como DRAWER a partir do atalho HE da Central, como as outras gestoes da casa. Empresa real por padrao, nunca a de teste.
-  7. Depois da ciencia em lote, dia novo que chegar bloqueado volta a aparecer como sem decisao.
+  PRIMEIRO, o bug: quatro comentarios {# #} multilinha estao renderizando como texto na pagina. Tirar, com selo que varra todo template.
 
-  PRIMEIRO: tirar do ar os quatro comentarios {# #} multilinha que estao renderizando na pagina, com selo que varra todo template.
-  ANTES DE CODAR A FORMA: devolver em ate 10 linhas o que o admin ve em cada um dos tres momentos (lista fechada, colaborador aberto, confirmacao do lote), para ele aprovar o
-  desenho.
-  A decisao segue por DIA INTEIRO; autorizar so uma ponta fica como pergunta para ele.
+  O ERRO DA VEZ PASSADA, para nao repetir: o pedido de 30/09 23:1x era uma lista (busca, filtros, multisselecao, totais, PDF, atalho) e saiu uma lista empilhada -- filtros em
+  cima, cinco contadores, tabela de oito colunas. O admin tem de montar a resposta de cabeca.
+  O ACERTO QUE ELE APONTA: o mini calendario de fase no "Vincular escala". Ninguem pediu um calendario. Alguem perguntou "o que acontece com os dias se eu trocar a fase?" e
+  respondeu PELA FORMA, com uma linha dizendo de onde veio ("paridade real, 93% dos dias") e a consequencia antes do clique ("furos antes -> 0 depois"). E esse MODO DE RACIOCINIO
+  que ele quer -- nao e para copiar o calendario.
 
-  Censo dos comentarios multilinha que renderizam
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, os, re
-     APP='app/templates'
-     achados=[]
-     for base,dirs,arqs in os.walk(APP):
-     dirs[:]=[d for d in dirs if not d.startswith('.')]
-     for a in arqs:
-     if not a.endswith('.html'): continue
-     p=os.path.join(base,a)
-     src=io.open(p,encoding='utf-8').rea…
+  QUEM USA E O QUE PRECISA:
+  O admin da folha. A regra ja esta decidida: toda HE de ponta chega BLOQUEADA. Ele nao vem decidir a regra. Vem para:
+  (1) SUPERVISIONAR. O sistema nao pode bloquear a frota inteira sem que alguem olhe. Ele quer ver o geral, concluir "e isso mesmo, ninguem a autorizar", e dar o ok em quase tudo
+  de uma vez.
+  (2) ACHAR A EXCECAO. Buscar uma pessoa, ver os dias dela e autorizar um ou alguns -- so ai a hora conta.
+  A pergunta que a tela tem de responder SEM ele ler tabela: "quem esta esticando o horario, e habito ou foi um dia, e o que eu faco?"
 
-✽ Pouncing… (2h 16m 10s · ↓ 220.6k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  DOIS CASOS REAIS, opostos, que a forma tem de distinguir de relance:
+  - o col do print dele (12x36 19:00-07:00, Shopping Boulevard): chega ~9 min antes e sai ~3 min depois em QUASE TODO plantao. E habito.
+  - col624 em 22/09: chegou 12:15 contra marco 15:00, 165 min, um dia. E evento.
+    Numa tabela os dois viram uma linha com um total. Nao sao a mesma decisao.
+    O tamanho: na 09 sao 460 colaboradores e 6.220 dias com ponta. Quase tudo e ciencia; a excecao e rara.
+
+  O QUE NAO MUDA (principios, nao itens):
+  - Dois atos, com estes nomes: DAR CIENCIA ("vi, segue bloqueado", em lote, nao move dinheiro) e AUTORIZAR (desfaz o bloqueio do dia, com motivo, move dinheiro, re-lavra). A
+  palavra "validar" nao aparece.
+  - Le o retrato lavrado e a porta decidir_he. Zero derivacao nova.
+  - As leis de UI da casa. Empresa real por padrao.
+  - Ele gosta de como a UI de chamados colapsa por colaborador e abre no detalhe, e de gestao em drawer. Sao REFERENCIAS da casa, nao receita: use se servirem a pergunta.
+
+  O QUE EU QUERO ANTES DE QUALQUER CODIGO:
+  DUAS propostas de forma, diferentes entre si, cada uma em ate 8 linhas: o que o admin ve primeiro, como "habito x evento" aparece sem ele calcular, onde ele da a ciencia em
+  lote e onde autoriza um dia. Diga qual voce escolheria e por que. Ele escolhe; so entao constroi.
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
