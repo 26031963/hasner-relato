@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:19:01.**
+**Medido em 01/10/2026 11:24:31.**
 
 | | |
 |---|---|
@@ -96,6 +96,7 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Defeito 2 — a relavra NÃO pegou, e a culpa é minha: faltou --apply. Medido: existem 2 linhas de he_pendente para a emp2, de 30/09 17:23 (09) e 01/10 06:36 (10). Nenhuma é das
   10:11/10:41. O comando lavrar_he_pendente só escreve com --apply e eu rodei sem — ele mediu e imprimiu, e eu publiquei "retrato relavrado" lendo o print como se fosse escrita.
   Os 13,7% do almoço são válidos (é a medição), mas o retrato em prod nunca foi reescrito. Vou relavrar de verdade depois do defeito 1, senão gravaria os 4.198 dias de novo.
@@ -128,12 +129,11 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
      a = """ brutos = ['%s:%s:%s' % (c['colab'], d['data'], d['minutos'])
      for c in _vis['colabs'] for d in c['dias'] if d.get('estado') == 'sem_decisao…
 
-· Pouncing… (3h 46m 25s · ↓ 396.2k tokens · deep in thought)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
