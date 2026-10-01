@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:35:31.**
+**Medido em 01/10/2026 11:40:45.**
 
 | | |
 |---|---|
@@ -96,44 +96,44 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ficava parado em 28/09 enquanto as horas eram reescritas — a mesma família que a seção 4 do CLAUDE.md descreve para a célula, e eu usei o
-  campo como prova em vez de desconfiar dele. O selo novo achou 14 sítios em 8 arquivos com o mesmo defeito; todos curados, allowlist zero. E
-  a rota morta da mensageria saiu com o seu !: das 42 funções api_mensageria_*, 41 estavam roteadas — não é que ninguém chamava, não havia
-  como chamar.
+  - Dar ciência é uma opção por pessoa, no topo do expandido, pelo diálogo da casa com a conta e a consequência no texto.
+  - Autorizar por dia, e o motivo nasce no clique — o botão se esconde e o par campo+confirmar aparece.
+  - A tira da linha colapsada engrossou de 5px para 7px com 2px de gap e traço mínimo de 3px, para ser legível no tamanho em que está.
 
-  As 6 linhas do expandido, antes de codar:
-  1. O período dela desenhado grande, em semanas: uma célula por dia de 21→20, as com ponta pintadas, intensidade pelos minutos na escala
-     única com o teto declarado.
-  2. Dentro da célula, a direção: metade de cima = antes da entrada, metade de baixo = depois da saída; dia com as duas aparece dividido.
-  3. Uma frase sobre o desenho: "9 min antes da entrada em 12 de 15 plantões · maior dia 22 min · 110 min no total".
-  4. Abaixo, a tabela limpa, como texto de apoio: dia (dd/mm) · ponta · bateu · marco · minutos — rótulo no cabeçalho, nunca repetido por
-     linha.
-  5. No topo do expandido, uma opção: "Dar ciência nos N dias sem decisão desta pessoa".
-  6. Autorizar segue por dia, e o campo de motivo só nasce quando ele escolhe autorizar aquele dia.
+  E os selos mudaram de pergunta em vez de serem afrouxados: o que proibia <table> agora pergunta onde ela vive (antes do primeiro expandido =
+  vermelho; dentro dele = o que você pediu); entraram mais quatro — a frase não se repete por linha, o motivo não nasce aberto, nenhuma data
+  de máquina no que o navegador mostra (com o ISO ainda indo no POST, que é da porta), a ciência por pessoa cobre os 12 dias dela e não toca a
+  outra, e a grade semanal cobre o período inteiro com as duas pontas separadas.
+
+  Falta rodar os selos da raia e, com a suite limpa da main verde, deployar a cura dos três defeitos de dado + relavrar com --apply — nessa
+  ordem, para não gravar os 4.198 dias de novo.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8
   PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Background command "Rodar a suite inteira com os 14 carimbos curados" completed (exit code 0)
+● Background command "Aguardar a suite limpa da main" completed (exit code 0)
 
-● Curar o comentario, pôr o JS e engrossar a tira
-  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, re
-     P='app/templates/ponto/gestao_he.html'
-     t=io.open(P,encoding='utf-8').read()
-     # 1. o comentario multilinha que eu acabei de escrever vira {% comment %}
-     a = """ {# A GRADE DO PERIODO: celula por dia, em semanas. Para …
+  Ran 2 shell commands
 
-✢ Pouncing… (4h 2m 55s · ↓ 406.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Background command "Aguardar o fim da suite limpa" completed (exit code 0)
+
+  Ran 5 shell commands
+
+● Expandido commitado na raia (8a74c506). A suite limpa da main ainda está rodando — e desta vez é uma só, sem colisão.
+
+  Estado, para fechar o que está em pé:
+
+  No ar agora: a Gestão de HE na forma B antiga (a que você reprovou), mais a cura do almoço, os 14 carimbos e a rota morta da mensageria.
+
+  Pronto na raia, esperando a suite: o expandido refeito nos seis pontos, com 5 selos novos.
+
                                                                                                       ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
