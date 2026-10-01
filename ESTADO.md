@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:367 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:374 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:19:01.**
+**Medido em 01/10/2026 14:24:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO` |
+| `HEAD` local | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,21 +29,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md
 02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO
 62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL
 baa66320 CORRECAO: eu errei a causa do col142, e foi o meu proprio RED que pegou -- e o achado verdadeiro e maior
 f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha no alcance declarado -- PAREI com o numero
-8b8c0af4 LEI recebida (L-084 vence o T8): registrada, com item e com a MEDICAO que nao fecha no alcance declarado
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/ponto/management/commands/diff_calculador.py
-?? app/docs/HANDOFF-SESSAO.md
-?? bin/handoff_sessao.sh
+?? app/docs/RELATO-ARQUIVO.md
 ?? bin/keepalive.sh
-?? bin/tests/test_handoff_sessao.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -99,8 +99,6 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  1. bin/handoff_sessao.sh: grava app/docs/HANDOFF-SESSAO.md por COMANDO, sem prosa -- HEAD e origin, git status curto, ORDEM VIVA e o item em curso,
   linhas PAREI do topo do RELATO, avais recebidos hoje ainda nao cumpridos (de PROMPTS.md), processos de fundo vivos, proximo passo em 1 linha. Teto: 60
   linhas.
   2. Hook PreCompact (manual e auto) chama o script. Hook SessionStart com matcher compact imprime o HANDOFF-SESSAO.md (stdout entra no contexto).
@@ -125,10 +123,12 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 
 ● The item in curso closed. Building the handoff (reusing the Stop hook's readers, not writing new ones).
 
-● Ver o topo do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && head -6 app/docs/RELATO.md
+● Rodar todos os selos de host · 2m 26s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; if [ $rc -ne 0 ]; then echo "### VERMELHO: $f"; echo
+     "$out" | head -5; fi; done; echo "--- varredura concluida ---" (2m 25s · 9 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (6h 46m 25s · ↓ 799.0k tokens)
+· Pouncing… (6h 51m 55s · ↓ 812.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
