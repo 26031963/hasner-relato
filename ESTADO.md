@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:283 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:338 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:44:31.**
+**Medido em 30/09/2026 23:50:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
+| `HEAD` local | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
 | `origin/main` | `74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
 74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
 c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
 e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
-2b8c0044 Ato cirurgico sem desfazer na porta: ontem eu repus 8 celulas por shell, que e escritor nao declarado
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,39 +95,39 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-❯ (4) NAO PARA EM "NAO SEI": quando a evidencia nao fecha, ele levanta as POSSIBILIDADES (2 a 4), diz o que cada uma explicaria e o que a desmentiria, e INTERPELA o admin com a
-  UMA pergunta que mais separa as hipoteses -- em linguagem do admin, sem jargao de sistema. Com a resposta, mede de novo e segue ate a proposta. Se nao consegue sugerir uma
-  escala, pergunta ao admin o que falta para sugerir (horario real, desde quando, posto, quem cobre) em vez de desistir. "Nao tenho informacao" so vale acompanhado da pergunta
-  que traria a informacao. GOLDEN: col438 (bate 07:00 em 10 dias e 12:00 em 2, cadastro 12:00) -> tres hipoteses e a pergunta "mudou de turno? desde quando?"; col647 (ausencia
-  nos 31 dias, zero batida) -> "esta afastada? ate quando?".
-
-● Item (4) de uma ordem nova — e ele se aplica diretamente ao S5b, cuja célula diz literalmente "a causa dos 333 eu NÃO sei". Registrando:
-
-  Ran 1 shell command
-
-● Background command "Esperar o push" completed (exit code 0)
-
-● Push e131e98b..74e0180a. Agora o S5b — primeiro instrumento: remedir, porque o diff_calculador mudou hoje:
-
-  Ran 3 shell commands
-
-● Background command "Remedir o S5b na competencia 10" completed (exit code 0)
-
-● A remedição muda o quadro: o horas_trabalhadas negativo agora são ~118 dia-colab (45+40+14+19), não 333. Lendo os totais e o CSV:
-
-  Ran 1 shell command
-
-● Atenção a uma diferença que importa: esta é motor × calculador (+69,37 h em 1778 dia-colab), e os "333 / −1.531,61 h" eram contra o GRAVADO — são perguntas diferentes. Pegando 3
   casos negativos para calcular à mão, como ele exigiu:
 
   Ran 1 shell command
 
 ● Três casos, e dois deles têm o calculador em 0,0 contra motor com horas. Calculando à mão pelas batidas cruas:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Percolating… (1h 41m 56s · ↓ 217.7k tokens)
+● Três cálculos à mão, e duas descobertas: a causa tem três mecanismos distintos — e col950 é "[nome]", com batidas sintéticas disputa_s84_retro, então não serve de
+  prova de frota. Repetindo com colabs reais:
+
+  Ran 1 shell command
+
+● col43 tem o motor marcando 28,69 h num único dia — impossível. Calculando à mão três casos reais, com esse na frente:
+
+  Ran 1 shell command
+
+● Causa encontrada, e ela inverte a leitura do sinal. Escrevendo:
+
+  Ran 1 shell command
+
+● O 8 está certo aqui: a tabela do S5b tem 6 colunas (a das OBRAS tem 5). Conferindo contra uma irmã e commitando:
+
+  Ran 1 shell command
+
+● Colunas certas (as irmãs também têm 8). Empurrando:
+
+  Empurrar o S5b · 2m 48s
+  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s5b.log 2>&1; echo
+     "RC=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_s5b.log) & sle… (2m 46s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Percolating… (1h 47m 26s · ↓ 229.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
