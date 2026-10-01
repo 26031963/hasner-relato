@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:571 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:579 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:05:45.**
+**Medido em 01/10/2026 19:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga` |
+| `HEAD` local | `3cbfd495 A guarda lia p.entrada direto e derrubou 20 testes: periodo de selo e SimpleNamespace` |
 | `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3cbfd495 A guarda lia p.entrada direto e derrubou 20 testes: periodo de selo e SimpleNamespace
 19e17c5f PONTUALIDADE-EM-TURNO-ABERTO: 7 campo-colab descem, 0 sobe. So fato encerrado se julga
 0ba9872f Lei (1) respondida: o recorte do T8 vale e a literal esta descartada; as duas linhas de lei saem do topo
 867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO
 c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
-92a1c4e6 A segunda causa tambem estava escrita na casa: a L-084 julga ANTES da janela. Noturnas -47,80 -> +0,67 h
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,44 +95,44 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Monitor event: "veredito da suite da PONTUALIDADE-EM-TURNO-ABERTO"
-
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -f -n +1 $S/pta_suite.log | grep -E
-     --line-buffered "^(OK|… · stopped
-
-● Monitor(veredito final da suite (OK/FAILED/Ran e falhas nomeadas))
-  ⎿  Monitor started · task bgo7ab0ig · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-● A suíte segue rodando; o monitor agora filtra só o veredito (OK/FAILED/Ran/falha nomeada) — o primeiro filtro era largo e replicou os Traceback que os
-  próprios testes de caminho de erro imprimem.
-
-  Estado, para quando ela fechar:
-
-  (1) deploy + smoke + push — bin/deploy.sh --sem-migrate (nenhum modelo foi tocado), smoke em prod pelo autoridade_do_periodo nos três casos, PROVA no
-  RELATO, um push.
-
-  (2) a 09 — autorizada na célula com a sua razão: a L-092 não era o obstáculo que eu supus; a lei de 30/09 19:2x (o TXT é fotografia do cálculo) já dizia
-  que correção provada entra em qualquer competência. Duas coisas que o preparo mostrou e que mudam o caminho:
-
-  - Não é REGEN-EM-EXPORTADA. Aquela porta é um colab por ato — e a própria lei de 30/09 derrubou esse limite. O caminho é lote com DIFF, reversão e
-    prova, mais TXT novo por regerar_txt_dominio --mes 9 --ano 2026 --motivo ... --aplicar, que invalida o anterior pela porta sem nunca tocar conteudo
-    nem hash_sha256.
-  - O veículo carrega deriva. recalcular_fechamento_mes na 09 traz junto as três curas de origem de hoje, que o gravado da 09 não tem — é literalmente a
-    lição de 26/09 ("apply por recálculo nunca é cirúrgico"). Por isso o DIFF vai medir duas coisas: pós-guarda × pré-guarda (isola o que a sua lei move)
-    e pós-guarda × gravado (mostra o que o recálculo arrastaria). Se o segundo mexer campo fora de atraso/antecipada, é PAREI com a tabela pela
-    AVAL-DE-CRITERIO — e aí o escopo nomeado (colaborador_ids, o mesmo que corrigiu 28 colabs da 08) é o que mantém o ato dentro dos 14 dia-colab.
-
-✻ Cogitated for 4m 25s · done 7:01 PM · 3 shells, 1 monitor still running
-
 ● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
 
-· Pollinating… (4s · thinking)
+  Ran 1 shell command
+
+● Background command "Rodar a suite canonica inteira" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Esperar a suite fechar e ler o veredito" completed (exit code 0)
+
+● Background command "Esperar a suite fechar" completed (exit code 0)
+
+  Ran 4 shell commands
+
+● Monitor(veredito da 2a suite da PONTUALIDADE-EM-TURNO-ABERTO)
+  ⎿  Monitor started · task bty52ovv9 · timeout 1800s
+  ⎿  Allowed by auto mode classifier
+
+● Correção minha, dita de frente: a primeira versão da guarda derrubou 20 testes. Eu li p.entrada direto, e os selos test_l093_trabalhado_real e
+  test_s5b_regra_pontualidade montam o período como types.SimpleNamespace — AttributeError em 20 casos. A linha vizinha, que já existia, sempre usou
+  getattr(p, 'turno_aberto', False) exatamente por isso.
+
+  O que me pegou não foi o descuido, foi a ordem: rodei só o selo novo (6 casos, OK em 0,06 s) e chamei a cura de provada; a suíte cheia respondeu FAILED
+  (errors=20) dezoito minutos depois. Os vizinhos do sítio tocado custam 73 testes em 2,5 s — já rodaram, OK — e passam a vir antes. Está escrito no
+  RELATO, no commit 3cbfd495 e na memória da sessão.
+
+  A suíte canônica está rodando de novo com a guarda curada. O deploy espera o verde dela — e por isso a palavra "NO AR" na célula ainda não é verdade;
+  ela vira verdade no mesmo ato do deploy.sh, com o smoke dos três casos.
+
+  Registrei também, do preparo do DIFF da 09, que não é REGEN-EM-EXPORTADA: aquela porta é um colab por ato, limite que a sua própria lei de 30/09
+  derrubou. O caminho é lote com DIFF, reversão e prova, mais regerar_txt_dominio --aplicar, que invalida o anterior pela porta sem tocar conteudo nem
+  hash_sha256.
+
+✻ Cogitated for 2m 17s · done 7:07 PM · 2 shells, 2 monitors still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ suite verde: deploy, smoke dos tres, push
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 2 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
