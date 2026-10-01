@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:51:35.**
+**Medido em 01/10/2026 10:57:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `6ce20522 O rodape do TICKETS volta a bater com origin/main` |
-| `origin/main` | `9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato` |
-| commits a subir (`ahead`) | **7** |
+| `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -95,44 +95,44 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     col866  cortes=['2026-09-05']  turnos 14 x 9
+  A fatia nasceu em 30/07 (col49) curando 720 min/dia de antecipada fantasma, quando o previsto do dia vinha do tipo_escala da janela. A cura de origem de 14/09 e 26/09 — célula
+  alimentada + colaborador_id — fez o previsto do dia passar a sair da célula, e o remendo virou correção do que já estava certo.
 
-  113 de 114 dão o mesmo cartão. O único que difere, difere em um campo — turnos — e ali a versão fatiada é a que carrega o bug que a própria lápide do arquivo declara desde
-  23/09: no ramo da fatia o turno da fronteira conta duas vezes. Tirar a fatia também cura o único caso em que ela muda algo. Zero campo de dinheiro, zero de furo, zero dia.
+  Duas coisas ficaram mais apertadas, não mais soltas:
+  - O parâmetro _fatia_unica morreu com o ramo, e um selo cobra que ele não volte — parâmetro vestigial é convite a ressuscitar.
+  - O selo dos "dois caminhos" exigia que o segundo passasse pela folha; agora exige que ele não exista: _folha_manda(colaborador aparece exatamente uma vez no cartão.
 
-  O que segurava o O9 não era um risco: era um remendo que a cura de origem aposentou e que ninguém mediu depois.
+  O que falta no O9, cada passo com RED: trazer o O108 passo 1 (git cherry-pick 9d68ca04) → o cartão passar a ler espelho_do_colab → a dívida do test_pdf_nao_calcula cair de 6/7
+  para 0. A suite de relatorios + ponto está rodando sobre o passo 1; relatorios sozinho já deu 222 testes, 0 vermelho depois de eu re-expressar aquele selo.
 
-  A ordem do O9, cada passo com RED:
-  1. Tirar a fatia do cartão — os 114 colabs são a prova de neutralidade, com o col866 nomeado.
-  2. Trazer o O108 passo 1 (git cherry-pick 9d68ca04).
-  3. O cartão passa a ler espelho_do_colab; os três selos de test_palavra_do_dia + o diff_pdf_x_espelho são o veredito.
-  4. A dívida do test_pdf_nao_calcula cai de 6/7 para 0.
-
-  Estado: Gestão de HE em forma B no ar e empurrada (2b7a8537..9f3deacb), esperando seu smoke pelos 13 passos. Retrato das duas competências relavrado com o denominador. O push
-  dos documentos tinha caído pelo placar do topo do TICKETS — reescrito e reempurrado.
+  Em paralelo: a Gestão de HE em forma B está no ar e empurrada, esperando seu smoke; os selos de rodapé e placar do TICKETS foram reescritos pelas curas declaradas deles e o push
+  dos documentos está na régua.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
+  Ran 2 shell commands
+
+● Background command "Aguardar relavratura e push, e ler os dois" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Aguardar o push terminar e ler o veredito" completed (exit code 0)
+
   Ran 1 shell command
 
-● Background command "Publicar a morte da fatia e empurrar" completed (exit code 0)
+● Background command "Medir PDF x espelho sem fatia e com a cura" completed (exit code 0)
 
-  Re-expressar o selo e rodar relatorios e ponto
-  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io, py_compile
-     P='app/relatorios/tests/test_falta_um_significado.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = """ self.assertIn(" _folha_manda(colaborador, data_ini, data_fim, _out['resumo'])\\n return _out",
-     fonte, 'o ra…
+  Ran 1 shell command
 
-* Pouncing… (3h 18m 59s · ↓ 340.5k tokens)
+● Background command "Re-expressar o selo e rodar relatorios e ponto" completed (exit code 0)
+
+✢ Pouncing… (3h 24m 25s · ↓ 348.4k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
