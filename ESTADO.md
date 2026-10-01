@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:39:01.**
+**Medido em 01/10/2026 15:44:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA` |
+| `HEAD` local | `be51b833 O20: celula dentro do teto (301 -> 290)` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -24,21 +24,26 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **73** (baseline divergiu 41, nunca lancada 27, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **74** (baseline divergiu 41, nunca lancada 28, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
 ```
+be51b833 O20: celula dentro do teto (301 -> 290)
+5696af56 O20 fatia 3: 8 contratos a mais, e a migracao expos um FALSO VERDE no contrato do TETO TEMPORAL
 8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA
 d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 3df84d9d O20 fatia 1: nasce core/censo_fonte.py, e a implementacao NAO e minha -- a casa ja tinha uma melhor
-a2d374a3 O19: lado servidor no ar, e o lado APP espera o `!` porque o fork de 24/09 nao deixou rastro
-c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar
 ```
 
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_contract_filtros_painel.py
+ M app/chamados/tests/test_contract_js_colab_legado.py
+ M app/core/censo_fonte.py
+ M app/core/tests/test_contract_copiloto_dataset.py
+ M app/ponto/tests/test_b1_linha_do_dia_le_a_lavratura.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,36 +101,36 @@ c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar
 
 ```
 
-  Ran 4 shell commands
+  7 contratos varrendo código, selo de 8 casos, ruff limpo na árvore inteira. Faltam 17, dos quais 4 precisam do remédio de template.
 
-● O19 lado servidor: medi o limite e a hipótese fecha com o BO. Curando o que é do servidor.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O20 -- CONTRATO-VARRE-COMENTARIO (classe achada 24/09, 2 vezes no mesmo dia) -- contratos de arvore que procuram idio
 
-  Ran 9 shell commands
+  Ran 8 shell commands
 
-● O20 é exatamente a classe de erro que me pegou cinco vezes hoje. Fazendo o censo.
+● Essa falha é na direção contrária — vale olhar.
 
-  Searched for 1 pattern, listed 1 directory, ran 3 shell commands
+  Searched for 2 patterns, ran 1 shell command
 
-● I wrote a parallel implementation — the house already has a better one. Adopting it instead.
+● O20 não só evita falso-vermelho: acabou de expor um falso-verde no contrato do TETO TEMPORAL.
 
-  Ran 7 shell commands
+  Searched for 1 pattern, ran 5 shell commands
 
-● The two failures are the same lesson twice — including inside the seal I wrote to prevent it.
+● A terceira vez que meu censo conta pela forma: 3 dos 9 leem cru com razão.
 
-  Ran 4 shell commands
+● Migrar os tres de markup e rodar
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, re
+     IMP = ('from core.censo_fonte import markup_de as _markup '
+     '# O20: contrato de template julga o que RENDERIZA')
+     def _poe(t):
+     if 'censo_fonte' in t: return t
+     ms = [m for m in re.finditer(r'^(?:from|import) [^(\n]+$', t, flags=re.M)]
+     pos = …
 
-● Meu censo dos 28 contou pela forma. Medindo o fato.
-
-  Ran 3 shell commands
-
-● O swap cego quebrou: codigo_de tokeniza Python, e vários desses contratos leem template e JS. Revertendo.
-
-  Ran 11 shell commands
-
-● MARCO FECHADO — pode compactar. A fila andou mais: O19 (lado servidor) e O20 (duas fatias).
-
-  O19 — a causa do "o servidor não recebe o POST"
-
+✢ Pouncing… (8h 11m 55s · ↓ 1.0m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
   ctrl+x ctrl+s to send now

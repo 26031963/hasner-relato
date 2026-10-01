@@ -27,7 +27,7 @@ lista — ela e o que esta EM PE._
 | **O17** | TRAVA-A-VAZIA-8H | **FECHADA**: o contador existe, esta com |
 | **O18** | PARADAS-NAO-SAO-PARADAS | espera aval |
 | **O19** | BO-APP-ANDROID-ATESTADO | espera `!` |
-| **O20** | CONTRATO-VARRE-COMENTARIO | **FATIA 1 + 2**: `core/censo_fonte.py` ( |
+| **O20** | CONTRATO-VARRE-COMENTARIO | **15 contratos** varrendo CODIGO (`core/ |
 | **O21** | ROTULO-DO-DIA-DECIDIDO | **em curso** |
 | **O22** | AUSENCIA-REVERTER-REJEICAO | **em curso** |
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
