@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:463 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:486 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:30:45.**
+**Medido em 01/10/2026 20:35:45.**
 
 | | |
 |---|---|
@@ -97,44 +97,44 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Os quatro respondidos já somem da tabela — e dois deles (ui-resposta-diz-o-que-e-desenho e col369-vinculo-1296) são justamente dois dos quatro que o seu
-  observável (1) citava: não aparecem porque você já respondeu. E os 163 antigos não foram triados: receberam sem-motivo, o terceiro valor que a sua
-  ordem nomeia, e dos 8 que já tinham estado em texto livre o texto foi preservado em estado_texto.
+  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
+  │ fechamento ZERO e situação desligado │ 3   │ 2   │ 1   │ 6     │
+  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
+  │ SEM linha de fechamento              │ 0   │ 1   │ 0   │ 1     │
+  ├──────────────────────────────────────┼─────┼─────┼─────┼───────┤
+  │ (com batida apurável na janela)      │ 516 │ 528 │ 472 │       │
+  └──────────────────────────────────────┴─────┴─────┴─────┴───────┘
 
-  Vizinhos do sítio tocado primeiro, como a fila manda: 87 testes, OK. A suíte cheia está rodando e o deploy vai atrás dela — o selo
-  test_import_tardio_contra_o_ar já acusa o que falta: corrigir_vinculo_vigencia.py:48 importa reabrir_vigencia_impossivel, que está no disco e não na
-  memória do worker. O selo está certo, e a cura é o deploy.
+  42 em 1.516 colab-mês com batida — 2,8%. O achado de prod das 16:0x está aqui dentro e confere: na 10 são 7 ativos com vínculo e 4 sem vínculo, os 11
+  que eu publiquei. Os que mais doem por volume: col43 nas competências 09 (24 batidas) e 10 (38), sempre sem vínculo que cubra a janela; col924 com 41
+  batidas na 10; col882 com 23. Gente batendo ponto todo dia cuja folha não existe porque o cadastro não a alcança. Nada aplicado — e a cura não é uma: as
+  quatro causas pedem quatro curas, e duas são dado de cadastro, que a L-009 põe sob o seu !.
+
+  Item (7) — as quatro Pautas escritas, pelo escritor único, assinadas como sistema, cada uma com âncora: 908 supervisão/colab:369 (qual é o dia de folga
+  — o 1313 é 6x1 e não declara folga, e os dois candidatos, sexta 25/09 e segunda 28/09, estão ambos sem batida), 909 DP/colab:650 (data de fim da
+  ausência #3186), 910 DP/colab:935 (batidas em 05-06/09 contra admissão em 07/09, 9,11 h de adicional noturno), 911 supervisão/colab:221 (os 51 da fase
+  12x36, nenhuma proposta se aplica). Idempotentes e provado na hora: a segunda chamada respondeu já existe — nada criado nas quatro.
+
+  Item (2) — AVAIS-NA-MESA já estava no ar, com os 3 abertos e a frase pronta.
+
+  Sobre o item (6b), o DIFF emp3=CLT: encontrei a medição de 25/09 no JSON de pendentes (08 movia 87 de 128 colabs, +979,40 h de noturno; 09 movia 48 de
+  123, +1.279,27 h), mas ela é de antes de uma dúzia de curas e não serve para o seu ! final. O DIFF novo precisa alternar Empresa.regime_trabalhista na
+  sombra com rollback — nunca em prod, que é a lei do incidente de 27/08 — e a sombra usa os mesmos núcleos da suíte que está rodando. Entra assim que ela
+  fechar, junto do deploy que o selo test_import_tardio_contra_o_ar está cobrando.
 
 ✻ Waiting for 1 background agent to finish
 
-● Monitor event: "resultado do diff_calculador da competencia 10"
+› Message from @a6628ec7e07379c89 (ctrl+o to expand)
 
-● Monitor event: "resultado do diff_calculador da competencia 10"
-
-  Listed 1 directory, ran 1 shell command
-
-● Monitor event: "veredito da suite do marco do AVAIS"
-
-  Ler todos os campos do item do regime
-  ⎿  $ python3 - <<'PY'
-     import json,io
-     d=json.load(io.open('docs/PENDENTES_RONALD.json',encoding='utf-8'))
-     for x in d:
-     if x['id']=='regime-por-empresa-apply-emp3-clt':
-     for k in sorted(x):
-     print('--- %s: %s' % (k, str(x[k])[:600]))
-     break
-     PY
-
-· Swirling… (2m 22s · ↓ 8.4k tokens · thought for 11s)
+· Zesting… (9s · thinking)
   ⎿  Tip: Run /ultrareview for a cloud-based multi-agent review that finds and verifies bugs in your branch — 3 free reviews left
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 3 monitors · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking ba14jhui5.output for lane availability                                                           23m 58s · ↓ 260.4k tokens
+  ◯ general-purpose  Stopping the pista-waiting background task                                                                28m 58s · ↓ 287.4k tokens
   ⧉  index
 ```
