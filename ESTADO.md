@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:147 AFIRMA ato sem PROVA ao lado -- **FEITO, com reversao e prova.** A cura 2 da sua ordem (o passivo S84) esta aplicada nas competencias 07, 08 e
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:15:43.**
+**Medido em 30/09/2026 21:20:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `d07f8e74 O1 fecha em ZERO, e tres dos quatro itens dele ja estavam cumpridos sem ninguem ter medido` |
+| `HEAD` local | `86879e4f Gestao de HE no ar com a aba Autorizar, e o SEED da minha migration nao alcancou ninguem` |
 | `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+86879e4f Gestao de HE no ar com a aba Autorizar, e o SEED da minha migration nao alcancou ninguem
 d07f8e74 O1 fecha em ZERO, e tres dos quatro itens dele ja estavam cumpridos sem ninguem ter medido
 5b4593e4 A allowlist apodreceu porque faltava o selo que a irma tinha -- e com ela apodreceu um item do backlog que ja estava feito
 b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha
 f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como esta, sem mudar um byte do que esta no ar
-bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso em 98
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
+ M app/docs/TICKETS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,39 +97,39 @@ bf3a4c64 O censo que o R1 esperava esta feito e dissolve a premissa dele: 1 caso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o push por arquivo" completed (exit code 0)
 
-● O push fechou. Vendo o veredito:
-
-  Read 1 file
-
-● Push liberado: 346ad7ab..b6f267f8, com 8.881 testes OK mais os 22 do control-plane. A pista de teste está livre (a medição da 10 roda contra prod, não contra o banco de teste).
-  Rodando os selos pendentes:
+● Ordem recebida, e o item 2 é uma correção séria da minha medição. Registro primeiro (L-010) e conserto o push, que falhou no placar do topo:
 
   Ran 1 shell command
 
-● 13 verdes. Commitando e indo ao deploy:
+● Agora o item 2, que é o que decide tudo. A sua correção está exata: eu media a entrada do turno, e o turno é montado a partir da célula — então eu pedia à célula para escolher
+  qual batida é a entrada e depois julgava a célula com isso. Circular. Refazendo pela primeira batida crua do dia:
 
-  Committed 5b4593e4
+  Ran 1 shell command
 
-● Background command "Medir a 10 e o portao inteiro" completed (exit code 0)
+● A remedição inverte o quadro, e o seu exemplo reproduz exato (col900 01/09: real 06:56, template 07:00 −4 min, célula 12:50 −354 min):
 
-  Read 1 file
+  ┌──────────────────────────┬──────────────────┬───────────────────────────┐
+  │          classe          │ v1 (contaminada) │ v2 (primeira batida crua) │
+  ├──────────────────────────┼──────────────────┼───────────────────────────┤
+  │ CÉLULA acerta → fica     │ 61               │ 50                        │
+  ├──────────────────────────┼──────────────────┼───────────────────────────┤
+  │ TEMPLATE acerta → regera │ 10               │ 24                        │
+  ├──────────────────────────┼──────────────────┼───────────────────────────┤
+  │ sem batida → fica        │ 13               │ 10                        │
+  └──────────────────────────┴──────────────────┴───────────────────────────┘
 
-● cartao_x_txt_divergentes = 0 na 10 também (com 100 dias em aberto em 18 colabs), e o portão inteiro da 09 responde tela_x_pdf: [], topo_x_coluna: [], cartao_x_txt: 0. O
-  he_pendente confirma o bloqueio total medindo as duas pontas: col226 com 18:51 contra marco 19:00 (9 min antes), 02:08 contra 02:00 e 07:02 contra 07:00.
+  O col900 virou por inteiro: 16 dias de template, zero de célula. Mas dentro dos 24 há dois que me incomodam — vou medi-los antes de aplicar:
 
-  Com isso o O1 fecha: (1) já estava feito, (2) está em zero nas duas competências, (3) censo feito, (4) feito em 28/09:
+  Ran 1 shell command
 
-  Committed d07f8e74
+● 22 dias regeneram (template confirmado, erro máximo 23 min) e 62 ficam — incluindo dois que eu separo com nome: col900 11/09 (template errado por 117 min) e col945 11/09 (178
+  min). Nesses dois nenhum marco descreve o dia, que é a classe da L-084 que nasceu hoje de manhã: eles vão para CADASTRO x REALIDADE, não para regeneração. Publicando antes de
+  aplicar, como a ordem manda:
 
-● Agora o deploy, que é o ato que faltava — com migrate, porque a 0055 é nova:
+● Running 1 shell command…
 
-● Deployar com migrate · 6s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 1500 bin/deploy.sh 2>&1 | tail -22 (6s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Bootstrapping… (7h 44m 11s · ↓ 1.4m tokens)
+· Bootstrapping… (7h 49m 12s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
