@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:33:31.**
+**Medido em 30/09/2026 23:39:01.**
 
 | | |
 |---|---|
@@ -95,13 +95,6 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Enquanto o push roda, começo o item 1 da noite (S5b). Lendo o item e o instrumento que mudou hoje:
-
-  Ran 1 shell command
-
-● Background command "Empurrar" completed (exit code 0)
-
   Ran 1 shell command
 
 ● Cura conhecida do rodapé (a mesma friction do O90). Curando e reempurrando:
@@ -122,16 +115,23 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 
 ● Background command "Reempurrar depois da cura do ruff" completed (exit code 0)
 
-● Running 1 shell command · 1m 9s…
+● Running 1 shell command · 6m 39s…
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final3.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
-     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta empurrar: $(git log --oneline origin/main..HEAD | wc -l)" (1m 9s)
+     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta empurrar: $(git log --oneline origin/main..HEAD | wc -l)" (6m 39s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (1h 30m 56s · ↓ 212.2k tokens)
+· Percolating… (1h 36m 25s · ↓ 212.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ (4) NAO PARA EM "NAO SEI": quando a evidencia nao fecha, ele levanta as POSSIBILIDADES (2 a 4), diz o que cada uma explicaria e o que a desmentiria, e INTERPELA o admin com a
+  UMA pergunta que mais separa as hipoteses -- em linguagem do admin, sem jargao de sistema. Com a resposta, mede de novo e segue ate a proposta. Se nao consegue sugerir uma
+  escala, pergunta ao admin o que falta para sugerir (horario real, desde quando, posto, quem cobre) em vez de desistir. "Nao tenho informacao" so vale acompanhado da pergunta
+  que traria a informacao. GOLDEN: col438 (bate 07:00 em 10 dias e 12:00 em 2, cadastro 12:00) -> tres hipoteses e a pergunta "mudou de turno? desde quando?"; col647 (ausencia
+  nos 31 dias, zero batida) -> "esta afastada? ate quando?".
+  ctrl+x ctrl+s to send now
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
