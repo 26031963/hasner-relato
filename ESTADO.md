@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:32:01.**
+**Medido em 01/10/2026 05:37:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor` |
-| `origin/main` | `ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,19 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ---
-
-  É o fim de um turno muito longo. Fechados nesta noite: O2, O3, O4 (6 itens), O5 (deck no ar, 12 páginas), O6, O7, O8, O104, O106, O107, mais o ! da saída (i) do col900 e a
-  investigação do S5b. Abertos por medição: O102/O103 (o que falta), O105 e o próximo passo do O9 — um motor só.
-
-  Esperando você: o ! do TXT da emp2, a resposta da pergunta do S5b (decide 118 dia-colab de uma vez) e os dois smokes.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
-● O próximo passo é "um motor só", mas antes preciso saber qual dos dois está certo — e há uma pista de ordem: o espelho chama folha_manda depois de gravar o datas_furo_apurado.
-  Vendo se o PDF chama:
-
   Searched for 1 pattern
 
 ● Os dois chamam folha_manda com a mesma janela — então a diferença está nos argumentos do motor. Comparando os dois sítios de chamada:
@@ -124,13 +111,26 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● A medição refuta minha própria hipótese: autoridade_do_periodo dá datas_falta = 0 nas duas janelas — a competência e até hoje. Então a janela não é a causa; o que difere é o que
   cada um alimenta no motor. Publicando a refutação:
 
-● Conferir o push · 7m 19s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_ref.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 17s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 2 shell commands
 
-✢ Percolating… (7h 29m 26s · ↓ 580.7k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Background command "Publicar a refutacao e empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● A minha hipótese caiu, e isso é o resultado do ciclo.
+
+  Eu havia escrito que a causa dos 392 seria a janela — o espelho roda o motor em vis_ini..hoje e o PDF na competência, e o defeito do piso_visual já está registrado nos
+  PENDENTES. Encaixava num defeito conhecido, o que a fazia parecer conclusão.
+
+  Medi no col41, chamando autoridade_do_periodo nas duas janelas:
+
+  ┌────────────────────────────────────────────────┬─────────────┐
+  │                     janela                     │ datas_falta │
+  ├────────────────────────────────────────────────┼─────────────┤
+  │ 21/08..20/09 (a competência, o que o PDF roda) │ 0           │
+  └────────────────────────────────────────────────┴─────────────┘
+
+✻ Waiting for API response · will retry in 2m 40s · check your network
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
