@@ -4,6 +4,12 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
+<!-- ORDEM-VIVA-TOPO: DISPUTA-FECHADA-SEM-RESOLUCAO -->
+<!-- ^ o 1o item ABERTO da ORDEM VIVA, em UM lugar. Ate 01/10 este nome estava COPIADO dentro de
+     `bin/tests/test_hook_nao_cobra_congelado.sh` como literal, e a copia envelheceu: a ORDEM VIVA
+     de 28/09 e `S3 -> S4 -> S5b`, as duas primeiras FECHARAM (29/09 e 30/09) e a S5b esta em PAREI
+     esperando o `!`, entao a fila andou e o selo seguiu cobrando a S3. Nao era a fila errada: era a
+     copia. Quem move a fila move ESTA linha, e o selo passa a ler daqui. -->
 <!-- OBRAS:INICIO -->
 
 <!-- A FILA 1 VIVA. ORDEM VIGENTE -- MODO CONTINUO ate o export (corte Ronald 28/09 01:1x):

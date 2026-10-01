@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:10:45.**
+**Medido em 01/10/2026 01:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes` |
+| `HEAD` local | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
 | `origin/main` | `cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
 2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
 cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
 bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
 ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
-4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
 ```
 
 ## `git status --short`
@@ -96,38 +96,38 @@ ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superesti
 
 ```
 
-  Ran 1 shell command
-
-● api/views_auth.py não existe — achando onde o login mora de verdade, em vez de declarar um arquivo inventado:
-
-  Listed 1 directory, ran 2 shell commands
-
-● Para o selo poder morder as bordas sem um segundo escritor da regra, a janela ganha uma costura declarada de relógio:
-
-  Ran 1 shell command
-
-● A lógica da janela não roda quando nada de auth mudou — o selo precisa interrogá-la direto. Adicionando um modo declarado só para isso:
-
-  Ran 1 shell command
-
-● Nove bordas certas. O selo de host que tranca isso:
-
-  Ran 1 shell command
-
-● O selo cobra exatamente o que falta. Ligando a guarda no deploy.sh:
-
-  Ran 3 shell commands
-
-● 43 verdes, 2 vermelhos — os mesmos de antes de eu tocar em nada. Commitando o O4 primeiro e depois cuido deles:
-
-  Ran 1 shell command
-
 ● Agora os 2 vermelhos. O do cpuset primeiro:
 
-  Ver o vermelho do cpuset
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tests/test_cpuset_de_teste.sh 2>&1 | head -12; echo "=== o sitio ==="; sed -n '20,30p' bin/sonda_frota.sh
+  Ran 1 shell command
 
-· Percolating… (3h 8m 9s · ↓ 337.8k tokens · thinking)
+● Os dois já sourceiam a fonte única e usam TESTE_CPUSET, mas escrevem as flags à mão em vez de usar o $TESTE_DOCKER que ela exporta — que é exatamente o que o selo cobra. Curando
+  pela fonte única:
+
+  Ran 1 shell command
+
+● Verde. Agora o segundo: a ORDEM VIVA aponta para a S3, que está fechada. Lendo o que o selo compara:
+
+  Ran 2 shell commands
+
+● O selo carrega uma cópia do topo da ORDEM VIVA num literal, e a S3 fechou — então a divergência é a cópia envelhecendo, não a fila. Matando a cópia: um marcador declarado que os
+  dois lados leem:
+
+  Ran 2 shell commands
+
+● 45 verdes, 0 vermelhos — a pasta inteira limpa. Commitando e empurrando:
+
+  Ran 2 shell commands
+
+● Background command "Commitar as duas curas e empurrar" completed (exit code 0)
+
+● Cura do rodapé pela terceira vez nesta noite (é a friction do O90). Curando e reempurrando:
+
+● Conferir o push · 1m 51s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o4b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 50s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (3h 13m 9s · ↓ 345.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
