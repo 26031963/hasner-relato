@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 13:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.2 MB). Acoes na janela: **934**.
+**Medido em 01/10/2026 13:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (167.2 MB). Acoes na janela: **932**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -942,5 +942,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:27:06 | Bash | Ver a forma de invocar comando na sombra | `cd /home/ronald/saas-hasner && grep -n 'settings.sombra\\|docker run' bin/simular_folha.sh \| head -6` |
 | 01:27:00 | Bash | Escrever o replay em core/management/commands | `cat > core/management/commands/replay_credenciais.py <<'PYEOF' # -*- coding: utf-8 -*- """REPLAY DE CREDENCIAIS REAIS (ACESSO-NUNCA-EM-LOTE item 4, lei Ronald 23/09 08:4x). A LEI: *"auth = zona de dinheiro: **replay de 50 tokens reais na sombra**, prova de casca, nunca sexta 18h+/fim de semana/23:20-06:00"*. A janela e a prova de casca ja existem (`bin/janela_auth.sh`, ligado no `bin/deploy.sh`);  ...` |
 | 01:26:24 | Bash | Escrever o replay de credenciais | `cat > api/management/commands/replay_credenciais.py <<'PYEOF' # -*- coding: utf-8 -*- """REPLAY DE CREDENCIAIS REAIS (ACESSO-NUNCA-EM-LOTE item 4, lei Ronald 23/09 08:4x). A LEI: *"auth = zona de dinheiro: **replay de 50 tokens reais na sombra**, prova de casca, nunca sexta 18h+/fim de semana/23:20-06:00"*. A janela e a prova de casca ja existem (`bin/janela_auth.sh` e o `bin/deploy.sh`); isto e o ...` |
-| 01:25:35 | Bash | Ver o claim, a sombra e o escopo do modelo | `cd /home/ronald/saas-hasner && grep -n 'def versao' -A 10 app/api/credencial.py \| sed -n '1,14p'; echo "=== sombra: settings e banco ==="; grep -n 'DATABASES\\|NAME' app/config/settings/sombra.py 2>/dev/null \| head -6; echo "=== CredencialUsuario e tenant ou public? ==="; grep -n "'core'" app/config/settings/base.py \| head -3` |
-| 01:23:59 | Bash | Conferir o push | `L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o4b.log; for i in $(seq 1 60); do grep -q '^RC=' "$L" && break; sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD \| wc -l)"` |
