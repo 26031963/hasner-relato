@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 07:14:31.**
+**Medido em 01/10/2026 07:20:02.**
 
 | | |
 |---|---|
@@ -41,6 +41,9 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ```
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/relatorios/pdf_espelho.py
+ M app/relatorios/tests/test_pdf_nao_calcula.py
+?? app/ponto/services/efeito_ausencia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,22 +100,6 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ C — + os vínculos do período, por fatia │ 408                            │
-  └─────────────────────────────────────────┴────────────────────────────────┘
-
-  E nenhum campo de dinheiro se move: total_horas_trabalhadas, horas_extras_50, horas_extras_100 e dias_abono não aparecem na tabela de divergência em 862 colaboradores. A cura
-  mexe no furo — no que a tela diz que falta —, não no que se paga. Casos: col41 0 → 22, col53 0 → 16, col56 0 → 9.
-
-  O DIFF é parcial e ele mesmo diz isso na primeira linha: falta datas_justificadas, e sem ela o furo sai superestimado. Os 408 são teto, não previsão. Replicar essa derivação
-  dentro do instrumento seria a terceira cópia do mesmo previsto — preferi um número declarado como teto a um número preciso obtido por cópia.
-
-  Preparo feito com saída provada: o laço do previsto saiu do PDF para escala/alimentacao.py::previstas_do_periodo, byte a byte, para que a cura da tela use a mesma função do
-  cartão em vez de uma segunda derivação de um previsto que já tem fonte única. 1.086 selos de relatorios + escala verdes depois da extração, e o ruff pegou o import órfão que ela
-  deixou — antes do push.
-
-  O que falta para aplicar: extrair as datas_justificadas, refazer o DIFF completo, e o seu ! — porque "não move dinheiro" não é "não muda nada": um colaborador que hoje vê zero
-  falta passará a ver 22, no app.
-
   Empurrado: e860aef1..a216cd89.
 
   Duas vezes neste turno esqueci a casa do comando novo em config/crons.py (9 min por ciclo). Guardei o trio de pré-push na memória: ruff · mypy · casa do comando.
@@ -126,10 +113,26 @@ ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o 
 
 ● datas_justificadas já existe antes do laço — a extração tem de somar, não substituir. Vendo de onde ela vem:
 
-● Ver a origem do datas_justificadas
-  ⎿  $ sed -n '336,344p' relatorios/pdf_espelho.py
+  Searched for 1 pattern, ran 3 shell commands
 
-✢ Percolating… (9h 11m 55s · ↓ 614.9k tokens)
+● O anti-podre do meu próprio tripwire disparou: a extração tirou duas autoridades do PDF e a dívida tem de encolher com elas. Medindo o censo atual:
+
+  Ran 1 shell command
+
+● A dívida encolheu de 8 entradas para 6 — ausencias_do_periodo e cobertura_ausencia_periodo saíram. Atualizando a lista, como o selo exige:
+
+  Atualizar a divida e rodar os tres apps · 3m 57s
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='relatorios/tests/test_pdf_nao_calcula.py'; t=io.open(P,encoding='utf-8').read()
+     i = t.index('DIVIDA = {'); j = t.index('}\n', i) + 2
+     novo = """DIVIDA = {
+     ('pdf_espelho.py', 'batidas_apuraveis'): 1,
+     ('pdf_espelho.py', 'celulas_do_periodo'): … (3m 56s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Percolating… (9h 17m 26s · ↓ 619.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                                             1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
