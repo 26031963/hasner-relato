@@ -26,7 +26,7 @@ lista — ela e o que esta EM PE._
 | **O16** | PORTAS-SEM-CAUSA-CONHECIDA | **FECHADA: conferido hoje, a classe DESA |
 | **O17** | TRAVA-A-VAZIA-8H | **FECHADA**: o contador existe, esta com |
 | **O18** | PARADAS-NAO-SAO-PARADAS | espera aval |
-| **O19** | BO-APP-ANDROID-ATESTADO | **LADO SERVIDOR no ar** (deploy 15:28; o |
+| **O19** | BO-APP-ANDROID-ATESTADO | espera `!` |
 | **O20** | CONTRATO-VARRE-COMENTARIO | **livre** |
 | **O21** | ROTULO-DO-DIA-DECIDIDO | **em curso** |
 | **O22** | AUSENCIA-REVERTER-REJEICAO | **em curso** |

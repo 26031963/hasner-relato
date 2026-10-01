@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:28:31.**
+**Medido em 01/10/2026 15:33:39.**
 
 | | |
 |---|---|
-| `HEAD` local | `c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar` |
+| `HEAD` local | `a2d374a3 O19: lado servidor no ar, e o lado APP espera o `!` porque o fork de 24/09 nao deixou rastro` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **12** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -24,21 +24,27 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **72** (baseline divergiu 41, nunca lancada 26, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **73** (baseline divergiu 41, nunca lancada 27, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
 ```
+a2d374a3 O19: lado servidor no ar, e o lado APP espera o `!` porque o fork de 24/09 nao deixou rastro
 c5780465 O19: celula dentro do teto (306 -> 295); o lado servidor esta no ar
 f21721aa O19 lado SERVIDOR: a causa do "o servidor nao recebe o POST" era o LUGAR do log, e o numero explica o BO
 65838e75 O18 FECHADA -- e apagando o residuo eu causei o proprio defeito que a obra existe para acabar
 1e9520f7 O17 FECHADA, e o contador dele ganhou a terceira resposta: PAUSA COM DONO nao e anomalia
-dfe50274 bin/backlog_estado.py: a celula de estado passa a ser escrita por comando, com o teto e o veredito guardados
 ```
 
 ## `git status --short`
 
 ```
+ M app/core/tests/test_contract_escritores_estado.py
+ M app/docs/RELATO.md
+ M app/ponto/tests/test_contract_juiz_celula.py
+ M app/ponto/tests/test_contract_juiz_feriado.py
+?? app/core/censo_fonte.py
+?? app/core/tests/test_o20_contrato_julga_codigo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,23 +101,6 @@ dfe50274 bin/backlog_estado.py: a celula de estado passa a ser escrita por coman
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O contador da trava A lia errado o próprio número. Dizia "132 h — o fabricante NÃO disse 'sem item livre', olhe o log". O número está certo; a leitura
-  mandava procurar causa onde ela não está: a esteira está pausada pelo Ronald desde 26/09 10:01, com QUEM, POR_QUE e SAÍDA escritos em esteira.pausada.
-  Mandar o leitor ao log para redescobrir um fato declarado num arquivo é o que ensina o admin a ignorar o contador. Curado, com selo que morde dos dois
-  lados.
-
-  Apagando o resíduo eu recriei o defeito que a obra existe para acabar. Dos 12, 8 saíram e 4 ficaram com um arquivo de root — e a casca perdeu o
-  msg_commit.txt, que é justamente o que faz um pacote ser resíduo. Os 4 mudaram de classe: pacotes_portao 17 → 21. O apagar parcial escondeu quatro
-  pacotes em "espera o mundo". Repus da cópia, e a porta agora pergunta o dono antes e é tudo-ou-nada por pacote.
-
-  Ferramenta nova
-
-  bin/backlog_estado.py — escrevo célula por comando. Eu havia passado do teto de 300 cinco vezes à mão; e ele guarda o veredito do hook antes/depois, que
-  foi o que pegou o espera o ! perdido no encurtamento em lote.
-
-  Próximo da fila: O19, não tocado. As seis perguntas suas do relato anterior seguem abertas.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O19 -- BO-APP-ANDROID-ATESTADO (Ronald 24/09 10:2x, col878) -- "Erro ao enviar" em Nova ausencia COM foto da CAMERA,
 
@@ -119,12 +108,29 @@ dfe50274 bin/backlog_estado.py: a celula de estado passa a ser escrita por coman
 
 ● O19 lado servidor: medi o limite e a hipótese fecha com o BO. Curando o que é do servidor.
 
-● Encurtar e fechar a celula do O19
-  ⎿  $ cd /home/ronald/saas-hasner && python3 bin/backlog_estado.py "O19" '**LADO SERVIDOR no ar** (deploy 15:28; o lado APP e o fork de 24/09). A causa
-     do "servidor nao recebe" era o LUGAR do log -- vinha depois de `request.data`, que parseia, e parse que estoura mata o log. O `CONTENT_LENGTH` sai
-     ANTE…
+  Ran 9 shell commands
 
-✢ Pouncing… (7h 55m 55s · ↓ 954.8k tokens · thought for 5s)
+● O20 é exatamente a classe de erro que me pegou cinco vezes hoje. Fazendo o censo.
+
+  Searched for 1 pattern, listed 1 directory, ran 3 shell commands
+
+● I wrote a parallel implementation — the house already has a better one. Adopting it instead.
+
+  Ran 7 shell commands
+
+● The two failures are the same lesson twice — including inside the seal I wrote to prevent it.
+
+● Separar marco de violacao e curar a auto-acusacao
+  ⎿  $ python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     # (a) a MARCA do pendente e OUTRA PERGUNTA: ela pode ser prosa de proposito.
+     P='ponto/tests/test_contract_juiz_feriado.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ if p['impressao'] not in _codigo(os.path.join(APP, p['arquivo']))]"""
+     asser…
+
+* Pouncing… (8h 1m 3s · ↓ 971.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
