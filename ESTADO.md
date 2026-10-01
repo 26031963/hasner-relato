@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:43:01.**
+**Medido em 01/10/2026 05:48:31.**
 
 | | |
 |---|---|
@@ -97,7 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────────────────────────────────┼─────────────┤
   │ 21/08..01/10 (até hoje, o que o espelho roda)  │ 0           │
   └────────────────────────────────────────────────┴─────────────┘
 
@@ -126,11 +125,12 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● Os dois sítios diferem em três coisas: o PDF alimenta folgas_alimentadas e passa datas_previstas_trabalho, que o espelho não tem; e o espelho usa o vínculo ativa=True. Vendo o
   terceiro no PDF:
 
-● Ver o esc e o datas_previstas do PDF
+  Ver o esc e o datas_previstas do PDF
   ⎿  $ sed -n '404,426p' relatorios/pdf_espelho.py | grep -nE 'esc =|esc=|datas_previstas_trabalho|get_motor_cct|motor =' ; echo "---"; grep -n 'datas_previstas_trabalho = \|esc =
      ' relatorios/pdf_espelho.py | head -5
 
-✻ Waiting for API response · will retry in 2m 36s · check your network
+✢ Percolating… (7h 45m 56s · ↓ 584.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
