@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:52:41.**
+**Medido em 01/10/2026 13:58:01.**
 
 | | |
 |---|---|
@@ -119,13 +119,13 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 
 ● Both cases measured from the real retrato. Publishing the design.
 
-  Esperar o push e ler o veredito · 1m 22s
+● Esperar o push e ler o veredito · 6m 42s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
      11); do sleep 50; if ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; then break; fi; done; grep -E "^(OK|FAILED|Ran|FAIL:|ERROR:)|main
-     ->|RC=|AssertionErr… (1m 21s)
+     ->|RC=|AssertionErr… (6m 41s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (6h 20m 5s · ↓ 763.2k tokens)
+✢ Pouncing… (6h 25m 25s · ↓ 763.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
