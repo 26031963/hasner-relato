@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:45 AFIRMA ato sem PROVA ao lado -- **APLICADO 01/10 11:57** com usuario e motivo: vigente **id=26, hash `0ae5da67364c`, 211 linhas**; a anterior
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:121 AFIRMA ato sem PROVA ao lado -- **APLICADO 01/10 11:57** com usuario e motivo: vigente **id=26, hash `0ae5da67364c`, 211 linhas**; a anterior
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:06:41.**
+**Medido em 01/10/2026 12:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `8706851f MERGE: a Gestao de HE com o expandido refeito e os tres defeitos de dado curados` |
+| `HEAD` local | `7c23ae78 O10: o censo antes de codar, e ele corrige o numero de 23/09 -- 16 lancamentos, nao 11` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,17 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7c23ae78 O10: o censo antes de codar, e ele corrige o numero de 23/09 -- 16 lancamentos, nao 11
+14a12d06 col369 achado 4: publicado o que mudaria, sem aplicar -- 4 furos desaparecem e zero hora se move
+88163450 S5b item 2: as 132,19 h de HE50 abertas por origem e por colab -- a janela ESTA aplicada, e a mao bate 3 de 3
 8706851f MERGE: a Gestao de HE com o expandido refeito e os tres defeitos de dado curados
 43b4cf3e Os tres defeitos de dado dele, e tres achados dos meus proprios selos na forma nova
-662f0853 Merge branch 'main' into raia-ui
-66e9fb39 Rubrica 0200: um colaborador, 5,00 h -- o TXT da emp2 regerado, e o emissor nunca multiplicou
-7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/diff_calculador.py
+ M app/chamados/tests/test_contract_juiz_chamado.py
+ M app/ponto/tests/test_contract_juiz_ausencia.py
+ M app/ponto/tests/test_contract_juiz_fechamento.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +98,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● No ar: o expandido refeito e os três defeitos de dado. Merge 8706851f + deploy no mesmo ato, e a relavra está rodando — agora com --apply.
 
-  Os três defeitos:
-  1. Dia fora da janela — curado no escritor (04c027ed), medido em 4.198 de 5.767 dias fora de 21/09–20/10 na competência 10.
-  2. A relavra que não pegou — meu erro de execução: faltou --apply. Está rodando agora, com o filtro de janela já no ar.
-  3. Data de máquina — fechou nos dois lugares: os dias da tabela e a faixa do retrato (Competência 09/2026 (2026-08-21 a 2026-09-20)), que eu havia
-     esquecido. Quem achou foi o meu próprio selo, varrendo o que o navegador mostra em vez do markup.
+  Medido agora: 16 lançamentos troca_de_plantao, não 11 — 12 aprovados, 2 rejeitados, 2 aguardando decisão. E dois são de outubro (col848 04/10, col281
+  03–04/10): a competência 10 está recebendo troca agora, então a conversão não é só de passado exportado.
 
-  E o formato voltou para o leitor depois de eu o pôr no lugar errado: derivar o dd/mm no escritor obrigaria a re-lavrar o retrato para mudar uma vírgula
-  na tela, e deixaria o retrato velho renderizando ( a ) na faixa entre o deploy e a próxima lavratura. O retrato guarda ISO; o dd/mm é da view.
+  - 15 de 16 são SOLO (data_fim nulo, sem referência a quem assumiu); o único com data_fim está rejeitado.
+  - 15 de 16 têm documento — isso é novo em relação a 23/09 —, e o único sem está aguardando decisão.
+  - O tipo segue com efeito=abona: o pedido já abona sozinho, sem par e sem confirmação.
+  - Não existe campo para o par. O único candidato na Ausencia é chamado_origem, que é outra coisa. Não há onde dizer quem cedeu e quem assumiu, nem onde
+    pôr o segundo anexo: há um documento e a lei pede dois.
 
-  Mais dois achados dos meus próprios selos: a frase do padrão aparecia duas vezes (colapsada + cabeçalho do aberto) — ficou só na colapsada, porque
-  aberto quem responde é o desenho; e o botão passou a dizer as suas palavras, "Autorizar +N min de HE".
+  O desenho mínimo tem três peças, e nenhuma é tela: (1) um lugar para o par, com os dois lados e os dois anexos; (2) o tipo deixar de abonar sozinho —
+  vale só confirmado, e o pedido não move célula; (3) a porta que escreve o par com trilha e mata o chamado por lastro. A 4ª opção do Resolver dia é a
+  casca, e vem depois.
 
-  E um selo re-expresso, não afrouxado: o que cobrava value="nao" por dia agora cobra os dois atos nas formas novas — AUTORIZAR por dia (decidir_he) e
-  CIÊNCIA por pessoa (todos_sem_decisao). O ato não morreu, mudou de lugar por sua ordem.
+  Não comecei a codar, e digo por quê: a peça (1) é migration, e as 12 aprovadas da 09 estão em competência exportada — então a conversão é pós-export com
+  DRY → aval, como o próprio item manda. O próximo ato é escrever as três peças inertes (modelo + porta + catálogo) com os selos, sem tocar a célula de
+  ninguém.
 
-  57 selos verdes nos três arquivos da tela, ruff limpo, e a suite da main em 9.033 OK.
-
-  Quando a relavra fechar, a tela mostra a competência certa, sem almoço, em dd/mm, com a grade do período e o denominador na frase — e aí o smoke é seu.
+  Fechado nesta rodada, além disso: a relavra com --apply gravou os quatro snapshots da 09 (emp2 3.978 dias/332 colabs), o TXT da emp2 está regerado e
+  provado, a HE50 está aberta com 3 casos à mão, e o col369 item 4 está publicado sem aplicar. Esperando você: o ! da troca do S5b, o ! do vínculo do
+  col369, e o smoke da Gestão de HE.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O10 -- TROCA-DE-PLANTAO (corte Ronald 23/09 18:3x, detalhado as 20:3x: nasce como 4a opcao do Resolver dia -- "Trocou
+  ⎿  Stop hook error: siga: O11 -- BAIXA-DIFERIDA-TODA-FAMILIA (achado da corrida GERAR-CELULAS-JANELA-PELO-JUIZ, 23/09) -- core/registro_baixa.p
 
-  Ran 9 shell commands
+● Curar os tres contratos que cravam numero
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O11: os tres contratos que ainda CRAVAM numero passam a derivar, como o da TELA ja faz.
+     A lei e a do proprio `registro_baixa.py`: *"um numero cravado ao lado de uma lista e o SEGUNDO ESCRITOR do
+     mesmo valor"*. A familia…
 
-● Background command "Abrir a HE50 por origem e por colab na sombra" completed (exit code 0)
-
-  Ler a HE50 aberta por origem e por colab
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; sed -n '/HE50 DO CALCULADOR ABERTA/,/^PADROES/p'
-     $S/scratchpad/he50_aberta.log | head -42
-
-✢ Pouncing… (4h 34m 5s · ↓ 462.7k tokens · thinking)
+✢ Pouncing… (4h 39m 25s · ↓ 484.5k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
