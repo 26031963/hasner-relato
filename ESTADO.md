@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 19:00:45.**
+**Medido em 01/10/2026 19:05:45.**
 
 | | |
 |---|---|
@@ -98,44 +98,44 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  merge só com o seu smoke, e AVAIS-NA-MESA como item novo. O hook continua nomeando a S5b, antes e depois da escrita.
+● Monitor event: "veredito da suite da PONTUALIDADE-EM-TURNO-ABERTO"
 
-  Dois achados medidos no caminho, registrados e não curados: PREVISTO-EM-DUAS-FONTES (o teto lê 660 min para o col221 01/10, o DiaPago gravado diz 139 —
-  exatamente a duração do primeiro par) e a hipótese (b) da folga do 12x36, que morre pelo sinal: ela prevê troca (folga desce, trabalhadas sobe) e o DIFF
-  mostra os dois subindo, o que é dupla contagem, não fonte trocada.
+● Stop Task
+  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -f -n +1 $S/pta_suite.log | grep -E
+     --line-buffered "^(OK|… · stopped
 
-✻ Crunched for 1h 46m 52s · done 6:53 PM · 4 shells still running
+● Monitor(veredito final da suite (OK/FAILED/Ran e falhas nomeadas))
+  ⎿  Monitor started · task bgo7ab0ig · timeout 1800s
+  ⎿  Allowed by auto mode classifier
 
-❯ aval Ronald 01/10 19:0x: (1) suite fechada -> bin/deploy.sh da PONTUALIDADE-EM-TURNO-ABERTO, smoke em prod do col890 22/09 e do col221/col99 01/10 com
-  PROVA no RELATO, e push UM so. (2) 09-TURNO-ABERTO-EXPOSTA: aplicar tambem na 09 -- lei existente, o TXT e fotografia do calculo e correcao provada
-  entra em qualquer competencia. Condicoes: DIFF de frota da 09 publicado antes (os 14 dia-colab, 61,30 h, por colab), so pode DESCER desconto, reversao
-  em logs, versao anterior do TXT guardada pela porta, TXT novo com hash. Depois segue a fila pela S5b !
+● A suíte segue rodando; o monitor agora filtra só o veredito (OK/FAILED/Ran/falha nomeada) — o primeiro filtro era largo e replicou os Traceback que os
+  próprios testes de caminho de erro imprimem.
 
-  Searched for 3 patterns, read 1 file, listed 1 directory, ran 15 shell commands
+  Estado, para quando ela fechar:
 
-● Aguardando a suíte fechar para deployar. Enquanto isso, as duas árvores do DIFF da 09 (pré e pós-guarda, nascidas de git show) já estão montadas e a
-  foto em modo leitura está escrita — ela chama recalcular_fechamento_mes(..., somente_leitura=True), que é a função real da folha, sem gravar nada.
+  (1) deploy + smoke + push — bin/deploy.sh --sem-migrate (nenhum modelo foi tocado), smoke em prod pelo autoridade_do_periodo nos três casos, PROVA no
+  RELATO, um push.
 
-  Um achado na preparação, que vou registrar: a guarda da L-092 em fechamento.py:72 levanta antes do laço, inclusive em somente_leitura=True — ela diz
-  "antes de qualquer escrita", mas nesse modo não há escrita nenhuma. Para o DIFF uso a porta com motivo escrito (o seu ! de 19:0x), não um contorno.
+  (2) a 09 — autorizada na célula com a sua razão: a L-092 não era o obstáculo que eu supus; a lei de 30/09 19:2x (o TXT é fotografia do cálculo) já dizia
+  que correção provada entra em qualquer competência. Duas coisas que o preparo mostrou e que mudam o caminho:
 
-  Read 1 file, ran 3 shell commands
+  - Não é REGEN-EM-EXPORTADA. Aquela porta é um colab por ato — e a própria lei de 30/09 derrubou esse limite. O caminho é lote com DIFF, reversão e
+    prova, mais TXT novo por regerar_txt_dominio --mes 9 --ano 2026 --motivo ... --aplicar, que invalida o anterior pela porta sem nunca tocar conteudo
+    nem hash_sha256.
+  - O veículo carrega deriva. recalcular_fechamento_mes na 09 traz junto as três curas de origem de hoje, que o gravado da 09 não tem — é literalmente a
+    lição de 26/09 ("apply por recálculo nunca é cirúrgico"). Por isso o DIFF vai medir duas coisas: pós-guarda × pré-guarda (isola o que a sua lei move)
+    e pós-guarda × gravado (mostra o que o recálculo arrastaria). Se o segundo mexer campo fora de atraso/antecipada, é PAREI com a tabela pela
+    AVAL-DE-CRITERIO — e aí o escopo nomeado (colaborador_ids, o mesmo que corrigiu 28 colabs da 08) é o que mantém o ato dentro dos 14 dia-colab.
 
-● Aguardando o veredito da suíte (notificação automática quando o container sair). Nada mais entra na pista de teste até lá — um run por vez.
+✻ Cogitated for 4m 25s · done 7:01 PM · 3 shells, 1 monitor still running
 
-  Enquanto isso, registrei o achado irmão na célula do PREVISTO-EM-DUAS-FONTES: a guarda da L-092 impede medir uma competência exportada, porque levanta
-  antes do laço mesmo em somente_leitura=True, e a porta que destrava loga recalculo_de_competencia_EXPORTADA para atos que não gravaram nada. A cura é
-  uma linha, mas mexe na guarda mais perigosa da casa — não entra de passagem.
+● Monitor event: "veredito final da suite (OK/FAILED/Ran e falhas nomeadas)"
 
-  Reading 1 file, running 1 shell command…
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; wc -l $S/pta_suite.log; grep -oE "^Ran [0-9]+
-     tests" $S/pta_suite.log | tail -1; tail -c 200 $S/pta_suite.log
-
-· Gusting… (3m 59s · ↓ 14.1k tokens)
+· Pollinating… (4s · thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
