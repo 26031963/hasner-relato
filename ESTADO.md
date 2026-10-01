@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:39:01.**
+**Medido em 30/09/2026 23:44:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
-| `origin/main` | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,6 +39,7 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,43 +96,43 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Cura conhecida do rodapé (a mesma friction do O90). Curando e reempurrando:
-
-  Ran 2 shell commands
-
-● Background command "Curar o rodape e reempurrar" completed (exit code 0)
-
-  Ran 1 shell command
-
-● _dt já estava importado no topo; o meu import local era duplicado. Curando na origem:
-
-  Ran 2 shell commands
-
-● Enquanto o push roda, o item 1 da noite. Achando a linha do S5b:
-
-  Ran 1 shell command
-
-● Background command "Reempurrar depois da cura do ruff" completed (exit code 0)
-
-● Running 1 shell command · 6m 39s…
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final3.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
-     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta empurrar: $(git log --oneline origin/main..HEAD | wc -l)" (6m 39s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Percolating… (1h 36m 25s · ↓ 212.2k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ❯ (4) NAO PARA EM "NAO SEI": quando a evidencia nao fecha, ele levanta as POSSIBILIDADES (2 a 4), diz o que cada uma explicaria e o que a desmentiria, e INTERPELA o admin com a
   UMA pergunta que mais separa as hipoteses -- em linguagem do admin, sem jargao de sistema. Com a resposta, mede de novo e segue ate a proposta. Se nao consegue sugerir uma
   escala, pergunta ao admin o que falta para sugerir (horario real, desde quando, posto, quem cobre) em vez de desistir. "Nao tenho informacao" so vale acompanhado da pergunta
   que traria a informacao. GOLDEN: col438 (bate 07:00 em 10 dias e 12:00 em 2, cadastro 12:00) -> tres hipoteses e a pergunta "mudou de turno? desde quando?"; col647 (ausencia
   nos 31 dias, zero batida) -> "esta afastada? ate quando?".
-  ctrl+x ctrl+s to send now
+
+● Item (4) de uma ordem nova — e ele se aplica diretamente ao S5b, cuja célula diz literalmente "a causa dos 333 eu NÃO sei". Registrando:
+
+  Ran 1 shell command
+
+● Background command "Esperar o push" completed (exit code 0)
+
+● Push e131e98b..74e0180a. Agora o S5b — primeiro instrumento: remedir, porque o diff_calculador mudou hoje:
+
+  Ran 3 shell commands
+
+● Background command "Remedir o S5b na competencia 10" completed (exit code 0)
+
+● A remedição muda o quadro: o horas_trabalhadas negativo agora são ~118 dia-colab (45+40+14+19), não 333. Lendo os totais e o CSV:
+
+  Ran 1 shell command
+
+● Atenção a uma diferença que importa: esta é motor × calculador (+69,37 h em 1778 dia-colab), e os "333 / −1.531,61 h" eram contra o GRAVADO — são perguntas diferentes. Pegando 3
+  casos negativos para calcular à mão, como ele exigiu:
+
+  Ran 1 shell command
+
+● Três casos, e dois deles têm o calculador em 0,0 contra motor com horas. Calculando à mão pelas batidas cruas:
+
+● Running 1 shell command…
+
+✢ Percolating… (1h 41m 56s · ↓ 217.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
   ⧉  index
