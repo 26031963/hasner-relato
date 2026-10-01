@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:13:31.**
+**Medido em 01/10/2026 11:19:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `59429b00 O9 passo 1 verde, e o passo 3 achou TRES numeros para a mesma pergunta` |
+| `HEAD` local | `04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,29 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado
 59429b00 O9 passo 1 verde, e o passo 3 achou TRES numeros para a mesma pergunta
 6ce20522 O rodape do TICKETS volta a bater com origin/main
 cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava o O9
 113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia
-9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela
 ```
 
 ## `git status --short`
 
 ```
- M app/api/views_mensageria.py
- M app/chamados/management/commands/carimbar_por_batida_coincidente.py
- M app/chamados/services/celula_carimbada.py
- M app/chamados/services/silencio_ausencia.py
- M app/docs/RELATO.md
- M app/escala/services/agenda.py
- M app/ferias/services.py
- M app/pautas/services.py
- M app/ponto/services/ausencia.py
- M app/ponto/services/fechamento.py
- M app/ponto/services/he_pendente_lavrado.py
- M bin/import_tardio_contra_o_ar.py
-?? app/ponto/tests/test_carimbo_acompanha_a_escrita.py
+ M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -108,39 +96,39 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 13 shell commands
+  Defeito 2 — a relavra NÃO pegou, e a culpa é minha: faltou --apply. Medido: existem 2 linhas de he_pendente para a emp2, de 30/09 17:23 (09) e 01/10 06:36 (10). Nenhuma é das
+  10:11/10:41. O comando lavrar_he_pendente só escreve com --apply e eu rodei sem — ele mediu e imprimiu, e eu publiquei "retrato relavrado" lendo o print como se fosse escrita.
+  Os 13,7% do almoço são válidos (é a medição), mas o retrato em prod nunca foi reescrito. Vou relavrar de verdade depois do defeito 1, senão gravaria os 4.198 dias de novo.
 
-● Background command "Aguardar a suite e conferir o push" completed (exit code 0)
+  Defeito 3 — dd/mm na tela: entra com a forma.
 
-  Ran 1 shell command
+  E o item 1 do aval anterior, que desfaz a minha própria conclusão: não houve commit de emissão. O único que toca folha/export.py desde 29/09 é 711982b3 (30/09 19:13) e são 17
+  inserções, 0 deleções — só acrescentou nome_canonico. O que mudou foi o gravado, e a minha "prova" de que ele não havia sido tocado estava errada: o escritor canônico dos
+  números é um queryset.update(), e auto_now só dispara no save(). O carimbo ficava parado em 28/09 enquanto as horas eram reescritas — a mesma família que a seção 4 do CLAUDE.md
+  descreve para a célula, e eu usei o campo como prova em vez de desconfiar dele. O selo novo achou 14 sítios em 8 arquivos com o mesmo defeito; todos curados, allowlist zero. E a
+  rota morta da mensageria saiu com o seu !: das 42 funções api_mensageria_*, 41 estavam roteadas — não é que ninguém chamava, não havia como chamar.
 
-❯ aval Ronald 01/10 11:1x -- Gestao de HE forma B: o caminho esta certo, a execucao do EXPANDIDO nao. Tres defeitos de dado primeiro, depois a forma.
+  As 6 linhas do expandido, antes de codar:
+  1. O período dela desenhado grande, em semanas: uma célula por dia de 21→20, as com ponta pintadas, intensidade pelos minutos na escala única com o teto declarado.
+  2. Dentro da célula, a direção: metade de cima = antes da entrada, metade de baixo = depois da saída; dia com as duas aparece dividido.
+  3. Uma frase sobre o desenho: "9 min antes da entrada em 12 de 15 plantões · maior dia 22 min · 110 min no total".
+  4. Abaixo, a tabela limpa, como texto de apoio: dia (dd/mm) · ponta · bateu · marco · minutos — rótulo no cabeçalho, nunca repetido por linha.
+  5. No topo do expandido, uma opção: "Dar ciência nos N dias sem decisão desta pessoa".
+  6. Autorizar segue por dia, e o campo de motivo só nasce quando ele escolhe autorizar aquele dia.
 
-  DEFEITOS, medidos no print dele (col616, emp2, competencia 10):
-  1. A lista da competencia 10 (21/09 a 20/10) mostra dias de 02/09 a 20/09 -- nove dias da 09 somados no "14 sem decisao". A janela da tela tem de sair de janela_fechamento.
-  2. O almoco ainda aparece como ponta: "depois da saida: bateu 12:01, marco 12:00" e "antes da entrada: bateu 12:59, marco 13:00". O cabecalho diz "retrato de 01/10 06:36",
-  ANTERIOR a cura das 10:08. Voce escreveu que relavrou 10:11 e 10:14: a tela esta lendo outro retrato, ou a relavra nao pegou. Medir e dizer qual.
-  3. Datas em formato de maquina (2026-09-02). Na tela e dd/mm.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-  A FORMA do expandido -- a critica dele, nas palavras dele: "coluna com o mesmo texto repetido" e poluicao. Catorze linhas repetem a mesma frase e os mesmos tres controles; a
-  tira ficou pequena demais para responder alguma coisa.
-  - Ao abrir a pessoa, o que ele ve primeiro e o PERIODO DELA DESENHADO, no espirito do mini calendario do "Vincular escala": os dias com ponta marcados, intensidade pelos
-  minutos, antes/depois distinguiveis. O padrao inteiro de uma vez. Nao e para copiar o componente; e o mesmo modo de responder pela forma.
-  - A tabela de dias FICA, como texto de apoio (o papel que a frase "paridade real, 93%" cumpre la), mas LIMPA: colunas (dia, ponta, bateu, marco, minutos), sem repetir rotulo em
-  cada linha.
-  - DAR CIENCIA e UMA opcao por pessoa, nao um botao por dia. AUTORIZAR segue por dia, e o campo de motivo so aparece quando ele escolhe autorizar aquele dia.
-  - A tira da linha colapsada precisa ser legivel no tamanho em que esta.
-    Antes de codar: 6 linhas dizendo o que ele ve ao abrir uma pessoa. Depois constroi, merge e deploy no mesmo ato.
+● Permitir a ciencia recortada por pessoa
+  ⎿  $ cd /home/ronald/wt-ui && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile
+     P='app/ponto/views.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = """ brutos = ['%s:%s:%s' % (c['colab'], d['data'], d['minutos'])
+     for c in _vis['colabs'] for d in c['dias'] if d.get('estado') == 'sem_decisao…
 
-  Ran 1 shell command
-
-● Background command "Aguardar a suite inteira" completed (exit code 0)
-
-● Ver o fim do log da suite
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; tail -5 $S/scratchpad/carimbo_suite.log; pgrep -f "manage.py
-     test.*settings=config.settings.ci" | head -2
-
-✢ Pouncing… (3h 40m 55s · ↓ 387.1k tokens · thinking)
+· Pouncing… (3h 46m 25s · ↓ 396.2k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
