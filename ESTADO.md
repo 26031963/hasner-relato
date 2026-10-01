@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 03:55:29.**
+**Medido em 01/10/2026 04:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido` |
+| `HEAD` local | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
 | `origin/main` | `1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes
 1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido
 8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada
 a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia
 96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando
-c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/RELATO.md
- M app/relatorios/pdf_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,15 +96,6 @@ c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permi
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E a resposta do "medir primeiro": o espelho já devolve tudo o que o PDF recalcula. O dia dele carrega 27 chaves — batidas, turnos, previsto, folga, ausência, palavra_dia,
-  dia_pago, rubricas, falta_marcos, he_fora_da_janela… — mais resultado (o próprio motor) e resumo. A migração é mecânica.
-
-  Não comecei a migração, e a razão está na própria célula: ela exige "DIFF antes de subir — o que muda no PDF de cada um e por que", com a regra de que mudança que o espelho não
-  tem é bug do espelho e vira item próprio. Rasgar dez laços de um documento do Art.74 §2º sem esse DIFF publicado seria o oposto do que o item manda — e é o próximo passo,
-  nomeado na célula.
-
-  Empurrado: 8f57dea2..1c3513ca.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
@@ -125,11 +115,20 @@ c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permi
 
 ● _CATR segue usado para ABONA/SUPRIME, e rotulo_vigente só aparece na minha prosa. Provando que remover código morto não mudou saída:
 
-  Rodar relatorios e o ruff
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te…
+  Ran 1 shell command
 
-· Percolating… (5h 52m 53s · ↓ 512.6k tokens)
+● 217 OK e ruff limpo. Agora o tripwire que o item pede, com os 9 restantes como allowlist que só encolhe:
+
+  Ran 1 shell command
+
+● 5 OK, e rodei o ruff antes do push desta vez. Fechando o incremento do O9:
+
+  Conferir o push do O9 · 3m 37s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (3m 36s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (5h 58m 9s · ↓ 519.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
