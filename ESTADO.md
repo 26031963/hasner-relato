@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 05:05:45.**
+**Medido em 01/10/2026 05:10:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe` |
-| `origin/main` | `8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -97,39 +97,39 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (32,5 min) agora. É a terceira vez que a mesma colisão acontece. Movi o vizinho para 04:45 (folga declarada no próprio arquivo) e instalei o crontab, porque a sombra não pode
-  começar antes das 04:05 — ela depende do dump das 04:00. Mas mover o vizinho é band-aid de terceira geração: a cura de origem é o horário sair da medida em vez de ser literal, e
-  isso virou O107, com o selo B6 como cobrador da quarta vez.
-
-  Guardei na memória a receita do mypy no container — ele precisa de DJANGO_SETTINGS_MODULE no ambiente, senão falha com erro interno do plugin.
-
-  Empurrado: 4b541969..8dab8b82.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O107 -- O HORARIO DA SOMBRA E LITERAL E A SOMBRA CRESCE: a MESMA colisao pela TERCEIRA vez (achado 01/10 04:4x, pego p
+  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-● O107 é a cura de origem: o horário da sombra sair da medida. Antes, uma pergunta que decide o desenho — o crons.sh check é vigiado por alguém?
+● A triagem dos 5 campos. Começando pelo que explica três deles — o portão do folha_manda:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Background command "Conferir o push" completed (exit code 0)
-
-● O drift é vigiado: o placar_code.sh roda o check e anuncia cron fora do crontab. Então derivar o horário é seguro. Lendo a entrada da sombra:
-
-  Ran 3 shell commands
-
-● Funciona: duração medida 1947 s (33 min) → início derivado 04:10 (termina 04:43 + 2 min de tolerância = 04:45 exato), e o ramo "não cabe" levanta com a mensagem. O selo:
+● O portão é competencia_do_periodo, e os dois chamam folha_manda com a mesma janela — então a divergência tem outra causa. Medindo um caso nominal:
 
   Ran 1 shell command
 
-● 27 OK. Limpando uma linha que ficou tortuosa no selo, e rodando ruff e mypy antes do push:
+● Triagem rica: horas_previstas, total_trabalhadas e dias_falta saem idênticos nos três — então não são os suspeitos. Localizando quem escreve as três chaves que divergem:
 
-  Conferir o push do O107 · 7m 54s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o107.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 53s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Percolating… (7h 3m 9s · ↓ 564.0k tokens)
+● Triagem conclusiva, e ela aponta a mecânica do O9:
+
+  ┌────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────┐
+  │       campo        │                                       causa medida                                        │
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────┤
+  │ datas_furo_apurado │ código idêntico nos dois (getattr(resultado,'datas_falta')) — difere o resultado do motor │
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────┤
+  │ dias_abono         │ código idêntico (getattr(resultado,'dias_abono')) — mesma causa                           │
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────┤
+  │ turnos             │ duas contagens diferentes: len(turnos_do_colab(...)) contra += 1 no laço do espelho       │
+  └────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────┘
+
+  E isso explica por que total_trabalhadas bate: ele vem da folha. O que não bate vem do motor — que os dois rodam duas vezes, com entradas diferentes. Publicando:
+
+  Running 1 shell command…
+
+· Percolating… (7h 8m 9s · ↓ 569.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
