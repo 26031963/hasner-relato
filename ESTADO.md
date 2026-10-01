@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:22:36.**
+**Medido em 30/09/2026 23:28:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4514e1f0 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
+| `HEAD` local | `bea5bd39 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
 | `origin/main` | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-4514e1f0 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
+bea5bd39 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
 c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
 e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
@@ -95,19 +95,6 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Os três têm vigente de 30/09 17:07, e a minha lavra foi depois. Mas o col900 está fora do TXT, então o conteúdo pode não ter mudado — provando pelo hash em vez de afirmar:
-
-  Ran 2 shell commands
-
-● Decisivo e com hash: emp3 e emp4 saem IDÊNTICOS — nada a substituir, e isso prova a condição dele (a lavra do col900 não tocou o arquivo). emp2 mudou (0e3e00… → 8f449e…).
-  Publicando o DIFF antes de substituir:
-
-  Ran 2 shell commands
-
-● Um única linha mudou: rubrica 0011 de 0000010000 para 0000005000 em 02/09/2026. Identificando quem e qual rubrica:
-
-  Ran 1 shell command
-
 ● col881 [nome], 02/09, rubrica 0011, de 0000010000 para 0000005000. Antes de substituir preciso saber por que mudou:
 
   Ran 1 shell command
@@ -123,11 +110,24 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 
 ● O | dentro de `tipo: estado|flag` virou coluna. Corrigindo:
 
-  Empurrar
-  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final.log 2>&1;
-     echo "RC=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final.log) &…
+  Ran 2 shell commands
 
-✶ Percolating… (1h 20m 1s · ↓ 208.1k tokens)
+● Enquanto o push roda, começo o item 1 da noite (S5b). Lendo o item e o instrumento que mudou hoje:
+
+  Ran 1 shell command
+
+● Background command "Empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Cura conhecida do rodapé (a mesma friction do O90). Curando e reempurrando:
+
+● Curar o rodape e reempurrar · 4m 52s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final2.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
+     sleep 10; done; tail -5 "$L"; echo "=== falta ==="; cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD | wc -l (4m 51s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (1h 25m 25s · ↓ 210.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
