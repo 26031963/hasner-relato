@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:03:01.**
+**Medido em 01/10/2026 17:08:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce` |
+| `HEAD` local | `3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,29 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas
 4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 be51b833 O20: celula dentro do teto (301 -> 290)
 5696af56 O20 fatia 3: 8 contratos a mais, e a migracao expos um FALSO VERDE no contrato do TETO TEMPORAL
-8f7e98b2 O20 fatia 2: 5 contratos a mais varrendo CODIGO, e o censo que eu fiz primeiro contava pela FORMA
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_contract_dia_do_fato.py
- M app/chamados/tests/test_contract_texto_com_carimbo.py
- M app/core/censo_fonte.py
- M app/core/tests/test_contract_btn_pdf.py
- M app/core/tests/test_contract_feriado.py
- M app/core/tests/test_contract_trilha.py
- M app/core/tests/test_o20_contrato_julga_codigo.py
- M app/docs/RELATO.md
- M app/escala/tests/test_contract_fase_declarada.py
- M app/pautas/tests/test_contract_um_escritor.py
- M app/ponto/tests/test_contract_geofence_juiz_unico.py
- M app/ponto/tests/test_contract_no_batida_date.py
- M app/ponto/tests/test_contract_um_produtor_de_ausencia.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -108,43 +95,43 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Listed 1 directory, ran 5 shell commands
+       col214    inconsistencias 1.00->0.00, minutos_abonados 0.00->5500.00, saldo_banco_horas 0.00->-188.57
+       col225    inconsistencias 1.00->0.00
+       col237    inconsistencias 1.00->0.00, minutos_abonados 0.00->4320.00
+       col238    horas_saida_antecipada 0.41->0.00
+       col246    horas_atraso 0.83->0.00
+       col247    horas_saida_antecipada 0.21->0.00
+       col250    inconsistencias 2.00->3.00
+       col254    minutos_abonados 0.00->1440.00
+       col272    inconsistencias 1.00->0.00, minutos_abonados 0.00->3300.00
+       col288    horas_atraso 0.20->0.16
+       col289    minutos_abonados 0.00->2640.00
+       col290    horas_saida_antecipada 0.68->0.51
+       col292    minutos_abonados 1680.00->2100.00
+       col303    horas_atraso 2.42->2.08
+       col306    minutos_abonados 0.00->660.00
+       col318    minutos_abonados 4320.00->4860.00
+       col327    minutos_abonados 480.00->960.00
+       col332    horas_saida_antecipada 1.77->0.01
+       col340    minutos_abonados 2640.00->3300.00
+       col346    horas_atraso 0.21->0.00
+       col370    inconsistencias 1.00->0.00, minutos_abonados 0.00->5100.00, saldo_banco_horas 0.00->-190.67
+       col371    minutos_abonados 3780.00->4200.00
+       col379    inconsistencias 1.00->0.00, saldo_banco_horas 0.00->-190.67
+       ... e mais 33
 
-● Censo final: 7, não 33. Migrando os últimos.
+● Ele aplicou. Devo a PROVA — e ela tem duas metades que não se misturam.
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● O teste pulava a docstring à mão com split('"""') — o helper já faz isso. Simplificando.
+❯ aval Ronald 01/10 17:0x: recalculo da competencia 10 aplicado por mim (572 fechamentos). Publicar a PROVA no RELATO: col890 22/09 saida antecipada
+  antes/depois, os 32 campo-colab que descem e 0 que sobem, exportada intacta por hash. Retomar o push interrompido, UM so. Depois compactar (marco
+  fechado) e seguir a fila pela S5b.
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Background command "Fechar a fatia 4 do O20" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● O helper tem um limite real: docstring que é o único corpo de um bloco deixa bloco vazio. Curando.
-
-  Searched for 1 pattern, ran 6 shell commands
-
-● O selo tem um buraco: ter o import não é usá-lo em todas as leituras. Fechando os dois.
-
-  Searched for 1 pattern, ran 9 shell commands
-
-● O colisão de pista derrubou os quatro pushes — minha própria lei. Serializando.
-
-● Aguardar o fim da suite
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 55; if grep -q "^RC=" $S/suite_o20b.log 2>/dev/null; then break; fi; done; grep -E "^(Ran |OK$|FAILED)|^RC=|^(FAIL|ERROR):"
-     $S/suite_o20b.…
-
-✢ Pouncing… (9h 30m 25s · ↓ 1.0m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
-  ctrl+x ctrl+s to send now
+· Fermenting… (2m 21s · ↓ 1.7k tokens · thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
