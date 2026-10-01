@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 09:16:31.**
+**Medido em 01/10/2026 09:21:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `64c65c60 A janela machucou: o 500 do lote por DATA LIVRE era disco novo contra memoria velha, e agora ha selo que morde` |
+| `HEAD` local | `843f74e8 MERGE da Gestao de HE completa: listagem, aba Autorizar, lote de "Nao", busca, filtros, totais, PDF e o atalho da Central` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+843f74e8 MERGE da Gestao de HE completa: listagem, aba Autorizar, lote de "Nao", busca, filtros, totais, PDF e o atalho da Central
+0251070a Item 1: a autopsia do col881 esta no topo do RELATO, e ela desmente a minha propria leitura de ontem
 64c65c60 A janela machucou: o 500 do lote por DATA LIVRE era disco novo contra memoria velha, e agora ha selo que morde
 bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ESMERIL fechado e a Gestao de HE com a lista do que clicar
 337b5e88 Dois carregadores vizinhos com contratos OPOSTOS derrubaram o bloco da sombra -- e o segundo erro do portao em um dia
-67b6ee92 O portao do deploy estava CEGO desde 04:11 por duas colunas minhas sem inventario -- e agora a pergunta se faz no commit
-2b7a8537 O placar do topo do TICKETS volta a bater com o mundo
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ bd217a94 RELATO e BACKLOG do 01/10: os dois erros do portao, o O108 em 340, o ES
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Rodar a suite da raia inteira com saida completa" completed (exit code 0)
-
-  Committed 8ce7eebf, 337b5e88, bd217a94, searched for 1 pattern, read 1 file, ran 16 shell commands
-
-❯ aval Ronald 01/10 08:5x:
-  1. TXT emp2: NAO substitui ainda. Autopsia do col881 02/09 primeiro -- e o seu RELATO de 19:3x diz que ele perdeu 5 h na cura S84, entao ele FOI tocado ontem; reconciliar com o
-  "atualizado_em 28/09". Cura de origem: o bloco de FALTA do TXT passa a sair do GRAVADO como o resto (o TXT e funcao pura do gravado). Depois regera a emp2.
-  2. S5b: a lei ja existe -- dia impar ou malformado vale a soma dos PARES FECHADOS (BUG-144), aparece EM ABERTO com o que falta, e a hora volta pela resposta. O calculador esta
-  certo. Segue a sombra com isso; a troca continua esperando o meu ! com o DIFF por rubrica.
-  3. O108: aplica. A tela passa a dizer a verdade sobre furo e abono !
-
-● Background command "Rodar a suite da raia depois do merge" completed (exit code 0)
-
-❯ aval Ronald 01/10 08:5x -- BUG EM PROD AGORA, fura tudo. Lote de cartoes por DATA LIVRE: u28 08:28, 08:28 e 08:43 -> 0 gerados. A trilha diz o erro: "cannot import name
-  'previstas_do_periodo' from 'escala.alimentacao'". E a janela que voce escreveu que "nao machucou": o .py do O108 esta na arvore viva e o saas_ui nao recarregou -- um import
-  tardio pegou o arquivo novo contra o modulo velho em memoria. Mesma familia do merge de 30/09 17:15, segunda vez em 16 horas.
-  1. Deploy JA para alinhar disco e memoria (--sem-sombra com o motivo se o ensaio estiver ocupado). Conferir antes que o que esta no disco e mudanca NULA de comportamento -- a
-  cura do O108 NAO sobe de carona, ela espera o meu !.
-  2. Smoke: lote por data livre, 21/08 a 20/09, col61 e col929, gerando.
-  3. A cura de classe: arquivo .py de fatia NAO fica na arvore viva sem reload, nem por minutos. Selo que morda (import tardio de simbolo que o HEAD carregado nao tem), nao uma
-  promessa no RELATO.
-
-● BUG EM PROD — você está certo e eu estava errado: a janela machucou. Deploy imediato.
-
   Ran 7 shell commands
 
 ● Background command "Reensaiar o bloco da manha na sombra" completed (exit code 0)
 
-● Ver como o PDF monta a lista de vinculos do periodo
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "_escalas_periodo = \|escalas_do_periodo" app/relatorios/pdf_espelho.py | head -5
+  Committed 64c65c60, ran 32 shell commands
 
-· Pouncing… (1h 43m 55s · ↓ 184.7k tokens)
+❯ aval Ronald 01/10 09:2x -- Gestao de HE completa (listagem + aba Autorizar + atalho HE na Central): merge e deploy AGORA, no mesmo ato, sem .py na arvore viva antes do reload.
+  O smoke eu faco NO AR pelos 13 passos; se falhar, volta pelo revert. Cola aqui os 13 passos em lista curta, um por linha, com o endereco de cada tela.
+
+● Os 13 passos, um por linha:
+
+  /ponto/gestao-he/ (admin, com a ação autorizar_he)
+  1. Abrir com empresa/mês/ano → a lista aparece com a hora do retrato no topo.
+  2. Digitar um nome em "Nome ou CPF" → Ver → a lista encolhe.
+  3. Digitar um CPF com pontos → encolhe igual.
+  4. Digitar algo que não existe → a frase do vazio tem de falar de filtro, não de competência.
+  5. Escolher uma Praça → encolhe. Escolher um Posto → encolhe.
+  6. Estado do dia = autorizado → só dias autorizados, e as colunas "Dias"/"Minutos fora" da linha acompanham.
+  7. Marcar 2 ou 3 caixas → "Marcar selecionados como 'Não'" → o toast conta quantos, os dias ganham o selo nao, o contador "Sem decisão" desce.
+  8. Clicar o mesmo lote de novo → o toast diz que já estavam assim (nenhuma trilha nova).
+  9. Autorizar um dia SEM motivo → tem de ser recusado, com a frase da porta.
+  10. Autorizar com motivo (≥10 caracteres) → toast dizendo que o fechamento foi para a fila de recálculo.
+  11. Botão PDF → abre com o mesmo filtro da tela, hash no rodapé, nome gestao-he-emp<N>-09-2026.pdf.
+
+  /relatorios/ (a Central)
+  12. O cartão "Gestão de HE" com o contador vermelho; empresa sem retrato aparece como "Não lavrado ainda: <empresa>" — e isso não é zero pendência.
+  13. Clicar o cartão → cai na tela.
+
+  Aplicar o O108 na copia e rodar a suite com o staticfiles montado
+  ⎿  $ cd /home/ronald/wt-ui && git merge --no-edit main -q 2>&1 | tail -2; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && git
+     apply $S/o108.patch && echo "o108 aplicado NA COPIA (wt-ui), nao na arvore viva" && cd /home/ronald/saas-hasner && source bin…
+
+· Pouncing… (1h 49m 5s · ↓ 197.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
