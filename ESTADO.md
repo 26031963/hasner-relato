@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:42:01.**
+**Medido em 01/10/2026 01:47:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
-| `origin/main` | `d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -95,44 +95,44 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Medindo a população que importa:
+● G2 divergiu: o publicado é ~70 maior em cada ponto antigo e só o último (3774) bate — a régua mudou no meio da medição, exatamente o que a lição paga de 29/08 manda corrigir
+  recalculando todos. Agora os números de banco, e o G5 reconstruído para conferir se o critério é o mesmo:
 
   Ran 1 shell command
 
-● O universo que eu escolhi era o oposto da população em risco. Só 51 usuários têm linha de credencial; 850 nunca foram observados — e são justamente esses que tomam o caminho
-  legado e que o P0 derrubou. Corrigindo o universo para o acervo real de aparelhos:
+● G5 reconstruído reproduz a série publicada exatamente (23,23,28,29,31,32,33) — critério idêntico, e ele estabilizou em 34. Agora commits e linhas líquidas por semana:
 
   Ran 1 shell command
 
-● legado: 42/55 — os dois lados representados agora, e o comando avisa honestamente que o outro lado está saturado. Provando o --conferir:
+● O numstat (137.344 na última semana) conta tudo, inclusive o RELATO.md; o delta do G1 na mesma semana é 31.145. Vendo qual dos dois as páginas publicadas usam:
 
   Ran 1 shell command
 
-● Um defeito real: no --conferir o universo é re-sorteado e 5 da baseline não foram reconferidas. O universo tem de vir da própria baseline:
+● Importante: recalcular o G2 mudaria o texto de 5 páginas publicadas. Antes disso, "não reinventar" manda achar o critério ORIGINAL — ele é ~70 maior, o que sugere um glob mais
+  largo. Testando:
 
   Ran 1 shell command
 
-● 55/55 comparadas, zero perdidas. O selo:
+● Achei: o critério original é o glob *tests*, que dá 3336 em 12/08 — o publicado. A receita documenta */tests/*, que é outro número. Conferindo a série inteira pelo critério
+  real:
 
   Ran 1 shell command
 
-● 29 OK. O4 completo nos seis itens. Fechando e empurrando:
+● O publicado mistura os dois critérios: os pontos antigos vêm de *tests* e o último de */tests/* — a régua mudou no meio da medição, agora, no G2. A lição paga resolve: um
+  critério só, o declarado na receita, aplicado a todos. Vendo a estrutura das páginas para o que isso implica:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Background command "Fechar o O4 e empurrar" completed (exit code 0)
+● Vou tornar as medições duráveis antes do edit (são a parte caríssima de refazer), e registrar as duas descobertas de critério:
 
-● Conferir o push · 36s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_replay.log; for i in $(seq 1 55); do grep -q '^RC=' "$L" && break;
-     sleep 10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (37s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Running 1 shell command…
 
-✢ Percolating… (3h 39m 25s · ↓ 373.7k tokens)
+✢ Percolating… (3h 44m 56s · ↓ 389.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
