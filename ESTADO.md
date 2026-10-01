@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 11:40:45.**
+**Medido em 01/10/2026 11:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado` |
+| `HEAD` local | `7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7cf1d0b4 O9: a celula passa a dizer o estado real -- passo 1 fechado, passo 3 com o pre-requisito escrito, DIFF aguardando a pista
 04c027ed O carimbo mentia em 14 sitios, e foi ele que me fez afirmar que o gravado do col881 nao havia sido tocado
 59429b00 O9 passo 1 verde, e o passo 3 achou TRES numeros para a mesma pergunta
 6ce20522 O rodape do TICKETS volta a bater com origin/main
 cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava o O9
-113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ cdab64d2 A fatia por vigencia do cartao esta MORTA, e com ela cai o que segurava
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  - Dar ciência é uma opção por pessoa, no topo do expandido, pelo diálogo da casa com a conta e a consequência no texto.
-  - Autorizar por dia, e o motivo nasce no clique — o botão se esconde e o par campo+confirmar aparece.
-  - A tira da linha colapsada engrossou de 5px para 7px com 2px de gap e traço mínimo de 3px, para ser legível no tamanho em que está.
+  dias em 5.767; aqui, de 18 datas em 28 no pior caso.
 
-  E os selos mudaram de pergunta em vez de serem afrouxados: o que proibia <table> agora pergunta onde ela vive (antes do primeiro expandido =
-  vermelho; dentro dele = o que você pediu); entraram mais quatro — a frase não se repete por linha, o motivo não nasce aberto, nenhuma data
-  de máquina no que o navegador mostra (com o ISO ainda indo no POST, que é da porta), a ciência por pessoa cobre os 12 dias dela e não toca a
-  outra, e a grade semanal cobre o período inteiro com as duas pontas separadas.
+  Curado na raia (d83d35f6) e falta o DIFF de frota antes de ir à main — muda dias_em_aberto na tela de quem tem janela visual maior que a
+  competência, e isso é o que ~750 pessoas veem.
 
-  Falta rodar os selos da raia e, com a suite limpa da main verde, deployar a cura dos três defeitos de dado + relavrar com --apply — nessa
-  ordem, para não gravar os 4.198 dias de novo.
+  Uma coisa que não vou repetir: às 11:2x eu rodei duas suites ao mesmo tempo no juliani_db_test e colhi 665 errors falsos com deadlock —
+  exatamente o que a lei "um run por vez" prevê. A regra é minha e eu a quebrei; agora há uma suite na pista e eu espero por ela antes de
+  qualquer outro run.
+
+  Fila do meu lado, em ordem: suite verde → merge + deploy do expandido e das curas → lavrar_he_pendente --apply → DIFF de frota do recorte do
+  furo → S5b (as 132,19 h de HE50 por origem, com 3 casos à mão) → col369 item 4 (o que mudaria com o vínculo 1296, sem aplicar).
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8
   PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-  Ran 1 shell command
-
-● Background command "Aguardar a suite limpa da main" completed (exit code 0)
-
   Ran 2 shell commands
 
-● Background command "Aguardar o fim da suite limpa" completed (exit code 0)
+● O9 está andando, com o estado registrado na célula e a trava nomeada.
 
-  Ran 5 shell commands
+  - Passo 1 fechado (95c5bb25): a fatia por vigência saiu do cartão, medida em 114 colabs — 113 com cartão idêntico, e o único que diferia
+    (col866, turnos 14 × 9) diferia para pior no ramo fatiado. 2.894 selos de relatorios+ponto verdes.
+  - Passo 2 refutado como causa: com a cura do O108 de volta numa cópia, o DIFF PDF × espelho deu o mesmo 22 de 40 — a fatia não era a causa.
+  - Passo 3, pré-requisito achado e curado (d83d35f6): o resumo do espelho promete "os totais só da competência" e entregava a janela visual.
+    No col87: 89 dias de janela, 28 datas de furo no resumo, 10 na autoridade dentro da competência, 0 no cartão. Recortado para [apur_ini,
+    apur_fim].
 
-● Expandido commitado na raia (8a74c506). A suite limpa da main ainda está rodando — e desta vez é uma só, sem colisão.
+  A trava é a pista, e ela tem nome: falta o DIFF de frota desse recorte — ele muda dias_em_aberto na tela de quem tem janela visual maior que
+  a competência — e há uma suite rodando. Não vou rodar duas: às 11:2x eu fiz isso e colhi 665 errors falsos com deadlock, que é precisamente
+  o que a lei "um run por vez" prevê.
 
-  Estado, para fechar o que está em pé:
+  Assim que a suite fechar, na ordem: merge + deploy do expandido e das curas → lavrar_he_pendente --apply → DIFF de frota do recorte → S5b
 
-  No ar agora: a Gestão de HE na forma B antiga (a que você reprovou), mais a cura do almoço, os 14 carimbos e a rota morta da mensageria.
-
-  Pronto na raia, esperando a suite: o expandido refeito nos seis pontos, com 5 selos novos.
-
+✻ Waiting for API response · will retry in 2m 40s · check your network
                                                                                                       ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
