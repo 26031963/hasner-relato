@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:47:31.**
+**Medido em 01/10/2026 01:53:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 
 ```
 ?? bin/keepalive.sh
+?? bin/tests/test_deck_tamanho.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,39 +96,39 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● G2 divergiu: o publicado é ~70 maior em cada ponto antigo e só o último (3774) bate — a régua mudou no meio da medição, exatamente o que a lição paga de 29/08 manda corrigir
-  recalculando todos. Agora os números de banco, e o G5 reconstruído para conferir se o critério é o mesmo:
+
+● Semana 1 é claramente holerite (lote por job, visualizador, UPSERT, carimbos). As outras três:
+
+  Ran 3 shell commands
+
+● Quatro temas com lastro. Lendo pagina() e o fecho do deck.py para o edit:
 
   Ran 1 shell command
 
-● G5 reconstruído reproduz a série publicada exatamente (23,23,28,29,31,32,33) — critério idêntico, e ele estabilizou em 34. Agora commits e linhas líquidas por semana:
+● Corrigindo uma conclusão minha antes de escrever: o idx mostra que P5 e P6 compartilham o ponto de 21/08 de propósito (semana curta) — não era erro de cópia. Conferindo os KPIs
+  de P7:
+
+  Ran 6 shell commands
+
+● 8/22 verdes, 18 declaradas, pela função da própria casa. Tenho tudo. Escrevendo o edit do deck:
 
   Ran 1 shell command
 
-● O numstat (137.344 na última semana) conta tudo, inclusive o RELATO.md; o delta do G1 na mesma semana é 31.145. Vendo qual dos dois as páginas publicadas usam:
+● Agora as quatro páginas novas e o fecho. Cada bullet com lastro em commit real da semana:
 
   Ran 1 shell command
 
-● Importante: recalcular o G2 mudaria o texto de 5 páginas publicadas. Antes disso, "não reinventar" manda achar o critério ORIGINAL — ele é ~70 maior, o que sugere um glob mais
-  largo. Testando:
+● Agora o fecho — a página de resumo passa a cobrir o período inteiro:
 
   Ran 1 shell command
 
-● Achei: o critério original é o glob *tests*, que dá 3336 em 12/08 — o publicado. A receita documenta */tests/*, que é outro número. Conferindo a série inteira pelo critério
-  real:
+● 12 páginas, e a armadilha da receita conferida (os valores da última semana aparecem acesos). Agora o selo que o item pede e a publicação:
 
   Ran 1 shell command
 
-● O publicado mistura os dois critérios: os pontos antigos vêm de *tests* e o último de */tests/* — a régua mudou no meio da medição, agora, no G2. A lição paga resolve: um
-  critério só, o declarado na receita, aplicado a todos. Vendo a estrutura das páginas para o que isso implica:
+●
 
-  Ran 1 shell command
-
-● Vou tornar as medições duráveis antes do edit (são a parte caríssima de refazer), e registrar as duas descobertas de critério:
-
-  Running 1 shell command…
-
-✢ Percolating… (3h 44m 56s · ↓ 389.8k tokens)
+✢ Percolating… (3h 50m 25s · ↓ 413.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
