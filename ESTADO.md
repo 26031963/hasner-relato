@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:16:31.**
+**Medido em 01/10/2026 04:22:01.**
 
 | | |
 |---|---|
@@ -125,12 +125,12 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 
 ● O DIFF não é zero — e isso é o achado. Mas minha comparação conta "chave que só existe num lado" como divergência (total_relogio), o que é outra coisa. Separando as duas:
 
-  Esperar o DIFF de frota · 1m 46s
+● Esperar o DIFF de frota · 7m 16s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o9.log; for i in $(seq 1 58); do grep -q '^RC=' "$L" 2>/dev/null &&
-     break; sleep 10; done; sed -n '1,30p' "$L" 2>/dev/null (1m 45s)
+     break; sleep 10; done; sed -n '1,30p' "$L" 2>/dev/null (7m 15s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (6h 13m 55s · ↓ 532.3k tokens)
+✢ Percolating… (6h 19m 26s · ↓ 532.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

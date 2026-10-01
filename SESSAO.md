@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 04:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (157.1 MB). Acoes na janela: **1269**.
+**Medido em 01/10/2026 04:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (157.1 MB). Acoes na janela: **1268**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1278,4 +1278,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:27:08 | Bash | Ler o campo que o escritor usa | `cd /home/ronald/saas-hasner && cat > app/sonda_not2_tmp.py <<'PYEOF' # -*- coding: utf-8 -*- """BUG OU DERIVA, versao 2 -- lendo o campo que o ESCRITOR usa, nao uma soma minha. A v1 somou `resultado.periodos` e ignorou `periodos_ft` (folga trabalhada), e deu 0,00 para tres colabs que tem 35 h gravadas. Sonda mal parametrizada lida como bug do sistema: a casa ja pagou por isso 7 vezes, e o CLAUDE.m ...` |
 | 16:26:41 | Bash | Bug ou deriva: sondar os nove | `cd /home/ronald/saas-hasner && cat > app/sonda_not_tmp.py <<'PYEOF' # -*- coding: utf-8 -*- """BUG OU DERIVA? A causa das noturnas dos 9, com nome e numero. So leitura. A pergunta e literal: o motor mudou de resposta porque a CELULA mudou (deriva -- o gravado predata a cura do cadastro) ou porque o CALCULO mudou (bug)? A celula denuncia isso sozinha desde 01/09: `regenerada_em`, `regeneracoes` e ` ...` |
 | 16:26:23 | Bash | Registrar a ordem da 09 | `date '+%d/%m %H:%M' && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io HORA = '30/09 16:2x' P = 'docs/PROMPTS.md' t = io.open(P, encoding='utf-8').read() assert 'BLOQUEIO TOTAL DE HE VALE NA 09' not in t linha = ('\| BLOQUEIO TOTAL DE HE VALE NA 09 (`!`) \| %s \| **CORRIGE o bloco dele de 15:1x** (*"a 09 nao se toca"* ' '-- *"estava errado"*): o TXT de 28/09 **nao foi importado por ninguem** ...` |
-| 16:16:44 | Bash | Smoke do portao em prod com as duas pontas | `cd /home/ronald/saas-hasner && cat > app/smoke_he_tmp.py <<'PYEOF' # -*- coding: utf-8 -*- """SMOKE em prod: o portao ve as DUAS pontas, e a pendencia diz qual. So leitura.""" import collections from colaboradores.models import Empresa from folha.porta_export import medir for eid in (2, 3, 4): e = Empresa.objects.get(pk=eid) d = medir(e, 10, 2026) hp = d.get('he_pendente') or [] por_sentido = coll ...` |
