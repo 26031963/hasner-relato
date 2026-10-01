@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:125 AFIRMA ato sem PROVA ao lado -- funcao, o simbolo existe no modulo **na versao que esta NO AR**? O commit no ar sai de `logs/deploy.stamp`,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:41:07.**
+**Medido em 01/10/2026 10:46:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela` |
+| `HEAD` local | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **29** |
+| commits a subir (`ahead`) | **30** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia
 9a4182ce O9: o primeiro obstaculo tem nome, e nao e a janela
 1eb48a03 As tres ordens da manha entram em PROMPTS.md, e os tres achados restantes do col369 viram item
 83fe03cd A linha do TICKETS troca a forma antiga pela nova
 837a82e0 A Gestao de HE em forma B esta NO AR e o que falta e o smoke dele
-9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato
 ```
 
 ## `git status --short`
@@ -96,43 +96,43 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
+  ┌───────┬─────────┬─────────────────────────────────┐
+  │ colab │   PDF   │       espelho com a cura        │
+  ├───────┼─────────┼─────────────────────────────────┤
+  │ col87 │ 10 dias │ 31 dias — a competência inteira │
+  ├───────┼─────────┼─────────────────────────────────┤
+  │ col82 │ 3       │ 8                               │
+  ├───────┼─────────┼─────────────────────────────────┤
+  │ col73 │ 0       │ 5                               │
+  └───────┴─────────┴─────────────────────────────────┘
+
+  31 dias de furo numa competência de 31 dias não é a tela dizendo a verdade — é a lista de previstos ficando generosa ao somar todos os vínculos do período. O 340 era o número de
+  colabs cujo furo se move; nunca foi prova de que o valor novo está certo, e eu não fiz essa distinção com clareza suficiente.
+
+  O que isso decide: o ato correto é o do O9 — uma montagem, lida pelos dois (_coletar_dados_espelho deixa de calcular) — e não enriquecer um lado. Segurar o apply estava certo, e
+  agora há número que explica por quê.
+
+  A decisão que é sua, e vai medida: o cartão fatia o período por vigência de EC e roda o motor por fatia (pdf_espelho.py:197-208, caso Janerson col49 — a fatia nasceu curando 720
+  min/dia de antecipada fantasma), e autoridade_do_periodo roda um motor na janela inteira. A janela não é a diferença (:302). Unificar exige decidir se o cartão perde a fatia
+  por vigência — e isso eu não resolvo por conveniência.
+
+  A cura saiu da raia de novo depois da medição (git cherry-pick 9d68ca04 a traz quando o O9 decidir a montagem). Retrato das duas competências relavrado com o denominador (09 às
+  10:38, 10 às 10:41). Push na régua.
+
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
 
-  Ran 5 shell commands
-
-● O9 — o primeiro obstáculo tem nome, e li no código em vez de supor:
-
-  - A janela não é a diferença. pdf_espelho.py:302 faz data_fim_mes = data_fim — o PDF usa o período pedido, o mesmo do espelho.
-  - A assimetria é estrutural: o PDF fatia o período por vigência de EC e roda o motor por fatia, somando numéricos e concatenando listas (:197-208, caso Janerson col49 30/07),
-    enquanto autoridade_do_periodo roda um motor na janela inteira.
-
-  Enquanto isso existir, "o PDF lê o espelho" não é trocar a chamada: é decidir se o cartão perde a fatia por vigência — e ela nasceu curando 720 min/dia de antecipada fantasma.
-  Essa é uma decisão de desenho que eu levo medida para você, não resolvo por conveniência.
-
-  O passo 1 do O108 está commitado em 9d68ca04 e volta por git cherry-pick; ele não sobe sozinho porque derruba três selos do test_palavra_do_dia — o topo ganha 23 e 24/07 que a
-  linha não marca, e a tela diz "Em aberto" no 22/07 onde o cartão diz ''. É o CARTÃO=ESPELHO avisando que enriquecer um lado só troca o sinal da divergência de lado.
-
-  Próximo ato, com a pista livre: o DIFF por dia PDF × espelho com a cura aplicada. O comando já existe (diff_pdf_x_espelho) e o tripwire que a lei da fatia pede também
-  (test_pdf_nao_calcula, dívida 6 entradas / 7 chamadas, que só encolhe).
-
-  Estado agora: retrato da 09 relavrado às 10:38 já com o denominador (5.370 dias, 451 colabs); a 10 está rodando; o push está na régua. A Gestão de HE em forma B está no ar
-  esperando seu smoke.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O9 -- PDF-E-O-ESPELHO (corte Ronald 23/09 11:xx) -- SUPERA PDF-LOTE-DIA-DO-TURNO e O8 PDF-ROTULO-PARCIAL-E-PENDENTE,
-
-● Aguardar e ler o DIFF do O9 · 33s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; for i in $(seq 1 10); do pgrep -f "diff_pdf_x_espelho" >/dev/null || break; sleep 40;
-     done; echo "=== DIFF PDF x ESPELHO, COM a cura do O108 ==="; tail -26 $S/scratchpad/o9_diff_com_cura.log; echo; echo "=== pus… (32s)
+● Ler o resultado da sonda da fatia · 1m 9s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; for i in $(seq 1 10); do pgrep -f "o9f.py|tenant_command shell" >/dev/null || break;
+     sleep 40; done; tail -26 $S/scratchpad/o9_fatia.log 2>/dev/null; echo "=== push ==="; tail -5 $S/tasks/bghme4143.output (1m 8s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Pouncing… (3h 8m 31s · ↓ 320.5k tokens)
+✢ Pouncing… (3h 13m 55s · ↓ 330.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 12 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
