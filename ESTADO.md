@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:167 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:313 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:47:14.**
+**Medido em 01/10/2026 13:52:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha no alcance declarado -- PAREI com o numero` |
+| `HEAD` local | `62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL` |
 | `origin/main` | `e3a4834a A medicao a parte achou outra coisa: pontualidade sendo julgada em turno ABERTO, dois deles EM CURSO agora` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,21 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL
+baa66320 CORRECAO: eu errei a causa do col142, e foi o meu proprio RED que pegou -- e o achado verdadeiro e maior
 f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha no alcance declarado -- PAREI com o numero
 8b8c0af4 LEI recebida (L-084 vence o T8): registrada, com item e com a MEDICAO que nao fecha no alcance declarado
 2e036103 TICKETS: placar do topo regenerado pelo proprio gerador (6 parados, 17 esperando smoke, 2601 commits)
-07bc5550 LEI no topo: dois juizes de "a entrada esta longe do marco", os dois a 180 min, com formas OPOSTAS
-73a82f83 S5b regra 2 (atraso + saida antecipada) com os dois REDs dele, e a distincao SEM_ENTRADA x NAO_DECIDE
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/regras.py
  M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_calculador_regras.py
- M app/ponto/tests/test_l084_vence_o_t8.py
- M app/ponto/tests/test_s5b_regra_pontualidade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,12 +96,6 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  SELO: autorizar em lote chama a MESMA porta do autorizar por dia (grep de escrita fora dela = 0); um caso que morde por estado; selo de front nas DUAS
-  cascas.
-  PROIBIDO: regra de HE no template ou no JS; autoridade nova; gravar no clique; cor como unico sinal; tocar motor ou celula.
-  PRONTO: RELATO com os prints, PROVA: ao lado de cada ato, commit na raia. Merge so com o smoke dele.
-  LEI-AKITA: origem=retrato lavrado he_pendente + porta decidir_he; testemunha=o retrato; RED=lote grava N trilhas; quem-mais-le=PDF da Gestao de HE;
-  juizes novos=0 (o limite e cadastro de tela, nao juiz).
   HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa, rotulo de admin; (b) golden: "quantos dias de HE da col616 na 09 pedem
   decisao?"; (c) degrau: leitura.
   LEI: nenhuma lei nova de dinheiro; cadastro novo de tela = corte dado acima. A migration do cadastro NAO cabe no --sem-migrate da raia: ela sobe pela
@@ -121,15 +111,21 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 
 ● Found a real error in my own diagnosis. Correcting it before anything else.
 
-  Corrigir e rodar o conjunto
-  ⎿  $ python3 - <<'PYEOF'
-     import io
-     P='ponto/tests/test_l084_vence_o_t8.py'
-     t=io.open(P,encoding='utf-8').read()
-     a = ''' """O outro ramo do mesmo `if` e um juiz DIFERENTE -- *que marco esta batida ocupa* --, e a lei de
-     hoje nao fala dele. Entrada as 13:58 casa com a volta do intervalo (13:00, dentro do…
+  Ran 6 shell commands
 
-✶ Pouncing… (6h 14m 38s · ↓ 746.8k tokens)
+● The test caught my own diagnostic error. Correcting it where it was written.
+
+  Ran 7 shell commands
+
+● Both cases measured from the real retrato. Publishing the design.
+
+  Esperar o push e ler o veredito · 1m 22s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
+     11); do sleep 50; if ! pgrep -f "bin/pre-push.sh" >/dev/null 2>&1; then break; fi; done; grep -E "^(OK|FAILED|Ran|FAIL:|ERROR:)|main
+     ->|RC=|AssertionErr… (1m 21s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Pouncing… (6h 20m 5s · ↓ 763.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
