@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 16:35:50.**
+**Medido em 01/10/2026 16:41:01.**
 
 | | |
 |---|---|
@@ -131,13 +131,13 @@ be51b833 O20: celula dentro do teto (301 -> 290)
 
 ● O colisão de pista derrubou os quatro pushes — minha própria lei. Serializando.
 
-● Esperar o fim da suite · 21s
+● Esperar o fim da suite · 5m 32s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
      11); do sleep 50; if grep -q "^RC=" $S/suite_o20.log 2>/dev/null; then break; fi; done; grep -E "^(OK$|FAILED|Ran |FAIL:|ERROR:)|^RC="
-     $S/suite_o20.log … (20s)
+     $S/suite_o20.log … (5m 31s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Pouncing… (9h 3m 14s · ↓ 1.0m tokens)
+· Pouncing… (9h 8m 25s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
