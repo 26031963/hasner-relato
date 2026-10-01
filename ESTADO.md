@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:12:01.**
+**Medido em 01/10/2026 12:17:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7c23ae78 O10: o censo antes de codar, e ele corrige o numero de 23/09 -- 16 lancamentos, nao 11` |
+| `HEAD` local | `ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam
+f49f2b25 O11: os tres contratos que ainda cravavam numero passam a DERIVAR, e a prova veio no mesmo minuto
 7c23ae78 O10: o censo antes de codar, e ele corrige o numero de 23/09 -- 16 lancamentos, nao 11
 14a12d06 col369 achado 4: publicado o que mudaria, sem aplicar -- 4 furos desaparecem e zero hora se move
 88163450 S5b item 2: as 132,19 h de HE50 abertas por origem e por colab -- a janela ESTA aplicada, e a mao bate 3 de 3
-8706851f MERGE: a Gestao de HE com o expandido refeito e os tres defeitos de dado curados
-43b4cf3e Os tres defeitos de dado dele, e tres achados dos meus proprios selos na forma nova
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/tests/test_contract_juiz_chamado.py
- M app/ponto/tests/test_contract_juiz_ausencia.py
- M app/ponto/tests/test_contract_juiz_fechamento.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,39 +95,39 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  As três passaram a derivar na mesma forma: total como teto (assertLessEqual do valor medido hoje — teto acima do que a lista tem afrouxa a guarda), soma
+  do vetor de zonas comparada com len(pend), e teto por zona elemento a elemento.
 
-  Medido agora: 16 lançamentos troca_de_plantao, não 11 — 12 aprovados, 2 rejeitados, 2 aguardando decisão. E dois são de outubro (col848 04/10, col281
-  03–04/10): a competência 10 está recebendo troca agora, então a conversão não é só de passado exportado.
+  Esse "elemento a elemento" foi erro meu de cinco minutos: eu havia escrito assertLessEqual(_zonas, (0,0,0,1)) sobre tuplas, e tupla compara
+  lexicograficamente — (0,0,0,5) <= (0,0,1,0) é True, então a zona da tela podia crescer de 1 para 5 e o selo passava.
 
-  - 15 de 16 são SOLO (data_fim nulo, sem referência a quem assumiu); o único com data_fim está rejeitado.
-  - 15 de 16 têm documento — isso é novo em relação a 23/09 —, e o único sem está aguardando decisão.
-  - O tipo segue com efeito=abona: o pedido já abona sozinho, sem par e sem confirmação.
-  - Não existe campo para o par. O único candidato na Ausencia é chamado_origem, que é outra coisa. Não há onde dizer quem cedeu e quem assumiu, nem onde
-    pôr o segundo anexo: há um documento e a lei pede dois.
+  E a prova veio sozinha, no mesmo minuto: o test_MORDE_pendente_curado_sai_da_lista ficou vermelho porque o O9 passo 1 apagou if not _fatia_unica: do
+  pdf_espelho.py e o pendente seguia declarado em core/juizes.PENDENTES. Tirei o pendente e nenhum contador precisou ser mexido — que é exatamente o que o
+  item pedia.
 
-  O desenho mínimo tem três peças, e nenhuma é tela: (1) um lugar para o par, com os dois lados e os dois anexos; (2) o tipo deixar de abonar sozinho —
-  vale só confirmado, e o pedido não move célula; (3) a porta que escreve o par com trilha e mata o chamado por lastro. A 4ª opção do Resolver dia é a
-  casca, e vem depois.
+  O mecanismo morreu: ajustar_contadores, _desce_total e _desce_grupo removidos com lápide; a chamada saiu do integrador; e contadores_a_ajustar virou
+  baixas_por_familia, porque o nome passou a mentir — ela sempre só contou baixas por família para o log.
 
-  Não comecei a codar, e digo por quê: a peça (1) é migration, e as 12 aprovadas da 09 estão em competência exportada — então a conversão é pós-export com
-  DRY → aval, como o próprio item manda. O próximo ato é escrever as três peças inertes (modelo + porta + catálogo) com os selos, sem tocar a célula de
-  ninguém.
+  O que guarda a volta: um selo acusa se o descedor reaparecer (por hasattr e por texto no integrador) e outro varre os quatro contratos recusando
+  assertEqual(len(pend), N), exigindo o teto que só encolhe — com a mensagem dizendo a cura certa: fazer aquele contrato derivar, nunca ressuscitar o
+  mecanismo.
 
-  Fechado nesta rodada, além disso: a relavra com --apply gravou os quatro snapshots da 09 (emp2 3.978 dias/332 colabs), o TXT da emp2 está regerado e
-  provado, a HE50 está aberta com 3 casos à mão, e o col369 item 4 está publicado sem aplicar. Esperando você: o ! da troca do S5b, o ! do vínculo do
-  col369, e o smoke da Gestão de HE.
+  43 selos verdes, test_baixa_diferida_host.sh OK (61 pacotes na esteira), ruff limpo. Falta empurrar — e aí a fila 1 segue para o próximo item.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O11 -- BAIXA-DIFERIDA-TODA-FAMILIA (achado da corrida GERAR-CELULAS-JANELA-PELO-JUIZ, 23/09) -- core/registro_baixa.p
+  ⎿  Stop hook error: siga: O12 -- CHAVE-MORTA-TRAB-FERIADO (achado da PDF-SEM-REGRA-PROPRIA, 24/09) -- relatorios/pdf_espelho.py:464-470 classif
 
-● Curar os tres contratos que cravam numero
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O11: os tres contratos que ainda CRAVAM numero passam a derivar, como o da TELA ja faz.
-     A lei e a do proprio `registro_baixa.py`: *"um numero cravado ao lado de uma lista e o SEGUNDO ESCRITOR do
-     mesmo valor"*. A familia…
+● Ler o escopo do O12
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+     import io
+     for l in io.open('app/docs/BACKLOG.md',encoding='utf-8'):
+     if l.startswith('| O12 '):
+     c=l.split('|')
+     print('=== ESCOPO ==='); print(c[2].strip()[:1100])
+     print(); print('=== ESTADO ==='); print(c[3].strip()[:300])
+     "
 
-✢ Pouncing… (4h 39m 25s · ↓ 484.5k tokens · thought for 3s)
+✢ Pouncing… (4h 44m 55s · ↓ 504.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
