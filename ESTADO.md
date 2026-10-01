@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:20:45.**
+**Medido em 01/10/2026 06:25:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
+| `HEAD` local | `e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia` |
 | `origin/main` | `a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e860aef1 O escopo do O108 tem tres partes, e uma delas inverte a direcao que o O9 assumia
 a887f990 A entrada tem nome: o espelho nao passa `datas_previstas_trabalho`, e por isso ve ZERO furo onde ha 22
 8ac8790b A janela nao era a causa: medi e a minha hipotese caiu -- sao as ENTRADAS do motor
 ef37ec93 A triagem do O9: os dois rodam o MOTOR, com entradas diferentes -- e o que vem da folha bate
 b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e levanta quando nao cabe
-8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
 ```
 
 ## `git status --short`
@@ -97,23 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────────────────────────┼───────────────────┤
-  │ + as duas (= o PDF)         │ 22                │
-  └─────────────────────────────┴───────────────────┘
-
-  Não era a janela (refutada no ciclo anterior) e não é a folga: é a lista de dias previstos, que o PDF passa e a autoridade_do_periodo não.
-
-  E isso decide o veredito: o col41 trabalhou 12,73 h de 176,67 previstas e tem 25 dias previstos pela célula. Vinte e dois dias de furo é o número certo — e o espelho diz zero. O
-  PDF está certo; o espelho tem buraco. Pela regra que a própria célula do O9 escreve, isso vira item próprio: O108.
-
-  Tamanho: datas_furo_apurado divergia em 302 colabs e datas_em_aberto/dias_em_aberto em 282, de 862. E não é enfeite — o próprio espelho.py:908 diz que o folha_manda lê dessa
-  lista, então a tela monta dias_em_aberto sobre uma lista vazia. Quem lê isso é a tela do admin e o app do colaborador (fonte única desde o BUG 139), mais a palavra do dia e o
-  topo do cartão.
-
-  Não curei agora, de propósito: mexer na alimentação do motor da tela muda o número de 302 colaboradores e o que ~750 pessoas veem no app. Exige DIFF próprio — seria incoerente
-  eu exigir DIFF do cartão e dispensar o da tela.
-
-  E um detalhe que a lápide já contava e eu só entendi agora: autoridade_do_periodo diz, desde 26/09, que rodava o motor "com MENOS alimentação do que o recalcular_fechamento_mes:
   sem célula e sem colaborador_id". A célula e o id entraram naquele dia; o datas_previstas_trabalho ficou — a mesma cura, pela metade.
 
   O O9 está bloqueado pelo O108, e isso agora está escrito nas duas células: trocar o motor do PDF pelo do espelho importaria o buraco para o cartão do Art.74 §2º.
@@ -129,7 +112,24 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
 ● Background command "Conferir o push do O108" completed (exit code 0)
 
-· Percolating… (8h 18m 9s · ↓ 591.9k tokens · deep in thought)
+● A cura é maior do que um kwarg: o PDF passa três coisas que o espelho não tem (datas_previstas_trabalho, datas_justificadas, e os suprimidos), e constrói a lista sobre todos os
+  vínculos do período por fatia — enquanto o espelho usa só o ativa=True. Medindo o tamanho disso:
+
+  Ran 1 shell command
+
+● Medição que fecha o escopo do O108 — e ela explica um dos quatro REDs do O9:
+
+  - 570 colabs com vínculo na janela
+  - 87 (15,3%) têm mais de um vínculo nela
+  - 10 cujo vínculo ativa=True está fora da janela — para esses, o motor do espelho roda com a escala errada
+  - e col823, um dos quatro REDs do O9 ("janela"), está nessa lista
+
+● Conferir o push do escopo · 1m 13s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_esc.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 12s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Percolating… (8h 23m 10s · ↓ 595.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
