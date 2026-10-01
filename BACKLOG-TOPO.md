@@ -5,13 +5,13 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**103 obras abertas.**
+**106 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
 | **O1** | COERENCIA-PORTAO | **FECHADA 30/09 21:5x -- os quatro itens |
 | **O2** | FILTRO-COERENTE fatia 1 (Gabriel): o filtro do cartao nao aceita data final depois de onte | PAREI |
-| **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | espera corte |
+| **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | **FECHADA 30/09 23:0x** -- e a trava era |
 | **O4** | ACESSO-NUNCA-EM-LOTE | **livre** |
 | **O5** | DECK-30DIAS | **livre** |
 | **O6** | PORTA-RETRATAR-BATIDA | **em curso** |
@@ -112,3 +112,6 @@ lista — ela e o que esta EM PE._
 | **O101** | A TRILHA DA ISENCAO E ENGOLIDA EM SILENCIO | espera aval |
 | **O102** | O RELOGIO RISCADO SAIU COM O DOBRO DO TEXTO | **FECHADA 30/09 22:3x** |
 | **O103** | COL900 -- A PORTA GANHA O MODO DIA | PAREI |
+| **O104** | ENTRADA SEM PAR DE 20 DIAS ATRAS NAO TEM COMO ACENDER | espera `!` |
+| **O105** | O TXT NAO E FUNCAO PURA DO GRAVADO | PAREI |
+| **O106** | 252 CELULAS FORAM JULGADAS ANTES DE SEREM REESCRITAS | **medir antes de nomear** |

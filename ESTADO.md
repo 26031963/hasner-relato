@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:201 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:283 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:17:31.**
+**Medido em 30/09/2026 23:22:36.**
 
 | | |
 |---|---|
-| `HEAD` local | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
+| `HEAD` local | `4514e1f0 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou` |
 | `origin/main` | `e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,21 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4514e1f0 A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
 c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
 e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
 2b8c0044 Ato cirurgico sem desfazer na porta: ontem eu repus 8 celulas por shell, que e escritor nao declarado
-c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenerar, e o 16 do Ronald bate
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/PROMPTS.md
- M app/ponto/management/commands/aplicar_col900.py
-?? bin/artefatos_de_estado.txt
 ?? bin/keepalive.sh
-?? bin/tests/test_artefato_de_estado.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -99,39 +95,39 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O DNA está na impressão (cartorio.py:97), então os 3 dias já estão na fila e o cartório das 06:28 os julga. Provando pela autoridade em vez de afirmar — cartório em DRY:
-
-  Ran 2 shell commands
-
-❯ aval Ronald 30/09 23:1x, para a noite -- duas frentes que se revezam:
-  1. S5b: INVESTIGA a causa dos 333 dia-colab (-1.531,61 h). So leitura, chamando a funcao real, um instrumento por vez e conferido contra 3 casos calculados a mao antes de valer
-  para a frota. NAO troca, NAO aplica. Publica a causa com nome e numero.
-  2. Raia UI, enquanto as sondas rodam: CONCLUI a Gestao de HE como registrada no BACKLOG -- decisao por colab e multisselecao, "Nao" em lote, busca nome+CPF, filtros, totais da
-  competencia, PDF e o atalho HE na Central com contador. Nada sobe sem o smoke dele: deixa pronta na raia, com a lista do que clicar.
-  3. ESMERIL: re-rotulo do contador da S3 aprovado, desde que o rotulo diga o que a conta faz. Fecha a obra.
-  4. COL882 fica esperando.
-
-● O cartório em DRY julgaria 76 na emp3 e o col900 não está entre eles — então os 3 dias não acenderiam amanhã. Lendo o pré-filtro da fila, que é onde isso se decide:
-
-  Ran 1 shell command
-
-● Minha inferência estava frouxa: o DRY só imprime [EMITE], e julgadas=76 conta julgamentos sem linha. O col900 é julgado e não emite — porque o cartório julga furo de marco, e
-  "saída não registrada" (orfao_14h) sai do detectar_ausencias, cuja janela é hoje/ontem. A casa cita um emissor retroativo; procurando:
-
-  Ran 1 shell command
-
-● emitir_furo_retroativo — "passe retroativo sob ordem". É exatamente este caminho, e eu tenho a ordem. Vendo os argumentos:
+● Os três têm vigente de 30/09 17:07, e a minha lavra foi depois. Mas o col900 está fora do TXT, então o conteúdo pode não ter mudado — provando pelo hash em vez de afirmar:
 
   Ran 2 shell commands
 
-● É o emissor declarado. Rodando em DRY na janela dos 3 dias para medir o efeito de frota antes de qualquer emissão:
+● Decisivo e com hash: emp3 e emp4 saem IDÊNTICOS — nada a substituir, e isso prova a condição dele (a lavra do col900 não tocou o arquivo). emp2 mudou (0e3e00… → 8f449e…).
+  Publicando o DIFF antes de substituir:
 
-● DRY do emissor retroativo na janela dos 3 dias
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 docker exec saas_core python manage.py tenant_command emitir_furo_retroativo --schema=juliani --empresa 3 --ini 2026-09-03 --fim
-     2026-09-11 2>&1 | tail -22
+  Ran 2 shell commands
 
-· Percolating… (1h 14m 55s · ↓ 187.9k tokens · thinking)
+● Um única linha mudou: rubrica 0011 de 0000010000 para 0000005000 em 02/09/2026. Identificando quem e qual rubrica:
+
+  Ran 1 shell command
+
+● col881 [nome], 02/09, rubrica 0011, de 0000010000 para 0000005000. Antes de substituir preciso saber por que mudou:
+
+  Ran 1 shell command
+
+● col881 não foi tocado hoje (fechamento de 28/09 00:45, nenhuma trilha hoje) — então o TXT da emp2 mudou sem o gravado mudar. Conferindo se a linha datada é derivada ao vivo:
+
+  Searched for 1 pattern
+
+● Achado: a linha de falta do TXT é derivada ao vivo (export.py:388 datas_falta), não do gravado — então o col881, que ninguém relavrou, se move no arquivo. Pela regra dele de
+  18:5x isso é PAREI. Escrevendo o RELATO:
+
+  Ran 2 shell commands
+
+● O | dentro de `tipo: estado|flag` virou coluna. Corrigindo:
+
+  Empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && (git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final.log 2>&1;
+     echo "RC=$?" >> /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_final.log) &…
+
+✶ Percolating… (1h 20m 1s · ↓ 208.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
