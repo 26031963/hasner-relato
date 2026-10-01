@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:49 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:101 AFIRMA ato sem PROVA ao lado -- # NO AR: Gestao de HE (listagem + aba Autorizar) e a acao `autorizar_he` -- e o SEED da minha migration foi um no-op (30/09 21:2x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:30:45.**
+**Medido em 30/09/2026 21:36:01.**
 
 | | |
 |---|---|
@@ -101,39 +101,39 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├───────────────────────────┼───────┼───────────────┼─────────────────┤
-  │ 06, 08, 10, 12, 14, 18/09 │ 07:00 │ 07:00 (0 min) │ 12:00 (300 min) │
-  └───────────────────────────┴───────┴───────────────┴─────────────────┘
-
-  Seis dias em que a célula estava PERFEITA foram sobrescritos por um template 5 h errado. A causa: a porta regenera o período do vínculo até o horizonte, não o dia — e o template
-  do col438 (12:00) acerta em 2 dias e erra nos outros. Regenerá-lo foi violar a própria lei que eu estava implementando.
-
-  O gravado não se moveu (não relavrei). Revertendo os 6 agora:
 
   Ran 1 shell command
 
-● Revertidos os 6 — todos de volta a 07:00, batendo exatamente com a primeira batida. Mas a conferência expôs outra contaminação no meu instrumento: 02/09 do col438 ficou com
-  celula_hi=None, isto é, folga — e ele bateu 12:00 nesse dia. Eu comparei contra te.marcos_do_dia(), que é o template sem a fase, e o CLAUDE.md diz em letras próprias que "o do
-  template não sabe a fase". Décimo quinto erro de instrumento.
+● Perfeito: o calendário já faz exatamente esse padrão para as órfãs (orfas_map[(dia, mês)] casado por H:M). O riscado usa a mesma forma, com a mesma função. Vendo como o espelho
+  a chama, para copiar os parâmetros do cadastro:
 
-  Não vou relavrar sobre isso. Antes, a verificação que decide: o estado atual é melhor que o anterior em todos os dias?
+  Ran 2 shell commands
+
+● Tenho o padrão exato. Implementando no calendário — mesma função, mesmo cadastro, chaveando por H:M como ele já faz com as órfãs:
 
   Ran 1 shell command
 
-● O veredito é melhor do que eu temia e pior do que eu disse: 21 dias melhoraram, nenhum ficou pior no marco — mas 4 viraram FOLGA tendo batida no dia, e a minha própria
-  classificação os separou em vez de chamar isso de piora. Dois são regressão clara:
+● Agora o template. O partial rende a hora em dois ramos, então vou criar um include para a hora — e preciso copiar o tooltip do espelho, porque a ordem diz "tooltip igual".
+  Achando-o:
 
-  - col438 16/09 e 20/09: célula tinha 07:00 = real 07:00 (certo) e viraram folga.
+  Ran 1 shell command
 
-  Revertendo esses dois:
+● O espelho rende um relógio riscado (ícone de relógio com um traço) e o tooltip "N min antes/depois do marco HH:MM · não conta · Art. 4º §2º". Para o calendário dizer o mesmo, o
+  markup tem de ser um — senão os dois tooltips divergem, que é o que a sua ordem guarda. Extraindo:
 
-● Reverter os dois dias que viraram folga com marco certo
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/reverter438b.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """REVERSAO 2: os dias do col438 em que a celula tinha o marco CERTO e a regeneracao os virou FOLGA."""
-     import…
+  Ran 2 shell commands
 
-· Bootstrapping… (7h 59m 12s · ↓ 1.4m tokens)
+● Tudo no lugar: calendário com 2 ocorrências (os dois ramos), espelho com o markup único e o PDF já riscava. Agora o selo com a sua RED — 12x36 19-07, 18:51 e 07:06, dois
+  relógios riscados:
+
+  Ran 2 shell commands
+
+● O RED falhou também — nada está sendo riscado, e os dois selos que "passaram" passaram vazios (0 riscados), que é justamente o que o RED existe para pegar. A suspeita: o espelho
+  usa células de montar_realizado_grade e o calendário usa grade_da_celula — formas possivelmente diferentes. Lendo o corpo da função e as células:
+
+  Running 1 shell command…
+
+✢ Bootstrapping… (8h 4m 29s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
