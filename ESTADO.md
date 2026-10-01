@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 12:22:48.**
+**Medido em 01/10/2026 12:28:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou` |
+| `HEAD` local | `1f28c5ea S5b-4-REGRAS registrada e com as dez linhas citadas CONFERIDAS no HEAD local` |
 | `origin/main` | `113bc9c9 Medi a cura do O108 contra o CARTAO, e ela nao fecha a conta: inverte o sinal da divergencia` |
-| commits a subir (`ahead`) | **26** |
+| commits a subir (`ahead`) | **27** |
 
 ## Fabrica
 
@@ -29,18 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1f28c5ea S5b-4-REGRAS registrada e com as dez linhas citadas CONFERIDAS no HEAD local
 69b0e750 HAIKU-DENTES regenerado: ele e GERADO do codigo, e o codigo mudou
 f26fd56b TICKETS: placar e rodape antes do push do lote
 35803556 O12 FECHADO: as duas opcoes da cura ja tinham acontecido, e o que faltava era a guarda
 ae32c5a9 O11 FECHADO: o mecanismo que descia contador morreu, porque as quatro familias agora derivam
-f49f2b25 O11: os tres contratos que ainda cravavam numero passam a DERIVAR, e a prova veio no mesmo minuto
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
+ M app/ponto/calculador/regras.py
  M app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py
+?? app/ponto/tests/test_s5b_regra_noturnas.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,44 +98,44 @@ f49f2b25 O11: os tres contratos que ainda cravavam numero passam a DERIVAR, e a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ calcular_mes               │ :1552  │ definida em :1403; o :1552 é o sítio da folga que você cita — confirmado (folga_pelo_dia /                   │
+  │                            │        │ pergunta_ao_vinculo)                                                                                         │
+  ├────────────────────────────┼────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ intermitente               │ :1475  │ :1474, uma linha antes                                                                                       │
+  └────────────────────────────┴────────┴──────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  - A função do laço próprio não existe mais — só a lápide em espelho.py:426 conta o que era.
-  - montar_dias pergunta ao juiz: dia_das_batidas(colaborador, data_ini, data_fim_mes), a mesma autoridade do cartão, com a ponte instante → pk → dia e
-    None como resposta legítima ("fora da janela apresentada"), nunca dia inventado.
-  - Os quatro casos de comportamento já existiam em test_espelho_tela_le_o_juiz_do_dia.py (a saída da madrugada na linha da entrada, a borda direita, o
-    turno aberto, o card junto das batidas).
+  O origin 113bc9c e o meu HEAD local concordam onde importa. O item nasceu no BACKLOG no mesmo turno, com as quatro fontes a importar (nunca reescrever),
+  os REDs com número ao lado, os seis resultados observáveis, os dois itens de fila para medir e o selo que proíbe regra copiada do motor.
 
-  O que escrevi foi a guarda estrutural — três casos a mais, porque comportamento certo com regra própria dentro volta a divergir no primeiro ajuste:
-  1. montar_dias pergunta ao juiz e não deriva (por regex sobre a fonte da função: nenhum localtime(...timestamp...).date()).
-  2. timestamps_continuacao não volta.
-  3. E um caso que distingue janela de dia — sem ele o selo proibiria os dois usos legítimos de .date() (piso_visual, que diz onde a tela começa, e
-     somar_periodos(dentro=), que recorta a competência) e empurraria a cura para o lado errado. Janela recorta; dia atribui.
+  Nada codado ainda — e digo em que ordem vou: regra (1) noturnas primeiro, porque é a que tem dois REDs seus com número exato (col898 0,14 e col331 9,82)
+  e a importação é a mais direta (minutos_noturnos é função de módulo, não método); depois (2) pontualidade, que é a mais cara em dinheiro; (3) dobra de
+  feriado, que exige escolher os dois casos de 07/09 só em leitura; e (4) folga trabalhada, que fecha o +257,40 h do intermitente.
 
-  E o push do lote esbarrou num selo que trabalhou certo: HAIKU-DENTES.md é gerado do código e ficou fora de sincronia — porque a rota morta da mensageria
-  saiu, e o documento contava 41 endpoints GET; agora conta 40. Regenerado pelo próprio gerador e recommitado; o push está rodando.
+  Uma trava que você já conhece e que vale nomear agora: três das quatro fontes são métodos de MotorBase (aplicar_tolerancia, _aplicar_teto_pontualidade,
+  _feriado_dobra_no_dia, _noturno_dos_intervalos), não funções puras. Importar método exige uma instância de motor — e o calculador existe justamente para
+  não montar motor. Vou medir se cada um depende só de self que o calculador tem (cadastro, marcos) ou se arrasta o motor inteiro; onde arrastar, a saída
+  que respeita o seu "proibido reescrever" é extrair a função pura para ponto/janela_he.py-style módulo e os dois chamarem — o que a casa já fez com
+  entrada_efetiva/saida_efetiva. Se eu achar que precisa disso, publico antes de escrever.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O13 -- ESPELHO-TELA-TAMBEM-DERIVA-DIA (achado da PDF-SEM-REGRA-PROPRIA, 24/09) -- curado o cartao, o leitor de aprese
+  ⎿  Stop hook error: siga: S5b-4-REGRAS -- as QUATRO regras que faltam ao calculador, por IMPORTACAO do motor -- nunca reescritas (ordem Ronald
+  01/10 12:
 
-● Registrar o estado do O13 e rodar o ruff
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.find('| O13 ')
-     assert i>0
-     fim=t.index('\n',i)
-     c=t[i:fim].split('|')
-     c[3]=(' **O CODIGO JA ESTA CURADO -- medido 01/10 12:5x -- e o que escrevi foi a GUARDA; os selos novos '
-     'aguarda…
+  Ran 6 shell commands
 
-* Pouncing… (4h 50m 12s · ↓ 522.8k tokens)
+❯ aval Ronald 01/10 lei: o teto da L-093 usa o trabalhado REAL do dia (antes da janela de HE da L-097); minuto bloqueado como HE nao autorizada nunca
+  vira saida antecipada nem atraso. RED col890 22/09: antecipada 10,66 -> 8,23. DIFF de frota da 10 publicado antes; 09 intacta. E medir a parte: dia em
+  aberto ou turno em curso lavrado com saida antecipada (col221 e col99 em 01/10, col890 22/09). Segue a fila.
+
+● Ler o teto da pontualidade, o sitio da lei nova
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '812,845p' app/ponto/motor_calculo_v2.py
+
+✢ Pouncing… (4h 55m 25s · ↓ 544.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
