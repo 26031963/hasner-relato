@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 23:01:01.**
+**Medido em 30/09/2026 23:06:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## `git status --short`
 
 ```
+?? bin/artefatos_de_estado.txt
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,40 +96,40 @@ c73a6bbb O censo refeito pela primeira batida crua: nao sobrou dia para regenera
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Commitar a casa e reempurrar" completed (exit code 0)
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Medindo antes de escrever, como ele pediu:
 
   Ran 1 shell command
 
-● A suíte de negócio passou (8929 OK); está no control-plane:
+● Achado medido: o fatia.done carrega o próprio QUANDO= e o esperar_fatia nunca o lê — e o comentário de armar_fim_de_fatia diz "apaga o fim velho" e o corpo não apaga nada.
+  Conferindo:
+
+  Ran 4 shell commands
+
+● O caso do pronta.json já tem reader declarado: core/esteira_vigia.py::pronta_de_verdade. Lendo a resposta que a casa já deu, para o selo cobrar ela e não inventar outra:
 
   Ran 1 shell command
 
-● Background command "Esperar o push pelo arquivo de sinal" completed (exit code 0)
-
-● Push: b7a2b6b2..e131e98b, 8929 testes OK + control-plane OK. Deploy do crons.py que entrou depois do último:
+● A casa já respondeu esta classe quatro vezes em camadas (pronta_de_verdade consulta 4 testemunhas). Então o selo cobra o reader declarado, não inventa um novo. Conferindo os
+  nomes do censo antes de escrevê-lo:
 
   Ran 1 shell command
 
-● Fila andada. Resumo do que entrou e do que ficou com você.
+● Nomes todos confirmados. Vendo o idioma de um selo de host antes de escrever o meu:
 
-  No ar e empurrado (b7a2b6b2..e131e98b, 8929 testes OK + control-plane, dois deploys com três rotas provadas):
+  Ran 1 shell command
 
-  - O2 FILTRO-COERENTE fechado — e a trava era ponteiro morto: o portão esperava "a decisão 1/2/3 do _F6", o _F6 foi declarado em 22/09, a scratchpad/f6 não existe mais e as
-    opções 1/2/3 não estão escritas em lugar nenhum. A regra estava na própria obra, então decidi e segui. Uma função (recusa_por_data_final), os dois caminhos de cartão a leem, 9
-    selos.
-  - Os dois avais das 22:1x registrados no PROMPTS e como O102/O103 no mesmo turno.
-  - O102 relógio 10px — classe própria .relogio-riscado. RED literal: no HEAD ele herdava .icone-dia = 16px e não tinha classe nenhuma. O PDF não entra porque não lê o partial (no
-    papel a marca é texto, por decisão já registrada). 8 selos, três MORDE.
-  - O103 (a)/(a2) — regenerar_celulas_dia (RED vivo: 1 célula pela porta de DIA contra 2 pela de VÍNCULO na mesma fixture) e reverter_regeneracao_dia, que faltava: ontem repus 8
-    células por shell, escritor não declarado que o gate não vê. Selo anti-ping-pong — desfazer simétrico alternaria dinheiro a cada chamada.
-  - O103 (b) — censo refeito pela primeira batida crua, como comando. regera = 0 porque o col900 já estava regenerado: 16 dias de 12:50 → 07:00, confirmados a 0–5 min contra 350+
-    do marco antigo. Os seus 16, pelo nome.
-  - (c) col438 e col309 não precisaram de lista nova — já estão na tela cadastro_x_realidade, e a maior parte dos dias deles cai em "a célula acerta", isto é fica.
+● Idioma claro. Escrevendo o censo declarado:
 
-  A lavra e o TXT da 09 não saíram, e o motivo mudou duas vezes porque eu fui medir em vez de confiar na minha leitura. Minha primeira autópsia estava errada nas duas pontas:
-  07/09 é feriado (Independência) — o +7,37 h é a casa pagando feriado trabalhado que o gravado subpagava, e reverter aquele dia restauraria a subpaga; e os 3 turnos abertos são
-  09-03, 09-06 e 09-11, dos dias certos — entradas 06:59, 16:12 e 15:51 sem saída, que o marco de 12:50 pareava fechando turnos que não fecham.
+  Ran 1 shell command
 
+● Agora o selo de classe. Ele cobra o reader declarado, distingue estado de flag (para não morder a lei da pausa) e tem os três MORDE dos três mecanismos:
+
+● Running 1 shell command…
+
+✢ Percolating… (1h 3m 56s · ↓ 153.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
