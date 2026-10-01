@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:260 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:358 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:09:01.**
+**Medido em 01/10/2026 20:14:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS` |
+| `HEAD` local | `edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs
+48a202f0 A tabela honesta da S5b: 3 rubricas 100% CEGAS, trabalhadas divergindo em 445 de 464, e o `!` NAO se pede
 d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS
 02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00
 b17b4689 PAREI com a tabela: o vinculo do col369 move 7,07 h e os -4 furos NAO acontecem
-b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor deste ato e `correcao`
-76b8f2da A 09 APLICADA no escopo nomeado: -63,81 h de antecipada, -0,35 de atraso, as outras 17 rubricas em ZERO
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ b5674323 O `motivo` do HistoricoVinculo e CHOICE de 20 chars, nao prosa: o valor
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Duas curas, porque há duas contas: por dia-colab a rubrica declarada sai da comparação e entra num contador cego_<rubrica>; e contra o gravado, soma
-  parcial não se compara com total — se qualquer dia do colab saiu declarado naquela rubrica, o mês dele está incompleto por cegueira do instrumento, e
-  ele sai daquela rubrica. A tabela ganhou a coluna "colabs CEGOS (fora da conta)", porque tabela que não diz quantos deixou de fora é a mesma tabela que
-  mentia com zero, só mais discreta.
+  +107,23 (célula +113,52 — a diferença é o gravado da 10, que o recálculo por evento rega a cada batida).
 
-  Prova em 12 colabs (181 dia-colab), antes → depois:
+  A tabela que decide (465 colabs, 2.890 dia-colab):
 
-  ┌────────────────────────┬────────────────────────┬──────────────────────────────────┐
-  │        rubrica         │         antes          │              depois              │
-  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
-  │ horas_noturnas         │ −454,70 h em 13 colabs │ +0,00 · 0 divergentes · 30 CEGOS │
-  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
-  │ horas_atraso           │ −0,60 h em 2 colabs    │ +0,00 · 0 divergentes · 30 CEGOS │
-  ├────────────────────────┼────────────────────────┼──────────────────────────────────┤
-  │ horas_saida_antecipada │ 0,00                   │ +0,00 · 0 divergentes · 30 CEGOS │
-  └────────────────────────┴────────────────────────┴──────────────────────────────────┘
+  ┌────────────────────────┬─────────────┬─────────────┬─────────┬─────────────┬───────┐
+  │        rubrica         │   gravado   │ calculador  │  delta  │ divergentes │ CEGOS │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_atraso           │ 28,94       │ 158,64      │ +129,70 │ 22          │ 182   │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_saida_antecipada │ 80,90       │ 92,87       │ +11,97  │ 10          │ 182   │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_folga_trabalhada │ 232,57      │ 264,05      │ +31,48  │ 3           │ 0     │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_trabalhadas      │ 23.972,52   │ 24.079,75   │ +107,23 │ 27          │ 0     │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_noturnas         │ 5.786,47    │ 5.787,14    │ +0,67   │ 12          │ 0     │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_intra_indenizada │ 795,50      │ 781,61      │ −13,89  │ 14          │ 0     │
+  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
+  │ horas_extras_50 / _100 │ 1,00 / 0,00 │ 1,00 / 0,00 │ 0,00    │ 0           │ 41    │
+  └────────────────────────┴─────────────┴─────────────┴─────────┴─────────────┴───────┘
 
-  E as que não dependem de par seguem falando: trabalhadas +11,35 h, intra −3,38, extras 50 +7,41, extras 100 +8,03, folga +13,92. Por dia-colab:
-  cego_horas_noturnas=170 de 181.
+  O ! ainda não sai, e o motivo é a sua própria lei (2): "a troca da S5b não cria desconto novo" — e a tabela diz que ela cria. O NAO_DECIDE das três
+  classes resolveu uma parte, e o número mostra qual: os 182 colabs cegos em atraso e antecipada são exatamente os de MotorComercial, Motor12x36 e
+  MotorIntermitente. Mas sobram 283 colabs cuja classe JULGA, e nesses o calculador cobra +129,70 h a mais que o gravado. A declaração calou quem o motor
+  nunca cobrou; ela não fez o calculador concordar com quem o motor cobra.
 
-  O que isso não resolve, e fica nomeado: o instrumento continua sem modo que alimente par. Os dois que existem são o por sequência (cego em noturna e
-  pontualidade, por construção declarada em :336) e o --pares-da-autoridade, que a própria flag descreve como "MEDIDO em 28/09 e AINDA PIOR". Então o ! da
-  troca só pode ser pedido sobre as rubricas que não dependem de par — e a frota inteira está rodando agora com o instrumento curado para dar esse
-  número.
+  Então a pergunta da S5b muda: deixa de ser "qual classe cala" e passa a ser "por que o calculador cobra mais atraso que o motor nas classes que julgam"
+  — 22 divergentes em 283. Isso é RED a escrever e cura de origem, não declaração. As outras seis rubricas estão em faixa de troca.
 
-  Em paralelo, a GESTAO-HE-CALENDARIO-CONTROLE está sendo construída por um agente na raia wt-ui, com os limites literais da sua ordem: só templates/,
-  static/ e teste de tela nas duas cascas, sem suíte cheia porque a pista é da S5b, o que precisar de .py ou da migration do limite por cadastro vai
-  listado para a main (sem ponte inventada nem valor cravado), e merge e deploy só com o seu smoke. A célula está em CONSTRUINDO na raia, e a sessão
-  principal não parou.
-
-✻ Waiting for 1 background agent to finish
+  O DIFF fechou, que era a condição da sua ordem de 20:0x, entã Jump to bottom (ctrl+End) ↓  a ORDEM VIVA anda para COL369-FOLGA-NAO-DECLARADA — a Pauta
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 3 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 4 monitors · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading test_ui_cal_competencia.py gate precedent                                                          2m 14s · ↓ 132.1k tokens
+  ◯ general-purpose  Counting url_autorizar_marcados in gestao_he.html                                                          7m 44s · ↓ 170.2k tokens
   ⧉  index
 ```
