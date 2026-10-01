@@ -4,7 +4,7 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: DISPUTA-FECHADA-SEM-RESOLUCAO -->
+<!-- ORDEM-VIVA-TOPO: S5b-CALCULADOR-ESCREVE -->
 <!-- ^ o 1o item ABERTO da ORDEM VIVA, em UM lugar. Ate 01/10 este nome estava COPIADO dentro de
      `bin/tests/test_hook_nao_cobra_congelado.sh` como literal, e a copia envelheceu: a ORDEM VIVA
      de 28/09 e `S3 -> S4 -> S5b`, as duas primeiras FECHARAM (29/09 e 30/09) e a S5b esta em PAREI

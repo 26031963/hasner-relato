@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 17:25:01.**
+**Medido em 01/10/2026 17:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
+| `HEAD` local | `e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava` |
 | `origin/main` | `8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e8021770 ORDEM VIVA passa a apontar a S5b, e a secao O14 ganha a linha PROVA: que faltava
 8a6d5bcc L-093 FECHADA: aplicada por ele as 17:07, prova publicada, 09 intacta por hash
 fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero da sombra era 32/0
 3f09091b O20 FECHADA: censo em ZERO, e o numero certo so apareceu depois de quatro correcoes minhas
 4793cc10 O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
-8c5788ac O20 fatia 4: o remedio de MARKUP entra no sitio unico, e o censo verdadeiro vira TETO que so desce
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
+ M app/ponto/calculador/regras.py
+ M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/tests/test_s5b_regra_pontualidade.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,40 +98,40 @@ fb4e10af PROVA do apply da L-093: 45 campo-colab descem e 2 SOBEM -- e o numero 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E (entrada que não fechou). É o PONTUALIDADE-EM-TURNO-ABERTO outra vez, o item que já está esperando seu !, com a lei escrita desde 08/08. A L-093 não
-  pode subir pontualidade de ninguém; o que subiu foi a pontualidade errada de um turno aberto, gravada quando o recálculo trouxe aquele fechamento ao
-  presente.
+● Lei nova registrada e aplicada. Primeiro o registro, no mesmo turno.
 
-  Exportada intacta, por hash do GRAVADO — não do TXT, que é string guardada e não provaria nada: mes=09 9b61e18ba18a1f76 antes e depois; mes=08 idem; só
-  a 10 mudou.
+  Ran 4 shell commands
 
-  E a deriva, separada (foi ela que me pegou em 26/09): dos 73 fechamentos mexidos, a maior parte não é da lei — minutos_abonados +37.770 em 22 colabs é o
-  backfill do abono (ponto/0068, fatia abono-no-ar): 629,5 h que já existiam e agora estão no gravado. Mais minutos_previstos −10.988 em 4, horas_falta
-  +19,33 h em 2 (dinheiro para o outro lado, com dono) e saldo_banco_horas −569,91. Nenhuma rubrica de HE, folga trabalhada ou intra se move — 0,00 nos
-  572.
+● Agora a segunda metade da ordem: medir a folga do 12x36 pelas duas hipóteses.
 
-  Próximo da fila: O21. Sigo pela S5b como você mandou.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
+● As duas hipóteses dele caem: o motor produz periodos_ft = 0. Medindo por que.
 
-  Searched for 2 patterns, ran 3 shell commands
+  Ran 2 shell commands
 
-● O serviço já existe com 9 selos e a grade já está pronta. Medindo o cartão e o app.
+● Terceira causa, e nenhuma das duas dele — e metade dela é minha. Conferindo a chave da alimentação.
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● O buraco é o APP: api/views.py tem 0. Os ~750 veem dia decidido sem saber o quê.
+● É a chave. celulas.get((colab_id, data)) e eu passei {data: cel} — sempre miss, sempre fallback aritmético.
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 1 shell command
 
-❯ aval Ronald 01/10 lei (2): a troca da S5b NAO cria desconto novo. Pontualidade em MotorComercial, Motor12x36 e MotorIntermitente fica em NAO_DECIDE no
-  calculador (declarado, com o numero: +272,67 h atraso, +184,32 h antecipada), igual ao motor de hoje. Ligar pontualidade no comercial com marcos e obra
-  propria (L-084), com DIFF e aviso ao admin, depois da troca. E medir a folga do 12x36 pelas DUAS hipoteses: fonte do dia_de_trabalho e o passo
-  escala_certa (fechamento.py:429-461: sem escala certa a hora vai para trabalhadas). Refazer o DIFF; o ! da troca so com as rubricas-alvo se movendo.
-  Segue a fila.
+❯ aval Ronald 01/10 17:3x: (1) a linha ORDEM-VIVA-TOPO do BACKLOG passa a ser S5b-CALCULADOR-ESCREVE; o hook cobra a S5b ate fechar, e a O21 volta para a
+  fila depois dela. (2) escrever a PROVA: da secao O14 (RELATO:165) e republicar. Segue a fila.
 
-✢ Fermenting… (18m 51s · ↓ 16.1k tokens · still thinking)
+  Ran 1 shell command
+
+● Duas ordens. A linha da ORDEM VIVA e a PROVA: do O14.
+
+  Ran 2 shell commands
+
+● Lei (2) mordeu: antecipada +184,32 → +0,80. A folga não se moveu — então é a terceira causa. Medindo-a.
+
+● Running 1 shell command…
+
+✢ Fermenting… (24m 21s · ↓ 37.0k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
