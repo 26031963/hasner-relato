@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:55:31.**
+**Medido em 01/10/2026 19:00:45.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 
 ```
  M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
@@ -97,44 +98,44 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 7 shell commands
-
-● Background command "Aguardar o veredito da suite" completed (exit code 0)
-
-  Read 1 file, ran 4 shell commands
-
-● Enquanto a suite roda, o estado do marco:
-
-  PONTUALIDADE-EM-TURNO-ABERTO está commitada em 19e17c5f, com a lei que você citou (TETO TEMPORAL, seção 6 (b), de 08/08) e juiz novo = 0.
-
-  - Onde a guarda mora: no laço por dia de MotorBase._aplicar_teto_pontualidade (:849), não em aplicar_tolerancia — a tolerância vê um par, e o par que
-    recebeu os 8,23 h do col890 (07:34→10:20) está fechado. Quem não fechou foi o turno, que é fato do dia. Os três caminhos que recalculam pontualidade
-    chamam esse laço, então a lei vale nos três sem se escrever três vezes.
-  - Par nulo é literal: col399 18:30E 18:30S, duração 0,0 min. Não criei limiar de duração ínfima — essa pergunta tem juiz próprio
-    (detectar_par_relampago, e core/juizes.py diz que nenhum outro leitor pergunta). O col473 (19:00E 19:23S, 23,6 min) não é nulo e a guarda não o toca.
-  - RED: 6 casos, 5 vermelhos na árvore do HEAD, OK na curada. O 6º (dia fechado, 40 min de atraso) passa nos dois mundos — é o que morde.
-  - DIFF de frota da 10, publicado antes: DIFF_FOLHA=7, 7 campo-colab descem, 0 sobe (antecipada −28,55 h, atraso −0,79 h, 5 colabs de emp2). No TXT muda
-    uma linha em toda a frota: emp3 col81, rubrica 8069 (horas faltas parcial), 5,12 → 2,61 h.
-  - A 09 está intacta — e a exposição dela é sua decisão: 61,30 h em 14 dia-colab de pontualidade lavrada sobre dia que o motor diz aberto, os maiores
-    col820 07/09 e 15/09 com 11,00 h cada. Item 09-TURNO-ABERTO-EXPOSTA, espera o !.
-
-  Duas correções minhas, ditas onde estavam escritas: a primeira conta da exposição foi por forma (batidas em número ímpar) e dava 169 dia-colab / 126,29
-  h — inflava 12×; e eu escrevi "NO AR" no BACKLOG antes de deployar, o que ainda não é verdade: o .py só entra com o deploy.sh, que vem assim que a suíte
-  fechar.
-
-  As três ordens de 18:3x/18:4x estão registradas no mesmo ato (PROMPTS + células): UI-RESPOSTA com a escolha (A) e os dois ajustes (a faixa começa em
-  TOLERANCIA_CONFORMIDADE_MIN, não em 5; sem pontualidade a frase para em "grava no espelho"), GESTAO-HE-CALENDARIO-CONTROLE com o desenho aprovado e
   merge só com o seu smoke, e AVAIS-NA-MESA como item novo. O hook continua nomeando a S5b, antes e depois da escrita.
 
   Dois achados medidos no caminho, registrados e não curados: PREVISTO-EM-DUAS-FONTES (o teto lê 660 min para o col221 01/10, o DiaPago gravado diz 139 —
   exatamente a duração do primeiro par) e a hipótese (b) da folga do 12x36, que morre pelo sinal: ela prevê troca (folga desce, trabalhadas sobe) e o DIFF
   mostra os dois subindo, o que é dupla contagem, não fonte trocada.
 
-✻ Crunched for 1h 46m 52s · done 6:53 PM · 2 shells still running
+✻ Crunched for 1h 46m 52s · done 6:53 PM · 4 shells still running
+
+❯ aval Ronald 01/10 19:0x: (1) suite fechada -> bin/deploy.sh da PONTUALIDADE-EM-TURNO-ABERTO, smoke em prod do col890 22/09 e do col221/col99 01/10 com
+  PROVA no RELATO, e push UM so. (2) 09-TURNO-ABERTO-EXPOSTA: aplicar tambem na 09 -- lei existente, o TXT e fotografia do calculo e correcao provada
+  entra em qualquer competencia. Condicoes: DIFF de frota da 09 publicado antes (os 14 dia-colab, 61,30 h, por colab), so pode DESCER desconto, reversao
+  em logs, versao anterior do TXT guardada pela porta, TXT novo com hash. Depois segue a fila pela S5b !
+
+  Searched for 3 patterns, read 1 file, listed 1 directory, ran 15 shell commands
+
+● Aguardando a suíte fechar para deployar. Enquanto isso, as duas árvores do DIFF da 09 (pré e pós-guarda, nascidas de git show) já estão montadas e a
+  foto em modo leitura está escrita — ela chama recalcular_fechamento_mes(..., somente_leitura=True), que é a função real da folha, sem gravar nada.
+
+  Um achado na preparação, que vou registrar: a guarda da L-092 em fechamento.py:72 levanta antes do laço, inclusive em somente_leitura=True — ela diz
+  "antes de qualquer escrita", mas nesse modo não há escrita nenhuma. Para o DIFF uso a porta com motivo escrito (o seu ! de 19:0x), não um contorno.
+
+  Read 1 file, ran 3 shell commands
+
+● Aguardando o veredito da suíte (notificação automática quando o container sair). Nada mais entra na pista de teste até lá — um run por vez.
+
+  Enquanto isso, registrei o achado irmão na célula do PREVISTO-EM-DUAS-FONTES: a guarda da L-092 impede medir uma competência exportada, porque levanta
+  antes do laço mesmo em somente_leitura=True, e a porta que destrava loga recalculo_de_competencia_EXPORTADA para atos que não gravaram nada. A cura é
+  uma linha, mas mexe na guarda mais perigosa da casa — não entra de passagem.
+
+  Reading 1 file, running 1 shell command…
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; wc -l $S/pta_suite.log; grep -oE "^Ran [0-9]+
+     tests" $S/pta_suite.log | tail -1; tail -c 200 $S/pta_suite.log
+
+· Gusting… (3m 59s · ↓ 14.1k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ deploya e roda o smoke do col890 em prod
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
