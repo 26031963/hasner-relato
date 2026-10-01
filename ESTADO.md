@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:52:01.**
+**Medido em 30/09/2026 21:57:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou` |
+| `HEAD` local | `b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar` |
 | `origin/main` | `b6f267f8 O selo que estava VAZIO desde 30/06 agora prova o gate chamando o emissor -- e achar isso resolveu o col499 e achou um except que engole trilha` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b7a2b6b2 O `extends` nao era a primeira tag -- e o selo que me cobrou o motivo do passe livre estava certo em quebrar
 7236bfcd Rodape do TICKETS pelo gerador, que o merge da raia desatualizou
 e9e49d37 Merge branch 'raia-ui'
 42b3be2d COL900: a minha medicao estava contaminada TRES vezes, a porta nao faz o que a lei pede, e eu revertei 8 celulas
 965bdde7 Duas curas que o merge exigia: a lapide multilinha voltaria a vazar, e o selo do espelho nao sabia seguir o include
-7859e7fa Placar do topo do TICKETS reescrito pelo gerador
 ```
 
 ## `git status --short`
@@ -96,42 +96,42 @@ e9e49d37 Merge branch 'raia-ui'
 
 ```
 
-● O push recusou em tickets_rodape_vs_git — o rodapé do TICKETS contra o git, que o merge desatualizou. Vendo a cura que ele mesmo nomeia:
+● O log responde o que importa: nenhum 500 em /relatorios/ nos últimos 40 min — ninguém pegou a janela. Conferindo os templates pela casca certa:
 
   Ran 1 shell command
 
-● A cura que ele nomeia é bin/tickets_rodape.sh --escrever (o rodapé diz 346ad7ab, 28 commits atrás). Rodando e empurrando:
+● Os seis compilam em prod, e ninguém pediu /relatorios/ na janela — o template quebrado não serviu 500 a humano nenhum. Sorte, e vale dito assim.
+
+  Agora os outros dois: o selo que já existia do passe livre POSTa sem motivo, e eu tornei o motivo obrigatório. Lendo-o para atualizar com fidelidade:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● 13 verdes. E há a lição que já me pegou uma vez hoje: a raia tem a mesma cópia do relatorios/index.html, e o próximo merge reintroduziria o defeito. Curando lá também:
 
   Ran 2 shell commands
 
-● O push está correndo com a suíte como portão (~16 min). A recusa anterior foi do tickets_rodape_vs_git, e a causa não é descuido: o merge trouxe 18 commits de uma vez, e o
-  rodapé mede distância contra o remoto — nenhum commit individual estourava o teto de 5, o merge estourou. Curado pelo gerador que o próprio selo nomeia.
+● Achei um defeito que estava no ar, e o selo me pegou depois do deploy.
 
-  Enquanto isso, o estado do que você pediu:
+  templates/relatorios/index.html tinha 38 linhas de {% comment %} antes do {% extends %} — e o Django exige que o extends seja a primeira tag. A ironia está dentro do arquivo: a
+  lápide logo depois do extends diz, textual, "o {% extends %} É A PRIMEIRA LINHA, e isso não é estilo: o Django exige que ele seja o primeiro". Eu escrevi a frase certa e pus o
+  bloco acima dela.
 
-  ┌───────────────────────────────┬───────────────────────────────────────────────────────────────────────────────┐
-  │             item              │                                    estado                                     │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
-  │ 1. autorizar_he → DP e hasner │ no ar, 5 setores, supervisão fora, com trilha                                 │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
-  │ 2. COL900                     │ PAREI — o gravado não se moveu, 8 células revertidas, PAREI no topo do RELATO │
-  ├───────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┤
-  │ 3. merge + deploy             │ no ar — deploy no mesmo ato do merge, 3 rotas provadas, importerror_500=0     │
-  └───────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┘
+  Como template é vivo, /relatorios/ ficou com o template quebrado no ar entre o deploy de 21:43 e a cura. Medido: zero requests a /relatorios/ na janela — ninguém pegou o 500.
+  Isso foi sorte, não desenho, e é exatamente por isso que o selo existe. Os seis templates que eu toquei agora compilam em prod, conferidos um a um.
 
-  A tela está servindo agora para o seu smoke: /ponto/gestao-he/ com a aba Autorizar/Não, e o calendário com o relógio riscado nas duas pontas.
+  Curei nas duas árvores no mesmo ato, e não por zelo: a mesma classe me pegou uma hora antes com as lápides multilinha do gestao_he.html — curei só em main, e a raia seguiu com a
+  versão velha que o merge reintroduziria. Arquivo que existe nas duas se cura nas duas.
 
-  O que o item 2 precisa de você, e é a única coisa que me trava ali: a porta regenerar_celulas_vinculo alcança o horizonte do vínculo, não o dia — então a sua lei ("regera só os
-  dias em que o template acerta") não cabe nela. As três saídas estão no RELATO com os números: a porta ganhar modo DIA, corrigir o cadastro do col438 (vínculo, seu !), ou tudo ir
-  para CADASTRO x REALIDADE. O col900 é o caso em que a sua lei funcionou limpa — 15 dias com o template confirmado por 1 a 5 min.
+  E o outro vermelho era um selo certo me cobrando. test_post_add/test_post_remove do passe livre POSTavam sem motivo, e eu tornei o motivo obrigatório às 21:2x. Ele afirmava o
+  contrato antigo e quebrou com razão. Os dois ganharam motivo — e junto um caso novo que morde: test_MORDE_sem_motivo_a_tela_NAO_muda_a_flag. Sem ele, "atualizar os dois POSTs"
+  seria esconder a lei: o selo diria OK tanto com a exigência quanto sem ela.
 
-  E registro o saldo do dia sem adoçar: quinze erros de instrumento, três deles no mesmo censo do COL900, e a sua correção das 21:2x foi a que abriu os outros dois. O padrão é um
-  só e já está na memória — medir a declaração em vez do fato, ou usar como régua a autoridade que está sendo julgada.
+  O push está rodando com esses dois curados. Aviso o veredito.
 
-✻ Worked for 54s · done 9:45 PM · 1 shell still running
+✻ Sautéed for 3m 0s · done 9:56 PM · 1 shell still running
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ avisa quando o push fechar
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
