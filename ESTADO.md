@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:212 AFIRMA ato sem PROVA ao lado -- | (1) `NAO_DECIDE` vazio ou so o item 5 | **FEITO** -- so `horas_falta`, `horas_reflexo_dsr`, `saldo_banco_horas`, com selo que exige a caus
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:103 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:01:01.**
+**Medido em 01/10/2026 15:06:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1c1ac3e0 O13 FECHADA: o codigo estava curado e a guarda que faltava esta verde (8 casos, por AST)` |
+| `HEAD` local | `11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta` |
 | `origin/main` | `bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+11c7023e O14: celula dentro do teto (304 -> 287), com o numero e o smoke que falta
+f55d5526 O14 publicado e no ar; a celula diz o numero e o smoke que falta
+099fa332 O14: o app dos ~750 para de inventar turno aberto no cross-meia-noite -- 1.349 avisos FALSOS saem, 0 batidas somem
 1c1ac3e0 O13 FECHADA: o codigo estava curado e a guarda que faltava esta verde (8 casos, por AST)
 c69aadf2 S5b-4-REGRAS: celula de estado dentro do teto, com os 5 observaveis feitos e o ! nomeado
-bee887d5 Os tres observaveis que nao dependiam dele: medidos, e dois batem exato contra o gravado
-1766ebbb CORRECAO: a hipotese da folga estava errada -- troquei o juiz, o numero NAO se moveu, e ha TRES numeros
-c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- desenho publicado, obra esperando o !
 ```
 
 ## `git status --short`
@@ -95,36 +95,36 @@ c763ea36 GESTAO-HE-CALENDARIO-CONTROLE: a celula diz o que a ordem manda -- dese
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  0 acima de 300, com o veredito do hook idêntico antes e depois.
+  Duas vezes eu estava errado, e disse onde
+
+  (1) Atribuí o zero do col142 ao gate do T8 e pedi a lei em cima disso. Ele é MotorComercial, e o gate não está no caminho dele — eu havia chamado
+  aplicar_tolerancia à mão e li o resultado como se fosse o do motor. Quem me pegou foi o próprio RED (dava zero até no caso de 90 min). O achado
+  verdadeiro é maior: 223 de 571 colabs com horas_atraso = 0,00 h exato — três classes de motor nunca julgam pontualidade.
+
+  (2) Publiquei que as +1.035,67 h de folga eram fonte errada no chamador. Troquei o juiz, rodei o DIFF: as mesmas 1.035,67 h. E há três números para a
+  mesma rubrica — motor 595,23 · gravado 217,64 · calculador 1.253,31. Não escolho qual está certo: folga trabalhada paga 100%.
+
+  Esperando você
+
+  1. T8: vale o recorte, ou a versão literal com col473/col399 dentro?
+  2. 223 colabs sem pontualidade — é deliberado?
+  3. Folga: por que o motor vivo discorda do gravado?
+  4. Relavra da 10 — o comando está no RELATO; meu ambiente barrou a escrita.
+  5. Gestão de HE — desenho publicado (col616: 13 → 3 com o limite), espero seu ok.
+  6. CLAUDE.md: dos 27 parágrafos, zero é só história. Destrava com "pode quebrar o parágrafo em dois, sem mudar palavra".
+
+  Fila 1 agora aponta O15 (Pauta DP dias em aberto), que eu não toquei.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: HIGIENE-DE-CONTEXTO -- Infra de sessao (ordem Ronald 01/10 14:0x), nenhuma lei de negocio. bin/handoff_sessao.sh ->
-  app/docs/HANDOFF-
+  ⎿  Stop hook error: siga: O15 -- PAUTA-DP-DIAS-EM-ABERTO (Ronald 24/09 08:4x, prazo 10:00) -- folha de hoje: Pauta pro DP com dias_em_aberto (2
 
-  Read 1 file, ran 9 shell commands
+● Ver o cron e rodar a pauta em dry · 1m 34s
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '920,932p' app/config/crons.py; echo "=== DRY em prod (so leitura) ==="; timeout 520 docker exec saas_core
+     python manage.py tenant_command pauta_dia_em_aberto --schema=juliani --por admin --dry 2>&1 | grep -vE "objects imported" | head -22 (1m 33s · 15
+     lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● The fila's next item is one I can still advance myself — the folga gap is in my own chamador.
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● My hypothesis was wrong — the number didn't move. Measuring the real cause.
-
-  Ran 2 shell commands
-
-● My hypothesis was wrong. Publishing what the measurement actually says.
-
-  Ran 2 shell commands
-
-● Two confirmed, and the third turned up something bigger. Checking it.
-
-  Ran 8 shell commands
-
-● The fila's next item is actionable — same cure as O13, in the app's casca.
-
-● Achar o sitio do O14
-  ⎿  $ sed -n '1398,1432p' api/views.py; echo "=== o 2o sitio (1874) ==="; sed -n '1866,1886p' api/views.py
-
-· Pouncing… (7h 28m 25s · ↓ 898.8k tokens · thinking)
+· Pouncing… (7h 33m 55s · ↓ 913.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
