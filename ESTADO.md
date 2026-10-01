@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:41:31.**
+**Medido em 01/10/2026 06:47:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
  M app/docs/RELATO.md
  M app/escala/alimentacao.py
  M app/relatorios/pdf_espelho.py
+?? app/ponto/management/commands/diff_espelho_alimentacao.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,11 +100,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  tela roda com uma escala que nem cobre o período pedido.
-
-  (3) datas_justificadas e os dias suprimidos, que saem do laço de ausência do PDF.
-
-  E isso explica um dos quatro REDs do O9: o col823, listado lá como "(janela)", está entre os 87 com dois vínculos. O RED que o item chamou de janela é, na verdade, vínculo.
 
   A inversão é o achado mais importante do ciclo. O item diz "o PDF chama espelho_do_colab e só desenha" — e eu vinha medindo para cumprir isso. A medição diz o contrário: a
   montagem completa do motor é a do PDF; a pobre é a do espelho. Trocar agora importaria o buraco para o cartão do Art.74 §2º e para a folha que o lê. A ordem certa é primeiro
@@ -126,12 +122,17 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 
 ● O ruff pegou antes do push (o hábito novo funcionando): o import do _DIO ficou órfão. Removendo e provando que a extração não mudou nada:
 
-● Remover o import orfao e rodar relatorios e escala · 4m 14s
-  ⎿  $ sed -i '323d' relatorios/pdf_espelho.py && sed -n '320,325p' relatorios/pdf_espelho.py && cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run
-     --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app -w /app saas-hasner-core:latest ruff check . --output-format concise 2>&1 | tail… (4m 11s · 7 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Percolating… (8h 38m 56s · ↓ 600.2k tokens)
+● 1086 testes OK em relatorios + escala, ruff limpo — extração provada neutra. Agora o DIFF do O108:
+
+  Ran 2 shell commands
+
+● O DIFF funciona e o resultado é decisivo em 15 colabs: A (hoje) dá datas_falta = 0 em todos, B move 6, C move 7 — e nenhum campo de dinheiro se move. Rodando a frota:
+
+  Running 1 shell command…
+
+✢ Percolating… (8h 44m 25s · ↓ 605.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
