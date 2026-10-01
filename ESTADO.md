@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:30:45.**
+**Medido em 01/10/2026 10:36:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b6b9a620 S5b: o DIFF por rubrica esta na mesa, e com ele a razao de nao subir a troca sem o `!`` |
+| `HEAD` local | `9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato` |
 | `origin/main` | `2b7a8537 O placar do topo do TICKETS volta a bater com o mundo` |
-| commits a subir (`ahead`) | **19** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9f3deacb MERGE da FORMA B da Gestao de HE: a tira responde habito x evento, e o merge e o deploy sao o mesmo ato
+b2575070 A FORMA B da Gestao de HE: a tira do periodo responde habito x evento sem o admin montar a conta de cabeca
+42b9b707 A celula do S5b passa a dizer 'espera o `!`' com as palavras que o hook le
 b6b9a620 S5b: o DIFF por rubrica esta na mesa, e com ele a razao de nao subir a troca sem o `!`
 fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
-5b498d0b O almoco nao e ponta: a tela inventava HE fora da janela sobre a saida do intervalo
-104ab974 Os cinco comentarios que eu deixei RENDERIZANDO na tela sairam do ar -- e o selo que ele pediu ja existia
-7a2e4afd RELATO item 3: o O108 nao sobe pela metade, e quem disse isso foram tres selos dele
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ fd5f076d O numero que ele pediu: 850 dos 6.220 dias da 09 eram almoco, 13,7%
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 3 shell commands
 
-  Uma escolha que tomei na cura: os índices são dos marcos, não das batidas. Se a 1ª entrada não foi batida, a 2ª E da grade é a volta do intervalo — promovê-la a ponta cobraria
-  atraso de almoço como entrada. Dia sem a 1ª entrada batida não tem ponta de entrada, e há selo.
+● Background command "Esperar o veredito da suite aparecer no log" completed (exit code 0)
 
-  Os três ajustes, feitos:
-  1. Cura + relavra vieram antes de construir.
-  2. A lista desce pela maior espiga, e não existe campo de classe em lugar nenhum — um selo proíbe eh_habito/classe/tipo_padrao na linha. Ordenar não é classificar.
-  3. Escala única, teto de 120 min declarado na tela. Escolhi 120 porque é o dobro do teto de entrada da L-097: o que passa daí não é "esticou o horário", é dia em outro turno — e
-     a L-084 já manda esse dia para CADASTRO × REALIDADE. O opcional entrou: traço para cima = antes da entrada, para baixo = depois da saída. E a tira cobre o período inteiro,
-     não só os dias com ponta, senão "12 de 15 plantões" e "12 de 60 dias" viram o mesmo pente cheio.
+  Ran 4 shell commands
 
-  No AUTORIZAR, o botão diz "+N min de HE" antes do clique. 53 selos verdes, 11 novos.
+● No ar. Merge 9f3deacb + bin/deploy.sh no mesmo ato, sem .py na árvore viva antes do reload. Relavrando o retrato agora para o denominador entrar na frase, e empurrando pela
+  régua.
 
-  Um achado de desenho no caminho: o estado de cada dia no retrato é foto da hora da lavratura — a tela repetia o botão sobre o dia que o admin acabou de decidir. Agora a
-  pendência vem do retrato (medi-la custa 7 min) e a decisão vem do DecisaoHE (uma query), e nenhum dos dois recalcula o outro. Quem achou foi o selo do seu item 7.
+  Os 13 passos, atualizados para a forma B — /ponto/gestao-he/ (admin com autorizar_he):
 
-  Uma decisão minha, para você derrubar se quiser: ficou página, não drawer. A ordem de 09:4x pedia drawer e a de 09:5x o rebaixou a referência ("use se servirem à pergunta");
-  drawer serve para ver detalhe sem perder a lista, e aqui a lista é a tela — o detalhe é a própria linha que abre. A página também é linkável, imprimível, e é onde o PDF mora.
+  1. Abrir com empresa/mês/ano → uma linha por colaborador, com a tira do período e a hora do retrato no topo.
+  2. A lista desce pela maior espiga: o dia de 165 min vem antes do de 9 min em doze.
+  3. Olhar duas linhas e não ler número: hábito é pente espaçado e baixo; evento é uma espiga sozinha.
+  4. Conferir a frase ao lado: "9 min antes da entrada em 12 de 15 plantões" × "165 min … em 1 dia de 21 trabalhados".
+  5. Traço para cima = antes da entrada; para baixo = depois da saída. A legenda acima diz o teto: cheio a partir de 120 min.
+  6. Digitar um nome ou CPF → a lista só reduz (não há quadro de filtros).
+  7. Clicar a linha → abre nos dias: cada dia com as duas pontas separadas, hora batida contra o marco, e os totais da competência dele.
+  8. No dia, "Autorizar +N min de HE" — a consequência está no botão, antes do clique.
+  9. Autorizar sem motivo → recusado, com a frase da porta.
+  10. Autorizar com motivo (≥10 caracteres) → toast dizendo que o fechamento foi para a fila de recálculo, e a tira daquele dia fica verde.
+  11. "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", no topo → o diálogo da casa (não o do navegador) com a conta e a consequência; depois do sim, o
+      contador vai a zero e as tiras ficam cinza.
+  12. Em /relatorios/: o cartão Gestão de HE com o contador; empresa sem retrato aparece como "Não lavrado ainda: <empresa>".
+  13. Reabrir a tela depois da ciência → os dias decididos não voltam com botão; só um dia novo bloqueado volta como sem decisão.
+
+  Duas coisas que mudaram no caminho e que você vai ver: a lista encolheu 13,7% (era almoço) e o estado de cada dia agora vem do DecisaoHE vivo, não da foto — era por isso que a
+  tela repetia o botão sobre o dia recém-decidido.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia 10 em diante (aval Ronald 30/09 13
+  ⎿  Stop hook error: siga: GESTAO-HE-FORMA -- a FORMA da Gestao de HE se refaz; a funcao e os dados FICAM (ordem Ronald 01/10 09:4x). A pagina de hoje -- qu
 
-  Ajustar a redacao e conferir o hook · 34s
-  ⎿  $ python3 - <<'PYEOF'
-     import io
-     P='docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     a = '**A LEI CHEGOU (BUG-144) e o DIFF POR RUBRICA esta PUBLICADO: a obra espera SO o `!` dele.**'
-     assert t.count(a)==1
-     # o hook le a frase `espera o \`!` -- escrever "espera SO o" nao casa, e a celula ficaria … (33s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Pouncing… (2h 58m 9s · ↓ 293.8k tokens)
+✢ Pouncing… (3h 3m 25s · ↓ 303.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
