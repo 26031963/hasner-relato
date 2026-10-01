@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 13:36:31.**
+**Medido em 01/10/2026 13:42:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/ponto/calculador/regras.py
  M app/ponto/management/commands/diff_calculador.py
  M app/ponto/motor_calculo_v2.py
@@ -101,24 +103,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O DESENHO PEDIDO (palavras dele + as minhas, aprovadas):
-  - a celula do dia mostra o NUMERO: ▲19 antes da entrada, ▼5 depois da saida, as duas quando houver. Sem "HE" e sem "min" repetidos; a legenda diz uma
-  vez.
-  - dia com HE tem fundo cheio e numero escuro; dia sem HE fica claro.
-  - tres estados, nunca so por cor: sem decisao (led cinza vazado, numero riscado) · com ciencia (led cinza cheio, numero riscado) · autorizado (led
-  verde, numero normal).
-  - o dia e CLICAVEL: clicar MARCA; uma barra unica confirma "Autorizar N dias, +M min" com motivo. Nada de interruptor que grava no clique.
-  - a tabela vira apoio de conferencia (dia, ponta, bateu, marco, min), sem botao por linha, recolhida por padrao.
-  - LIMITE DE DECISAO por cadastro da empresa (corte Ronald: nasce, default 10 min, so de TELA): dia abaixo do limite segue bloqueado, aparece apagado e
-  NAO conta em "sem decisao"; acima, aparece forte e pede decisao. Nao muda dinheiro nem a L-097.
-  - a frase do padrao ("6 min antes da entrada em 13 de 16 plantoes") ganha a propria acao: dar ciencia no padrao.
-
-  RESULTADOS OBSERVAVEIS (todos, ou INCOMPLETO com a lista):
-   (1) print do calendario com numeros e os tres estados distinguiveis em tons de cinza.
-   (2) marcar 3 dias + 1 confirmacao = 3 autorizacoes pela porta existente (decidir_he), 3 trilhas com usuario, antes/depois e motivo.
-   (3) col616 comp 09: "sem decisao" cai de 13 para os dias acima do limite, com o numero publicado.
-   (4) tabela sem botao por linha.
    (5) limite lido do cadastro, com leitor e rotulo; chave sem leitor = vermelho.
    (6) autorizar e desfazer movem o numero do dia no espelho; ciencia nao move nada.
 
@@ -134,6 +118,24 @@ RELATO, com a lista de nomes do banco como autoridade._
   main, no deploy normal.
 
   Segue a fila; PAREI so em lei ou !.
+
+  Ran 3 shell commands
+
+● Opening the DIFF changed the picture in a way worth stating precisely. Publishing both that and the new order.
+
+● Registrar a ordem nova da Gestao de HE
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='app/docs/PROMPTS.md'
+     t=io.open(P,encoding='utf-8').read()
+     linha = ('- **01/10 ~13:3x — GESTAO-HE-FORMA, 2a volta: o CALENDARIO vira o CONTROLE.** Fila 2, raia `wt-ui`, '
+     'nao corta a S5b. **PROPOSTA ANTES DO C…
+
+· Pouncing… (6h 9m 25s · ↓ 726.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
   ctrl+x ctrl+s to send now
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
