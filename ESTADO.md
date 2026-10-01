@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 15:50:02.**
+**Medido em 01/10/2026 15:55:31.**
 
 | | |
 |---|---|
@@ -24,7 +24,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - por que: 19-26/09: portas 149->149, noites 0-2 fatias, 28 de 44 caidos, O57
 - condicao de saida: criterio do estrutural fechado + corte Ronald
-- pacotes caidos: **74** (baseline divergiu 41, nunca lancada 28, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
+- pacotes caidos: **75** (baseline divergiu 41, nunca lancada 29, o processo morreu sem escrever fim 2, vermelho da ARVORE no lote 2, copia falhou 1)
 
 ## `git log --oneline -5`
 
@@ -126,13 +126,13 @@ d7fb0fe2 O20: celula dentro do teto (319 -> 296)
 
 ● O censo verdadeiro é bem maior do que eu contei. Medindo e declarando o número real.
 
-● Fechar a fatia 4 do O20 · 2m 19s
+● Fechar a fatia 4 do O20 · 7m 48s
   ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); [ $? -ne 0 ] && { echo "### VERMELHO: $f"; echo "$out"|head
      -3; }; done; echo "--- selos de host ok ---"
-     python3 bin/backlog_estado.py "O20" '**18 contratos migrados** para `core/censo_fonte.py` (`codigo_de` pa… (2m 18s)
+     python3 bin/backlog_estado.py "O20" '**18 contratos migrados** para `core/censo_fonte.py` (`codigo_de` pa… (7m 47s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✻ Pouncing… (8h 17m 26s · ↓ 1.0m tokens)
+· Pouncing… (8h 22m 55s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
