@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:16:31.**
+**Medido em 01/10/2026 00:22:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
+| `HEAD` local | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
 | `origin/main` | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
 4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
 db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
 74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
-c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
 ```
 
 ## `git status --short`
@@ -95,39 +95,39 @@ c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turn
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  No ar e empurrado (db84cf30..4c8ed85a): o ! da saída (i) do col900 cumprido, o S5b investigado, o O3 e o O2 fechados, o relógio de 10px.
-
-  S5b — a causa inverte o sinal. O calculador acerta 3 de 3 contra a conta à mão (col43 5,53 · col698 7,00 · col465 1,07) e o motor dá 28,69 h num único dia no col43. Causa: dia
-  de sequência ímpar — o calculador soma pares fechados, o motor faz ponte com a última saída. Então o delta negativo não é o calculador perdendo hora, é o motor creditando hora
-  que as batidas não sustentam. Descartei os 3 primeiros casos que sorteei: dois eram do col950, "[nome]", com batidas sintéticas — e quase publiquei com eles.
-
-  Não parei em "não sei": três hipóteses no RELATO, cada uma com o que a desmentiria, e a pergunta para o admin em uma linha — "ele saiu às 14:00 e voltou sem bater, ou foi embora
-  e a batida das 19:00 não é jornada dele? E a casa paga até a primeira saída ou até a última?". Ela decide os 118 dia-colab de uma vez, porque é a mesma forma em todos. A célula
-  agora diz PAREI no vocabulário que o hook lê — antes dizia "esperando o !", e "esperando" não casa com "espera o", então o hook me devolvia siga com a trava de pé.
-
-  Raia UI — o "Não" em lote, e havia um conflito real. O selo da B2 proibia lote com a L-081 escrita como razão (lote de dinheiro sem DIFF). Em vez de revogar a razão, olhei de
-  que lado dela o seu pedido cai — e o seu próprio texto responde: você pediu "Não" em lote, nunca "autorizar em lote". Autorizar move dinheiro e fica um dia por ato; recusar é o
-  padrão da lei e não move centavo, grava ciência. Lote de ciência não é lote de dinheiro. O lote chama a porta dia a dia, então não nasce um segundo escritor — e há selo por AST
-  provando isso. 22 selos (eram 15), na raia, nada no ar.
-
-  Esperando você:
-  - o ! do TXT da emp2: uma linha move (col881, 02/09, falta 1 dia → meio dia) e ele não foi tocado hoje — o bloco de falta do TXT é derivado ao vivo (export.py:388), então o TXT
-    não é função pura do gravado. Os dois arquivos estão em logs/txt_dominio/, nada no banco.
-  - a resposta da pergunta do S5b.
-  - o smoke em /ponto/gestao-he/ e no calendário (relógio agora 10px).
-
-  Falta para concluir a Gestão de HE: multisseleção no template, busca nome+CPF, filtros, totais da competência, PDF e o atalho na Central com contador — é o próximo, na raia, com
-  a lista do que clicar no fim.
-
-● Ran 1 stop hook
   ⎿  Stop hook error: siga: O106 -- 252 CELULAS FORAM JULGADAS ANTES DE SEREM REESCRITAS (achado MEDIDO 30/09 23:2x, de carona no COL900) -- vered
 
 ● O106: falta a conta pela autoridade. Lendo como o cartório monta a impressão, para chamar a mesma montagem em vez de re-derivar:
 
-● Ler julgar_colab para reusar a montagem da impressao
+  Searched for 1 pattern
 
-✢ Percolating… (2h 13m 56s · ↓ 254.0k tokens)
+● A medida pela autoridade é rodar julgar_colab em DRY nos 26 colabs e ver quais dos 252 dias ele julga (impressão divergiu) contra os que pula. Vendo como o comando monta o
+  emissor:
+
+  Ran 2 shell commands
+
+● A autoridade responde 75, não 252 — o meu número pela forma superestimava 3,4×. Mas falta a pergunta adversarial: a impressão só guarda dna_versao + marcos, então ela é cega a
+  outras mudanças de DNA. Medindo:
+
+  Ran 1 shell command
+
+● A pergunta adversarial achou o ponto cego: entre as 177 que a impressão pula, o DNA mudou em chaves que ela não vê — minutos_jornada em 44 e tipo_ciclo em 6. Conferindo se o
+  julgamento usa essas chaves:
+
+  Searched for 1 pattern
+
+● classificar_dia não lê essas chaves — então a cegueira pode ser inofensiva. A prova definitiva é forçar o re-julgamento e ver se o veredito muda:
+
+  Ran 1 shell command
+
+● A autoridade fecha o número: 4, não 252. Escrevendo:
+
+● Conferir o push do O106 · 2m 51s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o106.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (2m 50s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Percolating… (2h 19m 26s · ↓ 264.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
