@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:33:01.**
+**Medido em 01/10/2026 00:38:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
+| `HEAD` local | `bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe` |
 | `origin/main` | `ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
 ace162de O106 fecha em 4, e eu havia publicado 252: a conta pela forma superestimava 63 vezes
 4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
 db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
 74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
-e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons.py
-?? app/ponto/management/commands/emitir_turno_aberto_retroativo.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,39 +95,39 @@ e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Próximo na raia UI: concluir a Gestão de HE — multisseleção no template (a porta do "Não" em lote já está pronta e selada), busca nome+CPF, filtros, totais da competência, PDF e
-  o atalho na Central com contador.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O104 -- ENTRADA SEM PAR DE 20 DIAS ATRAS NAO TEM COMO ACENDER (achado MEDIDO 30/09 23:2x, no caminho do ! da saida (i)
-
-● O104 está em **corte**, que o hook lê como andável. Antes de aceitar que é "desenho novo", a pergunta da LEI-AKITA 4: a casa já tem a categoria? Medindo quem emite turno_aberto:
-
-  Searched for 1 pattern
-
-● processar_alertas_avancados (*/30) emite turno_aberto_24h. Vendo a janela dele, que é onde o buraco está:
+● Defeito no meu próprio output: o pré-check só olha turno_aberto e eu crio turno_aberto_24h, então a 2ª passada imprime [EMITE] para algo que não emite — a linha mente. Curando
+  no sítio (o cron checa os dois):
 
   Ran 1 shell command
 
-● Buraco confirmado: ele só olha ontem. E o padrão para isso já existe — o "passe retroativo sob ordem". Lendo-o para espelhar os gates em vez de inventar:
+● Agora o output não mente (emitidos=0 ja_existia=3, zero linhas [EMITE]). Escrevendo o selo:
 
-  Searched for 1 pattern, ran 4 shell commands
+  Ran 2 shell commands
 
-● Tenho tudo. Escrevendo o passe retroativo de turno aberto — mesmos gates, mesmo emissor canônico, nenhuma regra nova:
-
-  Ran 1 shell command
-
-● Declarando a casa dele (o selo cobra) e rodando em DRY nos 3 dias do col900 — que é a prova de que o caminho passou a existir:
+● Só a fixture da ausência (precisa de registrado_por). Corrigindo:
 
   Ran 1 shell command
 
-● O DRY acha exatamente os 3 dias que eu havia isolado por turnos_do_colab — o caminho passou a existir. Aplicando, escopado ao col900 como o ! pede:
+● 31 OK. PROVA em prod de que os 3 acenderam e estão vivos:
 
-● Aplicar e provar a idempotencia
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command emitir_turno_aberto_retroativo --schema=juliani --empresa 3 --colab 900 --ini
-     2026-09-01 --fim 2026-09-20 --apply 2>&1 | tail -8; echo "=== 2a passada (idempotencia) ==="; docker exec saas_core python manage.py t…
+  Ran 2 shell commands
 
-✢ Percolating… (2h 30m 26s · ↓ 277.2k tokens · thinking)
+● Os 3 estão vivos em prod (ch27484/85/86, abertos, supervisão). O ! da saída (i) está inteiro agora. Fechando o O104:
+
+  Ran 2 shell commands
+
+● A régua leu [EMITE] da minha mensagem como citação de fatia — mesma família do [VETO_SEM_CELULA]. Tirando os colchetes:
+
+  Ran 1 shell command
+
+● Background command "Fechar o O104, commitar e empurrar" completed (exit code 0)
+
+● Conferir o push · 1m 59s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o104b.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 58s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (2h 35m 55s · ↓ 290.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
