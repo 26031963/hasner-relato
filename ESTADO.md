@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 30/09/2026 21:36:01.**
+**Medido em 30/09/2026 21:41:25.**
 
 | | |
 |---|---|
@@ -104,36 +104,36 @@ f6caf098 O calendario que serve prod estava VIVO e sem commit -- rastreado como 
 
   Ran 1 shell command
 
-● Perfeito: o calendário já faz exatamente esse padrão para as órfãs (orfas_map[(dia, mês)] casado por H:M). O riscado usa a mesma forma, com a mesma função. Vendo como o espelho
-  a chama, para copiar os parâmetros do cadastro:
-
-  Ran 2 shell commands
-
-● Tenho o padrão exato. Implementando no calendário — mesma função, mesmo cadastro, chaveando por H:M como ele já faz com as órfãs:
+● 7 verdes — incluindo a sua RED das duas pontas e o caso que achou o defeito do marco None. Commitando e rodando os selos que o espelho e o calendário têm, porque eu mexi nos
+  dois templates:
 
   Ran 1 shell command
 
-● Agora o template. O partial rende a hora em dois ramos, então vou criar um include para a hora — e preciso copiar o tooltip do espelho, porque a ordem diz "tooltip igual".
-  Achando-o:
+● Dois vermelhos, os dois legítimos:
+
+  1. O selo do espelho afirma que data-he-riscado está no fonte daquele arquivo — e eu extraí o markup para um include. A intenção do selo (o espelho desenha o riscado) continua
+     válida; a implementação dele tem de seguir o include.
+  2. gestao_he.html:35 tem lápide multilinha na raia — eu corrigi em main depois do cherry-pick, então o merge reintroduziria o defeito. Achado de peso.
+
+  Curando os dois:
 
   Ran 1 shell command
 
-● O espelho rende um relógio riscado (ícone de relógio com um traço) e o tooltip "N min antes/depois do marco HH:MM · não conta · Art. 4º §2º". Para o calendário dizer o mesmo, o
-  markup tem de ser um — senão os dois tooltips divergem, que é o que a sua ordem guarda. Extraindo:
+● O selo afirma sobre o fonte do espelho: data-he-riscado, c.fora_da_janela, c.minutos_fora e Art. 4. Dois deles mudaram de arquivo. Fazendo o selo seguir o include, o que
+  preserva a intenção e fica mais forte (ele também cai se o include desaparecer):
 
-  Ran 2 shell commands
+  Fazer o selo seguir o include e rodar
+  ⎿  $ cd /home/ronald/wt-ui/app && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, py_compile, re
+     P = 'ponto/tests/test_b1_relogio_riscado_e_aviso.py'
+     t = io.open(P, encoding='utf-8').read()
+     V = """class JanelaDeHeApareceNoDiaTest(SimpleTestCase):
+     def setUp(self):
+     self.tela = _vivo(TELA)"""
+     N = …
 
-● Tudo no lugar: calendário com 2 ocorrências (os dois ramos), espelho com o markup único e o PDF já riscava. Agora o selo com a sua RED — 12x36 19-07, 18:51 e 07:06, dois
-  relógios riscados:
-
-  Ran 2 shell commands
-
-● O RED falhou também — nada está sendo riscado, e os dois selos que "passaram" passaram vazios (0 riscados), que é justamente o que o RED existe para pegar. A suspeita: o espelho
-  usa células de montar_realizado_grade e o calendário usa grade_da_celula — formas possivelmente diferentes. Lendo o corpo da função e as células:
-
-  Running 1 shell command…
-
-✢ Bootstrapping… (8h 4m 29s · ↓ 1.4m tokens)
+* Bootstrapping… (8h 9m 53s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
