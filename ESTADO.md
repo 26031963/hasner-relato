@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:40:45.**
+**Medido em 01/10/2026 02:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando` |
-| `origin/main` | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
+| `HEAD` local | `a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia` |
+| `origin/main` | `96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando` |
 | commits a subir (`ahead`) | **1** |
 
 ## Fabrica
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a trilha prometida nao existia
 96378652 Uma marcacao em cada 33 nao veio do relogio, e a tela nao dizia -- agora diz, com quem validou e quando
 c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela
 e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos
 2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
-d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
 ```
 
 ## `git status --short`
@@ -96,23 +96,6 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 
 ```
 
-● Agora o markup único e os dois montadores. O partial:
-
-  Searched for 2 patterns, ran 3 shell commands
-
-● A célula da grade não carrega o pk da batida — então o espelho não consegue identificá-la sem tocar _match_marcos, um juiz compartilhado. Faço o calendário (que tem objetos
-  Batida de verdade) e registro essa metade medida:
-
-  Ran 3 shell commands
-
-● Agora o template do calendário — nos três pontos onde a marcação aparece:
-
-  Searched for 2 patterns, ran 3 shell commands
-
-● 9 OK. O template já está no ar e {% if b.procedencia %} é falso sem o atributo, então nada quebra. Agora a metade do PDF:
-
-  Ran 1 shell command
-
 ● O PDF lê dia['batidas'], que são objetos Batida reais do montador do espelho — então ele pode receber a procedência pelo mesmo caminho. Achando onde o montador marca a batida:
 
   Searched for 2 patterns, ran 4 shell commands
@@ -123,16 +106,33 @@ d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila erra
 
 ● Background command "Fechar o O7, commitar e empurrar" completed (exit code 0)
 
-● Running 1 shell command…
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o7.log; for i in $(seq 1 55); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)"
+  Ran 2 shell commands
 
-· Percolating… (4h 38m 9s · ↓ 464.8k tokens)
+● Background command "Conferir o push do O7" completed (exit code 0)
+
+● O backtick no argumento --sem-sombra foi executado pelo bash e comeu palavras do motivo — a mesma família da lição que já está na minha memória sobre -m em commit. Conferindo o
+  que ficou gravado:
+
+  Ran 2 shell commands
+
+● Dois achados. O meu backtick comeu palavras — mas o maior é que o motivo não é persistido em deploy manual: a lápide promete "com o motivo gravado na trilha do log do deploy", e
+  isso só acontece quando o integrador redireciona a saída. Curando a promessa:
+
+  Ran 4 shell commands
+
+● Background command "Commitar a cura da trilha e registrar a licao" completed (exit code 0)
+
+  Curar o placar e reempurrar · 2m 27s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_trilha2.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break;
+     sleep 10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (2m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Percolating… (4h 43m 9s · ↓ 470.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
