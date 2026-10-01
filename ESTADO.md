@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 10:15:45.**
+**Medido em 01/10/2026 10:20:45.**
 
 | | |
 |---|---|
@@ -95,9 +95,6 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  B — Uma linha por pessoa, com a forma do mês desenhada (molde HX-RESUMO-COLAB)
-  1. Uma linha colapsada por colaborador, e dentro dela uma tira dos dias da competência: um traço por dia, altura = minutos de ponta.
   2. Hábito é pente baixo e regular; evento é uma espiga. Não há número para ler — a forma responde.
   3. A linha diz em palavras de onde vem: "9 min antes em 12 de 15 plantões" · "165 min em 1 dia de 21".
   4. No topo, um gesto: "Dar ciência em tudo que está sem decisão — N dias, M colaboradores", com a conta na cara antes de confirmar.
@@ -124,10 +121,13 @@ f6851e50 RELATO: o bug em prod com a minha frase errada corrigida no lugar onde 
 
 ● Background command "Relavrar o retrato das competencias 9 e 10" completed (exit code 0)
 
-  Ler o selo dos dois lados da permissao
-  ⎿  $ cd /home/ronald/wt-ui && sed -n '280,310p' app/ponto/tests/test_tela_gestao_he.py
+  Escrever e rodar os selos da forma B
+  ⎿  $ cd /home/ronald/wt-ui && cat > app/ponto/tests/test_tela_gestao_he_forma_b.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """GESTAO DE HE -- A FORMA B, e os invariantes que ELA cria (desenho aprovado 01/10 10:1x).
+     A forma anterior era uma lista empilhada -- filtros em cima, cinco contadores, tabela de oito…
 
-· Pouncing… (2h 43m 9s · ↓ 266.9k tokens · thinking)
+· Pouncing… (2h 48m 9s · ↓ 276.4k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
