@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 01:53:01.**
+**Medido em 01/10/2026 01:58:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
+| `HEAD` local | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
 | `origin/main` | `2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos
 2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
 d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
 2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
 cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
-bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho novo: faltava o irmao de um passe que existe
 ```
 
 ## `git status --short`
 
 ```
 ?? bin/keepalive.sh
-?? bin/tests/test_deck_tamanho.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,19 +96,6 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 
 ```
 
-● Semana 1 é claramente holerite (lote por job, visualizador, UPSERT, carimbos). As outras três:
-
-  Ran 3 shell commands
-
-● Quatro temas com lastro. Lendo pagina() e o fecho do deck.py para o edit:
-
-  Ran 1 shell command
-
-● Corrigindo uma conclusão minha antes de escrever: o idx mostra que P5 e P6 compartilham o ponto de 21/08 de propósito (semana curta) — não era erro de cópia. Conferindo os KPIs
-  de P7:
-
-  Ran 6 shell commands
-
 ● 8/22 verdes, 18 declaradas, pela função da própria casa. Tenho tudo. Escrevendo o edit do deck:
 
   Ran 1 shell command
@@ -126,9 +112,22 @@ bec166ac A hora do col900 ganhou caminho de volta, e nao precisou de desenho nov
 
   Ran 1 shell command
 
-●
+● Selo verde. Publicando e corrigindo as duas divergências que a receita tinha:
 
-✢ Percolating… (3h 50m 25s · ↓ 413.2k tokens · thinking)
+  Listed 1 directory
+
+● O alvo é app/media/plano/ (montado como /srv/media no Caddy). Publicando:
+
+  Ran 1 shell command
+
+● No ar: HTTP 200, 89.858 bytes (era 50.432). Corrigindo a receita com as duas divergências que achei e a minha própria conclusão errada:
+
+● Conferir o push do deck · 3m 52s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_deck.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (3m 51s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Percolating… (3h 55m 56s · ↓ 420.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
