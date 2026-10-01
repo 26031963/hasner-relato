@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:22:41.**
+**Medido em 01/10/2026 18:28:01.**
 
 | | |
 |---|---|
@@ -124,12 +124,12 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
   ⎿  cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
      # -*- coding: utf-8 -*-… · stopped
 
-  Esperar e ler o DIFF de frota · 2m 2s
+● Esperar e ler o DIFF de frota · 7m 22s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in 1 2 3 4 5 6 7 8 9 10 11 12; do if ! pgrep
-     -f "simular_folha" >/dev/null 2>&1; then break; fi; sleep 55; done; echo "=== DIFF DE FROTA ==="; cat $S/pta_diff.log | tail -40 (2m 1s)
+     -f "simular_folha" >/dev/null 2>&1; then break; fi; sleep 55; done; echo "=== DIFF DE FROTA ==="; cat $S/pta_diff.log | tail -40 (7m 21s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Fermenting… (1h 16m 31s · ↓ 133.2k tokens)
+✢ Fermenting… (1h 21m 51s · ↓ 133.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
