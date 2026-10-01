@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:432 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:472 AFIRMA ato sem PROVA ao lado -- ## O14 NO AR: o app dos ~750 parou de inventar turno aberto -- **1.349 avisos FALSOS a menos, 0 batida perdida**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 18:01:01.**
+**Medido em 01/10/2026 18:06:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
-| `origin/main` | `83df1da7 LEI (2) aplicada: antecipada cai +184,32 -> +0,80 h, e as DUAS hipoteses da folga caem as duas` |
-| commits a subir (`ahead`) | **6** |
+| `HEAD` local | `867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO` |
+| `origin/main` | `c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+867fc8a1 ACHADO DE PROD: 7 colaboradores ATIVOS bateram ponto na 10 e tem fechamento ZERO
 c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABERTO ou par nulo
 92a1c4e6 A segunda causa tambem estava escrita na casa: a L-084 julga ANTES da janela. Noturnas -47,80 -> +0,67 h
 5e42de55 A causa da folga era UMA LINHA: o nucleo adivinhava o dia. Folga +1.035,67 -> +23,87 h, trabalhadas -1.231 -> -219
 5929e3dc LOTE-ATRASO-ADMITIDO: celula declara a trava -- move dinheiro, espera o ! e vem depois da S5b
-4cd56242 UI-RESPOSTA-DIZ-O-QUE-E: celula dentro do teto, com o obstaculo nomeado
 ```
 
 ## `git status --short`
@@ -95,41 +95,41 @@ c965b638 O +114,00 h de atraso aberto por causa: 8 dos 10 maiores sao turno ABER
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Também na mesa: ! da troca, o recorte do T8, os 223 colabs sem pontualidade, e a escolha (A)/(B) da UI-RESPOSTA-DIZ-O-QUE-E.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-TROCA-NAO-CRIA-DESCONTO -- LEI (2), Ronald 01/10 17:2x: a troca NAO cria desconto novo. Pontualidade em
   MotorComercial, Motor12x36 e Moto
 
   Ran 1 shell command
 
-● col592 com −3,98 h trabalhadas no calculador. Hora negativa é bug, e fura a fila.
+● 12x36 +53 em trabalhadas e −53 em folga: as mesmas 53. E col43/col924 com gravado 0,00.
 
   Ran 1 shell command
 
-● Não é o pareamento. Então é a janela de HE invertendo o par. Medindo com o clip.
+● Dois colabs ativos com 38 e 37 batidas e zero horas no fechamento. Isso é dinheiro. Medindo a frota.
 
   Ran 1 shell command
 
-● 41 de 2.416 pares invertidos — e a cura já está escrita na casa: a L-084 julga antes da janela.
-
-  Ran 2 shell commands
-
-● A rubrica que não se movia zerou: noturnas −47,80 → +0,67 h. E 71 dia-colab saíram da janela pela L-084.
+● Sete colaboradores ativos, 107 batidas, fechamento zerado. E o calculador está certo — o gravado está vazio.
 
   Ran 1 shell command
 
-● Falta o horas_atraso +114,00 h. Medindo quanto dele é o item que já espera o seu !.
+❯ aval Ronald 01/10 18:1x lei (1): a cura do T8 vale RECORTADA -- L-084 so no dia que DECLARA intervalo; sem marco de intervalo o gate de 14/09 segue. A
+  literal esta descartada (cobrava 720 min de quem bateu a SAIDA; col473, col399). Tirar as duas linhas de lei do topo do RELATO: (1) e (2) estao
+  respondidas.
+  aval Ronald 01/10 18:1x PONTUALIDADE-EM-TURNO-ABERTO: o motor NAO julga atraso nem saida antecipada em turno aberto ou par nulo -- lei existente, TETO
+  TEMPORAL secao 6 (b): so fato encerrado. Aval explicito para tocar motor_calculo_v2.py. DIFF de frota da 10 publicado antes, reversao em logs, 09
+  intacta, so pode DESCER desconto. RED: col890 22/09, col221 e col99 01/10. Segue a fila pela S5b !
 
-  Ran 1 shell command
+● Dois avais. Registro, as duas linhas de lei saem do topo, e o aval do motor é explícito.
 
-● 8 dos 10 maiores têm turno aberto ou par nulo — é o item que já espera seu !.
+● Running 1 shell command…
 
-● Esperar o push e ver o veredito · 3m 41s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 55; if grep -q "^RC=" $S/push_v4.log 2>/dev/null; then break; fi; done; grep -E "main ->|^RC=|error:|^(FAIL|ERROR):|^(OK|FAILED)"
-     $S/push_… (3m 40s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Fermenting… (54m 51s · ↓ 90.9k tokens)
+✢ Fermenting… (1h 0m 21s · ↓ 101.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                   2% until auto-compact
+                                                                                                                                   1% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
