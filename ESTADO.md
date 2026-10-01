@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:38:31.**
+**Medido em 01/10/2026 04:44:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `461564e0 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
+| `HEAD` local | `8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia` |
 | `origin/main` | `4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-461564e0 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
+8dab8b82 O DIFF do O9 reprova a migracao direta: 392 de 862 colabs mudariam o cartao, e por isso ele existia
 4b541969 Uma das dez autoridades que o PDF calculava escrevia para ninguem, e agora ha tripwire nas nove restantes
 1c3513ca O9 medido: o PDF le o espelho E recalcula por conta propria -- dez autoridades, duas escondidas por apelido
 8f57dea2 O dia abonado em 4h30 dizia so "abonado", e o dia com pedido pendente nao dizia nada
@@ -39,11 +39,8 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## `git status --short`
 
 ```
- M app/chamados/models.py
- M app/config/crons.py
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
- M app/relatorios/management/commands/diff_pdf_x_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -100,39 +97,39 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Faltou a casa do comando e o mypy (que eu não rodei — o hábito novo cobria só o ruff). Vendo o mypy:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O plugin do django-stubs precisa do settings no ambiente. Rodando com o env:
 
   Ran 1 shell command
 
-● Meu erro: reusei o nome e do except como variável do laço — o Python o apaga depois do bloco. Curando, declarando a casa e guardando a receita do mypy (que precisa do settings
-  no ambiente, o que não é óbvio):
+● Outro selo quebrou — "sem sobreposição no bloco diário". Isso sugere que minha entrada caiu na estrutura errada. Conferindo onde ela foi:
+
+  Searched for 1 pattern
+
+● Minha entrada caiu na estrutura certa (as casas, depois de FORA_DE_PIPELINE), e o selo lê CRONS/DUR_MAX_S, que eu não toquei. Vendo a mensagem:
 
   Ran 1 shell command
 
-● Meu erro saiu. O que resta é pré-existente e só aparece por cadeia de import — rodando o comando exato do selo para confirmar:
+● sombra.sh@04:08 (até 04:41) invade python3@04:40 — nada a ver com a minha entrada. Vendo se a duração é lida de arquivo (ela é medida às 04:05, 40 min atrás):
+
+  Searched for 1 pattern
+
+● A duração MEDIDA vence a declarada (DUR_MAX_S.update(_dur_medida())), lida do placar no import — então o selo ficou vermelho por um fato real medido às 04:05, não pela minha
+  entrada. Vendo os dois crons:
 
   Ran 1 shell command
 
-● O erro está no universo do selo: 1 em 719 arquivos, e surgiu porque a cadeia de import do meu comando mudou a ordem de inferência do mypy. Curando na origem, como o selo manda:
+● sombra.sh mede 1947 s (32,5 min): começa 04:08 e termina 04:40:27 — e a lápide da linha 155 diz que isso já aconteceu em 20/09, quando ela media 25 min. É a terceira vez. Vendo
+  o vizinho:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 2 shell commands
 
-● Sintoma clássico de ciclo de import: o set é um literal e o mypy não consegue tipá-lo quando a ordem muda. A cura na origem é a anotação explícita:
+● 22 OK. O comentário promete item, então ele vira item — e o crontab precisa ser renderizado:
 
-  Ran 1 shell command
-
-● mypy limpo em 719 arquivos e ruff limpo. Emendando e reempurrando:
-
-  Rodar o selo das casas e o app chamados · 1m 17s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te… (1m 17s)
+● Conferir o push · 1m 53s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9d.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (1m 52s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Percolating… (6h 35m 56s · ↓ 543.4k tokens)
+✢ Percolating… (6h 41m 25s · ↓ 551.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
