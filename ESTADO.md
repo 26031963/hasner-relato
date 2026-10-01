@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 06:05:01.**
+**Medido em 01/10/2026 06:10:31.**
 
 | | |
 |---|---|
@@ -97,7 +97,6 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │          montagem           │    datas_falta    │
   ├─────────────────────────────┼───────────────────┤
   │ base (como o espelho monta) │ 0                 │
   ├─────────────────────────────┼───────────────────┤
@@ -130,7 +129,8 @@ b43dcf14 O horario da sombra deixa de ser literal: ele sai da duracao medida, e 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O108 -- O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 (achado MEDIDO 01/10 05:2x, saido da triagem do O
 
-✻ Waiting for API response · will retry in 2m 31s · check your network
+✢ Percolating… (8h 7m 56s · ↓ 590.9k tokens · deep in thought)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
