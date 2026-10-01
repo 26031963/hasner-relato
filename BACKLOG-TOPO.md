@@ -20,7 +20,7 @@ lista — ela e o que esta EM PE._
 | **O10** | TROCA-DE-PLANTAO | espera corte |
 | **O11** | BAIXA-DIFERIDA-TODA-FAMILIA | espera aval |
 | **O12** | CHAVE-MORTA-TRAB-FERIADO | **FECHADO 01/10 12:4x -- e o censo de ho |
-| **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | espera aval |
+| **O13** | ESPELHO-TELA-TAMBEM-DERIVA-DIA | **O CODIGO JA ESTA CURADO -- medido 01/1 |
 | **O14** | ESPELHO-APP-DERIVA-DIA | espera aval |
 | **O15** | PAUTA-DP-DIAS-EM-ABERTO | **em curso** |
 | **O16** | PORTAS-SEM-CAUSA-CONHECIDA | **em esteira** |

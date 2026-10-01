@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:374 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:425 AFIRMA ato sem PROVA ao lado -- **A L-093 esta NO AR** (`bin/deploy.sh --sem-migrate` as 12:51: 0 migration pendente, sombra OK de hoje,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:30:01.**
+**Medido em 01/10/2026 14:35:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
+| `HEAD` local | `2082e03d Dieta, parte 1: o RELATO cai de 1,77 MB para 393 KB (-78%), e o handoff passa a ler TRAVAS em vez de processos` |
 | `origin/main` | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,23 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2082e03d Dieta, parte 1: o RELATO cai de 1,77 MB para 393 KB (-78%), e o handoff passa a ler TRAVAS em vez de processos
 d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md
 02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO
 62a650a5 GESTAO DE HE 2a volta: o DESENHO publicado antes do codigo, com os dois casos tirados do retrato REAL
 baa66320 CORRECAO: eu errei a causa do col142, e foi o meu proprio RED que pegou -- e o achado verdadeiro e maior
-f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha no alcance declarado -- PAREI com o numero
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO-ARQUIVO.md
  M app/ponto/management/commands/diff_calculador.py
- M bin/handoff_sessao.sh
- M bin/tests/test_handoff_sessao.sh
- M bin/tests/test_trava_teste.sh
-?? app/docs/RELATO-ARQUIVO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -121,17 +117,17 @@ f7ce9039 L-084 vence o T8: curado no motor com RED, e o DIFF de frota NAO fecha 
 
 ● The item in curso closed. Building the handoff (reusing the Stop hook's readers, not writing new ones).
 
-● Trocar processos por travas e partir os literais
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
+● Conferir o teto e os selos da fila · 28s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
      import io
-     P='bin/handoff_sessao.sh'
-     t=io.open(P,encoding='utf-8').read()
-     i=t.index(' echo "## PROCESSOS DE FUNDO"')
-     j=t.index(' echo "## PROXIMO PASSO"')
-     NOVO = ''' # RECURSO TOMADO, NAO PROCESSO VIVO -- e a troca nao e co…
+     t=io.open('app/docs/BACKLOG.md',encoding='utf-8').read()
+     i=t.find('<!-- OBRAS:INICIO -->'); j=t.find('<!-- OBRAS:FIM -->', i)
+     acima=[]; n=0; tot=0
+     for ln in t[i:j].splitlines():
+     if not ln.startswith('| ') or ln.startswith('|---') or ln.startsw… (28s · 11 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (6h 57m 25s · ↓ 822.7k tokens · thinking)
+✢ Pouncing… (7h 2m 55s · ↓ 837.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
