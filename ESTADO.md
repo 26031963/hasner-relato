@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 00:00:45.**
+**Medido em 01/10/2026 00:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
+| `HEAD` local | `4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le` |
 | `origin/main` | `db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4c8ed85a A trava do S5b existia e estava escrita numa palavra que o hook nao le
 db84cf30 S5b: a causa tem nome, e ela inverte o sinal -- o motor creditava hora que as batidas nao sustentam
 74e0180a A lavra do col900 saiu e o TXT da emp3 saiu IDENTICO -- mas o da emp2 move um colab que ninguem tocou
 e131e98b Comando novo sem casa declarada: o selo me pegou, e a casa dele diz por que ele nao e script
 c9f5c86e Fui medir e a minha propria autopsia caiu: 07/09 e feriado, e os 3 turnos abertos sao dos dias CERTOS
-e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a autorizou, e o DIFF mostra isso
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,18 +95,6 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PAREI novo, que não estava na mesa
-
-  Regerei a 09 das três: emp3 e emp4 idênticas, emp2 move UMA linha — col881, 02/09, falta_diurna, um dia virando meio dia. Ele não foi tocado hoje (fechamento de 28/09 00:45,
-  zero trilha). O gravado não se moveu e o arquivo se moveu: export.py:388 tira o bloco de falta de datas_falta(...) derivado na hora da geração. O TXT não é função pura do
-  gravado. Não substituí.
-
-  S5b — a causa inverte o sinal
-
-  O calculador acerta 3 de 3 contra a mão (col43 5,53 · col698 7,00 · col465 1,07), e o motor dá 28,69 h num único dia no col43. Causa: dia com sequência ímpar; o calculador soma
-  pares fechados, o motor faz ponte com a última saída. O delta negativo não é o calculador perdendo hora — é o motor creditando hora que as batidas não sustentam. Descartei os 3
-  primeiros casos que sorteei: dois eram do col950, "[nome]", com batidas sintéticas.
-
   A pergunta que separa as três hipóteses está no RELATO, em uma linha: "ele saiu às 14:00 e voltou sem bater, ou foi embora e a batida das 19:00 não é jornada dele?"
 
   Também fechou o O3 (selo de classe, com o anti-podre me pegando na primeira corrida) e o relógio de 10px está no ar. Falta seu smoke em /ponto/gestao-he/ e no calendário; a raia
@@ -119,21 +106,33 @@ e0af1264 A lavra do col900 nao sai: 4 dias foram regenerados contra a lei que a 
 ● A célula do S5b ficou com "esperando o !", que o hook não lê — ele reconhece PAREI e espera o !. E a trava é real e nomeada: pergunta de LEI publicada com número. Corrigindo o
   vocabulário:
 
-  Pôr a trava do S5b no vocabulario do hook e conferir · 1m 46s
-  ⎿  $ python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='docs/BACKLOG.md'; t=io.open(P,encoding='utf-8').read()
-     i=t.find('| S5b-CALCULADOR-ESCREVE |'); fim=t.index('\n',i); c=t[i:fim].split('|')
-     c[3]=(' **PAREI: qual pareamento e o devido num dia de sequencia IMPAR** -- pergunta de LEI, publicada… (1m 46s · 3 lines)
+  Ran 1 shell command
+
+● O hook espera stdin quando chamado à mão — não é para rodar assim. Conferindo a célula e commitando:
+
+  Searched for 1 pattern
+
+● O | que escrevi dentro da célula virou coluna. Trocando por --:
+
+  Ran 2 shell commands
+
+● Enquanto o push roda, o item 2 da noite — a raia UI. Orientando na raia e no estado da Gestão de HE:
+
+  Ran 1 shell command
+
+● Background command "Commitar e empurrar a correcao da celula" completed (exit code 0)
+
+● Conferir o push · 4m 1s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_hook.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -4 "$L" (4m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (1h 58m 9s · ↓ 233.8k tokens)
+· Percolating… (2h 3m 9s · ↓ 236.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on (shift+tab to cycle) · esc to interrupt · ← for agents
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
