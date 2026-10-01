@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:105 AFIRMA ato sem PROVA ao lado -- ### (1) e (2) handoff + hooks -- FEITO
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:150 AFIRMA ato sem PROVA ao lado -- | (1) `NAO_DECIDE` vazio ou so o item 5 | **FEITO** -- so `horas_falta`, `horas_reflexo_dsr`, `saldo_banco_horas`, com selo que exige a caus
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 14:45:45.**
+**Medido em 01/10/2026 14:50:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `2b7e3691 Duas rubricas saiam CALADAS do ramo da folga, e o selo que eu escrevi hoje para isso pegou as duas` |
+| `HEAD` local | `6bbfc0fe HIGIENE-DE-CONTEXTO: itens 1-4 e 6 FECHADOS; o 5 espera uma linha dele, e a razao e a propria proibicao da ordem` |
 | `origin/main` | `d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6bbfc0fe HIGIENE-DE-CONTEXTO: itens 1-4 e 6 FECHADOS; o 5 espera uma linha dele, e a razao e a propria proibicao da ordem
+ef7a0ff3 S5b-4-REGRAS: DIFF de frota contra o GRAVADO publicado, e o problema da folga MUDOU DE LUGAR
 2b7e3691 Duas rubricas saiam CALADAS do ramo da folga, e o selo que eu escrevi hoje para isso pegou as duas
 318c69fc Dieta parte 2: celulas do BACKLOG de 67.882 para 22.288 chars, 0 acima de 300 -- e o item 5 fica INCOMPLETO
 2082e03d Dieta, parte 1: o RELATO cai de 1,77 MB para 393 KB (-78%), e o handoff passa a ler TRAVAS em vez de processos
-d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de host e a regra no CLAUDE.md
-02e0bb86 Cura do T8 FECHADA com recorte: a versao literal criava 23,59 h de atraso FALSO, e o DIFF recortado da ZERO
 ```
 
 ## `git status --short`
@@ -95,36 +95,36 @@ d6cb0c06 HIGIENE-DE-CONTEXTO: handoff por comando, hooks instalados, selo de hos
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Segue a fila; PAREI so em lei ou !.
+  MotorIntermitente não chamam aplicar_tolerancia — 223 de 571 colabs da 10 com horas_atraso = 0,00 h exato. É deliberado?
 
-  Ran 5 shell commands
+  S5b-4-REGRAS — as 4 regras escritas por importação, NAO_DECIDE só com o item 5, DIFF contra o gravado publicado. A regra 4 tirou o intermitente (ele
+  saiu dos padrões), e o problema mudou de lugar: 12x36, +1.035,67 h, por fonte errada no chamador (_cel.trabalha x eh_dia_trabalho). INCOMPLETO com 5
+  itens nomeados.
 
-● DIFF_FOLHA=0 with the recorte. Measuring why, because that zero is the answer.
+  Gestão de HE — desenho publicado antes do código, com col207 (hábito) e col616 (13 → 3 com o limite de 10 min). Espero seu ok.
 
-  Ran 4 shell commands
+  Higiene de contexto — handoff + hooks + selo. Item 5 INCOMPLETO: dos 27 parágrafos do CLAUDE.md, zero é inteiramente história — separar exige
+  reescrever, e sua ordem proíbe. Destrava com uma linha sua: "pode quebrar o parágrafo em dois, sem mudar palavra". RELATO −78%, células do BACKLOG −67%,
+  0 acima de 300, com o veredito do hook idêntico antes e depois.
 
-● The item in curso closed. Building the handoff (reusing the Stop hook's readers, not writing new ones).
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: HIGIENE-DE-CONTEXTO -- Infra de sessao (ordem Ronald 01/10 14:0x), nenhuma lei de negocio. bin/handoff_sessao.sh ->
+  app/docs/HANDOFF-
 
-  Read 1 file, ran 37 shell commands
-
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && python3 -c "
-     import io… · stopped
-
-  Ran 6 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Three real gaps. Fixing the silent rubric first.
-
-● Esperar e ler o DIFF de frota · 49s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1
-     11); do sleep 50; if grep -q "^RC=" $S/diff_s5b_frota.log 2>/dev/null; then break; fi; done
-     grep -vE "objects imported" $S/diff_s5b_frota.log | sed -n '… (49s)
+● Declarar o estado da higiene e conferir o hook · 1m 43s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io, re, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='| HIGIENE-DE-CONTEXTO |'
+     assert t.count(A)==1
+     i=t.find(A); fim=t.index('\n', i)
+     c=t[i… (1m 43s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Pouncing… (7h 13m 9s · ↓ 856.3k tokens)
+✻ Pouncing… (7h 18m 10s · ↓ 866.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
 ! docker exec saas_core python manage.py tenant_command recalcular_fechamento --schema=juliani --mes 10 --ano 2026 --apply
