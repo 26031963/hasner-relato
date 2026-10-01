@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:46:01.**
+**Medido em 01/10/2026 20:51:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `060dd4a2 AVAIS NA MESA no ar: 3 abertos com a frase pronta, 4 respondidos que ja somem, 163 sem triagem` |
+| `HEAD` local | `1d9308e6 Duas falhas minhas na suite cheia: command sem casa e dois tipos que o vocabulario nao conhecia` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,22 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1d9308e6 Duas falhas minhas na suite cheia: command sem casa e dois tipos que o vocabulario nao conhecia
 060dd4a2 AVAIS NA MESA no ar: 3 abertos com a frase pronta, 4 respondidos que ja somem, 163 sem triagem
 61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU
 edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs
 48a202f0 A tabela honesta da S5b: 3 rubricas 100% CEGAS, trabalhadas divergindo em 445 de 464, e o `!` NAO se pede
-d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS
 ```
 
 ## `git status --short`
 
 ```
- M app/core/fila_pendentes.py
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -101,26 +95,6 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  38). Nenhum vínculo foi inventado: a pauta pergunta.
-
-  E duas pautas que eu abri eu mesmo cancelei no minuto seguinte, porque não eram frota: a 917 era col950, "[nome]", da empresa 1 — a de
-  teste; e a 921 era col677, "[nome]", sem data de admissão. Pauta à supervisão sobre esses dois é ruído num departamento de gente. Canceladas
-  pela porta, e a pauta cancelada fica na trilha. Sobram 8 vivas.
-
-  Isso corrige o censo que publiquei às 21:4x: dos 13 colab-mês sem vínculo, 2 não são gente da frota. A lição estava na minha memória de sessão — "colab
-  de teste não é prova de frota" — e eu a apliquei meia volta atrasado: filtrei depois de escrever, não antes.
-
-  O que as suas respostas põem na fila agora, e nenhuma delas pode começar enquanto a suíte cheia ocupa a pista:
-
-  1. as três curas da S5b — importar a guarda de turno aberto no _PeriodoPontualidade (ele não tem entrada/saida/turno_aberto, e é por isso que a guarda é
-     muda lá), a guarda do T8 e a cura da hora negativa — e então o DIFF refeito. Você disse que não sobe como está, e é o que vou provar com número
-     antes de voltar a pedir.
-  2. o patch 3 da GESTAO-HE com a opção (b): o limite filtra o contador e o ato, então dia abaixo do limite não pede nem recebe ciência — e o sem_decisao
-     volta a ser contador == universo nos quatro leitores. Isso muda o patch que a raia listou, e vou escrever a linha do ato junto do filtro.
-  3. a ordem de subida da GESTAO-HE: patch 1 → deploy.sh → merge e deploy no mesmo ato.
-  4. a outra metade da resposta (3): causa por colab e DIFF dos que têm vínculo.
-
-  Mais o deploy que o selo test_import_tardio_contra_o_ar está cobrando desde o commit da porta, e o DIFF do emp3=CLT que já está escrito. Tudo atrás da
   mesma suíte.
 
 ✻ Crunched for 2m 8s · done 8:43 PM · 1 shell, 2 monitors still running
@@ -131,14 +105,34 @@ d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786
 
 ● Monitor event: "veredito final da suite do AVAIS"
 
-  Ver a forma de uma entrada do FORA_DE_PIPELINE
-  ⎿  $ sed -n 697,705p config/crons.py
+  Searched for 1 pattern, read 1 file, ran 6 shell commands
 
-· Jitterbugging… (1m 3s · ↓ 3.0k tokens)
+● A suíte cheia voltou com duas falhas, as duas minhas, e a lição é a mesma de uma volta antes.
+
+  - corrigir_vinculo_vigencia estava sem casa (B6.1): todo management command tem de estar no CRONS ou declarado em FORA_DE_PIPELINE com motivo. Declarado
+    — e o motivo é o que ele é: ato de cadastro sob !, que agendar seria um cron mudando escala sozinho. E vale registrar que o ! de 19:3x terminou em
+    não trocar, que é exatamente o uso certo do dry-run.
+  - core/fila_pendentes.py::DECISAO não conhecia lei nem ok-desenho, e o selo mordeu o item ui-resposta-diz-o-que-e-desenho. Os dois tipos vêm da sua
+    ordem de 18:4x, que nomeia os quatro com as suas palavras. A linha do módulo diz "tipo novo entra aqui por ato, nunca por esquecimento" — essa ordem é
+    o ato. Os rótulos antigos ficam: 163 itens usam aval/corte/corte-dado, e renomeá-los seria reescrever o registro para caber numa ordem de hoje; quem
+    traduz para a exibição é o TIPO_EXIBE do gerador, que mapeia sem tocar o dado.
+
+  A lição, dita de frente: eu rodei os vizinhos por IMPORT e não os contratos que ENUMERAM. Os 87 testes de vigência e pontualidade passaram porque
+  importam o que eu mexi; nenhum dos dois contratos importa meu código — um varre */management/commands/*.py e o outro varre o JSON. Arquivo novo de um
+  tipo que a casa enumera tem como vizinho o contrato da enumeração. Está na memória da sessão, ao lado da lição das 20:0x.
+
+  Os dois contratos depois da cura: 25 testes, OK. A suíte cheia foi relançada, e atrás dela ficam, na ordem: o deploy que o selo do import tardio cobra,
+  as três curas da S5b que você autorizou (guarda de turno aberto importada, guarda do T8, hora negativa) com o DIFF refeito, o patch 3 com a opção (b) —
+  limite filtrando contador e ato —, a ordem de subida da GESTAO-HE, o DIFF do emp3=CLT e a outra metade da resposta (3), a causa por colab dos que têm
+  vínculo.
+
+  O AVAIS está com 1 item: o seu smoke.
+
+✻ Sautéed for 2m 9s · done 8:47 PM · 1 shell, 2 monitors still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so com a lista inteira travada !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 2 monitors · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 2 monitors · ← for agents · ↓ to manage
   ⧉  index
 ```
