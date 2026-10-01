@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 02:09:29.**
+**Medido em 01/10/2026 02:14:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
+| `HEAD` local | `c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela` |
 | `origin/main` | `e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c00d62c3 A porta de retratar batida existia ha 8 dias; o que faltava era a permissao DENTRO dela
 e2f073d4 O deck vai a 12 paginas, e a conferencia achou a regua trocada no meio do grafico de selos
 2f522b8e O replay fecha o O4, e os tres defeitos dele sairam de LER a saida em vez de aceitar o numero
 d6a08a38 Os dois selos de host vermelhos eram COPIAS envelhecendo, nao fila errada -- e a pasta fecha em 45/0
 2a078a90 O4: medi os seis itens antes de construir, tres ja existiam, e o relogio agora tem guarda com dentes
-cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de batida, e a causa foi uma frase minha
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/services/retratar_humano.py
- M app/ponto/tests/test_porta_retratar_batida.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,7 +95,6 @@ cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de bat
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Ran 1 shell command
 
 ● As rotas existem com views próprias. Vendo a porta e se há selo:
@@ -125,11 +122,12 @@ cab53e2f O desenho da casa anunciava 7 chamadores fantasmas do chokepoint de bat
 
 ● 14 OK. Rodando os vizinhos que consomem a porta antes de fechar:
 
-● Rodar os selos vizinhos
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te…
+  Conferir o push do O6 · 4m 24s
+  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o6.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
+     10; done; tail -5 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (4m 23s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (4h 6m 53s · ↓ 431.4k tokens)
+· Percolating… (4h 12m 15s · ↓ 434.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

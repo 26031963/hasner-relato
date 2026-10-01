@@ -14,7 +14,7 @@ lista — ela e o que esta EM PE._
 | **O3** | Selo de CLASSE "artefato de estado obsoleto lido como sinal bom" — 5 casos em 22/09 (`mate | **FECHADA 30/09 23:0x** -- e a trava era |
 | **O4** | ACESSO-NUNCA-EM-LOTE | espera `!` |
 | **O5** | DECK-30DIAS | **FECHADA 01/10 01:5x -- NO AR** |
-| **O6** | PORTA-RETRATAR-BATIDA | **em curso** |
+| **O6** | PORTA-RETRATAR-BATIDA | **FECHADA 01/10 02:0x -- a fatia estava  |
 | **O7** | COL857 / ORIGEM-DA-BATIDA | **em fila** |
 | **O8** | PDF-ROTULO-PARCIAL-E-PENDENTE | **em fila** |
 | **O9** | PDF-E-O-ESPELHO | espera corte |
