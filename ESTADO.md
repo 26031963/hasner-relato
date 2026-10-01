@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:358 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:435 AFIRMA ato sem PROVA ao lado -- ### APLICADO 01/10 19:44, e a PROVA
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:14:31.**
+**Medido em 01/10/2026 20:20:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs` |
+| `HEAD` local | `61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU` |
 | `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU
 edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs
 48a202f0 A tabela honesta da S5b: 3 rubricas 100% CEGAS, trabalhadas divergindo em 445 de 464, e o `!` NAO se pede
 d1ddc677 O DIFF da S5b parou de somar a propria cegueira: noturnas sai de -5.786,47 h para 30 colabs CEGOS
 02da1822 col369 DECIDIDO por ele: NAO trocar para o 1296 -- a pausa real e 12:09-14:04, nao 11:00-12:00
-b17b4689 PAREI com a tabela: o vinculo do col369 move 7,07 h e os -4 furos NAO acontecem
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ b17b4689 PAREI com a tabela: o vinculo do col369 move 7,07 h e os -4 furos NAO a
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  +107,23 (célula +113,52 — a diferença é o gravado da 10, que o recálculo por evento rega a cada batida).
+  certo (motor ou calculador) e se a suspeita de contagem em dobro morreu. Com (1) e (2) publicados, trazer a tabela final para o ! da troca. Segue a
+  fila.
 
-  A tabela que decide (465 colabs, 2.890 dia-colab):
+  Ran 6 shell commands
 
-  ┌────────────────────────┬─────────────┬─────────────┬─────────┬─────────────┬───────┐
-  │        rubrica         │   gravado   │ calculador  │  delta  │ divergentes │ CEGOS │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_atraso           │ 28,94       │ 158,64      │ +129,70 │ 22          │ 182   │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_saida_antecipada │ 80,90       │ 92,87       │ +11,97  │ 10          │ 182   │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_folga_trabalhada │ 232,57      │ 264,05      │ +31,48  │ 3           │ 0     │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_trabalhadas      │ 23.972,52   │ 24.079,75   │ +107,23 │ 27          │ 0     │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_noturnas         │ 5.786,47    │ 5.787,14    │ +0,67   │ 12          │ 0     │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_intra_indenizada │ 795,50      │ 781,61      │ −13,89  │ 14          │ 0     │
-  ├────────────────────────┼─────────────┼─────────────┼─────────┼─────────────┼───────┤
-  │ horas_extras_50 / _100 │ 1,00 / 0,00 │ 1,00 / 0,00 │ 0,00    │ 0           │ 41    │
-  └────────────────────────┴─────────────┴─────────────┴─────────┴─────────────┴───────┘
+❯ aval Ronald 01/10 20:2x -- FILA DA NOITE. A ORDEM VIVA passa a ser esta LISTA, nao um item. Regra unica: item que travar em !, lei ou smoke meu vira
+  linha no AVAIS com a frase pronta e voce PASSA AO PROXIMO no mesmo turno. So devolve turno com a lista inteira travada. Um push por marco; vizinhos do
+  sitio tocado antes da suite cheia.
+  1. S5b: (a) horas_atraso +129,70 h em 22 -- medir quantos sao turno ABERTO ou par nulo; hipotese: o calculador nao le a guarda que entrou no motor as
+  19:26 (_aplicar_teto_pontualidade); se for, IMPORTAR a guarda. (b) trabalhadas +107,23 h em 27 e folga +31,48 h em 3: abrir por causa, 3 casos a mao,
+  dizer quem esta certo e se a contagem em dobro morreu. Tabela final -> AVAIS, espera o ! da troca.
+  2. AVAIS-NA-MESA (ordem de 18:4x): gerar e publicar AVAIS.md.
+  3. GESTAO-HE-CALENDARIO-CONTROLE, parte da main: view do laco (N atos por decidir_he), cadastro he_limite_decisao_min com migration, leitor mandando
+  abaixo_limite, url no contexto; merge da raia + deploy no mesmo ato -> smoke meu no AVAIS.
+  4. UI-RESPOSTA-DIZ-O-QUE-E (ordens de 17:4x e 18:3x): sinal_min no juiz, as 4 frases, Reabrir com aviso, "30 min" lido da fonte.
+  5. SUITE-UMA-VEZ-POR-ARVORE (ordem de 20:0x).
+  6. So LEITURA, publicar e nao aplicar: censo FOLHA-ZERO-COM-BATIDA na frota; DIFF emp3=CLT da 09 e da 10 por rubrica e por colab.
+  7. Pautas, sem escrita de dinheiro: col369 (folga nao declarada no 1313), col650 (data de fim da ausencia 3186), col935 (admissao 05 ou 07/09), lista
+  dos 51 da fase 12x36 para a supervisao.
+  8. Fila 1 do BACKLOG na ordem do hook (O21 em diante).
+     Segue a fila; PAREI so com a lista inteira travada !
 
-  O ! ainda não sai, e o motivo é a sua própria lei (2): "a troca da S5b não cria desconto novo" — e a tabela diz que ela cria. O NAO_DECIDE das três
-  classes resolveu uma parte, e o número mostra qual: os 182 colabs cegos em atraso e antecipada são exatamente os de MotorComercial, Motor12x36 e
-  MotorIntermitente. Mas sobram 283 colabs cuja classe JULGA, e nesses o calculador cobra +129,70 h a mais que o gravado. A declaração calou quem o motor
-  nunca cobrou; ela não fez o calculador concordar com quem o motor cobra.
+  Ver a frase pronta e a lista do relato.sh
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+     import json,io
+     d=json.load(io.open('app/docs/PENDENTES_RONALD.json',encoding='utf-8'))
+     for x in d:
+     if x.get('frase'):
+     print('id:', x['id']); print('tipo:', x['tipo']); print('desde:', x.get('desde')); print('frase:', x['frase'][:220]); print('o_que:', x…
 
-  Então a pergunta da S5b muda: deixa de ser "qual classe cala" e passa a ser "por que o calculador cobra mais atraso que o motor nas classes que julgam"
-  — 22 divergentes em 283. Isso é RED a escrever e cura de origem, não declaração. As outras seis rubricas estão em faixa de troca.
-
-  O DIFF fechou, que era a condição da sua ordem de 20:0x, entã Jump to bottom (ctrl+End) ↓  a ORDEM VIVA anda para COL369-FOLGA-NAO-DECLARADA — a Pauta
+✻ Discombobulating… (4m 53s · ↓ 19.9k tokens · thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell, 4 monitors · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell, 4 monitors · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Counting url_autorizar_marcados in gestao_he.html                                                          7m 44s · ↓ 170.2k tokens
+  ◯ general-purpose  Scanning gestao_he.html for template comparisons                                                          13m 14s · ↓ 202.9k tokens
   ⧉  index
 ```
