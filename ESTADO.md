@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 04:33:01.**
+**Medido em 01/10/2026 04:38:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,11 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## `git status --short`
 
 ```
+ M app/chamados/models.py
+ M app/config/crons.py
  M app/config/crons_duracao.json
  M app/docs/RELATO.md
+ M app/relatorios/management/commands/diff_pdf_x_espelho.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -97,39 +100,39 @@ a8ed55ca O motivo do --sem-sombra ia para o terminal e morria com a sessao: a tr
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Faltou a casa do comando e o mypy (que eu não rodei — o hábito novo cobria só o ruff). Vendo o mypy:
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 2 shell commands
 
-● Background command "Corrigir o comparador e rodar o DIFF de frota" completed (exit code 0)
-
-● 862 colaboradores, e cada um roda o motor duas vezes. Esperando:
+● O plugin do django-stubs precisa do settings no ambiente. Rodando com o env:
 
   Ran 1 shell command
 
-● DIFF de frota entregue, e ele diz que a migração NÃO é de graça:
+● Meu erro: reusei o nome e do except como variável do laço — o Python o apaga depois do bloco. Curando, declarando a casa e guardando a receita do mypy (que precisa do settings
+  no ambiente, o que não é óbvio):
 
-  ┌────────────────────┬──────────────────────────────┐
-  │       campo        │ colabs que divergem (de 862) │
-  ├────────────────────┼──────────────────────────────┤
-  │ datas_furo_apurado │ 302                          │
-  ├────────────────────┼──────────────────────────────┤
-  │ datas_em_aberto    │ 282                          │
-  ├────────────────────┼──────────────────────────────┤
-  │ dias_em_aberto     │ 282                          │
-  ├────────────────────┼──────────────────────────────┤
-  │ dias_abono         │ 156                          │
-  ├────────────────────┼──────────────────────────────┤
-  │ turnos             │ 97                           │
-  └────────────────────┴──────────────────────────────┘
+  Ran 1 shell command
 
-  392 colabs (45%) mudariam pelo menos um campo. Publicando:
+● Meu erro saiu. O que resta é pré-existente e só aparece por cadeia de import — rodando o comando exato do selo para confirmar:
 
-● Conferir o push · 7m 12s
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push_o9c.log; for i in $(seq 1 95); do grep -q '^RC=' "$L" && break; sleep
-     10; done; tail -4 "$L"; cd /home/ronald/saas-hasner && echo "falta: $(git log --oneline origin/main..HEAD | wc -l)" (7m 11s)
+  Ran 1 shell command
+
+● O erro está no universo do selo: 1 em 719 arquivos, e surgiu porque a cadeia de import do meu comando mudou a ordem de inferência do mypy. Curando na origem, como o selo manda:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Sintoma clássico de ciclo de import: o set é um literal e o mypy não consegue tipá-lo quando a ordem muda. A cura na origem é a anotação explícita:
+
+  Ran 1 shell command
+
+● mypy limpo em 719 arquivos e ruff limpo. Emendando e reempurrando:
+
+  Rodar o selo das casas e o app chamados · 1m 17s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py te… (1m 17s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Percolating… (6h 30m 25s · ↓ 536.7k tokens)
+✢ Percolating… (6h 35m 56s · ↓ 543.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                                            ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
