@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 01:12:31.**
+**Medido em 02/10/2026 01:17:40.**
 
 | | |
 |---|---|
-| `HEAD` local | `5b42b55d ATALHO-HE fechado com o smoke dele; o AVAIS volta a ZERO` |
+| `HEAD` local | `ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **24** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar
 5b42b55d ATALHO-HE fechado com o smoke dele; o AVAIS volta a ZERO
 77126b6a SUITE-UMA-VEZ-POR-ARVORE no ar, e o criterio antigo era CEGO para .js, .css e bin/
 f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa
 09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO
-680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,24 +94,9 @@ f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  o hash e a suíte roda inteira.
-
-  O item (4) das suas regras ganhou selo: test_hook_nao_para_por_processo.sh — suíte rodando + item livre = block, e o bloqueio tem de nomear o item; com
-  o par que morde do outro lado (fila vazia, suíte rodando igual, tem de liberar). Ele não é redundante com o irmão: aquele prova que a espera não gasta o
-  teto, este prova que ela não libera — um hook que não contasse a espera mas liberasse por outro caminho passaria naquele e falharia aqui.
-
-  E o painel ganhou "LISTA TRAVADA" — com o selo me pegando no meio. Minha primeira versão varria o bloco OBRAS dentro do handoff_sessao.sh, e o selo dele
-  ficou vermelho na hora: "o script varre o bloco OBRAS por conta própria (2º leitor da fila)". Ele está certo — dois leitores discordam no dia em que a
-  fila andar. A trava passou a nascer no juiz (hook_stop_fila1.travas_da_fila()) e o painel a chama, devolvendo a palavra que travou (PAREI, FILA 2,
-  espera o !, CONGELADA) e não uma interpretação.
-
-  54 selos de host, 0 vermelhos. O smoke do atalho HE está no AVAIS (item 1 da sua lista: ele está no ar desde 02:5x, com contador == universo medido em
-  1.817 = 1.344 + 401 + 72).
-
-  A suíte cheia do marco das três curas segue rodando — próximo item livre é o (2) abrir por causa as +59,82 h de atraso em 13 colabs, que é leitura sobre
   o CSV que já tenho em disco e não precisa da pista.
 
-✻ Baked for 11m 55s · done 12:50 AM · 1 shell still running
+✻ Baked for 11m 55s · done 12:50 AM · 2 shells still running
 
 ❯ → code
   smoke Ronald: abri a Central, o atalho HE esta no quadro com o numero certo e me levou para a tela de HE -- pode fechar o ATALHO-HE
@@ -127,12 +111,27 @@ f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora 
 ● Task "Esperar o container de teste sair" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Unfurling… (13m 26s · ↓ 15.4k tokens)
+  Ran 1 shell command
+
+● Background command "Relancar o push dos 24 commits" completed (exit code 0)
+
+  Committed ba11ab89, searched for 1 pattern, ran 11 shell commands
+
+● Agora a cura (b) na copia. Primeiro o predicado, no sitio onde o juiz vizinho ja mora:
+
+  Ran 2 shell commands
+
+● Agora os dois portoes no calculador — entrada na volta do intervalo (mata o atraso) e saida para o intervalo (mata a antecipada):
+
+  Running 1 shell command…
+
+✽ Unfurling… (18m 34s · ↓ 25.6k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
