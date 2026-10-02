@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:50:01.**
+**Medido em 02/10/2026 09:55:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito` |
+| `HEAD` local | `24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo` |
 | `origin/main` | `46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,16 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo
+8e085c33 [PAINEL-SITUACIONAL-N+1] Os dois censos que a suite acusou eram de ANCORA: o sitio mudou de lugar, a lei nao
 a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito
 27c9c24c O topo do TICKETS fechado no ato do push (O112)
 46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS
-9877256e [JANELA-DA-AUTORIDADE-PERDE-O-DIA-20] A janela da testemunha passa a ser a da folha, e a medicao refinou a premissa
-daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
+ M app/core/management/commands/lavrar_placar_situacional.py
+ M app/docs/BACKLOG.md
+ M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,39 +97,39 @@ daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ equivalência lote × juiz (520, mesmo instante) │ 144 = 144, lote-juiz=[], juiz-lote=[] (0,33 s × 4,16 s) │
-  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ op_em_turno global × soma empresas             │ 145 = 145 (118+19+8) — pela cor do LED seria 39         │
-  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ op_justif global × soma                        │ 31 = 31 (25+5+1) — era 31 repetido em toda linha        │
-  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
-  │ colabs sem empresa                             │ 0 (a igualdade não tem ressalva)                        │
-  └────────────────────────────────────────────────┴─────────────────────────────────────────────────────────┘
-
-  Dois registros que o trabalho produziu:
-
-  - o censo vizinho me pegou na hora de nascer: copiar para o lote a escolha de escala que a ata faz criou o terceiro desempate por ativa em turnos.py
-    contra 2 declarados. Não declarei 3 — a dívida da O68 ganhou um carregador só (_escalas_da_ata), que os dois leitores chamam.
-  - *o cron das /5 já estava servindo a cura antes do deploy: o placar lavrado às 09:40 já veio 118+19+8 = 145 e 25+5+1 = 31, porque docker exec nasce
-    lendo o disco. É a mesma família da janela do merge — e é o motivo de deployar no verde, não depois.
-
-  Erro meu a corrigir no próximo commit: datei BACKLOG/TICKETS como "12:xx" de cabeça; são 09:4x (li o date depois).
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
-
-  Ran 1 shell command
-
-● Background command "Espera o pre-push e le o veredito" completed (exit code 0)
-
-  Ran 1 shell command
 
 ● Push 77 caiu com 2 selos — os dois da mesma família (contrato que enumera). Lendo os dois:
 
-● Qual pergunta e o _TT6
-  ⎿  $ sed -n '380,400p' core/juizes.py
+  Searched for 2 patterns, ran 5 shell commands
 
-✢ Hullaballooing… (2h 16m 28s · ↓ 249.8k tokens)
+● Os dois selos reancorados estão verdes (o único error é um label meu que não existe). Commit da reancoragem:
+
+  Committed 8e085c33
+
+● Agora o HAIKU (ordem (a)+(b)+(c)) na árvore, com o DENTES regenerado:
+
+  Committed 24f57549, ran 7 shell commands
+
+● Deploy agora (DEPLOY JÁ; ensaio da sombra de hoje OK, sem migration):
+
+  Ran 1 shell command
+
+● Deploy OK às 09:54 — e ele reiniciou as três cascas, mensageria inclusa. Provas em prod:
+
+  Ran 2 shell commands
+
+● Bug provado no caminho (LEI-AKITA 6): o lavrador imprime 12:54 para 09:54 — agora cru em UTC, a mesma lápide do HAIKU-EXPORT. Cura na hora:
+
+● Corrige hora, hash e fecha as celulas
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     # ---------------- TICKETS: hash, hora e a linha do HAIKU
+     p='app/docs/TICKETS.md'
+     s=io.open(p,encoding='utf-8').read()
+     s=s.replace('| **FECHADA 02/10 12:xx, no ar** | `<commit>` | 02/10 |',
+     '| **FECHADA 02/10 09:54, no ar** | `a8c605dd`+`8…
+
+✢ Hullaballooing… (2h 21m 58s · ↓ 261.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
