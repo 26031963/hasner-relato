@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:15:45.**
+**Medido em 01/10/2026 23:20:57.**
 
 | | |
 |---|---|
@@ -39,6 +39,10 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## `git status --short`
 
 ```
+ M app/chamados/views.py
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
+ M app/templates/chamados/painel_gestao.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,44 +99,44 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  aqui.
+  consome. Empresa sem retrato NAO vira zero: o atalho mostra "HE —" e o title diz qual empresa nao tem retrato.
+  DESTINO: link para ponto:gestao_he. E <a>, nao button[type=submit] (a regra global de hasner-ponto.css:369 pinta de azul).
+  SELO: o numero do atalho == o total "sem decisao" da tela de destino (contador == universo); getComputedStyle do atalho no chromium = rgb(255, 237,
+  213); as duas cascas.
+  PROIBIDO: contador novo, conta no template, formato novo de botao.
+  PRONTO: print da Central com o atalho no RELATO, PROVA: ao lado, AVAIS com o meu smoke.
+  LEI-AKITA: origem=pendentes_na_central; testemunha=retrato lavrado he_pendente; RED=atalho x total da tela; quem-mais-le=relatorios/views.py; juizes
+  novos=0.
+  HAIKU: (a) o mesmo contador, rotulo "dias de HE aguardando ciencia"; (b) golden: "quantos dias de HE esperam ciencia na J.A?"; (c) leitura.
 
-  Você também achou um segundo sítio que eu não tinha visto: a linha 139 tem um botão de envio com fundo slate-100 no style, coberto pela mesma regra
-  global — também pintado de azul por cima. Está na ordem do agente para conferir e dizer o que achou, mesmo que esteja certo.
+  (2) HE-OCORRENCIA-COMO-LINHA -- REGISTRAR no BACKLOG, NAO construir; entra depois do ! da troca da S5b. corte Ronald: a ocorrencia de HE deixa de morar
+  no retrato em bloco e nasce como LINHA de tabela, com trilha.
+  CONTRATO DE ENTRADA: FONTE = a regra da janela de HE (ponto/janela_he.py), a tabela registra o que ela produz, nao recalcula. UNIDADE = minutos por
+  dia, por colaborador, por ponta. UNIVERSO = todo dia com batida fora do marco desde a competencia 09. EXCLUSOES = intervalo e dia que o cadastro nao
+  descreve (L-084). ESCALA = uma linha por ocorrencia, indice por empresa + competencia + colaborador; contagem em lote, sem N+1.
+  A LINHA GUARDA: colaborador, empresa, data, hora batida e hora do marco, posto e praca do dia, ponta (antes/depois), minutos, estado
+  (bloqueada/ciencia/autorizada), quem decidiu, quando, motivo, historico de cada mudanca, e a competencia em que entrou na folha.
+  O QUE PASSA A SAIR DELA: o numero do atalho, o limite de decisao por cadastro (opcao b), a ciencia em lote, e relatorio de HE por colaborador e por
+  posto.
+  Na obra: publicar o desenho da tabela e o plano de migracao do retrato ANTES do codigo.
 
-  E a prova ficou mais dura, que é o que mais importa: getComputedStyle da célula no chromium = rgb(219, 234, 254), nas duas cascas, e o selo de
-  luminância passa a ler a tela renderizada em vez do arquivo de cores. Isso é mudança de método, não caso novo — foi justamente por ler o arquivo que o
-  selo ficou verde com a tela azul.
+  Segue a fila.
 
-  Registrado também que os tokens de 22:16 ficam e os hexes literais do aval de 23:0x não valem, porque aquele aval foi substituído por este.
+  Ver como o retrato e escrito e lido
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >
+     $S/atalho_igual.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """O numero do atalho e o total da tela de destino sao o MESMO? SO LEITURA.
+     A ordem dele: *"SELO: o numero do …
 
-  Quando a raia voltar com a prova no chromium, eu mergeio direto, publico o print do col207 e ponho o seu smoke no AVAIS — e então volto às três curas da
-  S5b, que é onde a sua ordem manda a fila seguir depois.
-
-✻ Waiting for 1 background agent to finish
-
-❯ aval Ronald 01/10 23:1x GESTAO-HE fatia 1 -- consolida e SUBSTITUI os avais de 23:0x. So template.
-  CAUSA PROVADA do azul (print 22:57, depois da correcao das 22:16): templates/ponto/gestao_he.html:221 faz da celula um <button type="submit">, e
-  static/css/hasner-ponto.css:369-373 pinta todo button[type="submit"] com background var(--hp-blue) !important e color #fff !important. Os tokens suaves
-  estao la, por baixo.
-  CURA: a celula deixa de ser botao de envio -- type="button" com o disparo por htmx na MESMA porta decidir_he, mesma confirmacao e mesmo motivo. Nao
-  brigar com !important, nao tocar a regra global.
-  CORES: ficam os TOKENS que voce ja pos as 22:16; os hex do aval das 23:0x nao valem.
-  LED: o LED da casa, copiar de templates/colaboradores/partials/painel_situacional.html:282-285 -- circulo cheio de 11px (nao 5px): cinza #cbd5e1 pelo
-  token equivalente = bloqueado, verde = autorizado; ciencia com o anel, como voce fez.
-  CONFERIR a linha 139: botao de envio com fundo slate-100 no style, que a mesma regra tambem cobre.
-  PROVA antes de dizer pronto: getComputedStyle da celula com HE no chromium = o rgb do --hx-primary-bg (219, 234, 254), nas duas cascas. O selo de
-  luminancia passa a ler a tela renderizada, nao o arquivo de cores.
-  Merge direto, print do col207 no RELATO, AVAIS com o meu smoke. Depois, de volta as curas da S5b. Segue a fila.
-
-✶ Shimmying…
+✢ Shimmying… (5m 16s · ↓ 10.6k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  paste again to expand
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Checking STATIC_ROOT in config/settings/base.py                                                             8m 2s · ↓ 500.7k tokens
+  ◯ general-purpose  Running test_tela_gestao_he_calendario suite                                                              13m 15s · ↓ 522.7k tokens
   ⧉  index
 ```
