@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:22:01.**
+**Medido em 02/10/2026 05:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10` |
-| `origin/main` | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `6b1ae4f9 [O22] AUSENCIA-REVERTER-REJEICAO estava CONSTRUIDA: o que faltava era conferir e dizer` |
+| `origin/main` | `27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6b1ae4f9 [O22] AUSENCIA-REVERTER-REJEICAO estava CONSTRUIDA: o que faltava era conferir e dizer
+0d5c2f39 O topo do TICKETS fechado no ato do push (O112)
 27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10
 68764776 A O110 ganha linha no TICKETS
 90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia
-a1acc651 O topo do TICKETS fechado no ato do push (O112)
-9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/HANDOFF-SESSAO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,9 +95,6 @@ a1acc651 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  portão por onde toda fatia passa — então vai para a sua mesa como ok-desenho (O112), não curada por mim.
-
-  O push final está rodando a suite; aviso quando entrar.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: O112 -- O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite (02/10, medido). tickets_
@@ -121,12 +119,15 @@ a1acc651 O topo do TICKETS fechado no ato do push (O112)
 
 ● Background command "Esperar o push 65" completed (exit code 0)
 
-● Esperar o push 66 · 6m 54s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "rc=|pos_push|error:" logs/push66.log; do sleep 25; done; tail -5 logs/push66.log; git fetch -q
-     origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (6m 53s)
+  Searched for 4 patterns, ran 19 shell commands
+
+● Background command "Linha do O110 e push" completed (exit code 0)
+
+● Esperar o push 67 · 57s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "rc=|pos_push|error:" logs/push67.log; do sleep 25; done; tail -4 logs/push67.log (57s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (4h 22m 56s · ↓ 383.3k tokens)
+· Unfurling… (4h 28m 26s · ↓ 389.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
