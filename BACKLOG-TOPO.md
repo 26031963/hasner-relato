@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**111 obras abertas.**
+**112 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -120,3 +120,4 @@ lista — ela e o que esta EM PE._
 | **O110** | A DISTANCIA CIRCULAR TEM SEIS COPIAS A MAO, nao quatro | **FECHADA 02/10 05:5x: as SEIS copias vi |
 | **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | **FECHADA 02/10 09:xx.** O mapa `dia_da_ |
 | **O112** | O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite | **FECHADA 02/10 05:2x** -- nasceu `bin/p |
+| **O113** | PAINEL-SITUACIONAL-N+1 + PLACAR-EM-TURNO-DOIS-NUMEROS | espera `!` |

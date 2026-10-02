@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:50:31.**
+**Medido em 02/10/2026 08:56:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook` |
-| `origin/main` | `99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)` |
-| commits a subir (`ahead`) | **3** |
+| `HEAD` local | `daa9cb6a O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook
 c4980e4b [COL369-TIPOS-INVERTIDOS] MEDIDO: SIM para a intra (2,00 h), PARCIAL para as horas (2,29 das 5,07)
 ec346990 O topo do TICKETS fechado no ato do push (O112)
 99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)
-0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,21 +96,6 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  MEDIDO 02/10 08:45 em prod (so leitura, funcoes reais): pagina de 30 = 0,63 s e 130 queries; lote de 100 = 0,96 s e 390; universo de 520 = 4,07 s e
-  2.150. Sao ~4 queries por colaborador. PlacarSituacional: op_em_turno GLOBAL 139, soma das empresas 37 (26+9+2); op_justif = 31 em TODAS as linhas.
-
-  (A) N+1
-  FONTE: colaboradores/services/situacional.py::montar_situacional.
-  MUDA: (1) :102 chama ponto/turnos.py::turno_aberto_de UMA VEZ POR COLAB -- passa a perguntar em LOTE, pela MESMA autoridade (_turno_aberto_calc,
-  :1273), com os insumos carregados uma vez para os ids da pagina; (2) :73 ids_com_adesao() sem recorte varre a frota inteira a cada pagina e a cada lote
-  -- passa a receber ids=_ids; (3) colaboradores/views.py::painel_situacional, caminho FILTRADO: monta o recorte inteiro antes do primeiro paint e de
-  novo nos lotes -- monta uma vez.
-  RED: selo de contagem -- montar_situacional com 30 e com 100 colabs faz o MESMO numero de queries (hoje 130 x 390). MORDE: a diferenca tem de ser 0.
-  SELO DE EQUIVALENCIA: na sombra de hoje, o conjunto em_turno do lote == {c : turno_aberto_de(c, agora) is not None} para os 520, diferenca 0 nos dois
-  sentidos.
-
-  (B) EM TURNO COM DUAS DEFINICOES
-  FONTE: o juiz, situacional.py:139 (pk in em_turno).
   MUDA: core/management/commands/lavrar_placar_situacional.py:71 conta led == 'amarelo', e o LED fica vermelho com disputa aberta -- passa a contar pelo
   MESMO predicado do global (a linha carrega o veredito do juiz).
   RED: soma de op_em_turno das empresas == op_em_turno global (hoje 37 x 139).
@@ -127,11 +114,26 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
   LEI-AKITA: origem=situacional.py + lavrar_placar_situacional.py, testemunha=_turno_aberto_calc, RED=os tres acima, quem-mais-le=censo dos 68 chamadores
   de turno_aberto_de (nenhum muda de assinatura), juizes novos=0.
   segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
+
+● Duas coisas. Primeiro: minha sonda leu a chave errada e devolveu 0,00 nos dois lados — or 0 engoliu. E a ordem nova entra ao fechar este marco, como
+  você diz. Registrando-a já:
+
+  Ran 2 shell commands
+
+● A chave é total_trabalhadas — e no col155 ela já bate com o gravado (242,81). Refazendo o DIFF com a chave certa:
+
+● A tela contra o gravado, com a chave certa · 1m 30s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY'
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/jan20_vs_gravado.py'
+     s=open(p,encoding='utf-8').read(… (1m 30s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Hullaballooing… (1h 22m 28s · ↓ 117.6k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
