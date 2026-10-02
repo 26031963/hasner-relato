@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:15:31.**
+**Medido em 02/10/2026 19:21:01.**
 
 | | |
 |---|---|
@@ -95,36 +95,36 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern
-
-● Decisivo para o desenho: marcos_dna_periodo é lido pelo motor (motor_calculo_v2.py:357,723, zona inviolável) e pelo juiz de turnos
-  (turnos.py:1250,1280) como marcos_por_dia do pareamento. Mudar o retorno dela mexeria no pareamento — dinheiro e zona inviolável. Pela
-  CURA-MAIS-RESTRITIVA: a 4-tupla do motor fica intacta, nasce uma irmã com a sequência completa, e migram só os dois sítios da GRADE.
-  Registro o aval e abro a cópia:
+● Testo a cura da grade antes de tirar o raio do cartório:
 
   Ran 1 shell command
 
-● O formato do arquivo é bullet, não tabela — corrijo a linha para a forma da vizinha:
+● Sete verdes — incluindo a invariante da ata e as 6 acesas com 0 órfãs — sem tocar o cartório. Isso prova que a origem era a grade: a ata
+  sarou sozinha. Agora o raio de 30 min sai. Leio o ramo irmão antes de apagar:
 
   Ran 1 shell command
 
-● Agora a cópia do HEAD e o RED. Monto a raia com os pontos de montagem que a suíte exige:
+● Dois usos do raio: o do ramo j is None (pré-existente, para marco que a régua nem tem) e o meu if not _acesa: de hoje, que é o band-aid.
+  Tiro só o meu — o pré-existente agora fica guardado pelo selo novo da disjunção:
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Escrevo o RED — o selo dele (batida que acendeu nunca consta em órfãs) mais o caso da grade:
-
-  Ran 1 shell command
-
-● Agora o selo que ele pediu — a invariante na ata gravada:
+● O caso previsto: um dos quatro afirmava sobre o band-aid. Caracterização não se apaga — ela se inverte. Leio como ele monta a entrada:
 
   Ran 1 shell command
 
-● Rodo o RED na raia (CPUSET de teste, contêiner irmão) para ver os dois selos vermelhos antes de curar:
+● O teste fabrica à mão a saída defeituosa da grade (coluna None + batida em orfas) — uma forma que, curada a origem, não ocorre mais.
+  Inverto a asserção para morder a volta do band-aid nos termos do selo dele:
 
-● Running 1 shell command…
+● Invert the characterization test
+  ⎿  $ cd /home/ronald/wt-orfa/app && python3 - <<'PY'
+     import io
+     p = 'ponto/tests/test_lampada_acende_pela_batida.py'
+     s = io.open(p, encoding='utf-8').read()
+     # ---- 1) o cabecalho: a conclusao estava errada, e a licao fica
+     velho_cab = s[s.find('"""A LAMPADA ACENDE'):s.find('"""', s.find('"""A LAMPADA AC…
 
-✢ Sock-hopping… (1h 3m 0s · ↓ 166.6k tokens)
+✢ Sock-hopping… (1h 8m 30s · ↓ 184.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
