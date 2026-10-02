@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:20:57.**
+**Medido em 01/10/2026 23:26:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/templates/chamados/painel_gestao.html
+?? app/chamados/tests/test_atalho_he_na_central.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,20 +100,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  consome. Empresa sem retrato NAO vira zero: o atalho mostra "HE —" e o title diz qual empresa nao tem retrato.
-  DESTINO: link para ponto:gestao_he. E <a>, nao button[type=submit] (a regra global de hasner-ponto.css:369 pinta de azul).
-  SELO: o numero do atalho == o total "sem decisao" da tela de destino (contador == universo); getComputedStyle do atalho no chromium = rgb(255, 237,
-  213); as duas cascas.
-  PROIBIDO: contador novo, conta no template, formato novo de botao.
-  PRONTO: print da Central com o atalho no RELATO, PROVA: ao lado, AVAIS com o meu smoke.
-  LEI-AKITA: origem=pendentes_na_central; testemunha=retrato lavrado he_pendente; RED=atalho x total da tela; quem-mais-le=relatorios/views.py; juizes
-  novos=0.
-  HAIKU: (a) o mesmo contador, rotulo "dias de HE aguardando ciencia"; (b) golden: "quantos dias de HE esperam ciencia na J.A?"; (c) leitura.
-
-  (2) HE-OCORRENCIA-COMO-LINHA -- REGISTRAR no BACKLOG, NAO construir; entra depois do ! da troca da S5b. corte Ronald: a ocorrencia de HE deixa de morar
-  no retrato em bloco e nasce como LINHA de tabela, com trilha.
-  CONTRATO DE ENTRADA: FONTE = a regra da janela de HE (ponto/janela_he.py), a tabela registra o que ela produz, nao recalcula. UNIDADE = minutos por
-  dia, por colaborador, por ponta. UNIVERSO = todo dia com batida fora do marco desde a competencia 09. EXCLUSOES = intervalo e dia que o cadastro nao
   descreve (L-084). ESCALA = uma linha por ocorrencia, indice por empresa + competencia + colaborador; contagem em lote, sem N+1.
   A LINHA GUARDA: colaborador, empresa, data, hora batida e hora do marco, posto e praca do dia, ponta (antes/depois), minutos, estado
   (bloqueada/ciencia/autorizada), quem decidiu, quando, motivo, historico de cada mudanca, e a competencia em que entrou na folha.
@@ -122,14 +109,28 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 
   Segue a fila.
 
-  Ver como o retrato e escrito e lido
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >
-     $S/atalho_igual.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O numero do atalho e o total da tela de destino sao o MESMO? SO LEITURA.
-     A ordem dele: *"SELO: o numero do …
+  Searched for 3 patterns, read 1 file, ran 11 shell commands
 
-✢ Shimmying… (5m 16s · ↓ 10.6k tokens)
+❯ aval Ronald 01/10 23:2x PERMISSAO autorizar_he: liberar a acao rbac_autorizar_he para os setores DP e SUPERVISAO SP do cliente, pela mesma porta que a
+  UI de Setores usa, com trilha (quem, quando, antes/depois). Antes de gravar: listar os setores existentes e os usuarios que passam a ter a acao; se
+  "DP" ou "SUPERVISAO SP" nao casar com exatamente um setor cada, NAO gravar e publicar a lista no AVAIS. Sem migration. PROVA: um usuario de cada setor
+  ve a celula do calendario de HE como clicavel. Segue a fila !
+
+  Listed 1 directory
+
+❯ aval Ronald 01/10 23:2x, complemento da PERMISSAO autorizar_he: "SUPERVISAO SP" nao e nome de setor -- os supervisores do cliente tem login sp01, sp02
+  etc. (e nome proprio no cadastro). Achar o(s) SETOR(es) onde esses usuarios estao e liberar a acao para esse(s) setor(es) e para o DP. O login serve so
+  para LOCALIZAR o setor; a permissao e do setor, nunca por prefixo de login. Publicar no RELATO a lista: setor -> usuarios que passam a poder
+  autorizar. Se houver supervisor fora de setor, ou setor com gente que nao e supervisao nem DP, NAO gravar esse e por no AVAIS. Segue a fila !
+
+● Listar setores e supervisores antes de gravar
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >
+     $S/setores_he.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """LISTAR ANTES DE GRAVAR (ordem Ronald 01/10 23:2x): setores, quem esta neles, e quem passaria a poder
+     autoriza…
+
+✢ Shimmying… (10m 20s · ↓ 21.5k tokens · still thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -137,6 +138,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Running test_tela_gestao_he_calendario suite                                                              13m 15s · ↓ 522.7k tokens
+  ◯ general-purpose  Writing cascade section into RELATO.md                                                                    18m 19s · ↓ 528.8k tokens
   ⧉  index
 ```
