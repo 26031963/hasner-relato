@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 06:32:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.3 MB). Acoes na janela: **934**.
+**Medido em 02/10/2026 06:38:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.3 MB). Acoes na janela: **938**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:33:28 | Bash | Veredito do push e do hook | `cd /home/ronald/saas-hasner && until grep -qE "pos_push\|error:" logs/push72.log; do sleep 30; done; tail -4 logs/push72.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"; echo "=== hook:"; echo '{"hook_event_name":"Stop"}' \| timeout 60 python3 bin/hook_stop_fila1.py 2>&1 \| head -2; echo "(silencio = libera)"` |
+| 06:33:23 | Bash | Push final do turno | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh >/dev/null 2>&1 && git add app/docs/HANDOFF-SESSAO.md && git commit -q -m "Handoff regenerado depois das correcoes de redacao Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>" && bin/push.sh origin main > logs/push72.log 2>&1; echo "rc=$?"; tail -3 logs/push72.log` |
+| 06:33:17 | Bash | Publicar as duas correcoes de redacao | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && printf '%s\n' '- [O topo do RELATO é contrato com o hook](topo-do-relato-e-contrato-com-o-hook.md) — PAREI só nomeia fila 1; estado fecha com FECHADA/NO AR, não sinônimo' >> MEMORY.md; cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().rstrip('\n') s += """ ## 02/10 06:3x — o h ...` |
+| 06:32:48 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/topo-do-relato-e-contrato-com-o-hook.md` |
 | 06:32:29 | Bash | PAREI so com o que trava a fila 1 | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read() i=s.index('PAREI: ! e ok-desenho') j=s.index('\n\n', i) novo = ("PAREI: ! — **a fila 1 espera DOIS `!` seus**, e os dois tem a tabela publicada: **(1)** a **TROCA do\n" "calculador (S5b)**, com a isolacao feita no MESMO dado (atraso +59,82 h -> **-0,16 h**, e nada fora de\n" "atraso/antecipada  ...` |
 | 06:32:09 | Bash | As condicoes de liberacao do hook | `cd /home/ronald/saas-hasner && sed -n '230,300p' bin/hook_stop_fila1.py` |
 | 06:31:56 | Bash | Ler o item que o hook aponta | `cd /home/ronald/saas-hasner && python3 - <<'PY' import re for l in open('app/docs/BACKLOG.md',encoding='utf-8'): if l.startswith('\| S5b-TROCA-NAO-CRIA-DESCONTO \|'): c=l.split(' \| ') print('OBRA:', c[1][:700]); print(); print('ESTADO:', c[2][:400]); print(); print('ONDE:', c[3][:300]) break PY` |

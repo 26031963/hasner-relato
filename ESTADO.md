@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:32:31.**
+**Medido em 02/10/2026 06:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c9aaa1df O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
 | `origin/main` | `567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b1da8d82 Handoff regenerado depois das correcoes de redacao
+036a21bd O hook me recusou duas vezes, e nas duas a culpa era a minha REDACAO
 c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA
 e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a tela nao diverge -- ela e MUDA
-2b3d646c O topo do TICKETS fechado no ato do push (O112)
-a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,6 +94,9 @@ a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  O O45 é o achado que vale ler: a lápide dizia que a diferença era de janela. Não é. Na amostra de 150, as 99 diferenças são 100% só-no-cartão e 100%
+  dentro da janela da tela — e o número que fecha o caso é dia_colab_tela = 0, com a lista da tela vazia em 150 de 150. Com horas_previstas idênticas e
   dias_falta = 0 nos dois lados, não é previsto, nem falta, nem janela: a tela é muda. Os "1.411" não são desencontros entre duas contas — são dias que só
   o cartão conta.
 
@@ -120,21 +120,18 @@ a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 
 ● Background command "Esperar o push final do turno" completed (exit code 0)
 
-● PAREI so com o que trava a fila 1
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/RELATO.md'
-     s=open(p,encoding='utf-8').read()
-     i=s.index('PAREI: ! e ok-desenho')
-     j=s.index('\n\n', i)
-     novo = ("PAREI: ! — **a fila 1 espera DOIS `!` seus**, e os dois tem a tabela publicada: **(1)** a **TROCA do\n"
-     "calculador (S5b)**, co…
+● Veredito do push e do hook · 4m 32s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push72.log; do sleep 30; done; tail -4 logs/push72.log; git fetch -q origin;
+     echo "ahead=$(git rev-list --count origin/main..HEAD)"; echo "=== hook:"; echo '{"hook_event_name":"Stop"}' | timeout 60 python3
+     bin/hook_stop_fila1.py… (4m 30s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (5h 33m 26s · ↓ 430.6k tokens)
+✢ Unfurling… (5h 38m 56s · ↓ 434.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
