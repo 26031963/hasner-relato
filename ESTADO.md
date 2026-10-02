@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 03:13:31.**
+**Medido em 02/10/2026 03:19:01.**
 
 | | |
 |---|---|
@@ -123,11 +123,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Adicionar o RED do sinal e esperar a pista" completed (exit code 0)
 
-● Esperar o veredito do push do marco · 4s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push57.log; do sleep 25; done; tail -6 logs/push57.log (3s)
+● Esperar o veredito do push do marco · 5m 34s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push57.log; do sleep 25; done; tail -6 logs/push57.log (5m 33s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (2h 14m 26s · ↓ 233.0k tokens)
+✢ Unfurling… (2h 19m 56s · ↓ 233.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
