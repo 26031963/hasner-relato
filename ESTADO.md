@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:23:01.**
+**Medido em 02/10/2026 09:28:09.**
 
 | | |
 |---|---|
@@ -39,6 +39,12 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 ## `git status --short`
 
 ```
+ M app/colaboradores/services/situacional.py
+ M app/colaboradores/views.py
+ M app/core/management/commands/lavrar_placar_situacional.py
+ M app/ponto/turnos.py
+?? app/colaboradores/tests/test_situacional_pergunta_em_lote.py
+?? app/core/tests/test_placar_situacional_um_so_numero.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,14 +100,6 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 3 patterns, ran 12 shell commands
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/topo-do-relato-e-contrato-com-o-hook.md (33 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/nao-commitar-durante-o-push.md (27 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/compilar-nao-e-renderizar.md (31 lines)
-  ⎿  Referenced file templates/chamados/detalhe_local.html
-
-● Task "Esperar o container de teste sair" still running in background
 
 ● Task "Linha no TICKETS e push do marco" still running in background
 
@@ -116,17 +114,25 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 
 ● Background command "Linha no TICKETS e push do marco" completed (exit code 0)
 
-● Patching 3 na copia: o lavrador
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113/p3_lavrador.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """O113 patch 3/4 -- o lavrador do placar conta pelo VEREDITO que a linha carrega."""
-     import io
-     import os
-     import py_compile
-     import sys
-     ROOT = s…
+  Searched for 2 patterns, read 2 files, listed 1 directory, ran 8 shell commands
 
-✢ Hullaballooing… (1h 49m 28s · ↓ 167.0k tokens · thinking)
+● RED primeiro: aplico só o turnos.py (refactor + lote) na árvore e deixo os consumidores velhos mentindo:
+
+  Ran 2 shell commands
+
+● RED #1 evidenciado: 190 queries para 30 linhas, 610 para 100 — diferença 420; a equivalência lote×juiz já passou. Corrijo a fixture (unique de
+  justificativa por turno) e aplico o resto:
+
+  Ran 2 shell commands
+
+● Nove GREEN. Agora ruff + os vizinhos que enumeram (lição das 3 rodadas de 01/10):
+
+  Censo de vizinhos e ruff
+  ⎿  $ grep -rln "papel_por_minuto_da_ata\|_turno_aberto_calc\|turno_aberto_de\|montar_situacional\|lavrar_placar_situacional\|painel_situacional"
+     --include=test_*.py . | tr '\n' ' '; echo; echo "=== ruff ==="; (ruff check colaboradores/tests/test_situacional_pergunta_em_lote.py
+     core/tests/test_placar_s…
+
+· Hullaballooing… (1h 54m 36s · ↓ 187.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
