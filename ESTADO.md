@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:42:31.**
+**Medido em 01/10/2026 23:48:01.**
 
 | | |
 |---|---|
@@ -98,9 +98,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  escrever:
-
-  ┌───────┬───────────────────────────────┬──────────────────────┬────────────┐
   │ setor │            empresa            │ ações antes → depois │   trilha   │
   ├───────┼───────────────────────────────┼──────────────────────┼────────────┤
   │ 4     │ emp2 J.A Juliani              │ 21 → 22              │ log 610714 │
@@ -129,13 +126,16 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
   -m. Refeito por heredoc.
 
 ✻ Waiting for 1 background agent to finish
+
+› Message from @a6628ec7e07379c89 (ctrl+o to expand)
+
+● Running 1 shell command…
+
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Shortening estado cell under 300 chars                                                                    34m 49s · ↓ 532.7k tokens
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
