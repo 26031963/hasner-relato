@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:31:47.**
+**Medido em 02/10/2026 15:37:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ```
  M app/ponto/calculador/alimentacao.py
  M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,44 +96,36 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    cadastro×realidade em col382 e irmãos; col788 no O65);
-  - (c) o arquivo de reversão em logs/;
-  - (d) o hash depois (o antes está medido: 09 com 607 linhas, 189304907c23163…);
-  - e a lavratura chamando a porta — que exige refazer a extração das rubricas, agora movendo as linhas em vez de reescrever, que é a lição
-    que custou cinco rodadas.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no
-  periodo AQUISIT
 
-● Seguindo para a troca. A extração das rubricas agora é por movimento: copio as linhas literais e troco só os nomes locais por parâmetros:
+● Task "Veredito do push 78" still running in background
 
-  Searched for 1 pattern, ran 1 shell command
+● Task "Fim do push 78" still running in background
 
-● Mais uma peça que eu não tinha: o chamador injeta mins e fora_janela na primeira tupla da pontualidade ("o trabalhado do dia vai na
-  primeira ponta... o teto da L-093 soma sobre os períodos do dia"). Agora tenho o fluxo completo. Movendo o bloco literal:
+● Task "Fim do push 78 (espera curta)" still running in background
 
-  Ran 2 shell commands
+● Task "Fim do push 78" still running in background
 
-● Agora o teste da extração: o DIFF chamando a porta das rubricas tem de dar a mesma tabela. Se mudar uma rubrica, a extração falhou de
-  novo:
+● Task "Espera o contador do O27" still running in background
 
-  Ran 2 shell commands
+● Task "Espera a sonda e reporta junto do push" still running in background
 
-● Os goldens pela porta movida dão o mesmo (n_pont=2 — a tupla fechada e a aberta, que aciona a guarda). Agora a frota, que é o teste da
-  extração inteira:
+● O selo mordeu — e mordeu certo: o comando chama _rubricas_por_dia, um nome local. Vou ver o que esse nome é de fato.
 
-● A frota pela porta movida · 1m 2s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; nohup docker run --rm $TESTE_DOCKER --network
-     saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONUNBUFFERED=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python
-     manage.py tenant_command diff_calculador --schema=j… (1m 1s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern
 
-✢ Doodling… (10m 34s · ↓ 27.5k tokens)
-                                                                                                                    0% until auto-compact
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+● A chamada é a porta certa — só entra com apelido no import (as _rubricas_por_dia), e o selo lê o nome chamado. Apelido
+  que esconde a porta do selo é o selo medindo o apelido: tiro o apelido.
+
+● Ler os dois sítios vivos antes do patch
+  ⎿  $ sed -n 258,268p ponto/management/commands/diff_calculador.py && echo "--- 360,372 ---" && sed -n 360,372p
+     ponto/management/commands/diff_calculador.py
+
+✢ Doodling… (15m 48s · ↓ 30.4k tokens)
+                                                                                ✔ Update installed · Restart to update
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
