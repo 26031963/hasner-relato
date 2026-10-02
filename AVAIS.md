@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 12
+# AVAIS NA MESA — 13
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -16,12 +16,13 @@
 | 8 | `ui-resposta-diz-o-que-e-smoke` | **smoke** | 2026-10-02T03:45 | NO AR desde 02/10 03:3x (`432058dd` + deploy). As 4 frases medidas nas perguntas REAIS pelo codigo no ar: `perg#37945` col106 'atraso de 1h 00m' + 'vai para a folha' + botao 'Validar com atraso'; `perg#38287` col358 'sai | `smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E` |
 | 9 | `W12X36-HPD-SMOKE` | **smoke** | 2026-10-02T11:47 | 128 tipos 12x36, 0 com hpd, 0 de 896 dia-tipo mudam; serve 338 vinculos e 1.307 plantoes de fim de semana | `smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual -- pode fechar o W12X36-HPD` |
 | 10 | `COL954-FALTA-1440` | **!** | 2026-10-02T16:10 | 1440 min lancados contra 480 previstos; excesso 960 min = 16 h; 1 caso em 14 | `` |
-| 11 | `TXT-09-JA-NAO-E-O-CALCULADO` | **!** | 2026-10-02T16:15 | 47 linhas da 09 escritas hoje; 12 dentro do TXT; emp2 213x210, emp3 88x86, emp4 igual; 5 linhas a mais, 0 a menos | `` |
-| 12 | `O114-SMOKE-COL221` | **smoke** | 2026-10-02T18:00 | 30/09 e 01/10 do col221 com 6 marcos; 9,19 h inalterado; te548 unico de 341 | `` |
+| 11 | `PAUTA-DP-09-COL954` | **pauta DP** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `` |
+| 12 | `PAUTA-DP-09-COL900` | **pauta DP** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `` |
+| 13 | `O114-SMOKE-COL221` | **smoke** | 2026-10-02T18:00 | 30/09 e 01/10 do col221 com 6 marcos; 9,19 h inalterado; te548 unico de 341 | `` |
 
 ---
 
-Total no JSON: **190** · aberto **12** · respondido **14** · sem-motivo **164**.
+Total no JSON: **191** · aberto **13** · respondido **14** · sem-motivo **164**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

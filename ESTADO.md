@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:13:29.**
+**Medido em 02/10/2026 17:18:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado` |
+| `HEAD` local | `e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **28** |
+| commits a subir (`ahead`) | **29** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP
 5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado
 ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
 a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato
 d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push
-01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL
 ```
 
 ## `git status --short`
@@ -95,35 +95,35 @@ d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do pus
 
 ```
 
-  As 7 falhas da suíte eram ambiente. Todas em selos de clique com chromium, porque o staticfiles da raia existia mas estava vazio — 0
-  arquivos contra 799 no main. Selo de clique sem JS coletado nunca dispara o POST. Com o staticfiles do main montado em leitura, os 11
-  passam.
+  Você estava certo e o número confirma: três das cinco linhas são um bloco de falta de 2 dias do col954 (rubrica 8792, 18/09 e 19/09),
+  que desconta; as outras duas são do col900 (0200 = 7,37 e 0243 = 4,50), que pagam. Segue verdadeiro só que nada foi removido nem
+  alterado.
 
-  A régua do TICKETS me recusou três vezes, todas com razão — e a terceira foi a mais útil: com os dois nomes na mesma célula ela recusou
-  os dois, porque casa o ID exato. A cura não foi afrouxar o padrão nem duplicar a história, foi uma linha-ponteiro que diz no próprio
-  texto que não é uma segunda obra. A causa de fundo é que o seu aval chamou a fatia CELULA-SEGUNDO-INTERVALO e eu a registrei como O114:
-  um item, dois nomes, e quem viu foi a régua.
+  Cheguei lá corrigindo três falhas minhas na mesma medição, e nenhuma apareceu por revisão — todas pelo número: escolhi os arquivos por
+  nome e o nome embute o hash, então comparei corridas diferentes e saíram 104 linhas em vez de 5; adivinhei os offsets e saiu ano=3202,
+  quando o layout está escrito em montar_linha_10; e comparei por conjunto, que some com duplicata — a linha de data de falta de um
+  colaborador é idêntica à de outro, e só multiconjunto dá os 3 + 2 exatos.
 
-  Falta o smoke do col221 na sua mesa. Depois do push, a S5b retoma com sete peças em cópia e o DIFF de frota refeito.
+  E uma unidade que inverteria tudo: a 8792 é rubrica de dias, então val_cru=2 são 2 dias; lida como horas seriam 0,02 — trocar desconto
+  de dois dias por dois centésimos de hora.
+
+  Em seguida, na ordem do seu aval: item (3) col954 com a porta recusando falta acima do previsto, item (4) AVAIS, e item (1) o
+  ancoramento com o número da lei em aberto.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
+● Item (3). Primeiro acho a porta de ausência — a cura vai nela, não no caminho de quem chama:
 
-● O push caiu num RED legítimo e rápido — antes da suíte, não depois: HAIKU-DENTES.md fora de sincronia com o codigo. É derivado, e o O114
-  criou contador e golden novos. Regenero:
+  Ran 2 shell commands
 
-  Ran 3 shell commands
+● A porta é criar_ausencia, com contrato de produtor único já selado. Leio a assinatura e onde as recusas moram:
 
-● Background command "Empurrar o marco do O114" completed (exit code 0)
+● A assinatura e o bloco de recusas
+  ⎿  $ cd /home/ronald/wt-splits/app && sed -n 70,80p ponto/services/ausencia.py; echo "..."; sed -n 130,150p ponto/services/ausencia.py
 
-  Ran 1 shell command
-
-●
-
-✶ Doodling… (1h 52m 16s · ↓ 330.7k tokens)
+✢ Doodling… (1h 57m 38s · ↓ 350.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
