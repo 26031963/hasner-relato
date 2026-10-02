@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:923 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:967 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:45:46.**
+**Medido em 02/10/2026 00:50:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa` |
+| `HEAD` local | `77126b6a SUITE-UMA-VEZ-POR-ARVORE no ar, e o criterio antigo era CEGO para .js, .css e bin/` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **22** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,27 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+77126b6a SUITE-UMA-VEZ-POR-ARVORE no ar, e o criterio antigo era CEGO para .js, .css e bin/
 f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa
 09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO
 680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
 cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke dele
-e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M bin/handoff_sessao.sh
- M bin/pre-push.sh
- M bin/regua.sh
-?? bin/arvore_hash.sh
-?? bin/keepalive.sh
-?? bin/tests/test_hook_nao_para_por_processo.sh
-?? bin/tests/test_suite_uma_vez_por_arvore.sh
+ M app/docs/ARQUITETURA.mmd
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -105,44 +95,44 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-❯ aval Ronald 02/10 00:4x -- NAO PARAR. Regra da sessao, vale ate eu revogar.
-  1. Esperar suite, push, deploy ou monitor NAO devolve o turno. Com a pista ocupada, pegar o proximo item da lista que nao precisa dela (cura em copia,
-  leitura, censo, pauta, registro, desenho) e trabalhar nele.
-  2. Item travado em !, lei ou smoke meu: linha no AVAIS com a frase pronta e PROXIMO item, no mesmo turno.
-  3. So devolve o turno com a lista INTEIRA travada ou vazia, escrevendo no painel "LISTA TRAVADA" e o que trava cada item.
-  4. O hook cobra isto: bin/hook_stop_fila1.py devolve "siga: <proximo item livre>" enquanto houver item livre, mesmo com processo de fundo rodando. Selo
-  com o caso que morde: suite rodando + item livre = block.
-  5. Um run por vez na pista: o paralelo e de PREPARO, nunca duas suites ou dois DIFFs juntos.
-     A LISTA, nesta ordem:
-     (1) ATALHO-HE-NA-CENTRAL no ar, com o smoke no AVAIS -- entrega de amanha cedo.
-     (2) S5b: abrir por causa as +59,82 h de atraso (13 colabs) e +13,55 h de antecipada (7), curar, DIFF refeito -> tabela no AVAIS para o ! da troca.
-     (3) push dos commits pendentes, um por marco.
-     (4) UI-RESPOSTA-DIZ-O-QUE-E (ordens de 17:4x e 18:3x).
-     (5) SUITE-UMA-VEZ-POR-ARVORE.
-     (6) So leitura: DIFF emp3=CLT da 09 e da 10; folha zero dos COM vinculo, causa por colab e DIFF.
-     (7) Trilha no quadro de permissoes: core/views_quadro.py:31 grava sem registrar_log.
      (8) HE-OCORRENCIA-COMO-LINHA: publicar o desenho da tabela e o plano de migracao; nao construir.
      (9) Fila 1 do BACKLOG na ordem do hook, O21 em diante.
      Segue a lista !
 
-  Pôr LISTA TRAVADA no painel e rodar os selos · 1m 16s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     import io
-     P='bin/handoff_sessao.sh'
-     t=io.open(P,encoding='utf-8').read()
-     a = ''' echo "## PROXIMO PASSO"'''
-     assert t.count(a)==1
-     # LISTA TRAVADA NO PAINEL (ordem Ronald 02/10 00:4x, item 3): o turno so se devolve com a lis… (1m 15s · 7 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 12 shell commands
 
-✽ Pouncing… (7m 12s · ↓ 14.8k tokens)
-                                                                                                                  ✔ Update installed · Restart to update
+● A regra nova foi usada por ela mesma: com a pista ocupada pela suíte, peguei o item (5), que é todo em bin/ — o container de teste não monta bin/.
+
+  SUITE-UMA-VEZ-POR-ARVORE no ar (77126b6a), e a obra se justificou por uma descoberta que o selo prova na mesma rodada: o critério antigo era cego.
+  bin/regua.sh::impressao_digital anda o disco com find -name '*.py' -o -name '*.html' — ele não vê static/js/, static/css/, bin/ nem arquivo de dado. Ou
+  seja: mudar o JS da tela mantinha o atalho "JÁ VERDE" e a suíte não rodava sobre o que mudou. O selo cria um .js num repo de mentira, exige que o hash
+  da árvore mude, e avisaria se a impressão antiga também mudasse — ela não mudou.
+
+  bin/arvore_hash.sh usa git write-tree num índice descartável, então o hash é exato e não suja o staging de quem está trabalhando — a lei da casa é "add
+  por PATH, nunca -A", e um -A num índice que morre no fim da função não é staging. O REGUA_ARVORE entrou nos três carimbos (o de OK e os dois de FALHOU),
+  e o FP antigo ficou como segunda condição por um ciclo, para carimbo velho nunca liberar nada. Não é SKIP_TESTS: a identidade é da árvore, um byte muda
+  o hash e a suíte roda inteira.
+
+  O item (4) das suas regras ganhou selo: test_hook_nao_para_por_processo.sh — suíte rodando + item livre = block, e o bloqueio tem de nomear o item; com
+  o par que morde do outro lado (fila vazia, suíte rodando igual, tem de liberar). Ele não é redundante com o irmão: aquele prova que a espera não gasta o
+  teto, este prova que ela não libera — um hook que não contasse a espera mas liberasse por outro caminho passaria naquele e falharia aqui.
+
+  E o painel ganhou "LISTA TRAVADA" — com o selo me pegando no meio. Minha primeira versão varria o bloco OBRAS dentro do handoff_sessao.sh, e o selo dele
+  ficou vermelho na hora: "o script varre o bloco OBRAS por conta própria (2º leitor da fila)". Ele está certo — dois leitores discordam no dia em que a
+  fila andar. A trava passou a nascer no juiz (hook_stop_fila1.travas_da_fila()) e o painel a chama, devolvendo a palavra que travou (PAREI, FILA 2,
+  espera o !, CONGELADA) e não uma interpretação.
+
+  54 selos de host, 0 vermelhos. O smoke do atalho HE está no AVAIS (item 1 da sua lista: ele está no ar desde 02:5x, com contador == universo medido em
+  1.817 = 1.344 + 401 + 72).
+
+  A suíte cheia do marco das três curas segue rodando — próximo item livre é o (2) abrir por causa as +59,82 h de atraso em 13 colabs, que é leitura sobre
+  o CSV que já tenho em disco e não precisa da pista.
+
+✻ Baked for 11m 55s · done 12:50 AM · 1 shell still running
+                                                                                                                                   1% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
