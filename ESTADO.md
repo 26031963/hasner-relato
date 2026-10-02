@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:35:45.**
+**Medido em 02/10/2026 00:40:46.**
 
 | | |
 |---|---|
@@ -95,44 +95,44 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (b) O gate do T8 chegou ao calculador, e o col473 21/09 desapareceu do CSV — os +11,61 h de atraso que o calculador cobrava e o motor não. O input que
-  faltava era de cadastro e o chamador já o tinha: _marcos_do() devolvia 2 dos 4 marcos que marcos_do_dia entrega.
-
-  E aqui um selo meu precisou aprender a distinção, em vez de eu afrouxar a cura: test_MORDE_uma_ponta_a_4h10_SEGUE_sendo_atraso ficou vermelho (250 → 0)
-  e estava certo em exigir 250 — faltava dizer que o dia declara intervalo. Sem o input ele exigia do calculador o contrário do que o motor faz, e passava
-  verde só porque o calculador não tinha gate. Ganhou o input e nasceu o par: a mesma ponta, no dia sem marco de intervalo, não desconta.
-
-  (c) A hora negativa morreu, com as duas camadas medidas:
-
-  ┌───────────────────────────────┬───────────────────────┬────────┐
-  │           contador            │         antes         │ depois │
-  ├───────────────────────────────┼───────────────────────┼────────┤
-  │ horas negativas no CSV        │ 4 dia-colab, −41,74 h │ ZERO   │
-  ├───────────────────────────────┼───────────────────────┼────────┤
-  │ dia_fora_da_janela_por_l084   │ 2                     │ 74     │
-  ├───────────────────────────────┼───────────────────────┼────────┤
-  │ janela_recusada_par_invertido │ não existia           │ 11     │
-  └───────────────────────────────┴───────────────────────┴────────┘
-
-  E o col235 01/10 ficou mais honesto que o motor: soma 5,00 h — as batidas reais 00:00→05:00, inteiras — contra 0,00 do motor, que clipa pela mesma
-  janela que a camada 2 recusa. A lápide do chamador pedia exatamente isso: "a batida REAL vale inteira". A divergência trocou de lado, e desta vez o lado
-  certo é o do calculador.
-
-  A tabela refeita: atraso +129,70 → +59,82 h (22 → 13 colabs), antecipada +11,97 → +13,55 (10 → 7), extras 0,00 nas duas.
-
-  E uma ressalva que eu não vou esconder: o gravado mudou entre as duas medições — trabalhadas de 23.972,52 para 24.338,40, +366 h — porque o recálculo
-  por evento rega a 10 a cada batida. Parte do que subiu em trabalhadas, noturnas e folga é deriva do gravado, não das curas. O que é seguramente das
-  curas, porque não depende de nível: as 4 horas negativas morreram, os 11 pares invertidos foram recusados, o contador da L-084 saltou 2 → 74, e o atraso
-  caiu 69,88 h com 9 colabs saindo da divergência.
 
   A suíte cheia está rodando. Com ela verde vem o deploy, o push do marco, e então a tabela final para o seu ! da troca — que ainda não vou pedir: sobram
   +59,82 h de atraso novo em 13 colabs, e a sua lei (2) diz que a troca não cria desconto.
 
 ✻ Cooked for 16m 39s · done 12:35 AM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Ler o mecanismo do stamp atual
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n 30,60p bin/pre-push.sh; echo "=== o stamp de hoje ==="; cat .regua_stamp 2>/dev/null | head -6; echo "===
+     impressao_digital ==="; grep -n "impressao_digital" -A14 bin/regua.sh | head -20
+
+✽ Pouncing… (2m 12s · ↓ 1.9k tokens)
+
+❯ aval Ronald 02/10 00:4x -- NAO PARAR. Regra da sessao, vale ate eu revogar.
+  1. Esperar suite, push, deploy ou monitor NAO devolve o turno. Com a pista ocupada, pegar o proximo item da lista que nao precisa dela (cura em copia,
+  leitura, censo, pauta, registro, desenho) e trabalhar nele.
+  2. Item travado em !, lei ou smoke meu: linha no AVAIS com a frase pronta e PROXIMO item, no mesmo turno.
+  3. So devolve o turno com a lista INTEIRA travada ou vazia, escrevendo no painel "LISTA TRAVADA" e o que trava cada item.
+  4. O hook cobra isto: bin/hook_stop_fila1.py devolve "siga: <proximo item livre>" enquanto houver item livre, mesmo com processo de fundo rodando. Selo
+  com o caso que morde: suite rodando + item livre = block.
+  5. Um run por vez na pista: o paralelo e de PREPARO, nunca duas suites ou dois DIFFs juntos.
+     A LISTA, nesta ordem:
+     (1) ATALHO-HE-NA-CENTRAL no ar, com o smoke no AVAIS -- entrega de amanha cedo.
+     (2) S5b: abrir por causa as +59,82 h de atraso (13 colabs) e +13,55 h de antecipada (7), curar, DIFF refeito -> tabela no AVAIS para o ! da troca.
+     (3) push dos commits pendentes, um por marco.
+     (4) UI-RESPOSTA-DIZ-O-QUE-E (ordens de 17:4x e 18:3x).
+     (5) SUITE-UMA-VEZ-POR-ARVORE.
+     (6) So leitura: DIFF emp3=CLT da 09 e da 10; folha zero dos COM vinculo, causa por colab e DIFF.
+     (7) Trilha no quadro de permissoes: core/views_quadro.py:31 grava sem registrar_log.
+     (8) HE-OCORRENCIA-COMO-LINHA: publicar o desenho da tabela e o plano de migracao; nao construir.
+     (9) Fila 1 do BACKLOG na ordem do hook, O21 em diante.
+     Segue a lista !
+  ctrl+x ctrl+s to send now
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
