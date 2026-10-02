@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:10:31.**
+**Medido em 02/10/2026 11:16:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +95,44 @@ a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  em_curso. O número que tranquiliza: zero períodos adquirido ou concedido com direito divergente — não há férias concedidas acima do direito.
-
-  Isso é exatamente a razão de existir da F2: hoje a tela mostra 30 dias a quem, se o período fechasse agora, teria 18.
-
-  Ran 2 shell commands
-
-● A medição da F2 está feita e o registro escrito — entra assim que o push 82b liberar a pista. E ela mudou o que a F2 é:
-
-  A F2 não é a regra, é a visão. O art.130 já está implementado (ferias/services.py:217 com a tabela em ferias/models.py:5), e o aplicar_art130 roda no
-  fechamento do período por desenho declarado. Isso derruba o custo e o risco do item: nenhum número novo nasce, é um leitor que falta — a mesma forma dos
-  três que subiram hoje.
-
-  O que ela precisa de você é uma pergunta jurídica, não técnica: quatro tipos descontam pelo cadastro vivo (atraso, falta, saida_antecipada, suspensao) e
-  o art.130 conta só o literal 'falta'. Suspensão disciplinar conta como falta injustificada para férias? Se sim, 5 ausências aprovadas não estão
-  reduzindo direito. Atraso e saída antecipada são parciais — contá-las como dia seria errado, e aí o literal está certo por acidente e o que falta é um
-  conjunto próprio no catálogo (FALTAS_DO_ART130), não DESCONTAM_VIVOS.
-
-  E o estado do direito, em 1.046 períodos: 7 com dias_direito gravado acima da tabela (col338 com 15 faltas marcando 30 onde dá 18; col667 com 19), todos
-  em_curso — e zero adquirido ou concedido divergente. Ninguém recebeu férias acima do direito. O que existe é a tela prometendo 30 dias a quem, se o
-  período fechasse hoje, teria 18 — que é exatamente o furo que a F2 fecha.
-
-  Com isso, o portão da F2 deixa de ser uma parede sem informação: quando o 22/22 abrir (e ele depende do mesmo ! da troca da S5b), o item entra sabendo
   que é tela, com o universo medido em 7-8 colaboradores e a regra jurídica já respondida.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● Segue esperando o push 82b · 1m 11s
+  Ran 5 shell commands
+
+● Esperando a suíte do push 82b (sobre 0c1d6bf4, a linha do O27 no TICKETS) para aplicar o último registro — o da F2 — e fechar o turno.
+
+  Nada de novo a relatar desde a última linha: a medição da F2 está feita, o registro escrito, e o que falta é o commit. Resumo do que você encontra
+  quando olhar:
+
+  No ar hoje: O113, O21, O25 — painel de 2.150 para 12 queries, o app dizendo o que foi decidido em 3.432 dia-colab, o chão do espelho de volta ao
+  cadastro. Dinheiro medido em zero nos três.
+
+  Medido e documentado, esperando você: O27 (325/520, 1.757,97 h, causa única), O26 (DIFF 0 garantido, 1.307 plantões de fim de semana), F2 (é visão, não
+  regra; 7 períodos projetando direito acima da tabela, nenhum concedido), censo B5-j (34 sítios sem guarda em apuração), 16 parâmetros sem efeito, placar
+  8/22.
+
+  Oito avais na mesa, todos com número e frase pronta — e quatro deles são cortes que já tinham nome na pausa de 27/09, cuja saída é o export da 09.
+
+  E a cadeia toda pende de um !: a troca da S5b (col516 +7,86 h, col174 +4,52 h, por pareamento). Dele dependem o 22/22, o censo dos juízes, os parâmetros
+  e o portão da F2.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
+
+● Control-plane do push 82b · 22s
   ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep
-     -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push82b.log | tail -5; date +%H:%M:%S (1m 10s)
+     -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push82b.log | tail -6; git log --oneline -1 (22s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (3h 36m 58s · ↓ 485.8k tokens)
+✢ Hullaballooing… (3h 42m 28s · ↓ 487.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

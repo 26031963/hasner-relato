@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 11:10:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (190.5 MB). Acoes na janela: **1074**.
+**Medido em 02/10/2026 11:16:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (190.5 MB). Acoes na janela: **1080**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:15:38 | Bash | Control-plane do push 82b | `cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https\|error:\|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -6; git log --oneline -1` |
+| 11:13:42 | Bash | Espera o push 82b | `cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https\|error:\|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -6; date +%H:%M:%S` |
+| 11:13:37 | Bash | Push 82b | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bvdjx00tn.output 2>/dev/null \| tail -8; cd /home/ronald/saas-hasner; tail -2 logs/push82b.log` |
+| 11:13:19 | Bash | Monitor por arquivo do push 82b | `cd /home/ronald/saas-hasner && until grep -qE "To https\|error:\|FAILED" logs/push82b.log; do sleep 20; done; sleep 2; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -6; date +%H:%M:%S` |
+| 11:13:13 | Bash | Progresso do push 82b | `cd /home/ronald/saas-hasner; tail -2 logs/push82b.log; wc -l < logs/push82b.log; docker ps --format '{{.Command}}' \| grep -c manage` |
+| 11:11:16 | Bash | Espera o push 82b fechar | `cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https\|error:\|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -6; date +%H:%M:%S` |
 | 11:09:20 | Bash | Segue esperando o push 82b | `cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https\|error:\|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -5; date +%H:%M:%S` |
 | 11:07:33 | Bash | Espera o push 82b | `cd /home/ronald/saas-hasner; for i in $(seq 1 10); do if grep -qE "To https\|error:\|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep -E "^(OK$\|Ran \|To https\|pos_push\|error:\|FAIL:)" logs/push82b.log \| tail -5; date +%H:%M:%S` |
 | 11:07:14 | Bash | Registro da F2 pronto | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113 && cat > $S/p14_f2.py <<'PYEOF' # -*- coding: utf-8 -*- """F2 -- publica a MEDICAO feita sob o portao (medir nao e construir) e a pergunta de LEI.""" import io import json import os import sys RAIZ = sys.argv[1] # ---------------- PENDENTES: a pergunta e JURIDICA p = os.path.join(RAIZ, 'app/docs/PE ...` |
