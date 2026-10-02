@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:368 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:411 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:09:54.**
+**Medido em 02/10/2026 16:15:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas` |
+| `HEAD` local | `8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -29,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA
+7260475c [S5b] A PORTA E UMA, mas o `resultado` dos dois chamadores NAO era o mesmo
 ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas
 edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso
 7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu
-a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou
-99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +95,44 @@ a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que na
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Reversão provada executável (10.684 linhas montadas, 572 colabs, todas as FKs resolvem). Ponho o par no mesmo lugar e corrijo o
-  registro, que dizia executável sem ter sido provado:
-
-  Ran 2 shell commands
-
-● logs/ é do root (o container escreve lá). Copio por dentro do container:
+● A casa já tem o instrumento: regerar_txt_dominio sem --aplicar gera e compara o hash sem registrar nada. É a medida certa, pela linha
+  que gerou o arquivo:
 
   Ran 2 shell commands
 
-● Agora o item que decide se a troca sobe com o número que medi: o DIFF alimenta a porta com o resultado do motor do espelho, e a
-  lavratura tem o do fechamento. Se os períodos divergem, a tabela não prevê a produção:
-
-  Ran 2 shell commands
-
-● Enquanto a prova corre, escrevo a PROVA do apply no RELATO:
+● O TXT da 09 gerado hoje já não é o exportado: emp2 com 213 linhas contra 210, emp3 88 contra 86 (emp4 idêntico). Isso é fato para o DP,
+  não detalhe — vejo quais linhas:
 
   Ran 1 shell command
 
-● Background command "Provar que os dois chamadores dão o mesmo resultado" completed (exit code 0)
+● Cinco linhas a mais e nenhuma removida ou alterada: o TXT exportado da 09 segue inteiramente contido no de hoje. Registro com o número e
+  o comando, porque o ato tem de ser assinado por ele:
 
-  Provar que ninguém escreveu na 09
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $S/nove_intacta.py <<'PY'
-     from django.conf import settings
-     assert settings.DATABASES['default']['NAME'] == 'saas_hasner'
-     from django.utils import timezone as tz
-     …
+  Searched for 2 patterns, ran 4 shell commands
 
-✻ Doodling… (48m 41s · ↓ 113.1k tokens)
+● A célula de ESTADO dessa linha está muito acima dos 300 caracteres da DIETA. Atualizo-a compacta, com o fato novo:
+
+  Ran 2 shell commands
+
+● A asserção dos 300 caracteres me pegou (388) — a célula não entrou. Encurto:
+
+  Ran 1 shell command
+
+● Marco fechado. Confiro a pista antes de empurrar, porque push conta como run e a raia do O114 pode estar na suíte:
+
+  Quem gera o AVAIS · 11s
+  ⎿  $ cd /home/ronald/saas-hasner && (bin/relato.sh 2>&1 | tail -6) ; git status --short app/docs/ | head -8 (11s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Doodling… (53m 48s · ↓ 131.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Reading `_wizard_preview.html` and `nome_canonico`                                                   17m 58s · ↓ 296.2k tokens
+  ◯ fork  Running sombra_dinheiro_col221.py money ensaio                                                        23m 5s · ↓ 329.2k tokens
   ⧉  index
 ```
