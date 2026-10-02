@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:13:01.**
+**Medido em 02/10/2026 08:18:31.**
 
 | | |
 |---|---|
@@ -125,17 +125,17 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● O contrato do juiz de turno está me cobrando o certo: o sítio foi curado, então sai da lista de pendentes — ela só encolhe.
 
-● Baixar o contador e rodar as tres suites · 3m 27s
+● Baixar o contador e rodar as tres suites · 8m 58s
   ⎿  $ python3 - <<'PY'
      p='ponto/tests/test_contract_juiz_turno.py'
      s=open(p,encoding='utf-8').read()
      old = """ def test_o_contador_e_o_tamanho_da_lista(self):
      self.assertEqual(juizes.fora_de_autoridade(FAMILIA), len(juizes.PENDENTES_TURNO))
      self.assertEqual(juizes.fora_de_autoridade(FAMILIA), 2)
-     zonas … (3m 27s)
+     zonas … (8m 57s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (39m 28s · ↓ 75.2k tokens)
+✢ Hullaballooing… (44m 58s · ↓ 75.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
