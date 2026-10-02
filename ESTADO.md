@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:55:01.**
+**Medido em 02/10/2026 05:00:31.**
 
 | | |
 |---|---|
@@ -124,11 +124,11 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Push pelo novo bin/push.sh" completed (exit code 0)
 
-● Esperar o push 65 · 3m 18s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push\|pos_push\|error:" logs/push65.log; do sleep 25; done; tail -6 logs/push65.log (3m 17s)
+● Esperar o push 65 · 8m 48s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push\|pos_push\|error:" logs/push65.log; do sleep 25; done; tail -6 logs/push65.log (8m 47s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (3h 55m 56s · ↓ 366.1k tokens)
+✢ Unfurling… (4h 1m 26s · ↓ 366.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
