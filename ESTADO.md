@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:51:24.**
+**Medido em 02/10/2026 07:56:51.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,20 +95,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (1) S5b: a troca NAO sobe com a tabela das 02:50. Ordem: O111 (chamador agrupa por dia_da_jornada, o mesmo juiz do motor) -> DIFF de frota da 10
-  refeito contra o GRAVADO -> causa nomeada por colab de toda rubrica que ainda mover.
-  (2) AVAL DE CRITERIO da troca, vale sem nova parada: sobe sozinha quando o DIFF contra o GRAVADO mostrar (a) nenhum colab com atraso ou saida
-  antecipada ACIMA do gravado, (b) toda rubrica que move com causa nomeada por colab publicada no RELATO ANTES, (c) arquivo de reversao em logs/, (d)
-  competencia 09 e exportadas intactas com hash. Fora disso = PAREI com a tabela.
-  (3) folha-zero-vinculo-vencido: caminho (a), so PAUTA DP para col43, col882, col391 e col948; nenhuma porta nova.
-  (4) motor-perto-delega-ao-raio: ok, mesmo numero e mesmo veredito, com o selo de equivalencia nos dois sentidos.
-  (5) Depois da troca, a ordem de 28/09 que ja esta no BACKLOG: descongelar O73b, E6-14, CORTE-B-30 e turnos abertos medidos contra o DiaPago -> re-medir
-  o PLACAR E1-E6 -> fila 1 em diante.
-  PRONTO: tabela final e PROVA no RELATO, AVAIS regenerado. PROIBIDO: fallback, tolerancia nova, tirar caso da lista para o numero cair.
-  segue a fila; PAREI so em lei ou no criterio (2) !
-
-● Ordem recebida, com AVAL DE CRITÉRIO — isso me deixa fechar a troca sozinho se (a)-(d) baterem. E a medição que acabou de sair me deu a peça que faltava
-  do O111:
 
   Searched for 2 patterns, ran 8 shell commands
 
@@ -122,12 +109,26 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● Três causas nomeadas. Uma delas é curável lendo lei existente — o par de 8 segundos do col932:
 
-● DIFF com a guarda do par relampago
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && docker run --rm
-     --cpuset-cpus 4-7 --cpus 3 --network saas-hasner_default --env-file .env -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e
-     TZ=A…
+  Searched for 1 pattern, ran 2 shell commands
 
-✽ Hullaballooing… (17m 51s · ↓ 52.4k tokens)
+● Antecipada no total abaixo do gravado (−1,85 h), mas o critério (a) é por colab e dois seguem acima. Abrindo as quatro rubricas por colab, que é o que o
+  seu (b) pede:
+
+  Ran 1 shell command
+
+● Uma causa única explica as duas maiores rubricas. E o efeito da guarda do relâmpago no motor precisa ser medido antes de qualquer deploy:
+
+  Ran 1 shell command
+
+● O lado motor é byte-idêntico nas oito rubricas — a guarda do relâmpago move zero na frota, só alcança o calculador. Agora os selos das duas curas:
+
+  Suite inteira de ponto (o motor mudou) · 2m 3s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
+     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
+     "$TESTE_ENVFILE" -e PYTHON… (2m 3s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Hullaballooing… (23m 18s · ↓ 65.4k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
