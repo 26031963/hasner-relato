@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:49:32.**
+**Medido em 02/10/2026 04:55:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ```
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,6 +96,10 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Sete Pautas DP abertas (#922–#924, #926–#929): colaboradores que bateram ponto e a folha paga ZERO — 245,93 h sem vínculo nenhum, 195,41 h com vínculo
+  vencido.
+
   Três erros meus, corrigidos e publicados: o ! da folha zero nomeava portas que não fazem o serviço (ia te fazer responder um ! impossível); o censo do
   O110 nasceu curto em dois; e a minha lápide no detalhe_local.html era {# #} multilinha — vazava para a tela do DP, o get_template disse "COMPILA" e quem
   pegou foi o contrato de 05/09. Compilar não é renderizar.
@@ -119,15 +124,11 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Push pelo novo bin/push.sh" completed (exit code 0)
 
-● Abrir a linha do O112 e empurrar
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/TICKETS.md'
-     L=open(p,encoding='utf-8').read().split('\n')
-     assert L[126].startswith('| ID | frente')
-     r=('| O112 | infra/portao do push | o topo do TICKETS e DERIVADO de `origin/main`, e so era escrito no turno '
-     'SEGUINTE -- pelo RED. **6…
+● Esperar o push 65 · 3m 18s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push\|pos_push\|error:" logs/push65.log; do sleep 25; done; tail -6 logs/push65.log (3m 17s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Unfurling… (3h 50m 26s · ↓ 356.0k tokens · thinking)
+✢ Unfurling… (3h 55m 56s · ↓ 366.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
