@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:16:01.**
+**Medido em 02/10/2026 06:21:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2b3d646c O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA` |
 | `origin/main` | `a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA
+e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a tela nao diverge -- ela e MUDA
 2b3d646c O topo do TICKETS fechado no ato do push (O112)
 a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 6e7a2d17 [O23] HAIKU-CONTADOR-UNIVERSO: o selo que dependia de o mundo estar quieto ganhou universo
-a8a53e2c O topo do RELATO renumerado: QUATRO na mesa dele, e o O112 saiu porque foi curado
-a3a1b0b1 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
@@ -94,6 +94,10 @@ a3a1b0b1 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  O22 e O21 — a pergunta certa não era "como construir". O22 estava construído (porta, rota, view, botão, 6 selos); faltava conferir e dizer — frota
+  medida: 254 rejeitadas, rejeitada_que_cobre_dia = 0. O21 respondeu "qual leitor não migrou": o APP, com 112 dia-colab na competência 10, e o dado já
+  pronto (rotulo, cor, veredito). Não construí: toca o app de ~750 pessoas e pede seu smoke.
+
   Três erros meus, cada um com a lição no lugar: a lápide multilinha que vazava para a tela do DP (get_template dizia "COMPILA" — compilar não é
   renderizar); commitar durante a suite do push, que invalida a árvore carimbada e derruba o push sem RED visível; e meu próprio selo mordendo a prosa
   duas vezes, a segunda porque a palavra push termina em "sh".
@@ -117,21 +121,17 @@ a3a1b0b1 O topo do TICKETS fechado no ato do push (O112)
 
 ● Background command "Esperar o push do O23" completed (exit code 0)
 
-  A tela tem lista de em aberto para alguem? · 57s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
-     $S/o45_conta.py <<'PY'
-     import collections
-     from django.utils import timezone as tz
-     from colaboradores.queries import colaboradores_em_uso
-     from ponto.services.espe… (57s)
+● Esperar o push final do turno · 2m 53s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push71.log; do sleep 30; done; tail -4 logs/push71.log; git fetch -q origin;
+     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (2m 53s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (5h 16m 56s · ↓ 419.5k tokens)
+✢ Unfurling… (5h 22m 26s · ↓ 424.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

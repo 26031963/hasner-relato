@@ -52,7 +52,7 @@ lista — ela e o que esta EM PE._
 | **O42** | ESTEIRA-SECA-25-09 + ADENDO | **8 de 10 feitos; 1 e 2 em cura** |
 | **O43** | RASTRO-ADMIN | **livre** |
 | **O44** | ARQUIVO-SIMPLES v2 | **item 1 feito; 2-8 com aval, na fila** |
-| **O45** | EM-ABERTO-CARTAO-X-TELA | espera corte |
+| **O45** | EM-ABERTO-CARTAO-X-TELA | **REMEDIDO 02/10 06:2x, e o fato e MAIS  |
 | **O46** | EXECUTA-CLAUDE-6 / SINAL-QUE-MENTE | o que afirma |
 | **O47** | AUDITORIA-JSP02: ato de admin sem IP | **na fila BO, dentro do RASTRO-ADMIN (O4 |
 | **O48** | FECHAMENTO-ONLINE | espera aval |
