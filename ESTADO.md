@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:27:01.**
+**Medido em 02/10/2026 10:32:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
-| `origin/main` | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `d83c508d O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d83c508d O topo do TICKETS fechado no ato do push (O112)
 908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
 0ac1d8a5 [O21] O hash e a hora do deploy nos tres docs (10:16, f4693856)
 f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando
 d9538116 O topo do TICKETS fechado no ato do push (O112)
-9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL
 ```
 
 ## `git status --short`
@@ -41,6 +41,8 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/ponto/services/espelho.py
+?? app/ponto/tests/test_piso_nao_sobe_por_batida.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,44 +98,44 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O21 (palavra do dia  │ RED quatro decisoes com 1 desenho [(None,None,None)] → 3.432 de 7.693 dia-colab com palavra, zero query nova               │
-  │ no app)              │                                                                                                                            │
-  └──────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+● Background command "Fim do push 79b" completed (exit code 0)
 
-  F2 não entrou — e não por escolha minha: o portão dela é literal ("não construir antes de 22/22") e o placar estrutural, medido pela função real, está
-  em 8/22. Portão declarado não devolve turno, então fui atrás do que ela espera — e aí está o achado que você precisa saber:
+● Background command "Veredito do push 79b por arquivo de sinal" completed (exit code 0)
 
-  - as duas células mais próximas de fechar (turno/marcos × juiz e celula/precedencia × juiz) dependem do mesmo sítio,
-    escala/utils.py::minutos_realizados_do_dia, e o pendente dele é zona dinheiro e "grava na ata que a prontidão e o supra-juiz leem". Curá-lo agora
-    moveria o GRAVADO que a tabela da S5b na sua mesa descreve — a L-096 protege exatamente isso. Fica atrás do seu ! da troca.
-  - batida × juiz e escala × juiz não começaram porque falta o censo, e declarar autoridade nova exige a sua frase (corte Ronald: juiz <nome> nasce) —
-    nenhuma das 54 da linha de base cobre essas duas famílias.
-  - as 5 células de parâmetro sem efeito precisam do campo consumido ou removido; rotular não as fecha, e remover cadastro é seu.
+● Background command "Espera o sinal final no log" completed (exit code 0)
 
-  Então peguei o próximo que anda de verdade: O25 — PISO-NAO-SOBE-POR-BATIDA, portão aberto (CARTAO=ESPELHO fechou). E a medição refinou o seu RED: o
-  19/08 do col905 já aparece no espelho (Abono 11h (abonado)), porque a cura CARTAO-CORTADO pôs vis_ini = min(piso, apur_ini) e o período pedido manda.
-  Quem ainda sofre é o caminho que usa o piso cru — o calendário do drawer:
+● Push 79b fechou: 9bbb6f4b..908cbabd no remoto (9.294 + control-plane OK). Pista livre — RED do O25 na árvore de antes:
 
-  ▎ 163 de 532 colaboradores têm o piso elevado pela 1ª batida · o drawer perde 293 dias na janela de duas competências · col921 11 dias, col963 8, col909
-  ▎ 7, col917 5.
+  Ran 1 shell command
 
-  O selo está escrito (6 casos, incluindo o que morde sem olhar constante: dois colabs com o mesmo cadastro e batidas diferentes não podem ter chão
-  diferente) e a cura são 3 linhas na origem. Aplico assim que o push 79b liberar a pista — não edito a árvore com a suíte rodando sobre ela.
+● Background command "Espera o push 79b fechar" completed (exit code 0)
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
+● Background command "Fecha o push 79b" completed (exit code 0)
 
-● Pushing 79b
-  ⎿  $ cd /home/ronald/saas-hasner && tail -3 logs/push79b.log; date +%H:%M:%S; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1ar5i9n2.output 2>/dev/null | tail -8
+● Background command "Confere o push" completed (exit code 0)
 
-✢ Hullaballooing… (2h 53m 28s · ↓ 362.9k tokens · thinking)
+● RED evidenciado (piso = 08/07 onde o cadastro diz 06/07). Aplicando a cura de origem:
+
+  Ran 2 shell commands
+
+● Background command "Aguarda e confere" completed (exit code 0)
+
+● DIFF de frota do O25 (antes × depois, funções reais): dinheiro igual em 60 de 60, MOVEM: 0 — e 57 colabs passam a ver dias que não existiam (col219 de
+  43 → 74 dias, col194 45 → 74, col191 52 → 74), com em_aberto 0 → 0: nenhuma acusação nova nasceu. Vizinhos:
+
+  Ran 2 shell commands
+
+● Três selos de caracterização mordem — e os três me dizem explicitamente que a lápide muda junto quando o corte revoga o comportamento. Lendo cada um
+  antes de tocar:
+
+● O terceiro selo: a ancora AST do piso
+
+✢ Hullaballooing… (2h 58m 58s · ↓ 376.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
