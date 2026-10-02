@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:210 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:247 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:26:31.**
+**Medido em 02/10/2026 15:31:47.**
 
 | | |
 |---|---|
-| `HEAD` local | `0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU` |
+| `HEAD` local | `99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,18 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
 0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
 ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
 389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
 dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
-3aa5e2b6 [O26] O 12x36 passa a poder declarar o horario do dia em que o plantao cai
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
  M app/ponto/calculador/alimentacao.py
+ M app/ponto/management/commands/diff_calculador.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,41 +95,41 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├──────────────────────┼───────┼──────────────────────────┼─────────────────────────────┤
-  │ col231/col296/col418 │ 01/10 │ 351,54 / 360,02 / 339,46 │ idem col196                 │
-  └──────────────────────┴───────┴──────────────────────────┴─────────────────────────────┘
+    cadastro×realidade em col382 e irmãos; col788 no O65);
+  - (c) o arquivo de reversão em logs/;
+  - (d) o hash depois (o antes está medido: 09 com 607 linhas, 189304907c23163…);
+  - e a lavratura chamando a porta — que exige refazer a extração das rubricas, agora movendo as linhas em vez de reescrever, que é a lição
+    que custou cinco rodadas.
 
-  Então o item (1) está respondido: diverge do motor, e o parágrafo "A PROVA DE QUE ERA PAREAMENTO" sai — ele nasceu da rodada do bug.
-  Vendo como a regra trata a guarda, para mover e não reescrever:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no
+  periodo AQUISIT
 
-  Searched for 1 pattern
-
-● A regra recebe "um por período fechado do dia" — a guarda de turno aberto é do motor. Achando a linha exata dela, para mover e não
-  reinventar:
+● Seguindo para a troca. A extração das rubricas agora é por movimento: copio as linhas literais e troco só os nomes locais por parâmetros:
 
   Searched for 1 pattern, ran 1 shell command
 
-● A guarda mora em MotorBase._aplicar_teto_pontualidade (:892), e ponto/calculador/regras.py já importa esse método — a guarda está
-  disponível, só não chega a informação. Vendo o que a regra monta a partir das tuplas:
+● Mais uma peça que eu não tinha: o chamador injeta mins e fora_janela na primeira tupla da pontualidade ("o trabalhado do dia vai na
+  primeira ponta... o teto da L-093 soma sobre os períodos do dia"). Agora tenho o fluxo completo. Movendo o bloco literal:
 
   Ran 2 shell commands
 
-● A guarda já existe na regra — _PeriodoPontualidade(..., turno_aberto=_s is None) — e foi a minha última "correção" que a apagou: ao
-  agrupar por jornada com max(saidas), eu peguei a saída do período fechado e joguei fora o período aberto, que é justamente quem carrega
-  saida=None. Voltando ao laço por período, com hora local e os abertos incluídos:
+● Agora o teste da extração: o DIFF chamando a porta das rubricas tem de dar a mesma tabela. Se mudar uma rubrica, a extração falhou de
+  novo:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Os sete goldens fecharam. Motor × calculador: horas_atraso +0,00 e horas_saida_antecipada −0,00, zero dia-colab divergentes; contra o
-  gravado, +0,01 e +0,00 com zero colabs divergentes. A guarda era exatamente isso. Agora a frota — que a ordem permite depois dos goldens:
+● Os goldens pela porta movida dão o mesmo (n_pont=2 — a tupla fechada e a aberta, que aciona a guarda). Agora a frota, que é o teste da
+  extração inteira:
 
-● A frota depois dos goldens
+● A frota pela porta movida · 1m 2s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; nohup docker run --rm $TESTE_DOCKER --network
      saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONUNBUFFERED=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python
-     manage.py tenant_command diff_calculador --schema=j…
+     manage.py tenant_command diff_calculador --schema=j… (1m 1s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Doodling… (5m 18s · ↓ 11.7k tokens · thinking)
-                                                                                                   ✔ Update installed · Restart to update
+✢ Doodling… (10m 34s · ↓ 27.5k tokens)
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
