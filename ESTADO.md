@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:53:31.**
+**Medido em 02/10/2026 18:59:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
-| `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **44** |
+| `HEAD` local | `e8ca6f65 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e8ca6f65 O topo do TICKETS fechado no ato do push (O112)
 070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho
 a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6
 52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
 b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
-e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em diante
 ```
 
 ## `git status --short`
@@ -95,6 +95,21 @@ e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em dia
 
 ```
 
+  Ran 1 shell command
+
+● A suíte está verde (9.375 testes, zero falhas) e o pre-push segue nos passos pós-suíte — o segundo runner de control-plane e os selos de
+  host. Os 44 commits ainda não foram empurrados.
+
+  Aguardo o monitor, que dispara em To https ou error:.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
+
+  Ran 1 shell command
+
+● Push vivo nos passos pós-suíte. Aguardo o monitor.
+
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
@@ -107,29 +122,14 @@ e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em dia
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
-
-● Push vivo às 18:53:15, cerca de dez minutos e meio. Aguardo o monitor.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
-
-  Ran 1 shell command
-
-● Push vivo.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
-
-✢ Sock-hopping… (41m 0s · ↓ 114.7k tokens)
+✢ Compacting conversation… (46m 30s · ↓ 118.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   1% until auto-compact
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
