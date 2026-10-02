@@ -6,7 +6,7 @@
 
 | # | id | tipo | desde | o numero | frase PRONTA para colar |
 |---|---|---|---|---|---|
-| 1 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | desenho aprovado 18:3x e em construcao na raia wt-ui por um agente (ordem de 20:1x). O MERGE e o DEPLOY esperam o smoke de clique DELE nas DUAS cascas -- e lei da casa desde 07/09 (BUG 73): suite verde nao ve tela. | `smoke Ronald: cliquei no calendario de HE nas duas cascas, marquei dia e confirmei pela barra -- pode mergear a raia wt-ui e deployar` |
+| 1 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | FATIA 1 MERGEADA e NO AR em 01/10 21:24 (merge 4c35e96c + deploy no mesmo ato). So template: a celula do calendario posta em `ponto:decidir_he`, a porta que JA estava no ar, UM dia por ato, com o motivo pelo `hxPerguntar | `smoke Ronald: abri a Gestao de HE, cliquei num dia e CANCELEI o dialogo (nada gravou), cliquei de novo e confirmei com motivo -- o dia virou autorizado com o numero limpo. Pode fechar a FATIA 1` |
 
 ---
 

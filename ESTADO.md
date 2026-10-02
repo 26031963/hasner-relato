@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:356 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:393 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 21:23:53.**
+**Medido em 01/10/2026 21:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4c35e96c MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que JA existia` |
+| `HEAD` local | `c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o smoke dele` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o smoke dele
 4c35e96c MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que JA existia
 d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o dia de HE ganha FUNDO CHEIO
 5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias
 1d9308e6 Duas falhas minhas na suite cheia: command sem casa e dois tipos que o vocabulario nao conhecia
-21c4826e [GESTAO-HE-CALENDARIO-CONTROLE] O calendario vira o CONTROLE: celula com o NUMERO, tres estados sem depender de cor, e a barra nasce DESLIGADA
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  no código.
 
-  A lápide de _PeriodoPontualidade dizia: "se um dia ele passar a ler um sexto campo, este __slots__ quebra em VOZ ALTA (AttributeError no selo) em vez de
-  o calculador passar a divergir calado". Às 19:26 o motor ganhou a guarda de turno aberto, que lê três campos novos. O AttributeError nunca aconteceu —
-  porque a minha guarda lê por getattr(p, campo, default), de propósito, para tolerar o SimpleNamespace que os selos fabricam. A fronteira prometeu
-  quebrar e o meu getattr a calou. O resultado é o número que você já tem: +129,70 h de atraso cobrados em dias que o motor não julgava.
+  E a sua partição em duas fatias apagou o risco que eu havia levantado: como a fatia 1 não depende de .py nenhum, o template entrar no ar no ato do merge
+  não deixa a tela sem caminho de autorizar. A ordem "patch 1 → deploy → merge" vale para a fatia 2, não para esta.
 
-  Então a cura (a) não é só acrescentar os três campos. A proteção muda de natureza: ponto/tests/test_fronteira_pontualidade_completa.py varre por AST os
-  atributos que _aplicar_teto_pontualidade lê e escreve no período — nas duas formas, p.campo e getattr(p, 'campo', …) — e cobra que todos estejam no
-  __slots__. Campo novo no teto fica vermelho no commit, não na esperança de uma exceção que um getattr legítimo engole. E tem o par que morde dos dois
-  lados: um caso fabricado prova que o varredor vê as duas formas, e outro proíbe o __slots__ de crescer por conforto — campo que o teto não toca é a
-  fronteira virando cópia do motor, que é o que a própria lápide proíbe.
+  ┌────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────┐
+  │             prova              │                                    número                                    │
+  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ selos de tela da fatia 1       │ 13                                                                           │
+  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ na raia                        │ 78 testes OK (7 pulados = fatia 2)                                           │
+  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ selos de front, com o chromium │ 38 OK                                                                        │
+  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ na main, depois do merge       │ 93 testes OK                                                                 │
+  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
+  │ deploy                         │ migrations em dia, prova de casca, 3 rotas, BUG 128 verde, importerror_500=0 │
+  └────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────┘
 
-  Na cópia (scratchpad/s5b/app), compilando e com ruff limpo: a fronteira completa, os três campos viajando do par que o chamador já tem — importar a
-  guarda, não escrever regra nova, como você disse — e o selo estrutural.
+  O desenho mais fino desse merge são dois selos que são os dois lados do mesmo interruptor: um cobra que os 9 nomes da fatia 2 não estejam no HTML nem no
+  markup; o outro cobra que o pedido de patch continue no RELATO e que as classes puladas leiam o motivo. Depois de religar a fatia 2, os dois não podem
+  estar verdes juntos — e isso impede as duas doenças de uma vez: meia fatia 2 pendurada na tela, e um arquivo de @skip passando por vacuidade.
 
-  Faltam as curas (b) a guarda do T8 e (c) a hora negativa, mais os REDs e o DIFF refeito. A (c) eu ainda não vou curar: col235 tem 00:00E 01:01S 05:00S,
-  duas saídas seguidas, e a casa já registrou que clampear em zero seria band-aid — esconderia o dia errado. Primeiro meço de onde vem o sinal negativo.
+  O conflito do merge foi no BACKLOG e está declarado: ficou a célula da raia (o agente mediu a fatia 1) e a minha linha da FATIA-2 foi preservada.
+  Conferi depois que bin/gerar_avais.py, o selo do AVAIS, o handoff_sessao.sh e o relato.sh seguem de pé — a raia nasceu antes deles — e os selos de host
+  estão verdes. Uma coisa precisou de linha minha: a célula que a raia escreveu não falava o vocabulário do hook_stop_fila1 e virou "o 1º aberto" contra o
+  marcador; agora declara fatia 1 no ar e aguardando o seu smoke.
 
-✻ Waiting for 1 background agent to finish
+  O AVAIS tem UM item: o seu smoke, com a frase pronta e os cinco pontos que só o olho responde — e dois deles são de comportamento, não de pintura:
+  clicar num dia e cancelar o diálogo (nada pode ser gravado) e motivo curto (tem de dar o toast de aviso antes de gravar).
 
-› Message from @a6628ec7e07379c89 (ctrl+o to expand)
+  Na cópia da S5b, a cura (a) está pronta e com o selo que torna a fronteira estrutural. Faltam (b) a guarda do T8 e (c) a hora negativa — essa última eu
+  meço antes de curar, porque clampear em zero seria band-aid.
 
-  Ran 1 shell command
-
-● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 25m 36s
-
-  Commitar o merge e deployar no mesmo ato · 3s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; git add -A
-     app/docs/BACKLOG.md app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
-     MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que J… (3s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✻ Roosting… (2m 16s · ↓ 6.6k tokens)
+✻ Cooked for 32m 1s · done 9:24 PM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; mede a hora negativa e cura (b) e (c)
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
