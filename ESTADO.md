@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:28:01.**
+**Medido em 02/10/2026 04:33:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha` |
+| `HEAD` local | `b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar` |
 | `origin/main` | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar
 2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha
 104f8d1c O topo do TICKETS, escrito pelos proprios scripts depois do push 61 (a 5a vez da noite -- O112)
 39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel
 1316b866 O topo do TICKETS bloqueou o push pela QUARTA vez numa noite, e isso virou item com o numero
-fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- dita pelos alertas do proprio motor
 ```
 
 ## `git status --short`
@@ -94,6 +94,7 @@ fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- di
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
   Searched for 2 patterns, ran 23 shell commands
 
 ● Background command "Esperar o veredito do push do marco" completed (exit code 0)
@@ -121,17 +122,16 @@ fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- di
 
 ● Background command "Push do marco de leitura" completed (exit code 0)
 
-● Esperar o push 62 · 8m 42s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push62.log; do sleep 25; done; tail -4 logs/push62.log; echo "=== ultimo push:"; git
-     fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (8m 41s)
+● Indexar a memoria e conferir o push · 2m 54s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push63.log; do sleep 30; done; tail -5 logs/push63.log (2m 53s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (3h 28m 56s · ↓ 319.0k tokens)
+✢ Unfurling… (3h 34m 26s · ↓ 324.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
