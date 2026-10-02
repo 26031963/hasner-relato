@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:38:01.**
+**Medido em 02/10/2026 10:43:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso` |
+| `HEAD` local | `3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS` |
 | `origin/main` | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS
 b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
 d83c508d O topo do TICKETS fechado no ato do push (O112)
 908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
 0ac1d8a5 [O21] O hash e a hora do deploy nos tres docs (10:16, f4693856)
-f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -100,44 +95,44 @@ f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● A sonda do O27 roda o cartão real de 520 colaboradores (motor + grade por colab) — está em voo junto do push 80. Esperando as duas:
 
-● DIFF de frota do O25 (antes × depois, funções reais): dinheiro igual em 60 de 60, MOVEM: 0 — e 57 colabs passam a ver dias que não existiam (col219 de
-  43 → 74 dias, col194 45 → 74, col191 52 → 74), com em_aberto 0 → 0: nenhuma acusação nova nasceu. Vizinhos:
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● Turno em andamento, com três marcos no ar e o quarto em medição. O estado honesto agora:
 
-● Três selos de caracterização mordem — e os três me dizem explicitamente que a lápide muda junto quando o corte revoga o comportamento. Lendo cada um
-  antes de tocar:
+  Fechados e empurrados hoje: O113 (09:54), O21 (10:16), O25 (10:35) — cada um com RED evidenciado antes e número medido depois, e os dois pushes
+  anteriores verdes (9.285 e 9.294 testes). O push 80 (docs do O25 + as quatro travas no AVAIS) está com a suíte rodando.
 
-  Searched for 4 patterns, ran 1 shell command
+  Em medição agora — O27 JANELA-EXATA, que é o próximo da fila 1 com portão aberto e cuja própria nota manda "medir antes de construir". A sonda roda o
+  cartão real (_coletar_dados_espelho_mes, a função que o PDF usa) nos 520 colaboradores em operação e compara três números na competência 09:
 
-● Os três são caracterização do comportamento que o corte revoga, e cada um diz que a lápide muda junto. Os ajustes, sem afrouxar nenhum:
+  - COLUNA — a soma de pago_h linha por linha, que é o que o admin vê e deveria poder somar;
+  - RODAPÉ — resumo['total_trabalhadas'], o badge do topo;
+  - GRAVADO — FechamentoMensal.horas_trabalhadas.
 
-  Ran 8 shell commands
+  O contador que o seu corte nomeia (cartao_x_fechamento_total, esperado 0) sai dessa comparação. E já há um achado de leitura antes do número: a coluna
+  mudou de nome e de fonte desde o seu corte de 24/09 — ela se chamava "Realizado" e imprimia realizado_do_dia (o cru do relógio); hoje se chama
+  "Trabalhado" e imprime DiaPago.horas_trabalhadas, a mesma lavratura de onde sai o rodapé. Ou seja, os 2 minutos do col37 (153h58 na coluna contra 153h56
+  no rodapé) podem ter mudado de natureza — e é por isso que medir vem antes de construir, como você escreveu na linha.
 
-● A célula do BACKLOG passou de 300 (dieta de prosa) — a história vai para o RELATO:
+  Reporto os três contadores assim que a sonda terminar; se vierem em zero, o RED do O27 é outro e eu digo qual, em vez de fabricar selo sobre número que
+  já bate.
 
-  Ran 3 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● As travas vão para o PENDENTES (o AVAIS é gerado dele). Medindo o número dos parâmetros antes de escrever:
+● A sonda do O27 e o push 80
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b12wjfq7z.output 2>/dev/null | tail -26; echo "---
+     parcial ---"; wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blg8e31p1.output; cd
+     /home/ronald/saas-has…
 
-  Ran 2 shell commands
-
-● Medido: 16 campos sem efeito em 5 famílias (folha/export tem 7, incluindo adicional_noturno_pct, periculosidade_pct e os dois divisores). Registrando as
-  quatro travas com número:
-
-  Ran 3 shell commands
-
-● O gerador exige estado: aberto, desde e a frase pronta. Corrigindo os quatro:
-
-● Running 1 shell command…
-
-✢ Hullaballooing… (3h 4m 28s · ↓ 392.7k tokens)
+· Hullaballooing… (3h 9m 58s · ↓ 405.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
