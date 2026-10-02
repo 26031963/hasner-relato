@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:28:09.**
+**Medido em 02/10/2026 09:33:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
  M app/colaboradores/services/situacional.py
  M app/colaboradores/views.py
  M app/core/management/commands/lavrar_placar_situacional.py
+ M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
  M app/ponto/turnos.py
 ?? app/colaboradores/tests/test_situacional_pergunta_em_lote.py
 ?? app/core/tests/test_placar_situacional_um_so_numero.py
@@ -101,11 +102,6 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 
 ```
 
-● Task "Linha no TICKETS e push do marco" still running in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Searched for 1 pattern, ran 3 shell commands
 
 ● Construindo em cópia, com o script de patch ancorado por grep:
@@ -127,12 +123,17 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 
 ● Nove GREEN. Agora ruff + os vizinhos que enumeram (lição das 3 rodadas de 01/10):
 
-  Censo de vizinhos e ruff
-  ⎿  $ grep -rln "papel_por_minuto_da_ata\|_turno_aberto_calc\|turno_aberto_de\|montar_situacional\|lavrar_placar_situacional\|painel_situacional"
-     --include=test_*.py . | tr '\n' ' '; echo; echo "=== ruff ==="; (ruff check colaboradores/tests/test_situacional_pergunta_em_lote.py
-     core/tests/test_placar_s…
+  Ran 5 shell commands
 
-· Hullaballooing… (1h 54m 36s · ↓ 187.3k tokens)
+● Vizinho que ENUMERA pegou: meu loader virou um 3º sítio de desempate por ativa em turnos.py (declarado: 2). A dívida tem de ter um sítio, não dois:
+
+  Ran 4 shell commands
+
+● 204 vizinhos OK. Agora a medição em prod (só leitura, funções reais — o processo novo lê o disco, que já tem a cura):
+
+● Running 1 shell command…
+
+✢ Hullaballooing… (1h 59m 58s · ↓ 197.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
