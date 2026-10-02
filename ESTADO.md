@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:48:01.**
+**Medido em 02/10/2026 15:53:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criter
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -93,44 +95,44 @@ ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criter
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● fork(RED e construção do segundo intervalo) Opus 5 (1M context)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+
+● Background command "Rodar o mesmo DIFF na árvore que está no ar" completed (exit code 0)
+
+● Raia lançada. Registro o prompt (PROMPT-NAO-SE-REPETE) e leio o DIFF da árvore no ar:
+
+  Ran 6 shell commands
+
+● Background command "Esperar o DIFF da árvore no ar" completed (exit code 0)
+
+● O DIFF da árvore que está no ar terminou — é ele que decide se a deriva é minha ou do gravado:
 
   Ran 1 shell command
 
-● RELATO cumpre o PRONTO das 15:2x (tabela dos goldens, parágrafo CONFIRMADO, seção das 14:2x marcada como bug meu). Agora o DIFF do ato,
-  não da tabela que tenho — a função real em modo leitura:
+● As duas tabelas são idênticas em todo campo de dinheiro — a única diferença é minutos_realizados 18.190/47 contra 18.130/46, que é uma
+  batida que entrou entre as duas corridas. Então meu código não deployado não move dinheiro; a deriva é do gravado contra o código que
+  está no ar. Falta a causa dos dois que ganham horas_falta:
 
-  Ran 2 shell commands
+● Campos do DiaPago
+  ⎿  $ python3 -c "
+     import io
+     s=io.open('ponto/models.py',encoding='utf-8').read()
+     i=s.find('class DiaPago')
+     b=s[i:i+7000]
+     import re
+     print([re.sub(r'\s*=.*','',l.strip()) for l in b.splitlines() if ('Field(' in l and 'models.' in l)][:40])
+     "
 
-● O DIFF do ato sai da função real em modo leitura contra prod (nenhuma escrita), com a CPU na metade de teste. Monto a sonda:
-
-  Ran 4 shell commands
-
-● DIFF do ato (leitura, zero escrita) na metade de teste da CPU, contra prod:
-
-  Ran 1 shell command
-
-● Enquanto roda, preparo a reversão — e ela cobre duas tabelas, porque o recálculo apaga e recria o DiaPago versao='motor', que a tela e a
-  porta do export leem:
-
-  Ran 3 shell commands
-
-● Background command "Rodar o DIFF do ato em container irmão" failed with exit code 1
-
-● O container da sonda está vivo (65% na metade de teste); o código 1 foi do meu wrapper, não dela. Espero pelo veredito por arquivo, não
-  por pgrep:
-
-  Ran 1 shell command
-
-● Preparo o provador de hash (a 09 e as exportadas têm de sair idênticas):
-
-● Running 1 shell command…
-
-✢ Doodling… (26m 48s · ↓ 48.1k tokens)
+· Doodling… (32m 18s · ↓ 68.4k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+
+  ● main
+  ◯ fork  Writing prod probe for te548 and col221 cells                                                         1m 35s · ↓ 180.8k tokens
   ⧉  index
 ```
