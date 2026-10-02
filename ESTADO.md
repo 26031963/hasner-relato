@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:18:31.**
+**Medido em 02/10/2026 08:23:50.**
 
 | | |
 |---|---|
-| `HEAD` local | `52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !` |
+| `HEAD` local | `0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega` |
 | `origin/main` | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,25 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega
 52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !
 17b5ceef O topo do TICKETS fechado no ato do push (O112)
 b1da8d82 Handoff regenerado depois das correcoes de redacao
 036a21bd O hook me recusou duas vezes, e nas duas a culpa era a minha REDACAO
-c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
- M app/core/juizes.py
  M app/docs/RELATO.md
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/services/espelho.py
- M app/ponto/tests/test_contract_juiz_turno.py
-?? app/ponto/tests/test_dia_da_jornada_e_legivel.py
-?? app/ponto/tests/test_par_relampago_nao_se_julga.py
-?? app/ponto/tests/test_perto_do_marco_e_o_mesmo_no_motor.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -104,8 +96,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ```
 
-  Searched for 1 pattern, ran 2 shell commands
-
 ● Antecipada no total abaixo do gravado (−1,85 h), mas o critério (a) é por colab e dois seguem acima. Abrindo as quatro rubricas por colab, que é o que o
   seu (b) pede:
 
@@ -125,17 +115,19 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● O contrato do juiz de turno está me cobrando o certo: o sítio foi curado, então sai da lista de pendentes — ela só encolhe.
 
-● Baixar o contador e rodar as tres suites · 8m 58s
-  ⎿  $ python3 - <<'PY'
-     p='ponto/tests/test_contract_juiz_turno.py'
-     s=open(p,encoding='utf-8').read()
-     old = """ def test_o_contador_e_o_tamanho_da_lista(self):
-     self.assertEqual(juizes.fora_de_autoridade(FAMILIA), len(juizes.PENDENTES_TURNO))
-     self.assertEqual(juizes.fora_de_autoridade(FAMILIA), 2)
-     zonas … (8m 57s)
+  Searched for 1 pattern, ran 8 shell commands
+
+● Background command "Baixar o contador e rodar as tres suites" completed (exit code 0)
+
+● O selo do diagrama está certo: o motor passou a ler escala/regua_defesa, e o .mmd é defendido por selo. Regenerando:
+
+● Commitar o O111 e deployar · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/motor_calculo_v2.py app/ponto/services/espelho.py app/ponto/management/commands/diff_calculador.py
+     app/core/juizes.py app/ponto/tests/test_contract_juiz_turno.py app/ponto/tests/test_par_relampago_nao_se_julga.py
+     app/ponto/tests/test_dia_da_jornada… (3s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (44m 58s · ↓ 75.2k tokens)
+✶ Hullaballooing… (50m 17s · ↓ 80.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
