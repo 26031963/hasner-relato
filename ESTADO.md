@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:42:38.**
+**Medido em 02/10/2026 18:48:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6` |
+| `HEAD` local | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **43** |
+| commits a subir (`ahead`) | **44** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho
 a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6
 52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
 b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em diante
-fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cortes dele registrada
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/RELATO.md
- M app/ponto/calculador/regras.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,41 +95,41 @@ fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cort
 
 ```
 
-● O veredito saiu: duas falhas, e eu reconheço as duas — são as curas que eu fiz na cópia wt-splits e que não entraram no merge da troca.
-  Confirmo:
+  Ran 1 shell command
+
+● Push vivo.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
   Ran 1 shell command
 
-● Achei, e o erro é meu: eu mesmo descartei as duas curas. Antes de construir a troca eu fiz git checkout da1bac54 na cópia — e isso jogou
-  fora as correções do SEM_ENTRADA e do except-pass, que estavam sem commit. Refaço as duas na árvore viva:
+● Push vivo.
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Background command "Esperar o veredito do push 85" completed (exit code 0)
-
-● A asserção me parou de novo no mesmo ponto: minha remoção por linha não casa o fim da constante. Olho a forma real dela em vez de supor:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
   Ran 1 shell command
 
-● A constante termina em 22-05') — e eu procurava ') no fim da linha, que casa na primeira linha dela também, porque a primeira termina em
-  da '. Não: termina em ', sem parêntese. O problema é outro — o while para na linha errada por causa do ' final. Removo pelo parêntese
-  que fecha, contado:
+● Push vivo. Aguardo o monitor.
 
-● Remover por AST e rodar
-  ⎿  $ python3 - <<'PY'
-     import io, py_compile, ast
-     p='ponto/calculador/regras.py'
-     s=io.open(p,encoding='utf-8').read()
-     # A FORMA CERTA DE ACHAR O FIM: por AST. A constante e um `Assign` de modulo, e o `ast` sabe onde ela
-     # acaba (`end_lineno`) -- eu estava procurando o fim por sufixo de texto (`')`), e …
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
-✽ Sock-hopping… (30m 7s · ↓ 92.7k tokens)
+● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:|pos_push"
+     logs/push86.log | tail -6; pgrep -f "bin/pre-push.sh" >/dev/null && echo "push vivo" || echo "TERMINOU"
+
+✢ Sock-hopping… (35m 30s · ↓ 106.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
