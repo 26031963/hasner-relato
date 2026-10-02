@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:38:01.**
+**Medido em 02/10/2026 11:43:31.**
 
 | | |
 |---|---|
@@ -93,44 +93,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Oito avais na mesa, todos com número e frase pronta — e quatro deles cortes que já tinham nome na sua pausa de 27/09. A pergunta nunca foi "qual a
-  regra": era "qual o número".
-
-  E a trava está nomeada: o ! da troca da S5b (col516 +7,86 h, col174 +4,52 h, por pareamento) segura o 22/22 e, atrás dele, o portão da F2 — e isso é
-  demonstrável, não alegado: as duas células que faltam dependem do mesmo sítio de dinheiro que a troca substitui.
-
-  Os quatro erros meus ficaram escritos onde doem — a hora datada de cabeça, os 266% de CPU em prod, a asserção que afirmava o que o sistema não dizia, e
-  as perguntas que levei à sua mesa sem procurar o corte que já existia.
-
-✻ Crunched for 43s · done 11:31 AM · 8 shells still running
-
-● Background command "Push final e o handoff como o hook o le" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● O push 84 (a trava + handoff) está com a suíte rodando — é o último ato pendente do turno, e nada depende dele além do registro chegar ao remoto.
-
-  Vou aguardar o veredito e, se ele vier verde, o turno está inteiro no git. Se cair, repito com a causa em uma linha, como nas duas vezes de hoje (o ID
-  do TICKETS e a allowlist do .date()).
-
-✻ Cooked for 15s · done 11:31 AM · 8 shells still running
-
-❯ segue a fila; PAREI so em lei ou !
-
 ● Seguindo. O próximo que anda é o O26 — o portão dele era "logo após o item 1", e o item 1 era o O25, que fechou às 10:35. Já tenho o censo medido e o
   selo escrito; preparo a cura enquanto o push 84 libera a pista:
 
-● Espera o push 84 · 45s
+  Ran 5 shell commands
+
+● Seguindo a fila: O26 — W12X36-HPD é o próximo que anda, e o portão dele abriu quando o O25 fechou (ele era o "item 1").
+
+  A fatia está pronta em cópia, com o censo já medido na sombra sustentando cada decisão:
+
+  - a lista: COM_GRADE_POR_DIA ganha '12x36' — a mesma linha única que o W6X1-HPD curou em 10/09, com a lápide explicando por que o corte de 24/09 revoga
+    a exclusão de 09/09 (a grade por dia não compete com a âncora: quem decide se o dia é plantão continua sendo eh_dia_trabalho; a grade só diz o horário
+    daquele dia, e marcos_do_dia já respeita por weekday desde a S150);
+  - o rótulo é dele, não emprestado (LEI-AKITA 8): a ajuda da cíclica fala de "sábado de meio período", que é a história do 6x1, onde o dia da semana
+    decide o expediente. No 12x36 a frase passa a ser "quando o plantão cair neste dia, o horário é este — a escala continua decidindo quais dias são
+    plantão". Texto emprestado ensinaria o admin a pensar em semana onde o sistema pensa em ciclo, e o primeiro cadastro errado sai daí;
+  - o selo tem 6 casos, incluindo o hpd vazio idêntico a hoje — que é o "DIFF 0 na frota" que o corte pede, e aqui ele é garantido por construção: dos 128
+    tipos 12x36 cadastrados, zero declara horarios_por_dia.
+
+  O universo que a fatia serve está medido: 338 vínculos ativos e 1.307 plantões de fim de semana na competência (26,7% de 4.902), hoje todos obrigados ao
+  horário do dia de semana.
+
+  Aplico assim que a suíte do push 84 liberar a pista — e, por ser tela de cadastro (a mesma do irmão W6X1, que subiu com "smoke do Ronald aprovado"), vou
+  pedir o seu clique no AVAIS depois do deploy.
+
+✻ Brewed for 6m 50s · done 11:39 AM · 9 shells still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Pushing 84 e a pista · 44s
   ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED|RED --" logs/push84.log; then break; fi; sleep 10; done;
-     grep -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push84.log | tail -5; date +%H:%M:%S; docker ps --format '{{.Command}}' | grep -c manage
-     (45s)
+     grep -E "^(To https|pos_push|error:)" logs/push84.log | tail -3; git log --oneline -1; docker ps --format '{{.Command}}' | grep -c manage (44s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Working… (5m 24s · ↓ 3.9k tokens)
+✢ Bloviating… (53s · ↓ 421 tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
