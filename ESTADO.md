@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:26:01.**
+**Medido em 02/10/2026 02:31:06.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## `git status --short`
 
 ```
+ M app/ponto/management/commands/diff_calculador.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,10 +95,6 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora os dois portoes no calculador — entrada na volta do intervalo (mata o atraso) e saida para o intervalo (mata a antecipada):
-
-  Searched for 3 patterns, listed 1 directory, ran 23 shell commands
-
 ● Agora a trilha do quadro de permissoes (item 7 da lista), na copia:
 
   Ran 1 shell command
@@ -125,9 +122,13 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 
 ● Background command "Esperar o bloco da sombra" completed (exit code 0)
 
-● Running 1 shell command…
+● DIFF refeito com os pares da autoridade
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && docker run --rm
+     --cpuset-cpus 4-7 --cpus 3 --network saas-hasner_default --env-file .env -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e
+     TZ=A…
 
-✻ Waiting for API response · will retry in 2m 33s · check your network
+✽ Unfurling… (1h 32m 0s · ↓ 129.5k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
