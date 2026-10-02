@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- PAREI: ! e ok-desenho — **TRES itens na sua mesa, e a lista da noite esta INTEIRA fechada ou atras de um deles** (frase pronta de cada um no
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:986 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:44:01.**
+**Medido em 02/10/2026 05:49:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `8037088a A O22 ganha linha no TICKETS, e o handoff regenerado` |
-| `origin/main` | `27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10` |
-| commits a subir (`ahead`) | **3** |
+| `HEAD` local | `a8a53e2c O topo do RELATO renumerado: QUATRO na mesa dele, e o O112 saiu porque foi curado` |
+| `origin/main` | `8037088a A O22 ganha linha no TICKETS, e o handoff regenerado` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a8a53e2c O topo do RELATO renumerado: QUATRO na mesa dele, e o O112 saiu porque foi curado
+a3a1b0b1 O topo do TICKETS fechado no ato do push (O112)
 8037088a A O22 ganha linha no TICKETS, e o handoff regenerado
 6b1ae4f9 [O22] AUSENCIA-REVERTER-REJEICAO estava CONSTRUIDA: o que faltava era conferir e dizer
 0d5c2f39 O topo do TICKETS fechado no ato do push (O112)
-27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10
-68764776 A O110 ganha linha no TICKETS
 ```
 
 ## `git status --short`
@@ -94,44 +94,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  cadastro. Prova de mudança nula: grade de 2.000 pares dando o mesmo número em 9 casas. No ar.
 
-● Background command "Esperar o push final" completed (exit code 0)
+  O22 e O21 — a pergunta certa não era "como construir". O22 estava construído (porta, rota, view, botão, 6 selos); faltava conferir e dizer — frota
+  medida: 254 rejeitadas, rejeitada_que_cobre_dia = 0. O21 respondeu "qual leitor não migrou": o APP, com 112 dia-colab na competência 10, e o dado já
+  pronto (rotulo, cor, veredito). Não construí: toca o app de ~750 pessoas e pede seu smoke.
 
-  Searched for 2 patterns, listed 1 directory, ran 26 shell commands
+  Três erros meus, cada um com a lição no lugar: a lápide multilinha que vazava para a tela do DP (get_template dizia "COMPILA" — compilar não é
+  renderizar); commitar durante a suite do push, que invalida a árvore carimbada e derruba o push sem RED visível; e meu próprio selo mordendo a prosa
+  duas vezes, a segunda porque a palavra push termina em "sh".
 
-● Background command "Push pelo novo bin/push.sh" completed (exit code 0)
+  Na sua mesa, quatro (frase pronta em app/docs/AVAIS.md): o ! da troca do calculador, o ! da folha zero com vínculo vencido (195,41 h de 4 pessoas), o
+  ok-desenho do _perto do motor (a cópia que sobra é a de zona inviolável) e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E.
 
-  Ran 10 shell commands
+  Uma coisa para você decidir quando olhar: o bloco OBRAS tem 56 itens abertos, e "O21 em diante" não é lista finita — se quiser, me diga o critério de
+  ordem (dinheiro primeiro? app primeiro? os que já estão construídos e só precisam de conferência, como o O22?) e eu sigo por ele em vez de pela ordem do
+  arquivo.
 
-● Background command "Abrir a linha do O112 e empurrar" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: FILA-DA-NOITE -- A ORDEM VIVA passa a ser uma LISTA, nao um item (ordem Ronald 01/10 20:2x). Regra unica: item que
+  travar em !,
 
-  Ran 1 shell command
+● Ler o teste que pisca
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import re
+     L=open('app/docs/BACKLOG.md',encoding='utf-8').read().split('\n')
+     for l in L:
+     if re.match(r'^\| O23 \|', l):
+     c=l.split(' | ')
+     print('OBRA:', c[1][:900]); print(); print('ESTADO:', c[2][:200]); print('ONDE:', c[3][:200])
+     break
+     PY
 
-● Background command "Esperar o push 65" completed (exit code 0)
-
-  Searched for 4 patterns, ran 19 shell commands
-
-● Background command "Linha do O110 e push" completed (exit code 0)
-
-  Searched for 2 patterns, ran 9 shell commands
-
-● Background command "Push do censo do O21" completed (exit code 0)
-
-  Ran 4 shell commands, wrote 1 memory
-
-● Background command "Causa e nova tentativa do push" completed (exit code 0)
-
-● Linha do O22 e push final · 7m 51s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push69.log; do sleep 30; done; tail -4 logs/push69.log; git fetch -q origin;
-     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (7m 51s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Unfurling… (4h 44m 55s · ↓ 393.6k tokens)
+✢ Unfurling… (4h 50m 26s · ↓ 397.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
