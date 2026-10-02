@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:21:31.**
+**Medido em 02/10/2026 06:27:01.**
 
 | | |
 |---|---|
@@ -121,12 +121,12 @@ a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 
 ● Background command "Esperar o push do O23" completed (exit code 0)
 
-● Esperar o push final do turno · 2m 53s
+● Esperar o push final do turno · 8m 24s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push71.log; do sleep 30; done; tail -4 logs/push71.log; git fetch -q origin;
-     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (2m 53s)
+     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (8m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (5h 22m 26s · ↓ 424.6k tokens)
+✢ Unfurling… (5h 27m 56s · ↓ 424.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
