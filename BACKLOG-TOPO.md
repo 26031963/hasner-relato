@@ -117,6 +117,6 @@ lista — ela e o que esta EM PE._
 | **O107** | O HORARIO DA SOMBRA E LITERAL E A SOMBRA CRESCE: a MESMA colisao pela TERCEIRA vez | **FECHADA 01/10 04:5x -- o literal morre |
 | **O108** | O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 | espera `!` |
 | **O109** | O CHAMADOR DO CALCULADOR NAO ALINHA O PERIODO AO SEU MARCO | espera `!` |
-| **O110** | A DISTANCIA CIRCULAR TEM SEIS COPIAS A MAO, nao quatro | **ABERTA** -- censo 4 sitios, nenhum de  |
+| **O110** | A DISTANCIA CIRCULAR TEM SEIS COPIAS A MAO, nao quatro | **FECHADA 02/10 05:5x: as SEIS copias vi |
 | **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | **A HIPOTESE DA CLASSE MORREU** (medida  |
 | **O112** | O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite | **FECHADA 02/10 05:2x** -- nasceu `bin/p |

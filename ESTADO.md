@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:05:45.**
+**Medido em 02/10/2026 05:11:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a1acc651 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia` |
 | `origin/main` | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia
 a1acc651 O topo do TICKETS fechado no ato do push (O112)
 9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)
 6bde56ba [O112] O derivado do topo fecha no ATO do push, e de carona a medida da sombra que SUMIU ia ressuscitar a colisao do O107
 b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar
-2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -122,13 +120,13 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Esperar o push 65" completed (exit code 0)
 
-  Suites inteiras de escala e chamados · 3m 15s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
-     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
-     "$TESTE_ENVFILE" -e PYTHON… (3m 14s)
+● Deploying do O110 (prod le regua_defesa e juizes) · 39s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/regua_tickets.sh 2>&1 | tail -2; bin/deploy.sh --sem-migrate >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy10.log 2>&1; echo "rc_deploy=$?"; tail -3
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21… (38s · 3 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (4h 6m 39s · ↓ 367.3k tokens)
+✢ Unfurling… (4h 11m 56s · ↓ 371.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
