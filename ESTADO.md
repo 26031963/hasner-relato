@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:18:01.**
+**Medido em 02/10/2026 14:23:03.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/calculador/alimentacao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,26 +95,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
-
-● Meu detector é que estava fraco: ele olhava só o valor atribuído (_m), e a mescla acontece nas linhas acima. Corrigindo a varredura para a lei que eu
-  quis escrever:
-
-  Ran 1 shell command
-
-● Verde. O detector antigo acusava as duas mesclas (olhava só o valor _m) — e um detector fraco absolve quem escreve a palavra certa no lugar errado.
-  Agora a pergunta é por escopo: a função que expõe lê o que já está lá?
-
-  Commitando a porta, o carimbo e os três selos antes de seguir para (c) e (d):
-
-  Ran 1 shell command
-
-● A porta está commitada (ec22b2f1) com a prova. Agora os itens (d) e (c) do critério, antes de qualquer escrita:
-
-  Ran 1 shell command
-
-● O campo é dias_incertos. Melhor: o hash sai da lista de campos do próprio modelo, não de uma lista minha:
-
   Ran 1 shell command
 
 ● (d) medido, o ANTES: FechamentoMensal 09/2026 = 607 linhas, sha256 189304907c23163…; a 10 = 572 linhas, 4bf7b1b3ffa8890…; exportações vigentes da 09:
@@ -125,9 +106,29 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
   rubrica fica possível sem apagar o número de produção". Então "o calculador passa a ESCREVER o DiaPago" é aditivo. Lendo como o DIFF chama as regras,
   para que a lavratura chame a mesma linha:
 
-● Como o DIFF chama as regras do calculador
+  Searched for 1 pattern
 
-✻ Waiting for API response · will retry in 2m 36s · check your network
+● A chamada regras.do_dia tem 18 argumentos, cada um com fonte própria, e os helpers são locais do comando. Medindo o tamanho real da extração antes de
+  prometer:
+
+  Searched for 3 patterns, ran 1 shell command
+
+● Boa notícia para o escopo: _mpd, _idd, _certa e _cad_do_template são imports de módulo, não closures — só _dia_de_trabalho é local. A extração é viável.
+  Vendo os argumentos restantes:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Tenho o mapa completo dos 18 insumos. Escrevendo a segunda metade da porta — as rubricas, que o DIFF e a lavratura vão chamar pela mesma linha:
+
+  As rubricas da porta em 60 colabs
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/prova_rub.py <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     """S5b -- as RUBRICAS da porta contra as do DIFF: o mesmo numero? SO LEITURA."""
+     from django_tenants.utils import schema_context
+     with schema_context('juliani'):
+     from colaboradores.queries import colaboradores…
+
+· Philosophizing… (20m 29s · ↓ 37.2k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

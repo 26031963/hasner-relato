@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 14:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (192.1 MB). Acoes na janela: **987**.
+**Medido em 02/10/2026 14:23:03.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (192.2 MB). Acoes na janela: **982**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:22:55 | Bash | As rubricas da porta em 60 colabs | `cd /home/ronald/saas-hasner && cat > /tmp/prova_rub.py <<'PYEOF' # -*- coding: utf-8 -*- """S5b -- as RUBRICAS da porta contra as do DIFF: o mesmo numero? SO LEITURA.""" from django_tenants.utils import schema_context with schema_context('juliani'): from colaboradores.queries import colaboradores_em_operacao from escala.alimentacao import celulas_do_periodo from ponto.calculador.alimentacao import ...` |
+| 14:20:24 | Bash | A segunda metade da porta: as rubricas | `cd /home/ronald/saas-hasner && cat >> app/ponto/calculador/alimentacao.py <<'PYEOF' def _contexto_cct(colaborador, tipo_escala): """O que a CCT decide e que o calculador LE (nunca interpreta). -> dict""" from core.regua_cct import get_motor_cct try: _m = get_motor_cct(colaborador, tipo_escala=tipo_escala) except Exception: # noqa: BLE001 -- sem CCT, o default da casa return {'prorrogacao_pos5h': F ...` |
+| 14:19:55 | Bash | Os ultimos insumos: CCT, classe do motor, feriado em dobra | `grep -n "_cct_pro\\|_cct_hr\\|_classe = \\|_fer_dobra = \\|_cel = " ponto/management/commands/diff_calculador.py \| grep "= " \| head -8` |
+| 14:19:51 | Bash | O resto dos argumentos de regras.do_dia | `sed -n '422,462p' ponto/management/commands/diff_calculador.py \| grep -vE "^\s*#" \| head -24` |
+| 14:19:40 | Bash | De onde vem _mpd, _idd e _certa | `grep -n "_mpd\b" ponto/management/commands/diff_calculador.py \| head -3; grep -n "_mpd\\|_idd\\|_cad_do_template\\|_certa" ponto/management/commands/diff_calculador.py \| grep "import\\|= " \| head -6` |
+| 14:19:36 | Bash | Onde os helpers moram (modulo ou local) | `grep -n "^def _mpd\\|^def _idd\\|^def _cad_do_template\\|^def _certa\\|^def _ler_lavra" ponto/management/commands/diff_calculador.py; echo "---"; awk 'NR>=300 && NR<=345' ponto/management/commands/diff_calculador.py \| grep -nE "^\s+(def\|_feriados\|_interm\|_dias_folga\|_escalas_dt)" \| head` |
+| 14:19:31 | Bash | Os helpers que a porta das rubricas precisaria | `grep -n "def _mpd\\|def _idd\\|def _dia_de_trabalho\\|def _certa\\|def _cad_do_template\\|_cad_min = \\|_feriados = \\|_dias_folga = \\|_interm = \\|_lavra = " ponto/management/commands/diff_calculador.py \| head -14` |
+| 14:17:05 | Bash | Como o DIFF chama as regras do calculador | `grep -n "_r_dia = regras.do_dia" -B 6 -A 24 ponto/management/commands/diff_calculador.py \| head -40` |
 | 14:16:33 | Bash | O sitio da lavratura do DiaPago na producao | `sed -n '600,650p' ponto/services/fechamento.py` |
 | 14:16:29 | Bash | Quem lavra o DiaPago na producao | `grep -rn "import lavrar\\|dia_pago import.*lavrar\\|_lavrar_dia_pago\\|versao='oraculo'\\|versao=\"oraculo\"" --include=*.py . \| grep -v tests \| head -8; echo "=== onde o fechamento grava ==="; grep -rn "lavrar" ponto/services/fechamento.py \| head -6` |
 | 14:16:20 | Bash | Quem lavra e o campo versao | `grep -rn "lavrar(" --include=*.py . \| grep -v tests \| grep -v "def lavrar" \| head -8; echo "=== o 'versao' do DiaPago ==="; sed -n '290,300p' ponto/models.py` |
@@ -984,16 +992,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:23:20 | Bash | Ler o cartao do modal | `sed -n '205,240p' templates/chamados/partials/modal_fio.html` |
 | 02:23:12 | Bash | Estado do bloco | `cd /home/ronald/saas-hasner && tail -6 logs/sombra_bloco_0202.log \| grep -v "^$"; date '+%H:%M'` |
 | 02:23:08 | Bash | O leitor da lista declarada | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/ui4/app && python3 - <<'PY' p='chamados/juizes.py' s=open(p,encoding='utf-8').read() anc = "def classificar_resposta_validacao(perg):" assert s.count(anc)==1 novo = '''def folha_julga_pontualidade(colaborador, data=None, tipo_escala=None): """A folha desconta atraso / saida antecipada no regime D ...` |
-| 02:22:47 | Bash | Estado do bloco | `cd /home/ronald/saas-hasner && tail -5 logs/sombra_bloco_0202.log; date '+%H:%M'; pgrep -c -f "sombra.sh --bloco"` |
-| 02:22:42 | Bash | Ler o contexto do fio | `sed -n '315,375p' chamados/services/fio.py` |
-| 02:22:35 | Bash | Quem inclui e quem renderiza os cartoes | `grep -rln "_pergunta_card.html\\|modal_fio.html" templates/ \| head; echo "=== quem renderiza:"; grep -rn "modal_fio.html\\|detalhe_local.html" --include=*.py . \| grep -v tests \| head` |
-| 02:22:17 | Bash | Filtro que le o juiz e a frase | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/ui4/app && cat >> chamados/templatetags/chamados_tags.py <<'PY' @register.filter(name='frase_resposta') def frase_resposta(perg, folha_julga=True): """UI-RESPOSTA-DIZ-O-QUE-E: a frase que diz a DIRECAO e a CONSEQUENCIA. -> dict \| None Mesmo molde do `hora_implausivel` logo acima: o filtro **nao  ...` |
-| 02:22:04 | Bash | Ler o filtro hora_implausivel | `grep -rn "def hora_implausivel" -B 10 -A 12 */templatetags/*.py \| head -40` |
-| 02:21:59 | Bash | Ler o resto do cartao | `sed -n '70,135p' templates/chamados/partials/_pergunta_card.html` |
-| 02:21:42 | Bash | Ler o cartao da pergunta | `sed -n '25,70p' templates/chamados/partials/_pergunta_card.html` |
-| 02:21:37 | Bash | Estado do bloco | `cd /home/ronald/saas-hasner && tail -4 logs/sombra_bloco_0202.log; date '+%H:%M'` |
-| 02:21:20 | Bash | A frase composta uma vez, em rotulos.py | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/ui4/app && cat >> chamados/rotulos.py <<'PY' # --------------------------------------------------------------------------------------------------- # UI-RESPOSTA-DIZ-O-QUE-E (ordem Ronald 01/10 17:4x, frases aprovadas 18:3x) -- A FRASE MORA AQUI, UMA VEZ. # # A pergunta do admin era *"o colaborado ...` |
-| 02:19:48 | Bash | Ler o modulo de rotulos | `head -30 chamados/rotulos.py; echo "=== defs:"; grep -n "^def \\|^[A-Z_]* =" chamados/rotulos.py \| head -20` |
-| 02:19:45 | Bash | Onde mora a casca de apresentacao | `grep -rn "def acoes_disputa" --include=*.py . \| head; ls chamados/*.py chamados/services/*.py \| head -20` |
-| 02:19:17 | Bash | O juiz passa a devolver o sinal | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; rm -rf $S/ui4; mkdir -p $S/ui4; cd /home/ronald/saas-hasner && git archive HEAD app \| tar -x -C $S/ui4 && mkdir -p $S/ui4/app/logs $S/ui4/app/media && cd $S/ui4/app && python3 - <<'PY' p='chamados/juizes.py' s=open(p,encoding='utf-8').read() old = ''' a, b = _min(resp), _min(esperada) if a is None or  ...` |
-| 02:18:57 | Bash | Estado do bloco | `cd /home/ronald/saas-hasner && tail -5 logs/sombra_bloco_0202.log; date '+%H:%M'` |
