@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**118 obras abertas.**
+**121 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -127,3 +127,6 @@ lista — ela e o que esta EM PE._
 | **O117** | DOIS CORTES DELE COLIDEM sobre celula que EXISTE com `dna.marcos` NULO | espera `!` |
 | **O118** | A GRADE CASAVA A PRIMEIRA PAUSA, NAO TODAS | **NO AR** (deploy `96beb803`, 19:27). Cu |
 | **O119** | O `intra_descontada` do motor oscila no MESMO cadastro e no MESMO padrao de batidas | espera `!` |
+| **O120** | COL221-VINCULO-DESDE-2107 | espera `!` |
+| **O121** | VINCULO-CORRIGE-O-PASSADO | espera corte |
+| **O122** | UI PLANO DE ESCALAS, ETAPA 1 | espera aval |

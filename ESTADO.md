@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:47:01.**
+**Medido em 02/10/2026 20:52:02.**
 
 | | |
 |---|---|
-| `HEAD` local | `e064a263 [O38] O censo esta feito, e ele parte o bug em DOIS -- meio a meio` |
+| `HEAD` local | `d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)` |
 | `origin/main` | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
+6976f3aa [O121] As duas obras registradas, e a LEI dele responde a pergunta que eu levantei
 e064a263 [O38] O censo esta feito, e ele parte o bug em DOIS -- meio a meio
 72972402 [O37] O DIFF esta feito: 161,00 h em 22 dia-colab, e converge na lei do O120
 ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
-751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia
-bc0ce2ac [HOOK] Item no PORTAO nao anda, e o selo lia METADE do padrao
 ```
 
 ## `git status --short`
@@ -95,42 +95,42 @@ bc0ce2ac [HOOK] Item no PORTAO nao anda, e o selo lia METADE do padrao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  MUDA:
-   A1. Tela de vinculo: recuar a data de inicio regenera as celulas do trecho, sem guarda por empresa exportada (celula.py:78), sem piso
-  (vinculo.py:34-36), sem recusa por trancada (vinculo.py:38-39). Fica: trilha com usuario, antes/depois e motivo; reversao; holerite
-  PUBLICADO do proprio colab continua barrando e dizendo por que.
-   A2. Wizard edita o tipo_ciclo de template existente (hoje cadastro_tipo.py:14 proibe e views_wizard.py:44 so le na criacao). Antes de
-  salvar, mostra quantos colabs e quais serao reescritos e pede confirmacao pelo componente da casa.
-   A3. Campo ciclo nasce VAZIO na criacao (hoje o select abre em 12x36, wizard_tipo_escala.html:30); salvar sem escolha e recusado. Cai o
-  default '12x36' de views_wizard.py:45 e cadastro_tipo.py:153.
-  RED: col221 (ec189 te224 ciclo 12x36 com horarios de seg a sex; corrigido hoje por corrigir_escala_retroativa, ec1361). Caso que morde
-  em A1: colab fora do TXT de competencia exportada pela empresa, recuar inicio pela tela regenera. A2: template com N vinculos, troca de
-  ciclo reescreve os N e a tela disse N antes. A3: POST sem tipo_ciclo = recusa.
-  PRONTO (cada um com prova nomeada no RELATO):
-  1. A1 provado pela porta da tela em banco lateral, contagem de celulas antes/depois.
-  2. A2 provado com template de 1 colab e de varios.
-  3. A3 provado nas duas formas (wizard e POST direto).
-  4. Censo: quem mais chama regenerar_celulas_vinculo e o que muda para cada chamador.
-  5. Dizer o que acontece com o FechamentoMensal do colab depois da regeneracao em competencia exportada (recalcula sozinho ou nao).
-     PROIBIDO: fallback, manter a guarda "por enquanto", flag para ligar depois, fatia posterior, juiz novo.
-     LEI-AKITA: origem/testemunha/RED/quem-mais-le, juizes novos=0.
+❯ aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
+  ponto/motor_calculo_v2.py:573, junto da cura do juiz_batida.py. DIFF de frota antes (so quem tem duas pausas se move, todo outro campo
+  zero), reversao em logs/, 09 e exportadas intactas, prova depois com o pago do col221 em 551 min nos dias cheios. AVISO: a competencia
+  09 do col221 JA foi corrigida por mim as 20:28 pelo comando corrigir_escala_retroativa (ec1361, te548, 21/08 a 20/09, 31 celulas,
+  provado). O ensaio do O120 esta superado: nao aplicar vinculo nele de novo; reler os vinculos antes de qualquer ato!
 
-  OBRA B - UI PLANO DE ESCALAS, ETAPA 1 (fila 2, raia wt-ui, so templates/static/teste de tela)
-  PERGUNTA DO ADMIN: "quais escalas sao usadas nesta praca, quem usa qual escala neste posto, quem esta na escala xyz?"
-  ETAPA 1 e so isto: instalar core/_barra_gestao.html em /escala/tipos/ com UM quadro, Atalhos, e nele o wizard, que sai do titulo. Zero
-  CSS novo, nada mais muda na tela.
-  ANTES DO CODIGO: publicar a proposta (o que entra, o que sai, print do antes) e esperar meu ok.
-  As etapas seguintes (pre-filtro, badges que filtram, atalho Quem usa) NAO entram agora.
+● O ! do O119 chegou, e o aviso é claro: reler os vínculos antes de qualquer ato. Já reli — ec189, ec1361 (te548, 21/08–20/09, o seu de
+  20:28), ec1345, ec1346 — e o ensaio do O120 está descartado; não toco vínculo do col221.
 
-  Segue a fila; PAREI so em lei ou !
+  E o seu alvo de prova fecha a aritmética: 551 min = 720 (jornada 07:00–19:00) − 169 (as duas pausas reais, 85+84). Commito a régua e
+  começo:
 
-✢ Sock-hopping… (2h 34m 30s · ↓ 470.1k tokens · thinking)
+  Ran 3 shell commands
+
+● Cópia no HEAD atual com o RED. Agora as duas curas — o juiz (fora da zona) e a uma linha que você autorizou:
+
+  Ran 1 shell command
+
+● Agora a uma linha da zona inviolável, exatamente como você a escreveu:
+
+  Ran 1 shell command
+
+● RED virou verde — 3 casos OK. Agora as quatro condições do seu !. Primeiro os vizinhos, porque a linha mora no motor e o raio é grande:
+
+  Running the neighbour suites for the motor change
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER
+     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
+     /home/ronald/wt-orfa/app:/app -v /home/ronald…
+
+✻ Sock-hopping… (2h 39m 30s · ↓ 491.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
