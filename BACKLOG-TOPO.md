@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**110 obras abertas.**
+**111 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -118,4 +118,5 @@ lista — ela e o que esta EM PE._
 | **O108** | O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 | espera `!` |
 | **O109** | O CHAMADOR DO CALCULADOR NAO ALINHA O PERIODO AO SEU MARCO | **ABERTA, e a medicao e barata**: ler a  |
 | **O110** | A DISTANCIA DO MARCO AINDA TEM QUATRO COPIAS, e elas pedem outra funcao | **ABERTA** -- censo 4 sitios, nenhum de  |
-| **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | espera `!` |
+| **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | **A HIPOTESE DA CLASSE MORREU** (medida  |
+| **O112** | O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite | **ABERTA** -- nao mexi no caminho do pus |
