@@ -32,7 +32,7 @@ lista — ela e o que esta EM PE._
 | **O22** | AUSENCIA-REVERTER-REJEICAO | espera aval |
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |
-| **O25** | PISO-NAO-SOBE-POR-BATIDA | **proxima, logo apos CARTAO=ESPELHO 6/6* |
+| **O25** | PISO-NAO-SOBE-POR-BATIDA | **FECHADA 02/10 10:35, no ar** (`b817f39 |
 | **O26** | W12X36-HPD | **spec completa, posicao 2 da fila** |
 | **O27** | JANELA-EXATA | **medido; RED aberto e OUTRO** |
 | **O28** | CATALOGO-SAIDA-ANTECIPADA-DESCONTA | espera `!` |

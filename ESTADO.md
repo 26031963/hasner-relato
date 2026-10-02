@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:56 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:32:31.**
+**Medido em 02/10/2026 10:38:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `d83c508d O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso` |
 | `origin/main` | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,20 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
 d83c508d O topo do TICKETS fechado no ato do push (O112)
 908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
 0ac1d8a5 [O21] O hash e a hora do deploy nos tres docs (10:16, f4693856)
 f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando
-d9538116 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/ponto/services/espelho.py
-?? app/ponto/tests/test_piso_nao_sobe_por_batida.py
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -98,27 +100,6 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Fim do push 79b" completed (exit code 0)
-
-● Background command "Veredito do push 79b por arquivo de sinal" completed (exit code 0)
-
-● Background command "Espera o sinal final no log" completed (exit code 0)
-
-● Push 79b fechou: 9bbb6f4b..908cbabd no remoto (9.294 + control-plane OK). Pista livre — RED do O25 na árvore de antes:
-
-  Ran 1 shell command
-
-● Background command "Espera o push 79b fechar" completed (exit code 0)
-
-● Background command "Fecha o push 79b" completed (exit code 0)
-
-● Background command "Confere o push" completed (exit code 0)
-
-● RED evidenciado (piso = 08/07 onde o cadastro diz 06/07). Aplicando a cura de origem:
-
-  Ran 2 shell commands
-
-● Background command "Aguarda e confere" completed (exit code 0)
 
 ● DIFF de frota do O25 (antes × depois, funções reais): dinheiro igual em 60 de 60, MOVEM: 0 — e 57 colabs passam a ver dias que não existiam (col219 de
   43 → 74 dias, col194 45 → 74, col191 52 → 74), com em_aberto 0 → 0: nenhuma acusação nova nasceu. Vizinhos:
@@ -128,9 +109,30 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ● Três selos de caracterização mordem — e os três me dizem explicitamente que a lápide muda junto quando o corte revoga o comportamento. Lendo cada um
   antes de tocar:
 
-● O terceiro selo: a ancora AST do piso
+  Searched for 4 patterns, ran 1 shell command
 
-✢ Hullaballooing… (2h 58m 58s · ↓ 376.3k tokens · thinking)
+● Os três são caracterização do comportamento que o corte revoga, e cada um diz que a lápide muda junto. Os ajustes, sem afrouxar nenhum:
+
+  Ran 8 shell commands
+
+● A célula do BACKLOG passou de 300 (dieta de prosa) — a história vai para o RELATO:
+
+  Ran 3 shell commands
+
+● As travas vão para o PENDENTES (o AVAIS é gerado dele). Medindo o número dos parâmetros antes de escrever:
+
+  Ran 2 shell commands
+
+● Medido: 16 campos sem efeito em 5 famílias (folha/export tem 7, incluindo adicional_noturno_pct, periculosidade_pct e os dois divisores). Registrando as
+  quatro travas com número:
+
+  Ran 3 shell commands
+
+● O gerador exige estado: aberto, desde e a frase pronta. Corrigindo os quatro:
+
+● Running 1 shell command…
+
+✢ Hullaballooing… (3h 4m 28s · ↓ 392.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
