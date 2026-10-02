@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:820 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:852 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:09:31.**
+**Medido em 02/10/2026 00:15:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke` |
+| `HEAD` local | `09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO
 680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
 cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke dele
 e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto
 6b0c036b [GESTAO-HE-FATIA-1] A celula saia AZUL pela CASCATA, e o meu selo nao viu: ela deixa de ser botao de envio e a prova passa a ser o navegador
-b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e metade da ordem ja estava cumprida
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e m
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E faltava um probe, que é a lição do dia: em file:// o render aponta o estático para STATIC_ROOT, e no worktree da raia app/staticfiles existe vazio
-  (ponto de montagem do tmpfs). Sem um probe <button type="submit"> que tem de sair azul, teria nascido um segundo selo verde sobre uma página sem folha
-  de estilo. O probe entrou antes de todos os casos.
+  hoje: item respondido some, a história fica no JSON e no RELATO.
 
-  A linha 139 que você mandou conferir estava doente: o botão "Dar ciência no padrão" era type="submit" e a mesma regra o pintava de azul cheio com texto
-  branco — o ato secundário com a cara do primário. Curado pelo mesmo caminho (e ele nem precisava ser submit).
+  Os dois pontos que só o olho responde eram justamente os dois que você testou, e os dois passaram: cancelar não gravou e confirmar com motivo virou
+  autorizado com o número limpo.
 
-  E há um terceiro que eu não toquei, e é decisão sua: o botão do topo "Dar ciência em tudo que está sem decisão" também é type="submit" e também sai
-  azul-primário pela mesma regra. Ali pode ser o certo — é gesto de competência inteira —, mas hoje ele é azul por acidente da cascata, não por escolha.
+  O que a fatia 1 custou, e o preço foi todo de medição, não de código — quatro rodadas na raia, três delas porque o selo afirmava sobre o arquivo e não
+  sobre a tela:
 
-  Uma divergência da letra, declarada: a ordem diz "disparo por htmx", e ficou form.submit(). A razão é medida: core/respostas.py:52-55 devolve 204 +
-  HX-Trigger para htmx, e com 204 não há swap — o toast apareceria e a célula ficaria azul e riscada no dia que o admin acabou de autorizar. Testemunha
-  mostrando "sem decisão" sobre dia autorizado é o que esta casa não aceita. O essencial da ordem — deixar de ser botão de envio — está cumprido, e é ele
-  que resolve a cascata. Para htmx literal, decidir_he tem de devolver a linha re-renderizada em vez de 204: é .py, e está listado na fatia 2.
+  ┌───────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ hora  │                                                o que aconteceu                                                │
+  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 20:5x │ a célula virou <button type="submit"> para disparar a porta por dia — sua ordem, e certa                      │
+  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 21:5x │ tirei a cor literal e pus tokens; o selo ficou verde lendo o hasner-ui.css                                    │
+  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 22:57 │ o seu print mostrou a célula ainda azul — hasner-ponto.css:369-373 pinta todo submit com --hp-blue !important │
+  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 23:1x │ você decidiu a cura certa: sair de baixo da regra, não gritar mais alto                                       │
+  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ 02:3x │ type="button", e a prova passou a ser getComputedStyle no chromium, nas duas cascas, com o par que morde      │
+  └───────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Junto foi o ATALHO-HE na Central (sua ordem de 23:1x): quarto atalho no molde dos três, <a> e nunca submit — pela mesma regra que custou três rodadas —,
-  cor do selo HE da legenda, número do contador que já existe, e HE — em vez de zero quando falta retrato. Contador == universo medido em prod: 1.817 =
-  1.344 + 401 + 72, igual empresa por empresa.
+  A lição ficou no código e não só no RELATO: o selo da luminância mudou de fonte — de ler o arquivo de cores para ler a tela renderizada. Lendo o arquivo
+  ele provava intenção; a cascata só existe depois que o CSS rodou. A seção 6 do CLAUDE.md já dizia para que o chromium existe, e eu tinha a ferramenta
+  sem apontar para essa tela.
 
-  E o meu selo do atalho errou o recorte, que eu consertei aqui: ele pegava o primeiro {% endif %} e o title tem um {% if %} dentro — o recorte morria no
-  meio e quatro casos acusaram a tela de não ter ícone, cor, pílula e travessão, tudo que estava depois do corte. Agora conta aninhamento. Mesmo tropeço
-  que a raia teve com o he-barra horas antes.
+  Dois achados de borda sobreviveram: a linha 139 foi curada (o ato secundário tinha a cara do primário), e o botão do topo "Dar ciência em tudo" também
+  está azul por essa regra — pode ser o certo, mas hoje é azul por acidente da cascata. Esse não toquei: é desenho seu.
 
-  98 testes OK na main depois do merge, deploy no mesmo ato, e o AVAIS com um item: o seu smoke, com os cinco pontos que só o olho responde — incluindo se
-  o "Dar ciência no padrão" em slate-100 é o que você queria.
+  O push do marco está rodando. Com o AVAIS vazio, a fila da noite volta ao item (1): as três curas da S5b — a (a) já está em cópia com o selo que torna a
+  fronteira estrutural, e as causas de (b) e (c) estão nomeadas e provadas. É o que pego agora, no mesmo marco do DIFF refeito que a sua resposta exige
+  para a troca subir.
 
-✻ Worked for 50m 38s · done 11:55 PM · 1 shell still running
-
-❯ smoke Ronald: abri a Gestao de HE, cliquei num dia e CANCELEI o dialogo (nada gravou), cliquei de novo e confirmei com motivo -- o dia virou autorizado
-  com o numero limpo. Pode fechar a FATIA 1
-
-● Running 1 shell command…
-
-✢ Whatchamacalliting… (11s · ↓ 531 tokens)
+✻ Worked for 1m 10s · done 12:10 AM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
