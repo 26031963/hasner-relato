@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:10:01.**
+**Medido em 02/10/2026 19:15:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## `git status --short`
 
 ```
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,36 +95,36 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  perguntar à autoridade — exatamente o erro de contar pela forma. O vínculo de 21/09 em diante é ec1345 / te548 (6x1 Seg/Ter); o te176
-  que eu medi começa em 01/10 e está ativa=False:
+  Searched for 1 pattern
 
-  Searched for 1 pattern, ran 2 shell commands
-
-● A autoridade é o carimbo CelulaDia.escala_geradora. Leio ele direto:
+● Decisivo para o desenho: marcos_dna_periodo é lido pelo motor (motor_calculo_v2.py:357,723, zona inviolável) e pelo juiz de turnos
+  (turnos.py:1250,1280) como marcos_por_dia do pareamento. Mudar o retorno dela mexeria no pareamento — dinheiro e zona inviolável. Pela
+  CURA-MAIS-RESTRITIVA: a 4-tupla do motor fica intacta, nasce uma irmã com a sequência completa, e migram só os dois sítios da GRADE.
+  Registro o aval e abro a cópia:
 
   Ran 1 shell command
 
-● Agora a mecânica está medida e confirma o diagnóstico dele (as órfãs são as da tarde; minha corrida anterior estava no vínculo errado):
+● O formato do arquivo é bullet, não tabela — corrijo a linha para a forma da vizinha:
 
-  ┌──────────────────────────────────┬───────────────────────────────┬───────────────────────────────────────────────┐
-  │              camada              │        o que responde         │                   resultado                   │
-  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
-  │ célula (autoridade)              │ dna.marcos                    │ 6 marcos, escala_geradora=1345, todos os dias │
-  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
-  │ cadastro te548                   │ pausas_cadastradas()          │ as duas pausas                                │
-  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
-  │ régua de colunas                 │ _marcos_def(te)               │ 8 colunas, inclui S 14:15 | E 15:40           │
-  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
-  │ sequência do dia (utils.py:1116) │ te.marcos_do_dia(d) → 4-tupla │ (07:00, 19:00, 09:15, 10:40) — hii2/hfi2 caem │
-  └──────────────────────────────────┴───────────────────────────────┴───────────────────────────────────────────────┘
+  Ran 1 shell command
 
-  _match_marcos então casa 4 e sobra o par da tarde: cheias=4 de 8, orfas=['14:17','15:40'] em todos os dias. O cartório acende 6 porque o
-  ramo do DNA itera os seis marcos da célula e o meu raio de 30 min achou as horas — logo 6 acesas E as mesmas duas em órfãs. O asterisco
-  do calendário é a órfã.
+● Agora a cópia do HEAD e o RED. Monto a raia com os pontos de montagem que a suíte exige:
 
-● Advising using Fable 5.1
+  Ran 3 shell commands
 
-✢ Sock-hopping… (57m 30s · ↓ 149.7k tokens)
+● Escrevo o RED — o selo dele (batida que acendeu nunca consta em órfãs) mais o caso da grade:
+
+  Ran 1 shell command
+
+● Agora o selo que ele pediu — a invariante na ata gravada:
+
+  Ran 1 shell command
+
+● Rodo o RED na raia (CPUSET de teste, contêiner irmão) para ver os dois selos vermelhos antes de curar:
+
+● Running 1 shell command…
+
+✢ Sock-hopping… (1h 3m 0s · ↓ 166.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
