@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:15:45.**
+**Medido em 02/10/2026 02:20:45.**
 
 | | |
 |---|---|
@@ -94,6 +94,7 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
 
 ● Agora os dois portoes no calculador — entrada na volta do intervalo (mata o atraso) e saida para o intervalo (mata a antecipada):
 
@@ -122,11 +123,10 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
   ⎿  cd /home/ronald/saas-hasner && python3 - <<'PY'
      p='app/docs/BACKLOG.md'… · stopped
 
-  Esperar o bloco da sombra
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_bloco=" logs/sombra_bloco_0202.log 2>/dev/null; do sleep 30; done; tail -5
-     logs/sombra_bloco_0202.log; bin/sombra.sh --conferir 2>&1 | tail -2
+● Onde mora a casca de apresentacao
+  ⎿  $ grep -rn "def acoes_disputa" --include=*.py . | head; ls chamados/*.py chamados/services/*.py | head -20
 
-· Unfurling… (1h 16m 39s · ↓ 108.9k tokens)
+✶ Unfurling… (1h 21m 40s · ↓ 116.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
