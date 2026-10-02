@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:44:52.**
+**Medido em 02/10/2026 17:50:02.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
  M app/docs/PENDENTES_RONALD.json
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,35 +96,35 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 
 ```
 
+  (a) Merge e deploy: a2e903e1, 17:10:45, três rotas provadas. (b) Regeneração: não tinha sido feita — eu a registrei e não executei;
+  executei agora, 22 células, DNA de 4 → 6 marcos.
+
+  O smoke segue reprovado, e agora com a causa certa: a ata continua com quatro lâmpadas, e é ela que a tela lê. O próximo passo é o
+  emissor da ata ler as duas pausas — e aí sim medir em prod as seis lâmpadas, a grade com seis células, o previsto_canon com seis e as
+  batidas de 14:17 e 15:40 com marco, antes de te devolver o smoke.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
+
+  Searched for 1 pattern
+
+● A linha 154 do cartório já cita o caso — a raia mexeu lá. Leio o sítio exato para ver por que ele ainda lavra quatro:
+
   Ran 1 shell command
 
-● Duas correções: minha regex não pegou a constante (parênteses aninhados), e o vocabulário de decisão é ['!', 'aval', 'corte',
-  'corte-dado', 'lei', 'ok-desenho', 'smoke'] — "pauta DP" não existe nele:
+● O cartório já lê as seis chaves do DNA (chaves_do_turno), mas a ata saiu com quatro — e julgada_em é de hoje 18:17/18:40, depois da
+  minha regeneração. Então ou ele não re-julgou com o DNA novo, ou há um corte adiante. Mando o cartório re-julgar, que é o passo que o
+  item (5) nomeia:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-❯ smoke Ronald O114: REPROVADO. Medido em PROD as 17:43 pela funcao real: as celulas do col221 em 30/09 e 01/10 seguem com dna_versao 2 e
-  QUATRO marcos (hi 07:00, hii 09:15, hfi 10:40, hf 19:00); espelho_do_colab monta quatro celulas por dia; no calendario as batidas
-  14:17 e 15:40 seguem com o asterisco laranja, de 22/09 a 30/09. O "seis marcos" do seu aval foi medido na SOMBRA. Responder com PROVA
-  em prod: (a) o merge e o deploy do O114 aconteceram, com hash e hora? (b) o item (5) do aval das 15:5x, regenerar pela porta as celulas
-  do ec1345 desde 21/09, foi executado? Fazer o que faltar e me devolver o smoke so depois de medir em PROD o dna com seis marcos e a
-  grade com seis celulas. O calendario do colaborador tambem tem de mostrar as seis: conferir o leitor dele. segue a fila; PAREI so em
-  lei ou no criterio (2) !
+● --forcar existe e a razão dele é exatamente esta família: "rejulga mesmo com impressão igual". Chamo a função real do cartório para o
+  col221 nesses dias, sem escrever, para ver quantas lâmpadas ela produziria agora:
 
-● Smoke reprovado com razão, e a causa é uma omissão minha clara: o item (5) do seu aval das 15:5x — regenerar as células do ec1345 — eu
-  registrei e não executei. Respondo as duas perguntas com prova e faço o que falta.
+  A entrada do cartório
 
-  (a) Merge e deploy aconteceram: commit a2e903e1, merge e deploy no mesmo ato às 17:10:45, com as três rotas provadas. (b) A regeneração
-  não foi executada — e sem ela o código novo não reescreve célula nenhuma, porque célula é DADO congelado.
-
-  DRY da regeneração das células do ec1345
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $S/regen_ec1345.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """ITEM (5) do aval 15:5x, que eu REGISTREI E NAO EXECUTEI: regenerar pela porta as celulas
-     do ec1345 desde 21/…
-
-✽ Doodling… (2h 23m 39s · ↓ 441.3k tokens)
+✽ Doodling… (2h 28m 49s · ↓ 459.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
