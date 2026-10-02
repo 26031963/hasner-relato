@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 21:29:01.**
+**Medido em 01/10/2026 21:34:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o 
 ## `git status --short`
 
 ```
+ M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,17 +96,6 @@ d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  E a sua partição em duas fatias apagou o risco que eu havia levantado: como a fatia 1 não depende de .py nenhum, o template entrar no ar no ato do merge
-  não deixa a tela sem caminho de autorizar. A ordem "patch 1 → deploy → merge" vale para a fatia 2, não para esta.
-
-  ┌────────────────────────────────┬──────────────────────────────────────────────────────────────────────────────┐
-  │             prova              │                                    número                                    │
-  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
-  │ selos de tela da fatia 1       │ 13                                                                           │
-  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
-  │ na raia                        │ 78 testes OK (7 pulados = fatia 2)                                           │
-  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
   │ selos de front, com o chromium │ 38 OK                                                                        │
   ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
   │ na main, depois do merge       │ 93 testes OK                                                                 │
@@ -129,10 +119,21 @@ d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o 
   meço antes de curar, porque clampear em zero seria band-aid.
 
 ✻ Cooked for 32m 1s · done 9:24 PM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Provar a aritmetica da hora negativa
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+     # a aritmetica que PROVA a causa: clipar a entrada ate o marco das 21:00 do MESMO dia poe a entrada
+     # DEPOIS da saida das 05:00 -- e 21:00 -> 05:00 para tras e -16 h.
+     print('21:00 -> 05:00 no MESMO dia = %.2f min' % ((5-21)*60))
+     print('medido no col235 …
+
+✢ Nucleating… (1m 55s · ↓ 6.2k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; mede a hora negativa e cura (b) e (c)
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
