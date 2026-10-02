@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:15:01.**
+**Medido em 02/10/2026 00:20:31.**
 
 | | |
 |---|---|
@@ -95,15 +95,6 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  hoje: item respondido some, a história fica no JSON e no RELATO.
-
-  Os dois pontos que só o olho responde eram justamente os dois que você testou, e os dois passaram: cancelar não gravou e confirmar com motivo virou
-  autorizado com o número limpo.
-
-  O que a fatia 1 custou, e o preço foi todo de medição, não de código — quatro rodadas na raia, três delas porque o selo afirmava sobre o arquivo e não
-  sobre a tela:
-
-  ┌───────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
   │ hora  │                                                o que aconteceu                                                │
   ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ 20:5x │ a célula virou <button type="submit"> para disparar a porta por dia — sua ordem, e certa                      │
@@ -129,10 +120,19 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
   para a troca subir.
 
 ✻ Worked for 1m 10s · done 12:10 AM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Ver a cadeia do_dia -> pontualidade_do_dia
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/s5b3/app && sed -n 620,630p
+     ponto/calculador/regras.py; grep -n "def do_dia" -A6 ponto/calculador/regras.py | head -8; sed -n 505,512p
+     ponto/management/commands/diff_calculador.py
+
+✢ Whisking… (1m 51s · ↓ 7.4k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
