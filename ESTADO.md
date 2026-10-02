@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:70 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:356 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 21:18:31.**
+**Medido em 01/10/2026 21:23:53.**
 
 | | |
 |---|---|
-| `HEAD` local | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| `origin/main` | `c07a13c5 NO AR as 19:26 com smoke em prod -- e a ressalva: quem prova a guarda e o col890, nao os outros dois` |
-| commits a subir (`ahead`) | **13** |
+| `HEAD` local | `4c35e96c MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que JA existia` |
+| `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4c35e96c MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que JA existia
+d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o dia de HE ganha FUNDO CHEIO
 5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias
 1d9308e6 Duas falhas minhas na suite cheia: command sem casa e dois tipos que o vocabulario nao conhecia
-060dd4a2 AVAIS NA MESA no ar: 3 abertos com a frase pronta, 4 respondidos que ja somem, 163 sem triagem
-61720fac S5b, os dois passos medidos: a guarda e CEGA no calculador por falta de dado, e a dobra MORREU
-edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de atraso em 283 colabs
+21c4826e [GESTAO-HE-CALENDARIO-CONTROLE] O calendario vira o CONTROLE: celula com o NUMERO, tres estados sem depender de cor, e a barra nasce DESLIGADA
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/HANDOFF-SESSAO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,17 +96,6 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✻ Waiting for 1 background agent to finish
-
-● Monitor event: "veredito final da suite do AVAIS"
-
-  Ran 7 shell commands
-
-● Marco fechado e no ar: suíte canônica Ran 9161 tests, OK (skipped=25), deploy.sh com prova de casca e três rotas, e o selo que cobrava o deploy agora
-  morde do lado certo — IMPORT_TARDIO acusados=0, e ele mesmo declara que "o 500 de hoje volta a ser acusado quando o ar é o commit de antes", que é a
-  prova de que não passou por ausência de sinal. Push do marco lançado.
-
-  E preparando a cura (a) da S5b em cópia, eu achei o que explica por que ninguém viu nada por duas horas — e é uma promessa quebrada que estava escrita
   no código.
 
   A lápide de _PeriodoPontualidade dizia: "se um dia ele passar a ler um sexto campo, este __slots__ quebra em VOZ ALTA (AttributeError no selo) em vez de
@@ -126,13 +116,24 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
   duas saídas seguidas, e a casa já registrou que clampear em zero seria band-aid — esconderia o dia errado. Primeiro meço de onde vem o sinal negativo.
 
 ✻ Waiting for 1 background agent to finish
+
+› Message from @a6628ec7e07379c89 (ctrl+o to expand)
+
+  Ran 1 shell command
+
+● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 25m 36s
+
+  Commitar o merge e deployar no mesmo ato · 3s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; git add -A
+     app/docs/BACKLOG.md app/docs/TICKETS.md && git commit -q -F - <<'MSGEOF'
+     MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que J… (3s · 3 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Roosting… (2m 16s · ↓ 6.6k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ medir de onde vem a hora negativa; segue a fila
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Re-running test_tela_gestao_he_calendario suite                                                           22m 16s · ↓ 394.2k tokens
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
