@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:38:01.**
+**Medido em 02/10/2026 06:43:31.**
 
 | | |
 |---|---|
@@ -94,6 +94,7 @@ e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  └────────────┴─────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
   O O45 é o achado que vale ler: a lápide dizia que a diferença era de janela. Não é. Na amostra de 150, as 99 diferenças são 100% só-no-cartão e 100%
   dentro da janela da tela — e o número que fecha o caso é dia_colab_tela = 0, com a lista da tela vazia em 150 de 150. Com horas_previstas idênticas e
@@ -120,18 +121,17 @@ e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a 
 
 ● Background command "Esperar o push final do turno" completed (exit code 0)
 
-● Veredito do push e do hook · 4m 32s
+● Veredito do push e do hook
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push72.log; do sleep 30; done; tail -4 logs/push72.log; git fetch -q origin;
      echo "ahead=$(git rev-list --count origin/main..HEAD)"; echo "=== hook:"; echo '{"hook_event_name":"Stop"}' | timeout 60 python3
-     bin/hook_stop_fila1.py… (4m 30s)
-     (ctrl+b ctrl+b (twice) to run in background)
+     bin/hook_stop_fila1.py…
 
-✢ Unfurling… (5h 38m 56s · ↓ 434.6k tokens)
+✢ Unfurling… (5h 44m 26s · ↓ 434.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
