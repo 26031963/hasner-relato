@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:28:31.**
+**Medido em 02/10/2026 14:34:01.**
 
 | | |
 |---|---|
@@ -96,40 +96,40 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ (2)(b) causa por colab do que move                      │ publicada no RELATO antes do apply — Pautas DP #922/#924/#926/#927 para os de gravado   │
+  │                                                         │ zero, L-084 no col382, O65 no col788                                                    │
+  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (2)(d) 09 e exportadas intactas                         │ hash ANTES medido: 607 linhas, 189304907c23163…; exp#27/#25/#24 vigentes                │
+  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (2)(c) reversão em logs/                                │ próximo, junto do apply                                                                 │
+  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
+  │ (3) pareamento único fica para o O65                    │ respeitado — o col788 (intervalo fora do par) está declarado, não corrigido             │
+  └─────────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────┘
 
-● (d) medido, o ANTES: FechamentoMensal 09/2026 = 607 linhas, sha256 189304907c23163…; a 10 = 572 linhas, 4bf7b1b3ffa8890…; exportações vigentes da 09:
-  exp#27 (emp2), exp#25 (emp4), exp#24 (emp3). Agora o que "subir" significa no código — lendo a porta de escrita:
+  E a prova de que a causa era pareamento, como você disse: motor × calculador dá atraso +0,00 e antecipada −0,00 com zero dia-colab divergentes. A
+  pontualidade do calculador é hoje idêntica à do motor — o que sobra contra o gravado é deriva do gravado, não regra nova.
 
-  Searched for 1 pattern, ran 3 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● O desenho fecha: a lavratura mora em fechamento.py:613 com versao='motor', e o campo versao existe para as duas conviverem — "é assim que o DIFF por
-  rubrica fica possível sem apagar o número de produção". Então "o calculador passa a ESCREVER o DiaPago" é aditivo. Lendo como o DIFF chama as regras,
-  para que a lavratura chame a mesma linha:
+  Ran 1 shell command
 
-  Searched for 1 pattern
+● Background command "Roda o DIFF pela porta inteira" completed (exit code 0)
 
-● A chamada regras.do_dia tem 18 argumentos, cada um com fonte própria, e os helpers são locais do comando. Medindo o tamanho real da extração antes de
-  prometer:
+● A tabela mudou muito, e para pior (atraso de +0,00 para +146,03 h; antecipada de −0,00 para +289,66 h) — a minha extração das rubricas não foi fiel, e
+  era exatamente para isso que o teste servia. Não publico isso. Achando o que eu pulei:
 
-  Searched for 3 patterns, ran 1 shell command
+  Ran 1 shell command
 
-● Boa notícia para o escopo: _mpd, _idd, _certa e _cad_do_template são imports de módulo, não closures — só _dia_de_trabalho é local. A extração é viável.
-  Vendo os argumentos restantes:
+● Achei o que pulei, e está escrito na lápide do núcleo: "quando a autoridade já pareou, o núcleo NÃO pareia — ele SOMA". A porta tem de chamar o núcleo
+  com pares= (dedup, pausa, envelope, paridade), e meu selo proibiu exatamente isso. Corrigindo os dois:
 
-  Searched for 1 pattern, ran 2 shell commands
+● Como o DIFF obtem mins e pausas do nucleo
+  ⎿  $ grep -n "v = minutos_do_oraculo\|mins = \|k_str = " ponto/management/commands/diff_calculador.py | head -6; sed -n '/v = minutos_do_oraculo/,+12p'
+     ponto/management/commands/diff_calculador.py | head -14
 
-● Tenho o mapa completo dos 18 insumos. Escrevendo a segunda metade da porta — as rubricas, que o DIFF e a lavratura vão chamar pela mesma linha:
-
-  Ran 2 shell commands
-
-● A porta das rubricas roda (0 erros em 60 colabs). O teste definitivo da extração é o DIFF produzir a mesma tabela chamando-a — se mudar, eu meço a
-  causa. Fazendo a troca:
-
-  Ran 3 shell commands
-
-● A porta agora entrega as duas metades — os segmentos (do motor) e as rubricas (os 18 insumos, cada um com sua autoridade) — e o DIFF perdeu outras 37
-
-✻ Waiting for API response · will retry in 2m 33s · check your network
+✢ Philosophizing… (31m 27s · ↓ 44.5k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
