@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:37:01.**
+**Medido em 02/10/2026 15:42:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que` |
+| `HEAD` local | `a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou
 99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
 0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
 ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
 389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
-dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/alimentacao.py
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,35 +94,43 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 
 ```
 
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 10; done; sleep 3; grep -E
+     "^(OK$|FAILED|Ran |To https|pos_push|error:)"… · stopped
 
-● Task "Veredito do push 78" still running in background
+● Stop Task
+  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until [ "$(docker ps -q --filter
+     ancestor=saas-hasner-core:latest --filter… · stopped
 
-● Task "Fim do push 78" still running in background
+  Ran 1 shell command
 
-● Task "Fim do push 78 (espera curta)" still running in background
+● O push80 voltou FAILED (1 falha em 9300) às 10:48 e por isso os 7 commits ainda estão aqui. Qual foi a falha:
 
-● Task "Fim do push 78" still running in background
+  Ran 1 shell command
 
-● Task "Espera o contador do O27" still running in background
+● Essa é exatamente a entrada que a cura do piso (O25) apodreceu — e eu já a removi depois. Confiro se a árvore atual passa:
 
-● Task "Espera a sonda e reporta junto do push" still running in background
+  Ran 1 shell command
 
-● O selo mordeu — e mordeu certo: o comando chama _rubricas_por_dia, um nome local. Vou ver o que esse nome é de fato.
+● Fix já commitado em 322a71a2 — a falha do push80 era de árvore velha. Commito a extração por movimento com a prova de que a frota saiu
+  idêntica:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● A chamada é a porta certa — só entra com apelido no import (as _rubricas_por_dia), e o selo lê o nome chamado. Apelido
-  que esconde a porta do selo é o selo medindo o apelido: tiro o apelido.
+● Agora a troca em si. Leio o sítio da lavratura antes de decidir como ela chama a porta:
 
-● Ler os dois sítios vivos antes do patch
-  ⎿  $ sed -n 258,268p ponto/management/commands/diff_calculador.py && echo "--- 360,372 ---" && sed -n 360,372p
-     ponto/management/commands/diff_calculador.py
+  Ran 2 shell commands
 
-✢ Doodling… (15m 48s · ↓ 30.4k tokens)
-                                                                                ✔ Update installed · Restart to update
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+● Pela medida (1), motor × calculador em pontualidade = 0 dia-colab — logo vale o item (3) do seu aval: o que sobra é gravado velho, e a
+  relavratura da 10 pelo motor é o próximo ato. É dinheiro em competência aberta, então vou consultar antes de aplicar.
+
+● Advising using Fable 5.1
+
+✢ Doodling… (21m 18s · ↓ 37.6k tokens)
+                                                                                                  ✔ Update installed · Restart to update
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
