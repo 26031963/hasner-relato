@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:55:31.**
+**Medido em 02/10/2026 10:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo` |
+| `HEAD` local | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
 | `origin/main` | `46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL
 24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo
 8e085c33 [PAINEL-SITUACIONAL-N+1] Os dois censos que a suite acusou eram de ANCORA: o sitio mudou de lugar, a lei nao
 a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito
 27c9c24c O topo do TICKETS fechado no ato do push (O112)
-46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS
 ```
 
 ## `git status --short`
 
 ```
- M app/core/management/commands/lavrar_placar_situacional.py
- M app/docs/BACKLOG.md
- M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,13 +94,6 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Push 77 caiu com 2 selos — os dois da mesma família (contrato que enumera). Lendo os dois:
-
-  Searched for 2 patterns, ran 5 shell commands
-
-● Os dois selos reancorados estão verdes (o único error é um label meu que não existe). Commit da reancoragem:
-
   Committed 8e085c33
 
 ● Agora o HAIKU (ordem (a)+(b)+(c)) na árvore, com o DENTES regenerado:
@@ -120,21 +110,28 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 
 ● Bug provado no caminho (LEI-AKITA 6): o lavrador imprime 12:54 para 09:54 — agora cru em UTC, a mesma lápide do HAIKU-EXPORT. Cura na hora:
 
-● Corrige hora, hash e fecha as celulas
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     # ---------------- TICKETS: hash, hora e a linha do HAIKU
-     p='app/docs/TICKETS.md'
-     s=io.open(p,encoding='utf-8').read()
-     s=s.replace('| **FECHADA 02/10 12:xx, no ar** | `<commit>` | 02/10 |',
-     '| **FECHADA 02/10 09:54, no ar** | `a8c605dd`+`8…
+  Committed 9bbb6f4b, ran 9 shell commands
 
-✢ Hullaballooing… (2h 21m 58s · ↓ 261.9k tokens)
+● Marco fechado e push 78 em voo. O hook aponta o próximo da fila 1 — O21. Lendo, enquanto a suíte roda (preparo é paralelo; commit não):
+
+  Searched for 8 patterns, ran 8 shell commands
+
+● O21 é fiação: o app monta ok/alerta sozinho enquanto a grade e o cartão já leem do_dia. Medindo o custo da porta antes de ligar:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Medido em prod: +10 queries / ~15 ms por colab nas três portas, e 615 dia-colab com decisão humana na competência — 478 abonado, 109 suprimido, 6
+  descontado, 2 rejeitado (os 117 que o app pinta igual; Ronald mediu 112 às 06:1x). Palavras reais: INSS 15+ (sem previsao), TROCA DE PLA rejeitado.
+
+  Como o selo autentica no endpoint do app
+  ⎿  $ sed -n '1,70p' api/tests/test_t42_espelho_v2_celula.py
+
+· Hullaballooing… (2h 27m 12s · ↓ 280.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
