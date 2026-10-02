@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:05:45.**
+**Medido em 02/10/2026 18:11:01.**
 
 | | |
 |---|---|
@@ -97,42 +97,42 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  denominador da prontidão e base do furo.
+  vez hoje que esse padrão aparece, e a regra que a casa tem para ele é literal: não reconstruir em sonda própria a chamada que o sistema
+  faz.
 
-  Não aplico a relavratura antes de publicar o censo. E o push dos 36 commits vem depois do smoke fechado, como você ordenou.
+  O despejo que está rodando corrige isso pela raiz: a mesma função nas duas árvores, saída colab;dia;minutos, diff sem interpretação.
+  Quando ele fechar, publico o censo real e relavro o col221.
 
-✻ Baked for 2m 53s · done 6:03 PM · 4 shells still running
+✻ Sautéed for 1m 10s · done 6:09 PM · 5 shells still running
 
-● Background command "Censo de quem a cura do previsto move" completed (exit code 0)
-
-  Ran 1 shell command
-
-● O censo imprimiu só a primeira linha. Vejo o log inteiro:
+● Background command "Despejar o previsto nas duas árvores" completed (exit code 0)
 
   Ran 1 shell command
 
-● A sonda ainda está correndo (determined_babbage) — ela varre ~565 colaboradores × 30 dias × 2 competências chamando duas funções por
-  dia, então leva alguns minutos. O que já saiu confirma a premissa: 1 modelo de 341 declara segundo intervalo.
+● Dois containers vivos — o despejo (laughing_bardeen) e o censo antigo, que ainda não saiu. Espero pelos arquivos, que é o sinal certo:
 
-  Enquanto ela termina, deixo o estado exato do que você pediu:
+  Ran 1 shell command
 
-  A cura está feita, na origem, com RED antes e GREEN depois. escala/utils.py::minutos_previstos_do_dia desempacotava a 4-tupla de
-  marcos_do_dia e descontava uma pausa; agora pergunta a EscalaColaborador.pausas_do_dia, que é a autoridade que vê todas. Três casos no
-  selo: duas pausas dão 550, uma pausa continua 635 (o caso que impede a cura de inventar pausa), e célula que existe sem marco deixa de
-  descontar pausa do template — 720 —, que é a guarda da R4 entrando pela porta do previsto.
+● O monitor espera pelos dois CSVs e pelo fim do container — sinal por arquivo, não por tempo.
 
-  E registro a parte que é minha: o erro estava no sistema e na minha conta, e foi a minha conta que o escondeu. Eu escrevi "635 =
-  720−85−85" num RELATO; se eu tivesse feito a subtração, o 550 teria aparecido na hora. Você viu porque fez a conta que eu não fiz.
+  Enquanto isso, preparo a relavratura do col221 que você pediu, para disparar assim que o censo estiver publicado. Ela é dinheiro em
+  competência aberta, então vai com os quatro requisitos da L-082: DIFF publicado antes, reversão em logs/, a 09 intacta por hash, e prova
+  depois.
 
-  Falta o censo por causa, e só depois dele a relavratura — o previsto é base de folha e não aplico sem o número. Depois, o push dos 36
-  commits.
+  Um ponto que preciso levantar antes de aplicar, porque muda o escopo: a cura do previsto alcança duas famílias, e só uma delas é o
+  col221. A outra é a guarda da R4 — célula que existe com dna.marcos nulo deixa de descontar a pausa do template. Se o despejo mostrar
+  que essa segunda família move outros colaboradores, relavrar só o col221 deixa o sistema com o previsto novo no código e o gravado velho
+  neles — divergência que a próxima batida de cada um resolveria sozinha, pelo recálculo por evento, mas em tempos diferentes.
 
-✻ Cogitated for 23s · done 6:03 PM · 4 shells still running
+  Então vou publicar o censo com as duas famílias separadas e relavrar o col221 como você mandou; se a segunda família aparecer com
+  tamanho, ela vai para a sua mesa com o número, não junto no mesmo apply.
+
+✻ Cooked for 28s · done 6:10 PM · 5 shells still running
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ publica o censo e relavra o col221
+❯ a segunda familia tambem relavra
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
