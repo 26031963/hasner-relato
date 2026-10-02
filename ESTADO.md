@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:21:01.**
+**Medido em 02/10/2026 15:26:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/calculador/alimentacao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +95,44 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├──────────────────────┼───────┼──────────────────────────┼─────────────────────────────┤
+  │ col231/col296/col418 │ 01/10 │ 351,54 / 360,02 / 339,46 │ idem col196                 │
+  └──────────────────────┴───────┴──────────────────────────┴─────────────────────────────┘
 
-● A correção está commitada (0ad4ebc4) e publicada no topo do RELATO, com a tabela nomeada.
+  Então o item (1) está respondido: diverge do motor, e o parágrafo "A PROVA DE QUE ERA PAREAMENTO" sai — ele nasceu da rodada do bug.
+  Vendo como a regra trata a guarda, para mover e não reescrever:
 
-  O essencial, sem rodeio:
+  Searched for 1 pattern
 
-  PAREI: o ! da pontualidade da S5b — o critério (2)(a) não fechou. Atraso +2,51 h (col81) e antecipada +44,21 h em 9 colabs (col932 +9,76
-  · col296 +6,00 · col196 +5,96 · col231 +5,86 · col418 +5,66 · col255 +5,35), os dois acima do gravado. Como o seu aval manda: não fechou
-  = PAREI com a tabela.
+● A regra recebe "um por período fechado do dia" — a guarda de turno aberto é do motor. Achando a linha exata dela, para mover e não
+  reinventar:
 
-  E a tabela que eu publiquei às 14:2x era um bug meu, não uma cura: eu passava as pontas da pontualidade em UTC, e marco_no_dia ancora o
-  marco no dia do instante — o marco caía no dia seguinte e a distância saía menor, empurrando o número para o lado que me convinha.
-  Corrigi para hora local (como o chamador antigo faz) e o critério abriu.
+  Searched for 1 pattern, ran 1 shell command
 
-  O que a sua ordem (1) pediu está de pé e provado: a porta única dos períodos. Seis das oito rubricas voltaram idênticas à rodada fiel,
-  col516 e col174 saíram da lista — a cura do pareamento funcionou, e era isso que você disse ser a causa. A soma dos segmentos bate com o
-  motor em 519 de 520 colaboradores. Resta um insumo: a pontualidade.
+● A guarda mora em MotorBase._aplicar_teto_pontualidade (:892), e ponto/calculador/regras.py já importa esse método — a guarda está
+  disponível, só não chega a informação. Vendo o que a regra monta a partir das tuplas:
 
-  O que eu reverti e por quê: a extração das rubricas (os 18 insumos). Cinco tentativas, cada uma denunciada pelo DIFF de ponta a ponta —
-  núcleo pulado (+146,03 h de atraso), tupla sem o dia da jornada (−952,38 h), CCT sem a data (cego 1.247→110), dias_folga do template
-  (divisão trocada), pontualidade por período e por jornada. Código sem leitor é vermelho, então ele saiu; os números ficaram na lápide. A
-  lição: extração de alimentação se faz movendo as linhas, nunca reescrevendo a montagem "equivalente".
+  Ran 2 shell commands
 
-  Na sua mesa, o que destrava: o ! sobre como a pontualidade do calculador deve ler as pontas — e o caso medido é o col81/col932, dia a
-  dia, não outra rodada de frota.
+● A guarda já existe na regra — _PeriodoPontualidade(..., turno_aberto=_s is None) — e foi a minha última "correção" que a apagou: ao
+  agrupar por jornada com max(saidas), eu peguei a saída do período fechado e joguei fora o período aberto, que é justamente quem carrega
+  saida=None. Voltando ao laço por período, com hora local e os abertos incluídos:
 
-✻ Worked for 59m 55s · done 3:02 PM · 7 shells still running
+  Ran 1 shell command
 
+● Os sete goldens fecharam. Motor × calculador: horas_atraso +0,00 e horas_saida_antecipada −0,00, zero dia-colab divergentes; contra o
+  gravado, +0,01 e +0,00 com zero colabs divergentes. A guarda era exatamente isso. Agora a frota — que a ordem permite depois dos goldens:
+
+● A frota depois dos goldens
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; nohup docker run --rm $TESTE_DOCKER --network
+     saas-hasner_default --env-file ~/saas-hasner/.env -e PYTHONUNBUFFERED=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python
+     manage.py tenant_command diff_calculador --schema=j…
+
+✢ Doodling… (5m 18s · ↓ 11.7k tokens · thinking)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  Background
-  7 active shells
-
-  ❯ cd /home/ronald/saas-hasner && until grep -qE "CONTADORES|Traceback" /tmp/claude-1001/-home-ronald-saas-hasner-a… (running)
-    cd /home/ronald/saas-hasner && until grep -qE "CONTADORES|Traceback" /tmp/claude-1001/-home-ronald-saas-hasner-a… (running)
-    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 10; done; sleep 3; grep -… (running)
-    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 15; done; sleep 3; grep -… (running)
-    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 20; done; sleep 4; echo "… (running)
-    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null && ! pgrep -f "bin/push.sh" >/dev/n… (running)
-    S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until [ "$(docker ps -q --… (running)
-
-  ↑/↓ to select · Enter to view · x to stop · Esc to close
+❯ 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⧉  index
 ```
