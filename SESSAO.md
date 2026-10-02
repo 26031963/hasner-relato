@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 21:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (177.1 MB). Acoes na janela: **1221**.
+**Medido em 01/10/2026 21:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (177.1 MB). Acoes na janela: **1224**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:55:22 | SendMessage |  | `-` |
+| 21:52:35 | SendMessage |  | `-` |
+| 21:52:12 | Bash | Registrar a correcao de desenho e pôr no AVAIS | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() nova = ("- **01/10 ~21:5x — GESTAO-HE fatia 1, CORRECAO DE DESENHO** (so template, raia `wt-ui`): *\"o pedido era " "**SALIENTAR A GRADE**, nao preencher a celula; o 'fundo cheio' foi **erro do texto do aval**\"*. **(1)** celula " "**SEM fundo azul ...` |
 | 21:35:09 | Bash | Fechar a celula e ver o push | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, sys sys.path.insert(0,'bin'); import hook_stop_fila1 as H P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() A='\| S5b-TROCA-NAO-CRIA-DESCONTO \|' i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('\|') novo = (' **AS TRES CURAS SAO UMA FAMILIA (01/10 21:4x): guarda que o MOTOR tem e o CALCULADOR nao le.** ' '(a) turno abert ...` |
 | 21:34:58 | Bash | Publicar e commitar a causa da hora negativa | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='app/docs/RELATO.md' t=io.open(P,encoding='utf-8').read() A='<!-- SEUS-CORTES:FIM -->\n' sec = """ ## A hora NEGATIVA do calculador tem causa PROVADA POR ARITMETICA: a janela clipa contra o marco de OUTRO turno Cura (c) das tres que voce autorizou. Para medir isto eu precisei dar ao instrumento um modo que ele n ...` |
 | 21:34:09 | Bash | Provar a aritmetica da hora negativa | `cd /home/ronald/saas-hasner && python3 -c " # a aritmetica que PROVA a causa: clipar a entrada ate o marco das 21:00 do MESMO dia poe a entrada # DEPOIS da saida das 05:00 -- e 21:00 -> 05:00 para tras e -16 h. print('21:00 -> 05:00 no MESMO dia = %.2f min' % ((5-21)*60)) print('medido no col235 01/10: -959.87 min') print('col174 24/09: -959.02 min (mesma forma: marco 21:00, batidas 02:32-05:00)') ...` |
