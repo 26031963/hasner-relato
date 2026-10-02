@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 12:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1055**.
+**Medido em 02/10/2026 13:03:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1047**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1057,11 +1057,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:05:39 | Bash | Censo de chamadores da pontualidade | `grep -rn "pontualidade=\\|pontualidade_do_dia(\\|intervalo_marcos=" --include=*.py . \| grep -v "/tests/"` |
 | 01:05:27 | Bash | Ler pontualidade_do_dia no calculador | `grep -n "intervalo_marcos\\|def pontualidade_do_dia" -A 40 ponto/calculador/regras.py \| sed -n '1,90p'` |
 | 01:05:22 | Bash | Ler o ramo 1 do T8 no motor | `sed -n 2570,2660p ponto/motor_calculo_v2.py` |
-| 01:01:44 | Bash | Copia nova e ler o _perto do motor | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; rm -rf $S/s5b4 2>/dev/null; mkdir -p $S/s5b4; cd /home/ronald/saas-hasner && git archive HEAD app \| tar -x -C $S/s5b4 && mkdir -p $S/s5b4/app/logs $S/s5b4/app/media && cd $S/s5b4/app && sed -n 2605,2616p ponto/motor_calculo_v2.py` |
-| 01:00:57 | Bash | Ver se algum caminho servido importa o calculador | `echo "=== quem importa o calculador ==="; grep -rln "ponto.calculador\\|from ponto import calculador" --include=*.py . \| grep -v test \| head; echo "=== e o selo do import tardio ==="; cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -3` |
-| 01:00:33 | Bash | Deployar e empurrar o marco das tres curas | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash bin/deploy.sh --sem-migrate > $S/deploy6.log 2>&1; echo "deploy rc=$?"; tail -3 $S/deploy6.log; nohup git push origin main > $S/push_3curas.log 2>&1 & echo "push do marco lancado"; git log --oneline origin/main..HEAD \| wc -l` |
-| 01:00:24 | Bash | Conferir a suite do marco das tres curas | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -E "^(FAIL\|ERROR): \|^Ran \|^OK \(\|^FAILED" $S/suite4.log 2>/dev/null\|head -4; echo "[teste vivo: $(docker ps --format '{{.Command}}'\|grep -c 'manage.py te')] [linhas: $(wc -l < $S/suite4.log 2>/dev/null)]"` |
-| 01:00:08 | Bash | Conferir o ramo da volta do intervalo | `sed -n 2637,2646p ponto/motor_calculo_v2.py; echo "=== o calculador importa o _volta_do_intervalo? ==="; grep -c "_volta_do_intervalo\\|_perto(" ponto/calculador/regras.py` |
-| 00:59:54 | Bash | Medir o detalhe dos maiores atrasos restantes | `cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command diff_calculador --schema=juliani --mes 10 --ano 2026 --contra-gravado --pares-da-autoridade --colab 345,696,246,821 2>&1 \| grep -vE "W004\|^WARNINGS" \| grep -E "detalhe=" \| head -5 \| cut -c1-400` |
-| 00:59:36 | Bash | Abrir as horas de atraso por colab e familia | `cd /home/ronald/saas-hasner && echo "=== item (2): as +59,82 h de atraso, por COLAB e por FAMILIA ==="; awk -F, 'NR>1 && $4=="horas_atraso"' app/logs/diff_calc_10_curado3.csv \| sort -t, -k7 -gr \| head -16; echo "--- por familia ---"; awk -F, 'NR>1 && $4=="horas_atraso"{print $3}' app/logs/diff_calc_10_curado3.csv \| sort \| uniq -c \| sort -rn; echo "=== antecipada ==="; awk -F, 'NR>1 && $4=="ho ...` |
-| 00:59:20 | Bash | Fechar o atalho com o smoke dele | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json, sys sys.path.insert(0,'bin'); import hook_stop_fila1 as H PJ='app/docs/PENDENTES_RONALD.json' d=json.load(io.open(PJ,encoding='utf-8')) for x in d: if x['id']=='atalho-he-na-central-smoke': x['estado']='respondido'; x['respondido_em']='2026-10-02T01:10' x['resposta']=('SMOKE FEITO: ele abriu a Central, o at ...` |
