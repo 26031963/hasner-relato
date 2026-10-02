@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:985 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- PAREI: ! e ok-desenho — **CINCO itens na sua mesa, e a lista da noite esta INTEIRA fechada ou atras de um deles** (frase pronta de cada um n
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:17:09.**
+**Medido em 02/10/2026 04:22:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
-| `origin/main` | `83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha` |
+| `origin/main` | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha
+104f8d1c O topo do TICKETS, escrito pelos proprios scripts depois do push 61 (a 5a vez da noite -- O112)
 39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel
 1316b866 O topo do TICKETS bloqueou o push pela QUARTA vez numa noite, e isso virou item com o numero
 fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- dita pelos alertas do proprio motor
-cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e a folha zero tem 7 nomes com causa
-83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons_duracao.json
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,11 +94,6 @@ cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Push de novo com o rodape corrigido" completed (exit code 0)
-
-● Background command "Adicionar o RED do sinal e esperar a pista" completed (exit code 0)
-
   Searched for 2 patterns, ran 23 shell commands
 
 ● Background command "Esperar o veredito do push do marco" completed (exit code 0)
@@ -123,16 +117,21 @@ cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Esperar o push 61 · 7m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push61.log; do sleep 25; done; tail -5 logs/push61.log (7m 18s)
+  Searched for 2 patterns, ran 9 shell commands
+
+● Background command "Push do marco de leitura" completed (exit code 0)
+
+● Esperar o push 62 · 3m 12s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push62.log; do sleep 25; done; tail -4 logs/push62.log; echo "=== ultimo push:"; git
+     fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (3m 11s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (3h 18m 4s · ↓ 312.2k tokens)
+✢ Unfurling… (3h 23m 26s · ↓ 319.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
