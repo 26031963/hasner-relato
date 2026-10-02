@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:297 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:329 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:54:01.**
+**Medido em 02/10/2026 19:59:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `708b846f [S5b] FECHADA no ESCREVER; o DIFF das duas versoes achou o O119` |
+| `HEAD` local | `aae484a1 [O119] A celula usa a palavra declarada do hook: "espera o !"` |
 | `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aae484a1 [O119] A celula usa a palavra declarada do hook: "espera o !"
+551e17d3 [O119] Causa localizada por LEITURA, RED evidenciado, e falta UMA linha na zona inviolavel
 708b846f [S5b] FECHADA no ESCREVER; o DIFF das duas versoes achou o O119
 d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia
 96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla
-e8ca6f65 O topo do TICKETS fechado no ato do push (O112)
-070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho
 ```
 
 ## `git status --short`
@@ -96,35 +96,35 @@ e8ca6f65 O topo do TICKETS fechado no ato do push (O112)
 
 ```
 
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O119 -- O intra_descontada do motor oscila no MESMO cadastro e no MESMO padrao de batidas (achado
+  02/10 19:5x, pelo DI
+
+● O hook segue cobrando o O119, e a lei diz que a esteira não para por aval — ela pega o próximo item. Leio o contrato do hook em vez de
+  adivinhar o que ele espera:
+
   Ran 1 shell command
 
-● O lado das lâmpadas já lê todas as pausas (curado hoje). O que falta é o fora['intervalo']. Vejo quem o preenche:
+● O hook tem vocabulário declarado (linha 79): item cuja célula diz espera o !, aguardando ou CONGELADA sai da conta da fila 1. A minha
+  célula diz "espera UMA linha" — não é a palavra da casa. Uso a palavra certa, que é literalmente o caso:
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 1 shell command
 
-● A causa está localizada e é um sítio, fora da zona inviolável — ponto/juiz_batida.py:254-256:
+● O hook leva mais de 100 s rodando à mão (varre 2.781 commits), mas a palavra agora é a declarada. Commito e pego o próximo trabalho que
+  não depende de decisão sua: medir a segunda família de órfãs, que é o que o seu próprio selo cobra (frota = 0) e que eu disse que se
+  mede antes de mover.
 
-  cad_min, cad_fonte = intervalo_cadastrado(tipo_escala)
-  ii, fi = por_chave.get('hii'), por_chave.get('hfi')   # <-- SÓ O PRIMEIRO PAR
+  Ran 1 shell command
 
-  O lado das lâmpadas foi curado hoje para conhecer as seis; este bloco ainda pede um par. Isso explica os oito dias: nos 7 com ata
-  legível o dia é lido pelo marco e desconta 85; em 21/09 a ata tem hi apagado → em_aberto → o motor cai na geometria, que vê as duas
-  (166,26). Leio como o motor consome isso:
+● Isso muda a natureza da segunda família — e aponta para um defeito do meu selo. Veja col859 07/09: os marcos são hii=00:00 e hf=05:00,
+  4/4 acesas, e as horas "em conflito" são exatamente 00:00 e 05:00. Não falta coluna. O que há é a mesma string HH:MM aparecendo como luz
+  de uma lâmpada e na lista de órfãs — o que acontece quando há duas batidas no mesmo minuto: uma casa o marco, a outra sobra de verdade.
 
-  Ran 2 shell commands
-
-● A cura exige uma linha dentro da zona inviolável, e agora sei qual. motor_calculo_v2.py:569-574:
-
-  itv = resp.get('intervalo') or {}
-  if itv.get('inicio') and itv.get('fim'):
-      intervalos[ent] = [(_ii, _if)]      # <-- UMA tupla, sempre
-
-  O juiz entrega um par e esta linha embala um par. Então o item do seu aval está certo — mas agora com o sítio exato. O que anda sem o
-  seu ! é o RED (sem ele a cura não existe). Escrevo:
+  Meu selo compara luz com orfas por string, e isso é contar pela forma. Confirmo:
 
 ● Running 1 shell command…
 
-✢ Sock-hopping… (1h 41m 30s · ↓ 289.3k tokens)
+✢ Sock-hopping… (1h 47m 0s · ↓ 306.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
