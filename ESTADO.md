@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:39:01.**
+**Medido em 02/10/2026 09:44:31.**
 
 | | |
 |---|---|
@@ -94,15 +94,6 @@ daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
-
-● Nove GREEN. Agora ruff + os vizinhos que enumeram (lição das 3 rodadas de 01/10):
-
-  Ran 5 shell commands
-
-● Vizinho que ENUMERA pegou: meu loader virou um 3º sítio de desempate por ativa em turnos.py (declarado: 2). A dívida tem de ter um sítio, não dois:
-
-  Ran 4 shell commands
 
 ● 204 vizinhos OK. Agora a medição em prod (só leitura, funções reais — o processo novo lê o disco, que já tem a cura):
 
@@ -123,15 +114,24 @@ daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 
 ● O push está detached (o & interno retornou na hora). Sigo preparando o HAIKU e monitoro o log:
 
-  Resolucao de empresa nas ferramentas
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def certificacao_da_pergunta" -A 30 mensageria/nucleo/ferramentas.py | head -40
+  Ran 13 shell commands
 
-✢ Hullaballooing… (2h 5m 28s · ↓ 217.8k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 2 shell commands
+
+● Erro de hora meu: são 09:44, não 12:xx — corrijo no próximo commit junto do hash. Lendo os contratos que enumeram antes de aplicar o p6:
+
+● O contrato que enumera os endpoints da ponte
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,50p' app/api/tests/test_contract_mensageria_le_o_juiz.py
+
+✢ Hullaballooing… (2h 10m 58s · ↓ 232.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
