@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 20:57:01.**
+**Medido em 01/10/2026 21:02:31.**
 
 | | |
 |---|---|
@@ -135,6 +135,6 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
   ⏵⏵ auto mode on · 1 shell, 1 monitor · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Reading hxPerguntar in _dialogo.html                                                                          45s · ↓ 295.0k tokens
+  ◯ general-purpose  Splitting selos in test_tela_gestao_he_calendario.py                                                       6m 15s · ↓ 332.8k tokens
   ⧉  index
 ```
