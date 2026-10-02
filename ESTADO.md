@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 03:55:54.**
+**Medido em 02/10/2026 04:01:01.**
 
 | | |
 |---|---|
@@ -122,12 +122,12 @@ ff9b95c9 A frase nunca prometia folha, e eram CINCO False seguidos: o leitor nao
 
 ● Background command "Esperar o push" completed (exit code 0)
 
-  DIFF inverso: quanto vale o regime CLT na emp3
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -e
-     "s/regime_trabalhista='clt'/regime_trabalhista='cct'/" -e "s/emp3 = CLT/emp3 CLT->CCT (o INVERSO: quanto vale o regime que ela JA tem)/"
-     $S/diff_emp3_clt.py > $…
+● Abrir as Pautas com a ancora certa
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -i
+     "s/ancora_tipo='colaborador'/ancora_tipo='colab'/g" $S/pauta_folha_zero.py && docker cp $S/pauta_folha_zero.py saas_core:/tmp/pauta_folha_zero.py
+     >/dev/null && …
 
-✶ Unfurling… (2h 56m 49s · ↓ 271.2k tokens)
+✢ Unfurling… (3h 1m 56s · ↓ 285.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
