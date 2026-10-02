@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:39:01.**
+**Medido em 02/10/2026 04:44:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,8 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 ## `git status --short`
 
 ```
+ M app/config/crons_duracao.json
+ M bin/crons_duracao.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,44 +96,44 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  00m · vai para a folha · Validar com atraso", col290 "atraso de 7m · dentro da tolerância de 10 min: não desconta"); a trilha no quadro de permissões; e
+  a cura de um cron que morria — o ensaio da sombra pegou reconciliar_perguntas_orfas --apply estourando na guarda da porta (disputa #6174), e o cron das
+  06:40 ia encontrar o mesmo.
 
-  Searched for 2 patterns, ran 23 shell commands
+  Sete Pautas DP abertas (#922–#924, #926–#929): colaboradores que bateram ponto e a folha paga ZERO — 245,93 h sem vínculo nenhum, 195,41 h com vínculo
+  vencido.
 
-● Background command "Esperar o veredito do push do marco" completed (exit code 0)
+  Três erros meus, corrigidos e publicados: o ! da folha zero nomeava portas que não fazem o serviço (ia te fazer responder um ! impossível); o censo do
+  O110 nasceu curto em dois; e a minha lápide no detalhe_local.html era {# #} multilinha — vazava para a tela do DP, o get_template disse "COMPILA" e quem
+  pegou foi o contrato de 05/09. Compilar não é renderizar.
 
-● Background command "Commitar o freeze e empurrar o marco" completed (exit code 0)
+  O que chama por desenho: o topo do TICKETS recusou o push cinco vezes numa noite pelo mesmo derivado velho. Não é um caso, é padrão, e a cura mexe no
+  portão por onde toda fatia passa — então vai para a sua mesa como ok-desenho (O112), não curada por mim.
 
-  Searched for 1 pattern, ran 20 shell commands
+  O push final está rodando a suite; aviso quando entrar.
 
-● Background command "Smoke no ar e push do item 4" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O112 -- O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite (02/10, medido). tickets_
 
-  Searched for 6 patterns, ran 11 shell commands
-
-● Background command "Abrir a linha e empurrar" completed (exit code 0)
+● O hook recusou o Stop e tem razão: O112 não é lei nem !, é decisão técnica — eu decido pela lei existente e sigo. Curando.
 
   Ran 1 shell command
 
-● Background command "Esperar o push" completed (exit code 0)
+● Background command "Commitar a cura da lapide e empurrar" completed (exit code 0)
 
-  Searched for 3 patterns, listed 1 directory, ran 32 shell commands
+● Background command "Esperar o push final" completed (exit code 0)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Selo da medicao ausente
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp
+     app/config/crons_duracao.json $S/o112/app/config/ && cat >> $S/o112/app/chamados/tests/test_cron_longo_sai_da_medida.py <<'PY'
+     class MedicaoAusenteLevantaTest(Simpl…
 
-  Searched for 2 patterns, ran 9 shell commands
-
-● Background command "Push do marco de leitura" completed (exit code 0)
-
-● Indexar a memoria e conferir o push · 8m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push63.log; do sleep 30; done; tail -5 logs/push63.log (8m 23s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Unfurling… (3h 39m 56s · ↓ 324.0k tokens)
+✢ Unfurling… (3h 45m 26s · ↓ 337.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
