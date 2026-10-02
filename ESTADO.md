@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:00:31.**
+**Medido em 02/10/2026 05:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
-| `origin/main` | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `a1acc651 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a1acc651 O topo do TICKETS fechado no ato do push (O112)
 9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)
 6bde56ba [O112] O derivado do topo fecha no ATO do push, e de carona a medida da sombra que SUMIU ia ressuscitar a colisao do O107
 b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar
 2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha
-104f8d1c O topo do TICKETS, escrito pelos proprios scripts depois do push 61 (a 5a vez da noite -- O112)
 ```
 
 ## `git status --short`
@@ -97,16 +97,6 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ```
 
-  Sete Pautas DP abertas (#922–#924, #926–#929): colaboradores que bateram ponto e a folha paga ZERO — 245,93 h sem vínculo nenhum, 195,41 h com vínculo
-  vencido.
-
-  Três erros meus, corrigidos e publicados: o ! da folha zero nomeava portas que não fazem o serviço (ia te fazer responder um ! impossível); o censo do
-  O110 nasceu curto em dois; e a minha lápide no detalhe_local.html era {# #} multilinha — vazava para a tela do DP, o get_template disse "COMPILA" e quem
-  pegou foi o contrato de 05/09. Compilar não é renderizar.
-
-  O que chama por desenho: o topo do TICKETS recusou o push cinco vezes numa noite pelo mesmo derivado velho. Não é um caso, é padrão, e a cura mexe no
-  portão por onde toda fatia passa — então vai para a sua mesa como ok-desenho (O112), não curada por mim.
-
   O push final está rodando a suite; aviso quando entrar.
 
 ● Ran 1 stop hook
@@ -124,16 +114,26 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Push pelo novo bin/push.sh" completed (exit code 0)
 
-● Esperar o push 65 · 8m 48s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push\|pos_push\|error:" logs/push65.log; do sleep 25; done; tail -6 logs/push65.log (8m 47s)
+  Ran 10 shell commands
+
+● Background command "Abrir a linha do O112 e empurrar" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Background command "Esperar o push 65" completed (exit code 0)
+
+  Suites inteiras de escala e chamados · 3m 15s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
+     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
+     "$TESTE_ENVFILE" -e PYTHON… (3m 14s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (4h 1m 26s · ↓ 366.1k tokens)
+· Unfurling… (4h 6m 39s · ↓ 367.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
