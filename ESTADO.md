@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:34:31.**
+**Medido em 02/10/2026 17:39:36.**
 
 | | |
 |---|---|
-| `HEAD` local | `da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida` |
+| `HEAD` local | `12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **33** |
+| commits a subir (`ahead`) | **34** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu
 da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida
 abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script
 c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real
-e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP
 ```
 
 ## `git status --short`
@@ -93,36 +93,36 @@ e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O monitor do push 84 está armado com o padrão ancorado. Fecho o turno com o estado real, porque o próximo passo depende da pista e os
-  três seguintes dependem de você.
+  2864 e cego_horas_extras_100_noturna: 2864 — as duas rubricas novas estão declaradas cegas em 2.864 de 3.103 dia-colab. Leio a tabela:
 
-  A S5b, que é o item da fila 1, está no ar e com o censo fechado: 15 dos 15 campos de dia do DiaPago têm dono, depois de a sua resposta
-  das 17:2x destravar a lei do ancoramento. As sete peças subiram às 17:31 com merge e deploy no mesmo ato, zero conflitos provados antes
-  de tocar a árvore, e importerror_500=0.
+  Ran 1 shell command
 
-  A troca está ligada em cópia, com selo de quatro mordidas que atacam os atalhos que eu poderia ter tomado — porta irmã, degrau só na
-  intenção, try compartilhado, escrever em 'motor' — e que declara não provar o número. O número é o DIFF de frota, que é o próximo passo
-  quando a pista vagar.
+● O DIFF prova o essencial — o número do calculador é exatamente o do gravado: 50_noturna 1,31 e 100_noturna 3,99, idênticos aos totais
+  que medi no FechamentoMensal. "A troca não muda número" está medido, não prometido. Atraso e antecipada seguem com 0 dia-colab
+  divergente.
 
-  Hoje seis coisas me pegaram, e nenhuma por revisão — todas por selo ou por número: a meia-correção nos laços da folga, o apelido que
-  escondia a porta, o erro de unidade minutos×horas, a sonda sem flag, a reversão que não rodava, e a fixture que inventou o formato da
-  entrada. E duas vezes eu tive de retratar número publicado: o "paga mais" do TXT e o "1440 contra 480" do col954 — este porque comparei
-  o total de um range de três dias contra o previsto de um dia.
+  Mas o contador denuncia um excesso meu: 2.864 de 3.103 dia-colab saem "cegos" nas duas rubricas novas — e dia sem HE nenhuma não é
+  desconhecido, é zero conhecido. Declarar ignorância onde há conhecimento é o [] de dois sentidos ao contrário, e some com a comparação
+  (466 colabs "fora da conta"):
 
-  Na sua mesa, 12 itens com frase pronta. Os que mexem em dinheiro: o "dia inteiro cravado em 720" (90 casos, 53 pessoas, 25 descontando —
-  onde a recusa que você pediu bloquearia a convenção que o próprio sistema ensina, e a cura na origem é "dia inteiro" passar a
-  significar o previsto do dia); as duas pautas DP da 09; e o smoke do col221.
+  Ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● Background command "Esperar o DIFF das sete peças" completed (exit code 0)
 
-● Estado do push 84
-  ⎿  $ cd /home/ronald/saas-hasner && grep -E "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:|pos_push"
-     logs/push84.log | tail -6; echo "a empurrar: $(git rev-list --count origin/main..HEAD)"; docker ps --format '{{.Names}}' | grep -vE
-     "saas_|juliani_db_test|mensageria" || echo …
+● O selo falhou e a causa é ele, não o código: recalcular_fechamento_mes tem um try grande em volta do corpo por colaborador, então o try
+  do oráculo está aninhado nele — e minha asserção contava os dois. Corrijo para olhar o mais interno:
 
-✢ Doodling… (2h 13m 18s · ↓ 406.0k tokens · thinking)
+● Corrigir o selo e rodar os seis
+  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
+     import io, py_compile
+     p='ponto/tests/test_s5b_troca_ligada.py'
+     s=io.open(p,encoding='utf-8').read()
+     a = """ fn = _fn_lavratura()
+     tries = [n for n in ast.walk(fn) if isinstance(n, ast.Try)]
+     com_rub = [t for t in tries
+     if any(isinstance(c, ast.Call)…
+
+✽ Doodling… (2h 18m 23s · ↓ 422.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
