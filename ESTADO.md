@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:411 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:22 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, em copia do HEAD** (`/home/ronald/wt-splits`, arvore viva intocada): a regra do split
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:25:45.**
+**Medido em 02/10/2026 16:30:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,11 @@ edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro si
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/FABRICANTE.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/ponto/management/commands/diff_calculador.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +98,44 @@ edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro si
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Na sua mesa seguem três coisas, todas com número: a lei do ancoramento do trecho extra (no topo do RELATO, sem devolver turno), a falta
+  de 1440 min contra 480 previstos do col954, e o TXT da 09 que já não é o calculado (emp2 213×210, emp3 88×86, cinco linhas a mais e
+  nenhuma a menos).
+
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Pista e árvore ocupadas pela suíte — então construo em cópia do HEAD, que é a lei da casa. Primeiro leio a regra que vou importar, nunca
-  reescrever:
+  Ran 1 shell command
 
-  Searched for 3 patterns, ran 2 shell commands
+● O DIFF segue correndo. Enquanto isso, fecho uma das três rubricas sem inventar regra nenhuma — a horas_extras_100_feriado é só dizer
+  qual ramo produziu o número que o calculador já decide:
 
-● A regra é um método que usa só o período e um flag — então ela se move para função pura, do jeito que funcionou antes (locais →
-  parâmetros). Monto em cópia do HEAD:
+  Searched for 1 pattern
 
-  Ran 2 shell commands
+● Background command "Rodar o DIFF da troca pelo comando" completed (exit code 0)
 
-● Agora o RED, e ele tem de ser por par, porque o split do motor é por período. Leio onde o calculador decide as extras:
+  Searched for 1 pattern, ran 1 shell command
 
-  Ran 2 shell commands
-
-● Aqui apareceu uma pergunta de lei, não de técnica, e pela regra ela vai ao topo do RELATO com número sem devolver o turno: o motor
-  calcula a HE por período e ancora o trecho extra no fim da jornada; o calculador calcula por dia. Quando o dia tem mais de um par, onde
-  o trecho extra se ancora?
+● Há um selo forte: toda rubrica de RUBRICAS tem de sair com valor ou com causa, nos dois ramos. Então acrescentar a 100_feriado é
+  guardado por construção. Leio os ramos antes de mexer:
 
   Ran 1 shell command
 
-● Enquanto a suíte fecha, escrevo na raia o selo que morde a extração — grade de casos provando que a função pura dá o mesmo número do
-  método:
+● A estrutura ajuda: val nasce com 0,0 para toda rubrica não declarada cega, então a adição é guardada. Implemento nos quatro pontos onde
+  a 100 se decide ou se cala:
 
   Running 1 shell command…
 
-· Doodling… (1h 4m 32s · ↓ 166.5k tokens)
+· Doodling… (1h 9m 32s · ↓ 185.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Drafting commit message for gerar_celulas cure                                                       33m 49s · ↓ 376.2k tokens
+❯ ◯ fork  Running escala suite plus test_r4_celula_sem_marcos                                                  38m 49s · ↓ 391.9k tokens
   ⧉  index
 ```
