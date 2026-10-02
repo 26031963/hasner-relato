@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:01:13.**
+**Medido em 02/10/2026 09:06:41.**
 
 | | |
 |---|---|
@@ -97,11 +97,6 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  MUDA: situacional.py:141 conta TODAS as justificativas pendentes da casa, e o lavrador (:72) repete esse total em cada empresa -- passa a contar as
-  pendentes dos colaboradores do recorte recebido.
-  RED: soma das empresas == global; recorte de uma praca != total da casa.
-
-  PROIBIDO: juiz novo (juizes novos = 0), reimplementar pareamento fora de ponto/turnos.py, cache com prazo, fallback, mudar o que o painel mostra alem
   dos tres numeros.
   PRONTO: os tres REDs nomeados no RELATO com PROVA, tempo e queries re-medidos na pagina de 30, no lote de 100 e no universo, placar relavrado e
   conferido, commit e deploy. Sem isso = INCOMPLETO com a lista.
@@ -124,14 +119,19 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 
 ● Medição decisiva, e ela refina a premissa do item: a cura move o dia a dia, não os totais.
 
-  RED com a janela de 12 h
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
-     bin/recursos.sh && teste_envfile >/dev/null && echo "===== RED (janela de 12 h, HEAD):" && cp
-     $S/jan20/app/ponto/tests/test_janela_da_autoridade_e_a_da_folha.py…
+  Ran 2 shell commands
 
-* Hullaballooing… (1h 27m 40s · ↓ 122.3k tokens)
+● RED confirmado (3 falhas, incluindo a saída das 19:00 do último dia fora da janela). Restaurando a cura e rodando GREEN:
+
+  Suites de ponto, relatorios e colaboradores · 4m 37s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
+     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
+     "$TESTE_ENVFILE" -e PYTHON… (4m 36s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Hullaballooing… (1h 33m 8s · ↓ 124.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                   2% until auto-compact
+                                                                                                                                   1% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
