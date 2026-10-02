@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:23:03.**
+**Medido em 02/10/2026 14:28:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ```
  M app/docs/RELATO.md
  M app/ponto/calculador/alimentacao.py
+ M app/ponto/management/commands/diff_calculador.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,7 +96,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
 ● (d) medido, o ANTES: FechamentoMensal 09/2026 = 607 linhas, sha256 189304907c23163…; a 10 = 572 linhas, 4bf7b1b3ffa8890…; exportações vigentes da 09:
   exp#27 (emp2), exp#25 (emp4), exp#24 (emp3). Agora o que "subir" significa no código — lendo a porta de escrita:
@@ -120,15 +120,16 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 
 ● Tenho o mapa completo dos 18 insumos. Escrevendo a segunda metade da porta — as rubricas, que o DIFF e a lavratura vão chamar pela mesma linha:
 
-  As rubricas da porta em 60 colabs
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/prova_rub.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """S5b -- as RUBRICAS da porta contra as do DIFF: o mesmo numero? SO LEITURA."""
-     from django_tenants.utils import schema_context
-     with schema_context('juliani'):
-     from colaboradores.queries import colaboradores…
+  Ran 2 shell commands
 
-· Philosophizing… (20m 29s · ↓ 37.2k tokens)
+● A porta das rubricas roda (0 erros em 60 colabs). O teste definitivo da extração é o DIFF produzir a mesma tabela chamando-a — se mudar, eu meço a
+  causa. Fazendo a troca:
+
+  Ran 3 shell commands
+
+● A porta agora entrega as duas metades — os segmentos (do motor) e as rubricas (os 18 insumos, cada um com sua autoridade) — e o DIFF perdeu outras 37
+
+✻ Waiting for API response · will retry in 2m 33s · check your network
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
