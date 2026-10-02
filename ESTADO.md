@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:31:31.**
+**Medido em 01/10/2026 23:37:01.**
 
 | | |
 |---|---|
@@ -136,6 +136,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
   ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ general-purpose  Trimming state cell in BACKLOG.md                                                                         23m 49s · ↓ 532.2k tokens
+  ◯ general-purpose  Shortening estado cell under 300 chars                                                                    29m 19s · ↓ 532.5k tokens
   ⧉  index
 ```
