@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:39:36.**
+**Medido em 02/10/2026 08:45:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ec346990 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook` |
 | `origin/main` | `99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook
+c4980e4b [COL369-TIPOS-INVERTIDOS] MEDIDO: SIM para a intra (2,00 h), PARCIAL para as horas (2,29 das 5,07)
 ec346990 O topo do TICKETS fechado no ato do push (O112)
 99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)
 0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega
-52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !
-17b5ceef O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
@@ -94,23 +94,6 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  trabalho?". Golden col221, oito dias com previsto = 0: o motor põe em horas_folga_trabalhada (0,77 a 2,30 h/dia), o calculador em horas_trabalhadas
-  (7,73 a 9,30). Trabalhadas e folga não são duas divergências: são uma, com o sinal trocado por colab. Os maiores: col43 +88,32 e col924 +80,12 (folha
-  zero sem vínculo, Pautas #926/#922), col882 +63,99 em folga (vínculo vencido, #927).
-
-  Veredito do (2): (b) e (d) cumpridos, (c) não se aplica — e (a) NÃO: sobram col516 +7,86 e col174 +4,52 de antecipada acima do gravado. No total a
-  antecipada está abaixo (−1,85) e o atraso também (−0,16), mas o critério é por colab.
-
-  Os dois são a mesma família — o DIFF alimenta o calculador com pares de turnos_do_colab enquanto o motor pareia com turnos_de_batidas. A cura que
-  elimina isso por construção é o DIFF entregar os períodos do motor ao calculador; não fiz porque muda o que o instrumento mede em todas as rubricas, e é
-  essa tabela que sustenta o seu !. A alternativa, mexer em turnos_do_colab, é o O65 e está declarada corte.
-
-  Itens (3) e (4) fechados no mesmo marco: folha-zero pelo caminho (a), só Pauta DP (as quatro já abertas), e o _perto do motor delegando a perto_do_marco
-  com selo de equivalência nos dois sentidos — com ele o PENDENTES_TURNO caiu de 2 para 1, e foi o próprio contrato que cobrou a baixa.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: COL369-TIPOS-INVERTIDOS -- REGISTRAR e MEDIR, nao curar (ordem Ronald 01/10 20:1x): em 5 dos 11 dias (19, 20, 23, 26 e
-  27/09) a volta da
 
   Ran 1 shell command
 
@@ -118,20 +101,37 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 
 ● Ordem: medir, não curar. A pergunta é se a inversão de tipos explica as 2,00 h de intra e as 5,07 h de trabalhadas do DIFF do vínculo:
 
-● Os tipos e o que o motor apura no col369
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
-     $S/col369_tipos.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """COL369-TIPOS-INVERTIDOS: MEDIR, nao curar. SO LEITURA nesta primeira parte."""
-     import datetime as d
-     from dja…
+  Ran 1 shell command
 
-✽ Hullaballooing… (1h 6m 3s · ↓ 92.3k tokens)
+● A inversão é real em 5 dias (ESSE) e o motor já mostra o efeito. Agora o contrafactual — tipos corrigidos em transação desfeita, que é o que responde "é
+  isso que gera?":
+
+  Ran 1 shell command
+
+● Medição fechada, e ela responde a pergunta com número:
+
+  Ran 3 shell commands
+
+● Background command "Push e ver o proximo item" completed (exit code 0)
+
+● O hook está certo de novo, e é a lição que eu mesmo guardei hoje: MEDIDO não é palavra que ele conhece. O item está fechado — a medição era o escopo:
+
+  Ran 3 shell commands
+
+● Cura com a lei já escrita três vezes no chamador. Primeiro o sítio e a medição do efeito:
+
+  O DIFF da janela: antes e depois · 1m 19s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && for rot in ANTES
+     DEPOIS; do if [ "$rot" = "ANTES" ]; then APP=/home/ronald/saas-hasner/app; else APP=$S/jan20/app; fi; echo "===== $rot ($APP)"; docker run --rm
+     --cpus… (1m 17s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Hullaballooing… (1h 11m 28s · ↓ 110.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
