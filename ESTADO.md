@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:40:54.**
+**Medido em 02/10/2026 07:46:01.**
 
 | | |
 |---|---|
@@ -94,21 +94,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Veredito do push e do hook" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Era só o esperador do push 72 fechando — nada novo a tratar.
-
-  Estado final, conferido:
-  - árvore de app/ limpa; origin/main em b1da8d82
-  - a empurrar = 1 — é o commit do pos_push (17b5ceef, o topo do TICKETS derivado do push que acabou de entrar). Isso é inerente ao desenho do O112: o
-    derivado de cada push é escrito e commitado depois dele e viaja no push seguinte. Não é pendência solta.
-  - o hook libera o turno
-  - as duas lições da madrugada estão no índice da memória (25 linhas): não commitar durante o push, e o topo do RELATO ser contrato de vocabulário com o
-    hook
-
-  Na sua mesa, com a frase pronta em app/docs/AVAIS.md: os dois ! que travam a fila 1 (troca do calculador e folha zero com vínculo vencido, 195,41 h), o
   ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E, que está no ar.
 
 ✻ Worked for 30s · done 6:46 AM · 1 shell still running
@@ -119,15 +104,30 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● Ordem recebida: O111 primeiro, a troca espera, e as quatro rubricas abertas por causa e por colab antes do !. Registrando e indo.
 
-  O mapa que o motor da autoridade devolve
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
-     $S/o111_mapa.py <<'PY'
-     import datetime as d
-     from django.utils import timezone as tz
-     from colaboradores.models import Colaborador
-     from ponto.services.espelho impo…
+  Searched for 5 patterns, ran 20 shell commands
 
-✶ Hullaballooing… (7m 21s · ↓ 24.5k tokens)
+❯ aval Ronald 02/10 -- nenhuma lei nova (L-082, L-096, LEI-AKITA 9 e 12, lei de 01/10 17:2x "a troca nao cria desconto novo").
+  (1) S5b: a troca NAO sobe com a tabela das 02:50. Ordem: O111 (chamador agrupa por dia_da_jornada, o mesmo juiz do motor) -> DIFF de frota da 10
+  refeito contra o GRAVADO -> causa nomeada por colab de toda rubrica que ainda mover.
+  (2) AVAL DE CRITERIO da troca, vale sem nova parada: sobe sozinha quando o DIFF contra o GRAVADO mostrar (a) nenhum colab com atraso ou saida
+  antecipada ACIMA do gravado, (b) toda rubrica que move com causa nomeada por colab publicada no RELATO ANTES, (c) arquivo de reversao em logs/, (d)
+  competencia 09 e exportadas intactas com hash. Fora disso = PAREI com a tabela.
+  (3) folha-zero-vinculo-vencido: caminho (a), so PAUTA DP para col43, col882, col391 e col948; nenhuma porta nova.
+  (4) motor-perto-delega-ao-raio: ok, mesmo numero e mesmo veredito, com o selo de equivalencia nos dois sentidos.
+  (5) Depois da troca, a ordem de 28/09 que ja esta no BACKLOG: descongelar O73b, E6-14, CORTE-B-30 e turnos abertos medidos contra o DiaPago -> re-medir
+  o PLACAR E1-E6 -> fila 1 em diante.
+  PRONTO: tabela final e PROVA no RELATO, AVAIS regenerado. PROIBIDO: fallback, tolerancia nova, tirar caso da lista para o numero cair.
+  segue a fila; PAREI so em lei ou no criterio (2) !
+
+● Ordem recebida, com AVAL DE CRITÉRIO — isso me deixa fechar a troca sozinho se (a)-(d) baterem. E a medição que acabou de sair me deu a peça que faltava
+  do O111:
+
+● DIFF de frota com o O111 curado
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && docker run --rm
+     --cpuset-cpus 4-7 --cpus 3 --network saas-hasner_default --env-file .env -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e
+     TZ=A…
+
+✢ Hullaballooing… (12m 28s · ↓ 40.4k tokens · still thinking)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
