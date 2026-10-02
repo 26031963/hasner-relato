@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:436 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:482 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 22:00:45.**
+**Medido em 01/10/2026 22:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `427015a3 A celula da obra declara a correcao de desenho em curso na raia` |
+| `HEAD` local | `b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO
 427015a3 A celula da obra declara a correcao de desenho em curso na raia
 f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge direto, print depois
 79716395 A celula da S5b nomeia a familia: tres guardas que o motor tem e o calculador nao le
 9ffa0ef8 A hora NEGATIVA do calculador: causa provada por aritmetica -- a janela clipa contra o marco de OUTRO turno
-c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o smoke dele
 ```
 
 ## `git status --short`
@@ -95,37 +95,37 @@ c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o sm
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O que cai do primeiro: célula sem cor — ela volta a ter fundo, suave — e o OK/print antes do merge. O que sobrevive: grade no desenho do calendário de
-  vínculos, número legível, led cheio.
 
-  O que vale agora, ao pé da letra: nenhuma cor literal nem --hp-blue em célula, só os tokens de static/css/hasner-ui.css (os mesmos de espelho, badge e
-  pílula); sem decisão → --hx-primary-bg + --hx-primary-text riscado; ciência → --hx-slate-100 + --hx-slate-600 riscado; autorizado → --hx-success-bg +
-  --hx-success-text sem risco; dia sem HE como está; grade com bordas --hx-slate-300 reusando as classes do calendário de vínculos; LED cheio, cinza
-  --hx-slate-400 = desabilitado e verde --hx-success = autorizado, sem bolinha vazada. E o selo que você pediu nominalmente: grep de cor hex e de
-  --hp-blue no template da Gestão de HE = 0 — pedi que ele o escreva varrendo o markup com o descontador de comentário e com o par que morde, um hex de
-  mentira injetado tem de deixar vermelho.
+  E o erro é o DIA do marco de saída. marco_no_dia põe o marco "no mesmo dia do instante", e o marco de saída desse turno mora no dia seguinte, porque o
+  turno cruza a meia-noite. Com o marco no dia certo o delta da saída é +1.439,9 min, passa dos 180, e a guarda morde. E a correção do dia do marco existe
+  dez linhas abaixo — _ms + 1 dia quando turno_cruza_meia_noite — dentro do ramo que a guarda deveria ter impedido. A guarda pergunta com o marco cru; o
+  ramo que ela protege calcula com o marco resolvido. Mesma pergunta, dois marcos.
 
-  Merge direto, print depois — então ele entrega com o print do col207 no relatório e eu mergeio e deployo, sem esperar OK.
+  A cura tem duas camadas, as duas aritmética, nenhuma regra nova:
 
-  Uma nota que passei a ele e que vale aqui: os selos de luminância que ele escreveu para o fundo cheio (célula com HE < 0,50, número > 0,80) mudam de
-  lado, não de existência. A afirmação vira fundo suave + número escuro legível + risco enquanto bloqueado, e o par que morde continua sendo dia com HE
-  distinguível do dia sem HE sem depender de cor — pelo led e pelo risco. Mudar a afirmação e dizer no docstring que ela mudou, em vez de apagar o caso.
+  1. a guarda passa a perguntar com o marco resolvido, usando o mesmo turno_cruza_meia_noite que o ramo de baixo já usa — só isso pega col235, col174 e
+     col382;
+  2. a janela nunca entrega par invertido: depois do clip, se saída <= entrada, a janela não se aplicou — as batidas reais voltam inteiras e o dia é
+     contado. Isso não é clampear em zero, que a lápide proíbe com razão; é a própria prescrição dela — "recusar a janela nele" — aplicada por
+     impossibilidade aritmética em vez de por pré-condição de juiz. Clampe esconde; recusa declara.
 
-  O item que eu havia aberto no AVAIS às 21:5x fechou com a razão escrita: ele existia para esperar um OK antes do merge, e o segundo aval tirou esse OK
-  da frente. O AVAIS volta a um item — o seu smoke.
+  Por que as duas: a camada 1 cura a causa conhecida; a 2 é o cinto, e existe porque a L-084 responde a pergunta do desconto ("o cadastro descreve o
+  dia?") e a janela precisa de outra ("o clip inverteria o par?"). São perguntas diferentes, e a cura de 28/09 emprestou a primeira para decidir a segunda
+  — com uma ponta exata no marco e a outra a 21 h dele, a pergunta do desconto responde "descreve", e está certa, para o desconto.
 
-  E registro o que está no ar agora, para não haver surpresa: a tela de 21:24 tem o azul forte, que é o desenho errado. Eu não a revertí — voltar arquivo
-  que prod usa é ! seu — então ela fica assim até o merge da correção, que é questão de minutos.
+  As três curas da S5b agora têm as três causas nomeadas e duas já escritas em cópia. Falta implementar (b) e (c), os REDs e o DIFF refeito — e isso vai
+  num marco só, que é o que a sua resposta (1) exige para a troca subir.
 
 ✻ Waiting for 1 background agent to finish
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Ler marco_no_dia
-  ⎿  $ grep -n "def _jm\|_jm = \|def _marco_dt" ponto/management/commands/diff_calculador.py | head -3; N=$(grep -n "_jm = \|def _jm"
-     ponto/management/commands/diff_calculador.py | head -1 | cut -d: -f1); sed -n "${N},$((N+12))p" ponto/management/commands/diff_calculador.py
+● Montar copia limpa em outro diretorio
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; D=$S/s5b2; rm -rf $D 2>/dev/null; mkdir -p $D; cd
+     /home/ronald/saas-hasner && git archive HEAD app | tar -x -C $D && mkdir -p $D/app/logs $D/app/media && echo "copia nova em s5b2 do HEAD $(git log
+     --o…
 
-✶ Spinning… (1m 58s · ↓ 5.4k tokens)
+* Caramelizing… (3m 9s · ↓ 2.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
@@ -133,6 +133,6 @@ c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o sm
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Inspecting cell markup in gestao_he.html                                                                    8m 9s · ↓ 430.4k tokens
+  ◯ general-purpose  Rendering three-state sample in print_col207.py                                                            13m 8s · ↓ 454.1k tokens
   ⧉  index
 ```
