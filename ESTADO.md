@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:16:07.**
+**Medido em 02/10/2026 18:21:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancor
 ```
  M app/docs/AVAIS.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
+ M app/ponto/services/cartorio.py
 ?? app/ponto/tests/test_lampada_acende_pela_batida.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,42 +98,42 @@ da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancor
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  meu nem da raia — é a interação entre o segundo par e a origem circular ata↔grade.
+  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
+  │ batida  │ escrita (chokepoint) │ ponto/registro_batida.py              │ 1 — chamados/services/regularizacao_ext.py │
+  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
+  │ batida  │ tipo E/S             │ turnos.py::decidir_tipo_estrito       │ 44 (99)                                    │
+  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
+  │ batida  │ espúria/cluster      │ triagem_batida.py                     │ 18 (39)                                    │
+  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
+  │ escala  │ vínculo do dia       │ escala/alimentacao.py::vinculo_do_dia │ 24 (32)                                    │
+  └─────────┴──────────────────────┴───────────────────────────────────────┴────────────────────────────────────────────┘
 
-  Devolvo o smoke como REPROVADO na segunda metade, com a causa isolada e o número: 6 lâmpadas, 4 acesas, orfas=['14:17','15:40'] nos dois
-  dias, e a quebra está em cartorio.py usando a posição da grade em vez da batida quando a régua já conhece o marco.
+  O número que já vale como achado é o da segunda linha: um único sítio fora do chokepoint de escrita de batida,
+  chamados/services/regularizacao_ext.py — e isso é zona inviolável da seção 4. Esse eu levo com frase de corte.
 
-  Isso é desenho de juiz, não execução — e por isso paro aqui e te levo, em vez de escolher sozinho: a lâmpada do segundo par deve acender
-  pela batida próxima mesmo quando a régua já tem a posição? Se sim, a cura é o cartório preferir a batida à coluna vazia; se não, a cura
-  é a grade não nascer da ata para esses marcos.
+  Para os outros quatro, o número honesto sai do mesmo instrumento que a casa usa nas seis famílias que já existem — fora_da_autoridade,
+  que varre por AST e distingue decidir de ler. Vou refazer com ele antes de te trazer frase para assinar, porque frase de corte sobre
+  número inflado é pior que corte nenhum.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Revejo a minha própria pergunta, porque a LEI-AKITA 4 manda procurar a lei antes de pedir corte — e ela existe. A lápide do próprio
-  cartório diz: "Coluna None da grade tinha DOIS sentidos (não é deste dia × intervalo não batido) e o segundo sumia da ata". E a célula é
-  soberana sobre o fato: a batida das 14:17 aconteceu. Então não é pergunta de lei, é leitor que não migrou:
-
   Ran 1 shell command
 
-● Confirmado no código: quando a régua tem a posição (j is not None) mas a coluna está vazia, o cartório conclui acesa=False e nunca tenta
-  a batida próxima — enquanto o ramo de j is None tenta. Mesma pergunta, duas respostas, dependendo de a régua conhecer o marco. RED
-  primeiro:
+● Esse é o instrumento certo, e ele mostra o que o meu censo não fazia: ele tira o comentário antes de varrer (sem_comentario — "o
+  comentário que ensina não é a violação"), respeita a lista de autoridades livres e os pendentes declarados, e cada padrão vem com a
+  pergunta e o motivo.
 
-● RED da lâmpada que acende pelo fato
-  ⎿  $ cat > /home/ronald/saas-hasner/app/ponto/tests/test_lampada_acende_pela_batida.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """A LAMPADA ACENDE PELO FATO, e nao pela coluna vazia da grade (02/10 19:xx).
-     RED MEDIDO EM PROD, no smoke do col221 que ele reprovou: a ata tem SEIS lampadas e so QUATRO
-     acesas; as b…
+  Então o censo das famílias batida e escala que você vai assinar precisa primeiro de três declarações em core/juizes.py, que hoje não
+  existem para elas: JUIZES['batida']/['escala'] (pergunta → autoridade), PROIBIDOS (o padrão que denuncia resposta própria, com o motivo)
+  e AUTORIDADE_DOS_PADROES (quem pode responder).
 
-· Sock-hopping… (3m 36s · ↓ 12.0k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
