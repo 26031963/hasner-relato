@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:90 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:24:01.**
+**Medido em 02/10/2026 17:29:07.**
 
 | | |
 |---|---|
-| `HEAD` local | `c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real` |
+| `HEAD` local | `c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **30** |
+| commits a subir (`ahead`) | **31** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script
 c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real
 e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP
 5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado
 ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
-a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,42 +93,42 @@ a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ou 440, em ausências de um dia. Não é digitação errada: é a convenção que o próprio campo ensina (help_text: "Para falta dia inteiro:
-  720"), usada por 53 pessoas, enquanto a L-088 diz que a falta custa o previsto do dia. A recusa que você pediu bloquearia essas 53
-  pessoas usando a convenção do sistema — e a lápide A4 da porta já conta o preço da recusa dura.
+  "a troca não muda número" ser verdade e não esperança: usar as do calculador mudaria onde a HE dele difere (medido: HE50 +3,96 h, HE100
+  +7,94 h).
 
-  A cura na origem é "dia inteiro" passar a significar o previsto do dia; o chokepoint já sabe derivar isso, só não sobrescreve minutos>0.
-  Move 25 descontos, então pede DIFF antes e é seu corte.
+  Duas guardas acompanham:
 
-  Aqui a LEI-AKITA 3 funcionou a meu favor por acidente: eu vi o risco na lápide e medi antes de construir a recusa. Construindo primeiro,
-  eu teria quebrado o caminho de 53 pessoas para curar um defeito que não existia.
+  Sem as pontas, não se afirma o split. Chamador que não passa he_pontas recebe a causa, não zero — porque zero diria "nenhuma HE caiu na
+  janela noturna", e a casa paga 6,29 + 132,51 h nessas duas rubricas numa competência como a 09. Seria o [] de dois sentidos na forma
+  mais cara.
+
+  A lei em aberto ficou escrita na própria lista de rubricas, com o número: na 09, de 7.535 dia-colab com período, 85 têm mais de um par e
+  3 mudariam (100_noturna −8,14 h); na 10, zero. E a diferença vai nos dois sentidos — ancorar no último par aumenta num caso e zera
+  noutro.
+
+  Com isso o censo da S5b fecha: 15 dos 15 campos de dia do DiaPago têm dono. Falta rodar os selos — inclusive o que eu escrevi afirmando
+  que as duas rubricas estavam fora de RUBRICAS, e essa asserção agora tem de se inverter, que é o registro de que a lei foi respondida.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Item (4), o AVAIS. Vejo o que o gerador lê para a "frase pronta", para corrigir na fonte e não no derivado:
-
-  Ran 2 shell commands
-
-● Os quatro sem frase são os que eu acabei de abrir — então a dívida é minha, não antiga. Escrevo as frases prontas, tiro o item 1 que
-  trazia a frase de 03:10 e ponho a pergunta que trava a fila 1 como linha 1:
-
   Ran 1 shell command
 
-● Item (4) cumprido: o item que trazia a frase de 03:10 saiu da mesa (fechado pela sua própria resposta das 17:2x), os quatro abertos sem
-  frase pronta ganharam frase — e eram os quatro que eu acabei de abrir, então a dívida era minha e nova, não antiga —, e a mesa está
-  ordenada com o que trava a fila 1 na frente.
+● 75 dos 76 verdes — inclusive a asserção invertida e os dois casos novos. Falta o selo de efeito que eu escrevi há pouco; vejo o erro:
 
-  As frases saíram no formato de escolha, para você responder em uma linha:
+  O erro do selo de efeito
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && timeout 300 docker run --rm
+     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
+     /home/ronald/wt-splits/app:/app sa…
 
-  - DIA-INTEIRO-CRAVADO-EM-720 — "dia inteiro" passa a significar o previsto do dia ou fica 720 e a L-088 vale só no leitor.
-  -
+· Doodling… (2h 7m 54s · ↓ 389.8k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
