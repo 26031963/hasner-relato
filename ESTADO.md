@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:54:01.**
+**Medido em 02/10/2026 10:59:31.**
 
 | | |
 |---|---|
@@ -95,44 +95,44 @@ d83c508d O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ construir        │ sítios sem guarda em apuração) · 16 campos sem efeito · placar 8/22                                                            │
+  ├──────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ sua mesa         │ 7 avais, cada um com a frase pronta e o número                                                                                 │
+  └──────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  O que eu entregaria primeiro se você olhasse uma coisa só: o ! da troca da S5b segue parado no critério (2)(a) — col516 +7,86 h e col174 +4,52 h acima
+  do gravado, por pareamento — e é ele que destrava a cadeia inteira: o 22/22 espera a troca (as duas células dependem do sítio de dinheiro que ela
+  substitui), e a F2 espera o 22/22. Enquanto isso a esteira andou pelos itens de portão aberto, que foi o que esses três marcos são.
+
+  Três coisas que eu fiz errado e corrigi no ato, porque elas valem mais registradas que escondidas: datei docs de cabeça (12:xx quando eram 09:4x); rodei
+  medição com motor dentro do saas_core e cheguei a 266% de CPU com o cliente batendo ponto (matei e refiz na sombra, no cpuset de teste); e afirmei num
+  selo um em_aberto que era trabalhou — troquei pelo invariante real e escrevi no próprio selo o que ele não prova, em vez de fabricar a fixture que faria
+  a minha asserção passar.
+
+  E uma que me corrigiu: a pausa cortes.alarme.pausado, escrita por mim, já nomeava quatro dos cortes que levei hoje ao AVAIS. A pergunta certa nunca foi
+  "qual a regra" — era "qual o número". Agora eles têm.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
+
   Ran 1 shell command
 
-● Background command "O contador final da frota (480/520)" completed (exit code 0)
+● Verificação leve em prod de que o que subiu continua coerente depois dos três deploys (uma query, não a sonda pesada):
 
-● Background command "Espera o contador da frota" completed (exit code 0)
+  O placar e o HAIKU seguem coerentes em prod
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "
+     from django_tenants.utils import schema_context
+     from django.utils import timezone
+     with schema_context('juliani'):
+     from core.models import PlacarSituacional
+     rs = list(PlacarSituacional.objects.all().order_by('e…
 
-● Background command "Espera o contador final da frota" completed (exit code 0)
-
-● Causa provada, e é UMA só — a cauda inteira é folga trabalhada, ao centésimo:
-
-  ┌────────┬─────────────────────┬──────────────────┬──────────────────┬─────────┐
-  │ colab  │ DiaPago trabalhadas │ folga trabalhada │ FechamentoMensal │  delta  │
-  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
-  │ col451 │ 47,71               │ 142,49           │ 47,71            │ +142,49 │
-  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
-  │ col165 │ 38,92               │ 133,86           │ 38,92            │ +133,86 │
-  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
-  │ col824 │ 71,09               │ 110,17           │ 71,09            │ +110,17 │
-  └────────┴─────────────────────┴──────────────────┴──────────────────┴─────────┘
-
-  O FechamentoMensal bate exatamente com DiaPago.horas_trabalhadas nos oito casos, e o delta é exatamente a folga trabalhada. Corrigindo o registro para a
-  causa única e o número de frota:
-
-● Atualiza o registro com a causa unica
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113/p12_docs_o27.py'
-     s=io.open(p,encoding='utf-8').read()
-     old = """ (1) **FOLGA TRABALHADA**"""
-     assert s.count(old)==1
-     s = s.replace(""" (2) …
-
-✢ Hullaballooing… (3h 20m 28s · ↓ 440.2k tokens)
+✢ Hullaballooing… (3h 25m 58s · ↓ 460.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
