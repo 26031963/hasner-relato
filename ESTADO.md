@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:52:01.**
+**Medido em 02/10/2026 02:57:31.**
 
 | | |
 |---|---|
@@ -94,7 +94,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
 ● Background command "Esperar a pista do push liberar" completed (exit code 0)
 
   Committed 295f8e4d, searched for 3 patterns, ran 23 shell commands
@@ -124,14 +123,15 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Agora o filtro do N e as tres confirmacoes do Reabrir:
 
-● Running 1 shell command…
+● Onde moram as classes A/B/C
+  ⎿  $ cd /home/ronald/saas-hasner && tail -5 logs/push56.log; date '+%H:%M'
 
-✢ Unfurling… (1h 52m 56s · ↓ 175.8k tokens)
+✢ Unfurling… (1h 58m 26s · ↓ 200.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
