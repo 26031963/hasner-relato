@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:58:51.**
+**Medido em 02/10/2026 00:04:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e m
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
