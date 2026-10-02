@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:971 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:985 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:46:38.**
+**Medido em 02/10/2026 02:52:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `992d8af9 As duas curas da madrugada publicadas, com a linha da S5b no TICKETS e os dois achados de carona no BACKLOG` |
+| `HEAD` local | `9390c8a7 O rodape do TICKETS volta a bater com origin/main, e o push passa` |
 | `origin/main` | `ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9390c8a7 O rodape do TICKETS volta a bater com origin/main, e o push passa
+3ae3e326 [S5b] A tabela final do ! da troca, com a isolacao feita no MESMO dado -- e o residuo de antecipada tem NOME
+33622ec7 O instrumento ganha os PARES com SEGUNDOS, e o segundo era onde o numero estava escondido
 992d8af9 As duas curas da madrugada publicadas, com a linha da S5b no TICKETS e os dois achados de carona no BACKLOG
 8d8844b1 A porta que muda QUEM PODE O QUE passa a deixar trilha, com antes e depois lidos do banco
-d4288985 O cron das 06:40 MORRIA na guarda da porta, e o ensaio de hoje achou: a disputa barrada agora e CONTADA, nao fatal
-295f8e4d [S5b] A cura (b) estava pela METADE: entram os DOIS portoes de marco do motor, e o raio de 90 min ganha UM dono
-ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/diff_calculador.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -117,22 +116,22 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 
 ● Background command "Esperar o bloco da sombra" completed (exit code 0)
 
-● Os pares com SEGUNDOS
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/ponto/management/commands/diff_calculador.py'
-     s=open(p,encoding='utf-8').read()
-     old = """ if o['colab'] and _pont:
-     self.stdout.write(' PARES col%s %s: %s' % (
-     c.pk, k, ' | '.join(
-     '%s->%s m(%s->%s) trab=%s fora=%s' % (
-     tz.localtime(_x[0]).str…
+  Committed 33622ec7, 3ae3e326, searched for 3 patterns, ran 31 shell commands
 
-✻ Unfurling… (1h 47m 33s · ↓ 153.8k tokens)
+● Background command "Push do marco da cura (b)" completed (exit code 0)
+
+  Searched for 2 patterns, ran 8 shell commands
+
+● Agora o filtro do N e as tres confirmacoes do Reabrir:
+
+● Running 1 shell command…
+
+✢ Unfurling… (1h 52m 56s · ↓ 175.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
