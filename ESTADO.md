@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:56 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:107 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:59:31.**
+**Medido em 02/10/2026 11:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela` |
-| `origin/main` | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `7d9922db [O27] JANELA-EXATA MEDIDO: a causa e UMA (folga trabalhada), e os cortes ja tinham nome` |
+| `origin/main` | `322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela` |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7d9922db [O27] JANELA-EXATA MEDIDO: a causa e UMA (folga trabalhada), e os cortes ja tinham nome
+a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela
 3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS
 b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
-d83c508d O topo do TICKETS fechado no ato do push (O112)
-908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/HANDOFF-SESSAO.md
-?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,44 +94,44 @@ d83c508d O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ construir        │ sítios sem guarda em apuração) · 16 campos sem efeito · placar 8/22                                                            │
-  ├──────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ sua mesa         │ 7 avais, cada um com a frase pronta e o número                                                                                 │
-  └──────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  O que eu entregaria primeiro se você olhasse uma coisa só: o ! da troca da S5b segue parado no critério (2)(a) — col516 +7,86 h e col174 +4,52 h acima
-  do gravado, por pareamento — e é ele que destrava a cadeia inteira: o 22/22 espera a troca (as duas células dependem do sítio de dinheiro que ela
-  substitui), e a F2 espera o 22/22. Enquanto isso a esteira andou pelos itens de portão aberto, que foi o que esses três marcos são.
+  E o turno terminou me corrigindo em três pontos, que ficaram escritos:
 
-  Três coisas que eu fiz errado e corrigi no ato, porque elas valem mais registradas que escondidas: datei docs de cabeça (12:xx quando eram 09:4x); rodei
-  medição com motor dentro do saas_core e cheguei a 266% de CPU com o cliente batendo ponto (matei e refiz na sombra, no cpuset de teste); e afirmei num
-  selo um em_aberto que era trabalhou — troquei pelo invariante real e escrevi no próprio selo o que ele não prova, em vez de fabricar a fixture que faria
-  a minha asserção passar.
+  1. A pausa cortes.alarme.pausado — minha, de 27/09 — já nomeava quatro dos cortes que levei ao AVAIS hoje (CARTAO-TOTAL-IGUAL-SOMA, JUIZ-BATIDA-NASCE,
+     JUIZ-ESCALA-NASCE, PARAMETRO-GANHA-ROTULO), com a saída declarada "o export da 09 com o ! do Ronald". A pergunta nunca foi qual a regra — era qual o
+     número. Os itens passam a citar o corte; o portão da F2 deixa de parecer solto, porque é o mesmo !.
+  2. Rodei medição pesada em prod (266% de CPU) antes de lembrar que isso vai na sombra. Matei no ato e refiz no cpuset de teste.
+  3. Afirmei num selo um veredito que o sistema não dava (em_aberto onde era trabalhou) e troquei pelo invariante real, escrevendo no próprio selo o que
+     ele não prova.
 
-  E uma que me corrigiu: a pausa cortes.alarme.pausado, escrita por mim, já nomeava quatro dos cortes que levei hoje ao AVAIS. A pergunta certa nunca foi
-  "qual a regra" — era "qual o número". Agora eles têm.
+  O que destrava tudo o que sobrou é uma decisão sua, e ela é uma só: o ! da troca da S5b (col516 +7,86 h e col174 +4,52 h, por pareamento) e o export da
+  09. Dele dependem, em cadeia, as duas células que faltam para o 22/22, o censo dos juízes de batida e escala, os 16 parâmetros sem efeito e o portão da
+  F2 — e agora todos eles têm o número do lado, prontos para andar no mesmo turno em que você responder.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
+● O portão da F2 proíbe construir — não proíbe medir, e medir é o que falta para ela valer quando o portão abrir. O item é art.130/131 no período
+  aquisitivo:
+
+  Searched for 1 pattern
+
+● Background command "Push 82 e o handoff do marco" failed with exit code 1
+
+● O push 82 falhou — vendo a causa antes de seguir:
+
   Ran 1 shell command
 
-● Verificação leve em prod de que o que subiu continua coerente depois dos três deploys (uma query, não a sonda pesada):
+● A régua cobra linha no TICKETS para toda fatia citada em commit — inclusive quando ela foi medida e não construída. Abrindo com o estado honesto:
 
-  O placar e o HAIKU seguem coerentes em prod
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py shell --command "
-     from django_tenants.utils import schema_context
-     from django.utils import timezone
-     with schema_context('juliani'):
-     from core.models import PlacarSituacional
-     rs = list(PlacarSituacional.objects.all().order_by('e…
+● Running 1 shell command…
 
-✢ Hullaballooing… (3h 25m 58s · ↓ 460.0k tokens · thinking)
+✢ Hullaballooing… (3h 31m 28s · ↓ 476.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
