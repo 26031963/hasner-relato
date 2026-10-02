@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:57:31.**
+**Medido em 02/10/2026 17:02:43.**
 
 | | |
 |---|---|
-| `HEAD` local | `ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona` |
+| `HEAD` local | `01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **22** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL
 ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona
 8784fecd [S5b] A celula do BACKLOG dentro da DIETA (a assercao recusou 347 chars)
 811f4235 [S5b] 113 selos verdes, e o RED foi MEIA-CORRECAO minha pega pelo meu proprio selo
 dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2
-0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs
 ```
 
 ## `git status --short`
@@ -94,23 +94,15 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Escrever "verde" sem essa distinção seria o selo afirmando sobre a saída o que só olhou na fiação — a família de vacuidade que custou
+  quatro casos em 01/09.
 
-  Dois leitores fora da sua lista, e eram os piores. ponto/marcos.py::marco_para_motivo fazia o marco das 14:15 virar unmapped mudo — furo
-  em silêncio, que é a família de defeito mais cara da casa. E chamados/juizes.py:722 tinha a pergunta da pausa da tarde morrendo pela
-  lâmpada das 09:15; virou AND, fail-closed.
+  O segundo caso guarda a trava do juiz novo: vinculo_do_dia tem de ser consultado dentro de rubricas_por_dia, para que não nasça um
+  segundo critério de "qual vínculo neste dia".
 
-  A condição (3) do seu aval foi cumprida literalmente, não contornada: DNA_VERSAO ficou em 2 e as chaves novas não nascem com None,
-  porque cartorio.py:97 serializa o dict inteiro na impressão digital — uma chave a mais re-julgaria ~17 mil células.
-
-  E o item (6) cresceu com medida, com dois que são dinheiro: juiz_batida::intervalo_cadastrado (lido pelo motor em :620) e
-  juiz_batida.py:244 (o intervalo batido, lido em :514) somam uma pausa. Mexer neles move dinheiro, e esta fatia tinha de deixar em zero —
-  vão com os outros contornos para depois da troca da S5b, com DIFF próprio.
-
-  O defeito era mudo, e ela provou: dos 3 chamados do col221 desde 21/09, nenhum é sobre a pausa da tarde — não poderia ser, porque o
-  detector nunca olhou o segundo par. O contador novo tem universo = cadastro e esperado = autoridade do dia, nunca 6 cravado.
-
-  Se os 7.167 fecharem verde, o merge vai junto com o deploy, sem nada no meio — a árvore é o bind-mount, e os onze minutos de intervalo
-  quebraram prod em 30/09. São 21 commits meus mais os dois dela.
+  A suíte do O114 está nos cinco minutos. A ordem quando ela fechar continua a mesma e não muda: ato único de merge e deploy, push, e
+  depois os selos da S5b mais o DIFF refeito — porque a mudança de hoje altera o próprio DIFF, que vinha sendo medido com uma escala só
+  para o colaborador inteiro.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
@@ -118,12 +110,20 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 
   Ran 2 shell commands
 
-● Suíte correndo (os pontos de progresso estão saindo). Preparo o ato único de merge+deploy, para quando o veredito vier — a lei exige que
-  não haja nada entre os dois:
+● ruff passou, mas deixei lixo meu: um for ... pass com comentário, que é código morto disfarçado de intenção. Troco pela afirmação real
+  que ele prometia:
 
-  Running 1 shell command…
+  Trocar o stub morto pela asserção real
+  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
+     import io, py_compile
+     p='ponto/tests/test_s5b_porta_unica.py'
+     s=io.open(p,encoding='utf-8').read()
+     a = """ for _proibido in ('filter', 'get_or_create'):
+     pass # a consulta crua a EscalaColaborador no laco por dia seria N+1 e juiz paralelo
+     """
+     b = '…
 
-✢ Doodling… (1h 36m 18s · ↓ 280.4k tokens)
+✢ Doodling… (1h 41m 30s · ↓ 298.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
