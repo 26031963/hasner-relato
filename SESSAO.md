@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 13:09:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1034**.
+**Medido em 02/10/2026 13:14:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1031**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1041,6 +1041,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:14:46 | Bash | Ler como o selo procura a linha | `cd /home/ronald/saas-hasner && sed -n '18,110p' bin/regua_tickets.sh` |
 | 01:14:42 | Bash | Formato da tabela e o selo | `cd /home/ronald/saas-hasner && grep -n "^\|" app/docs/TICKETS.md \| head -12; echo "=== total linhas:"; wc -l app/docs/TICKETS.md; echo "=== o selo:"; grep -n "TICKETS.md\\|sem linha" bin/regua_tickets.sh \| head -20` |
 | 01:14:38 | Bash | Ver o formato da tabela de TICKETS | `cd /home/ronald/saas-hasner && grep -n "ATALHO-HE\\|SUITE-UMA-VEZ" app/docs/TICKETS.md \| head; echo ---; grep -n "ATALHO-HE" -A 3 -B 6 app/docs/TICKETS.md \| head -30` |
-| 01:14:29 | Bash | Conferir push e sombra | `cd /home/ronald/saas-hasner && echo "=== push53:"; tail -12 logs/push53.log; echo "=== sombra:"; ls -la logs/sombra_refazer_0201.log 2>&1; tail -5 logs/sombra_refazer_0201.log 2>/dev/null; pgrep -af "sombra.sh" \| head -3` |
-| 01:14:14 | Bash | Refazer a sombra com dump de agora | `cd /home/ronald/saas-hasner && nohup bash -c 'bin/sombra.sh --refazer --dump-agora > logs/sombra_refazer_0201.log 2>&1; echo "rc_refazer=$?" >> logs/sombra_refazer_0201.log' > /dev/null 2>&1 & sleep 3; echo lancado; tail -3 logs/sombra_refazer_0201.log 2>/dev/null` |
-| 01:11:49 | Bash | Relancar o push dos 24 commits | `cd /home/ronald/saas-hasner && git log --oneline -1 && (git push origin main > logs/push53.log 2>&1; echo "rc_push=$?" >> logs/push53.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" >> logs/push53.log)` |
