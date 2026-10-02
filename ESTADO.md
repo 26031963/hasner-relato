@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:59 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:90 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:52:01.**
+**Medido em 02/10/2026 16:57:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2` |
+| `HEAD` local | `ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **21** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona
+8784fecd [S5b] A celula do BACKLOG dentro da DIETA (a assercao recusou 347 chars)
+811f4235 [S5b] 113 selos verdes, e o RED foi MEIA-CORRECAO minha pega pelo meu proprio selo
 dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2
 0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs
-0749895a [S5b] AS QUATRO RUBRICAS ABERTAS POR COLAB: 97% da trabalhada e artefato da MINHA medicao
-6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou
-69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,44 +94,44 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O hook bloquear com lei no topo é o comportamento correto — a lei de 30/09 diz que pergunta de lei não devolve turno, só o ! devolve, e
-  a esteira tem de seguir o próximo item da ORDEM VIVA que não depende dela. Leio a ordem para não escolher por conta própria:
 
-  Ran 1 shell command
+  Dois leitores fora da sua lista, e eram os piores. ponto/marcos.py::marco_para_motivo fazia o marco das 14:15 virar unmapped mudo — furo
+  em silêncio, que é a família de defeito mais cara da casa. E chamados/juizes.py:722 tinha a pergunta da pausa da tarde morrendo pela
+  lâmpada das 09:15; virou AND, fail-closed.
 
-● O critério do próprio aval de 30/09 resolve a dúvida que eu havia deixado aberta: "só as rubricas que o oráculo corrige se movem, e todo
-  outro campo de todo colaborador dá ZERO". Carregar os dois splits do motor, sem alterar, é literalmente zero movimento — é o que o
-  critério manda, não um contorno dele. Construo:
+  A condição (3) do seu aval foi cumprida literalmente, não contornada: DNA_VERSAO ficou em 2 e as chaves novas não nascem com None,
+  porque cartorio.py:97 serializa o dict inteiro na impressão digital — uma chave a mais re-julgaria ~17 mil células.
+
+  E o item (6) cresceu com medida, com dois que são dinheiro: juiz_batida::intervalo_cadastrado (lido pelo motor em :620) e
+  juiz_batida.py:244 (o intervalo batido, lido em :514) somam uma pausa. Mexer neles move dinheiro, e esta fatia tinha de deixar em zero —
+  vão com os outros contornos para depois da troca da S5b, com DIFF próprio.
+
+  O defeito era mudo, e ela provou: dos 3 chamados do col221 desde 21/09, nenhum é sobre a pausa da tarde — não poderia ser, porque o
+  detector nunca olhou o segundo par. O contador novo tem universo = cadastro e esperado = autoridade do dia, nunca 6 cravado.
+
+  Se os 7.167 fecharem verde, o merge vai junto com o deploy, sem nada no meio — a árvore é o bind-mount, e os onze minutos de intervalo
+  quebraram prod em 30/09. São 21 commits meus mais os dois dela.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
   Ran 2 shell commands
 
-● Background command "Rodar os selos da cópia quando a pista vagar" completed (exit code 0)
+● Suíte correndo (os pontos de progresso estão saindo). Preparo o ato único de merge+deploy, para quando o veredito vier — a lei exige que
+  não haja nada entre os dois:
 
-● O selo pegou meia-correção minha, e é exatamente para isso que ele existe: eu migrei só o primeiro laço, e os períodos de folga
-  trabalhada seguiam chamando _dia_de sem o mapa — o segundo juiz sobrevivia neles.
+  Running 1 shell command…
 
-● Curar a meia-correção e reprovar
-  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
-     import io, py_compile
-     p='ponto/services/dia_pago.py'
-     s=io.open(p,encoding='utf-8').read()
-     a = """ for p in (ft_certa or ()):
-     d = _dia_de(p)
-     if d is None:
-     continue
-     L = _linha(d)
-     L['horas_folga_trabalhada'] += (p.minutos_trabalhados or 0) / 60
-     _rubr…
-
-* Doodling… (1h 30m 48s · ↓ 260.3k tokens)
+✢ Doodling… (1h 36m 18s · ↓ 280.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Moving sonda_passivo.py out of app/logs                                                             1h 0m 6s · ↓ 421.1k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
