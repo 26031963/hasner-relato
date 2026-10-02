@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:08:01.**
+**Medido em 02/10/2026 17:13:29.**
 
 | | |
 |---|---|
-| `HEAD` local | `d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push` |
+| `HEAD` local | `5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **28** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado
+ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
+a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato
 d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push
 01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL
-ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona
-8784fecd [S5b] A celula do BACKLOG dentro da DIETA (a assercao recusou 347 chars)
-811f4235 [S5b] 113 selos verdes, e o RED foi MEIA-CORRECAO minha pega pelo meu proprio selo
 ```
 
 ## `git status --short`
@@ -94,36 +94,36 @@ ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DIN
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  e O116, este último com cura e DIFF em cópia); o censo fechou em 13 dos 15 campos com dono; seis peças da troca estão construídas em
-  cópia com selos que mordem; e o O114 chegou pronto da raia, esperando apenas o verde para entrar com deploy no mesmo gesto.
 
-  A S5b segue travada numa única coisa, e ela é sua: onde se ancora o trecho extra quando o dia tem mais de um par.
+  As 7 falhas da suíte eram ambiente. Todas em selos de clique com chromium, porque o staticfiles da raia existia mas estava vazio — 0
+  arquivos contra 799 no main. Selo de clique sem JS coletado nunca dispara o POST. Com o staticfiles do main montado em leitura, os 11
+  passam.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+  A régua do TICKETS me recusou três vezes, todas com razão — e a terceira foi a mais útil: com os dois nomes na mesma célula ela recusou
+  os dois, porque casa o ID exato. A cura não foi afrouxar o padrão nem duplicar a história, foi uma linha-ponteiro que diz no próprio
+  texto que não é uma segunda obra. A causa de fundo é que o seu aval chamou a fatia CELULA-SEGUNDO-INTERVALO e eu a registrei como O114:
+  um item, dois nomes, e quem viu foi a régua.
 
-  Ran 2 shell commands
-
-● A suíte está avançando, não travada: o log cresceu 1.375 bytes em 25 segundos e o container está a 100% de CPU num núcleo da metade de
-  teste. Conferi em vez de supor, porque "está demorando" e "travou" são coisas diferentes e só uma delas pede ação.
-
-  Vou parar de consultar a cada turno e deixar o monitor me chamar — ele está ancorado no veredito estrito agora.
-
-  Todas as condições de fora estão verificadas, uma por uma: régua do TICKETS verde, ensaio da sombra de hoje com divergência 0,
-  interseção vazia entre os arquivos da raia e os da minha cópia, ruff limpo nas seis peças, 113 selos verdes até a penúltima, e a
-  mensagem do merge escrita com os números medidos. O ato único dispara no verde e vai sem intervalo até o deploy.
+  Falta o smoke do col221 na sua mesa. Depois do push, a S5b retoma com sete peças em cópia e o DIFF de frota refeito.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Veredito da suíte
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -E "^Ran [0-9]+ tests?
-     in|^OK$|^FAILED \(" $S/o114_suite.log || echo "sem veredito; $(wc -l < $S/o114_suite.log) linhas, container $(docker ps --format
-     '{{.Status}}' --filter name=stupefied_carso…
+  Ran 1 shell command
 
-✢ Doodling… (1h 46m 48s · ↓ 313.7k tokens · thinking)
+● O push caiu num RED legítimo e rápido — antes da suíte, não depois: HAIKU-DENTES.md fora de sincronia com o codigo. É derivado, e o O114
+  criou contador e golden novos. Regenero:
+
+  Ran 3 shell commands
+
+● Background command "Empurrar o marco do O114" completed (exit code 0)
+
+  Ran 1 shell command
+
+●
+
+✶ Doodling… (1h 52m 16s · ↓ 330.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
