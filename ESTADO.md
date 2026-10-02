@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:32:01.**
+**Medido em 02/10/2026 18:37:25.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cort
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,36 +96,36 @@ fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cort
 
 ```
 
-● Monitor armado com grep -a e padrão ancorado nas linhas que o Django e o git realmente imprimem.
+  O que falta, nominalmente: o seu print do espelho do col221 em 30/09 e 01/10 mostrando as seis colunas sem asterisco laranja.
 
-  Com o push na pista e a S5b no ar, o turno está num ponto de espera legítimo: não há ato meu que não dependa do veredito dele.
-
-  O que você tem para conferir, em uma frase cada:
-
-  O smoke do col221 — abrir o espelho em 30/09 e 01/10 e ver as seis colunas sem asterisco laranja, com o total em 9,19 h. É a única peça
-  que a sonda não substitui.
-
-  A colisão R4 × F1 — dois cortes seus que discordam sobre célula com dna.marcos nulo: a F1 fixa o previsto descontando a pausa do
-  template (480), a R4 diz que o template descreve outro dia (+75,12 h em 27 colabs). Deixei o comportamento de hoje e registrei a
-  colisão; a escolha é sua.
-
-  O "720 cravado" — 90 casos, 53 pessoas, 25 descontando, onde a recusa que você pediu bloquearia a convenção que o próprio campo ensina.
-
-  As duas pautas DP da 09 — col954 com falta de 2 dias que desconta, col900 com 7,37 + 4,50 que pagam.
-
-  As duas frases de nascimento de juiz para batida e escala — sem elas o censo dessas famílias não passa do único número já provado: zero
-  escritas de Batida fora do chokepoint.
+  E a causa de o primeiro reparo não ter bastado, dita: o ata_do_dia grava minutos_previstos copiando da grade, e a grade tira o valor da
+  própria ata — ciclo que se auto-perpetua. Quebrei escrevendo pela autoridade. Foi por isso que as lâmpadas (que vêm do DNA) curaram às
+  18:28 e o previsto não.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Estado do push 85
-  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:" logs/push85.log |
-     tail -5; docker ps --format '{{.Names}}' | grep -vE "saas_|juliani_db_test|mensageria" >/dev/null && echo "suite do push viva" ||
-     echo "PISTA LIVRE"
+  Ran 1 shell command
 
-✢ Sock-hopping… (19m 30s · ↓ 61.3k tokens)
+❯ aval Ronald: O114 REPROVADO pelo print do calendario do col221 as 18:36. De 22 a 30/09 as batidas de 14:1x e 15:40 seguem com asterisco
+  em todos os dias, e o previsto gravado segue 635. Fecha so com: (1) cura das lampadas commitada e as celulas do col221 de 21/09 em
+  diante rejulgadas, so ele, com snapshot antes; (2) 6 lampadas ACESAS lidas da ata GRAVADA; (3) previsto 550 gravado dia a dia; (4)
+  calendario sem asterisco de 22 a 30/09, com print. Dizer o que e o asterisco da entrada 08:28 de 21/09 e o chamado 24277. Nao tocar 01
+  a 20/09. Sem as quatro provas, INCOMPLETO com a lista. Depois push e segue a fila; PAREI so em lei ou !
+
+● Seu print é de 18:36 e a cura do previsto entrou depois, às 18:5x — mas preciso verificar os dias 22 a 30/09, que a minha última leitura
+  truncou. Meço o trecho exato:
+
+● As quatro provas no trecho 21/09 a 02/10
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/prova_21a02.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """As QUATRO provas no trecho que ele mediu: 21/09 a 02/10, dia a dia, da ata GRAVADA."""
+     import datetime as dt
+     …
+
+* Sock-hopping… (24m 54s · ↓ 78.6k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
