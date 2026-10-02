@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 13:03:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1047**.
+**Medido em 02/10/2026 13:09:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1034**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1044,16 +1044,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 01:14:29 | Bash | Conferir push e sombra | `cd /home/ronald/saas-hasner && echo "=== push53:"; tail -12 logs/push53.log; echo "=== sombra:"; ls -la logs/sombra_refazer_0201.log 2>&1; tail -5 logs/sombra_refazer_0201.log 2>/dev/null; pgrep -af "sombra.sh" \| head -3` |
 | 01:14:14 | Bash | Refazer a sombra com dump de agora | `cd /home/ronald/saas-hasner && nohup bash -c 'bin/sombra.sh --refazer --dump-agora > logs/sombra_refazer_0201.log 2>&1; echo "rc_refazer=$?" >> logs/sombra_refazer_0201.log' > /dev/null 2>&1 & sleep 3; echo lancado; tail -3 logs/sombra_refazer_0201.log 2>/dev/null` |
 | 01:11:49 | Bash | Relancar o push dos 24 commits | `cd /home/ronald/saas-hasner && git log --oneline -1 && (git push origin main > logs/push53.log 2>&1; echo "rc_push=$?" >> logs/push53.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" >> logs/push53.log)` |
-| 01:07:28 | Bash | Ler o log do push 52 | `cd /home/ronald/saas-hasner && tail -25 logs/push52.log 2>/dev/null; echo "=== pgrep push:"; pgrep -af "git push" \| head` |
-| 01:07:25 | Bash | Procurar o resultado do push | `cd /home/ronald/saas-hasner && ls -t logs/push_*.log logs/*push* 2>/dev/null \| head -5; for f in $(ls -t /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/*.output 2>/dev/null \| head -8); do echo "== $f"; tail -4 "$f"; done` |
-| 01:07:16 | Bash | Conferir push, arvore e carimbo da sombra | `cd /home/ronald/saas-hasner && git log --oneline origin/main..HEAD \| wc -l; git status --porcelain \| head; echo "--- sombra:"; bin/sombra.sh --conferir 2>&1 \| tail -5; echo "--- date:"; date '+%d/%m %H:%M'` |
-| 01:06:52 | Bash | Ler a quarta copia e o juiz vizinho | `sed -n '370,430p' escala/regua_defesa.py; echo "=== entrada_fora_do_inicio:"; grep -n "def entrada_fora_do_inicio" -A 30 escala/regua_defesa.py` |
-| 01:06:47 | Bash | Procurar constante nomeada de raio de marco | `grep -rn "RAIO\\|TOL_MARCO\\|_PROX_MARCO\\|= 90\b\\|90)" --include=*.py ponto/turnos.py escala/regua_defesa.py ponto/calculador/regras.py core/juizes.py \| head -20; echo "--- regua_defesa:"; sed -n '1,60p' escala/regua_defesa.py` |
-| 01:06:25 | Bash | Ler o lado da saida no T8 | `sed -n '2660,2730p' ponto/motor_calculo_v2.py` |
-| 01:06:10 | Bash | Ler o juiz de distancia a marco | `grep -n "_dist_marco" -A 25 ponto/turnos.py \| head -45; echo ---; grep -rn "_dist_marco" --include=*.py . \| grep -v tests` |
-| 01:05:56 | Bash | Ler a montagem de marcos por periodo | `sed -n '270,380p' ponto/management/commands/diff_calculador.py` |
-| 01:05:47 | Bash | Localizar a montagem dos marcos por par | `grep -n "_pont_por_dia\\|_marcos_intervalo_por_dia\\|_marcos_do\b" ponto/management/commands/diff_calculador.py \| head -30` |
-| 01:05:43 | Bash | Ler a montagem dos pares no diff | `sed -n '440,530p' ponto/management/commands/diff_calculador.py` |
-| 01:05:39 | Bash | Censo de chamadores da pontualidade | `grep -rn "pontualidade=\\|pontualidade_do_dia(\\|intervalo_marcos=" --include=*.py . \| grep -v "/tests/"` |
-| 01:05:27 | Bash | Ler pontualidade_do_dia no calculador | `grep -n "intervalo_marcos\\|def pontualidade_do_dia" -A 40 ponto/calculador/regras.py \| sed -n '1,90p'` |
-| 01:05:22 | Bash | Ler o ramo 1 do T8 no motor | `sed -n 2570,2660p ponto/motor_calculo_v2.py` |

@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 13:03:31.**
+**Medido em 02/10/2026 13:09:01.**
 
 | | |
 |---|---|
@@ -128,7 +128,7 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
   custar um ciclo. O O79 é o próximo, e é fabricável sem aval — selo de vocabulário não move número.
 
 ✻ Churned for 4m 17s · done 11:52 AM · 7 shells still running
-                                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                    new task? /clear to save 729k tokens
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
