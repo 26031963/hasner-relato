@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 07:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.4 MB). Acoes na janela: **860**.
+**Medido em 02/10/2026 07:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.4 MB). Acoes na janela: **853**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -863,10 +863,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:16:22 | Bash | Ler a lapide da porta do export sobre a janela | `sed -n 30,72p folha/porta_export.py` |
 | 19:16:14 | Bash | Censo de quem chama a autoridade e estado da suite | `grep -rn "autoridade_do_periodo" --include=*.py . \| grep -v "def autoridade_do_periodo" \| head -20; echo "[teste vivo: $(docker ps --format '{{.Command}}' \| grep -c 'manage.py te')]"; grep -E "^Ran \|^OK$\|^FAILED" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/pta_suite2.log 2>/dev/null` |
 | 19:16:00 | Bash | Medir a frota cega do dia 20 na porta da tela | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/cego_do_dia20.py <<'PYEOF' # -*- coding: utf-8 -*- """QUANTO A TELA NAO VE DO ULTIMO DIA DA COMPETENCIA. SO LEITURA. `ponto/services/espelho.py::autoridade_do_periodo` busca batida ate `fim 00:00 + 12 h`. Com `fim` = ultimo dia da competencia (20/09), isso e MEIO-DIA: tudo que foi batido na ta ...` |
-| 19:15:20 | Bash | Medir a exposicao da 09 com a janela da folha | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/exposicao_09c.py <<'PYEOF' # -*- coding: utf-8 -*- """EXPOSICAO DA 09, 3a medicao -- agora com a janela que a FOLHA usa. SO LEITURA. A 2a medicao (pela autoridade) disse 14 dia-colab / 61,30 h, e 8 deles caiam no dia 20/09. Medido depois: `autoridade_do_periodo` busca batida ate `fim 00:00 + 1 ...` |
-| 19:14:28 | Bash | Medir as duas janelas da mesma competencia | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/janela_duas.py <<'PYEOF' # -*- coding: utf-8 -*- """DUAS JANELAS PARA A MESMA COMPETENCIA? SO LEITURA. `ponto/services/fechamento.py:133-139` (a FOLHA) busca batida de `inicio - 1 DIA` a `fim 23:59:59 + 1 DIA`. `ponto/services/espelho.py::autoridade_do_periodo` (a TELA e o PDF) busca de `ini - ...` |
-| 19:13:56 | Bash | Ler a janela de batidas do recalculo | `sed -n 125,175p ponto/services/fechamento.py` |
-| 19:13:53 | Bash | Ver a janela de batidas do recalculo da folha | `grep -n "batidas_apuraveis\\|timedelta(hours=12\\|_lo\b\\|_hi\b" ponto/services/fechamento.py \| head -20` |
-| 19:13:12 | Bash | Listar os 14 dia-colab da 09, por colab | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i 's/if len(_am) < 6:/if True:/g; s/len(_am) < 6/True/g' $S/exposicao_09b.py; grep -n "_am.append\\|if True" $S/exposicao_09b.py \| head; docker cp $S/exposicao_09b.py saas_core:/tmp/exp09b.py >/dev/null && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exe ...` |
-| 19:12:55 | Bash | Ler delta_da_resposta | `sed -n '/def delta_da_resposta/,/^def /p' chamados/juizes.py \| head -70` |
-| 19:12:41 | Bash | Conferir a 2a suite | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; grep -E "^(FAIL\|ERROR):\|^Ran \|^OK$\|^FAILED" $S/scratchpad/pta_suite2.log 2>/dev/null \| head -10; echo "[teste vivo: $(docker ps --format '{{.Command}}' \| grep -c 'manage.py te')]"; wc -l $S/scratchpad/pta_suite2.log 2>/dev/null` |
