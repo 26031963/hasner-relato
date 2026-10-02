@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 05:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.7 MB). Acoes na janela: **1004**.
+**Medido em 02/10/2026 05:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.7 MB). Acoes na janela: **1002**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1012,5 +1012,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:24:10 | Bash | Achar o catalogo de efeito e o tick | `grep -rn "efeito_vigente\\|def efeito\\|EFEITO" ponto/catalogo/ausencias.py \| head -8; echo "=== onde o tick verde generico aparece ==="; grep -rln "veredito" templates/ \| head -8` |
 | 17:24:01 | Bash | Ler o O21 | `cd /home/ronald/saas-hasner && awk -F'\|' '/^\\| O21 /{print "O QUE: "substr($3,1,900); print "ESTADO: "substr($4,1,300); print "ONDE: "substr($5,1,300)}' app/docs/BACKLOG.md` |
 | 17:23:37 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && HANDOFF_RAIZ=/home/ronald/saas-hasner bash bin/handoff_sessao.sh && echo "---" && sed -n '/## GIT/,/## PAREI/p' app/docs/HANDOFF-SESSAO.md` |
-| 17:21:01 | Bash | Aguardar o fim do push | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 10); do sleep 50; if grep -q "^RC=" $S/push_unico.log 2>/dev/null; then break; fi; done; grep -E "main ->\|^RC=\|error:\|ALARME\|VERMELHO" $S/push_unico.log \| head -6; echo "=== a empurrar agora ==="; git fetch -q 2>/dev/null; git log --oneline origin/ma ...` |
-| 17:20:54 | Bash | Ver o estado do push | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -4 $S/push_unico.log 2>/dev/null; echo "--- ainda rodando? ---"; pgrep -f "bin/pre-push.sh" >/dev/null && echo "pre-push VIVO" \|\| echo "pre-push terminou"` |
