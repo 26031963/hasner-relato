@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:00:45.**
+**Medido em 02/10/2026 18:05:45.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ```
  M app/docs/AVAIS.md
  M app/docs/PENDENTES_RONALD.json
+ M app/escala/utils.py
+?? app/escala/tests/test_previsto_desconta_as_duas_pausas.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,42 +97,42 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  denominador da prontidão e base do furo.
 
-  As duas lâmpadas novas estão APAGADAS — 14:15 luz=None acesa=False e 15:40 luz=None acesa=False nos dois dias, embora as batidas 14:17 e
-  15:40 existam. Quando chamei ata_do_dia direto, ela casou as duas; gravada, elas saíram apagadas. Então a tela mostra seis marcos e as
-  duas batidas da tarde seguem sem casa.
+  Não aplico a relavratura antes de publicar o censo. E o push dos 36 commits vem depois do smoke fechado, como você ordenou.
 
-  (1) O previsto está errado, e você viu primeiro: 635, não 550. Minha conta estava furada — 720−85−85 = 550, e 635 é 720−85, uma pausa. O
-  FechamentoMensal confirma: minutos_previstos=13.335 em 21 dias = 635/dia. O efeito em atraso e falta dele hoje é ZERO (falta=0,00,
-  atraso=0,00, antecip=0,00), porque atraso e antecipada se julgam contra os marcos — ele bate 06:58→19:00 — e horas_falta vem de
-  Ausência, não do furo. O que o 635 infla é o previsto: 85 min/dia, 31,17 h nos 22 dias, e com ele o denominador da prontidão e a base do
-  furo.
+✻ Baked for 2m 53s · done 6:03 PM · 4 shells still running
 
-  (2) Não é zero, e a resposta honesta é com ressalva. Na janela desde 17:00, 14.274 células de 466 outros colaboradores foram re-julgadas
-  pelo meu --forcar, e 13 chamados nasceram na emp2 (5 Ausência, 5 disputa_supervisão, 1 auditoria_clt, 2 turno_aberto), todos de outros.
-  Pelas categorias, esses 13 parecem vir dos crons das */5 — o cartório emite cobrança/protesto, não essas —, mas eu não consigo separar
-  os meus dos deles, porque rodei --apply --forcar na empresa inteira sem snapshot antes. Isso foi escolha minha e foi um erro: a ordem
-  dizia "cartório re-julga", e eu ampliei para 431 colaboradores sem reversão. Das células re-julgadas, nenhuma de outro colaborador ficou
-  com 6 lâmpadas ({0: 1903, 4: 1333, 2: 764}), o que é o esperado — o te548 é o único modelo com duas pausas.
+● Background command "Censo de quem a cura do previsto move" completed (exit code 0)
 
-  (3) O push dos 36 commits é o próximo ato, antes de qualquer outra coisa.
+  Ran 1 shell command
 
-✻ Cooked for 2m 48s · done 5:59 PM · 4 shells still running
+● O censo imprimiu só a primeira linha. Vejo o log inteiro:
 
-❯ cura o previsto do dia: 550, nao 635
+  Ran 1 shell command
 
-● Ordem clara. A cura vai na origem — minutos_previstos_do_dia desconta uma pausa porque desempacota a 4-tupla. Leio a função inteira
-  antes de tocar:
+● A sonda ainda está correndo (determined_babbage) — ela varre ~565 colaboradores × 30 dias × 2 competências chamando duas funções por
+  dia, então leva alguns minutos. O que já saiu confirma a premissa: 1 modelo de 341 declara segundo intervalo.
 
-  O contrato de pausas_do_dia
-  ⎿  $ sed -n 1099,1140p escala/models.py
+  Enquanto ela termina, deixo o estado exato do que você pediu:
 
-· Incubating… (31s · ↓ 1.5k tokens · thinking)
+  A cura está feita, na origem, com RED antes e GREEN depois. escala/utils.py::minutos_previstos_do_dia desempacotava a 4-tupla de
+  marcos_do_dia e descontava uma pausa; agora pergunta a EscalaColaborador.pausas_do_dia, que é a autoridade que vê todas. Três casos no
+  selo: duas pausas dão 550, uma pausa continua 635 (o caso que impede a cura de inventar pausa), e célula que existe sem marco deixa de
+  descontar pausa do template — 720 —, que é a guarda da R4 entrando pela porta do previsto.
+
+  E registro a parte que é minha: o erro estava no sistema e na minha conta, e foi a minha conta que o escondeu. Eu escrevi "635 =
+  720−85−85" num RELATO; se eu tivesse feito a subtração, o 550 teria aparecido na hora. Você viu porque fez a conta que eu não fiz.
+
+  Falta o censo por causa, e só depois dele a relavratura — o previsto é base de folha e não aplico sem o número. Depois, o push dos 36
+  commits.
+
+✻ Cogitated for 23s · done 6:03 PM · 4 shells still running
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ publica o censo e relavra o col221
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
