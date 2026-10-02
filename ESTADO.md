@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 22:38:01.**
+**Medido em 01/10/2026 22:43:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o mar
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
