@@ -44,8 +44,8 @@ lista — ela e o que esta EM PE._
 | **O34** | FATIA-ANCORA-ENVELHECE | espera `!` |
 | **O35** | CONTRATOS-14 | espera `!` |
 | **O36** | PRONTA-QUE-NAO-POUSA | **NO AR** -- curado e no ar; o 1 item fi |
-| **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 | espera aval |
-| **O38** | VALIDACAO-QUE-NAO-GRAVA-DIZ-O-MOTIVO | **medindo** |
+| **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 | espera `!` |
+| **O38** | VALIDACAO-QUE-NAO-GRAVA-DIZ-O-MOTIVO | **CENSO FEITO, e ele parte o bug em DOIS |
 | **O39** | REABRIR-LINHA-UI | **FRENTE DA FILA** |
 | **O40** | K8-COMPETENCIA-NAO-E-MES-CIVIL | **tripwire no ar; a fronteira FM x Perio |
 | **O41** | GEOFENCE-VALIDAR-SEM-VOLTA | **FECHADA 25/09** (`ebde81d4`, nome `GEO |

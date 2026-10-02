@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:427 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:12 AFIRMA ato sem PROVA ao lado -- ### O38: O CENSO ESTA FEITO, E ELE PARTE O BUG EM DOIS -- MEIO A MEIO (02/10 21:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:41:31.**
+**Medido em 02/10/2026 20:47:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia` |
+| `HEAD` local | `e064a263 [O38] O censo esta feito, e ele parte o bug em DOIS -- meio a meio` |
 | `origin/main` | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e064a263 [O38] O censo esta feito, e ele parte o bug em DOIS -- meio a meio
+72972402 [O37] O DIFF esta feito: 161,00 h em 22 dia-colab, e converge na lei do O120
 ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
 751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia
 bc0ce2ac [HOOK] Item no PORTAO nao anda, e o selo lia METADE do padrao
-b70febcc [TICKETS] As cinco linhas que faltavam -- a causa do push 88, em uma linha
-a85c89f5 [O115] Fechada como NO AR: as tres rubricas tem dono e 15 selos verdes no vivo
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ a85c89f5 [O115] Fechada como NO AR: as tres rubricas tem dono e 15 selos verdes 
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,36 +95,36 @@ a85c89f5 [O115] Fechada como NO AR: as tres rubricas tem dono e 15 selos verdes 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  filho é do fabricante) e O94 (espera o ! — a cura de código já está no ar; falta a decisão sobre o gravado).
+  MUDA:
+   A1. Tela de vinculo: recuar a data de inicio regenera as celulas do trecho, sem guarda por empresa exportada (celula.py:78), sem piso
+  (vinculo.py:34-36), sem recusa por trancada (vinculo.py:38-39). Fica: trilha com usuario, antes/depois e motivo; reversao; holerite
+  PUBLICADO do proprio colab continua barrando e dizendo por que.
+   A2. Wizard edita o tipo_ciclo de template existente (hoje cadastro_tipo.py:14 proibe e views_wizard.py:44 so le na criacao). Antes de
+  salvar, mostra quantos colabs e quais serao reescritos e pede confirmacao pelo componente da casa.
+   A3. Campo ciclo nasce VAZIO na criacao (hoje o select abre em 12x36, wizard_tipo_escala.html:30); salvar sem escolha e recusado. Cai o
+  default '12x36' de views_wizard.py:45 e cadastro_tipo.py:153.
+  RED: col221 (ec189 te224 ciclo 12x36 com horarios de seg a sex; corrigido hoje por corrigir_escala_retroativa, ec1361). Caso que morde
+  em A1: colab fora do TXT de competencia exportada pela empresa, recuar inicio pela tela regenera. A2: template com N vinculos, troca de
+  ciclo reescreve os N e a tela disse N antes. A3: POST sem tipo_ciclo = recusa.
+  PRONTO (cada um com prova nomeada no RELATO):
+  1. A1 provado pela porta da tela em banco lateral, contagem de celulas antes/depois.
+  2. A2 provado com template de 1 colab e de varios.
+  3. A3 provado nas duas formas (wizard e POST direto).
+  4. Censo: quem mais chama regenerar_celulas_vinculo e o que muda para cada chamador.
+  5. Dizer o que acontece com o FechamentoMensal do colab depois da regeneracao em competencia exportada (recalcula sozinho ou nao).
+     PROIBIDO: fallback, manter a guarda "por enquanto", flag para ligar depois, fatia posterior, juiz novo.
+     LEI-AKITA: origem/testemunha/RED/quem-mais-le, juizes novos=0.
 
-  Essa caminhada de nove itens não foi desperdício: ela produziu a evidência do corte do marcador que está no topo da sua fila. Os itens
-  que o hook me mandou em sequência — O27, O28, O30, O31, O33, O34, O35, O89, O91 — estavam todos estacionados por texto seu, e o marcador
-  não conseguia dizer isso porque o selo o obriga a espelhar a tabela.
+  OBRA B - UI PLANO DE ESCALAS, ETAPA 1 (fila 2, raia wt-ui, so templates/static/teste de tela)
+  PERGUNTA DO ADMIN: "quais escalas sao usadas nesta praca, quem usa qual escala neste posto, quem esta na escala xyz?"
+  ETAPA 1 e so isto: instalar core/_barra_gestao.html em /escala/tipos/ com UM quadro, Atalhos, e nele o wizard, que sai do titulo. Zero
+  CSS novo, nada mais muda na tela.
+  ANTES DO CODIGO: publicar a proposta (o que entra, o que sai, print do antes) e esperar meu ok.
+  As etapas seguintes (pre-filtro, badges que filtram, atalho Quem usa) NAO entram agora.
 
-  Push 91: a suíte passou (Ran 9383 tests in 588.958s, sem falha) e ele está nas etapas finais. Não commito nada desta rodada até ele
-  pousar — e as células que eu escrevi estão no disco, prontas para entrar no commit seguinte.
+  Segue a fila; PAREI so em lei ou !
 
-  O próximo passo é o O37: medir o DIFF na sombra da causa que já está medida. Começo por ele assim que o push liberar a árvore — e se a
-  árvore liberar antes, commito primeiro este lote de reconciliação (O33, O35, O36, O94, marcador, fora da sessao no hook + selo), porque
-  ele é o que explica a caminhada.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O37 -- UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 (BO Ronald 25/09 09:00, bug 1 -- a hipotese da fase vazia
-  caiu na medicao)
-
-  Ran 1 shell command
-
-● Background command "Wait for push 91 verdict" completed (exit code 0)
-
-● Push 91 pousou — To https + exit=0, os 11 commits estão no remoto. Árvore livre: commito o lote de reconciliação antes de medir:
-
-● Committing the reconciliation batch
-  ⎿  $ cd /home/ronald/saas-hasner && git add bin/hook_stop_fila1.py bin/tests/test_hook_nao_cobra_congelado.sh app/docs/BACKLOG.md
-     app/docs/PENDENTES_RONALD.json && git commit -q -F - <<'MSGEOF'
-     [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
-     O hook me mandou a NOVE iten…
-
-✢ Sock-hopping… (2h 29m 0s · ↓ 446.8k tokens)
+✢ Sock-hopping… (2h 34m 30s · ↓ 470.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
