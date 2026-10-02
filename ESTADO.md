@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:21:41.**
+**Medido em 02/10/2026 10:27:01.**
 
 | | |
 |---|---|
@@ -96,44 +96,44 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  ├──────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O21 (palavra do dia  │ RED quatro decisoes com 1 desenho [(None,None,None)] → 3.432 de 7.693 dia-colab com palavra, zero query nova               │
+  │ no app)              │                                                                                                                            │
+  └──────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Portão da F2 está fechado: 8/22, não 22/22 — e o selo dela é literal ("não construir antes de 22/22"). Portão declarado não devolve turno: avanço o que
-  ela espera. Lendo a matriz:
+  F2 não entrou — e não por escolha minha: o portão dela é literal ("não construir antes de 22/22") e o placar estrutural, medido pela função real, está
+  em 8/22. Portão declarado não devolve turno, então fui atrás do que ela espera — e aí está o achado que você precisa saber:
 
-  Ran 2 shell commands
+  - as duas células mais próximas de fechar (turno/marcos × juiz e celula/precedencia × juiz) dependem do mesmo sítio,
+    escala/utils.py::minutos_realizados_do_dia, e o pendente dele é zona dinheiro e "grava na ata que a prontidão e o supra-juiz leem". Curá-lo agora
+    moveria o GRAVADO que a tabela da S5b na sua mesa descreve — a L-096 protege exatamente isso. Fica atrás do seu ! da troca.
+  - batida × juiz e escala × juiz não começaram porque falta o censo, e declarar autoridade nova exige a sua frase (corte Ronald: juiz <nome> nasce) —
+    nenhuma das 54 da linha de base cobre essas duas famílias.
+  - as 5 células de parâmetro sem efeito precisam do campo consumido ou removido; rotular não as fecha, e remover cadastro é seu.
 
-● F2 segue no portão (8/22 medido); o que anda é o que ela espera. A célula turno/marcos × um juiz depende de uma lista de pendentes vazia — e hoje ela
-  caiu de 2 para 1. Vendo o que sobrou:
+  Então peguei o próximo que anda de verdade: O25 — PISO-NAO-SOBE-POR-BATIDA, portão aberto (CARTAO=ESPELHO fechou). E a medição refinou o seu RED: o
+  19/08 do col905 já aparece no espelho (Abono 11h (abonado)), porque a cura CARTAO-CORTADO pôs vis_ini = min(piso, apur_ini) e o período pedido manda.
+  Quem ainda sofre é o caminho que usa o piso cru — o calendário do drawer:
 
-  Ran 1 shell command
+  ▎ 163 de 532 colaboradores têm o piso elevado pela 1ª batida · o drawer perde 293 dias na janela de duas competências · col921 11 dias, col963 8, col909
+  ▎ 7, col917 5.
 
-● Achado de alto retorno: duas células da matriz dependem do mesmo sítio — escala/utils.py::minutos_realizados_do_dia. Lendo o pendente por inteiro e o
-  sítio:
+  O selo está escrito (6 casos, incluindo o que morde sem olhar constante: dois colabs com o mesmo cadastro e batidas diferentes não podem ter chão
+  diferente) e a cura são 3 linhas na origem. Aplico assim que o push 79b liberar a pista — não edito a árvore com a suíte rodando sobre ela.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● O pendente de dinheiro grava na ata que a prontidão e o supra-juiz leem — e a L-096 congela dinheiro e célula. Conferindo a lei antes de tocar:
+● Pushing 79b
+  ⎿  $ cd /home/ronald/saas-hasner && tail -3 logs/push79b.log; date +%H:%M:%S; cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1ar5i9n2.output 2>/dev/null | tail -8
 
-  Ran 2 shell commands
-
-● A obra em voo é a própria S5b, e a L-096 a protege: mover o realizado da grade agora mudaria o DIFF que está na mesa dele. O que anda sem tocar número é
-  o censo que a matriz diz faltar "primeiro":
-
-  Ran 2 shell commands
-
-● A fila 1 estrutural está travada em três pontos que são dele (frases de corte do juiz novo, a obra S5b em voo, a escolha nos parâmetros sem efeito).
-  Pergunta de lei não devolve turno — vendo o que anda:
-
-  A ordem viva e o estado da fila 2 em raia propria
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '155p' app/docs/BACKLOG.md | fold -w 160 | head -24
-
-✢ Hullaballooing… (2h 48m 8s · ↓ 342.0k tokens · thinking)
+✢ Hullaballooing… (2h 53m 28s · ↓ 362.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
