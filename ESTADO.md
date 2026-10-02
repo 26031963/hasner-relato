@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:06:31.**
+**Medido em 02/10/2026 04:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1316b866 O topo do TICKETS bloqueou o push pela QUARTA vez numa noite, e isso virou item com o numero` |
+| `HEAD` local | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
 | `origin/main` | `83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel
 1316b866 O topo do TICKETS bloqueou o push pela QUARTA vez numa noite, e isso virou item com o numero
 fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- dita pelos alertas do proprio motor
 cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e a folha zero tem 7 nomes com causa
 83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo
-28ba345d A UI-RESPOSTA-DIZ-O-QUE-E ganha linha no TICKETS, com os dois defeitos que a medicao achou
 ```
 
 ## `git status --short`
@@ -95,11 +95,6 @@ cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 2 patterns, ran 8 shell commands
-
-● Agora o filtro do N e as tres confirmacoes do Reabrir:
-
-  Searched for 3 patterns, ran 24 shell commands, wrote 1 memory
 
 ● Background command "Push de novo com o rodape corrigido" completed (exit code 0)
 
@@ -126,8 +121,13 @@ cace3fec Item (6) SO LEITURA: o regime da emp3 nao move nada porque JA E CLT, e 
   Searched for 3 patterns, listed 1 directory, ran 32 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-· Unfurling… (3h 7m 26s · ↓ 301.6k tokens)
+● Esperar o push 61 · 2m 11s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push61.log; do sleep 25; done; tail -5 logs/push61.log (2m 10s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Unfurling… (3h 12m 56s · ↓ 312.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
