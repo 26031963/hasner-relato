@@ -33,7 +33,7 @@ lista — ela e o que esta EM PE._
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |
 | **O25** | PISO-NAO-SOBE-POR-BATIDA | **FECHADA 02/10 10:35, no ar** (`b817f39 |
-| **O26** | W12X36-HPD | **spec completa, posicao 2 da fila** |
+| **O26** | W12X36-HPD | **FECHADA 02/10 11:47, no ar** (`3aa5e2b |
 | **O27** | JANELA-EXATA | **MEDIDO 02/10 na sombra, 520 colabs: a  |
 | **O28** | CATALOGO-SAIDA-ANTECIPADA-DESCONTA | espera `!` |
 | **O29** | RELATORIO-ATESTADOS-FOTOS | **FECHADA — SUPERADO pelo O30** (virou a |

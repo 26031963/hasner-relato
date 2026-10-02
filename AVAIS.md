@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 8
+# AVAIS NA MESA — 9
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -14,10 +14,11 @@
 | 6 | `O27-COLUNA-NAO-FECHA-COM-O-RODAPE` | **lei** | 2026-10-02T10:50 | O27 JANELA-EXATA: a sua linha dizia *'medir antes de construir'*, e a medicao MUDA o alvo. MEDIDO na SOMBRA, competencia 09, pelas funcoes REAIS do cartao (`relatorios/pdf_espelho::_coletar_dados_espelho_mes`): **cartao_ | `corte Ronald: no cartao, (c) o rodape ganha a linha 'folga trabalhada' e passa a somar os valores EXIBIDOS -- a coluna e o badge ficam como estao; com isso eu fecho o selo `cartao_x_fechamento_total`` |
 | 7 | `F2-ART130-LE-LITERAL-NAO-CADASTRO` | **lei** | 2026-10-02T11:05 | 4 tipos descontam e o art.130 conta 1; 7 de 1.046 periodos com direito gravado acima da tabela (todos em_curso); 0 adquirido/concedido divergente | `lei Ronald: para o art.130 contam <so a falta de dia / falta + suspensao>; atraso e saida antecipada sao parciais e NAO entram -- com isso eu troco o literal por um conjunto do catalogo e a F2 passa a mostrar a projecao do direito` |
 | 8 | `ui-resposta-diz-o-que-e-smoke` | **smoke** | 2026-10-02T03:45 | NO AR desde 02/10 03:3x (`432058dd` + deploy). As 4 frases medidas nas perguntas REAIS pelo codigo no ar: `perg#37945` col106 'atraso de 1h 00m' + 'vai para a folha' + botao 'Validar com atraso'; `perg#38287` col358 'sai | `smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E` |
+| 9 | `W12X36-HPD-SMOKE` | **smoke** | 2026-10-02T11:47 | 128 tipos 12x36, 0 com hpd, 0 de 896 dia-tipo mudam; serve 338 vinculos e 1.307 plantoes de fim de semana | `smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual -- pode fechar o W12X36-HPD` |
 
 ---
 
-Total no JSON: **186** · aberto **8** · respondido **14** · sem-motivo **164**.
+Total no JSON: **187** · aberto **9** · respondido **14** · sem-motivo **164**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

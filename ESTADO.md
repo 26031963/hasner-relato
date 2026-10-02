@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:43:31.**
+**Medido em 02/10/2026 11:49:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| `origin/main` | `37a79e5d [F2] MEDIDA sob o portao: o art.130 ja existe, a F2 e a VISAO -- e a pergunta que sobra e juridica` |
-| commits a subir (`ahead`) | **2** |
+| `HEAD` local | `dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao` |
+| `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
+3aa5e2b6 [O26] O 12x36 passa a poder declarar o horario do dia em que o plantao cai
+e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2
 5ca0baaf O topo do TICKETS fechado no ato do push (O112)
-37a79e5d [F2] MEDIDA sob o portao: o art.130 ja existe, a F2 e a VISAO -- e a pergunta que sobra e juridica
-7770f914 O topo do TICKETS fechado no ato do push (O112)
-0c1d6bf4 [O27] A linha do TICKETS da fatia MEDIDA
 ```
 
 ## `git status --short`
@@ -93,44 +93,44 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Seguindo. O próximo que anda é o O26 — o portão dele era "logo após o item 1", e o item 1 era o O25, que fechou às 10:35. Já tenho o censo medido e o
-  selo escrito; preparo a cura enquanto o push 84 libera a pista:
+  └────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Ran 5 shell commands
+  Três coisas que vale você saber sobre como ela ficou:
 
-● Seguindo a fila: O26 — W12X36-HPD é o próximo que anda, e o portão dele abriu quando o O25 fechou (ele era o "item 1").
+  1. A cura é uma linha, e a razão do corte está escrita junto. A exclusão de 09/09 dizia "12x36 tem grade própria: âncora + ciclo de 24h" — e ela caiu
+     porque a grade por dia não compete com a âncora: quem decide se o dia é plantão continua sendo eh_dia_trabalho; ela só diz o horário de quando o
+     plantão cair ali. O modelo já respeitava desde a S150.
+  2. O rótulo é dele, não emprestado. A ajuda da cíclica fala de "sábado de meio período" — história do 6x1, onde o dia da semana decide o expediente. No
+     12x36 a frase passou a ser "quando o plantão cair neste dia, o horário é este — a escala continua decidindo quais dias são plantão". Texto emprestado
+     ensinaria o admin a pensar em semana onde o sistema pensa em ciclo.
+  3. Um caso meu nasceu vácuo e eu o corrigi no mesmo ato: a primeira versão procurava a palavra "plantão" no arquivo inteiro, e o template já a usava —
+     ou seja, passava antes da cura. A âncora virou a frase do ramo. E caí de novo na lápide do heredoc sem quote: o bash executou os backticks e comeu
+     dois nomes da linha do TICKETS; reparei antes do commit.
 
-  A fatia está pronta em cópia, com o censo já medido na sombra sustentando cada decisão:
+  Pedi o seu clique no AVAIS (W12X36-HPD-SMOKE), porque é a mesma tela que o irmão W6X1 subiu com smoke seu — mas com o risco medido em zero: nenhuma
+  escala existente muda, o que muda é a capacidade de declarar.
 
-  - a lista: COM_GRADE_POR_DIA ganha '12x36' — a mesma linha única que o W6X1-HPD curou em 10/09, com a lápide explicando por que o corte de 24/09 revoga
-    a exclusão de 09/09 (a grade por dia não compete com a âncora: quem decide se o dia é plantão continua sendo eh_dia_trabalho; a grade só diz o horário
-    daquele dia, e marcos_do_dia já respeita por weekday desde a S150);
-  - o rótulo é dele, não emprestado (LEI-AKITA 8): a ajuda da cíclica fala de "sábado de meio período", que é a história do 6x1, onde o dia da semana
-    decide o expediente. No 12x36 a frase passa a ser "quando o plantão cair neste dia, o horário é este — a escala continua decidindo quais dias são
-    plantão". Texto emprestado ensinaria o admin a pensar em semana onde o sistema pensa em ciclo, e o primeiro cadastro errado sai daí;
-  - o selo tem 6 casos, incluindo o hpd vazio idêntico a hoje — que é o "DIFF 0 na frota" que o corte pede, e aqui ele é garantido por construção: dos 128
-    tipos 12x36 cadastrados, zero declara horarios_por_dia.
+✻ Worked for 5m 32s · done 11:48 AM · 7 shells still running
 
-  O universo que a fatia serve está medido: 338 vínculos ativos e 1.307 plantões de fim de semana na competência (26,7% de 4.902), hoje todos obrigados ao
-  horário do dia de semana.
+● Background command "Fecha o O26 e empurra" completed (exit code 0)
 
-  Aplico assim que a suíte do push 84 liberar a pista — e, por ser tela de cadastro (a mesma do irmão W6X1, que subiu com "smoke do Ronald aprovado"), vou
-  pedir o seu clique no AVAIS depois do deploy.
+  Ran 1 shell command
 
-✻ Brewed for 6m 50s · done 11:39 AM · 9 shells still running
+● Seguindo a fila. Listando o que vem depois do O26 para achar o próximo com portão aberto:
 
-❯ segue a fila; PAREI so em lei ou !
+  Ran 2 shell commands
 
-● Pushing 84 e a pista · 44s
-  ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED|RED --" logs/push84.log; then break; fi; sleep 10; done;
-     grep -E "^(To https|pos_push|error:)" logs/push84.log | tail -3; git log --oneline -1; docker ps --format '{{.Command}}' | grep -c manage (44s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● O39 está suspenso pelo O44 (o próprio item diz). O próximo livre é o O41 — GEOFENCE-VALIDAR-SEM-VOLTA, com RED de print dele. Lendo a fatia inteira e os
+  sítios:
 
-✢ Bloviating… (53s · ↓ 421 tokens)
+● O que a funcao resp faz (a volta)
+  ⎿  $ grep -n "_resp = \|def _resp" -A 14 chamados/views.py | sed -n '1,30p'
+
+· Meandering… (51s · ↓ 2.5k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 9 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
