@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 21:13:06.**
+**Medido em 01/10/2026 21:18:31.**
 
 | | |
 |---|---|
@@ -95,44 +95,44 @@ edea15bc CORRECAO minha, e a tabela que decide: a troca ainda cria +129,70 h de 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A GESTAO-HE partida em duas está registrada, e a fatia 2 não se perdeu — o código dos três patches está em duas cópias: o pedido de patch com
-  arquivo:linha no RELATO da raia (21c4826e) e uma cópia de trabalho onde eu já havia aplicado os patches 1 e 3, compilando. A célula
-  GESTAO-HE-FATIA-2-LOTE-E-LIMITE guarda os dois ponteiros, mais os REDs a escrever e a sua decisão do limite (opção b, o limite filtra contador e ato),
-  para quando ela tiver a vez depois da troca da S5b.
-
-  Um detalhe do que eu já tinha construído na cópia, que vale guardar: eu pus o <= do limite em um sítio só (enriquecer, quando linha['dias'] nasce), e
-  fiz a tira e os dois contadores lerem a chave em vez de recomparar — dois <= para a mesma pergunta divergem na primeira borda, e a borda aqui é o minuto
-  exato do limite.
-
-  A fatia 1 voltou para o agente na raia, com o que a sua ordem muda no desenho dele: o fundo cheio no dia de HE é novo, a barra única sai (vira fatia 2)
-  e o clique passa a disparar a porta por dia que já existe — ponto:decidir_he, a mesma do botão "Autorizar +N min" da linha, com a confirmação e o motivo
-  que ela já pede. Instruí explicitamente a não apagar nada: a barra, o limite e os selos que afirmam sobre eles mudam de fatia, não desaparecem — e
-  nenhum selo verde pode afirmar sobre coisa que não está na tela.
-
-  E há uma consequência boa dessa partição que vale dizer: a fatia 1 não tem janela de perigo. Ela usa uma porta que já está no ar, então merge e deploy
-  não dependem de nenhum .py antes — o problema de ordem que eu levantei (patch 1 → deploy → merge) passa a valer só para a fatia 2.
-
-  Enquanto isso a suíte cheia da main terminou de rodar sobre as duas curas de contrato; vou ler o veredito e, com ela verde, fazer o deploy que o selo do
-  import tardio cobra e então as três curas da S5b — que é o que a sua ordem anterior pedia para eu preparar em cópia.
-
 ✻ Waiting for 1 background agent to finish
 
 ● Monitor event: "veredito final da suite do AVAIS"
 
-● Escrever o selo que torna a fronteira estrutural
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/s5b/app && cat >
-     ponto/tests/test_fronteira_pontualidade_completa.py <<'PYEOF'
-     # -*- coding: utf-8 -*-
-     """A FRONTEIRA DO CALCULADOR COM O TETO DO MOTOR E COMPLETA -- e isto deixa de ser promessa…
+  Ran 7 shell commands
 
-✽ Hatching… (4m 6s · ↓ 11.3k tokens)
+● Marco fechado e no ar: suíte canônica Ran 9161 tests, OK (skipped=25), deploy.sh com prova de casca e três rotas, e o selo que cobrava o deploy agora
+  morde do lado certo — IMPORT_TARDIO acusados=0, e ele mesmo declara que "o 500 de hoje volta a ser acusado quando o ar é o commit de antes", que é a
+  prova de que não passou por ausência de sinal. Push do marco lançado.
+
+  E preparando a cura (a) da S5b em cópia, eu achei o que explica por que ninguém viu nada por duas horas — e é uma promessa quebrada que estava escrita
+  no código.
+
+  A lápide de _PeriodoPontualidade dizia: "se um dia ele passar a ler um sexto campo, este __slots__ quebra em VOZ ALTA (AttributeError no selo) em vez de
+  o calculador passar a divergir calado". Às 19:26 o motor ganhou a guarda de turno aberto, que lê três campos novos. O AttributeError nunca aconteceu —
+  porque a minha guarda lê por getattr(p, campo, default), de propósito, para tolerar o SimpleNamespace que os selos fabricam. A fronteira prometeu
+  quebrar e o meu getattr a calou. O resultado é o número que você já tem: +129,70 h de atraso cobrados em dias que o motor não julgava.
+
+  Então a cura (a) não é só acrescentar os três campos. A proteção muda de natureza: ponto/tests/test_fronteira_pontualidade_completa.py varre por AST os
+  atributos que _aplicar_teto_pontualidade lê e escreve no período — nas duas formas, p.campo e getattr(p, 'campo', …) — e cobra que todos estejam no
+  __slots__. Campo novo no teto fica vermelho no commit, não na esperança de uma exceção que um getattr legítimo engole. E tem o par que morde dos dois
+  lados: um caso fabricado prova que o varredor vê as duas formas, e outro proíbe o __slots__ de crescer por conforto — campo que o teto não toca é a
+  fronteira virando cópia do motor, que é o que a própria lápide proíbe.
+
+  Na cópia (scratchpad/s5b/app), compilando e com ruff limpo: a fronteira completa, os três campos viajando do par que o chamador já tem — importar a
+  guarda, não escrever regra nova, como você disse — e o selo estrutural.
+
+  Faltam as curas (b) a guarda do T8 e (c) a hora negativa, mais os REDs e o DIFF refeito. A (c) eu ainda não vou curar: col235 tem 00:00E 01:01S 05:00S,
+  duas saídas seguidas, e a casa já registrou que clampear em zero seria band-aid — esconderia o dia errado. Primeiro meço de onde vem o sinal negativo.
+
+✻ Waiting for 1 background agent to finish
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ medir de onde vem a hora negativa; segue a fila
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
 
   ● main
-  ◯ general-purpose  Trimming state cell in BACKLOG.md                                                                         16m 49s · ↓ 393.9k tokens
+  ◯ general-purpose  Re-running test_tela_gestao_he_calendario suite                                                           22m 16s · ↓ 394.2k tokens
   ⧉  index
 ```
