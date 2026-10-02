@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:56:01.**
+**Medido em 02/10/2026 09:01:13.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ```
  M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,11 +97,6 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  MUDA: core/management/commands/lavrar_placar_situacional.py:71 conta led == 'amarelo', e o LED fica vermelho com disputa aberta -- passa a contar pelo
-  MESMO predicado do global (a linha carrega o veredito do juiz).
-  RED: soma de op_em_turno das empresas == op_em_turno global (hoje 37 x 139).
-
-  (C) op_justif
   MUDA: situacional.py:141 conta TODAS as justificativas pendentes da casa, e o lavrador (:72) repete esse total em cada empresa -- passa a contar as
   pendentes dos colaboradores do recorte recebido.
   RED: soma das empresas == global; recorte de uma praca != total da casa.
@@ -122,15 +118,20 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 
 ● A chave é total_trabalhadas — e no col155 ela já bate com o gravado (242,81). Refazendo o DIFF com a chave certa:
 
-● A tela contra o gravado, com a chave certa · 1m 30s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY'
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/jan20_vs_gravado.py'
-     s=open(p,encoding='utf-8').read(… (1m 30s · 3 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Hullaballooing… (1h 22m 28s · ↓ 117.6k tokens)
+● Background command "Linha no TICKETS e push" completed (exit code 0)
+
+● Medição decisiva, e ela refina a premissa do item: a cura move o dia a dia, não os totais.
+
+  RED com a janela de 12 h
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
+     bin/recursos.sh && teste_envfile >/dev/null && echo "===== RED (janela de 12 h, HEAD):" && cp
+     $S/jan20/app/ponto/tests/test_janela_da_autoridade_e_a_da_folha.py…
+
+* Hullaballooing… (1h 27m 40s · ↓ 122.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                                   2% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
