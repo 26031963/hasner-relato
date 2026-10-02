@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR**, e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:16:19.**
+**Medido em 02/10/2026 10:21:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando` |
+| `HEAD` local | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
 | `origin/main` | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,16 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
+0ac1d8a5 [O21] O hash e a hora do deploy nos tres docs (10:16, f4693856)
 f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando
 d9538116 O topo do TICKETS fechado no ato do push (O112)
 9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL
-24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo
-8e085c33 [PAINEL-SITUACIONAL-N+1] Os dois censos que a suite acusou eram de ANCORA: o sitio mudou de lugar, a lei nao
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
+ M app/docs/HANDOFF-SESSAO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,44 +96,44 @@ d9538116 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
 
-● Antes de aplicar: a mesma lápide que acabei de pagar no lavrador vale aqui — quando é UTC no banco e o payload precisa sair local:
-
-  Ran 1 shell command
-
-● Background command "Espera por arquivo de sinal, nao por pgrep" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Push 78 OK às 10:08 (9.285 + 22 testes, 46e90bfa..9bbb6f4b no remoto). Pista livre — O21 agora, RED primeiro:
+● Portão da F2 está fechado: 8/22, não 22/22 — e o selo dela é literal ("não construir antes de 22/22"). Portão declarado não devolve turno: avanço o que
+  ela espera. Lendo a matriz:
 
   Ran 2 shell commands
 
-● Background command "Confere o fim do push" completed (exit code 0)
+● F2 segue no portão (8/22 medido); o que anda é o que ela espera. A célula turno/marcos × um juiz depende de uma lista de pendentes vazia — e hoje ela
+  caiu de 2 para 1. Vendo o que sobrou:
 
   Ran 1 shell command
 
-● RED do O21 evidenciado — e a linha que o resume: "quatro decisões DIFERENTES saíram com 1 desenho no app: [(None, None, None)]". Aplicando a cura:
+● Achado de alto retorno: duas células da matriz dependem do mesmo sítio — escala/utils.py::minutos_realizados_do_dia. Lendo o pendente por inteiro e o
+  sítio:
 
   Ran 1 shell command
 
-● 8 de 9 verdes. O que caiu foi minha expectativa, não o código: em_aberto nasce de datas_em_aberto, que o folha_manda monta do furo apurado — sem célula
-  gerada a fixture não produz furo. Troco por um invariante que não inventa:
+● O pendente de dinheiro grava na ata que a prontidão e o supra-juiz leem — e a L-096 congela dinheiro e célula. Conferindo a lei antes de tocar:
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Medido em prod (120 colabs, só leitura): 3.432 de 7.693 dia-colab passam a ter palavra — Férias (abonado) verde, Atestado aguardando decisao amarelo,
-  INSS 15+ (sem previsao) cinza, 5 rejeitados laranja. Fechando a fatia:
+● A obra em voo é a própria S5b, e a L-096 a protege: mover o realizado da grade agora mudaria o DIFF que está na mesa dele. O que anda sem tocar número é
+  o censo que a matriz diz faltar "primeiro":
 
-● Committing do O21 · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bin/deploy.sh --sem-migrate 2>&1 | tail -10; date +%H:%M:%S
+  Ran 2 shell commands
 
-· Hullaballooing… (2h 42m 45s · ↓ 327.1k tokens)
+● A fila 1 estrutural está travada em três pontos que são dele (frases de corte do juiz novo, a obra S5b em voo, a escolha nos parâmetros sem efeito).
+  Pergunta de lei não devolve turno — vendo o que anda:
+
+  A ordem viva e o estado da fila 2 em raia propria
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '155p' app/docs/BACKLOG.md | fold -w 160 | head -24
+
+✢ Hullaballooing… (2h 48m 8s · ↓ 342.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
