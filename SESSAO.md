@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 06:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.1 MB). Acoes na janela: **975**.
+**Medido em 02/10/2026 06:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.1 MB). Acoes na janela: **972**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 06:09:14 | Bash | Veredito do push 70 | `cd /home/ronald/saas-hasner && until grep -qE "pos_push\|error:" logs/push70.log; do sleep 20; done; tail -4 logs/push70.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"` |
+| 06:09:08 | Bash | Estado do push 70 | `cd /home/ronald/saas-hasner && tail -3 logs/push70.log; date '+%H:%M'` |
 | 05:59:04 | Bash | Esperar o push do O23 | `cd /home/ronald/saas-hasner && until grep -qE "pos_push\|error:" logs/push70.log; do sleep 30; done; tail -4 logs/push70.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"` |
 | 05:58:59 | Bash | A fonte declarada do O45 | `cd /home/ronald/saas-hasner && python3 - <<'PY' import re for l in open('app/docs/BACKLOG.md',encoding='utf-8'): if re.match(r'^\\| O45 \\|', l): c=l.split(' \| ') print(c[1][500:1800]) break PY` |
 | 05:58:49 | Bash | Ler os proximos itens livres | `cd /home/ronald/saas-hasner && python3 - <<'PY' import re for alvo in ('O41','O43','O45'): for l in open('app/docs/BACKLOG.md',encoding='utf-8'): if re.match(r'^\\| %s \\|' % alvo, l): c=l.split(' \| ') print('=== %s' % alvo); print(c[1][:520]); print(' ESTADO:', c[2][:90]); print() break PY` |
@@ -980,8 +982,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:11:06 | Bash | Ver os textos de alerta de atraso e os chamadores do teto | `grep -n "alertas.append" ponto/motor_calculo_v2.py \| grep -iE "atraso\|antecip\|Sa" \| head -20; echo "=== chamadas do teto ==="; grep -n "_aplicar_teto_pontualidade" ponto/motor_calculo_v2.py` |
 | 18:10:55 | Bash | Ler a regiao editada do motor | `sed -n 800,890p ponto/motor_calculo_v2.py` |
 | 18:10:48 | Bash | Conferir que localizar existe no motor | `grep -n "^def localizar\\|^from\\|^import\\|localizar(" ponto/motor_calculo_v2.py \| head -20; echo "--- turno_aberto ---"; grep -n "turno_aberto" ponto/motor_calculo_v2.py \| head` |
-| 18:07:27 | Bash | Aplicar a cura do turno aberto no motor | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='ponto/motor_calculo_v2.py' t=io.open(P,encoding='utf-8').read() a = """ for dia, ps in por_dia.items(): prev = self._previsto_do_dia(dia) if prev is None: continue # sem juiz do previsto: nao ha teto a aplicar""" assert t.count(a)==1 t=t.replace(a, """ for dia, ps in por_dia.items(): # TURNO ABERTO E PAR NULO NAO SE JULGAM (aval Ronald 01/10 ...` |
-| 18:07:03 | Bash | Ver o laco por dia do teto | `sed -n '826,836p' ponto/motor_calculo_v2.py` |
-| 18:06:59 | Bash | Ver o turno_aberto e o inicio do teto | `grep -n "turno_aberto" ponto/motor_calculo_v2.py \| head -6; sed -n '836,845p' ponto/motor_calculo_v2.py` |
-| 18:06:44 | Bash | Registrar as leis e limpar o topo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # (1) PROMPTS P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() L = ('- **01/10 ~18:1x — LEI (1) RESPONDIDA e PONTUALIDADE-EM-TURNO-ABERTO avalizada.** (1) a cura do T8 ' 'vale **RECORTADA** -- L-084 so no dia que DECLARA intervalo; sem marco de intervalo o gate de 14/09 ' 'segue. **A literal esta desca ...` |
-| 18:06:01 | Bash | Publicar o achado dos sete zerados | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='docs/RELATO.md' t=io.open(P,encoding='utf-8').read() A = t[t.index('\n## ')+1:].split('\n')[0] NOVO = '''## ACHADO DE PROD, e ele fura a fila: **7 colaboradores ATIVOS bateram ponto e tem fechamento ZERO** Eu estava medindo a outra metade do DIFF (`horas_trabalhadas +113,52 h`) e os dois maiores eram `col43` **+88,32 h** e `col924` **+75,12  ...` |
