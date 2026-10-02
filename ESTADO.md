@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:92 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:39:36.**
+**Medido em 02/10/2026 17:44:52.**
 
 | | |
 |---|---|
-| `HEAD` local | `12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu` |
+| `HEAD` local | `3b9f91ac [PROMPTS] aval 02/10 17:5x: quatro respostas (F2 no portao, censo batida+escala, lei O25, 720)` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **34** |
+| commits a subir (`ahead`) | **36** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3b9f91ac [PROMPTS] aval 02/10 17:5x: quatro respostas (F2 no portao, censo batida+escala, lei O25, 720)
+adce0fe4 [S5b] DIFF DA TROCA PUBLICADO: as tres rubricas novas batem EXATAMENTE com o gravado
 12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu
 da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida
 abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
-c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script
-c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/PENDENTES_RONALD.json
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -93,42 +94,42 @@ c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito ac
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2864 e cego_horas_extras_100_noturna: 2864 — as duas rubricas novas estão declaradas cegas em 2.864 de 3.103 dia-colab. Leio a tabela:
 
   Ran 1 shell command
 
-● O DIFF prova o essencial — o número do calculador é exatamente o do gravado: 50_noturna 1,31 e 100_noturna 3,99, idênticos aos totais
-  que medi no FechamentoMensal. "A troca não muda número" está medido, não prometido. Atraso e antecipada seguem com 0 dia-colab
-  divergente.
-
-  Mas o contador denuncia um excesso meu: 2.864 de 3.103 dia-colab saem "cegos" nas duas rubricas novas — e dia sem HE nenhuma não é
-  desconhecido, é zero conhecido. Declarar ignorância onde há conhecimento é o [] de dois sentidos ao contrário, e some com a comparação
-  (466 colabs "fora da conta"):
+● Duas correções: minha regex não pegou a constante (parênteses aninhados), e o vocabulário de decisão é ['!', 'aval', 'corte',
+  'corte-dado', 'lei', 'ok-desenho', 'smoke'] — "pauta DP" não existe nele:
 
   Ran 1 shell command
 
-● Background command "Esperar o DIFF das sete peças" completed (exit code 0)
+❯ smoke Ronald O114: REPROVADO. Medido em PROD as 17:43 pela funcao real: as celulas do col221 em 30/09 e 01/10 seguem com dna_versao 2 e
+  QUATRO marcos (hi 07:00, hii 09:15, hfi 10:40, hf 19:00); espelho_do_colab monta quatro celulas por dia; no calendario as batidas
+  14:17 e 15:40 seguem com o asterisco laranja, de 22/09 a 30/09. O "seis marcos" do seu aval foi medido na SOMBRA. Responder com PROVA
+  em prod: (a) o merge e o deploy do O114 aconteceram, com hash e hora? (b) o item (5) do aval das 15:5x, regenerar pela porta as celulas
+  do ec1345 desde 21/09, foi executado? Fazer o que faltar e me devolver o smoke so depois de medir em PROD o dna com seis marcos e a
+  grade com seis celulas. O calendario do colaborador tambem tem de mostrar as seis: conferir o leitor dele. segue a fila; PAREI so em
+  lei ou no criterio (2) !
 
-● O selo falhou e a causa é ele, não o código: recalcular_fechamento_mes tem um try grande em volta do corpo por colaborador, então o try
-  do oráculo está aninhado nele — e minha asserção contava os dois. Corrijo para olhar o mais interno:
+● Smoke reprovado com razão, e a causa é uma omissão minha clara: o item (5) do seu aval das 15:5x — regenerar as células do ec1345 — eu
+  registrei e não executei. Respondo as duas perguntas com prova e faço o que falta.
 
-● Corrigir o selo e rodar os seis
-  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
-     import io, py_compile
-     p='ponto/tests/test_s5b_troca_ligada.py'
-     s=io.open(p,encoding='utf-8').read()
-     a = """ fn = _fn_lavratura()
-     tries = [n for n in ast.walk(fn) if isinstance(n, ast.Try)]
-     com_rub = [t for t in tries
-     if any(isinstance(c, ast.Call)…
+  (a) Merge e deploy aconteceram: commit a2e903e1, merge e deploy no mesmo ato às 17:10:45, com as três rotas provadas. (b) A regeneração
+  não foi executada — e sem ela o código novo não reescreve célula nenhuma, porque célula é DADO congelado.
 
-✽ Doodling… (2h 18m 23s · ↓ 422.4k tokens)
+  DRY da regeneração das células do ec1345
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/regen_ec1345.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """ITEM (5) do aval 15:5x, que eu REGISTREI E NAO EXECUTEI: regenerar pela porta as celulas
+     do ec1345 desde 21/…
+
+✽ Doodling… (2h 23m 39s · ↓ 441.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
