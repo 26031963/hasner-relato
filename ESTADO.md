@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:41:31.**
+**Medido em 02/10/2026 02:46:38.**
 
 | | |
 |---|---|
@@ -95,7 +95,6 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Push dos 25 commits" completed (exit code 0)
 
 ● Background command "Esperar a pista do push liberar" completed (exit code 0)
 
@@ -118,16 +117,17 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 
 ● Background command "Esperar o bloco da sombra" completed (exit code 0)
 
-● Imprimir a rubrica no mesmo ponto dos pares
+● Os pares com SEGUNDOS
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      p='app/ponto/management/commands/diff_calculador.py'
      s=open(p,encoding='utf-8').read()
-     anc = """ if o['abrir_he50'] and float(_r_dia.valores.get('horas_extras_50') or 0) > 0:"""
-     assert s.count(anc)==1
-     novo = """ if o['colab']:
-     self.stdout.write(' RU…
+     old = """ if o['colab'] and _pont:
+     self.stdout.write(' PARES col%s %s: %s' % (
+     c.pk, k, ' | '.join(
+     '%s->%s m(%s->%s) trab=%s fora=%s' % (
+     tz.localtime(_x[0]).str…
 
-✢ Unfurling… (1h 42m 26s · ↓ 149.7k tokens · thinking more)
+✻ Unfurling… (1h 47m 33s · ↓ 153.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
