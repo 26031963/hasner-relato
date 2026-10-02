@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:00:45.**
+**Medido em 02/10/2026 10:05:45.**
 
 | | |
 |---|---|
@@ -94,44 +94,44 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 8e085c33
+  │ HAIKU (a)(b)(c)                │ 4ª ferramenta de leitura + ponte + golden  │ "quantos em turno agora na empresa 2?" → 119, rótulo "em turno      │
+  │                                │                                            │ agora", lavrado 09:54                                               │
+  └────────────────────────────────┴────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────┘
 
-● Agora o HAIKU (ordem (a)+(b)+(c)) na árvore, com o DENTES regenerado:
+  Dois achados que viraram cura no caminho: o censo do ativa me pegou copiando a dívida da O68 (virou um carregador, _escalas_da_ata), e o log do lavrador
+  escrevia 12:54 por 09:54 (UTC cru — curado).
 
-  Committed 24f57549, ran 7 shell commands
+  O21 já está em construção (o próximo da fila 1, como o hook cobra): medi em prod que o leitor que não migrou é o APP — 615 dia-colab com decisão humana
+  na competência, 117 deles não-abonados saindo com a palavra errada. O patch da fiação (as três portas que a grade usa, chaves aditivas
+  veredito_dia/palavra_dia/cor_dia/decidido_por/decidido_em) e o selo de 7 casos estão prontos em cópia — aplico na árvore no instante em que a suíte do
+  push liberar a pista, para não trocar o código debaixo dela.
 
-● Deploy agora (DEPLOY JÁ; ensaio da sombra de hoje OK, sem migration):
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
 
-  Ran 1 shell command
+  Searched for 2 patterns, ran 2 shell commands
 
-● Deploy OK às 09:54 — e ele reiniciou as três cascas, mensageria inclusa. Provas em prod:
+● Achado que muda o desenho: a porta que aplica as três chaves já existe — espelho.py::aplicar_palavra_do_dia, usada pela tela e pelo cartão (LEI-AKITA
+  4). Vendo se o app alcança os insumos dela:
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 3 shell commands
 
-● Bug provado no caminho (LEI-AKITA 6): o lavrador imprime 12:54 para 09:54 — agora cru em UTC, a mesma lápide do HAIKU-EXPORT. Cura na hora:
+● Isso muda o desenho para melhor: api_espelho_v2 já chama espelho_do_colab, que devolve dias com as três chaves aplicadas — e o app joga fora e remonta.
+  Vendo a fonte do hover que a grade usa:
 
-  Committed 9bbb6f4b, ran 9 shell commands
+  Searched for 1 pattern, ran 4 shell commands
 
-● Marco fechado e push 78 em voo. O hook aponta o próximo da fila 1 — O21. Lendo, enquanto a suíte roda (preparo é paralelo; commit não):
+● O desenho fica melhor e mais barato: o app já tem a palavra montada em _esp['dias'] (a porta única) — não preciso das 3 portas que medi. Refazendo o
+  patch:
 
-  Searched for 8 patterns, ran 8 shell commands
+  Running 1 shell command…
 
-● O21 é fiação: o app monta ok/alerta sozinho enquanto a grade e o cartão já leem do_dia. Medindo o custo da porta antes de ligar:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Medido em prod: +10 queries / ~15 ms por colab nas três portas, e 615 dia-colab com decisão humana na competência — 478 abonado, 109 suprimido, 6
-  descontado, 2 rejeitado (os 117 que o app pinta igual; Ronald mediu 112 às 06:1x). Palavras reais: INSS 15+ (sem previsao), TROCA DE PLA rejeitado.
-
-  Como o selo autentica no endpoint do app
-  ⎿  $ sed -n '1,70p' api/tests/test_t42_espelho_v2_celula.py
-
-· Hullaballooing… (2h 27m 12s · ↓ 280.3k tokens)
+· Hullaballooing… (2h 32m 12s · ↓ 297.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
