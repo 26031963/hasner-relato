@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:10:45.**
+**Medido em 01/10/2026 23:15:45.**
 
 | | |
 |---|---|
@@ -95,22 +95,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Message queued for delivery to a6628ec7e07379c89 at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
-  Ran 2 shell commands
-
-● A ordem consolidada está repassada e registrada, e você acertou a cura melhor do que eu. Eu tinha sugerido ao agente o !important inline — que venceria
-  a linha 371, mas deixaria a tela brigando com a folha para sempre. A sua decisão é o contrário: a célula sai de baixo da regra global em vez de lutar
-  com ela — type="button" + htmx na mesma porta decidir_he, mesma confirmação, mesmo motivo. Nada de !important, nada de tocar a regra global.
-
-  A causa está publicada com arquivo e linha, como você pediu: hasner-ponto.css:369-373 pinta todo button[type="submit"] com background: var(--hp-blue)
-  !important (#0078d4) e color:#fff !important. A célula virou submit no commit de 20:5x — foi assim que ela passou a disparar a porta por dia, que era a
-  sua ordem — e caiu nessa regra. O template estava certo desde as 22:16; ganhou a cascata.
-
-  E a parte que me cabe dizer de frente: o selo ficou verde porque nunca perguntou ao navegador. Ele leu o token declarado no markup e o resolveu lendo
-  hasner-ui.css — prova de intenção, não de resultado. O test_smoke_chromium que rodou no mesmo ciclo abre o espelho, não essa tela. A seção 6 do
-  CLAUDE.md diz exatamente para que o chromium existe: "ele responde o que regex de markup não responde: CASCATA". Eu tinha a ferramenta e não a apontei
   aqui.
 
   Você também achou um segundo sítio que eu não tinha visto: a linha 139 tem um botão de envio com fundo slate-100 no style, coberto pela mesma regra
@@ -126,13 +110,29 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
   S5b, que é onde a sua ordem manda a fila seguir depois.
 
 ✻ Waiting for 1 background agent to finish
+
+❯ aval Ronald 01/10 23:1x GESTAO-HE fatia 1 -- consolida e SUBSTITUI os avais de 23:0x. So template.
+  CAUSA PROVADA do azul (print 22:57, depois da correcao das 22:16): templates/ponto/gestao_he.html:221 faz da celula um <button type="submit">, e
+  static/css/hasner-ponto.css:369-373 pinta todo button[type="submit"] com background var(--hp-blue) !important e color #fff !important. Os tokens suaves
+  estao la, por baixo.
+  CURA: a celula deixa de ser botao de envio -- type="button" com o disparo por htmx na MESMA porta decidir_he, mesma confirmacao e mesmo motivo. Nao
+  brigar com !important, nao tocar a regra global.
+  CORES: ficam os TOKENS que voce ja pos as 22:16; os hex do aval das 23:0x nao valem.
+  LED: o LED da casa, copiar de templates/colaboradores/partials/painel_situacional.html:282-285 -- circulo cheio de 11px (nao 5px): cinza #cbd5e1 pelo
+  token equivalente = bloqueado, verde = autorizado; ciencia com o anel, como voce fez.
+  CONFERIR a linha 139: botao de envio com fundo slate-100 no style, que a mesma regra tambem cobre.
+  PROVA antes de dizer pronto: getComputedStyle da celula com HE no chromium = o rgb do --hx-primary-bg (219, 234, 254), nas duas cascas. O selo de
+  luminancia passa a ler a tela renderizada, nao o arquivo de cores.
+  Merge direto, print do col207 no RELATO, AVAIS com o meu smoke. Depois, de volta as curas da S5b. Segue a fila.
+
+✶ Shimmying…
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  paste again to expand
 
   ● main
-  ◯ general-purpose  Reading hasner-ponto.css cascade rule                                                            3m 3s · ↓ 474.1k tokens · 1 queued
+  ◯ general-purpose  Checking STATIC_ROOT in config/settings/base.py                                                             8m 2s · ↓ 500.7k tokens
   ⧉  index
 ```
