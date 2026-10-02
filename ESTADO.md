@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:02:43.**
+**Medido em 02/10/2026 17:08:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL` |
+| `HEAD` local | `d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **22** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push
 01704a2b [O114] O smoke do col221 na fila dele, com o que tem de ficar IGUAL
 ec2e3b9f [O114] A raia fechou: 2 commits, dinheiro zero, e dois contornos de DINHEIRO de carona
 8784fecd [S5b] A celula do BACKLOG dentro da DIETA (a assercao recusou 347 chars)
 811f4235 [S5b] 113 selos verdes, e o RED foi MEIA-CORRECAO minha pega pelo meu proprio selo
-dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2
 ```
 
 ## `git status --short`
@@ -94,15 +94,10 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Escrever "verde" sem essa distinção seria o selo afirmando sobre a saída o que só olhou na fiação — a família de vacuidade que custou
-  quatro casos em 01/09.
+  e O116, este último com cura e DIFF em cópia); o censo fechou em 13 dos 15 campos com dono; seis peças da troca estão construídas em
+  cópia com selos que mordem; e o O114 chegou pronto da raia, esperando apenas o verde para entrar com deploy no mesmo gesto.
 
-  O segundo caso guarda a trava do juiz novo: vinculo_do_dia tem de ser consultado dentro de rubricas_por_dia, para que não nasça um
-  segundo critério de "qual vínculo neste dia".
-
-  A suíte do O114 está nos cinco minutos. A ordem quando ela fechar continua a mesma e não muda: ato único de merge e deploy, push, e
-  depois os selos da S5b mais o DIFF refeito — porque a mudança de hoje altera o próprio DIFF, que vinha sendo medido com uma escala só
-  para o colaborador inteiro.
+  A S5b segue travada numa única coisa, e ela é sua: onde se ancora o trecho extra quando o dia tem mais de um par.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
@@ -110,20 +105,25 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 
   Ran 2 shell commands
 
-● ruff passou, mas deixei lixo meu: um for ... pass com comentário, que é código morto disfarçado de intenção. Troco pela afirmação real
-  que ele prometia:
+● A suíte está avançando, não travada: o log cresceu 1.375 bytes em 25 segundos e o container está a 100% de CPU num núcleo da metade de
+  teste. Conferi em vez de supor, porque "está demorando" e "travou" são coisas diferentes e só uma delas pede ação.
 
-  Trocar o stub morto pela asserção real
-  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
-     import io, py_compile
-     p='ponto/tests/test_s5b_porta_unica.py'
-     s=io.open(p,encoding='utf-8').read()
-     a = """ for _proibido in ('filter', 'get_or_create'):
-     pass # a consulta crua a EscalaColaborador no laco por dia seria N+1 e juiz paralelo
-     """
-     b = '…
+  Vou parar de consultar a cada turno e deixar o monitor me chamar — ele está ancorado no veredito estrito agora.
 
-✢ Doodling… (1h 41m 30s · ↓ 298.8k tokens)
+  Todas as condições de fora estão verificadas, uma por uma: régua do TICKETS verde, ensaio da sombra de hoje com divergência 0,
+  interseção vazia entre os arquivos da raia e os da minha cópia, ruff limpo nas seis peças, 113 selos verdes até a penúltima, e a
+  mensagem do merge escrita com os números medidos. O ato único dispara no verde e vai sem intervalo até o deploy.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
+
+● Veredito da suíte
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -E "^Ran [0-9]+ tests?
+     in|^OK$|^FAILED \(" $S/o114_suite.log || echo "sem veredito; $(wc -l < $S/o114_suite.log) linhas, container $(docker ps --format
+     '{{.Status}}' --filter name=stupefied_carso…
+
+✢ Doodling… (1h 46m 48s · ↓ 313.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
