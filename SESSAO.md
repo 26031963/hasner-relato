@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 04:33:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.0 MB). Acoes na janela: **958**.
+**Medido em 02/10/2026 04:39:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.0 MB). Acoes na janela: **957**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -967,4 +967,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:43:22 | Bash | Relancar a suite com a pista provada vazia | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && nohup bash -c "cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; LABELS=\$(grep -oP '^LABELS=\"\K[^\"]+' bin/regua.sh); docker run --rm \$TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file \"\$TESTE_ ...` |
 | 16:43:14 | Bash | Ver quem usa o banco de teste | `cd /home/ronald/saas-hasner && docker exec juliani_db_test psql -U juliani -d postgres -t -c "select pid, datname, state, now()-query_start from pg_stat_activity where datname like 'test%' or datname='juliani';" 2>/dev/null \| head -6; echo "=== docker rodando suite? ==="; docker ps --format '{{.Names}} {{.Command}}' \| grep -c "manage.py test" ; pgrep -af "docker run.*manage.py test" \| grep -v s ...` |
 | 16:43:05 | Bash | Contar os erros e ver a causa | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -cE "^ERROR:" $S/suite_o20.log; grep -E "^(Ran \|OK$\|FAILED)\|^RC=" $S/suite_o20.log \| tail -4; echo "=== a causa do 1o erro ==="; grep -A 12 "^ERROR: test_painel_vinculo_render_sabado_11h" $S/suite_o20.log \| head -14` |
-| 16:35:28 | Bash | Esperar o fim da suite | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for i in $(seq 1 11); do sleep 50; if grep -q "^RC=" $S/suite_o20.log 2>/dev/null; then break; fi; done; grep -E "^(OK$\|FAILED\|Ran \|FAIL:\|ERROR:)\|^RC=" $S/suite_o20.log \| head -10` |

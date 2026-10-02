@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:33:31.**
+**Medido em 02/10/2026 04:39:01.**
 
 | | |
 |---|---|
@@ -122,11 +122,11 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Push do marco de leitura" completed (exit code 0)
 
-● Indexar a memoria e conferir o push · 2m 54s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push63.log; do sleep 30; done; tail -5 logs/push63.log (2m 53s)
+● Indexar a memoria e conferir o push · 8m 24s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push63.log; do sleep 30; done; tail -5 logs/push63.log (8m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (3h 34m 26s · ↓ 324.0k tokens)
+✢ Unfurling… (3h 39m 56s · ↓ 324.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
