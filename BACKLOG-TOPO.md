@@ -40,10 +40,10 @@ lista — ela e o que esta EM PE._
 | **O30** | AUSENCIAS-DRAWER-E-LOTE | espera aval |
 | **O31** | ESTEIRA-RETA-FINAL | **recebido -- obra de ESTEIRA/FABRICANTE |
 | **O32** | ZUMBIDO | **recebido -- obra de ESTEIRA/FABRICANTE |
-| **O33** | CARTAO-TOTAL-IGUAL-SOMA | **na fila, depois da F3** |
+| **O33** | CARTAO-TOTAL-IGUAL-SOMA | espera `!` |
 | **O34** | FATIA-ANCORA-ENVELHECE | espera `!` |
 | **O35** | CONTRATOS-14 | espera `!` |
-| **O36** | PRONTA-QUE-NAO-POUSA | **curado e no ar; 1 item filho (fabrican |
+| **O36** | PRONTA-QUE-NAO-POUSA | **NO AR** -- curado e no ar; o 1 item fi |
 | **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 | espera aval |
 | **O38** | VALIDACAO-QUE-NAO-GRAVA-DIZ-O-MOTIVO | **medindo** |
 | **O39** | REABRIR-LINHA-UI | **FRENTE DA FILA** |

@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:36:01.**
+**Medido em 02/10/2026 20:41:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
-| `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| commits a subir (`ahead`) | **11** |
+| `HEAD` local | `ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia` |
+| `origin/main` | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,23 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
 751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia
 bc0ce2ac [HOOK] Item no PORTAO nao anda, e o selo lia METADE do padrao
 b70febcc [TICKETS] As cinco linhas que faltavam -- a causa do push 88, em uma linha
 a85c89f5 [O115] Fechada como NO AR: as tres rubricas tem dono e 15 selos verdes no vivo
-da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral do deploy
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
- M bin/hook_stop_fila1.py
- M bin/tests/test_hook_nao_cobra_congelado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -100,42 +96,42 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  filho é do fabricante) e O94 (espera o ! — a cura de código já está no ar; falta a decisão sobre o gravado).
 
-  E falta o motivo obrigatório: a view não recebe motivo nenhum, só fechamento_id; a confirmação é um hxConfirmSubmit de texto fixo, e a
-  trilha não guarda por quê.
+  Essa caminhada de nove itens não foi desperdício: ela produziu a evidência do corte do marcador que está no topo da sua fila. Os itens
+  que o hook me mandou em sequência — O27, O28, O30, O31, O33, O34, O35, O89, O91 — estavam todos estacionados por texto seu, e o marcador
+  não conseguia dizer isso porque o selo o obriga a espelhar a tabela.
 
-  Então a fatia é: liberar o botão na linha trancada, exigir motivo, levá-lo à trilha, e a parte (2) do aviso no fio da disputa. Toca
-  template → precisa do seu smoke nas duas cascas (BUG 73).
+  Push 91: a suíte passou (Ran 9383 tests in 588.958s, sem falha) e ele está nas etapas finais. Não commito nada desta rodada até ele
+  pousar — e as células que eu escrevi estão no disco, prontas para entrar no commit seguinte.
 
-  Não commito nem toco a árvore com o push 91 ainda vivo — essa disciplina é o que me custou dois pushes hoje quando a quebrei. Construo
-  em cópia e aplico no ato do commit, assim que ele pousar.
-
-  Aviso o veredito do push e volto com a fatia. Na sua mesa seguem, com número: o ! do O119 (uma linha), a lei do O120 (gravado de 08/09
-  vs Pauta DP), o ! do O27 (1.757,97 h, três saídas nomeadas), o print do O118 e agora o print da O30 F1, que eu abri na sua fila porque a
-  lacuna era minha — a fatia estava pronta desde 24/09 e o pedido nunca foi feito.
+  O próximo passo é o O37: medir o DIFF na sombra da causa que já está medida. Começo por ele assim que o push liberar a árvore — e se a
+  árvore liberar antes, commito primeiro este lote de reconciliação (O33, O35, O36, O94, marcador, fora da sessao no hook + selo), porque
+  ele é o que explica a caminhada.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O31 -- ESTEIRA-RETA-FINAL (Ronald 24/09 17:xx, vale a partir de agora) -- (1) teto 6 de dia e 6 de
-  noite em esteira.s
+  ⎿  Stop hook error: siga: O37 -- UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 (BO Ronald 25/09 09:00, bug 1 -- a hipotese da fase vazia
+  caiu na medicao)
 
-● O O31 diz, nas suas próprias palavras, fora da sessao pelo proprio item 4. Essa forma é inequívoca — foi a única das quatro que eu
-  julguei segura. Acrescento só ela, e levo a você o padrão que está por baixo, porque ele é desenho e não caso:
+  Ran 1 shell command
 
-● Adding only the unambiguous form and its selo case
-  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^(OK$|Ran |To https|error|exit=)" logs/push91.log | tail -2; pgrep -f "git push origin
-     main" >/dev/null && echo "PUSH 91 VIVO" || echo "push 91 terminou"; python3 - <<'PY'
-     import io
-     p = 'bin/hook_stop_fila1.py'
-     s = io.open(p, encoding='utf-8').read()
-     velho…
+● Background command "Wait for push 91 verdict" completed (exit code 0)
 
-✢ Sock-hopping… (2h 23m 30s · ↓ 423.2k tokens)
+● Push 91 pousou — To https + exit=0, os 11 commits estão no remoto. Árvore livre: commito o lote de reconciliação antes de medir:
+
+● Committing the reconciliation batch
+  ⎿  $ cd /home/ronald/saas-hasner && git add bin/hook_stop_fila1.py bin/tests/test_hook_nao_cobra_congelado.sh app/docs/BACKLOG.md
+     app/docs/PENDENTES_RONALD.json && git commit -q -F - <<'MSGEOF'
+     [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
+     O hook me mandou a NOVE iten…
+
+✢ Sock-hopping… (2h 29m 0s · ↓ 446.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
