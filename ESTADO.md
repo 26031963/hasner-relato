@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:07:31.**
+**Medido em 02/10/2026 08:13:01.**
 
 | | |
 |---|---|
@@ -39,10 +39,12 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## `git status --short`
 
 ```
+ M app/core/juizes.py
  M app/docs/RELATO.md
  M app/ponto/management/commands/diff_calculador.py
  M app/ponto/motor_calculo_v2.py
  M app/ponto/services/espelho.py
+ M app/ponto/tests/test_contract_juiz_turno.py
 ?? app/ponto/tests/test_dia_da_jornada_e_legivel.py
 ?? app/ponto/tests/test_par_relampago_nao_se_julga.py
 ?? app/ponto/tests/test_perto_do_marco_e_o_mesmo_no_motor.py
@@ -101,15 +103,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Medindo a causa:
-
-  Ran 3 shell commands
-
-● Antecipada entrou em faixa: +29,96 → +6,80 h. Agora abrindo os que ainda ficam ACIMA do gravado — o critério (a) é literal:
-
-  Ran 1 shell command
-
-● Três causas nomeadas. Uma delas é curável lendo lei existente — o par de 8 segundos do col932:
 
   Searched for 1 pattern, ran 2 shell commands
 
@@ -128,13 +121,22 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● 2811 testes de ponto OK. Aplicando, e já emendando os itens (3) e (4) da sua ordem no mesmo marco:
 
-● Suites de ponto e escala com o delegate · 7m 30s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default
-     --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app -v
-     /home/ronald/saas-hasner/app/staticfile… (7m 30s)
+  Ran 8 shell commands
+
+● O contrato do juiz de turno está me cobrando o certo: o sítio foi curado, então sai da lista de pendentes — ela só encolhe.
+
+● Baixar o contador e rodar as tres suites · 3m 27s
+  ⎿  $ python3 - <<'PY'
+     p='ponto/tests/test_contract_juiz_turno.py'
+     s=open(p,encoding='utf-8').read()
+     old = """ def test_o_contador_e_o_tamanho_da_lista(self):
+     self.assertEqual(juizes.fora_de_autoridade(FAMILIA), len(juizes.PENDENTES_TURNO))
+     self.assertEqual(juizes.fora_de_autoridade(FAMILIA), 2)
+     zonas … (3m 27s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (33m 58s · ↓ 71.5k tokens)
+✢ Hullaballooing… (39m 28s · ↓ 75.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
