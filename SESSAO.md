@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 09:12:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (185.6 MB). Acoes na janela: **728**.
+**Medido em 02/10/2026 09:17:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (186.2 MB). Acoes na janela: **741**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:16:14 | Bash | Campos da Justificativa | `grep -n "class Justificativa" -A 25 ponto/models.py \| grep -nE "colaborador\|status\|class \|ForeignKey" \| head -20` |
+| 09:15:50 | Bash | adesao e o lavrador do placar | `sed -n '40,95p' ponto/services/adesao.py; echo "=== LAVRADOR ==="; cat -n core/management/commands/lavrar_placar_situacional.py` |
+| 09:15:16 | Bash | A view do lote | `sed -n '2554,2650p' colaboradores/views.py` |
+| 09:15:07 | Bash | A bifurcacao e o primeiro paint | `sed -n '2470,2560p' colaboradores/views.py` |
+| 09:15:01 | Bash | A view painel_situacional | `sed -n '2360,2470p' colaboradores/views.py` |
+| 09:14:57 | Bash | Fim do servico e local da view | `sed -n '160,175p' colaboradores/services/situacional.py; echo "=== view ==="; grep -n "def painel_situacional" colaboradores/views.py` |
+| 09:14:48 | Bash | O servico situacional inteiro | `cat -n colaboradores/services/situacional.py \| sed -n '1,160p'` |
+| 09:14:42 | Bash | Queries escondidas nos tres | `grep -n "def marcos_do_dia" -A 22 escala/models.py \| head -40; echo "=== periodos_do_dia ==="; grep -n "def periodos_do_dia" -A 18 ponto/juiz_batida.py; echo "=== ecos_flush ==="; grep -n "def _marca_ecos_flush" -A 12 ponto/turnos.py` |
+| 09:14:04 | Bash | escalas_do_periodo e celulas_do_periodo | `sed -n '63,127p' escala/alimentacao.py; echo "=== celulas_do_periodo ==="; sed -n '12,38p' escala/alimentacao.py` |
+| 09:13:22 | Bash | Corpo da ata | `sed -n '930,1000p' ponto/turnos.py` |
+| 09:13:08 | Bash | Fim do escala_vigente e as portas de alimentacao | `sed -n '43,70p' escala/servico_jornada.py; echo "=== alimentacao ==="; grep -n "^def \\|^ \"\"\"" escala/alimentacao.py \| head -40` |
+| 09:13:02 | Bash | Assinaturas dos dois insumos | `grep -n "def papel_por_minuto_da_ata" -A 30 ponto/turnos.py \| head -45; echo "=== escala_vigente ==="; grep -n "def escala_vigente" -A 28 escala/servico_jornada.py` |
+| 09:12:56 | Bash | Cabeca do miolo e a casca publica | `sed -n '1255,1292p' ponto/turnos.py; echo "=== turno_aberto_de ==="; sed -n '1324,1345p' ponto/turnos.py` |
+| 09:09:41 | Bash | O resto do miolo do turno aberto | `sed -n '1289,1324p' ponto/turnos.py` |
 | 09:09:28 | Bash | O ids_com_adesao e o lavrador | `grep -n "def ids_com_adesao" -A 16 ponto/services/adesao.py; echo "=== lavrador :60-80:"; sed -n '60,80p' core/management/commands/lavrar_placar_situacional.py` |
 | 09:09:09 | Bash | A autoridade do turno aberto e o calc | `grep -n "def turno_aberto_de" -A 22 ponto/turnos.py \| head -26; echo "=== _turno_aberto_calc:"; grep -n "def _turno_aberto_calc" -A 18 ponto/turnos.py \| head -22` |
 | 09:09:03 | Bash | Os tres sitios do situacional | `sed -n '60,80p' colaboradores/services/situacional.py; echo "=== :95-110"; sed -n '95,112p' colaboradores/services/situacional.py; echo "=== :135-145"; sed -n '135,145p' colaboradores/services/situacional.py` |
@@ -737,4 +751,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 21:22:16 | Bash | Ver o conflito do BACKLOG | `cd /home/ronald/saas-hasner && grep -n "^<<<<<<<\\|^=======\\|^>>>>>>>" app/docs/BACKLOG.md \| head; echo "=== o conflito ==="; awk '/^<<<<<<</,/^>>>>>>>/' app/docs/BACKLOG.md \| cut -c1-150 \| head -12` |
 | 21:22:12 | Bash | Mergear a raia sem commitar, para resolver | `cd /home/ronald/saas-hasner && git merge --no-commit --no-ff raia-ui 2>&1 \| tail -12; echo "=== conflitos ==="; git diff --name-only --diff-filter=U` |
 | 21:21:56 | Bash | Ver o push e o que a raia traz | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -3 $S/push_marco3.log 2>/dev/null; echo "[pre-push: $(pgrep -fc 'pre-push.sh' 2>/dev/null \|\| echo 0)] [teste: $(docker ps --format '{{.Command}}'\|grep -c 'manage.py te')]"; git fetch -q 2>/dev/null; echo "a empurrar: $(git log --oneline origin/main..HEAD\|wc -l)"; ...` |
-| 21:13:04 | Bash | Escrever o selo que torna a fronteira estrutural | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/s5b/app && cat > ponto/tests/test_fronteira_pontualidade_completa.py <<'PYEOF' # -*- coding: utf-8 -*- """A FRONTEIRA DO CALCULADOR COM O TETO DO MOTOR E COMPLETA -- e isto deixa de ser promessa. O CASO, medido em 01/10. A lapide de `_PeriodoPontualidade` dizia: *"Se um dia ele passar a ler um se ...` |
