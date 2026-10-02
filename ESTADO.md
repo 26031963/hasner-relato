@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:50:02.**
+**Medido em 02/10/2026 14:55:31.**
 
 | | |
 |---|---|
@@ -98,8 +98,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  entregando classe_motor=None. Vendo a chamada original:
-
   Ran 1 shell command
 
 ● Terceiro erro de extração meu, e é o que explica tudo: a chamada é get_motor_cct(c, ini, tipo_escala=te) — com a data como segundo argumento posicional.
@@ -120,17 +118,19 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
   2. dias_folga vem de aut.esc.folga_dia_semana (o vínculo) — eu usei tipo_escala.dias_folga (o template).
   3. minutos_do_oraculo(**ts**, pares=...) — eu passei None.
 
-● DIFF 7a vez, com os insumos portados · 1m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/ponto/management/commands/diff_calculador.py'
-     s=io.open(p,encoding='utf-8').read()
-     old = """ _rub_dia = _rubricas_por_dia(
-     c, aut.resultado, ini, fim, insumos=_ins_porta, celulas=cels, lavra=_lavra,
-     tipo_escala=te, feriados=_feriado… (1m 23s · 4 lines)
+  Ran 4 shell commands
+
+● Quase tudo voltou a ser idêntico à rodada fiel — trabalhadas +348,48, folga −346,58, noturnas +139,96, HE50 +3,96, HE100 +7,94 e todos os contadores de
+  cego. Resta um insumo: a pontualidade (+30,51 / +39,24 contra +0,00 / −0,00). A causa é estrutural e eu a vejo:
+
+  o original monta uma tupla por TURNO (primeira entrada → última saída); eu monto uma por PERÍODO, então um turno com duas pernas cobra pontualidade duas
+  vezes.
+
+● A tabela da 8a rodada · 24s
+  ⎿  $ cd /home/ronald/saas-hasner; sleep 110; sed -n '1,14p' logs/s5b_diff10i.log; docker ps --format '{{.Command}}' | grep -c manage (23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Philosophizing… (47m 28s · ↓ 60.9k tokens)
+✢ Philosophizing… (52m 57s · ↓ 64.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
