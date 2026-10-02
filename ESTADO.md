@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:43:31.**
+**Medido em 02/10/2026 10:48:54.**
 
 | | |
 |---|---|
@@ -95,40 +95,40 @@ d83c508d O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A sonda do O27 roda o cartão real de 520 colaboradores (motor + grade por colab) — está em voo junto do push 80. Esperando as duas:
+  │ col37 │ 153,75 │ 153,7355 + 0                     │ 153,74  │ puro arredondamento (os "2 min" de 28/07, hoje 1) │
+  └───────┴────────┴──────────────────────────────────┴─────────┴───────────────────────────────────────────────────┘
 
-  Ran 1 shell command
+  A coluna "Trabalhado" imprime pago_h = horas_trabalhadas + horas_folga_trabalhada (convenção declarada em pago_do_dia: folga trabalhada é hora de
+  trabalho do dia, paga a 100%); o badge "Trabalhadas" imprime o gravado, que por convenção não inclui a folga. Duas convenções opostas no mesmo papel —
+  nenhuma errada sozinha.
 
-● Turno em andamento, com três marcos no ar e o quarto em medição. O estado honesto agora:
+  Ran 2 shell commands
 
-  Fechados e empurrados hoje: O113 (09:54), O21 (10:16), O25 (10:35) — cada um com RED evidenciado antes e número medido depois, e os dois pushes
-  anteriores verdes (9.285 e 9.294 testes). O push 80 (docs do O25 + as quatro travas no AVAIS) está com a suíte rodando.
+● O O27 cumpriu a parte que era minha — "medir antes de construir" — e o resultado muda o que se constrói:
 
-  Em medição agora — O27 JANELA-EXATA, que é o próximo da fila 1 com portão aberto e cuja própria nota manda "medir antes de construir". A sonda roda o
-  cartão real (_coletar_dados_espelho_mes, a função que o PDF usa) nos 520 colaboradores em operação e compara três números na competência 09:
+  O RED que você deixou aberto tem duas causas, as duas medidas na sombra:
 
-  - COLUNA — a soma de pago_h linha por linha, que é o que o admin vê e deveria poder somar;
-  - RODAPÉ — resumo['total_trabalhadas'], o badge do topo;
-  - GRAVADO — FechamentoMensal.horas_trabalhadas.
+  1. Folga trabalhada — a coluna soma horas_trabalhadas + horas_folga_trabalhada; o badge do topo imprime o gravado, que por convenção não inclui a folga.
+     No col49 isso são 24,00 h exatas de diferença num só colaborador. As duas fontes estão certas pelas suas próprias convenções: o papel é que não
+     fecha.
+  2. Arredondamento de impressão — cada dia sai com 2 casas e a soma dos arredondados ≠ o total arredondado. É o critério de ouro de 28/07: no col37 os
+     seus "2 min" hoje são 1 min, com folga trabalhada zero.
 
-  O contador que o seu corte nomeia (cartao_x_fechamento_total, esperado 0) sai dessa comparação. E já há um achado de leitura antes do número: a coluna
-  mudou de nome e de fonte desde o seu corte de 24/09 — ela se chamava "Realizado" e imprimia realizado_do_dia (o cru do relógio); hoje se chama
-  "Trabalhado" e imprime DiaPago.horas_trabalhadas, a mesma lavratura de onde sai o rodapé. Ou seja, os 2 minutos do col37 (153h58 na coluna contra 153h56
-  no rodapé) podem ter mudado de natureza — e é por isso que medir vem antes de construir, como você escreveu na linha.
+  E um número que fecha o diagnóstico: cartao_rodape_x_fechamento = 0 em 20 de 20 — o rodapé nunca discorda do gravado. O defeito está só entre a coluna e
+  o rodapé.
 
-  Reporto os três contadores assim que a sonda terminar; se vierem em zero, o RED do O27 é outro e eu digo qual, em vez de fabricar selo sobre número que
-  já bate.
+  Por isso não construí: as três saídas mexem em coisas diferentes e a escolha é sua —
+  (a) o badge passar a somar folga trabalhada (e aí o topo deixa de bater com o GRAVADO, que é a testemunha);
+  (b) a coluna imprimir só horas_trabalhadas (e a folga trabalhada ganha coluna própria, que o bloco de rubricas já suporta);
+  (c) o rodapé ganhar a linha "folga trabalhada", e a conta fecha sem mover número nenhum.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
+  Eu faria a (c) — é a única que não troca nenhum número existente e faz o admin reconstituir o total somando o que vê, que é o que o seu critério de ouro
+  exige. O arredondamento, na mesma linha: o rodapé imprime a soma dos valores exibidos, não o total cru.
 
-● A sonda do O27 e o push 80
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b12wjfq7z.output 2>/dev/null | tail -26; echo "---
-     parcial ---"; wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/blg8e31p1.output; cd
-     /home/ronald/saas-has…
+  A frota inteira (520 colaboradores, na sombra, cpuset de teste) está terminando de medir o contador cartao_x_fechamento_total — reporto o número e levo
+  o item ao AVAIS com a tabela e a recomendação.
 
-· Hullaballooing… (3h 9m 58s · ↓ 405.0k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Uma correção de conduta minha, registrada: a primeira versão dessa medição rodou dentro do saas_core e chegou a 266% de CPU com o cliente batendo ponto.
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
