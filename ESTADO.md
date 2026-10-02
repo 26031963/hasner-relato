@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:39:15.**
+**Medido em 02/10/2026 14:44:41.**
 
 | | |
 |---|---|
@@ -98,23 +98,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dia-colab) e antecipada de −0,00 → +289,66 h. Fora do núcleo ficavam o dedup de 10 min, o corte de turno, o envelope e a paridade (o dia ímpar em que a
-  última batida solta não conta, BUG-144).
-
-  A lei certa estava escrita na lápide do próprio núcleo — "quando a autoridade já pareou, o núcleo NÃO pareia: ele SOMA" —, e o selo agora diz isso:
-  minutos_do_oraculo com pares= é obrigatório, sem pares= é proibido (nesse modo ele pareia por sequência, e aí seria o segundo pareamento).
-
-  Dois selos meus, no mesmo turno, precisaram ser corrigidos por serem fortes no lugar errado: este e o do mapa (que acusava as mesclas por olhar só o
-  valor atribuído). Em ambos o custo foi medido antes de virar número publicado — e é por isso que a tabela só vale com o DIFF rodado de ponta a ponta,
-  não com a extração "parecendo certa".
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
-
-  Ran 2 shell commands
-
-● Erro meu de leitura, e é de uma linha: os pares do DIFF são tuplas de três elementos (ini, fim, dia) — o núcleo usa o dia da jornada que vem neles — e
-  eu passei só (ini, fim), jogando o dia fora. Daí o núcleo redatou tudo pela regra dele:
 
   Ran 1 shell command
 
@@ -125,12 +108,29 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ● Pelo código (a docstring do núcleo está desatualizada e diz 2 posições): if len(_par) >= 3 — ele usa o 3º como dia. Minha correção está certa. E achei a
   segunda causa, a do atraso: eu passo p.entrada em UTC onde o DIFF passava timezone.localtime(...) — o marco ancora no dia errado:
 
-  DIFF 5a vez: dia da jornada + pontas locais
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; nohup docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
-     ~/saas-hasner/.env -e PYTHONUNBUFFERED=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py tenant_command diff_calculador
-     --schema=j…
+  Ran 3 shell commands
 
-✢ Philosophizing… (36m 41s · ↓ 51.8k tokens)
+● As trabalhadas voltaram (+174,21, perto do +186,81 fiel) — o dia da jornada era isso. Mas atraso e antecipada ficaram idênticos, e o contador conta a
+  história: cego_horas_atraso caiu de 1.247 para 110 e cego_horas_extras_100 subiu de 91 para 2.711. Minha _contexto_cct está caindo no except e
+  entregando classe_motor=None. Vendo a chamada original:
+
+  Ran 1 shell command
+
+● Terceiro erro de extração meu, e é o que explica tudo: a chamada é get_motor_cct(c, ini, tipo_escala=te) — com a data como segundo argumento posicional.
+  Eu chamei sem ela, caía no except, e classe_motor virava None — e a própria lápide do DIFF diz que "classe que não julga pontualidade faz o calculador
+  DECLARAR as duas rubricas em vez de cobrá-las":
+
+  DIFF 6a vez, com a CCT certa · 59s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='app/ponto/calculador/alimentacao.py'
+     s=io.open(p,encoding='utf-8').read()
+     old = """def _contexto_cct(colaborador, tipo_escala):
+     \"\"\"O que a CCT decide e que o calculador LE (nunca interpreta). -> dict\"\"\"
+     from core.regua_cct import … (59s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Philosophizing… (42m 7s · ↓ 55.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
