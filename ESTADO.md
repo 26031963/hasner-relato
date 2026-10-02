@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 13:51:01.**
+**Medido em 02/10/2026 13:56:22.**
 
 | | |
 |---|---|
@@ -40,6 +40,8 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/motor_calculo_v2.py
+?? app/ponto/calculador/alimentacao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,40 +96,40 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Aqui está o ponto exato que a ordem (1) resolve: o pares_da_autoridade de hoje itera turnos_do_colab (o juiz de geometria), e a ordem manda usar
-  aut.resultado.periodos (os períodos do motor) — que é justamente onde col516 e col174 divergiam. Vendo o que um período do motor expõe:
+  │                      medição                       │                                       o que ela mudou                                        │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ PeriodoCalculo é o envelope do turno com a pausa   │ matou a ideia de passar os períodos crus — repetiria o erro já medido de +5.563,83 h         │
+  │ dentro (col174: 488,0 × 411,8)                     │                                                                                              │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ o motor tem e/s clipados e os intervalos da        │ o período passou a carimbar o que o motor usou, com um escritor só                           │
+  │ autoridade (:1881)                                 │                                                                                              │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ periodos_ord cobre só periodos                     │ os periodos_ft não tinham dia — 7 períodos descartados, col114 perdendo 861 min; o mapa      │
+  │                                                    │ ganhou os ft e a exposição passou a mesclar em vez de sobrescrever                           │
+  ├────────────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ col81 25/09: envelope 320,1 com intervalo de 59,8  │ o motor só desconta acima de 6 h — o período passou a dizer intra_descontada, e a porta lê   │
+  │ e motor contando 320,1                             │ em vez de supor                                                                              │
+  └────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────┘
 
-  Searched for 1 pattern, ran 1 shell command
+  Resultado: 120 de 120 colaboradores com a soma dos segmentos igual aos minutos do motor, e os contadores declarando o que sobra em vez de calar
+  (par_invertido_pela_janela: 1 — o caso em que a janela clipa a entrada das 02:32 para o marco das 21:00 e o motor zera).
 
-● Isso simplifica o desenho: cada PeriodoCalculo já é um par (E→S) que o motor usou para contar — sem pareamento, sem intervalos_do_turno. Medindo se
-  entrada/saida vêm crus ou já clipados na janela, porque isso decide a porta:
+  Isso cumpre o item (1) da ordem na origem: a porta não deriva nada — os segmentos saem do período, o dia sai do dia_da_jornada do juiz, o fora-da-janela
+  sai de minutos_fora_janela. As 220 linhas que o DIFF mantinha (reaplicando janela, marcos e L-084 por conta própria) deixam de existir, e com elas o
+  turnos_do_colab que fazia col516 e col174 divergirem.
 
-  Ran 1 shell command
+  A frota inteira (520) está rodando na sombra para confirmar o 120/120 em escala. Em seguida: o DIFF passa a chamar a porta, nasce o selo "DIFF e
+  lavratura chamam a mesma linha", e então o DIFF da 10 contra o GRAVADO para o critério (2).
 
-● Medição decisiva, e ela corrige o desenho antes de eu escrever: o PeriodoCalculo é o envelope do turno com a pausa dentro (col174 21/09: envelope 488,0
-  × trabalhadas 411,8 — 64,9 min de pausa real; col516: 60 min indenizados, pausa real 0). Passá-lo cru ao núcleo repetiria o erro já medido de +5.563,83
-  h. Vendo como o motor obtém turno e intra:
+✻ Sautéed for 9m 45s · done 1:56 PM · 7 shells still running
 
-  Ran 1 shell command
+● Background command "A porta x o motor na frota inteira" completed (exit code 0)
 
-● O desenho certo apareceu: o motor obtém os turnos por _turnos_do_juiz → turnos_de_batidas (não turnos_do_colab) e soma a intra que intervalos_do_turno
-  decidiu. A porta tem de ler os turnos que o motor usou, não refazer a receita. Vendo se o resultado já os guarda:
+  Espera a frota · 3s
+  ⎿  $ cd /home/ronald/saas-hasner; sleep 45; tail -8 logs/s5b_porta_frota.log; docker ps --format '{{.Command}}' | grep -c manage (3s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Agora o desenho está fechado: o motor liga período→turno em turno_da_batida (:2044) e soma a intra que intervalos_do_turno decidiu. A porta precisa dos
-  intervalos de cada período, lidos do motor. Vendo onde ele os tem:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Encontrei o lugar certo: no motor, cada período já tem e/s clipados na janela e os intervalos da autoridade (:1881-1888). A porta não precisa derivar
-  nada — precisa ler. Vendo o segundo sítio para expor nos dois:
-
-● O segundo sitio da intra e a criacao do periodo
-  ⎿  $ sed -n '2318,2336p' ponto/motor_calculo_v2.py; echo "=== onde o periodo e criado nos dois ramos ==="; grep -n "periodo =
-     PeriodoCalculo\|PeriodoCalculo(" ponto/motor_calculo_v2.py | head -6
-
-✢ Moonwalking… (4m 42s · ↓ 16.5k tokens)
+✶ Architecting… (17s · ↓ 179 tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
