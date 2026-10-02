@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:313 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:368 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:04:31.**
+**Medido em 02/10/2026 16:09:54.**
 
 | | |
 |---|---|
-| `HEAD` local | `edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso` |
+| `HEAD` local | `ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas
 edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso
 7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu
 a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou
 99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
-0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -93,44 +94,44 @@ a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que na
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Registro o apply e a Pauta DP na fila dele enquanto a re-medição corre:
+
+● Reversão provada executável (10.684 linhas montadas, 572 colabs, todas as FKs resolvem). Ponho o par no mesmo lugar e corrijo o
+  registro, que dizia executável sem ter sido provado:
 
   Ran 2 shell commands
 
-● Background command "Esperar o fim do apply e comparar os hashes" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Background command "Re-medir a frota contra o gravado em dia" failed with exit code 1
+● logs/ é do root (o container escreve lá). Copio por dentro do container:
 
   Ran 2 shell commands
 
-● A sonda saiu mal parametrizada: sem --pares-da-autoridade o _ins_porta é None e a porta devolve {} — daí dia_sem_rubrica_da_porta: 2961
-  e calculador 0,00 em tudo. Não é resultado, é a minha flag faltando:
+● Agora o item que decide se a troca sobe com o número que medi: o DIFF alimenta a porta com o resultado do motor do espelho, e a
+  lavratura tem o do fechamento. Se os períodos divergem, a tabela não prevê a produção:
 
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE
-     "CONTADORES|Traceback|rror" $S/remedida_10.log 2… · stopped
+  Ran 2 shell commands
 
-  Ran 3 shell commands
-
-● Background command "Re-medir com a flag da porta" completed (exit code 0)
+● Enquanto a prova corre, escrevo a PROVA do apply no RELATO:
 
   Ran 1 shell command
 
-● O apply está commitado e durável. Consulto antes de declarar o critério fechado e ligar a troca:
+● Background command "Provar que os dois chamadores dão o mesmo resultado" completed (exit code 0)
 
-● Advising using Fable 5.1
+  Provar que ninguém escreveu na 09
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/nove_intacta.py <<'PY'
+     from django.conf import settings
+     assert settings.DATABASES['default']['NAME'] == 'saas_hasner'
+     from django.utils import timezone as tz
+     …
 
-· Doodling… (43m 18s · ↓ 97.5k tokens)
+✻ Doodling… (48m 41s · ↓ 113.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Inspecting intervalo_cadastrado in juiz_batida.py                                                    12m 36s · ↓ 255.8k tokens
+  ◯ fork  Reading `_wizard_preview.html` and `nome_canonico`                                                   17m 58s · ↓ 296.2k tokens
   ⧉  index
 ```
