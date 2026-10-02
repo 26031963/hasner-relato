@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:29:07.**
+**Medido em 02/10/2026 17:34:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script` |
+| `HEAD` local | `da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **31** |
+| commits a subir (`ahead`) | **33** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida
+abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 c8341811 [S5b] As duas curas do ruff, e a licao e onde eu pus o script
 c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real
 e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP
-5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado
-ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
 ```
 
 ## `git status --short`
@@ -93,42 +93,42 @@ ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  "a troca não muda número" ser verdade e não esperança: usar as do calculador mudaria onde a HE dele difere (medido: HE50 +3,96 h, HE100
-  +7,94 h).
+● O monitor do push 84 está armado com o padrão ancorado. Fecho o turno com o estado real, porque o próximo passo depende da pista e os
+  três seguintes dependem de você.
 
-  Duas guardas acompanham:
+  A S5b, que é o item da fila 1, está no ar e com o censo fechado: 15 dos 15 campos de dia do DiaPago têm dono, depois de a sua resposta
+  das 17:2x destravar a lei do ancoramento. As sete peças subiram às 17:31 com merge e deploy no mesmo ato, zero conflitos provados antes
+  de tocar a árvore, e importerror_500=0.
 
-  Sem as pontas, não se afirma o split. Chamador que não passa he_pontas recebe a causa, não zero — porque zero diria "nenhuma HE caiu na
-  janela noturna", e a casa paga 6,29 + 132,51 h nessas duas rubricas numa competência como a 09. Seria o [] de dois sentidos na forma
-  mais cara.
+  A troca está ligada em cópia, com selo de quatro mordidas que atacam os atalhos que eu poderia ter tomado — porta irmã, degrau só na
+  intenção, try compartilhado, escrever em 'motor' — e que declara não provar o número. O número é o DIFF de frota, que é o próximo passo
+  quando a pista vagar.
 
-  A lei em aberto ficou escrita na própria lista de rubricas, com o número: na 09, de 7.535 dia-colab com período, 85 têm mais de um par e
-  3 mudariam (100_noturna −8,14 h); na 10, zero. E a diferença vai nos dois sentidos — ancorar no último par aumenta num caso e zera
-  noutro.
+  Hoje seis coisas me pegaram, e nenhuma por revisão — todas por selo ou por número: a meia-correção nos laços da folga, o apelido que
+  escondia a porta, o erro de unidade minutos×horas, a sonda sem flag, a reversão que não rodava, e a fixture que inventou o formato da
+  entrada. E duas vezes eu tive de retratar número publicado: o "paga mais" do TXT e o "1440 contra 480" do col954 — este porque comparei
+  o total de um range de três dias contra o previsto de um dia.
 
-  Com isso o censo da S5b fecha: 15 dos 15 campos de dia do DiaPago têm dono. Falta rodar os selos — inclusive o que eu escrevi afirmando
-  que as duas rubricas estavam fora de RUBRICAS, e essa asserção agora tem de se inverter, que é o registro de que a lei foi respondida.
+  Na sua mesa, 12 itens com frase pronta. Os que mexem em dinheiro: o "dia inteiro cravado em 720" (90 casos, 53 pessoas, 25 descontando —
+  onde a recusa que você pediu bloquearia a convenção que o próprio sistema ensina, e a cura na origem é "dia inteiro" passar a
+  significar o previsto do dia); as duas pautas DP da 09; e o smoke do col221.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
+● Estado do push 84
+  ⎿  $ cd /home/ronald/saas-hasner && grep -E "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:|pos_push"
+     logs/push84.log | tail -6; echo "a empurrar: $(git rev-list --count origin/main..HEAD)"; docker ps --format '{{.Names}}' | grep -vE
+     "saas_|juliani_db_test|mensageria" || echo …
 
-● 75 dos 76 verdes — inclusive a asserção invertida e os dois casos novos. Falta o selo de efeito que eu escrevi há pouco; vejo o erro:
-
-  O erro do selo de efeito
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1 && teste_envfile >/dev/null && timeout 300 docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     /home/ronald/wt-splits/app:/app sa…
-
-· Doodling… (2h 7m 54s · ↓ 389.8k tokens)
+✢ Doodling… (2h 13m 18s · ↓ 406.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
