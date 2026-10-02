@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:02:01.**
+**Medido em 02/10/2026 08:07:31.**
 
 | | |
 |---|---|
@@ -128,13 +128,13 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● 2811 testes de ponto OK. Aplicando, e já emendando os itens (3) e (4) da sua ordem no mesmo marco:
 
-● Suites de ponto e escala com o delegate · 2m 0s
+● Suites de ponto e escala com o delegate · 7m 30s
   ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default
      --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app -v
-     /home/ronald/saas-hasner/app/staticfile… (2m 0s)
+     /home/ronald/saas-hasner/app/staticfile… (7m 30s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (28m 28s · ↓ 71.5k tokens)
+✢ Hullaballooing… (33m 58s · ↓ 71.5k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
