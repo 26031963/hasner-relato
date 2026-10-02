@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 01:01:31.**
+**Medido em 02/10/2026 01:07:01.**
 
 | | |
 |---|---|
@@ -95,12 +95,6 @@ f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  bin/regua.sh::impressao_digital anda o disco com find -name '*.py' -o -name '*.html' — ele não vê static/js/, static/css/, bin/ nem arquivo de dado. Ou
-  seja: mudar o JS da tela mantinha o atalho "JÁ VERDE" e a suíte não rodava sobre o que mudou. O selo cria um .js num repo de mentira, exige que o hash
-  da árvore mude, e avisaria se a impressão antiga também mudasse — ela não mudou.
-
-  bin/arvore_hash.sh usa git write-tree num índice descartável, então o hash é exato e não suja o staging de quem está trabalhando — a lei da casa é "add
-  por PATH, nunca -A", e um -A num índice que morre no fim da função não é staging. O REGUA_ARVORE entrou nos três carimbos (o de OK e os dois de FALHOU),
   e o FP antigo ficou como segunda condição por um ciclo, para carimbo velho nunca liberar nada. Não é SKIP_TESTS: a identidade é da árvore, um byte muda
   o hash e a suíte roda inteira.
 
@@ -124,12 +118,18 @@ f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora 
 ❯ → code
   smoke Ronald: abri a Central, o atalho HE esta no quadro com o numero certo e me levou para a tela de HE -- pode fechar o ATALHO-HE
 
-● Ver se algum caminho servido importa o calculador
-  ⎿  $ echo "=== quem importa o calculador ==="; grep -rln "ponto.calculador\|from ponto import calculador" --include=*.py . | grep -v test | head; echo
-     "=== e o selo do import tardio ==="; cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3
+● Ler a quarta copia e o juiz vizinho
+  ⎿  $ sed -n '370,430p' escala/regua_defesa.py; echo "=== entrada_fora_do_inicio:"; grep -n "def entrada_fora_do_inicio" -A 30 escala/regua_defesa.py
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bo0fl31ni.output (3 lines)
+  ⎿  Referenced file ponto/motor_calculo_v2.py
+  ⎿  Referenced file docs/PROMPTS.md
+  ⎿  Referenced file ponto/management/commands/diff_calculador.py
+  ⎿  Referenced file ponto/calculador/regras.py
 
-· Unfurling… (2m 26s · ↓ 6.2k tokens)
-                                                                                                                                   0% until auto-compact
+● Task "Esperar o container de teste sair" still running in background
+
+✢ Unfurling… (7m 56s · ↓ 12.5k tokens · thinking)
+                                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
