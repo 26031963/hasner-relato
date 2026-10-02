@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:674 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:820 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:48:01.**
+**Medido em 01/10/2026 23:53:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e metade da ordem ja estava cumprida` |
+| `HEAD` local | `e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto
+6b0c036b [GESTAO-HE-FATIA-1] A celula saia AZUL pela CASCATA, e o meu selo nao viu: ela deixa de ser botao de envio e a prova passa a ser o navegador
 b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e metade da ordem ja estava cumprida
 50f85995 A celula da obra registra a cura decidida: sair da regra global, nao brigar com ela
 83ea71a0 Ordem consolidada de 23:1x: a celula sai de baixo da regra global em vez de brigar com ela
-0953f1ec POR QUE o fundo nao mudou as 22:5x: !important na folha vence o style= inline
-d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o grep de cor literal da ZERO
 ```
 
 ## `git status --short`
 
 ```
- M app/chamados/views.py
- M app/templates/chamados/painel_gestao.html
-?? app/chamados/tests/test_atalho_he_na_central.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -98,19 +95,6 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ setor │            empresa            │ ações antes → depois │   trilha   │
-  ├───────┼───────────────────────────────┼──────────────────────┼────────────┤
-  │ 4     │ emp2 J.A Juliani              │ 21 → 22              │ log 610714 │
-  ├───────┼───────────────────────────────┼──────────────────────┼────────────┤
-  │ 8     │ emp3 Juliani Seg. Patrimonial │ 21 → 22              │ log 610715 │
-  ├───────┼───────────────────────────────┼──────────────────────┼────────────┤
-  │ 10    │ emp4 R. A. de Oliveira Lopes  │ 22 → 23              │ log 610716 │
-  └───────┴───────────────────────────────┴──────────────────────┴────────────┘
-
-  O setor 6 ficou fora: é a Supervisao da Confiance Force (emp1), e a sua ordem diz "do cliente" — o cliente é o Grupo Juliani. Se quiser os JSP*
-  autorizando lá também, é uma linha.
-
-  De 15 para 21 usuários por setor; os seis que ganharam: JSP01, JSP03, JSP04, JSP05, JSP07, JSP08.
 
   A prova, pelo juiz e não pelo markup: tem_acao(user, 'autorizar_he') — o mesmo que a porta confere e que decide o pode_autorizar da tela — responde True
   para JSP03, JSP05 e JSP08, nenhum deles superuser, e para JDP03 e greice.
@@ -129,9 +113,22 @@ d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o g
 
 › Message from @a6628ec7e07379c89 (ctrl+o to expand)
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✻ Waiting for API response · will retry in 2m 36s · check your network
+● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 38m 46s
+
+● Commitar o merge e o atalho, e deployar · 4s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='| GESTAO-HE-CALENDARIO-CONTROLE |'
+     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
+     novo = (' **FATIA 1 C… (4s · 5 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Brewing… (7m 18s · ↓ 7.9k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
