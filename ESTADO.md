@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:29:01.**
+**Medido em 02/10/2026 08:34:31.**
 
 | | |
 |---|---|
@@ -122,11 +122,11 @@ b1da8d82 Handoff regenerado depois das correcoes de redacao
 
 ● Deploy OK. Agora a tabela final, as causas por colab e o veredito do seu critério (a):
 
-  Veredito do push do marco · 2m 55s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push73.log; do sleep 30; done; tail -4 logs/push73.log (2m 54s)
+● Veredito do push do marco · 8m 24s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push73.log; do sleep 30; done; tail -4 logs/push73.log (8m 24s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Hullaballooing… (55m 28s · ↓ 89.0k tokens)
+✢ Hullaballooing… (1h 0m 58s · ↓ 89.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
