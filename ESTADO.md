@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:42:31.**
+**Medido em 02/10/2026 15:48:01.**
 
 | | |
 |---|---|
@@ -93,44 +93,44 @@ ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criter
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 10; done; sleep 3; grep -E
-     "^(OK$|FAILED|Ran |To https|pos_push|error:)"… · stopped
-
-● Stop Task
-  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until [ "$(docker ps -q --filter
-     ancestor=saas-hasner-core:latest --filter… · stopped
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
   Ran 1 shell command
 
-● O push80 voltou FAILED (1 falha em 9300) às 10:48 e por isso os 7 commits ainda estão aqui. Qual foi a falha:
-
-  Ran 1 shell command
-
-● Essa é exatamente a entrada que a cura do piso (O25) apodreceu — e eu já a removi depois. Confiro se a árvore atual passa:
-
-  Ran 1 shell command
-
-● Fix já commitado em 322a71a2 — a falha do push80 era de árvore velha. Commito a extração por movimento com a prova de que a frota saiu
-  idêntica:
-
-  Ran 1 shell command
-
-● Agora a troca em si. Leio o sítio da lavratura antes de decidir como ela chama a porta:
+● RELATO cumpre o PRONTO das 15:2x (tabela dos goldens, parágrafo CONFIRMADO, seção das 14:2x marcada como bug meu). Agora o DIFF do ato,
+  não da tabela que tenho — a função real em modo leitura:
 
   Ran 2 shell commands
 
-● Pela medida (1), motor × calculador em pontualidade = 0 dia-colab — logo vale o item (3) do seu aval: o que sobra é gravado velho, e a
-  relavratura da 10 pelo motor é o próximo ato. É dinheiro em competência aberta, então vou consultar antes de aplicar.
+● O DIFF do ato sai da função real em modo leitura contra prod (nenhuma escrita), com a CPU na metade de teste. Monto a sonda:
 
-● Advising using Fable 5.1
+  Ran 4 shell commands
 
-✢ Doodling… (21m 18s · ↓ 37.6k tokens)
+● DIFF do ato (leitura, zero escrita) na metade de teste da CPU, contra prod:
+
+  Ran 1 shell command
+
+● Enquanto roda, preparo a reversão — e ela cobre duas tabelas, porque o recálculo apaga e recria o DiaPago versao='motor', que a tela e a
+  porta do export leem:
+
+  Ran 3 shell commands
+
+● Background command "Rodar o DIFF do ato em container irmão" failed with exit code 1
+
+● O container da sonda está vivo (65% na metade de teste); o código 1 foi do meu wrapper, não dela. Espero pelo veredito por arquivo, não
+  por pgrep:
+
+  Ran 1 shell command
+
+● Preparo o provador de hash (a 09 e as exportadas têm de sair idênticas):
+
+● Running 1 shell command…
+
+✢ Doodling… (26m 48s · ↓ 48.1k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
