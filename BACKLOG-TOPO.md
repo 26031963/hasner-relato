@@ -28,7 +28,7 @@ lista — ela e o que esta EM PE._
 | **O18** | PARADAS-NAO-SAO-PARADAS | espera aval |
 | **O19** | BO-APP-ANDROID-ATESTADO | espera `!` |
 | **O20** | CONTRATO-VARRE-COMENTARIO | **FECHADA 01/10**: `core/censo_fonte.py` |
-| **O21** | ROTULO-DO-DIA-DECIDIDO | **MEDIDO 02/10 06:1x: quem NAO migrou e  |
+| **O21** | ROTULO-DO-DIA-DECIDIDO | **FECHADA 02/10 10:2x, no ar** -- o app  |
 | **O22** | AUSENCIA-REVERTER-REJEICAO | espera aval |
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |

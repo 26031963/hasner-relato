@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. PAINEL-SITUACIONAL-N+1 + PLACAR-EM-TURNO-DOIS-NUMEROS (O113) -- **NO AR, com os tres REDs**
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR**, e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:11:01.**
+**Medido em 02/10/2026 10:16:19.**
 
 | | |
 |---|---|
-| `HEAD` local | `d9538116 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando` |
 | `origin/main` | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f4693856 [O21] O app dos ~750 passa a DIZER o que foi decidido no dia -- lendo, nao recalculando
 d9538116 O topo do TICKETS fechado no ato do push (O112)
 9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL
 24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo
 8e085c33 [PAINEL-SITUACIONAL-N+1] Os dois censos que a suite acusou eram de ANCORA: o sitio mudou de lugar, a lei nao
-a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito
 ```
 
 ## `git status --short`
 
 ```
- M app/api/views.py
- M app/docs/RELATO.md
-?? app/api/tests/test_o21_app_diz_o_que_foi_decidido.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,14 +94,6 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Lição aplicada (e é lei da casa): meus monitores com pgrep -f estavam casando a própria linha de comando — espera curta vai por arquivo de sinal, nunca
-  pgrep:
-
-  Read 1 file, ran 2 shell commands
-
-● Background command "Espera o fim do push 77" failed with exit code 144
-
-● Background command "Veredito final do push 77" failed with exit code 144
 
 ● Antes de aplicar: a mesma lápide que acabei de pagar no lavrador vale aqui — quando é UTC no banco e o payload precisa sair local:
 
@@ -124,12 +113,20 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 
 ● RED do O21 evidenciado — e a linha que o resume: "quatro decisões DIFERENTES saíram com 1 desenho no app: [(None, None, None)]". Aplicando a cura:
 
-● GREEN do O21
-  ⎿  $ cd /home/ronald/saas-hasner && python3
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113/p9b_o21_app.py /home/ronald/saas-hasner && source
-     bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; timeout 900 docker run --rm $TESTE_DOCKER --networ…
+  Ran 1 shell command
 
-· Hullaballooing… (2h 37m 28s · ↓ 312.4k tokens · still thinking)
+● 8 de 9 verdes. O que caiu foi minha expectativa, não o código: em_aberto nasce de datas_em_aberto, que o folha_manda monta do furo apurado — sem célula
+  gerada a fixture não produz furo. Troco por um invariante que não inventa:
+
+  Ran 3 shell commands
+
+● Medido em prod (120 colabs, só leitura): 3.432 de 7.693 dia-colab passam a ter palavra — Férias (abonado) verde, Atestado aguardando decisao amarelo,
+  INSS 15+ (sem previsao) cinza, 5 rejeitados laranja. Fechando a fatia:
+
+● Committing do O21 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 600 bin/deploy.sh --sem-migrate 2>&1 | tail -10; date +%H:%M:%S
+
+· Hullaballooing… (2h 42m 45s · ↓ 327.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
