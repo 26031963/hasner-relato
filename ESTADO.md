@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:194 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:210 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:00:45.**
+**Medido em 02/10/2026 15:05:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU` |
+| `HEAD` local | `0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
 ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
 389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
 dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 3aa5e2b6 [O26] O 12x36 passa a poder declarar o horario do dia em que o plantao cai
-e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/ponto/calculador/alimentacao.py
- M app/ponto/calculador/nucleo.py
- M app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,44 +93,44 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  col516/col174 fora da lista. A causa era pareamento, como você disse — provado por motor × calculador dar zero divergências na pontualidade.
-
-  O que eu tentei além da ordem e falhou — e por que isso importa: extrair também a montagem dos 18 insumos de regras.do_dia. Eu reescrevi em vez de
-  mover, e cada insumo reescrito virou número, denunciado pelo DIFF de ponta a ponta:
-
-  ┌──────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────┐
-  │                  tentativa                   │                                    o que o DIFF mostrou                                    │
-  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ somei os segmentos pulando o núcleo          │ atraso +146,03 h, antecipada +289,66 h (perdi dedup, corte, envelope, paridade do BUG-144) │
-  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ passei (ini, fim) sem o dia da jornada       │ trabalhadas −952,38 h                                                                      │
-  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ get_motor_cct sem a data                     │ cego_horas_atraso de 1.247 → 110; HE100 cega de 91 → 2.711 — cobrando onde devia declarar  │
-  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ dias_folga do template, não do vínculo       │ a soma igual e a divisão trocada (+174,21/−172,31 contra +348,48/−346,58)                  │
-  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ pontualidade por período, depois por jornada │ +30,51/+39,24 e +32,26/+93,55 contra +0,00/−0,00 — não explicada                           │
-  └──────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Revertí a extração das rubricas (código sem leitor é vermelho) e deixei as cinco tentativas escritas na lápide, com os números. A lição ficou onde dói:
-  extração de alimentação se faz movendo as linhas e trocando locais por parâmetros — nunca reescrevendo a montagem "equivalente". A diferença custou
-  cinco rodadas e uma tabela que eu quase publiquei como se fosse da troca.
-
-  O que falta para a troca subir é essa extração feita por movimento, com um caso medido dia a dia no insumo que sobrou (a pontualidade) — e isso é
-  trabalho, não palpite.
+  defeito — e um que empurrava o número para o lado que me convinha. A regra que eu violei é a da casa: o certo vence o conveniente, e número que fecha
+  critério exige saber por que fechou.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-  A tabela final, de confirmacao
-  ⎿  $ cd /home/ronald/saas-hasner; sleep 100; sed -n '1,30p' logs/s5b_final.log | grep -E "^\||dia-colab comparados" | head -22
+● Commitando a correção e o estado real, com o ! que o PAREI exige:
 
-· Philosophizing… (58m 11s · ↓ 70.8k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Ran 1 shell command
+
+● A correção está commitada (0ad4ebc4) e publicada no topo do RELATO, com a tabela nomeada.
+
+  O essencial, sem rodeio:
+
+  PAREI: o ! da pontualidade da S5b — o critério (2)(a) não fechou. Atraso +2,51 h (col81) e antecipada +44,21 h em 9 colabs (col932 +9,76 · col296 +6,00
+  · col196 +5,96 · col231 +5,86 · col418 +5,66 · col255 +5,35), os dois acima do gravado. Como o seu aval manda: não fechou = PAREI com a tabela.
+
+  E a tabela que eu publiquei às 14:2x era um bug meu, não uma cura: eu passava as pontas da pontualidade em UTC, e marco_no_dia ancora o marco no dia do
+  instante — o marco caía no dia seguinte e a distância saía menor, empurrando o número para o lado que me convinha. Corrigi para hora local (como o
+  chamador antigo faz) e o critério abriu.
+
+  O que a sua ordem (1) pediu está de pé e provado: a porta única dos períodos. Seis das oito rubricas voltaram idênticas à rodada fiel, col516 e col174
+  saíram da lista — a cura do pareamento funcionou, e era isso que você disse ser a causa. A soma dos segmentos bate com o motor em 519 de 520
+  colaboradores. Resta um insumo: a pontualidade.
+
+  O que eu reverti e por quê: a extração das rubricas (os 18 insumos). Cinco tentativas, cada uma denunciada pelo DIFF de ponta a ponta — núcleo pulado
+  (+146,03 h de atraso), tupla sem o dia da jornada (−952,38 h), CCT sem a data (cego 1.247→110), dias_folga do template (divisão trocada), pontualidade
+  por período e por jornada. Código sem leitor é vermelho, então ele saiu; os números ficaram na lápide. A lição: extração de alimentação se faz movendo
+  as linhas, nunca reescrevendo a montagem "equivalente".
+
+  Na sua mesa, o que destrava: o ! sobre como a pontualidade do calculador deve ler as pontas — e o caso medido é o col81/col932, dia a dia, não outra
+  rodada de frota.
+
+✻ Worked for 59m 55s · done 3:02 PM · 7 shells still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ !: a pontualidade le as pontas em hora LOCAL; segue a fila
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
