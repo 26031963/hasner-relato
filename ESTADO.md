@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:67 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, em copia do HEAD** (`/home/ronald/wt-splits`, arvore viva intocada): a regra do split
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:28 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:36:01.**
+**Medido em 02/10/2026 16:41:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou` |
+| `HEAD` local | `0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **15** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs
+0749895a [S5b] AS QUATRO RUBRICAS ABERTAS POR COLAB: 97% da trabalhada e artefato da MINHA medicao
 6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou
 69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco
 8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA
-7260475c [S5b] A PORTA E UMA, mas o `resultado` dos dois chamadores NAO era o mesmo
-ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas
 ```
 
 ## `git status --short`
@@ -94,44 +94,44 @@ ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergen
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  move o número. As duas armadilhas da captura estão fechadas no código e foram achadas no desenho, não na falha: o alvo é o ResultadoMes
-  composto, e é a primeira instância de cada colab.
+  diferente, mas três colabs carregam zero nos campos que a lavratura lê — então o efeito são 5 realocações em 3 colabs. Contar a causa
+  como efeito é rótulo que não diz o que a conta faz.
 
-  A resposta não veio na tabela, veio no contador: sem_dia_da_jornada 3.177. O resultado composto do fechamento não carrega o mapa — soma
-  períodos, anomalias, DSR, reflexo e banco, e o mapa fica na fatia.
+  Fica dito e não decidido: col820 leva 21,56 h para o 28/09, que é o caso da entrada às 19:13 de 29/09 atribuída à jornada anterior.
+  Depois do passo 2 o calendário mostrará esse dia com 21,56 h a mais — pode ser turno que não fechou, pode ser a cadeia esticando. Vai
+  para o O65 com o col922 ao lado; o passo 2 não inventa esse número, ele passa a mostrar o que o motor já usa para julgar.
 
-  E isso descobriu um defeito maior, em prod hoje: dia_pago.py::_dia_de decide o dia pela data de calendário da entrada, enquanto o motor
-  julga por dia_da_jornada. O O111 curou o DIFF às 09:xx e nunca alcançou a lavratura, que é quem escreve. Medido: 11 períodos em 6 colabs
-  de 3.204, com zero sem mapa. O total do mês não muda; muda a linha de dia — e quem lê o DiaPago por dia é a tela do calendário e a 7ª
-  testemunha da porta do export. Registrado como O116, com DIFF próprio exigido antes da cura.
-
-  Também corrigi um RED legítimo do push 81: a trilha da relavratura estava no PENDENTES_RONALD.json como "aplicado, revise" seguindo a
-  regra 7b.4, e o selo recusou — aquela fila guarda só decisão sua. Foi para o FABRICANTE.md com todos os números, e o selo está verde.
-
-  Em cópia (wt-splits), esperando a pista: a extração do split noturno, a horas_extras_100_feriado decidida sem regra nova, e a composição
-  somando o mapa por mescla. São 15 commits a empurrar; a raia do O114 ainda não voltou.
+  A pista segue com a suíte da raia. O que falta da S5b é mecânico e está pronto em cópia: re-rodar os vizinhos com banco, mergear o O114
+  primeiro como você ordenou, e então o passo 2 com este DIFF já no RELATO.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Pista livre. Rodo os selos da cópia com os vizinhos — e o vizinho certo aqui é quem já exercita a HE noturna e o NAO_DECIDE:
+  Ran 1 shell command
 
-  Searched for 1 pattern, read 1 file, ran 3 shell commands
+● Pista ocupada, mas a cópia está livre e o DIFF do passo 2 já está publicado — então a condição da lei está cumprida e eu aplico o passo
+  2 na cópia, com o selo que impede o segundo juiz de voltar:
 
-● Enquanto a suíte da cópia roda (103 selos), preparo o passo 2 como patch pronto — sem tocar a cópia, que está sob a suíte:
+  Ran 2 shell commands
 
-● Running 1 shell command…
+● Agent "RED e construção do segundo intervalo" stopped at its 200-turn limit (partial result; SendMessage to task-id to continue) · 48m
+30s
 
-· Doodling… (1h 14m 48s · ↓ 206.9k tokens)
+● A raia do O114 bateu o limite de turnos com a suíte ainda correndo. Peço a continuação com escopo curto e, em paralelo, olho o que ela
+  já commitou:
+  ⎿  Resuming agent aa14fd1
+  ⎿  Allowed by auto mode classifier
+
+✢ Doodling… (1h 20m 18s · ↓ 229.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork  Grepping literal marco-key tuples in production                                                       44m 6s · ↓ 405.9k tokens
+  ◯ fork  Awaiting suite_int2.log verdict                                                                      49m 36s · ↓ 409.2k tokens
   ⧉  index
 ```
