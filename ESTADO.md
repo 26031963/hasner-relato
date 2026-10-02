@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:00:31.**
+**Medido em 02/10/2026 06:05:45.**
 
 | | |
 |---|---|
@@ -121,12 +121,12 @@ a3a1b0b1 O topo do TICKETS fechado no ato do push (O112)
   ⎿  Stop hook error: siga: FILA-DA-NOITE -- A ORDEM VIVA passa a ser uma LISTA, nao um item (ordem Ronald 01/10 20:2x). Regra unica: item que
   travar em !,
 
-● A fonte declarada do O45 · 1m 26s
+  A fonte declarada do O45 · 6m 41s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push70.log; do sleep 30; done; tail -4 logs/push70.log; git fetch -q origin;
-     echo "ahead=$(git rev-list --count origin/main..HEAD)" (1m 26s)
+     echo "ahead=$(git rev-list --count origin/main..HEAD)" (6m 40s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (5h 1m 26s · ↓ 412.2k tokens)
+· Unfurling… (5h 6m 39s · ↓ 412.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

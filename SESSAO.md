@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 06:00:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.1 MB). Acoes na janela: **979**.
+**Medido em 02/10/2026 06:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (184.1 MB). Acoes na janela: **975**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -985,7 +985,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:06:59 | Bash | Ver o turno_aberto e o inicio do teto | `grep -n "turno_aberto" ponto/motor_calculo_v2.py \| head -6; sed -n '836,845p' ponto/motor_calculo_v2.py` |
 | 18:06:44 | Bash | Registrar as leis e limpar o topo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # (1) PROMPTS P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() L = ('- **01/10 ~18:1x — LEI (1) RESPONDIDA e PONTUALIDADE-EM-TURNO-ABERTO avalizada.** (1) a cura do T8 ' 'vale **RECORTADA** -- L-084 so no dia que DECLARA intervalo; sem marco de intervalo o gate de 14/09 ' 'segue. **A literal esta desca ...` |
 | 18:06:01 | Bash | Publicar o achado dos sete zerados | `python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io P='docs/RELATO.md' t=io.open(P,encoding='utf-8').read() A = t[t.index('\n## ')+1:].split('\n')[0] NOVO = '''## ACHADO DE PROD, e ele fura a fila: **7 colaboradores ATIVOS bateram ponto e tem fechamento ZERO** Eu estava medindo a outra metade do DIFF (`horas_trabalhadas +113,52 h`) e os dois maiores eram `col43` **+88,32 h** e `col924` **+75,12  ...` |
-| 18:05:07 | Bash | Medir a frota de fechamentos zerados com batida | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/zerados.py <<'PYEOF' # -*- coding: utf-8 -*- """FROTA: colab ATIVO que bateu ponto na 10 e tem fechamento ZERADO. So leitura.""" import collections, datetime as dt from django.utils import timezone as tz from colaboradores.models import Colaborador, Empresa fro ...` |
-| 18:04:42 | Bash | Medir os dois com gravado zero | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/c43.py <<'PYEOF' # -*- coding: utf-8 -*- """col43 e col924: gravado 0,00 em trabalhadas com 88 h e 75 h no calculador. So leitura.""" import datetime as dt from django.utils import timezone as tz from colaboradores.models import Colaborador from ponto.models im ...` |
-| 18:04:23 | Bash | Ver os maiores de trabalhadas no v5 | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '/horas_trabalhadas -- os 6 maiores/,/^$/p' $S/diff_s5b_v5.log \| head -8; echo "=== PADROES do v5 ==="; sed -n '/^PADROES/,$p' $S/diff_s5b_v5.log \| head -7` |
-| 18:03:55 | Bash | Confirmar e gerar o handoff do marco | `cd /home/ronald/saas-hasner && git log --oneline -1 origin/main \| cat; git log --oneline -1 \| cat; HANDOFF_RAIZ=/home/ronald/saas-hasner bash bin/handoff_sessao.sh && sed -n '/## FILA 1/,/## AVAIS/p' app/docs/HANDOFF-SESSAO.md` |
