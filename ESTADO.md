@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 03:40:45.**
+**Medido em 02/10/2026 03:45:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `ff9b95c9 A frase nunca prometia folha, e eram CINCO False seguidos: o leitor nao passava o tipo de escala a fabrica` |
+| `HEAD` local | `83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo` |
 | `origin/main` | `11bfafdf O selo do cron nasceu com o relogio SOLTO, e o contrato o pegou na suite cheia` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+83cc01c2 HE-OCORRENCIA-COMO-LINHA: o desenho da tabela e o plano de migracao, publicados ANTES do codigo
+28ba345d A UI-RESPOSTA-DIZ-O-QUE-E ganha linha no TICKETS, com os dois defeitos que a medicao achou
 ff9b95c9 A frase nunca prometia folha, e eram CINCO False seguidos: o leitor nao passava o tipo de escala a fabrica
 432058dd [UI-RESPOSTA-DIZ-O-QUE-E] A resposta longe do marco passa a dizer a DIRECAO e a CONSEQUENCIA, e o Reabrir diz quantas respostas apaga
 11bfafdf O selo do cron nasceu com o relogio SOLTO, e o contrato o pegou na suite cheia
-9390c8a7 O rodape do TICKETS volta a bater com origin/main, e o push passa
-3ae3e326 [S5b] A tabela final do ! da troca, com a isolacao feita no MESMO dado -- e o residuo de antecipada tem NOME
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -124,16 +122,16 @@ ff9b95c9 A frase nunca prometia folha, e eram CINCO False seguidos: o leitor nao
 
 ● Background command "Smoke no ar e push do item 4" completed (exit code 0)
 
-  Atualizar placar e rodape do TICKETS
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 | tail -1 && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -1 &&
-     bin/regua_tickets.sh 2>&1 | tail -2
+  Commitar o desenho publicado · 2m 36s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push59.log; do sleep 25; done; tail -5 logs/push59.log (2m 36s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (2h 41m 39s · ↓ 258.7k tokens)
+· Unfurling… (2h 46m 39s · ↓ 267.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
