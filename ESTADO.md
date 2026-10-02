@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:30:46.**
+**Medido em 02/10/2026 20:36:01.**
 
 | | |
 |---|---|
@@ -42,7 +42,10 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M bin/hook_stop_fila1.py
+ M bin/tests/test_hook_nao_cobra_congelado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -98,36 +101,36 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
 
 ```
 
-  Push 91 rodando com 11 commits; aviso o veredito.
+  E falta o motivo obrigatório: a view não recebe motivo nenhum, só fechamento_id; a confirmação é um hxConfirmSubmit de texto fixo, e a
+  trilha não guarda por quê.
 
-  Na sua mesa, as quatro com número na mão:
+  Então a fatia é: liberar o botão na linha trancada, exigir motivo, levá-lo à trilha, e a parte (2) do aviso no fio da disputa. Toca
+  template → precisa do seu smoke nas duas cascas (BUG 73).
 
-  ┌──────┬──────────────────────────────────────────┬──────────────────────────────────────┐
-  │ item │               o que espera               │                número                │
-  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
-  │ O119 │ ! — uma linha em motor_calculo_v2.py:573 │ 12,59 h de HE que ninguém trabalhou  │
-  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
-  │ O120 │ lei — gravado de 08/09 vs Pauta DP       │ +102,25 h em 08 (parcial, declarado) │
-  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
-  │ O27  │ ! — qual das três saídas                 │ 1.757,97 h em 325 colabs             │
-  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
-  │ O118 │ seu print do calendário                  │ 4ª prova das quatro                  │
-  └──────┴──────────────────────────────────────────┴──────────────────────────────────────┘
+  Não commito nem toco a árvore com o push 91 ainda vivo — essa disciplina é o que me custou dois pushes hoje quando a quebrei. Construo
+  em cópia e aplico no ato do commit, assim que ele pousar.
+
+  Aviso o veredito do push e volto com a fatia. Na sua mesa seguem, com número: o ! do O119 (uma linha), a lei do O120 (gravado de 08/09
+  vs Pauta DP), o ! do O27 (1.757,97 h, três saídas nomeadas), o print do O118 e agora o print da O30 F1, que eu abri na sua fila porque a
+  lacuna era minha — a fatia estava pronta desde 24/09 e o pedido nunca foi feito.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O28 -- CATALOGO-SAIDA-ANTECIPADA-DESCONTA (Ronald 24/09 10:xx + MUDA das 15:5x) -- saida_antecipada =
-  DESCONTA em min
+  ⎿  Stop hook error: siga: O31 -- ESTEIRA-RETA-FINAL (Ronald 24/09 17:xx, vale a partir de agora) -- (1) teto 6 de dia e 6 de
+  noite em esteira.s
 
-● O hook foi ao O28 — e aqui o padrão fica visível. O estado dele diz **dinheiro -- para no '!'**: mesma coisa que "espera o !", palavra
-  diferente. Crescer o regex a cada variante é band-aid; antes meço quantas variantes existem, porque isso é que diz se a fila ainda tem
-  trabalho meu:
+● O O31 diz, nas suas próprias palavras, fora da sessao pelo proprio item 4. Essa forma é inequívoca — foi a única das quatro que eu
+  julguei segura. Acrescento só ela, e levo a você o padrão que está por baixo, porque ele é desenho e não caso:
 
-  Ran 1 shell command
+● Adding only the unambiguous form and its selo case
+  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^(OK$|Ran |To https|error|exit=)" logs/push91.log | tail -2; pgrep -f "git push origin
+     main" >/dev/null && echo "PUSH 91 VIVO" || echo "push 91 terminou"; python3 - <<'PY'
+     import io
+     p = 'bin/hook_stop_fila1.py'
+     s = io.open(p, encoding='utf-8').read()
+     velho…
 
-● Isso corrige uma conclusão que eu estava formando: eu ia dizer que a sua mesa era o gargalo, e a medição diz o contrário. Dos 66 itens
-  vivos no bloco OBRAS, só 8 dizem esperar por você — e 58 não dizem esperar nada: são trabalho meu (O38 medindo, O39 FRENTE DA FILA, O43
-  livre, O48 passo 2 em curso...). A fila não acabou; eu estava andando pela cabeça dela, que calhou de estar bloqueada.
-
+✢ Sock-hopping… (2h 23m 30s · ↓ 423.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

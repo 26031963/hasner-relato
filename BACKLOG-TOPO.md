@@ -41,7 +41,7 @@ lista — ela e o que esta EM PE._
 | **O31** | ESTEIRA-RETA-FINAL | **recebido -- obra de ESTEIRA/FABRICANTE |
 | **O32** | ZUMBIDO | **recebido -- obra de ESTEIRA/FABRICANTE |
 | **O33** | CARTAO-TOTAL-IGUAL-SOMA | **na fila, depois da F3** |
-| **O34** | FATIA-ANCORA-ENVELHECE | espera aval |
+| **O34** | FATIA-ANCORA-ENVELHECE | espera `!` |
 | **O35** | CONTRATOS-14 | espera `!` |
 | **O36** | PRONTA-QUE-NAO-POUSA | **curado e no ar; 1 item filho (fabrican |
 | **O37** | UMA-FOLGA-NAO-APAGA-A-FASE-DO-12X36 | espera aval |
