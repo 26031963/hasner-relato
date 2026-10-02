@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 22:05:45.**
+**Medido em 01/10/2026 22:10:46.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge d
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -95,6 +96,7 @@ f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  medido foi −959,87.
 
   E o erro é o DIA do marco de saída. marco_no_dia põe o marco "no mesmo dia do instante", e o marco de saída desse turno mora no dia seguinte, porque o
   turno cruza a meia-noite. Com o marco no dia certo o delta da saída é +1.439,9 min, passa dos 180, e a guarda morde. E a correção do dia do marco existe
@@ -125,14 +127,13 @@ f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge d
      /home/ronald/saas-hasner && git archive HEAD app | tar -x -C $D && mkdir -p $D/app/logs $D/app/media && echo "copia nova em s5b2 do HEAD $(git log
      --o…
 
-* Caramelizing… (3m 9s · ↓ 2.8k tokens)
+✻ Caramelizing… (8m 9s · ↓ 2.9k tokens)
+
+› Message from @a6628ec7e07379c89 (ctrl+o to expand)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ general-purpose  Rendering three-state sample in print_col207.py                                                            13m 8s · ↓ 454.1k tokens
   ⧉  index
 ```
