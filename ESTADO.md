@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- PAREI: ! e ok-desenho — **CINCO itens na sua mesa, e a lista da noite esta INTEIRA fechada ou atras de um deles** (frase pronta de cada um n
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- PAREI: ! e ok-desenho — **TRES itens na sua mesa, e a lista da noite esta INTEIRA fechada ou atras de um deles** (frase pronta de cada um no
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:44:31.**
+**Medido em 02/10/2026 04:49:32.**
 
 | | |
 |---|---|
-| `HEAD` local | `b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar` |
+| `HEAD` local | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
 | `origin/main` | `39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)
+6bde56ba [O112] O derivado do topo fecha no ATO do push, e de carona a medida da sombra que SUMIU ia ressuscitar a colisao do O107
 b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar
 2cdbbb0a O topo do RELATO passa a dizer os CINCO que estao na mesa dele, e a lista da noite fecha
 104f8d1c O topo do TICKETS, escrito pelos proprios scripts depois do push 61 (a 5a vez da noite -- O112)
-39eac1fc Tres correcoes minhas, e a primeira ia fazer ele responder um ! impossivel
-1316b866 O topo do TICKETS bloqueou o push pela QUARTA vez numa noite, e isso virou item com o numero
 ```
 
 ## `git status --short`
 
 ```
- M app/config/crons_duracao.json
- M bin/crons_duracao.py
+ M app/docs/HANDOFF-SESSAO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,13 +95,6 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  00m · vai para a folha · Validar com atraso", col290 "atraso de 7m · dentro da tolerância de 10 min: não desconta"); a trilha no quadro de permissões; e
-  a cura de um cron que morria — o ensaio da sombra pegou reconciliar_perguntas_orfas --apply estourando na guarda da porta (disputa #6174), e o cron das
-  06:40 ia encontrar o mesmo.
-
-  Sete Pautas DP abertas (#922–#924, #926–#929): colaboradores que bateram ponto e a folha paga ZERO — 245,93 h sem vínculo nenhum, 195,41 h com vínculo
-  vencido.
-
   Três erros meus, corrigidos e publicados: o ! da folha zero nomeava portas que não fazem o serviço (ia te fazer responder um ! impossível); o censo do
   O110 nasceu curto em dois; e a minha lápide no detalhe_local.html era {# #} multilinha — vazava para a tela do DP, o get_template disse "COMPILA" e quem
   pegou foi o contrato de 05/09. Compilar não é renderizar.
@@ -123,17 +115,24 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Esperar o push final" completed (exit code 0)
 
-● Selo da medicao ausente
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp
-     app/config/crons_duracao.json $S/o112/app/config/ && cat >> $S/o112/app/chamados/tests/test_cron_longo_sai_da_medida.py <<'PY'
-     class MedicaoAusenteLevantaTest(Simpl…
+  Searched for 2 patterns, listed 1 directory, ran 26 shell commands
 
-✢ Unfurling… (3h 45m 26s · ↓ 337.3k tokens)
+● Background command "Push pelo novo bin/push.sh" completed (exit code 0)
+
+● Abrir a linha do O112 e empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/TICKETS.md'
+     L=open(p,encoding='utf-8').read().split('\n')
+     assert L[126].startswith('| ID | frente')
+     r=('| O112 | infra/portao do push | o topo do TICKETS e DERIVADO de `origin/main`, e so era escrito no turno '
+     'SEGUINTE -- pelo RED. **6…
+
+✽ Unfurling… (3h 50m 26s · ↓ 356.0k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
