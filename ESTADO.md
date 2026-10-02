@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:11:01.**
+**Medido em 02/10/2026 05:16:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia` |
+| `HEAD` local | `27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10` |
 | `origin/main` | `9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10
+68764776 A O110 ganha linha no TICKETS
 90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia
 a1acc651 O topo do TICKETS fechado no ato do push (O112)
 9f9815ec A O112 ganha linha no TICKETS, e a O109 fecha por medicao (turno_partido nao aparece no padrao)
-6bde56ba [O112] O derivado do topo fecha no ATO do push, e de carona a medida da sombra que SUMIU ia ressuscitar a colisao do O107
-b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar nao e renderizar
 ```
 
 ## `git status --short`
@@ -94,6 +94,7 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  portão por onde toda fatia passa — então vai para a sua mesa como ok-desenho (O112), não curada por mim.
 
   O push final está rodando a suite; aviso quando entrar.
 
@@ -120,18 +121,17 @@ b4c01bb5 A minha lapide VAZAVA PARA A TELA, e o `get_template` nao via: compilar
 
 ● Background command "Esperar o push 65" completed (exit code 0)
 
-● Deploying do O110 (prod le regua_defesa e juizes) · 39s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/regua_tickets.sh 2>&1 | tail -2; bin/deploy.sh --sem-migrate >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/deploy10.log 2>&1; echo "rc_deploy=$?"; tail -3
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-21… (38s · 3 lines)
+● Esperar o push 66 · 1m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "rc=|pos_push|error:" logs/push66.log; do sleep 25; done; tail -5 logs/push66.log; git fetch -q
+     origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (1m 23s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (4h 11m 56s · ↓ 371.2k tokens)
+✢ Unfurling… (4h 17m 26s · ↓ 383.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```

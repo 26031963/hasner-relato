@@ -28,7 +28,7 @@ lista — ela e o que esta EM PE._
 | **O18** | PARADAS-NAO-SAO-PARADAS | espera aval |
 | **O19** | BO-APP-ANDROID-ATESTADO | espera `!` |
 | **O20** | CONTRATO-VARRE-COMENTARIO | **FECHADA 01/10**: `core/censo_fonte.py` |
-| **O21** | ROTULO-DO-DIA-DECIDIDO | **em curso** |
+| **O21** | ROTULO-DO-DIA-DECIDIDO | **MEDIDO 02/10 06:1x: quem NAO migrou e  |
 | **O22** | AUSENCIA-REVERTER-REJEICAO | **em curso** |
 | **O23** | HAIKU-CONTADOR-UNIVERSO | espera `!` |
 | **O24** | FECHAMENTO-UI-PORTAS | **PORTAO: fila (depois do export de 09)* |
@@ -118,5 +118,5 @@ lista — ela e o que esta EM PE._
 | **O108** | O ESPELHO REPORTA ZERO FURO APURADO ONDE O CARTAO REPORTA 22 | espera `!` |
 | **O109** | O CHAMADOR DO CALCULADOR NAO ALINHA O PERIODO AO SEU MARCO | espera `!` |
 | **O110** | A DISTANCIA CIRCULAR TEM SEIS COPIAS A MAO, nao quatro | **FECHADA 02/10 05:5x: as SEIS copias vi |
-| **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | **A HIPOTESE DA CLASSE MORREU** (medida  |
+| **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | espera `!` |
 | **O112** | O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite | **FECHADA 02/10 05:2x** -- nasceu `bin/p |
