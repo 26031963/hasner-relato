@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:993 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:991 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:23:50.**
+**Medido em 02/10/2026 08:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega` |
+| `HEAD` local | `99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)` |
 | `origin/main` | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)
 0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega
 52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !
 17b5ceef O topo do TICKETS fechado no ato do push (O112)
 b1da8d82 Handoff regenerado depois das correcoes de redacao
-036a21bd O hook me recusou duas vezes, e nas duas a culpa era a minha REDACAO
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,8 +94,6 @@ b1da8d82 Handoff regenerado depois das correcoes de redacao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Antecipada no total abaixo do gravado (−1,85 h), mas o critério (a) é por colab e dois seguem acima. Abrindo as quatro rubricas por colab, que é o que o
   seu (b) pede:
 
   Ran 1 shell command
@@ -121,18 +118,20 @@ b1da8d82 Handoff regenerado depois das correcoes de redacao
 
 ● O selo do diagrama está certo: o motor passou a ler escala/regua_defesa, e o .mmd é defendido por selo. Regenerando:
 
-● Commitar o O111 e deployar · 3s
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/motor_calculo_v2.py app/ponto/services/espelho.py app/ponto/management/commands/diff_calculador.py
-     app/core/juizes.py app/ponto/tests/test_contract_juiz_turno.py app/ponto/tests/test_par_relampago_nao_se_julga.py
-     app/ponto/tests/test_dia_da_jornada… (3s · 2 lines)
+  Ran 3 shell commands
+
+● Deploy OK. Agora a tabela final, as causas por colab e o veredito do seu critério (a):
+
+  Veredito do push do marco · 2m 55s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push73.log; do sleep 30; done; tail -4 logs/push73.log (2m 54s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✶ Hullaballooing… (50m 17s · ↓ 80.0k tokens)
+✢ Hullaballooing… (55m 28s · ↓ 89.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
