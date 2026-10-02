@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:37:31.**
+**Medido em 02/10/2026 19:43:01.**
 
 | | |
 |---|---|
@@ -94,36 +94,36 @@ a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO co
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● O objeto Turno não guarda número — o trabalhado é conta do motor. Então sou obrigado a ser preciso sobre o que não sei: eu localizei que
+  as duas pausas entram em fora (169 min) e que o gravado desconta 88,09; onde, entre os dois, 169 vira 88 eu não localizei, e não vou
+  instrumentar o motor sem o seu aval. O que está medido é o efeito.
+
   Ran 1 shell command
 
-● Esse é o DIFF que o seu aval pede, e ele ficou pequeno e nomeável: 1949 chaves em 112 colabs, só 3 campos de 17 divergem, em 2
-  colaboradores. Nomeio a causa de cada um:
+● Localizo a conta por leitura, que é o que falta para o aval ser decidível:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● Achei, e muda o veredito — está escrito como regra declarada em motor_calculo_v2.py:170-174:
+
+  # QUANTO o motor descontou de intra neste periodo. Zero NAO quer dizer "nao houve pausa": quer
+  # dizer "o motor nao descontou" -- e ele so desconta acima de 6 h (ou 4 h, no ramo do partido).
+
+  O motor desconta o intervalo legal (Art. 71, acima de 6 h) — uma pausa —, e os 88,09 min são isso. Não é bug do motor: é regra, e a
+  lápide ao lado já media o caso irmão (col81, 59,8 min). Corrigindo o que eu disse: não é bug de dinheiro no motor.
+
+  O que existe é uma assimetria: o previsto agora subtrai as duas pausas (550) e o trabalhado subtrai só a legal (635) — e a diferença de
+  85 min/dia aparece como HE 50. Isso é pergunta de lei, não defeito. Vejo o push e escrevo:
 
   Ran 1 shell command
 
-● As duas causas saem nomeadas do próprio dado:
+● Um número ainda não fecha (88,09 não é 60 nem 85), e eu não vou publicar lei com número que não fecha. Pergunto ao motor quanto ele
+  descontou, pelo campo que ele mesmo declara:
 
-  - col221, 9 dias, horas_extras_50 +12,59 h — 1,42 h/dia = 85 min = uma pausa. O oráculo credita a segunda pausa como trabalho e ela
-    virou HE. É o mesmo defeito do O118, agora do lado do calculador: a grade já sarou, o calculador não.
-  - col221 21/09, horas_atraso +1,43 h (86 min) — é o atraso real das 08:28 contra 07:00; o motor diz 0,00. Pela L-084 uma ponta longe é
-    atraso e desconta, então aqui o oráculo acerta e o motor cala.
-  - col599, 5 dias, horas_intra_indenizada −5,00 h — ele bate 11:28→18:02, 19:02→23:30: tirou 60 min reais (18:02→19:02). O cadastro dele
-    é noturno (hii 01:00), que ele não cumpriu; o motor paga 1 h de intra não gozado, o oráculo vê a pausa que houve e paga 0. O oráculo
-    acerta, e são 5 h a favor da casa.
+● Finding motor entry point
 
-  Confirmo a causa 1 na fonte — o que o calculador pergunta sobre pausa:
-
-  Searched for 1 pattern
-
-● Confirmado na fonte: ponto/calculador/alimentacao.py:135 devolve a mesma 4-tupla ({dia: (hi, hf, hii, hfi)}) e regras.py:201 recebe
-  intervalo_marcos = (hii, hfi). O calculador é cego à segunda pausa do mesmo jeito que a grade era. Construo na cópia (o push está vivo,
-  não toco a árvore):
-
-● Reading the calculador marcos map and consumers
-  ⎿  $ cd /home/ronald/wt-orfa/app && sed -n '130,175p' ponto/calculador/alimentacao.py; echo "=== quem consome esse mapa ==="; grep -n
-     "marcos_por_dia\|_marcos_dia\|intervalo_marcos\|intervalos=" ponto/calculador/alimentacao.py | head -14
-
-· Sock-hopping… (1h 25m 0s · ↓ 239.4k tokens · thinking)
+✢ Sock-hopping… (1h 30m 30s · ↓ 260.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
