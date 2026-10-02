@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:15:45.**
+**Medido em 02/10/2026 20:20:45.**
 
 | | |
 |---|---|
@@ -96,13 +96,6 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (6) foi diferido por sua própria ordem:
-
-  Ran 1 shell command
-
-● Background command "Commit the fix and start push 89" completed (exit code 0)
-
-● Régua passou no push 89 (8 citações com linha) e ele está na suíte. Enquanto roda, aplico os regexes do próprio hook ao BACKLOG para
   dizer qual é, de verdade, a fila 1 viva — em vez de descobrir item por item:
 
   Ran 1 shell command
@@ -120,12 +113,19 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
   S5b; a esteira segue pelos itens de portão aberto." A célula dela diz **portao: 8/22** — e portao não está no vocabulário do hook. É a
   mesma classe de erro que as lápides dele já nomeiam três vezes:
 
-  Checking F2 cell and hook selos
-  ⎿  $ cd /home/ronald/saas-hasner && awk -F'|' '/^\| F2 \|/{print "ESTADO: "$4}' app/docs/BACKLOG.md | cut -c1-200; echo "=== quantos
-     itens dizem 'portao' no estado ==="; awk -F'|' '$4 ~ /portao|PORTAO/ {n++} END {print n" item(ns)"}' app/docs/BACKLOG.md; echo "===
-     ha selo do hook? ==="; ls bin/tests/ …
+  Ran 1 shell command
 
-· Sock-hopping… (2h 3m 14s · ↓ 370.0k tokens)
+● Confirmado: 6 itens dizem portao no estado, e há família de selos do hook — incluindo test_hook_nao_cobra_congelado.sh, que é exatamente
+  onde este caso mora. Construo e testo numa cópia (não toco bin/ com o push vivo):
+
+  Patching and testing the hook in a copy · 4m 39s
+  ⎿  $ cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cp bin/hook_stop_fila1.py $SC/hook_patch.py && python3 - <<'PY'
+     import io, os
+     sc = os.environ.get('SC') or '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210… (4m 38s · 4 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Sock-hopping… (2h 8m 14s · ↓ 371.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
