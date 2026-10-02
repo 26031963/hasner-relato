@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:249 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:297 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:43:01.**
+**Medido em 02/10/2026 19:48:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| `origin/main` | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -39,7 +39,10 @@ a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO co
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,35 +98,35 @@ a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO co
 
 ```
 
-● O objeto Turno não guarda número — o trabalhado é conta do motor. Então sou obrigado a ser preciso sobre o que não sei: eu localizei que
-  as duas pausas entram em fora (169 min) e que o gravado desconta 88,09; onde, entre os dois, 169 vira 88 eu não localizei, e não vou
-  instrumentar o motor sem o seu aval. O que está medido é o efeito.
+  No mesmo cadastro e no mesmo padrão de batidas, o motor desconta uma pausa em 7 dias e as duas em 21/09. Não é a regra do Art. 71 que eu
+  citei — é inconsistência, e é o que infla horas_trabalhadas em ~81–84 min nesses 7 dias. O motor nunca pagou essa HE (minutos_extra_50
+  = 0,00 em todos os períodos); quem a pagaria é o oráculo, por herdar minutos_trabalhados e comparar com o previsto certo de 550.
+
+  Ran 3 shell commands
+
+● Suíte 9 min no contêiner de teste, normal. Escrevo os registros (sem commitar até o push pousar). O S5b fecha e o achado novo nasce como
+  item próprio:
 
   Ran 1 shell command
 
-● Localizo a conta por leitura, que é o que falta para o aval ser decidível:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Achei, e muda o veredito — está escrito como regra declarada em motor_calculo_v2.py:170-174:
-
-  # QUANTO o motor descontou de intra neste periodo. Zero NAO quer dizer "nao houve pausa": quer
-  # dizer "o motor nao descontou" -- e ele so desconta acima de 6 h (ou 4 h, no ramo do partido).
-
-  O motor desconta o intervalo legal (Art. 71, acima de 6 h) — uma pausa —, e os 88,09 min são isso. Não é bug do motor: é regra, e a
-  lápide ao lado já media o caso irmão (col81, 59,8 min). Corrigindo o que eu disse: não é bug de dinheiro no motor.
-
-  O que existe é uma assimetria: o previsto agora subtrai as duas pausas (550) e o trabalhado subtrai só a legal (635) — e a diferença de
-  85 min/dia aparece como HE 50. Isso é pergunta de lei, não defeito. Vejo o push e escrevo:
+● Meu próprio teto mordeu (320 > 300). Encurto:
 
   Ran 1 shell command
 
-● Um número ainda não fecha (88,09 não é 60 nem 85), e eu não vou publicar lei com número que não fecha. Pergunto ao motor quanto ele
-  descontou, pelo campo que ele mesmo declara:
+● Agora o item na sua fila de decisão (é ! de zona inviolável, não lei) e a linha no RELATO:
 
-● Finding motor entry point
+  Ran 2 shell commands
 
-✢ Sock-hopping… (1h 30m 30s · ↓ 260.7k tokens)
+● Background command "Wait for push 87 verdict" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Push 87 pousou: 9.382 testes OK + 22 do control-plane, To https, exit=0 — os 3 commits (cura do O118 + as quatro provas) estão no
+  remoto. Commito os registros:
+
+  Running 1 shell command…
+
+· Sock-hopping… (1h 36m 0s · ↓ 273.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

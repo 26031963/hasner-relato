@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**117 obras abertas.**
+**118 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -126,3 +126,4 @@ lista — ela e o que esta EM PE._
 | **O116** | A LAVRATURA DO `DiaPago` TEM UM SEGUNDO JUIZ DE DIA, e o O111 nunca a alcancou | espera aval |
 | **O117** | DOIS CORTES DELE COLIDEM sobre celula que EXISTE com `dna.marcos` NULO | espera `!` |
 | **O118** | A GRADE CASAVA A PRIMEIRA PAUSA, NAO TODAS | **CURADO na origem** em `escala/utils.py |
+| **O119** | O `intra_descontada` do motor oscila no MESMO cadastro e no MESMO padrao de batidas | **ESPERA AVAL**: a conta mora em `ponto/ |
