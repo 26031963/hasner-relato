@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:05:01.**
+**Medido em 02/10/2026 11:10:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7d9922db [O27] JANELA-EXATA MEDIDO: a causa e UMA (folga trabalhada), e os cortes ja tinham nome` |
+| `HEAD` local | `0c1d6bf4 [O27] A linha do TICKETS da fatia MEDIDA` |
 | `origin/main` | `322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0c1d6bf4 [O27] A linha do TICKETS da fatia MEDIDA
 7d9922db [O27] JANELA-EXATA MEDIDO: a causa e UMA (folga trabalhada), e os cortes ja tinham nome
 a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela
 3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS
-b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
 ```
 
 ## `git status --short`
@@ -94,39 +94,39 @@ b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  em_curso. O número que tranquiliza: zero períodos adquirido ou concedido com direito divergente — não há férias concedidas acima do direito.
 
-  E o turno terminou me corrigindo em três pontos, que ficaram escritos:
+  Isso é exatamente a razão de existir da F2: hoje a tela mostra 30 dias a quem, se o período fechasse agora, teria 18.
 
-  1. A pausa cortes.alarme.pausado — minha, de 27/09 — já nomeava quatro dos cortes que levei ao AVAIS hoje (CARTAO-TOTAL-IGUAL-SOMA, JUIZ-BATIDA-NASCE,
-     JUIZ-ESCALA-NASCE, PARAMETRO-GANHA-ROTULO), com a saída declarada "o export da 09 com o ! do Ronald". A pergunta nunca foi qual a regra — era qual o
-     número. Os itens passam a citar o corte; o portão da F2 deixa de parecer solto, porque é o mesmo !.
-  2. Rodei medição pesada em prod (266% de CPU) antes de lembrar que isso vai na sombra. Matei no ato e refiz no cpuset de teste.
-  3. Afirmei num selo um veredito que o sistema não dava (em_aberto onde era trabalhou) e troquei pelo invariante real, escrevendo no próprio selo o que
-     ele não prova.
+  Ran 2 shell commands
 
-  O que destrava tudo o que sobrou é uma decisão sua, e ela é uma só: o ! da troca da S5b (col516 +7,86 h e col174 +4,52 h, por pareamento) e o export da
-  09. Dele dependem, em cadeia, as duas células que faltam para o 22/22, o censo dos juízes de batida e escala, os 16 parâmetros sem efeito e o portão da
-  F2 — e agora todos eles têm o número do lado, prontos para andar no mesmo turno em que você responder.
+● A medição da F2 está feita e o registro escrito — entra assim que o push 82b liberar a pista. E ela mudou o que a F2 é:
+
+  A F2 não é a regra, é a visão. O art.130 já está implementado (ferias/services.py:217 com a tabela em ferias/models.py:5), e o aplicar_art130 roda no
+  fechamento do período por desenho declarado. Isso derruba o custo e o risco do item: nenhum número novo nasce, é um leitor que falta — a mesma forma dos
+  três que subiram hoje.
+
+  O que ela precisa de você é uma pergunta jurídica, não técnica: quatro tipos descontam pelo cadastro vivo (atraso, falta, saida_antecipada, suspensao) e
+  o art.130 conta só o literal 'falta'. Suspensão disciplinar conta como falta injustificada para férias? Se sim, 5 ausências aprovadas não estão
+  reduzindo direito. Atraso e saída antecipada são parciais — contá-las como dia seria errado, e aí o literal está certo por acidente e o que falta é um
+  conjunto próprio no catálogo (FALTAS_DO_ART130), não DESCONTAM_VIVOS.
+
+  E o estado do direito, em 1.046 períodos: 7 com dias_direito gravado acima da tabela (col338 com 15 faltas marcando 30 onde dá 18; col667 com 19), todos
+  em_curso — e zero adquirido ou concedido divergente. Ninguém recebeu férias acima do direito. O que existe é a tela prometendo 30 dias a quem, se o
+  período fechasse hoje, teria 18 — que é exatamente o furo que a F2 fecha.
+
+  Com isso, o portão da F2 deixa de ser uma parede sem informação: quando o 22/22 abrir (e ele depende do mesmo ! da troca da S5b), o item entra sabendo
+  que é tela, com o universo medido em 7-8 colaboradores e a regra jurídica já respondida.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● O portão da F2 proíbe construir — não proíbe medir, e medir é o que falta para ela valer quando o portão abrir. O item é art.130/131 no período
-  aquisitivo:
+● Segue esperando o push 82b · 1m 11s
+  ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED" logs/push82b.log; then break; fi; sleep 10; done; grep
+     -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push82b.log | tail -5; date +%H:%M:%S (1m 10s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  Searched for 1 pattern
-
-● Background command "Push 82 e o handoff do marco" failed with exit code 1
-
-● O push 82 falhou — vendo a causa antes de seguir:
-
-  Ran 1 shell command
-
-● A régua cobra linha no TICKETS para toda fatia citada em commit — inclusive quando ela foi medida e não construída. Abrindo com o estado honesto:
-
-● Running 1 shell command…
-
-✢ Hullaballooing… (3h 31m 28s · ↓ 476.1k tokens)
+✢ Hullaballooing… (3h 36m 58s · ↓ 485.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
