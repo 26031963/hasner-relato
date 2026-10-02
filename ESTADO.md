@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:591 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:629 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:05:31.**
+**Medido em 01/10/2026 23:10:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o grep de cor literal da ZERO` |
+| `HEAD` local | `50f85995 A celula da obra registra a cura decidida: sair da regra global, nao brigar com ela` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **12** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+50f85995 A celula da obra registra a cura decidida: sair da regra global, nao brigar com ela
+83ea71a0 Ordem consolidada de 23:1x: a celula sai de baixo da regra global em vez de brigar com ela
+0953f1ec POR QUE o fundo nao mudou as 22:5x: !important na folha vence o style= inline
 d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o grep de cor literal da ZERO
 142c4a99 trilha do vigia da esteira (linha escrita pelo cron das 22:10)
-e50abfd5 [GESTAO-HE-FATIA-1] A GRADE salta, a celula NAO: fundo suave por token da casa, zero cor literal, led cheio
-b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO
-427015a3 A celula da obra declara a correcao de desenho em curso na raia
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o mar
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E o preço do erro do primeiro aval, medido: com a célula escura o número tinha de ir branco — que é o contrário de "número em texto ESCURO e legível",
-  pedido do mesmo aval. Os dois lados daquele texto não cabiam juntos; a correção não foi ajuste de gosto.
+  ⎿  Message queued for delivery to a6628ec7e07379c89 at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
-  O print do col207 está no RELATO, e ele confirma que era essa pessoa que você estava olhando: o dia 15 sai ▲90 ▼32 — exatamente o número que o seu aval
-  citou. E uma coisa que o agente deixou para o seu olho decidir sem mexer: o col207 tem 25 dias de 26 plantões com ponta e nenhum decidido — a grade é um
-  pente quase cheio de números riscados. Está certo e é o fato, mas é muita informação de uma vez.
+  Ran 2 shell commands
 
-  Provas: 80 testes na raia (7 pulados = fatia 2), 38 de front com o chromium, 98 na main depois do merge. Dois selos mudaram de lado em vez de serem
-  apagados — o da luminância agora afirma fundo > 0,85 e número < 0,45, e prova que --hx-slate-300 é mais escuro que o --hx-slate-100 de antes, então
-  "grade mais marcada" virou fato e não palavra. E o _lum() do selo lê o hasner-ui.css de verdade em vez de repetir os hex — repetir seria o segundo lugar
-  onde a cor mora.
+● A ordem consolidada está repassada e registrada, e você acertou a cura melhor do que eu. Eu tinha sugerido ao agente o !important inline — que venceria
+  a linha 371, mas deixaria a tela brigando com a folha para sempre. A sua decisão é o contrário: a célula sai de baixo da regra global em vez de lutar
+  com ela — type="button" + htmx na mesma porta decidir_he, mesma confirmação, mesmo motivo. Nada de !important, nada de tocar a regra global.
 
-  O AVAIS segue com um item: o seu smoke, agora na tela corrigida.
+  A causa está publicada com arquivo e linha, como você pediu: hasner-ponto.css:369-373 pinta todo button[type="submit"] com background: var(--hp-blue)
+  !important (#0078d4) e color:#fff !important. A célula virou submit no commit de 20:5x — foi assim que ela passou a disparar a porta por dia, que era a
+  sua ordem — e caiu nessa regra. O template estava certo desde as 22:16; ganhou a cascata.
 
-✻ Brewed for 22m 12s · done 10:17 PM · 1 shell still running
+  E a parte que me cabe dizer de frente: o selo ficou verde porque nunca perguntou ao navegador. Ele leu o token declarado no markup e o resolveu lendo
+  hasner-ui.css — prova de intenção, não de resultado. O test_smoke_chromium que rodou no mesmo ciclo abre o espelho, não essa tela. A seção 6 do
+  CLAUDE.md diz exatamente para que o chromium existe: "ele responde o que regex de markup não responde: CASCATA". Eu tinha a ferramenta e não a apontei
+  aqui.
 
-❯ aval Ronald 01/10 23:0x GESTAO-HE fatia 1: a celula saiu AINDA com fundo #0078d4 (print 22:57) e numero azul escuro por cima. So template.
-  MODELO UNICO, copiar e nao interpretar: a celula do calendario do colaborador, templates/colaboradores/partials/_calendario_grade.html:57-65.
-  - HE sem decisao = a celula "previsto" de la: fundo #eff6ff, borda #bfdbfe, numero #1e40af riscado.
-  - Com ciencia = a celula "folga" de la: fundo #f8fafc, borda #e2e8f0, numero #475569 riscado.
-  - Autorizado: fundo #dcfce7, borda um tom acima como no resto da grade, numero #166534 sem risco.
-  - Dia sem HE: fundo branco, borda #e2e8f0.
-  - LED: ponto cheio #94a3b8 = bloqueado, #16a34a = autorizado.
-    PROVA antes de dizer pronto: getComputedStyle da celula no chromium = rgb(239, 246, 255); 0078d4 e hp-blue na celula = 0. E dizer no RELATO POR QUE o
-  fundo nao mudou na versao das 22:5x.
-    Merge direto, print do col207 no RELATO, AVAIS com o meu smoke. Segue a fila.
+  Você também achou um segundo sítio que eu não tinha visto: a linha 139 tem um botão de envio com fundo slate-100 no style, coberto pela mesma regra
+  global — também pintado de azul por cima. Está na ordem do agente para conferir e dizer o que achou, mesmo que esteja certo.
 
-✢ Warping… (24s · still thinking)
+  E a prova ficou mais dura, que é o que mais importa: getComputedStyle da célula no chromium = rgb(219, 234, 254), nas duas cascas, e o selo de
+  luminância passa a ler a tela renderizada em vez do arquivo de cores. Isso é mudança de método, não caso novo — foi justamente por ler o arquivo que o
+  selo ficou verde com a tela azul.
 
-❯ aval Ronald 01/10 23:0x, complemento da GESTAO-HE: (1) LED = o LED da casa, copiar de templates/colaboradores/partials/painel_situacional.html:282-285
-  -- circulo CHEIO de 11px, border-radius 50%, sem borda: cinza #cbd5e1 = bloqueado, verde #16a34a = autorizado. Este cinza substitui o do aval anterior.
-  (2) A grade no desenho do mini calendario do Vincular escala (templates/colaboradores/partials/_fase_12x36.html): celula arredondada de borda fina,
-  dia com HE no azul suave do plantao, os demais brancos. Segue a fila.
-  ctrl+x ctrl+s to send now
+  Registrado também que os tokens de 22:16 ficam e os hexes literais do aval de 23:0x não valem, porque aquele aval foi substituído por este.
+
+  Quando a raia voltar com a prova no chromium, eu mergeio direto, publico o print do col207 e ponho o seu smoke no AVAIS — e então volto às três curas da
+  S5b, que é onde a sua ordem manda a fila seguir depois.
+
+✻ Waiting for 1 background agent to finish
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+
+  ● main
+  ◯ general-purpose  Reading hasner-ponto.css cascade rule                                                            3m 3s · ↓ 474.1k tokens · 1 queued
   ⧉  index
 ```
