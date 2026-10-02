@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:991 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:10 AFIRMA ato sem PROVA ao lado -- ### 0. PAINEL-SITUACIONAL-N+1 + PLACAR-EM-TURNO-DOIS-NUMEROS (O113) -- **NO AR, com os tres REDs**
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:33:31.**
+**Medido em 02/10/2026 09:39:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `27c9c24c O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito` |
 | `origin/main` | `46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,23 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito
 27c9c24c O topo do TICKETS fechado no ato do push (O112)
 46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS
 9877256e [JANELA-DA-AUTORIDADE-PERDE-O-DIA-20] A janela da testemunha passa a ser a da folha, e a medicao refinou a premissa
 daa9cb6a O topo do TICKETS fechado no ato do push (O112)
-a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/services/situacional.py
- M app/colaboradores/views.py
- M app/core/management/commands/lavrar_placar_situacional.py
- M app/ponto/tests/test_vinculo_do_dia_pela_celula.py
- M app/ponto/turnos.py
-?? app/colaboradores/tests/test_situacional_pergunta_em_lote.py
-?? app/core/tests/test_placar_situacional_um_so_numero.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -101,24 +94,6 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Construindo em cópia, com o script de patch ancorado por grep:
-
-  Read 1 file, ran 4 shell commands
-
-● Background command "Linha no TICKETS e push do marco" completed (exit code 0)
-
-  Searched for 2 patterns, read 2 files, listed 1 directory, ran 8 shell commands
-
-● RED primeiro: aplico só o turnos.py (refactor + lote) na árvore e deixo os consumidores velhos mentindo:
-
-  Ran 2 shell commands
-
-● RED #1 evidenciado: 190 queries para 30 linhas, 610 para 100 — diferença 420; a equivalência lote×juiz já passou. Corrijo a fixture (unique de
-  justificativa por turno) e aplico o resto:
-
   Ran 2 shell commands
 
 ● Nove GREEN. Agora ruff + os vizinhos que enumeram (lição das 3 rodadas de 01/10):
@@ -131,9 +106,27 @@ a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario
 
 ● 204 vizinhos OK. Agora a medição em prod (só leitura, funções reais — o processo novo lê o disco, que já tem a cura):
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Hullaballooing… (1h 59m 58s · ↓ 197.8k tokens)
+● Medição em prod, com a cura (contra o 08:45 dele): 30 linhas 130→13 queries, 0,63→0,16 s · 100 linhas 390→13, 0,96→0,16 s · 520 linhas 2.150→12,
+  4,07→0,78 s; equivalência 144=144, diferença 0 nos dois sentidos. Agora o HAIKU:
+
+  Committed a8c605dd, searched for 4 patterns, listed 3 directories, ran 15 shell commands
+
+● Suíte em voo. Enquanto roda, preparo (sem commitar) o lado HAIKU — a ponte e a golden:
+
+  Ran 1 shell command
+
+● Background command "Push 77 com a suite do pre-push" completed (exit code 0)
+
+  Ran 1 shell command
+
+● O push está detached (o & interno retornou na hora). Sigo preparando o HAIKU e monitoro o log:
+
+  Resolucao de empresa nas ferramentas
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "def certificacao_da_pergunta" -A 30 mensageria/nucleo/ferramentas.py | head -40
+
+✢ Hullaballooing… (2h 5m 28s · ↓ 217.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
