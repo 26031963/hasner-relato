@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:247 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:313 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:53:31.**
+**Medido em 02/10/2026 15:59:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou` |
+| `HEAD` local | `7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu
 a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou
 99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
 0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
 ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
-389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,44 +93,44 @@ ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criter
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● fork(RED e construção do segundo intervalo) Opus 5 (1M context)
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+● Atenção à unidade (a lição do h+min contra decimal): faltas_por_dia vem em minutos, DiaPago.horas_falta em horas — 440 min = 7,33 h é o
+  mesmo dia, não movimento. Com a conversão certa, o que move em col954 é 22/09 (+8 h), 24/09 (+24 h) e 02/10 (+7,33), e todos esses dias
+  perderam o previsto. Falta sem previsto, e 24 h de falta num dia comercial, não é gravado velho:
 
-● Background command "Rodar o mesmo DIFF na árvore que está no ar" completed (exit code 0)
+  Searched for 1 pattern, ran 1 shell command
 
-● Raia lançada. Registro o prompt (PROMPT-NAO-SE-REPETE) e leio o DIFF da árvore no ar:
-
-  Ran 6 shell commands
-
-● Background command "Esperar o DIFF da árvore no ar" completed (exit code 0)
-
-● O DIFF da árvore que está no ar terminou — é ele que decide se a deriva é minha ou do gravado:
+● horas_falta não vem do furo do motor: vem de Ausência aprovada (fechamento.py:382-388, soma de minutos). Então as +48,14 h são faltas
+  lançadas pelo DP depois do gravado. Quais, e por que uma soma 1440 min:
 
   Ran 1 shell command
 
-● As duas tabelas são idênticas em todo campo de dinheiro — a única diferença é minutos_realizados 18.190/47 contra 18.130/46, que é uma
-  batida que entrou entre as duas corridas. Então meu código não deployado não move dinheiro; a deriva é do gravado contra o código que
-  está no ar. Falta a causa dos dois que ganham horas_falta:
+● Causa limpa e legítima: o DP lançou as faltas hoje (JSP02 às 09:08-09:10, ANAPAULABEASI às 07:53), depois do gravado — é exatamente o
+  "gravado velho" do item (3). Mas uma delas pede nome próprio: col954 24/09 com minutos=1440, 24 h de desconto num dia de 480. Censo
+  antes de aplicar:
 
-● Campos do DiaPago
-  ⎿  $ python3 -c "
-     import io
-     s=io.open('ponto/models.py',encoding='utf-8').read()
-     i=s.find('class DiaPago')
-     b=s[i:i+7000]
-     import re
-     print([re.sub(r'\s*=.*','',l.strip()) for l in b.splitlines() if ('Field(' in l and 'models.' in l)][:40])
-     "
+  Ran 1 shell command
 
-· Doodling… (32m 18s · ↓ 68.4k tokens)
+● Um caso em 14 — vai para o AVAIS como Pauta DP (mexer em Ausencia é cadastro de dinheiro, ! dele). Agora publico o DIFF do ato antes do
+  apply, como a L-082 manda:
+
+  Ran 2 shell commands
+
+● Reversão, hash ANTES, apply e hash DEPOIS num só ato, com o contador de erro silencioso que o except ... continue do recálculo esconde:
+
+  Primeira leitura do apply · 33s
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sleep 60; grep -vE "objects
+     imported" $S/apply_10.log | head -25 (34s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Doodling… (37m 48s · ↓ 87.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Writing prod probe for te548 and col221 cells                                                         1m 35s · ↓ 180.8k tokens
+  ◯ fork  Adding pausas_do_dia to EscalaColaborador                                                              7m 5s · ↓ 220.1k tokens
   ⧉  index
 ```
