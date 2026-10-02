@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:20:45.**
+**Medido em 02/10/2026 20:25:45.**
 
 | | |
 |---|---|
@@ -42,6 +42,10 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
+ M bin/hook_stop_fila1.py
+ M bin/tests/test_hook_nao_cobra_congelado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,42 +100,42 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dizer qual é, de verdade, a fila 1 viva — em vez de descobrir item por item:
 
   Ran 1 shell command
 
-● Meu número está errado e eu não o publico: reproduzi os regexes do hook mas não o universo dele (ele lê só o bloco OBRAS, e eu varri o
-  BACKLOG inteiro — 415 é artefato meu, o mesmo erro de contar pela forma). Pergunto à autoridade em vez de replicá-la:
-
-  Ran 2 shell commands
-
-● Background command "Ask the hook itself for the live queue" completed (exit code 0)
-
-  Read 1 file
-
-● O hook diz: o próximo é F2 — VISAO-FALTAS-FERIAS. E o seu aval das 17:5x foi literal: "a F2 SEGUE no portão, e o 22/22 espera a troca da
-  S5b; a esteira segue pelos itens de portão aberto." A célula dela diz **portao: 8/22** — e portao não está no vocabulário do hook. É a
-  mesma classe de erro que as lápides dele já nomeiam três vezes:
+● Push 89 falhou com 1 falha em 9.383 testes. Acho qual:
 
   Ran 1 shell command
 
-● Confirmado: 6 itens dizem portao no estado, e há família de selos do hook — incluindo test_hook_nao_cobra_congelado.sh, que é exatamente
-  onde este caso mora. Construo e testo numa cópia (não toco bin/ com o push vivo):
+● Falha minha: o item O119 que eu escrevi em PENDENTES_RONALD.json não tem o campo o_que, e o selo exige que todo item diga o que espera.
+  Vejo o contrato e a forma dos vizinhos:
 
-  Patching and testing the hook in a copy · 4m 39s
-  ⎿  $ cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cp bin/hook_stop_fila1.py $SC/hook_patch.py && python3 - <<'PY'
-     import io, os
-     sc = os.environ.get('SC') or '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210… (4m 38s · 4 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Sock-hopping… (2h 8m 14s · ↓ 371.9k tokens)
+● Eu inventei a forma em vez de seguir a que existe (o_que, desde, dono, estado, trava_fila1) — mesma classe do erro de tipo: "pauta DP"
+  mais cedo hoje. Confiro se o selo recusa chave extra antes de corrigir:
+
+  Ran 1 shell command
+
+● O selo só exige o_que presente — chave extra é permitida. Corrijo para o vocabulário da casa e aplico a cura do hook com o selo que a
+  morde (o push morreu, posso commitar):
+
+● Fixing PENDENTES, applying hook cure and selo
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io, json
+     p = 'app/docs/PENDENTES_RONALD.json'
+     d = json.loads(io.open(p, encoding='utf-8').read())
+     itens = d if isinstance(d, list) else d.get('itens', [])
+     it = next(i for i in itens if i.get('id') == 'O119-INTRA-OSCILA')
+     it['o_que'] = ("O `!`…
+
+✶ Sock-hopping… (2h 13m 14s · ↓ 382.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
