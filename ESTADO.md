@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 22:16:01.**
+**Medido em 01/10/2026 22:21:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `142c4a99 trilha do vigia da esteira (linha escrita pelo cron das 22:10)` |
+| `HEAD` local | `d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o grep de cor literal da ZERO` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d7425a86 MERGE da correcao de 21:5x: o azul forte sai, 59 hex viram token, e o grep de cor literal da ZERO
 142c4a99 trilha do vigia da esteira (linha escrita pelo cron das 22:10)
+e50abfd5 [GESTAO-HE-FATIA-1] A GRADE salta, a celula NAO: fundo suave por token da casa, zero cor literal, led cheio
 b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO
 427015a3 A celula da obra declara a correcao de desenho em curso na raia
-f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge direto, print depois
-79716395 A celula da S5b nomeia a familia: tres guardas que o motor tem e o calculador nao le
 ```
 
 ## `git status --short`
 
 ```
-UU app/docs/BACKLOG.md
-M  app/docs/RELATO.md
-M  app/ponto/tests/test_tela_gestao_he_calendario.py
-M  app/templates/ponto/gestao_he.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,44 +95,44 @@ M  app/templates/ponto/gestao_he.html
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. a guarda passa a perguntar com o marco resolvido, usando o mesmo turno_cruza_meia_noite que o ramo de baixo já usa — só isso pega col235, col174 e
-     col382;
-  2. a janela nunca entrega par invertido: depois do clip, se saída <= entrada, a janela não se aplicou — as batidas reais voltam inteiras e o dia é
-     contado. Isso não é clampear em zero, que a lápide proíbe com razão; é a própria prescrição dela — "recusar a janela nele" — aplicada por
-     impossibilidade aritmética em vez de por pré-condição de juiz. Clampe esconde; recusa declara.
 
-  Por que as duas: a camada 1 cura a causa conhecida; a 2 é o cinto, e existe porque a L-084 responde a pergunta do desconto ("o cadastro descreve o
-  dia?") e a janela precisa de outra ("o clip inverteria o par?"). São perguntas diferentes, e a cura de 28/09 emprestou a primeira para decidir a segunda
-  — com uma ponta exata no marco e a outra a 21 h dele, a pergunta do desconto responde "descreve", e está certa, para o desconto.
+● A correção está no ar às 22:16 — merge de e50abfd5 e deploy no mesmo ato, com o segundo aval vencendo: fundo suave pelos tokens da casa e merge direto.
 
-  As três curas da S5b agora têm as três causas nomeadas e duas já escritas em cópia. Falta implementar (b) e (c), os REDs e o DIFF refeito — e isso vai
-  num marco só, que é o que a sua resposta (1) exige para a troca subir.
+  59 ocorrências de cor literal viraram token (20 tokens distintos de hasner-ui.css): sem decisão → --hx-primary-bg + --hx-primary-text riscado; ciência →
+  --hx-slate-100 + --hx-slate-600 riscado; autorizado → --hx-success-bg + --hx-success-text sem risco; grade com borda --hx-slate-300 em toda célula,
+  inclusive no dia sem HE; led círculo cheio de 5px, cinza = desabilitado, verde = autorizado.
 
-✻ Waiting for 1 background agent to finish
+  O selo que você pediu nominalmente existe e dá zero — e eu caí na armadilha dele antes de ler o relatório. Meu primeiro grep de hex no template devolveu
+  2, e as duas eram &#9656; e &#9662;, as setas do colapso lidas como cor. Com o (?<!&) que o selo da raia já usava: 0 hex, 0 --hp-. A única menção a
+  --hp-blue está na lápide que explica a proibição, e o selo varre descontando comentário. Décima primeira vez que a prosa que explica a cura é lida como
+  a doença.
 
-❯ segue a fila; PAREI so em lei ou !
+  Duas coisas que o agente declarou em vez de esconder:
+  - a ordem diz "reusar as classes" do calendário de vínculos, e _calendario_fase.html não tem classe nenhuma — as linhas 11-15 são style inline. Então
+    ele reusou o desenho medido (gap 2px, radius 6px, borda 1px por token, led cheio de 5px) e não criou CSS novo, porque estático novo depende de
+    collectstatic e serviria hash velho na janela de deploy;
+  - com o led vazado proibido, "sem decisão" e "ciência" ficariam distinguíveis só pela cor do fundo, e os dois são claros e vizinhos. O anel de 1px é a
+    forma que sobrou: sem decisão = sem anel + riscado, ciência = com anel + riscado, autorizado = sem anel + limpo.
 
-  Ran 3 shell commands
+  E o preço do erro do primeiro aval, medido: com a célula escura o número tinha de ir branco — que é o contrário de "número em texto ESCURO e legível",
+  pedido do mesmo aval. Os dois lados daquele texto não cabiam juntos; a correção não foi ajuste de gosto.
 
-› Message from @a6628ec7e07379c89 (ctrl+o to expand)
+  O print do col207 está no RELATO, e ele confirma que era essa pessoa que você estava olhando: o dia 15 sai ▲90 ▼32 — exatamente o número que o seu aval
+  citou. E uma coisa que o agente deixou para o seu olho decidir sem mexer: o col207 tem 25 dias de 26 plantões com ponta e nenhum decidido — a grade é um
+  pente quase cheio de números riscados. Está certo e é o fato, mas é muita informação de uma vez.
 
-● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 17m 24s
+  Provas: 80 testes na raia (7 pulados = fatia 2), 38 de front com o chromium, 98 na main depois do merge. Dois selos mudaram de lado em vez de serem
+  apagados — o da luminância agora afirma fundo > 0,85 e número < 0,45, e prova que --hx-slate-300 é mais escuro que o --hx-slate-100 de antes, então
+  "grade mais marcada" virou fato e não palavra. E o _lum() do selo lê o hasner-ui.css de verdade em vez de repetir os hex — repetir seria o segundo lugar
+  onde a cor mora.
 
-● Acertar a celula e rodar os vizinhos na main
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     A='| GESTAO-HE-CALENDARIO-CONTROLE |'
-     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
-     novo = (' **FATIA 1 +…
+  O AVAIS segue com um item: o seu smoke, agora na tela corrigida.
 
-✢ Caramelizing… (13m 24s · ↓ 9.9k tokens)
+✻ Brewed for 22m 12s · done 10:17 PM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
