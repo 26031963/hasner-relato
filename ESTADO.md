@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 13:45:45.**
+**Medido em 02/10/2026 13:51:01.**
 
 | | |
 |---|---|
@@ -94,44 +94,44 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Aqui está o ponto exato que a ordem (1) resolve: o pares_da_autoridade de hoje itera turnos_do_colab (o juiz de geometria), e a ordem manda usar
+  aut.resultado.periodos (os períodos do motor) — que é justamente onde col516 e col174 divergiam. Vendo o que um período do motor expõe:
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● O selo da L-086 existe e passa (10 testes OK). Fechando as duas células que mentiam e abrindo o O79, que é trabalho real:
+● Isso simplifica o desenho: cada PeriodoCalculo já é um par (E→S) que o motor usou para contar — sem pareamento, sem intervalos_do_turno. Medindo se
+  entrada/saida vêm crus ou já clipados na janela, porque isso decide a porta:
 
   Ran 1 shell command
 
-● Achado de higiene da fila, com prova item por item: três células do BACKLOG estavam mentindo — e é exatamente isso que faz a esteira construir o que já
-  existe.
+● Medição decisiva, e ela corrige o desenho antes de eu escrever: o PeriodoCalculo é o envelope do turno com a pausa dentro (col174 21/09: envelope 488,0
+  × trabalhadas 411,8 — 64,9 min de pausa real; col516: 60 min indenizados, pausa real 0). Passá-lo cru ao núcleo repetiria o erro já medido de +5.563,83
+  h. Vendo como o motor obtém turno e intra:
 
-  ┌─────────────────────────────┬─────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │            item             │  dizia  │                                                     é                                                     │
-  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O41                         │         │ feito em 25/09 (ebde81d4): os 3 verbos já entram pela porta do fio (fio.py:406, lápide citando o mesmo    │
-  │ GEOFENCE-VALIDAR-SEM-VOLTA  │ "livre" │ print do [nome] #16386), o relatório de geo já é bloco recolhido no fio, o selo da volta existe —  │
-  │                             │         │ 44 testes OK em 5 selos + smoke de chromium                                                               │
-  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O78 selo da L-086           │ "livre" │ existe e passa (10 testes OK)                                                                             │
-  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ O56 pre-push testa a árvore │ "livre" │ curado: pre-push.sh:45 carimba git write-tree                                                             │
-  └─────────────────────────────┴─────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Ran 1 shell command
 
-  Eu fui construir o O41 e parei na leitura — a lápide do próprio arquivo citava o print que originou o item. Se eu tivesse ido direto ao código, teria
-  reescrito uma cura de 25/09.
+● O desenho certo apareceu: o motor obtém os turnos por _turnos_do_juiz → turnos_de_batidas (não turnos_do_colab) e soma a intra que intervalos_do_turno
+  decidiu. A porta tem de ler os turnos que o motor usou, não refazer a receita. Vendo se o resultado já os guarda:
 
-  O que sobrou de verdade na varredura é o O79 — SELO DO VOCABULÁRIO falta × furo (L-088): nenhum teste da árvore cita a L-088, e a própria linha dela em
-  LEIS.md admite "cobrem CASOS; não há selo do VOCABULÁRIO". A lei é precisa — falta é dia previsto sem trabalho e sem justificativa, e custa o previsto
-  daquele dia; furo é marco não cumprido, que é pergunta em aberto, não decisão — e o selo pedido é um censo por AST de quem soma dias_falta e de quem lê
-  furo, mordendo quem tratar um como o outro.
+  Searched for 1 pattern, ran 1 shell command
 
-  Deixei os outros cinco estados vagos (O38, O43, O55, O57, O77) sem tocar: cada um precisa da mesma leitura, e afirmar sem ler é o que acabou de me
-  custar um ciclo. O O79 é o próximo, e é fabricável sem aval — selo de vocabulário não move número.
+● Agora o desenho está fechado: o motor liga período→turno em turno_da_batida (:2044) e soma a intra que intervalos_do_turno decidiu. A porta precisa dos
+  intervalos de cada período, lidos do motor. Vendo onde ele os tem:
 
-✻ Churned for 4m 17s · done 11:52 AM · 7 shells still running
-                                                                                                                    new task? /clear to save 729k tokens
+  Searched for 1 pattern, ran 1 shell command
+
+● Encontrei o lugar certo: no motor, cada período já tem e/s clipados na janela e os intervalos da autoridade (:1881-1888). A porta não precisa derivar
+  nada — precisa ler. Vendo o segundo sítio para expor nos dois:
+
+● O segundo sitio da intra e a criacao do periodo
+  ⎿  $ sed -n '2318,2336p' ponto/motor_calculo_v2.py; echo "=== onde o periodo e criado nos dois ramos ==="; grep -n "periodo =
+     PeriodoCalculo\|PeriodoCalculo(" ponto/motor_calculo_v2.py | head -6
+
+✢ Moonwalking… (4m 42s · ↓ 16.5k tokens)
+                                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
