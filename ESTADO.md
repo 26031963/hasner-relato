@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:159 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:11:01.**
+**Medido em 02/10/2026 18:16:07.**
 
 | | |
 |---|---|
-| `HEAD` local | `3b9f91ac [PROMPTS] aval 02/10 17:5x: quatro respostas (F2 no portao, censo batida+escala, lei O25, 720)` |
+| `HEAD` local | `07d89f21 [PREVISTO] A cura: desconta TODAS as pausas, nao a primeira -- e o censo publicado ANTES` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **36** |
+| commits a subir (`ahead`) | **37** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+07d89f21 [PREVISTO] A cura: desconta TODAS as pausas, nao a primeira -- e o censo publicado ANTES
 3b9f91ac [PROMPTS] aval 02/10 17:5x: quatro respostas (F2 no portao, censo batida+escala, lei O25, 720)
 adce0fe4 [S5b] DIFF DA TROCA PUBLICADO: as tres rubricas novas batem EXATAMENTE com o gravado
 12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu
 da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida
-abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ```
 
 ## `git status --short`
@@ -41,8 +41,7 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ```
  M app/docs/AVAIS.md
  M app/docs/PENDENTES_RONALD.json
- M app/escala/utils.py
-?? app/escala/tests/test_previsto_desconta_as_duas_pausas.py
+?? app/ponto/tests/test_lampada_acende_pela_batida.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,42 +96,42 @@ abea49b1 [S5b] A TROCA FECHA O CENSO: 15 dos 15 campos do DiaPago tem dono
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  vez hoje que esse padrão aparece, e a regra que a casa tem para ele é literal: não reconstruir em sonda própria a chamada que o sistema
-  faz.
+  meu nem da raia — é a interação entre o segundo par e a origem circular ata↔grade.
 
-  O despejo que está rodando corrige isso pela raiz: a mesma função nas duas árvores, saída colab;dia;minutos, diff sem interpretação.
-  Quando ele fechar, publico o censo real e relavro o col221.
+  Devolvo o smoke como REPROVADO na segunda metade, com a causa isolada e o número: 6 lâmpadas, 4 acesas, orfas=['14:17','15:40'] nos dois
+  dias, e a quebra está em cartorio.py usando a posição da grade em vez da batida quando a régua já conhece o marco.
 
-✻ Sautéed for 1m 10s · done 6:09 PM · 5 shells still running
+  Isso é desenho de juiz, não execução — e por isso paro aqui e te levo, em vez de escolher sozinho: a lâmpada do segundo par deve acender
+  pela batida próxima mesmo quando a régua já tem a posição? Se sim, a cura é o cartório preferir a batida à coluna vazia; se não, a cura
+  é a grade não nascer da ata para esses marcos.
 
-● Background command "Despejar o previsto nas duas árvores" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
+
+● Revejo a minha própria pergunta, porque a LEI-AKITA 4 manda procurar a lei antes de pedir corte — e ela existe. A lápide do próprio
+  cartório diz: "Coluna None da grade tinha DOIS sentidos (não é deste dia × intervalo não batido) e o segundo sumia da ata". E a célula é
+  soberana sobre o fato: a batida das 14:17 aconteceu. Então não é pergunta de lei, é leitor que não migrou:
 
   Ran 1 shell command
 
-● Dois containers vivos — o despejo (laughing_bardeen) e o censo antigo, que ainda não saiu. Espero pelos arquivos, que é o sinal certo:
+● Confirmado no código: quando a régua tem a posição (j is not None) mas a coluna está vazia, o cartório conclui acesa=False e nunca tenta
+  a batida próxima — enquanto o ramo de j is None tenta. Mesma pergunta, duas respostas, dependendo de a régua conhecer o marco. RED
+  primeiro:
 
-  Ran 1 shell command
+● RED da lâmpada que acende pelo fato
+  ⎿  $ cat > /home/ronald/saas-hasner/app/ponto/tests/test_lampada_acende_pela_batida.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """A LAMPADA ACENDE PELO FATO, e nao pela coluna vazia da grade (02/10 19:xx).
+     RED MEDIDO EM PROD, no smoke do col221 que ele reprovou: a ata tem SEIS lampadas e so QUATRO
+     acesas; as b…
 
-● O monitor espera pelos dois CSVs e pelo fim do container — sinal por arquivo, não por tempo.
-
-  Enquanto isso, preparo a relavratura do col221 que você pediu, para disparar assim que o censo estiver publicado. Ela é dinheiro em
-  competência aberta, então vai com os quatro requisitos da L-082: DIFF publicado antes, reversão em logs/, a 09 intacta por hash, e prova
-  depois.
-
-  Um ponto que preciso levantar antes de aplicar, porque muda o escopo: a cura do previsto alcança duas famílias, e só uma delas é o
-  col221. A outra é a guarda da R4 — célula que existe com dna.marcos nulo deixa de descontar a pausa do template. Se o despejo mostrar
-  que essa segunda família move outros colaboradores, relavrar só o col221 deixa o sistema com o previsto novo no código e o gravado velho
-  neles — divergência que a próxima batida de cada um resolveria sozinha, pelo recálculo por evento, mas em tempos diferentes.
-
-  Então vou publicar o censo com as duas famílias separadas e relavrar o col221 como você mandou; se a segunda família aparecer com
-  tamanho, ela vai para a sua mesa com o número, não junto no mesmo apply.
-
-✻ Cooked for 28s · done 6:10 PM · 5 shells still running
+· Sock-hopping… (3m 36s · ↓ 12.0k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ a segunda familia tambem relavra
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
