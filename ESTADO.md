@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:12:31.**
+**Medido em 02/10/2026 14:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe` |
+| `HEAD` local | `ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
 389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
 dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 3aa5e2b6 [O26] O 12x36 passa a poder declarar o horario do dia em que o plantao cai
 e56b03c5 O topo do TICKETS fechado no ato do push (O112)
-94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/RELATO.md
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/motor_calculo_v2.py
- M app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py
-?? app/ponto/calculador/alimentacao.py
-?? app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -99,40 +94,40 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  E col516 e col174 desapareceram da lista — era pareamento, como a ordem (1) dizia. A prova mais limpa: motor × calculador em atraso e antecipada dá
-  +0,00 / −0,00 com ZERO dia-colab divergentes — a pontualidade do calculador é hoje idêntica à do motor, então a diferença contra o gravado é deriva do
-  gravado, não da regra.
+  Searched for 1 pattern, ran 1 shell command
 
-  Lendo o que "subir" significa no código antes de qualquer apply:
-
-  Ran 5 shell commands
-
-● O critério original do ! de 30/09 está claro, e com o de hoje forma a lista. Antes de qualquer apply: os vizinhos do motor (zona inviolável — toquei 4
-  campos e 1 escritor):
-
-  Ran 2 shell commands
-
-● O selo chamador_do_calculador_aplica_a_janela morde porque o DIFF deixou de reaplicar a janela — e não precisa mais: o motor já a aplicou, e a porta lê
-  as pontas clipadas. Isso é mais forte que reaplicar (não há segunda aplicação para divergir). Atualizando a exigência sem afrouxá-la:
-
-  Ran 3 shell commands
-
-● O selo da janela ganhou o segundo caminho com o par que morde (a mesma fonte, com e sem a leitura do carimbo — senão bastaria escrever a palavra num
-  comentário para escapar). 17 testes OK. Rodando os 30 vizinhos do motor de novo:
+● Meu detector é que estava fraco: ele olhava só o valor atribuído (_m), e a mescla acontece nas linhas acima. Corrigindo a varredura para a lei que eu
+  quis escrever:
 
   Ran 1 shell command
 
-● Enquanto os vizinhos rodam, publico a tabela e a causa por colab — o item (b) do critério exige que ela esteja no RELATO antes de qualquer apply:
+● Verde. O detector antigo acusava as duas mesclas (olhava só o valor _m) — e um detector fraco absolve quem escreve a palavra certa no lugar errado.
+  Agora a pergunta é por escopo: a função que expõe lê o que já está lá?
+
+  Commitando a porta, o carimbo e os três selos antes de seguir para (c) e (d):
 
   Ran 1 shell command
 
-● O PAREI do topo ficou falso — o critério fechou. Corrigindo o topo e seguindo para (c) e (d):
+● A porta está commitada (ec22b2f1) com a prova. Agora os itens (d) e (c) do critério, antes de qualquer escrita:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Background command "Todos os vizinhos do motor e do calculador" completed (exit code 0)
+● O campo é dias_incertos. Melhor: o hash sai da lista de campos do próprio modelo, não de uma lista minha:
 
-✻ Waiting for API response · will retry in 2m 40s · check your network
+  Ran 1 shell command
+
+● (d) medido, o ANTES: FechamentoMensal 09/2026 = 607 linhas, sha256 189304907c23163…; a 10 = 572 linhas, 4bf7b1b3ffa8890…; exportações vigentes da 09:
+  exp#27 (emp2), exp#25 (emp4), exp#24 (emp3). Agora o que "subir" significa no código — lendo a porta de escrita:
+
+  Searched for 1 pattern, ran 3 shell commands
+
+● O desenho fecha: a lavratura mora em fechamento.py:613 com versao='motor', e o campo versao existe para as duas conviverem — "é assim que o DIFF por
+  rubrica fica possível sem apagar o número de produção". Então "o calculador passa a ESCREVER o DiaPago" é aditivo. Lendo como o DIFF chama as regras,
+  para que a lavratura chame a mesma linha:
+
+● Como o DIFF chama as regras do calculador
+
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
