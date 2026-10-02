@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 17:18:51.**
+**Medido em 02/10/2026 17:24:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP` |
+| `HEAD` local | `c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **29** |
+| commits a subir (`ahead`) | **30** |
 
 ## Fabrica
 
@@ -29,17 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c48f3c4a [S5b] RETRATADO: o "1440 contra 480" era MEU ERRO, e o censo refeito achou o alvo real
 e432319e [S5b] CORRIGIDO: "o de hoje paga mais" era FALSO para o col954, e sao 2 pautas DP
 5ad88936 [O114] HAIKU-DENTES regenerado: o contador novo entrou no derivado
 ef06c6b9 [O114] NO AR as 17:10:45, e a regua me recusou TRES vezes com razao
 a2e903e1 [O114] A CELULA CARREGA AS DUAS PAUSAS: merge da raia de nucleo, deploy no mesmo ato
-d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do push
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,37 +96,37 @@ d8c6dd2c [O114] A linha do TICKETS nasce EM VOO, e a regua a cobrou antes do pus
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ou 440, em ausências de um dia. Não é digitação errada: é a convenção que o próprio campo ensina (help_text: "Para falta dia inteiro:
+  720"), usada por 53 pessoas, enquanto a L-088 diz que a falta custa o previsto do dia. A recusa que você pediu bloquearia essas 53
+  pessoas usando a convenção do sistema — e a lápide A4 da porta já conta o preço da recusa dura.
 
-  Você estava certo e o número confirma: três das cinco linhas são um bloco de falta de 2 dias do col954 (rubrica 8792, 18/09 e 19/09),
-  que desconta; as outras duas são do col900 (0200 = 7,37 e 0243 = 4,50), que pagam. Segue verdadeiro só que nada foi removido nem
-  alterado.
+  A cura na origem é "dia inteiro" passar a significar o previsto do dia; o chokepoint já sabe derivar isso, só não sobrescreve minutos>0.
+  Move 25 descontos, então pede DIFF antes e é seu corte.
 
-  Cheguei lá corrigindo três falhas minhas na mesma medição, e nenhuma apareceu por revisão — todas pelo número: escolhi os arquivos por
-  nome e o nome embute o hash, então comparei corridas diferentes e saíram 104 linhas em vez de 5; adivinhei os offsets e saiu ano=3202,
-  quando o layout está escrito em montar_linha_10; e comparei por conjunto, que some com duplicata — a linha de data de falta de um
-  colaborador é idêntica à de outro, e só multiconjunto dá os 3 + 2 exatos.
-
-  E uma unidade que inverteria tudo: a 8792 é rubrica de dias, então val_cru=2 são 2 dias; lida como horas seriam 0,02 — trocar desconto
-  de dois dias por dois centésimos de hora.
-
-  Em seguida, na ordem do seu aval: item (3) col954 com a porta recusando falta acima do previsto, item (4) AVAIS, e item (1) o
-  ancoramento com o número da lei em aberto.
+  Aqui a LEI-AKITA 3 funcionou a meu favor por acidente: eu vi o risco na lápide e medi antes de construir a recusa. Construindo primeiro,
+  eu teria quebrado o caminho de 53 pessoas para curar um defeito que não existia.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Item (3). Primeiro acho a porta de ausência — a cura vai nela, não no caminho de quem chama:
+● Item (4), o AVAIS. Vejo o que o gerador lê para a "frase pronta", para corrigir na fonte e não no derivado:
 
   Ran 2 shell commands
 
-● A porta é criar_ausencia, com contrato de produtor único já selado. Leio a assinatura e onde as recusas moram:
+● Os quatro sem frase são os que eu acabei de abrir — então a dívida é minha, não antiga. Escrevo as frases prontas, tiro o item 1 que
+  trazia a frase de 03:10 e ponho a pergunta que trava a fila 1 como linha 1:
 
-● A assinatura e o bloco de recusas
-  ⎿  $ cd /home/ronald/wt-splits/app && sed -n 70,80p ponto/services/ausencia.py; echo "..."; sed -n 130,150p ponto/services/ausencia.py
+  Ran 1 shell command
 
-✢ Doodling… (1h 57m 38s · ↓ 350.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Item (4) cumprido: o item que trazia a frase de 03:10 saiu da mesa (fechado pela sua própria resposta das 17:2x), os quatro abertos sem
+  frase pronta ganharam frase — e eram os quatro que eu acabei de abrir, então a dívida era minha e nova, não antiga —, e a mesa está
+  ordenada com o que trava a fila 1 na frente.
+
+  As frases saíram no formato de escolha, para você responder em uma linha:
+
+  - DIA-INTEIRO-CRAVADO-EM-720 — "dia inteiro" passa a significar o previsto do dia ou fica 720 e a L-088 vale só no leitor.
+  -
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
