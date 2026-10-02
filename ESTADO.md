@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:992 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:993 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:30:45.**
+**Medido em 02/10/2026 07:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `17b5ceef O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !` |
 | `origin/main` | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !
 17b5ceef O topo do TICKETS fechado no ato do push (O112)
 b1da8d82 Handoff regenerado depois das correcoes de redacao
 036a21bd O hook me recusou duas vezes, e nas duas a culpa era a minha REDACAO
 c9aaa1df O topo do TICKETS fechado no ato do push (O112)
-567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,17 +94,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lápide dele já dizia isso, com o caso de 28/09 que a criou.
-
-  Corrigi as duas e, de carona, achei um terceiro desalinhamento: a S5b-TROCA-NAO-CRIA-DESCONTO ainda dizia "falta o DIFF final e o !" — o DIFF final foi
-  publicado às 03:1x desta madrugada, com a isolação feita no mesmo dado. Só falta o !.
-
-  O topo do RELATO agora lista só os dois ! que travam a fila 1: a troca do calculador (atraso +59,82 h → −0,16 h, e nada fora de atraso/antecipada se
-  move) e a folha zero com vínculo vencido (195,41 h de 4 pessoas). O ok-desenho do _perto e o seu smoke da UI-RESPOSTA saíram dessa linha de propósito e
-  vivem no AVAIS.md, com a frase pronta.
-
-  Tudo empurrado (b1da8d82), handoff regenerado, e o hook libera o turno — pela primeira vez sem um item aberto cobrando.
-
   Guardei a lição: quando o hook insistir num item, conferir primeiro se a culpa é a palavra. Ele lê vocabulário fixo em dois lugares, e sinônimo ali não
   é estilo — é um item que nunca fecha.
 
@@ -129,10 +117,21 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
   ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E, que está no ar.
 
 ✻ Worked for 30s · done 6:46 AM · 1 shell still running
+
+❯ aval Ronald: a troca da S5b ESPERA. O111 primeiro, ate a antecipada entrar em faixa; e as quatro rubricas que a troca move contra o GRAVADO
+  (trabalhadas +179,20, folga +52,49, noturnas +26,85, intra -14,66) abertas por causa e por colab antes do !. Nenhuma lei nova: L-082 (b) e a lei de
+  01/10 17:2x. segue a fila; PAREI so em lei ou !
+
+● Ordem recebida: O111 primeiro, a troca espera, e as quatro rubricas abertas por causa e por colab antes do !. Registrando e indo.
+
+● O metodo que mapeia entrada -> dia do turno
+  ⎿  $ sed -n '1995,2030p' ponto/motor_calculo_v2.py
+
+* Hullaballooing… (2m 12s · ↓ 8.2k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
