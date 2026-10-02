@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:52:02.**
+**Medido em 02/10/2026 20:57:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+?? bin/diff_o119_frota.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,36 +96,36 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
-  ponto/motor_calculo_v2.py:573, junto da cura do juiz_batida.py. DIFF de frota antes (so quem tem duas pausas se move, todo outro campo
-  zero), reversao em logs/, 09 e exportadas intactas, prova depois com o pago do col221 em 551 min nos dias cheios. AVISO: a competencia
-  09 do col221 JA foi corrigida por mim as 20:28 pelo comando corrigir_escala_retroativa (ec1361, te548, 21/08 a 20/09, 31 celulas,
-  provado). O ensaio do O120 esta superado: nao aplicar vinculo nele de novo; reler os vinculos antes de qualquer ato!
-
-● O ! do O119 chegou, e o aviso é claro: reler os vínculos antes de qualquer ato. Já reli — ec189, ec1361 (te548, 21/08–20/09, o seu de
-  20:28), ec1345, ec1346 — e o ensaio do O120 está descartado; não toco vínculo do col221.
-
-  E o seu alvo de prova fecha a aritmética: 551 min = 720 (jornada 07:00–19:00) − 169 (as duas pausas reais, 85+84). Commito a régua e
-  começo:
-
-  Ran 3 shell commands
-
-● Cópia no HEAD atual com o RED. Agora as duas curas — o juiz (fora da zona) e a uma linha que você autorizou:
-
-  Ran 1 shell command
-
-● Agora a uma linha da zona inviolável, exatamente como você a escreveu:
-
-  Ran 1 shell command
-
 ● RED virou verde — 3 casos OK. Agora as quatro condições do seu !. Primeiro os vizinhos, porque a linha mora no motor e o raio é grande:
 
-  Running the neighbour suites for the motor change
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; docker run --rm $TESTE_DOCKER
-     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     /home/ronald/wt-orfa/app:/app -v /home/ronald…
+  Ran 1 shell command
 
-✻ Sock-hopping… (2h 39m 30s · ↓ 491.3k tokens)
+● Enquanto a suíte roda, preparo o DIFF de frota que o seu ! exige antes — medido na sombra, contra o gravado:
+
+  Ran 2 shell commands
+
+● PAROU pelo critério — mas antes de lhe devolver isso eu tenho de separar o que é a minha cura do que é deriva do gravado velho, que é a
+  lição do seu próprio AVAL-DE-CRITERIO ("apply por recálculo nunca é cirúrgico"). Meço a MESMA conta na árvore sem a cura, para subtrair:
+
+  Ran 1 shell command
+
+● Agora posso separar, e o resultado é dos dois lados:
+
+  A cura faz o que devia: horas_extras e horas_extras_50 de +1,42 h em 1 colab (a HE fantasma do col221) desaparecem do DIFF — a leitura
+  passa a bater com o gravado ali.
+
+  Mas ela move gente de fora do universo: horas_trabalhadas sai de 4 colabs para 201, saldo_banco_horas de 3 para 94, e aparecem
+  horas_intra_indenizada (23) e horas_noturnas (44). Isso viola o seu critério e eu não aplico. Vejo a suíte, que pode já estar dizendo
+  por quê:
+
+  Read 1 file, ran 1 shell command
+
+● A suíte ainda roda. A pergunta que decide se eu aplico é por que 197 colabs a mais se movem, e eu não vou deduzir: meço um deles nas
+  duas árvores. O col28 move só com a cura:
+
+● Running 1 shell command…
+
+✢ Sock-hopping… (2h 45m 0s · ↓ 499.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
