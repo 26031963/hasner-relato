@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:05:45.**
+**Medido em 02/10/2026 02:10:45.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,13 +97,6 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Relancar o push dos 24 commits" completed (exit code 0)
-
-  Committed ba11ab89, searched for 1 pattern, ran 11 shell commands
-
-● Agora a cura (b) na copia. Primeiro o predicado, no sitio onde o juiz vizinho ja mora:
-
   Ran 2 shell commands
 
 ● Agora os dois portoes no calculador — entrada na volta do intervalo (mata o atraso) e saida para o intervalo (mata a antecipada):
@@ -125,9 +120,16 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Running 1 shell command…
+  Registrar O109 e O110 no BACKLOG · 1m 25s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/BACKLOG.md'
+     L=open(p,encoding='utf-8').read().split('\n')
+     i=[n for n,x in enumerate(L) if x.startswith('| # | obra | portao | onde esta | pedido em |')][0]
+     assert L[i+1].startswith('|---')
+     r1=('| O110 | **A DISTANCIA DO MARCO AINDA TEM Q… (1m 24s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Unfurling… (1h 6m 39s · ↓ 100.4k tokens)
+· Unfurling… (1h 11m 39s · ↓ 103.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
