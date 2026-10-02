@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:59:01.**
+**Medido em 02/10/2026 19:04:31.**
 
 | | |
 |---|---|
@@ -94,40 +94,40 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● versao é parte da chave única por desenho (UniqueConstraint(colaborador, mes, ano, data, versao)), lavrar apaga só dentro da própria
+  versão (dia_pago.py:309) e todo leitor tem versao='motor' por default. Então a dobra pode ser namespace deliberado, não defeito — mas
+  isso só vale se nenhum leitor consultar DiaPago sem filtrar versão. Censo por AST, não por texto:
 
   Ran 1 shell command
 
-● A suíte está verde (9.375 testes, zero falhas) e o pre-push segue nos passos pós-suíte — o segundo runner de control-plane e os selos de
-  host. Os 44 commits ainda não foram empurrados.
-
-  Aguardo o monitor, que dispara em To https ou error:.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● Três sítios, todos dentro do próprio dia_pago.py. Vejo o que são:
 
   Ran 1 shell command
 
-● Push vivo nos passos pós-suíte. Aguardo o monitor.
+● Veredito: a dobra não é defeito, é o namespace declarado. 18 dos 21 sítios filtram versão; os 3 que não filtram são
+  bulk_create/bulk_update sobre objetos já escopados (comum carrega versao; o bulk_update da 441 vem do filtro da 418, que tem
+  versao=versao). Meu alarme estava errado. Mas a medição deixa um fato que importa mais:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● Advising using Fable 5.1
 
-  Ran 1 shell command
-
-● Push vivo.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
-
-✢ Compacting conversation… (46m 30s · ↓ 118.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
+✢ Sock-hopping… (52m 0s · ↓ 128.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+
+❯ aval Ronald: O114 REPROVADO, bug provado na ata gravada do col221 (sonda 19:03). ID: O114-ORFA-QUE-ACENDEU. FONTE:
+  ponto/services/cartorio.py::ata_do_dia. MUDA: linhas 271-274 gravam n_orfas e orfas de dia['orfas'] sem retirar as horas que as linhas
+  236-245 usaram para acender lampada (_usadas). RED: col221 22/09 a 01/10, ata com 6 lampadas acesas E orfas ['14:1x','15:40']; 02/10 4
+  acesas e 4 orfas. SELO: batida que acendeu lampada nunca consta em orfas, na ata gravada, frota = 0. Responder por escrito: por que a
+  grade entrega coluna vazia para hii2/hfi2 se o builder do espelho casa as seis; se a origem e a grade, a cura e la e o raio de 30 min
+  sai (LEI-AKITA 1 e 2). PROIBIDO: filtrar orfa no leitor ou no template, fallback, rejulgar a empresa inteira. PRONTO: celulas do col221
+  de 21/09 em diante rejulgadas so ele com snapshot antes, saida de /tmp/mauro_ata.py colada com orfas [] de 22/09 a 01/10, censo de
+  frota do selo, commit. Sem isso INCOMPLETO com a lista. LEI-AKITA: origem/testemunha/RED/quem-mais-le, juizes novos=0; nenhuma lei
+  nova. Depois segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
