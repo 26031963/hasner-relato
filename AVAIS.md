@@ -17,7 +17,7 @@
 | 9 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 10 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
 | 11 | `DIA-INTEIRO-CRAVADO-EM-720` | **!** | 2026-10-02T17:40 | 90 casos de 1.826; 720 contra 420/360/440 em ausencia de 1 dia; 25 descontam; 53 pessoas | `"dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado -- o chokepoint ja sabe derivar, so nao sobrescreve `minutos>0`. Mede o DIFF antes e aplica, sao 25 descontos em 90 casos.   OU   fica 720 como esta e a L-088 vale so no leitor.` |
-| 12 | `O114-SMOKE-COL221` | **smoke** | 2026-10-02T18:00 | 30/09 e 01/10 do col221 com 6 marcos; 9,19 h inalterado; te548 unico de 341 | `"abri o espelho do col221, os dias 30/09 e 01/10 estao com SEIS marcos e o total segue 9,19 h -- pode fechar o O114".   OU   "o espelho esta errado: <o que vi>".` |
+| 12 | `O114-SMOKE-COL221` | **smoke** | 2026-10-02T18:00 | previsto 550; ata 6 lampadas 6 ACESAS nos dois dias; 22 celulas regeneradas; 28 atas reescritas | `"abri o espelho do col221, 30/09 e 01/10 estao com SEIS colunas, as batidas das 14:17 e 15:40 sem asterisco, e o total segue 9,19 h -- pode fechar o O114".   OU   "ainda esta errado: <o que vi>".` |
 
 ---
 

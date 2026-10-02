@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:26:37.**
+**Medido em 02/10/2026 18:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `07d89f21 [PREVISTO] A cura: desconta TODAS as pausas, nao a primeira -- e o censo publicado ANTES` |
+| `HEAD` local | `52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **37** |
+| commits a subir (`ahead`) | **42** |
 
 ## Fabrica
 
@@ -29,23 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
+b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
+e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em diante
+fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cortes dele registrada
 07d89f21 [PREVISTO] A cura: desconta TODAS as pausas, nao a primeira -- e o censo publicado ANTES
-3b9f91ac [PROMPTS] aval 02/10 17:5x: quatro respostas (F2 no portao, censo batida+escala, lei O25, 720)
-adce0fe4 [S5b] DIFF DA TROCA PUBLICADO: as tres rubricas novas batem EXATAMENTE com o gravado
-12f9cb71 [S5b] A linha do TICKETS deixa de anunciar espera do que ja subiu
-da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancoramento respondida
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
- M app/escala/tests/test_previsto_desconta_as_duas_pausas.py
- M app/escala/utils.py
- M app/ponto/services/cartorio.py
-?? app/ponto/tests/test_lampada_acende_pela_batida.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -101,41 +95,41 @@ da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancor
 
 ```
 
-● A falha nova é da minha cura do previsto, e é legítima: 540 != 480. Leio o selo para entender o que ele afirma, antes de decidir se o
-  certo é a cura ou a asserção:
+● Monitor armado com grep -a e padrão ancorado nas linhas que o Django e o git realmente imprimem.
 
-  Ran 1 shell command
+  Com o push na pista e a S5b no ar, o turno está num ponto de espera legítimo: não há ato meu que não dependa do veredito dele.
 
-● Background command "Esperar o veredito dos vizinhos" completed (exit code 0)
+  O que você tem para conferir, em uma frase cada:
 
-● Agora o quadro está claro, e há uma colisão real entre dois dos seus cortes — não um bug meu:
+  O smoke do col221 — abrir o espelho em 30/09 e 01/10 e ver as seis colunas sem asterisco laranja, com o total em 9,19 h. É a única peça
+  que a sonda não substitui.
 
-  O selo test_MORDE_sem_minutos_na_ata_a_autoridade_responde_pelos_marcos (CÉLULA F1, 14/09) fixa que célula com dna.marcos nulo deve ter
-  o previsto 480 — ou seja, descontando a pausa do template. A R4 (27/09) diz o contrário: "o template entrega hii/hfi que aquele dia NÃO
-  TEM", e foi curada em seis leitores por isso, com +75,12 h em 27 colabs medidos.
+  A colisão R4 × F1 — dois cortes seus que discordam sobre célula com dna.marcos nulo: a F1 fixa o previsto descontando a pausa do
+  template (480), a R4 diz que o template descreve outro dia (+75,12 h em 27 colabs). Deixei o comportamento de hoje e registrei a
+  colisão; a escolha é sua.
 
-  A minha cura trouxe a guarda da R4 para o previsto e o número virou 540. Isso é mudança que você não pediu — você pediu 550 em vez de
-  635. Então restrinjo ao pedido:
+  O "720 cravado" — 90 casos, 53 pessoas, 25 descontando, onde a recusa que você pediu bloquearia a convenção que o próprio campo ensina.
 
-  Ran 1 shell command
+  As duas pautas DP da 09 — col954 com falta de 2 dias que desconta, col900 com 7,37 + 4,50 que pagam.
 
-● O selo do leitor de célula voltou ao verde, e agora o que falha é o meu próprio caso, que afirmava a mudança da R4 que eu decidi não
-  fazer. Converto-o em registro da colisão, em vez de apagá-lo:
+  As duas frases de nascimento de juiz para batida e escala — sem elas o censo dessas famílias não passa do único número já provado: zero
+  escritas de Batida fora do chokepoint.
 
-  Converter o caso em caracterização e rodar
-  ⎿  $ python3 - <<'PY'
-     import io, py_compile
-     p='escala/tests/test_previsto_desconta_as_duas_pausas.py'
-     s=io.open(p,encoding='utf-8').read()
-     a = ''' def test_MORDE_celula_que_NAO_declara_marco_nao_desconta_pausa_do_template(self):
-     """A cura de carona, e ela e da familia R4 (col610 22/08, +75,12 h em 27 …
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
-✢ Sock-hopping… (14m 5s · ↓ 43.7k tokens)
+● Estado do push 85
+  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:" logs/push85.log |
+     tail -5; docker ps --format '{{.Names}}' | grep -vE "saas_|juliani_db_test|mensageria" >/dev/null && echo "suite do push viva" ||
+     echo "PISTA LIVRE"
+
+✢ Sock-hopping… (19m 30s · ↓ 61.3k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
