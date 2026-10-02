@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:34:31.**
+**Medido em 02/10/2026 08:39:36.**
 
 | | |
 |---|---|
-| `HEAD` local | `99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)` |
-| `origin/main` | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
-| commits a subir (`ahead`) | **4** |
+| `HEAD` local | `ec346990 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ec346990 O topo do TICKETS fechado no ato do push (O112)
 99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)
 0488d42b [O111] O dia da jornada do motor fica LEGIVEL e o chamador agrupa por ele; o par de 8 s deixa de ser julgado; o _perto delega
 52480a3a Aval 02/10 06:4x recebido: a TROCA da S5b espera, o O111 vem primeiro, e as 4 rubricas abrem antes do !
 17b5ceef O topo do TICKETS fechado no ato do push (O112)
-b1da8d82 Handoff regenerado depois das correcoes de redacao
 ```
 
 ## `git status --short`
@@ -94,44 +94,44 @@ b1da8d82 Handoff regenerado depois das correcoes de redacao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  seu (b) pede:
+  trabalho?". Golden col221, oito dias com previsto = 0: o motor põe em horas_folga_trabalhada (0,77 a 2,30 h/dia), o calculador em horas_trabalhadas
+  (7,73 a 9,30). Trabalhadas e folga não são duas divergências: são uma, com o sinal trocado por colab. Os maiores: col43 +88,32 e col924 +80,12 (folha
+  zero sem vínculo, Pautas #926/#922), col882 +63,99 em folga (vínculo vencido, #927).
+
+  Veredito do (2): (b) e (d) cumpridos, (c) não se aplica — e (a) NÃO: sobram col516 +7,86 e col174 +4,52 de antecipada acima do gravado. No total a
+  antecipada está abaixo (−1,85) e o atraso também (−0,16), mas o critério é por colab.
+
+  Os dois são a mesma família — o DIFF alimenta o calculador com pares de turnos_do_colab enquanto o motor pareia com turnos_de_batidas. A cura que
+  elimina isso por construção é o DIFF entregar os períodos do motor ao calculador; não fiz porque muda o que o instrumento mede em todas as rubricas, e é
+  essa tabela que sustenta o seu !. A alternativa, mexer em turnos_do_colab, é o O65 e está declarada corte.
+
+  Itens (3) e (4) fechados no mesmo marco: folha-zero pelo caminho (a), só Pauta DP (as quatro já abertas), e o _perto do motor delegando a perto_do_marco
+  com selo de equivalência nos dois sentidos — com ele o PENDENTES_TURNO caiu de 2 para 1, e foi o próprio contrato que cobrou a baixa.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: COL369-TIPOS-INVERTIDOS -- REGISTRAR e MEDIR, nao curar (ordem Ronald 01/10 20:1x): em 5 dos 11 dias (19, 20, 23, 26 e
+  27/09) a volta da
 
   Ran 1 shell command
 
-● Uma causa única explica as duas maiores rubricas. E o efeito da guarda do relâmpago no motor precisa ser medido antes de qualquer deploy:
+● Background command "Veredito do push do marco" completed (exit code 0)
 
-  Ran 1 shell command
+● Ordem: medir, não curar. A pergunta é se a inversão de tipos explica as 2,00 h de intra e as 5,07 h de trabalhadas do DIFF do vínculo:
 
-● O lado motor é byte-idêntico nas oito rubricas — a guarda do relâmpago move zero na frota, só alcança o calculador. Agora os selos das duas curas:
+● Os tipos e o que o motor apura no col369
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
+     $S/col369_tipos.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """COL369-TIPOS-INVERTIDOS: MEDIR, nao curar. SO LEITURA nesta primeira parte."""
+     import datetime as d
+     from dja…
 
-  Ran 5 shell commands
-
-● 2811 testes de ponto OK. Aplicando, e já emendando os itens (3) e (4) da sua ordem no mesmo marco:
-
-  Ran 8 shell commands
-
-● O contrato do juiz de turno está me cobrando o certo: o sítio foi curado, então sai da lista de pendentes — ela só encolhe.
-
-  Searched for 1 pattern, ran 8 shell commands
-
-● Background command "Baixar o contador e rodar as tres suites" completed (exit code 0)
-
-● O selo do diagrama está certo: o motor passou a ler escala/regua_defesa, e o .mmd é defendido por selo. Regenerando:
-
-  Ran 3 shell commands
-
-● Deploy OK. Agora a tabela final, as causas por colab e o veredito do seu critério (a):
-
-● Veredito do push do marco · 8m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push73.log; do sleep 30; done; tail -4 logs/push73.log (8m 24s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Hullaballooing… (1h 0m 58s · ↓ 89.0k tokens)
+✽ Hullaballooing… (1h 6m 3s · ↓ 92.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
