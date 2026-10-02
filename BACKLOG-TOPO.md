@@ -121,9 +121,9 @@ lista — ela e o que esta EM PE._
 | **O111** | A ANTECIPADA QUE SOBRA NO DIFF E PAREAMENTO, NAO REGRA -- tres causas MEDIDAS | **FECHADA 02/10 09:xx.** O mapa `dia_da_ |
 | **O112** | O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite | **FECHADA 02/10 05:2x** -- nasceu `bin/p |
 | **O113** | PAINEL-SITUACIONAL-N+1 + PLACAR-EM-TURNO-DOIS-NUMEROS | espera `!` |
-| **O114** | CELULA-SEGUNDO-INTERVALO: a celula nao carrega o segundo intervalo, e motor e pareamento a | espera aval |
+| **O114** | CELULA-SEGUNDO-INTERVALO: a celula nao carrega o segundo intervalo, e motor e pareamento a | espera `!` |
 | **O115** | S5b-3-SPLITS: as TRES rubricas que o `DiaPago` paga e o calculador nao decide | espera `!` |
-| **O116** | A LAVRATURA DO `DiaPago` TEM UM SEGUNDO JUIZ DE DIA, e o O111 nunca a alcancou | espera aval |
+| **O116** | A LAVRATURA DO `DiaPago` TEM UM SEGUNDO JUIZ DE DIA, e o O111 nunca a alcancou | **NO AR** desde o deploy de 18:27:52 (`a |
 | **O117** | DOIS CORTES DELE COLIDEM sobre celula que EXISTE com `dna.marcos` NULO | espera `!` |
 | **O118** | A GRADE CASAVA A PRIMEIRA PAUSA, NAO TODAS | **NO AR** (deploy `96beb803`, 19:27). Cu |
 | **O119** | O `intra_descontada` do motor oscila no MESMO cadastro e no MESMO padrao de batidas | espera `!` |
