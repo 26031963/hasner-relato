@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:21:01.**
+**Medido em 02/10/2026 19:26:31.**
 
 | | |
 |---|---|
@@ -39,8 +39,10 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,42 +97,42 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Testo a cura da grade antes de tirar o raio do cartório:
+  da cura (modelos com segundo intervalo):
 
   Ran 1 shell command
 
-● Sete verdes — incluindo a invariante da ata e as 6 acesas com 0 órfãs — sem tocar o cartório. Isso prova que a origem era a grade: a ata
-  sarou sozinha. Agora o raio de 30 min sai. Leio o ramo irmão antes de apagar:
+● Censo medido — e ele revela duas famílias:
 
-  Ran 1 shell command
+  ┌────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┐
+  │                                pergunta                                │                  número                   │
+  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ modelos que declaram 2º intervalo                                      │ 1 de 341 (te548) — 1 colaborador (col221) │
+  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ células com hii2/hfi2 desde 01/09                                      │ 22 dias, 1 colab                          │
+  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+  │ o selo em frota: ata gravada com hora ACESA que também consta em orfas │ 25 dia-colab em 10 colaboradores          │
+  └────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
 
-● Dois usos do raio: o do ramo j is None (pré-existente, para marco que a régua nem tem) e o meu if not _acesa: de hoje, que é o band-aid.
-  Tiro só o meu — o pré-existente agora fica guardado pelo selo novo da disjunção:
+  col221 tem 10 desses. Os outros 15 dias em 9 colabs (col945 6, col859 2, mais 7 com 1) não são do segundo intervalo — os modelos deles
+  têm uma pausa só. São do raio irmão (j is None), que tem a mesma falha de desenho: acende por fora da grade. Vejo o lote de vizinhos:
 
-  Ran 2 shell commands
+  Read 1 file, ran 2 shell commands
 
-● O caso previsto: um dos quatro afirmava sobre o band-aid. Caracterização não se apaga — ela se inverte. Leio como ele monta a entrada:
+● Ruff limpo. Armo o esperador da suíte de escala e escrevo os registros enquanto ela corre:
 
-  Ran 1 shell command
+  Read 1 file, ran 5 shell commands
 
-● O teste fabrica à mão a saída defeituosa da grade (coluna None + batida em orfas) — uma forma que, curada a origem, não ocorre mais.
-  Inverto a asserção para morder a volta do band-aid nos termos do selo dele:
+● Escrevo o RELATO com a resposta escrita que ele pediu, enquanto a suíte de escala corre:
 
-● Invert the characterization test
-  ⎿  $ cd /home/ronald/wt-orfa/app && python3 - <<'PY'
-     import io
-     p = 'ponto/tests/test_lampada_acende_pela_batida.py'
-     s = io.open(p, encoding='utf-8').read()
-     # ---- 1) o cabecalho: a conclusao estava errada, e a licao fica
-     velho_cab = s[s.find('"""A LAMPADA ACENDE'):s.find('"""', s.find('"""A LAMPADA AC…
+● Running 1 shell command…
 
-✢ Sock-hopping… (1h 8m 30s · ↓ 184.3k tokens)
+✢ Sock-hopping… (1h 14m 0s · ↓ 195.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
