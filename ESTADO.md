@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:32:31.**
+**Medido em 02/10/2026 11:38:01.**
 
 | | |
 |---|---|
@@ -93,19 +93,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ placar por empresa │ dois números para o mesmo fato → um: global 146 = 119+8+19                            │
-  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ app dos ~750       │ tick genérico → a palavra do dia em 3.432 dia-colab, lendo a porta única              │
-  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-  │ chão do espelho    │ 1ª batida → cadastro; 57 colabs veem dias que não existiam, em_aberto 0→0             │
-  └────────────────────┴───────────────────────────────────────────────────────────────────────────────────────┘
-
-  O que medi e não construí, porque a próxima decisão é sua: O27 (325/520, 1.757,97 h, causa única provada — e o achado de que 325 colaboradores têm folga
-  trabalhada, com col451 marcando 142 h de folga contra 47 h trabalhadas), O26 (DIFF 0 garantido por construção, 1.307 plantões de fim de semana), F2 (é
-  visão, não regra — o art.130 já existe; 7 períodos projetam direito acima da tabela e nenhum concedido), e os censos (34 sítios lendo batida crua em
-  apuração, 16 parâmetros sem efeito, placar 8/22).
-
   Oito avais na mesa, todos com número e frase pronta — e quatro deles cortes que já tinham nome na sua pausa de 27/09. A pergunta nunca foi "qual a
   regra": era "qual o número".
 
@@ -127,10 +114,23 @@ RELATO, com a lista de nomes do banco como autoridade._
   do TICKETS e a allowlist do .date()).
 
 ✻ Cooked for 15s · done 11:31 AM · 8 shells still running
+
+❯ segue a fila; PAREI so em lei ou !
+
+● Seguindo. O próximo que anda é o O26 — o portão dele era "logo após o item 1", e o item 1 era o O25, que fechou às 10:35. Já tenho o censo medido e o
+  selo escrito; preparo a cura enquanto o push 84 libera a pista:
+
+● Espera o push 84 · 45s
+  ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED|RED --" logs/push84.log; then break; fi; sleep 10; done;
+     grep -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push84.log | tail -5; date +%H:%M:%S; docker ps --format '{{.Command}}' | grep -c manage
+     (45s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Working… (5m 24s · ↓ 3.9k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
