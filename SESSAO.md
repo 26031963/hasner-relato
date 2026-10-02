@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 01/10/2026 21:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (177.1 MB). Acoes na janela: **1224**.
+**Medido em 01/10/2026 22:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (177.2 MB). Acoes na janela: **1232**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:00:36 | Bash | Achar a origem do _jm | `grep -n "_jm" ponto/management/commands/diff_calculador.py \| head -4; grep -n "import.*as _jm\\|_jm," ponto/management/commands/diff_calculador.py \| head -3` |
+| 22:00:32 | Bash | Ler o _jm que resolve o marco em datetime | `grep -n "def _jm\\|_jm = \\|def _marco_dt" ponto/management/commands/diff_calculador.py \| head -3; N=$(grep -n "_jm = \\|def _jm" ponto/management/commands/diff_calculador.py \| head -1 \| cut -d: -f1); sed -n "${N},$((N+12))p" ponto/management/commands/diff_calculador.py` |
+| 21:59:52 | Bash | Ler a definicao do juiz | `grep -n "def _cadastro_nao_descreve" -A22 ponto/motor_calculo_v2.py \| head -26` |
+| 21:59:48 | Bash | Ler o juiz da L-084 | `grep -n "_cadastro_nao_descreve" -A26 ponto/motor_calculo_v2.py \| head -34` |
+| 21:59:24 | Bash | Ler a guarda do clip invertido que ja existe | `sed -n 272,312p ponto/management/commands/diff_calculador.py` |
+| 21:59:00 | Bash | Ver onde o chamador clipa os minutos | `grep -n "minutos_trabalhados=\\|_trab_dia\\|entrada_efetiva\\|saida_efetiva\\|_ini_seg\b" ponto/management/commands/diff_calculador.py \| head -16` |
+| 21:56:38 | Bash | Fechar a celula e ver a fila de push | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io, sys sys.path.insert(0,'bin'); import hook_stop_fila1 as H P='app/docs/BACKLOG.md' t=io.open(P,encoding='utf-8').read() A='\| GESTAO-HE-CALENDARIO-CONTROLE \|' i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('\|') novo = (' **FATIA 1 no ar 21:24; em CORRECAO na raia (2o aval de 21:5x vence o 1o): o azul forte sai e entram os ' 'TOKEN ...` |
+| 21:56:08 | Bash | Registrar os dois avais e a prevalencia do segundo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() nova = ("- **01/10 ~21:5x (2o aval, e ele VENCE o 1o onde divergirem) — GESTAO-HE fatia 1: TIRAR o azul forte JA.** " "So template, raia `wt-ui`, **merge DIRETO** (porta e clique nao mudam), e o **print vem DEPOIS** do merge -- nao " "antes. **(1)* ...` |
 | 21:55:22 | SendMessage |  | `-` |
 | 21:52:35 | SendMessage |  | `-` |
 | 21:52:12 | Bash | Registrar a correcao de desenho e pôr no AVAIS | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() nova = ("- **01/10 ~21:5x — GESTAO-HE fatia 1, CORRECAO DE DESENHO** (so template, raia `wt-ui`): *\"o pedido era " "**SALIENTAR A GRADE**, nao preencher a celula; o 'fundo cheio' foi **erro do texto do aval**\"*. **(1)** celula " "**SEM fundo azul ...` |
