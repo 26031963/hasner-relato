@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:482 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:591 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 22:10:46.**
+**Medido em 01/10/2026 22:16:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO` |
+| `HEAD` local | `142c4a99 trilha do vigia da esteira (linha escrita pelo cron das 22:10)` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,17 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+142c4a99 trilha do vigia da esteira (linha escrita pelo cron das 22:10)
 b04b76b6 A hora negativa com a causa FECHADA: a guarda mede a saida contra o marco do dia ERRADO
 427015a3 A celula da obra declara a correcao de desenho em curso na raia
 f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge direto, print depois
 79716395 A celula da S5b nomeia a familia: tres guardas que o motor tem e o calculador nao le
-9ffa0ef8 A hora NEGATIVA do calculador: causa provada por aritmetica -- a janela clipa contra o marco de OUTRO turno
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/RELATO.md
+UU app/docs/BACKLOG.md
+M  app/docs/RELATO.md
+M  app/ponto/tests/test_tela_gestao_he_calendario.py
+M  app/templates/ponto/gestao_he.html
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,15 +99,6 @@ f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  medido foi −959,87.
-
-  E o erro é o DIA do marco de saída. marco_no_dia põe o marco "no mesmo dia do instante", e o marco de saída desse turno mora no dia seguinte, porque o
-  turno cruza a meia-noite. Com o marco no dia certo o delta da saída é +1.439,9 min, passa dos 180, e a guarda morde. E a correção do dia do marco existe
-  dez linhas abaixo — _ms + 1 dia quando turno_cruza_meia_noite — dentro do ramo que a guarda deveria ter impedido. A guarda pergunta com o marco cru; o
-  ramo que ela protege calcula com o marco resolvido. Mesma pergunta, dois marcos.
-
-  A cura tem duas camadas, as duas aritmética, nenhuma regra nova:
-
   1. a guarda passa a perguntar com o marco resolvido, usando o mesmo turno_cruza_meia_noite que o ramo de baixo já usa — só isso pega col235, col174 e
      col382;
   2. a janela nunca entrega par invertido: depois do clip, se saída <= entrada, a janela não se aplicou — as batidas reais voltam inteiras e o dia é
@@ -122,14 +116,23 @@ f111bfea Dos dois avais de 21:5x vale o SEGUNDO: tokens suaves da casa e merge d
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Montar copia limpa em outro diretorio
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; D=$S/s5b2; rm -rf $D 2>/dev/null; mkdir -p $D; cd
-     /home/ronald/saas-hasner && git archive HEAD app | tar -x -C $D && mkdir -p $D/app/logs $D/app/media && echo "copia nova em s5b2 do HEAD $(git log
-     --o…
-
-✻ Caramelizing… (8m 9s · ↓ 2.9k tokens)
+  Ran 3 shell commands
 
 › Message from @a6628ec7e07379c89 (ctrl+o to expand)
+
+● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 17m 24s
+
+● Acertar a celula e rodar os vizinhos na main
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     import io, sys
+     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
+     P='app/docs/BACKLOG.md'
+     t=io.open(P,encoding='utf-8').read()
+     A='| GESTAO-HE-CALENDARIO-CONTROLE |'
+     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
+     novo = (' **FATIA 1 +…
+
+✢ Caramelizing… (13m 24s · ↓ 9.9k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
