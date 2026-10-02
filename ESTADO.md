@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:218 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:249 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:32:01.**
+**Medido em 02/10/2026 19:37:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla` |
+| `HEAD` local | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
 | `origin/main` | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,19 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia
 96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla
 e8ca6f65 O topo do TICKETS fechado no ato do push (O112)
 070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho
 a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6
-52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
 ```
 
 ## `git status --short`
 
 ```
-?? bin/diff_o118_col221.py
-?? bin/rejulgar_o118_col221.py
-?? bin/snapshot_o118_col221.py
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,42 +94,42 @@ a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO co
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A grade está inteira certa agora, inclusive o 02/10: 8 colunas, cheias=6 orfas=[] prev=550 em todo dia trabalhado; 21/09 com 5 acesas,
-  orfas ['08:28']. O gravado é que ficou atrás: minutos_previstos=12270 em 22 dias, e 22×550 = 12.100 — a diferença 170 = 2 × 85 são
-  exatamente 01/10 e 02/10. Relavro, com o DIFF medido ANTES (L-082):
+  Ran 1 shell command
 
-  Ran 2 shell commands
-
-● somente_leitura=True dá o DIFF sem gravar nada — é a porta certa. Mede antes:
+● Esse é o DIFF que o seu aval pede, e ele ficou pequeno e nomeável: 1949 chaves em 112 colabs, só 3 campos de 17 divergem, em 2
+  colaboradores. Nomeio a causa de cada um:
 
   Ran 1 shell command
 
-● O DIFF move 2 campos: minutos_previstos −85 e minutos_realizados −5. Mas −85 é uma pausa, e eu esperava −170 (dois dias). Um dia ainda
-  está em 635 — acho qual antes de aplicar:
+● As duas causas saem nomeadas do próprio dado:
 
-  Ran 1 shell command
+  - col221, 9 dias, horas_extras_50 +12,59 h — 1,42 h/dia = 85 min = uma pausa. O oráculo credita a segunda pausa como trabalho e ela
+    virou HE. É o mesmo defeito do O118, agora do lado do calculador: a grade já sarou, o calculador não.
+  - col221 21/09, horas_atraso +1,43 h (86 min) — é o atraso real das 08:28 contra 07:00; o motor diz 0,00. Pela L-084 uma ponta longe é
+    atraso e desconta, então aqui o oráculo acerta e o motor cala.
+  - col599, 5 dias, horas_intra_indenizada −5,00 h — ele bate 11:28→18:02, 19:02→23:30: tirou 60 min reais (18:02→19:02). O cadastro dele
+    é noturno (hii 01:00), que ele não cumpriu; o motor paga 1 h de intra não gozado, o oráculo vê a pausa que houve e paga 0. O oráculo
+    acerta, e são 5 h a favor da casa.
 
-● As duas autoridades concordam agora: (12100, 22), todos os 22 dias a 550. Então o 635 que sobra no recálculo vem da grade em algum dia
-  que eu não medi — a janela anterior parou em 02/10. Varro a competência inteira:
+  Confirmo a causa 1 na fonte — o que o calculador pergunta sobre pausa:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Todas as três autoridades dizem 12100 (8 colunas, 22 dias a 550, zero órfã fora do 21/09). Mas o recálculo do fechamento leu 12185 —
-  então o previsto do fechamento vem de um quarto caminho, e um dia ainda sai 635. Acho onde:
+● Confirmado na fonte: ponto/calculador/alimentacao.py:135 devolve a mesma 4-tupla ({dia: (hi, hf, hii, hfi)}) e regras.py:201 recebe
+  intervalo_marcos = (hii, hfi). O calculador é cego à segunda pausa do mesmo jeito que a grade era. Construo na cópia (o push está vivo,
+  não toco a árvore):
 
-  Searched for 1 pattern, ran 1 shell command
+● Reading the calculador marcos map and consumers
+  ⎿  $ cd /home/ronald/wt-orfa/app && sed -n '130,175p' ponto/calculador/alimentacao.py; echo "=== quem consome esse mapa ==="; grep -n
+     "marcos_por_dia\|_marcos_dia\|intervalo_marcos\|intervalos=" ponto/calculador/alimentacao.py | head -14
 
-● O previsto do fechamento sai de folha/export.py::grade_do_fechamento — um quarto ponto de entrada da grade. Leio:
-
-● Reading grade_do_fechamento
-
-✢ Sock-hopping… (1h 19m 30s · ↓ 216.4k tokens · thinking)
+· Sock-hopping… (1h 25m 0s · ↓ 239.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
