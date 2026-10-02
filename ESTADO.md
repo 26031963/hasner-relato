@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:393 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:436 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 21:34:31.**
+**Medido em 01/10/2026 21:40:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o smoke dele` |
+| `HEAD` local | `79716395 A celula da S5b nomeia a familia: tres guardas que o motor tem e o calculador nao le` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+79716395 A celula da S5b nomeia a familia: tres guardas que o motor tem e o calculador nao le
+9ffa0ef8 A hora NEGATIVA do calculador: causa provada por aritmetica -- a janela clipa contra o marco de OUTRO turno
 c58bb0e2 FATIA 1 no ar as 21:24: a prova no RELATO e o AVAIS com UM item -- o smoke dele
 4c35e96c MERGE da raia-ui: GESTAO-HE FATIA 1 (so template) no ar -- o clique usa a porta que JA existia
 d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o dia de HE ganha FUNDO CHEIO
-5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias
-1d9308e6 Duas falhas minhas na suite cheia: command sem casa e dois tipos que o vocabulario nao conhecia
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/management/commands/diff_calculador.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -96,44 +95,44 @@ d2003c6c [GESTAO-HE-FATIA-1] O clique no dia dispara a porta que JA EXISTE, e o 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ selos de front, com o chromium │ 38 OK                                                                        │
-  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
-  │ na main, depois do merge       │ 93 testes OK                                                                 │
-  ├────────────────────────────────┼──────────────────────────────────────────────────────────────────────────────┤
-  │ deploy                         │ migrations em dia, prova de casca, 3 rotas, BUG 128 verde, importerror_500=0 │
-  └────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────┘
 
-  O desenho mais fino desse merge são dois selos que são os dois lados do mesmo interruptor: um cobra que os 9 nomes da fatia 2 não estejam no HTML nem no
-  markup; o outro cobra que o pedido de patch continue no RELATO e que as classes puladas leiam o motivo. Depois de religar a fatia 2, os dois não podem
-  estar verdes juntos — e isso impede as duas doenças de uma vez: meia fatia 2 pendurada na tela, e um arquivo de @skip passando por vacuidade.
+  Searched for 1 pattern, ran 7 shell commands
 
-  O conflito do merge foi no BACKLOG e está declarado: ficou a célula da raia (o agente mediu a fatia 1) e a minha linha da FATIA-2 foi preservada.
-  Conferi depois que bin/gerar_avais.py, o selo do AVAIS, o handoff_sessao.sh e o relato.sh seguem de pé — a raia nasceu antes deles — e os selos de host
-  estão verdes. Uma coisa precisou de linha minha: a célula que a raia escreveu não falava o vocabulário do hook_stop_fila1 e virou "o 1º aberto" contra o
-  marcador; agora declara fatia 1 no ar e aguardando o seu smoke.
+● A hora negativa do calculador tem causa provada por aritmética, e ela fecha na segunda casa.
 
-  O AVAIS tem UM item: o seu smoke, com a frase pronta e os cinco pontos que só o olho responde — e dois deles são de comportamento, não de pintura:
-  clicar num dia e cancelar o diálogo (nada pode ser gravado) e motivo curto (tem de dar o toast de aviso antes de gravar).
+  Para medir eu precisei dar ao instrumento um modo que ele não tinha — diff_calculador --colab <ids>, que mede só aqueles colabs e imprime o detalhe que
+  do_dia já devolve. O --limite-colabs pega os N primeiros e o colab que interessa quase nunca está neles; a alternativa era reconstruir a chamada numa
+  sonda própria, que é o que a casa proíbe.
 
-  Na cópia da S5b, a cura (a) está pronta e com o selo que torna a fronteira estrutural. Faltam (b) a guarda do T8 e (c) a hora negativa — essa última eu
-  meço antes de curar, porque clampear em zero seria band-aid.
+  col235 01/10: batidas 00:00 → 05:00, e o cadastro do dia diz que o turno começa às 21:00 — porque o turno real começou na véspera. A janela de HE clipa
+  a entrada para cima até o marco e a saída para baixo: clipar 00:00 até 21:00 do próprio dia põe a entrada depois da saída, e o intervalo clipado fica
+  invertido.
 
-✻ Cooked for 32m 1s · done 9:24 PM · 1 shell still running
+  21:00 → 05:00 no mesmo dia = −960,00 min. O medido é −959,87 — a diferença são os segundos das batidas. Mesma forma em col174 (−959,02, marco 21:00) e
+  col382 (−560,17, marco 23:50). O próprio detalhe grita: delta_entrada_min = −1259,8 e delta_saida_min = +1439,9, as duas pontas a mais de 20 h do marco.
 
-❯ segue a fila; PAREI so em lei ou !
+  E a casa já tem a lei que recusa isso: a L-084 diz que dia cujo cadastro não descreve a batida não se julga pelo marco, e o chamador já pergunta — a
+  variável se chama _fora_da_janela_por_l084 e o contador apareceu nesse run. Ela não segurou esses dias, e é esse o fio da cura.
 
-● Provar a aritmetica da hora negativa
-  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
-     # a aritmetica que PROVA a causa: clipar a entrada ate o marco das 21:00 do MESMO dia poe a entrada
-     # DEPOIS da saida das 05:00 -- e 21:00 -> 05:00 para tras e -16 h.
-     print('21:00 -> 05:00 no MESMO dia = %.2f min' % ((5-21)*60))
-     print('medido no col235 …
+  O que não vai ser a cura, e está escrito na própria casa: clampear em zero. A lápide diz "clampear em zero seria band-aid: esconderia o dia errado" — e
+  está certa, porque o zero do motor nesses dias também não é a verdade. A pessoa trabalhou de 00:00 a 05:00; o errado é o marco contra o qual o tempo foi
+  medido.
 
-✢ Nucleating… (1m 55s · ↓ 6.2k tokens)
+  E isso dá um nome à família: as três curas que você autorizou são a mesma coisa — guarda que o motor tem e o calculador não lê. (a) turno aberto e par
+  nulo, (b) o recorte do T8, (c) o marco de outro turno na janela. Nenhuma é regra nova, e é por isso que todas as três são "importar a guarda".
+
+  A (a) já está curada em cópia, com o selo que torna a fronteira estrutural — e ele nasceu de uma promessa quebrada que estava no código: a lápide do
+  _PeriodoPontualidade jurava que um campo novo no teto quebraria "em voz alta", e o meu getattr a calou por duas horas. Agora um varredor por AST cobra
+  isso no commit.
+
+  Seis commits esperando o push, que está rodando a régua. As três curas vão num marco só, com os REDs e o DIFF refeito — é o que a sua resposta (1) exige
+  para a troca subir.
+
+✻ Sautéed for 2m 51s · done 9:35 PM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
