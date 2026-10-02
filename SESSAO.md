@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 12:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1069**.
+**Medido em 02/10/2026 12:41:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (191.2 MB). Acoes na janela: **1067**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1077,5 +1077,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:42:07 | Bash | Ver os tres sitios do carimbo | `cd /home/ronald/saas-hasner && sed -n 55,80p bin/regua.sh; echo "--- 192-200 ---"; sed -n 192,200p bin/regua.sh` |
 | 00:41:56 | Bash | Fazer a regua calcular o hash da arvore | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io # --- a regua carimba o hash da ARVORE ao lado do FP antigo ------------------------------------- P='bin/regua.sh' t=io.open(P,encoding='utf-8').read() a = "FP=$(impressao_digital)" assert t.count(a)==1 t=t.replace(a, """FP=$(impressao_digital) # O HASH DA ARVORE (SUITE-UMA-VEZ-POR-ARVORE, ordem Ronald 01/10 20:0x ...` |
 | 00:41:44 | Bash | Registrar a regra e pôr o smoke do atalho no AVAIS | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' # -*- coding: utf-8 -*- import io, json P='app/docs/PROMPTS.md' t=io.open(P,encoding='utf-8').read() nova = ("- **02/10 ~00:4x — NAO PARAR, regra da sessao (vale ate ele revogar).** **(1)** esperar suite, push, deploy " "ou monitor **nao devolve o turno** -- com a pista ocupada, pegar o proximo item que **nao precisa dela** (cura " "em copia, leit ...` |
-| 00:41:11 | Bash | Escrever o hash da arvore por write-tree | `cd /home/ronald/saas-hasner && cat > bin/arvore_hash.sh <<'EOF' #!/usr/bin/env bash # HASH DA ARVORE, em UM sitio (ordem Ronald 01/10 20:0x, SUITE-UMA-VEZ-POR-ARVORE). # # bin/arvore_hash.sh -> o hash da arvore de trabalho (tracked + untracked nao ignorado) # # POR QUE `git write-tree` E NAO `find \| sha1sum`. O carimbo antigo (`bin/regua.sh::impressao_digital`) # anda o DISCO com `find -name '*.p ...` |
-| 00:39:05 | Bash | Ler o mecanismo do stamp atual | `cd /home/ronald/saas-hasner && sed -n 30,60p bin/pre-push.sh; echo "=== o stamp de hoje ==="; cat .regua_stamp 2>/dev/null \| head -6; echo "=== impressao_digital ==="; grep -n "impressao_digital" -A14 bin/regua.sh \| head -20` |
