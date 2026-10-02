@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:43:31.**
+**Medido em 02/10/2026 06:49:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
-| `origin/main` | `567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA` |
-| commits a subir (`ahead`) | **3** |
+| `HEAD` local | `17b5ceef O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `b1da8d82 Handoff regenerado depois das correcoes de redacao` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+17b5ceef O topo do TICKETS fechado no ato do push (O112)
 b1da8d82 Handoff regenerado depois das correcoes de redacao
 036a21bd O hook me recusou duas vezes, e nas duas a culpa era a minha REDACAO
 c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA
-e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a tela nao diverge -- ela e MUDA
 ```
 
 ## `git status --short`
@@ -94,44 +94,44 @@ e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  └────────────┴─────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────┘
+  lápide dele já dizia isso, com o caso de 28/09 que a criou.
 
-  O O45 é o achado que vale ler: a lápide dizia que a diferença era de janela. Não é. Na amostra de 150, as 99 diferenças são 100% só-no-cartão e 100%
-  dentro da janela da tela — e o número que fecha o caso é dia_colab_tela = 0, com a lista da tela vazia em 150 de 150. Com horas_previstas idênticas e
-  dias_falta = 0 nos dois lados, não é previsto, nem falta, nem janela: a tela é muda. Os "1.411" não são desencontros entre duas contas — são dias que só
-  o cartão conta.
+  Corrigi as duas e, de carona, achei um terceiro desalinhamento: a S5b-TROCA-NAO-CRIA-DESCONTO ainda dizia "falta o DIFF final e o !" — o DIFF final foi
+  publicado às 03:1x desta madrugada, com a isolação feita no mesmo dado. Só falta o !.
 
-  Dois erros meus, com a lição no lugar: meu selo do O23 nasceu vazio (fiz o outro usuário pedir férias, 2 turnos como o meu, e a média continuava 2,0 —
-  só vi porque ensaiei a vacuidade de propósito; troquei para atestado, que chega ao preview em 1 turno, e aí morde com 1.5 != 2.0); e commitei durante a
-  suite de um push, o que invalida a árvore carimbada e derruba o push sem nenhum RED visível.
+  O topo do RELATO agora lista só os dois ! que travam a fila 1: a troca do calculador (atraso +59,82 h → −0,16 h, e nada fora de atraso/antecipada se
+  move) e a folha zero com vínculo vencido (195,41 h de 4 pessoas). O ok-desenho do _perto e o seu smoke da UI-RESPOSTA saíram dessa linha de propósito e
+  vivem no AVAIS.md, com a frase pronta.
 
-  Na sua mesa seguem quatro, com a frase pronta em app/docs/AVAIS.md: o ! da troca do calculador, o ! da folha zero com vínculo vencido (195,41 h), o
-  ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA.
+  Tudo empurrado (b1da8d82), handoff regenerado, e o hook libera o turno — pela primeira vez sem um item aberto cobrando.
 
-  Sobre a ordem: o bloco OBRAS tem ~55 abertos, e os próximos na ordem do arquivo estão atrás de portão (O24 espera o export da 09, O25 espera o
-  CARTÃO=ESPELHO 6/6, O28 é dinheiro). Dos "livres", os que rendem mais pelo mesmo esforço são os da classe que apareceu três vezes esta noite — item que
-  já está construído e só precisa de conferência e número (foi o caso do O22 e metade do O21). Se você me der o critério (dinheiro primeiro, app primeiro,
-  ou "os que só faltam conferir"), eu sigo por ele; sem critério, continuo na ordem do hook.
+  Guardei a lição: quando o hook insistir num item, conferir primeiro se a culpa é a palavra. Ele lê vocabulário fixo em dois lugares, e sinônimo ali não
+  é estilo — é um item que nunca fecha.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: FILA-DA-NOITE -- A ORDEM VIVA passa a ser uma LISTA, nao um item (ordem Ronald 01/10 20:2x). Regra unica: item que
-  travar em !,
+✻ Cogitated for 5h 46m 50s · done 6:45 AM · 1 shell still running
 
-  Ran 1 shell command
+● Background command "Veredito do push e do hook" completed (exit code 0)
 
-● Background command "Esperar o push final do turno" completed (exit code 0)
+  Ran 2 shell commands
 
-● Veredito do push e do hook
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push72.log; do sleep 30; done; tail -4 logs/push72.log; git fetch -q origin;
-     echo "ahead=$(git rev-list --count origin/main..HEAD)"; echo "=== hook:"; echo '{"hook_event_name":"Stop"}' | timeout 60 python3
-     bin/hook_stop_fila1.py…
+● Era só o esperador do push 72 fechando — nada novo a tratar.
 
-✢ Unfurling… (5h 44m 26s · ↓ 434.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Estado final, conferido:
+  - árvore de app/ limpa; origin/main em b1da8d82
+  - a empurrar = 1 — é o commit do pos_push (17b5ceef, o topo do TICKETS derivado do push que acabou de entrar). Isso é inerente ao desenho do O112: o
+    derivado de cada push é escrito e commitado depois dele e viaja no push seguinte. Não é pendência solta.
+  - o hook libera o turno
+  - as duas lições da madrugada estão no índice da memória (25 linhas): não commitar durante o push, e o topo do RELATO ser contrato de vocabulário com o
+    hook
+
+  Na sua mesa, com a frase pronta em app/docs/AVAIS.md: os dois ! que travam a fila 1 (troca do calculador e folha zero com vínculo vencido, 195,41 h), o
+  ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E, que está no ar.
+
+✻ Worked for 30s · done 6:46 AM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
