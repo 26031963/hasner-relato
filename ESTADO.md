@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:46:01.**
+**Medido em 02/10/2026 07:51:24.**
 
 | | |
 |---|---|
@@ -94,19 +94,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E, que está no ar.
-
-✻ Worked for 30s · done 6:46 AM · 1 shell still running
-
-❯ aval Ronald: a troca da S5b ESPERA. O111 primeiro, ate a antecipada entrar em faixa; e as quatro rubricas que a troca move contra o GRAVADO
-  (trabalhadas +179,20, folga +52,49, noturnas +26,85, intra -14,66) abertas por causa e por colab antes do !. Nenhuma lei nova: L-082 (b) e a lei de
-  01/10 17:2x. segue a fila; PAREI so em lei ou !
-
-● Ordem recebida: O111 primeiro, a troca espera, e as quatro rubricas abertas por causa e por colab antes do !. Registrando e indo.
-
-  Searched for 5 patterns, ran 20 shell commands
-
-❯ aval Ronald 02/10 -- nenhuma lei nova (L-082, L-096, LEI-AKITA 9 e 12, lei de 01/10 17:2x "a troca nao cria desconto novo").
   (1) S5b: a troca NAO sobe com a tabela das 02:50. Ordem: O111 (chamador agrupa por dia_da_jornada, o mesmo juiz do motor) -> DIFF de frota da 10
   refeito contra o GRAVADO -> causa nomeada por colab de toda rubrica que ainda mover.
   (2) AVAL DE CRITERIO da troca, vale sem nova parada: sobe sozinha quando o DIFF contra o GRAVADO mostrar (a) nenhum colab com atraso ou saida
@@ -122,12 +109,25 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ● Ordem recebida, com AVAL DE CRITÉRIO — isso me deixa fechar a troca sozinho se (a)-(d) baterem. E a medição que acabou de sair me deu a peça que faltava
   do O111:
 
-● DIFF de frota com o O111 curado
+  Searched for 2 patterns, ran 8 shell commands
+
+● O111 curado — a antecipada caiu de +29,96 para +6,80 h. Mas apareceram 104 colabs com o mapa ausente (fallback silencioso, que a sua ordem proíbe).
+  Medindo a causa:
+
+  Ran 3 shell commands
+
+● Antecipada entrou em faixa: +29,96 → +6,80 h. Agora abrindo os que ainda ficam ACIMA do gravado — o critério (a) é literal:
+
+  Ran 1 shell command
+
+● Três causas nomeadas. Uma delas é curável lendo lei existente — o par de 8 segundos do col932:
+
+● DIFF com a guarda do par relampago
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && docker run --rm
      --cpuset-cpus 4-7 --cpus 3 --network saas-hasner_default --env-file .env -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e
      TZ=A…
 
-✢ Hullaballooing… (12m 28s · ↓ 40.4k tokens · still thinking)
+✽ Hullaballooing… (17m 51s · ↓ 52.4k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
