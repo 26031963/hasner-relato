@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:06:41.**
+**Medido em 02/10/2026 09:12:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `daa9cb6a O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS` |
 | `origin/main` | `a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS
+9877256e [JANELA-DA-AUTORIDADE-PERDE-O-DIA-20] A janela da testemunha passa a ser a da folha, e a medicao refinou a premissa
 daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 a7b1b912 A COL369-TIPOS-INVERTIDOS ganha linha no TICKETS e fecha no vocabulario do hook
 c4980e4b [COL369-TIPOS-INVERTIDOS] MEDIDO: SIM para a intra (2,00 h), PARCIAL para as horas (2,29 das 5,07)
-ec346990 O topo do TICKETS fechado no ato do push (O112)
-99bc54f0 [S5b] A tabela final depois do O111, as 4 rubricas abertas por colab, e PAREI no criterio (2)(a)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,12 +94,6 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dos tres numeros.
-  PRONTO: os tres REDs nomeados no RELATO com PROVA, tempo e queries re-medidos na pagina de 30, no lote de 100 e no universo, placar relavrado e
-  conferido, commit e deploy. Sem isso = INCOMPLETO com a lista.
-  HAIKU: (a) op_em_turno por empresa passa a ser o do juiz, rotulo "em turno agora"; (b) golden: "quantos em turno agora na empresa 2?", esperado pela
-  ferramenta do placar; (c) nenhum degrau novo.
-  LEI-AKITA: origem=situacional.py + lavrar_placar_situacional.py, testemunha=_turno_aberto_calc, RED=os tres acima, quem-mais-le=censo dos 68 chamadores
   de turno_aberto_de (nenhum muda de assinatura), juizes novos=0.
   segue a fila; PAREI so em lei ou !
 
@@ -123,18 +114,24 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 
 ● RED confirmado (3 falhas, incluindo a saída das 19:00 do último dia fora da janela). Restaurando a cura e rodando GREEN:
 
-  Suites de ponto, relatorios e colaboradores · 4m 37s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
-     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
-     "$TESTE_ENVFILE" -e PYTHON… (4m 36s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 5 shell commands
 
-✢ Hullaballooing… (1h 33m 8s · ↓ 124.8k tokens)
+● Marco fechado e no ar. Agora o O113, que entra exatamente aqui. Lendo os três sítios:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Quadro completo — e ids_com_adesao já aceita ids= desde 22/09; o chamador é que não passa. Construindo a fatia:
+
+● O resto do miolo do turno aberto
+  ⎿  $ sed -n '1289,1324p' ponto/turnos.py
+
+✢ Compacting conversation… (1h 38m 28s · ↓ 132.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                                   1% until auto-compact
+                                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
