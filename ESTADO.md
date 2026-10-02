@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:49:01.**
+**Medido em 02/10/2026 11:54:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao` |
+| `HEAD` local | `389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+389fa2a7 TRES CELULAS DO BACKLOG MENTIAM, e e isso que faz a esteira construir o que existe
 dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 3aa5e2b6 [O26] O 12x36 passa a poder declarar o horario do dia em que o plantao cai
 e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2
-5ca0baaf O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
@@ -93,44 +93,44 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  └────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Três coisas que vale você saber sobre como ela ficou:
-
-  1. A cura é uma linha, e a razão do corte está escrita junto. A exclusão de 09/09 dizia "12x36 tem grade própria: âncora + ciclo de 24h" — e ela caiu
-     porque a grade por dia não compete com a âncora: quem decide se o dia é plantão continua sendo eh_dia_trabalho; ela só diz o horário de quando o
-     plantão cair ali. O modelo já respeitava desde a S150.
-  2. O rótulo é dele, não emprestado. A ajuda da cíclica fala de "sábado de meio período" — história do 6x1, onde o dia da semana decide o expediente. No
-     12x36 a frase passou a ser "quando o plantão cair neste dia, o horário é este — a escala continua decidindo quais dias são plantão". Texto emprestado
-     ensinaria o admin a pensar em semana onde o sistema pensa em ciclo.
-  3. Um caso meu nasceu vácuo e eu o corrigi no mesmo ato: a primeira versão procurava a palavra "plantão" no arquivo inteiro, e o template já a usava —
-     ou seja, passava antes da cura. A âncora virou a frase do ramo. E caí de novo na lápide do heredoc sem quote: o bash executou os backticks e comeu
-     dois nomes da linha do TICKETS; reparei antes do commit.
-
-  Pedi o seu clique no AVAIS (W12X36-HPD-SMOKE), porque é a mesma tela que o irmão W6X1 subiu com smoke seu — mas com o risco medido em zero: nenhuma
-  escala existente muda, o que muda é a capacidade de declarar.
-
-✻ Worked for 5m 32s · done 11:48 AM · 7 shells still running
-
-● Background command "Fecha o O26 e empurra" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Seguindo a fila. Listando o que vem depois do O26 para achar o próximo com portão aberto:
 
   Ran 2 shell commands
 
-● O39 está suspenso pelo O44 (o próprio item diz). O próximo livre é o O41 — GEOFENCE-VALIDAR-SEM-VOLTA, com RED de print dele. Lendo a fatia inteira e os
-  sítios:
+● O selo da L-086 existe e passa (10 testes OK). Fechando as duas células que mentiam e abrindo o O79, que é trabalho real:
 
-● O que a funcao resp faz (a volta)
-  ⎿  $ grep -n "_resp = \|def _resp" -A 14 chamados/views.py | sed -n '1,30p'
+  Ran 1 shell command
 
-· Meandering… (51s · ↓ 2.5k tokens)
+● Achado de higiene da fila, com prova item por item: três células do BACKLOG estavam mentindo — e é exatamente isso que faz a esteira construir o que já
+  existe.
+
+  ┌─────────────────────────────┬─────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │            item             │  dizia  │                                                     é                                                     │
+  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O41                         │         │ feito em 25/09 (ebde81d4): os 3 verbos já entram pela porta do fio (fio.py:406, lápide citando o mesmo    │
+  │ GEOFENCE-VALIDAR-SEM-VOLTA  │ "livre" │ print do [nome] #16386), o relatório de geo já é bloco recolhido no fio, o selo da volta existe —  │
+  │                             │         │ 44 testes OK em 5 selos + smoke de chromium                                                               │
+  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O78 selo da L-086           │ "livre" │ existe e passa (10 testes OK)                                                                             │
+  ├─────────────────────────────┼─────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ O56 pre-push testa a árvore │ "livre" │ curado: pre-push.sh:45 carimba git write-tree                                                             │
+  └─────────────────────────────┴─────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  Eu fui construir o O41 e parei na leitura — a lápide do próprio arquivo citava o print que originou o item. Se eu tivesse ido direto ao código, teria
+  reescrito uma cura de 25/09.
+
+  O que sobrou de verdade na varredura é o O79 — SELO DO VOCABULÁRIO falta × furo (L-088): nenhum teste da árvore cita a L-088, e a própria linha dela em
+  LEIS.md admite "cobrem CASOS; não há selo do VOCABULÁRIO". A lei é precisa — falta é dia previsto sem trabalho e sem justificativa, e custa o previsto
+  daquele dia; furo é marco não cumprido, que é pergunta em aberto, não decisão — e o selo pedido é um censo por AST de quem soma dias_falta e de quem lê
+  furo, mordendo quem tratar um como o outro.
+
+  Deixei os outros cinco estados vagos (O38, O43, O55, O57, O77) sem tocar: cada um precisa da mesma leitura, e afirmar sem ler é o que acabou de me
+  custar um ciclo. O O79 é o próximo, e é fabricável sem aval — selo de vocabulário não move número.
+
+✻ Churned for 4m 17s · done 11:52 AM · 7 shells still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · ← for agents · ↓ to manage
   ⧉  index
 ```

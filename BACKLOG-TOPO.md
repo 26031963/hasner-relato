@@ -48,7 +48,7 @@ lista — ela e o que esta EM PE._
 | **O38** | VALIDACAO-QUE-NAO-GRAVA-DIZ-O-MOTIVO | **medindo** |
 | **O39** | REABRIR-LINHA-UI | **FRENTE DA FILA** |
 | **O40** | K8-COMPETENCIA-NAO-E-MES-CIVIL | **tripwire no ar; a fronteira FM x Perio |
-| **O41** | GEOFENCE-VALIDAR-SEM-VOLTA | **livre** |
+| **O41** | GEOFENCE-VALIDAR-SEM-VOLTA | **FECHADA 25/09** (`ebde81d4`, nome `GEO |
 | **O42** | ESTEIRA-SECA-25-09 + ADENDO | **8 de 10 feitos; 1 e 2 em cura** |
 | **O43** | RASTRO-ADMIN | **livre** |
 | **O44** | ARQUIVO-SIMPLES v2 | **item 1 feito; 2-8 com aval, na fila** |
@@ -85,7 +85,7 @@ lista — ela e o que esta EM PE._
 | **O75** | MEDIDOR IMPRIME O UNIVERSO DE CAMPOS | **livre, esteira** |
 | **O76** | DIA DO PLANTAO VEM DO MARCO, NAO DA DATA CIVIL DA ENTRADA | espera corte |
 | **O77** | SELO DA L-084 | **livre** |
-| **O78** | SELO DA L-086 | **livre** |
+| **O78** | SELO DA L-086 | **FECHADA: o selo EXISTE** -- `ponto/tes |
 | **O79** | SELO DO VOCABULARIO falta x furo | **livre** |
 | **O80** | FECHADA 27/09 10:1x | **livre, prioridade** |
 | **O81** | ATA-SEM-LAMPADA | espera corte |
