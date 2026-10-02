@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:56:51.**
+**Medido em 02/10/2026 08:02:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,12 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/docs/RELATO.md
+ M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/motor_calculo_v2.py
+ M app/ponto/services/espelho.py
+?? app/ponto/tests/test_dia_da_jornada_e_legivel.py
+?? app/ponto/tests/test_par_relampago_nao_se_julga.py
+?? app/ponto/tests/test_perto_do_marco_e_o_mesmo_no_motor.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,10 +101,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 2 patterns, ran 8 shell commands
-
-● O111 curado — a antecipada caiu de +29,96 para +6,80 h. Mas apareceram 104 colabs com o mapa ausente (fallback silencioso, que a sua ordem proíbe).
   Medindo a causa:
 
   Ran 3 shell commands
@@ -122,13 +124,17 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● O lado motor é byte-idêntico nas oito rubricas — a guarda do relâmpago move zero na frota, só alcança o calculador. Agora os selos das duas curas:
 
-  Suite inteira de ponto (o motor mudou) · 2m 3s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && source
-     bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file
-     "$TESTE_ENVFILE" -e PYTHON… (2m 3s)
+  Ran 5 shell commands
+
+● 2811 testes de ponto OK. Aplicando, e já emendando os itens (3) e (4) da sua ordem no mesmo marco:
+
+● Suites de ponto e escala com o delegate · 2m 0s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER --network saas-hasner_default
+     --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/saas-hasner/app:/app -v
+     /home/ronald/saas-hasner/app/staticfile… (2m 0s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-· Hullaballooing… (23m 18s · ↓ 65.4k tokens)
+✢ Hullaballooing… (28m 28s · ↓ 71.5k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
