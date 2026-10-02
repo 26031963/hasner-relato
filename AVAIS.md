@@ -6,7 +6,7 @@
 
 | # | id | tipo | desde | o numero | frase PRONTA para colar |
 |---|---|---|---|---|---|
-| 1 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | FATIA 1 MERGEADA e NO AR em 01/10 21:24 (merge 4c35e96c + deploy no mesmo ato). So template: a celula do calendario posta em `ponto:decidir_he`, a porta que JA estava no ar, UM dia por ato, com o motivo pelo `hxPerguntar | `smoke Ronald: abri a Gestao de HE, cliquei num dia e CANCELEI o dialogo (nada gravou), cliquei de novo e confirmei com motivo -- o dia virou autorizado com o numero limpo. Pode fechar a FATIA 1` |
+| 1 | `gestao-he-calendario-controle-smoke` | **smoke** | 2026-10-01T18:30 | FATIA 1 COMPLETA no ar 02/10 02:5x. A celula saiu de baixo da regra global (`type="button"`), com PROVA no chromium: `rgb(219, 234, 254)` nas DUAS cascas, e o par que morde devolve `rgb(0, 120, 212)` com `submit` de volt | `smoke Ronald: abri a Gestao de HE, a celula esta azul-claro com a grade saltando, cliquei num dia e CANCELEI (nada gravou), cliquei de novo com motivo e o dia virou verde com o numero limpo. Pode fechar a FATIA 1` |
 
 ---
 

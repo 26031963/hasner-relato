@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 01/10/2026 23:53:31.**
+**Medido em 01/10/2026 23:58:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto` |
+| `HEAD` local | `680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **18** |
+| commits a subir (`ahead`) | **20** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
+cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke dele
 e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto
 6b0c036b [GESTAO-HE-FATIA-1] A celula saia AZUL pela CASCATA, e o meu selo nao viu: ela deixa de ser botao de envio e a prova passa a ser o navegador
 b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e metade da ordem ja estava cumprida
-50f85995 A celula da obra registra a cura decidida: sair da regra global, nao brigar com ela
-83ea71a0 Ordem consolidada de 23:1x: a celula sai de baixo da regra global em vez de brigar com ela
 ```
 
 ## `git status --short`
@@ -96,43 +96,43 @@ b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e m
 
 ```
 
-  A prova, pelo juiz e não pelo markup: tem_acao(user, 'autorizar_he') — o mesmo que a porta confere e que decide o pode_autorizar da tela — responde True
-  para JSP03, JSP05 e JSP08, nenhum deles superuser, e para JDP03 e greice.
+● A FATIA 1 está completa e no ar às 02:5x, e a cura é a sua: a célula saiu de baixo da regra global em vez de gritar mais alto. type="button", o seletor
+  button[type="submit"] não casa mais, nenhum !important novo e hasner-ponto.css intacto (conferido: diff de app/static/ vazio).
 
-  E um achado no caminho: core/views_quadro.py:31 faz permissions.add e não chama registrar_log. O quadro de permissões muda quem pode mover dinheiro em
-  silêncio. A trilha deste ato eu escrevi à mão, com antes/depois e a lista de usuários; a porta da UI segue sem. Registrado, com a cura nomeada.
+  A prova agora é no navegador e tem o par que morde: getComputedStyle da célula = rgb(219, 234, 254) nas duas cascas, e a mesma página com type="submit"
+  reinjetado devolve rgb(0, 120, 212) — isso é o que prova que a medição vê cascata, e não o arquivo de cores.
 
-  Antes disso, nesta mesma rodada: o atalho HE na Central está construído no molde dos três que já estavam lá, com <a> e não button[type=submit] — pela
-  mesma razão que custou três rodadas na célula —, lendo o contador que já existe, e com HE — em vez de zero quando falta retrato. O selo tem o caso de
-  chromium que você exigiu e a igualdade contador == universo está medida em prod: 1.817 = 1.344 + 401 + 72, igual empresa por empresa.
+  E faltava um probe, que é a lição do dia: em file:// o render aponta o estático para STATIC_ROOT, e no worktree da raia app/staticfiles existe vazio
+  (ponto de montagem do tmpfs). Sem um probe <button type="submit"> que tem de sair azul, teria nascido um segundo selo verde sobre uma página sem folha
+  de estilo. O probe entrou antes de todos os casos.
 
-  E um erro meu de processo: o commit anterior morreu no bash por backtick em -m — a memória da sessão diz "mensagem de commit só por heredoc" e eu usei
-  -m. Refeito por heredoc.
+  A linha 139 que você mandou conferir estava doente: o botão "Dar ciência no padrão" era type="submit" e a mesma regra o pintava de azul cheio com texto
+  branco — o ato secundário com a cara do primário. Curado pelo mesmo caminho (e ele nem precisava ser submit).
 
-✻ Waiting for 1 background agent to finish
+  E há um terceiro que eu não toquei, e é decisão sua: o botão do topo "Dar ciência em tudo que está sem decisão" também é type="submit" e também sai
+  azul-primário pela mesma regra. Ali pode ser o certo — é gesto de competência inteira —, mas hoje ele é azul por acidente da cascata, não por escolha.
 
-› Message from @a6628ec7e07379c89 (ctrl+o to expand)
+  Uma divergência da letra, declarada: a ordem diz "disparo por htmx", e ficou form.submit(). A razão é medida: core/respostas.py:52-55 devolve 204 +
+  HX-Trigger para htmx, e com 204 não há swap — o toast apareceria e a célula ficaria azul e riscada no dia que o admin acabou de autorizar. Testemunha
+  mostrando "sem decisão" sobre dia autorizado é o que esta casa não aceita. O essencial da ordem — deixar de ser botão de envio — está cumprido, e é ele
+  que resolve a cascata. Para htmx literal, decidir_he tem de devolver a linha re-renderizada em vez de 204: é .py, e está listado na fatia 2.
 
-  Ran 1 shell command
+  Junto foi o ATALHO-HE na Central (sua ordem de 23:1x): quarto atalho no molde dos três, <a> e nunca submit — pela mesma regra que custou três rodadas —,
+  cor do selo HE da legenda, número do contador que já existe, e HE — em vez de zero quando falta retrato. Contador == universo medido em prod: 1.817 =
+  1.344 + 401 + 72, igual empresa por empresa.
 
-● Agent "Construir o calendário-controle de HE na raia wt-ui" finished · 38m 46s
+  E o meu selo do atalho errou o recorte, que eu consertei aqui: ele pegava o primeiro {% endif %} e o title tem um {% if %} dentro — o recorte morria no
+  meio e quatro casos acusaram a tela de não ter ícone, cor, pílula e travessão, tudo que estava depois do corte. Agora conta aninhamento. Mesmo tropeço
+  que a raia teve com o he-barra horas antes.
 
-● Commitar o merge e o atalho, e deployar · 4s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     import io, sys
-     sys.path.insert(0,'bin'); import hook_stop_fila1 as H
-     P='app/docs/BACKLOG.md'
-     t=io.open(P,encoding='utf-8').read()
-     A='| GESTAO-HE-CALENDARIO-CONTROLE |'
-     i=t.find(A); fim=t.index('\n', i); c=t[i:fim].split('|')
-     novo = (' **FATIA 1 C… (4s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  98 testes OK na main depois do merge, deploy no mesmo ato, e o AVAIS com um item: o seu smoke, com os cinco pontos que só o olho responde — incluindo se
+  o "Dar ciência no padrão" em slate-100 é o que você queria.
 
-· Brewing… (7m 18s · ↓ 7.9k tokens)
+✻ Worked for 50m 38s · done 11:55 PM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
