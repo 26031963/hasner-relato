@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:138 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:140 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:21:31.**
+**Medido em 02/10/2026 11:27:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +95,44 @@ a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  falta injustificada para férias (5 casos aprovados)? Atraso e saída antecipada são parciais — contá-las como dia seria errado, e aí o literal está certo
-  por acidente e o que falta é um conjunto próprio no catálogo. Não decidi porque é lei, não fiação.
-
-  O turno inteiro, em uma linha cada:
-
-  - três marcos no ar — painel de 2.150 → 12 queries; o app dizendo o que foi decidido em 3.432 dia-colab; o chão do espelho de volta ao cadastro.
-    Dinheiro medido em zero nos três.
-  - quatro itens medidos sem construir — O27 (325/520, 1.757,97 h, causa única), O26 (DIFF 0 garantido), F2 (é visão; 0 concedidos divergentes), e os
-    censos (34 sítios sem guarda em apuração, 16 parâmetros sem efeito, placar 8/22).
-  - cinco pushes verdes (78, 79b, 81, 82b e o 83 em voo), cada repique com a causa em uma linha.
-  - oito avais na sua mesa, todos com número e frase pronta — quatro deles cortes que já tinham nome na pausa de 27/09.
-  - e a cadeia toda pendura num !: a troca da S5b (col516 +7,86 h, col174 +4,52 h, por pareamento) e o export da 09. Dele dependem o 22/22, o censo dos
-    juízes, os parâmetros e o portão da F2.
-
-  Os erros do turno ficaram escritos onde doem: datei de cabeça, rodei medição pesada em prod (266% de CPU), afirmei num selo um veredito que o sistema
-  não dava, e levei ao AVAIS quatro perguntas que já tinham corte com nome — a pergunta certa era "qual o número", e é isso que hoje produziu.
+  Era isso o turno. Três marcos no ar com dinheiro medido em zero, quatro itens medidos sem construir, cinco pushes verdes, oito avais com número e frase
+  pronta — e quatro erros meus registrados onde eles custam, não onde ficam bonitos.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-● O hook vai seguir cobrando a F2 enquanto ela estiver aberta — e, pela lei do turno, o que falta é escrever no topo do RELATO a trava nomeada, porque
-  agora é verdade: todo o resto da fila 1 está atrás do mesmo !. Esperando o push 83 para não mexer na árvore sob a suíte:
+  Ran 1 shell command
+
+● A suíte roda ~12 min e o selo que lê o RELATO é de host (já passou na régua). Escrevo a trava nomeada agora e ela entra no próximo commit:
 
   Ran 1 shell command
 
-● Background command "Commit da F2 e push 83" completed (exit code 0)
+● A trava está nomeada no topo do RELATO, como a lei do turno exige — e ela só pôde ser escrita com verdade agora, depois de a esteira esgotar tudo o que
+  tinha portão aberto:
 
-  Estado do push 83 · 19s
-  ⎿  $ cd /home/ronald/saas-hasner; for i in $(seq 1 11); do if grep -qE "To https|error:|FAILED|RED --" logs/push83.log; then break; fi; sleep 10; done;
-     grep -E "^(OK$|Ran |To https|pos_push|error:|FAIL:)" logs/push83.log | tail -5; date +%H:%M:%S (18s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  ▎ PAREI: o ! da troca da S5b — critério (2)(a) não cumprido: col516 +7,86 h e col174 +4,52 h de saída antecipada acima do gravado, os dois por
+  ▎ pareamento — e com ele param o 22/22 (8/22 medido; as duas células que faltam dependem do sítio de dinheiro que a troca substitui) e o portão da F2 |
+  ▎ espera Ronald
 
-✢ Hullaballooing… (3h 47m 58s · ↓ 494.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  O texto anterior ficou logo abaixo, como detalhe da S5b, porque ele segue valendo: a tabela, o O111 fechado, a antecipada em faixa no total.
+
+  O que você decide, e o efeito de cada um:
+
+  1. o ! da troca — libera o recálculo, e com ele o caminho para o 22/22 (as duas células de um juiz por pergunta que hoje dependem do
+     minutos_realizados_do_dia, zona dinheiro) e, atrás delas, o portão da F2.
+  2. o export da 09 — é a saída declarada da pausa de 27/09, que segura JUIZ-BATIDA-NASCE, JUIZ-ESCALA-NASCE, PARAMETRO-GANHA-ROTULO e
+     CARTAO-TOTAL-IGUAL-SOMA (o O27). Todos já com número.
+  3. três respostas curtas que destravam fatias prontas: a saída (c) do cartão no O27, a regra jurídica do art.130 na F2, e o smoke do app para o O21
+     desenhar a palavra que o servidor já entrega.
+
+  Enquanto isso o push 83 fecha o último commit do turno. O que subiu hoje, com dinheiro medido em zero nos três, está no ar: o painel que perguntava
+  2.150 queries agora pergunta 12, o placar que dava dois números para o mesmo fato dá um, e o app dos ~750 passou a dizer o que foi decidido em cada dia.
+
+✻ Sautéed for 3h 50m 29s · done 11:24 AM · 8 shells still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · ← for agents · ↓ to manage
   ⧉  index
 ```
