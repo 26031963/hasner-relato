@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 12:10:45.**
+**Medido em 02/10/2026 12:15:45.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
