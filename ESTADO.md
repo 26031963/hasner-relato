@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:34:01.**
+**Medido em 02/10/2026 14:39:15.**
 
 | | |
 |---|---|
@@ -41,7 +41,9 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ```
  M app/docs/RELATO.md
  M app/ponto/calculador/alimentacao.py
+ M app/ponto/calculador/nucleo.py
  M app/ponto/management/commands/diff_calculador.py
+ M app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,39 +98,39 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ (2)(b) causa por colab do que move                      │ publicada no RELATO antes do apply — Pautas DP #922/#924/#926/#927 para os de gravado   │
-  │                                                         │ zero, L-084 no col382, O65 no col788                                                    │
-  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (2)(d) 09 e exportadas intactas                         │ hash ANTES medido: 607 linhas, 189304907c23163…; exp#27/#25/#24 vigentes                │
-  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (2)(c) reversão em logs/                                │ próximo, junto do apply                                                                 │
-  ├─────────────────────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
-  │ (3) pareamento único fica para o O65                    │ respeitado — o col788 (intervalo fora do par) está declarado, não corrigido             │
-  └─────────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────┘
+  dia-colab) e antecipada de −0,00 → +289,66 h. Fora do núcleo ficavam o dedup de 10 min, o corte de turno, o envelope e a paridade (o dia ímpar em que a
+  última batida solta não conta, BUG-144).
 
-  E a prova de que a causa era pareamento, como você disse: motor × calculador dá atraso +0,00 e antecipada −0,00 com zero dia-colab divergentes. A
-  pontualidade do calculador é hoje idêntica à do motor — o que sobra contra o gravado é deriva do gravado, não regra nova.
+  A lei certa estava escrita na lápide do próprio núcleo — "quando a autoridade já pareou, o núcleo NÃO pareia: ele SOMA" —, e o selo agora diz isso:
+  minutos_do_oraculo com pares= é obrigatório, sem pares= é proibido (nesse modo ele pareia por sequência, e aí seria o segundo pareamento).
+
+  Dois selos meus, no mesmo turno, precisaram ser corrigidos por serem fortes no lugar errado: este e o do mapa (que acusava as mesclas por olhar só o
+  valor atribuído). Em ambos o custo foi medido antes de virar número publicado — e é por isso que a tabela só vale com o DIFF rodado de ponta a ponta,
+  não com a extração "parecendo certa".
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Background command "Roda o DIFF pela porta inteira" completed (exit code 0)
-
-● A tabela mudou muito, e para pior (atraso de +0,00 para +146,03 h; antecipada de −0,00 para +289,66 h) — a minha extração das rubricas não foi fiel, e
-  era exatamente para isso que o teste servia. Não publico isso. Achando o que eu pulei:
+● Erro meu de leitura, e é de uma linha: os pares do DIFF são tuplas de três elementos (ini, fim, dia) — o núcleo usa o dia da jornada que vem neles — e
+  eu passei só (ini, fim), jogando o dia fora. Daí o núcleo redatou tudo pela regra dele:
 
   Ran 1 shell command
 
-● Achei o que pulei, e está escrito na lápide do núcleo: "quando a autoridade já pareou, o núcleo NÃO pareia — ele SOMA". A porta tem de chamar o núcleo
-  com pares= (dedup, pausa, envelope, paridade), e meu selo proibiu exatamente isso. Corrigindo os dois:
+● A docstring do núcleo diz pares = [(entrada, saida|None), ...] — duas posições. Preciso ler o código, não a docstring, antes de afirmar:
 
-● Como o DIFF obtem mins e pausas do nucleo
-  ⎿  $ grep -n "v = minutos_do_oraculo\|mins = \|k_str = " ponto/management/commands/diff_calculador.py | head -6; sed -n '/v = minutos_do_oraculo/,+12p'
-     ponto/management/commands/diff_calculador.py | head -14
+  Ran 1 shell command
 
-✢ Philosophizing… (31m 27s · ↓ 44.5k tokens)
+● Pelo código (a docstring do núcleo está desatualizada e diz 2 posições): if len(_par) >= 3 — ele usa o 3º como dia. Minha correção está certa. E achei a
+  segunda causa, a do atraso: eu passo p.entrada em UTC onde o DIFF passava timezone.localtime(...) — o marco ancora no dia errado:
+
+  DIFF 5a vez: dia da jornada + pontas locais
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; nohup docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env -e PYTHONUNBUFFERED=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest python manage.py tenant_command diff_calculador
+     --schema=j…
+
+✢ Philosophizing… (36m 41s · ↓ 51.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
