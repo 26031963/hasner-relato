@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:15:01.**
+**Medido em 02/10/2026 16:20:26.**
 
 | | |
 |---|---|
-| `HEAD` local | `8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA` |
+| `HEAD` local | `69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **13** |
+| commits a subir (`ahead`) | **14** |
 
 ## Fabrica
 
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco
 8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA
 7260475c [S5b] A PORTA E UMA, mas o `resultado` dos dois chamadores NAO era o mesmo
 ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas
 edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso
-7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,44 +93,44 @@ edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro si
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A casa já tem o instrumento: regerar_txt_dominio sem --aplicar gera e compara o hash sem registrar nada. É a medida certa, pela linha
-  que gerou o arquivo:
+  A raia do O114 segue construindo em worktree, com a árvore viva intocada — ela entra na principal antes de qualquer outro item, com
+  merge e deploy no mesmo gesto, como você ordenou.
 
-  Ran 2 shell commands
-
-● O TXT da 09 gerado hoje já não é o exportado: emp2 com 213 linhas contra 210, emp3 88 contra 86 (emp4 idêntico). Isso é fato para o DP,
-  não detalhe — vejo quais linhas:
-
-  Ran 1 shell command
-
-● Cinco linhas a mais e nenhuma removida ou alterada: o TXT exportado da 09 segue inteiramente contido no de hoje. Registro com o número e
-  o comando, porque o ato tem de ser assinado por ele:
-
-  Searched for 2 patterns, ran 4 shell commands
-
-● A célula de ESTADO dessa linha está muito acima dos 300 caracteres da DIETA. Atualizo-a compacta, com o fato novo:
-
-  Ran 2 shell commands
-
-● A asserção dos 300 caracteres me pegou (388) — a célula não entrou. Encurto:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
 
   Ran 1 shell command
 
-● Marco fechado. Confiro a pista antes de empurrar, porque push conta como run e a raia do O114 pode estar na suíte:
+● Pista ocupada. Faço o desenho da troca, que é o que não disputa nada — e a primeira pergunta é se a lavratura sabe receber rubrica por
+  dia ou só período:
 
-  Quem gera o AVAIS · 11s
-  ⎿  $ cd /home/ronald/saas-hasner && (bin/relato.sh 2>&1 | tail -6) ; git status --short app/docs/ | head -8 (11s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Doodling… (53m 48s · ↓ 131.0k tokens)
+● A lavratura deriva as linhas dos periodos; o oráculo tem rubrica por dia pronta. Então a troca não pode nascer como segundo escritor do
+  DiaPago. Vejo o mapeamento dos campos antes de desenhar:
+
+  Ran 1 shell command
+
+● Isso é um achado de desenho com dinheiro dentro: as rubricas do calculador são 11, e o DiaPago tem três que ele não decide nem declara
+  cego — horas_extras_50_noturna, horas_extras_100_feriado, horas_extras_100_noturna. Quanto elas valem hoje:
+
+● Quanto valem as três rubricas que o calculador não decide
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/tres_splits.py <<'PY'
+     from django.conf import settings
+     assert settings.DATABASES['default']['NAME'] == 'saas_hasner'
+     from django.db.models import Sum, Count, …
+
+✽ Doodling… (59m 13s · ↓ 147.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Running sombra_dinheiro_col221.py money ensaio                                                        23m 5s · ↓ 329.2k tokens
+  ◯ fork  Adding selos to test_celula_segundo_intervalo.py                                                     28m 30s · ↓ 356.7k tokens
   ⧉  index
 ```
