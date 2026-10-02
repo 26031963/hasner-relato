@@ -10,12 +10,12 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 11:27:01.**
+**Medido em 02/10/2026 11:32:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `37a79e5d [F2] MEDIDA sob o portao: o art.130 ja existe, a F2 e a VISAO -- e a pergunta que sobra e juridica` |
-| `origin/main` | `0c1d6bf4 [O27] A linha do TICKETS da fatia MEDIDA` |
+| `HEAD` local | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
+| `origin/main` | `37a79e5d [F2] MEDIDA sob o portao: o art.130 ja existe, a F2 e a VISAO -- e a pergunta que sobra e juridica` |
 | commits a subir (`ahead`) | **2** |
 
 ## Fabrica
@@ -29,18 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2
+5ca0baaf O topo do TICKETS fechado no ato do push (O112)
 37a79e5d [F2] MEDIDA sob o portao: o art.130 ja existe, a F2 e a VISAO -- e a pergunta que sobra e juridica
 7770f914 O topo do TICKETS fechado no ato do push (O112)
 0c1d6bf4 [O27] A linha do TICKETS da fatia MEDIDA
-7d9922db [O27] JANELA-EXATA MEDIDO: a causa e UMA (folga trabalhada), e os cortes ja tinham nome
-a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -95,40 +93,40 @@ a83dfcb9 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Era isso o turno. Três marcos no ar com dinheiro medido em zero, quatro itens medidos sem construir, cinco pushes verdes, oito avais com número e frase
-  pronta — e quatro erros meus registrados onde eles custam, não onde ficam bonitos.
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ placar por empresa │ dois números para o mesmo fato → um: global 146 = 119+8+19                            │
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ app dos ~750       │ tick genérico → a palavra do dia em 3.432 dia-colab, lendo a porta única              │
+  ├────────────────────┼───────────────────────────────────────────────────────────────────────────────────────┤
+  │ chão do espelho    │ 1ª batida → cadastro; 57 colabs veem dias que não existiam, em_aberto 0→0             │
+  └────────────────────┴───────────────────────────────────────────────────────────────────────────────────────┘
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
+  O que medi e não construí, porque a próxima decisão é sua: O27 (325/520, 1.757,97 h, causa única provada — e o achado de que 325 colaboradores têm folga
+  trabalhada, com col451 marcando 142 h de folga contra 47 h trabalhadas), O26 (DIFF 0 garantido por construção, 1.307 plantões de fim de semana), F2 (é
+  visão, não regra — o art.130 já existe; 7 períodos projetam direito acima da tabela e nenhum concedido), e os censos (34 sítios lendo batida crua em
+  apuração, 16 parâmetros sem efeito, placar 8/22).
 
-  Ran 1 shell command
+  Oito avais na mesa, todos com número e frase pronta — e quatro deles cortes que já tinham nome na sua pausa de 27/09. A pergunta nunca foi "qual a
+  regra": era "qual o número".
 
-● A suíte roda ~12 min e o selo que lê o RELATO é de host (já passou na régua). Escrevo a trava nomeada agora e ela entra no próximo commit:
+  E a trava está nomeada: o ! da troca da S5b (col516 +7,86 h, col174 +4,52 h, por pareamento) segura o 22/22 e, atrás dele, o portão da F2 — e isso é
+  demonstrável, não alegado: as duas células que faltam dependem do mesmo sítio de dinheiro que a troca substitui.
 
-  Ran 1 shell command
+  Os quatro erros meus ficaram escritos onde doem — a hora datada de cabeça, os 266% de CPU em prod, a asserção que afirmava o que o sistema não dizia, e
+  as perguntas que levei à sua mesa sem procurar o corte que já existia.
 
-● A trava está nomeada no topo do RELATO, como a lei do turno exige — e ela só pôde ser escrita com verdade agora, depois de a esteira esgotar tudo o que
-  tinha portão aberto:
+✻ Crunched for 43s · done 11:31 AM · 8 shells still running
 
-  ▎ PAREI: o ! da troca da S5b — critério (2)(a) não cumprido: col516 +7,86 h e col174 +4,52 h de saída antecipada acima do gravado, os dois por
-  ▎ pareamento — e com ele param o 22/22 (8/22 medido; as duas células que faltam dependem do sítio de dinheiro que a troca substitui) e o portão da F2 |
-  ▎ espera Ronald
+● Background command "Push final e o handoff como o hook o le" completed (exit code 0)
 
-  O texto anterior ficou logo abaixo, como detalhe da S5b, porque ele segue valendo: a tabela, o O111 fechado, a antecipada em faixa no total.
+  Ran 2 shell commands
 
-  O que você decide, e o efeito de cada um:
+● O push 84 (a trava + handoff) está com a suíte rodando — é o último ato pendente do turno, e nada depende dele além do registro chegar ao remoto.
 
-  1. o ! da troca — libera o recálculo, e com ele o caminho para o 22/22 (as duas células de um juiz por pergunta que hoje dependem do
-     minutos_realizados_do_dia, zona dinheiro) e, atrás delas, o portão da F2.
-  2. o export da 09 — é a saída declarada da pausa de 27/09, que segura JUIZ-BATIDA-NASCE, JUIZ-ESCALA-NASCE, PARAMETRO-GANHA-ROTULO e
-     CARTAO-TOTAL-IGUAL-SOMA (o O27). Todos já com número.
-  3. três respostas curtas que destravam fatias prontas: a saída (c) do cartão no O27, a regra jurídica do art.130 na F2, e o smoke do app para o O21
-     desenhar a palavra que o servidor já entrega.
+  Vou aguardar o veredito e, se ele vier verde, o turno está inteiro no git. Se cair, repito com a causa em uma linha, como nas duas vezes de hoje (o ID
+  do TICKETS e a allowlist do .date()).
 
-  Enquanto isso o push 83 fecha o último commit do turno. O que subiu hoje, com dinheiro medido em zero nos três, está no ar: o painel que perguntava
-  2.150 queries agora pergunta 12, o placar que dava dois números para o mesmo fato dá um, e o app dos ~750 passou a dizer o que foi decidido em cada dia.
-
-✻ Sautéed for 3h 50m 29s · done 11:24 AM · 8 shells still running
+✻ Cooked for 15s · done 11:31 AM · 8 shells still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
