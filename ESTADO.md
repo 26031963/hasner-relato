@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:04:31.**
+**Medido em 02/10/2026 19:10:01.**
 
 | | |
 |---|---|
@@ -94,42 +94,42 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  perguntar à autoridade — exatamente o erro de contar pela forma. O vínculo de 21/09 em diante é ec1345 / te548 (6x1 Seg/Ter); o te176
+  que eu medi começa em 01/10 e está ativa=False:
 
-● versao é parte da chave única por desenho (UniqueConstraint(colaborador, mes, ano, data, versao)), lavrar apaga só dentro da própria
-  versão (dia_pago.py:309) e todo leitor tem versao='motor' por default. Então a dobra pode ser namespace deliberado, não defeito — mas
-  isso só vale se nenhum leitor consultar DiaPago sem filtrar versão. Censo por AST, não por texto:
+  Searched for 1 pattern, ran 2 shell commands
 
-  Ran 1 shell command
-
-● Três sítios, todos dentro do próprio dia_pago.py. Vejo o que são:
+● A autoridade é o carimbo CelulaDia.escala_geradora. Leio ele direto:
 
   Ran 1 shell command
 
-● Veredito: a dobra não é defeito, é o namespace declarado. 18 dos 21 sítios filtram versão; os 3 que não filtram são
-  bulk_create/bulk_update sobre objetos já escopados (comum carrega versao; o bulk_update da 441 vem do filtro da 418, que tem
-  versao=versao). Meu alarme estava errado. Mas a medição deixa um fato que importa mais:
+● Agora a mecânica está medida e confirma o diagnóstico dele (as órfãs são as da tarde; minha corrida anterior estava no vínculo errado):
+
+  ┌──────────────────────────────────┬───────────────────────────────┬───────────────────────────────────────────────┐
+  │              camada              │        o que responde         │                   resultado                   │
+  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
+  │ célula (autoridade)              │ dna.marcos                    │ 6 marcos, escala_geradora=1345, todos os dias │
+  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
+  │ cadastro te548                   │ pausas_cadastradas()          │ as duas pausas                                │
+  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
+  │ régua de colunas                 │ _marcos_def(te)               │ 8 colunas, inclui S 14:15 | E 15:40           │
+  ├──────────────────────────────────┼───────────────────────────────┼───────────────────────────────────────────────┤
+  │ sequência do dia (utils.py:1116) │ te.marcos_do_dia(d) → 4-tupla │ (07:00, 19:00, 09:15, 10:40) — hii2/hfi2 caem │
+  └──────────────────────────────────┴───────────────────────────────┴───────────────────────────────────────────────┘
+
+  _match_marcos então casa 4 e sobra o par da tarde: cheias=4 de 8, orfas=['14:17','15:40'] em todos os dias. O cartório acende 6 porque o
+  ramo do DNA itera os seis marcos da célula e o meu raio de 30 min achou as horas — logo 6 acesas E as mesmas duas em órfãs. O asterisco
+  do calendário é a órfã.
 
 ● Advising using Fable 5.1
 
-✢ Sock-hopping… (52m 0s · ↓ 128.4k tokens)
+✢ Sock-hopping… (57m 30s · ↓ 149.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: O114 REPROVADO, bug provado na ata gravada do col221 (sonda 19:03). ID: O114-ORFA-QUE-ACENDEU. FONTE:
-  ponto/services/cartorio.py::ata_do_dia. MUDA: linhas 271-274 gravam n_orfas e orfas de dia['orfas'] sem retirar as horas que as linhas
-  236-245 usaram para acender lampada (_usadas). RED: col221 22/09 a 01/10, ata com 6 lampadas acesas E orfas ['14:1x','15:40']; 02/10 4
-  acesas e 4 orfas. SELO: batida que acendeu lampada nunca consta em orfas, na ata gravada, frota = 0. Responder por escrito: por que a
-  grade entrega coluna vazia para hii2/hfi2 se o builder do espelho casa as seis; se a origem e a grade, a cura e la e o raio de 30 min
-  sai (LEI-AKITA 1 e 2). PROIBIDO: filtrar orfa no leitor ou no template, fallback, rejulgar a empresa inteira. PRONTO: celulas do col221
-  de 21/09 em diante rejulgadas so ele com snapshot antes, saida de /tmp/mauro_ata.py colada com orfas [] de 22/09 a 01/10, censo de
-  frota do selo, commit. Sem isso INCOMPLETO com a lista. LEI-AKITA: origem/testemunha/RED/quem-mais-le, juizes novos=0; nenhuma lei
-  nova. Depois segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
