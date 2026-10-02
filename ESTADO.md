@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:21:31.**
+**Medido em 02/10/2026 18:26:37.**
 
 | | |
 |---|---|
@@ -42,6 +42,8 @@ da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancor
  M app/docs/AVAIS.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
+ M app/escala/tests/test_previsto_desconta_as_duas_pausas.py
+ M app/escala/utils.py
  M app/ponto/services/cartorio.py
 ?? app/ponto/tests/test_lampada_acende_pela_batida.py
 ?? esteira.pausada
@@ -98,42 +100,42 @@ da1bac54 [S5b] Merge da raia: a troca fecha o censo em 15/15, com a lei do ancor
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
-  │ batida  │ escrita (chokepoint) │ ponto/registro_batida.py              │ 1 — chamados/services/regularizacao_ext.py │
-  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
-  │ batida  │ tipo E/S             │ turnos.py::decidir_tipo_estrito       │ 44 (99)                                    │
-  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
-  │ batida  │ espúria/cluster      │ triagem_batida.py                     │ 18 (39)                                    │
-  ├─────────┼──────────────────────┼───────────────────────────────────────┼────────────────────────────────────────────┤
-  │ escala  │ vínculo do dia       │ escala/alimentacao.py::vinculo_do_dia │ 24 (32)                                    │
-  └─────────┴──────────────────────┴───────────────────────────────────────┴────────────────────────────────────────────┘
 
-  O número que já vale como achado é o da segunda linha: um único sítio fora do chokepoint de escrita de batida,
-  chamados/services/regularizacao_ext.py — e isso é zona inviolável da seção 4. Esse eu levo com frase de corte.
-
-  Para os outros quatro, o número honesto sai do mesmo instrumento que a casa usa nas seis famílias que já existem — fora_da_autoridade,
-  que varre por AST e distingue decidir de ler. Vou refazer com ele antes de te trazer frase para assinar, porque frase de corte sobre
-  número inflado é pior que corte nenhum.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● A falha nova é da minha cura do previsto, e é legítima: 540 != 480. Leio o selo para entender o que ele afirma, antes de decidir se o
+  certo é a cura ou a asserção:
 
   Ran 1 shell command
 
-● Esse é o instrumento certo, e ele mostra o que o meu censo não fazia: ele tira o comentário antes de varrer (sem_comentario — "o
-  comentário que ensina não é a violação"), respeita a lista de autoridades livres e os pendentes declarados, e cada padrão vem com a
-  pergunta e o motivo.
+● Background command "Esperar o veredito dos vizinhos" completed (exit code 0)
 
-  Então o censo das famílias batida e escala que você vai assinar precisa primeiro de três declarações em core/juizes.py, que hoje não
-  existem para elas: JUIZES['batida']/['escala'] (pergunta → autoridade), PROIBIDOS (o padrão que denuncia resposta própria, com o motivo)
-  e AUTORIDADE_DOS_PADROES (quem pode responder).
+● Agora o quadro está claro, e há uma colisão real entre dois dos seus cortes — não um bug meu:
 
+  O selo test_MORDE_sem_minutos_na_ata_a_autoridade_responde_pelos_marcos (CÉLULA F1, 14/09) fixa que célula com dna.marcos nulo deve ter
+  o previsto 480 — ou seja, descontando a pausa do template. A R4 (27/09) diz o contrário: "o template entrega hii/hfi que aquele dia NÃO
+  TEM", e foi curada em seis leitores por isso, com +75,12 h em 27 colabs medidos.
+
+  A minha cura trouxe a guarda da R4 para o previsto e o número virou 540. Isso é mudança que você não pediu — você pediu 550 em vez de
+  635. Então restrinjo ao pedido:
+
+  Ran 1 shell command
+
+● O selo do leitor de célula voltou ao verde, e agora o que falha é o meu próprio caso, que afirmava a mudança da R4 que eu decidi não
+  fazer. Converto-o em registro da colisão, em vez de apagá-lo:
+
+  Converter o caso em caracterização e rodar
+  ⎿  $ python3 - <<'PY'
+     import io, py_compile
+     p='escala/tests/test_previsto_desconta_as_duas_pausas.py'
+     s=io.open(p,encoding='utf-8').read()
+     a = ''' def test_MORDE_celula_que_NAO_declara_marco_nao_desconta_pausa_do_template(self):
+     """A cura de carona, e ela e da familia R4 (col610 22/08, +75,12 h em 27 …
+
+✢ Sock-hopping… (14m 5s · ↓ 43.7k tokens)
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
