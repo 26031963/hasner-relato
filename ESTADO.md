@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:357 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:421 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:05:01.**
+**Medido em 02/10/2026 20:10:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `d778a31e [O118] O censo da 2a familia era MEU falso-positivo: 15 em 9 sao 7 em 2` |
+| `HEAD` local | `626186b1 [O117] O passo zero medido: a colisao dos dois cortes tem ZERO casos na frota` |
 | `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,20 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+626186b1 [O117] O passo zero medido: a colisao dos dois cortes tem ZERO casos na frota
+05af4d20 [O120] Ensaio na sombra do vinculo do col221, e uma pergunta de LEI com o numero
 d778a31e [O118] O censo da 2a familia era MEU falso-positivo: 15 em 9 sao 7 em 2
 aae484a1 [O119] A celula usa a palavra declarada do hook: "espera o !"
 551e17d3 [O119] Causa localizada por LEITURA, RED evidenciado, e falta UMA linha na zona inviolavel
-708b846f [S5b] FECHADA no ESCREVER; o DIFF das duas versoes achou o O119
-d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -98,36 +96,36 @@ d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 grava
 
 ```
 
-  Searched for 1 pattern
-
-● Há a porta certa para "o cadastro descrevia outra coisa no passado": corrigir_escala_retroativa, com criar_trecho_retroativo e
-  corrigir_vinculo_retroativo. Leio o contrato dela:
+● O hook passou ao O117, e ele está certo: a célula dele diz que o número do lado da F1 não está medido, e nomeia isso como "o passo zero
+  de qualquer corte aqui". Isso é trabalho meu e não depende de decisão sua. Meço:
 
   Ran 1 shell command
 
-● Essa é a porta exata deste caso — e o caso que a criou ([nome]) tem a mesma forma: cadastro 12x36 noturno enquanto ele batia
-  diurno. Ela faz os três atos: edita o vínculo no lugar com histórico, chama regenerar_celulas_vinculo, e reconciliar_apos_vinculo
-  derruba o que nasceu da premissa morta — que é o "chamados mortos por lastro" do seu aval. E tem --apesar-da-lavra "<motivo>", a guarda
-  que não cede sem motivo escrito, para as competências lavradas.
-
-  Rodo o DRY em prod (ela é DRY por padrão) e deixo ela dizer o que muda:
+● Zero — mas um zero que eu não publico sem checar se não é a minha sonda se medindo. Dois artefatos possíveis: escala_geradora_id nulo (o
+  get(None) devolveria None e o filtro mataria tudo em silêncio) ou trabalha=False em todas. Meço o funil:
 
   Ran 1 shell command
 
-● O DRY mostra a guarda funcionando: todas as células de 21/07 a 20/09 saem BARRADO (competencia exportada) — é a
-  HX-REGEN-NAO-TOCA-EXPORTADO (BUG 23), a mesma que barrou o caso Neelise. E o padrão que ela produziria é exatamente o que você
-  descreveu: dias de semana fato_sem_previsao → fato passa a ter previsao, sábados e domingos cobrado → furo perde a premissa. 10 chamados
-  vivos, 7 deles → PREMISSA MORTA.
+● O zero é real e o funil prova que não é o meu filtro: sem geradora resolvivel = 0, nada caiu em silêncio. O corte acontece inteiro num
+  ponto só — das 20.317 células com dna.marcos nulo, ZERO têm trabalha=True. Todas são folga, e folga não tem previsto sobre o que
+  discordar.
 
-  Rodo o DRY com o motivo escrito, que é o que atravessa a guarda, para ver o plano real:
+  Ran 1 shell command
 
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 170 docker exec saas_core python manage.py tenant_command corrigir_escala_retroativa
-     --schema=juliani --colab 221 --vinculo 1345 --template 548 --desde 2026-07-21 --regenerar-desde 2026-07-21 --apesar-da-lavra "aval
-     Ronald 02/10 20:2x: cadastro errado provad…
+● O117 — o passo zero está medido, e o resultado dispensa o corte.
 
-✢ Sock-hopping… (1h 52m 30s · ↓ 329.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  A célula dizia que o lado da F1 nunca foi medido. Medido:
+
+  celulas lidas (desde 01/07) ......... 53.435
+  com dna.marcos NULO ................. 20.317
+  ... e trabalha=True .................      0
+  ... sem geradora resolvivel .........      0   (nada caiu em silencio)
+  ... e template COM intervalo ........      0
+
+  Célula sem marco é célula de folga — e folga não tem previsto sobre o que discordar. Publiquei o funil porque um zero sem funil é
+  indistinguível de sonda mal parametrizada: sem geradora resolvivel = 0 descarta o artefato que eu tinha de eliminar antes de afirmar (o
+  get(None) engolindo tudo em silêncio).
+
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
