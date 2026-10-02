@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 04:22:31.**
+**Medido em 02/10/2026 04:28:01.**
 
 | | |
 |---|---|
@@ -121,12 +121,12 @@ fa74d134 O111: a hipotese da CLASSE morreu medida, e a causa e AGRUPAMENTO -- di
 
 ● Background command "Push do marco de leitura" completed (exit code 0)
 
-● Esperar o push 62 · 3m 12s
+● Esperar o push 62 · 8m 42s
   ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_push=" logs/push62.log; do sleep 25; done; tail -4 logs/push62.log; echo "=== ultimo push:"; git
-     fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (3m 11s)
+     fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)" (8m 41s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (3h 23m 26s · ↓ 319.0k tokens)
+✢ Unfurling… (3h 28m 56s · ↓ 319.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
