@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:37:25.**
+**Medido em 02/10/2026 18:42:38.**
 
 | | |
 |---|---|
-| `HEAD` local | `52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META` |
+| `HEAD` local | `a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **42** |
+| commits a subir (`ahead`) | **43** |
 
 ## Fabrica
 
@@ -29,18 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6
 52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
 b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em diante
 fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cortes dele registrada
-07d89f21 [PREVISTO] A cura: desconta TODAS as pausas, nao a primeira -- e o censo publicado ANTES
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
  M app/docs/RELATO.md
+ M app/ponto/calculador/regras.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,41 +96,41 @@ fecb9a67 [PREVISTO+ATA] A cura restrita ao pedido, e uma COLISAO entre dois cort
 
 ```
 
-  O que falta, nominalmente: o seu print do espelho do col221 em 30/09 e 01/10 mostrando as seis colunas sem asterisco laranja.
-
-  E a causa de o primeiro reparo não ter bastado, dita: o ata_do_dia grava minutos_previstos copiando da grade, e a grade tira o valor da
-  própria ata — ciclo que se auto-perpetua. Quebrei escrevendo pela autoridade. Foi por isso que as lâmpadas (que vêm do DNA) curaram às
-  18:28 e o previsto não.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● O veredito saiu: duas falhas, e eu reconheço as duas — são as curas que eu fiz na cópia wt-splits e que não entraram no merge da troca.
+  Confirmo:
 
   Ran 1 shell command
 
-❯ aval Ronald: O114 REPROVADO pelo print do calendario do col221 as 18:36. De 22 a 30/09 as batidas de 14:1x e 15:40 seguem com asterisco
-  em todos os dias, e o previsto gravado segue 635. Fecha so com: (1) cura das lampadas commitada e as celulas do col221 de 21/09 em
-  diante rejulgadas, so ele, com snapshot antes; (2) 6 lampadas ACESAS lidas da ata GRAVADA; (3) previsto 550 gravado dia a dia; (4)
-  calendario sem asterisco de 22 a 30/09, com print. Dizer o que e o asterisco da entrada 08:28 de 21/09 e o chamado 24277. Nao tocar 01
-  a 20/09. Sem as quatro provas, INCOMPLETO com a lista. Depois push e segue a fila; PAREI so em lei ou !
+● Achei, e o erro é meu: eu mesmo descartei as duas curas. Antes de construir a troca eu fiz git checkout da1bac54 na cópia — e isso jogou
+  fora as correções do SEM_ENTRADA e do except-pass, que estavam sem commit. Refaço as duas na árvore viva:
 
-● Seu print é de 18:36 e a cura do previsto entrou depois, às 18:5x — mas preciso verificar os dias 22 a 30/09, que a minha última leitura
-  truncou. Meço o trecho exato:
+  Searched for 1 pattern, ran 1 shell command
 
-● As quatro provas no trecho 21/09 a 02/10
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $S/prova_21a02.py <<'PY'
-     # -*- coding: utf-8 -*-
-     """As QUATRO provas no trecho que ele mediu: 21/09 a 02/10, dia a dia, da ata GRAVADA."""
-     import datetime as dt
-     …
+● Background command "Esperar o veredito do push 85" completed (exit code 0)
 
-* Sock-hopping… (24m 54s · ↓ 78.6k tokens)
+● A asserção me parou de novo no mesmo ponto: minha remoção por linha não casa o fim da constante. Olho a forma real dela em vez de supor:
+
+  Ran 1 shell command
+
+● A constante termina em 22-05') — e eu procurava ') no fim da linha, que casa na primeira linha dela também, porque a primeira termina em
+  da '. Não: termina em ', sem parêntese. O problema é outro — o while para na linha errada por causa do ' final. Removo pelo parêntese
+  que fecha, contado:
+
+● Remover por AST e rodar
+  ⎿  $ python3 - <<'PY'
+     import io, py_compile, ast
+     p='ponto/calculador/regras.py'
+     s=io.open(p,encoding='utf-8').read()
+     # A FORMA CERTA DE ACHAR O FIM: por AST. A constante e um `Assign` de modulo, e o `ast` sabe onde ela
+     # acaba (`end_lineno`) -- eu estava procurando o fim por sufixo de texto (`')`), e …
+
+✽ Sock-hopping… (30m 7s · ↓ 92.7k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
