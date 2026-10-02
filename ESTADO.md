@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 09:44:31.**
+**Medido em 02/10/2026 09:50:01.**
 
 | | |
 |---|---|
@@ -94,44 +94,44 @@ daa9cb6a O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  │ equivalência lote × juiz (520, mesmo instante) │ 144 = 144, lote-juiz=[], juiz-lote=[] (0,33 s × 4,16 s) │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ op_em_turno global × soma empresas             │ 145 = 145 (118+19+8) — pela cor do LED seria 39         │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ op_justif global × soma                        │ 31 = 31 (25+5+1) — era 31 repetido em toda linha        │
+  ├────────────────────────────────────────────────┼─────────────────────────────────────────────────────────┤
+  │ colabs sem empresa                             │ 0 (a igualdade não tem ressalva)                        │
+  └────────────────────────────────────────────────┴─────────────────────────────────────────────────────────┘
 
-● 204 vizinhos OK. Agora a medição em prod (só leitura, funções reais — o processo novo lê o disco, que já tem a cura):
+  Dois registros que o trabalho produziu:
+
+  - o censo vizinho me pegou na hora de nascer: copiar para o lote a escolha de escala que a ata faz criou o terceiro desempate por ativa em turnos.py
+    contra 2 declarados. Não declarei 3 — a dívida da O68 ganhou um carregador só (_escalas_da_ata), que os dois leitores chamam.
+  - *o cron das /5 já estava servindo a cura antes do deploy: o placar lavrado às 09:40 já veio 118+19+8 = 145 e 25+5+1 = 31, porque docker exec nasce
+    lendo o disco. É a mesma família da janela do merge — e é o motivo de deployar no verde, não depois.
+
+  Erro meu a corrigir no próximo commit: datei BACKLOG/TICKETS como "12:xx" de cabeça; são 09:4x (li o date depois).
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
 
   Ran 1 shell command
 
-● Medição em prod, com a cura (contra o 08:45 dele): 30 linhas 130→13 queries, 0,63→0,16 s · 100 linhas 390→13, 0,96→0,16 s · 520 linhas 2.150→12,
-  4,07→0,78 s; equivalência 144=144, diferença 0 nos dois sentidos. Agora o HAIKU:
-
-  Committed a8c605dd, searched for 4 patterns, listed 3 directories, ran 15 shell commands
-
-● Suíte em voo. Enquanto roda, preparo (sem commitar) o lado HAIKU — a ponte e a golden:
+● Background command "Espera o pre-push e le o veredito" completed (exit code 0)
 
   Ran 1 shell command
 
-● Background command "Push 77 com a suite do pre-push" completed (exit code 0)
+● Push 77 caiu com 2 selos — os dois da mesma família (contrato que enumera). Lendo os dois:
 
-  Ran 1 shell command
+● Qual pergunta e o _TT6
+  ⎿  $ sed -n '380,400p' core/juizes.py
 
-● O push está detached (o & interno retornou na hora). Sigo preparando o HAIKU e monitoro o log:
-
-  Ran 13 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
-● Erro de hora meu: são 09:44, não 12:xx — corrijo no próximo commit junto do hash. Lendo os contratos que enumeram antes de aplicar o p6:
-
-● O contrato que enumera os endpoints da ponte
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,50p' app/api/tests/test_contract_mensageria_le_o_juiz.py
-
-✢ Hullaballooing… (2h 10m 58s · ↓ 232.9k tokens · thinking)
+✢ Hullaballooing… (2h 16m 28s · ↓ 249.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
