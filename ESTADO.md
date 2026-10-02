@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:20:31.**
+**Medido em 02/10/2026 00:25:39.**
 
 | | |
 |---|---|
@@ -95,9 +95,6 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ hora  │                                                o que aconteceu                                                │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 20:5x │ a célula virou <button type="submit"> para disparar a porta por dia — sua ordem, e certa                      │
   ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ 21:5x │ tirei a cor literal e pus tokens; o selo ficou verde lendo o hasner-ui.css                                    │
   ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
@@ -123,12 +120,15 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 
 ❯ segue a fila; PAREI so em lei ou !
 
-● Ver a cadeia do_dia -> pontualidade_do_dia
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/s5b3/app && sed -n 620,630p
-     ponto/calculador/regras.py; grep -n "def do_dia" -A6 ponto/calculador/regras.py | head -8; sed -n 505,512p
-     ponto/management/commands/diff_calculador.py
+● Dar o input ao caso e rodar os vizinhos
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cd $S/s5b3/app && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='ponto/tests/test_s5b_regra_pontualidade.py'
+     t=io.open(P,encoding='utf-8').read()
+     a = ''' def test_MORDE_uma_ponta_a_4h10_SEGU…
 
-✢ Whisking… (1m 51s · ↓ 7.4k tokens)
+✶ Whisking… (7m 0s · ↓ 19.2k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
