@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:56:01.**
+**Medido em 02/10/2026 01:01:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `77126b6a SUITE-UMA-VEZ-POR-ARVORE no ar, e o criterio antigo era CEGO para .js, .css e bin/` |
+| `HEAD` local | `5b42b55d ATALHO-HE fechado com o smoke dele; o AVAIS volta a ZERO` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **24** |
 
 ## Fabrica
 
@@ -29,16 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5b42b55d ATALHO-HE fechado com o smoke dele; o AVAIS volta a ZERO
 77126b6a SUITE-UMA-VEZ-POR-ARVORE no ar, e o criterio antigo era CEGO para .js, .css e bin/
 f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa
 09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO
 680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
-cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke dele
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,15 +95,6 @@ cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke del
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     (8) HE-OCORRENCIA-COMO-LINHA: publicar o desenho da tabela e o plano de migracao; nao construir.
-     (9) Fila 1 do BACKLOG na ordem do hook, O21 em diante.
-     Segue a lista !
-
-  Ran 12 shell commands
-
-● A regra nova foi usada por ela mesma: com a pista ocupada pela suíte, peguei o item (5), que é todo em bin/ — o container de teste não monta bin/.
-
-  SUITE-UMA-VEZ-POR-ARVORE no ar (77126b6a), e a obra se justificou por uma descoberta que o selo prova na mesma rodada: o critério antigo era cego.
   bin/regua.sh::impressao_digital anda o disco com find -name '*.py' -o -name '*.html' — ele não vê static/js/, static/css/, bin/ nem arquivo de dado. Ou
   seja: mudar o JS da tela mantinha o atalho "JÁ VERDE" e a suíte não rodava sobre o que mudou. O selo cria um .js num repo de mentira, exige que o hash
   da árvore mude, e avisaria se a impressão antiga também mudasse — ela não mudou.
@@ -128,10 +120,19 @@ cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke del
   o CSV que já tenho em disco e não precisa da pista.
 
 ✻ Baked for 11m 55s · done 12:50 AM · 1 shell still running
-                                                                                                                                   1% until auto-compact
+
+❯ → code
+  smoke Ronald: abri a Central, o atalho HE esta no quadro com o numero certo e me levou para a tela de HE -- pode fechar o ATALHO-HE
+
+● Ver se algum caminho servido importa o calculador
+  ⎿  $ echo "=== quem importa o calculador ==="; grep -rln "ponto.calculador\|from ponto import calculador" --include=*.py . | grep -v test | head; echo
+     "=== e o selo do import tardio ==="; cd /home/ronald/saas-hasner && bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3
+
+· Unfurling… (2m 26s · ↓ 6.2k tokens)
+                                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
