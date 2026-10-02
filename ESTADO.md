@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:04:01.**
+**Medido em 02/10/2026 00:09:31.**
 
 | | |
 |---|---|
@@ -96,13 +96,6 @@ b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e m
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● A FATIA 1 está completa e no ar às 02:5x, e a cura é a sua: a célula saiu de baixo da regra global em vez de gritar mais alto. type="button", o seletor
-  button[type="submit"] não casa mais, nenhum !important novo e hasner-ponto.css intacto (conferido: diff de app/static/ vazio).
-
-  A prova agora é no navegador e tem o par que morde: getComputedStyle da célula = rgb(219, 234, 254) nas duas cascas, e a mesma página com type="submit"
-  reinjetado devolve rgb(0, 120, 212) — isso é o que prova que a medição vê cascata, e não o arquivo de cores.
-
   E faltava um probe, que é a lição do dia: em file:// o render aponta o estático para STATIC_ROOT, e no worktree da raia app/staticfiles existe vazio
   (ponto de montagem do tmpfs). Sem um probe <button type="submit"> que tem de sair azul, teria nascido um segundo selo verde sobre uma página sem folha
   de estilo. O probe entrou antes de todos os casos.
@@ -130,10 +123,17 @@ b551be88 PERMISSAO autorizar_he liberada nos setores 4, 8 e 10 com trilha -- e m
   o "Dar ciência no padrão" em slate-100 é o que você queria.
 
 ✻ Worked for 50m 38s · done 11:55 PM · 1 shell still running
+
+❯ smoke Ronald: abri a Gestao de HE, cliquei num dia e CANCELEI o dialogo (nada gravou), cliquei de novo e confirmei com motivo -- o dia virou autorizado
+  com o numero limpo. Pode fechar a FATIA 1
+
+● Running 1 shell command…
+
+✢ Whatchamacalliting… (11s · ↓ 531 tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ segue a fila; PAREI so em lei ou !
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
