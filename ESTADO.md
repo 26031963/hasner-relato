@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:159 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:218 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:26:31.**
+**Medido em 02/10/2026 19:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e8ca6f65 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla` |
 | `origin/main` | `070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,20 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla
 e8ca6f65 O topo do TICKETS fechado no ato do push (O112)
 070c1345 [S5b] As duas curas que EU descartei com um checkout, refeitas -- e tres tropeços no caminho
 a8536b18 [O114] TRES provas fecham; a 4a e o print dele. E o 21/09 esta CERTO com 5 de 6
 52f9551e [TICKETS] As duas fatias no topo, o import morto fora, e PROMPTS nomeado como META
-b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
+?? bin/diff_o118_col221.py
+?? bin/rejulgar_o118_col221.py
+?? bin/snapshot_o118_col221.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,42 +96,42 @@ b444bf25 [O114] SMOKE medido em PROD: previsto 550 e 6 lampadas, 6 ACESAS
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  da cura (modelos com segundo intervalo):
+● A grade está inteira certa agora, inclusive o 02/10: 8 colunas, cheias=6 orfas=[] prev=550 em todo dia trabalhado; 21/09 com 5 acesas,
+  orfas ['08:28']. O gravado é que ficou atrás: minutos_previstos=12270 em 22 dias, e 22×550 = 12.100 — a diferença 170 = 2 × 85 são
+  exatamente 01/10 e 02/10. Relavro, com o DIFF medido ANTES (L-082):
+
+  Ran 2 shell commands
+
+● somente_leitura=True dá o DIFF sem gravar nada — é a porta certa. Mede antes:
 
   Ran 1 shell command
 
-● Censo medido — e ele revela duas famílias:
+● O DIFF move 2 campos: minutos_previstos −85 e minutos_realizados −5. Mas −85 é uma pausa, e eu esperava −170 (dois dias). Um dia ainda
+  está em 635 — acho qual antes de aplicar:
 
-  ┌────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┐
-  │                                pergunta                                │                  número                   │
-  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
-  │ modelos que declaram 2º intervalo                                      │ 1 de 341 (te548) — 1 colaborador (col221) │
-  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
-  │ células com hii2/hfi2 desde 01/09                                      │ 22 dias, 1 colab                          │
-  ├────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
-  │ o selo em frota: ata gravada com hora ACESA que também consta em orfas │ 25 dia-colab em 10 colaboradores          │
-  └────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
+  Ran 1 shell command
 
-  col221 tem 10 desses. Os outros 15 dias em 9 colabs (col945 6, col859 2, mais 7 com 1) não são do segundo intervalo — os modelos deles
-  têm uma pausa só. São do raio irmão (j is None), que tem a mesma falha de desenho: acende por fora da grade. Vejo o lote de vizinhos:
+● As duas autoridades concordam agora: (12100, 22), todos os 22 dias a 550. Então o 635 que sobra no recálculo vem da grade em algum dia
+  que eu não medi — a janela anterior parou em 02/10. Varro a competência inteira:
 
-  Read 1 file, ran 2 shell commands
+  Ran 1 shell command
 
-● Ruff limpo. Armo o esperador da suíte de escala e escrevo os registros enquanto ela corre:
+● Todas as três autoridades dizem 12100 (8 colunas, 22 dias a 550, zero órfã fora do 21/09). Mas o recálculo do fechamento leu 12185 —
+  então o previsto do fechamento vem de um quarto caminho, e um dia ainda sai 635. Acho onde:
 
-  Read 1 file, ran 5 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● Escrevo o RELATO com a resposta escrita que ele pediu, enquanto a suíte de escala corre:
+● O previsto do fechamento sai de folha/export.py::grade_do_fechamento — um quarto ponto de entrada da grade. Leio:
 
-● Running 1 shell command…
+● Reading grade_do_fechamento
 
-✢ Sock-hopping… (1h 14m 0s · ↓ 195.8k tokens)
+✢ Sock-hopping… (1h 19m 30s · ↓ 216.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
