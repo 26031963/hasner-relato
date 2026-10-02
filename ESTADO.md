@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:44:41.**
+**Medido em 02/10/2026 14:50:02.**
 
 | | |
 |---|---|
@@ -98,20 +98,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● A docstring do núcleo diz pares = [(entrada, saida|None), ...] — duas posições. Preciso ler o código, não a docstring, antes de afirmar:
-
-  Ran 1 shell command
-
-● Pelo código (a docstring do núcleo está desatualizada e diz 2 posições): if len(_par) >= 3 — ele usa o 3º como dia. Minha correção está certa. E achei a
-  segunda causa, a do atraso: eu passo p.entrada em UTC onde o DIFF passava timezone.localtime(...) — o marco ancora no dia errado:
-
-  Ran 3 shell commands
-
-● As trabalhadas voltaram (+174,21, perto do +186,81 fiel) — o dia da jornada era isso. Mas atraso e antecipada ficaram idênticos, e o contador conta a
-  história: cego_horas_atraso caiu de 1.247 para 110 e cego_horas_extras_100 subiu de 91 para 2.711. Minha _contexto_cct está caindo no except e
   entregando classe_motor=None. Vendo a chamada original:
 
   Ran 1 shell command
@@ -120,17 +106,31 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
   Eu chamei sem ela, caía no except, e classe_motor virava None — e a própria lápide do DIFF diz que "classe que não julga pontualidade faz o calculador
   DECLARAR as duas rubricas em vez de cobrá-las":
 
-  DIFF 6a vez, com a CCT certa · 59s
+  Ran 2 shell commands
+
+● Estou no quarto ciclo de correção, e a causa é sempre a mesma: eu reescrevi a montagem dos 18 insumos em vez de mover o bloco. Cada diferença de
+  alimentação vira número. Parando de reescrever e portando o bloco literal do HEAD:
+
+  Ran 2 shell commands
+
+● Três diferenças que eu reescrevi errado, e agora vejo as linhas originais:
+
+  1. _dia_de_trabalho usa a juíza do vínculo (vinculo_do_dia) e trata "não sei" como True ("o motor só manda para periodos_ft quando a resposta é
+     explicitamente False; tratar 'não sei' como folga criaria folga trabalhada onde o motor não cria") — eu iterava as escalas na mão e devolvia None.
+  2. dias_folga vem de aut.esc.folga_dia_semana (o vínculo) — eu usei tipo_escala.dias_folga (o template).
+  3. minutos_do_oraculo(**ts**, pares=...) — eu passei None.
+
+● DIFF 7a vez, com os insumos portados · 1m 24s
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import io
-     p='app/ponto/calculador/alimentacao.py'
+     p='app/ponto/management/commands/diff_calculador.py'
      s=io.open(p,encoding='utf-8').read()
-     old = """def _contexto_cct(colaborador, tipo_escala):
-     \"\"\"O que a CCT decide e que o calculador LE (nunca interpreta). -> dict\"\"\"
-     from core.regua_cct import … (59s · 2 lines)
+     old = """ _rub_dia = _rubricas_por_dia(
+     c, aut.resultado, ini, fim, insumos=_ins_porta, celulas=cels, lavra=_lavra,
+     tipo_escala=te, feriados=_feriado… (1m 23s · 4 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Philosophizing… (42m 7s · ↓ 55.5k tokens)
+✽ Philosophizing… (47m 28s · ↓ 60.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
