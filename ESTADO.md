@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:986 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:992 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 06:27:01.**
+**Medido em 02/10/2026 06:32:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA` |
-| `origin/main` | `a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado` |
-| commits a subir (`ahead`) | **3** |
+| `HEAD` local | `c9aaa1df O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,16 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 567b3bdb A O45 ganha linha no TICKETS e a FILA-DA-NOITE e marcada CUMPRIDA
 e7528d8d [O45] Remedi antes de corrigir, e a hipotese do proprio codigo caiu: a tela nao diverge -- ela e MUDA
 2b3d646c O topo do TICKETS fechado no ato do push (O112)
 a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
-6e7a2d17 [O23] HAIKU-CONTADOR-UNIVERSO: o selo que dependia de o mundo estar quieto ganhou universo
 ```
 
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,44 +97,44 @@ a392c474 A O23 ganha linha no TICKETS, e o handoff regenerado
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O22 e O21 — a pergunta certa não era "como construir". O22 estava construído (porta, rota, view, botão, 6 selos); faltava conferir e dizer — frota
-  medida: 254 rejeitadas, rejeitada_que_cobre_dia = 0. O21 respondeu "qual leitor não migrou": o APP, com 112 dia-colab na competência 10, e o dado já
-  pronto (rotulo, cor, veredito). Não construí: toca o app de ~750 pessoas e pede seu smoke.
+  dias_falta = 0 nos dois lados, não é previsto, nem falta, nem janela: a tela é muda. Os "1.411" não são desencontros entre duas contas — são dias que só
+  o cartão conta.
 
-  Três erros meus, cada um com a lição no lugar: a lápide multilinha que vazava para a tela do DP (get_template dizia "COMPILA" — compilar não é
-  renderizar); commitar durante a suite do push, que invalida a árvore carimbada e derruba o push sem RED visível; e meu próprio selo mordendo a prosa
-  duas vezes, a segunda porque a palavra push termina em "sh".
+  Dois erros meus, com a lição no lugar: meu selo do O23 nasceu vazio (fiz o outro usuário pedir férias, 2 turnos como o meu, e a média continuava 2,0 —
+  só vi porque ensaiei a vacuidade de propósito; troquei para atestado, que chega ao preview em 1 turno, e aí morde com 1.5 != 2.0); e commitei durante a
+  suite de um push, o que invalida a árvore carimbada e derruba o push sem nenhum RED visível.
 
-  Na sua mesa, quatro (frase pronta em app/docs/AVAIS.md): o ! da troca do calculador, o ! da folha zero com vínculo vencido (195,41 h de 4 pessoas), o
-  ok-desenho do _perto do motor (a cópia que sobra é a de zona inviolável) e o seu smoke da UI-RESPOSTA-DIZ-O-QUE-E.
+  Na sua mesa seguem quatro, com a frase pronta em app/docs/AVAIS.md: o ! da troca do calculador, o ! da folha zero com vínculo vencido (195,41 h), o
+  ok-desenho do _perto do motor e o seu smoke da UI-RESPOSTA.
 
-  Uma coisa para você decidir quando olhar: o bloco OBRAS tem 56 itens abertos, e "O21 em diante" não é lista finita — se quiser, me diga o critério de
-  ordem (dinheiro primeiro? app primeiro? os que já estão construídos e só precisam de conferência, como o O22?) e eu sigo por ele em vez de pela ordem do
-  arquivo.
+  Sobre a ordem: o bloco OBRAS tem ~55 abertos, e os próximos na ordem do arquivo estão atrás de portão (O24 espera o export da 09, O25 espera o
+  CARTÃO=ESPELHO 6/6, O28 é dinheiro). Dos "livres", os que rendem mais pelo mesmo esforço são os da classe que apareceu três vezes esta noite — item que
+  já está construído e só precisa de conferência e número (foi o caso do O22 e metade do O21). Se você me der o critério (dinheiro primeiro, app primeiro,
+  ou "os que só faltam conferir"), eu sigo por ele; sem critério, continuo na ordem do hook.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: FILA-DA-NOITE -- A ORDEM VIVA passa a ser uma LISTA, nao um item (ordem Ronald 01/10 20:2x). Regra unica: item que
   travar em !,
 
-  Searched for 3 patterns, ran 17 shell commands
+  Ran 1 shell command
 
-● Background command "Linha do O23 e push" completed (exit code 0)
+● Background command "Esperar o push final do turno" completed (exit code 0)
 
-  Searched for 1 pattern, ran 1 shell command
+● PAREI so com o que trava a fila 1
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/RELATO.md'
+     s=open(p,encoding='utf-8').read()
+     i=s.index('PAREI: ! e ok-desenho')
+     j=s.index('\n\n', i)
+     novo = ("PAREI: ! — **a fila 1 espera DOIS `!` seus**, e os dois tem a tabela publicada: **(1)** a **TROCA do\n"
+     "calculador (S5b)**, co…
 
-● Background command "Esperar o push do O23" completed (exit code 0)
-
-● Esperar o push final do turno · 8m 24s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push71.log; do sleep 30; done; tail -4 logs/push71.log; git fetch -q origin;
-     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (8m 23s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Unfurling… (5h 27m 56s · ↓ 424.6k tokens)
+✢ Unfurling… (5h 33m 26s · ↓ 430.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
