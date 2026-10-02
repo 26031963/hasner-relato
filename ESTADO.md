@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:22 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, em copia do HEAD** (`/home/ronald/wt-splits`, arvore viva intocada): a regra do split
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:67 AFIRMA ato sem PROVA ao lado -- **O QUE FOI FEITO, em copia do HEAD** (`/home/ronald/wt-splits`, arvore viva intocada): a regra do split
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:30:45.**
+**Medido em 02/10/2026 16:36:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco` |
+| `HEAD` local | `6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,21 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou
 69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco
 8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA
 7260475c [S5b] A PORTA E UMA, mas o `resultado` dos dois chamadores NAO era o mesmo
 ad81a50f [S5b] CRITERIO (2)(a) FECHADO contra o gravado EM DIA: 0 colab divergente nas duas
-edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/FABRICANTE.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/ponto/management/commands/diff_calculador.py
+ M app/docs/AVAIS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -98,44 +94,44 @@ edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro si
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Na sua mesa seguem três coisas, todas com número: a lei do ancoramento do trecho extra (no topo do RELATO, sem devolver turno), a falta
-  de 1440 min contra 480 previstos do col954, e o TXT da 09 que já não é o calculado (emp2 213×210, emp3 88×86, cinco linhas a mais e
-  nenhuma a menos).
+  move o número. As duas armadilhas da captura estão fechadas no código e foram achadas no desenho, não na falha: o alvo é o ResultadoMes
+  composto, e é a primeira instância de cada colab.
+
+  A resposta não veio na tabela, veio no contador: sem_dia_da_jornada 3.177. O resultado composto do fechamento não carrega o mapa — soma
+  períodos, anomalias, DSR, reflexo e banco, e o mapa fica na fatia.
+
+  E isso descobriu um defeito maior, em prod hoje: dia_pago.py::_dia_de decide o dia pela data de calendário da entrada, enquanto o motor
+  julga por dia_da_jornada. O O111 curou o DIFF às 09:xx e nunca alcançou a lavratura, que é quem escreve. Medido: 11 períodos em 6 colabs
+  de 3.204, com zero sem mapa. O total do mês não muda; muda a linha de dia — e quem lê o DiaPago por dia é a tela do calendário e a 7ª
+  testemunha da porta do export. Registrado como O116, com DIFF próprio exigido antes da cura.
+
+  Também corrigi um RED legítimo do push 81: a trilha da relavratura estava no PENDENTES_RONALD.json como "aplicado, revise" seguindo a
+  regra 7b.4, e o selo recusou — aquela fila guarda só decisão sua. Foi para o FABRICANTE.md com todos os números, e o selo está verde.
+
+  Em cópia (wt-splits), esperando a pista: a extração do split noturno, a horas_extras_100_feriado decidida sem regra nova, e a composição
+  somando o mapa por mescla. São 15 commits a empurrar; a raia do O114 ainda não voltou.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
+● Pista livre. Rodo os selos da cópia com os vizinhos — e o vizinho certo aqui é quem já exercita a HE noturna e o NAO_DECIDE:
 
-● O DIFF segue correndo. Enquanto isso, fecho uma das três rubricas sem inventar regra nenhuma — a horas_extras_100_feriado é só dizer
-  qual ramo produziu o número que o calculador já decide:
+  Searched for 1 pattern, read 1 file, ran 3 shell commands
 
-  Searched for 1 pattern
+● Enquanto a suíte da cópia roda (103 selos), preparo o passo 2 como patch pronto — sem tocar a cópia, que está sob a suíte:
 
-● Background command "Rodar o DIFF da troca pelo comando" completed (exit code 0)
+● Running 1 shell command…
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Há um selo forte: toda rubrica de RUBRICAS tem de sair com valor ou com causa, nos dois ramos. Então acrescentar a 100_feriado é
-  guardado por construção. Leio os ramos antes de mexer:
-
-  Ran 1 shell command
-
-● A estrutura ajuda: val nasce com 0,0 para toda rubrica não declarada cega, então a adição é guardada. Implemento nos quatro pontos onde
-  a 100 se decide ou se cala:
-
-  Running 1 shell command…
-
-· Doodling… (1h 9m 32s · ↓ 185.8k tokens)
+· Doodling… (1h 14m 48s · ↓ 206.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork  Running escala suite plus test_r4_celula_sem_marcos                                                  38m 49s · ↓ 391.9k tokens
+❯ ◯ fork  Grepping literal marco-key tuples in production                                                       44m 6s · ↓ 405.9k tokens
   ⧉  index
 ```
