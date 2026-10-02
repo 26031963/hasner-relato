@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:852 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:923 AFIRMA ato sem PROVA ao lado -- ## Suite VERDE e NO AR as 21:09 -- e a GESTAO-HE partida em duas, com a fatia 2 guardada em duas copias
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:30:45.**
+**Medido em 02/10/2026 00:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO` |
+| `HEAD` local | `f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa` |
 | `origin/main` | `5087f213 Suite VERDE (9.161, OK) e NO AR as 21:09; a GESTAO-HE vira duas fatias e a 2 fica guardada em duas copias` |
-| commits a subir (`ahead`) | **21** |
+| commits a subir (`ahead`) | **22** |
 
 ## Fabrica
 
@@ -29,20 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f735dab4 As TRES curas da S5b: zero hora negativa, atraso -69,88 h, col473 fora da lista e a fronteira completa
 09f946bc FATIA 1 FECHADA com o smoke dele, e o AVAIS ficou em ZERO
 680af923 O topo volta a FILA DA NOITE: a fatia 1 esta no ar e so espera o smoke
 cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke dele
 e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo da regra, nao grita mais alto
-6b0c036b [GESTAO-HE-FATIA-1] A celula saia AZUL pela CASCATA, e o meu selo nao viu: ela deixa de ser botao de envio e a prova passa a ser o navegador
 ```
 
 ## `git status --short`
 
 ```
- M app/ponto/calculador/regras.py
- M app/ponto/management/commands/diff_calculador.py
- M app/ponto/tests/test_s5b_regra_pontualidade.py
-?? app/ponto/tests/test_fronteira_pontualidade_completa.py
 ?? bin/keepalive.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
@@ -99,44 +95,44 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ hora  │                                                o que aconteceu                                                │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 20:5x │ a célula virou <button type="submit"> para disparar a porta por dia — sua ordem, e certa                      │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 21:5x │ tirei a cor literal e pus tokens; o selo ficou verde lendo o hasner-ui.css                                    │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 22:57 │ o seu print mostrou a célula ainda azul — hasner-ponto.css:369-373 pinta todo submit com --hp-blue !important │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 23:1x │ você decidiu a cura certa: sair de baixo da regra, não gritar mais alto                                       │
-  ├───────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ 02:3x │ type="button", e a prova passou a ser getComputedStyle no chromium, nas duas cascas, com o par que morde      │
-  └───────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  (b) O gate do T8 chegou ao calculador, e o col473 21/09 desapareceu do CSV — os +11,61 h de atraso que o calculador cobrava e o motor não. O input que
+  faltava era de cadastro e o chamador já o tinha: _marcos_do() devolvia 2 dos 4 marcos que marcos_do_dia entrega.
 
-  A lição ficou no código e não só no RELATO: o selo da luminância mudou de fonte — de ler o arquivo de cores para ler a tela renderizada. Lendo o arquivo
-  ele provava intenção; a cascata só existe depois que o CSS rodou. A seção 6 do CLAUDE.md já dizia para que o chromium existe, e eu tinha a ferramenta
-  sem apontar para essa tela.
+  E aqui um selo meu precisou aprender a distinção, em vez de eu afrouxar a cura: test_MORDE_uma_ponta_a_4h10_SEGUE_sendo_atraso ficou vermelho (250 → 0)
+  e estava certo em exigir 250 — faltava dizer que o dia declara intervalo. Sem o input ele exigia do calculador o contrário do que o motor faz, e passava
+  verde só porque o calculador não tinha gate. Ganhou o input e nasceu o par: a mesma ponta, no dia sem marco de intervalo, não desconta.
 
-  Dois achados de borda sobreviveram: a linha 139 foi curada (o ato secundário tinha a cara do primário), e o botão do topo "Dar ciência em tudo" também
-  está azul por essa regra — pode ser o certo, mas hoje é azul por acidente da cascata. Esse não toquei: é desenho seu.
+  (c) A hora negativa morreu, com as duas camadas medidas:
 
-  O push do marco está rodando. Com o AVAIS vazio, a fila da noite volta ao item (1): as três curas da S5b — a (a) já está em cópia com o selo que torna a
-  fronteira estrutural, e as causas de (b) e (c) estão nomeadas e provadas. É o que pego agora, no mesmo marco do DIFF refeito que a sua resposta exige
-  para a troca subir.
+  ┌───────────────────────────────┬───────────────────────┬────────┐
+  │           contador            │         antes         │ depois │
+  ├───────────────────────────────┼───────────────────────┼────────┤
+  │ horas negativas no CSV        │ 4 dia-colab, −41,74 h │ ZERO   │
+  ├───────────────────────────────┼───────────────────────┼────────┤
+  │ dia_fora_da_janela_por_l084   │ 2                     │ 74     │
+  ├───────────────────────────────┼───────────────────────┼────────┤
+  │ janela_recusada_par_invertido │ não existia           │ 11     │
+  └───────────────────────────────┴───────────────────────┴────────┘
 
-✻ Worked for 1m 10s · done 12:10 AM · 1 shell still running
+  E o col235 01/10 ficou mais honesto que o motor: soma 5,00 h — as batidas reais 00:00→05:00, inteiras — contra 0,00 do motor, que clipa pela mesma
+  janela que a camada 2 recusa. A lápide do chamador pedia exatamente isso: "a batida REAL vale inteira". A divergência trocou de lado, e desta vez o lado
+  certo é o do calculador.
 
-❯ segue a fila; PAREI so em lei ou !
+  A tabela refeita: atraso +129,70 → +59,82 h (22 → 13 colabs), antecipada +11,97 → +13,55 (10 → 7), extras 0,00 nas duas.
 
-● Conferir se as horas negativas morreram
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== horas
-     NEGATIVAS agora ==="; awk -F, 'NR>1 && $6+0<0' app/logs/diff_calc_10_curado3.csv | head -5; echo "total negativas: $(awk -F, 'NR>1 && $6+0<0'
-     app/logs/di…
+  E uma ressalva que eu não vou esconder: o gravado mudou entre as duas medições — trabalhadas de 23.972,52 para 24.338,40, +366 h — porque o recálculo
+  por evento rega a 10 a cada batida. Parte do que subiu em trabalhadas, noturnas e folga é deriva do gravado, não das curas. O que é seguramente das
+  curas, porque não depende de nível: as 4 horas negativas morreram, os 11 pares invertidos foram recusados, o contador da L-084 saltou 2 → 74, e o atraso
+  caiu 69,88 h com 9 colabs saindo da divergência.
 
-· Whisking… (12m 5s · ↓ 21.2k tokens · deep in thought)
+  A suíte cheia está rodando. Com ela verde vem o deploy, o push do marco, e então a tabela final para o seu ! da troca — que ainda não vou pedir: sobram
+  +59,82 h de atraso novo em 13 colabs, e a sua lei (2) diz que a troca não cria desconto.
+
+✻ Cooked for 16m 39s · done 12:35 AM · 1 shell still running
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ segue a fila; PAREI so em lei ou !
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
   ⧉  index
 ```
