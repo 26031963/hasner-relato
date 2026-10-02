@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 18:48:01.**
+**Medido em 02/10/2026 18:53:31.**
 
 | | |
 |---|---|
@@ -95,10 +95,6 @@ e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em dia
 
 ```
 
-  Ran 1 shell command
-
-● Push vivo.
-
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
@@ -113,19 +109,23 @@ e8e67d9b [S5b] Merge da TROCA: a lavratura escreve versao='oraculo' da 10 em dia
 
   Ran 1 shell command
 
-● Push vivo. Aguardo o monitor.
+● Push vivo às 18:53:15, cerca de dez minutos e meio. Aguardo o monitor.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-● Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && grep -aE "^Ran [0-9]+ tests? in|^OK$|^FAILED \(|^(FAIL|ERROR): |^To https|^error:|pos_push"
-     logs/push86.log | tail -6; pgrep -f "bin/pre-push.sh" >/dev/null && echo "push vivo" || echo "TERMINOU"
+  Ran 1 shell command
 
-✢ Sock-hopping… (35m 30s · ↓ 106.5k tokens)
+● Push vivo.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
+  10 em diante (aval Ronald 30/09 13
+
+✢ Sock-hopping… (41m 0s · ↓ 114.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   1% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
