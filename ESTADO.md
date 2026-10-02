@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:423 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:427 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:25:45.**
+**Medido em 02/10/2026 20:30:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `b70febcc [TICKETS] As cinco linhas que faltavam -- a causa do push 88, em uma linha` |
+| `HEAD` local | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
 | `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia
+bc0ce2ac [HOOK] Item no PORTAO nao anda, e o selo lia METADE do padrao
 b70febcc [TICKETS] As cinco linhas que faltavam -- a causa do push 88, em uma linha
 a85c89f5 [O115] Fechada como NO AR: as tres rubricas tem dono e 15 selos verdes no vivo
 da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral do deploy
-626186b1 [O117] O passo zero medido: a colisao dos dois cortes tem ZERO casos na frota
-05af4d20 [O120] Ensaio na sombra do vinculo do col221, e uma pergunta de LEI com o numero
 ```
 
 ## `git status --short`
@@ -42,10 +42,7 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
- M bin/hook_stop_fila1.py
- M bin/tests/test_hook_nao_cobra_congelado.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -101,41 +98,41 @@ da0548d0 [O116] Fechada como NO AR: selo verde na arvore viva e commit ancestral
 
 ```
 
+  Push 91 rodando com 11 commits; aviso o veredito.
+
+  Na sua mesa, as quatro com número na mão:
+
+  ┌──────┬──────────────────────────────────────────┬──────────────────────────────────────┐
+  │ item │               o que espera               │                número                │
+  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
+  │ O119 │ ! — uma linha em motor_calculo_v2.py:573 │ 12,59 h de HE que ninguém trabalhou  │
+  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
+  │ O120 │ lei — gravado de 08/09 vs Pauta DP       │ +102,25 h em 08 (parcial, declarado) │
+  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
+  │ O27  │ ! — qual das três saídas                 │ 1.757,97 h em 325 colabs             │
+  ├──────┼──────────────────────────────────────────┼──────────────────────────────────────┤
+  │ O118 │ seu print do calendário                  │ 4ª prova das quatro                  │
+  └──────┴──────────────────────────────────────────┴──────────────────────────────────────┘
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O28 -- CATALOGO-SAIDA-ANTECIPADA-DESCONTA (Ronald 24/09 10:xx + MUDA das 15:5x) -- saida_antecipada =
+  DESCONTA em min
+
+● O hook foi ao O28 — e aqui o padrão fica visível. O estado dele diz **dinheiro -- para no '!'**: mesma coisa que "espera o !", palavra
+  diferente. Crescer o regex a cada variante é band-aid; antes meço quantas variantes existem, porque isso é que diz se a fila ainda tem
+  trabalho meu:
+
   Ran 1 shell command
 
-● Push 89 falhou com 1 falha em 9.383 testes. Acho qual:
+● Isso corrige uma conclusão que eu estava formando: eu ia dizer que a sua mesa era o gargalo, e a medição diz o contrário. Dos 66 itens
+  vivos no bloco OBRAS, só 8 dizem esperar por você — e 58 não dizem esperar nada: são trabalho meu (O38 medindo, O39 FRENTE DA FILA, O43
+  livre, O48 passo 2 em curso...). A fila não acabou; eu estava andando pela cabeça dela, que calhou de estar bloqueada.
 
-  Ran 1 shell command
-
-● Falha minha: o item O119 que eu escrevi em PENDENTES_RONALD.json não tem o campo o_que, e o selo exige que todo item diga o que espera.
-  Vejo o contrato e a forma dos vizinhos:
-
-  Ran 1 shell command
-
-● Eu inventei a forma em vez de seguir a que existe (o_que, desde, dono, estado, trava_fila1) — mesma classe do erro de tipo: "pauta DP"
-  mais cedo hoje. Confiro se o selo recusa chave extra antes de corrigir:
-
-  Ran 1 shell command
-
-● O selo só exige o_que presente — chave extra é permitida. Corrijo para o vocabulário da casa e aplico a cura do hook com o selo que a
-  morde (o push morreu, posso commitar):
-
-● Fixing PENDENTES, applying hook cure and selo
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io, json
-     p = 'app/docs/PENDENTES_RONALD.json'
-     d = json.loads(io.open(p, encoding='utf-8').read())
-     itens = d if isinstance(d, list) else d.get('itens', [])
-     it = next(i for i in itens if i.get('id') == 'O119-INTRA-OSCILA')
-     it['o_que'] = ("O `!`…
-
-✶ Sock-hopping… (2h 13m 14s · ↓ 382.3k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
