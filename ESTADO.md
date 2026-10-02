@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:55:31.**
+**Medido em 02/10/2026 15:00:45.**
 
 | | |
 |---|---|
@@ -42,7 +42,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
  M app/docs/RELATO.md
  M app/ponto/calculador/alimentacao.py
  M app/ponto/calculador/nucleo.py
- M app/ponto/management/commands/diff_calculador.py
  M app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -98,39 +97,39 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  col516/col174 fora da lista. A causa era pareamento, como você disse — provado por motor × calculador dar zero divergências na pontualidade.
 
-● Terceiro erro de extração meu, e é o que explica tudo: a chamada é get_motor_cct(c, ini, tipo_escala=te) — com a data como segundo argumento posicional.
-  Eu chamei sem ela, caía no except, e classe_motor virava None — e a própria lápide do DIFF diz que "classe que não julga pontualidade faz o calculador
-  DECLARAR as duas rubricas em vez de cobrá-las":
+  O que eu tentei além da ordem e falhou — e por que isso importa: extrair também a montagem dos 18 insumos de regras.do_dia. Eu reescrevi em vez de
+  mover, e cada insumo reescrito virou número, denunciado pelo DIFF de ponta a ponta:
 
-  Ran 2 shell commands
+  ┌──────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────┐
+  │                  tentativa                   │                                    o que o DIFF mostrou                                    │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ somei os segmentos pulando o núcleo          │ atraso +146,03 h, antecipada +289,66 h (perdi dedup, corte, envelope, paridade do BUG-144) │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ passei (ini, fim) sem o dia da jornada       │ trabalhadas −952,38 h                                                                      │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ get_motor_cct sem a data                     │ cego_horas_atraso de 1.247 → 110; HE100 cega de 91 → 2.711 — cobrando onde devia declarar  │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ dias_folga do template, não do vínculo       │ a soma igual e a divisão trocada (+174,21/−172,31 contra +348,48/−346,58)                  │
+  ├──────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ pontualidade por período, depois por jornada │ +30,51/+39,24 e +32,26/+93,55 contra +0,00/−0,00 — não explicada                           │
+  └──────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────┘
 
-● Estou no quarto ciclo de correção, e a causa é sempre a mesma: eu reescrevi a montagem dos 18 insumos em vez de mover o bloco. Cada diferença de
-  alimentação vira número. Parando de reescrever e portando o bloco literal do HEAD:
+  Revertí a extração das rubricas (código sem leitor é vermelho) e deixei as cinco tentativas escritas na lápide, com os números. A lição ficou onde dói:
+  extração de alimentação se faz movendo as linhas e trocando locais por parâmetros — nunca reescrevendo a montagem "equivalente". A diferença custou
+  cinco rodadas e uma tabela que eu quase publiquei como se fosse da troca.
 
-  Ran 2 shell commands
+  O que falta para a troca subir é essa extração feita por movimento, com um caso medido dia a dia no insumo que sobrou (a pontualidade) — e isso é
+  trabalho, não palpite.
 
-● Três diferenças que eu reescrevi errado, e agora vejo as linhas originais:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
 
-  1. _dia_de_trabalho usa a juíza do vínculo (vinculo_do_dia) e trata "não sei" como True ("o motor só manda para periodos_ft quando a resposta é
-     explicitamente False; tratar 'não sei' como folga criaria folga trabalhada onde o motor não cria") — eu iterava as escalas na mão e devolvia None.
-  2. dias_folga vem de aut.esc.folga_dia_semana (o vínculo) — eu usei tipo_escala.dias_folga (o template).
-  3. minutos_do_oraculo(**ts**, pares=...) — eu passei None.
+  A tabela final, de confirmacao
+  ⎿  $ cd /home/ronald/saas-hasner; sleep 100; sed -n '1,30p' logs/s5b_final.log | grep -E "^\||dia-colab comparados" | head -22
 
-  Ran 4 shell commands
-
-● Quase tudo voltou a ser idêntico à rodada fiel — trabalhadas +348,48, folga −346,58, noturnas +139,96, HE50 +3,96, HE100 +7,94 e todos os contadores de
-  cego. Resta um insumo: a pontualidade (+30,51 / +39,24 contra +0,00 / −0,00). A causa é estrutural e eu a vejo:
-
-  o original monta uma tupla por TURNO (primeira entrada → última saída); eu monto uma por PERÍODO, então um turno com duas pernas cobra pontualidade duas
-  vezes.
-
-● A tabela da 8a rodada · 24s
-  ⎿  $ cd /home/ronald/saas-hasner; sleep 110; sed -n '1,14p' logs/s5b_diff10i.log; docker ps --format '{{.Command}}' | grep -c manage (23s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Philosophizing… (52m 57s · ↓ 64.8k tokens)
+· Philosophizing… (58m 11s · ↓ 70.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
