@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:50:46.**
+**Medido em 02/10/2026 00:56:01.**
 
 | | |
 |---|---|
@@ -39,7 +39,6 @@ cc920b27 FATIA 1 completa no ar; o atalho HE fecha; o AVAIS fica com o smoke del
 ## `git status --short`
 
 ```
- M app/docs/ARQUITETURA.mmd
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
