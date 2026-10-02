@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:59:01.**
+**Medido em 02/10/2026 16:04:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu` |
+| `HEAD` local | `edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+edc4eb8e [S5b] A 10 RELAVRADA: 565 colabs, a 09 com hash identico e zero erro silencioso
 7141ae49 [S5b] O DIFF DO ATO publicado antes do apply, e a suspeita medida fui eu
 a80bf914 [S5b] As rubricas entram na porta por MOVIMENTO, e a frota prova que nada mudou
 99b3aee3 [S5b] A causa era a GUARDA DE TURNO ABERTO, e o criterio (2)(a) fechou sabendo por que
 0ad4ebc4 [S5b] PAREI com a tabela: o (2)(a) NAO fechou, e a tabela que eu publiquei as 14:2x era um BUG MEU
-ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criterio (2)(a) FECHOU
 ```
 
 ## `git status --short`
@@ -93,44 +93,44 @@ ec22b2f1 [S5b] A PORTA UNICA do calculador: os insumos saem do MOTOR, e o criter
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Atenção à unidade (a lição do h+min contra decimal): faltas_por_dia vem em minutos, DiaPago.horas_falta em horas — 440 min = 7,33 h é o
-  mesmo dia, não movimento. Com a conversão certa, o que move em col954 é 22/09 (+8 h), 24/09 (+24 h) e 02/10 (+7,33), e todos esses dias
-  perderam o previsto. Falta sem previsto, e 24 h de falta num dia comercial, não é gravado velho:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● horas_falta não vem do furo do motor: vem de Ausência aprovada (fechamento.py:382-388, soma de minutos). Então as +48,14 h são faltas
-  lançadas pelo DP depois do gravado. Quais, e por que uma soma 1440 min:
-
-  Ran 1 shell command
-
-● Causa limpa e legítima: o DP lançou as faltas hoje (JSP02 às 09:08-09:10, ANAPAULABEASI às 07:53), depois do gravado — é exatamente o
-  "gravado velho" do item (3). Mas uma delas pede nome próprio: col954 24/09 com minutos=1440, 24 h de desconto num dia de 480. Censo
-  antes de aplicar:
-
-  Ran 1 shell command
-
-● Um caso em 14 — vai para o AVAIS como Pauta DP (mexer em Ausencia é cadastro de dinheiro, ! dele). Agora publico o DIFF do ato antes do
-  apply, como a L-082 manda:
+● Registro o apply e a Pauta DP na fila dele enquanto a re-medição corre:
 
   Ran 2 shell commands
 
-● Reversão, hash ANTES, apply e hash DEPOIS num só ato, com o contador de erro silencioso que o except ... continue do recálculo esconde:
+● Background command "Esperar o fim do apply e comparar os hashes" completed (exit code 0)
 
-  Primeira leitura do apply · 33s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sleep 60; grep -vE "objects
-     imported" $S/apply_10.log | head -25 (34s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Doodling… (37m 48s · ↓ 87.5k tokens)
+● Background command "Re-medir a frota contra o gravado em dia" failed with exit code 1
+
+  Ran 2 shell commands
+
+● A sonda saiu mal parametrizada: sem --pares-da-autoridade o _ins_porta é None e a porta devolve {} — daí dia_sem_rubrica_da_porta: 2961
+  e calculador 0,00 em tudo. Não é resultado, é a minha flag faltando:
+
+● Stop Task
+  ⎿  S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE
+     "CONTADORES|Traceback|rror" $S/remedida_10.log 2… · stopped
+
+  Ran 3 shell commands
+
+● Background command "Re-medir com a flag da porta" completed (exit code 0)
+
+  Ran 1 shell command
+
+● O apply está commitado e durável. Consulto antes de declarar o critério fechado e ligar a troca:
+
+● Advising using Fable 5.1
+
+· Doodling… (43m 18s · ↓ 97.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Adding pausas_do_dia to EscalaColaborador                                                              7m 5s · ↓ 220.1k tokens
+  ◯ fork  Inspecting intervalo_cadastrado in juiz_batida.py                                                    12m 36s · ↓ 255.8k tokens
   ⧉  index
 ```
