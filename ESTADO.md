@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 08:45:01.**
+**Medido em 02/10/2026 08:50:31.**
 
 | | |
 |---|---|
@@ -94,43 +94,43 @@ ec346990 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  MEDIDO 02/10 08:45 em prod (so leitura, funcoes reais): pagina de 30 = 0,63 s e 130 queries; lote de 100 = 0,96 s e 390; universo de 520 = 4,07 s e
+  2.150. Sao ~4 queries por colaborador. PlacarSituacional: op_em_turno GLOBAL 139, soma das empresas 37 (26+9+2); op_justif = 31 em TODAS as linhas.
 
-  Ran 1 shell command
+  (A) N+1
+  FONTE: colaboradores/services/situacional.py::montar_situacional.
+  MUDA: (1) :102 chama ponto/turnos.py::turno_aberto_de UMA VEZ POR COLAB -- passa a perguntar em LOTE, pela MESMA autoridade (_turno_aberto_calc,
+  :1273), com os insumos carregados uma vez para os ids da pagina; (2) :73 ids_com_adesao() sem recorte varre a frota inteira a cada pagina e a cada lote
+  -- passa a receber ids=_ids; (3) colaboradores/views.py::painel_situacional, caminho FILTRADO: monta o recorte inteiro antes do primeiro paint e de
+  novo nos lotes -- monta uma vez.
+  RED: selo de contagem -- montar_situacional com 30 e com 100 colabs faz o MESMO numero de queries (hoje 130 x 390). MORDE: a diferenca tem de ser 0.
+  SELO DE EQUIVALENCIA: na sombra de hoje, o conjunto em_turno do lote == {c : turno_aberto_de(c, agora) is not None} para os 520, diferenca 0 nos dois
+  sentidos.
 
-● Background command "Veredito do push do marco" completed (exit code 0)
+  (B) EM TURNO COM DUAS DEFINICOES
+  FONTE: o juiz, situacional.py:139 (pk in em_turno).
+  MUDA: core/management/commands/lavrar_placar_situacional.py:71 conta led == 'amarelo', e o LED fica vermelho com disputa aberta -- passa a contar pelo
+  MESMO predicado do global (a linha carrega o veredito do juiz).
+  RED: soma de op_em_turno das empresas == op_em_turno global (hoje 37 x 139).
 
-● Ordem: medir, não curar. A pergunta é se a inversão de tipos explica as 2,00 h de intra e as 5,07 h de trabalhadas do DIFF do vínculo:
+  (C) op_justif
+  MUDA: situacional.py:141 conta TODAS as justificativas pendentes da casa, e o lavrador (:72) repete esse total em cada empresa -- passa a contar as
+  pendentes dos colaboradores do recorte recebido.
+  RED: soma das empresas == global; recorte de uma praca != total da casa.
 
-  Ran 1 shell command
-
-● A inversão é real em 5 dias (ESSE) e o motor já mostra o efeito. Agora o contrafactual — tipos corrigidos em transação desfeita, que é o que responde "é
-  isso que gera?":
-
-  Ran 1 shell command
-
-● Medição fechada, e ela responde a pergunta com número:
-
-  Ran 3 shell commands
-
-● Background command "Push e ver o proximo item" completed (exit code 0)
-
-● O hook está certo de novo, e é a lição que eu mesmo guardei hoje: MEDIDO não é palavra que ele conhece. O item está fechado — a medição era o escopo:
-
-  Ran 3 shell commands
-
-● Cura com a lei já escrita três vezes no chamador. Primeiro o sítio e a medição do efeito:
-
-  O DIFF da janela: antes e depois · 1m 19s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && for rot in ANTES
-     DEPOIS; do if [ "$rot" = "ANTES" ]; then APP=/home/ronald/saas-hasner/app; else APP=$S/jan20/app; fi; echo "===== $rot ($APP)"; docker run --rm
-     --cpus… (1m 17s · 5 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Hullaballooing… (1h 11m 28s · ↓ 110.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  PROIBIDO: juiz novo (juizes novos = 0), reimplementar pareamento fora de ponto/turnos.py, cache com prazo, fallback, mudar o que o painel mostra alem
+  dos tres numeros.
+  PRONTO: os tres REDs nomeados no RELATO com PROVA, tempo e queries re-medidos na pagina de 30, no lote de 100 e no universo, placar relavrado e
+  conferido, commit e deploy. Sem isso = INCOMPLETO com a lista.
+  HAIKU: (a) op_em_turno por empresa passa a ser o do juiz, rotulo "em turno agora"; (b) golden: "quantos em turno agora na empresa 2?", esperado pela
+  ferramenta do placar; (c) nenhum degrau novo.
+  LEI-AKITA: origem=situacional.py + lavrar_placar_situacional.py, testemunha=_turno_aberto_calc, RED=os tres acima, quem-mais-le=censo dos 68 chamadores
+  de turno_aberto_de (nenhum muda de assinatura), juizes novos=0.
+  segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
