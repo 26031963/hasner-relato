@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:28 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:57 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:41:31.**
+**Medido em 02/10/2026 16:47:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs` |
+| `HEAD` local | `dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2` |
 | `origin/main` | `94048d51 A trava do turno, nomeada no topo do RELATO: o `!` da troca segura o 22/22 e a F2` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 2
 0745d623 [S5b] DIFF do passo 2 ANTES do apply: realocacao pura, 5 movimentos em 3 colabs
 0749895a [S5b] AS QUATRO RUBRICAS ABERTAS POR COLAB: 97% da trabalhada e artefato da MINHA medicao
 6691f6c6 [S5b] A LAVRATURA TEM UM SEGUNDO JUIZ DE DIA, e foi o DIFF da troca que o achou
 69f42550 [S5b] AVAIS e handoff regenerados no fecho do marco
-8d0649dd [S5b] A celula do BACKLOG diz o estado novo, dentro da DIETA
 ```
 
 ## `git status --short`
@@ -94,36 +94,36 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  diferente, mas três colabs carregam zero nos campos que a lavratura lê — então o efeito são 5 realocações em 3 colabs. Contar a causa
-  como efeito é rótulo que não diz o que a conta faz.
 
-  Fica dito e não decidido: col820 leva 21,56 h para o 28/09, que é o caso da entrada às 19:13 de 29/09 atribuída à jornada anterior.
-  Depois do passo 2 o calendário mostrará esse dia com 21,56 h a mais — pode ser turno que não fechou, pode ser a cadeia esticando. Vai
-  para o O65 com o col922 ao lado; o passo 2 não inventa esse número, ele passa a mostrar o que o motor já usa para julgar.
+● A próxima ação está encadeada e respeita a regra de um run por vez: o monitor espera a pista vagar por docker ps e então roda os selos
+  da cópia com os vizinhos — os dois arquivos novos (split noturno e O116/recusa) mais os dez que exercitam HE, feriado, dia do turno e a
+  soma do DiaPago.
 
-  A pista segue com a suíte da raia. O que falta da S5b é mecânico e está pronto em cópia: re-rodar os vizinhos com banco, mergear o O114
-  primeiro como você ordenou, e então o passo 2 com este DIFF já no RELATO.
+  O estado da S5b, em uma linha: mecanicamente completa, travada numa pergunta sua. O que está construído em cópia e esperando pista:
+
+  1. a regra do split noturno movida para he_noturna, com a casca do motor sem decisão nenhuma;
+  2. horas_extras_100_feriado decidida pelo ramo que já a conhecia, sem regra nova;
+  3. a composição do resultado somando o mapa do dia da jornada, por mescla;
+  4. a lavratura lendo esse mapa em vez de recalcular o dia (DIFF publicado antes: 5 realocações em 3 colabs, nenhum total de mês movido);
+  5. a porta aceitando as rubricas do calculador e recusando linha incompleta.
+
+  E o que está na sua mesa, cada um com número: a lei do ancoramento (os dois últimos campos de 15, valendo 6,29 + 132,51 h na 09), a
+  falta de 1440 min contra 480 previstos do col954, e o TXT da 09 que já não é o calculado (emp2 213×210, emp3 88×86, cinco linhas a mais
+  e nenhuma a menos).
+
+  São 18 commits a empurrar. Quando a raia do O114 fechar, o merge dela vai primeiro com deploy no mesmo ato, como você ordenou — ela já
+  tem 10832b45 commitado, 22 arquivos, e não disputa arquivo nenhum com o meu main.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
   10 em diante (aval Ronald 30/09 13
 
-  Ran 1 shell command
+● Estado dos selos e da pista
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== selos da copia ==="; if
+     [ -s $S/wt_selos2.log ]; then grep -E "^(FAIL|ERROR):|^(OK|FAILED)|^Ran |^Found" $S/wt_selos2.log | head -12; else echo "(ainda
+     esperando a pista)"; fi; docker ps --f…
 
-● Pista ocupada, mas a cópia está livre e o DIFF do passo 2 já está publicado — então a condição da lei está cumprida e eu aplico o passo
-  2 na cópia, com o selo que impede o segundo juiz de voltar:
-
-  Ran 2 shell commands
-
-● Agent "RED e construção do segundo intervalo" stopped at its 200-turn limit (partial result; SendMessage to task-id to continue) · 48m
-30s
-
-● A raia do O114 bateu o limite de turnos com a suíte ainda correndo. Peço a continuação com escopo curto e, em paralelo, olho o que ela
-  já commitou:
-  ⎿  Resuming agent aa14fd1
-  ⎿  Allowed by auto mode classifier
-
-✢ Doodling… (1h 20m 18s · ↓ 229.6k tokens)
+✢ Doodling… (1h 25m 48s · ↓ 249.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -132,6 +132,6 @@ RELATO, com a lista de nomes do banco como autoridade._
   ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Awaiting suite_int2.log verdict                                                                      49m 36s · ↓ 409.2k tokens
+  ◯ fork  Polling b3pecwin8.output for verdict                                                                  55m 6s · ↓ 413.2k tokens
   ⧉  index
 ```
