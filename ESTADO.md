@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 02:10:45.**
+**Medido em 02/10/2026 02:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `8d8844b1 A porta que muda QUEM PODE O QUE passa a deixar trilha, com antes e depois lidos do banco` |
+| `HEAD` local | `992d8af9 As duas curas da madrugada publicadas, com a linha da S5b no TICKETS e os dois achados de carona no BACKLOG` |
 | `origin/main` | `ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,19 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+992d8af9 As duas curas da madrugada publicadas, com a linha da S5b no TICKETS e os dois achados de carona no BACKLOG
 8d8844b1 A porta que muda QUEM PODE O QUE passa a deixar trilha, com antes e depois lidos do banco
 d4288985 O cron das 06:40 MORRIA na guarda da porta, e o ensaio de hoje achou: a disputa barrada agora e CONTADA, nao fatal
 295f8e4d [S5b] A cura (b) estava pela METADE: entram os DOIS portoes de marco do motor, e o raio de 90 min ganha UM dono
 ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a passar
-5b42b55d ATALHO-HE fechado com o smoke dele; o AVAIS volta a ZERO
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,7 +94,6 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
 ● Agora os dois portoes no calculador — entrada na volta do intervalo (mata o atraso) e saida para o intervalo (mata a antecipada):
 
@@ -120,21 +116,22 @@ ba11ab89 As duas fatias da GESTAO-HE ganham linha no TICKETS, e o push volta a p
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Registrar O109 e O110 no BACKLOG · 1m 25s
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/BACKLOG.md'
-     L=open(p,encoding='utf-8').read().split('\n')
-     i=[n for n,x in enumerate(L) if x.startswith('| # | obra | portao | onde esta | pedido em |')][0]
-     assert L[i+1].startswith('|---')
-     r1=('| O110 | **A DISTANCIA DO MARCO AINDA TEM Q… (1m 24s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 5 shell commands
 
-· Unfurling… (1h 11m 39s · ↓ 103.3k tokens)
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/BACKLOG.md'… · stopped
+
+  Esperar o bloco da sombra
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -q "rc_bloco=" logs/sombra_bloco_0202.log 2>/dev/null; do sleep 30; done; tail -5
+     logs/sombra_bloco_0202.log; bin/sombra.sh --conferir 2>&1 | tail -2
+
+· Unfurling… (1h 16m 39s · ↓ 108.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
