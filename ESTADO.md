@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:329 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:357 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 19:59:31.**
+**Medido em 02/10/2026 20:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `aae484a1 [O119] A celula usa a palavra declarada do hook: "espera o !"` |
+| `HEAD` local | `d778a31e [O118] O censo da 2a familia era MEU falso-positivo: 15 em 9 sao 7 em 2` |
 | `origin/main` | `d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,18 +29,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d778a31e [O118] O censo da 2a familia era MEU falso-positivo: 15 em 9 sao 7 em 2
 aae484a1 [O119] A celula usa a palavra declarada do hook: "espera o !"
 551e17d3 [O119] Causa localizada por LEITURA, RED evidenciado, e falta UMA linha na zona inviolavel
 708b846f [S5b] FECHADA no ESCREVER; o DIFF das duas versoes achou o O119
 d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 gravado dia a dia
-96beb803 [O118] A regua tinha as seis colunas; a sequencia do dia nascia de uma 4-tupla
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,35 +98,35 @@ d25595c1 [O118] As quatro provas em prod: 6 acesas, orfas [], previsto 550 grava
 
 ```
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O119 -- O intra_descontada do motor oscila no MESMO cadastro e no MESMO padrao de batidas (achado
-  02/10 19:5x, pelo DI
+  Searched for 1 pattern
 
-● O hook segue cobrando o O119, e a lei diz que a esteira não para por aval — ela pega o próximo item. Leio o contrato do hook em vez de
-  adivinhar o que ele espera:
+● Há a porta certa para "o cadastro descrevia outra coisa no passado": corrigir_escala_retroativa, com criar_trecho_retroativo e
+  corrigir_vinculo_retroativo. Leio o contrato dela:
 
   Ran 1 shell command
 
-● O hook tem vocabulário declarado (linha 79): item cuja célula diz espera o !, aguardando ou CONGELADA sai da conta da fila 1. A minha
-  célula diz "espera UMA linha" — não é a palavra da casa. Uso a palavra certa, que é literalmente o caso:
+● Essa é a porta exata deste caso — e o caso que a criou ([nome]) tem a mesma forma: cadastro 12x36 noturno enquanto ele batia
+  diurno. Ela faz os três atos: edita o vínculo no lugar com histórico, chama regenerar_celulas_vinculo, e reconciliar_apos_vinculo
+  derruba o que nasceu da premissa morta — que é o "chamados mortos por lastro" do seu aval. E tem --apesar-da-lavra "<motivo>", a guarda
+  que não cede sem motivo escrito, para as competências lavradas.
+
+  Rodo o DRY em prod (ela é DRY por padrão) e deixo ela dizer o que muda:
 
   Ran 1 shell command
 
-● O hook leva mais de 100 s rodando à mão (varre 2.781 commits), mas a palavra agora é a declarada. Commito e pego o próximo trabalho que
-  não depende de decisão sua: medir a segunda família de órfãs, que é o que o seu próprio selo cobra (frota = 0) e que eu disse que se
-  mede antes de mover.
+● O DRY mostra a guarda funcionando: todas as células de 21/07 a 20/09 saem BARRADO (competencia exportada) — é a
+  HX-REGEN-NAO-TOCA-EXPORTADO (BUG 23), a mesma que barrou o caso Neelise. E o padrão que ela produziria é exatamente o que você
+  descreveu: dias de semana fato_sem_previsao → fato passa a ter previsao, sábados e domingos cobrado → furo perde a premissa. 10 chamados
+  vivos, 7 deles → PREMISSA MORTA.
 
-  Ran 1 shell command
-
-● Isso muda a natureza da segunda família — e aponta para um defeito do meu selo. Veja col859 07/09: os marcos são hii=00:00 e hf=05:00,
-  4/4 acesas, e as horas "em conflito" são exatamente 00:00 e 05:00. Não falta coluna. O que há é a mesma string HH:MM aparecendo como luz
-  de uma lâmpada e na lista de órfãs — o que acontece quando há duas batidas no mesmo minuto: uma casa o marco, a outra sobra de verdade.
-
-  Meu selo compara luz com orfas por string, e isso é contar pela forma. Confirmo:
+  Rodo o DRY com o motivo escrito, que é o que atravessa a guarda, para ver o plano real:
 
 ● Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 170 docker exec saas_core python manage.py tenant_command corrigir_escala_retroativa
+     --schema=juliani --colab 221 --vinculo 1345 --template 548 --desde 2026-07-21 --regenerar-desde 2026-07-21 --apesar-da-lavra "aval
+     Ronald 02/10 20:2x: cadastro errado provad…
 
-✢ Sock-hopping… (1h 47m 0s · ↓ 306.9k tokens)
+✢ Sock-hopping… (1h 52m 30s · ↓ 329.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

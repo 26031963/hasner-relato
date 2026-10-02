@@ -125,5 +125,5 @@ lista — ela e o que esta EM PE._
 | **O115** | S5b-3-SPLITS: as TRES rubricas que o `DiaPago` paga e o calculador nao decide | espera `!` |
 | **O116** | A LAVRATURA DO `DiaPago` TEM UM SEGUNDO JUIZ DE DIA, e o O111 nunca a alcancou | espera aval |
 | **O117** | DOIS CORTES DELE COLIDEM sobre celula que EXISTE com `dna.marcos` NULO | espera `!` |
-| **O118** | A GRADE CASAVA A PRIMEIRA PAUSA, NAO TODAS | **CURADO na origem** em `escala/utils.py |
+| **O118** | A GRADE CASAVA A PRIMEIRA PAUSA, NAO TODAS | **NO AR** (deploy `96beb803`, 19:27). Cu |
 | **O119** | O `intra_descontada` do motor oscila no MESMO cadastro e no MESMO padrao de batidas | espera `!` |
