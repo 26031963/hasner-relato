@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:57 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:59 AFIRMA ato sem PROVA ao lado -- que movem dinheiro de linha". O numero do defeito e 11; o numero do EFEITO e **5 realocacoes em 3
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 16:47:01.**
+**Medido em 02/10/2026 16:52:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -94,44 +95,44 @@ dfd50fff [S5b] O CENSO DA TROCA: 13 dos 15 campos tem dono, e faltam exatamente 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O hook bloquear com lei no topo é o comportamento correto — a lei de 30/09 diz que pergunta de lei não devolve turno, só o ! devolve, e
+  a esteira tem de seguir o próximo item da ORDEM VIVA que não depende dela. Leio a ordem para não escolher por conta própria:
 
-● A próxima ação está encadeada e respeita a regra de um run por vez: o monitor espera a pista vagar por docker ps e então roda os selos
-  da cópia com os vizinhos — os dois arquivos novos (split noturno e O116/recusa) mais os dez que exercitam HE, feriado, dia do turno e a
-  soma do DiaPago.
+  Ran 1 shell command
 
-  O estado da S5b, em uma linha: mecanicamente completa, travada numa pergunta sua. O que está construído em cópia e esperando pista:
+● O critério do próprio aval de 30/09 resolve a dúvida que eu havia deixado aberta: "só as rubricas que o oráculo corrige se movem, e todo
+  outro campo de todo colaborador dá ZERO". Carregar os dois splits do motor, sem alterar, é literalmente zero movimento — é o que o
+  critério manda, não um contorno dele. Construo:
 
-  1. a regra do split noturno movida para he_noturna, com a casca do motor sem decisão nenhuma;
-  2. horas_extras_100_feriado decidida pelo ramo que já a conhecia, sem regra nova;
-  3. a composição do resultado somando o mapa do dia da jornada, por mescla;
-  4. a lavratura lendo esse mapa em vez de recalcular o dia (DIFF publicado antes: 5 realocações em 3 colabs, nenhum total de mês movido);
-  5. a porta aceitando as rubricas do calculador e recusando linha incompleta.
+  Ran 2 shell commands
 
-  E o que está na sua mesa, cada um com número: a lei do ancoramento (os dois últimos campos de 15, valendo 6,29 + 132,51 h na 09), a
-  falta de 1440 min contra 480 previstos do col954, e o TXT da 09 que já não é o calculado (emp2 213×210, emp3 88×86, cinco linhas a mais
-  e nenhuma a menos).
+● Background command "Rodar os selos da cópia quando a pista vagar" completed (exit code 0)
 
-  São 18 commits a empurrar. Quando a raia do O114 fechar, o merge dela vai primeiro com deploy no mesmo ato, como você ordenou — ela já
-  tem 10832b45 commitado, 22 arquivos, e não disputa arquivo nenhum com o meu main.
+● O selo pegou meia-correção minha, e é exatamente para isso que ele existe: eu migrei só o primeiro laço, e os períodos de folga
+  trabalhada seguiam chamando _dia_de sem o mapa — o segundo juiz sobrevivia neles.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: S5b-CALCULADOR-ESCREVE -- o calculador na forma do oraculo passa a ESCREVER o DiaPago, da competencia
-  10 em diante (aval Ronald 30/09 13
+● Curar a meia-correção e reprovar
+  ⎿  $ cd /home/ronald/wt-splits/app && python3 - <<'PY'
+     import io, py_compile
+     p='ponto/services/dia_pago.py'
+     s=io.open(p,encoding='utf-8').read()
+     a = """ for p in (ft_certa or ()):
+     d = _dia_de(p)
+     if d is None:
+     continue
+     L = _linha(d)
+     L['horas_folga_trabalhada'] += (p.minutos_trabalhados or 0) / 60
+     _rubr…
 
-● Estado dos selos e da pista
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== selos da copia ==="; if
-     [ -s $S/wt_selos2.log ]; then grep -E "^(FAIL|ERROR):|^(OK|FAILED)|^Ran |^Found" $S/wt_selos2.log | head -12; else echo "(ainda
-     esperando a pista)"; fi; docker ps --f…
-
-✢ Doodling… (1h 25m 48s · ↓ 249.7k tokens)
+* Doodling… (1h 30m 48s · ↓ 260.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Polling b3pecwin8.output for verdict                                                                  55m 6s · ↓ 413.2k tokens
+  ◯ fork  Moving sonda_passivo.py out of app/logs                                                             1h 0m 6s · ↓ 421.1k tokens
   ⧉  index
 ```
