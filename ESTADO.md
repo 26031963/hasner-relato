@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 05:33:01.**
+**Medido em 02/10/2026 05:38:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `6b1ae4f9 [O22] AUSENCIA-REVERTER-REJEICAO estava CONSTRUIDA: o que faltava era conferir e dizer` |
+| `HEAD` local | `8037088a A O22 ganha linha no TICKETS, e o handoff regenerado` |
 | `origin/main` | `27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,17 +29,16 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8037088a A O22 ganha linha no TICKETS, e o handoff regenerado
 6b1ae4f9 [O22] AUSENCIA-REVERTER-REJEICAO estava CONSTRUIDA: o que faltava era conferir e dizer
 0d5c2f39 O topo do TICKETS fechado no ato do push (O112)
 27291506 [O21] O censo diz quem nao migrou: o APP, com 112 dia-colab na 10
 68764776 A O110 ganha linha no TICKETS
-90120fa6 [O110] As SEIS copias da distancia circular viraram UMA, e a FRACAO e o coracao da fatia
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/HANDOFF-SESSAO.md
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -96,15 +95,6 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O112 -- O TOPO DO TICKETS BLOQUEIA O PUSH SEGUINTE, e isso aconteceu QUATRO vezes numa noite (02/10, medido). tickets_
-
-● O hook recusou o Stop e tem razão: O112 não é lei nem !, é decisão técnica — eu decido pela lei existente e sigo. Curando.
-
-  Ran 1 shell command
-
-● Background command "Commitar a cura da lapide e empurrar" completed (exit code 0)
-
 ● Background command "Esperar o push final" completed (exit code 0)
 
   Searched for 2 patterns, listed 1 directory, ran 26 shell commands
@@ -123,11 +113,20 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ● Background command "Linha do O110 e push" completed (exit code 0)
 
-● Esperar o push 67 · 6m 27s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "rc=|pos_push|error:" logs/push67.log; do sleep 25; done; tail -4 logs/push67.log (6m 27s)
+  Searched for 2 patterns, ran 9 shell commands
+
+● Background command "Push do censo do O21" completed (exit code 0)
+
+  Ran 4 shell commands, wrote 1 memory
+
+● Background command "Causa e nova tentativa do push" completed (exit code 0)
+
+● Linha do O22 e push final · 2m 21s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qE "pos_push|error:" logs/push69.log; do sleep 30; done; tail -4 logs/push69.log; git fetch -q origin;
+     echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M' (2m 21s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Unfurling… (4h 33m 56s · ↓ 389.8k tokens)
+✢ Unfurling… (4h 39m 26s · ↓ 393.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

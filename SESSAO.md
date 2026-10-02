@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 05:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.8 MB). Acoes na janela: **989**.
+**Medido em 02/10/2026 05:38:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (183.9 MB). Acoes na janela: **997**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:36:09 | Bash | Esperar o push final | `cd /home/ronald/saas-hasner && until grep -qE "pos_push\|error:" logs/push69.log; do sleep 30; done; tail -4 logs/push69.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"; date '+%H:%M'` |
+| 05:36:04 | Bash | Linha do O22 e push final | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/TICKETS.md' L=open(p,encoding='utf-8').read().split('\n') assert L[126].startswith('\| ID \| frente') r=('\| O22 \| ponto/ausencia (porta) \| ausencia `rejeitada` era BECO SEM SAIDA: nao dava para anexar o ' 'documento que faltou nem reabrir -- e o caso e o `col443 aus#4232` \| **FECHADA 02/10 06:2x, e estava ' 'CONSTRUIDA: o que faltava  ...` |
+| 05:35:44 | Bash | Indexar a memoria e ver o push 68 | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && printf '%s\n' '- [Não commitar durante o push](nao-commitar-durante-o-push.md) — a árvore carimbada muda e o push cai sem RED visível' >> MEMORY.md; cd /home/ronald/saas-hasner && tail -5 logs/push68.log; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"` |
+| 05:35:38 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/nao-commitar-durante-o-push.md` |
+| 05:35:26 | Bash | Causa e nova tentativa do push | `cd /home/ronald/saas-hasner && grep -inE "arvore\|stamp\|carimbo\|mudou" logs/push67.log \| tail -6; echo "=== retry, arvore estavel:"; bin/push.sh origin main > logs/push68.log 2>&1; echo "rc=$?"; tail -4 logs/push68.log` |
+| 05:35:13 | Bash | O fim do log do push 67 | `cd /home/ronald/saas-hasner && tail -14 logs/push67.log` |
+| 05:35:04 | Bash | O motivo exato da recusa | `cd /home/ronald/saas-hasner && grep -B 4 "error: failed" logs/push67.log \| head -10` |
+| 05:34:59 | Bash | Por que o push 67 falhou | `cd /home/ronald/saas-hasner && grep -E "RED\|ALARME\|BLOQUEADO\|rejected\|non-fast" logs/push67.log \| head -4; git fetch -q origin; echo "ahead=$(git rev-list --count origin/main..HEAD)"` |
 | 05:26:33 | Bash | Esperar o push 67 | `cd /home/ronald/saas-hasner && until grep -qE "rc=\|pos_push\|error:" logs/push67.log; do sleep 25; done; tail -4 logs/push67.log` |
 | 05:26:27 | Bash | Estado do push e handoff | `cd /home/ronald/saas-hasner && tail -3 logs/push67.log; bin/handoff_sessao.sh 2>&1 \| tail -1` |
 | 05:26:22 | Bash | Fechar o O22 com a prova | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/BACKLOG.md' s=open(p,encoding='utf-8').read() i=s.index('\| O22 \|') j=s.index('\n', i) col=s[i:j].split(' \| ') col[2] = ("**FECHADA, e estava CONSTRUIDA: conferi as quatro pontas em 02/10 06:2x.** Porta " "`ponto/services/ausencia.py::reverter_rejeicao` (guarda de estado, motivo obrigatorio, delega ao " "`_reabrir` -> `mudar_estado`), u ...` |
