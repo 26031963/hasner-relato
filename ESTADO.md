@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 00:40:46.**
+**Medido em 02/10/2026 00:45:46.**
 
 | | |
 |---|---|
@@ -39,7 +39,17 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
+ M bin/handoff_sessao.sh
+ M bin/pre-push.sh
+ M bin/regua.sh
+?? bin/arvore_hash.sh
 ?? bin/keepalive.sh
+?? bin/tests/test_hook_nao_para_por_processo.sh
+?? bin/tests/test_suite_uma_vez_por_arvore.sh
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,19 +105,7 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  A suíte cheia está rodando. Com ela verde vem o deploy, o push do marco, e então a tabela final para o seu ! da troca — que ainda não vou pedir: sobram
-  +59,82 h de atraso novo em 13 colabs, e a sua lei (2) diz que a troca não cria desconto.
-
-✻ Cooked for 16m 39s · done 12:35 AM · 1 shell still running
-
-❯ segue a fila; PAREI so em lei ou !
-
-● Ler o mecanismo do stamp atual
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n 30,60p bin/pre-push.sh; echo "=== o stamp de hoje ==="; cat .regua_stamp 2>/dev/null | head -6; echo "===
-     impressao_digital ==="; grep -n "impressao_digital" -A14 bin/regua.sh | head -20
-
-✽ Pouncing… (2m 12s · ↓ 1.9k tokens)
+  Ran 2 shell commands
 
 ❯ aval Ronald 02/10 00:4x -- NAO PARAR. Regra da sessao, vale ate eu revogar.
   1. Esperar suite, push, deploy ou monitor NAO devolve o turno. Com a pista ocupada, pegar o proximo item da lista que nao precisa dela (cura em copia,
@@ -128,10 +126,22 @@ e47d91db MERGE da cura da cascata + ATALHO-HE na Central: a celula sai de baixo 
      (8) HE-OCORRENCIA-COMO-LINHA: publicar o desenho da tabela e o plano de migracao; nao construir.
      (9) Fila 1 do BACKLOG na ordem do hook, O21 em diante.
      Segue a lista !
-  ctrl+x ctrl+s to send now
+
+  Pôr LISTA TRAVADA no painel e rodar os selos · 1m 16s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     # -*- coding: utf-8 -*-
+     import io
+     P='bin/handoff_sessao.sh'
+     t=io.open(P,encoding='utf-8').read()
+     a = ''' echo "## PROXIMO PASSO"'''
+     assert t.count(a)==1
+     # LISTA TRAVADA NO PAINEL (ordem Ronald 02/10 00:4x, item 3): o turno so se devolve com a lis… (1m 15s · 7 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✽ Pouncing… (7m 12s · ↓ 14.8k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
