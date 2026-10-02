@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 07:35:45.**
+**Medido em 02/10/2026 07:40:54.**
 
 | | |
 |---|---|
@@ -94,11 +94,6 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Guardei a lição: quando o hook insistir num item, conferir primeiro se a culpa é a palavra. Ele lê vocabulário fixo em dois lugares, e sinônimo ali não
-  é estilo — é um item que nunca fecha.
-
-✻ Cogitated for 5h 46m 50s · done 6:45 AM · 1 shell still running
-
 ● Background command "Veredito do push e do hook" completed (exit code 0)
 
   Ran 2 shell commands
@@ -124,10 +119,15 @@ c9aaa1df O topo do TICKETS fechado no ato do push (O112)
 
 ● Ordem recebida: O111 primeiro, a troca espera, e as quatro rubricas abertas por causa e por colab antes do !. Registrando e indo.
 
-● O metodo que mapeia entrada -> dia do turno
-  ⎿  $ sed -n '1995,2030p' ponto/motor_calculo_v2.py
+  O mapa que o motor da autoridade devolve
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >
+     $S/o111_mapa.py <<'PY'
+     import datetime as d
+     from django.utils import timezone as tz
+     from colaboradores.models import Colaborador
+     from ponto.services.espelho impo…
 
-* Hullaballooing… (2m 12s · ↓ 8.2k tokens)
+✶ Hullaballooing… (7m 21s · ↓ 24.5k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
