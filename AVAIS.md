@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 7
+# AVAIS NA MESA — 8
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,11 +12,12 @@
 | 4 | `PARAMETROS-SEM-EFEITO-16-CAMPOS` | **!** | 2026-10-02T10:35 | CINCO das 14 celulas nao-verdes sao `parametro consumido ou sem efeito`, e o contrato (CLAUDE.md 4b) so as deixa verdes com o campo **consumido** -- rotular 'sem efeito' nao fecha a celula, so a torna honesta. MEDIDO pel | `! Ronald: dos 16 campos sem efeito, consuma <lista> e remova <lista>; os 7 da folha/export movem dinheiro, entao eles entram so com DIFF de frota publicado antes` |
 | 5 | `O25-DIAS-PREVISTOS-EXIBIDOS` | **lei** | 2026-10-02T10:35 | O corte do O25 pede um SELO que eu nao pude fabricar: *'para TODO colab, `dias_previstos` do fechamento == dias previstos exibidos pelo espelho na mesma janela (contador `espelho_x_fechamento_dias`, esperado 0)'*. MEDI n | `lei Ronald: "dia previsto exibido" e <(a) todo dia com marco previsto na janela / (b) todo dia que a celula diz trabalho>; com isso eu fabrico o contador `espelho_x_fechamento_dias` e fecho o selo do O25` |
 | 6 | `O27-COLUNA-NAO-FECHA-COM-O-RODAPE` | **lei** | 2026-10-02T10:50 | O27 JANELA-EXATA: a sua linha dizia *'medir antes de construir'*, e a medicao MUDA o alvo. MEDIDO na SOMBRA, competencia 09, pelas funcoes REAIS do cartao (`relatorios/pdf_espelho::_coletar_dados_espelho_mes`): **cartao_ | `corte Ronald: no cartao, (c) o rodape ganha a linha 'folga trabalhada' e passa a somar os valores EXIBIDOS -- a coluna e o badge ficam como estao; com isso eu fecho o selo `cartao_x_fechamento_total`` |
-| 7 | `ui-resposta-diz-o-que-e-smoke` | **smoke** | 2026-10-02T03:45 | NO AR desde 02/10 03:3x (`432058dd` + deploy). As 4 frases medidas nas perguntas REAIS pelo codigo no ar: `perg#37945` col106 'atraso de 1h 00m' + 'vai para a folha' + botao 'Validar com atraso'; `perg#38287` col358 'sai | `smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E` |
+| 7 | `F2-ART130-LE-LITERAL-NAO-CADASTRO` | **lei** | 2026-10-02T11:05 | 4 tipos descontam e o art.130 conta 1; 7 de 1.046 periodos com direito gravado acima da tabela (todos em_curso); 0 adquirido/concedido divergente | `lei Ronald: para o art.130 contam <so a falta de dia / falta + suspensao>; atraso e saida antecipada sao parciais e NAO entram -- com isso eu troco o literal por um conjunto do catalogo e a F2 passa a mostrar a projecao do direito` |
+| 8 | `ui-resposta-diz-o-que-e-smoke` | **smoke** | 2026-10-02T03:45 | NO AR desde 02/10 03:3x (`432058dd` + deploy). As 4 frases medidas nas perguntas REAIS pelo codigo no ar: `perg#37945` col106 'atraso de 1h 00m' + 'vai para a folha' + botao 'Validar com atraso'; `perg#38287` col358 'sai | `smoke Ronald: abri a mesa de disputa, a resposta longe do marco agora diz a direcao e o que validar faz, e o Reabrir avisa quantas respostas apaga -- pode fechar a UI-RESPOSTA-DIZ-O-QUE-E` |
 
 ---
 
-Total no JSON: **185** · aberto **7** · respondido **14** · sem-motivo **164**.
+Total no JSON: **186** · aberto **8** · respondido **14** · sem-motivo **164**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.
