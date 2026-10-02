@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 15:15:46.**
+**Medido em 02/10/2026 15:21:01.**
 
 | | |
 |---|---|
@@ -94,44 +94,44 @@ dbf63f4c [O26] Hash, hora do deploy e o pedido de smoke da mesma tela do irmao
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  defeito — e um que empurrava o número para o lado que me convinha. A regra que eu violei é a da casa: o certo vence o conveniente, e número que fecha
-  critério exige saber por que fechou.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: F2 -- VISAO-FALTAS-FERIAS (feature, 23/09 11:xx) -- por colaborador, ausencias e faltas DECIDIDAS no periodo AQUISIT
-
-● Commitando a correção e o estado real, com o ! que o PAREI exige:
-
-  Ran 1 shell command
 
 ● A correção está commitada (0ad4ebc4) e publicada no topo do RELATO, com a tabela nomeada.
 
   O essencial, sem rodeio:
 
-  PAREI: o ! da pontualidade da S5b — o critério (2)(a) não fechou. Atraso +2,51 h (col81) e antecipada +44,21 h em 9 colabs (col932 +9,76 · col296 +6,00
-  · col196 +5,96 · col231 +5,86 · col418 +5,66 · col255 +5,35), os dois acima do gravado. Como o seu aval manda: não fechou = PAREI com a tabela.
+  PAREI: o ! da pontualidade da S5b — o critério (2)(a) não fechou. Atraso +2,51 h (col81) e antecipada +44,21 h em 9 colabs (col932 +9,76
+  · col296 +6,00 · col196 +5,96 · col231 +5,86 · col418 +5,66 · col255 +5,35), os dois acima do gravado. Como o seu aval manda: não fechou
+  = PAREI com a tabela.
 
-  E a tabela que eu publiquei às 14:2x era um bug meu, não uma cura: eu passava as pontas da pontualidade em UTC, e marco_no_dia ancora o marco no dia do
-  instante — o marco caía no dia seguinte e a distância saía menor, empurrando o número para o lado que me convinha. Corrigi para hora local (como o
-  chamador antigo faz) e o critério abriu.
+  E a tabela que eu publiquei às 14:2x era um bug meu, não uma cura: eu passava as pontas da pontualidade em UTC, e marco_no_dia ancora o
+  marco no dia do instante — o marco caía no dia seguinte e a distância saía menor, empurrando o número para o lado que me convinha.
+  Corrigi para hora local (como o chamador antigo faz) e o critério abriu.
 
-  O que a sua ordem (1) pediu está de pé e provado: a porta única dos períodos. Seis das oito rubricas voltaram idênticas à rodada fiel, col516 e col174
-  saíram da lista — a cura do pareamento funcionou, e era isso que você disse ser a causa. A soma dos segmentos bate com o motor em 519 de 520
-  colaboradores. Resta um insumo: a pontualidade.
+  O que a sua ordem (1) pediu está de pé e provado: a porta única dos períodos. Seis das oito rubricas voltaram idênticas à rodada fiel,
+  col516 e col174 saíram da lista — a cura do pareamento funcionou, e era isso que você disse ser a causa. A soma dos segmentos bate com o
+  motor em 519 de 520 colaboradores. Resta um insumo: a pontualidade.
 
-  O que eu reverti e por quê: a extração das rubricas (os 18 insumos). Cinco tentativas, cada uma denunciada pelo DIFF de ponta a ponta — núcleo pulado
-  (+146,03 h de atraso), tupla sem o dia da jornada (−952,38 h), CCT sem a data (cego 1.247→110), dias_folga do template (divisão trocada), pontualidade
-  por período e por jornada. Código sem leitor é vermelho, então ele saiu; os números ficaram na lápide. A lição: extração de alimentação se faz movendo
-  as linhas, nunca reescrevendo a montagem "equivalente".
+  O que eu reverti e por quê: a extração das rubricas (os 18 insumos). Cinco tentativas, cada uma denunciada pelo DIFF de ponta a ponta —
+  núcleo pulado (+146,03 h de atraso), tupla sem o dia da jornada (−952,38 h), CCT sem a data (cego 1.247→110), dias_folga do template
+  (divisão trocada), pontualidade por período e por jornada. Código sem leitor é vermelho, então ele saiu; os números ficaram na lápide. A
+  lição: extração de alimentação se faz movendo as linhas, nunca reescrevendo a montagem "equivalente".
 
-  Na sua mesa, o que destrava: o ! sobre como a pontualidade do calculador deve ler as pontas — e o caso medido é o col81/col932, dia a dia, não outra
-  rodada de frota.
+  Na sua mesa, o que destrava: o ! sobre como a pontualidade do calculador deve ler as pontas — e o caso medido é o col81/col932, dia a
+  dia, não outra rodada de frota.
 
 ✻ Worked for 59m 55s · done 3:02 PM · 7 shells still running
-                                                                                                                  ✔ Update installed · Restart to update
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ !: a pontualidade le as pontas em hora LOCAL; segue a fila
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · Enter to view tasks
-  ⧉  index
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  Background
+  7 active shells
+
+  ❯ cd /home/ronald/saas-hasner && until grep -qE "CONTADORES|Traceback" /tmp/claude-1001/-home-ronald-saas-hasner-a… (running)
+    cd /home/ronald/saas-hasner && until grep -qE "CONTADORES|Traceback" /tmp/claude-1001/-home-ronald-saas-hasner-a… (running)
+    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 10; done; sleep 3; grep -… (running)
+    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 15; done; sleep 3; grep -… (running)
+    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null; do sleep 20; done; sleep 4; echo "… (running)
+    cd /home/ronald/saas-hasner && until ! pgrep -f "bin/pre-push.sh" >/dev/null && ! pgrep -f "bin/push.sh" >/dev/n… (running)
+    S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; until [ "$(docker ps -q --… (running)
+
+  ↑/↓ to select · Enter to view · x to stop · Esc to close
 ```
