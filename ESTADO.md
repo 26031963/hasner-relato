@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:01:45.**
+**Medido em 02/10/2026 14:07:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
  M app/docs/RELATO.md
  M app/ponto/management/commands/diff_calculador.py
  M app/ponto/motor_calculo_v2.py
+ M app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py
 ?? app/ponto/calculador/alimentacao.py
 ?? app/ponto/tests/test_s5b_porta_unica.py
 ?? esteira.pausada
@@ -99,39 +100,39 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 
 ```
 
-  Ran 1 shell command
+  ┌────────────┬─────────────────────────────────────────────┬───────────────┐
+  │  rubrica   │             colabs divergentes              │     todos     │
+  ├────────────┼─────────────────────────────────────────────┼───────────────┤
+  │ atraso     │ col704: 0,25 → 0,09                         │ −0,16, abaixo │
+  ├────────────┼─────────────────────────────────────────────┼───────────────┤
+  │ antecipada │ col704 6,41→0; col934 4,00→0; col920 3,84→0 │ todos abaixo  │
+  └────────────┴─────────────────────────────────────────────┴───────────────┘
 
-● 519 de 520 na frota inteira — e o único que sobra é o col788, declarado pelo contador, com causa nomeada: o motor desconta 113,86 min de um intervalo
-  (06:11→08:05) que não cabe no par (14:00→21:59). Isso é geometria, não regra de rubrica — portanto é O65, como a ordem (3) determina. Não corrigi: tirar
-  "do fim" deslocaria instante, e noturna conta por instante.
+  E col516 e col174 desapareceram da lista — era pareamento, como a ordem (1) dizia. A prova mais limpa: motor × calculador em atraso e antecipada dá
+  +0,00 / −0,00 com ZERO dia-colab divergentes — a pontualidade do calculador é hoje idêntica à do motor, então a diferença contra o gravado é deriva do
+  gravado, não da regra.
 
-  Agora o DIFF passa a chamar a porta, e nasce o selo da porta única:
+  Lendo o que "subir" significa no código antes de qualquer apply:
 
-  Ran 1 shell command
+  Ran 5 shell commands
 
-● A lápide do DIFF registra que esse caminho deu −2.676,48 h porque "a subtração da intra do motor não é simétrica à soma dos segmentos" — e é exatamente
-  essa assimetria que a porta curou (os ft sem dia, a intra só acima de 6 h, os intervalos fora de ordem). Completando a porta com os marcos, para o DIFF
-  e a lavratura chamarem uma linha:
+● O critério original do ! de 30/09 está claro, e com o de hoje forma a lista. Antes de qualquer apply: os vizinhos do motor (zona inviolável — toquei 4
+  campos e 1 escritor):
 
   Ran 2 shell commands
 
-● A porta inteira está provada: 200 de 200 com a soma igual ao motor, 1.027 dias com pontualidade montada e zero dias sem marco (o cadastro responde por
-  todos). Commitando a porta antes de mexer no DIFF, com o selo que a ordem pede:
+● O selo chamador_do_calculador_aplica_a_janela morde porque o DIFF deixou de reaplicar a janela — e não precisa mais: o motor já a aplicou, e a porta lê
+  as pontas clipadas. Isso é mais forte que reaplicar (não há segunda aplicação para divergir). Atualizando a exigência sem afrouxá-la:
 
-  Ran 1 shell command
-
-● O selo nasce vermelho nos dois casos do DIFF e verde nos quatro que descrevem a porta e o motor. Trocando as 227 linhas do DIFF pela chamada à porta:
-
-  Troca o bloco do DIFF pela porta
+● Atualiza o selo da janela
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
      import io
-     p='app/ponto/management/commands/diff_calculador.py'
-     L=io.open(p,encoding='utf-8').read().split('\n')
-     # bordas (1-indexed no editor -> 0-indexed aqui)
-     i0 = next(n for n,l in enumerate(L) if l.strip() == "if o['pares_da_autoridade']:")
-     i1 =…
+     p='app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py'
+     s=io.open(p,encoding='utf-8').read()
+     # (1) a docstring ganha o segundo caminho, com a razao
+     old = """ENTAO ESTE SELO COBRA O USO, e nao o import: todo modulo de producao qu…
 
-✢ Architecting… (5m 40s · ↓ 15.1k tokens)
+✢ Philosophizing… (4m 27s · ↓ 10.1k tokens)
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
