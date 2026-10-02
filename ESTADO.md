@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:48:54.**
+**Medido em 02/10/2026 10:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS` |
+| `HEAD` local | `322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela` |
 | `origin/main` | `908cbabd [O21] A linha do TICKETS leva o ID que o commit cita` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+322a71a2 [O25] A allowlist do `.date()` de batida encolhe: o espelho saiu dela
 3333aaee [O25] A prova do piso nos docs, e as QUATRO travas de fila 1 viram linha no AVAIS
 b817f399 [O25] O chao do espelho e o CADASTRO: a 1a batida nao eleva mais o piso
 d83c508d O topo do TICKETS fechado no ato do push (O112)
 908cbabd [O21] A linha do TICKETS leva o ID que o commit cita
-0ac1d8a5 [O21] O hash e a hora do deploy nos tres docs (10:16, f4693856)
 ```
 
 ## `git status --short`
@@ -95,44 +95,44 @@ d83c508d O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ col37 │ 153,75 │ 153,7355 + 0                     │ 153,74  │ puro arredondamento (os "2 min" de 28/07, hoje 1) │
-  └───────┴────────┴──────────────────────────────────┴─────────┴───────────────────────────────────────────────────┘
+  Ran 1 shell command
 
-  A coluna "Trabalhado" imprime pago_h = horas_trabalhadas + horas_folga_trabalhada (convenção declarada em pago_do_dia: folga trabalhada é hora de
-  trabalho do dia, paga a 100%); o badge "Trabalhadas" imprime o gravado, que por convenção não inclui a folga. Duas convenções opostas no mesmo papel —
-  nenhuma errada sozinha.
+● Background command "O contador final da frota (480/520)" completed (exit code 0)
 
-  Ran 2 shell commands
+● Background command "Espera o contador da frota" completed (exit code 0)
 
-● O O27 cumpriu a parte que era minha — "medir antes de construir" — e o resultado muda o que se constrói:
+● Background command "Espera o contador final da frota" completed (exit code 0)
 
-  O RED que você deixou aberto tem duas causas, as duas medidas na sombra:
+● Causa provada, e é UMA só — a cauda inteira é folga trabalhada, ao centésimo:
 
-  1. Folga trabalhada — a coluna soma horas_trabalhadas + horas_folga_trabalhada; o badge do topo imprime o gravado, que por convenção não inclui a folga.
-     No col49 isso são 24,00 h exatas de diferença num só colaborador. As duas fontes estão certas pelas suas próprias convenções: o papel é que não
-     fecha.
-  2. Arredondamento de impressão — cada dia sai com 2 casas e a soma dos arredondados ≠ o total arredondado. É o critério de ouro de 28/07: no col37 os
-     seus "2 min" hoje são 1 min, com folga trabalhada zero.
+  ┌────────┬─────────────────────┬──────────────────┬──────────────────┬─────────┐
+  │ colab  │ DiaPago trabalhadas │ folga trabalhada │ FechamentoMensal │  delta  │
+  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
+  │ col451 │ 47,71               │ 142,49           │ 47,71            │ +142,49 │
+  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
+  │ col165 │ 38,92               │ 133,86           │ 38,92            │ +133,86 │
+  ├────────┼─────────────────────┼──────────────────┼──────────────────┼─────────┤
+  │ col824 │ 71,09               │ 110,17           │ 71,09            │ +110,17 │
+  └────────┴─────────────────────┴──────────────────┴──────────────────┴─────────┘
 
-  E um número que fecha o diagnóstico: cartao_rodape_x_fechamento = 0 em 20 de 20 — o rodapé nunca discorda do gravado. O defeito está só entre a coluna e
-  o rodapé.
+  O FechamentoMensal bate exatamente com DiaPago.horas_trabalhadas nos oito casos, e o delta é exatamente a folga trabalhada. Corrigindo o registro para a
+  causa única e o número de frota:
 
-  Por isso não construí: as três saídas mexem em coisas diferentes e a escolha é sua —
-  (a) o badge passar a somar folga trabalhada (e aí o topo deixa de bater com o GRAVADO, que é a testemunha);
-  (b) a coluna imprimir só horas_trabalhadas (e a folga trabalhada ganha coluna própria, que o bloco de rubricas já suporta);
-  (c) o rodapé ganhar a linha "folga trabalhada", e a conta fecha sem mover número nenhum.
+● Atualiza o registro com a causa unica
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113/p12_docs_o27.py'
+     s=io.open(p,encoding='utf-8').read()
+     old = """ (1) **FOLGA TRABALHADA**"""
+     assert s.count(old)==1
+     s = s.replace(""" (2) …
 
-  Eu faria a (c) — é a única que não troca nenhum número existente e faz o admin reconstituir o total somando o que vê, que é o que o seu critério de ouro
-  exige. O arredondamento, na mesma linha: o rodapé imprime a soma dos valores exibidos, não o total cru.
-
-  A frota inteira (520 colaboradores, na sombra, cpuset de teste) está terminando de medir o contador cartao_x_fechamento_total — reporto o número e levo
-  o item ao AVAIS com a tabela e a recomendação.
-
-  Uma correção de conduta minha, registrada: a primeira versão dessa medição rodou dentro do saas_core e chegou a 266% de CPU com o cliente batendo ponto.
+✢ Hullaballooing… (3h 20m 28s · ↓ 440.2k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
   ⧉  index
 ```
