@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:140 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:194 AFIRMA ato sem PROVA ao lado -- ### 0. O21 ROTULO-DO-DIA-DECIDIDO, lado APP -- **NO AR as 10:16** (`f4693856`), e a leitura barateou a cura
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 14:07:01.**
+**Medido em 02/10/2026 14:12:31.**
 
 | | |
 |---|---|
@@ -99,15 +99,6 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  ┌────────────┬─────────────────────────────────────────────┬───────────────┐
-  │  rubrica   │             colabs divergentes              │     todos     │
-  ├────────────┼─────────────────────────────────────────────┼───────────────┤
-  │ atraso     │ col704: 0,25 → 0,09                         │ −0,16, abaixo │
-  ├────────────┼─────────────────────────────────────────────┼───────────────┤
-  │ antecipada │ col704 6,41→0; col934 4,00→0; col920 3,84→0 │ todos abaixo  │
-  └────────────┴─────────────────────────────────────────────┴───────────────┘
-
   E col516 e col174 desapareceram da lista — era pareamento, como a ordem (1) dizia. A prova mais limpa: motor × calculador em atraso e antecipada dá
   +0,00 / −0,00 com ZERO dia-colab divergentes — a pontualidade do calculador é hoje idêntica à do motor, então a diferença contra o gravado é deriva do
   gravado, não da regra.
@@ -124,15 +115,24 @@ e56b03c5 O topo do TICKETS fechado no ato do push (O112)
 ● O selo chamador_do_calculador_aplica_a_janela morde porque o DIFF deixou de reaplicar a janela — e não precisa mais: o motor já a aplicou, e a porta lê
   as pontas clipadas. Isso é mais forte que reaplicar (não há segunda aplicação para divergir). Atualizando a exigência sem afrouxá-la:
 
-● Atualiza o selo da janela
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p='app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py'
-     s=io.open(p,encoding='utf-8').read()
-     # (1) a docstring ganha o segundo caminho, com a razao
-     old = """ENTAO ESTE SELO COBRA O USO, e nao o import: todo modulo de producao qu…
+  Ran 3 shell commands
 
-✢ Philosophizing… (4m 27s · ↓ 10.1k tokens)
+● O selo da janela ganhou o segundo caminho com o par que morde (a mesma fonte, com e sem a leitura do carimbo — senão bastaria escrever a palavra num
+  comentário para escapar). 17 testes OK. Rodando os 30 vizinhos do motor de novo:
+
+  Ran 1 shell command
+
+● Enquanto os vizinhos rodam, publico a tabela e a causa por colab — o item (b) do critério exige que ela esteja no RELATO antes de qualquer apply:
+
+  Ran 1 shell command
+
+● O PAREI do topo ficou falso — o critério fechou. Corrigindo o topo e seguindo para (c) e (d):
+
+  Ran 3 shell commands
+
+● Background command "Todos os vizinhos do motor e do calculador" completed (exit code 0)
+
+✻ Waiting for API response · will retry in 2m 40s · check your network
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
