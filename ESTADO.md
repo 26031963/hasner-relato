@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 10:05:45.**
+**Medido em 02/10/2026 10:11:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
-| `origin/main` | `46e90bfa A JANELA-DA-AUTORIDADE ganha linha no TICKETS` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `d9538116 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,16 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d9538116 O topo do TICKETS fechado no ato do push (O112)
 9bbb6f4b [PAINEL-SITUACIONAL-N+1] A prova de prod, e a hora do log do lavrador em LOCAL
 24f57549 [PAINEL-SITUACIONAL-N+1] HAIKU: "quantos em turno agora na empresa 2?" responde pelo juiz, com rotulo
 8e085c33 [PAINEL-SITUACIONAL-N+1] Os dois censos que a suite acusou eram de ANCORA: o sitio mudou de lugar, a lei nao
 a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o placar por empresa conta pelo veredito
-27c9c24c O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
+ M app/api/views.py
+ M app/docs/RELATO.md
+?? app/api/tests/test_o21_app_diz_o_que_foi_decidido.py
 ?? cortes.alarme.pausado
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,39 +97,39 @@ a8c605dd [PAINEL-SITUACIONAL-N+1] O painel pergunta em LOTE ao mesmo juiz, e o p
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ HAIKU (a)(b)(c)                │ 4ª ferramenta de leitura + ponte + golden  │ "quantos em turno agora na empresa 2?" → 119, rótulo "em turno      │
-  │                                │                                            │ agora", lavrado 09:54                                               │
-  └────────────────────────────────┴────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────┘
+● Lição aplicada (e é lei da casa): meus monitores com pgrep -f estavam casando a própria linha de comando — espera curta vai por arquivo de sinal, nunca
+  pgrep:
 
-  Dois achados que viraram cura no caminho: o censo do ativa me pegou copiando a dívida da O68 (virou um carregador, _escalas_da_ata), e o log do lavrador
-  escrevia 12:54 por 09:54 (UTC cru — curado).
+  Read 1 file, ran 2 shell commands
 
-  O21 já está em construção (o próximo da fila 1, como o hook cobra): medi em prod que o leitor que não migrou é o APP — 615 dia-colab com decisão humana
-  na competência, 117 deles não-abonados saindo com a palavra errada. O patch da fiação (as três portas que a grade usa, chaves aditivas
-  veredito_dia/palavra_dia/cor_dia/decidido_por/decidido_em) e o selo de 7 casos estão prontos em cópia — aplico na árvore no instante em que a suíte do
-  push liberar a pista, para não trocar o código debaixo dela.
+● Background command "Espera o fim do push 77" failed with exit code 144
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O21 -- ROTULO-DO-DIA-DECIDIDO (Ronald 24/09 10:xx, caso col443 11-13/09) -- dia sem batida com decisao humana sai com
+● Background command "Veredito final do push 77" failed with exit code 144
 
-  Searched for 2 patterns, ran 2 shell commands
+● Antes de aplicar: a mesma lápide que acabei de pagar no lavrador vale aqui — quando é UTC no banco e o payload precisa sair local:
 
-● Achado que muda o desenho: a porta que aplica as três chaves já existe — espelho.py::aplicar_palavra_do_dia, usada pela tela e pelo cartão (LEI-AKITA
-  4). Vendo se o app alcança os insumos dela:
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 3 shell commands
+● Background command "Espera por arquivo de sinal, nao por pgrep" completed (exit code 0)
 
-● Isso muda o desenho para melhor: api_espelho_v2 já chama espelho_do_colab, que devolve dias com as três chaves aplicadas — e o app joga fora e remonta.
-  Vendo a fonte do hover que a grade usa:
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 4 shell commands
+● Push 78 OK às 10:08 (9.285 + 22 testes, 46e90bfa..9bbb6f4b no remoto). Pista livre — O21 agora, RED primeiro:
 
-● O desenho fica melhor e mais barato: o app já tem a palavra montada em _esp['dias'] (a porta única) — não preciso das 3 portas que medi. Refazendo o
-  patch:
+  Ran 2 shell commands
 
-  Running 1 shell command…
+● Background command "Confere o fim do push" completed (exit code 0)
 
-· Hullaballooing… (2h 32m 12s · ↓ 297.3k tokens)
+  Ran 1 shell command
+
+● RED do O21 evidenciado — e a linha que o resume: "quatro decisões DIFERENTES saíram com 1 desenho no app: [(None, None, None)]". Aplicando a cura:
+
+● GREEN do O21
+  ⎿  $ cd /home/ronald/saas-hasner && python3
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o113/p9b_o21_app.py /home/ronald/saas-hasner && source
+     bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; timeout 900 docker run --rm $TESTE_DOCKER --networ…
+
+· Hullaballooing… (2h 37m 28s · ↓ 312.4k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
