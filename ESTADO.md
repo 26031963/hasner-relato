@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:39:01.**
+**Medido em 03/10/2026 16:44:31.**
 
 | | |
 |---|---|
@@ -109,37 +109,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O deadlock é meu: violei o "um run por vez no juliani_db_test" ao rodar junto da suíte de fundo. O tripwire mediu 0 sítios em prod. Vou
-  ver se contaminei a suíte:
+  Ran 4 shell commands
 
-  Ran 1 shell command
-
-● Contaminada — column ... does not exist é o schema recriado pelo outro run. Mato e refaço sozinha, como a lei manda.
+● Agora a suíte pela porta, não à mão:
 
   Ran 2 shell commands
 
-● Enquanto ela roda sozinha, os selos de host (#5) — são shell, não tocam o banco de teste:
-
-  Ran 3 shell commands
-
-● Os 4 parecem de ambiente da raia (faltam logs/, .claude/), não da cura. A discriminação honesta é rodar os mesmos 4 na árvore principal:
+● Enquanto a suíte roda, resolvo o #2 do conselho: a linha viva das 06:16. Vejo primeiro o tamanho da divergência entre o crontab vivo e a
+  fonte única:
 
   Ran 1 shell command
 
-● Os 4 são ambiente da raia, não a cura. Isso é da mesma família de uma memória que já existe — vou estendê-la em vez de duplicar:
+● crontab == config/crons.py (100 linhas) — eles estão em sincronia. Isso muda a cura: a linha das 06:16 não se tira à mão, sai pelo
+  escritor único (crons.sh install renderiza da fonte). E responde o achado do O91: não há nada declarado-e-não-instalado, então install
+  hoje é neutro fora da minha remoção. Vejo se há dry-run:
 
-  Read 1 file, ran 1 shell command
+  Ran 1 shell command
 
-● A medição do _A12 (#6) — consulta leve, só leitura, e dias_da_ausencia é aritmética de data, não motor:
+● install já faz backup em logs/ — a trilha vem de graça, e o render sai do container, então a ordem é deploy e só depois install. Vendo a
+  raia e o que vai de carona no ar:
 
-● Rodar a medição com o catálogo certo
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i "s|from
-     core.catalogo_vigente import CatalogoVigente as _CATV|from ponto.catalogo import ausencias as _CATV|" $SP/medir_a12.py && docker cp
-     $SP/medir_a12.py saas_core:/tmp/medir_a12.py >/dev/n…
+  Ran 1 shell command
 
-✢ Bloviating… (16h 25m 30s · ↓ 2.2m tokens · thinking)
+● Raia em HEAD destacado no mesmo commit da main → o merge será fast-forward. Vendo a suíte:
+
+  Ran 1 shell command
+
+●
+
+· Bloviating… (16h 31m 0s · ↓ 2.3m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +147,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running test_porta_remocao_motivo GREEN check                                           4h 46m 38s · ↓ 159.5k tokens
+  ◯ general-purpose  Deduplicating ATOS in test_porta_remocao_motivo                                          4h 52m 8s · ↓ 163.3k tokens
   ⧉  index
 ```
