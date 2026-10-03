@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:19 AFIRMA ato sem PROVA ao lado -- **TODO COMMIT DESTE LOTE FOI FEITO COM `--no-verify`**, e isso e atalho -- NUNCA pre-aprovado
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:62 AFIRMA ato sem PROVA ao lado -- **TODO COMMIT DESTE LOTE FOI FEITO COM `--no-verify`**, e isso e atalho -- NUNCA pre-aprovado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 08:34:01.**
+**Medido em 03/10/2026 08:39:31.**
 
 | | |
 |---|---|
@@ -122,22 +122,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Histograma, mas preciso do delta. Sonda melhor, nas duas cópias:
-
-  Ran 2 shell commands
-
-● O N+1 morreu: 69 → 48, e os +19 que sobram não são por dia — são uma passada da autoridade (todas as tabelas +1 ou +2, zero repetição
-  por sítio). Custo fixo por request. Vendo o teto para escrever a justificativa C8 ao lado:
-
-  Ran 2 shell commands
-
-● Agora o selo da alimentação nova, com o caso que morde o escalas or query:
-
-  Ran 38 shell commands
-  ⎿  Read docs/AVAIS.md (33 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6zcxtqwx.output (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bs2bgl91h.output (10 lines)
   ⎿  Referenced file config/crons.py
   ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/background-duplo-perde-o-veredito.md (28 lines)
 
@@ -147,13 +131,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Run the 5-reader seal on the sombra, HEAD then cured, both competencies" completed (exit code 0)
 
-● Census tipo_base readers and check CORTES.md for the juiz phrases
-  ⎿  $ sed -n 100,200p escala/servico_jornada.py
+● Verifying hook queue unchanged and polling sombra
+  ⎿  $ cd /home/ronald/saas-hasner && python3 -c "
+     import sys; sys.path.insert(0,'bin')
+     import hook_stop_fila1 as H
+     print('proximo:', (H._proximo_da_fila() or '')[:80])
+     print('nao andam:', len(H._ids_que_nao_andam() or ()))
+     "; echo '--- sombra ---'; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b…
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6xwexsmx.output (12 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r3_sombra_leitores.txt
+     (3 lines)
+  ⎿  Read docs/AVAIS.md (32 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6zcxtqwx.output (23 lines)
 
-✢ Compacting conversation… (8h 20m 30s · ↓ 1.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Apply the BACKLOG edits and refresh the placar" still running in background
+
+● Task "Rerun the sombra seal with the explicit env-file path" still running in background
+
+✢ Bloviating… (8h 26m 0s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
