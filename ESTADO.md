@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:57 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:15:45.**
+**Medido em 03/10/2026 18:20:45.**
 
 | | |
 |---|---|
@@ -33,6 +40,7 @@ a114f126 LEIS: as QUATRO de 17:2x registradas, e a resposta da (a) com os numero
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -107,42 +115,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  prova por curl sem sessao = 302. NAO publicar o endereco nem o detalhe no RELATO (repo publico) antes do deploy provado. Em seguida, no
+  mesmo marco: selo que varre TODA rota de urls sem decorador de login, allowlist zero, e a lista do que ele acusar publicada so com as
+  rotas ja fechadas. Depois volta a fila.
 
-· Bloviating… (18h 2m 14s · ↓ 2.5m tokens)
+● Ele provou em prod: 200 sem sessão, devolvendo nome/matrícula/empresa. Isso fura tudo — e colide com o PAREI que publiquei: o deploy está
+  barrado pela janela de auth por causa do meu merge. Vendo o sítio da cura, o molde e minha carona suja no mesmo arquivo:
+
+  Ran 1 shell command
+
+● Minha carona em escala/views.py é o O122 ETAPA 1 (corte dele de 02/10), 25 linhas, e os templates dela já estão no ar — só o .py não.
+  Isso importa porque o deploy publica o disco. Localizando o alvo no disco e medindo se a carona é de base:
+
+  Ran 1 shell command
+
+● Alvo confirmado no disco (linha 201, sem linha em branco e sem decorador acima), e a carona não é partial de base — BUG 73 não morde
+  nela. Aplicando a cura no molde da vizinha, em memória → py_compile → gravar:
+
+  Ran 1 shell command
+
+● Curado, e os dois decoradores já estão importados no topo. Agora o censo — deixar um irmão aberto seria meia-correção. Construindo o
+  varredor por AST (que é o selo que ele pediu) e medindo com ele:
+
+  Ran 1 shell command
+
+● 87, mas a pergunta do varredor é estreita demais para acusar: a maioria é api_mensageria_*, que provavelmente confere token no corpo, não
+  por decorador. Separando o que importa agora — o que não é api/ — e vendo como a mensageria se guarda:
+
+  Running 1 shell command…
+
+· Bloviating… (18h 7m 14s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: BLOCO DAS 18H (nao muda a ordem do O134; nenhuma lei nova alem dos cortes abaixo).
-  1) P7.1, PRIMEIRO: escala/views.py::escala_buscar_colabs (~177) esta SEM decorador (os de ~154-156 sao de buscar_escalas) e devolve nome
-  de colab em JSON. Provar sem sessao; se abre, curar com login_required + acao_required no molde da vizinha e nascer selo que varre view
-  de urls sem decorador de login, allowlist zero.
-  2) corte Ronald: o pendente _A14 e CONFORME e sai do registro -- a escrita de situacao pela porta gravar() e o escritor legitimo. Os
-  dois tetos do contrato de ausencia vao a 0 e a celula fecha quando o selo de idempotencia da porta existir e morder. Os leitores de
-  situacao='ativo' NAO migram em massa: ler o campo e conforme enquanto o vigia de divergencia campo x afastado_hoje der 0, com alarme
-  fora de 0; migram so os 4 que emitem para fora, cada um pela composicao certa.
-  3) A raia CHAMADO-EM-RAIA pousa por PORTA FECHADA: o que tem selo verde commita e empurra agora; a pista nao fica presa por raia sem
-  commit.
-  4) SOLTOS viram itens nomeados no BACKLOG, de ENCAIXE: entram em toda janela em que a pista esteja livre, nunca na frente da fila 1.
-  Lista: HE-INVISIVEL (abaixo); os 3 atrasados da 09 (col418, col414, col438), medir a diferenca em dinheiro antes; folgas duplicando
-  (rodar /tmp/folga_dup.py e publicar); os 3 vinculos com fim antes do inicio (ec1187, ec1296, ec1194) para a lista do admin; furo do hook
-  NAO-PARAR; os 13 chamados do --forcar de 02/10; O113 painel situacional N+1.
-  5) HE-INVISIVEL (bug provado, encaixe com DIFF de frota): a ponta some quando a batida cai a mais de 90 min do marco -- a celula fica
-  missing (ponto/janela_he.py ~164; raio em escala/utils.py ~319-323, tol_min=90) e marcar_pontas_fora nao a ve. O motor risca os minutos
-  (motor_calculo_v2.py ~1342-1350) e a porta recusa autorizar dia sem minutos (ponto/portas/he.py ~68-74). Primeiro a frota: quantos
-  dia-colab por competencia (bin/sonda_frota.sh). Cura na origem: a Gestao de HE passa a ver a ponta do dia que nao casou.
-     corte Ronald: HE fixa da escala e CADASTRO -- o modelo de escala declara a "extra prevista", ela nasce autorizada com calculo
-  proprio, e o bloqueio total da L-097 segue valendo para o que nao esta declarado. Nao existe campo hoje (permite_hora_extra em
-  escala/models.py ~60 nao e lido pelo motor): nasce com nome, wizard e leitor.
-  6) FILA 2 (UI, atras dos contratos), so registrar: BUSCA-DA-CASA -- um componente unico de busca que procura no MESMO texto que mostra.
-  Hoje ha 4 implementacoes (hx-typeahead, JS solto com length<2 em 6 telas, filtro universal, _filtro_praca). buscar_escalas procura so
-  template_nome/apelido e mostra nome_canonico_dropdown; termo so de digitos vira hora. Caixas de selecao de lista longa a trocar:
-  colaboradores 8 sitios (todos os ativos, sem limite), postos 6, pracas 4, calendario de folgas 2.
-     Segue a fila; PAREI so em lei ou !.
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  paste again to expand
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
