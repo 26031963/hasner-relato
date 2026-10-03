@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:10:45.**
+**Medido em 03/10/2026 18:15:45.**
 
 | | |
 |---|---|
@@ -107,42 +107,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  medição minha não revoga portão declarado. O que decide o risco real é se o reload das 03:30 passa pela mesma janela:
 
-  Ran 1 shell command
-
-● Dois achados que mudam a decisão. Lendo as linhas exatas:
-
-  Ran 1 shell command
-
-● Os dois achados estão confirmados, e juntos eles são um bug provado no caminho desta fatia:
-
-  - deploy.sh:125 isenta o reload das 03:30 porque "ele nao publica codigo novo -- recarrega o que ja estava no ar". Essa premissa é falsa
-    exatamente agora: a árvore tem 44 arquivos que os workers não têm. Às 03:30, dentro da faixa proibida 23:20-06:00 e sem ninguém
-    olhando, o reload publicaria o auth que a janela acabou de barrar. A guarda fabrica a condição que ela proíbe.
-  - janela_auth.sh compara $BASE...HEAD com BASE=origin/main. Depois do push, origin/main == HEAD, o diff fica vazio e a guarda imprime "OK
-    -- nenhum sitio de auth mudou". O "empurra agora" do corte abriria o portão por efeito colateral — e pré-aprovação cobre rotina, nunca
-    contorno.
-
-  Conferindo a autoridade que as duas deviam ler:
-
-  Ran 1 shell command
-
-● A autoridade do "que está no ar" já existe (logs/deploy.stamp::COMMIT=2984714b) e já é lida por 5 sítios, inclusive o próprio deploy.sh.
-  E api/views.py está declarado em auth_sitios.txt com razão escrita — "tem a porta de login no meio" —, então minha medição não revoga
-  nada: o portão é por arquivo, de propósito.
-
-  Antes de mexer no caminho de publicação — e é a guarda que acabou de me barrar, o que pede segunda leitura:
-
-  Advising using Fable 5.1
-
-· Bloviating… (17h 57m 14s · ↓ 2.4m tokens)
+· Bloviating… (18h 2m 14s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: BLOCO DAS 18H (nao muda a ordem do O134; nenhuma lei nova alem dos cortes abaixo).
+  1) P7.1, PRIMEIRO: escala/views.py::escala_buscar_colabs (~177) esta SEM decorador (os de ~154-156 sao de buscar_escalas) e devolve nome
+  de colab em JSON. Provar sem sessao; se abre, curar com login_required + acao_required no molde da vizinha e nascer selo que varre view
+  de urls sem decorador de login, allowlist zero.
+  2) corte Ronald: o pendente _A14 e CONFORME e sai do registro -- a escrita de situacao pela porta gravar() e o escritor legitimo. Os
+  dois tetos do contrato de ausencia vao a 0 e a celula fecha quando o selo de idempotencia da porta existir e morder. Os leitores de
+  situacao='ativo' NAO migram em massa: ler o campo e conforme enquanto o vigia de divergencia campo x afastado_hoje der 0, com alarme
+  fora de 0; migram so os 4 que emitem para fora, cada um pela composicao certa.
+  3) A raia CHAMADO-EM-RAIA pousa por PORTA FECHADA: o que tem selo verde commita e empurra agora; a pista nao fica presa por raia sem
+  commit.
+  4) SOLTOS viram itens nomeados no BACKLOG, de ENCAIXE: entram em toda janela em que a pista esteja livre, nunca na frente da fila 1.
+  Lista: HE-INVISIVEL (abaixo); os 3 atrasados da 09 (col418, col414, col438), medir a diferenca em dinheiro antes; folgas duplicando
+  (rodar /tmp/folga_dup.py e publicar); os 3 vinculos com fim antes do inicio (ec1187, ec1296, ec1194) para a lista do admin; furo do hook
+  NAO-PARAR; os 13 chamados do --forcar de 02/10; O113 painel situacional N+1.
+  5) HE-INVISIVEL (bug provado, encaixe com DIFF de frota): a ponta some quando a batida cai a mais de 90 min do marco -- a celula fica
+  missing (ponto/janela_he.py ~164; raio em escala/utils.py ~319-323, tol_min=90) e marcar_pontas_fora nao a ve. O motor risca os minutos
+  (motor_calculo_v2.py ~1342-1350) e a porta recusa autorizar dia sem minutos (ponto/portas/he.py ~68-74). Primeiro a frota: quantos
+  dia-colab por competencia (bin/sonda_frota.sh). Cura na origem: a Gestao de HE passa a ver a ponta do dia que nao casou.
+     corte Ronald: HE fixa da escala e CADASTRO -- o modelo de escala declara a "extra prevista", ela nasce autorizada com calculo
+  proprio, e o bloqueio total da L-097 segue valendo para o que nao esta declarado. Nao existe campo hoje (permite_hora_extra em
+  escala/models.py ~60 nao e lido pelo motor): nasce com nome, wizard e leitor.
+  6) FILA 2 (UI, atras dos contratos), so registrar: BUSCA-DA-CASA -- um componente unico de busca que procura no MESMO texto que mostra.
+  Hoje ha 4 implementacoes (hx-typeahead, JS solto com length<2 em 6 telas, filtro universal, _filtro_praca). buscar_escalas procura so
+  template_nome/apelido e mostra nome_canonico_dropdown; termo so de digitos vira hora. Caixas de selecao de lista longa a trocar:
+  colaboradores 8 sitios (todos os ativos, sem limite), postos 6, pracas 4, calendario de folgas 2.
+     Segue a fila; PAREI so em lei ou !.
+  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  paste again to expand
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
