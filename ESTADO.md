@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:43:21.**
+**Medido em 03/10/2026 11:48:41.**
 
 | | |
 |---|---|
 | `HEAD` local | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
-| `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| commits a subir (`ahead`) | **6** |
+| `origin/main` | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -108,42 +108,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    "13"). E a correção muda o alvo: turnos_do_colab já lê a ata desde o corte de 26/09 (turnos.py:1251, nos dois ramos, simples e
-    multi-escala). Então o que resta do O65 não é "o juiz pareia pelo tipo gravado" em bloco — é o dia em que ele devolve turno nenhum, e
-    a fallback soma células.
-  - A sonda deixou de medir só tamanho. Cada dia da fallback é classificado perguntando ao próprio juiz na janela d-1..d+1: vizinho
-    (batida consumida por turno de outra data — o BUG-145 próprio, que a cura do pareamento alcança), orfa (batida que nenhum turno
-    consumiu — isso é a órfã na ata do O68, outro defeito, com ! de dinheiro), sem_batida_nenhuma, ou outro nomeado sem veredito meu. E
-    ela lê o RED registrado do O65 — col736 11/09, que dava 2 turnos abertos contra 420 min do motor — pelo juiz de hoje, sem afirmar de
-    antemão se curou.
+  │ 10/2026     │ 3.984            │ 968      │ 14 (96,3 h)                        │ 954          │
+  └─────────────┴──────────────────┴──────────┴────────────────────────────────────┴──────────────┘
 
-  Um achado lateral: havia um /tmp/re.py de sonda antiga sombreando o re da stdlib — qualquer script python rodado de /tmp quebrava no
-  import ast. Renomeado para /tmp/re.py.ARMADILHA_sombreia_stdlib, não apagado.
+  Causa perguntada ao juiz em d-1..d+1: sem_batida_nenhuma 1.155+913 (dia que a célula diz trabalho e a pessoa não bateu — aí
+  sem_turno=True é a resposta CERTA, e a fallback soma 0, o mesmo que o juiz diria), vizinho 93+44, orfa 6+2, outro 20+9. O defeito real é
+  só a cauda: 48 dia-colab, 312,9 h, com número derivado fora do juiz.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 5 shell commands
+● O caso que MORDE diz que a sonda não serve: col32 com recalculo=True também não move, logo o "21 parados" não é prova de nada (LEI-AKITA
+  8). A causa é de desenho da minha perturbação — vou confirmar no código dela.
 
-● O hook está certo: a fila 1 segue com PLACAR-ESTRUTURAL de pé, e o que resta dele depois do R3 é o LOTE do R6 (item 4 da ordem das
-  08:13). Vou construir a medição dele agora — sem commit, porque o push está em voo.
+  Ran 1 shell command
 
-● Writing the read-only stale-money census
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SP/r6_stale_frota.py
-     <<'PY'
-     # -*- coding: utf-8 -*-
-     """R6 LOTE -- O TAMANHO DO ATRASO NO VIVO, por DUAS COLUNAS e NENHUM motor.
-     Read-only: dois agregados. Nenhuma escrita, nenhuma chamada de a…
+● Confirmado: perturbei celula.trabalha e a regeneração restaura trabalha do template — a célula final volta a ser idêntica, então o
+  dinheiro não tinha por que mover. A sonda mediu o nada. O que o admin realmente faz é mudar o template.
 
-· Compacting conversation… (11h 29m 50s · ↓ 1.6m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
+  Ran 2 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O advisor pegou um segundo motivo de PAROU na parte 3 — recalculo and _tocadas. Primeiro publico os números medidos (eles só existem em
+  logs/), depois conserto a sonda.
+
+  Reading the O65 TICKETS row and table header
+  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '493p' docs/TICKETS.md; echo; echo "=== header TICKETS ==="; sed -n '121,124p'
+     docs/TICKETS.md | cut -c1-200
+
+· Bloviating… (11h 35m 10s · ↓ 1.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
