@@ -6920,3 +6920,5 @@ folga trabalhada, entao ela passa a discordar da lei nova -- e essa discordancia
 # RESOLVIDO na secao do topo: `total_trabalhadas` = so as trabalhadas, `trab_folga` separada. O que ela pedia
 # em 3 passos virou 1: o passo do `abater_no_proprio_dia` entrou junto da cura da soma unica.
 # ------------------------------------------------------------------------------------------------------
+
+**02/10 22:35 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.

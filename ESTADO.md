@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:31:41.**
+**Medido em 02/10/2026 22:37:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS` |
+| `HEAD` local | `bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap
 b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS
 3749dd5a [E6-CAUDA-2] A celula do censo, dentro do teto de 300
 3a5ac950 [E6-CAUDA-2] O censo parte a classe em QUATRO familias, e nenhuma e "o espelho soma errado"
 10e2ecc2 [TICKETS] A linha da PLACAR-E, e RELATO vira META (como o PROMPTS)
-5232d6e5 [E6-CAUDA-1] A maior classe era o INSTRUMENTO: 1.681 das 2.325 h eram do meu leitor
 ```
 
 ## `git status --short`
@@ -34,11 +34,10 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
- M app/ponto/calculador/nucleo.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
-?? app/ponto/tests/test_e6_turno_nao_cresce_sem_fim.py
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -95,41 +94,41 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 
 ```
 
-  Ran 1 shell command
-
-● Os 4 errors são de importação: a cópia está num commit anterior à cura da classe 1, então minutos_do_espelho não existe lá. Sincronizo:
-
-  Ran 2 shell commands
-
-● 19 verdes. Mas a função mora em ponto/calculador/nucleo.py — o núcleo do calculador —, então preciso saber quem mais a chama antes de
-  levar isso à árvore viva:
-
-  Searched for 1 pattern
-
-● Dois chamadores de produção: o oráculo (sem pares) e o diff_calculador (com pares). Confiro se o caminho com pares passa pelo laço que
-  eu mudei:
-
-● Running E6 selos and calculador tests in live tree
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER
-     --network saas-hasner_default --env-file /home/ronald/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     /home/ronald/saas-hasner/app:/app --tmp…
-  ⎿  Read templates/core/_icone_barra.html (9 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5oacq3u3.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cd4z478.output (8 lines)
-  ⎿  Referenced file ponto/services/fechamento.py
-  ⎿  Referenced file escala/utils.py
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Write RELATO block and check hook" still running in background
 
-* Sock-hopping… (4h 19m 10s · ↓ 730.9k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Searched for 1 pattern
+
+● Background command "Run E6 selos and calculador tests in live tree" completed (exit code 0)
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● The motor's own ceiling is on the span, not the gap — turnos.py:749. That tightens my anchor, and it also tells me what I have not
+  proven. Fixing the lápide before the commit:
+
+  Ran 4 shell commands
+
+● Both live template diffs are additive-only. Verifying the inertness claim rather than trusting it:
+
+  Committed bfb3a15b, searched for 1 pattern
+
+● Committed bfb3a15b. Now the remedição — and it needs a counter that doesn't exist yet: the days where the new clause fires but no old
+  clause would have.
+
+● Reading how the oráculo builds its input
+  ⎿  $ sed -n '86,140p' ponto/management/commands/e6_oraculo.py
+
+✢ Sock-hopping… (4h 24m 30s · ↓ 740.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
