@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:18:31.**
+**Medido em 03/10/2026 20:23:35.**
 
 | | |
 |---|---|
 | `HEAD` local | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| `origin/main` | `bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -111,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 15 shell commands
+● Task "Nova tentativa do push (pre-push roda a suite)" still running in background
 
-● The push's pre-push suite is still holding juliani_db_test (~5 min in, one run at a time), so the O154 RED/GREEN waits on it. Meanwhile:
+● Background command "Nova tentativa do push (pre-push roda a suite)" completed (exit code 0)
 
-  - Push retried after the pre-push's own RED: tickets_rodape_vs_git ALARME (footer citing 4845e671, 25 commits behind the remote, teto 5)
-    → cure it named, bin/tickets_rodape.sh --escrever, committed as 29f28708.
-  - O154 applied in the raia wt-ui: buscar_escalas now matches against nome_canonico_dropdown() — the same text the <option> prints — with
-    prefetch_related('blocos_ciclo'), and digits-only falls back to the text when no hour matches. Anchor-checked patch, py_compile before
-    writing.
-  - Selo written: app/escala/tests/test_o154_busca_le_o_que_mostra.py, 10 cases. Each of the four terms from the aval asserts the term is
-    absent from template_nome/apelido — that's what makes it bite the old Q(template_nome) | Q(apelido). Plus 22 proving the hour branch
-    still wins over LOTE 22 (fallback, not union), and one case per part the aval names (tipo/dias/horario/intervalo/apelido) computing the
-    expected set from the model itself.
-  - Ruff clean on both files; no test anywhere referenced buscar_escalas before this one.
-  - Merge plan decided: cherry-pick only the O154 commit onto main. The raia's four O122 commits stay put — etapa 0 is an open lei question
-    ("vale como entrega?") and etapa 1 waits on his smoke; putting them in the air would answer for him. Their two pendentes exist only in
-    the raia's PENDENTES_RONALD.json, so they're invisible on the mesa — I'll bring those two JSON items into main so they show up, with
-    the deadlock named (etapa 1's smoke can't happen until it's in the air).
+  Ran 2 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Push confirmado: bc2cd2fb..29f28708 main -> main, suíte 9521 OK + control-plane 22 OK. E a fatia CELULA-SEGUNDO-INTERVALO que o
+  fabricante entregou já está em main e no ar — foi mergeada como O114 (a2e903e1) e deployada às 17:10:45 (ef06c6b9); nada a refazer ali.
 
-● Uso de _dias_cobertos
-  ⎿  $ cd /home/ronald/saas-hasner && awk '/^def recalcular_fechamento_mes/,0' app/ponto/services/fechamento.py | grep -n
-     "_dias_cobertos\|o85\|O85" | head -20
+  MARCO FECHADO -- pode compactar (SITUACAO-VIGIA-E-PORTA: a família AUSENCIA do estrutural zerada, c1a1f7b6 + prova em prod 560f7314,
+  rodapé curado 29f28708, tudo em origin/main).
 
-✢ Compacting conversation… (20h 5m 0s · ↓ 2.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 54%
+  Pista livre — rodando o RED/GREEN do O154:
+
+  Listed 1 directory, ran 4 shell commands
+
+● Background command "RED contra a view do HEAD e GREEN contra a curada" completed (exit code 0)
+
+  Read 1 file
+
+● RED: 10 de 10 vermelhos contra a view do HEAD. GREEN: 1 falha — e ela é do lado da view, não do selo:
+
+● RED e GREEN de novo após a cura
+  ⎿  $ cd /home/ronald/saas-hasner && bash
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o154/rodar.sh 2>&1 | grep -E
+     '^(OK|FAILED|Ran|----|====|FAIL:)' | tail -20
+
+✶ Bloviating… (20h 10m 4s · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
