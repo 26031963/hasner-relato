@@ -1,5 +1,52 @@
 # RELATO — esteira saas-hasner
 
+# E6-CAUDA-1: a MAIOR classe era o INSTRUMENTO, e 1.681 das 2.325 h eram minhas (02/10 23:0x)
+
+PROVA: oraculo curado na sombra, competencia 09 -- **BATE 91,0% de 7.870 dias** contra 89,2% de 7.886 antes;
+`esp_zero_e6_trabalho` de **247 para 60** linhas; `esp_lido_pelo_pago_h = 171`; colabs divergentes 195 ->
+187; `erros no espelho: 0`. CSV: `logs/placar_e/e6_09_curado.csv`. 16 selos verdes, `ruff` limpo.
+
+**EU PUBLIQUEI 2.325,1 h COMO DIVERGENCIA E DOIS TERCOS ERAM DO MEU PROPRIO LEITOR.** O censo da classe
+(ordem dele, item 3) comecou bem -- 247 dia-colab, 44 colabs, 46% cruzando a meia-noite, `veredito` do
+cartorio dizendo `trabalhou` em 215 deles -- e eu estava a um passo de escrever o RED contra o ESPELHO.
+Antes disso fui abrir o balde:
+
+    o DiaPago tem valor > 0 (o oraculo leu outra coisa)   170   1.681,0 h
+    zero de verdade                                        67     567,9 h
+    sem linha de DiaPago                                   10      76,2 h
+
+**A CAUSA, em uma linha**: `e6_oraculo.py:110` fazia `m_esp = float(de.get('minutos_realizados') or 0)`, e
+o `or 0` transforma **`None`** (campo nao lavrado) em **ZERO** (trabalhou zero). A mao, nos dois maiores:
+`col887 21/08` tem `minutos_realizados=None` e **`pago_h=12.0`**, com o motor dizendo 720 min; `col134
+02/09` tem `None` e `pago_h=11.98`. **O espelho SABIA o dia -- quem nao sabia era o leitor.**
+
+**E A LEI JA EXISTIA AQUI, com outro nome**: a alimentacao desta casa distingue `{}` ("perguntei e nao ha")
+de `None` ("nao perguntei"), e o `[]` de dois sentidos ja custou caro. `float(x or 0)` e a MESMA familia --
+ausencia de sinal lida como sinal bom. Setima vez hoje que um criterio meu mediu o proprio instrumento, e a
+mais cara: o numero estava publicado.
+
+**A CURA** (`minutos_do_espelho(dia) -> (minutos, fonte)`): o campo LAVRADO manda quando existe -- senao a
+cura trocaria a testemunha de TODOS os dias e o placar se moveria por troca de fonte, nao por cura --;
+sem ele vale `pago_h`, que e o que a tela e o cartao IMPRIMEM; e **sem os dois o dia NAO SE COMPARA**, com
+contador proprio (`dia_sem_lavratura_no_espelho`), para a substituicao ser visivel e nao silenciosa.
+
+| | antes | depois |
+|---|---|---|
+| BATE ate 10 min | 89,2% de 7.886 | **91,0% de 7.870** |
+| `esp_zero_e6_trabalho` | 247 (+20 FORA) | **49 (+11 FORA)** |
+| `dia_sem_trabalho_ambos` | 9.080 | **126** (o balde estava inflado pela mesma leitura) |
+| `esp_lido_pelo_pago_h` | -- | **171** |
+| colabs divergentes | 195 | **187** |
+
+**O QUE NAO MELHOROU, e e o alvo real que sobra**: `diverge_acima_60` SUBIU de 162 para 178 e
+`diverge_10_60` de 186 para 212. Sao dias que antes caiam no balde errado e agora aparecem na classe certa
+-- **a cura nao os criou, ela os revelou**. E o alvo da classe 1 cai de 2.325 h para os **567,9 h** que sao
+zero de verdade, mais os **76,2 h** sem linha de DiaPago, que e uma terceira familia ("nao lavrado", nao
+"zero").
+
+**NENHUM DINHEIRO SE MOVEU**: a cura e do instrumento de medicao, nao do calculo. O placar sobe porque a
+divergencia nao existia.
+
 **DISTANCIA PARA 98% (remedicao de 02/10 21:5x, oraculo independente na sombra):** **695 dia-colab** na 09 e **296** na 10 -- e **242 colaboradores** com ao menos uma divergencia (195 na 09, 139 na 10, **92 nos dois**). `erros no espelho: 0` nas duas.
 
 # O120 APLICADO: a 09 do col221 reescrita, e o cadastro errado custava DSR em QUATRO semanas (02/10 22:3x)

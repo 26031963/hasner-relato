@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:11:01.**
+**Medido em 02/10/2026 22:16:10.**
 
 | | |
 |---|---|
-| `HEAD` local | `aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16` |
+| `HEAD` local | `10e2ecc2 [TICKETS] A linha da PLACAR-E, e RELATO vira META (como o PROMPTS)` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+10e2ecc2 [TICKETS] A linha da PLACAR-E, e RELATO vira META (como o PROMPTS)
+5232d6e5 [E6-CAUDA-1] A maior classe era o INSTRUMENTO: 1.681 das 2.325 h eram do meu leitor
 aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16
 14b1de9c [PLACAR-E] A remedicao com prova de hoje, e o O120 aplicado na 09 do col221
 34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
-74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia
-da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias de 169
 ```
 
 ## `git status --short`
@@ -93,36 +93,36 @@ da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O RED fica evidente e é do oráculo: um dia-colab com minutos_realizados = None e pago_h = 12,0 não é esp_zero_e6_trabalho; e o caso que
-  distingue é o zero de verdade, que tem de continuar acusando.
+  02/10 21:4x, item 3 --
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: E6-CAUDA-1 -- A CAUDA DO E6 PELA MAIOR CLASSE: esp_zero_e6_trabalho (ordem dele 02/10 21:4x, item 3:
-  'a cauda do E6 pela mai
-
-● A cura é no instrumento, não em dinheiro. Leio o sítio e a classificação:
+● Sigo pela metade (b), que é trabalho meu: 178 dia-colab pares, o oráculo creditando mais. Vejo os maiores:
 
   Ran 1 shell command
 
-● A cura: quando minutos_realizados é None, o oráculo deve ler o que a tela mostra (pago_h), e não zero — e se os dois forem nulos, o dia
-  sai da comparação com contador próprio. RED primeiro:
+● col913 27/08 e 29/08 são o caso limpo: batidas 07:00 12:00 13:00 19:00 — dia normal com uma hora de almoço. O oráculo diz 660 min (300 +
+  360, e piso = teto, sem ambiguidade) e o espelho diz 300 — exatamente o primeiro par. Confirmo com a função real antes de afirmar:
 
   Ran 1 shell command
 
-● Agora a cura — a função pura que o selo cobra, e o sítio passando a usá-la:
+● Achei, e não é soma do espelho — é o TIPO GRAVADO:
 
-  Ran 1 shell command
+  col913 27/08: 07:00 E, 12:00 S, 13:00 E, 19:00 E   <- a SAIDA do dia gravada como E
+    motor: (07:00->12:00, 300) + (13:00, None) + (19:00, None)   -> dois periodos ABERTOS
+  col860 07/09: 17:51 E, 05:51 E, 05:55 S            <- idem
+    motor: nenhum periodo fechado no dia; espelho mostra 4 min
 
-● 16 verdes (4 novos + 12 do selo irmão). Agora a remedição, que é o quarto passo da sua ordem — o oráculo curado na 09:
+  Isso é exatamente o O65 — "o juiz de geometria ainda pareia pelo tipo gravado" —, cuja lápide descreve o col369 na mesma forma: "a
+  última batida foi GRAVADA como E sendo a saída do dia... dois períodos abertos e 0,00 h numa jornada inteira trabalhada". Meço a
+  assinatura nos 164:
 
-● Re-measuring the oraculo with the cure · 3m 23s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 1700 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
-     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
-     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
-     -e HTT… (3m 23s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Measuring the O65 signature across family b
+  ⎿  $ cd /home/ronald/saas-hasner && cat >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6b_censo.py <<'PY'
+     """A familia (b) da classe 2 e o O65? Mede-se pelo TIPO GRAVADO, no banco."""
+     import csv, io, datetime, collections
+     from ponto.models import Batid…
 
-✢ Sock-hopping… (3h 58m 30s · ↓ 666.4k tokens)
+✽ Sock-hopping… (4h 3m 39s · ↓ 687.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
