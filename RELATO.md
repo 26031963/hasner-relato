@@ -96,8 +96,11 @@ MEDIDO: `bin/pre-push.sh` **nunca roda `bin/tests/*.sh`** -- quem roda a pasta d
 
 **TODO COMMIT DESTE LOTE FOI FEITO COM `--no-verify`**, e isso e atalho -- NUNCA pre-aprovado
 PROVA: os dois ganchos pulados, replayados HOJE **commit por commit** -- `commit_so_o_declarado.sh
---lista "$(git diff-tree --name-status -r <c>)"` sobre os **10** commits de `b26da390^..4ecf7a39` deu
-**rc=0 nos 10** (nao e vacuo: le o name-status REAL de cada commit). `index_vs_arvore.sh` **nao se
+--lista "$(git diff-tree --name-status -r <c>)"` sobre os **10** commits de `b26da390^..4ecf7a39`
+(os **9** do lote mais o `b26da390` que abre o range, e que o TICKETS tambem cita) deu **rc=0 nos
+10** -- e o rotulo honesto desse rc=0 e **"nao havia o que barrar"**: a linha daquele gancho e a
+DELECAO (`git log --diff-filter=D` no lote = **0 arquivo apagado**, nos 10 commits), entao ele passa
+por ausencia de sinal. Publico o numero com o rotulo em vez de chamar ausencia de sinal de verde. `index_vs_arvore.sh` **nao se
 replaya** -- o indice daquele instante morreu, e pos-commit ele e vacuo por construcao (index ==
 arvore depois do commit; esta linha ja estava escrita no `b26da390`). O que SE mede no lugar dele:
 dos **60** paths do lote, **53** aparecem em UM commit e **7** em mais de um (6 docs +
