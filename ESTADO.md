@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:35:01.**
+**Medido em 03/10/2026 03:40:12.**
 
 | | |
 |---|---|
@@ -41,13 +41,13 @@ b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o 
 ```
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
-?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? bin/diff_o124_frota.py
 ?? bin/r3_turno_aberto_alcanca.py
 ?? bin/r5_idempotencia_frota.py
@@ -123,38 +123,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● They fail identically on HEAD — but both runs share a dangling symlink (No directory at: /app/staticfiles/: the symlink points to a host
-  path the container doesn't mount). The deciding run is the live tree, where /app/staticfiles is real.
+  Ran 1 shell command
+
+● Six host selos are RED on the live tree before O124 — the advisor's assumption that they were green doesn't hold, and the regua runs
+  this whole folder before any push. I need each one's reason.
 
   Ran 1 shell command
 
-● Decisive: 27/27 OK on the live tree. The seven were false REDs — the copy's staticfiles symlink points at a host path the container
-  never mounts, so it dangles. The mount is the fix.
+● Six REDs, and they split: five are mine to cure, one (juiz_novo, 2 frases) is on Ronald's mesa as aval #10 and blocks push — not deploy.
+  The gate status now decides the window.
+
+  Ran 1 shell command
+
+● The gate is green for today (dia=20261003 status=OK diverge=0), so the deploy will clear --conferir. ~9 minutes of suite left — using
+  them to cure the selos that are mine. The cheapest first, and it's an artifact I created.
 
   Ran 3 shell commands
 
-● The memory already named this twice; I hit it a third time, with a new twist worth recording — the symlink that looks like a fix.
+● The normalizer keeps the prose (estado_texto) but forces sem-motivo — which would be wrong for two items Ronald actually answered.
+  Reading them before touching his surface.
 
-  Ran 1 shell command
+● Reading the four offending avais items
+  ⎿  $ cd /home/ronald/saas-hasner; python3 - <<'PY'
+     import json
+     d=json.load(open('app/docs/PENDENTES_RONALD.json'))
+     itens = d if isinstance(d,list) else d.get('itens',d)
+     alvo={'F2-PORTAO-22-22','O114-SMOKE-COL221','APP-DESENHA-A-PALAVRA-DO-DIA','s5b-troca-do-calculador-tabela-final'}
+     for x in itens:
+     i=…
 
-● Now the landing script must carry the newly-touched test file.
-
-  Ran 2 shell commands
-
-● Now the R3 number. Two measurements of the same thing disagree by 10x, and the smaller one is already on Ronald's reading surface.
-
-  Ran 2 shell commands
-
-● The distribution settles it: so_impar is dominated by n=1 on consecutive days (col27: 21,22,23,24,25/09) — the cross-midnight signature
-  my own probe docstring predicted. The odd-count oracle isn't a witness to a missing batida at all.
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-
-✢ Bloviating… (3h 21m 30s · ↓ 477.4k tokens)
+✽ Bloviating… (3h 26m 41s · ↓ 490.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                  10% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
