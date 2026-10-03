@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 01:54:31.**
+**Medido em 03/10/2026 02:00:01.**
 
 | | |
 |---|---|
@@ -132,8 +132,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● rotulo_efeito has zero template uses — the screens never printed the "sem efeito" label at all. Checking the column chooser before
   touching the postos table.
 
-● Reading the declaration block and TELAS in the copy
-  ⎿  $ cd /tmp/o124/app && sed -n 25,60p core/configuracao_efeito.py; echo ---; sed -n 125,140p core/configuracao_efeito.py
+● Reading the Praca/Posto declaration blocks and the derived tail
+  ⎿  $ cd /tmp/o124/app && sed -n 1,30p core/configuracao_efeito.py
   ⎿  Read docs/AVAIS.md (31 lines)
   ⎿  Read core/tests/test_selo_diagrama_do_codigo.py (159 lines)
   ⎿  Read ponto/tests/test_r6_dinheiro_acompanha_cadastro.py (123 lines)
@@ -145,7 +145,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Insert the obra at the top of fila 1 and move the marker" still running in background
 
-· Bloviating… (1h 41m 0s · ↓ 229.9k tokens)
+✢ Bloviating… (1h 46m 30s · ↓ 252.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
