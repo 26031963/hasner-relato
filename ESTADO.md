@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:29:01.**
+**Medido em 03/10/2026 15:34:15.**
 
 | | |
 |---|---|
-| `HEAD` local | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
+| `HEAD` local | `0c3cbc69 RELATO: o marco esta no remoto, e os dois numeros soltos eram meus (HEAD e p95)` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,18 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0c3cbc69 RELATO: o marco esta no remoto, e os dois numeros soltos eram meus (HEAD e p95)
 2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)
 8417887e [PALAVRA-SEM-TURNO-PAREADO] a palavra esta na MEMORIA do worker, nao so no disco -- smoke de leitura em prod, e a sonda que morreu era minha
 0dd83989 [PLACAR-ESTRUTURAL] o R6 ganha o numero que faltava -- contratos 12/22 pela funcao real, e o placar dizia 8
 7765ceb2 [PALAVRA-SEM-TURNO-PAREADO] o dia com ata e sem par pareavel ganha a palavra nos TRES leitores -- e o numero que eu publiquei era 10, mediu 48
-f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -108,44 +107,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● O selo cobra o CLAUDE.md e o teto de band-aid, não a linha por commit; e esta entrada é registro, não cura. Commitando só o RELATO, por
+  path.
+
+  Committed 0c3cbc69, ran 1 shell command
+
+● R4 segue a 75%. Vendo a medição anterior, que é o "antes" com que a nova se compara.
+
   Ran 2 shell commands
 
-● O cliente do docker run (3850882) está vivo há 9 min, então um container deve existir — mas docker ps não o mostrou. Uma das duas
-  afirmações está errada.
+● A medição anterior confirma os números do placar, e confirma o que falta: ela não traz gravado_discorda_da_propria_grade — é isso que a
+  rodada de agora produz. Enquanto ela fecha, valido os imports da sonda dos RED, para não queimar uma rodada na sombra por nome errado.
 
   Ran 1 shell command
 
-● clever_jepsen nasceu 9 min atrás, com --memory 2g e --cpus 4 — é o meu R4. Eu atribuí os dois containers pelo nome, no chute;
-  thirsty_wright era o da raia e já saiu. Perguntando à autoridade em vez de adivinhar:
+● Os cinco juízes existem. Escrevendo o runner dos RED agora, pronto para disparar quando a trava liberar — com PYTHONUNBUFFERED=1, que é a
+  lição que eu tinha e não apliquei.
 
-  Ran 1 shell command
+  Preparar o runner dos RED com a flag aplicada
+  ⎿  $ cd /home/ronald/saas-hasner && sed -e 's|r4_medir_20261003|r4_reds_20261003|g' \
+     -e 's|r4_pares_20261003|r4_reds_20261003|g' \
+     -e 's|r4_placar_estrutural|r4_reds_placar_estrutural|' \
+     logs/sombra/r4_rodar_20261003.sh > logs/sombra/r4_reds_rodar_20261003.sh
+     python3 - <<'PY'
+     import io
+     p='logs/sombr…
 
-● Confirmado: clever_jepsen tem pid 3850928, que é o sh -c da minha própria árvore — o R4 está vivo e trabalhando. Nada morreu. Duas vezes
-  hoje eu nomeei coisa de cabeça (o HEAD e o container); as duas foram pegas antes de virar afirmação, mas a correção da memória tem que
-  dizer o que está provado e o que não está.
-
-  Ran 1 shell command
-
-● Memória corrigida. Agora preparo a sonda dos outros dois RED — cada um pelo juiz do seu nível, como o advisor apontou. Primeiro leio as
-  autoridades, para não reimplementar nenhuma.
-
-  Searched for 6 patterns, ran 4 shell commands
-
-● Tenho tudo: previsto_em é o carimbo da lavratura, que é justamente o discriminador do col305. Escrevendo a sonda dos três RED — cada um
-  pelo juiz do seu nível, e o juiz do dia importado, não copiado.
-
-● Running 1 shell command…
-
-✢ Bloviating… (15h 15m 30s · ↓ 2.1m tokens)
+✢ Compacting conversation… (15h 20m 43s · ↓ 2.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 43%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Mapping structure of validacao.py                                                       3h 36m 38s · ↓ 142.1k tokens
+  ◯ general-purpose  Re-running Q6 selo after ruff fix                                                       3h 41m 51s · ↓ 167.2k tokens
   ⧉  index
 ```
