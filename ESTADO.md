@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:02:49.**
+**Medido em 02/10/2026 21:08:01.**
 
 | | |
 |---|---|
@@ -40,8 +40,10 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
 ?? bin/diff_o119_frota.py
+?? bin/relavrar_o119_col221.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,42 +98,42 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  horas_intra_indenizada (23) e horas_noturnas (44). Isso viola o seu critério e eu não aplico. Vejo a suíte, que pode já estar dizendo
-  por quê:
+  Assim que a suíte isolada voltar verde: commit + deploy, relavratura do col221 na competência 10 (aberta), e a prova com os 551 min, 09
+  e exportadas intactas por hash.
 
-  Read 1 file, ran 1 shell command
+  Uma coisa que preciso registrar do seu aviso, porque muda o que eu teria feito: o ec1361 que você criou às 20:28 está em prod e eu o
+  confirmei antes de qualquer ato — 31 células da competência 09 do col221 com regeneracoes=1, 21 dias de trabalho com seis marcos. O meu
+  ensaio do O120 está descartado e não toco vínculo dele.
 
-● A suíte ainda roda. A pergunta que decide se eu aplico é por que 197 colabs a mais se movem, e eu não vou deduzir: meço um deles nas
-  duas árvores. O col28 move só com a cura:
+  E o fato que o item (5) do seu PRONTO pedia, já medido: o FechamentoMensal não recalcula sozinho depois da regeneração — 08/2026 com
+  atualizado_em=31/08 17:54 e 09/2026 com 30/09 19:57, os dois anteriores ao seu ato. A célula do col221 diz 21 × 550 = 11.550 e o gravado
+  diz 15 × 720 = 10.800, e nada fecha essa distância. É a mesma parede que o O37 (161,00 h) e o O94 esperam — e a LEI do seu corte A
+  acabou de derrubá-la: a guarda é leitor que não migrou.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: O121 -- VINCULO-CORRIGE-O-PASSADO (cortes dele 02/10 20:38 e 20:45, fila 1). A LEI RESPONDE A PERGUNTA
+  QUE EU LEVANTEI
 
-● O juiz é idêntico nas duas árvores para o col28 — minutos, inicio, fim e cad iguais; só aparece pausas com a mesma pausa única. Então os
-  197 colabs não vêm da cura. Suspeito do relógio: às 21h há turno em curso, e horas_trabalhadas/noturnas/saldo de quem está trabalhando
-  mudam minuto a minuto. Meço o ruído do instrumento rodando a árvore-base duas vezes:
-
-  Ran 1 shell command
-
-● O instrumento é determinístico — a segunda corrida da base é byte-idêntica (70,32/4, 1,42/1, 95 colabs). Então os 197 são da minha
-  mudança, e achei onde: na linha antiga o par passava por _instante_real (o instante da Batida, com segundos) e a minha lista pausas usa
-  o instante_luz cru, truncado ao minuto. É a minha própria lição — "hora truncada esconde a guarda" — movendo até 59 s por pausa em 200
-  colabs:
+● O hook ainda aponta o O121 porque eu inseri as linhas novas acima do O119 na tabela, e ele cobra a primeira aberta na ordem. Seu aval
+  diz "entram atrás do item em curso" — então a ordem da tabela é que está errada:
 
   Ran 1 shell command
 
-● Selos verdes. Remeço o DIFF de frota, que é o que diz se o critério fecha:
+● Ordem corrigida — O119 na frente e as três novas atrás, como o seu aval determina. Selo verde apontando o O119. Espero a suíte isolada:
 
-  Ran 1 shell command
+● Waiting for the suite verdict · 2m 26s
+  ⎿  $ cd /home/ronald/saas-hasner && until [ -s
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output ]; do sleep 30; done; cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output | tail -8 (2m 26s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Background command "Run the neighbour suites for the motor change" completed (exit code 0)
-
-✢ Sock-hopping… (2h 50m 17s · ↓ 505.2k tokens)
+✢ Sock-hopping… (2h 55m 30s · ↓ 515.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
