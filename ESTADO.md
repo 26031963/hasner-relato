@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:19:01.**
+**Medido em 02/10/2026 21:24:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,8 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+?? bin/reverter_o122.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -96,35 +98,35 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 
 ```
 
-● Push 92 e as três guardas localizadas. Falta saber se o barrador que fica — holerite publicado — já existe:
-
-  Ran 3 shell commands
-
-● Push 92: causa nova, mesma família — tickets_rodape_vs_git: ALARME — rodape diz 070c1345, 14 commits atras de origin/main, teto 5. A
-  cura é declarada:
-
   Ran 2 shell commands
 
-● Push 93 armado. Enquanto roda, leio o ramo do holerite que o seu corte manda ficar:
+● Cópia sincronizada em 74e24761. Aplico a cura do A1:
 
   Ran 1 shell command
 
-● Agora o A1 está claro, e a distinção do seu corte é fina: hoje a guarda barra por competência exportada da EMPRESA (TXT emitido), e você
-  diz que isso não é assunto do colaborador — "é vínculo, tanto faz empresa". O que deve barrar é o holerite publicado do próprio colab,
-  porque é o papel que ele recebeu. E a lápide ali ao lado já documenta que os dois sinais são independentes (caso [nome]: holerite
-  publicado, folha nunca gerada). Procuro a autoridade existente, porque juiz novo = 0:
+● Agora a guarda da regenerar_celulas_vinculo passa a olhar só o holerite, e as duas recusas do vinculo.py saem:
+
+  Ran 1 shell command
+
+● Usei Empresa sem importá-la — corrijo, e tiro as duas recusas do vinculo.py:
+
+  Ran 1 shell command
+
+● As três peças do A1 estão escritas. Não rodo teste com o push vivo — confiro se ele pousou:
+
+  Ran 1 shell command
+
+● Push vivo, então uso a janela para a etapa 1 do O122, que é tela e não precisa do banco de teste. Leio o componente da casa e a tela:
 
   Searched for 1 pattern
 
-● Background command "Commit the footer fix and push 93" completed (exit code 0)
+● O contrato do componente pede quadros no contexto — e isso é uma linha na view, não no template (Django não monta dicionário em
+  template, e copiar o markup é o que o próprio partial proíbe: "quem inventa a segunda cria duas"). A saída que respeita o seu "só eles":
+  a chave da view é aditiva e inerte se o template voltar, então reverter só a tela restaura a página inteira. Leio os dois:
 
-● Checking push 93 and read the Holerite model
-  ⎿  $ cd /home/ronald/saas-hasner && cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/by0q35afi.output | tail -4; grep -aE
-     "^(OK$|Ran |To https|error|exit=)" logs/push93.log 2>/dev/null | tail -3; echo "a empurrar: $(git rev-list --count
-     origin/main..HEAD)"; …
+● Reading the view and the template title area
 
-✢ Sock-hopping… (3h 6m 30s · ↓ 531.1k tokens · still thinking)
+✢ Sock-hopping… (3h 12m 0s · ↓ 554.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
