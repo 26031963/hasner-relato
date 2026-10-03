@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**128 obras abertas.**
+**129 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -137,3 +137,4 @@ lista — ela e o que esta EM PE._
 | **O127** | FLIP-LE-AS-DUAS-PAUSAS | **fila 1, atras da O124.** Nao entrou na |
 | **O128** | O122-ETAPA-1-INCOMPLETA | fila 2 (UI), raia `wt-ui` |
 | **O129** | DECLARAR O WIZARD DE ESCALA. | fila 1, atras da O127. **Nao e fatia de  |
+| **O130** | EM ABERTO DIZ O QUE FALTA | **fila 1, atras do R3.** E leitura de `t |

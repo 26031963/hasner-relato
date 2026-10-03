@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:59 AFIRMA ato sem PROVA ao lado -- **RED primeiro** (LEI-AKITA 5): adversarial em `/tmp/o124red15`, onde devolver UM campo ao `SEM_EFEITO` sem
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:100 AFIRMA ato sem PROVA ao lado -- **RED primeiro** (LEI-AKITA 5): adversarial em `/tmp/o124red15`, onde devolver UM campo ao `SEM_EFEITO` sem
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 02:57:31.**
+**Medido em 03/10/2026 03:03:01.**
 
 | | |
 |---|---|
@@ -39,7 +39,9 @@ b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o 
 ## `git status --short`
 
 ```
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M app/escala/views.py
@@ -120,20 +122,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
 ● Monitor event: "sombra block progress and finish"
 
-  Searched for 1 pattern, ran 2 shell commands
-  ⎿  Referenced file docs/TICKETS.md
-  ⎿  Read docs/AVAIS.md (31 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read core/tests/test_selo_diagrama_do_codigo.py (159 lines)
-  ⎿  Read ponto/tests/test_r6_dinheiro_acompanha_cadastro.py (123 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Re-run the sombra block so the deploy gate can turn OK" still running in background
-
-● Task "sombra block progress and finish" still running in background
+  Ran 1 shell command
 
 ● Monitor event: "sombra block progress and finish"
 
@@ -141,17 +134,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Monitor event: "sombra block progress and finish"
 
-  Searched for 1 pattern, ran 1 shell command
+  Searched for 1 pattern, ran 3 shell commands
+
+● Monitor event: "sombra block progress and finish"
+
+  Listed 2 directories, ran 5 shell commands
 
 ● Monitor event: "sombra block progress and finish"
 
   Ran 2 shell commands
 
-● Advising using Fable 5.1
+● Monitor event: "sombra block progress and finish"
 
-✢ Bloviating… (2h 44m 0s · ↓ 389.9k tokens)
+● Re-measuring O124 copy vs HEAD
+  ⎿  $ cd /home/ronald/saas-hasner && rm -rf /tmp/o124cmp && mkdir -p /tmp/o124cmp && git archive HEAD app | tar -x -C /tmp/o124cmp &&
+     diff -rq /tmp/o124cmp/app /tmp/o124/app 2>/dev/null | grep -v 'logs\|media\|staticfiles\|__pycache__\|\.pyc' | sed
+     's#/tmp/o124cmp/app/##; s#/tmp/o124/app/##' | sort
+
+✢ Bloviating… (2h 49m 30s · ↓ 405.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                  11% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
