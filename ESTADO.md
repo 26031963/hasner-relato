@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:50:31.**
+**Medido em 03/10/2026 15:55:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `0c3cbc69 RELATO: o marco esta no remoto, e os dois numeros soltos eram meus (HEAD e p95)` |
+| `HEAD` local | `17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,19 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE
+9a412112 PLACAR-ESTRUTURAL: os tres RED do R4 ganham dono, numero e frota -- e o contador que os achou mede o gravado contra ELE MESMO
 0c3cbc69 RELATO: o marco esta no remoto, e os dois numeros soltos eram meus (HEAD e p95)
 2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)
 8417887e [PALAVRA-SEM-TURNO-PAREADO] a palavra esta na MEMORIA do worker, nao so no disco -- smoke de leitura em prod, e a sonda que morreu era minha
-0dd83989 [PLACAR-ESTRUTURAL] o R6 ganha o numero que faltava -- contratos 12/22 pela funcao real, e o placar dizia 8
-7765ceb2 [PALAVRA-SEM-TURNO-PAREADO] o dia com ata e sem par pareavel ganha a palavra nos TRES leitores -- e o numero que eu publiquei era 10, mediu 48
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/core/placar_estrutural.py
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -56,7 +54,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 | **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 09: ESTRUTURA 197 (747,4 h, 60 colabs) · CADASTRO 29 (68,6 h, 12) · BATIDA 208 (867,9 h, 118) = 434. 10: 95 (393,1 h, 40) · 15 (70,3 h, 8) · 95 (448,1 h, 75) = 205. A soma fecha nas duas, e o proprio comando a cobra | tres donos, soma igual ao total de divergentes, juiz novo = 0 | logs/e6_cauda2c/r1_dono_09_e_10.txt, r1_9.csv, r1_10.csv (coluna dono_da_divergencia) |
 | **R2** | so ESTRUTURA fica na fila 1; CADASTRO e BATIDA vao para a lista do admin pela MESMA fonte do Cadastro x Realidade, e nao se curam por codigo | gap real = 7 colabs (5 de CADASTRO fora da lista + col392 e col529 sem chamado), nao 82: BATIDA JA tem casa -- 103 de 118 na 09 e 67 de 75 na 10 com chamado carimbado NO DIA. Uma leitura do corte continua na mesa dele (a lista cresce uma secao de batida, ou BATIDA fica no chamado) | 0 colaborador de dono CADASTRO ou BATIDA sem destino | logs/e6_cauda2c/r2_lista_do_admin.py + r2b.py, medidos em prod so leitura |
 | **R3** | dia de turno ABERTO aparece EM ABERTO dizendo O QUE FALTA e MANTEM o numero rotulado (a soma dos pares fechados), igual em tela, PDF, cartao, app e TXT; o turno EM CURSO de hoje nao recebe a palavra -- quem esta dentro da jornada nao deixou nada em aberto | A PALAVRA ALCANCOU O TURNO ABERTO e os 5 leitores seguem CONCORDANDO (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias; TXT=0 e RETIDOS=0 nos 6 pares empresa x competencia, medido CRUZADO HEAD x curada na mesma sombra). O VEREDITO, no universo `Colaborador.objects.filter(situacao="ativo")` (533 colabs): **0 dia de turno aberto MUDO** nas duas competencias. 09/2026: 244 dia-colab de turno aberto = 238 com a palavra + 6 DECIDIDOS pela folha (palavra propria) + 0 em curso. 10/2026: 193 = 135 com a palavra + 0 decididos + 58 EM CURSO (corte parte 2). O MUDOS=0 NAO MUDA DE UNIVERSO: no universo `FechamentoMensal` (607 e 572 colabs) da 275 = 269 + 6 + 0 na 09 e 194 = 136 + 0 + 58 na 10 -- e o 6 DECIDIDO e o mesmo nos dois. O `em curso` anda com o relogio POR DESENHO (`turno_aberto_de(agora=None)` le `timezone.now()`, ponto/turnos.py:1401): 3 medicoes no mesmo banco e no mesmo universo (ativos) deram 59 as 09:31, 58 as 09:43 e 51 as 09:55 -- e sao turnos abertos NO INSTANTE DO DUMP (ultima batida da sombra 03/10 04:11), nao gente na jornada agora. Encolher em_curso so empurra dia para a classe COM palavra, nunca para MUDO; o que nao anda e o MUDOS=0. `dias_em_aberto` subiu de 296 para 323 na 09 e de 133 para 145 na 10 -- +27 e +12 dias que ganharam a palavra, 0 que a perderam. SEGUE PARCIAL, e a parte que falta tem nome: a O130 -- a palavra dizer QUAL marco falta (hoje e a string fixa `Em aberto`). As duas partes do corte de 05:3x estao cumpridas e o MUDOS=0 esta medido nos dois universos; o que nao esta e a clausula `com o que falta`, que e da redacao dele e nao sai daqui para carimbar fechado. A 2a PALAVRA POUSOU em `7765ceb2` (03/10 14:2x, lei dele das 12:4x): o dia com minuto na ata e ZERO par pareavel leva `sem turno pareado` com o numero da ata rotulado, no molde do `Em aberto` -- **48 dia-colab, 312,9 h** na frota 09+10 (eu havia publicado 10 e 34,6 h, que era a premissa, nao a medicao), com **cartao, tela e api em 48 de 48** e a **grade em 25 de 48**, porque `turnos_do_colab` responde diferente conforme a JANELA pedida (col736: 9 turnos em 21/08-20/09 contra 26 em 01/09-30/09) -- e essa discordancia de janela e do O65, nao da palavra | os 5 leitores iguais, ZERO dia de turno aberto MUDO -- nenhum dia contado sem palavra nenhuma -- e a palavra NOMEANDO o marco ausente. NAO e "todo turno aberto ganha a palavra": dia que a folha DECIDIU tem palavra propria, mais informativa (corte R3 parte 1, 03/10 05:3x; LEI-AKITA 4) | logs/r3_cross/ -- r3_frota_invariante.txt (o MUDOS=0, com a sonda r3_frota.py ao lado), r3_cross_09_e_10.txt (TXT=0/RETIDOS=0 cruzado + o caso col643), r3_recon_universo_fechamento.txt (o mesmo invariante no outro universo), r3_detalhe_as_duas_classes.txt (os 6 decididos NOMEADOS com a palavra de cada um, e a prova de que o em-curso e do dump), r3_curso_agregado_classe_inteira.txt (os 51 em curso medidos SEM AMOSTRA: data_turno 02/10 nos 51, maior batida 04:11 = o dump), r3_suite_vizinhos.txt. Antes: logs/e6_cauda2c/r4_pares.txt + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
-| **R4** | uma resposta so, frota, 09 e 10: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela | CINCO pares em ZERO nas DUAS competencias (tela x PDF, cartao x TXT, fechamento x soma do DiaPago, topo x soma das linhas, e calendario x espelho de brinde); o par 6 e ZERO por CONSTRUCAO (selo de AST). O SEXTO, espelho x DiaPago, REMEDIDO em 03/10 15:3x: **1 na 09** (col935 05/09) e **6 na 10** (col882, nos dias 21,23,25,27,29/09 e 01/10) -- este campo dizia "0 na 10", e era numero que envelheceu em silencio, o mesmo defeito que o R4 existe para nomear. O par 4 medido tambem FORA do universo do TXT: 607 fechamentos na 09 e 572 na 10, 100% batendo com tolerancia de 0,02 h. Universo do TXT: 214 na 09, 21 na 10. Selo VERDE, `falhas=0`, sem allowlist | ZERO em cada par; o que nao for zero vira item da fila 1, maior primeiro | logs/e6_cauda2c/r4_pares.txt. QUATRO dos seis pares JA tinham comando (selo_leitores_no_mesmo_numero, tolerancia ZERO e sem allowlist) e o par espelho x DiaPago e a 7a testemunha de folha/porta_export.py. Os dois que faltavam foram construidos: par 4 (ORM puro) e par 6 (api/tests/test_r4_par6_app_le_a_tela.py, AST, zero montagem propria -- VERDE). OS TRES REDs de 02/10 23:55 SEGUEM ABERTOS, e desde 03/10 15:4x tem DONO, NUMERO e FROTA -- cada um pelo juiz do seu NIVEL (o oraculo de dia foi importado, nunca copiado; juiz novo = 0): (a) col935 emp2/09, 1 dia (05/09), espelho 10,97 h x dia_pago 11,10 h = 8 min, e os 8 min sao 18:52->19:00 -- EC#1186.marcos_do_dia devolve (19:00, 07:00, None, None), marco de TEMPLATE (PAI-12x36) num dia SEM celula e FORA do vinculo (EC e admissao 07/09); o espelho ancora no marco, o dia_pago le a batida crua: LEI-AKITA 2. (b) col305 emp2/09, minutos_previstos 13.020 (217 h) x grade 0: desligado 24/02 com EC#965 ativa e data_fim=None iniciada 21/07; a lavra e de 28/09 00:45:59 e o registro foi editado 28/09 12:21:34 (LOG#590996, u942) -- o gravado envelheceu 11h36 DEPOIS de nascer certo; fora do TXT por rescisao_modulo_proprio; frota 1/1. (c) col882 emp2/10, 6 dias e 25 batidas (~66 h) com dia pago 0,0: unico vinculo EC#1059 terminou 06/09 e NAO cobre a janela, mas as 30 celulas foram geradas 21/09 05:50 pela geradora 1059, regeneradas=0; minutos_previstos=0, horas_trabalhadas=0,00 e classificar_export diz ENTRA; frota 1 de 19 descobertos, o UNICO com batida -- os outros 18 sao todos situacao=ativo sem demissao (956-967 em bloco contiguo; col644 e col66 nas duas competencias). O INSTRUMENTO: gravado_discorda_da_propria_grade NAO compara o gravado com a grade viva -- folha/porta_export.py:88::_gravado_x_grade le grade_do_fechamento(fech), a grade que o PROPRIO gravado carrega, e so acusa quando soma_grade == soma_dias_pagos E escalar != soma_grade: e coerencia INTERNA do FechamentoMensal, pega escalar que envelheceu, nunca grade vazia ou errada. Por isso e mudo no col882 (na competencia ABERTA o ramo nem roda; o par dele compara 0 com 0). Quem viu o col882 foi espelho_x_dia_pago, porque o espelho le BATIDA -- testemunha de FORA do gravado. LIMITE do que se pode datar: EscalaColaborador nao tem NENHUM campo de data, entao mudanca em vinculo so se data por LogAuditoria e a linha editar nao nomeia o campo. CODIGO (fila 1): porta de demissao e porta de encerrar vinculo alcancarem celula e fechamento; tripwire "ativo com batida e previsto 0"; contador ler testemunha de fora do gravado. DADO (! de L-009, nunca pre-aprovado): o EC sucessor do col882 e o encerramento do EC#965. PROVA: logs/placar_estrutural/r4_pares_20261003.txt, r4_reds_20261003.txt, r4_quando_20261003.txt, r4_frota_vinculo_20261003.txt |
+| **R4** | uma resposta so, frota, 09 e 10: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela | CINCO pares em ZERO nas DUAS competencias (tela x PDF, cartao x TXT, fechamento x soma do DiaPago, topo x soma das linhas, e calendario x espelho de brinde); o par 6 e ZERO por CONSTRUCAO (selo de AST). O SEXTO, espelho x DiaPago, REMEDIDO em 03/10 15:3x: **1 na 09** (col935 05/09) e **6 na 10** (col882, nos dias 21,23,25,27,29/09 e 01/10) -- este campo dizia "0 na 10", e era numero que envelheceu em silencio, o mesmo defeito que o R4 existe para nomear. O par 4 medido tambem FORA do universo do TXT: 607 fechamentos na 09 e 572 na 10, 100% batendo com tolerancia de 0,02 h. Universo do TXT: 214 na 09, 21 na 10. Selo VERDE, `falhas=0`, sem allowlist | ZERO em cada par; o que nao for zero vira item da fila 1, maior primeiro | logs/e6_cauda2c/r4_pares.txt. QUATRO dos seis pares JA tinham comando (selo_leitores_no_mesmo_numero, tolerancia ZERO e sem allowlist) e o par espelho x DiaPago e a 7a testemunha de folha/porta_export.py. Os dois que faltavam foram construidos: par 4 (ORM puro) e par 6 (api/tests/test_r4_par6_app_le_a_tela.py, AST, zero montagem propria -- VERDE). OS TRES REDs de 02/10 23:55 SEGUEM ABERTOS, e desde 03/10 15:4x tem DONO, NUMERO e FROTA -- cada um pelo juiz do seu NIVEL (o oraculo de dia foi importado, nunca copiado; juiz novo = 0): (a) col935 emp2/09, 1 dia (05/09), espelho 10,97 h x dia_pago 11,10 h = 8 min, e os 8 min sao 18:52->19:00 -- EC#1186.marcos_do_dia devolve (19:00, 07:00, None, None), marco de TEMPLATE (PAI-12x36) num dia SEM celula e FORA do vinculo (EC e admissao 07/09); o espelho ancora no marco, o dia_pago le a batida crua: LEI-AKITA 2. (b) col305 emp2/09, minutos_previstos 13.020 (217 h) x grade 0: desligado 24/02 com EC#965 ativa e data_fim=None iniciada 21/07; a lavra e de 28/09 00:45:59 e o registro foi editado 28/09 12:21:34 (LOG#590996, u942) -- o gravado envelheceu 11h36 DEPOIS de nascer certo; fora do TXT por rescisao_modulo_proprio; frota 1/1. (c) col882 emp2/10, 6 dias e 25 batidas (~66 h) com dia pago 0,0: unico vinculo EC#1059 terminou 06/09 e NAO cobre a janela, mas as 30 celulas foram geradas 21/09 05:50 pela geradora 1059, regeneradas=0; minutos_previstos=0, horas_trabalhadas=0,00 e classificar_export diz ENTRA; frota 1 de 19 descobertos, o UNICO com batida -- os outros 18 sao todos situacao=ativo sem demissao (956-967 em bloco contiguo; col644 e col66 nas duas competencias). O INSTRUMENTO: gravado_discorda_da_propria_grade NAO compara o gravado com a grade viva -- folha/porta_export.py:88::_gravado_x_grade le grade_do_fechamento(fech), a grade que o PROPRIO gravado carrega, e so acusa quando soma_grade == soma_dias_pagos E escalar != soma_grade: e coerencia INTERNA do FechamentoMensal, pega escalar que envelheceu, nunca grade vazia ou errada. Por isso e mudo no col882 (na competencia ABERTA o ramo nem roda; o par dele compara 0 com 0). Quem viu o col882 foi espelho_x_dia_pago, porque o espelho le BATIDA -- testemunha de FORA do gravado. LIMITE do que se pode datar: EscalaColaborador nao tem NENHUM campo de data, entao mudanca em vinculo so se data por LogAuditoria e a linha editar nao nomeia o campo. CODIGO (fila 1): porta de demissao e porta de encerrar vinculo alcancarem celula e fechamento; tripwire "ativo com batida e previsto 0"; contador ler testemunha de fora do gravado. DADO: NAO espera ! -- a lei e de 02/10 (PENDENTES_RONALD::folha-zero-vinculo-vencido, respondido, col882 na familia (B) com 64,79 h medidas; caminho (a), so Pauta DP, nenhuma porta nova). O ROTEAMENTO ESTA INERTE, medido: as 7 pautas daquele censo (#922,#923,#924,#926,#927 col882,#928,#929) estao todas com lido_em NULO, feito_em NULO e prazo=None, nenhuma aberta em 36 h, dentro de 759 pautas abertas de 957 -- pauta sem prazo e nao lida e a familia do "silenciar exige prazo + tripwire + item de fila". col305 tem ZERO pautas: nao e (A) sem vinculo nem (B) vinculo vencido, e vinculo ABERTO e ativo iniciado 5 meses APOS a demissao, 1/1 na frota e fora do TXT. PROVA: logs/placar_estrutural/r4_pares_20261003.txt, r4_reds_20261003.txt, r4_quando_20261003.txt, r4_frota_vinculo_20261003.txt, r4_pautas_20261003.txt |
 | **R5** | idempotencia e determinismo de frota: rejulgar o cartorio 2x e relavrar/recalcular 2x, e a segunda rodada nao muda nada | A LEI FECHA: 2a rodada = ZERO em celula, chamado, DiaPago e hash do FechamentoMensal (competencia 10, empresas 2/3/4, sombra). O CONTEXTO da 1a rodada e que doi: 9.062 DiaPago NASCERAM, 7 morreram, 83 mudaram, e 82 FECHAMENTOS mudaram -- nao e falta de idempotencia, e ATRASO de lavratura, o mesmo fato do R6. LIMITE: a rodada usa `processar_cartorio --apply` SEM `--forcar`, entao o caminho do --forcar (que rejulga mesmo com impressao igual) NAO esta nesta medicao | diferenca ZERO na 2a rodada em celula, ata, chamado nascido ou morto, DiaPago e hash do FechamentoMensal | logs/r5_idempotencia/r5_2345.txt (+ _completo.txt). E os 13 chamados do --forcar tem DOIS produtores, medidos: 9 em 17:51-17:54 (o --forcar) e 4 em 18:00:1x no batente do */5 (o cron, em pares por colab); os 7 orfao_14h nasceram resolvido com celula=None |
 | **R6** | contratos N/22 com o que falta em cada celula e a ordem de fechar; e REATIVIDADE -- zero passo manual depois de corrigir um cadastro | REATIVIDADE: ZERO passo manual no caminho de UM colab, medido na sombra (col221, competencia 10: hash 3a5da35a -> 3a42920e sem comando nenhum). Resta o LOTE. CONTRATOS: 12/22 verdes, 17 declaradas (03/10 14:5x, pela funcao real) -- o RED de ">= 12/22" do CONTRATOS-14 (O35, 25/09) ESTA ALCANCADO, e o placar dizia 8. O TETO e 20/22, nao 21: (chamado, parametro) e (escala, parametro) sao PROIBIDAS de existir por "familia sem campo editavel nao tem celula", a segunda desde o O124 (03/10). Faltam 8 atingiveis, e a ordem sai do TAMANHO da allowlist MEDIDA, nao da nota: (1) ausencia/ferias x juiz, 1 pendente, e ele e exatamente o `!` de 03/10 14:1x (Colaborador.situacao e LAMPADA; a impressao e _gravar_colab em ponto/views.py) -- ANDAVEL AGORA, +1; (2) celula/precedencia x juiz (1) e turno/marcos x juiz (1) sao O MESMO SITIO: escala/utils.py:822::minutos_realizados_do_dia -- o pendente de turno esta na linha 861, DENTRO dela, e o de celula e o seu unico chamador de producao (:1290). UMA cura fecha DUAS celulas (+2), e espera a lei da BUG-145 (aval dele 03/10 12:4x: o contador bordas_realizado.py:42 se reescreve ANTES). O `_perto` de motor_calculo_v2.py que o O35 dava como trava de turno JA NAO esta na lista -- a zona inviolavel nao segura mais esta celula; (3) folha/export x juiz, PENDENTES_FECHAMENTO = 19, 8 deles dinheiro: a maior fatia andavel sem lei nenhuma; (4) chamado x juiz, PENDENTES_CHAMADO JA e 0 e o que segura sao os 27 de config.crons::JUIZES_POR_VARREDURA (vigia nao julga); (5) chamado x escritor, 122 escritas fora de porta em 49 arquivos, em curso na raia wt-esmeril2; (6) batida x juiz -- a nota da matriz diz "ninguem comecou, nao ha JUIZES[batida] nem PENDENTES[batida]" e ISSO ENVELHECEU: as duas chaves existem (PENDENTES_BATIDA = 2, os dois de dinheiro, um deles declarado "E DO MOTOR, e fica" e o outro um adendo dele de 25/09). O que falta e DECLARAR a celula, SEM juiz novo, logo SEM a TRAVA JUIZ-NOVO; verde nao sai dai, legibilidade sai; (7) escala x juiz e o UNICO sem censo (nao ha PENDENTES["escala"] nem JUIZES["escala"]) e esse sim cai na TRAVA JUIZ-NOVO -- lei dele. A `meta` desta linha ainda diz "N = 22" e ela NAO e atingivel enquanto o teto for 20; a escolha entre as tres saidas (celula vazia verde / TOTAL desconta a familia sem campo / chamado ganha cadastro) e dele e dorme no PENDENTES_RONALD como `teto-da-matriz-do-estrutural-e-21`, id que envelheceu junto | N = 22 e zero passo manual | logs/r6_dinheiro/red_col221_10.txt (a reatividade) + logs/placar_estrutural/contratos_20261003.txt (as 21 celulas + o GLOBAL, as allowlists e os pendentes nomeados, 3 sondas completas, sem truncar) + core/contratos_estruturais.py::linha_do_placar (o N/22) |
 
@@ -109,37 +107,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O contador compara o fechamento com ele mesmo — a grade que o próprio gravado carrega. Isso é mais forte que "cego quando os dois são 0".
-  Agora as três leituras que faltam, numa sonda só.
-
-  Ran 2 shell commands
-
-● Três das quatro respostas vieram, e a (C) fechou na aritmética. O erro de % meu matou a (D) — corrigindo e pegando só ela.
+● Existe item folha-zero-vinculo-vencido já RESPONDIDO — e isso é exatamente a LEI-AKITA 4. Lendo antes de pedir corte novo.
 
   Ran 1 shell command
 
-● Tudo medido. marcos_do_dia(05/09) devolve (19:00, 07:00, None, None) — o juiz entrega marco de template para um dia sem célula e fora do
-  vínculo. E os 18 "inócuos" são todos ativo. Escrevendo o registro.
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Agora o placar — o módulo manda que quem mede escreva no mesmo commit.
+● A lei existe e foi respondida em 02/10: caminho (a), só Pauta DP — e a Pauta #927 é o col882. Então o lado dado não espera !; espera a
+  Pauta. Conferindo o estado dela.
 
   Ran 1 shell command
 
-● O campo numero ainda diz espelho_x_dia_pago "0 na 10" — e hoje mediu 6 (col882). É o próprio defeito que o R4 nomeia; corrigindo.
+● O estado da Pauta são lido_em/feito_em/cancelado_em, e a âncora é ancora_tipo/ancora_id. Remedindo pelos campos certos.
 
-● Rodar os selos do placar em banco próprio · 48s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; timeout 420 docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -e
-     REGUA_DB=test_placar_r4 -v "$PWD/app:/app" saas-hasn… (47s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Bloviating… (15h 37m 0s · ↓ 2.1m tokens)
+● Isso muda o que eu escrevi, e muda para melhor. A decisão do lado dado já existe e já foi roteada — e o roteamento está inerte:
+
+  - as 7 Pautas do censo de 02/10 estão lido=NAO, feito=NAO, prazo=None — nenhuma lida em 36 h
+  - col305 tem ZERO pautas → é família que aquele censo não cobriu
+  - 759 de 957 Pautas seguem abertas
+
+  Corrigindo o RELATO, porque eu pedi ! para algo já decidido.
+
+  Commitar a correção do lado dado
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/core/placar_estrutural.py && git commit -F - <<'EOF'
+     PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE
+     LEI-AKITA 4 em acao, e corrige o commit anterior. Eu havia escrito que o EC
+     sucessor …
+
+· Compacting conversation… (15h 42m 14s · ↓ 2.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +145,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Verifying mutation REDs in test_porta_validacao_pergunta.py                              3h 58m 9s · ↓ 165.0k tokens
+  ◯ general-purpose  Reading D3 sites in colaboradores/signals.py                                              4h 3m 22s · ↓ 85.2k tokens
   ⧉  index
 ```
