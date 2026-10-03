@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:100 AFIRMA ato sem PROVA ao lado -- **RED primeiro** (LEI-AKITA 5): adversarial em `/tmp/o124red15`, onde devolver UM campo ao `SEM_EFEITO` sem
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:46 AFIRMA ato sem PROVA ao lado -- > **APLICADO, REVISE** (03/10, neste commit; DIFF de frota ZERO e suite verde, os dois numeros abaixo). Ordem dele: *"CONSUMIR 1 (`TipoAusen
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:56:31.**
+**Medido em 03/10/2026 04:02:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c7b05d59 [O126-FLIP-ARIDADE] O ensaio da sombra achou o cron de hoje morto 4h49 antes de ele rodar` |
+| `HEAD` local | `4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela` |
 | `origin/main` | `b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,22 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela
 c7b05d59 [O126-FLIP-ARIDADE] O ensaio da sombra achou o cron de hoje morto 4h49 antes de ele rodar
 b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada
 7017090f [TICKETS] Tres fatias estavam no ar sem linha na tabela, e e o segundo RED do mesmo push
 9150ab4c [TICKETS] O placar do topo envelheceu na virada do dia e segurou o push dos 13
-0f3df2cb [R6] O selo do relogio estava VERMELHO pelo meu proprio teste novo, e a cura e congelar
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -124,42 +121,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/boag9t8g2.output (11 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Re-run the full suite over the O124 copy with staticfiles mounted" still running in background
-
-● No FAIL:/ERROR: and zero No directory at — the real bind mount took. 1664 lines of dots at 03:46; the run started 03:31, so the verdict
-  is ~2 min out. Pre-flighting the landing chain while it finishes, since the 04:00 dump is the clock.
+● The selo caught the BUG-128 window open right now: alertas_ausencia.py:33 late-imports TIPOS_MEDICOS, which the in-memory module doesn't
+  have — a 500 scheduled on the next request, and the */5 crons are seconds away. This is the 30/09 merge window again, and the cure is
+  the deploy. Closing it: docs → templates → commit, nothing in between, then deploy.
 
   Ran 1 shell command
 
-● Everything staged, gate green (dia=20261003 diverge=0). Checking the verdict.
+● app/templates/core/_barra_gestao.html and _icone_barra.html came along — they were already modified before O124 and are not in its path
+  list. That's the O57 bug that produced CURA-MAIS-RESTRITIVA. Unstaging them and auditing the staged set against the intended paths.
 
   Ran 1 shell command
 
-● The read -t trick didn't wait at all, and my grep matched a sombra line (^OK  with a space) — that's the same false-positive family I
-  tightened earlier. Using the proper wait primitive with ^OK$ only.
+● Staged set is exactly the 29 intended paths, zero intruders, and Ronald's surface (PENDENTES_RONALD.json, AVAIS.md) correctly left out.
+  Committing and deploying with nothing in between.
 
-  Ran 1 shell command
+  Committed 4088657e, ran 1 shell command
 
-● While that waits, staging the R3 number correction as its own script — it's a separate commit from O124 and touches Ronald's surface, so
-  it must not ride along.
+● Deploy OK at 04:01 — migration 0070 applied, three cascas reloaded together, three routes proved, importerror_500=0, and the BUG-128
+  selo green. The import window is closed.
 
-● Block until the suite verdict and print it · 8m 47s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE "^OK$|^FAILED"
-     $S/suite_o124_c.txt; do sleep 5; done; date "+%H:%M:%S"; grep -nE "^Ran [0-9]+ test|^OK$|^FAILED|^(FAIL|ERROR):" $S/suite_o124_c.txt
-     (8m 46s)
+  Now the gate consequence I predicted: prod's migrate landed after the 04:00 dump, so the sombra won't have 0070. Measuring instead of
+  assuming.
+
+● Verifying the window closed and measuring the sombra gate state · 31s
+  ⎿  $ cd /home/ronald/saas-hasner; date "+%H:%M:%S"; bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3; echo "=== dumps de
+     hoje:"; ls -la --time-style=+%H:%M:%S backups/juliani/ 2>/dev/null | tail -4; echo "=== conferir:"; bin/sombra.sh --conferir 2>&1 |
+     tail -6; echo "=== cron do refazer… (31s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (3h 43m 0s · ↓ 507.9k tokens)
+✢ Bloviating… (3h 48m 30s · ↓ 515.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
