@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**158 obras abertas.**
+**159 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -144,7 +144,7 @@ lista — ela e o que esta EM PE._
 | **O134** | ESPINHA-ANTES-DA-UI | espera corte |
 | **O135** | TETO-20: a matriz desconta familia sem campo editavel | **livre, fila 1** -- entra junto da PRIM |
 | **O136** | O DISPATCH SO PERGUNTA NUM SENTIDO | **livre, fila 1 atras da espinha** -- `m |
-| **O137** | ESMERIL-NO-RASTRO | **fila 1, colada na O134** -- nao e obra |
+| **O137** | ESMERIL-NO-RASTRO | espera aval |
 | **O138** | DADO DERIVADO DO GIT NAO SE GRAVA EM ARQUIVO QUE VAI NO PUSH | fila 2, raia `wt-ui` nao serve (e `bin/` |
 | **O139** | PAPEL-PRAZO | espera corte |
 | **O140** | O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR | espera corte |
@@ -167,3 +167,4 @@ lista — ela e o que esta EM PE._
 | **O157** | ART.130 LE O CATALOGO, NAO UM LITERAL | fila 1, atras do item em curso. Toca DIR |
 | **O158** | ORDEM-VIVA-TOPO E AUTORIDADE | espera corte |
 | **O159** | DIA INTEIRO E O PREVISTO DO DIA | espera `!` |
+| **O160** | ARVORE-SEM-CONFLITO: O DEPLOY RECUSA ARVORE QUEBRADA | tail -3 && bin/deploy.sh` -- o pipe entr |

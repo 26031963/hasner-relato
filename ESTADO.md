@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:193 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- **AUSENCIA FECHADA no estrutural: `contratos_estruturais: 13/22 verdes`** pela funcao real, selo `test_selo_contratos_estruturais` 13 OK (`c
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:34:31.**
+**Medido em 03/10/2026 20:40:02.**
 
 | | |
 |---|---|
@@ -41,7 +41,12 @@ bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do
 ```
  M PLANO_PISCADA.md
  M app/core/contratos_estruturais.py
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/views.py
  M bin/deploy.sh
  M bin/prova_de_casca.py
@@ -119,44 +124,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Enquanto roda, as duas linhas do PROMPTS.md (PROMPT-NAO-SE-REPETE) e o parágrafo do 19:00 no RELATO.
+
+  Ran 1 shell command
+
+● Background command "Rodar o selo dos contratos estruturais" completed (exit code 0)
+
+  Read 1 file
+
+● Selo verde: 13 testes OK. Agora o placar pela função real.
+
+  Ran 5 shell commands
+
+● Placar pela função real: contratos_estruturais: 13/22 verdes — 12 células da MATRIZ + o global; 7 vermelhas nomeadas, e o teto aritmético
+  segue 20/22 (duas células proibidas de existir, documentado em contratos_estruturais.py:263-269).
+
+  Ran 7 shell commands
+
+● Agora o RELATO: as três seções (as duas guardas nascidas do apagão, a O154, e o sexto banco).
 
   Ran 6 shell commands
 
-● Extraindo a guarda para ter como selá-la contra o arquivo REAL, não contra uma cópia da lógica:
+● O placar do TICKETS cobra a nota nova da célula. Regenero pela própria cura que ele indica.
 
-  Ran 4 shell commands
+● Regerar o placar do TICKETS e reconferir
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "SITUACAO-VIGIA-E-PORTA\|^| " app/docs/TICKETS.md | sed -n '1,6p' | cut -c1-250; echo "...";
+     grep -n "SITUACAO-VIGIA" app/docs/TICKETS.md | head -3
 
-● Guardas no ar (selo 5/5). Agora o O154 em main — na cópia, que é o que eu devia ter feito:
-
-  Ran 8 shell commands
-
-❯ aval Ronald: SEXTO BANCO da ausencia -- c1a1f7b6 zerou os tetos e tirou o _A14, mas ('ausencia/ferias', 'um juiz por pergunta') segue
-  sem verde=True em core/contratos_estruturais.py e linha_do_placar() responde 12/22. Virar a celula com a nota atualizada, rodar o selo
-  test_selo_contratos_estruturais, e publicar o placar pela funcao real. Com a familia fechada, nasce o ESMERIL-NO-RASTRO dela (O137).
-  Segue a fila.
-
-● Aval recebido — sexto banco da ausência. Lendo a matriz:
-
-  Ran 6 shell commands
-
-❯ lei Ronald: o byte a byte da etapa 0 nao fecha e nunca ia fechar; o que fecha e o estilo CALCULADO, 0 de 14 elementos. Vale como entrega
-  -- manda a etapa 0 para o smoke.
-
-● Duas leis novas na mesa. Vou encaixar as duas: a célula do sexto banco e a etapa 0 que passa a valer como entrega. Primeiro a célula:
-
-● Formato do PROMPTS.md e a suíte do escala
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n '^## \|^### ' app/docs/PROMPTS.md | tail -8
-
-✢ Compacting conversation… (20h 21m 0s · ↓ 2.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
+✻ Bloviating… (20h 26m 31s · ↓ 2.8m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
