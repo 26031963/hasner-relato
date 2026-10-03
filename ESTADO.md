@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:32:31.**
+**Medido em 03/10/2026 11:38:01.**
 
 | | |
 |---|---|
@@ -109,41 +109,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Committed 8bf639f1, ran 17 shell commands
+  Enquanto isso, duas coisas ficaram prontas e uma correção foi medida:
 
-● Agora o push único do marco — ele roda a régua inteira no pre-push.
+  - As duas linhas que faltavam no TICKETS entraram (bf392022): O139 em em voo — com a nota dizendo que o número 8 é dele e não foi medido
+    por mim (PAPEIS tem 7 papéis, JUIZES_POR_VARREDURA tem 27 crons, e o docstring do detectar_intervalo_ausente nomeia um nono) — e
+    RELATO-RETIDO em feito. bin/regua_tickets.sh passou de RED a OK — 3 citações com linha na tabela, e foi exatamente ela que recusou o
+    push anterior.
+  - Meu próprio censo do O65 contava errado, e por FORMA. Ele foi feito com grep de linha e pôs ponto/motor_calculo_v2.py:388 na lista
+    "sem papel_por_minuto" — a chamada passa o kwarg, três linhas abaixo da que o grep casou. Pelo AST: 4 chamadas com papel, 11 sem (eram
+    "13"). E a correção muda o alvo: turnos_do_colab já lê a ata desde o corte de 26/09 (turnos.py:1251, nos dois ramos, simples e
+    multi-escala). Então o que resta do O65 não é "o juiz pareia pelo tipo gravado" em bloco — é o dia em que ele devolve turno nenhum, e
+    a fallback soma células.
+  - A sonda deixou de medir só tamanho. Cada dia da fallback é classificado perguntando ao próprio juiz na janela d-1..d+1: vizinho
+    (batida consumida por turno de outra data — o BUG-145 próprio, que a cura do pareamento alcança), orfa (batida que nenhum turno
+    consumiu — isso é a órfã na ata do O68, outro defeito, com ! de dinheiro), sem_batida_nenhuma, ou outro nomeado sem veredito meu. E
+    ela lê o RED registrado do O65 — col736 11/09, que dava 2 turnos abertos contra 420 min do motor — pelo juiz de hoje, sem afirmar de
+    antemão se curou.
 
-  Ran 2 shell commands
+  Um achado lateral: havia um /tmp/re.py de sonda antiga sombreando o re da stdlib — qualquer script python rodado de /tmp quebrava no
+  import ast. Renomeado para /tmp/re.py.ARMADILHA_sombreia_stdlib, não apagado.
 
-● O push roda a régua em segundo plano. Enquanto isso, leitura pura do próximo item da fila 1 (O65) — sem CPU, sem tocar a árvore.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 1 shell command
+● Finding the callers of the regeneration porta
+  ⎿  $ sed -n '230,245p' colaboradores/services/vinculo.py; echo "=== corrigir_escala_retroativa cabeça:"; sed -n '1,40p'
+     colaboradores/management/commands/corrigir_escala_retroativa.py
 
-● Background command "Push the marco" completed (exit code 0)
-
-  Ran 1 shell command
-
-● O push foi recusado pela régua: regua_tickets: RED — os commits [O139] e [RELATO-RETIDO] citam fatia sem linha no TICKETS. Causa em uma
-  linha: os dois entraram pelo lote --no-verify e nunca ganharam linha.
-
-● Checking which grade builder is live
-  ⎿  $ sed -n '150,170p' config/settings/base.py; echo "=== def montar_grade_prevista_periodo (dispatcher?):"; grep -n "def
-     montar_grade_prevista_periodo\b" -A 25 escala/utils.py | head -35
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/selo-estrutural-varre-ast-nao-texto.md (24 lines)
-  ⎿  Referenced file colaboradores/services/calendario.py
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Read ../logs/r3_cross/r3_frota_invariante.txt (26 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-✢ Bloviating… (11h 19m 0s · ↓ 1.5m tokens · thought for 2s)
+✢ Bloviating… (11h 24m 30s · ↓ 1.5m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
