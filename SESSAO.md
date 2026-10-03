@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 02/10/2026 21:08:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (205.7 MB). Acoes na janela: **1562**.
+**Medido em 02/10/2026 21:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (205.7 MB). Acoes na janela: **1552**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1562,13 +1562,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:14:48 | Bash | O servico situacional inteiro | `cat -n colaboradores/services/situacional.py \| sed -n '1,160p'` |
 | 09:14:42 | Bash | Queries escondidas nos tres | `grep -n "def marcos_do_dia" -A 22 escala/models.py \| head -40; echo "=== periodos_do_dia ==="; grep -n "def periodos_do_dia" -A 18 ponto/juiz_batida.py; echo "=== ecos_flush ==="; grep -n "def _marca_ecos_flush" -A 12 ponto/turnos.py` |
 | 09:14:04 | Bash | escalas_do_periodo e celulas_do_periodo | `sed -n '63,127p' escala/alimentacao.py; echo "=== celulas_do_periodo ==="; sed -n '12,38p' escala/alimentacao.py` |
-| 09:13:22 | Bash | Corpo da ata | `sed -n '930,1000p' ponto/turnos.py` |
-| 09:13:08 | Bash | Fim do escala_vigente e as portas de alimentacao | `sed -n '43,70p' escala/servico_jornada.py; echo "=== alimentacao ==="; grep -n "^def \\|^ \"\"\"" escala/alimentacao.py \| head -40` |
-| 09:13:02 | Bash | Assinaturas dos dois insumos | `grep -n "def papel_por_minuto_da_ata" -A 30 ponto/turnos.py \| head -45; echo "=== escala_vigente ==="; grep -n "def escala_vigente" -A 28 escala/servico_jornada.py` |
-| 09:12:56 | Bash | Cabeca do miolo e a casca publica | `sed -n '1255,1292p' ponto/turnos.py; echo "=== turno_aberto_de ==="; sed -n '1324,1345p' ponto/turnos.py` |
-| 09:09:41 | Bash | O resto do miolo do turno aberto | `sed -n '1289,1324p' ponto/turnos.py` |
-| 09:09:28 | Bash | O ids_com_adesao e o lavrador | `grep -n "def ids_com_adesao" -A 16 ponto/services/adesao.py; echo "=== lavrador :60-80:"; sed -n '60,80p' core/management/commands/lavrar_placar_situacional.py` |
-| 09:09:09 | Bash | A autoridade do turno aberto e o calc | `grep -n "def turno_aberto_de" -A 22 ponto/turnos.py \| head -26; echo "=== _turno_aberto_calc:"; grep -n "def _turno_aberto_calc" -A 18 ponto/turnos.py \| head -22` |
-| 09:09:03 | Bash | Os tres sitios do situacional | `sed -n '60,80p' colaboradores/services/situacional.py; echo "=== :95-110"; sed -n '95,112p' colaboradores/services/situacional.py; echo "=== :135-145"; sed -n '135,145p' colaboradores/services/situacional.py` |
-| 09:08:50 | Bash | Linha no TICKETS e push do marco | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/TICKETS.md' L=open(p,encoding='utf-8').read().split('\n') assert L[126].startswith('\| ID \| frente') r=('\| JANELA-DA-AUTORIDADE-PERDE-O-DIA-20 \| ponto/espelho (janela) \| `autoridade_do_periodo` buscava batida ' 'ate `fim 00:00 + 12 h` -- **meio-dia do ultimo dia da competencia** -- enquanto a FOLHA busca ' '`inicio - 1 d` a `fim 23:59 ...` |
-| 09:08:21 | Bash | Commitar e deployar a cura da janela | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().rstrip('\n') s += """ ## 02/10 10:5x — JANELA-DA-AUTORIDADE-PERDE-O-DIA-20: curada, e a medicao **refinou a premissa** A janela de busca de batidas de `autoridade_do_periodo` era `fim 00:00 + 12 h` -- **meio-dia do ultimo dia da competencia**. A FOLHA busca `inicio - 1 DIA` ate `fim 23:59:59 +  ...` |

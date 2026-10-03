@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:08:01.**
+**Medido em 02/10/2026 21:13:31.**
 
 | | |
 |---|---|
@@ -121,13 +121,13 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 
 ● Ordem corrigida — O119 na frente e as três novas atrás, como o seu aval determina. Selo verde apontando o O119. Espero a suíte isolada:
 
-● Waiting for the suite verdict · 2m 26s
+● Waiting for the suite verdict · 7m 57s
   ⎿  $ cd /home/ronald/saas-hasner && until [ -s
      /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output ]; do sleep 30; done; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output | tail -8 (2m 26s)
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output | tail -8 (7m 56s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Sock-hopping… (2h 55m 30s · ↓ 515.3k tokens)
+✢ Sock-hopping… (3h 1m 0s · ↓ 515.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
