@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:17:01.**
+**Medido em 03/10/2026 16:22:31.**
 
 | | |
 |---|---|
@@ -108,15 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  higiene. Executando a remoção.
-
-  Ran 9 shell commands
-
-● DOSSIES.md é o texto literal do Ronald — não toco. Agora o diagrama, que é gerado e defendido por selo.
-
-  Ran 5 shell commands
-
-● O pendente só sai com tripwire no lugar (LEI-AKITA 7). Vendo como a varredura é aplicada antes de escrever o padrão.
 
   Ran 2 shell commands
 
@@ -127,18 +118,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O juiz _A14 já está declarado (afastado_hoje) — nenhum juiz novo nasce. Fechando: o pendente sai e os três padrões de escrita entram no
   lugar.
 
-● Adicionar os casos que mordem ao contrato
-  ⎿  $ cd /home/ronald/wt-lampada/app && python3 - <<'PY'
-     import io
-     p='ponto/tests/test_contract_juiz_ausencia.py'
-     s=io.open(p,encoding='utf-8').read()
-     old = """ def test_perguntar_ao_periodo_nao_e_acusado(self):"""
-     assert s.count(old)==1
-     new = ''' def test_MORDE_escrever_a_lampada_do_afastamento_e_viol…
+  Ran 4 shell commands
 
-· Bloviating… (16h 3m 30s · ↓ 2.2m tokens)
+● Agora a prova: o selo novo, o contrato da família, os vizinhos de cron/diagrama/porta.
+
+  Ran 3 shell commands
+
+● Quatro falhas, e duas são do meu próprio selo mordendo um bug meu: o {# #} de duas linhas vazou para a tela (compilar-nao-e-renderizar) e
+  o texto vazado contém a palavra "Afastado".
+
+  Ran 1 shell command
+
+● A exclusão do varredor é por arquivo: tirar o pendente expôs uma violação pré-existente de _A12 em ponto/views.py:2463 — e o selo que
+  cobra isso já existe no mesmo arquivo. A cura dessa pergunta já tem precedente (25/09).
+
+● Ler a tela e a view inteira
+  ⎿  $ cd /home/ronald/wt-lampada/app && sed -n '30,55p' templates/ponto/historico_atestados.html && echo "=== a view inteira ===" && sed
+     -n "$(grep -n 'def historico_atestados' ponto/views.py | cut -d: -f1),+30p" ponto/views.py
+
+✢ Bloviating… (16h 9m 0s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -146,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Documenting P13 blindness in test_porta_disputa_ciclo.py                                4h 24m 38s · ↓ 169.4k tokens
+  ◯ general-purpose  Listing GREEN modules in mods_d1_linha.txt                                                4h 30m 8s · ↓ 81.2k tokens
   ⧉  index
 ```
