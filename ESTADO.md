@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:37:01.**
+**Medido em 02/10/2026 22:42:31.**
 
 | | |
 |---|---|
@@ -93,44 +93,44 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+                                                                                                                                        ↑
+   Total cost:            $3717.48
+   Total duration (API):  2d 14h 21m
+   Total duration (wall): 5d 6h 20m
+   Total code changes:    4206 lines added, 498 lines removed
+   Usage by model:
+          claude-opus-5:  1.2m input, 11.4m output, 6.1b cache read, 27.2m cache write ($3563.68)
+       claude-fable-5-1:  12.5m input, 571.7k output, 0 cache read, 0 cache write ($153.80)
+   Prompt cache (main):   15859 requests · 100% of input tokens from cache · 29 misses (last 8h 54m 44s ago — likely cause: idle past
+   the 1h TTL, 11.9m tokens re-cached) · 28 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL, last activity 36s
+   ago)
 
-● Task "RED e construção do segundo intervalo" completed in background
+   Current session
+   ██████▌                                            13% used
+   Resets 1:30am (America/Sao_Paulo)
 
-● Task "Write RELATO block and check hook" still running in background
+   Current week (all models)
+   █████████████████████████▌                         51% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+   Current week (Fable)
+   █████████████████                                  34% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-  Searched for 1 pattern
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
 
-● Background command "Run E6 selos and calculador tests in live tree" completed (exit code 0)
+   Last 7d · these are independent characteristics of your usage, not a breakdown
 
-  Searched for 1 pattern, ran 2 shell commands
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
 
-● The motor's own ceiling is on the span, not the gap — turnos.py:749. That tightens my anchor, and it also tells me what I have not
-  proven. Fixing the lápide before the commit:
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
 
-  Ran 4 shell commands
-
-● Both live template diffs are additive-only. Verifying the inertness claim rather than trusting it:
-
-  Committed bfb3a15b, searched for 1 pattern
-
-● Committed bfb3a15b. Now the remedição — and it needs a counter that doesn't exist yet: the days where the new clause fires but no old
-  clause would have.
-
-● Reading how the oráculo builds its input
-  ⎿  $ sed -n '86,140p' ponto/management/commands/e6_oraculo.py
-
-✢ Sock-hopping… (4h 24m 30s · ↓ 740.3k tokens · thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
-  ⧉  index
+   97% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear
+    when switching to new tasks.                                                                                                        ↓
 ```
