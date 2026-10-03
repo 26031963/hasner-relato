@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:70 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 04:29:01.**
+**Medido em 03/10/2026 04:34:31.**
 
 | | |
 |---|---|
@@ -39,9 +39,13 @@ b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o 
 ## `git status --short`
 
 ```
+ M app/chamados/tests/test_contract_crons.py
+ M app/config/crons.py
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -116,7 +120,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  goes in that block. Checking LEIS.md.
 
   Ran 1 shell command
 
@@ -142,16 +145,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Reading _nome_raw and nome_do_cron
-  ⎿  $ cd /home/ronald/saas-hasner; sed -n '1152,1162p' app/config/crons.py; sed -n '1415,1420p' app/config/crons.py
+● Reading the TICKETS row format
+  ⎿  $ cd /home/ronald/saas-hasner; sed -n '120,126p' app/docs/TICKETS.md; echo "=== cabecalho da tabela"; sed -n '110,120p'
+     app/docs/TICKETS.md | grep -n '^|' | head -4
 
-✢ Bloviating… (4h 15m 30s · ↓ 570.0k tokens · thought for 6s)
+✢ Bloviating… (4h 21m 0s · ↓ 588.6k tokens · thought for 4s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   4% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
