@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:40:45.**
+**Medido em 02/10/2026 21:45:45.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -93,36 +94,36 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │                  │                                       item                                        │
-  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ cabeça           │ PLACAR-E — remedir o placar ESPELHO-VERDADE, com os quatro entregáveis            │
-  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ depois           │ cauda do E6 pela maior classe (uma por vez, com censo/RED/cura/remedição)         │
-  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ depois           │ O65                                                                               │
-  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ depois           │ obra A (O121) — A1 construído em cópia, RED evidenciado, 5 selos verdes           │
-  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
-  │ raia wt-esmeril2 │ O123 como primeiro item do trecho 3, e a pista de teste é uma: a fila 1 tem a vez │
-  └──────────────────┴───────────────────────────────────────────────────────────────────────────────────┘
+  ponto colaboradores escala holerite folha: 5.033 testes, 6 falhas. Pela regra da casa eles não se apagam — a asserção troca e passa a
+  morder a volta: a exportada passa a ser reescrita (e o holerite segue barrando), o piso e o período fechado param de bloquear. Deixei os
+  seis nomeados na célula do O121, porque é o trabalho que falta no A1 e a vez dele é depois da remedição e do O65 — não vou furar a sua
+  ordem para terminá-lo.
 
-  O selo do hook confirma a cabeça: "aponta o 1o da ORDEM VIVA (PLACAR-E)". A suíte dos vizinhos do O121 ainda roda, sozinha, e com ela
-  verde o A1 fica pronto para quando chegar a vez dele.
+  E isso é, na verdade, a prova de que o seu corte estava certo sobre o desenho: a lei antiga tinha seis selos a defendendo, e nenhum
+  deles distinguia a exportação da empresa do holerite da pessoa — que é exatamente a distinção que você mandou fazer.
 
-  O próximo passo é a remedição — o oráculo independente na frota nas competências 09 e 10, os congelados remedidos, o placar E1–E6 item a
-  item e a linha de distância para 98% no topo do RELATO. É o que você quer ler, e agora o RELATO está publicando de novo.
+  O oráculo reiniciou na competência 09 (a primeira corrida morreu por falta do --tmpfs /app/logs, com a árvore em :ro — a mesma nota que
+  diz que o ensaio na sombra precisa dos dois pontos de montagem). Está rodando as duas competências.
+
+  Quando ele voltar, publico os quatro entregáveis da PLACAR-E: o % de dia-colab que bate até 10 min, os divergentes por classe, os dias
+  de batida ímpar com número, os congelados remedidos (O73b, E6-14, CORTE-B-30, turnos abertos), o placar E1–E6 item a item com prova de
+  hoje e contratos N/22, e a linha de distância para 98% no topo do RELATO — em dia-colab e em colabs.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-E -- grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje -- parada desde 27/09
   19:3x
 
-● O hook aponta a cabeça certa. Começo a remedição pelo entregável (1) — o oráculo independente. Procuro onde ele mora:
+  Ran 1 shell command
 
-  Finding the independent oraculo
-  ⎿  $ cd /home/ronald/saas-hasner && ls bin/ | grep -iE "oraculo|e6" | head -8; echo "--- no app ---"; find app -name "*oraculo*" -o
-     -name "*e6*" 2>/dev/null | grep -v __pycache__ | head -8; echo "--- em /tmp ---"; ls /tmp/*oraculo* /tmp/*e6* 2>/dev/null | head -5
+● O arquivo tem a cauda da suíte que eu encadeei, e o meu laço casou com ela. O oráculo segue na 09. Espero pelo sinal certo — o CSV:
 
-· Sock-hopping… (3h 28m 14s · ↓ 602.0k tokens)
+  Waiting for competencia 09 to finish · 1m 20s
+  ⎿  $ cd /home/ronald/saas-hasner && until [ -s logs/placar_e/e6_010.csv ] || grep -qa "COMPETENCIA 10"
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5h296on5.output 2>/dev/null; do sleep 45;
+     done; echo "=== a 09 terminou ==="; ls -la logs/placar_e/; sed -n '… (1m 19s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Sock-hopping… (3h 33m 14s · ↓ 609.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
