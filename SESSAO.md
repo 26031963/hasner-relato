@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 01:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (217.5 MB). Acoes na janela: **1836**.
+**Medido em 03/10/2026 01:22:17.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (218.1 MB). Acoes na janela: **1851**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:22:13 | Bash | Read the _SetVivo tail | `cd /tmp/o124/app && sed -n '250,375p' ponto/catalogo/ausencias.py` |
+| 01:22:10 | Bash | Read the vigente/_do_banco region | `cd /tmp/o124/app && sed -n '140,250p' ponto/catalogo/ausencias.py` |
+| 01:22:07 | Bash | Map the API of ausencias catalogo | `cd /tmp/o124/app && grep -n "FORA_DO_8932\\|def parciais_vigentes\\|def _flag_vigente\\|def _do_banco\\|def vigente\\|def invalidar_cache\\|_SetVivo\\|def fim_de\\|def efeito_de\\|def rotulo_de\\|def exige_doc\\|def bloqueia" ponto/catalogo/ausencias.py` |
+| 01:22:02 | Bash | Read catalogo ausencias head | `cd /tmp/o124/app && sed -n '1,80p' ponto/catalogo/ausencias.py` |
+| 01:21:58 | Bash | Check push 4 status and lane | `tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push4.log 2>/dev/null; echo "---pista---"; bash /home/ronald/saas-hasner/bin/pista_lock.sh ver 2>&1 \| tail -3` |
+| 01:18:52 | Bash | Build copy of HEAD for O124 | `cd /home/ronald/saas-hasner && rm -rf /tmp/o124 && mkdir -p /tmp/o124 && git archive HEAD app \| tar -x -C /tmp/o124 && mkdir -p /tmp/o124/app/logs /tmp/o124/app/media && ls /tmp/o124/app \| head -20 && git log --oneline -1` |
+| 01:18:35 | Bash | Read colaboradores admin and all registrations | `sed -n '1,30p' colaboradores/admin.py; echo "=== onde ParametroSistema/Feriado/Sindicato/TipoAusencia estao registrados"; grep -rn "admin.register\\|admin.site.register" --include='admin.py' . \| cut -c1-120` |
+| 01:18:31 | Bash | Push status and the config admins | `cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -c 300 $SC/push4.log; echo "=== admins"; cd app && grep -rn "class \(Praca\\|Posto\\|ParametroSistema\\|TipoAusencia\\|Feriado\\|Sindicato\)Admin" -A 8 --include='admin.py' . \| grep -E "class \|fields\|readonly" \| cut -c1-170` |
+| 01:18:03 | Bash | Read configuracao_efeito head | `sed -n '1,130p' core/configuracao_efeito.py` |
+| 01:17:57 | Bash | Rest of the selo | `sed -n '110,185p' core/tests/test_contract_configuracao_nao_mente.py` |
+| 01:17:45 | Bash | Read escala admin and the selo internals | `echo "### escala/admin.py"; cat escala/admin.py; echo; echo "### selo 40,110"; sed -n '40,110p' core/tests/test_contract_configuracao_nao_mente.py` |
+| 01:17:24 | Bash | Read CATALOGO tail and _do_banco | `sed -n '60,215p' ponto/catalogo/ausencias.py` |
+| 01:17:14 | Bash | Read the vigente() machinery | `sed -n '215,355p' ponto/catalogo/ausencias.py` |
+| 01:17:08 | Bash | Find the vigentes helpers | `grep -rn "_CATV\s*=\\|_CATC\s*=" --include='*.py' . \| head -5; echo "=== def .*vigentes"; grep -rn "def .*vigente" --include='*.py' ponto/ \| cut -c1-120` |
+| 01:16:55 | Bash | Read the four lista-fixa readers | `echo "### views.py 1893,1915"; sed -n '1893,1915p' ponto/views.py; echo; echo "### views.py 2088,2108"; sed -n '2088,2108p' ponto/views.py; echo; echo "### views.py 2444,2462"; sed -n '2444,2462p' ponto/views.py; echo; echo "### relatorios/views.py 268,292"; sed -n '268,292p' relatorios/views.py` |
 | 01:15:08 | Bash | Inspect push log and running containers | `cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -c 800 $SC/push4.log 2>/dev/null; echo "---"; ls -la $SC/push4.log 2>/dev/null; docker ps --format '{{.Names}}' \| head` |
 | 01:15:04 | Bash | Check push progress | `tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgncpxox0.output 2>/dev/null` |
 | 01:14:45 | Bash | Read the alert service and its users | `echo "### alertas_ausencia.py 1,60"; sed -n '1,60p' ponto/services/alertas_ausencia.py; echo; echo "### grep TIPOS_ATESTADO"; grep -rn "TIPOS_ATESTADO" --include='*.py' . \| cut -c1-150` |
