@@ -2,6 +2,66 @@
 
 **DISTANCIA PARA 98% (remedicao de 02/10 21:5x, oraculo independente na sombra):** **695 dia-colab** na 09 e **296** na 10 -- e **242 colaboradores** com ao menos uma divergencia (195 na 09, 139 na 10, **92 nos dois**). `erros no espelho: 0` nas duas.
 
+# O120 APLICADO: a 09 do col221 reescrita, e o cadastro errado custava DSR em QUATRO semanas (02/10 22:3x)
+
+PROVA: hash 09 `c12385f226be0cb4` -> `40f452f887ac8925`; hash 08 `336c823528d61ee0` **identico antes e
+depois**; reversao em `logs/reversao_o120_col221_09.json` (1 fechamento + 27 DiaPago).
+
+A lei dele de 22:2x fechou a pergunta que eu havia posto no topo: *"vale O TXT E FOTOGRAFIA -- correcao
+provada REESCREVE o gravado em qualquer competencia; a guarda de `fechamento.py:75` e leitor que nao
+migrou. Pauta DP so nasce quando o colab CONSTOU no TXT daquela competencia e o numero muda."*
+
+**O ESCOPO FICOU PEQUENO E EXATO**: so o col221, so a **09**. O vinculo **nao se tocou** (o `ec1361` dele
+de 20:28 ja estava em prod e o aval das 20:2x esta REVOGADO), a **08 nao se tocou** -- e isso esta provado
+por HASH, nao por promessa --, e **sem Pauta DP**, porque ele nao constou no TXT da 09 (0 linhas no export
+27, medido por ele).
+
+| campo | gravado | novo | delta |
+|---|---|---|---|
+| `minutos_previstos` | 10.800 | **11.550** (= 21 x 550) | +750 |
+| `minutos_realizados` | 4.984 | **10.981** | +5.997 |
+| `dias_previstos` | 15 | **21** | +6 |
+| `semanas_dsr_ok` | 0 | **4** | +4 |
+| **`semanas_dsr_perdido`** | **5** | **1** | **-4** |
+| `saldo_banco_horas` | 0,00 | -7,67 | -7,67 |
+
+**6 campos de 24**, e `horas_trabalhadas` NAO se move (182,99 nos dois) -- as batidas sao as mesmas; o que
+muda e a GRADE. E o numero que diz o que o defeito custava a ele: o cadastro 12x36 errado lia sabados e
+domingos como FALTA e lhe tirava **DSR em quatro semanas**.
+
+# PLACAR-E, entregavel (2): os congelados remedidos, e dois estao CURADOS (02/10 22:3x)
+
+PROVA: medido pela AUTORIDADE (`PeriodoCalculo.turno_aberto` via `autoridade_do_periodo`) na sombra,
+arvore de hoje, sobre os 436 dia-colab da 09 com pontualidade lavrada em 140 colabs.
+
+| congelado | antes | **hoje** |
+|---|---|---|
+| `09-TURNO-ABERTO-EXPOSTA` | 14 dia-colab / **61,30 h** (01/10 18:4x) | **1 dia-colab / 0,17 h** (col922 13/09) |
+| **O73b** (col81, volta da pausa no turno partido) | cobrada como atraso | atraso **0,00**, antecipada **0,00**, **zero** dias com atraso lavrado |
+| **E6-14** (nao certificados no universo do TXT) | 14 | **19 colabs** (96,2% de 2.655 dias) |
+| `CORTE-B-30` | 30 separados | **NAO MEDIDO -- e a razao importa** |
+
+**O `09-TURNO-ABERTO-EXPOSTA` e o O73b estao CURADOS**, e a medicao foi pela autoridade e nao pela forma
+-- a nota do proprio item adverte que a conta por FORMA (batidas em numero impar) dava 169 dia-colab e
+126,29 h, **inflando 12x**. As 11,00 h x 2 do col820 sumiram.
+
+**E O `CORTE-B-30` NAO SE MEDE HOJE, por uma razao que e ela mesma o achado**: o comando
+`aplicar_09_corte_b` chama `recalcular_fechamento_mes` **sem** `permitir_exportada`
+(`aplicar_09_corte_b.py:191`) e bate na guarda de `ponto/services/fechamento.py:75` -- **a mesma que o
+aval de 22:2x acabou de declarar leitor que nao migrou**. Ela barra **ate em DRY**, porque o DRY recalcula
+para montar o diff. Entao o quarto congelado esta atras de uma guarda que a lei ja derrubou, e a forma da
+migracao e: a guarda **para de levantar** e passa a **registrar** (o `logger.warning` dela ja existe para o
+caminho autorizado), preservando a trilha e tirando a parada -- *"sem parar a fila, com DIFF antes,
+reversao em logs/ e prova depois"*. Nao a removi por conta propria as 22:3x: e guarda de dinheiro da frota
+inteira, e ela merece RED e suite proprios.
+
+# PLACAR-E, entregavel (3): os contratos nao se moveram
+
+PROVA: `core/contratos_estruturais.linha_do_placar()` lido no ar -> **`contratos_estruturais: 8/22
+verdes`**, `TOTAL = 22`. E o mesmo 8/22 que o topo do TICKETS declara, o que confirma a sua frase: nenhum
+dos 29 itens mudou de estado desde 28/09. O caminho para 22/22 esta nomeado no O35, e a propria celula
+dele mede que **nenhum dos 4 degraus que faltam e meu**.
+
 # PLACAR ESPELHO-VERDADE REMEDIDO: 89,2% na 09 e 87,4% na 10, e a queda tem causa (02/10 21:5x)
 
 PROVA: oraculo independente (`ponto/management/commands/e6_oraculo.py`) na SOMBRA, arvore de HOJE (com o

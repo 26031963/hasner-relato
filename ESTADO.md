@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:55:45.**
+**Medido em 02/10/2026 22:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos` |
+| `HEAD` local | `14b1de9c [PLACAR-E] A remedicao com prova de hoje, e o O120 aplicado na 09 do col221` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,27 +22,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+14b1de9c [PLACAR-E] A remedicao com prova de hoje, e o O120 aplicado na 09 do col221
 34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
 74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia
 da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias de 169
 801253ed [O119] O intra desconta TODAS as pausas, e o DIFF me pegou num erro meu antes de fechar
-d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
-?? bin/relavrar_o120_col221_09.py
-?? bin/remedir_congelados_placar_e.py
-?? bin/reverter_o122.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,36 +92,36 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  a 08, e sem Pauta DP porque ele não constou no TXT (0 linhas no export 27). Primeiro o DIFF, que é a condição que vem antes:
+  reversão em logs/, sem Pauta DP (0 linhas no export 27), vínculo não tocado. Seis campos de 24 se movem — e o que diz o custo do
+  defeito: semanas_dsr_perdido de 5 para 1. O cadastro 12x36 errado lia sábado e domingo como falta e lhe tirava DSR em quatro semanas.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-E -- grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje -- parada desde 27/09
+  19:3x
 
-● DIFF publicado, e ele é coerente com o vínculo que você corrigiu:
+● O quarto entregável está atrás da guarda que a sua lei derrubou, então migrá-la é o caminho para fechar a PLACAR-E. Meço o raio antes:
+  quem afirma que ela levanta?
 
-  ┌─────────────────────┬─────────┬─────────────────────┬────────┐
-  │        campo        │ gravado │        novo         │ delta  │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ minutos_previstos   │ 10.800  │ 11.550 (= 21 × 550) │ +750   │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ minutos_realizados  │ 4.984   │ 10.981              │ +5.997 │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ dias_previstos      │ 15      │ 21                  │ +6     │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ semanas_dsr_ok      │ 0       │ 4                   │ +4     │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ semanas_dsr_perdido │ 5       │ 1                   │ −4     │
-  ├─────────────────────┼─────────┼─────────────────────┼────────┤
-  │ saldo_banco_horas   │ 0,00    │ −7,67               │ −7,67  │
-  └─────────────────────┴─────────┴─────────────────────┴────────┘
+  Searched for 1 pattern
 
-  6 campos de 24, e horas_trabalhadas não se move — as batidas são as mesmas; o que muda é a grade. E o item que importa para ele: o
-  cadastro 12x36 errado estava lhe custando DSR em 4 semanas (sábados e domingos lidos como falta). Aplico:
+● Antes de tocar a guarda eu preciso checar uma coisa que muda tudo: quem mais chama esse recálculo. Se o recálculo por evento (a cada
+  batida) passa por ali, tirar a guarda significa competência paga sendo reescrita automaticamente, sem DIFF, sem reversão e sem prova — o
+  oposto do que a sua lei pede:
 
-● Applying the col221 09 recalculation
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "APLICAR=True
-     exec(open('/tmp/r120.py').read())" 2>&1 | grep -v "objects imported" | tail -14
+  Searched for 1 pattern
 
-✶ Sock-hopping… (3h 43m 14s · ↓ 625.9k tokens)
+● Minha preocupação estava errada e é bom tê-la checado: não há chamador automático. Todos os 12 são atos deliberados — comandos e o botão
+  "Recalcular" da tela (views.py:1025). Então o CORTE-B-30 não está barrado pela guarda existir, e sim por aplicar_09_corte_b não passar
+  a flag autorizada — padrão que o recalcular_fechamento já tem. Correção estreita:
+
+● Measuring CORTE-B-30 with the motive passing through · 1m 10s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 900 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
+     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
+     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
+     -e HTTP… (1m 8s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✶ Sock-hopping… (3h 48m 14s · ↓ 640.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
