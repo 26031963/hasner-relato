@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:46 AFIRMA ato sem PROVA ao lado -- > **APLICADO, REVISE** (03/10, neste commit; DIFF de frota ZERO e suite verde, os dois numeros abaixo). Ordem dele: *"CONSUMIR 1 (`TipoAusen
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 04:02:01.**
+**Medido em 03/10/2026 04:07:31.**
 
 | | |
 |---|---|
@@ -39,9 +39,13 @@ b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o 
 ## `git status --short`
 
 ```
+ M CLAUDE.md
+ M app/config/crons_duracao.json
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -121,42 +125,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● The selo caught the BUG-128 window open right now: alertas_ausencia.py:33 late-imports TIPOS_MEDICOS, which the in-memory module doesn't
-  have — a 500 scheduled on the next request, and the */5 crons are seconds away. This is the 30/09 merge window again, and the cure is
-  the deploy. Closing it: docs → templates → commit, nothing in between, then deploy.
+● Now the marco section for the landing, including what the selo caught and the gate debt it created.
 
   Ran 1 shell command
 
-● app/templates/core/_barra_gestao.html and _icone_barra.html came along — they were already modified before O124 and are not in its path
-  list. That's the O57 bug that produced CURA-MAIS-RESTRITIVA. Unstaging them and auditing the staged set against the intended paths.
+● Adding the esmeril cure as its own BACKLOG item — per the house rule, a finding that isn't a fatia yet still has to become an item.
+  Checking the OBRAS format first (300-char state cell, no pipes).
 
   Ran 1 shell command
 
-● Staged set is exactly the 29 intended paths, zero intruders, and Ronald's surface (PENDENTES_RONALD.json, AVAIS.md) correctly left out.
-  Committing and deploying with nothing in between.
+● Marking O124 closed in the portao column the hook reads, correcting O130's universe, and adding the esmeril regression as its own obra —
+  no | inside any cell.
 
-  Committed 4088657e, ran 1 shell command
+  Ran 1 shell command
 
-● Deploy OK at 04:01 — migration 0070 applied, three cascas reloaded together, three routes proved, importerror_500=0, and the BUG-128
-  selo green. The import window is closed.
+● O124's row already has six cells where the header declares five — pre-existing, and my replacement text adds no pipes. Asserting only on
+  the row I'm creating.
 
-  Now the gate consequence I predicted: prod's migrate landed after the 04:00 dump, so the sombra won't have 0070. Measuring instead of
-  assuming.
-
-● Verifying the window closed and measuring the sombra gate state · 31s
-  ⎿  $ cd /home/ronald/saas-hasner; date "+%H:%M:%S"; bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 | tail -3; echo "=== dumps de
-     hoje:"; ls -la --time-style=+%H:%M:%S backups/juliani/ 2>/dev/null | tail -4; echo "=== conferir:"; bin/sombra.sh --conferir 2>&1 |
-     tail -6; echo "=== cron do refazer… (31s · 2 lines)
+● Applying the BACKLOG edits and refreshing the placar · 26s
+  ⎿  $ cd /home/ronald/saas-hasner; python3 - <<'PY'
+     # -*- coding: utf-8 -*-
+     import io
+     P='/home/ronald/saas-hasner/app/docs/BACKLOG.md'
+     s=io.open(P,encoding='utf-8').read()
+     a=u"| **a condicao previa esta CUMPRIDA**: a fonte de tolerancia do motor e `TOLERANCIA_CONFORMIDADE_MIN/_DIA` = **10/20** (`motor_…
+     (26s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (3h 48m 30s · ↓ 515.0k tokens)
+✢ Bloviating… (3h 54m 0s · ↓ 536.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                  11% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
