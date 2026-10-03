@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:55:31.**
+**Medido em 03/10/2026 17:01:01.**
 
 | | |
 |---|---|
@@ -109,35 +109,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Isso fecha a questão, e contra o meu pouso. O reverter já é o escritor derivado: quem_ja_voltou pergunta a afastado_hoje nos dois efeitos
-  e escreve pela porta (gravar + evento), declarando "AQUI NAO SE MUDA JUIZ NENHUM". E a lápide dele carrega um corte anterior do Ronald
-  (24/09, item 3) que já examinou e recusou a opção de tirar o campo, nomeando o motivo. Conferindo o sinal que esse corte diz que se
-  apagaria:
+● Agora test_afastado_hoje.py — tirar a asserção AST da leitura (b), manter a extensão de dois arquivos:
 
   Ran 1 shell command
 
-● Conferência 2 fecha pior do que o advisor supôs. O 2º if é alarme de casa (abre Pauta para a supervisão), mas o texto dele manda "encerre
-  a AUSENCIA de afastamento (a situacao sai dela, nao do cadastro)" — e, sem reversor e com admin readonly, encerrar a ausência não limpa
-  o campo. O 1º if passa a falhar, o 2º acende, e a Pauta renasce a cada batida para sempre, apontando uma cura que deixou de existir. Não
-  é tripwire medindo 0: é laço sem porta de saída.
+● O hunk 2 (_somas_cruas em dois arquivos) fica — e ele vale mais agora, porque prova que o arquivo abrigado pelo pendente não tem soma
+  crua. O hunk 1 volta ao HEAD, e o comentário do hunk 2 passa a contar a história verdadeira:
 
-  Enumerando o que é de qual leitura:
+  Ran 3 shell commands
+
+● Dois comentários ficaram com a premissa invertida, e o views.py merece nota: hoje os dois caminhos dão o mesmo conjunto de 11 (medido),
+  então a migração do filtro é comportamento idêntico e mais correto adiante. Corrigindo a prosa:
+
+  Ran 2 shell commands
+
+● models.py está limpo — lê, não deriva. Corrigindo as duas afirmações em tempo futuro do selo:
 
   Ran 1 shell command
 
-● Preciso partir o diff por hunk: ponto/views.py carrega a cura _A12 (segura) e a remoção da escrita (leitura b); test_afastado_hoje.py
-  carrega a extensão de dois arquivos (segura) e a asserção AST (leitura b). Vendo os hunks:
+● Ruff limpo. Rodando os módulos afetados, com a montagem pela autoridade (arvore_do_push.sh --montagem) e não à mão:
 
-  Ran 1 shell command
+● Rodar os módulos afetados · 39s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null
+     MONT=$(bin/arvore_do_push.sh --montagem /home/ronald/wt-lampada 2>/dev/null)
+     echo "montagem: $MONT"
+     mkdir -p /home/ronald/wt-lampada/app/logs /home/ronald/wt-lampada/app/media
+     docker run --rm --name al… (40s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Separação limpa: views.py tem 3 hunks — o hunk 1 (@@ -2082) é a remoção da escrita (segurar), os hunks 2 e 3 são a cura _A12 (pousar).
-  Vendo os dois que faltam classificar:
-
-● Ver diffs de juizes e espelho_verdade
-  ⎿  $ cd /home/ronald/wt-lampada && echo "=== core/juizes.py ==="; git diff HEAD -- app/core/juizes.py; echo "=== core/espelho_verdade.py
-     ==="; git diff HEAD -- app/core/espelho_verdade.py
-
-· Bloviating… (16h 42m 0s · ↓ 2.3m tokens · thinking)
+✢ Bloviating… (16h 47m 30s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +147,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading run_d1.sh test harness                                                             5h 3m 8s · ↓ 83.0k tokens
+  ◯ general-purpose  Reading test_porta_disputa_ciclo.py gate mold                                            5h 8m 38s · ↓ 113.3k tokens
   ⧉  index
 ```
