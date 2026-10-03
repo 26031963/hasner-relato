@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 00:17:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (213.5 MB). Acoes na janela: **1657**.
+**Medido em 03/10/2026 00:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (214.1 MB). Acoes na janela: **1674**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:22:58 | Bash | Check background shell outputs and git state | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9ya5bxj8.output 2>/dev/null \| tail -20; echo "=== BNA ==="; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bna2n8kvo.output 2>/dev/null \| tail -20; echo "=== GIT ==="; git log --oneline origin/main..HEAD \| cat; echo "=== STATU ...` |
+| 00:20:17 | Bash | Read the OBRAS table header | `sed -n '18,30p' docs/BACKLOG.md; echo "...."; sed -n '110,118p' docs/BACKLOG.md` |
+| 00:20:04 | Bash | Pin down the tolerance constants and their users | `sed -n '44,72p' ponto/motor_calculo_v2.py; echo "=== usos de TOLERANCIA_MINUTOS"; grep -rn "TOLERANCIA_MINUTOS" --include=*.py . \| grep -v migrations \| head` |
+| 00:19:53 | Bash | Read the persisted censo output | `cd /home/ronald/saas-hasner && cat logs/censo_juiz/batida_e_escala.txt` |
+| 00:19:44 | Bash | Locate the OBRAS block | `grep -n "OBRAS" docs/BACKLOG.md \| head -5` |
+| 00:19:43 | Bash | Read the PROMPTS tail for format | `tail -25 docs/PROMPTS.md` |
+| 00:19:17 | Bash | Measure the medico cadastro in the sombra | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c && cat > "$S/censo_medico.py" <<'PY' # -*- coding: utf-8 -*- """O cadastro responde "este tipo e MEDICO?" hoje? (PARAMETROS-SEM-EFEITO, CONSUMIR 1) Se `medico` esta False em TODO tipo, consumir o campo CALA o alerta -- e calar exige prazo, tripwire e item de fila. Enta ...` |
+| 00:19:00 | Bash | Read the exact sombra docker invocation | `cd /home/ronald/saas-hasner && sed -n '36,60p' bin/simular_folha.sh` |
+| 00:18:42 | Bash | Find the sombra invocation pattern | `cd /home/ronald/saas-hasner && grep -n "sombra" bin/simular_folha.sh 2>/dev/null \| head -20; echo ===; ls /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c/ \| head -30` |
+| 00:18:40 | Bash | Read the PerfilApuracao lápide, model and view note | `cat ponto/tests/test_perfil_apuracao_lapide.py; echo "=== model"; sed -n '890,925p' ponto/models.py; echo "=== views 2485-2500"; sed -n '2485,2500p' ponto/views.py` |
+| 00:18:18 | Bash | Read the selo cases that exercise the branch | `sed -n '100,160p' ponto/tests/test_e3_metade_intervalo_cadastrado.py` |
+| 00:18:17 | Bash | Check whether PerfilApuracao exists | `grep -rn "PerfilApuracao" --include=*.py . \| grep -v migrations \| head -20` |
+| 00:17:56 | Bash | Read the intrajornada branch in the motor | `sed -n '676,740p' ponto/motor_calculo_v2.py` |
+| 00:17:55 | Bash | Locate the TipoEscala screen view | `grep -rn "def salvar_tipo\\|def tipos_escala\\|def form_tipo\\|cadastro_tipo" escala/views.py \| head -20; echo "=== urls de tipos"; grep -rn "tipos" escala/urls.py \| head` |
+| 00:17:23 | Bash | Look for the TipoEscala screen POST keys | `echo "=== tela de TipoEscala: POST keys"; grep -rn "request.POST.get" escala/views_tipos.py 2>/dev/null \| head -30; ls escala/views*.py` |
+| 00:17:22 | Bash | Read admin field declarations | `echo "=== admins das entidades"; grep -rn "class .*Admin\\|fields\s*=\\|readonly_fields\\|site.register" core/admin.py colaboradores/admin.py ponto/admin.py 2>/dev/null \| head -40` |
+| 00:17:20 | Bash | Census of parametros= callers | `echo "=== quem passa parametros= a get_motor (AST-ish grep)"; grep -rn "parametros=" --include=*.py . \| grep -v migrations \| head -20; echo; echo "=== def get_motor"; grep -rn "def get_motor" --include=*.py . \| head` |
 | 00:16:55 | Bash | Read the catalogo DB loader | `grep -n "_do_banco" -A 30 ponto/catalogo/ausencias.py \| head -50` |
 | 00:16:54 | Bash | Find fixed atestado lists across the tree | `grep -rn "atestado_inss\\|'atestado'" --include=*.py . \| grep -v migrations \| grep -v "/tests/" \| grep -v catalogo/ausencias.py \| head -30` |
 | 00:16:53 | Bash | Read regua CCT tolerance declarations | `sed -n '20,80p' core/regua_cct.py` |
