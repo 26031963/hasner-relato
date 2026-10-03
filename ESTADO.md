@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:08:49.**
+**Medido em 03/10/2026 13:14:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `44099e7a [PLACAR-ESTRUTURAL] o atraso do LOTE sao 20 de 20 na perturbacao e 3 de 233 na frota -- e o [O65-GEOMETRIA-LE-A-ATA] nao tinha 6 dias, tinha 1` |
+| `HEAD` local | `f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres` |
 | `origin/main` | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,32 +22,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres
 44099e7a [PLACAR-ESTRUTURAL] o atraso do LOTE sao 20 de 20 na perturbacao e 3 de 233 na frota -- e o [O65-GEOMETRIA-LE-A-ATA] nao tinha 6 dias, tinha 1
 0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo
 bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO
 8bf639f1 [PLACAR-ESTRUTURAL] O RELATO do R3 publica a PROVA do ato, e a clausula do numero deixou de ser afirmacao
-e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/core/juizes.py
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
- M app/docs/TICKETS.md
  M app/escala/views.py
- M app/ponto/services/triagem_batida.py
- M app/ponto/tests/test_afastado_na_batida.py
- M app/ponto/tests/test_afastado_nunca_bloqueia.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
-?? app/docs/DOSSIES.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -119,44 +109,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
-
-● O registro fica em 1 pendente (a escrita). Atualizo só o motivo para carregar o fato de hoje:
-
-  Ran 3 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
-● Só o meu hunk em cada arquivo. Agora o arquivo de PROVA do número:
-
-  Ran 7 shell commands
-
 ● Background command "Rodar core.tests (contratos e juizes) com os dois modulos de ausencia" completed (exit code 0)
 
   Read 1 file
 
 ● Suite completa dos contratos: 1196 testes OK. Agora a linha no TICKETS (o selo cobra o ID citado):
 
-  Conferir se logs entram no git e o status dos paths da fatia
-  ⎿  $ cd /home/ronald/saas-hasner
-     git check-ignore -v logs/o134/afastado_censo_20261003.out || echo "NAO ignorado"
-     git ls-files logs/ | head -3 || true
-     echo "--- status dos meus paths ---"
-     git status --porcelain -- app/ponto app/core/juizes.py app/docs
+  Committed f9f0a745, ran 4 shell commands
 
-✢ Bloviating… (12h 55m 17s · ↓ 1.8m tokens)
+● O amend mudou o hash, então o hash escrito ficaria inválido — auto-referência não fecha. Ponho o rótulo estável e o hash entra no commit
+  seguinte:
+
+  Ran 1 shell command
+
+● Push do marco (o pre-push roda os dois runners):
+
+  Ran 1 shell command
+
+● Enquanto o push roda, abro o item (1) — a lei o destravou. Lendo os sítios antes de afirmar:
+
+  Ran 8 shell commands
+
+● O número publicado se reproduz: 10 dia-colab / 34,6 h são os dias com ata>0 e zero batida no dia (logo zero par pareável) — os outros 6
+  de ata>0 têm par ABERTO, que é a palavra "Em aberto" do R3. Lendo os sítios do molde antes de desenhar:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Bloviating… (13h 0m 30s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inspecting censo.out for the test-db collision                                          1h 16m 26s · ↓ 115.0k tokens
+  ◯ general-purpose  Comparing changed files against censo_escritas.py                                       1h 21m 38s · ↓ 129.7k tokens
   ⧉  index
 ```
