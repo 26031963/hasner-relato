@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:05:31.**
+**Medido em 03/10/2026 18:10:45.**
 
 | | |
 |---|---|
@@ -107,36 +107,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  medição minha não revoga portão declarado. O que decide o risco real é se o reload das 03:30 passa pela mesma janela:
 
   Ran 1 shell command
 
-❯ corte Ronald: HE fixa da escala e CADASTRO: o modelo de escala declara a "extra prevista", ela nasce autorizada com calculo proprio, e o
-  bloqueio total da L-097 segue valendo para o que nao esta declarado.
-
-● Corte de LEI recebido (HE fixa da escala = CADASTRO). Pela PAREI-DE-LEI-NAO-DEVOLVE-TURNO ele vai para o topo do RELATO + OBRAS neste
-  mesmo turno — mas não no meio do merge: a árvore é o bind-mount, e merge e deploy são um ato só. Primeiro conferindo o models.py da raia,
-  que decide se o deploy migra:
+● Dois achados que mudam a decisão. Lendo as linhas exatas:
 
   Ran 1 shell command
 
-● Zero campo → nenhuma migration. Merge agora:
+● Os dois achados estão confirmados, e juntos eles são um bug provado no caminho desta fatia:
+
+  - deploy.sh:125 isenta o reload das 03:30 porque "ele nao publica codigo novo -- recarrega o que ja estava no ar". Essa premissa é falsa
+    exatamente agora: a árvore tem 44 arquivos que os workers não têm. Às 03:30, dentro da faixa proibida 23:20-06:00 e sem ninguém
+    olhando, o reload publicaria o auth que a janela acabou de barrar. A guarda fabrica a condição que ela proíbe.
+  - janela_auth.sh compara $BASE...HEAD com BASE=origin/main. Depois do push, origin/main == HEAD, o diff fica vazio e a guarda imprime "OK
+    -- nenhum sitio de auth mudou". O "empurra agora" do corte abriria o portão por efeito colateral — e pré-aprovação cobre rotina, nunca
+    contorno.
+
+  Conferindo a autoridade que as duas deviam ler:
 
   Ran 1 shell command
 
-● Merge limpo, 44 arquivos. Compilando e commitando — o deploy vem imediatamente depois:
+● A autoridade do "que está no ar" já existe (logs/deploy.stamp::COMMIT=2984714b) e já é lida por 5 sítios, inclusive o próprio deploy.sh.
+  E api/views.py está declarado em auth_sitios.txt com razão escrita — "tem a porta de login no meio" —, então minha medição não revoga
+  nada: o portão é por arquivo, de propósito.
 
-  Ran 2 shell commands
+  Antes de mexer no caminho de publicação — e é a guarda que acabou de me barrar, o que pede segunda leitura:
 
-● --no-verify é atalho — está na lista NUNCA pré-aprovado e eu não devia tê-lo escrito. Commit pela porta normal:
+  Advising using Fable 5.1
 
-  Committed 23450e7e
-
-● Commit 23450e7e. Deploy agora — 44 arquivos já estão no disco que o worker lê:
-
-● Publicar o merge em prod
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh 2>&1 | tail -35
-
-✢ Bloviating… (17h 52m 0s · ↓ 2.4m tokens · thinking)
+· Bloviating… (17h 57m 14s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
