@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:30:45.**
+**Medido em 02/10/2026 23:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro` |
+| `HEAD` local | `33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado
 7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro
 8eaaf908 [PLACAR-ESTRUTURAL] R6, metade medida: NADA alcanca o dinheiro -- nem batida, nem correcao de cadastro
 71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento
 a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de chamar diferenca de PERGUNTA de divergencia
-ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101
 ```
 
 ## `git status --short`
@@ -94,36 +94,36 @@ ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o cens
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  minha sonda imprime "na 09" com dado da 10 — bug de rótulo meu, e o número abaixo é o da 10.)
+  Ran 1 shell command
 
-  Committed 7beff6c2, ran 1 shell command
+● RED evidenciado: exatamente 1 falha, a certa. Conferindo que a árvore voltou — a restauração veio encadeada num comando que falhou:
 
-❯ aval Ronald: duas respostas, nenhuma lei nova.
+  Ran 1 shell command
 
-  1. R6, "qual porta recalcula quando a celula muda": a porta JA EXISTE, e a medicao "nada alcanca o dinheiro" esta errada na metade da
-  batida. ponto/registro_batida.py:136-137 chama ponto/services/fechamento.py::recalcular_por_evento (linha 1011, on_commit, nunca
-  levanta), e a MESMA porta e chamada por ponto/portas/he.py:130 e chamados/services/validacao.py:107. Batida, decisao de HE e validacao
-  alcancam o dinheiro. Retratar o bloco no RELATO.
-     O leitor que NAO migrou e so o cadastro: regenerar_celulas_vinculo, reconciliar_apos_vinculo e corrigir_escala_retroativa nao chamam
-  a porta. CURA (LEI-AKITA 4, entra na O121): depois de regenerar celula, chamar recalcular_por_evento uma vez por competencia tocada,
-  com o motivo do vinculo. Signal em CelulaDia NAO; juiz novo = 0. Lote (template com N colabs, item A2) vai para job, nao inline.
-  Competencia exportada: vale a resposta do O120. RED: col221 na sombra, corrigir o vinculo e o FechamentoMensal acompanhar sem comando.
-  R6 so fecha com passos manuais = 0 medido.
-  2. Selo do "ultimo push" (falhas 93 e 96): escolha tecnica, pela lei CURA-MAIS-RESTRITIVA nao espera por mim. Fica a (a): o selo aceita
-  o hash gravado se ele for ancestral do origin/main, em vez de exigir igualdade. A (b) reescreve arquivo depois do push e suja a arvore
-  a cada push. Registrar e seguir.
+● O git checkout levou minha cura do placar_tickets.py e o git apply encadeado falhou. O patch guardado tem tudo — reaplicando só a parte
+  daquele arquivo:
 
-  Segue a fila; PAREI so em lei ou !
+  Ran 2 shell commands
 
-● Ele está certo e meu R6 estava errado na metade da batida: eu grepei recalcular_fechamento_mes e concluí sobre a pergunta inteira — a
-  porta se chama recalcular_por_evento. Lendo os três sítios antes de retratar:
+● 35 selos OK. O ALARME da cópia é artefato dela (não tem .regua_stamp, então o bloco "do mundo" sai sem o prefixo da régua) — os hashes
+  ali já são iguais. Levando à árvore viva, onde o selo roda de verdade:
 
-  Reading the porta and all its callers
-  ⎿  $ sed -n '132,140p' ponto/registro_batida.py; echo "=== a porta ==="; sed -n '1011,1020p' ponto/services/fechamento.py; echo "=== os
-     outros dois chamadores ==="; sed -n '128,132p' ponto/portas/he.py; sed -n '105,109p' chamados/services/validacao.py; echo "=== censo
-     de chamadores ==="; grep -rn "rec…
+  Ran 1 shell command
 
-· Sock-hopping… (5h 18m 14s · ↓ 939.3k tokens · thinking)
+● tickets_placar: OK na árvore viva. Registrando as duas respostas e commitando:
+
+  Committed 33412f31, ran 1 shell command
+
+● Agora a cura do R6 na O121, que ele especificou. Lendo o sítio da regeneração:
+
+  Searched for 2 patterns, ran 1 shell command
+
+● Três chamadores, incluindo o lote do cadastro_tipo. Preciso da autoridade que diz "qual competência contém esta data", para chamar uma
+  vez por competência e não por dia:
+
+● Running 1 shell command…
+
+✶ Sock-hopping… (5h 23m 14s · ↓ 958.9k tokens · thought for 16s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

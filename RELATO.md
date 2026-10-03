@@ -57,7 +57,34 @@ proximo uso, e o numero publicado aqui e o da 10.
 **O que eu NAO vou fazer, pelo R2 literal**: curar por codigo divergencia de dono CADASTRO ou BATIDA.
 Os 7 viram linha de lista, nao fatia.
 
-### R6 (primeira metade, e e o achado mais fundo do corte dele): NADA ALCANCA O DINHEIRO (02/10 23:4x)
+### ~~R6: NADA ALCANCA O DINHEIRO~~ — **RETRATADO pelo Ronald as 23:5x. A porta EXISTE.** (02/10 23:4x)
+
+> **ERRADO NA METADE DA BATIDA, e o erro foi de METODO**: eu grepei `recalcular_fechamento_mes` e
+> conclui sobre a pergunta INTEIRA. A porta do dinheiro por evento nao tem esse nome: e
+> `ponto/services/fechamento.py:1011::recalcular_por_evento`, chamada em `on_commit`, que **nunca
+> levanta**, com tres chamadores medidos agora -- `ponto/registro_batida.py:136-137` (a BATIDA),
+> `ponto/portas/he.py:130` (decisao de HE) e `chamados/services/validacao.py:107` (resposta
+> validada). **Batida, HE e validacao alcancam o dinheiro.** Procurar por UM nome de funcao e
+> responder pela pergunta toda e o criterio pela forma outra vez, agora no censo -- a decima nesta
+> sessao, e a mais cara, porque virou afirmacao publicada.
+>
+> **O QUE SOBREVIVE, e e o que importava**: o leitor que NAO migrou e **so o cadastro**.
+> `regenerar_celulas_vinculo`, `reconciliar_apos_vinculo` e `corrigir_escala_retroativa` nao
+> chamam a porta -- o censo de chamadores de `recalcular_por_evento` tem tres entradas e nenhuma
+> em `escala/` ou `colaboradores/`. Entao **1 passo manual** continua sendo o numero do R6, e o
+> RED continua sendo o col221. O que cai e a frase "nada alcanca", e com ela a minha conclusao de
+> que isto exigia desenho novo: **nao exige, a porta esta pronta.**
+>
+> A CURA (ordem dele 23:5x, entra na **O121**): depois de regenerar celula, chamar
+> `recalcular_por_evento` **uma vez por competencia tocada**, com o motivo do vinculo. **Signal em
+> `CelulaDia` NAO**; juiz novo = 0. Lote (template com N colabs, item A2) vai para **job**, nao
+> inline -- o custo medido da porta e p50 122 ms / p95 243 ms por colab. Competencia exportada:
+> vale a resposta do O120. RED: col221 na sombra, corrigir o vinculo e o `FechamentoMensal`
+> acompanhar **sem comando**. O R6 so fecha com passos manuais = **0 medido**.
+
+**O texto abaixo fica como estava, e esta ERRADO na linha da batida.** Nao se apaga: a lapide e o
+> registro de como eu medi errado.
+
 
 O corte diz: *"se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo,
 esta certo em todo lugar."* **Hoje isso e FALSO, e o motivo e estrutural, nao um bug.**
@@ -121,7 +148,7 @@ PROVA: `bin/tickets_placar.sh` acusou `arquivo diz 74e24761 / o mundo diz 94b281
 | **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
 | **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
 | **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
-| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **METADE MEDIDA: 1 passo manual** -- celula, ata, lampada, chamado e furo andam sozinhos; o `FechamentoMensal` **nao**, e `recalcular_fechamento_mes` so tem chamador HUMANO. A tela recalcula na LEITURA, o gravado nao. Falta o N/22 | zero passo manual | o bloco do R6 abaixo, com os `grep -c` = 0 |
+| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **1 passo manual, e e so o CADASTRO** (retratado por ele as 23:5x: a porta `recalcular_por_evento` EXISTE e batida, HE e validacao a chamam; `regenerar_celulas_vinculo` e `corrigir_escala_retroativa` nao). Cura vai na O121. Falta o N/22 | zero passo manual | censo de chamadores de `recalcular_por_evento` = 3 |
 
 **O percentual do oraculo, aberto por dono como ele pediu**: 09 em **94,3%** (7.182 de 7.616) e 10 em
 **92,4%** (2.489 de 2.694) -- e a conta do denominador da 09 esta aberta linha a linha no bloco do R1
@@ -2464,45 +2491,46 @@ matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado
 > RELATO por data e levei a tabela com ele.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (36)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (37)
 
-> **ALARME: 14 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (220 h), FECHAMENTO-UI-PORTAS (201 h), PISO-NAO-SOBE-POR-BATIDA (200 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (199 h), ESTEIRA-RETA-FINAL (197 h), ZUMBIDO (194 h), CARTAO-TOTAL-IGUAL-SOMA (192 h), CERT-VIGIA (181 h), PARAMETRO-GANHA-ROTULO (179 h), CHAMADO-GANHA-CADASTRO (179 h), JUIZ-BATIDA-NASCE (179 h), JUIZ-ESCALA-NASCE (179 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (179 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (179 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 14 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (221 h), FECHAMENTO-UI-PORTAS (202 h), PISO-NAO-SOBE-POR-BATIDA (201 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (199 h), ESTEIRA-RETA-FINAL (198 h), ZUMBIDO (195 h), CARTAO-TOTAL-IGUAL-SOMA (193 h), CERT-VIGIA (181 h), PARAMETRO-GANHA-ROTULO (180 h), CHAMADO-GANHA-CADASTRO (180 h), JUIZ-BATIDA-NASCE (180 h), JUIZ-ESCALA-NASCE (180 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (180 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (180 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
 | **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 230 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 221 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 220 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 220 h | construindo | CORTES-REGISTRADOS |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 222 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 221 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 221 h | construindo | CORTES-REGISTRADOS |
 | **NOITE-23-09** | 2026-09-23 18:4x | 220 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 218 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 201 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 200 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 199 h | construindo | O27 JANELA-EXATA |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 219 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 202 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 201 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 200 h | construindo | O27 JANELA-EXATA |
 | **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 199 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
 | **FILA-24-09-16-5X** | 2026-09-24 16:5x | 198 h | construindo | FILA-24-09-16-5X |
 | **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 198 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 197 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 197 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 194 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 192 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 192 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 198 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 198 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 195 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 193 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 193 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 191 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 191 h | esperando "!" | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 191 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 191 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 191 h | esperando "!" | O35 CONTRATOS-14 |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 182 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
 | **CERT-VIGIA** | 2026-09-25 09:4x | 181 h | recebido | CERT-VIGIA |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 181 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
-| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 180 h | construindo | O42 ESTEIRA-SECA-25-09 |
-| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 180 h | construindo | O44 ARQUIVO-SIMPLES v2 |
-| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 180 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
-| **PARAMETRO-GANHA-ROTULO** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
-| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
-| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 179 h | recebido | S-BATIDA |
-| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 179 h | recebido | S-ESCALA |
-| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
-| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 179 h | recebido | E3-CHAMADO |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 181 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 181 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 181 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **PARAMETRO-GANHA-ROTULO** | 2026-09-25 11:0x | 180 h | recebido | O35 CONTRATOS-14 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 180 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 180 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 180 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 180 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 180 h | recebido | E3-CHAMADO |
+| **PORTA-DO-DINHEIRO-JA-EXISTE** | 2026-10-02 23:5x | 0 h | recebido | O121 |
 | **PLACAR-ESTRUTURAL** | 2026-10-02 22:5x | 0 h | recebido | PLACAR-ESTRUTURAL |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
