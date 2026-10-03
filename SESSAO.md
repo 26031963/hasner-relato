@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 01:43:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (219.3 MB). Acoes na janela: **1908**.
+**Medido em 03/10/2026 01:49:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (219.3 MB). Acoes na janela: **1899**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:48:57 | Bash | Launch today's sombra ensaio in the background | `cd /home/ronald/saas-hasner && nohup bash -c 'bin/sombra.sh --refazer --dump-agora && bin/sombra.sh --bloco' > logs/o124/ensaio_sombra_0145.log 2>&1 & echo "ensaio lancado em background, log logs/o124/ensaio_sombra_0145.log"; sleep 2; tail -3 logs/o124/ensaio_sombra_0145.log` |
+| 01:48:45 | Bash | Check sombra flags and current ensaio state | `cd /home/ronald/saas-hasner && grep -n "^\s*--bloco\\|--dump-agora\\|--refazer\\|--conferir\\|usage\\|Uso:" bin/sombra.sh \| head -20; echo "=== estado atual do ensaio ==="; bin/sombra.sh --conferir 2>&1 \| tail -6` |
+| 01:43:32 | Bash | Size the TipoEscala admin option | `cd /tmp/o124/app && echo "=== TipoEscala tem ModelAdmin? ==="; grep -rn "TipoEscala" --include=admin.py . ; echo "=== admins de escala ==="; sed -n '1,60p' escala/admin.py 2>/dev/null; echo "=== campos editaveis de TipoEscala ==="; grep -n "= models\." escala/models.py \| sed -n '1,40p'` |
 | 01:43:05 | Bash | Read the contract test in full | `cd /tmp/o124/app && sed -n '26,82p' core/tests/test_contract_configuracao_nao_mente.py; echo "=== 105-180 ==="; sed -n '105,180p' core/tests/test_contract_configuracao_nao_mente.py` |
 | 01:43:02 | Bash | Read the rest of DECLARACAO and the contract test's questions | `cd /tmp/o124/app && sed -n '45,110p' core/configuracao_efeito.py; echo "=== o selo do contrato 3: as perguntas ==="; grep -n "def test_\\|ENTIDADES_COM_ADMIN\\|editaveis_dos_admins\\|FORA_DA_TELA" core/tests/test_contract_configuracao_nao_mente.py` |
 | 01:42:47 | Bash | Read the contract-3 cells and find the matrix seal | `cd /tmp/o124/app && sed -n '190,240p' core/contratos_estruturais.py; echo "=== o selo da matriz: como julga celula verde ==="; ls core/tests/ \| grep -i -E "matriz\|contrato\|estrutur"` |
@@ -1906,15 +1909,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:50:06 | Bash | O sitio onde o motor tem os turnos na mao | `sed -n '2036,2060p' ponto/motor_calculo_v2.py` |
 | 13:50:02 | Bash | Onde o motor usa os turnos do juiz | `grep -n "_turnos_do_juiz(\\|_turnos_juiz\s*=\\|turnos_do_juiz =" ponto/motor_calculo_v2.py \| head -10; echo "=== o resultado guarda turnos? ==="; grep -n "resultado.turnos\\|\.turnos_do_juiz\b\\|turnos_juiz" ponto/motor_calculo_v2.py \| head -8` |
 | 13:49:41 | Bash | Como o motor pareia e de onde sai a intra | `sed -n '650,680p' ponto/motor_calculo_v2.py; echo "=== _intra_real ==="; grep -n "def _intra_real" -A 18 ponto/motor_calculo_v2.py \| head -24` |
-| 13:48:55 | Bash | Os periodos do motor: crus ou clipados? | `cd /home/ronald/saas-hasner && cat > /tmp/sonda_s5b.py <<'PYEOF' # -*- coding: utf-8 -*- """S5b (1) -- os periodos do motor: crus ou clipados? E quantos pares por turno. SO LEITURA.""" import datetime as d from django.utils import timezone as tz from django_tenants.utils import schema_context MES, ANO = 10, 2026 with schema_context('juliani'): from colaboradores.models import Colaborador from pont ...` |
-| 13:48:24 | Bash | Os campos do PeriodoCalculo | `sed -n '130,190p' ponto/motor_calculo_v2.py \| grep -E "^\s{4}[a-z_]+\s*[:=]\|^class\|\"\"\"" \| head -30` |
-| 13:48:19 | Bash | A estrutura do periodo do motor | `grep -n "class Periodo\\|^class .*Periodo\\|minutos_intervalo\\|self.intervalos" ponto/motor_calculo_v2.py \| head -12; echo "=== os campos ==="; grep -n "class PeriodoTrabalhado" -A 30 ponto/motor_calculo_v2.py \| grep -E " [a-z_]+ *[:=]\|class " \| head -22` |
-| 13:47:57 | Bash | O fim do bloco da alimentacao | `sed -n '400,470p' ponto/management/commands/diff_calculador.py \| grep -vE "^\s*#" \| grep -vE "^\s*$" \| head -42` |
-| 13:47:40 | Bash | O codigo da alimentacao, sem a prosa | `sed -n '340,400p' ponto/management/commands/diff_calculador.py \| grep -vE "^\s*#" \| head -40` |
-| 13:47:36 | Bash | O bloco da alimentacao, parte 1 | `sed -n '275,340p' ponto/management/commands/diff_calculador.py` |
-| 13:47:23 | Bash | Onde o DIFF decide a fonte dos pares | `sed -n '240,275p' ponto/management/commands/diff_calculador.py` |
-| 13:47:19 | Bash | Como o DIFF monta pares e chama as regras | `grep -n "minutos_do_oraculo\\|_pares\b\\|pares=\\|regras\." ponto/management/commands/diff_calculador.py \| head -24` |
-| 13:47:10 | Bash | As regras e os chamadores do calculador | `grep -n "^def \\|^\"\"\"\\|^ \"\"\"" ponto/calculador/regras.py \| head -14; echo "=== quem chama o calculador ==="; grep -rn "from ponto.calculador\\|calculador import\\|calculador\." --include=*.py . \| grep -v tests \| grep -v "^./ponto/calculador" \| head -10` |
-| 13:46:59 | Bash | O nucleo do calculador | `head -40 ponto/calculador/nucleo.py; echo "=== as portas ==="; grep -n "^def \\|^ def " ponto/calculador/nucleo.py \| head -14` |
-| 13:46:55 | Bash | Onde esta o calculador da S5b | `ls ponto/calculador* ponto/services/calculador* 2>/dev/null; grep -rn "calculador" --include=*.py ponto/ folha/ \| grep -v tests \| grep -v "diff_calculador" \| head -10` |
-| 13:46:49 | Bash | Onde mora o calculador e o pareamento proprio dele | `cd /home/ronald/saas-hasner && grep -n "S5b" app/docs/BACKLOG.md \| head -3 \| cut -c1-260; echo "=== o calculador ==="; ls app/ponto/services/ \| grep -i "calc\\|dia_pago" ; grep -rn "turnos_de_batidas" --include=*.py app/ \| grep -v tests \| head -8` |
