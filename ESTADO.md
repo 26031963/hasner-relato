@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:49:31.**
+**Medido em 03/10/2026 17:54:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
+| `HEAD` local | `a114f126 LEIS: as QUATRO de 17:2x registradas, e a resposta da (a) com os numeros` |
 | `origin/main` | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,19 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a114f126 LEIS: as QUATRO de 17:2x registradas, e a resposta da (a) com os numeros
 4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como
 bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push VERMELHO
 42a67a87 RELATO/HANDOFF: a terceira prova velha do dia -- o gerador que comia o marcador -- com a PROVA de que o tripwire morde
 49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado
-16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -110,34 +108,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Searched for 1 pattern, ran 3 shell commands
-
-● Hoje os prompts entram como blocos ### no fim — é a convenção viva (12:4x, 14:1x). Lendo o cabeçalho das OBRAS para o número de colunas:
-
-  Ran 4 shell commands
-
-● Formato na mão (5 células, 6 pipes). Lendo a hora no ato e o topo do RELATO:
+● Dado intacto (199→202, 0 id perdido, 0 chave perdida, exatamente 1 alterado). Mas 2100 linhas de churn são cosméticas, e isso esconde o
+  próximo diff de verdade — vendo quem mais escreve esse JSON e com que estilo:
 
   Ran 1 shell command
 
-● O topo do RELATO já tem os dois blocos de LEI NA MESA — L1 (17:1x) e L4 (16:4x) — e as duas acabaram de ser respondidas. Vendo como um
-  bloco respondido se marca, e o que o hook exige:
+● Estilo canônico é indent=1, e há escritor canônico (core/fila_pendentes.py). Eu gravei com indent=2 — vou devolver o arquivo ao estilo da
+  casa pela porta dele, senão o próximo escritor real churna 2100 linhas de volta:
+
+  Ran 2 shell commands
+
+● bin/gerar_avais.py:99 grava o JSON de volta com indent=1 — é o estilo da casa e eu quebrei. Devolvendo e emendando o commit (ainda não
+  empurrado), senão o próximo escritor real churna 2100 linhas de volta:
 
   Ran 1 shell command
 
-● Hook só exige PAREI: na primeira linha — livre. Os QUATRO blocos de LEI NA MESA abertos (linhas 3, 22, 28, 31) são exatamente as quatro
-  leis que chegaram. Vendo a forma de um item respondido no JSON antes de escrever:
+● A porta existe: gerar_avais.py --escrever normaliza E grava no estilo da casa. Usando ela em vez do meu dump:
 
-● Procurar no JSON os itens das leis L2 L3 L4
-  ⎿  $ python3 -c "
-     import json
-     d=json.load(open('docs/PENDENTES_RONALD.json'))
-     import re
-     for x in d:
-     blob=(x.get('id','')+' '+str(x.get('o_que',''))+' '+str(x.get('frase','')))
-     if re.search(r'UNIVERSO DA PALAVRA|universo da palavra|DNA ZERO|dna zero|sem vinculo|DECORRIDO|decorrido|acumulado no ano|15 d…
+  Ran 1 shell command
 
-✢ Bloviating… (17h 36m 0s · ↓ 2.4m tokens · thinking)
+● 44/3 contra 2157/2116 — era tudo meu. Emendando:
+
+  Amended commit a114f126
+
+● Commit limpo (108/22). A pista está com a raia (UM RUN POR VEZ), então o push espera ela. Consultando antes de declarar o marco:
+
+● Advising using Fable 5.1
+
+· Bloviating… (17h 41m 14s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +145,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Finding test modules for anotar_contexto                                                 5h 57m 8s · ↓ 109.5k tokens
+  ◯ general-purpose  Degrading except-pass in validacao.py                                                    6h 2m 22s · ↓ 116.9k tokens
   ⧉  index
 ```

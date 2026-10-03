@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 14
+# AVAIS NA MESA — 13
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -19,11 +19,10 @@
 | 11 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 12 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
 | 13 | `DIA-INTEIRO-CRAVADO-EM-720` | **!** | 2026-10-02T17:40 | 90 casos de 1.826; 720 contra 420/360/440 em ausencia de 1 dia; 25 descontam; 53 pessoas | `"dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado -- o chokepoint ja sabe derivar, so nao sobrescreve `minutos>0`. Mede o DIFF antes e aplica, sao 25 descontos em 90 casos.   OU   fica 720 como esta e a L-088 vale so no leitor.` |
-| 14 | `SITUACAO-UM-ESCRITOR-DERIVADO` | **lei** | 2026-10-03T17:15 | 104 leitores de situacao='ativo' (7 emitindo para fora); 11 linhas 'afastado' = os 11 do juiz, divergencia 0; 1 com fcm_token; reversor INSTALADO as 06:16 com --apply | `lei Ronald: "um escritor derivado" em `Colaborador.situacao` e (a) a escrita do lancamento FICA e o derivado e o reversor das 06:16, com os 104 leitores migrando primeiro -- comecando pelos 7 que emitem para fora; OU (b) a escrita sai agora e os 104 passam a derivar na LEITURA, e entao me diga a ORD` |
 
 ---
 
-Total no JSON: **199** · aberto **14** · respondido **23** · sem-motivo **162**.
+Total no JSON: **202** · aberto **13** · respondido **27** · sem-motivo **162**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

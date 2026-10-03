@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**140 obras abertas.**
+**143 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -149,3 +149,6 @@ lista — ela e o que esta EM PE._
 | **O139** | PAPEL-PRAZO | espera corte |
 | **O140** | O FURO DO DIA NAO E LAVRADO, E POR ISSO TODO LEITOR DA PALAVRA PAGA UMA VOLTA DE MOTOR | espera corte |
 | **O141** | K4 BAIXA CONFORME, K1 GANHA O CRIVO, K6 GANHA DEFINICAO | espera corte |
+| **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | **PROXIMO MARCO.** Fixture nomeada: `col |
+| **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
+| **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
