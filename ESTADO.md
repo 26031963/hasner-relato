@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:01:01.**
+**Medido em 03/10/2026 17:06:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,9 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -109,37 +111,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora test_afastado_hoje.py — tirar a asserção AST da leitura (b), manter a extensão de dois arquivos:
+  LEI-AKITA:
+
+  Committed aaad199b
+
+● Commitado: aaad199b. Publicando a lei no topo do RELATO — vendo o topo atual primeiro:
 
   Ran 1 shell command
 
-● O hunk 2 (_somas_cruas em dois arquivos) fica — e ele vale mais agora, porque prova que o arquivo abrigado pelo pendente não tem soma
-  crua. O hunk 1 volta ao HEAD, e o comentário do hunk 2 passa a contar a história verdadeira:
+● O topo precisa de duas coisas: a lei nova e uma correção na lei de 16:4x (ela diz que tirei o pendente _A14, e ele voltou). Escrevendo as
+  duas:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Dois comentários ficaram com a premissa invertida, e o views.py merece nota: hoje os dois caminhos dão o mesmo conjunto de 11 (medido),
-  então a migração do filtro é comportamento idêntico e mais correto adiante. Corrigindo a prosa:
+● Registrando a lei na fila de decisão dele (PENDENTES_RONALD.json é a fonte; AVAIS.md é gerado):
 
   Ran 2 shell commands
 
-● models.py está limpo — lê, não deriva. Corrigindo as duas afirmações em tempo futuro do selo:
+● Agora o portão. A suíte roda antes do merge, porque merge escreve template no bind-mount e template é instantâneo — os meus chamam
+  situacao_exibida, que só existe no .py novo (é a lição de 30/09). Disparando a suíte cheia na raia:
 
   Ran 1 shell command
 
-● Ruff limpo. Rodando os módulos afetados, com a montagem pela autoridade (arvore_do_push.sh --montagem) e não à mão:
+● Suíte rodando. Enquanto ela corre (nada de segundo container — um run por vez), atualizando a célula de estado do BACKLOG dentro do teto
+  de 300 caracteres:
 
-● Rodar os módulos afetados · 39s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null
-     MONT=$(bin/arvore_do_push.sh --montagem /home/ronald/wt-lampada 2>/dev/null)
-     echo "montagem: $MONT"
-     mkdir -p /home/ronald/wt-lampada/app/logs /home/ronald/wt-lampada/app/media
-     docker run --rm --name al… (40s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Achar o item no BACKLOG
 
-✢ Bloviating… (16h 47m 30s · ↓ 2.3m tokens)
+✢ Compacting conversation… (16h 53m 0s · ↓ 2.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 47%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +149,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading test_porta_disputa_ciclo.py gate mold                                            5h 8m 38s · ↓ 113.3k tokens
+  ◯ general-purpose  Checking _dt_tz_now usage in declaracao_texto.py                                         5h 14m 8s · ↓ 150.4k tokens
   ⧉  index
 ```
