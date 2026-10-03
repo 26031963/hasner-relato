@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:16:01.**
+**Medido em 03/10/2026 11:21:31.**
 
 | | |
 |---|---|
@@ -109,36 +109,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 12 shell commands
-
-● Suite verde na cópia (Ran 9484 tests · OK (skipped=42) · rc=0, 0 ^(FAIL|ERROR):). Portões antes da rajada; o escala/views.py sujo que o
-  deploy vai carregar está medido: contexto inerte (tipos_lista.html no HEAD não cita quadros), compila, com bin/reverter_o122.sh como
-  saída declarada.
-
-  Ran 1 shell command
-
-● Pousou: e8963dc2, deploy rc=0 às 11:13:41 — janela commit→deploy de 18 s.
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● O trabalhadas=0.0 do col39 2026-08-22 com 3 batidas não fecha com a aritmética — e os outros três voltaram batidas=None, isto é, o laço
-  quebrou no primeiro dia com a palavra, que não é o dia-candidato. Sonda errada, não sistema errado: vou olhar o dia nomeado.
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Background command "Run live-tree seals after deploy" completed (exit code 0)
-
   Ran 1 shell command
 
 ● Selos na árvore viva, depois do deploy: Ran 76 tests · OK · rc=0.
 
-● Fixing probe timestamp access and rerunning
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - <<'PY'
-     p="/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/smoke_prod_r3c.py"
-     s=open(p).read()
-     old = """ _tn = [f"{t.data_turno} {getattr(t, 'ent…
+  Ran 1 shell command
 
-· Bloviating… (11h 2m 30s · ↓ 1.5m tokens · thinking)
+● O seletor estava errado, não o sistema: "contagem ímpar por DATA" não é "dia com turno aberto" — os três primeiros são 12x36 noturno
+  cujas batidas caem na data seguinte e o turno está ancorado no dia anterior (turnos do juiz: []). Pergunto à autoridade em vez de
+  recontar pela forma.
+
+  Searched for 1 pattern, ran 7 shell commands
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 2 shell commands
+
+● O caso que discrimina está lido: col39 2026-08-22 — E 06:55 → S 12:08 → E 13:00, e o juiz devolve UM turno aberto=True com n_batidas=3.
+  Não há par fechado aos olhos do turno, então 0.0 é aritmética, não supressão.
+
+● Calling the real placar function
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python -c "
+     import django, os
+     os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings')
+     django.setup()
+     from core.placar_estrutural import placar
+     for r in placar():
+     print(' ', r.get('id'), '|', r.get('estado'), '|', str(r.get('numero'))[…
+
+✢ Bloviating… (11h 8m 0s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
