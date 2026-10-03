@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:50:45.**
+**Medido em 02/10/2026 21:55:45.**
 
 | | |
 |---|---|
@@ -35,10 +35,13 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
+?? bin/relavrar_o120_col221_09.py
+?? bin/remedir_congelados_placar_e.py
 ?? bin/reverter_o122.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -94,36 +97,36 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  O oráculo reiniciou na competência 09 (a primeira corrida morreu por falta do --tmpfs /app/logs, com a árvore em :ro — a mesma nota que
-  diz que o ensaio na sombra precisa dos dois pontos de montagem). Está rodando as duas competências.
-
-  Quando ele voltar, publico os quatro entregáveis da PLACAR-E: o % de dia-colab que bate até 10 min, os divergentes por classe, os dias
-  de batida ímpar com número, os congelados remedidos (O73b, E6-14, CORTE-B-30, turnos abertos), o placar E1–E6 item a item com prova de
-  hoje e contratos N/22, e a linha de distância para 98% no topo do RELATO — em dia-colab e em colabs.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-E -- grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje -- parada desde 27/09
-  19:3x
+  a 08, e sem Pauta DP porque ele não constou no TXT (0 linhas no export 27). Primeiro o DIFF, que é a condição que vem antes:
 
   Ran 1 shell command
 
-● O arquivo tem a cauda da suíte que eu encadeei, e o meu laço casou com ela. O oráculo segue na 09. Espero pelo sinal certo — o CSV:
+● DIFF publicado, e ele é coerente com o vínculo que você corrigiu:
 
-  Ran 1 shell command
+  ┌─────────────────────┬─────────┬─────────────────────┬────────┐
+  │        campo        │ gravado │        novo         │ delta  │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ minutos_previstos   │ 10.800  │ 11.550 (= 21 × 550) │ +750   │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ minutos_realizados  │ 4.984   │ 10.981              │ +5.997 │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ dias_previstos      │ 15      │ 21                  │ +6     │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ semanas_dsr_ok      │ 0       │ 4                   │ +4     │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ semanas_dsr_perdido │ 5       │ 1                   │ −4     │
+  ├─────────────────────┼─────────┼─────────────────────┼────────┤
+  │ saldo_banco_horas   │ 0,00    │ −7,67               │ −7,67  │
+  └─────────────────────┴─────────┴─────────────────────┴────────┘
 
-● Background command "Fix the mount and re-run the oraculo" completed (exit code 0)
+  6 campos de 24, e horas_trabalhadas não se move — as batidas são as mesmas; o que muda é a grade. E o item que importa para ele: o
+  cadastro 12x36 errado estava lhe custando DSR em 4 semanas (sábados e domingos lidos como falta). Aplico:
 
-● O oráculo rodou as duas. Mas antes de publicar o número eu preciso saber se ele é comparável ao 91,4% de 27/09 — o comando tem --so-txt,
-  e comparar universos diferentes é o erro de contar pela forma. Rodo a variante:
+● Applying the col221 09 recalculation
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "APLICAR=True
+     exec(open('/tmp/r120.py').read())" 2>&1 | grep -v "objects imported" | tail -14
 
-  Running the so-txt variant for comparability
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 1700 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
-     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
-     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
-     -e HTT…
-
-· Sock-hopping… (3h 38m 14s · ↓ 610.2k tokens)
+✶ Sock-hopping… (3h 43m 14s · ↓ 625.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

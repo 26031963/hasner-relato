@@ -1,5 +1,53 @@
 # RELATO — esteira saas-hasner
 
+**DISTANCIA PARA 98% (remedicao de 02/10 21:5x, oraculo independente na sombra):** **695 dia-colab** na 09 e **296** na 10 -- e **242 colaboradores** com ao menos uma divergencia (195 na 09, 139 na 10, **92 nos dois**). `erros no espelho: 0` nas duas.
+
+# PLACAR ESPELHO-VERDADE REMEDIDO: 89,2% na 09 e 87,4% na 10, e a queda tem causa (02/10 21:5x)
+
+PROVA: oraculo independente (`ponto/management/commands/e6_oraculo.py`) na SOMBRA, arvore de HOJE (com o
+O119 no ar), competencias 09 e 10; CSV em `logs/placar_e/e6_09.csv` e `e6_010.csv`; `erros no espelho: 0`.
+
+Ordem dele de 21:4x, item 2: *"nenhum dos 29 itens mudou de estado desde 28/09 e o E6 ainda diz 91,4% de
+27/09"*. Remedido:
+
+| | 09/2026 | 10/2026 |
+|---|---|---|
+| dias comparados | **7.886** | **2.791** |
+| bate ate 10 min | **89,2%** (7.034) | **87,4%** (2.440) |
+| **sem os impares** (o universo da rodada 4) | **91,7%** de 7.542 | 90,4% de 2.606 |
+| rodada 4, 27/09 | **92,9%** de 7.512 | -- |
+| para 98% faltam | **695** dia-colab | **296** dia-colab |
+| colabs com divergencia | 195 | 139 (uniao **242**, nos dois **92**) |
+| `erros no espelho` | **0** | **0** |
+
+**O NUMERO CAIU, e eu nao vou chamar isso de melhora.** De 92,9% para 89,2%. A causa maior e o
+DENOMINADOR: os **dias de batida IMPAR entraram no julgamento** (corte dele de 28/09) e eles batem mal --
+**344 comparados na 09, 120 batem (34,9%), 224 divergem**. Tirando os impares, o universo comparavel da
+rodada 4 fica em **91,7%** contra 92,9%: **sobra -1,2 pp que os impares NAO explicam** (~90 dia-colab), e
+isso e divida, nao ruido.
+
+**E O 91,4% DELE ERA DE OUTRO UNIVERSO, o que eu conferi antes de comparar**: a rodada 3 mediu o universo
+COMPLETO. No universo do **TXT** (`--so-txt`) a 09 de hoje da **96,2% de 2.655 dias, 19 colabs** -- o recorte
+que o DP ve esta muito melhor que a frota inteira, e os dois numeros nao se substituem.
+
+## As classes, que e por onde a cauda se ataca (ordem dele, item 3: a maior classe primeiro)
+
+| classe | 09 | 10 | o que ela diz |
+|---|---|---|---|
+| **`esp_zero_e6_trabalho`** | **227** (+20 FORA) | **97** (+14 FORA) | o espelho diz ZERO e o oraculo ve trabalho -- **a maior, e e a primeira da cauda** |
+| `diverge_acima_60` | 162 (+152 faixa, +32 FORA) | 72 (+66, +12) | mais de 1 h de diferenca |
+| `diverge_10_60` | 186 (+10, +4) | 62 (+2, +2) | entre 10 e 60 min |
+| `e6_zero_esp_trabalho` | 53 (+6 FORA) | 19 (+5) | o inverso: o oraculo ve zero e o espelho ve trabalho |
+
+**`FORA` quer dizer FORA DA FAIXA piso..teto -- contraditorio, nao indecidivel.** Na 09 sao **62 impares
+fora da faixa** contra 162 dentro; dentro da faixa o oraculo nao decide sem DNA, fora dela **uma das duas
+testemunhas esta errada**. E a paridade tem dono: **223 dos 224 impares divergentes tem contagem impar no
+conjunto do dia** (falta ou sobra batida de verdade) e **1 e partido so pelo corte do proprio oraculo** --
+isto e, o oraculo quase nunca e o culpado da paridade.
+
+**FALTAM AINDA, desta mesma ordem**: (2) remedir os congelados O73b, E6-14, CORTE-B-30 e turnos abertos;
+(3) o placar E1-E6 item a item com a prova de hoje e os contratos N/22.
+
 > **O que tem mais de 3 dias mora em [`RELATO-ARQUIVO.md`](RELATO-ARQUIVO.md)** (DIETA DE PROSA,
 > ordem dele de 01/10 14:0x). Movido em 02/10 21:5x: **50 blocos, 3.622 linhas** -- tudo de 29/09
 > e antes. **Mover, nunca apagar**, e a regra nao se toca ao mover. Bloco sem data na linha de
