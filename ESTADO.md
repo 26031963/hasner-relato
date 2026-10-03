@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:45:45.**
+**Medido em 02/10/2026 21:50:45.**
 
 | | |
 |---|---|
@@ -94,13 +94,6 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ponto colaboradores escala holerite folha: 5.033 testes, 6 falhas. Pela regra da casa eles não se apagam — a asserção troca e passa a
-  morder a volta: a exportada passa a ser reescrita (e o holerite segue barrando), o piso e o período fechado param de bloquear. Deixei os
-  seis nomeados na célula do O121, porque é o trabalho que falta no A1 e a vez dele é depois da remedição e do O65 — não vou furar a sua
-  ordem para terminá-lo.
-
-  E isso é, na verdade, a prova de que o seu corte estava certo sobre o desenho: a lei antiga tinha seis selos a defendendo, e nenhum
-  deles distinguia a exportação da empresa do holerite da pessoa — que é exatamente a distinção que você mandou fazer.
 
   O oráculo reiniciou na competência 09 (a primeira corrida morreu por falta do --tmpfs /app/logs, com a árvore em :ro — a mesma nota que
   diz que o ensaio na sombra precisa dos dois pontos de montagem). Está rodando as duas competências.
@@ -117,19 +110,26 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 
 ● O arquivo tem a cauda da suíte que eu encadeei, e o meu laço casou com ela. O oráculo segue na 09. Espero pelo sinal certo — o CSV:
 
-  Waiting for competencia 09 to finish · 1m 20s
-  ⎿  $ cd /home/ronald/saas-hasner && until [ -s logs/placar_e/e6_010.csv ] || grep -qa "COMPETENCIA 10"
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5h296on5.output 2>/dev/null; do sleep 45;
-     done; echo "=== a 09 terminou ==="; ls -la logs/placar_e/; sed -n '… (1m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Sock-hopping… (3h 33m 14s · ↓ 609.4k tokens)
+● Background command "Fix the mount and re-run the oraculo" completed (exit code 0)
+
+● O oráculo rodou as duas. Mas antes de publicar o número eu preciso saber se ele é comparável ao 91,4% de 27/09 — o comando tem --so-txt,
+  e comparar universos diferentes é o erro de contar pela forma. Rodo a variante:
+
+  Running the so-txt variant for comparability
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 1700 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
+     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
+     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
+     -e HTT…
+
+· Sock-hopping… (3h 38m 14s · ↓ 610.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
