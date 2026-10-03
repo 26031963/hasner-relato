@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 05:54:02.**
+**Medido em 03/10/2026 05:59:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ c7b05d59 [O126-FLIP-ARIDADE] O ensaio da sombra achou o cron de hoje morto 4h49 
 ```
  M CLAUDE.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -115,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  memória nomeia, e que o meu próprio script de 01/10 já contornava. Nenhuma das duas fatias toca aquilo.
 
-  Agora, a pergunta que isso levanta: o comando canônico do CLAUDE.md §3 não tem esse mount. A régua tem?
-
-  Ran 2 shell commands
-
-● O arquivo já registra a 3ª reincidência de hoje às 03:2x com exatamente estes 7 selos. Esta é a 4ª — e a memória dá a conferência de um
-  comando. Vou cobrá-la na saída de 1013 s:
-
-  Ran 2 shell commands
-
-● No directory at = 0 nas três saídas — inclusive na que falhou. Então a conferência de um comando da memória não discrimina esta
-  variante: o diretório existe, só está VAZIO, e Django não avisa. Pior: o run de 355 s teve o mesmo staticfiles vazio e esses 7 passaram.
-  Eu misturei duas variáveis no meu run verde (mount + máquina quieta). Isolando:
+● Dois fatos novos, e um deles contradiz a própria memória:
 
   Ran 1 shell command
 
-● Isolado em 6 segundos, mesma cópia, máquina quieta: sem o mount = os mesmos 7; com o mount = OK. O mount é a causa, e a contenção não
-  tem parte nisso. Resta a anomalia do run de 355 s, que passou com o mesmo diretório vazio:
+● Linha 29 nomeia o escritor único: "O que o git archive nao traz e o container precisa. A lista mora no arvore_do_push.sh, nao aqui."
+  Essa é a autoridade que já existe para exatamente esta pergunta:
 
-  Look for the invocation of each suite log · 10s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     grep -rln "o131_suite" $S/ 2>/dev/null | head
-     echo "=== head do log de 355s ==="
-     sed -n '1,8p' $S/o131_suite.log
-     echo "=== head do log de 1013s ==="
-     sed -n '1,8p' $S/o131… (10s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✻ Bloviating… (5h 40m 30s · ↓ 743.3k tokens)
+● Este arquivo é a autoridade, e ele já documenta tudo o que eu acabei de redescobrir — inclusive os cinco smokes por nome, a armadilha do
+  symlink (26/09 12:0x, que a minha memória registrou hoje às 03:2x como se fosse nova) e o motivo do diretório vazio: mkdir -p
+  "$DIR/app/staticfiles" cria o ponto de montagem de propósito, para que o --montagem o encha.
+
+  E a lei está escrita na linha 22: *"So o bin/pre-push.sh a consome; quem montar <dir>/app em /app sem perguntar aqui roda uma arvore
+  incompleta."*
+
+  Foi exatamente o meu pecado hoje — e bin/vigia_arvore.sh:70-71 comete o mesmo. A cura é consumir a autoridade que já existe, não
+  inventar mount.
+
+  Ran 2 shell commands
+
+● O censo é inequívoco: 13 sítios montam árvore em /app; só o pre-push.sh consulta o --montagem. Dos que montam cópia, três nunca
+  perguntam — vigia_arvore.sh:71, isolamento.sh:32 e os moldes. Gravando o achado antes de consultar:
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+✢ Bloviating… (5h 46m 0s · ↓ 762.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
