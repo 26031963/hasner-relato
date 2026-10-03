@@ -1,9 +1,16 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- **NO AR em `e8963dc2`, e a janela do commit ao deploy foi de 18 SEGUNDOS.** Os tres atos foram UMA
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:21:31.**
+**Medido em 03/10/2026 11:22:45.**
 
 | | |
 |---|---|
@@ -35,6 +42,7 @@ e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodap
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -109,6 +117,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● Background command "Run live-tree seals after deploy" completed (exit code 0)
+
   Ran 1 shell command
 
 ● Selos na árvore viva, depois do deploy: Ran 76 tests · OK · rc=0.
@@ -129,18 +142,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O caso que discrimina está lido: col39 2026-08-22 — E 06:55 → S 12:08 → E 13:00, e o juiz devolve UM turno aberto=True com n_batidas=3.
   Não há par fechado aos olhos do turno, então 0.0 é aritmética, não supressão.
 
-● Calling the real placar function
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python -c "
-     import django, os
-     os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings')
-     django.setup()
-     from core.placar_estrutural import placar
-     for r in placar():
-     print(' ', r.get('id'), '|', r.get('estado'), '|', str(r.get('numero'))[…
+● Regenerating RELATO generated sections
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 280 bash bin/relato.sh 2>&1 | tail -20; echo "rc=$?"; git diff --numstat --
+     app/docs/RELATO.md
 
-✢ Bloviating… (11h 8m 0s · ↓ 1.5m tokens)
+· Bloviating… (11h 9m 14s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                  11% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
