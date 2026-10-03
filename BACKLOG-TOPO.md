@@ -138,5 +138,5 @@ lista — ela e o que esta EM PE._
 | **O128** | O122-ETAPA-1-INCOMPLETA | fila 2 (UI), raia `wt-ui` |
 | **O129** | DECLARAR O WIZARD DE ESCALA. | fila 1, atras da O127. **Nao e fatia de  |
 | **O130** | EM ABERTO DIZ O QUE FALTA | **fila 1, atras do R3.** E leitura de `t |
-| **O131** | TURNOS-ABERTOS-PERGUNTA-A-CELULA | **fila 1, atras do R3.** Toca `ponto/tur |
+| **O131** | UM CARREGADOR DE CANDIDATOS | fila 1. De-duplicacao PURA: nasce a irma |
 | **O132** | A MEDIDA QUE AGENDA O CRON NAO SE DEFENDE DE SI | espera `!` |

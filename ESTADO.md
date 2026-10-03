@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:139 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:190 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 06:10:31.**
+**Medido em 03/10/2026 06:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares` |
+| `HEAD` local | `d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha por ordem, era a regra escrita duas vezes` |
 | `origin/main` | `b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha por ordem, era a regra escrita duas vezes
 0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares
 e57e552b [ESTADO-STALE-NOS-REGISTROS] O alarme cobrava 206 h de obra pronta porque eu pausei o alarme e nao corrigi o estado
 910a3ff9 [CRON-NAO-CABE] O portao do deploy morreu as 04:05:01, e quem o matou foi a propria medicao
 400e689a [R3] O numero que eu publiquei as 03:00 era de um oraculo, e a autoridade diz outro: 526 -> 621
-4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela
 ```
 
 ## `git status --short`
@@ -114,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ran 9448 tests in 599.184s · OK (skipped=42) · zero FAIL/ERROR. A cópia da união — os 5 arquivos do O131 mais os 2 da cura do cron —
-  está verde. Os 3 errors do cron curados; os 7 eram bancada.
-
-  Parando a montagem aqui e pousando, como planejado. Conferindo o aplicador antes de ele escrever na árvore viva:
-
-  Ran 1 shell command
-
-● O aplicador está correto, e as fontes saem de o131head (HEAD puro + cura), sem carregar os arquivos do O131. Conferindo a convenção da
-  coluna commit antes de rodar:
-
-  Ran 2 shell commands
-
-● A convenção casa. Pousando a cura do cron:
-
-  Ran 2 shell commands
-
-● crontab -l = 17 4 e o arquivo curado deriva 17 4 com VIZINHO_SOMBRA = 05:00 — crontab == config, provado com a cura no lugar. Commitando
-  por heredoc:
-
-  Ran 2 shell commands
-
 ● Verde. Agora o O131 — conferindo o aplicador e o inventário da fatia antes de escrever:
 
-● Checking which O131 files are new and read the applier head
-  ⎿  $ cd /home/ronald/saas-hasner && for f in app/escala/tests/test_o131_um_carregador_de_candidatos.py bin/esmeril_vinculo_censo.py
-     app/escala/alimentacao.py app/ponto/turnos.py app/escala/tests/test_carregadores_contrato.py; do printf '%-56s %s\n' "$f" "$([ -f
-     "$f" ] && echo existe || echo NOVO)"; do…
+  Ran 9 shell commands
+  ⎿  Read docs/AVAIS.md (33 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/background-duplo-perde-o-veredito.md (28 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcvzmh6er.output (8 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b91l6xk8q.output (44 lines)
+  ⎿  Referenced file config/crons.py
 
-✢ Compacting conversation… (5h 57m 0s · ↓ 780.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Apply the BACKLOG edits and refresh the placar" still running in background
+
+● Agora o commit, por PATH (deixando escala/views.py, os dois templates e o HANDOFF de fora):
+
+  Ran 8 shell commands
+
+● Templates já estão no ar (sem cached.Loader); views.py do O122 etapa 1 fica inerte porque tipos_lista.html não inclui a barra ainda.
+  Deploy agora, nada no meio:
+
+  Ran 5 shell commands
+
+● O131 está no ar e provado. Agora a cura da montagem, como commit próprio. Construindo em cópia do HEAD:
+
+  Reading the pre-push docker run block
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     echo "=== pre-push.sh 110-150 ==="; sed -n '110,150p' $S/mont/bin/pre-push.sh
+     echo; echo "=== pre-push: todos os sitios de tmpfs/montagem ==="; grep -n "tmpfs\|ARVORE_MONTAGEM\|arvore_do_push" $S/mont/…
+
+· Bloviating… (6h 2m 14s · ↓ 793.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
