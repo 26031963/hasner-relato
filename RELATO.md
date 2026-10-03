@@ -1,5 +1,36 @@
 # RELATO — esteira saas-hasner
 
+# E6-CAUDA-2 familia (c): a colagem vem do ENVELOPE, nao da paridade (02/10 23:4x)
+
+PROVA: `minutos_do_oraculo` chamado direto, na arvore de hoje. Com contagem IMPAR e gaps de 11-13 h o
+oraculo **NAO cola**: devolve 780 min/dia nos tres dias e carimba o impar em `cortes`
+(`minutos {'04':780,'05':780,'06':780}`, `cortes {'2026-09-03'}`). Entao a minha hipotese -- "a paridade
+impede o corte e o turno cresce" -- **esta errada**, e o teste sintetico sem envelope nao podia
+reproduzir a colagem.
+
+**A CAUSA ESTA NO RAMO QUE EU NAO HAVIA LIDO** (`ponto/calculador/nucleo.py`, dentro do laco):
+
+    if _dentro_do_envelope(cur[-1], t):
+        cur.append(t)
+        continue                 # <- sai ANTES da regra de corte
+
+**O envelope curto-circuita o corte.** Quando o ponto medio entre duas batidas cai dentro do envelope do
+dia (os marcos do DNA), elas sao coladas **sem olhar o gap** -- e com envelope largo isso atravessa dias.
+E os 4 casos da frota tem exatamente essa marca: 9, 11, 17 e 17 batidas num "dia", `piso > 1440 min`,
+todos com `dono_da_paridade = CORTE_do_oraculo`.
+
+**O QUE O RED PRECISA, e por isso ele nao fecha agora**: a reproducao exige `envelopes=` -- o teste sem
+envelope mede outro caminho. Fica nomeado em vez de chutado.
+
+**E DUAS LICOES DESTE BLOCO, as duas minhas:**
+1. **Dois testes meus PASSARAM VAZIOS.** O helper montava `datetime` INGENUO e o nucleo recebe AWARE
+   (`tz.localtime`); a funcao devolvia `{}` e o `max()` de vazio da 0, que e <= 24 h. Quem acusou foi o
+   caso que DISTINGUE -- e e exatamente para isso que ele existe (anti-vacuidade).
+2. **Eu afirmei 882 min para a jornada de 14 h 42 do `col830` e isso era suposicao.** O oraculo
+   **corta** aquele dia (`gap > 14 h`, independente de paridade), marca `impares` e `cortes` e deixa
+   `minutos` VAZIO -- o modo de falha que a lapide dele ja declarava. O codigo estava certo; o meu
+   teste, nao.
+
 # E6-CAUDA-2: a classe 2 se parte em QUATRO familias, e nenhuma e "o espelho soma errado" (02/10 23:2x)
 
 PROVA: censo sobre `logs/placar_e/e6_09_curado.csv` (oraculo curado) cruzado com a BATIDA e com as

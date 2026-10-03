@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:21:16.**
+**Medido em 02/10/2026 22:26:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `3749dd5a [E6-CAUDA-2] A celula do censo, dentro do teto de 300` |
+| `HEAD` local | `b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS
 3749dd5a [E6-CAUDA-2] A celula do censo, dentro do teto de 300
 3a5ac950 [E6-CAUDA-2] O censo parte a classe em QUATRO familias, e nenhuma e "o espelho soma errado"
 10e2ecc2 [TICKETS] A linha da PLACAR-E, e RELATO vira META (como o PROMPTS)
 5232d6e5 [E6-CAUDA-1] A maior classe era o INSTRUMENTO: 1.681 das 2.325 h eram do meu leitor
-aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16
 ```
 
 ## `git status --short`
@@ -92,38 +92,38 @@ aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 2 patterns, ran 2 shell commands
-
-● A regra está em ponto/calculador/nucleo.py::minutos_do_oraculo. Leio o corte:
-
-  Searched for 2 patterns, ran 1 shell command
-
-● A regra é (contagem PAR e gap ≥ 8 h) ou gap > 14 h — então com contagem ímpar e gaps abaixo de 14 h o turno cresce sem parar, e foi
-  assim que nasceram os dias de 17 batidas e 47 h. A cura não afrouxa a paridade (seu corte de 27/09): ela impede o oráculo de afirmar um
-  fato impossível. RED primeiro:
+  (14 h 42) já é cortado hoje. Escrevo o RED e a cura:
 
   Ran 1 shell command
 
-● Minha fixture inventou o formato outra vez: o caso que distingue falhou com {} — o oráculo devolveu vazio para um dia trivial. Leio o
-  que a função espera:
+● Minha reescrita cortou o helper _ts junto do cabeçalho. Devolvo:
 
   Ran 1 shell command
 
-● E dois dos meus testes passaram vazios — a função devolveu {} e o max() de vazio deu 0, que é ≤ 24 h. É exatamente a armadilha
-  anti-vacuidade: passaram por ausência de sinal. A entrada é timezone-aware (tz.localtime), e eu passei ingênua:
+● RED evidenciado: 1080.0 not less than or equal to 840 — 18,0 h num dia contra o teto de 14 h. Mas o caso do carimbo ficou com a
+  sequência antiga e passa pelo motivo errado — alinho e aplico a cura:
 
   Ran 1 shell command
 
-● Ainda {} para um dia trivial. Pergunto ao objeto o que ele devolve, em vez de supor:
+● Os 4 errors são de importação: a cópia está num commit anterior à cura da classe 1, então minutos_do_espelho não existe lá. Sincronizo:
 
-  Probing the nucleo directly
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; timeout 115 docker run --rm
-     $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -v
-     /home/ronald/wt-orfa/app:/app saas-hasner-core:latest python -…
+  Ran 2 shell commands
 
-✽ Sock-hopping… (4h 8m 44s · ↓ 708.1k tokens)
+● 19 verdes. Mas a função mora em ponto/calculador/nucleo.py — o núcleo do calculador —, então preciso saber quem mais a chama antes de
+  levar isso à árvore viva:
+
+  Searched for 1 pattern
+
+● Dois chamadores de produção: o oráculo (sem pares) e o diff_calculador (com pares). Confiro se o caminho com pares passa pelo laço que
+  eu mudei:
+
+  Confirming the pares branch returns early
+  ⎿  $ awk 'NR>=77 && NR<=122 && /return/ {print NR": "$0}' ponto/calculador/nucleo.py | head -3
+
+· Compacting conversation… (4h 14m 10s · ↓ 727.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 41%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
