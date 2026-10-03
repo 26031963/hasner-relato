@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 05:59:31.**
+**Medido em 03/10/2026 06:05:01.**
 
 | | |
 |---|---|
@@ -116,38 +116,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Dois fatos novos, e um deles contradiz a própria memória:
-
-  Ran 1 shell command
-
-● Linha 29 nomeia o escritor único: "O que o git archive nao traz e o container precisa. A lista mora no arvore_do_push.sh, nao aqui."
-  Essa é a autoridade que já existe para exatamente esta pergunta:
+  tem dois caminhos de retrato. Medindo em vez de inferir:
 
   Ran 1 shell command
 
-● Este arquivo é a autoridade, e ele já documenta tudo o que eu acabei de redescobrir — inclusive os cinco smokes por nome, a armadilha do
-  symlink (26/09 12:0x, que a minha memória registrou hoje às 03:2x como se fosse nova) e o motivo do diretório vazio: mkdir -p
-  "$DIR/app/staticfiles" cria o ponto de montagem de propósito, para que o --montagem o encha.
-
-  E a lei está escrita na linha 22: *"So o bin/pre-push.sh a consome; quem montar <dir>/app em /app sem perguntar aqui roda uma arvore
-  incompleta."*
-
-  Foi exatamente o meu pecado hoje — e bin/vigia_arvore.sh:70-71 comete o mesmo. A cura é consumir a autoridade que já existe, não
-  inventar mount.
-
-  Ran 2 shell commands
-
-● O censo é inequívoco: 13 sítios montam árvore em /app; só o pre-push.sh consulta o --montagem. Dos que montam cópia, três nunca
-  perguntam — vigia_arvore.sh:71, isolamento.sh:32 e os moldes. Gravando o achado antes de consultar:
+● 93 diretórios vigia_arvore_commit_*, todos com staticfiles AUSENTE — e /tmp/vigia_arvore_retrato (o caminho do rsync) não existe. Os
+  timestamps vão de 1790093701 a 1790424902: de hora em hora, por ~92 h. O vigia caiu no ramo do git archive em 100% das passadas de ~4
+  dias, e o rm -rf que deveria limpar não limpa. Medindo o vazamento:
 
   Ran 1 shell command
+
+● Isso converge: a mesma omissão causa os dois sintomas. O rm -rf falha porque .hypothesis, .mypy_cache e .ruff_cache são escritos como
+  root pelo container — e a cura disso é exatamente os três --tmpfs que a minha memória registra e que o pre-push.sh monta. O vigia não
+  monta nenhum dos quatro. Resultado medido: 5 vermelhos de bancada por hora e 2,1 GB vazados em /tmp.
+
+  Ran 1 shell command
+
+● O pre-push.sh:136 monta os três --tmpfs inline, separados do --montagem. Então hoje "o que a cópia precisa" vive em dois lugares — e o
+  propósito declarado do arvore_do_push.sh é ser o lugar. Antes de alargá-lo, o selo que já o enumera:
+
+  Ran 1 shell command
+
+● O selo test_prepush_testa_o_commit.sh:76-105 é sólido e já MORDE nos dois sentidos, e assere por substring (*"/app/staticfiles"*) —
+  então alargar o --montagem é compatível com ele.
+
+  A minha medição mudou o desenho que o advisor viu: o censo colapsou de 4 sítios para um, e apareceu a convergência do tmpfs. Vou
+  conferir a escolha de escopo antes de escrever:
 
   Advising using Fable 5.1
 
-✢ Bloviating… (5h 46m 0s · ↓ 762.3k tokens)
+✢ Bloviating… (5h 51m 30s · ↓ 771.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   9% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
