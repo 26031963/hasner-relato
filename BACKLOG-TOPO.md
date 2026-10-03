@@ -130,4 +130,4 @@ lista — ela e o que esta EM PE._
 | **O120** | COL221-VINCULO-DESDE-2107 | espera `!` |
 | **O121** | VINCULO-CORRIGE-O-PASSADO | espera corte |
 | **O122** | UI PLANO DE ESCALAS, ETAPA 1 | espera aval |
-| **O123** | O-PENDENCIAS-DISPUTA-N+1 | **REGISTRADA agora, entra atras do O121  |
+| **O123** | O-PENDENCIAS-DISPUTA-N+1 | espera aval |

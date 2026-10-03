@@ -1,22 +1,15 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:58 AFIRMA ato sem PROVA ao lado -- ### O38: O CENSO ESTA FEITO, E ELE PARTE O BUG EM DOIS -- MEIO A MEIO (02/10 21:4x)
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:35:31.**
+**Medido em 02/10/2026 21:39:34.**
 
 | | |
 |---|---|
-| `HEAD` local | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
+| `HEAD` local | `34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
 74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia
 da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias de 169
 801253ed [O119] O intra desconta TODAS as pausas, e o DIFF me pegou num erro meu antes de fechar
 d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
-6976f3aa [O121] As duas obras registradas, e a LEI dele responde a pergunta que eu levantei
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -102,36 +93,36 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● 42 afirmações, mas você disse "a linha que retém" — singular. Vejo o publicador, porque é ele que retém:
-
-  Ran 2 shell commands
-
-● O publicador retém por qualquer uma das 42, e a cura estrutural é a lei que já existe: DIETA DE PROSA — "RELATO com mais de 3 dias vai
-  para app/docs/RELATO-ARQUIVO.md no mesmo commit". Hoje é 02/10, então 29/09 e antes saem. Meço onde está a fronteira:
+● Existe: PLACAR-E, "grade do PLACAR ESPELHO-VERDADE re-medida... parada desde 27/09", e está CONGELADA. Sua ordem a descongela. Registro
+  o aval do esmeril, descongelo ela e ponho o O121 atrás:
 
   Ran 1 shell command
 
-● Fronteira na linha 6716 (o último cabeçalho de 30/09 está na 6672). Confiro que não há 30/09 abaixo dela antes de mover:
+● O regex casa CONGELAD dentro de "DESCONGELADA" — a palavra contém a própria trava. Troco por uma que não se morde:
 
   Ran 1 shell command
 
-● Boa que eu conferi — há conteúdo de 02/10 abaixo da linha 6716 (9290+). O RELATO não é estritamente do mais novo ao mais velho, então um
-  corte por linha arquivaria o de hoje. Mapeio a estrutura por data antes de mover nada:
+● Minha própria explicação continha a palavra, e a palavra é a trava — tiro a menção da célula e guardo a lição no RELATO:
 
   Ran 1 shell command
 
-● A estrutura é embaralhada e algumas "datas" são falso-positivo (09/20, 10/20 são fragmentos de 09/2026). Então arquivo por bloco, nunca
-  por corte de linha, e só o que eu consigo datar com confiança como anterior a 30/09 — o que não dá para datar fica:
+● Selo verde apontando PLACAR-E, que é a cabeça da fila pela sua ordem. E uma armadilha que vale registrar: "DESCONGELADA" contém
+  "CONGELADA" — a palavra que anuncia a liberação é lida pelo hook como a própria trava, e a minha primeira tentativa de explicar isso na
+  célula repetia a palavra e se mordia de novo.
 
-● Splitting the RELATO by dated blocks
-  ⎿  $ cd /home/ronald/saas-hasner && cp app/docs/RELATO.md
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/RELATO_antes.md && python3 - <<'PY'
-     import io, re, datetime
-     p = 'app/docs/RELATO.md'
-     linhas = io.open(p, encoding='utf-8').read().split('\n')
-     cab = li…
+  Confiro a suíte dos vizinhos do O121, que ficou rodando:
 
-✢ Sock-hopping… (3h 23m 0s · ↓ 583.4k tokens)
+  Listed 1 directory
+
+● Suíte ainda rodando. Commito a cura do item 5 e publico, que é o que destrava a sua leitura:
+
+● Committing the RELATO cure and publishing
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md app/docs/BACKLOG.md app/docs/PROMPTS.md && git
+     commit -q -F - <<'MSGEOF'
+     [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
+     Item 5 da ordem dele: "o RELATO publicado esta retido desde 29/09…
+
+✶ Sock-hopping… (3h 27m 3s · ↓ 599.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
