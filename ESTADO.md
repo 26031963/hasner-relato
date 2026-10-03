@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:25:45.**
+**Medido em 02/10/2026 23:30:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento` |
+| `HEAD` local | `7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro
+8eaaf908 [PLACAR-ESTRUTURAL] R6, metade medida: NADA alcanca o dinheiro -- nem batida, nem correcao de cadastro
 71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento
 a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de chamar diferenca de PERGUNTA de divergencia
 ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101
-94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso
-379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o cens
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -95,42 +94,42 @@ ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o cens
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
+  minha sonda imprime "na 09" com dado da 10 — bug de rótulo meu, e o número abaixo é o da 10.)
 
-● corrigir_escala_retroativa faz três atos (vínculo, células, chamados). Conferindo se algum deles alcança a ata e o fechamento, em vez de
-  afirmar de memória:
+  Committed 7beff6c2, ran 1 shell command
 
-  Searched for 2 patterns, ran 1 shell command
+❯ aval Ronald: duas respostas, nenhuma lei nova.
 
-● Confirmado: zero menções a fechamento nos dois. Então a correção de cadastro alcança célula, ata, chamado e furo — e não alcança o
-  dinheiro. Checando a assimetria com a batida, que é o que torna isso um achado:
+  1. R6, "qual porta recalcula quando a celula muda": a porta JA EXISTE, e a medicao "nada alcanca o dinheiro" esta errada na metade da
+  batida. ponto/registro_batida.py:136-137 chama ponto/services/fechamento.py::recalcular_por_evento (linha 1011, on_commit, nunca
+  levanta), e a MESMA porta e chamada por ponto/portas/he.py:130 e chamados/services/validacao.py:107. Batida, decisao de HE e validacao
+  alcancam o dinheiro. Retratar o bloco no RELATO.
+     O leitor que NAO migrou e so o cadastro: regenerar_celulas_vinculo, reconciliar_apos_vinculo e corrigir_escala_retroativa nao chamam
+  a porta. CURA (LEI-AKITA 4, entra na O121): depois de regenerar celula, chamar recalcular_por_evento uma vez por competencia tocada,
+  com o motivo do vinculo. Signal em CelulaDia NAO; juiz novo = 0. Lote (template com N colabs, item A2) vai para job, nao inline.
+  Competencia exportada: vale a resposta do O120. RED: col221 na sombra, corrigir o vinculo e o FechamentoMensal acompanhar sem comando.
+  R6 so fecha com passos manuais = 0 medido.
+  2. Selo do "ultimo push" (falhas 93 e 96): escolha tecnica, pela lei CURA-MAIS-RESTRITIVA nao espera por mim. Fica a (a): o selo aceita
+  o hash gravado se ele for ancestral do origin/main, em vez de exigir igualdade. A (b) reescreve arquivo depois do push e suja a arvore
+  a cada push. Registrar e seguir.
 
-  Searched for 1 pattern
+  Segue a fila; PAREI so em lei ou !
 
-● recalcular_fechamento_mes só é chamado por ato humano (botão/comando) — nenhum signal, nenhum cron. Mas eu tinha nota de que batida rega
-  a competência, então quem escreve o fechamento:
+● Ele está certo e meu R6 estava errado na metade da batida: eu grepei recalcular_fechamento_mes e concluí sobre a pergunta inteira — a
+  porta se chama recalcular_por_evento. Lendo os três sítios antes de retratar:
 
-  Searched for 1 pattern, ran 1 shell command
+  Reading the porta and all its callers
+  ⎿  $ sed -n '132,140p' ponto/registro_batida.py; echo "=== a porta ==="; sed -n '1011,1020p' ponto/services/fechamento.py; echo "=== os
+     outros dois chamadores ==="; sed -n '128,132p' ponto/portas/he.py; sed -n '105,109p' chamados/services/validacao.py; echo "=== censo
+     de chamadores ==="; grep -rn "rec…
 
-● Isso é o achado mais fundo do corte dele, e é medido: nem batida nem correção de cadastro alcançam o dinheiro.
-
-  Updating the placar header and R6 line
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p = 'app/docs/RELATO.md'
-     s = io.open(p, encoding='utf-8').read()
-     v = ("| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **PENDENTE** | "
-     "zero passo manual | — |")
-     assert s.count(v) == 1
-     n = ("| **R6** | contratos N…
-
-· Sock-hopping… (5h 13m 14s · ↓ 919.9k tokens)
+· Sock-hopping… (5h 18m 14s · ↓ 939.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens

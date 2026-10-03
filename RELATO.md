@@ -1,5 +1,62 @@
 # RELATO — esteira saas-hasner
 
+### R2 MEDIDO, E A RESPOSTA CORRIGE A MINHA PRIMEIRA CONTA EM 52 COLABS (02/10 23:5x)
+
+**R2**: *"CADASTRO e BATIDA saem da cauda e vao para a lista do admin pela MESMA fonte do Cadastro x
+Realidade."* Medido na 09, contra a funcao que a TELA chama
+(`escala.services.cadastro_realidade.lista`, de `escala/views.py:428`), que hoje mostra **243
+colaboradores**.
+
+| dono | colabs | ja na lista | sem vinculo vigente (a lista nao os promete) | **GAP** |
+|---|---|---|---|---|
+| **CADASTRO** | 12 | 9 | 0 | **3** |
+| **BATIDA** | 118 | 56 | 9 | **53** |
+| ESTRUTURA (informativo -- fica na fila 1) | 60 | 36 | 5 | 19 |
+
+**E OS 53 DA BATIDA NAO SAO GAP, e isso se MEDIU em vez de supor**: a lista Cadastro x Realidade e de
+CADASTRO (A1-A11 = recorrencia no espelho; C = estado do cadastro lido agora). **Falta de batida nao e
+anomalia de cadastro** -- e o destino dela JA EXISTE, e e o CHAMADO. Dos 118 colabs de dono BATIDA:
+
+* **103 tem chamado carimbado NO DIA da divergencia**;
+* **115 tem chamado VIVO hoje** (autoridade `chamados.catalogo.motor.VIVOS`, nunca tupla literal);
+* **1 -- col392 -- nao tem nenhum dos dois**, e e o unico invisivel em todo lugar.
+
+As subcategorias desses colabs sao literalmente o vocabulario de batida faltando: `Batida nao
+realizada` (2.366), `orfao_14h` (788), `saida_pendente` (609), `aguarda_primeira_batida` (501).
+
+**ENTAO O GAP REAL DO R2 E 4 COLABS, nao 56**: `col456`, `col612`, `col865` (dono CADASTRO, fora da
+lista que E a fonte deles) e `col392` (dono BATIDA, sem chamado). A minha primeira conta deu 56 porque
+eu cobrei de UMA lista um fato que tem OUTRO destino -- cobrar da lista errada e a mesma familia do
+criterio pela forma, agora no destino em vez de no criterio.
+
+**LEI, no topo e sem me travar** (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): o R2 manda BATIDA para a lista do
+admin *"pela MESMA fonte do Cadastro x Realidade"*. Medido, **BATIDA ja tem casa, e nao e essa** -- e
+pondo-a la eu criaria um SEGUNDO lugar para um fato que ja tem um, que e exatamente o que a LEI-AKITA
+proibe. Duas leituras possiveis do seu corte, e eu sigo pela segunda ate voce dizer:
+  **(a)** a lista cresce uma secao de batida -- e passa a ter duas perguntas sob um nome;
+  **(b)** BATIDA fica onde esta (o chamado) e o R2 se cumpre com **1 colab** (col392), nao com 53.
+Enquanto a resposta nao vem, o numero publicado e o das duas leituras, lado a lado.
+
+PROVA: a tabela acima saiu de `escala.services.cadastro_realidade.lista` em PROD (so leitura) contra
+`logs/e6_cauda2c/r1_9.csv`, e o censo de chamado saiu de `ChamadoColaborador` no mesmo ato.
+
+**A 10 FECHOU DEPOIS, e confirma a forma** (uniao dos colabs das duas competencias): CADASTRO **17**
+colabs, 12 na lista, **5 de gap** -- `col235`, `col303`, `col456`, `col612`, `col865`. BATIDA **160**,
+74 na lista, 86 fora -- e na 10, dos 75 colabs de dono BATIDA, **67 tem chamado carimbado no dia**, 70
+tem chamado vivo e **1 e invisivel**: `col529`.
+
+**GAP REAL DO R2, nas duas competencias: 7 colaboradores.** 5 de dono CADASTRO (fora da lista que E a
+fonte deles) + 2 de dono BATIDA sem chamado nenhum (`col392` na 09, `col529` na 10). Contra os 82 que
+sairiam da conta ingenua.
+
+**UM ERRO DE ROTULO MEU, e ele fica dito porque rotulo e o que a casa cobra**: a minha sonda imprime
+*"colabs de dono BATIDA na 09"* mesmo quando recebe o CSV da 10 -- a competencia esta cravada no texto
+do `print`, nao lida do arquivo. O DADO esta certo (veio do CSV da 10); o ROTULO mentia. Corrigido no
+proximo uso, e o numero publicado aqui e o da 10.
+
+**O que eu NAO vou fazer, pelo R2 literal**: curar por codigo divergencia de dono CADASTRO ou BATIDA.
+Os 7 viram linha de lista, nao fatia.
+
 ### R6 (primeira metade, e e o achado mais fundo do corte dele): NADA ALCANCA O DINHEIRO (02/10 23:4x)
 
 O corte diz: *"se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo,
@@ -55,12 +112,12 @@ selo que BLOQUEIA push, entao nao a faco sem o seu corte -- e a pergunta e qual 
 PROVA: `bin/tickets_placar.sh` acusou `arquivo diz 74e24761 / o mundo diz 94b28144`, e o 93 trazia
 `rodape diz 751b53c4, 8 commits atras`.
 
-## PLACAR-ESTRUTURAL — 6 linhas, numero e meta (02/10 23:4x) · **INCOMPLETO: faltam R2, R3, R4, R5 e a metade N/22 do R6**
+## PLACAR-ESTRUTURAL — 6 linhas, numero e meta (02/10 23:5x) · **INCOMPLETO: faltam R3, R4, R5 e a metade N/22 do R6**
 
 | | resultado | numero de HOJE | meta | PROVA |
 |---|---|---|---|---|
 | **R1** | dono de cada divergencia, e as tres somam o total | **MEDIDO.** 09: ESTRUTURA 197 · CADASTRO 29 · BATIDA 208 (soma 434 = 434). 10: 95 · 15 · 95 (205 = 205) | tres donos, soma fechada | `logs/e6_cauda2c/r1_dono_09_e_10.txt` |
-| **R2** | CADASTRO e BATIDA fora da cauda, na lista do admin pela MESMA fonte | **PENDENTE** -- a lista nasce das assinaturas A1-A11 do esmeril + codigos C; o dono sai da lista por-DIA do motor. Fonte diferente, gap a MEDIR | 0 colab de dono CADASTRO ou BATIDA fora da lista | — |
+| **R2** | CADASTRO e BATIDA fora da cauda, na lista do admin pela MESMA fonte | **MEDIDO: gap real = 7 colabs** (5 de CADASTRO fora da lista; 2 de BATIDA sem chamado -- col392 e col529). Os outros 155 de BATIDA JA tem destino: 103 de 118 na 09 e 67 de 75 na 10 com chamado NO DIA. **Lei no topo**: BATIDA ja tem casa, e nao e a lista de cadastro | 0 colab sem destino | o bloco do R2 abaixo |
 | **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
 | **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
 | **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
