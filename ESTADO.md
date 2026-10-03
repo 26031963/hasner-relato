@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:30:31.**
+**Medido em 03/10/2026 13:36:01.**
 
 | | |
 |---|---|
@@ -109,44 +109,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+   Total cost:            $4220.98
+   Total duration (API):  3d 5h 26m
+   Total duration (wall): 5d 21h 12m
+   Total code changes:    4794 lines added, 498 lines removed
+   Usage by model:
+          claude-opus-5:  1.5m input, 14.8m output, 6.5b cache read, 36.0m cache write ($3975.03)
+       claude-fable-5-1:  19.2m input, 1.1m output, 0 cache read, 0 cache write ($245.94)
+   Prompt cache (main):   18349 requests · 99% of input tokens from cache · 34 misses (last 1h 8m 55s ago — likely cause: prompt
+   unchanged — likely server-side, 12.0m tokens re-cached) · 78 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL,
+   last activity 3m 14s ago)
 
-● Background command "Push do marco pela regua normal" completed (exit code 0)
+   Current session
+   ████████▌                                          17% used
+   Resets 4:30pm (America/Sao_Paulo)
 
-  Ran 2 shell commands
+   Current week (all models)
+   █████████████████████████████████                  66% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-● Push pousou — origin/main == HEAD == f652dfef, 0 à frente. Lanço a leitura 3 (só leitura, na sombra, com flock):
+   Current week (Fable)
+   █████████████████████                              42% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-  Ran 2 shell commands
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
 
-● Background command "Rodar a sonda de leitura da palavra do dia na sombra" completed (exit code 0)
+   Last 24h · these are independent characteristics of your usage, not a breakdown
 
-● ruff existe na imagem (/usr/local/bin/ruff). A sonda pousou:
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
 
-  Read 1 file, ran 3 shell commands
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
 
-● Medição feita e durável. Ela inverte a premissa da minha própria pergunta de lei — vou levar isso ao advisor antes de escrever uma linha
-  de código:
-
-  - Os 10 (o universo que publiquei) já têm palavra hoje: Em aberto (veredito=em_aberto, furo_apurado=True, batidas=0, turnos=0, Realizado
-    --).
-  - Quem não tem palavra nenhuma são 3 outros: col277 em 16/09, 18/09 e 20/09 — veredito=trabalhou, palavra='', Realizado --, 1 batida e
-    650-690 min na ata (≈33 h somadas). Ali "nem autoridade nem palavra falam" é literalmente verdade.
-  - A causa da discordância: a tela agrupa cards por dia_das_batidas, e realizado_dos_turnos julga por t.data_turno — a mesma divergência
-    da lápide TRAVA JUIZ-NOVO. Por isso "zero par pareável" tem três universos: 16 (pela ata, sem_turno), 13 (pelo batidas_dia da tela) e
-    10 (o do meu classificador, que publiquei na pergunta).
-
-● Advising using Fable 5.1
-
-✢ Bloviating… (13h 17m 0s · ↓ 1.8m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
-
-  ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inserting law question into RELATO-CHAMADO-EM-RAIA.md                                    1h 38m 8s · ↓ 112.4k tokens
-  ⧉  index
+   78% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear
+    when switching to new tasks.
+                                                                                                                                         ↓
 ```
