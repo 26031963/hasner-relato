@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:51:01.**
+**Medido em 03/10/2026 19:56:31.**
 
 | | |
 |---|---|
@@ -126,6 +126,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+     lines)
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
@@ -142,9 +143,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   reversao em logs/ e competencias exportadas intactas !
   aval Ronald: "dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado. Mede o DIFF antes e aplica !
 
-● Achar quem imprime a linha OK
-  ⎿  $ cd /home/ronald/saas-hasner && cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/br121v8t2.output; echo "=== $(date '+%H:%M')"
+● Ler nome_canonico_dropdown
+  ⎿  $ cd /home/ronald/saas-hasner && git show raia-ui:app/escala/models.py | sed -n '470,520p'
   ⎿  Read ponto/tests/test_tripwire_situacao_afastado.py (172 lines)
   ⎿  Referenced file core/juizes.py
   ⎿  Read docs/AVAIS.md (23 lines)
@@ -155,7 +155,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Rodar os vizinhos da fatia" still running in background
 
-✢ Bloviating… (19h 37m 30s · ↓ 2.7m tokens)
+· Bloviating… (19h 43m 0s · ↓ 2.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
