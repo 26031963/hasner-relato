@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:104 AFIRMA ato sem PROVA ao lado -- `SEM_EFEITO_NO_CALCULO` em `core/regua_cct.py`). `TOLERANCIA_MINUTOS = 5` (`:44`) **e** consumida, mas pela
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:124 AFIRMA ato sem PROVA ao lado -- `SEM_EFEITO_NO_CALCULO` em `core/regua_cct.py`). `TOLERANCIA_MINUTOS = 5` (`:44`) **e** consumida, mas pela
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 00:34:01.**
+**Medido em 03/10/2026 00:39:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `ca2d50d9 [PLACAR-ESTRUTURAL] R4 com cinco pares em ZERO, e o R3 nao era o que eu publiquei` |
+| `HEAD` local | `6472e8c4 [CENSO-JUIZ] O censo de batida e escala MEDIDO, e a trava ja estava vermelha por duas frases antigas` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+6472e8c4 [CENSO-JUIZ] O censo de batida e escala MEDIDO, e a trava ja estava vermelha por duas frases antigas
 ca2d50d9 [PLACAR-ESTRUTURAL] R4 com cinco pares em ZERO, e o R3 nao era o que eu publiquei
 70006e6f [L-099] O estrutural separado do dado vira LEI numerada, e o PLACAR-ESTRUTURAL vira o placar principal do ESTADO
 c6722c3f [O122] A pista de teste deixa de ser combinacao verbal e passa a ser ARQUIVO
 cdd5596e [PLACAR-ESTRUTURAL] O dinheiro acompanha o cadastro (R6), e o par 6 do R4 e estrutural
-fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -122,7 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byfk21e8e.output (5 lines)
   ⎿  Referenced file core/placar_tickets.py
   ⎿  Referenced file ponto/management/commands/e6_oraculo.py
 
@@ -141,25 +135,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Showing working tree status
-  ⎿  $ cd /home/ronald/saas-hasner && git status --short | head -20
+  Committed 6472e8c4, searched for 2 patterns, read 1 file, ran 22 shell commands
+  ⎿  Message queued for delivery to a36f717afe3b6f25d at its next tool round.
+  ⎿  Allowed by auto mode classifier
 
+  Correct the lock trail to what actually happened
+  ⎿  $ cd /home/ronald/saas-hasner && printf 'fila1-censo-push desde %s (a raia-ui SOLTOU a pista entre a minha conferencia e o ato -- nao
+     houve tomada forcada; 0 container de suite e 0 conexao no juliani_db_test no ato)\n' "$(date '+%d/%m %H:%M:%S')" > logs/.pista_lock
+     && bin/pista_lock.sh ver
+
+✢ Compacting conversation… (26m 0s · ↓ 62.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱ 77%
+
+› Message from @a36f717afe3b6f25d (ctrl+o to expand)
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- Bash command
+❯ 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
-   cd /home/ronald/saas-hasner && git status --short | head -20
-   Show working tree status
-
- │ Auto mode classifier requires confirmation for this command.
- │ 3 consecutive actions were blocked. Please review the transcript before continuing.
- │
- │ Latest blocked action: [Instruction Poisoning]
- ⚠ Claude Code will automatically deny this request in 0:34, to avoid blocking progress on an unattended session
-
-
- Do you want to proceed?
- ❯ 1. Yes
-   2. No
-
- Esc to cancel · Tab to amend
+  ● main
+  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ⧉  index
 ```
