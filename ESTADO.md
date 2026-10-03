@@ -1,22 +1,15 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:14 AFIRMA ato sem PROVA ao lado -- **NO AR as 17:18:07** (`2984714b`, fast-forward de `17052ed1`; `bin/deploy.sh --sem-migrate`): 3 cascas recarregadas juntas, 3 rotas provada
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:27:31.**
+**Medido em 03/10/2026 17:33:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado` |
+| `HEAD` local | `bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push VERMELHO` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push VERMELHO
+42a67a87 RELATO/HANDOFF: a terceira prova velha do dia -- o gerador que comia o marcador -- com a PROVA de que o tripwire morde
 49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado
 16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS
 2984714b [SITUACAO-E-LAMPADA] a nota do pendente _A14 afirmava duas coisas que ESTE commit derruba
-aaad199b [SITUACAO-E-LAMPADA] pousa a METADE DOS LEITORES do ! -- a da ESCRITA para em LEI, porque o censo que o aval mandou fazer devolveu 104 leitores, nao 8
-17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE
 ```
 
 ## `git status --short`
@@ -41,7 +34,7 @@ aaad199b [SITUACAO-E-LAMPADA] pousa a METADE DOS LEITORES do ! -- a da ESCRITA p
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -116,35 +109,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
 
-● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
+● A linha do TICKETS precisa entrar antes do push — não se commita com o push em voo:
 
-● Região perdida identificada: as linhas 7-11 de HEAD~1 — o marcador e seus dois blocos de comentário, que moram acima de OBRAS:INICIO e
-  por isso ficaram fora da única janela que o gerador preserva. Curando a origem e repondo o texto no mesmo ato:
+  Committed bba65eff
 
-  Ran 2 shell commands
-
-● Reposto. Agora a prova de que a cura morde — o gerador rodado duas vezes, e o selo que estava VERMELHO:
+● 9 commits, todos meus, origin/main intacto em 2fd71ba1. Um push para o marco — o pre-push roda os dois runners, então vai ao fundo:
 
   Ran 1 shell command
 
-● Verde. Falta provar que o tripwire morde — guarda que só afirma, sem caso que a quebra, passa por ausência de sinal:
+● Enquanto o push roda, as memórias duráveis deste ciclo. Conferindo primeiro se já existe arquivo que as cubra:
 
   Ran 1 shell command
 
-● Tripwire morde: exit 1, nada escrito, e o restaurado volta byte a byte ao mesmo md5 depois de uma geração cheia. Conferindo que mais nada
-  se perdeu em silêncio na mesma geração:
+● Background command "Empurrar o marco com o pre-push" completed (exit code 0)
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Ruff não é portão da régua, e o +1 é um UP031 na mesma forma % dos outros 9 do arquivo — estilo da casa, não defeito. Commitando a cura
-  por path:
+● O push não passou — o | tail comeu o rc, a mesma família de mascaramento de antes. O pre-push barrou no rodapé do TICKETS, com a cura
+  declarada. Vendo o resto do veredito antes de curar:
 
-● Ler o topo do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,22p' app/docs/RELATO.md | awk '{printf "%d: %.130s\n", NR, $0}'
+  Ran 1 shell command
 
-✢ Bloviating… (17h 14m 0s · ↓ 2.3m tokens)
+● Só esse alarme, e o pre-push morreu antes da suíte — a pista nunca foi tomada. Rodando a cura declarada:
+
+● Rodar a cura do rodape do TICKETS
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -8; echo "--- reconferir ---"; bash
+     bin/tickets_rodape.sh 2>&1 | tail -4; echo "--- diff ---"; git diff --stat app/docs/TICKETS.md
+
+· Bloviating… (17h 19m 30s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -153,7 +146,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Committing disputa_emissao.py porta D2                                                   5h 35m 9s · ↓ 104.9k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Inspecting contexto writes for D4 porta                                      5h 40m 39s · ↓ 133.2k tokens · 1 queued
   ⧉  index
 ```
