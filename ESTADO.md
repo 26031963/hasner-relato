@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:22:01.**
+**Medido em 03/10/2026 17:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS` |
+| `HEAD` local | `49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado
 16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS
 2984714b [SITUACAO-E-LAMPADA] a nota do pendente _A14 afirmava duas coisas que ESTE commit derruba
 aaad199b [SITUACAO-E-LAMPADA] pousa a METADE DOS LEITORES do ! -- a da ESCRITA para em LEI, porque o censo que o aval mandou fazer devolveu 104 leitores, nao 8
 17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE
-9a412112 PLACAR-ESTRUTURAL: os tres RED do R4 ganham dono, numero e frota -- e o contador que os achou mede o gravado contra ELE MESMO
 ```
 
 ## `git status --short`
@@ -116,44 +116,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 16d2f6c8
+● Task "RED e construção do segundo intervalo" completed in background
 
-● Commit 16d2f6c8. Conferindo que o gerador preservou o bloco OBRAS antes de empurrar (as 308 deleções vêm da regeneração):
+● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
 
-  Ran 1 shell command
-
-● O gerador comeu o marcador ORDEM-VIVA-TOPO — e ele é autoridade: o hook_stop_fila1 e o handoff o leem. Conferindo e restaurando:
-
-  Ran 1 shell command
-
-● Bug provado no caminho — e LEI-AKITA 6 manda curar na hora. Primeiro o RED: o selo de host que lê o marcador:
-
-  Ran 1 shell command
-
-● RED confirmado: hook_nao_cobra_congelado: VERMELHO -- falta o marcador. É selo de host, roda no pre-push — o push ia vermelho. Lendo o
-  gerador para curar a origem, não só repor o texto:
+● Região perdida identificada: as linhas 7-11 de HEAD~1 — o marcador e seus dois blocos de comentário, que moram acima de OBRAS:INICIO e
+  por isso ficaram fora da única janela que o gerador preserva. Curando a origem e repondo o texto no mesmo ato:
 
   Ran 2 shell commands
 
-● O gerador preserva só o bloco OBRAS; o marcador nasceu acima dele em 01/10 e ninguém ensinou o gerador. Vendo exatamente que região se
-  perdeu:
+● Reposto. Agora a prova de que a cura morde — o gerador rodado duas vezes, e o selo que estava VERMELHO:
 
-  A regiao perdida, do marcador ate OBRAS
-  ⎿  $ cd /home/ronald/saas-hasner && git show HEAD~1:app/docs/BACKLOG.md | sed -n '/<!-- ORDEM-VIVA-TOPO:/,/<!-- OBRAS:INICIO -->/p' |
-     head -30 | cat -A | sed 's/\$$//' | head -0; git show HEAD~1:app/docs/BACKLOG.md | sed -n '/<!-- ORDEM-VIVA-TOPO:/,/<!-- OBRAS:INICIO
-     -->/p' | awk '{printf "%d: %.100s\…
+  Ran 1 shell command
 
-✢ Compacting conversation… (17h 8m 30s · ↓ 2.3m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 26%
+● Verde. Falta provar que o tripwire morde — guarda que só afirma, sem caso que a quebra, passa por ausência de sinal:
+
+  Ran 1 shell command
+
+● Tripwire morde: exit 1, nada escrito, e o restaurado volta byte a byte ao mesmo md5 depois de uma geração cheia. Conferindo que mais nada
+  se perdeu em silêncio na mesma geração:
+
+  Ran 4 shell commands
+
+● Ruff não é portão da régua, e o +1 é um UP031 na mesma forma % dos outros 9 do arquivo — estilo da casa, não defeito. Commitando a cura
+  por path:
+
+● Ler o topo do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,22p' app/docs/RELATO.md | awk '{printf "%d: %.130s\n", NR, $0}'
+
+✢ Bloviating… (17h 14m 0s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Verifying anchors in disputa_emissao.py                                                  5h 29m 39s · ↓ 80.4k tokens
+  ◯ general-purpose  Committing disputa_emissao.py porta D2                                                   5h 35m 9s · ↓ 104.9k tokens
   ⧉  index
 ```

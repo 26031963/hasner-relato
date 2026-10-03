@@ -4,6 +4,17 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
+<!-- ORDEM-VIVA-TOPO: PLACAR-ESTRUTURAL -->
+<!-- O marcador segue a ordem do HOOK, que e o item (8) da lista dele de 01/10 20:2x ("fila 1 do
+     BACKLOG na ordem do hook, O21 em diante"). Caminhou em 02/10 20:5x: FILA-DA-NOITE (fechada) ->
+     O27 (espera o corte, frase pronta no PENDENTES) -> O28/O34/O91/O89 (esperam o `!`) -> O30, que
+     tem o PORTAO ABERTO e e trabalho. MEDIDO no mesmo ato: 66 itens vivos no bloco OBRAS, dos quais
+     so 8 dizem esperar por ele -- a fila NAO acabou, e eu estava andando pela cabeca dela. -->
+<!-- ^ o 1o item ABERTO da ORDEM VIVA, em UM lugar. Ate 01/10 este nome estava COPIADO dentro de
+     `bin/tests/test_hook_nao_cobra_congelado.sh` como literal, e a copia envelheceu: a ORDEM VIVA
+     de 28/09 e `S3 -> S4 -> S5b`, as duas primeiras FECHARAM (29/09 e 30/09) e a S5b esta em PAREI
+     esperando o `!`, entao a fila andou e o selo seguiu cobrando a S3. Nao era a fila errada: era a
+     copia. Quem move a fila move ESTA linha, e o selo passa a ler daqui. -->
 <!-- OBRAS:INICIO -->
 
 <!-- A FILA 1 VIVA. ORDEM VIGENTE -- MODO CONTINUO ate o export (corte Ronald 28/09 01:1x):
