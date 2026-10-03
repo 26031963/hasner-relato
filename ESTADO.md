@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:52:31.**
+**Medido em 03/10/2026 12:58:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de tu
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/views.py
+ M app/ponto/services/triagem_batida.py
+ M app/ponto/tests/test_afastado_na_batida.py
+ M app/ponto/tests/test_afastado_nunca_bloqueia.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? app/docs/DOSSIES.md
@@ -115,36 +118,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O censo confirma o "custo M". Vou medir a fixture mínima de escala e então consultar antes de escrever.
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Executo na ordem. Primeiro a correção vira texto (PROMPTS + DOSSIES literal) e vai para a raia, que está rodando com os números velhos.
-
-  Ran 1 shell command
-
-❯ lei Ronald: o dia com minuto na ata e ZERO par pareavel leva a palavra "sem turno pareado", com o numero da ata rotulado, no molde do
-  "Em aberto" do R3.
-
-● Lei respondida — isso devolve o item (1) ao topo com tudo que faltava. Primeiro a raia, que está rodando com números velhos.
-  ⎿  Message queued for delivery to a4b92115c4cb655af at its next tool round.
-  ⎿  Allowed by auto mode classifier
-
-  Ran 7 shell commands
-
 ● Item (1) volta ao topo com a lei. Vou ler o molde do "Em aberto" do R3 antes de escrever a palavra nova.
 
-● Reading dia_decidido vocabulary
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     echo "=== datas_em_aberto_de 126..200 ==="; sed -n '126,200p' ponto/services/dia_decidido.py
-     echo; echo "=== aplicar_palavra_do_dia (espelho.py 300..360) ==="; sed -n '300,360p' ponto/services/espelho.py
+  Ran 3 shell commands
 
-✢ Bloviating… (12h 39m 0s · ↓ 1.7m tokens · still thinking)
+● O molde do R3 está claro. Antes de construir a palavra, fecho o item (2) que já está medido — e registro a ordem. Agora o número do
+  ausência, em prod e só leitura.
+
+  Ran 1 shell command
+
+● 11 afastados, o juiz confirma 11, divergência 0, só-juiz 0, sem posto/escala 0 — a troca não move ninguém hoje; é origem, não DIFF. Agora
+  o RED, construído em cópia do HEAD.
+
+  Ran 4 shell commands
+
+● RED evidenciado: as três falhas previstas. Agora a cura, na cópia do HEAD.
+
+● Applying the cure and running with the triagem neighbours
+  ⎿  $ D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/f_aus
+     python3 - "$D" <<'PY'
+     import sys, os, py_compile
+     D = sys.argv[1]
+     p = os.path.join(D, 'triagem_batida.py')
+     s = open(p, encoding='utf-8').read()
+     old = """ if colaborador.situacao == 'afastado':
+     # A…
+
+✢ Compacting conversation… (12h 44m 30s · ↓ 1.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -152,6 +155,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Weighing porta split for disputa_emissao.py                                    1h 0m 8s · ↓ 125.4k tokens · 1 queued
+  ◯ general-purpose  Reading `registrar_aparelho` in aparelho.py                                              1h 5m 39s · ↓ 166.5k tokens
   ⧉  index
 ```
