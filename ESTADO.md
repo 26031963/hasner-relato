@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:09:31.**
+**Medido em 02/10/2026 23:15:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **12** |
+| `HEAD` local | `ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101` |
+| `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,27 +22,24 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101
 94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso
 379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite
 b0560aa9 [E6-CAUDA-2] A remedicao da familia (c), e os 5 que "pioraram" sao 5 acusacoes contra a tela
 bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap
-b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
+?? bin/r5_idempotencia_frota.py
+?? bin/r5_idempotencia_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -97,42 +94,42 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● motivo doesn't exist — the field list came back in the error, so I'll read it rather than guess. And the count in that window is 6, not
-  13 — widening to the whole day to find the real event:
+    independentes.
+  - Censo da (b2) publicado: o nome dela descreve 28 de 101, e 80 (82,9 h) não são divergência — são a janela declarada do corte de 14/09.
+    Sobram 11 dia-colab / 37,3 h de divergência real.
+  - RED de valor evidenciado para a cura nova, com a cura retirada cirurgicamente: AssertionError: 60 != 0 : o minuto subtraido sem ter
+    sido batido tem de aparecer no carimbo, e só 1 dos 12 caiu — o selo é específico, não cobertor. A árvore voltou idêntica ao patch
+    guardado.
+  - Rótulos de hora corrigidos contra git log e date: eu havia datado três blocos de cabeça (23:5x, 00:1x, 00:3x) e o ato foi 22:36–23:0x.
 
-  Ran 2 shell commands
+  Dois erros meus no caminho, nomeados
+  1. O primeiro critério do custo partia os dias por antes > 1440 min — critério pela forma: col439 14/09 tinha 22,5 h num dia e caiu em
+     "plausível" por caber em 1440. Refiz perguntando à autoridade (o espelho, tolerância 10 min, a dele).
+  2. Meu grep "manage.py te" para ver se havia suite rodando casava tenant_command — então eu esperei por uma pista que já estava livre.
+     Mesma família.
 
-● The burst is at 17:51–17:55, not 17:0x — 5 × orfao_14h plus Batida nao realizada, seconds apart, which is the --forcar signature.
-  Pinning it exactly:
+  O que o R1 vai responder (rodando na sombra, 09 e 10): dono_da_divergencia com juiz novo = 0 — ímpar → BATIDA (lei do BUG-144), dia na
+  lista dias_cadastro_x_realidade do motor → CADASTRO, resíduo → ESTRUTURA, dentro do único laço de comparação que já existe.
 
-  Ran 1 shell command
+  Um fio que o R2 já abriu: a lista do admin nasce das assinaturas A1–A11 por recorrência do esmeril mais os códigos C lidos do cadastro —
+  fonte diferente da lista por-dia do motor que atribui o dono CADASTRO. Então "vai para a lista do admin pela mesma fonte" tem um gap a
+  medir, não a supor; é o que faço assim que a tabela do R1 existir, junto da coluna dono no CSV para a mesa ficar auditável.
 
-● Exactly 13 in 17:45–18:15 — and they split by producer: 9 at 17:51–17:54 (the --forcar) and 4 at 18:00:1x on the */5 boundary (the cron,
-  in pairs per colab). All 7 orfao_14h were born resolvido with celula=None.
+  R5 já está durável em bin/r5_idempotencia_frota.sh, com foto1 → rodada A → foto2 → rodada B → foto3 e a lei em foto3 == foto2 — e os 13
+  chamados dele estão medidos: são exatamente 13, mas em 17:45–18:15 e com dois produtores (9 do --forcar, 4 do */5 em pares por colab),
+  sendo que os 7 orfao_14h nasceram resolvido com celula=None.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● The sombra is free (the suite is on the test DB), so R1's measurement can run now — from the copy, both competências:
-
-  Ran 1 shell command
-
-● Writing R5's probe while R1 measures — one container, snapshot → run → snapshot → run → diff:
-
-  Ran 2 shell commands
-
-● Both measurements are running. Waiting on them rather than polling — current state, so nothing is lost if this session ends:
-
-● Taking stock of uncommitted work
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xrxwniy.output 2>/dev/null | tail
-     -35
-
-· Sock-hopping… (4h 57m 0s · ↓ 859.5k tokens)
+✢ Sock-hopping… (5h 2m 30s · ↓ 880.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens

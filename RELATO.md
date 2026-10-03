@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-### PLACAR-ESTRUTURAL RECEBIDO, E ELE REDIRECIONA O QUE EU ESTAVA FAZENDO (03/10 00:3x)
+### PLACAR-ESTRUTURAL RECEBIDO, E ELE REDIRECIONA O QUE EU ESTAVA FAZENDO (02/10 23:0x)
 
 **Corte dele 02/10 22:5x, registrado**: `docs/CORTES.json` (55 cortes), `docs/PROMPTS.md`, e a obra no
 TOPO do bloco OBRAS com o marcador `ORDEM-VIVA-TOPO` apontando para ela.
@@ -52,7 +52,7 @@ nao recalcula (LEI-AKITA 2).
 PROVA: `grep -c competencia_rotulo app/docs/RELATO.md` = 4, e a suite que mordeu foi
 `colaboradores.tests.test_ui_cal_competencia`.
 
-### A CLASSE (b2) NAO E UMA FAMILIA, E O NOME DELA DESCREVE 28 DE 101 (03/10 00:1x)
+### A CLASSE (b2) NAO E UMA FAMILIA, E O NOME DELA DESCREVE 28 DE 101 (02/10 23:0x)
 
 **CENSO da 2a familia da cauda, no CSV de HOJE** (o de depois da cura (c) -- a atribuicao entre
 familias MUDA quando o instrumento muda, e foi a licao da classe 1). O funil FECHA:
@@ -121,9 +121,9 @@ depois da cura do rotulo.
 
 **PUSH 93 falhou e a causa e uma linha**: `tickets_rodape_vs_git` ALARME -- o rodape do TICKETS dizia `751b53c4`, 8 commits atras de `origin/main`. Curado por `bin/tickets_rodape.sh --escrever` (a propria saida do selo nomeia a cura), e nova tentativa. O selo mordeu ANTES da suite, entao nao custou os 9 min.
 
-### O TETO QUE FALTAVA ERA O DO VAO, E OS 5 QUE "PIORARAM" SAO 5 ACUSACOES CONTRA A TELA (02/10 23:5x)
+### O TETO QUE FALTAVA ERA O DO VAO, E OS 5 QUE "PIORARAM" SAO 5 ACUSACOES CONTRA A TELA (02/10 22:4x)
 
-**E6-CAUDA-2, familia (c) -- NO AR? nao: commit `bfb3a15b`, e deploy nao e preciso** (os dois
+**E6-CAUDA-2, familia (c) -- commit `bfb3a15b` (22:36), e deploy nao e preciso** (os dois
 chamadores de `minutos_do_oraculo` sao management commands; nenhum worker importa o modulo).
 
 **O RED, sintetico e reproduzido a mao**: `03/09 07:00 12:00 17:00 | 04/09 06:00 17:00 | 05/09 06:00
