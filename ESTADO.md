@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:12 AFIRMA ato sem PROVA ao lado -- ### O38: O CENSO ESTA FEITO, E ELE PARTE O BUG EM DOIS -- MEIO A MEIO (02/10 21:4x)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:58 AFIRMA ato sem PROVA ao lado -- ### O38: O CENSO ESTA FEITO, E ELE PARTE O BUG EM DOIS -- MEIO A MEIO (02/10 21:4x)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:13:31.**
+**Medido em 02/10/2026 21:19:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)` |
+| `HEAD` local | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
 | `origin/main` | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **8** |
 
 ## Fabrica
 
@@ -29,21 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia
+da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias de 169
+801253ed [O119] O intra desconta TODAS as pausas, e o DIFF me pegou num erro meu antes de fechar
 d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 6976f3aa [O121] As duas obras registradas, e a LEI dele responde a pergunta que eu levantei
-e064a263 [O38] O censo esta feito, e ele parte o bug em DOIS -- meio a meio
-72972402 [O37] O DIFF esta feito: 161,00 h em 22 dia-colab, e converge na lei do O120
-ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em sequencia
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
-?? bin/diff_o119_frota.py
-?? bin/relavrar_o119_col221.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -98,42 +95,42 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Assim que a suíte isolada voltar verde: commit + deploy, relavratura do col221 na competência 10 (aberta), e a prova com os 551 min, 09
-  e exportadas intactas por hash.
 
-  Uma coisa que preciso registrar do seu aviso, porque muda o que eu teria feito: o ec1361 que você criou às 20:28 está em prod e eu o
-  confirmei antes de qualquer ato — 31 células da competência 09 do col221 com regeneracoes=1, 21 dias de trabalho com seis marcos. O meu
-  ensaio do O120 está descartado e não toco vínculo dele.
+● Push 92 e as três guardas localizadas. Falta saber se o barrador que fica — holerite publicado — já existe:
 
-  E o fato que o item (5) do seu PRONTO pedia, já medido: o FechamentoMensal não recalcula sozinho depois da regeneração — 08/2026 com
-  atualizado_em=31/08 17:54 e 09/2026 com 30/09 19:57, os dois anteriores ao seu ato. A célula do col221 diz 21 × 550 = 11.550 e o gravado
-  diz 15 × 720 = 10.800, e nada fecha essa distância. É a mesma parede que o O37 (161,00 h) e o O94 esperam — e a LEI do seu corte A
-  acabou de derrubá-la: a guarda é leitor que não migrou.
+  Ran 3 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: O121 -- VINCULO-CORRIGE-O-PASSADO (cortes dele 02/10 20:38 e 20:45, fila 1). A LEI RESPONDE A PERGUNTA
-  QUE EU LEVANTEI
+● Push 92: causa nova, mesma família — tickets_rodape_vs_git: ALARME — rodape diz 070c1345, 14 commits atras de origin/main, teto 5. A
+  cura é declarada:
 
-● O hook ainda aponta o O121 porque eu inseri as linhas novas acima do O119 na tabela, e ele cobra a primeira aberta na ordem. Seu aval
-  diz "entram atrás do item em curso" — então a ordem da tabela é que está errada:
+  Ran 2 shell commands
+
+● Push 93 armado. Enquanto roda, leio o ramo do holerite que o seu corte manda ficar:
 
   Ran 1 shell command
 
-● Ordem corrigida — O119 na frente e as três novas atrás, como o seu aval determina. Selo verde apontando o O119. Espero a suíte isolada:
+● Agora o A1 está claro, e a distinção do seu corte é fina: hoje a guarda barra por competência exportada da EMPRESA (TXT emitido), e você
+  diz que isso não é assunto do colaborador — "é vínculo, tanto faz empresa". O que deve barrar é o holerite publicado do próprio colab,
+  porque é o papel que ele recebeu. E a lápide ali ao lado já documenta que os dois sinais são independentes (caso [nome]: holerite
+  publicado, folha nunca gerada). Procuro a autoridade existente, porque juiz novo = 0:
 
-● Waiting for the suite verdict · 7m 57s
-  ⎿  $ cd /home/ronald/saas-hasner && until [ -s
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output ]; do sleep 30; done; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl8zptfwb.output | tail -8 (7m 56s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 1 pattern
 
-✢ Sock-hopping… (3h 1m 0s · ↓ 515.3k tokens)
+● Background command "Commit the footer fix and push 93" completed (exit code 0)
+
+● Checking push 93 and read the Holerite model
+  ⎿  $ cd /home/ronald/saas-hasner && cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/by0q35afi.output | tail -4; grep -aE
+     "^(OK$|Ran |To https|error|exit=)" logs/push93.log 2>/dev/null | tail -3; echo "a empurrar: $(git rev-list --count
+     origin/main..HEAD)"; …
+
+✢ Sock-hopping… (3h 6m 30s · ↓ 531.1k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
