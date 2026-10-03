@@ -1,5 +1,60 @@
 # RELATO — esteira saas-hasner
 
+### R4 E R3 COM NUMERO: CINCO PARES EM ZERO, E O R3 NAO E O QUE EU PENSEI (03/10 00:4x)
+
+**R4, medido na sombra pelo selo da PROPRIA casa** (`selo_leitores_no_mesmo_numero`, tolerancia ZERO,
+sem allowlist) + o par 4 por fora:
+
+| par | 09/2026 | 10/2026 |
+|---|---|---|
+| **1** tela x PDF | **0** | **0** |
+| **2** cartao x TXT | **0** | **0** |
+| **3** espelho x DiaPago | **1** -- o `col935 05/09`, que e o RED 3 dele | **0** |
+| **4** fechamento x soma do DiaPago | **0** | **0** |
+| **5** topo x soma das linhas | **0** | **0** |
+| **6** app x tela | **0 por CONSTRUCAO** (selo de AST) | idem |
+| de brinde: calendario x espelho | **0** | **0** |
+| de brinde: minuto em duas rubricas | **0** | **0** |
+
+`SELO VERDE: tela == PDF == fechamento == TXT, 0 divergencia, sem allowlist`. Universo do TXT: **214**
+na 09 e **21** na 10. PROVA: `logs/e6_cauda2c/r4_pares.txt`.
+
+**O MEU PAR 4 NAO FOI REDUNDANTE, e o numero diz por que**: o selo varre o universo do TXT (214 e 21);
+o meu varre **TODOS** os `FechamentoMensal` -- **607** na 09 e **572** na 10 --, e da **100% batendo**
+com tolerancia declarada de 0,02 h (o arredondamento de duas casas que os dois lados gravam). Mesmo
+par, universo quase 3x maior, zero nos dois.
+
+**E O R3 NAO E O QUE EU PUBLIQUEI UMA HORA ATRAS.** Eu disse que a palavra EM ABERTO *"ja e
+compartilhada pelos cinco leitores"* e que faltava so rodar o numero. Fui ler `dia_decidido.py` e a
+distincao desmonta a minha conclusao:
+
+* `resumo['datas_em_aberto']` e **FURO SEM DECISAO** -- dia que a pessoa NAO trabalhou e ninguem
+  decidiu (furo apurado menos faltas decididas, por `cartao_pela_celula::folha_manda`);
+* o R3 fala de **DIA COM BATIDA FALTANDO** -- dia que a pessoa TRABALHOU e falta uma marcacao.
+* **Sao conjuntos diferentes**, e so o primeiro tem palavra.
+
+E `veredito_do_dia` **TRADUZ** em palavra (`em_aberto`, `folga`, `feriado`, `trabalhou`, `pendente`) --
+*"esta funcao nao decide nada, ela traduz"* -- e **nao toca nos minutos**. Entao o dia impar continua
+mostrando **NUMERO**: a soma dos pares fechados, pela lei do BUG-144. E exatamente o que o R3 proibe.
+
+**O NUMERO DO R3, medido**: `datas_em_aberto` = **288** na 09 e **127** na 10 (esses tem palavra); dia
+**IMPAR** = **343** na 09 e **183** na 10 -- **526 dia-colab que hoje mostram numero onde a lei pede
+"EM ABERTO com o que falta"**. PROVA: `logs/e6_cauda2c/r4_pares.txt` e `r1_dono_09_e_10.txt`.
+
+**O QUE ISSO FAZ COM A ORDEM**: o R3 deixa de ser "rodar um contador" e passa a ser fatia de verdade --
+a palavra precisa alcancar o dia IMPAR, e o leitor precisa dizer **o que falta** (qual marco) em vez do
+numero. Os cinco leitores ja concordam entre si (todos os pares em zero), entao a cura e **uma** e
+alcanca os cinco de uma vez: ela mora em quem monta a palavra, nao em cada tela.
+
+**E A CONTAMINACAO QUE EU DECLARO**: o R5 rodou DUAS rodadas de recalculo na sombra ANTES desta medicao
+do R4. Entao estes zeros sao sobre lavratura **FRESCA**. Em PROD os tres REDs dele existem porque o
+gravado esta **ATRASADO** -- e e o mesmo fato do R5 (uma rodada moveu **82 fechamentos**) e do R6 (a
+tela recalcula na leitura, o gravado nao). **Os pares dao zero quando a lavratura esta em dia; o que
+quebra nao e o par, e o atraso.**
+
+**Estado do placar, pela funcao real**: `placar_estrutural: 3 fechado(s), 3 parcial(is), 0 pendente(s)
+de 6`.
+
 ### R5 VERDE: A SEGUNDA RODADA NAO MUDA NADA -- E A PRIMEIRA MUDA 82 FECHAMENTOS (03/10 00:0x)
 
 **R5 fechado**, competencia 10, empresas 2/3/4, na sombra. O desenho nao e "antes e depois": e

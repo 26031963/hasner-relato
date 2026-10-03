@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 00:07:14.**
+**Medido em 03/10/2026 00:12:19.**
 
 | | |
 |---|---|
-| `HEAD` local | `70006e6f [L-099] O estrutural separado do dado vira LEI numerada, e o PLACAR-ESTRUTURAL vira o placar principal do ESTADO` |
+| `HEAD` local | `ca2d50d9 [PLACAR-ESTRUTURAL] R4 com cinco pares em ZERO, e o R3 nao era o que eu publiquei` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -22,21 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ca2d50d9 [PLACAR-ESTRUTURAL] R4 com cinco pares em ZERO, e o R3 nao era o que eu publiquei
 70006e6f [L-099] O estrutural separado do dado vira LEI numerada, e o PLACAR-ESTRUTURAL vira o placar principal do ESTADO
 c6722c3f [O122] A pista de teste deixa de ser combinacao verbal e passa a ser ARQUIVO
 cdd5596e [PLACAR-ESTRUTURAL] O dinheiro acompanha o cadastro (R6), e o par 6 do R4 e estrutural
 fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando
-33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -54,14 +51,14 @@ fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos 
 
 > O estrutural se separa do dado. Escala errada e batida furada sempre vao existir. O sistema tem de ser 100% coerente, deterministico e idempotente com o cadastro que TEM: se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo, esta certo em todo lugar.
 
-**placar_estrutural: 3 fechado(s), 2 parcial(is), 1 pendente(s) de 6**
+**placar_estrutural: 3 fechado(s), 3 parcial(is), 0 pendente(s) de 6**
 
 | | resultado | numero de hoje | meta | prova |
 |---|---|---|---|---|
 | **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 09: ESTRUTURA 197 (747,4 h, 60 colabs) · CADASTRO 29 (68,6 h, 12) · BATIDA 208 (867,9 h, 118) = 434. 10: 95 (393,1 h, 40) · 15 (70,3 h, 8) · 95 (448,1 h, 75) = 205. A soma fecha nas duas, e o proprio comando a cobra | tres donos, soma igual ao total de divergentes, juiz novo = 0 | logs/e6_cauda2c/r1_dono_09_e_10.txt, r1_9.csv, r1_10.csv (coluna dono_da_divergencia) |
 | **R2** | so ESTRUTURA fica na fila 1; CADASTRO e BATIDA vao para a lista do admin pela MESMA fonte do Cadastro x Realidade, e nao se curam por codigo | gap real = 7 colabs (5 de CADASTRO fora da lista + col392 e col529 sem chamado), nao 82: BATIDA JA tem casa -- 103 de 118 na 09 e 67 de 75 na 10 com chamado carimbado NO DIA. Uma leitura do corte continua na mesa dele (a lista cresce uma secao de batida, ou BATIDA fica no chamado) | 0 colaborador de dono CADASTRO ou BATIDA sem destino | logs/e6_cauda2c/r2_lista_do_admin.py + r2b.py, medidos em prod so leitura |
-| **R3** | dia com batida faltando aparece EM ABERTO com o que falta, nunca com numero, e igual em tela, PDF, cartao, app e TXT | **nao medido** | os 5 leitores iguais, nenhum mostrando numero em dia impar | a PALAVRA ja e compartilhada: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
-| **R4** | uma resposta so, frota, 09 e 10: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela | **nao medido** | ZERO em cada par; o que nao for zero vira item da fila 1, maior primeiro | QUATRO dos seis pares JA tem comando (selo_leitores_no_mesmo_numero, tolerancia ZERO e sem allowlist) e o par espelho x DiaPago e a 7a testemunha de folha/porta_export.py. Os dois que faltavam foram construidos: par 4 (ORM puro) e par 6 (api/tests/test_r4_par6_app_le_a_tela.py, AST, zero montagem propria -- VERDE). TRES REDs dele de 02/10 23:55 estao abertos: col882 no universo do TXT sem vinculo, col305 com previsto gravado contra grade zero, col935 05/09 |
+| **R3** | dia com batida faltando aparece EM ABERTO com o que falta, nunca com numero, e igual em tela, PDF, cartao, app e TXT | A PALAVRA ja e compartilhada e os 5 leitores CONCORDAM (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias). MAS ela responde o FURO SEM DECISAO, nao o DIA DE BATIDA FALTANDO -- sao conjuntos DIFERENTES, e o R3 pede o segundo. `veredito_do_dia` TRADUZ em palavra e nao toca nos minutos, entao o dia impar segue mostrando NUMERO (a soma dos pares fechados, lei do BUG-144). Medido: `datas_em_aberto` = 288 na 09 e 127 na 10; dia IMPAR = 343 na 09 e 183 na 10, ou seja **526 dia-colab que hoje mostram numero onde a lei pede EM ABERTO com o que falta** | os 5 leitores iguais, nenhum mostrando numero em dia impar | logs/e6_cauda2c/r4_pares.txt (os pares e o dias_em_aberto) + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
+| **R4** | uma resposta so, frota, 09 e 10: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela | CINCO pares em ZERO nas DUAS competencias (tela x PDF, cartao x TXT, fechamento x soma do DiaPago, topo x soma das linhas, e calendario x espelho de brinde); o par 6 e ZERO por CONSTRUCAO (selo de AST). O SEXTO, espelho x DiaPago: **1 na 09** -- o col935 05/09, que e o RED 3 dele -- e 0 na 10. O par 4 medido tambem FORA do universo do TXT: 607 fechamentos na 09 e 572 na 10, 100% batendo com tolerancia de 0,02 h. Universo do TXT: 214 na 09, 21 na 10. Selo VERDE, `falhas=0`, sem allowlist | ZERO em cada par; o que nao for zero vira item da fila 1, maior primeiro | logs/e6_cauda2c/r4_pares.txt. QUATRO dos seis pares JA tinham comando (selo_leitores_no_mesmo_numero, tolerancia ZERO e sem allowlist) e o par espelho x DiaPago e a 7a testemunha de folha/porta_export.py. Os dois que faltavam foram construidos: par 4 (ORM puro) e par 6 (api/tests/test_r4_par6_app_le_a_tela.py, AST, zero montagem propria -- VERDE). TRES REDs dele de 02/10 23:55 estao abertos: col882 no universo do TXT sem vinculo, col305 com previsto gravado contra grade zero, col935 05/09 |
 | **R5** | idempotencia e determinismo de frota: rejulgar o cartorio 2x e relavrar/recalcular 2x, e a segunda rodada nao muda nada | A LEI FECHA: 2a rodada = ZERO em celula, chamado, DiaPago e hash do FechamentoMensal (competencia 10, empresas 2/3/4, sombra). O CONTEXTO da 1a rodada e que doi: 9.062 DiaPago NASCERAM, 7 morreram, 83 mudaram, e 82 FECHAMENTOS mudaram -- nao e falta de idempotencia, e ATRASO de lavratura, o mesmo fato do R6. LIMITE: a rodada usa `processar_cartorio --apply` SEM `--forcar`, entao o caminho do --forcar (que rejulga mesmo com impressao igual) NAO esta nesta medicao | diferenca ZERO na 2a rodada em celula, ata, chamado nascido ou morto, DiaPago e hash do FechamentoMensal | logs/r5_idempotencia/r5_2345.txt (+ _completo.txt). E os 13 chamados do --forcar tem DOIS produtores, medidos: 9 em 17:51-17:54 (o --forcar) e 4 em 18:00:1x no batente do */5 (o cron, em pares por colab); os 7 orfao_14h nasceram resolvido com celula=None |
 | **R6** | contratos N/22 com o que falta em cada celula e a ordem de fechar; e REATIVIDADE -- zero passo manual depois de corrigir um cadastro | REATIVIDADE: ZERO passo manual no caminho de UM colab, medido na sombra (col221, competencia 10: hash 3a5da35a -> 3a42920e sem comando nenhum). Resta o LOTE. CONTRATOS: 8/22, e o teto aritmetico e 21/22 -- a celula (chamado, parametro consumido) e PROIBIDA de existir. Ordem medida do que falta: 1 em "um escritor por entidade" (so chamado), 5 em "parametro consumido", 7 de 7 em "um juiz por pergunta" | N = 22 e zero passo manual | logs/r6_dinheiro/red_col221_10.txt (a reatividade) + core/contratos_estruturais.py::linha_do_placar (o N/22) |
 
@@ -114,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ordem das 21:4x -- o resto d
 
-  Read 1 file, ran 2 shell commands
-
-● Carga baixa (1,74) e a pista livre. Atualizando a célula do BACKLOG enquanto as duas medições fecham:
+● Censo medido — mas meu rótulo mistura unidades: os "31" são arquivos únicos e os "87" saem de subtrair uma lista de sítios. Corrigindo
+  antes de publicar, que é a própria LEI-AKITA 8:
 
   Ran 1 shell command
 
-❯ aval Ronald, tres respostas do AVAIS:
-  1. CENSO-JUIZ-BATIDA-E-ESCALA, corte Ronald: monte o censo MEDIDO das familias batida e escala (pergunta, quem responde hoje, quantos
-  sitios respondem por conta propria) e me traga as frases de corte para eu assinar.
-  2. F2-PORTAO-22-22, lei Ronald: a F2 (VISAO-FALTAS-FERIAS) segue no portao ate 22/22; a esteira segue pelos itens de portao aberto.
-  3. O114-SMOKE-COL221: abri o calendario do col221, de 22 a 30/09 as batidas de 14:1x e 15:40 estao sem asterisco; pode fechar o O114.
-     Segue a fila.
+● Agora somam: 46 + 87 = 133. Publicando o censo com as frases de corte para ele assinar:
 
-● Três respostas, e a (1) é a que eu te devo desde as 17:5x — ela destrava 7 das 22 células. Fechando o O114 e registrando a F2 primeiro:
+  Ran 2 shell commands
+  ⎿  Interrupted · What should Claude do instead?
 
-  Ran 1 shell command
+! Ronald, PARAMETROS-SEM-EFEITO-16-CAMPOS: CONSUMIR 1: TipoAusencia.medico (o alerta e o relatorio de atestados passam a ler o campo, a
+  lista fixa morre; RED e censo de leitores). TIRAR DA TELA os outros 15, com o dado guardado e o DIFF de frota provando ZERO em todo
+  campo de dinheiro: ParametroSistema adicional_noturno_pct, periculosidade_pct, divisor_hora_extra, divisor_faltas,
+  horas_contratuais_turno, tolerancia_minutos, intrajornada_minutos (com o ramo morto do motor), raio_geofence_padrao,
+  janela_offline_horas; Praca adicional_noturno_percentual, tolerancia_minutos, banco_horas_prazo_dias; Posto lotacao_minima,
+  lotacao_maxima, tolerante_offline. Antes de tirar as duas tolerancias, dizer qual fonte o motor le hoje. Dizer tambem a celula
+  "parametro" da familia chamado, que nao esta declarada. Fecha as 5 celulas no mesmo commit. Segue a fila!
+  ⎿  /bin/bash: eval: line 1: syntax error near unexpected token `('
+     /bin/bash: eval: line 1: `Ronald, PARAMETROS-SEM-EFEITO-16-CAMPOS: CONSUMIR 1: TipoAusencia.medico (o alerta e o relatorio de
+     atestados passam a ler o campo, a lista fixa morre; RED e censo de leitores). TIRAR DA TELA os outros 15, com o dado guardado e o
+     DIFF de frota provando ZERO em todo campo de dinheiro: ParametroSistema adicional_noturno_pct, periculosidade_pct,
+     divisor_hora_extra, divisor_faltas, horas_contratuais_turno, tolerancia_minutos, intrajornada_minutos (com o ramo morto do motor),
+     raio_geofence_padrao, janela_offline_horas; Praca adicional_noturno_percentual, tolerancia_minutos, banco_horas_prazo_dias; Posto
+     lotacao_minima, lotacao_maxima, tolerante_offline. Antes de tirar as duas tolerancias, dizer qual fonte o motor le hoje. Dizer tambem
+     a celula "parametro" da familia chamado, que nao esta declarada. Fecha as 5 celulas no mesmo commit. Segue a fila!'
 
-● Agora o censo que ele pediu. Lendo a forma de uma família que já existe em core/juizes.py, para as novas nascerem no mesmo vocabulário:
 
-● Reading the juizes.py family shape
-  ⎿  $ python3 -c "
-     import re, io
-     s = io.open('core/juizes.py', encoding='utf-8').read()
-     print('familias declaradas:', re.findall(r\"^\s*'([a-z/_]+)':\s*\{\", s, re.M)[:14])
-     " 2>/dev/null; echo "--- a forma de uma familia ---"; grep -n "'turno'" -A 22 core/juizes.py | head -26
-
-* Sock-hopping… (5h 54m 43s · ↓ 1.1m tokens · still thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+· Compacting conversation… (47s)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 41%
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                     1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing test_o122_etapa0_barra_e_a_mesma.py                                               11m 45s · ↓ 137.4k tokens
+  ◯ general-purpose  Compiling test_o122_etapa0_barra_e_a_mesma.py                                             16m 49s · ↓ 171.6k tokens
   ⧉  index
 ```
