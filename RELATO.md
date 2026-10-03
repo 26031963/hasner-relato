@@ -1,6 +1,61 @@
 # RELATO — esteira saas-hasner
 
-## PLACAR-ESTRUTURAL — 6 linhas, numero e meta (02/10 23:2x) · **INCOMPLETO: faltam R2, R3, R4, R5, R6**
+### R6 (primeira metade, e e o achado mais fundo do corte dele): NADA ALCANCA O DINHEIRO (02/10 23:4x)
+
+O corte diz: *"se aparece errado no espelho, esta errado em todo lugar do sistema; se aparece certo,
+esta certo em todo lugar."* **Hoje isso e FALSO, e o motivo e estrutural, nao um bug.**
+
+**O que eu esperava medir** era a assimetria "batida rega a competencia, correcao de cadastro nao".
+**Errado.** Medido, arquivo por arquivo:
+
+| gatilho | celula | ata / lampada | chamado | furo | **FechamentoMensal** |
+|---|---|---|---|---|---|
+| **BATIDA** (`ponto/signals.py:29-43`) | nucleo recomputa | — | reconciliador re-testa | — | **NAO** |
+| **CORRECAO DE CADASTRO** (`corrigir_escala_retroativa`) | regenera | `julgar_celula` | `reconciliar_apos_vinculo` | recontado | **NAO** |
+| **CelulaDia** | *nao existe signal nenhum* | | | | |
+
+PROVA: `grep -c "fechamento|recalcul|DiaPago"` em `colaboradores/services/pos_vinculo.py` = **0** e no
+comando `corrigir_escala_retroativa.py` = **0**; `recalcular_fechamento_mes` tem tres chamadores e os
+tres sao ATO HUMANO -- o botao (`ponto/views.py::recalcular_fechamento`), o comando homonimo e
+`simular_folha --recalcular`. Nenhum signal, nenhum cron. E `sender='escala.CelulaDia'` nao aparece em
+nenhum receiver do repo.
+
+**E POR ISSO QUE O ESPELHO E O GRAVADO SE SEPARAM, e a propria casa ja escreveu a razao**: a tela
+**recalcula na LEITURA** -- `folha/porta_export.py` diz, em lapide, *"a lavratura e um RETRATO do
+recalculo e a autoridade recalcula AGORA. Cadastro mudado, DNA reescrito ou cura do motor sem novo
+fechamento afastam os dois"*. Entao a tela esta sempre em dia e o dinheiro fica parado onde o ultimo
+clique o deixou. **"Certo no espelho" e exatamente o estado em que o gravado pode estar errado.**
+
+**O RED e o col221, e ele e dele**: as 20:28 o Ronald corrigiu o vinculo (`ec1361`, 31 celulas). Celula,
+ata, lampada e chamado andaram **sozinhos**. O `FechamentoMensal` da 09 ficou com o numero velho ate eu
+recalcular a mao (O120, hash `c12385f226be0cb4` -> `40f452f887ac8925`, `semanas_dsr_perdido` 5 -> 1).
+**Um passo manual**, e o alvo do R6 e zero.
+
+**O que isso NAO autoriza, e eu nao faco sem o corte dele**: ligar um signal de `CelulaDia` para
+`recalcular_fechamento_mes` seria por o motor de DINHEIRO no caminho de escrita da celula -- em
+competencia exportada, em lote, e com o gatilho mais quente do sistema (a L-092, o degrau da
+exportada e a trilha de reversao sao desenhadas para ato DECLARADO, nao para signal). A pergunta certa
+nao e "como automatizo", e **"qual porta recalcula, com trilha, quando a celula muda"** -- e porta nova
+e desenho, que pela L-010 e o unico caso em que eu PARO. Vai para a sua mesa com o numero: **1 passo
+manual, 292 dia-colab de ESTRUTURA na fila 1, e o espelho recalculando na leitura enquanto o gravado
+nao.**
+
+**PUSH 96 falhou na MESMA FAMILIA do 93, e duas vezes em tres pushes ja e padrao**: `tickets_placar`
+ALARME -- o topo do TICKETS dizia `ultimo push 74e24761`, o mundo dizia `94b28144`. Curado por
+`bin/tickets_placar.sh --escrever` + `tickets_rodape.sh --escrever` (as duas curas que as proprias
+saidas dos selos nomeiam).
+
+**E O DEFEITO NAO E DISCIPLINA MINHA, E O MODELO DE DADO -- fica na sua mesa**: as duas linhas gravam
+*"ultimo push X"* num arquivo que **vai dentro do push**. O valor so passa a ser verdade DEPOIS do
+push, entao o arquivo esta sempre um push atrasado e o selo morde no push seguinte, por desenho --
+nao por esquecimento. Hoje custou o 93 e o 96. As curas de ORIGEM possiveis sao duas: (a) o selo
+comparar com o `origin/main` de QUANDO o commit foi feito, em vez de exigir igualdade com o agora; ou
+(b) a linha ser escrita por um gancho de POS-push. Nao e cura de dinheiro nem de escala, mas muda um
+selo que BLOQUEIA push, entao nao a faco sem o seu corte -- e a pergunta e qual das duas.
+PROVA: `bin/tickets_placar.sh` acusou `arquivo diz 74e24761 / o mundo diz 94b28144`, e o 93 trazia
+`rodape diz 751b53c4, 8 commits atras`.
+
+## PLACAR-ESTRUTURAL — 6 linhas, numero e meta (02/10 23:4x) · **INCOMPLETO: faltam R2, R3, R4, R5 e a metade N/22 do R6**
 
 | | resultado | numero de HOJE | meta | PROVA |
 |---|---|---|---|---|
@@ -9,7 +64,7 @@
 | **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
 | **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
 | **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
-| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **PENDENTE** | zero passo manual | — |
+| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **METADE MEDIDA: 1 passo manual** -- celula, ata, lampada, chamado e furo andam sozinhos; o `FechamentoMensal` **nao**, e `recalcular_fechamento_mes` so tem chamador HUMANO. A tela recalcula na LEITURA, o gravado nao. Falta o N/22 | zero passo manual | o bloco do R6 abaixo, com os `grep -c` = 0 |
 
 **O percentual do oraculo, aberto por dono como ele pediu**: 09 em **94,3%** (7.182 de 7.616) e 10 em
 **92,4%** (2.489 de 2.694) -- e a conta do denominador da 09 esta aberta linha a linha no bloco do R1

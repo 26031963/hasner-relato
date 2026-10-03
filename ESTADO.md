@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:20:31.**
+**Medido em 02/10/2026 23:25:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101` |
+| `HEAD` local | `71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,18 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento
+a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de chamar diferenca de PERGUNTA de divergencia
 ed85c090 [PLACAR-ESTRUTURAL] O corte das 22:5x entra no topo da fila 1, e o censo da (b2) diz que o nome dela descreve 28 de 101
 94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso
 379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite
-b0560aa9 [E6-CAUDA-2] A remedicao da familia (c), e os 5 que "pioraram" sao 5 acusacoes contra a tela
-bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/escala/views.py
@@ -96,44 +95,44 @@ bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  medição lia aquela árvore, e cada competência é um processo novo. Na janela do RED o contador daria zero; ele deu 85 na 10 e 257 na 09 —
-  as duas rodaram com a cura inteira. A lição ficou guardada na memória: árvore que medição monta não se edita.
+  Ran 2 shell commands
 
-  Dois pontos que eu não deixo passar como achado:
-  - aberto aparecer 0x em pdf_espelho.py, relatorios/services.py e folha/export.py é ponteiro, não censo — contar palavra é critério pela
-    forma, e o R3 exige ver o que cada leitor mostra num dia aberto de verdade.
-  - O R2 tem um gap real a medir: a lista do admin nasce das assinaturas A1–A11 por recorrência mais os códigos C do cadastro, enquanto o
-    dono CADASTRO sai da lista por-dia do motor. Fonte diferente — então "já está na lista" se mede, não se supõe.
+● corrigir_escala_retroativa faz três atos (vínculo, células, chamados). Conferindo se algum deles alcança a ata e o fechamento, em vez de
+  afirmar de memória:
 
-  Aguardando a suite dos vizinhos (ponto escala) para commitar a cura + R1 + os selos; o CSV já ganhou a coluna dono_da_divergencia, com
-  lápide dizendo por que ela não é a mesma pergunta que o dono_da_paridade que já existia ao lado.
+  Searched for 2 patterns, ran 1 shell command
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Confirmado: zero menções a fechamento nos dois. Então a correção de cadastro alcança célula, ata, chamado e furo — e não alcança o
+  dinheiro. Checando a assimetria com a batida, que é o que torna isso um achado:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● R2 precisa do conjunto de colabs que a lista do admin realmente mostra. Lendo a função que a tela chama, para o join ser contra a
-  autoridade e não contra uma reimplementação:
+● recalcular_fechamento_mes só é chamado por ato humano (botão/comando) — nenhum signal, nenhum cron. Mas eu tinha nota de que batida rega
+  a competência, então quem escreve o fechamento:
 
-  Searched for 1 pattern, listed 1 directory, ran 2 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● A lavra é de hoje 08:31 — fresca, então o R2 pode ler. Conferindo a suite:
+● Isso é o achado mais fundo do corte dele, e é medido: nem batida nem correção de cadastro alcançam o dinheiro.
 
-  Waiting by file for the neighbour suite verdict
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1mx60fag.output 2>/dev/null | tail
-     -12
+  Updating the placar header and R6 line
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p = 'app/docs/RELATO.md'
+     s = io.open(p, encoding='utf-8').read()
+     v = ("| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **PENDENTE** | "
+     "zero passo manual | — |")
+     assert s.count(v) == 1
+     n = ("| **R6** | contratos N…
 
-✢ Sock-hopping… (5h 8m 0s · ↓ 900.6k tokens · thinking)
+· Sock-hopping… (5h 13m 14s · ↓ 919.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
