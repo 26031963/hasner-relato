@@ -6,10 +6,30 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 01:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (217.2 MB). Acoes na janela: **1816**.
+**Medido em 03/10/2026 01:17:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (217.5 MB). Acoes na janela: **1836**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:15:08 | Bash | Inspect push log and running containers | `cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; tail -c 800 $SC/push4.log 2>/dev/null; echo "---"; ls -la $SC/push4.log 2>/dev/null; docker ps --format '{{.Names}}' \| head` |
+| 01:15:04 | Bash | Check push progress | `tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bgncpxox0.output 2>/dev/null` |
+| 01:14:45 | Bash | Read the alert service and its users | `echo "### alertas_ausencia.py 1,60"; sed -n '1,60p' ponto/services/alertas_ausencia.py; echo; echo "### grep TIPOS_ATESTADO"; grep -rn "TIPOS_ATESTADO" --include='*.py' . \| cut -c1-150` |
+| 01:14:30 | Bash | Read-only measurement of TipoAusencia.medico in prod | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $SC/medir_medico.py <<'PY' # SO LEITURA. Mede TipoAusencia.medico contra a lista fixa dos leitores. from ponto.models import TipoAusencia, Ausencia LISTA_FIXA = ('atestado', 'atestado_inss') rows = list(TipoAusencia.objects.all().order_by('codigo').values( 'codigo', 'nome', 'medico', 'efeito', ' ...` |
+| 01:14:16 | Bash | Where medico is edited on screen | `grep -rn "medico" --include='*.html' templates/ \| cut -c1-140; echo "=== views_tipos_ausencia 60,100"; sed -n '60,100p' ponto/views_tipos_ausencia.py` |
+| 01:14:01 | Bash | Ausencia.tipo and the catalogo | `sed -n '637,660p' ponto/models.py \| cut -c1-140; echo "=== catalogo/ausencias.py header"; sed -n '1,60p' ponto/catalogo/ausencias.py \| cut -c1-160` |
+| 01:13:58 | Bash | Read TipoAusencia and Ausencia.tipo | `sed -n '530,560p' ponto/models.py; echo "=== Ausencia.tipo"; grep -n "class Ausencia" -A 25 ponto/models.py \| grep -nE "tipo\|class " \| head -10` |
+| 01:13:50 | Bash | Hunt the lista fixa of atestado codes | `grep -rnE "atestado[^a-z_]" --include='*.py' . \| grep -v '/migrations/\\|/tests/\\|test_' \| grep -iE "in \(\|\[\|tipo__codigo\|codigo__in\|IN\b\|TIPOS\|LISTA\|CODIGOS" \| grep -v "'Atestado medico'" \| cut -c1-170 \| head -30` |
+| 01:13:44 | Bash | Find TipoAusencia.medico and the lista fixa | `grep -rn "medico" --include='*.py' . \| grep -v '/migrations/\\|/tests/\\|test_' \| cut -c1-170` |
+| 01:13:20 | Bash | Check models.py:786 and juizes registry entry | `sed -n '775,800p' escala/models.py; echo "=== juizes.py 865-885"; sed -n '865,885p' core/juizes.py` |
+| 01:13:09 | Bash | data_ancora and minutos_jornada readers | `echo "=== data_ancora todas as ocorrencias (sem _colaborador)"; grep -rn "data_ancora" --include='*.py' . \| grep -v 'data_ancora_colaborador' \| grep -v '/migrations/\\|/tests/\\|test_' \| cut -c1-150; echo; echo "=== minutos_jornada leitores"; grep -rnE "\.minutos_jornada\b\|minutos_jornada=\|'minutos_jornada'\|tipo_escala__minutos_jornada" --include='*.py' . \| grep -v '/migrations/\\|/tests/\\ ...` |
+| 01:13:04 | Bash | Censo of TipoEscala.data_ancora | `echo "=== data_ancora (TipoEscala) decl"; sed -n '106,115p' escala/models.py; echo "=== readers"; grep -rnE "\b(te\|tipo\|tipo_escala\|templ\|base\|pai\|novo\|original)\.data_ancora\b\|tipo_escala__data_ancora" --include='*.py' . \| grep -v '/migrations/\\|/tests/\\|test_' \| cut -c1-150` |
+| 01:12:47 | Bash | All non-test references for four fields | `for f in perfil_apuracao is_template template_pai ciclo_dias; do echo "=== $f"; grep -rn "$f" --include='*.py' . 2>/dev/null \| grep -v '/migrations/\\|/tests/\\|test_' \| cut -c1-160; done` |
+| 01:12:39 | Bash | Attribute-shaped readers per extra field | `for f in perfil_apuracao intervalo_indenizavel intervalo_modo nivel editavel is_template template_pai ciclo_dias; do echo "=== $f"; grep -rnE "(tipo_escala\|tipo\|te\|templ\|base\|esc\|t)\.$f\b\|tipo_escala__$f\b\|'$f'\|\"$f\"" --include='*.py' . 2>/dev/null \| grep -v '/tests/\\|/migrations/\\|test_' \| head -8 \| cut -c1-150; done` |
+| 01:12:27 | Bash | Rough reader count per extra field | `for f in codigo descricao minutos_jornada intervalo_modo intervalo_indenizavel ciclo_dias is_template data_ancora template_pai nivel editavel perfil_apuracao; do n=$(grep -rn "\b$f\b" --include='*.py' . 2>/dev/null \| grep -v '/tests/\\|/migrations/\\|test_' \| wc -l); echo "$f $n"; done` |
+| 01:12:18 | Bash | Read wizard payload | `sed -n '18,60p' escala/views_wizard.py` |
+| 01:12:12 | Bash | Accurate TipoEscala field list | `awk 'NR>=40 && NR<=175' escala/models.py \| grep -oE "^ [a-z_]+ = models\.[A-Za-z]+" \| sed 's/ = models\./ -> /' \| nl` |
+| 01:12:05 | Bash | List TipoEscala model fields | `grep -n "^class TipoEscala" -A 120 escala/models.py \| grep -nE "= models\.\|^class " \| head -60` |
+| 01:11:55 | Bash | Push attempt 4 (runs the full pre-push suite) | `cd /home/ronald/saas-hasner && git push origin main > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push4.log 2>&1; echo "rc=$?" \| tee -a /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/push4.log` |
+| 01:11:38 | Bash | Re-check diagram and tickets gate | `cd /home/ronald/saas-hasner && python3 bin/gerar_diagrama.py --check 2>&1 \| tail -3; echo "rc=$?"; bash bin/regua_tickets.sh 2>&1 \| tail -3` |
 | 01:11:29 | Bash | Run the two pre-commit guards manually | `cd /home/ronald/saas-hasner && bash bin/index_vs_arvore.sh; echo "rc_index=$?"; bash bin/commit_so_o_declarado.sh; echo "rc_decl=$?"` |
 | 01:11:11 | Bash | Read pre-commit hook | `cd /home/ronald/saas-hasner && cat .git/hooks/pre-commit` |
 | 01:11:08 | Bash | List active git hooks | `cd /home/ronald/saas-hasner && ls -la .git/hooks/ \| grep -v sample` |
