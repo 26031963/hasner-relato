@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**137 obras abertas.**
+**138 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -146,3 +146,4 @@ lista — ela e o que esta EM PE._
 | **O136** | O DISPATCH SO PERGUNTA NUM SENTIDO | **livre, fila 1 atras da espinha** -- `m |
 | **O137** | ESMERIL-NO-RASTRO | **fila 1, colada na O134** -- nao e obra |
 | **O138** | DADO DERIVADO DO GIT NAO SE GRAVA EM ARQUIVO QUE VAI NO PUSH | fila 2, raia `wt-ui` nao serve (e `bin/` |
+| **O139** | PAPEL-PRAZO | espera corte |

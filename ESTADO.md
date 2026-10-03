@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 09:55:31.**
+**Medido em 03/10/2026 10:00:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes` |
+| `HEAD` local | `ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro` |
 | `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro
 a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes
 e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git
 4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao
 73f7551e [MONTAGEM-TEM-UMA-PORTA] A lista do que falta na copia tinha dois escritores, e o segundo vazou 2,1 GB
-d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha por ordem, era a regra escrita duas vezes
 ```
 
 ## `git status --short`
@@ -34,6 +34,7 @@ d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -108,6 +109,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Task "Wait by file for both R3 probes to finish" still running in background
+
+● Task "Run the detail probe after the recon finishes" still running in background
 
 ● Task "Run the neighbours then the full suite on the cured copy" still running in background
 
@@ -130,20 +134,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Wait by file for both R3 probes to finish" completed (exit code 0)
 
-● Finish the probe patch and refresh the mount shim
+  Checking the detail probe for the sixth decided day
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     python3 - "$S/r3_detalhe.py" <<'PY'
-     import io, sys
-     p = sys.argv[1]; s = io.open(p, encoding='utf-8').read()
-     s = s.replace("'%d/%m %H:%M'", "'%d/%m %H:%M:%S'", 1) # hora truncada esconde a guarda (lapid…
+     date '+%H:%M:%S'; sed -n '/^===== *09/,$p' "$S/r3_detalhe.out" | tail -22
 
-✢ Bloviating… (9h 42m 0s · ↓ 1.3m tokens)
+· Bloviating… (9h 47m 14s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   5% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens

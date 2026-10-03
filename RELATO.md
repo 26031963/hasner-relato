@@ -3575,51 +3575,52 @@ matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado
 > RELATO por data e levei a tabela com ele.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (39)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (40)
 
-> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (230 h), FECHAMENTO-UI-PORTAS (211 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (209 h), ESTEIRA-RETA-FINAL (207 h), ZUMBIDO (204 h), CARTAO-TOTAL-IGUAL-SOMA (202 h), CERT-VIGIA (191 h), CHAMADO-GANHA-CADASTRO (189 h), JUIZ-BATIDA-NASCE (189 h), JUIZ-ESCALA-NASCE (189 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (189 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (189 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (231 h), FECHAMENTO-UI-PORTAS (212 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (210 h), ESTEIRA-RETA-FINAL (208 h), ZUMBIDO (205 h), CARTAO-TOTAL-IGUAL-SOMA (203 h), CERT-VIGIA (192 h), CHAMADO-GANHA-CADASTRO (190 h), JUIZ-BATIDA-NASCE (190 h), JUIZ-ESCALA-NASCE (190 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (190 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (190 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 240 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 231 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 230 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 230 h | construindo | CORTES-REGISTRADOS |
-| **NOITE-23-09** | 2026-09-23 18:4x | 230 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 228 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 211 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 209 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 209 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 208 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 208 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 207 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 207 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 204 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 202 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 202 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 200 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 200 h | esperando "!" | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 200 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 200 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 200 h | esperando "!" | O35 CONTRATOS-14 |
-| **CERT-VIGIA** | 2026-09-25 09:4x | 191 h | recebido | CERT-VIGIA |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 191 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
-| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 190 h | construindo | O42 ESTEIRA-SECA-25-09 |
-| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 190 h | construindo | O44 ARQUIVO-SIMPLES v2 |
-| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 190 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
-| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 189 h | recebido | O35 CONTRATOS-14 |
-| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 189 h | recebido | S-BATIDA |
-| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 189 h | recebido | S-ESCALA |
-| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 189 h | recebido | O35 CONTRATOS-14 |
-| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 189 h | recebido | E3-CHAMADO |
-| **PLACAR-ESTRUTURAL** | 2026-10-02 22:5x | 10 h | recebido | PLACAR-ESTRUTURAL |
-| **PORTA-DO-DINHEIRO-JA-EXISTE** | 2026-10-02 23:5x | 9 h | recebido | O121 |
-| **O122-ETAPA-0-E-ESTILO-CALCULADO** | 2026-10-03 00:1x | 8 h | recebido | O122 |
-| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 3 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 241 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 232 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 231 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 231 h | construindo | CORTES-REGISTRADOS |
+| **NOITE-23-09** | 2026-09-23 18:4x | 231 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 229 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 212 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 210 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 210 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 209 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 209 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 208 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 208 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 205 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 203 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 203 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 201 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 201 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 201 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 201 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 201 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 192 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 192 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 191 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 191 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 191 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 190 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 190 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 190 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 190 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 190 h | recebido | E3-CHAMADO |
+| **PLACAR-ESTRUTURAL** | 2026-10-02 22:5x | 11 h | recebido | PLACAR-ESTRUTURAL |
+| **PORTA-DO-DINHEIRO-JA-EXISTE** | 2026-10-02 23:5x | 10 h | recebido | O121 |
+| **O122-ETAPA-0-E-ESTILO-CALCULADO** | 2026-10-03 00:1x | 9 h | recebido | O122 |
+| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 4 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
+| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 1 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
+| **TETO-20-SEM-FAMILIA-SEM-CADASTRO** | 2026-10-03 08:13 | 1 h | recebido | O135 TETO-20 (matriz) -- junto da LINHA HAIKU do contador |
+| **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 0 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
-| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 0 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
-| **TETO-20-SEM-FAMILIA-SEM-CADASTRO** | 2026-10-03 08:13 | 0 h | recebido | O135 TETO-20 (matriz) -- junto da LINHA HAIKU do contador |
 <!-- SEUS-CORTES:FIM -->
 
 ## SUITE-UMA-VEZ-POR-ARVORE no ar -- e o criterio antigo era **CEGO para `.js`, `.css` e `bin/`**
@@ -6717,3 +6718,5 @@ calendario vao para merge e deploy.
 **03/10 08:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **03/10 09:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**03/10 10:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
