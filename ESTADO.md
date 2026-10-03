@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:41:37.**
+**Medido em 03/10/2026 18:47:01.**
 
 | | |
 |---|---|
@@ -113,38 +113,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-       3 Nasceu do P7.1 (aval Ronald 03/10 18:1x): `escala/views.py::escala_buscar_colabs` respondia
-       4 cadastro de pessoa em JSON SEM sessao, em prod, por um motivo banal -- nasceu sem decorador, e
-       5 os dois decoradores acima dela no arquivo pertenciam a view anterior. Nada pegou isso porque
-       6 NAO HA middleware que exija sessao: `core/middleware.py` decide PLATAFORMA, nao login
-       7 (`PlataformaGateMiddleware` isenta /api/ /static/ /media/ /health/ /webview/ e nao autentica
-       8 ninguem). Em casa assim, o decorador E a autoridade -- e autoridade sem selo e promessa.
-       9
-      10 POR QUE A PERGUNTA E A RESPOSTA, E NAO O DECORADOR. Meu primeiro censo varreu a LISTA DE
-     … +163 lines
+      32  GET NAO JULGA ROTA SO-POST. Um 405 nao e "guardada": e "a pergunta nao se aplica" -- o Django e
+      33  o DRF recusam o metodo antes de rodar o corpo, entao o GET nao sabe se ha sessao exigida. Calar
 
-● Write(core/rotas_publicas.py)
-  ⎿  Wrote 27 lines to core/rotas_publicas.py
-       1 """CADASTRO das rotas que respondem SEM sessao de proposito -- com motivo, por entrada.
-       2
-       3 Lido por `core/tests/test_rota_pede_sessao.py`, que varre as duas cascas e acusa toda rota cujo
-       4 GET sem sessao nao devolve 301/302/403. Rota publica de verdade existe, e precisava de um lugar:
-       5 a ordem de 03/10 18:1x diz "allowlist zero", e allowlist zero nao quer dizer "nao ha rota
-       6 publica" -- quer dizer que a excecao nao mora DENTRO do teste. Aqui ela mora fora, com nome e
-       7 motivo, no molde do `bin/auth_sitios.txt` (que tambem e lista declarada, nao derivada de nome de
-       8 arquivo) e do `PREFIXOS_ISENTOS` de `core/middleware.py`.
-       9
-      10 A REGRA DE ENTRADA, quatro linhas, antes de qualquer nome novo aqui:
-     … +17 lines
+  Ran 1 shell command
 
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER
-     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     ~/saas-hasner/app:/app saas-hasner-core:latest p…
+● 543 rotas varridas no ui, 13 na core. Agora a triagem — e ela não é pequena. Lendo cada acusada com a vizinhança, para escolher a guarda
+  pelo molde e não por palpite:
 
-· Bloviating… (18h 28m 6s · ↓ 2.5m tokens)
+  Ran 1 shell command
+
+● servir_documento_ausencia diz no próprio docstring "SO para staff" e não tem guarda de login. Lendo os corpos dos mais sensíveis antes de
+  concluir:
+
+  Ran 1 shell command
+
+● Correção importante ao meu próprio enquadramento: servir_documento_ausencia e raiox_lente têm guarda no corpo — tem_acao(...) /
+  _is_gestor(...) e então raise Http404, de propósito (não revelar existência). Logo 404 é ambíguo: pode ser recusa legítima ou view
+  aberta. A pergunta certa não é "o corpo rodou", é "a view consultou o usuário antes de responder". Trocando a sonda por essa:
+
+● Trocar a sonda pela pergunta de consulta ao usuario
+  ⎿  $ python3 - <<'PY'
+     p='core/tests/test_rota_pede_sessao.py'
+     s=open(p,encoding='utf-8').read()
+     velho = s[s.index('class RotaPedeSessaoTest'):s.index(' def test_MORDE_nenhuma_rota_responde_sem_sessao')]
+     novo = '''class _UsuarioEspiao:
+     """Um AnonymousUser que ANOTA se alguem olhou para ele.
+     E' a autori…
+
+✢ Compacting conversation… (18h 33m 30s · ↓ 2.5m tokens)
+  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 7%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
