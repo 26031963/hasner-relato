@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:22:31.**
+**Medido em 03/10/2026 16:28:01.**
 
 | | |
 |---|---|
@@ -109,36 +109,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-
-● O test_MORDE_pendente_curado_sai_da_lista é o que morde: a impressão saiu do código, então o pendente tem de sair no mesmo commit.
-
-  Ran 5 shell commands
-
-● O juiz _A14 já está declarado (afastado_hoje) — nenhum juiz novo nasce. Fechando: o pendente sai e os três padrões de escrita entram no
-  lugar.
-
-  Ran 4 shell commands
-
-● Agora a prova: o selo novo, o contrato da família, os vizinhos de cron/diagrama/porta.
-
-  Ran 3 shell commands
-
-● Quatro falhas, e duas são do meu próprio selo mordendo um bug meu: o {# #} de duas linhas vazou para a tela (compilar-nao-e-renderizar) e
-  o texto vazado contém a palavra "Afastado".
-
-  Ran 1 shell command
-
 ● A exclusão do varredor é por arquivo: tirar o pendente expôs uma violação pré-existente de _A12 em ponto/views.py:2463 — e o selo que
   cobra isso já existe no mesmo arquivo. A cura dessa pergunta já tem precedente (25/09).
 
-● Ler a tela e a view inteira
-  ⎿  $ cd /home/ronald/wt-lampada/app && sed -n '30,55p' templates/ponto/historico_atestados.html && echo "=== a view inteira ===" && sed
-     -n "$(grep -n 'def historico_atestados' ponto/views.py | cut -d: -f1),+30p" ponto/views.py
+  Ran 5 shell commands
 
-✢ Bloviating… (16h 9m 0s · ↓ 2.2m tokens)
+● Meu selo pegou meu bug: dois {# de duas linhas vazam para a tela (compilar-nao-e-renderizar). Trocando por {% comment %}.
+
+  Ran 2 shell commands
+
+● O selo que previu isso em 20/09 agora cobre o arquivo que a remoção desabrigou. A caracterização se inverte (não se apaga).
+
+  Rodar os selos que enumeram cron e diagrama · 48s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; \
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file ~/saas-hasner/.env \
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-lampada/app:/app \
+     saas-hasner… (47s)
+  ⎿  Read docs/AVAIS.md (30 lines)
+  ⎿  Referenced file core/placar_estrutural.py
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/medicao-com-motor-vai-na-sombra.md (44 lines)
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/merge-de-raia-recarrega-no-mesmo-ato.md (35 lines)
+  ⎿  Referenced file ponto/services/triagem_batida.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bloviating… (16h 14m 30s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -146,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Listing GREEN modules in mods_d1_linha.txt                                                4h 30m 8s · ↓ 81.2k tokens
+  ◯ general-purpose  Appending D1 section to RELATO-CHAMADO-EM-RAIA.md                                       4h 35m 39s · ↓ 103.1k tokens
   ⧉  index
 ```
