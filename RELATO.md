@@ -1,5 +1,65 @@
 # RELATO — esteira saas-hasner
 
+### R5 VERDE: A SEGUNDA RODADA NAO MUDA NADA -- E A PRIMEIRA MUDA 82 FECHAMENTOS (03/10 00:0x)
+
+**R5 fechado**, competencia 10, empresas 2/3/4, na sombra. O desenho nao e "antes e depois": e
+`foto1 -> rodada A -> foto2 -> rodada B -> foto3`, e **a lei e `foto3 == foto2`** -- a 1a rodada pode
+mudar coisa legitimamente (backfill), a 2a nao pode mudar nada.
+
+```
+=== DIFF foto2 -> foto3 (A LEI: meta ZERO) ===
+   celula      nasceu=0  morreu=0  mudou=0  -> 0
+   chamado     nasceu=0  morreu=0  mudou=0  -> 0
+   diapago     nasceu=0  morreu=0  mudou=0  -> 0
+   fechamento  nasceu=0  morreu=0  mudou=0  -> 0
+R5 VEREDITO: segunda rodada mudou 0 coisa(s). META=0 -> OK
+```
+PROVA: `logs/r5_idempotencia/r5_2345.txt`.
+
+**O CONTEXTO DA PRIMEIRA RODADA E O QUE DOI, e ele nao e sobre idempotencia**: rodar cartorio +
+recalculo UMA vez, sobre dado que ninguem tocou, fez **9.062 linhas de `DiaPago` NASCEREM**, 7
+morrerem, 83 mudarem -- e **82 `FechamentoMensal` mudarem**. Nada disso e nao-determinismo: e
+**ATRASO DE LAVRATURA**, e e exatamente o mesmo fato do R6 (a tela recalcula na leitura, o gravado fica
+onde o ultimo clique o deixou). O numero que ele vai querer e esse: **82 colaboradores da 10 tem
+dinheiro gravado que o proprio sistema recalcula diferente, sem ninguem mudar nada.**
+
+**LIMITE DESTA MEDICAO, declarado**: a rodada usa `processar_cartorio --apply` **sem `--forcar`**.
+Entao ela prova que o caminho NORMAL do cartorio e idempotente, e **nao** cobre o `--forcar` (que
+rejulga mesmo com impressao igual). Os 13 chamados que ele mandou explicar sao do `--forcar`, e eles
+tem **DOIS produtores**: 9 em 17:51-17:54 (o `--forcar`) e 4 em 18:00:1x no batente do `*/5` (o cron,
+em pares por colab). Na rodada A deste R5 um unico chamado mudou (24277, `em_analise` -> `resolvido`);
+na rodada B, zero.
+
+### E O PLACAR-ESTRUTURAL VIRA LEI NUMERADA E PLACAR PRINCIPAL (03/10 00:2x)
+
+Ordem dele: *"o corte das 22:5x vira LEI numerada em LEIS.md e no CLAUDE.md secao 4b, ao lado dos 22
+contratos, com a frase literal do corte. E o ESTADO.md passa a publicar o PLACAR-ESTRUTURAL (R1 a R6,
+numero e meta) como placar principal; o E1-E6 fica abaixo (...) Sem isso, sessao nova e chat novo
+cobram o criterio velho."*
+
+* **`L-099`** nasce em `app/docs/LEIS.md` com a frase LITERAL, e a mesma entra no **CLAUDE.md secao
+  4b, ao lado dos 22** -- porque e o mesmo criterio de encerramento visto por outro lado: os 22 dizem
+  que a casa e coerente, a L-099 diz que a coerencia se cobra **dado o cadastro que existe**.
+* **`app/core/placar_estrutural.py`** nasce como **DADO**, nao prosa -- R1..R6 com `numero`, `meta`,
+  `prova` e **`fonte`** (o comando que RE-MEDE). A casa ja decidiu isso duas vezes
+  (`contratos_estruturais.py` e `espelho_verdade.py`), e a razao esta escrita la: *"para contar % de
+  itens feitos os itens precisam EXISTIR como dados"*. **Numero sem prova nao conta**: `placar()`
+  rebaixa para PENDENTE, igual ao E1-E6.
+* O campo **`fonte`** nao e enfeite: foi o proprio R4 que mostrou por que ele existe -- o
+  `selo_leitores_no_mesmo_numero` existia, com tolerancia zero e sem allowlist, **e ninguem o rodava**.
+  Numero sem fonte envelhece em silencio.
+* **`bin/gerar_estado.py`** publica o ESTRUTURAL **em cima** e o ESPELHO-VERDADE **abaixo**, e isso
+  esta comentado no codigo como decisao e nao estetica: quem abre o ESTADO numa sessao nova le o
+  criterio de CIMA.
+
+**Estado de hoje, pela funcao real**: `placar_estrutural: 3 fechado(s), 2 parcial(is), 1 pendente(s)
+de 6` -- R1, R2 e R5 fechados; R4 e R6 parciais; R3 pendente.
+
+**UM DESLIZE MEU, e fica dito**: medi os REDs 1 e 3 dele chamando `porta_export.medir` **em PROD**, e
+`saas_db` foi a **95%** de CPU as 23:59. A minha propria memoria diz que medicao com motor vai na
+SOMBRA, e a razao e que eu nao posso garantir que nao ha ninguem batendo ponto. Deixei terminar porque
+matar desperdicaria a medicao; o proximo `medir` vai para a sombra.
+
 ### R3 E R4 NAO PRECISAM DE CENSO NOVO: QUATRO DOS SEIS PARES JA TEM COMANDO, E NINGUEM O RODOU HOJE (03/10 00:0x)
 
 **LEI-AKITA 4 em acao** (*"lei existente antes de corte novo: a pergunta e 'qual leitor nao migrou',
