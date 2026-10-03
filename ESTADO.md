@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:33:31.**
+**Medido em 03/10/2026 16:39:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -108,35 +109,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O ruff pegou o resto da cura: o import que existia para a soma crua.
-
-  Ran 4 shell commands
-
-● Suíte cheia na raia, em segundo plano (os $LABELS da fonte única):
+● O deadlock é meu: violei o "um run por vez no juliani_db_test" ao rodar junto da suíte de fundo. O tripwire mediu 0 sítios em prod. Vou
+  ver se contaminei a suíte:
 
   Ran 1 shell command
 
-● Enquanto a suíte roda, vou validar o plano do commit/deploy/dreno antes da parte irreversível.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Boa pauta. #1, #2 e #7 primeiro — todos baratos e todos podem mudar o que eu comito.
-
-  Ran 1 shell command
-
-● Só métodos — nenhum campo. Confirmo com o Django, e os outros dois em paralelo:
+● Contaminada — column ... does not exist é o schema recriado pelo outro run. Mato e refaço sozinha, como a lei manda.
 
   Ran 2 shell commands
 
-● O conselho acertou: a linha viva existe. Vejo o tamanho da divergência e faço o #7 no mesmo passo.
+● Enquanto ela roda sozinha, os selos de host (#5) — são shell, não tocam o banco de teste:
+
+  Ran 3 shell commands
+
+● Os 4 parecem de ambiente da raia (faltam logs/, .claude/), não da cura. A discriminação honesta é rodar os mesmos 4 na árvore principal:
 
   Ran 1 shell command
 
-● Os dois únicos achados são prosa, não código — 0 escritores em produção. E o triagem_batida.py:47 já carimba que o juiz confirma os 11.
+● Os 4 são ambiente da raia, não a cura. Isso é da mesma família de uma memória que já existe — vou estendê-la em vez de duplicar:
 
-✢ Bloviating… (16h 20m 0s · ↓ 2.2m tokens · thought for 7s)
+  Read 1 file, ran 1 shell command
+
+● A medição do _A12 (#6) — consulta leve, só leitura, e dias_da_ausencia é aritmética de data, não motor:
+
+● Rodar a medição com o catálogo certo
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -i "s|from
+     core.catalogo_vigente import CatalogoVigente as _CATV|from ponto.catalogo import ausencias as _CATV|" $SP/medir_a12.py && docker cp
+     $SP/medir_a12.py saas_core:/tmp/medir_a12.py >/dev/n…
+
+✢ Bloviating… (16h 25m 30s · ↓ 2.2m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -146,6 +147,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing test_porta_remocao_motivo.py selo                                                4h 41m 8s · ↓ 130.7k tokens
+  ◯ general-purpose  Running test_porta_remocao_motivo GREEN check                                           4h 46m 38s · ↓ 159.5k tokens
   ⧉  index
 ```
