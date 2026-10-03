@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:29:50.**
+**Medido em 03/10/2026 03:35:01.**
 
 | | |
 |---|---|
@@ -123,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Two cured. Now classify the other seven — my memory says a copy without the staticfiles mount gives a false RED on anything that
-  renders.
+● They fail identically on HEAD — but both runs share a dangling symlink (No directory at: /app/staticfiles/: the symlink points to a host
+  path the container doesn't mount). The deciding run is the live tree, where /app/staticfiles is real.
 
   Ran 1 shell command
 
-● Exactly that: the O124 copy's staticfiles is an empty directory where HEAD's is a symlink to the live one — the false RED my memory
-  names. Fixing and re-running the four modules.
+● Decisive: 27/27 OK on the live tree. The seven were false REDs — the copy's staticfiles symlink points at a host path the container
+  never mounts, so it dangles. The mount is the fix.
+
+  Ran 3 shell commands
+
+● The memory already named this twice; I hit it a third time, with a new twist worth recording — the symlink that looks like a fix.
+
+  Ran 1 shell command
+
+● Now the landing script must carry the newly-touched test file.
 
   Ran 2 shell commands
 
-● While that runs: the R3 probe says turno_aberto reaches only 189 of 1730 odd days. But my own published aval says "183 na 10" — a 10x
-  gap against the number I just measured. One of the two is wrong, and that one is on Ronald's reading surface.
+● Now the R3 number. Two measurements of the same thing disagree by 10x, and the smaller one is already on Ronald's reading surface.
+
+  Ran 2 shell commands
+
+● The distribution settles it: so_impar is dominated by n=1 on consecutive days (col27: 21,22,23,24,25/09) — the cross-midnight signature
+  my own probe docstring predicted. The odd-count oracle isn't a witness to a missing batida at all.
 
   Ran 1 shell command
 
-● The old probe's script no longer exists; the gap is real and must be resolved by reading what turno_aberto means.
+● Advising using Fable 5.1
 
-  Ran 1 shell command
-
-● Background command "Run the four modules against the O124 copy" completed (exit code 0)
-
-  Read 1 file
-
-● My two cures are green. The seven clique smokes survive the staticfiles fix, so they are not that — test them on HEAD.
-
-● Running the same four modules against HEAD
-  ⎿  $ cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash
-     $S/rodar_4modulos.sh /tmp/headapp/app $S/m4_head.txt 2>&1 | tail -15; echo "=== detalhe de um clique:"; sed -n '1,20p' $S/m4_o124.txt
-
-✽ Bloviating… (3h 16m 19s · ↓ 468.3k tokens)
+✢ Bloviating… (3h 21m 30s · ↓ 477.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
