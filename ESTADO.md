@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:40:55.**
+**Medido em 02/10/2026 23:46:01.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -94,42 +95,42 @@ a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Dois chamadores mais: um signal de vínculo (um colab, inline está certo) e o laço de frota. Só este último recebe recalculo=False:
+
+  Duas coisas que eu declaro junto com o número, porque sem elas ele enganaria:
+
+  - 26,05 → 81,24 h não mede nada do mundo real. Eu perturbei 3 células de propósito para a regeneração ter o que reescrever; o 81,24 é o
+    recálculo correto depois disso. O RED prova a propagação, não o valor. E a sombra ficou suja no col221/10 (refaz-se às 04:15).
+  - O RED é na competência 10, não na 09 — a 09 dele está exportada e a porta a recusa por lei (L-092). Medir ali provaria a recusa, não a
+    cura.
+
+  O que resta do R6: o lote, declarado com o motivo (job não existe, cron proibido pelo corte de 24/09), e a metade N/22 dos contratos.
+
+  Placar agora: R1 ✓, R2 ✓, R6 ✓ no caminho de um colab · faltam R3, R4, R5 e o N/22 — e o R5 já está durável em
+  bin/r5_idempotencia_frota.sh, pronto para disparar.
+
+  Aguardando só o verde dos vizinhos (ponto escala colaboradores) para levar a cura à árvore viva, commitar e empurrar o marco.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
   Ran 1 shell command
 
-● Nove sítios de chamada. Conferindo que nenhum outro é laço de frota — um segundo laço inline seria o POST de 48 s:
+● Disparando o R5 na sombra, que é o próximo da ordem dele e usa banco diferente da suite:
 
-  Ran 2 shell commands
+● Checking both jobs
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg3hifi9j.output 2>/dev/null | tail
+     -8; echo "=== VIZINHOS ==="; cat
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byfk21e8e.output 2>/dev/null | tail -5; echo
+     "…
 
-● Os dois do auto-executor são de um vínculo só. Agora o RED. Procurando um selo existente da porta para copiar a forma das fixtures em
-  vez de inventá-las:
-
-  Ran 2 shell commands
-
-● Tenho a forma exata das fixtures. Escrevendo o selo, com o caso que morde mais forte: a data representante tem de cair dentro da
-  competência que ela representa:
-
-  Ran 2 shell commands
-
-● 4 OK. Evidenciando o RED — a chamada retirada, patch guardado antes:
-
-  Evidence the RED with the call switched off
-  ⎿  $ cd /home/ronald/wt-orfa && git diff > /tmp/cura_r6.patch && wc -l /tmp/cura_r6.patch && python3 - <<'PY'
-     import io
-     p = '/home/ronald/wt-orfa/app/ponto/portas/celula.py'
-     s = io.open(p, encoding='utf-8').read()
-     v = " if recalculo and _tocadas:"
-     assert s.count(v) == 1
-     io.open(p, 'w', encoding='utf-8…
-
-· Sock-hopping… (5h 28m 24s · ↓ 978.0k tokens)
+✢ Sock-hopping… (5h 33m 30s · ↓ 995.2k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens

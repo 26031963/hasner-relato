@@ -1,5 +1,67 @@
 # RELATO — esteira saas-hasner
 
+### R6: O DINHEIRO PASSA A ACOMPANHAR O CADASTRO, E O LOTE FICA DE FORA COM O MOTIVO ESCRITO (03/10 00:0x)
+
+**A cura que ele mandou as 23:5x**, na porta que faltava migrar: depois de regenerar celula,
+`ponto/portas/celula.py::regenerar_celulas_vinculo` chama `recalcular_por_evento` **uma vez por
+competencia tocada**, com o motivo do vinculo. **Juiz novo = 0** -- competencia nao se deriva ali:
+quem resolve e `janela_atual`, a MESMA que a batida usa; a porta so DEDUPLICA. **Signal em `CelulaDia`
+NAO**, por ordem dele: o gatilho e o ATO de corrigir o cadastro, que tem autor, motivo e trilha.
+
+**DOIS CONJUNTOS, E NAO E DUPLICACAO** -- e isso ficou escrito no codigo: `_reescritos` (que ja
+existia) e o dia cujo DNA foi REESCRITO, e quem o le e a cobranca orfa. `_tocadas` e QUALQUER dia que
+mudou, **inclusive o que nasceu agora** (o ramo do `create`, que nao entra em `_reescritos`), porque
+previsto novo tambem move dinheiro.
+
+**CENSO DE CHAMADORES fechado antes de mexer** (MEIA-CORRECAO E PIOR QUE NENHUMA): a porta tem **9**
+sitios de chamada. Oito sao de UM colaborador -- `corrigir_escala_retroativa`, a porta do admin
+(`vinculo.py`), os dois signals de VINCULO, `regenerar_celulas_dia`, `folgas.py`, os dois do
+`escala_auto_executor` e a porta da exportada (O120) -- e nesses o recalculo entra **inline**. O nono e
+o unico laco de FROTA.
+
+**O LOTE NAO ESTA CURADO, e o motivo nao e preguica -- e um corte DELE**: `cadastro_tipo.py` regenera
+TODOS os vinculos ativos ao salvar um TipoEscala, e inline ali seria `N x 243 ms` dentro do POST do
+admin (com 200 colabs, **48 s de requisicao** -- o apagao de 05/09, que foi um POST de 152 s, outra
+vez). A ordem dele e *"lote vai para JOB, nao inline"*, e **o job nao existe**: nao ha infra de fila na
+casa, e **cron esta PROIBIDO** por corte de 24/09 (`config/crons.py:853` -- *"cronificar seria o
+sistema reescrevendo a folha sozinho na madrugada, e o carimbo `atualizado_em` deixaria de significar
+'alguem mandou'"*). Entao esse caminho leva `recalculo=False` **declarado, com o porque na linha**, e o
+gatilho dele tera de ser o ATO do admin -- nao um cron. Fica na sua mesa como o que falta do R6.
+
+**RED EVIDENCIADO, e ele me pegou uma vacuidade**: com a chamada desligada,
+`AssertionError: 2 != 0 : chamou 0 vez(es) para 2 competencia(s)` -- e **so 1 dos 4 casos caiu**. O
+caso da data REPRESENTANTE passou com zero chamadas, porque `len([]) == len(set())`. Ausencia de sinal
+lida como sinal bom, a familia que esta casa ja pagou quatro vezes, no meu selo novo. Fechei a
+vacuidade (`assertTrue(m.call_args_list)`) e agora o RED morde **2 de 4**.
+
+**O caso que uma contagem sozinha deixaria passar**, e e por isso que ele existe: a data representante
+tem de cair DENTRO da competencia que representa. Um `min(_tocadas)` global daria o numero de chamadas
+CERTO com o mes ERRADO -- recalcularia duas vezes a mesma competencia e nunca a outra.
+
+PROVA: `Ran 4 tests OK` (o selo novo) + `Ran 63 tests OK` (os selos da propria porta: `test_porta_celula`,
+`test_porta_celula_dia`, `test_contract_porta_2ato`, `test_cobranca_orfa_regeneracao`,
+`test_torneira_folgas`) + ruff limpo nos tres arquivos.
+
+**O RED DE FROTA RODOU, E ESTA VERDE**: na sombra, col221, competencia **10** (a 09 dele esta
+EXPORTADA e a porta a RECUSA por lei -- medir ali provaria a recusa, nao a cura). Sujei 3 celulas para
+a regeneracao ter o que reescrever, chamei **so** `regenerar_celulas_vinculo` e **nenhum comando de
+recalculo**:
+
+```
+ANTES  hash=3a5da35a1403e513  campos=['26.05', '0.00', '4896', '10941', '0', '0', '0']
+regenerar_celulas_vinculo devolveu n=20  (NENHUM comando de recalculo foi chamado)
+DEPOIS hash=3a42920e4dd7b2d8  campos=['81.24', '0.00', '4863', '10890', '0', '0', '0']
+R6 VERDE: o FechamentoMensal mudou SOZINHO. Zero passo manual.
+```
+
+**O QUE ESSE NUMERO NAO E, e isso importa**: `26,05 -> 81,24 h` nao mede nada do mundo real -- eu
+PERTURBEI 3 celulas de proposito para a regeneracao ter o que fazer, e o 81,24 e o recalculo correto
+depois disso. O RED prova a PROPAGACAO, nao o valor. E a sombra ficou suja no col221/10 (ela se refaz
+as 04:15).
+
+**ENTAO O R6 FECHA EM ZERO no caminho de UM colaborador** -- oito dos nove chamadores da porta -- e o
+que resta e **so o lote**, declarado acima com o motivo e sem fingir cura.
+
 ### R2 MEDIDO, E A RESPOSTA CORRIGE A MINHA PRIMEIRA CONTA EM 52 COLABS (02/10 23:5x)
 
 **R2**: *"CADASTRO e BATIDA saem da cauda e vao para a lista do admin pela MESMA fonte do Cadastro x
@@ -148,7 +210,7 @@ PROVA: `bin/tickets_placar.sh` acusou `arquivo diz 74e24761 / o mundo diz 94b281
 | **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
 | **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
 | **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
-| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **1 passo manual, e e so o CADASTRO** (retratado por ele as 23:5x: a porta `recalcular_por_evento` EXISTE e batida, HE e validacao a chamam; `regenerar_celulas_vinculo` e `corrigir_escala_retroativa` nao). Cura vai na O121. Falta o N/22 | zero passo manual | censo de chamadores de `recalcular_por_evento` = 3 |
+| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **ZERO passo manual no caminho de UM colab, medido na sombra**: corrigi o vinculo do col221 e o `FechamentoMensal` mudou sozinho (`3a5da35a` -> `3a42920e`), sem comando. Resta **o LOTE** (job nao existe, cron proibido por corte de 24/09) e o N/22 | zero passo manual | o RED no bloco do R6 abaixo |
 
 **O percentual do oraculo, aberto por dono como ele pediu**: 09 em **94,3%** (7.182 de 7.616) e 10 em
 **92,4%** (2.489 de 2.694) -- e a conta do denominador da 09 esta aberta linha a linha no bloco do R1
