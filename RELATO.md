@@ -1,5 +1,46 @@
 # RELATO — esteira saas-hasner
 
+### R3 E R4 NAO PRECISAM DE CENSO NOVO: QUATRO DOS SEIS PARES JA TEM COMANDO, E NINGUEM O RODOU HOJE (03/10 00:0x)
+
+**LEI-AKITA 4 em acao** (*"lei existente antes de corte novo: a pergunta e 'qual leitor nao migrou',
+nunca 'qual a regra'"*). Eu ia construir o censo dos cinco leitores. Fui procurar primeiro, e a casa ja
+tinha a resposta inteira.
+
+**A PALAVRA "EM ABERTO" JA E COMPARTILHADA pelos cinco leitores**, e o R3 nao inventa vocabulario:
+* **autoridade**: `relatorios/cartao_pela_celula.py:273-274::folha_manda` escreve `resumo['datas_em_aberto']`;
+* **tela**: `ponto/services/espelho.py:308::aplicar_palavra_do_dia(dias, datas_em_aberto)`;
+* **PDF**: `relatorios/pdf_espelho.py:563` (`_palavra(..., limpar=True)`) e o badge *"Em aberto (a
+  decidir)"* em `:708-709`;
+* **app**: `api/views.py:1391` -- *"a mesma que a tela do admin e o cartao leem, depois do `folha_manda`"*;
+* **TXT**: `folha/porta_export.py:466` -- *"`dias_em_aberto` NAO entra: furo sem decisao tem linha propria"*.
+
+**E O SELO DA PERGUNTA DO R4 JA EXISTE**:
+`relatorios/management/commands/selo_leitores_no_mesmo_numero.py`, com **tolerancia ZERO e sem
+allowlist**, no universo `classificar_export(status='entra')`. Ele mede, de uma vez:
+
+| pergunta dele | o par do R4 | onde |
+|---|---|---|
+| tela x PDF | **par 1** | `pdf_x_espelho_divergentes`, dentro de `porta_export.medir` |
+| cartao x TXT | **par 2** | idem -- *"a ponta que amarra o gravado na corrente"* |
+| topo x soma das linhas | **par 5** | E5, 28/09 -- verdadeiro por construcao, e entra justamente para denunciar se alguem voltar a montar o topo por outra conta |
+| `dias_em_aberto` | **o numero do R3** | nao e divergencia e nao reprova: furo sem decisao tem linha propria |
+
+E o **par 3** (espelho x `DiaPago`) tambem existe: e a **7a testemunha** da porta,
+`folha/porta_export.py::espelho_x_dia_pago`, que a casa curou em 29/09 justamente por ser "dois juizes,
+duas perguntas" -- e nas duas medicoes dela o `DiaPago` estava CERTO.
+
+**ENTAO O QUE EU PRECISO CONSTRUIR DO R4 SAO DOIS PARES, nao seis**: o **par 4** (`FechamentoMensal` x
+soma das linhas de `DiaPago` -- ORM puro, ja escrito, tolerancia declarada de 0,02 h para o
+arredondamento de duas casas) e o **par 6** (app x tela). O resto se RODA.
+
+**E O ACHADO E O OUTRO**: o comando existe, a tolerancia e zero, nao ha allowlist -- e **o numero de
+hoje nao esta publicado**. A docstring dele diz por que ele nasceu: *"as duas metades ja existiam e
+ninguem as rodava JUNTAS. Contador que vive solto e' contador que alguem esquece."* O R4 nao e uma
+medicao que falta; e uma medicao que **para de ser rodada**. Custo declarado: ~100 s para os 205 do TXT.
+
+**PROXIMO**: rodar `selo_leitores_no_mesmo_numero --mes 9` e `--mes 10` na sombra assim que o R5
+liberar a CPU, publicar os quatro numeros, e so entao construir os pares 4 e 6.
+
 ### R6: O DINHEIRO PASSA A ACOMPANHAR O CADASTRO, E O LOTE FICA DE FORA COM O MOTIVO ESCRITO (03/10 00:0x)
 
 **A cura que ele mandou as 23:5x**, na porta que faltava migrar: depois de regenerar celula,
@@ -207,8 +248,8 @@ PROVA: `bin/tickets_placar.sh` acusou `arquivo diz 74e24761 / o mundo diz 94b281
 |---|---|---|---|---|
 | **R1** | dono de cada divergencia, e as tres somam o total | **MEDIDO.** 09: ESTRUTURA 197 · CADASTRO 29 · BATIDA 208 (soma 434 = 434). 10: 95 · 15 · 95 (205 = 205) | tres donos, soma fechada | `logs/e6_cauda2c/r1_dono_09_e_10.txt` |
 | **R2** | CADASTRO e BATIDA fora da cauda, na lista do admin pela MESMA fonte | **MEDIDO: gap real = 7 colabs** (5 de CADASTRO fora da lista; 2 de BATIDA sem chamado -- col392 e col529). Os outros 155 de BATIDA JA tem destino: 103 de 118 na 09 e 67 de 75 na 10 com chamado NO DIA. **Lei no topo**: BATIDA ja tem casa, e nao e a lista de cadastro | 0 colab sem destino | o bloco do R2 abaixo |
-| **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
-| **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
+| **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **A PALAVRA JA E COMPARTILHADA** (LEI-AKITA 4): autoridade em `cartao_pela_celula:273::folha_manda` (`datas_em_aberto`), aplicada na tela, no PDF (com badge), lida pelo app e mantida FORA do TXT com linha propria. Falta RODAR o numero -- `dias_em_aberto` sai do mesmo comando do R4 | 5 leitores iguais, nenhum com numero | o bloco do R3/R4 abaixo, com os file:line |
+| **R4** | seis pares de frota, 09 e 10 | **QUATRO JA TEM COMANDO** -- `selo_leitores_no_mesmo_numero` (tolerancia ZERO, sem allowlist) mede tela x PDF, cartao x TXT, topo x soma e `dias_em_aberto`; o par espelho x DiaPago e a 7a testemunha da `porta_export`. **Eu construi os dois que faltavam**: par 4 (`FechamentoMensal` x soma do `DiaPago`, ORM puro) e par 6 (app x tela, selo de AST -- zero montagem propria). Falta RODAR | ZERO em cada par | os dois selos novos + o bloco abaixo |
 | **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
 | **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **ZERO passo manual no caminho de UM colab, medido na sombra**: corrigi o vinculo do col221 e o `FechamentoMensal` mudou sozinho (`3a5da35a` -> `3a42920e`), sem comando. Resta **o LOTE** (job nao existe, cron proibido por corte de 24/09) e o N/22 | zero passo manual | o RED no bloco do R6 abaixo |
 

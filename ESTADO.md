@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:46:01.**
+**Medido em 02/10/2026 23:51:30.**
 
 | | |
 |---|---|
-| `HEAD` local | `33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado` |
+| `HEAD` local | `fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando
 33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado
 7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro
 8eaaf908 [PLACAR-ESTRUTURAL] R6, metade medida: NADA alcanca o dinheiro -- nem batida, nem correcao de cadastro
 71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento
-a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de chamar diferenca de PERGUNTA de divergencia
 ```
 
 ## `git status --short`
@@ -34,10 +34,10 @@ a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
+?? app/api/tests/test_r4_par6_app_le_a_tela.py
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? bin/r5_idempotencia_frota.py
 ?? bin/r5_idempotencia_frota.sh
@@ -96,35 +96,35 @@ a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de
 
 ```
 
-  Duas coisas que eu declaro junto com o número, porque sem elas ele enganaria:
+● lavrar escreve um MetricaSnapshot — na sombra é escrita de sombra, inofensiva. E o medir devolve ainda calendario_x_espelho, que é mais
+  um par do R4 coberto.
 
-  - 26,05 → 81,24 h não mede nada do mundo real. Eu perturbei 3 células de propósito para a regeneração ter o que reescrever; o 81,24 é o
-    recálculo correto depois disso. O RED prova a propagação, não o valor. E a sombra ficou suja no col221/10 (refaz-se às 04:15).
-  - O RED é na competência 10, não na 09 — a 09 dele está exportada e a porta a recusa por lei (L-092). Medir ali provaria a recusa, não a
-    cura.
+  Os dois jobs seguem rodando (suite dos vizinhos e R5). Nada a decidir até eles voltarem: o código da cura do R6 espera o verde para ir à
+  árvore viva, e o selo_leitores_no_mesmo_numero espera a CPU do R5.
 
-  O que resta do R6: o lote, declarado com o motivo (job não existe, cron proibido pelo corte de 24/09), e a metade N/22 dos contratos.
+  Read 1 file, ran 1 shell command
 
-  Placar agora: R1 ✓, R2 ✓, R6 ✓ no caminho de um colab · faltam R3, R4, R5 e o N/22 — e o R5 já está durável em
-  bin/r5_idempotencia_frota.sh, pronto para disparar.
-
-  Aguardando só o verde dos vizinhos (ponto escala colaboradores) para levar a cura à árvore viva, commitar e empurrar o marco.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Vou parar de consultar e construir o par 6 (app × tela), que é o outro que falta. Lendo o que o endpoint do app realmente chama —
+  comparar pela função, não por HTTP:
 
   Ran 1 shell command
 
-● Disparando o R5 na sombra, que é o próximo da ordem dele e usa banco diferente da suite:
+● O par 6 já está respondido por construção, e foi curado hoje: api/views.py:1389 diz em lápide — "NÃO HÁ CONTA NOVA AQUI, E ESSE É O
+  PONTO. _esp já é o retorno de espelho_do_colab (...) a mesma que a tela do admin e o cartão leem", e a 1ª versão da cura montava a
+  palavra de novo, 10 queries por colab. Então o par 6 é estrutural, e o selo varre AST, não texto:
 
-● Checking both jobs
-  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bg3hifi9j.output 2>/dev/null | tail
-     -8; echo "=== VIZINHOS ==="; cat
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byfk21e8e.output 2>/dev/null | tail -5; echo
-     "…
+  Read 1 file, ran 2 shell commands
 
-✢ Sock-hopping… (5h 33m 30s · ↓ 995.2k tokens · thinking)
+● Verificando que os três nomes do selo existem de verdade — nome que nunca casa é selo que não morde:
+
+  Ran 1 shell command
+
+● Os três nomes existem com definição real (def=1 cada) — o selo pode morder. Atualizando as linhas do placar com o que a descoberta
+  mudou:
+
+● Running 1 shell command…
+
+✻ Sock-hopping… (5h 38m 59s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
