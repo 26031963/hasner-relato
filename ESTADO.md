@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:102 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:109 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:13:31.**
+**Medido em 03/10/2026 19:18:39.**
 
 | | |
 |---|---|
-| `HEAD` local | `bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam` |
+| `HEAD` local | `bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS` |
 | `origin/main` | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
-| commits a subir (`ahead`) | **23** |
+| commits a subir (`ahead`) | **25** |
 
 ## Fabrica
 
@@ -29,26 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS
+57420097 [P7.1b] wizard_calendario_criar aceitava POST ANONIMO que CADASTRAVA -- e o selo que varre as 556 rotas das duas cascas
 bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam
 3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha
 b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com os numeros
-23450e7e [CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA -- 18 commits, o que tem selo verde pousa
-cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar" diferentes, e o estoque na sombra
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/escala/views_wizard.py
-?? app/core/rotas_publicas.py
-?? app/core/tests/test_rota_pede_sessao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -120,24 +111,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Enquanto roda (e sem tocar o banco de teste), o topo do RELATO — o PAREI está resolvido e a linha não pode seguir dizendo que espera:
-
-  Ran 1 shell command
-
-● Agora os registros que o aval manda (PROMPT-NAO-SE-REPETE e os SOLTOS como ENCAIXE). Vendo os formatos:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Registrando o BLOCO DAS 18H: linha em PROMPTS e os SOLTOS como obras de ENCAIXE nomeadas.
 
   Read 1 file, ran 2 shell commands
 
 ● Suíte ainda rodando. O pendente do ! que o corte da HE deixa em aberto — pela porta canônica:
 
-  Abrir as 9 linhas no TICKETS e reconferir a regua
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/regua_tickets.sh 2>&1 | tail -6
+  Searched for 1 pattern, ran 22 shell commands
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b003n1ltd.output (23 lines)
   ⎿  Read docs/AVAIS.md (31 lines)
   ⎿  Referenced file core/tests/test_rota_pede_sessao.py
@@ -149,9 +128,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Rodar escala e core sozinho" still running in background
 
-✢ Bloviating… (19h 0m 0s · ↓ 2.6m tokens · thought for 1s)
+● Background command "Rodar escala e core sozinho" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Background command "Esperar o veredito da suite por arquivo" completed (exit code 0)
+
+● Medir os dois sentidos da divergencia na sombra
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > "$S/censo_a14.py" <<'PY'
+     # CENSO _A14: os DOIS sentidos da divergencia campo `situacao` x juiz `afastado_hoje`.
+     # So LE. Chama a FUNCAO REAL (ponto/turnos.py), n…
+
+✢ Bloviating… (19h 5m 8s · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
