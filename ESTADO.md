@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:52:25.**
+**Medido em 03/10/2026 18:57:51.**
 
 | | |
 |---|---|
@@ -40,9 +40,9 @@ cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar
 
 ```
  M PLANO_PISCADA.md
+ M app/escala/views_wizard.py
 ?? app/core/rotas_publicas.py
 ?? app/core/tests/test_rota_pede_sessao.py
-?? app/core/tests/test_zz_quem_toca.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-  Ran 2 shell commands
-  ⎿  Referenced file core/tests/test_rota_pede_sessao.py
-  ⎿  Read core/rotas_publicas.py (28 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_revert.txt (54
-     lines)
-  ⎿  Referenced file chamados/views.py
-  ⎿  Read docs/AVAIS.md (30 lines)
+● Essas duas são públicas por corte escrito (06/09) e protegidas por HMAC (comp.confere), devolvendo dados if ok else None — cumprem as
+  quatro linhas da regra de entrada, inclusive a 4ª. Lendo as cinco restantes:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Searched for 1 pattern, ran 3 shell commands
 
-● A sonda nova discrimina muito melhor — e o resultado mostra o combinado certo: as 23 rotas de mensageria não tocam no usuário (guardam
-  por TOKEN de header, _token_ok) mas recusam com 403. Então a autoridade são as duas juntas: acusa quem nem consultou o usuário nem
-  recusou. E o 405 do token_refresh pede o POST de volta, que eu perdi ao trocar o Client pelo RequestFactory.
+● Veredito da triagem: 1 buraco real (wizard_calendario_criar, escrita anônima) e 7 públicas por projeto. Vendo o molde das vizinhas do
+  wizard:
 
-  Ran 2 shell commands
+  Searched for 1 pattern
 
-● De 21+2 acusadas para 4+1. Mas isso levanta o risco oposto, e preciso medir antes de aceitar: render() passa pelo context processor auth,
-  que lê request.user — então uma view sem guarda que renderiza template tocaria no usuário por tabela, e sairia limpa. painel_vinculo é o
-  caso de prova: eu sei que ela não tem decorador.
+● O molde é exato: todo escritor do arquivo leva @login_required + @require_POST + @acao_required('editar_escalas'). Só esta não leva — e
+  ela nasceu entre duas decoradas, mesma forma do P7.1. Curando:
 
-  Medir quem toca no usuario em cada rota suspeita
-  ⎿  $ cd /home/ronald/saas-hasner && cat >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/quem_toca.py <<'PY'
-     import traceback
-     from django.contrib.auth.models import AnonymousUser
-     from django.contrib.messages.storage import default_storage
-     from django.cont…
+  Ran 1 shell command
 
-✢ Bloviating… (18h 38m 54s · ↓ 2.5m tokens)
+● Agora o cadastro, com as sete e o motivo de cada:
+
+  Ran 6 shell commands
+
+● Há suíte existente para essa rota (test_wizard_folga_padrao.py, 4 POSTs) — o teste de vizinho é obrigatório. Rodando escala + core:
+
+● Rodar escala e core · 44s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER
+     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
+     ~/saas-hasner/app:/app saas-hasner-core:latest pyt… (44s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bloviating… (18h 44m 20s · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
