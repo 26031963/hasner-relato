@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:70 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:139 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 06:05:01.**
+**Medido em 03/10/2026 06:10:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `e57e552b [ESTADO-STALE-NOS-REGISTROS] O alarme cobrava 206 h de obra pronta porque eu pausei o alarme e nao corrigi o estado` |
+| `HEAD` local | `0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares` |
 | `origin/main` | `b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -29,19 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares
 e57e552b [ESTADO-STALE-NOS-REGISTROS] O alarme cobrava 206 h de obra pronta porque eu pausei o alarme e nao corrigi o estado
 910a3ff9 [CRON-NAO-CABE] O portao do deploy morreu as 04:05:01, e quem o matou foi a propria medicao
 400e689a [R3] O numero que eu publiquei as 03:00 era de um oraculo, e a autoridade diz outro: 526 -> 621
 4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela
-c7b05d59 [O126-FLIP-ARIDADE] O ensaio da sombra achou o cron de hoje morto 4h49 antes de ele rodar
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -116,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  tem dois caminhos de retrato. Medindo em vez de inferir:
+● Ran 9448 tests in 599.184s · OK (skipped=42) · zero FAIL/ERROR. A cópia da união — os 5 arquivos do O131 mais os 2 da cura do cron —
+  está verde. Os 3 errors do cron curados; os 7 eram bancada.
+
+  Parando a montagem aqui e pousando, como planejado. Conferindo o aplicador antes de ele escrever na árvore viva:
 
   Ran 1 shell command
 
-● 93 diretórios vigia_arvore_commit_*, todos com staticfiles AUSENTE — e /tmp/vigia_arvore_retrato (o caminho do rsync) não existe. Os
-  timestamps vão de 1790093701 a 1790424902: de hora em hora, por ~92 h. O vigia caiu no ramo do git archive em 100% das passadas de ~4
-  dias, e o rm -rf que deveria limpar não limpa. Medindo o vazamento:
+● O aplicador está correto, e as fontes saem de o131head (HEAD puro + cura), sem carregar os arquivos do O131. Conferindo a convenção da
+  coluna commit antes de rodar:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Isso converge: a mesma omissão causa os dois sintomas. O rm -rf falha porque .hypothesis, .mypy_cache e .ruff_cache são escritos como
-  root pelo container — e a cura disso é exatamente os três --tmpfs que a minha memória registra e que o pre-push.sh monta. O vigia não
-  monta nenhum dos quatro. Resultado medido: 5 vermelhos de bancada por hora e 2,1 GB vazados em /tmp.
+● A convenção casa. Pousando a cura do cron:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● O pre-push.sh:136 monta os três --tmpfs inline, separados do --montagem. Então hoje "o que a cópia precisa" vive em dois lugares — e o
-  propósito declarado do arvore_do_push.sh é ser o lugar. Antes de alargá-lo, o selo que já o enumera:
+● crontab -l = 17 4 e o arquivo curado deriva 17 4 com VIZINHO_SOMBRA = 05:00 — crontab == config, provado com a cura no lugar. Commitando
+  por heredoc:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● O selo test_prepush_testa_o_commit.sh:76-105 é sólido e já MORDE nos dois sentidos, e assere por substring (*"/app/staticfiles"*) —
-  então alargar o --montagem é compatível com ele.
+● Verde. Agora o O131 — conferindo o aplicador e o inventário da fatia antes de escrever:
 
-  A minha medição mudou o desenho que o advisor viu: o censo colapsou de 4 sítios para um, e apareceu a convergência do tmpfs. Vou
-  conferir a escolha de escopo antes de escrever:
+● Checking which O131 files are new and read the applier head
+  ⎿  $ cd /home/ronald/saas-hasner && for f in app/escala/tests/test_o131_um_carregador_de_candidatos.py bin/esmeril_vinculo_censo.py
+     app/escala/alimentacao.py app/ponto/turnos.py app/escala/tests/test_carregadores_contrato.py; do printf '%-56s %s\n' "$f" "$([ -f
+     "$f" ] && echo existe || echo NOVO)"; do…
 
-  Advising using Fable 5.1
-
-✢ Bloviating… (5h 51m 30s · ↓ 771.8k tokens)
+✢ Compacting conversation… (5h 57m 0s · ↓ 780.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   9% until auto-compact
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
