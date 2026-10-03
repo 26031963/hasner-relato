@@ -144,9 +144,10 @@ flowchart TD
     x_chamados_services_materializacao_py["chamados/services/materializacao.py"] --> p_registrar_batida
     x_chamados_services_regularizacao_ext_py["chamados/services/regularizacao_ext.py"] --> p_registrar_batida
     mais_registrar_batida["... +5 chamadores"] --> p_registrar_batida
-    p_relavrar(["relavrar()<br/>via da pergunta<br/>2 chamador(es)"])
+    p_relavrar(["relavrar()<br/>via da pergunta<br/>3 chamador(es)"])
     x_chamados_management_commands_relavrar_via_i6_py["chamados/management/commands/relavrar_via_i6.py"] --> p_relavrar
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_relavrar
+    x_core_placar_estrutural_py["core/placar_estrutural.py"] --> p_relavrar
     p_desfazer_carimbo_sem_lastro(["desfazer_carimbo_sem_lastro()<br/>carimbo desfeito<br/>2 chamador(es)"])
     x_chamados_services_fabrica_da_celula_py["chamados/services/fabrica_da_celula.py"] --> p_desfazer_carimbo_sem_lastro
     x_core_management_commands_gerar_diagrama_py["core/management/commands/gerar_diagrama.py"] --> p_desfazer_carimbo_sem_lastro
