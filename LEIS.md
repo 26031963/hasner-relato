@@ -79,6 +79,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 | **L-090** | **COMPETENCIA E 21-20, NUNCA MES CIVIL**: a janela sai de `Empresa.dia_inicio_competencia` e nenhum leitor usa `mes`/`ano` calendario para decidir periodo | corte Ronald 27/09 02:2x (regra 6) | `ponto/janelas.py::janela_fechamento` / `periodo_apuracao` / `janela_atual` / `corte_da_empresa` | `ponto/tests/test_janela_paridade.py` + `ponto/tests/test_certificacao_da_competencia.py` | **vigente** |
 | **L-091** | **A DEFINICAO DA ESCALA DECIDE O REGIME; O ROTULO E TEXTO**: o motor e a geometria saem do DESENHO (vao entre blocos, cruza a meia-noite, jornada); `TipoEscala.tipo_base` e rotulo de tela e nao manda no calculo | corte Ronald 27/09 00:2x (opcao b) + 02:2x (regra 7). Nasceu medida: **37 de 37** templates rotulados `turno_partido` tinham vao de no maximo **70 min**, e por causa do rotulo **761 dias** de 09 nunca chegaram ao juiz da ata | `escala/servico_jornada.py::eh_turno_partido` (juiz, registrado em `core/juizes.py`) + `ponto/motor_calculo_v2.py::get_motor` + `escala/services/cadastro_tipo.py::descreve_turno_partido` | `escala/tests/test_jm_derivado.py::test_MORDE_o_juiz_diz_que_vao_de_1h_NAO_e_partido` e o par de 4 h + `bin/tests/test_juiz_novo_tem_corte.sh` | **vigente** |
 | **L-092** | **COMPETENCIA EXPORTADA NAO MUDA O GRAVADO**: depois do export, diferenca nao se aplica -- vira **Pauta DP** com os dois numeros (o exportado e o do motor de hoje) | corte Ronald 27/09 02:2x (regra 8) | `ponto/services/fechamento.py::trancar_periodo` + `folha/export.py::classificar_export` + `folha/models.py::ExportacaoDominio` | `ponto/tests/test_o80_selo_l092.py` (6 casos) + a guarda em `ponto/services/fechamento.py::recalcular_fechamento_mes`, que RECUSA com `CompetenciaExportada` antes de qualquer escrita. A excecao nasce como PORTA (`permitir_exportada=True` + `motivo_exportada`), e **sem motivo nao passa nem com a flag** | **vigente, com selo desde 27/09 10:1x. EXCECAO NOMEADA, UMA SO (aval Ronald 30/09 16:2x): "09/2026 regerada INTEIRA por ordem dele, TXT de 28/09 nao importado e SUBSTITUIDO". NAO E CAMINHO GENERICO** -- vale para ESTA competencia, por este motivo, e o que a legitima e um fato verificavel e nao uma conveniencia: o TXT de 28/09 (`ExportacaoDominio` id 20/21/22, hashes `8a63e3ba`, `6e0f1048`, `cb7f00fe`) **nao foi importado pelo Dominio**. O antigo fica INVALIDADO com trilha e **nunca apagado**; o novo nasce marcado como quem o substitui, com hash publicado. Fora desta competencia, a L-092 segue inteira |
+| **L-100** | **TETO DA MATRIZ DESCONTA FAMILIA SEM CADASTRO, e a meta e 20 de 20**: o TOTAL dos contratos estruturais nao cobra o contrato 3 (PARAMETRO) de familia que nao tem campo editavel; a celula de parametro de CHAMADO e de ESCALA so volta a existir quando a familia ganhar cadastro de verdade | corte Ronald 03/10 08:13 (TETO-20-SEM-FAMILIA-SEM-CADASTRO), opcao (b). SUBSTITUI o `TETO-DA-MATRIZ-E-21` de 25/09, que esta declarado como ATO logo abaixo e fica como historia. Nasceu do achado da O124: tirar os 15 campos sem efeito fazia `familias_com_parametro()` perder a familia `escala`, e o selo passava a exigir que a celula NAO existisse -- teto caindo de 22 para 21 por DELECAO, nao por lei | `app/core/contratos_estruturais.py` (`familias_com_parametro()` e o TOTAL), lido pelo placar do topo do `app/docs/TICKETS.md` e pela LINHA HAIKU `contratos_estruturais` com rotulo "arquitetura: N de 20" | **SEM SELO AINDA** -- obra **O135 TETO-20**; o selo da matriz hoje ainda conta 22 | **vigente, sem leitor**: a lei esta escrita e o TOTAL no codigo continua 22 ate a O135 pousar |
 
 ## Leis escritas que NAO TEM DONO (a lista mais importante daqui)
 
@@ -114,6 +115,7 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 - `E3-CHAMADO-APOS-ARQUIVO-SIMPLES`
 - `ESPELHO-SINAIS`
 - `ESPELHO-TELA-LE-A-FOLHA`
+- `ESPINHA-ANTES-DA-UI`
 - `ESTEIRA-RETA-FINAL`
 - `ESTEIRA-SECA-1-E-2-AGORA`
 - `EXPORT-09-DESCONHECIDO`
@@ -125,7 +127,9 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 - `JANELA-EXATA`
 - `JUIZ-BATIDA-NASCE`
 - `JUIZ-DE-BATIDA-E-DE-ESCALA`
+- `JUIZ-EH-TURNO-PARTIDO-ASSINADO`
 - `JUIZ-ESCALA-NASCE`
+- `JUIZES-TRES-ASSINATURAS`
 - `K1-DIA-DO-CHAMADO`
 - `K8-COMPETENCIA-NAO-E-MES-CIVIL`
 - `MARCA-DO-VEREDITO`
@@ -163,3 +167,4 @@ lei nem na lista de ATOS declarada no fim deste arquivo = VERMELHO.
 - `OBRA-ANDA-SOZINHA` -> **L-096**
 - `PLACAR-ESTRUTURAL` -> **L-099**
 - `PROMPT-NAO-SE-REPETE` -> **L-010**
+- `TETO-20-SEM-FAMILIA-SEM-CADASTRO` -> **L-100**
