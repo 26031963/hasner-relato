@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:24:31.**
+**Medido em 02/10/2026 21:30:03.**
 
 | | |
 |---|---|
@@ -42,6 +42,9 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+ M app/escala/views.py
+ M app/templates/core/_barra_gestao.html
+ M app/templates/core/_icone_barra.html
 ?? bin/reverter_o122.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -97,40 +100,40 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Waiting for push 93 to land · 2m 47s
+  ⎿  $ cd /home/ronald/saas-hasner && until grep -qaE "To https|error:|rejected|^exit=" logs/push93.log 2>/dev/null; do sleep 20; done;
+     grep -aE "^(OK$|FAILED|Ran |To https|error:|FAIL:|RED|exit=)" logs/push93.log | tail -5 (2m 46s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  Ran 2 shell commands
-
-● Cópia sincronizada em 74e24761. Aplico a cura do A1:
-
-  Ran 1 shell command
-
-● Agora a guarda da regenerar_celulas_vinculo passa a olhar só o holerite, e as duas recusas do vinculo.py saem:
-
-  Ran 1 shell command
-
-● Usei Empresa sem importá-la — corrijo, e tiro as duas recusas do vinculo.py:
-
-  Ran 1 shell command
-
-● As três peças do A1 estão escritas. Não rodo teste com o push vivo — confiro se ele pousou:
-
-  Ran 1 shell command
-
-● Push vivo, então uso a janela para a etapa 1 do O122, que é tela e não precisa do banco de teste. Leio o componente da casa e a tela:
-
-  Searched for 1 pattern
-
-● O contrato do componente pede quadros no contexto — e isso é uma linha na view, não no template (Django não monta dicionário em
-  template, e copiar o markup é o que o próprio partial proíbe: "quem inventa a segunda cria duas"). A saída que respeita o seu "só eles":
-  a chave da view é aditiva e inerte se o template voltar, então reverter só a tela restaura a página inteira. Leio os dois:
-
-● Reading the view and the template title area
-
-✢ Sock-hopping… (3h 12m 0s · ↓ 554.3k tokens · thinking)
+✢ Sock-hopping… (3h 17m 31s · ↓ 566.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: bug provado, entra na fila atras do item em curso; nao interrompe.
+
+  ID: O-PENDENCIAS-DISPUTA-N+1
+  MEDIDO 02/10 21:27 em prod, so leitura, chamando as views reais com usuario 651 (/tmp/painel_tempo.py):
+  - colaboradores:pendencias_disputa = 1,72 s, 318 consultas, 203 KB, disparada por hx-trigger="load" a CADA abertura do painel
+  situacional;
+  - pagina 0,08-0,23 s / 17-19 consultas; cada lote de 100 = 0,20 s / 15 consultas (O113 confirmado nas linhas).
+    FONTE: colaboradores/views.py:2808 pendencias_disputa -> chamados/relatorios_disputa.py::coletar (linha 25) -> classificar
+  (linha 10), que chama pergunta_viva por pergunta. O queryset ja tem select_related e prefetch (linhas 40-42); as 318 nascem depois
+  dele.
+    MUDA: a coleta responde em numero de consultas CONSTANTE, pela MESMA autoridade (pergunta_viva), carregando os insumos em lote. Mesma
+  classe e mesma cura do O113.
+    RED: (1) coletar() com N disputas e com 2N faz o MESMO numero de consultas, diferenca 0; (2) selo de equivalencia: os quatro baldes
+  (AGUARDA_SUPERVISAO, PRONTA_FECHAR, AGUARDA_COLAB, SEM_PERGUNTA) identicos antes e depois, disputa a disputa, na sombra, diferenca 0
+  nos dois sentidos.
+    PROIBIDO: juiz novo, reimplementar pergunta_viva, cache com prazo, fallback, tirar o bloco da tela, mudar o que ele mostra.
+    PRONTO: os dois REDs com PROVA, tempo e consultas re-medidos pela view em prod, commit e deploy. Sem isso INCOMPLETO com a lista.
+    QUEM MAIS LE: censo de quem chama coletar() e pergunta_viva em laco, com o numero de cada um.
+    LEI-AKITA: origem=chamados/relatorios_disputa.py::coletar, testemunha=pergunta_viva, RED=acima, quem-mais-le=censo, juizes novos=0.
+  Nenhuma lei nova (L-002, L-003, LEI-AKITA 5 e 8).
+    LINHA HAIKU: nenhum contador novo; golden "quantas disputas aguardam a supervisao agora?" esperado via a mesma coleta.
+    Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
