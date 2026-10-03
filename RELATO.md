@@ -1,5 +1,45 @@
 # RELATO — esteira saas-hasner
 
+# E6-CAUDA-2: a classe 2 se parte em QUATRO familias, e nenhuma e "o espelho soma errado" (02/10 23:2x)
+
+PROVA: censo sobre `logs/placar_e/e6_09_curado.csv` (oraculo curado) cruzado com a BATIDA e com as
+funcoes reais (`autoridade_do_periodo`, a ata da `CelulaDia`). Classe `diverge_acima_60` na 09: **366
+dia-colab, 1.418,7 h**.
+
+| familia | dia-colab | horas | dono |
+|---|---|---|---|
+| **(a)** impares -- a PONTE do motor contra os pares FECHADOS do oraculo | **188** | **937,7 h** | **espera a LEI dele** -- a mesma dos 118 negativos do S5b |
+| **(b1)** TIPO GRAVADO invertido | **62** | **256,2 h** | **O65**, ja na ordem dele |
+| **(b2)** a ATA perde a ponta do dia | **102** | **152,0 h** | familia do **O118** -- cadastro x realidade |
+| **(c)** o oraculo COLANDO dias (`piso > 24 h`) | **4** | **119,8 h** | **meu instrumento** |
+
+**(a) OS IMPARES**: o espelho credita MAIS em 164 dos 188 (635,5 h), e `dono_da_paridade =
+CORTE_do_oraculo` em **175 de 188** -- a paridade nao vem de batida faltando, vem do corte do proprio
+oraculo. **156 estao DENTRO da faixa** piso..teto, onde ele declara nao decidir sem DNA. A pergunta que
+decide isso e a que ja esta na mesa dele, em linguagem de admin: *"ele saiu as 14:00 e voltou sem bater,
+ou foi embora e a batida das 19:00 nao e jornada dele? A casa paga ate a primeira saida ou ate a
+ultima?"* -- **uma resposta fecha 635,5 h aqui e os 118 de la, porque e a MESMA forma**.
+
+**(b1) O TIPO GRAVADO, e a prova esta nas batidas**: `col913 27/08` tem `07:00 E, 12:00 S, 13:00 E,
+19:00 E` -- **a saida do dia gravada como E**. O motor fecha so o primeiro par (300 min) e deixa **dois
+periodos abertos**; o oraculo soma 660. `col860 07/09` e a mesma forma (`17:51 E, 05:51 E, 05:55 S`) e o
+espelho mostra **4 min** para um plantao de 12 h. E literalmente a lapide do col369.
+
+**(b2) A ATA PERDE A PONTA, e aqui o MOTOR concorda com o oraculo**: `col890 04/09`, celula com
+`hi 10:00 / hf 22:00`, batidas `07:01 10:55 11:55 18:55`. A ata casou a batida das **10:55** com o marco
+`E 10:00` e a de **07:01 virou ORFA**; a grade conta o dia das 10:55 em diante e grava **420 min**,
+enquanto o motor le batida crua e diz **654,5** -- contra 654 do oraculo. **O cadastro descreve
+10:00-22:00 para quem trabalhou 07:01-18:55**: e o caso col221 outra vez, com outro nome.
+
+**(c) O ORACULO COLANDO DIAS**: 4 casos com `piso > 1440 min` (9, 11, 17 e 17 batidas somadas num dia
+so), todos com `dono_da_paridade = CORTE_do_oraculo`. **E a proxima cura minha**, e e de instrumento --
+como a da classe 1.
+
+**TRES HIPOTESES MINHAS CAIRAM NESTA CLASSE, e as tres antes de publicar**: (1) "o oraculo cola dias" --
+e 1%, nao o grosso; (2) "o espelho soma so o primeiro par" -- era o tipo gravado invertido, o espelho
+recebe um dia que nao fecha; (3) "o espelho soma errado" -- em (b2) o motor CONCORDA com o oraculo e quem
+diverge e o gravado, pela ata. Medir antes de escrever o RED foi o que separou as quatro familias.
+
 # E6-CAUDA-1: a MAIOR classe era o INSTRUMENTO, e 1.681 das 2.325 h eram minhas (02/10 23:0x)
 
 PROVA: oraculo curado na sombra, competencia 09 -- **BATE 91,0% de 7.870 dias** contra 89,2% de 7.886 antes;
