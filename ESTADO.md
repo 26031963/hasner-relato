@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:25:01.**
+**Medido em 03/10/2026 13:30:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres` |
-| `origin/main` | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
-| commits a subir (`ahead`) | **3** |
+| `origin/main` | `f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -109,44 +109,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O número publicado se reproduz: 10 dia-colab / 34,6 h são os dias com ata>0 e zero batida no dia (logo zero par pareável) — os outros 6
-  de ata>0 têm par ABERTO, que é a palavra "Em aberto" do R3. Lendo os sítios do molde antes de desenhar:
 
-  Ran 1 shell command
+● Background command "Push do marco pela regua normal" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Push pousou — origin/main == HEAD == f652dfef, 0 à frente. Lanço a leitura 3 (só leitura, na sombra, com flock):
+
+  Ran 2 shell commands
+
+● Background command "Rodar a sonda de leitura da palavra do dia na sombra" completed (exit code 0)
+
+● ruff existe na imagem (/usr/local/bin/ruff). A sonda pousou:
+
+  Read 1 file, ran 3 shell commands
+
+● Medição feita e durável. Ela inverte a premissa da minha própria pergunta de lei — vou levar isso ao advisor antes de escrever uma linha
+  de código:
+
+  - Os 10 (o universo que publiquei) já têm palavra hoje: Em aberto (veredito=em_aberto, furo_apurado=True, batidas=0, turnos=0, Realizado
+    --).
+  - Quem não tem palavra nenhuma são 3 outros: col277 em 16/09, 18/09 e 20/09 — veredito=trabalhou, palavra='', Realizado --, 1 batida e
+    650-690 min na ata (≈33 h somadas). Ali "nem autoridade nem palavra falam" é literalmente verdade.
+  - A causa da discordância: a tela agrupa cards por dia_das_batidas, e realizado_dos_turnos julga por t.data_turno — a mesma divergência
+    da lápide TRAVA JUIZ-NOVO. Por isso "zero par pareável" tem três universos: 16 (pela ata, sem_turno), 13 (pelo batidas_dia da tela) e
+    10 (o do meu classificador, que publiquei na pergunta).
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Escrever a sonda de leitura e o lancador
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > "$S/palavra_sem_turno.py" <<'PY'
-     # ITEM (1) DOS DOSSIES, read 3: O QUE A TELA/CARTAO DIZEM HOJE nos 16 dia-colab da classe B com ata>0.
-     # Os 10 (zero par pareavel) sao o universo da lei de 03/10;…
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b2toylhyn.output (5 lines)
-  ⎿  Read docs/AVAIS.md (31 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/dossies_celulas.txt (29
-     lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/chamado_em_raia.txt (30
-     lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
-
-● Task "Push do marco pela regua normal" still running in background
-
-✢ Compacting conversation… (13h 11m 30s · ↓ 1.8m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 39%
+✢ Bloviating… (13h 17m 0s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading le_relogio_solto in test_selo_teste_sem_relogio.py                               1h 32m 38s · ↓ 86.5k tokens
+  ◯ general-purpose  Inserting law question into RELATO-CHAMADO-EM-RAIA.md                                    1h 38m 8s · ↓ 112.4k tokens
   ⧉  index
 ```
