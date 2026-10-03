@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:53:14.**
+**Medido em 02/10/2026 22:58:41.**
 
 | | |
 |---|---|
-| `HEAD` local | `379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite` |
+| `HEAD` local | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **12** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso
 379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite
 b0560aa9 [E6-CAUDA-2] A remedicao da familia (c), e os 5 que "pioraram" sao 5 acusacoes contra a tela
 bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap
 b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS
-3749dd5a [E6-CAUDA-2] A celula do censo, dentro do teto de 300
 ```
 
 ## `git status --short`
@@ -92,44 +92,44 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  certo, esta certo em todo lugar." Leis que ja dizem isso: L-002 (testemunha le), L-084 (cadastro x realidade), CLAUDE.md 4b (22
+  contratos). Nenhuma lei nova alem do corte.
 
-● The funnel closes and the attribution shifted as expected — (c) is gone from it. One crash: .get('marcos', {}) returns None when the key
-  exists holding None — the two-meanings trap again:
+  ID: PLACAR-ESTRUTURAL. Seis resultados observaveis; item faltando = INCOMPLETO com a lista.
 
-  Ran 1 shell command
+  R1. DONO DE CADA DIVERGENCIA. Todo dia-colab divergente do E6 (09 e 10) recebe UM dono: ESTRUTURA (o sistema se contradiz ou calcula
+  errado dado o cadastro), CADASTRO (o DNA nao descreve as batidas) ou BATIDA (falta ou sobra batida). Pelas autoridades que ja existem
+  (dias_cadastro_x_realidade do motor, assinaturas A/C do esmeril_espelho, paridade do dia); juiz novo = 0. Publicar a tabela; as tres
+  somam o total.
+  R2. So ESTRUTURA fica na fila 1. CADASTRO e BATIDA saem da cauda e vao para a lista do admin pela MESMA fonte do Cadastro x Realidade.
+  PROIBIDO curar por codigo divergencia de dono CADASTRO ou BATIDA.
+  R3. DIA IMPAR E ESTRUTURA NA EXIBICAO: dia com batida faltando aparece EM ABERTO com o que falta, nunca com numero, e igual em tela,
+  PDF, cartao, app e TXT. E o item do E6 que esta em FALTA; sobe para o topo da fila 1.
+  R4. UMA RESPOSTA SO, frota, 09 e 10, cada par com o numero e meta ZERO: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma
+  do DiaPago, topo do cartao x soma das linhas, app (api_espelho_v2) x tela. O que nao for zero vira item da fila 1, maior primeiro.
+  R5. IDEMPOTENCIA E DETERMINISMO DE FROTA, na sombra: rejulgar o cartorio 2x e relavrar/recalcular 2x. Na segunda rodada, diferenca ZERO
+  em celula, ata, chamado nascido ou morto, DiaPago e hash do FechamentoMensal. Publicar o numero. Inclui explicar os 13 chamados que
+  nasceram no --forcar de hoje as 17:0x.
+  R6. CONTRATOS N/22 com o que falta em cada celula e a ordem de fechar; e REATIVIDADE: lista dos passos MANUAIS que hoje sao necessarios
+  depois de corrigir um cadastro (RED col221), meta zero passo.
 
-● The family's own name is falsified: only 28 of 101 have the ata orphaning the first batida, and 69 have no orfa at all. It's a bucket,
-  not a family. Cross-tabulating to find the real partition:
-
-  Ran 1 shell command
-
-● The cross-table decides it. Persisting the censo, then I want a second opinion before acting on the diagnosis:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Point 1 is decisive and I'd read that code without connecting it: realizado_dos_turnos subtracts the declared interval window when no
-  pause was punched — corte Ronald 14/09. The oráculo subtracts only punched pairs. Testing that against the 44:
-
-● Testing whether the b2 difference is the declared interval window
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c; cat > "$S/janela_14_09.py"
-     <<'PY'
-     # -*- coding: utf-8 -*-
-     """A DIFERENCA DA (b2) E A JANELA DECLARADA DO CORTE DE 14/09?
-     `ponto/turnos.py:378-386` (corte Ronald 14/09 ~21h30): `realizado_dos_turno…
-
-✶ Sock-hopping… (4h 40m 43s · ↓ 800.5k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  PRONTO: topo do RELATO com o PLACAR-ESTRUTURAL em seis linhas (numero e meta), cada uma com PROVA de hoje. O percentual do oraculo
+  continua publicado, mas aberto por dono.
+  ORDEM: R1 e R2 primeiro (redirecionam o trabalho), depois R5 (nunca medido), R3, R4, R6.
+  PROIBIDO: mudar tolerancia ou tirar caso da lista para o numero cair; fallback; juiz novo.
+  LEI-AKITA: origem=o sitio de cada divergencia de dono ESTRUTURA, testemunha=celula/ata/DiaPago, RED=por item, quem-mais-le=censo por
+  item, juizes novos=0.
+  LINHA HAIKU: contador divergencia_por_dono no copiloto, rotulo "dias que nao batem: sistema / cadastro / batida"; golden "quantos dias
+  da 09 divergem por cadastro?".
+  Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+❯ ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

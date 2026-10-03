@@ -1,5 +1,85 @@
 # RELATO — esteira saas-hasner
 
+**PUSH 94 falhou num RED meu, e o selo acertou**: `test_MORDE_o_gate_e_a_MESMA_palavra_nos_QUATRO_sitios`
+cobra a palavra `competencia_rotulo` **no RELATO VIVO**, porque e ali que a outra metade da
+UI-CAL-COMPETENCIA le o nome da variavel de contexto -- nome diferente nao reprova, so CALA (o botao
+fica atras de `{% if competencia_rotulo %}` e a tela sai byte a byte igual). A DIETA DE PROSA arquivou
+esse bloco junto com a historia, e **pedido de patch ABERTO nao e historia**: a dieta move o que ja
+aconteceu, nao o que ainda tem de acontecer. A linha volta a viver aqui, e o pedido inteiro (os tres
+sitios de `app/colaboradores/services/calendario.py`, com o codigo) segue em
+`app/docs/RELATO-ARQUIVO.md`, a partir da linha ~16.112. Contrato entre as duas metades:
+**`competencia_rotulo`**, rotulo PRONTO no contexto, incondicional em todos os modos -- o partial LE,
+nao recalcula (LEI-AKITA 2).
+PROVA: `grep -c competencia_rotulo app/docs/RELATO.md` = 4, e a suite que mordeu foi
+`colaboradores.tests.test_ui_cal_competencia`.
+
+### A CLASSE (b2) NAO E UMA FAMILIA, E O NOME DELA DESCREVE 28 DE 101 (03/10 00:1x)
+
+**CENSO da 2a familia da cauda, no CSV de HOJE** (o de depois da cura (c) -- a atribuicao entre
+familias MUDA quando o instrumento muda, e foi a licao da classe 1). O funil FECHA:
+
+| familia | dia-colab | horas |
+|---|---|---|
+| **(a)** IMPAR -- espera a lei da ponte | **189** | -703,1 |
+| **(b2)** par, alternancia correta | **101** | **134,9** |
+| **(b1)** TIPO GRAVADO repetido -- e o O65 | **59** | 199,2 |
+| resto: par, o ESPELHO credita mais | 16 | -77,7 |
+| **SOMA** | **365** | fecha com a classe |
+
+**(c) saiu do funil -- zero linhas.** Era 4 / 119,8 h hoje de manha. E os numeros de ontem mudaram com
+ela: (a) 188 -> 189, (b1) 62 -> 59, (b2) 102 -> **101 / 134,9 h** (era 152,0).
+
+**O NOME DA (b2) ESTA ERRADO, e o censo e que diz**: *"a ATA perde a ponta da frente"* descreve
+**28 de 101**. A ata gravada nao tem orfa NENHUMA em **69**, e tem orfa que nao e a primeira em 4.
+Balde cujo rotulo nao descreve o conteudo nao e familia (LEI-AKITA 8).
+PROVA: `logs/e6_cauda2c/censo_b2.txt`.
+
+**O QUE EXPLICA 80 DELES E O CORTE DE 14/09, e nao um bug**: `ponto/turnos.py:378-386` declara que
+`realizado_dos_turnos` e **FATO** e **subtrai a janela DECLARADA (hii-hfi)** quando a pausa nao foi
+batida -- *"o intervalo tem hora declarada, o minuto a subtrair existe"*. O oraculo subtrai so par
+S->E **batido**. Entao os dois respondem perguntas DIFERENTES, de proposito. Medido dia a dia:
+
+| | dia-colab | horas |
+|---|---|---|
+| `oraculo - espelho` **== a janela declarada** (+-10 min) | **80** | **82,9** |
+| nao e a janela -- divergencia de verdade | **11** | **37,3** |
+| a celula nao declara janela (familia R4) | 10 | 14,7 |
+
+PROVA: `logs/e6_cauda2c/janela_14_09.txt`.
+
+**E A TERCEIRA VEZ QUE A CLASSE E O INSTRUMENTO** -- classe 1 (`float(x or 0)`), familia (c) (teto do
+vao) e agora 80 de 101 da (b2). Aqui nao e erro de codigo meu: e **comparacao mal especificada**. O
+oraculo poe lado a lado um numero que INCLUI o intervalo nao batido e um que o EXCLUI, e chama a
+diferenca de divergencia. O rotulo mente, e o numero que ele infla e o da cauda.
+
+**A DIVERGENCIA QUE SOBRA TEM NOME E E PEQUENA: 11 dia-colab / 37,3 h.** Os maiores:
+`col789 29/08` (espelho **60** min, oraculo 591, motor 460 -- orfa 18:22, que nao e a ponta da frente),
+`col890 04/09 · 16/09 · 18/09` (os tres com a ata orfanando a primeira batida: 420 contra 655, com o
+motor em 480 -- **o motor no MEIO dos dois**), `col820 04/09` (celula **sem marco** `hi`: 69 contra 411).
+E so nesses 11 a frase *"a ata perde a ponta"* se sustenta.
+
+**A REGUA DA L-084, medida nas DUAS PONTAS como a lei manda** (a minha primeira medicao olhou so a
+entrada): **4** dia-colab com as duas pontas a mais de 180 min (dia que o cadastro nao descreve), **32**
+com UMA ponta -- onde a L-084 manda descontar normalmente --, 64 dentro de 180.
+
+**DE QUEM E A DIVERGENCIA, pela terceira testemunha** (`DiaPago`, versao motor -- a autoridade que a
+porta de export passou a usar em 29/09 justamente por isso): motor ~= ORACULO em **51**, motor ~=
+ESPELHO em **18**, motor no MEIO em **32**. Os 18 em que o motor concorda com a tela sao suspeita do
+MEU oraculo -- `col893` dobra um dia de 110 min quatro vezes --, e vao para a fila do instrumento.
+
+**DECISAO TECNICA QUE EU REGISTRO E SIGO** (L-010: decisao tecnica nao devolve turno): a cura da (b2)
+nao e mover o espelho para o `DiaPago` -- isso REVOGARIA o corte de 14/09 e transformaria um campo de
+FATO num campo de DINHEIRO, que e exatamente o que aquele corte separou. A cura e o oraculo **declarar
+a diferenca de pergunta** em vez de chamar de divergencia, e para isso ele precisa da autoridade sobre
+"a pausa foi batida?" -- que mora em `ponto/turnos.py::_pares_marcados`, dentro de quem monta o
+realizado. O desenho que nao inventa juiz: `RealizadoDoDia` passa a DIZER quantos minutos de janela
+declarada ele subtraiu, e o oraculo le isso. Campo que diz o que a conta fez, no sitio que a fez.
+
+**FICA NA SUA MESA, com numero e sem me travar**: `col911`, **8 dia-colab**, cadastro `hi 12:50` com
+entrada real ~06:57 (353 min de distancia) -- espelho 655, oraculo 723 e **motor 372**. O motor e o
+MAIS BAIXO num dia que a L-084 diz que conta normalmente. Nao e fatia minha hoje; e o proximo nome
+depois da cura do rotulo.
+
 **PUSH 93 falhou e a causa e uma linha**: `tickets_rodape_vs_git` ALARME -- o rodape do TICKETS dizia `751b53c4`, 8 commits atras de `origin/main`. Curado por `bin/tickets_rodape.sh --escrever` (a propria saida do selo nomeia a cura), e nova tentativa. O selo mordeu ANTES da suite, entao nao custou os 9 min.
 
 ### O TETO QUE FALTAVA ERA O DO VAO, E OS 5 QUE "PIORARAM" SAO 5 ACUSACOES CONTRA A TELA (02/10 23:5x)
