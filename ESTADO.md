@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:39:34.**
+**Medido em 02/10/2026 21:40:45.**
 
 | | |
 |---|---|
@@ -93,36 +93,36 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Existe: PLACAR-E, "grade do PLACAR ESPELHO-VERDADE re-medida... parada desde 27/09", e está CONGELADA. Sua ordem a descongela. Registro
-  o aval do esmeril, descongelo ela e ponho o O121 atrás:
+  │                  │                                       item                                        │
+  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ cabeça           │ PLACAR-E — remedir o placar ESPELHO-VERDADE, com os quatro entregáveis            │
+  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ depois           │ cauda do E6 pela maior classe (uma por vez, com censo/RED/cura/remedição)         │
+  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ depois           │ O65                                                                               │
+  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ depois           │ obra A (O121) — A1 construído em cópia, RED evidenciado, 5 selos verdes           │
+  ├──────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+  │ raia wt-esmeril2 │ O123 como primeiro item do trecho 3, e a pista de teste é uma: a fila 1 tem a vez │
+  └──────────────────┴───────────────────────────────────────────────────────────────────────────────────┘
 
-  Ran 1 shell command
+  O selo do hook confirma a cabeça: "aponta o 1o da ORDEM VIVA (PLACAR-E)". A suíte dos vizinhos do O121 ainda roda, sozinha, e com ela
+  verde o A1 fica pronto para quando chegar a vez dele.
 
-● O regex casa CONGELAD dentro de "DESCONGELADA" — a palavra contém a própria trava. Troco por uma que não se morde:
+  O próximo passo é a remedição — o oráculo independente na frota nas competências 09 e 10, os congelados remedidos, o placar E1–E6 item a
+  item e a linha de distância para 98% no topo do RELATO. É o que você quer ler, e agora o RELATO está publicando de novo.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-E -- grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje -- parada desde 27/09
+  19:3x
 
-● Minha própria explicação continha a palavra, e a palavra é a trava — tiro a menção da célula e guardo a lição no RELATO:
+● O hook aponta a cabeça certa. Começo a remedição pelo entregável (1) — o oráculo independente. Procuro onde ele mora:
 
-  Ran 1 shell command
+  Finding the independent oraculo
+  ⎿  $ cd /home/ronald/saas-hasner && ls bin/ | grep -iE "oraculo|e6" | head -8; echo "--- no app ---"; find app -name "*oraculo*" -o
+     -name "*e6*" 2>/dev/null | grep -v __pycache__ | head -8; echo "--- em /tmp ---"; ls /tmp/*oraculo* /tmp/*e6* 2>/dev/null | head -5
 
-● Selo verde apontando PLACAR-E, que é a cabeça da fila pela sua ordem. E uma armadilha que vale registrar: "DESCONGELADA" contém
-  "CONGELADA" — a palavra que anuncia a liberação é lida pelo hook como a própria trava, e a minha primeira tentativa de explicar isso na
-  célula repetia a palavra e se mordia de novo.
-
-  Confiro a suíte dos vizinhos do O121, que ficou rodando:
-
-  Listed 1 directory
-
-● Suíte ainda rodando. Commito a cura do item 5 e publico, que é o que destrava a sua leitura:
-
-● Committing the RELATO cure and publishing
-  ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md app/docs/BACKLOG.md app/docs/PROMPTS.md && git
-     commit -q -F - <<'MSGEOF'
-     [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
-     Item 5 da ordem dele: "o RELATO publicado esta retido desde 29/09…
-
-✶ Sock-hopping… (3h 27m 3s · ↓ 599.6k tokens)
+· Sock-hopping… (3h 28m 14s · ↓ 602.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
