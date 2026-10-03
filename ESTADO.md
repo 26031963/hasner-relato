@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:57:31.**
+**Medido em 03/10/2026 14:03:01.**
 
 | | |
 |---|---|
@@ -34,8 +34,10 @@ bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139
 ```
  M PLANO_PISCADA.md
  M app/colaboradores/services/calendario.py
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/views.py
  M app/ponto/services/dia_decidido.py
  M app/ponto/services/espelho.py
