@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:06:31.**
+**Medido em 03/10/2026 17:11:48.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  LEI-AKITA:
+  banco — achar a célula certa do BACKLOG:
 
-  Committed aaad199b
+  Searched for 1 pattern, ran 2 shell commands
 
-● Commitado: aaad199b. Publicando a lei no topo do RELATO — vendo o topo atual primeiro:
+● O BACKLOG regenera por bin/gerar_backlog.py (lê o core/juizes.py vivo) — a linha AUSE-03 volta sozinha depois do merge, não se edita à
+  mão. Preparando a lista de módulos de escala que cobrem o escala/views.py sujo da main, para rodar assim que o banco de teste vagar:
 
-  Ran 1 shell command
+  Ran 3 shell commands
 
-● O topo precisa de duas coisas: a lei nova e uma correção na lei de 16:4x (ela diz que tirei o pendente _A14, e ele voltou). Escrevendo as
-  duas:
-
-  Ran 1 shell command
-
-● Registrando a lei na fila de decisão dele (PENDENTES_RONALD.json é a fonte; AVAIS.md é gerado):
-
-  Ran 2 shell commands
-
-● Agora o portão. A suíte roda antes do merge, porque merge escreve template no bind-mount e template é instantâneo — os meus chamam
-  situacao_exibida, que só existe no .py novo (é a lição de 30/09). Disparando a suíte cheia na raia:
+● escala/views.py sujo é inerte: tipos_lista.html não inclui _barra_gestao.html nem lê quadros. Mas os dois partials sujos já estão no ar
+  (template é instantâneo) e são lidos pelo painel situacional e pelo holerite — vendo o que eles mudaram:
 
   Ran 1 shell command
 
-● Suíte rodando. Enquanto ela corre (nada de segundo container — um run por vez), atualizando a célula de estado do BACKLOG dentro do teto
-  de 300 caracteres:
+● Os dois partials são aditivos e inertes (ninguém passa attrs em atalho; ninguém pede o ícone wizard). O risco real do escala/views.py é o
+  reverse('escala:wizard_tipo') — a família NoReverseMatch de 23/09. Conferindo ao vivo, sem container:
 
-● Achar o item no BACKLOG
+  Ran 1 shell command
 
-✢ Compacting conversation… (16h 53m 0s · ↓ 2.3m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 47%
+● escala:wizard_tipo existe (escala/urls.py:15) — a mudança suja da main é contexto aditivo + um reverse para nome existente, lido por
+  ninguém. Esperando o portão por arquivo, não por pgrep:
+
+  Ran 1 shell command
+
+● Antes do pouso em prod — que é o passo difícil de reverter — consultando o advisor com o estado completo:
+
+● Advising using Fable 5.1
+
+✽ Bloviating… (16h 58m 17s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking _dt_tz_now usage in declaracao_texto.py                                         5h 14m 8s · ↓ 150.4k tokens
+  ◯ general-purpose  Building mods_d2_linha.txt module list                                                  5h 19m 25s · ↓ 158.6k tokens
   ⧉  index
 ```
