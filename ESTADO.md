@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:122 AFIRMA ato sem PROVA ao lado -- **NO AR em `e8963dc2`, e a janela do commit ao deploy foi de 18 SEGUNDOS.** Os tres atos foram UMA
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:22:45.**
+**Medido em 03/10/2026 11:23:55.**
 
 | | |
 |---|---|
@@ -117,11 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Background command "Run live-tree seals after deploy" completed (exit code 0)
-
   Ran 1 shell command
 
 ● Selos na árvore viva, depois do deploy: Ran 76 tests · OK · rc=0.
@@ -142,13 +130,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O caso que discrimina está lido: col39 2026-08-22 — E 06:55 → S 12:08 → E 13:00, e o juiz devolve UM turno aberto=True com n_batidas=3.
   Não há par fechado aos olhos do turno, então 0.0 é aritmética, não supressão.
 
-● Regenerating RELATO generated sections
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 280 bash bin/relato.sh 2>&1 | tail -20; echo "rc=$?"; git diff --numstat --
-     app/docs/RELATO.md
+● Adding PROVA line and republish RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/RELATO.md'
+     s=open(p, encoding='utf-8').read()
+     old = """cartoes em prod. Medido agora: portoes OK 11:13:23, commit 11:13:23, `deploy rc=0` 11:13:41.
+     Quatro portoes"""
+     new = """cartoes em prod.
+     PROVA: portoes OK 11:13:23 · commit `e8963dc2…
 
-· Bloviating… (11h 9m 14s · ↓ 1.5m tokens)
+* Bloviating… (11h 10m 24s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                  11% until auto-compact
+                                                                                                                   9% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

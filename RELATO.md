@@ -1,5 +1,185 @@
 # RELATO — esteira saas-hasner
 
+### R3: A PALAVRA "Em aberto" ALCANCOU O TURNO ABERTO, E O INVARIANTE NAO ERA O QUE EU IA MEDIR (03/10 11:13)
+
+**contratos 12/20** (o R3 nao fecha celula de familia -- e o placar R3, e o 12/20 nao se move).
+
+Item **4** da ordem de 08:13 (*"R3 e o LOTE do R6, que ja estavam em curso"*), fechando as duas partes
+do seu corte das 05:3x: **(1)** o dia com turno ABERTO recebe a palavra *"Em aberto"* e **mantem o
+numero rotulado** (a soma dos pares fechados); **(2)** o turno **EM CURSO de hoje** nao recebe a
+palavra -- quem esta dentro da jornada nao deixou nada em aberto.
+
+**O INVARIANTE QUE EU IA PUBLICAR ESTAVA ERRADO, e a frota mostrou isso antes do commit.** Eu ia
+afirmar `turno_aberto ⊆ em_aberto`. O que vale e **nenhum dia de turno aberto fica MUDO**:
+
+    datas_turno_aberto = (com a palavra "Em aberto") + (DECIDIDO pela folha, com palavra propria)
+                         + (EM CURSO agora) + MUDOS,  e MUDOS tem de ser 0.
+
+Porque "Em aberto" significa **ausencia de decisao**: carimba-la num dia que a folha JA decidiu seria a
+testemunha mentindo. A lei antiga -- *em aberto = furo apurado MENOS o que a folha decidiu* -- vence o
+corte novo por **LEI-AKITA 4**, e a palavra que o dia decidido tem e MAIS informativa.
+
+**MEDIDO (sombra, copia curada, 03/10 09:47 e 09:5x) -- os dois universos, porque eles nao coincidem:**
+
+| competencia | universo | dia-colab de turno aberto | com a palavra | DECIDIDOS | EM CURSO | **MUDOS** |
+|---|---|---|---|---|---|---|
+| 09/2026 | ativos (533) | 244 | 238 | 6 | 0 | **0** |
+| 10/2026 | ativos (533) | 193 | 135 | 0 | 58 | **0** |
+| 09/2026 | `FechamentoMensal` (607) | 275 | 269 | 6 | 0 | **0** |
+| 10/2026 | `FechamentoMensal` (572) | 194 | 136 | 0 | 58 | **0** |
+
+**OS 6 DECIDIDOS TEM PALAVRA, e contar por balde seria a vacuidade que a casa proibe** -- fui ver cada
+um: col39 24/08 *"Saida ant. (desconta 5h)"*, col90 25/08 *"Suspensao (desconta 24h)"*, col370 16/09 e
+col735 10/09 *"Falta (desconta 9h)"*, col643 15/09 *"Saida ant. (desconta 3h)"*, todas com
+`veredito='descontado'`. Nenhuma e "Em aberto" e nenhuma e vazia (`erros de coleta: 0` -- a sonda
+conclui com erro, nao imprime zero por nao ter perguntado). **O 6 nao se move entre os dois
+universos**: 6 de 244 nos ativos, 6 de 275 no `FechamentoMensal`.
+
+**OS "EM CURSO" DA 10 SAO DO INSTANTE DO DUMP, NAO DAS 09:5x.** A ultima batida da sombra e
+**03/10 04:11:21** (o dump nasce as 04:00) contra um `AGORA` de **10:12:31**. E isto esta medido na
+**classe INTEIRA, sem amostra** (a primeira sonda imprimia 12 dos 51 e eu ia afirmar sobre os 51 --
+o consultor cobrou e ele estava certo): **os 51 tem `data_turno` 02/10**, e a **maior batida entre
+eles e exatamente 03/10 04:11:21**, o instante do dump. Nenhum tem batida depois dele. Eles estao
+abertos porque **a sombra para ali**, nao porque alguem esta na jornada agora -- em prod fecharam de
+manha. O rotulo honesto e *"em curso no instante do dump"*.
+
+**E A EXCLUSAO SEGUE O TURNO, NAO O DIA**: o em-curso de turno noturno cai no `data_turno` de ONTEM
+(02/10), porque quem responde e `turno_aberto_de` -> `data_turno`. E a licao do TETO TEMPORAL da
+CLAUDE.md -- *no cross-meia-noite o DIA acaba antes do TURNO* -- e e' por isso que o corte "o turno em
+curso de HOJE nao recebe a palavra" se cumpre sem comparar data de calendario com nada.
+
+**O TAMANHO DESSA CLASSE NAO E REPRODUZIVEL CONTRA O RELOGIO, e isso e do desenho**:
+`turno_aberto_de(agora=None)` le `timezone.now()` (`ponto/turnos.py:1401`). Medido TRES vezes no mesmo
+banco: 59 (09:31), **58** (09:43, a rodada da tabela), **51** (09:55). **O INVARIANTE nao anda, e por
+construcao**: encolher `em_curso` so empurra dia para a classe **COM** palavra, nunca para MUDO --
+**MUDOS = 0 nas tres rodadas**. E esse e o selo, nao o 58.
+
+**(a) e (b) do corte**: `dias_em_aberto` subiu de **296 para 323** na 09 e de **133 para 145** na 10
+(+27 e +12 dias que ganharam a palavra, **0** que perderam). `tela_x_pdf`, `topo_x_coluna`,
+`cartao_x_txt`, `calendario_x_espelho` e `minuto_em_duas_rubricas` seguem **0 nas duas competencias**,
+e o TXT segue **0 retidos** nos 6 pares empresa x competencia -- medido **CRUZADO** (copia do HEAD x
+copia curada, mesmo banco, mesma hora), que e o unico jeito de saber que o numero mudou pela cura.
+
+**A CURA ENCOSTOU NUM SELO, E O SELO ESTAVA PASSANDO POR AUSENCIA DE SINAL.** Esta e a parte do
+commit que eu mais quero que o senhor leia, e ela nao e o R3: o calendario passou a chamar
+`autoridade_do_periodo` para saber o FURO do dia, e `colaboradores/tests/test_calendario_le_dia_pago.py`
+ficou VERMELHO (*'autoridade_do_periodo' unexpectedly found*). **Nao afrouxei nada.** Tres coisas,
+nessa ordem:
+
+1. **O buraco do APELIDO, medido.** A varredura da S3 (`ponto/tests/test_s3_leitor_nao_chama_motor.py`)
+   comparava o nome **CHAMADO**, sem resolver `as`. MEDIDO nesta arvore em 03/10 10:3x: o detector
+   antigo ve **6** sitios; o que resolve o apelido ve **8**. **Os dois que faltavam nao eram meus** --
+   `ponto/views.py:126` importa `espelho_do_colab as _espelho_do_colab` (a tela de espelho do ADMIN,
+   sitio vivo que o censo nunca viu) e o `pdf_espelho.py` ganha `espelho_do_colab`. Ou seja
+   `test_MORDE_nenhum_leitor_NOVO_chama_o_motor` **vinha passando por ausencia de sinal**, que e a
+   familia do `[]` de dois sentidos da CLAUDE.md. Cura: `chamadas_na_fonte(fonte)` resolve pelo
+   `ImportFrom`, recebe STRING (o caso que morde nao precisa de fixture em disco) e nasce
+   `test_MORDE_o_censo_resolve_APELIDO`. `test_MORDE_a_lista_SO_ENCOLHE` segue verde, porque resolver
+   apelido so **acrescenta** sitio.
+
+2. **O censo cresce 2 -> 4, com a classe e o file:line de cada um** --
+   `ponto/views.py` (FALLBACK ROTULADO) e `colaboradores/services/calendario.py` (GEOMETRIA, a chamada
+   deste commit). **Crescer censo e divida, nao conquista**, e a origem esta dita: **`DiaPago` nao tem
+   campo de furo**, entao a unica autoridade que hoje responde *"este dia e furo apurado?"* e o motor
+   (`resultado.datas_falta`) -- todo leitor da palavra paga uma volta de motor por uma palavra que
+   deveria ser **LAVRADA**. Item novo no BACKLOG, ao lado da O130. Na tela de **frota**
+   (`relatorios/furos.py`, ~750 colabs num request) a pergunta **nao e feita** de proposito e o dia diz
+   `em_aberto_perguntado: False`: silencio **declarado**, nunca lista vazia que o leitor confunda com
+   *"nao tem dia em aberto"*.
+
+3. **O selo local migrou para a pergunta do seu corte de 29/09 15:1x.** Ele proibia o **simbolo**
+   `autoridade_do_periodo`; o corte diz que o placar conta **EXERCICIO, nao CAMINHO**, e que *"punir o
+   leitor por pedir GEOMETRIA ao mesmo objeto que responde dinheiro"* foi o defeito que aquele corte
+   matou. O caso vira `test_MORDE_o_calendario_nao_CALCULA_dinheiro_e_so_pede_GEOMETRIA`, com **duas
+   assercoes que o antigo nao tinha**: do `resultado` do motor o calendario so pode ler `datas_falta`
+   (medido: `['datas_falta']`) e da autoridade so o campo `resultado` (medido: `['resultado']`), por
+   AST, com `test_MORDE_os_detectores_de_campo_MORDEM` ao lado. Nao e um selo mais frouxo: e o mesmo
+   selo apertado em dois eixos que ele nao cobria.
+
+**O TETO DE PERFORMANCE DO CALENDARIO SUBIU, 36 -> 55 QUERIES, e eu prefiro dizer isso de frente.**
+A grade passou a PERGUNTAR a palavra em vez de calar. Medido nos tres estados (fixture de 14 dias,
+sonda de traceback por query): HEAD **29**; com a pergunta e sem cura **69** (40 novas, N+1 -- 15
+refetches de `Colaborador` por pk e 15 linhas de `EscalaColaborador`, duas por dia); **com a cura
+48** -- 19 novas, custo **fixo** de UMA passada da autoridade (+1 ou +2 por tabela, nenhum sitio
+repetido, nao cresce com dia nem com pessoa). A cura **nao tocou o motor** (zona inviolavel, e era
+desnecessario): os dois memos ja nasceram alimentaveis, entao `autoridade_do_periodo` os enche com
+UMA lista de vinculos carregada uma vez (`escalas=`, a 3a alimentacao). **O teto fica em 55, nao em
+62 (= 48 + 30%)**: qualquer doenca nova por DIA custa >= 14 nesta fixture, e a margem de 7 nao cabe
+meia doenca -- teto que aceita meia doenca e allowlist com outro nome. **A frota nao paga nada**: os
+unicos chamadores de producao de `contexto_calendario` sao de UM colaborador por request
+(`colaboradores/views.py:1847`, `colaboradores/services/drawer.py:119`) e `relatorios/furos.py`, que
+manda `NAO_PERGUNTADO`; `status_do_dia` e `contar_por_status` nao tem chamador de producao nenhum.
+
+**O R3 SEGUE `PARCIAL` NO PLACAR, e eu nao o fechei.** O `o_que` e a `meta` dele diziam *"nunca com
+numero"* e *"nenhum mostrando numero em dia impar"* -- as duas contradiziam o seu corte de 05:3x, que
+**manda manter o numero rotulado** --, entao essas clausulas foram reescritas com a redacao dele. **A
+clausula "com o que falta" ficou.** Ela e sua, nao esta cumprida (a palavra ainda e a string fixa
+`Em aberto`, sem nomear o marco ausente: **O130**), e tirar a parte nao cumprida para poder carimbar
+FECHADO seria *renomear pendencia para fechar celula* -- o PROIBIDO literal da ordem de 08:13. Entao:
+as duas partes do corte estao cumpridas, o MUDOS=0 esta medido nos dois universos, e o estado do R3
+continua **PARCIAL** com a parte que falta nomeada dentro do proprio placar.
+
+**NO AR em `e8963dc2`, e a janela do commit ao deploy foi de 18 SEGUNDOS.** Os tres atos foram UMA
+chamada (`scratchpad/landa_r3.sh`): portoes -> rajada dos 15 arquivos -> `git commit` -> `bin/deploy.sh
+--sem-migrate`, com **nada no meio**. A lei que manda nisso e a de 30/09 (MERGE-DE-RAIA CAI E RECARREGA
+NO MESMO ATO): a arvore E o bind-mount, e naquele dia os 11 min entre merge e deploy quebraram o lote de
+cartoes em prod.
+PROVA: portoes OK 11:13:23 · commit `e8963dc2` 11:13:23 (17 arquivos, 1.270 insercoes) · `deploy rc=0`
+11:13:41 -- janela de **18 s**; `prova de casca` 16 estaticos + 5 paginas; rotas core 200, ui 302,
+mensageria 200; selo BUG 128 verde; `importerror_500=0`.
+Quatro portoes correram ANTES da rajada, e dois deles nasceram de buraco proprio: (0) `bin/sombra.sh
+--conferir` -- porque o `deploy.sh:158` EXIGE o ensaio do dia, e deploy recusado com os 15 `.py` ja na
+arvore deixaria a janela aberta com as duas saidas proibidas (`--sem-sombra` nunca e pre-aprovado,
+`git checkout` de arquivo que prod usa e PAREI de `!`); (1) o veredito da suite lido por LINHA INTEIRA
+**e pelo `rc`** (`^OK( \(|$)` + `^rc=0$`), porque teste que imprime `OK` no stdout casa `^OK$` e o
+codigo de saida nao tem como mentir; (2) nenhum dos 15 sujo na arvore -- e para os DOIS selos novos a
+pergunta e EXISTIR, porque `git diff --quiet HEAD -- <untracked>` devolve 0 e isso e a resposta errada
+para a pergunta certa; (3) a forma do diff do BACKLOG cravada em `2 1`, porque `HASNER_COMMIT_PATHS`
+recusa CAMINHO de carona e nao LINHA de carona dentro de um caminho declarado.
+O deploy carregou TAMBEM um `.py` que nao e meu e eu nao o escondo: `app/escala/views.py` esta sujo na
+arvore com a etapa 1 do **O122** (fila 2). Antes de deployar eu o medi em vez de supor: ele so acrescenta
+a chave de contexto `quadros`, `app/templates/escala/tipos_lista.html` esta no HEAD e **nao cita** nem
+`quadros` nem a barra, entao a chave e lida por ninguem -- inerte, nao "provavelmente inofensiva". Compila
+(`py_compile OK`) e a saida declarada existe (`bin/reverter_o122.sh`). Voltar o arquivo ao HEAD para
+deployar "limpo" seria PAREI de `!`, nao higiene.
+**PROVA:** `logs/r3_cross/r3_suite_inteira.txt` -- suite inteira na copia curada `Ran 9484 tests in
+1126.532s`, `OK (skipped=42)`, `rc=0`, **0** linha `^(FAIL|ERROR):`; vizinhos `Ran 5025 tests in
+593.140s`, `OK (skipped=9)`, `rc=0`. Selos rodados **na arvore viva DEPOIS do deploy** (`Ran 76 tests`,
+`OK`, `rc=0`): os seis -- S3, calendario-le-dia-pago, diagrama, performance, e os dois do R3. Eles vao
+depois de proposito: selo de 4 min DENTRO da janela burst->deploy e trabalho posto no lugar mais caro, e
+o drift entre copia e arvore ja estava medido em ZERO. Deploy: `prova de casca` 16 estaticos + 5 paginas,
+tres rotas provadas (core 200, ui 302, mensageria 200), selo BUG 128 verde, `importerror_500=0`.
+
+**O SMOKE EM PROD CONFIRMOU A PALAVRA E CORRIGIU A MINHA SONDA, nao o sistema.** Leitura pura (ORM + o
+leitor real `contexto_calendario`, zero POST -- script que POSTa em porta de prod e ESCRITA). Na janela
+21/08-20/09, o codigo NO AR entrega a palavra em prod: `col37 2026-09-17`, `col39 2026-08-22`,
+`col44 2026-09-20`, `col49 2026-08-23`, os quatro com `palavra_dia='Em aberto'`, `veredito='em_aberto'`,
+`lavrada=True`. O que eu errei foi o SELETOR: eu escolhia o dia por *"contagem IMPAR de batidas na
+DATA"*, e isso **nao e** "dia com turno aberto". Medido: `col28 2026-08-21` tem 3 batidas na data
+(`02:03`, `03:00`, `07:02`) e e **FOLGA** -- as batidas pertencem ao turno ancorado em 20/08 19:03, e o
+juiz devolve `[]` para 21/08. Mesma coisa em col29 e col30. E exatamente o BUG-145 que a propria cura
+nomeia, e e a memoria *criterio pela forma conta errado*: censo que casa a FORMA infla e esconde. 
+**A CLAUSULA DO NUMERO FOI PROVADA NO UNICO DIA QUE A DISCRIMINA, e eu quase a declarei sem medir.**
+Eu havia escrito que ela estava *"no RED `test_08` e no invariante de frota"* -- e **nenhum dos dois e
+sobre o numero do dia**: o `test_08` cobra o CONTADOR (`dias_em_aberto` dava **0** com a lista cheia ao
+lado) e o invariante de frota cobra a PALAVRA (MUDOS=0). Era numero sem medicao, exatamente o que a casa
+proibe. O dia que separa "mantem o numero" de "zera o numero" e `col39 2026-08-22`, e ele foi lido:
+batidas apuraveis `E 06:55:52 -> S 12:08:09 -> E 13:00:00`, e o juiz devolve **UM** turno
+`data_turno=2026-08-22  06:55 -> None  aberto=True  cross=False  n_batidas=3`. **Nao ha par FECHADO aos
+olhos do turno** -- a terceira batida reabre o mesmo turno em vez de fechar o primeiro --, entao
+`trabalhadas=0.0` e ARITMETICA e nao supressao: o numero sobreviveu ao lado da palavra, e a linha diz
+`palavra='Em aberto'  veredito='em_aberto'  status='aberto'` com todas as rubricas em 0.0 e
+`lavrada=True`. **E e esse o ganho do R3**: antes o dia dizia zero e ficava MUDO -- zero sem motivo le-se
+como "nao trabalhou"; agora diz zero E diz por que. Fica NOMEADO, sem veredito meu porque nao e desta
+fatia: o dia esta **lavrado em 0.0 com um turno aberto dentro**, e se "lavrar dia de turno aberto" deve
+acontecer e pergunta do sitio do O65/BUG-145, nao dos 15 arquivos que subiram aqui.
+**O CUSTO EM PROD, medido e nao arredondado para o meu favor:** 44 chamadas de `contexto_calendario` no
+`saas_core` (7 + 12 + 4 + 20 + 1 nas cinco sondas), cada uma uma rodada de motor no container que atende
+`/api/ponto/bater/`. As tres do meio foram desperdicio meu: a sonda D leu 20 colabs perguntando por
+`ctx['resumo']['datas_turno_aberto']`, que **nao existe** nesse leitor -- a lista mora em `_res_ab`, uma
+variavel LOCAL (`calendario.py:566`), e o que o leitor publica no dia e a palavra. Medicao com motor vai
+na sombra, e as duas primeiras sondas ja bastavam.
+
 ### `eh_turno_partido`: QUE PERGUNTA RESPONDE, COM QUEM COMPETE -- A RESPOSTA, COM O NUMERO (03/10 08:4x)
 
 Pedido dele no corte das 08:13: *"Responder antes do item 3: a pergunta sobre `eh_turno_partido` (que
