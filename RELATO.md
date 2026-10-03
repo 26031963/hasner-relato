@@ -1,5 +1,44 @@
 # RELATO — esteira saas-hasner
 
+### PLACAR-ESTRUTURAL RECEBIDO, E ELE REDIRECIONA O QUE EU ESTAVA FAZENDO (03/10 00:3x)
+
+**Corte dele 02/10 22:5x, registrado**: `docs/CORTES.json` (55 cortes), `docs/PROMPTS.md`, e a obra no
+TOPO do bloco OBRAS com o marcador `ORDEM-VIVA-TOPO` apontando para ela.
+PROVA: `bin/tests/test_hook_nao_cobra_congelado.sh` -- *"ve id com espaco e aponta o 1o da ORDEM VIVA
+(PLACAR-ESTRUTURAL, lido do marcador)"*.
+
+**O QUE ELE SUBSTITUI**: o item 3 da ordem das 21:4x -- *"a cauda do E6 pela maior classe"*. Eu estava
+exatamente ali, na familia (b2). O resto daquela ordem fica.
+
+**O QUE EU FAZIA, e por que uma parte dele SOBREVIVE ao corte**: o censo da (b2) tinha acabado de
+mostrar que **80 dos 101 dia-colab (82,9 h) nao sao divergencia nenhuma** -- sao a janela declarada que
+a tela subtrai pelo corte de 14/09, contra o oraculo que subtrai so pausa batida. Sob o R1 esses 80
+dias teriam de receber um DONO, e eles nao tem: nao sao ESTRUTURA, nem CADASTRO, nem BATIDA. **Um
+placar por dono que inclua 80 fantasmas nao soma o total**, que e a propria exigencia do R1. Entao a
+cura do ROTULO vira pre-requisito do R1, e e a unica parte da (b2) que eu termino -- as outras 21 vao
+para a fila de dono, como o resto.
+
+**O QUE EU NAO FACO MAIS, por causa do R2**: curar por codigo divergencia de dono CADASTRO ou BATIDA.
+Os 11 dia-colab / 37,3 h que restavam da (b2) (col890, col789, col820) passam pelo juiz de dono antes
+de qualquer linha de codigo.
+
+**R1 JA ESTA ESCRITO NA COPIA (`wt-orfa`), e com juiz novo = 0**: `dono_da_divergencia` pergunta a
+autoridade que existe -- contagem IMPAR do dia (lei do BUG-144) da **BATIDA**; dia na lista
+`dias_cadastro_x_realidade` do MOTOR (`ponto/motor_calculo_v2.py:1274`, a mesma da L-084 e da tela
+Cadastro x Realidade) da **CADASTRO**; o residuo e **ESTRUTURA**. E ele mora DENTRO do unico laco de
+comparacao que ja existe, o do `e6_oraculo`, porque dois lacos seriam dois leitores da mesma pergunta
+(LEI-AKITA 2). A lista do motor vem de GRACA: `espelho_do_colab` devolve o `resultado`
+(`ponto/services/espelho.py:1007`), que o oraculo ja pedia para ler a tela.
+
+**A PRECEDENCIA E A PARTE QUE DECIDE O NUMERO DA FILA 1**, e por isso tem caso que morde: dia IMPAR
+**e** na lista do motor sai como BATIDA, nao CADASTRO. Sem esse caso a ordem podia inverter sem nada
+ficar vermelho, e o residuo ESTRUTURA -- o unico que fica na fila 1 -- mudaria de tamanho em silencio.
+Selo: `ponto/tests/test_e6_janela_declarada_nao_e_divergencia.py::DonoDaDivergencia`.
+
+**PENDENTE DE PISTA, nao de decisao**: o push 94 esta rodando a suite desde 00:0x e a pista de teste e
+uma (`juliani_db_test`, um run por vez). Os selos novos rodam quando ela liberar, e so entao a mesa do
+R1 sai medida, na sombra, para 09 e 10.
+
 **PUSH 94 falhou num RED meu, e o selo acertou**: `test_MORDE_o_gate_e_a_MESMA_palavra_nos_QUATRO_sitios`
 cobra a palavra `competencia_rotulo` **no RELATO VIVO**, porque e ali que a outra metade da
 UI-CAL-COMPETENCIA le o nome da variavel de contexto -- nome diferente nao reprova, so CALA (o botao
