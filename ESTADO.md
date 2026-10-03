@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:14:01.**
+**Medido em 03/10/2026 03:19:31.**
 
 | | |
 |---|---|
@@ -122,36 +122,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Três coisas que a espera rendeu, e duas mudam o pouso:
 
-● Monitor event: "sombra block progress and finish"
+  1. core/juizes.py muda uma linha — o texto da pergunta 'ha 3 ou mais atestados' → 'ha 3 ou mais lancamentos medicos'. Nenhuma autoridade
+     nova: bin/tests/test_juiz_novo_tem_corte.sh casa o valor (arquivo.py::nome), e bloco_juizes() do diagrama imprime contagens e nomes
+     de arquivo. Os dois ficam verdes, e juizes novos = 0 se sustenta na leitura, não na esperança.
+  2. A janela do template é medida, não suposta. templates/core/config/parametros.html novo desempacota cinco valores (chave, descricao,
+     padrao, valor, quem_manda) de parametros_com_valor, e a view velha em memória entrega quatro → ValueError: Need 5 values to unpack,
+     500 em /configuracoes/parametros/. Mesma família do NoReverseMatch de 23/09. Nenhum dos 9 templates toca {% url %}, então esse é o
+     único sítio que 500a. O pouso virou duas etapas: os 16 .py primeiro (inertes por BUG 128, e é a única hora em que os selos de HOST
+     podem falar, porque eles leem a árvore viva e não rodam no container), depois os 9 templates → commit → deploy.sh, nada no meio.
+  3. 0070 está se ensaiando na sombra agora — é o único ato deste deploy que o bloco das 02:4x não viu, já que --conferir confere dia e st
+     do carimbo, não o conjunto de migrations.
 
-  Listed 1 directory, ran 2 shell commands
+  Em curso: a suíte dos $LABELS sobre a cópia (9 min, sem FAIL/ERROR até aqui) e o ensaio da 0070. O pouso começa depois que o reload das
+  03:30 terminar (crontab: 30 3 * * * deploy.sh --reload-agendado) — com a árvore ainda em HEAD naquele minuto, ele recarrega o que já
+  está no ar.
 
-● Background command "Re-run the sombra block so the deploy gate can turn OK" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● Bloco da sombra: STATUS=OK, ERROS=0, 67 comandos, zero traceback em 66 logs. O portão abriu. Deployando.
+  Ran 1 shell command
 
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && prev=""; for i in $(seq 1 90); do cur=$(ls -t logs/sombra/cmd/ 2>/dev/null | head -1); if [
-     "$cur" != "$prev" ]; then echo "sombr… · stopped
+● Background command "Rehearse migration 0070 on the sombra" completed (exit code 0)
 
-  Ran 5 shell commands
+● Confirming the espelho resumo's authority for turno_aberto
+  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '420,440p' ponto/services/espelho.py; echo "=== 960-975:"; sed -n '955,975p'
+     ponto/services/espelho.py; echo "=== datas_furo_apurado:"; grep -rn "datas_furo_apurado" --include=*.py . | head
 
-● Background command "Run the O124 frota DIFF on competência 10" completed (exit code 0)
-
-  Read 1 file, ran 18 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/boag9t8g2.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/diff_o124_10.log (7
-     lines)
-  ⎿  Read docs/AVAIS.md (32 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read core/tests/test_selo_diagrama_do_codigo.py (159 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-
-✢ Bloviating… (3h 0m 30s · ↓ 423.6k tokens)
+✢ Bloviating… (3h 6m 0s · ↓ 440.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
