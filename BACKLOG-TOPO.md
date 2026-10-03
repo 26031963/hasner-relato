@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**143 obras abertas.**
+**152 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -152,3 +152,12 @@ lista — ela e o que esta EM PE._
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | **PROXIMO MARCO.** Fixture nomeada: `col |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
+| **O145** | HE-INVISIVEL | ENCAIXE (entra em toda janela com a pist |
+| **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
+| **O147** | OS 3 ATRASADOS DA 09 | PAREI |
+| **O148** | FOLGAS DUPLICANDO | ENCAIXE. Medicao, nao cura: publicar ant |
+| **O149** | 3 VINCULOS COM FIM ANTES DO INICIO | ENCAIXE. Mudanca de dado de VINCULO e NU |
+| **O150** | FURO DO HOOK NAO-PARAR | ENCAIXE. Selo de host, sem Django |
+| **O151** | OS 13 CHAMADOS DO `--forcar` DE 02/10 | ENCAIXE. Retratacao pela porta (`chamado |
+| **O152** | BUSCA-DA-CASA | **FILA 2 (UI), atras dos contratos.** Ra |
+| **O153** | ROTA-PEDE-SESSAO NAO PROVA AUTORIZACAO | ENCAIXE. Nao e furo do selo atual: e a f |

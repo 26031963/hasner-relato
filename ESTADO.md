@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:57 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:102 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:02:56.**
+**Medido em 03/10/2026 19:08:01.**
 
 | | |
 |---|---|
@@ -40,6 +40,11 @@ cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/escala/views_wizard.py
 ?? app/core/rotas_publicas.py
 ?? app/core/tests/test_rota_pede_sessao.py
@@ -114,38 +119,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  @api_view, independente da política de permissão — então uma rota AllowAny serve 200 e sai "consultada". Lavanderia, igual ao context
-  processor. permissions.py não entra: ali ler is_authenticated é a decisão.
 
-  Ran 3 shell commands
-
-● api_diag_cam só escreve em log (sem banco) e lê request.user.is_authenticated no próprio corpo — então ele continua "consultado"
-  legitimamente, e é o limite honesto da sonda: consultou ≠ autorizou. Vai nomeado no RELATO, não no cadastro (cadastro com entrada que não
-  serve a ninguém infla). Rodando com a lavanderia do DRF:
+● Enquanto roda (e sem tocar o banco de teste), o topo do RELATO — o PAREI está resolvido e a linha não pode seguir dizendo que espera:
 
   Ran 1 shell command
 
-● /api/auth/login/ revela um defeito na CHAVE do cadastro: o nome login é o mesmo da tela /login/, sem namespace — declarar 'login' cegaria
-  as duas rotas de uma vez. Trocando a chave pela identidade canônica da casa (a que o reverse usa):
+● Agora os registros que o aval manda (PROMPT-NAO-SE-REPETE e os SOLTOS como ENCAIXE). Vendo os formatos:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 1 shell command
 
-● O namespace funciona (core:login ≠ api:login) e o caso anti-cegueira mordeu a troca, que é o trabalho dele. Atualizando as chaves e
-  somando as duas novas:
+● Registrando o BLOCO DAS 18H: linha em PROMPTS e os SOLTOS como obras de ENCAIXE nomeadas.
 
-  Chaves com namespace, duas entradas novas, nova rodada
+  Read 1 file, ran 2 shell commands
+
+● Suíte ainda rodando. O pendente do ! que o corte da HE deixa em aberto — pela porta canônica:
+
+● Somar o pendente da HE e regerar AVAIS
   ⎿  $ python3 - <<'PY'
-     import re
-     p='core/tests/test_rota_pede_sessao.py'
-     s=open(p,encoding='utf-8').read()
-     a = """ ('saas_ui', 'config.urls_ci', 'escala_buscar_colabs'),
-     ('saas_core', 'config.urls_core', 'me'),"""
-     n = """ ('saas_ui', 'config.urls_ci', 'escala:escala_buscar_colabs'),
-     ('saas_core', 'conf…
+     import json
+     p='docs/PENDENTES_RONALD.json'
+     d=json.load(open(p,encoding='utf-8'))
+     assert not [x for x in d if x.get('id')=='HE-FIXA-CALCULO-PROPRIO-TOCA-O-MOTOR']
+     d.append({
+     "id": "HE-FIXA-CALCULO-PROPRIO-TOCA-O-MOTOR",
+     "tipo": "!",
+     "dono": "Ronald",
+     "estado": "aberto",
+     "desde": "…
 
-✽ Bloviating… (18h 49m 25s · ↓ 2.6m tokens)
+✢ Compacting conversation… (18h 54m 30s · ↓ 2.6m tokens)
+  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 1%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
