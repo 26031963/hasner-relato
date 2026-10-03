@@ -1,5 +1,22 @@
 # RELATO — esteira saas-hasner
 
+### R6 LOTE: O ATRASO DO LOTE E 20 DE 20 NA PERTURBACAO, E 3 DE 233 NA FROTA (03/10 12:1x)
+Na sombra (carimbo 20261003 tipo=completa diverge=0), `te178` com 21 vinculos ativos, competencia 10/2026, 21/21 com `FechamentoMensal`: perturbado o TEMPLATE (`hora_fim` 19:00 -> 18:30, que e o que o admin faz na tela), o sentinela col325 pela porta de UM vinculo (`recalculo=True`) regenerou 14 celulas e o hash do dinheiro **MOVEU** `3f0a78cb7c0beed0 -> 3eb9446f0bd5a75e`; a funcao REAL `_propagar_regeneracao_template` regenerou 300 celulas em 0,9 s (barrados=19) e dos 20 outros colabs do MESMO template deu **MOVEU=0, PARADO=20**.
+A pendencia se DERIVA sem campo novo nem modelo novo (`CelulaDia.regenerada_em` > `FechamentoMensal.atualizado_em`), e o detector tem o caso que MORDE sem eu fabricar fixture: ele achou **exatamente** os 20 que a minha propria sonda deixou atras, e **zero** falso positivo.
+FROTA, com a pegada da sonda cortada pelo minuto (`regenerada_em >= 03/10 11:50`, que sai nomeada no contador `pegada_da_sonda` e nao escondida): **3 atrasados de 233** -- 09/2026 **3 de 124**, 10/2026 **0 de 109**. A 10 esta em ZERO porque o recalculo por evento rega a competencia corrente a cada batida; o atraso sobrevive onde o evento nao chega.
+OS 3 ESTAO NA 09, QUE JA FOI EXPORTADA: col418 e col414 com celula `29/09 14:26` -- o MESMO minuto, logo UM ato de admin -- contra fechamento de `28/09 00:44` = **37,7 h de atraso**; col438 `30/09 21:27` contra `30/09 16:57` = 4,5 h. **Nao apliquei nada**: pela lei TXT E FOTOGRAFIA a correcao entra em qualquer competencia, mas com as quatro condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA, e a diferenca em dinheiro desses 3 ainda **nao esta medida**.
+A sonda anterior do R6 mediu o NADA e eu nao publiquei o numero dela: ela perturbava `celula.trabalha`, que `regenerar_celulas_vinculo` restaura do template, entao o dinheiro nao tinha por que mover -- o arquivo ficou com o nome do veredito (`r6_lote_INCONCLUSIVA_20261003.out`).
+**PROVA:** `logs/r6_dinheiro/r6_lote_20261003.out` (+ `.py` e `roda_r6_lote_20261003.sh`), `logs/r6_dinheiro/censo_atraso_20261003.out` (+ `.py`), `logs/r6_dinheiro/r6_lote_INCONCLUSIVA_20261003.out`.
+
+### O65: EU ESCREVI "col152, 6 DIAS" E A AUTOPSIA DIZ **1** (03/10 12:1x)
+Autopsia dos 6 dias pelas funcoes REAIS: em 28/09, 29/09, 30/09, 01/10 e 02/10 `turnos_do_colab(d,d)` devolve **1** e `realizado_do_dia` devolve `sem_turno=False`, com minutos 544/534/536/534/534 -- a fallback **nao dispara** nesses dias, e o "534 x 530" que eu citei era realizado acima do previsto, que e normal e nao e defeito. A celula do BACKLOG dizia 6 dias e esta **corrigida para 1**.
+O RED e UM dia, **25/09**: `parear_turnos` sobre as 4 batidas do proprio dia devolve **1 periodo FECHADO** (07:01:30 -> 18:30:03) enquanto `turnos_do_colab(d,d)` devolve **0** -- entao `realizado_do_dia` diz `sem_turno=True, minutos=None`, a fallback soma celula e entrega o **PREVISTO 530** no lugar do realizado.
+O que distingue 25/09 dos outros cinco, e e a unica diferenca: a batida das 14:40 e `origem=disputa_s84_retro`, nascida RETROATIVA por disputa, com timestamp de segundo exato (`17:40:00+00:00`) contra os `.043000` das batidas de app. Desde o corte de 26/09 `turnos_do_colab` le a **ATA**, e `parear_turnos` le batida: a hipotese a provar e que a ata de 25/09 foi lavrada ANTES da batida retroativa nascer, e nesse caso a origem e a porta da disputa nao relavrar a ata -- **nao** `turnos_do_colab`, e **nao** a fallback.
+**NAO curei nada**: a hipotese ainda nao foi lida NA ATA, e a ordem segue sendo origem primeiro, fallback depois. Proximo passo nomeado: imprimir a ocupacao por marco da ata de 25/09 e a data de nascimento de `b110384`.
+A sonda anterior errou 5 dos 6 dias por bug MEU (`timezone.localtime(Batida)` em vez de `.timestamp`) e por isso eu nao tinha visto que os cinco estavam sadios -- foi `erros=5` lido como se fosse dado.
+**PROVA:** `logs/o65/col152_autopsia_20261003.out` (+ `.py`), `erros=0`; a leitura de frota que originou a cauda segue em `logs/o65/bug145_universo_20261003.out`.
+
+
 ### O65: O RED REGISTRADO NAO REPRODUZ MAIS, E A CAUDA DA FALLBACK NAO E O QUE A CELULA DIZIA (03/10 11:4x)
 
 **contratos 12/20** (nada fecha celula de familia aqui -- e medicao, passo 0 do item 1 da ordem de 08:13).
@@ -6980,3 +6997,5 @@ calendario vao para merge e deploy.
 **03/10 10:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **03/10 11:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**03/10 12:10 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.

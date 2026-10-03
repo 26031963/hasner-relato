@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:05:01.**
+**Medido em 03/10/2026 12:10:31.**
 
 | | |
 |---|---|
@@ -34,6 +34,8 @@ ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -108,44 +110,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  sao so docs.
 
-  Ran 1 shell command
+  PROIBIDO: tirar pendente do registro sem a impressao sumir do codigo; trocar numero cravado do contrato sem a cura; apagar
+  funcao/arquivo sem o meu !; fallback, item proprio depois, autoridade nova alem das tres ja assinadas.
+  PRONTO: por celula, linha no RELATO com PROVA (pendentes antes -> 0, teste nomeado, DIFF de frota quando dinheiro, commit) e contratos
+  N/20. Sem isso = INCOMPLETO com a lista.
+  LEI-AKITA: origem=o juiz declarado de cada pergunta; testemunha=core/juizes.py + contrato da familia; RED=impressao presente antes;
+  quem-mais-le=censo por sitio; juizes novos=0.
+  LINHA HAIKU: (a) "contratos N/20" e "pendentes por familia" no payload com rotulo de admin; (b) golden: "quantas celulas de contrato
+  faltam e quais?" esperado via ferramentas; (c) degrau: leitura.
+  Segue a fila do O134; PAREI so em lei ou !.
 
-● Duas leituras, e as duas mudam o que eu ia publicar.
+● Chegou o dossiê. Dois pontos dele mudam o que eu ia fazer agora: o item (6) proíbe entrada de RELATO longa (máx. 6 linhas) e commit só de
+  docs entre fatias; e o item (1) pede exatamente a medição que eu já tenho. Publico curto, num commit só.
 
-  A sonda B mediu a minha própria pegada. Os 20 atrasados da 10/2026 têm todos celula 03/10 11:55 — é o timestamp da minha perturbação, e
-  são exatamente os 20 PARADO do r6_lote2.out (col39, col40, col32, col106, col151, col472, col188, col512, col521, col303, col306,
-  col428…). Isso confirma o RED por um segundo instrumento independente, mas não é número de frota: é resíduo meu. O número de prod tem de
-  sair de prod.
+  Read 1 file, ran 2 shell commands
 
-  A sonda A errou em 5 dos 6 dias por bug meu (timezone.localtime(b) em vez de b.data_hora). Mas o único dia que concluiu é o RED cravado.
+● O item (1) tem autoridade própria (bordas_do_realizado), e é dela que o número tem de sair — não da minha classificação. Publico primeiro
+  e já ponho a sombra em refazer, porque a minha sonda a sujou para o te178.
 
-  Ran 5 shell commands
+● Correct the O65 cell from 6 days to 1
+  ⎿  $ cd /home/ronald/saas-hasner
+     python3 - <<'PY'
+     p='app/docs/BACKLOG.md'
+     L=open(p).read().split('\n')
+     novo_o65 = (" **livre** (item 1 da ordem 08:13). RED novo e **1 dia**, nao 6: col152 25/09, `parear_turnos` "
+     "da 1 periodo FECHADO e `turnos_do_colab` da 0 -- a batida das 14:40 e `disputa_s84_retro…
 
-● Prod read bloqueado pelo classificador. Não preciso dele: a sombra é cópia de prod de hoje 04:00, então basta excluir a minha pegada
-  pelo minuto — que é nomeável e provada (03/10 11:55). Tudo com regenerada_em anterior a isso é dado de prod.
-
-  Ran 2 shell commands
-
-● Advising using Fable 5.1
-
-✢ Bloviating… (11h 51m 30s · ↓ 1.6m tokens)
+✢ Bloviating… (11h 57m 0s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ corte Ronald: aprovado e so o carimbo de quem entrou no TXT; o crivo e o entra de classificar_export nas tres portas (botao, por
-  colaborador, TXT), e gerar TXT nao tranca.
-
-❯ corte Ronald: pela lei O TXT E FOTOGRAFIA, recalculo e TXT nao consultam tranca -- os dois sitios do K4 saem do registro como
-  conformes; e "entregue" para chamado e celula quer dizer TXT exportado.
-  ctrl+x ctrl+s to send now
-                                                                                                  ✔ Update installed · Restart to update
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+                                                                                                                   10% until auto-compact
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                     1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Mapping classificar_falta query attribution                                               12m 39s · ↓ 103.2k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Hoisting _NAO_CONSULTADA above _turno_noturno_completo                                      18m 9s · ↓ 120.2k tokens
   ⧉  index
 ```
