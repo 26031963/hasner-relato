@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:34:15.**
+**Medido em 03/10/2026 15:39:41.**
 
 | | |
 |---|---|
@@ -108,43 +108,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O selo cobra o CLAUDE.md e o teto de band-aid, não a linha por commit; e esta entrada é registro, não cura. Commitando só o RELATO, por
-  path.
+  emp2 09/2026  gravado_discorda_da_propria_grade=
+    [{'colab': 305, 'campo': 'minutos_previstos',
+      'fechamento': 13020.0, 'dias_pagos': 0.0, 'grade_do_gravado': 0.0}]
 
-  Committed 0c3cbc69, ran 1 shell command
-
-● R4 segue a 75%. Vendo a medição anterior, que é o "antes" com que a nova se compara.
+  13.020 min = 217 h de previsto gravado, contra 0 na grade e 0 nos dias pagos. E o col882 não é um dia solto: são 6 dias alternados
+  (21,23,25,27,29/09 e 01/10 — 12x36), todos com espelho ~11 h e dia pago 0. Disparando a classificação.
 
   Ran 2 shell commands
 
-● A medição anterior confirma os números do placar, e confirma o que falta: ela não traz gravado_discorda_da_propria_grade — é isso que a
-  rodada de agora produz. Enquanto ela fecha, valido os imports da sonda dos RED, para não queimar uma rodada na sombra por nome errado.
+● O col882 aparece na competência 10/2026, e a sonda cravou MES, ANO = 9, 2026 para os três. Isso é sonda mal parametrizada lida como
+  resposta do sistema — corrigindo antes de disparar.
+
+  Ran 2 shell commands
+
+● Disparando na sombra, sob a trava, com a flag de buffer aplicada.
 
   Ran 1 shell command
 
-● Os cinco juízes existem. Escrevendo o runner dos RED agora, pronto para disparar quando a trava liberar — com PYTHONUNBUFFERED=1, que é a
-  lição que eu tinha e não apliquei.
+● Terminou em 20 s com arquivo vazio — o runner falhou antes de rodar. Lendo onde ele escreve.
 
-  Preparar o runner dos RED com a flag aplicada
-  ⎿  $ cd /home/ronald/saas-hasner && sed -e 's|r4_medir_20261003|r4_reds_20261003|g' \
-     -e 's|r4_pares_20261003|r4_reds_20261003|g' \
-     -e 's|r4_placar_estrutural|r4_reds_placar_estrutural|' \
-     logs/sombra/r4_rodar_20261003.sh > logs/sombra/r4_reds_rodar_20261003.sh
-     python3 - <<'PY'
-     import io
-     p='logs/sombr…
+  Ran 3 shell commands
 
-✢ Compacting conversation… (15h 20m 43s · ↓ 2.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 43%
+● Os três voltaram, todos ESTRUTURA, mas com causas distintas — e duas delas são a mesma família. Antes de rotear, medindo se é caso
+  isolado ou frota.
+
+  Running 1 shell command…
+
+✢ Bloviating… (15h 26m 10s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Re-running Q6 selo after ruff fix                                                       3h 41m 51s · ↓ 167.2k tokens
+  ◯ general-purpose  Reading sibling porta gate assertions                                                   3h 47m 18s · ↓ 119.3k tokens
   ⧉  index
 ```
