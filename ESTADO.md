@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:31:01.**
+**Medido em 03/10/2026 18:36:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `23450e7e [CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA -- 18 commits, o que tem selo verde pousa` |
+| `HEAD` local | `3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha` |
 | `origin/main` | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
-| commits a subir (`ahead`) | **20** |
+| commits a subir (`ahead`) | **22** |
 
 ## Fabrica
 
@@ -29,21 +29,58 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha
+b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com os numeros
 23450e7e [CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA -- 18 commits, o que tem selo verde pousa
 cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar" diferentes, e o estoque na sombra
 bf1879e5 [D4-PORTA-DA-ANOTACAO-DE-CONTEXTO] o mesmo gesto escrito em TRES sitios, e a guarda era DIFERENTE em cada um
-a114f126 LEIS: as QUATRO de 17:2x registradas, e a resposta da (a) com os numeros
-4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/RELATO.md
- M app/escala/views.py
- M app/templates/core/_barra_gestao.html
- M app/templates/core/_icone_barra.html
+M  app/api/views.py
+M  app/chamados/management/commands/dedup_perguntas_fato.py
+M  app/chamados/models.py
+M  app/chamados/reconciliador.py
+M  app/chamados/services/acoes_disputa.py
+M  app/chamados/services/declaracao_texto.py
+M  app/chamados/services/disputa_emissao.py
+M  app/chamados/services/fio.py
+M  app/chamados/services/materializacao.py
+M  app/chamados/services/relavra_via.py
+M  app/chamados/services/validacao.py
+M  app/chamados/signals.py
+D  app/chamados/tests/test_chokepoint_chamado_gate.py
+M  app/chamados/tests/test_contract_leitores_vitalidade.py
+D  app/chamados/tests/test_porta_anotacao_contexto.py
+D  app/chamados/tests/test_porta_desfecho_pergunta.py
+D  app/chamados/tests/test_porta_disputa_ciclo.py
+D  app/chamados/tests/test_porta_disputa_emissao.py
+D  app/chamados/tests/test_porta_pergunta_identidade.py
+D  app/chamados/tests/test_porta_reapontamento_pergunta.py
+D  app/chamados/tests/test_porta_remocao_motivo.py
+D  app/chamados/tests/test_porta_resposta_pergunta.py
+D  app/chamados/tests/test_porta_validacao_pergunta.py
+D  app/chamados/tests/test_porta_veredito_pergunta.py
+M  app/chamados/tests/test_sla_pelo_juiz.py
+M  app/chamados/veredito_lavrado.py
+M  app/chamados/views.py
+M  app/colaboradores/services/aparelho.py
+M  app/colaboradores/signals.py
+M  app/colaboradores/tests/test_porta_cadastro.py
+M  app/core/censo_escritas.py
+M  app/core/contratos_estruturais.py
+M  app/core/credenciais.py
+M  app/core/portas.py
+M  app/core/tests/test_censo_escritas.py
+M  app/core/tests/test_contract_escritores_estado.py
+M  app/escala/servico_jornada.py
+M  app/escala/signals.py
+D  app/escala/tests/test_o123_lei_pergunta_o_vinculo_uma_vez.py
+M  app/ponto/management/commands/alertar_disputas_pendentes.py
+M  app/ponto/management/commands/escalonar_chamados_supervisao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -115,37 +152,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Searched for 1 pattern
-
-● Não há middleware que exija login — PlataformaGateMiddleware decide plataforma, não sessão. Então view sem decorador e sem guarda no
-  corpo está aberta de fato. Fechando o censo honesto: decorador ou guarda no corpo:
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Read ponto/tests/test_contract_juiz_ausencia.py (142 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/worktree-precisa-logs-e-media.md (35 lines)
-  ⎿  Referenced file core/placar_estrutural.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Advisor confirma (B). Pré-flight:
-
   Ran 3 shell commands
 
-● O --name-only de merge mostra só o diff combinado — mentiu. A lista real:
+● Controle limpo: vizinhas decoradas dão 302 mesmo com tid inexistente (decorador roda antes); a aberta dá 404 — view alcançada sem sessão.
+  Então o par da prova é 404 → 302, sem nenhum PII. Commitando o RELATO para liberar o revert:
 
-● Lista real do merge e casamento com auth
-  ⎿  $ cd /home/ronald/saas-hasner && git diff --name-only 4845e671 23450e7e > /tmp/claude-1001/m.txt && echo "arquivos no merge: $(wc -l <
-     /tmp/claude-1001/m.txt)" && echo "=== AUTH declarados tocados ===" && while read -r s; do case "$s" in \#*|"") continue;; esac; grep
-     -qx "$s" /tmp/claude-1001/m.txt…
+  Committed b5cde421
 
-✢ Bloviating… (18h 17m 30s · ↓ 2.5m tokens · still thinking)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Agora a cura P7.1 sozinha, construída em cópia do HEAD e encenada sem tocar a árvore viva:
+
+  Ran 2 shell commands
+
+● O selo da casa recusou, e com razão: index ≠ disco. PULAR_INDEX=1 é atalho — não uso. Então a cura vai no mesmo commit da carona O122,
+  com disco == index e a carona declarada:
+
+  Committed 3c229e09, ran 2 shell commands
+
+● Revert do merge, preservando a história em app/docs/ — o revert é sobre os .py, não sobre o registro:
+
+  Ran 2 shell commands
+
+● O cheque discriminante do advisor fecha: do ar (2984714b) até o index, em .py, sobra só app/escala/views.py — o deploy publica o próprio
+  código de prod mais dois decoradores (bin/gerar_backlog.py é script de host, não entra no container). Commitando o revert:
+
+  Made 1 scratchpad edit +32, ran 3 shell commands
+
+● O selo pede declaração — e a deleção é minha e deliberada. Declarando no corpo, como ele prescreve:
+
+● Conferir se o apendice entrou
+  ⎿  /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_revert.txt
+
+✻ Waiting for API response · will retry in 2m 38s · check your network
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
