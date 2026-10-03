@@ -55,6 +55,38 @@ caminho autorizado), preservando a trilha e tirando a parada -- *"sem parar a fi
 reversao em logs/ e prova depois"*. Nao a removi por conta propria as 22:3x: e guarda de dinheiro da frota
 inteira, e ela merece RED e suite proprios.
 
+# PLACAR-E: o quarto congelado tambem foi remedido -- CORTE-B-30 de 30 para 16 (02/10 22:4x)
+
+PROVA: `aplicar_09_corte_b --mes 9 --ano 2026 --motivo-exportada "<remedicao>"` em DRY na sombra:
+o DRY imprime `APLICADOS: 104 colab(s)` (movimento so nos campos do item) e
+`SEPARADOS: 16`, cada um com os campos que o separam nomeados. **Nada foi aplicado** -- e o rotulo do
+comando, nao um ato meu, e escrever "APLICADOS" como afirmacao sobre uma corrida DRY foi o que o selo
+`afirma_com_prova` me cobrou aqui mesmo, com razao.
+
+**E A CURA PARA MEDIR NAO FOI DERRUBAR A GUARDA -- foi deixar o MOTIVO atravessar.** O comando chamava
+`recalcular_fechamento_mes` sem `permitir_exportada` e batia na guarda de `fechamento.py:75`, ate em
+DRY. A tentacao era derrubar a guarda ali, e o aval de 22:2x ate autoriza (*"leitor que nao migrou"*).
+**O CENSO me parou**: os 12 chamadores de `recalcular_fechamento_mes` sao TODOS atos deliberados --
+comandos e o **botao "Recalcular" da tela** (`ponto/views.py:1025`) --, e para o BOTAO nao existe DIFF
+nem reversao. Derrubar a guarda no SERVICO tiraria a protecao do clique junto com a do comando, e a lei
+dele pede o contrario: *"com DIFF antes, reversao em logs/ e prova depois"*. Entao quem carrega o motivo
+e o **ATO**, como no `recalcular_fechamento` ja fazia.
+
+**O QUE EU CHEQUEI ANTES DE AFIRMAR ISSO, porque eu estava com a hipotese errada**: eu suspeitava que o
+recalculo POR EVENTO (a cada batida) passasse por ali -- e ai tirar a guarda deixaria competencia paga
+sendo reescrita automaticamente, sem trilha. **Nao passa**: nenhum dos 12 chamadores e automatico. A
+hipotese caiu no censo, e o resultado foi uma cura menor e mais segura.
+
+**O PADRAO DOS 16, que diz onde a cauda esta**: o que os separa sao campos de **GRADE** --
+`minutos_abonados` (9), `semanas_dsr_ok`/`semanas_dsr_perdido` (9), `dias_previstos` (10),
+`minutos_previstos` (7), `minutos_realizados` (5) -- e **nao** as rubricas de dinheiro do item. So
+`col438` move uma rubrica (`horas_extras_100`). Quem separa do corte (b) hoje e a grade, nao a HE.
+
+**A PERGUNTA QUE FICA NA SUA MESA, e e de desenho**: o botao "Recalcular" da tela chama o mesmo
+servico. Pela lei nova ele passaria a reescrever competencia exportada **sem DIFF e sem reversao**, que
+sao justamente as condicoes que voce pos. Ou o botao ganha trilha, ou a guarda fica de pe para ele --
+e eu nao escolho por voce.
+
 # PLACAR-E, entregavel (3): os contratos nao se moveram
 
 PROVA: `core/contratos_estruturais.linha_do_placar()` lido no ar -> **`contratos_estruturais: 8/22

@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:00:45.**
+**Medido em 02/10/2026 22:05:54.**
 
 | | |
 |---|---|
-| `HEAD` local | `14b1de9c [PLACAR-E] A remedicao com prova de hoje, e o O120 aplicado na 09 do col221` |
+| `HEAD` local | `aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,17 +22,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aebe4cf9 [PLACAR-E] Os quatro entregaveis fechados: CORTE-B-30 de 30 para 16
 14b1de9c [PLACAR-E] A remedicao com prova de hoje, e o O120 aplicado na 09 do col221
 34f6cb0a [RELATO] O publicado estava retido desde 29/09; destravado em dois passos
 74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia
 da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias de 169
-801253ed [O119] O intra desconta TODAS as pausas, e o DIFF me pegou num erro meu antes de fechar
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -92,36 +93,36 @@ da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  reversão em logs/, sem Pauta DP (0 linhas no export 27), vínculo não tocado. Seis campos de 24 se movem — e o que diz o custo do
-  defeito: semanas_dsr_perdido de 5 para 1. O cadastro 12x36 errado lia sábado e domingo como falta e lhe tirava DSR em quatro semanas.
+  reversão, o marcador ORDEM-VIVA-TOPO que não consegue declarar, e o O33 × O27 que uma frase sua fecha junto.
 
 ● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-E -- grade do PLACAR ESPELHO-VERDADE re-medida com as provas de hoje -- parada desde 27/09
-  19:3x
+  ⎿  Stop hook error: siga: E6-CAUDA-1 -- A CAUDA DO E6 PELA MAIOR CLASSE: esp_zero_e6_trabalho (ordem dele 02/10 21:4x, item 3:
+  'a cauda do E6 pela mai
 
-● O quarto entregável está atrás da guarda que a sua lei derrubou, então migrá-la é o caminho para fechar a PLACAR-E. Meço o raio antes:
-  quem afirma que ela levanta?
+● Censo feito; agora o RED, pela sua ordem. Meço por que o espelho mostra zero no caso sem ambiguidade (col887 21/08, 06:51 → 19:00, piso
+  = teto = 730):
+
+  Ran 1 shell command
+
+● Isso corrige a classe inteira, e eu ia construir o RED contra o alvo errado. O espelho não mostra zero:
+
+  col887 21/08: minutos_realizados: None, pago_h: 12.0    (motor: 720 min)
+  col134 02/09: minutos_realizados: None, pago_h: 11.98   (motor: 719 min)
+
+  O espelho sabe o dia — paga 12,0 h. O que é None é minutos_realizados. Confiro qual campo o oráculo compara:
 
   Searched for 1 pattern
 
-● Antes de tocar a guarda eu preciso checar uma coisa que muda tudo: quem mais chama esse recálculo. Se o recálculo por evento (a cada
-  batida) passa por ali, tirar a guarda significa competência paga sendo reescrita automaticamente, sem DIFF, sem reversão e sem prova — o
-  oposto do que a sua lei pede:
+● Confirmado em e6_oraculo.py:110: m_esp = float(de.get('minutos_realizados') or 0) — e o or 0 transforma None ("não lavrado") em zero
+  ("trabalhou zero"). É a ausência de sinal lida como sinal, na forma mais pura. Meço quantos dos 247 são isso:
 
-  Searched for 1 pattern
+  Splitting the class by whether the espelho really says zero
+  ⎿  $ cd /home/ronald/saas-hasner && cat >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6_split.py <<'PY'
+     """Dos dia-colab da classe `esp_zero_e6_trabalho`: o espelho diz ZERO, ou NAO DIZ?
+     `e6_oraculo.py:110` faz `float(de.get('minutos_realizados') or 0…
 
-● Minha preocupação estava errada e é bom tê-la checado: não há chamador automático. Todos os 12 são atos deliberados — comandos e o botão
-  "Recalcular" da tela (views.py:1025). Então o CORTE-B-30 não está barrado pela guarda existir, e sim por aplicar_09_corte_b não passar
-  a flag autorizada — padrão que o recalcular_fechamento já tem. Correção estreita:
-
-● Measuring CORTE-B-30 with the motive passing through · 1m 10s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 900 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
-     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
-     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
-     -e HTTP… (1m 8s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✶ Sock-hopping… (3h 48m 14s · ↓ 640.8k tokens)
+* Sock-hopping… (3h 53m 23s · ↓ 658.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
