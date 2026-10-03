@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:11:48.**
+**Medido em 03/10/2026 17:16:48.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  banco — achar a célula certa do BACKLOG:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O BACKLOG regenera por bin/gerar_backlog.py (lê o core/juizes.py vivo) — a linha AUSE-03 volta sozinha depois do merge, não se edita à
-  mão. Preparando a lista de módulos de escala que cobrem o escala/views.py sujo da main, para rodar assim que o banco de teste vagar:
-
-  Ran 3 shell commands
-
-● escala/views.py sujo é inerte: tipos_lista.html não inclui _barra_gestao.html nem lê quadros. Mas os dois partials sujos já estão no ar
-  (template é instantâneo) e são lidos pelo painel situacional e pelo holerite — vendo o que eles mudaram:
+  vai imprimir depois do merge:
 
   Ran 1 shell command
 
-● Os dois partials são aditivos e inertes (ninguém passa attrs em atalho; ninguém pede o ícone wizard). O risco real do escala/views.py é o
-  reverse('escala:wizard_tipo') — a família NoReverseMatch de 23/09. Conferindo ao vivo, sem container:
+● O _p(_A14, ...) do commit carrega prova velha — diz "um deles FORA da porta (colaboradores/admin.py sem readonly_fields)", que este mesmo
+  commit fecha, e "8 universos", que o censo mediu em 104. É o mesmo padrão do espelho_verdade.py de hoje. Corrijo depois da suíte (editar
+  agora mexeria na árvore que ela está lendo). Esperando o portão:
 
   Ran 1 shell command
 
-● escala:wizard_tipo existe (escala/urls.py:15) — a mudança suja da main é contexto aditivo + um reverse para nome existente, lido por
-  ninguém. Esperando o portão por arquivo, não por pgrep:
+● Background command "Esperar a suite terminar por estado do container" completed (exit code 0)
 
   Ran 1 shell command
 
-● Antes do pouso em prod — que é o passo difícil de reverter — consultando o advisor com o estado completo:
+● Portão VERDE: Ran 9500 tests → OK (skipped=42). (Meu grep ^OK$ não casou porque a linha é OK (skipped=42) — é a mesma família de
+  falso-negativo do OK: 31.)
 
-● Advising using Fable 5.1
+  Agora a prova velha dentro do commit, antes do merge:
 
-✽ Bloviating… (16h 58m 17s · ↓ 2.3m tokens)
+  Ran 1 shell command
+
+● A nota do _p carrega duas afirmações que este mesmo commit derruba. Curando na raia, em memória antes de gravar:
+
+  Rodar os selos que leem o core/juizes.py · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null && teste_envfile >/dev/null && MNT=$(bin/arvore_do_push.sh
+     --montagem /home/ronald/wt-lampada) && docker run --rm --name selo_nota $TESTE_DOCKER --network saas-hasner_default --env-file .env
+     --env-file "$TESTE_ENVFILE" -e PYTHONDONT…
+
+✻ Bloviating… (17h 3m 17s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Building mods_d2_linha.txt module list                                                  5h 19m 25s · ↓ 158.6k tokens
+  ◯ general-purpose  Verifying AST and inspect usage in test_sla_pelo_juiz.py                                5h 24m 26s · ↓ 166.0k tokens
   ⧉  index
 ```
