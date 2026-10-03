@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 20:57:31.**
+**Medido em 02/10/2026 21:02:49.**
 
 | | |
 |---|---|
@@ -96,25 +96,6 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● RED virou verde — 3 casos OK. Agora as quatro condições do seu !. Primeiro os vizinhos, porque a linha mora no motor e o raio é grande:
-
-  Ran 1 shell command
-
-● Enquanto a suíte roda, preparo o DIFF de frota que o seu ! exige antes — medido na sombra, contra o gravado:
-
-  Ran 2 shell commands
-
-● PAROU pelo critério — mas antes de lhe devolver isso eu tenho de separar o que é a minha cura do que é deriva do gravado velho, que é a
-  lição do seu próprio AVAL-DE-CRITERIO ("apply por recálculo nunca é cirúrgico"). Meço a MESMA conta na árvore sem a cura, para subtrair:
-
-  Ran 1 shell command
-
-● Agora posso separar, e o resultado é dos dois lados:
-
-  A cura faz o que devia: horas_extras e horas_extras_50 de +1,42 h em 1 colab (a HE fantasma do col221) desaparecem do DIFF — a leitura
-  passa a bater com o gravado ali.
-
-  Mas ela move gente de fora do universo: horas_trabalhadas sai de 4 colabs para 201, saldo_banco_horas de 3 para 94, e aparecem
   horas_intra_indenizada (23) e horas_noturnas (44). Isso viola o seu critério e eu não aplico. Vejo a suíte, que pode já estar dizendo
   por quê:
 
@@ -123,15 +104,34 @@ ecee02f0 [HOOK] `fora da sessao`, e o corte que explica nove itens cobrados em s
 ● A suíte ainda roda. A pergunta que decide se eu aplico é por que 197 colabs a mais se movem, e eu não vou deduzir: meço um deles nas
   duas árvores. O col28 move só com a cura:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Sock-hopping… (2h 45m 0s · ↓ 499.1k tokens)
+● O juiz é idêntico nas duas árvores para o col28 — minutos, inicio, fim e cad iguais; só aparece pausas com a mesma pausa única. Então os
+  197 colabs não vêm da cura. Suspeito do relógio: às 21h há turno em curso, e horas_trabalhadas/noturnas/saldo de quem está trabalhando
+  mudam minuto a minuto. Meço o ruído do instrumento rodando a árvore-base duas vezes:
+
+  Ran 1 shell command
+
+● O instrumento é determinístico — a segunda corrida da base é byte-idêntica (70,32/4, 1,42/1, 95 colabs). Então os 197 são da minha
+  mudança, e achei onde: na linha antiga o par passava por _instante_real (o instante da Batida, com segundos) e a minha lista pausas usa
+  o instante_luz cru, truncado ao minuto. É a minha própria lição — "hora truncada esconde a guarda" — movendo até 59 s por pausa em 200
+  colabs:
+
+  Ran 1 shell command
+
+● Selos verdes. Remeço o DIFF de frota, que é o que diz se o critério fecha:
+
+  Ran 1 shell command
+
+● Background command "Run the neighbour suites for the motor change" completed (exit code 0)
+
+✢ Sock-hopping… (2h 50m 17s · ↓ 505.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
