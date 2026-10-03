@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 10:21:01.**
+**Medido em 03/10/2026 10:26:31.**
 
 | | |
 |---|---|
@@ -110,13 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ migration pendente                     │ nenhuma → --sem-migrate                                                                  │
-  └────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────────────────────────┘
-
-  Duas correções que a medição impôs antes do commit:
-
-  - a classe "em curso" foi medida INTEIRA, sem amostra (o consultor cobrou com razão: a sonda imprimia 12 dos 51 e eu ia afirmar sobre
-    os 51). Os 51 têm data_turno 02/10 e a maior batida entre eles é exatamente 03/10 04:11:21 — o instante do dump. "Em curso no instante
     do dump" passou a ser afirmação medida. E a exclusão segue o TURNO, não o dia: turno noturno em curso cai no data_turno de ontem, que
     é a lição do TETO TEMPORAL.
   - a etiqueta do commit saiu de [R3] para [PLACAR-ESTRUTURAL]: existe um | R3 | antigo no TICKETS (SENTINELA-ADMIN, 01/08) que faria a
@@ -131,21 +124,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-  Block until the full suite writes its end marker, then read the verdict · 1m 20s
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     timeout 560 bash -c 'until grep -q "^FIM$" '"$S"'/suite_cheia.out 2>/dev/null; do sleep 15; done'
-     echo "esperou rc=$?"; date '+%H:%M:%S'
-     echo "=== VEREDITO (linha de runner) ==="
-     grep -nE '^Ran [0-9]+ … (1m 19s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Bloviating… (10h 7m 30s · ↓ 1.4m tokens)
+● Background command "Run the neighbours then the full suite on the cured copy" completed (exit code 0)
+
+● Background command "Re-arm the waiter on the real end marker" completed (exit code 0)
+
+● Locating the reintroduced autoridade_do_periodo call
+  ⎿  $ cd /home/ronald/saas-hasner
+     echo "=== HEAD tem autoridade_do_periodo no calendario? ==="
+     git show HEAD:app/colaboradores/services/calendario.py | grep -n 'autoridade_do_periodo' || echo " NAO (HEAD esta limpo)"
+     echo
+     echo "=== diff do calendario.py (copia curada) ==="
+     git show HEAD:app/colaborador…
+
+· Compacting conversation… (10h 13m 0s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   3% until auto-compact
+                                                                                                                   1% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
