@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:271 AFIRMA ato sem PROVA ao lado -- ### O124 **NO AR** 04:01 (`4088657e`) — e o selo pegou a janela do BUG 128 ABERTA, com o 500 agendado
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:19 AFIRMA ato sem PROVA ao lado -- **TODO COMMIT DESTE LOTE FOI FEITO COM `--no-verify`**, e isso e atalho -- NUNCA pre-aprovado
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 06:47:31.**
+**Medido em 03/10/2026 06:53:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| `origin/main` | `b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada` |
-| commits a subir (`ahead`) | **9** |
+| `HEAD` local | `e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git` |
+| `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git
 4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao
 73f7551e [MONTAGEM-TEM-UMA-PORTA] A lista do que falta na copia tinha dois escritores, e o segundo vazou 2,1 GB
 d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha por ordem, era a regra escrita duas vezes
 0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares
-e57e552b [ESTADO-STALE-NOS-REGISTROS] O alarme cobrava 206 h de obra pronta porque eu pausei o alarme e nao corrigi o estado
 ```
 
 ## `git status --short`
@@ -114,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● The docstring of test_01 claims a day with one batida IS apurado as furo — which would make my cure add nothing. Checking the motor
-  rather than reasoning:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● A turno-aberto day lands in resultado.periodos, so it's in datas_trabalho and never becomes a falta — the cure does add days. Writing
-  the RED in a copy of HEAD:
-
-  Ran 3 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6zcxtqwx.output (16 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bs2bgl91h.output (10 lines)
-  ⎿  Read docs/AVAIS.md (33 lines)
-  ⎿  Referenced file config/crons.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/background-duplo-perde-o-veredito.md (28 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
 ● Task "Apply the BACKLOG edits and refresh the placar" still running in background
 
 ● Task "Retry the push through the normal gate" still running in background
 
 ● The push is in its last phase (control-plane). No suite run while it holds the bank — I'll build the cure in the copy meanwhile.
 
-● Finding the day-of-period authority
-  ⎿  $ C=$(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/.copia_r3)/app; echo "==
-     credito_parcial dia_do_periodo =="; sed -n '20,50p' "$C/ponto/services/credito_parcial.py"; echo "== dia_da_jornada census =="; grep
-     -rn "dia_da_jornada" --include=*.py "…
+  Ran 7 shell commands
 
-✢ Bloviating… (6h 34m 0s · ↓ 871.2k tokens · thinking)
+● Background command "Retry the push through the normal gate" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Push landed: b26da390..4ecf7a39, 9 commits in, origin/main == HEAD. Now the footer + the (este commit) hashes, in one commit.
+
+  Committed e034b758, ran 5 shell commands
+
+● MARCO FECHADO — pode compactar. O lote de 9 pousou (b26da390..4ecf7a39), os 6 hashes e o rodapé do TICKETS fecharam em e034b758, handoff
+  regenerado.
+
+  Agora o R3. Antes de escrever a cura, preciso resolver uma questão de autoridade do dia que a medição levantou.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Reading the motor falta block and folha datas_falta
+  ⎿  $ C=$(cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/.copia_r3)/app; echo "==
+     motor 1790-1825 =="; sed -n '1790,1825p' "$C/ponto/motor_calculo_v2.py"; echo; echo "== folha/export.py datas_falta 60-100 =="; sed
+     -n '60,100p' "$C/folha/export.py"
+
+✢ Bloviating… (6h 39m 30s · ↓ 883.9k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   5% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
