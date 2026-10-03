@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 05:48:31.**
+**Medido em 03/10/2026 05:54:02.**
 
 | | |
 |---|---|
@@ -115,38 +115,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  memória nomeia, e que o meu próprio script de 01/10 já contornava. Nenhuma das duas fatias toca aquilo.
 
-● Background command "Wait for the real suite verdict" completed (exit code 0)
+  Agora, a pergunta que isso levanta: o comando canônico do CLAUDE.md §3 não tem esse mount. A régua tem?
 
-  Ran 10 shell commands
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/background-duplo-perde-o-veredito.md (28 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bcvzmh6er.output (8 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b91l6xk8q.output (44 lines)
-  ⎿  Read docs/AVAIS.md (33 lines)
-  ⎿  Referenced file docs/BACKLOG.md
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O arquivo já registra a 3ª reincidência de hoje às 03:2x com exatamente estes 7 selos. Esta é a 4ª — e a memória dá a conferência de um
+  comando. Vou cobrá-la na saída de 1013 s:
 
-● Task "Apply the BACKLOG edits and refresh the placar" still running in background
+  Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● No directory at = 0 nas três saídas — inclusive na que falhou. Então a conferência de um comando da memória não discrimina esta
+  variante: o diretório existe, só está VAZIO, e Django não avisa. Pior: o run de 355 s teve o mesmo staticfiles vazio e esses 7 passaram.
+  Eu misturei duas variáveis no meu run verde (mount + máquina quieta). Isolando:
 
-  Ran 33 shell commands
+  Ran 1 shell command
 
-● Background command "Run the full suite on the union copy" completed (exit code 0)
+● Isolado em 6 segundos, mesma cópia, máquina quieta: sem o mount = os mesmos 7; com o mount = OK. O mount é a causa, e a contenção não
+  tem parte nisso. Resta a anomalia do run de 355 s, que passou com o mesmo diretório vazio:
 
-● Background command "Wait for the suite verdict" completed (exit code 0)
-
-● Checking the staticfiles mount hypothesis
+  Look for the invocation of each suite log · 10s
   ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     ls -d app/staticfiles 2>/dev/null && echo "viva: $(ls app/staticfiles | wc -l) entradas"
-     ls -d $S/o131/app/staticfiles 2>/dev/null && echo "o131: $(ls $S/o131/app/staticf…
+     grep -rln "o131_suite" $S/ 2>/dev/null | head
+     echo "=== head do log de 355s ==="
+     sed -n '1,8p' $S/o131_suite.log
+     echo "=== head do log de 1013s ==="
+     sed -n '1,8p' $S/o131… (10s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Compacting conversation… (5h 35m 0s · ↓ 736.3k tokens)
-  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 21%
+✻ Bloviating… (5h 40m 30s · ↓ 743.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
