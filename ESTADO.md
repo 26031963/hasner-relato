@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 14:19:31.**
+**Medido em 03/10/2026 14:25:01.**
 
 | | |
 |---|---|
@@ -119,22 +119,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Agora as duas correções de hora (a lei é 12:4x, não 14:0x — PROMPTS.md:561):
-
-  Ran 8 shell commands
-
-● Background command "Rodar a sonda DEPOIS na sombra" completed (exit code 0)
-
-  Ran 1 shell command
-
-❯ aval Ronald: Colaborador.situacao e LAMPADA -- um escritor derivado: a escrita de ponto/views.py ~2088 sai, os badges passam a ler
-  afastado_hoje, o admin Django fica readonly nesse campo e reverter_situacao_afastado some !
-
-  Searched for 1 pattern, ran 3 shell commands
-
-● Registro o ! que acabou de chegar e, em paralelo, meço a causa dos 23 — não afirmo sem medir.
-
   Read 1 file, ran 3 shell commands
 
 ● Background command "Rodar a sonda da janela na sombra" completed (exit code 0)
@@ -146,10 +130,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 6 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Bloviating… (14h 6m 0s · ↓ 1.9m tokens)
+● O advisor tem razão num ponto que muda o que eu publico: nos 33 a palavra laranja vai aparecer ao lado de um card fechado — e a lei foi
+  dada sobre a minha premissa de "10 dia-colab / 34,6 h". Isso é escopo de aval, não nota de rodapé.
+
+  Publicar a pergunta de lei no topo do RELATO
+  ⎿  $ python3 - <<'PY'
+     import io
+     p = 'docs/RELATO.md'
+     L = io.open(p, encoding='utf-8').read().split('\n')
+     assert L[0].startswith('# RELATO')
+     bloco = [
+     '',
+     '### LEI NA MESA (nao devolve turno) — O UNIVERSO DA PALAVRA: O QUE O JUIZ LE, OU O QUE O DIA FOI? (03/10 14:2x)',
+     '`lei:` **a palavra "sem turno pa…
+
+✻ Compacting conversation… (14h 11m 30s · ↓ 1.9m tokens)
+  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 5%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -157,6 +157,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping neighbour tests for reapontar_resolvedora                                       2h 27m 8s · ↓ 168.6k tokens
+  ◯ general-purpose  Reading the Q3 section of RELATO-CHAMADO-EM-RAIA.md                                      2h 32m 39s · ↓ 95.8k tokens
   ⧉  index
 ```
