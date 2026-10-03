@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:15:01.**
+**Medido em 02/10/2026 23:20:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,9 @@ bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -94,42 +96,42 @@ bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    independentes.
-  - Censo da (b2) publicado: o nome dela descreve 28 de 101, e 80 (82,9 h) não são divergência — são a janela declarada do corte de 14/09.
-    Sobram 11 dia-colab / 37,3 h de divergência real.
-  - RED de valor evidenciado para a cura nova, com a cura retirada cirurgicamente: AssertionError: 60 != 0 : o minuto subtraido sem ter
-    sido batido tem de aparecer no carimbo, e só 1 dos 12 caiu — o selo é específico, não cobertor. A árvore voltou idêntica ao patch
-    guardado.
-  - Rótulos de hora corrigidos contra git log e date: eu havia datado três blocos de cabeça (23:5x, 00:1x, 00:3x) e o ato foi 22:36–23:0x.
+  medição lia aquela árvore, e cada competência é um processo novo. Na janela do RED o contador daria zero; ele deu 85 na 10 e 257 na 09 —
+  as duas rodaram com a cura inteira. A lição ficou guardada na memória: árvore que medição monta não se edita.
 
-  Dois erros meus no caminho, nomeados
-  1. O primeiro critério do custo partia os dias por antes > 1440 min — critério pela forma: col439 14/09 tinha 22,5 h num dia e caiu em
-     "plausível" por caber em 1440. Refiz perguntando à autoridade (o espelho, tolerância 10 min, a dele).
-  2. Meu grep "manage.py te" para ver se havia suite rodando casava tenant_command — então eu esperei por uma pista que já estava livre.
-     Mesma família.
+  Dois pontos que eu não deixo passar como achado:
+  - aberto aparecer 0x em pdf_espelho.py, relatorios/services.py e folha/export.py é ponteiro, não censo — contar palavra é critério pela
+    forma, e o R3 exige ver o que cada leitor mostra num dia aberto de verdade.
+  - O R2 tem um gap real a medir: a lista do admin nasce das assinaturas A1–A11 por recorrência mais os códigos C do cadastro, enquanto o
+    dono CADASTRO sai da lista por-dia do motor. Fonte diferente — então "já está na lista" se mede, não se supõe.
 
-  O que o R1 vai responder (rodando na sombra, 09 e 10): dono_da_divergencia com juiz novo = 0 — ímpar → BATIDA (lei do BUG-144), dia na
-  lista dias_cadastro_x_realidade do motor → CADASTRO, resíduo → ESTRUTURA, dentro do único laço de comparação que já existe.
-
-  Um fio que o R2 já abriu: a lista do admin nasce das assinaturas A1–A11 por recorrência do esmeril mais os códigos C lidos do cadastro —
-  fonte diferente da lista por-dia do motor que atribui o dono CADASTRO. Então "vai para a lista do admin pela mesma fonte" tem um gap a
-  medir, não a supor; é o que faço assim que a tabela do R1 existir, junto da coluna dono no CSV para a mesa ficar auditável.
-
-  R5 já está durável em bin/r5_idempotencia_frota.sh, com foto1 → rodada A → foto2 → rodada B → foto3 e a lei em foto3 == foto2 — e os 13
-  chamados dele estão medidos: são exatamente 13, mas em 17:45–18:15 e com dois produtores (9 do --forcar, 4 do */5 em pares por colab),
-  sendo que os 7 orfao_14h nasceram resolvido com celula=None.
+  Aguardando a suite dos vizinhos (ponto escala) para commitar a cura + R1 + os selos; o CSV já ganhou a coluna dono_da_divergencia, com
+  lápide dizendo por que ela não é a mesma pergunta que o dono_da_paridade que já existia ao lado.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
   ordem das 21:4x -- o resto d
 
-✢ Sock-hopping… (5h 2m 30s · ↓ 880.6k tokens)
+  Ran 1 shell command
+
+● R2 precisa do conjunto de colabs que a lista do admin realmente mostra. Lendo a função que a tela chama, para o join ser contra a
+  autoridade e não contra uma reimplementação:
+
+  Searched for 1 pattern, listed 1 directory, ran 2 shell commands
+
+● A lavra é de hoje 08:31 — fresca, então o R2 pode ler. Conferindo a suite:
+
+  Waiting by file for the neighbour suite verdict
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b1mx60fag.output 2>/dev/null | tail
+     -12
+
+✢ Sock-hopping… (5h 8m 0s · ↓ 900.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
 ❯ ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens

@@ -1,5 +1,80 @@
 # RELATO — esteira saas-hasner
 
+## PLACAR-ESTRUTURAL — 6 linhas, numero e meta (02/10 23:2x) · **INCOMPLETO: faltam R2, R3, R4, R5, R6**
+
+| | resultado | numero de HOJE | meta | PROVA |
+|---|---|---|---|---|
+| **R1** | dono de cada divergencia, e as tres somam o total | **MEDIDO.** 09: ESTRUTURA 197 · CADASTRO 29 · BATIDA 208 (soma 434 = 434). 10: 95 · 15 · 95 (205 = 205) | tres donos, soma fechada | `logs/e6_cauda2c/r1_dono_09_e_10.txt` |
+| **R2** | CADASTRO e BATIDA fora da cauda, na lista do admin pela MESMA fonte | **PENDENTE** -- a lista nasce das assinaturas A1-A11 do esmeril + codigos C; o dono sai da lista por-DIA do motor. Fonte diferente, gap a MEDIR | 0 colab de dono CADASTRO ou BATIDA fora da lista | — |
+| **R3** | dia impar EM ABERTO, igual em tela, PDF, cartao, app e TXT | **PENDENTE.** Ponteiro, nao censo: `aberto` aparece 2x no template do espelho e **0x** em `pdf_espelho.py`, `relatorios/services.py` e `folha/export.py` -- contar palavra nao e medir leitor | 5 leitores iguais, nenhum com numero | — |
+| **R4** | seis pares de frota, 09 e 10 | **PENDENTE** (tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela) | ZERO em cada par | — |
+| **R5** | idempotencia e determinismo de frota, 2x na sombra | **PENDENTE, script pronto** (`bin/r5_idempotencia_frota.sh`, desenho `foto1 -> A -> foto2 -> B -> foto3`, lei `foto3 == foto2`). Os 13 chamados JA estao medidos: 17:45-18:15, **dois produtores** -- 9 do `--forcar` e 4 do `*/5` em pares por colab | diferenca ZERO na 2a rodada | `logs/e6_cauda2c/` (os 13, um por um) |
+| **R6** | contratos N/22 + passos manuais depois de corrigir cadastro | **PENDENTE** | zero passo manual | — |
+
+**O percentual do oraculo, aberto por dono como ele pediu**: 09 em **94,3%** (7.182 de 7.616) e 10 em
+**92,4%** (2.489 de 2.694) -- e a conta do denominador da 09 esta aberta linha a linha no bloco do R1
+abaixo, porque ela MUDOU (257 dia-colab sairam com nome) e isso parece o que ele proibiu.
+
+### R1 MEDIDO: TODA DIVERGENCIA TEM DONO, E A SOMA FECHA NAS DUAS COMPETENCIAS (02/10 23:2x)
+
+**PLACAR-ESTRUTURAL R1**, sombra de hoje (carimbo `dia=20261002 tipo=completa diverge=0`), juiz novo = 0.
+PROVA: `logs/e6_cauda2c/r1_dono_09_e_10.txt`, `r1_9.csv`, `r1_10.csv`.
+
+| dono | 09/2026 | | | 10/2026 | | |
+|---|---|---|---|---|---|---|
+| | dia-colab | horas | colabs | dia-colab | horas | colabs |
+| **ESTRUTURA** -- o sistema se contradiz DADO o cadastro | **197** | **747,4** | 60 | **95** | **393,1** | 40 |
+| **CADASTRO** -- o DNA nao descreve as batidas | 29 | 68,6 | 12 | 15 | 70,3 | 8 |
+| **BATIDA** -- falta ou sobra batida | 208 | 867,9 | 118 | 95 | 448,1 | 75 |
+| **SOMA** | **434** | | | **205** | | |
+
+**As tres somam o total, e o comando COBRA isso** (`SOMA 434 <- tem de ser igual a soma das classes
+(434)`; na 10, 205 = 205). Nao e conferencia minha depois: e linha do proprio comando.
+
+**A FILA 1 ENCOLHEU PARA O QUE ELA E: 292 dia-colab / 1.140,5 h de ESTRUTURA**, em 60 + 40 colabs.
+E **BATIDA e o maior dono** (303 dia-colab) -- pelo R2 ele sai inteiro da cauda e vai para a lista do
+admin, nao para codigo.
+
+**O PLACAR DA 09 SUBIU DE 91,4% PARA 94,3%, E EU ABRO A CONTA INTEIRA, porque remover dia da
+comparacao e parecido com o que ele PROIBIU** (*"mudar tolerancia ou tirar caso da lista para o numero
+cair"*). O que saiu foram **257 dia-colab** com contador proprio -- `esp_desconta_janela_declarada` --,
+e a decomposicao e esta:
+
+* `7.873 - 257 = 7.616` comparados (a conta do denominador fecha exata);
+* dos 257, **246 estavam DIVERGINDO e 11 estavam BATENDO** (`bate 7.193 - 11 = 7.182`);
+* `7.182 / 7.616 = 94,3%`, contra `7.193 / 7.873 = 91,4%`.
+
+**Por que sair e o certo, e nao conveniencia**: nesses dias a tela subtraiu a janela de intervalo
+DECLARADA e nao batida (corte dele de 14/09, `ponto/turnos.py:378-386`, que declara o campo FATO) e o
+oraculo subtrai so pausa BATIDA. Os dois numeros respondem perguntas diferentes **de proposito**, e a
+prova de que e isso -- e nao um atalho -- foi medida ANTES da cura existir: em 80 de 101 dia-colab da
+familia (b2) a diferenca era EXATAMENTE o tamanho da janela, +-10 min.
+PROVA: `logs/e6_cauda2c/janela_14_09.txt`. **A tolerancia nao mudou** (segue 10 min) e **nenhuma
+divergencia real saiu**: os 11 dia-colab / 37,3 h da (b2) que nao eram janela continuam na mesa.
+
+**E O ORACULO PASSOU A LER O CARIMBO, NAO O CADASTRO**: `RealizadoDoDia` ganhou
+`janela_descontada`, escrito **so** pelo ramo que subtrai minuto nao batido, e a tela propaga em
+`realizado_janela_descontada`. A derivacao do oraculo segue cega a cadastro -- e dai que vem a
+independencia dele --; so a comparacao deixou de somar pera com maca. Campo que diz o que a conta fez,
+no sitio que a fez (mesma familia do `RealizadoDoDia.aberto`, que existia sem leitor).
+
+**QUAL VERSAO DO CODIGO RODOU, provado pelo proprio contador**: eu reverti e restaurei a cura em
+`wt-orfa` para evidenciar o RED **enquanto** a medicao rodava sobre aquela arvore, e cada competencia e
+um PROCESSO novo no laco. O contador decide sem eu precisar acreditar: na janela do RED o
+`janela_descontada` seria sempre 0 e `esp_desconta_janela_declarada` daria **zero**. Ele deu **85** na
+10 e **257** na 09, logo as duas rodaram com a cura inteira. A licao ficou guardada: arvore que
+medicao monta nao se edita.
+
+**RED EVIDENCIADO, de valor e nao de import**: com a linha que carimba retirada (e o campo existindo),
+`AssertionError: 60 != 0 : o minuto subtraido sem ter sido batido tem de aparecer no carimbo` -- e
+**so 1 dos 12 casos caiu**, o que mostra que o selo e especifico. A arvore voltou IDENTICA ao patch
+guardado antes do revert (`diff` vazio).
+
+**PROXIMO, na ordem dele**: R2 -- medir quantos dos colabs de dono CADASTRO e BATIDA **ja aparecem** na
+lista Cadastro x Realidade. Ela nasce das assinaturas A1-A11 do esmeril (recorrencia no espelho) mais
+os codigos C lidos do cadastro: **fonte diferente** da lista por-dia do motor que atribui o dono. O
+gap entre as duas e o entregavel, e se medir, nao se supoe.
+
 ### PLACAR-ESTRUTURAL RECEBIDO, E ELE REDIRECIONA O QUE EU ESTAVA FAZENDO (02/10 23:0x)
 
 **Corte dele 02/10 22:5x, registrado**: `docs/CORTES.json` (55 cortes), `docs/PROMPTS.md`, e a obra no
