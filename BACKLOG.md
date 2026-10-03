@@ -4,17 +4,6 @@
 >
 > **livre** = pode virar fatia agora, sem humano. **corte/aval/smoke/dinheiro-ate-export** = tem dono humano e espera.
 
-<!-- ORDEM-VIVA-TOPO: PLACAR-ESTRUTURAL -->
-<!-- O marcador segue a ordem do HOOK, que e o item (8) da lista dele de 01/10 20:2x ("fila 1 do
-     BACKLOG na ordem do hook, O21 em diante"). Caminhou em 02/10 20:5x: FILA-DA-NOITE (fechada) ->
-     O27 (espera o corte, frase pronta no PENDENTES) -> O28/O34/O91/O89 (esperam o `!`) -> O30, que
-     tem o PORTAO ABERTO e e trabalho. MEDIDO no mesmo ato: 66 itens vivos no bloco OBRAS, dos quais
-     so 8 dizem esperar por ele -- a fila NAO acabou, e eu estava andando pela cabeca dela. -->
-<!-- ^ o 1o item ABERTO da ORDEM VIVA, em UM lugar. Ate 01/10 este nome estava COPIADO dentro de
-     `bin/tests/test_hook_nao_cobra_congelado.sh` como literal, e a copia envelheceu: a ORDEM VIVA
-     de 28/09 e `S3 -> S4 -> S5b`, as duas primeiras FECHARAM (29/09 e 30/09) e a S5b esta em PAREI
-     esperando o `!`, entao a fila andou e o selo seguiu cobrando a S3. Nao era a fila errada: era a
-     copia. Quem move a fila move ESTA linha, e o selo passa a ler daqui. -->
 <!-- OBRAS:INICIO -->
 
 <!-- A FILA 1 VIVA. ORDEM VIGENTE -- MODO CONTINUO ate o export (corte Ronald 28/09 01:1x):
@@ -290,17 +279,18 @@
 
 | portao | itens |
 |---|---|
-| livre | **278** |
+| livre | **223** |
 | smoke | **37** |
-| dinheiro-ate-export | **18** |
-| **total** | **333** |
+| dinheiro-ate-export | **17** |
+| corte | **1** |
+| **total** | **278** |
 
-## tela (137)
+## tela (117)
 
 | id | portao | pergunta / juiz alvo | arquivo:impressao |
 |---|---|---|---|
 | TELA-01 | **livre** | quem esta em turno (turno aberto vivo) agora? | `colaboradores/painel_cell.py` :: `b = (Batida.objects.filter(colaborador_id=c.pk, timestamp__gte=corte)` |
-| TELA-02 | **livre** | o colaborador entra na folha (e por que nao)? | `colaboradores/services/situacional.py` :: `op_justif = _Just.objects.filter(status='pendente').count()` |
+| TELA-02 | **livre** | o colaborador entra na folha (e por que nao)? | `colaboradores/services/situacional.py` :: `_just_pend = dict(_Just.objects.filter(status='pendente', colaborador_` |
 | TELA-03 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `colaboradores/services/situacional.py` :: `'geo': _geo_status_pino(batida_coord.get(c.pk), c.posto),` |
 | TELA-04 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/views.py` :: `cortados_painel = []` |
 | TELA-05 | **livre** | o chamado ou a pergunta esta vivo na fila? | `core/context_processors.py` :: `def _badge_registrados():` |
@@ -313,131 +303,111 @@
 | TELA-12 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/core/_painel_card.html` :: `{% for c in p.colabs %}{% if c.status == 'turno_aberto' %}<span style=` |
 | TELA-13 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/core/_painel_card.html` :: `data-tem-aberto="{% for c in p.colabs %}{% if c.status == 'turno_abert` |
 | TELA-14 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/core/painel_operacional.html` :: `function _aplicarFiltroNodes(tipo) {` |
-| TELA-15 | **livre** | o chamado ou a pergunta esta vivo na fila? | `chamados/services/fila.py` :: `'prazo_vencido': com_prazo.filter(prazo_sla__lt=agora).count(),` |
-| TELA-16 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `chamados/services/fila_por_causa.py` :: `def particionar(base=None):` |
-| TELA-17 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `chamados/services/fila_por_causa.py` :: `def toques(base=None, p=None):` |
-| TELA-18 | **livre** | qual competencia a tela mostra? | `chamados/services/fila_por_causa.py` :: `def bloqueios_para_fechar(p=None, hoje=None):` |
-| TELA-19 | **livre** | quantos minutos o dia realizou? | `chamados/services/painel.py` :: `sla_estourado = _sla.vencido(c, agora_sla, followups)` |
-| TELA-20 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/views.py` :: `gaps, sem_class = coletar_gaps_dp()` |
-| TELA-21 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `core/management/commands/lavrar_badge_navbar.py` :: `_p = particionar()` |
-| TELA-22 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `escala/services/furos_diarios.py` :: `def ranking_colabs(empresa, ini=None, fim=None, hoje=None, posto_id=No` |
-| TELA-23 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `escala/services/furos_diarios.py` :: `from ponto.models import Batida as _B` |
-| TELA-24 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `escala/services/furos_diarios.py` :: `_ult = {r['colaborador_id']: r['u'] for r in Batida.objects.filter(col` |
-| TELA-25 | **livre** | quem esta em turno (turno aberto vivo) agora? | `ponto/views.py` :: `_hoje = timezone.localdate()` |
-| TELA-26 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `relatorios/furos.py` :: `def estado_do_dia(cel, marcos, veredito=None):` |
-| TELA-27 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `relatorios/furos.py` :: `def escalas_em_limbo(empresa=None):` |
-| TELA-28 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `relatorios/views.py` :: `resp = _pdf_colaboradores(headers, rows)` |
-| TELA-29 | **livre** | o colaborador entra na folha (e por que nao)? | `relatorios/views.py` :: `c = _cmap.get(l['chave'])` |
-| TELA-30 | **livre** | o colaborador entra na folha (e por que nao)? | `relatorios/views_pend.py` :: `def pendencias_cadastro_view(request):` |
-| TELA-31 | **smoke** | quais sao os turnos do colaborador (pares de batida)? | `templates/chamados/meu_atendimento.html` :: `var LIM_C = 300, LIM_AMPM = 660;` |
-| TELA-32 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/painel_gestao.html` :: `if (r.dataset.colaboradorId == id) {` |
-| TELA-33 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_busca_arquivados.html` :: `{% if c.silenciado_ate > agora %}` |
-| TELA-34 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_card_atendimento.html` :: `{% elif chamado.disputa_obj and chamado.reaberturas_colab >= 2 %}` |
-| TELA-35 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/chamados/partials/_card_atendimento.html` :: `<p style="font-size:18px;font-weight:700;color:#92400e;margin:2px 0 0;` |
-| TELA-36 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_card_atendimento.html` :: `{% if fu.autor_tipo == 'dp_rh' and not fu.lido_colaborador_em %}<span ` |
-| TELA-37 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/modal_fio.html` :: `{% if chamado.disputa_obj.reaberturas_admin %}({{ chamado.disputa_obj.` |
-| TELA-38 | **livre** | o colaborador entra na folha (e por que nao)? | `folha/previa.py` :: `def _cobre_a_retencao(colab, ini, fim, dias):` |
-| TELA-39 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `folha/services/sem_furo.py` :: `def dias_com_furo(colab, ini, fim):` |
-| TELA-40 | **livre** | quantos minutos o dia realizou? | `folha/validacao_pdf.py` :: `def referencia_do_espelho(empresa, mes, ano):` |
-| TELA-41 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `folha/views.py` :: `def raiox_export(request):` |
-| TELA-42 | **livre** | qual competencia a tela mostra? | `folha/views.py` :: `return render(request, 'folha/exportar.html', {` |
-| TELA-43 | **livre** | qual competencia a tela mostra? | `inteligencia/calculadores.py` :: `@metrica('prontidao_folha')` |
-| TELA-44 | **livre** | qual competencia a tela mostra? | `ponto/views.py` :: `justificativas = Justificativa.objects.filter(` |
-| TELA-45 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `ponto/views.py` :: `'periodo_fechado': FechamentoMensal.objects.filter(` |
-| TELA-46 | **livre** | o colaborador entra na folha (e por que nao)? | `ponto/views.py` :: `_ids_anc_tela = set(_ECt.objects.filter(` |
-| TELA-47 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/holerite/confirmacao.html` :: `<div style="font-size:1.5rem;font-weight:700;color:#d97706;">{{ total\|` |
-| TELA-48 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/_fech_linha.html` :: `<td data-col="status">` |
-| TELA-49 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/_fech_linha.html` :: `<td data-col="pront" data-value="{{ r.pront.pct\|default:-1 }}">` |
-| TELA-50 | **smoke** | quantos minutos o dia realizou? | `templates/ponto/_fech_linha.html` :: `<tr class="fc-row" data-id="{{ r.fechamento.pk\|default:'' }}" data-col` |
-| TELA-51 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/fechamento.html` :: `function fcRows(){ return Array.from(document.querySelectorAll('tr.fc-` |
-| TELA-52 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/fechamento.html` :: `function fcFiltrar() {` |
-| TELA-53 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/fechamento.html` :: `function fcInc() {` |
-| TELA-54 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/partials/painel_fechamento.html` :: `<span class="badge {% if fechamento.status == 'aprovado' %}badge-ok{% ` |
-| TELA-55 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/relatorios/atestados.html` :: `{% if r.dias_empresa >= 15 %}` |
-| TELA-56 | **smoke** | o periodo de ferias esta vencido ou vencendo? | `templates/relatorios/ferias_vencendo.html` :: `{% if p.data_limite_concessao <= hoje %}` |
-| TELA-57 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/relatorios/ranking_furos.html` :: `window.qcFiltro=function(k,el){` |
-| TELA-58 | **livre** | quantos minutos o dia realizou? | `api/views.py` :: `horas_dia = round(p.minutos_trabalhados / 60, 1) if p else 0.0` |
-| TELA-59 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views.py` :: `_trab = esc.eh_dia_trabalho(_d, celulas=_cels_app, folgas=_folgas_app)` |
-| TELA-60 | **livre** | quantos minutos o dia realizou? | `api/views.py` :: `total_trabalhadas = round(_res['total_trabalhadas'], 1)` |
-| TELA-61 | **livre** | o colaborador entra na folha (e por que nao)? | `colaboradores/services/calendario.py` :: `def status_do_dia(colaborador, data):` |
-| TELA-62 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/services/calendario.py` :: `mes_prox, ano_prox = mes + 1, ano` |
-| TELA-63 | **livre** | quantos minutos o dia realizou? | `colaboradores/services/calendario.py` :: `if resultado.horas_extra_50 > 0:` |
-| TELA-64 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `colaboradores/services/detalhe.py` :: `total_batidas = Batida.objects.filter(colaborador=colaborador).count()` |
-| TELA-65 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/services/drawer.py` :: `cal = contexto_calendario(colab, {'modo': 'custom', 'data_ini': _ini.i` |
-| TELA-66 | **livre** | quantos minutos o dia realizou? | `colaboradores/services/drawer.py` :: `for _t in _tdc(colab, _hoje - timedelta(days=7), _hoje):` |
-| TELA-67 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `colaboradores/services/ficha.py` :: `proposta = {'tipo': p['tipo'], 'atual': p.get('template_atual'), 'prop` |
-| TELA-68 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `colaboradores/services/ficha.py` :: `esp = espelho_do_colab(colab, hoje, ini, fim)` |
-| TELA-69 | **livre** | qual competencia a tela mostra? | `colaboradores/views.py` :: `total_batidas = Batida.objects.filter(colaborador=colab).count()` |
-| TELA-70 | **livre** | numero de tela sem autoridade declarada (score, faixa de hor | `inteligencia/resumo.py` :: `s = ScoreColaborador.objects.filter(colaborador=colaborador).order_by(` |
-| TELA-71 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/services/espelho.py` :: `def _status_dia(dia, hoje):` |
-| TELA-72 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `ponto/services/espelho.py` :: `resultados_por_entrada[p.entrada] = p` |
-| TELA-73 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/services/espelho.py` :: `if inconsistente and apur_ini <= data <= apur_fim:` |
-| TELA-74 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/views.py` :: `'total_intra_indenizada': 0.0,` |
-| TELA-75 | **livre** | qual competencia a tela mostra? | `relatorios/pdf_espelho.py` :: `from .pdf_base import RodapeAuditavel, get_commit_git, get_hostname` |
-| TELA-76 | **livre** | quantos minutos o dia realizou? | `relatorios/pdf_espelho.py` :: `def _coletar_dados_espelho(colaborador, data_ini, data_fim, _fatia_uni` |
-| TELA-77 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/pdf_espelho.py` :: `if not _fatia_unica:` |
-| TELA-78 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/pdf_espelho.py` :: `resumo['horas_previstas'] = len(datas_previstas_trabalho) * (` |
-| TELA-79 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/pdf_espelho.py` :: `def gerar_pdf_espelho_informacional_bytes(colab, data_ini, data_fim, p` |
-| TELA-80 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/services.py` :: `def resumo_espelho_colab(colab, data_ini, data_fim):` |
-| TELA-81 | **livre** | quantos minutos o dia realizou? | `relatorios/services.py` :: `def _dias_compactos(dados):` |
-| TELA-82 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `mes = int(request.POST.get('mes')); ano = int(request.POST.get('ano'))` |
-| TELA-83 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `templates/chamados/fio_colaborador.html` :: `<strong style="font-size:18px;color:{% if resumo.score.total >= 80 %}#` |
-| TELA-84 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/colaboradores/partials/_calendario_grade.html` :: `{% if pode_veredito and dia.pode_ultimo_recurso and dia.eh_trabalho an` |
-| TELA-85 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/colaboradores/partials/agenda_edit_dia.html` :: `function _agdToMin(hhmm) { const [h, m] = hhmm.split(':').map(Number);` |
-| TELA-86 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/colaboradores/partials/painel_vinculo.html` :: `{% if colab.posto and 'definir' not in colab.posto.nome\|lower %}` |
-| TELA-87 | **smoke** | o periodo de ferias esta vencido ou vencendo? | `templates/ferias/_secao_colab.html` :: `function feriasPrev(pk){` |
-| TELA-88 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/ausencias.html` :: `<td data-col="duracao" data-value="{{ a.dias_corridos\|default:0 }}">` |
-| TELA-89 | **smoke** | quais sao os turnos do colaborador (pares de batida)? | `templates/ponto/bater_ponto_v2.html` :: `mkPosto=L.marker([POSTO.lat,POSTO.lng],{icon:L.icon({iconUrl:'/static/` |
-| TELA-90 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `templates/ponto/batidas_offline_pendentes.html` :: `{% if batida.timestamp_gap_ms > 300000 or batida.timestamp_gap_ms < -3` |
-| TELA-91 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% for d in sem.dias %}{% if d.tem_card %}<a class="hx-cal-cell st-{{ ` |
-| TELA-92 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% if dia.realizado_grade %}` |
-| TELA-93 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% if t.par.turno_aberto %}` |
-| TELA-94 | **smoke** | a ausencia vale no dia (e quanto)? | `templates/ponto/lancar_ausencia.html` :: `fim = new Date(ini.getTime() + (dias - 1) * 86400000);` |
-| TELA-95 | **smoke** | a ausencia vale no dia (e quanto)? | `templates/ponto/partials/painel_ausencia.html` :: `<input type="checkbox" name="indeterminado" {% if a.data_fim is None a` |
-| TELA-96 | **livre** | qual competencia a tela mostra? | `inteligencia/management/commands/calcular_scores.py` :: `"""40% — penaliza por ausências no período."""` |
-| TELA-97 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `score_medio = qs_score.aggregate(m=Avg('score_total'))['m'] or 0` |
-| TELA-98 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `if slug == 'jornada-inconsistencias':` |
-| TELA-99 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `def exportar_pdf(request):` |
-| TELA-100 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `postos_sem_colaborador = qs_postos.filter(colaboradores__isnull=True).` |
-| TELA-101 | **livre** | a ausencia vale no dia (e quanto)? | `inteligencia/views.py` :: `total_ativos      = qs_colab.filter(situacao='ativo').count()` |
-| TELA-102 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `inteligencia/views.py` :: `ferias_30d_count = PeriodoAquisitivo.objects.filter(**f30_filter).dist` |
-| TELA-103 | **livre** | o chamado ou a pergunta esta vivo na fila? | `inteligencia/views.py` :: `from core.models import PlacarNavbar` |
-| TELA-104 | **livre** | a ausencia vale no dia (e quanto)? | `inteligencia/views.py` :: `if slug == 'top-faltosos':` |
-| TELA-105 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `inteligencia/calculadores.py` :: `def preenchimento_marcos(data_ini, data_fim):` |
-| TELA-106 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `def api_mensageria_pendencias_cadastro(request):` |
-| TELA-107 | **livre** | quantos minutos o dia realizou? | `api/views_mensageria.py` :: `def api_mensageria_meio_periodo(request):` |
-| TELA-108 | **livre** | a ausencia vale no dia (e quanto)? | `api/views_mensageria.py` :: `def api_mensageria_revisao_semanal_dp(request):` |
-| TELA-109 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `def api_mensageria_fase_12x36(request):` |
-| TELA-110 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `'como_usar': ('pergunte "como esta a semana do posto X" para ver '` |
-| TELA-111 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `O caso que pede e o golden [nome] col911: em 10/09 as 23:47-23:52 ele` |
-| TELA-112 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `'chamados_vivos': h['chamados_vivos'],` |
-| TELA-113 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `def api_mensageria_validar(request):` |
-| TELA-114 | **livre** | qual competencia a tela mostra? | `api/views_mensageria.py` :: `def api_mensageria_ausencias(request):` |
-| TELA-115 | **livre** | o periodo de ferias esta vencido ou vencendo? | `api/views_mensageria.py` :: `def api_mensageria_ferias(request):` |
-| TELA-116 | **livre** | o chamado ou a pergunta esta vivo na fila? | `api/views_mensageria.py` :: `def api_mensageria_pessoa(request):` |
-| TELA-117 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `'casa_hoje': p.get('casa_hoje'),` |
-| TELA-118 | **livre** | qual competencia a tela mostra? | `folha/services/ranking_he.py` :: `def apuracao_colab(termo, mes=None, ano=None):` |
-| TELA-119 | **livre** | qual competencia a tela mostra? | `folha/services/ranking_he.py` :: `def competencia_mais_recente():` |
-| TELA-120 | **livre** | o chamado ou a pergunta esta vivo na fila? | `chamados/templatetags/chamados_extras.py` :: `def pergunta_cega(perg):` |
-| TELA-121 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `core/templatetags/hasner_filters.py` :: `def rotulo_escala(tipo, size='md'):` |
-| TELA-122 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `escala/views.py` :: `def propostas_limbo_pdf(request):` |
-| TELA-123 | **livre** | a ausencia vale no dia (e quanto)? | `ferias/views.py` :: `'em_gozo': Ag.filter(status='em_gozo').count(),` |
-| TELA-124 | **livre** | qual competencia a tela mostra? | `holerite/matriz.py` :: `def competencias_recentes(hoje=None, n=6):` |
-| TELA-125 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/views.py` :: `sla_limite = {` |
-| TELA-126 | **livre** | o periodo de ferias esta vencido ou vencendo? | `relatorios/services.py` :: `def gerar_pdf_ferias_gestao_bytes(empresa, user, request=None, situaca` |
-| TELA-127 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def inconsistencias(request):` |
-| TELA-128 | **livre** | o periodo de ferias esta vencido ou vencendo? | `relatorios/views.py` :: `def ferias_vencendo(request):` |
-| TELA-129 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def horas_mes(request):` |
-| TELA-130 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def beneficios_consolidado(request):` |
-| TELA-131 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def absenteismo(request):` |
-| TELA-132 | **livre** | a ausencia vale no dia (e quanto)? | `relatorios/views.py` :: `def atestados_acumulados(request):` |
-| TELA-133 | **livre** | a ausencia vale no dia (e quanto)? | `relatorios/views.py` :: `def afastados(request):` |
-| TELA-134 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/views.py` :: `def extrato_parcial(request):` |
-| TELA-135 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/views.py` :: `resultado = motor.calcular_mes(` |
-| TELA-136 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `static/js/hasner-filter.js` :: `function faixaHorario(q){` |
-| TELA-137 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/escala/plano_folgas.html` :: `var NDIAS={{ cab\|length\|default:0 }};` |
+| TELA-15 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `chamados/services/fila_por_causa.py` :: `def toques(base=None, p=None):` |
+| TELA-16 | **livre** | qual competencia a tela mostra? | `chamados/services/fila_por_causa.py` :: `def bloqueios_para_fechar(p=None, hoje=None):` |
+| TELA-17 | **livre** | quantos minutos o dia realizou? | `chamados/services/painel.py` :: `sla_estourado = _sla.vencido(c, agora_sla, followups)` |
+| TELA-18 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/views.py` :: `gaps, sem_class = coletar_gaps_dp()` |
+| TELA-19 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `escala/services/furos_diarios.py` :: `def ranking_colabs(empresa, ini=None, fim=None, hoje=None, posto_id=No` |
+| TELA-20 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `escala/services/furos_diarios.py` :: `_ult = {r['colaborador_id']: r['u'] for r in Batida.objects.filter(col` |
+| TELA-21 | **livre** | quem esta em turno (turno aberto vivo) agora? | `ponto/views.py` :: `_hoje = timezone.localdate()` |
+| TELA-22 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `relatorios/furos.py` :: `def escalas_em_limbo(empresa=None):` |
+| TELA-23 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `relatorios/views.py` :: `resp = _pdf_colaboradores(headers, rows)` |
+| TELA-24 | **smoke** | quais sao os turnos do colaborador (pares de batida)? | `templates/chamados/meu_atendimento.html` :: `var LIM_C = 300, LIM_AMPM = 660;` |
+| TELA-25 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/painel_gestao.html` :: `if (r.dataset.colaboradorId == id) {` |
+| TELA-26 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_busca_arquivados.html` :: `{% if c.silenciado_ate > agora %}` |
+| TELA-27 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_card_atendimento.html` :: `{% elif chamado.disputa_obj and chamado.reaberturas_colab >= 2 %}` |
+| TELA-28 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/chamados/partials/_card_atendimento.html` :: `<p style="font-size:18px;font-weight:700;color:#92400e;margin:2px 0 0;` |
+| TELA-29 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/_card_atendimento.html` :: `{% if fu.autor_tipo == 'dp_rh' and not fu.lido_colaborador_em %}<span ` |
+| TELA-30 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/chamados/partials/modal_fio.html` :: `{% if chamado.disputa_obj.reaberturas_admin %}({{ chamado.disputa_obj.` |
+| TELA-31 | **livre** | o colaborador entra na folha (e por que nao)? | `folha/previa.py` :: `def _cobre_a_retencao(colab, ini, fim, dias):` |
+| TELA-32 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `folha/services/sem_furo.py` :: `def dias_com_furo(colab, ini, fim):` |
+| TELA-33 | **livre** | quantos minutos o dia realizou? | `folha/validacao_pdf.py` :: `def referencia_do_espelho(empresa, mes, ano):` |
+| TELA-34 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `folha/views.py` :: `def raiox_export(request):` |
+| TELA-35 | **livre** | qual competencia a tela mostra? | `folha/views.py` :: `return render(request, 'folha/exportar.html', {` |
+| TELA-36 | **livre** | qual competencia a tela mostra? | `inteligencia/calculadores.py` :: `@metrica('prontidao_folha')` |
+| TELA-37 | **livre** | qual competencia a tela mostra? | `ponto/views.py` :: `justificativas = Justificativa.objects.filter(` |
+| TELA-38 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `ponto/views.py` :: `'periodo_fechado': FechamentoMensal.objects.filter(` |
+| TELA-39 | **livre** | o colaborador entra na folha (e por que nao)? | `ponto/views.py` :: `_ids_anc_tela = set(_ECt.objects.filter(` |
+| TELA-40 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/holerite/confirmacao.html` :: `<div style="font-size:1.5rem;font-weight:700;color:#d97706;">{{ total\|` |
+| TELA-41 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/_fech_linha.html` :: `<td data-col="status">` |
+| TELA-42 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/_fech_linha.html` :: `<td data-col="pront" data-value="{{ r.pront.pct\|default:-1 }}">` |
+| TELA-43 | **smoke** | quantos minutos o dia realizou? | `templates/ponto/_fech_linha.html` :: `<tr class="fc-row" data-id="{{ r.fechamento.pk\|default:'' }}" data-col` |
+| TELA-44 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/fechamento.html` :: `function fcRows(){ return Array.from(document.querySelectorAll('tr.fc-` |
+| TELA-45 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/ponto/fechamento.html` :: `function fcFiltrar() {` |
+| TELA-46 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/fechamento.html` :: `function fcInc() {` |
+| TELA-47 | **smoke** | o colaborador entra na folha (e por que nao)? | `templates/ponto/partials/painel_fechamento.html` :: `<span class="badge {% if fechamento.status == 'aprovado' %}badge-ok{% ` |
+| TELA-48 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/relatorios/atestados.html` :: `{% if r.dias_empresa >= 15 %}` |
+| TELA-49 | **smoke** | o periodo de ferias esta vencido ou vencendo? | `templates/relatorios/ferias_vencendo.html` :: `{% if p.data_limite_concessao <= hoje %}` |
+| TELA-50 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/relatorios/ranking_furos.html` :: `window.qcFiltro=function(k,el){` |
+| TELA-51 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views.py` :: `_trab = esc.eh_dia_trabalho(_d, celulas=_cels_app, folgas=_folgas_app)` |
+| TELA-52 | **livre** | quantos minutos o dia realizou? | `api/views.py` :: `total_trabalhadas = round(_res['total_trabalhadas'], 1)` |
+| TELA-53 | **livre** | o colaborador entra na folha (e por que nao)? | `colaboradores/services/calendario.py` :: `def status_do_dia(colaborador, data):` |
+| TELA-54 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/services/calendario.py` :: `mes_prox, ano_prox = mes + 1, ano` |
+| TELA-55 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `colaboradores/services/drawer.py` :: `cal = contexto_calendario(colab, {'modo': 'custom', 'data_ini': _ini.i` |
+| TELA-56 | **livre** | quantos minutos o dia realizou? | `colaboradores/services/drawer.py` :: `for _t in _tdc(colab, _hoje - timedelta(days=7), _hoje):` |
+| TELA-57 | **livre** | qual competencia a tela mostra? | `colaboradores/views.py` :: `total_batidas = Batida.objects.filter(colaborador=colab).count()` |
+| TELA-58 | **livre** | numero de tela sem autoridade declarada (score, faixa de hor | `inteligencia/resumo.py` :: `s = ScoreColaborador.objects.filter(colaborador=colaborador).order_by(` |
+| TELA-59 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/services/espelho.py` :: `def _status_dia(dia, hoje):` |
+| TELA-60 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `ponto/services/espelho.py` :: `resultados_por_entrada[p.entrada] = p` |
+| TELA-61 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/services/espelho.py` :: `if inconsistente and apur_ini <= data <= apur_fim:` |
+| TELA-62 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/views.py` :: `'total_intra_indenizada': 0.0,` |
+| TELA-63 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/pdf_espelho.py` :: `def gerar_pdf_espelho_informacional_bytes(colab, data_ini, data_fim, p` |
+| TELA-64 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `mes = int(request.POST.get('mes')); ano = int(request.POST.get('ano'))` |
+| TELA-65 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `templates/chamados/fio_colaborador.html` :: `<strong style="font-size:18px;color:{% if resumo.score.total >= 80 %}#` |
+| TELA-66 | **smoke** | quem esta em turno (turno aberto vivo) agora? | `templates/colaboradores/partials/_calendario_grade.html` :: `{% if pode_veredito and dia.pode_ultimo_recurso and dia.eh_trabalho an` |
+| TELA-67 | **smoke** | o chamado ou a pergunta esta vivo na fila? | `templates/colaboradores/partials/agenda_edit_dia.html` :: `function _agdToMin(hhmm) { const [h, m] = hhmm.split(':').map(Number);` |
+| TELA-68 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/colaboradores/partials/painel_vinculo.html` :: `{% if colab.posto and 'definir' not in colab.posto.nome\|lower %}` |
+| TELA-69 | **smoke** | o periodo de ferias esta vencido ou vencendo? | `templates/ferias/_secao_colab.html` :: `function feriasPrev(pk){` |
+| TELA-70 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/ausencias.html` :: `<td data-col="duracao" data-value="{{ a.dias_corridos\|default:0 }}">` |
+| TELA-71 | **smoke** | quais sao os turnos do colaborador (pares de batida)? | `templates/ponto/bater_ponto_v2.html` :: `mkPosto=L.marker([POSTO.lat,POSTO.lng],{icon:L.icon({iconUrl:'/static/` |
+| TELA-72 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `templates/ponto/batidas_offline_pendentes.html` :: `{% if batida.timestamp_gap_ms > 300000 or batida.timestamp_gap_ms < -3` |
+| TELA-73 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% for d in sem.dias %}{% if d.tem_card %}<a class="hx-cal-cell st-{{ ` |
+| TELA-74 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% if dia.realizado_grade %}` |
+| TELA-75 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/ponto/espelho.html` :: `{% if t.par.turno_aberto %}` |
+| TELA-76 | **smoke** | a ausencia vale no dia (e quanto)? | `templates/ponto/lancar_ausencia.html` :: `fim = new Date(ini.getTime() + (dias - 1) * 86400000);` |
+| TELA-77 | **smoke** | a ausencia vale no dia (e quanto)? | `templates/ponto/partials/painel_ausencia.html` :: `<input type="checkbox" name="indeterminado" {% if a.data_fim is None a` |
+| TELA-78 | **livre** | qual competencia a tela mostra? | `inteligencia/management/commands/calcular_scores.py` :: `"""40% — penaliza por ausências no período."""` |
+| TELA-79 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `score_medio = qs_score.aggregate(m=Avg('score_total'))['m'] or 0` |
+| TELA-80 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `if slug == 'jornada-inconsistencias':` |
+| TELA-81 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `def exportar_pdf(request):` |
+| TELA-82 | **livre** | qual competencia a tela mostra? | `inteligencia/views.py` :: `postos_sem_colaborador = qs_postos.filter(colaboradores__isnull=True).` |
+| TELA-83 | **livre** | a ausencia vale no dia (e quanto)? | `inteligencia/views.py` :: `total_ativos      = qs_colab.filter(situacao='ativo').count()` |
+| TELA-84 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `inteligencia/views.py` :: `ferias_30d_count = PeriodoAquisitivo.objects.filter(**f30_filter).dist` |
+| TELA-85 | **livre** | o chamado ou a pergunta esta vivo na fila? | `inteligencia/views.py` :: `from core.models import PlacarNavbar` |
+| TELA-86 | **livre** | a ausencia vale no dia (e quanto)? | `inteligencia/views.py` :: `if slug == 'top-faltosos':` |
+| TELA-87 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `inteligencia/calculadores.py` :: `def preenchimento_marcos(data_ini, data_fim):` |
+| TELA-88 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `def api_mensageria_pendencias_cadastro(request):` |
+| TELA-89 | **livre** | quantos minutos o dia realizou? | `api/views_mensageria.py` :: `def api_mensageria_meio_periodo(request):` |
+| TELA-90 | **livre** | a ausencia vale no dia (e quanto)? | `api/views_mensageria.py` :: `def api_mensageria_revisao_semanal_dp(request):` |
+| TELA-91 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `def api_mensageria_fase_12x36(request):` |
+| TELA-92 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `'como_usar': ('pergunte "como esta a semana do posto X" para ver '` |
+| TELA-93 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `api/views_mensageria.py` :: `O caso que pede e o golden [nome] col911: em 10/09 as 23:47-23:52 ele` |
+| TELA-94 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `'chamados_vivos': h['chamados_vivos'],` |
+| TELA-95 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `def api_mensageria_validar(request):` |
+| TELA-96 | **livre** | qual competencia a tela mostra? | `api/views_mensageria.py` :: `def api_mensageria_ausencias(request):` |
+| TELA-97 | **livre** | o periodo de ferias esta vencido ou vencendo? | `api/views_mensageria.py` :: `def api_mensageria_ferias(request):` |
+| TELA-98 | **livre** | o chamado ou a pergunta esta vivo na fila? | `api/views_mensageria.py` :: `def api_mensageria_pessoa(request):` |
+| TELA-99 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `api/views_mensageria.py` :: `'casa_hoje': p.get('casa_hoje'),` |
+| TELA-100 | **livre** | qual competencia a tela mostra? | `folha/services/ranking_he.py` :: `def apuracao_colab(termo, mes=None, ano=None):` |
+| TELA-101 | **livre** | qual competencia a tela mostra? | `folha/services/ranking_he.py` :: `def competencia_mais_recente():` |
+| TELA-102 | **livre** | o chamado ou a pergunta esta vivo na fila? | `chamados/templatetags/chamados_extras.py` :: `def pergunta_cega(perg):` |
+| TELA-103 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `core/templatetags/hasner_filters.py` :: `def rotulo_escala(tipo, size='md'):` |
+| TELA-104 | **livre** | quais sao os turnos do colaborador (pares de batida)? | `escala/views.py` :: `def propostas_limbo_pdf(request):` |
+| TELA-105 | **livre** | qual competencia a tela mostra? | `holerite/matriz.py` :: `def competencias_recentes(hoje=None, n=6):` |
+| TELA-106 | **livre** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `ponto/views.py` :: `criado_em__date__lte=hoje - datetime.timedelta(days=7),` |
+| TELA-107 | **livre** | o periodo de ferias esta vencido ou vencendo? | `relatorios/services.py` :: `def gerar_pdf_ferias_gestao_bytes(empresa, user, request=None, situaca` |
+| TELA-108 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def inconsistencias(request):` |
+| TELA-109 | **livre** | o periodo de ferias esta vencido ou vencendo? | `relatorios/views.py` :: `def ferias_vencendo(request):` |
+| TELA-110 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def horas_mes(request):` |
+| TELA-111 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def beneficios_consolidado(request):` |
+| TELA-112 | **livre** | qual competencia a tela mostra? | `relatorios/views.py` :: `def absenteismo(request):` |
+| TELA-113 | **livre** | a ausencia vale no dia (e quanto)? | `relatorios/views.py` :: `def atestados_acumulados(request):` |
+| TELA-114 | **livre** | a ausencia vale no dia (e quanto)? | `relatorios/views.py` :: `def afastados(request):` |
+| TELA-115 | **livre** | quais os totais da competencia (horas, HE, noturno, faltas)? | `relatorios/views.py` :: `def extrato_parcial(request):` |
+| TELA-116 | **smoke** | numero de tela sem autoridade declarada (score, faixa de hor | `static/js/hasner-filter.js` :: `function faixaHorario(q){` |
+| TELA-117 | **smoke** | o dia acusa (falta, furo, ok) -- o que a celula julgou? | `templates/escala/plano_folgas.html` :: `var NDIAS={{ cab\|length\|default:0 }};` |
 
-## portas (149)
+## portas (124)
 
 | id | portao | pergunta / juiz alvo | arquivo:impressao |
 |---|---|---|---|
@@ -457,154 +427,120 @@
 | PORT-14 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views.py` :: `def responder_pergunta_disputa(` |
 | PORT-15 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views.py` :: `def atribuir_chamado(` |
 | PORT-16 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views.py` :: `def marcar_lidos_colaborador(` |
-| PORT-17 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_add_item(` |
-| PORT-18 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_colab_responder(` |
-| PORT-19 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_enviar(` |
-| PORT-20 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_criar(` |
-| PORT-21 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_del_item(` |
-| PORT-22 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_cobrar.py` :: `def validar_inline(` |
-| PORT-23 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def flip_batida_view(` |
-| PORT-24 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_lote_justificativas(` |
-| PORT-25 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_justificativa(` |
-| PORT-26 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def veredito_celula_view(` |
-| PORT-27 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def materializar_saida_retroativa(` |
-| PORT-28 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_lote_justificativas(` |
-| PORT-29 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def lancar_ausencia(` |
-| PORT-30 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def editar_ausencia(` |
-| PORT-31 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_ausencia(` |
-| PORT-32 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def cancelar_ausencia_lote(` |
-| PORT-33 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_ausencia(` |
-| PORT-34 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def anexar_documento_ausencia(` |
-| PORT-35 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views_tipos_ausencia.py` :: `def salvar_tipo_ausencia(` |
-| PORT-36 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_ausencia_lote(` |
-| PORT-37 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_ausencia_lote(` |
-| PORT-38 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def submeter_ausencia(` |
-| PORT-39 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_wizard.py` :: `def wizard_preview(` |
-| PORT-40 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_escala(` |
-| PORT-41 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_posto(` |
-| PORT-42 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_wizard.py` :: `def wizard_salvar(` |
-| PORT-43 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views.py` :: `def editar_folga_calendario(` |
-| PORT-44 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_folga(` |
-| PORT-45 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_usuarios.py` :: `def vincular_setor_usuario(` |
-| PORT-46 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views.py` :: `def aplicar_folga_calendario(` |
-| PORT-47 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_plano_folgas.py` :: `def plano_folgas_toggle(` |
-| PORT-48 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views.py` :: `def escala_remove_colab(` |
-| PORT-49 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_wizard.py` :: `def wizard_calendario_criar(` |
-| PORT-50 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def cancelar(` |
-| PORT-51 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def feita(` |
-| PORT-52 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def lida(` |
-| PORT-53 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def responder(` |
-| PORT-54 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def escrever(` |
-| PORT-55 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def criar_periodo_aquisitivo(` |
-| PORT-56 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def corrigir_concluida_admin(` |
-| PORT-57 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_datas_admin(` |
-| PORT-58 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_agendamento(` |
-| PORT-59 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendamento_colab_responder(` |
-| PORT-60 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendar_lote(` |
-| PORT-61 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def cancelar_admin_massa(` |
-| PORT-62 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendar_ferias(` |
-| PORT-63 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_periodo(` |
-| PORT-64 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def excluir_periodo(` |
-| PORT-65 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def vender_dias(` |
-| PORT-66 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def avaliar_solicitacao(` |
-| PORT-67 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def espelho_lote(` |
-| PORT-68 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def gerar_dominio_txt(` |
-| PORT-69 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def editar_integracao(` |
-| PORT-70 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def excluir_integracao(` |
-| PORT-71 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def nova_integracao(` |
-| PORT-72 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def lista_rubricas(` |
-| PORT-73 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def confirmar_ciencia(` |
-| PORT-74 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def ver_holerite_erro(` |
-| PORT-75 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def drawer_celula(` |
-| PORT-76 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def validar_e_enviar(` |
-| PORT-77 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def reenviar_filtro(` |
-| PORT-78 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_lote_v2(` |
-| PORT-79 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def avisar_lote(` |
-| PORT-80 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_lote(` |
-| PORT-81 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_holerite(` |
-| PORT-82 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_colaborador(` |
-| PORT-83 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_fechamento(` |
-| PORT-84 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reabrir_colaborador(` |
-| PORT-85 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reabrir_periodo(` |
-| PORT-86 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reavaliar_vazios(` |
-| PORT-87 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def recalcular_fechamento(` |
-| PORT-88 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def espelho_pdf_avulso(` |
-| PORT-89 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def anexar_espelho_chamado(` |
-| PORT-90 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def login_view(` |
-| PORT-91 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_ia.py` :: `def ia_perguntar(` |
-| PORT-92 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def admitir_colaborador(` |
-| PORT-93 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def editar_colaborador(` |
-| PORT-94 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def resetar_senha(` |
-| PORT-95 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_posto(` |
-| PORT-96 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def colab_regularizar(` |
-| PORT-97 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def desligar_colaborador(` |
-| PORT-98 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def reativar_colaborador(` |
-| PORT-99 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def trocar_senha(` |
-| PORT-100 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def conta_bancaria(` |
-| PORT-101 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def definir_senha_manual(` |
-| PORT-102 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def disparar_onboarding(` |
-| PORT-103 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def linhas_transporte(` |
-| PORT-104 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def alterar_perfil(` |
-| PORT-105 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def resetar_onboarding(` |
-| PORT-106 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def toggle_acesso(` |
-| PORT-107 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def transferir_posto(` |
-| PORT-108 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def cancelar_beneficio(` |
-| PORT-109 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def lancar_beneficio_lote(` |
-| PORT-110 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def lancar_beneficio(` |
-| PORT-111 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def avaliar_solicitacao_beneficio(` |
-| PORT-112 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def solicitar_beneficio(` |
-| PORT-113 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def configuracao_va(` |
-| PORT-114 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def disparar_onboarding_massa(` |
-| PORT-115 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_empresa(` |
-| PORT-116 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def passe_livre(` |
-| PORT-117 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def posto_add_colab(` |
-| PORT-118 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def posto_remove_colab(` |
-| PORT-119 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def toggle_posto(` |
-| PORT-120 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_praca(` |
-| PORT-121 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def confirmar(` |
-| PORT-122 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def console_encerrar(` |
-| PORT-123 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def console_criar(` |
-| PORT-124 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def grupo_salvar(` |
-| PORT-125 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def grupo_criar(` |
-| PORT-126 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `comunicados/views.py` :: `def console_sininho_salvar(` |
-| PORT-127 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def form_feriado(` |
-| PORT-128 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def excluir_feriado(` |
-| PORT-129 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def importar_feriados_nacionais(` |
-| PORT-130 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def parametros_sistema(` |
-| PORT-131 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_quadro.py` :: `def quadro_setores_api(` |
-| PORT-132 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def form_sindicato(` |
-| PORT-133 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_usuarios.py` :: `def ficha_usuario_acao(` |
-| PORT-134 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_usuarios.py` :: `def ficha_setor_acao(` |
-| PORT-135 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_usuarios.py` :: `def criar_setor_ad(` |
-| PORT-136 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_usuarios.py` :: `def criar_usuario_ad(` |
-| PORT-137 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `inteligencia/views.py` :: `def marcar_alerta_lido(` |
-| PORT-138 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `inteligencia/views.py` :: `def marcar_todos_lidos(` |
-| PORT-139 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_aceitar_termos(` |
-| PORT-140 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def concluir_onboarding(` |
-| PORT-141 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_confirmar_contato(` |
-| PORT-142 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_permissoes(` |
-| PORT-143 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_salvar_selfie(` |
-| PORT-144 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def bater_ponto(` |
-| PORT-145 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def criar_cobertura(` |
-| PORT-146 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def salvar_foto_batida(` |
-| PORT-147 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def batidas_offline_pendentes(` |
-| PORT-148 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def notificacao_negada(` |
-| PORT-149 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def regularizar_retorno(` |
+| PORT-17 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_colab_responder(` |
+| PORT-18 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_regularizacao.py` :: `def regularizacao_enviar(` |
+| PORT-19 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `chamados/views_cobrar.py` :: `def validar_inline(` |
+| PORT-20 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def flip_batida_view(` |
+| PORT-21 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_lote_justificativas(` |
+| PORT-22 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_justificativa(` |
+| PORT-23 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def veredito_celula_view(` |
+| PORT-24 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def materializar_saida_retroativa(` |
+| PORT-25 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_lote_justificativas(` |
+| PORT-26 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def lancar_ausencia(` |
+| PORT-27 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def editar_ausencia(` |
+| PORT-28 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_ausencia(` |
+| PORT-29 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def cancelar_ausencia_lote(` |
+| PORT-30 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_ausencia(` |
+| PORT-31 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def anexar_documento_ausencia(` |
+| PORT-32 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_ausencia_lote(` |
+| PORT-33 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def rejeitar_ausencia_lote(` |
+| PORT-34 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def submeter_ausencia(` |
+| PORT-35 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_escala(` |
+| PORT-36 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_posto(` |
+| PORT-37 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_wizard.py` :: `def wizard_salvar(` |
+| PORT-38 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def vincular_folga(` |
+| PORT-39 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views.py` :: `def aplicar_folga_calendario(` |
+| PORT-40 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_plano_folgas.py` :: `def plano_folgas_toggle(` |
+| PORT-41 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views.py` :: `def escala_remove_colab(` |
+| PORT-42 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `escala/views_wizard.py` :: `def wizard_calendario_criar(` |
+| PORT-43 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `pautas/views.py` :: `def responder(` |
+| PORT-44 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def criar_periodo_aquisitivo(` |
+| PORT-45 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def corrigir_concluida_admin(` |
+| PORT-46 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_datas_admin(` |
+| PORT-47 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_agendamento(` |
+| PORT-48 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendamento_colab_responder(` |
+| PORT-49 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendar_lote(` |
+| PORT-50 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def cancelar_admin_massa(` |
+| PORT-51 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def agendar_ferias(` |
+| PORT-52 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def editar_periodo(` |
+| PORT-53 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def excluir_periodo(` |
+| PORT-54 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def vender_dias(` |
+| PORT-55 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ferias/views.py` :: `def avaliar_solicitacao(` |
+| PORT-56 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def espelho_lote(` |
+| PORT-57 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def gerar_dominio_txt(` |
+| PORT-58 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def editar_integracao(` |
+| PORT-59 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def excluir_integracao(` |
+| PORT-60 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def nova_integracao(` |
+| PORT-61 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `folha/views.py` :: `def lista_rubricas(` |
+| PORT-62 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def confirmar_ciencia(` |
+| PORT-63 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def ver_holerite_erro(` |
+| PORT-64 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def drawer_celula(` |
+| PORT-65 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def validar_e_enviar(` |
+| PORT-66 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def reenviar_filtro(` |
+| PORT-67 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_lote_v2(` |
+| PORT-68 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def avisar_lote(` |
+| PORT-69 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_lote(` |
+| PORT-70 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `holerite/views.py` :: `def upload_holerite(` |
+| PORT-71 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_colaborador(` |
+| PORT-72 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def aprovar_fechamento(` |
+| PORT-73 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reabrir_colaborador(` |
+| PORT-74 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reabrir_periodo(` |
+| PORT-75 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def reavaliar_vazios(` |
+| PORT-76 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def recalcular_fechamento(` |
+| PORT-77 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def espelho_pdf_avulso(` |
+| PORT-78 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `relatorios/views.py` :: `def anexar_espelho_chamado(` |
+| PORT-79 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def login_view(` |
+| PORT-80 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def admitir_colaborador(` |
+| PORT-81 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def editar_colaborador(` |
+| PORT-82 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def resetar_senha(` |
+| PORT-83 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_posto(` |
+| PORT-84 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def colab_regularizar(` |
+| PORT-85 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def desligar_colaborador(` |
+| PORT-86 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def reativar_colaborador(` |
+| PORT-87 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def trocar_senha(` |
+| PORT-88 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def conta_bancaria(` |
+| PORT-89 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def definir_senha_manual(` |
+| PORT-90 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def disparar_onboarding(` |
+| PORT-91 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def linhas_transporte(` |
+| PORT-92 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def alterar_perfil(` |
+| PORT-93 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def resetar_onboarding(` |
+| PORT-94 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def toggle_acesso(` |
+| PORT-95 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def transferir_posto(` |
+| PORT-96 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def cancelar_beneficio(` |
+| PORT-97 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def lancar_beneficio_lote(` |
+| PORT-98 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def lancar_beneficio(` |
+| PORT-99 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def avaliar_solicitacao_beneficio(` |
+| PORT-100 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def solicitar_beneficio(` |
+| PORT-101 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def configuracao_va(` |
+| PORT-102 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def disparar_onboarding_massa(` |
+| PORT-103 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_empresa(` |
+| PORT-104 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def passe_livre(` |
+| PORT-105 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def posto_add_colab(` |
+| PORT-106 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def posto_remove_colab(` |
+| PORT-107 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def toggle_posto(` |
+| PORT-108 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `colaboradores/views.py` :: `def form_praca(` |
+| PORT-109 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def importar_feriados_nacionais(` |
+| PORT-110 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def parametros_sistema(` |
+| PORT-111 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views_config.py` :: `def form_sindicato(` |
+| PORT-112 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `inteligencia/views.py` :: `def marcar_alerta_lido(` |
+| PORT-113 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `inteligencia/views.py` :: `def marcar_todos_lidos(` |
+| PORT-114 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_aceitar_termos(` |
+| PORT-115 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def concluir_onboarding(` |
+| PORT-116 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_confirmar_contato(` |
+| PORT-117 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_permissoes(` |
+| PORT-118 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `core/views.py` :: `def onboarding_salvar_selfie(` |
+| PORT-119 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def bater_ponto(` |
+| PORT-120 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def criar_cobertura(` |
+| PORT-121 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def salvar_foto_batida(` |
+| PORT-122 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def batidas_offline_pendentes(` |
+| PORT-123 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def notificacao_negada(` |
+| PORT-124 | **livre** | a porta de escrita tem uso humano e smoke de clique? | `ponto/views.py` :: `def regularizar_retorno(` |
 
-## chamado (2)
+## ausencia/ferias (1)
 
 | id | portao | pergunta / juiz alvo | arquivo:impressao |
 |---|---|---|---|
-| CHAM-01 | **dinheiro-ate-export** | qual o dia do chamado? | `ponto/management/commands/supra_juiz.py` :: `d = (ch.contexto_json or {}).get('data_turno')` |
-| CHAM-02 | **dinheiro-ate-export** | qual o dia do chamado? | `ponto/services/cartorio.py` :: `d = (ch.contexto_json or {}).get('data_turno')` |
-
-## ausencia/ferias (3)
-
-| id | portao | pergunta / juiz alvo | arquivo:impressao |
-|---|---|---|---|
-| AUSE-01 | **livre** | quanto a ausencia dura, e o tipo e valido? | `relatorios/views.py` :: `Sum('dias_corridos')` |
-| AUSE-02 | **livre** | o colaborador esta de ferias hoje? | `ponto/services/triagem_batida.py` :: `elif colaborador.situacao == 'ferias':` |
-| AUSE-03 | **livre** | o colaborador esta afastado hoje? | `ponto/views.py` :: `_gravar_colab(colab, 'situacao', {'situacao': 'afastado'})` |
+| AUSE-01 | **corte** | o colaborador esta afastado hoje? | `ponto/views.py` :: `_gravar_colab(colab, 'situacao', {'situacao': 'afastado'})` |
 
 ## celula/precedencia (1)
 
@@ -612,12 +548,11 @@
 |---|---|---|---|
 | CELU-01 | **dinheiro-ate-export** | quantos minutos o dia realizou? | `escala/utils.py` :: `real_por_data[d] = minutos_realizados_do_dia(` |
 
-## turno/marcos (2)
+## turno/marcos (1)
 
 | id | portao | pergunta / juiz alvo | arquivo:impressao |
 |---|---|---|---|
-| TURN-01 | **dinheiro-ate-export** | que marco previsto a batida ocupa? | `ponto/motor_calculo_v2.py` :: `return min(_d, 1440 - _d) <= tol_min` |
-| TURN-02 | **livre** | o vao entre batidas foi intervalo? | `escala/utils.py` :: `if prev is not None and m + base < prev:` |
+| TURN-01 | **livre** | o vao entre batidas foi intervalo? | `escala/utils.py` :: `if prev is not None and m + base < prev:` |
 
 ## fechamento (19)
 
@@ -643,28 +578,28 @@
 | FECH-18 | **livre** | que FechamentoMensal e o da competencia de hoje? | `ponto/views.py` :: `_u_ini = _pa_u(mes, ano, 2)[0]` |
 | FECH-19 | **dinheiro-ate-export** | que FechamentoMensal e o da competencia de hoje? | `ponto/services/fechamento.py` :: `_esc_ini = _pa_esc(mes, ano, 2)[0]` |
 
-## feriado/prazo (20)
+## feriado/prazo (13)
 
 | id | portao | pergunta / juiz alvo | arquivo:impressao |
 |---|---|---|---|
 | FERI-01 | **livre** | o feriado suprime o trabalho do dia? | `chamados/services/fila_por_causa.py` :: `if dia and dia in feriados:` |
 | FERI-02 | **livre** | o feriado suprime o trabalho do dia? | `colaboradores/services/calendario.py` :: `if faixa == 'feriado':` |
-| FERI-03 | **livre** | o feriado suprime o trabalho do dia? | `ponto/management/commands/detectar_ausencias.py` :: `if not cobra_no_dia(getattr(colab, 'posto', None), data_ref):` |
-| FERI-04 | **livre** | o feriado suprime o trabalho do dia? | `ponto/management/commands/reavaliar_ausencias_feriado.py` :: `WEEKDAY = TipoEscala.CICLOS_FERIADO_VIRA_FOLGA` |
-| FERI-05 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `self.feriados = set()` |
-| FERI-06 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `if feriado and trab_dia > 0:` |
-| FERI-07 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `# Feriado: Sumula 146 TST paga TODAS as horas em dobro.` |
-| FERI-08 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `folha/export.py` :: `_suprime_feriado = (tipo_ciclo == '12x36' and not feriado_12x36_em_dob` |
-| FERI-09 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `core/regua_cct.py` :: `if _ciclo == '12x36' and r.get('feriado_12x36_em_dobra'):` |
-| FERI-10 | **livre** | feriado trabalhado paga dobra ou hora simples? | `colaboradores/services/calendario.py` :: `motor = get_motor(ec.tipo_escala if ec else None, feriados=feriados) i` |
-| FERI-11 | **livre** | feriado trabalhado paga dobra ou hora simples? | `relatorios/pdf_espelho.py` :: `elif p.entrada and p.entrada.date() in feriados:` |
-| FERI-12 | **livre** | feriado trabalhado paga dobra ou hora simples? | `ponto/views.py` :: `hora_extra_100 = request.POST.get('hora_extra_100') == 'on'` |
-| FERI-13 | **livre** | a que competencia (corte a corte) pertence o dia? | `ponto/management/commands/gerar_celulas.py` :: `ini = ref.replace(day=21) if ref.day >= 21 else (` |
-| FERI-14 | **livre** | a que competencia (corte a corte) pertence o dia? | `chamados/management/commands/arquivar_competencia_encerrada.py` :: `if data.day >= dia_corte:` |
-| FERI-15 | **livre** | a que competencia (corte a corte) pertence o dia? | `api/views_mensageria.py` :: `dia_inicio_competencia__isnull=True` |
-| FERI-16 | **livre** | a que competencia (corte a corte) pertence o dia? | `colaboradores/views.py` :: `dia_inicio_competencia = min(28, max(2, _dic))` |
-| FERI-17 | **livre** | qual o prazo do DP para responder a justificativa? | `ponto/views.py` :: `sla_limite = {` |
-| FERI-18 | **livre** | qual o prazo do DP para responder a justificativa? | `ponto/management/commands/alertar_justificativas_sla.py` :: `limite = timezone.now() - datetime.timedelta(days=7)` |
-| FERI-19 | **livre** | qual o prazo do DP para responder a justificativa? | `ponto/views.py` :: `criado_em__date__lte=hoje - datetime.timedelta(days=7),` |
-| FERI-20 | **livre** | o que e dia util? | `ponto/management/commands/escalonar_chamados_supervisao.py` :: `return dt.weekday() < 5 and 8 <= dt.hour < 18` |
+| FERI-03 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `self.feriados = set()` |
+| FERI-04 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `if feriado and trab_dia > 0:` |
+| FERI-05 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `ponto/motor_calculo_v2.py` :: `# Feriado: Sumula 146 TST paga TODAS as horas em dobro.` |
+| FERI-06 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `folha/export.py` :: `_suprime_feriado = (tipo_ciclo == '12x36' and not feriado_12x36_em_dob` |
+| FERI-07 | **dinheiro-ate-export** | feriado trabalhado paga dobra ou hora simples? | `core/regua_cct.py` :: `if _ciclo == '12x36' and r.get('feriado_12x36_em_dobra'):` |
+| FERI-08 | **livre** | feriado trabalhado paga dobra ou hora simples? | `ponto/views.py` :: `hora_extra_100 = request.POST.get('hora_extra_100') == 'on'` |
+| FERI-09 | **livre** | a que competencia (corte a corte) pertence o dia? | `chamados/management/commands/arquivar_competencia_encerrada.py` :: `if data.day >= dia_corte:` |
+| FERI-10 | **livre** | a que competencia (corte a corte) pertence o dia? | `api/views_mensageria.py` :: `dia_inicio_competencia__isnull=True` |
+| FERI-11 | **livre** | a que competencia (corte a corte) pertence o dia? | `colaboradores/views.py` :: `dia_inicio_competencia = min(28, max(2, _dic))` |
+| FERI-12 | **livre** | qual o prazo do DP para responder a justificativa? | `ponto/views.py` :: `criado_em__date__lte=hoje - datetime.timedelta(days=7),` |
+| FERI-13 | **livre** | o que e dia util? | `ponto/management/commands/escalonar_chamados_supervisao.py` :: `return dt.weekday() < 5 and 8 <= dt.hour < 18` |
+
+## batida (2)
+
+| id | portao | pergunta / juiz alvo | arquivo:impressao |
+|---|---|---|---|
+| BATI-01 | **dinheiro-ate-export** | quantas horas este dia vale? | `ponto/motor_calculo_v2.py` :: `periodo.minutos_trabalhados = max(0, duracao)` |
+| BATI-02 | **dinheiro-ate-export** | o dia em aberto bloqueia a folha? | `folha/export.py` :: `classificar_export` |
 

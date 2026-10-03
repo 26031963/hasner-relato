@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:14 AFIRMA ato sem PROVA ao lado -- **NO AR as 17:18:07** (`2984714b`, fast-forward de `17052ed1`; `bin/deploy.sh --sem-migrate`): 3 cascas recarregadas juntas, 3 rotas provada
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:16:48.**
+**Medido em 03/10/2026 17:22:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE` |
+| `HEAD` local | `16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **6** |
 
 ## Fabrica
 
@@ -22,20 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS
+2984714b [SITUACAO-E-LAMPADA] a nota do pendente _A14 afirmava duas coisas que ESTE commit derruba
+aaad199b [SITUACAO-E-LAMPADA] pousa a METADE DOS LEITORES do ! -- a da ESCRITA para em LEI, porque o censo que o aval mandou fazer devolveu 104 leitores, nao 8
 17052ed1 PLACAR-ESTRUTURAL: o lado DADO nao espera ! -- a lei e de 02/10, e o roteamento dela esta INERTE
 9a412112 PLACAR-ESTRUTURAL: os tres RED do R4 ganham dono, numero e frota -- e o contador que os achou mede o gravado contra ELE MESMO
-0c3cbc69 RELATO: o marco esta no remoto, e os dois numeros soltos eram meus (HEAD e p95)
-2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)
-8417887e [PALAVRA-SEM-TURNO-PAREADO] a palavra esta na MEMORIA do worker, nao so no disco -- smoke de leitura em prod, e a sonda que morreu era minha
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -77,7 +82,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 | etapa | item | estado | prova |
 |---|---|---|---|
 | E1 | nascer com data_fim < data_inicio e RECUSADO pelo banco (nao so pelo servico | FEITO | corte 27/09 02:0x: CHECK `ec_vigencia_fim_nunca_antes_do_inicio` NOT VALID (escala/0041); selo `escala.tests.test_vigencia_constraint_e_o_juiz` (15 ca |
-| E1 | o passivo de vigencia impossivel que ja existe -- lista que so encolhe | em curso | O91 FECHADA por corte Ronald 27/09 10:3x ("nao instala"): o cron `lavrar_vigencia_impossivel` -- o contador desta porta -- segue DECLARADO e NAO insta |
+| E1 | o passivo de vigencia impossivel que ja existe -- lista que so encolhe | em curso | O91 FECHADA por corte Ronald 27/09 10:3x ("nao instala"): o cron `lavrar_vigencia_impossivel` -- o contador desta porta -- segue DECLARADO e instalado |
 | E1 | celula de trabalho sem previsao valida | em curso | medido: 4 colabs com zero vinculo E zero celula (col924/391/43/942, ~221 h) |
 | E1 | qual vinculo vale no dia tem UM juiz (CelulaDia.escala_geradora) | FEITO | O69 aplicada em 09: 654,74 h; `escala/alimentacao.py::vinculo_do_dia`; selo `ponto.tests.test_vinculo_do_dia_pela_celula` (8 casos) |
 | E3 | o MARCO manda, nunca o tipo gravado | FEITO | selo `ponto.tests.test_e3_completa_o_marco_manda` + `test_selo_motor_nao_pareia_pelo_tipo_gravado`; aplicada em 09 |
@@ -111,44 +116,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  vai imprimir depois do merge:
+  Committed 16d2f6c8
+
+● Commit 16d2f6c8. Conferindo que o gerador preservou o bloco OBRAS antes de empurrar (as 308 deleções vêm da regeneração):
 
   Ran 1 shell command
 
-● O _p(_A14, ...) do commit carrega prova velha — diz "um deles FORA da porta (colaboradores/admin.py sem readonly_fields)", que este mesmo
-  commit fecha, e "8 universos", que o censo mediu em 104. É o mesmo padrão do espelho_verdade.py de hoje. Corrijo depois da suíte (editar
-  agora mexeria na árvore que ela está lendo). Esperando o portão:
+● O gerador comeu o marcador ORDEM-VIVA-TOPO — e ele é autoridade: o hook_stop_fila1 e o handoff o leem. Conferindo e restaurando:
 
   Ran 1 shell command
 
-● Background command "Esperar a suite terminar por estado do container" completed (exit code 0)
+● Bug provado no caminho — e LEI-AKITA 6 manda curar na hora. Primeiro o RED: o selo de host que lê o marcador:
 
   Ran 1 shell command
 
-● Portão VERDE: Ran 9500 tests → OK (skipped=42). (Meu grep ^OK$ não casou porque a linha é OK (skipped=42) — é a mesma família de
-  falso-negativo do OK: 31.)
+● RED confirmado: hook_nao_cobra_congelado: VERMELHO -- falta o marcador. É selo de host, roda no pre-push — o push ia vermelho. Lendo o
+  gerador para curar a origem, não só repor o texto:
 
-  Agora a prova velha dentro do commit, antes do merge:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● O gerador preserva só o bloco OBRAS; o marcador nasceu acima dele em 01/10 e ninguém ensinou o gerador. Vendo exatamente que região se
+  perdeu:
 
-● A nota do _p carrega duas afirmações que este mesmo commit derruba. Curando na raia, em memória antes de gravar:
+  A regiao perdida, do marcador ate OBRAS
+  ⎿  $ cd /home/ronald/saas-hasner && git show HEAD~1:app/docs/BACKLOG.md | sed -n '/<!-- ORDEM-VIVA-TOPO:/,/<!-- OBRAS:INICIO -->/p' |
+     head -30 | cat -A | sed 's/\$$//' | head -0; git show HEAD~1:app/docs/BACKLOG.md | sed -n '/<!-- ORDEM-VIVA-TOPO:/,/<!-- OBRAS:INICIO
+     -->/p' | awk '{printf "%d: %.100s\…
 
-  Rodar os selos que leem o core/juizes.py · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null && teste_envfile >/dev/null && MNT=$(bin/arvore_do_push.sh
-     --montagem /home/ronald/wt-lampada) && docker run --rm --name selo_nota $TESTE_DOCKER --network saas-hasner_default --env-file .env
-     --env-file "$TESTE_ENVFILE" -e PYTHONDONT…
-
-✻ Bloviating… (17h 3m 17s · ↓ 2.3m tokens)
+✢ Compacting conversation… (17h 8m 30s · ↓ 2.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 26%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Verifying AST and inspect usage in test_sla_pelo_juiz.py                                5h 24m 26s · ↓ 166.0k tokens
+  ◯ general-purpose  Verifying anchors in disputa_emissao.py                                                  5h 29m 39s · ↓ 80.4k tokens
   ⧉  index
 ```
