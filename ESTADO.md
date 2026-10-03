@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 07:14:01.**
+**Medido em 03/10/2026 07:19:03.**
 
 | | |
 |---|---|
@@ -115,14 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● RED confirmed on HEAD — 4 failures (01, 05, 07, 08), the four MORDE/premise cases green. Note test_07's measured fact: the judge dated
-  the 00:30 batida of 24/07 to 23/07 — BUG-145 live in the fixture. Now the cured copy.
-
-  Ran 1 shell command
-
-● GREEN, 8/8. Ruff first (the lesson from 01/10), then the neighbours.
-
-  Ran 8 shell commands
 
 ● Writing the frota sonda (scratchpad now, into bin/ at the commit act — LEI-AKITA 10).
 
@@ -141,10 +133,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Run the frota sonda against HEAD on the sombra" still running in background
 
-● Reading _tela and tests 01-02
-  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '80,140p' relatorios/tests/test_palavra_do_dia.py
+● Comparing the tela internals on HEAD and on the cure
+  ⎿  $ C=/tmp/prepush-arvore.WyKTUx/app; H=/tmp/prepush-arvore.ekuRMV/app
+     cat > /tmp/dbg2.py <<'PY'
+     # -*- coding: utf-8 -*-
+     import datetime
+     from relatorios.tests.test_palavra_do_dia import (PalavraDoDiaTest, ABERTO, TRABALHADO, FALTA,
+     HOJE)
+     class Dbg2(PalavraDoDiaTest):
+     def test_zz_dbg2(self):
+     from pont…
 
-✢ Bloviating… (7h 0m 30s · ↓ 936.2k tokens · thinking)
+✶ Bloviating… (7h 5m 32s · ↓ 945.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
