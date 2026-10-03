@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:13:01.**
+**Medido em 03/10/2026 20:18:31.**
 
 | | |
 |---|---|
@@ -112,37 +112,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Committed c1a1f7b6, 560f7314, searched for 1 pattern, ran 23 shell commands
+  Ran 15 shell commands
 
-● Background command "Empurrar o marco (pre-push roda a suite)" completed (exit code 0)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ponto/tests/test_tripwire_situacao_afastado.py (172 lines)
-  ⎿  Read ponto/management/commands/tripwire_situacao_afastado.py (52 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Referenced file ponto/tests/test_afastado_hoje.py
+● The push's pre-push suite is still holding juliani_db_test (~5 min in, one run at a time), so the O154 RED/GREEN waits on it. Meanwhile:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  - Push retried after the pre-push's own RED: tickets_rodape_vs_git ALARME (footer citing 4845e671, 25 commits behind the remote, teto 5)
+    → cure it named, bin/tickets_rodape.sh --escrever, committed as 29f28708.
+  - O154 applied in the raia wt-ui: buscar_escalas now matches against nome_canonico_dropdown() — the same text the <option> prints — with
+    prefetch_related('blocos_ciclo'), and digits-only falls back to the text when no hour matches. Anchor-checked patch, py_compile before
+    writing.
+  - Selo written: app/escala/tests/test_o154_busca_le_o_que_mostra.py, 10 cases. Each of the four terms from the aval asserts the term is
+    absent from template_nome/apelido — that's what makes it bite the old Q(template_nome) | Q(apelido). Plus 22 proving the hour branch
+    still wins over LOTE 22 (fallback, not union), and one case per part the aval names (tipo/dias/horario/intervalo/apelido) computing the
+    expected set from the model itself.
+  - Ruff clean on both files; no test anywhere referenced buscar_escalas before this one.
+  - Merge plan decided: cherry-pick only the O154 commit onto main. The raia's four O122 commits stay put — etapa 0 is an open lei question
+    ("vale como entrega?") and etapa 1 waits on his smoke; putting them in the air would answer for him. Their two pendentes exist only in
+    the raia's PENDENTES_RONALD.json, so they're invisible on the mesa — I'll bring those two JSON items into main so they show up, with
+    the deadlock named (etapa 1's smoke can't happen until it's in the air).
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-● The pre-push blocked it: tickets_rodape_vs_git ALARME — the TICKETS footer still cites 4845e671, 25 commits behind the remote. Running
-  the cure it names:
+● Uso de _dias_cobertos
+  ⎿  $ cd /home/ronald/saas-hasner && awk '/^def recalcular_fechamento_mes/,0' app/ponto/services/fechamento.py | grep -n
+     "_dias_cobertos\|o85\|O85" | head -20
 
-  Committed 29f28708, ran 10 shell commands
-
-● Now applying the view in the raia (anchor-checked, compile before write):
-
-  Ran 5 shell commands
-
-● Ruff clean. Drafting the docs text while the push's suite holds the test DB:
-
-  Superficie de conflito da raia-ui com main
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== commits da raia nao mergeados ==="; git log --oneline main..raia-ui; echo "=== arquivos que
-     a raia toca ==="; git diff --stat $(git merge-base main raia-ui) raia-ui
-
-✢ Bloviating… (19h 59m 30s · ↓ 2.7m tokens · thinking)
+✢ Compacting conversation… (20h 5m 0s · ↓ 2.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 54%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
