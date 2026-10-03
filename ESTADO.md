@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:36:31.**
+**Medido em 03/10/2026 18:41:37.**
 
 | | |
 |---|---|
-| `HEAD` local | `3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha` |
+| `HEAD` local | `bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam` |
 | `origin/main` | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
-| commits a subir (`ahead`) | **22** |
+| commits a subir (`ahead`) | **23** |
 
 ## Fabrica
 
@@ -29,58 +29,19 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam
 3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha
 b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com os numeros
 23450e7e [CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA -- 18 commits, o que tem selo verde pousa
 cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar" diferentes, e o estoque na sombra
-bf1879e5 [D4-PORTA-DA-ANOTACAO-DE-CONTEXTO] o mesmo gesto escrito em TRES sitios, e a guarda era DIFERENTE em cada um
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
-M  app/api/views.py
-M  app/chamados/management/commands/dedup_perguntas_fato.py
-M  app/chamados/models.py
-M  app/chamados/reconciliador.py
-M  app/chamados/services/acoes_disputa.py
-M  app/chamados/services/declaracao_texto.py
-M  app/chamados/services/disputa_emissao.py
-M  app/chamados/services/fio.py
-M  app/chamados/services/materializacao.py
-M  app/chamados/services/relavra_via.py
-M  app/chamados/services/validacao.py
-M  app/chamados/signals.py
-D  app/chamados/tests/test_chokepoint_chamado_gate.py
-M  app/chamados/tests/test_contract_leitores_vitalidade.py
-D  app/chamados/tests/test_porta_anotacao_contexto.py
-D  app/chamados/tests/test_porta_desfecho_pergunta.py
-D  app/chamados/tests/test_porta_disputa_ciclo.py
-D  app/chamados/tests/test_porta_disputa_emissao.py
-D  app/chamados/tests/test_porta_pergunta_identidade.py
-D  app/chamados/tests/test_porta_reapontamento_pergunta.py
-D  app/chamados/tests/test_porta_remocao_motivo.py
-D  app/chamados/tests/test_porta_resposta_pergunta.py
-D  app/chamados/tests/test_porta_validacao_pergunta.py
-D  app/chamados/tests/test_porta_veredito_pergunta.py
-M  app/chamados/tests/test_sla_pelo_juiz.py
-M  app/chamados/veredito_lavrado.py
-M  app/chamados/views.py
-M  app/colaboradores/services/aparelho.py
-M  app/colaboradores/signals.py
-M  app/colaboradores/tests/test_porta_cadastro.py
-M  app/core/censo_escritas.py
-M  app/core/contratos_estruturais.py
-M  app/core/credenciais.py
-M  app/core/portas.py
-M  app/core/tests/test_censo_escritas.py
-M  app/core/tests/test_contract_escritores_estado.py
-M  app/escala/servico_jornada.py
-M  app/escala/signals.py
-D  app/escala/tests/test_o123_lei_pergunta_o_vinculo_uma_vez.py
-M  app/ponto/management/commands/alertar_disputas_pendentes.py
-M  app/ponto/management/commands/escalonar_chamados_supervisao.py
+?? app/core/rotas_publicas.py
+?? app/core/tests/test_rota_pede_sessao.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -152,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
+       3 Nasceu do P7.1 (aval Ronald 03/10 18:1x): `escala/views.py::escala_buscar_colabs` respondia
+       4 cadastro de pessoa em JSON SEM sessao, em prod, por um motivo banal -- nasceu sem decorador, e
+       5 os dois decoradores acima dela no arquivo pertenciam a view anterior. Nada pegou isso porque
+       6 NAO HA middleware que exija sessao: `core/middleware.py` decide PLATAFORMA, nao login
+       7 (`PlataformaGateMiddleware` isenta /api/ /static/ /media/ /health/ /webview/ e nao autentica
+       8 ninguem). Em casa assim, o decorador E a autoridade -- e autoridade sem selo e promessa.
+       9
+      10 POR QUE A PERGUNTA E A RESPOSTA, E NAO O DECORADOR. Meu primeiro censo varreu a LISTA DE
+     … +163 lines
 
-● Controle limpo: vizinhas decoradas dão 302 mesmo com tid inexistente (decorador roda antes); a aberta dá 404 — view alcançada sem sessão.
-  Então o par da prova é 404 → 302, sem nenhum PII. Commitando o RELATO para liberar o revert:
+● Write(core/rotas_publicas.py)
+  ⎿  Wrote 27 lines to core/rotas_publicas.py
+       1 """CADASTRO das rotas que respondem SEM sessao de proposito -- com motivo, por entrada.
+       2
+       3 Lido por `core/tests/test_rota_pede_sessao.py`, que varre as duas cascas e acusa toda rota cujo
+       4 GET sem sessao nao devolve 301/302/403. Rota publica de verdade existe, e precisava de um lugar:
+       5 a ordem de 03/10 18:1x diz "allowlist zero", e allowlist zero nao quer dizer "nao ha rota
+       6 publica" -- quer dizer que a excecao nao mora DENTRO do teste. Aqui ela mora fora, com nome e
+       7 motivo, no molde do `bin/auth_sitios.txt` (que tambem e lista declarada, nao derivada de nome de
+       8 arquivo) e do `PREFIXOS_ISENTOS` de `core/middleware.py`.
+       9
+      10 A REGRA DE ENTRADA, quatro linhas, antes de qualquer nome novo aqui:
+     … +17 lines
 
-  Committed b5cde421
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null && docker run --rm $TESTE_DOCKER
+     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
+     ~/saas-hasner/app:/app saas-hasner-core:latest p…
 
-● Agora a cura P7.1 sozinha, construída em cópia do HEAD e encenada sem tocar a árvore viva:
-
-  Ran 2 shell commands
-
-● O selo da casa recusou, e com razão: index ≠ disco. PULAR_INDEX=1 é atalho — não uso. Então a cura vai no mesmo commit da carona O122,
-  com disco == index e a carona declarada:
-
-  Committed 3c229e09, ran 2 shell commands
-
-● Revert do merge, preservando a história em app/docs/ — o revert é sobre os .py, não sobre o registro:
-
-  Ran 2 shell commands
-
-● O cheque discriminante do advisor fecha: do ar (2984714b) até o index, em .py, sobra só app/escala/views.py — o deploy publica o próprio
-  código de prod mais dois decoradores (bin/gerar_backlog.py é script de host, não entra no container). Commitando o revert:
-
-  Made 1 scratchpad edit +32, ran 3 shell commands
-
-● O selo pede declaração — e a deleção é minha e deliberada. Declarando no corpo, como ele prescreve:
-
-● Conferir se o apendice entrou
-  ⎿  /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_revert.txt
-
-✻ Waiting for API response · will retry in 2m 38s · check your network
+· Bloviating… (18h 28m 6s · ↓ 2.5m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
