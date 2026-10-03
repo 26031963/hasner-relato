@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 21:30:03.**
+**Medido em 02/10/2026 21:35:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| `origin/main` | `751b53c4 [TICKETS] A linha do HOOK -- a terceira causa de push na mesma familia` |
-| commits a subir (`ahead`) | **8** |
+| `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,11 +40,13 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
+?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? bin/reverter_o122.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -100,42 +102,42 @@ d21f59f6 [TICKETS] As quatro linhas que faltavam (O37, O38, O121, O122)
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Waiting for push 93 to land · 2m 47s
-  ⎿  $ cd /home/ronald/saas-hasner && until grep -qaE "To https|error:|rejected|^exit=" logs/push93.log 2>/dev/null; do sleep 20; done;
-     grep -aE "^(OK$|FAILED|Ran |To https|error:|FAIL:|RED|exit=)" logs/push93.log | tail -5 (2m 46s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● 42 afirmações, mas você disse "a linha que retém" — singular. Vejo o publicador, porque é ele que retém:
 
-✢ Sock-hopping… (3h 17m 31s · ↓ 566.1k tokens)
+  Ran 2 shell commands
+
+● O publicador retém por qualquer uma das 42, e a cura estrutural é a lei que já existe: DIETA DE PROSA — "RELATO com mais de 3 dias vai
+  para app/docs/RELATO-ARQUIVO.md no mesmo commit". Hoje é 02/10, então 29/09 e antes saem. Meço onde está a fronteira:
+
+  Ran 1 shell command
+
+● Fronteira na linha 6716 (o último cabeçalho de 30/09 está na 6672). Confiro que não há 30/09 abaixo dela antes de mover:
+
+  Ran 1 shell command
+
+● Boa que eu conferi — há conteúdo de 02/10 abaixo da linha 6716 (9290+). O RELATO não é estritamente do mais novo ao mais velho, então um
+  corte por linha arquivaria o de hoje. Mapeio a estrutura por data antes de mover nada:
+
+  Ran 1 shell command
+
+● A estrutura é embaralhada e algumas "datas" são falso-positivo (09/20, 10/20 são fragmentos de 09/2026). Então arquivo por bloco, nunca
+  por corte de linha, e só o que eu consigo datar com confiança como anterior a 30/09 — o que não dá para datar fica:
+
+● Splitting the RELATO by dated blocks
+  ⎿  $ cd /home/ronald/saas-hasner && cp app/docs/RELATO.md
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/RELATO_antes.md && python3 - <<'PY'
+     import io, re, datetime
+     p = 'app/docs/RELATO.md'
+     linhas = io.open(p, encoding='utf-8').read().split('\n')
+     cab = li…
+
+✢ Sock-hopping… (3h 23m 0s · ↓ 583.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: bug provado, entra na fila atras do item em curso; nao interrompe.
-
-  ID: O-PENDENCIAS-DISPUTA-N+1
-  MEDIDO 02/10 21:27 em prod, so leitura, chamando as views reais com usuario 651 (/tmp/painel_tempo.py):
-  - colaboradores:pendencias_disputa = 1,72 s, 318 consultas, 203 KB, disparada por hx-trigger="load" a CADA abertura do painel
-  situacional;
-  - pagina 0,08-0,23 s / 17-19 consultas; cada lote de 100 = 0,20 s / 15 consultas (O113 confirmado nas linhas).
-    FONTE: colaboradores/views.py:2808 pendencias_disputa -> chamados/relatorios_disputa.py::coletar (linha 25) -> classificar
-  (linha 10), que chama pergunta_viva por pergunta. O queryset ja tem select_related e prefetch (linhas 40-42); as 318 nascem depois
-  dele.
-    MUDA: a coleta responde em numero de consultas CONSTANTE, pela MESMA autoridade (pergunta_viva), carregando os insumos em lote. Mesma
-  classe e mesma cura do O113.
-    RED: (1) coletar() com N disputas e com 2N faz o MESMO numero de consultas, diferenca 0; (2) selo de equivalencia: os quatro baldes
-  (AGUARDA_SUPERVISAO, PRONTA_FECHAR, AGUARDA_COLAB, SEM_PERGUNTA) identicos antes e depois, disputa a disputa, na sombra, diferenca 0
-  nos dois sentidos.
-    PROIBIDO: juiz novo, reimplementar pergunta_viva, cache com prazo, fallback, tirar o bloco da tela, mudar o que ele mostra.
-    PRONTO: os dois REDs com PROVA, tempo e consultas re-medidos pela view em prod, commit e deploy. Sem isso INCOMPLETO com a lista.
-    QUEM MAIS LE: censo de quem chama coletar() e pergunta_viva em laco, com o numero de cada um.
-    LEI-AKITA: origem=chamados/relatorios_disputa.py::coletar, testemunha=pergunta_viva, RED=acima, quem-mais-le=censo, juizes novos=0.
-  Nenhuma lei nova (L-002, L-003, LEI-AKITA 5 e 8).
-    LINHA HAIKU: nenhum contador novo; golden "quantas disputas aguardam a supervisao agora?" esperado via a mesma coleta.
-    Segue a fila; PAREI so em lei ou !
-  ctrl+x ctrl+s to send now
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
