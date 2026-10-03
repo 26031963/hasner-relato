@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:58:01.**
+**Medido em 03/10/2026 13:03:31.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de tu
 
 ```
  M PLANO_PISCADA.md
+ M app/core/juizes.py
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
@@ -118,36 +119,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Item (1) volta ao topo com a lei. Vou ler o molde do "Em aberto" do R3 antes de escrever a palavra nova.
+● Os 8 filtros situacao='ativo' tiram os afastados do universo de cobrança. Vou medir o tamanho disso em prod (só leitura, sem motor):
 
   Ran 3 shell commands
 
-● O molde do R3 está claro. Antes de construir a palavra, fecho o item (2) que já está medido — e registro a ordem. Agora o número do
-  ausência, em prod e só leitura.
+● Medido: os 11 têm 0 dia-célula de trabalho e 0 batidas na competência — os 8 filtros excluem quem hoje não tem o que cobrar. Confirmando
+  a afirmação sobre o reversor antes de publicá-la:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● 11 afastados, o juiz confirma 11, divergência 0, só-juiz 0, sem posto/escala 0 — a troca não move ninguém hoje; é origem, não DIFF. Agora
-  o RED, construído em cópia do HEAD.
+● Minha afirmação sobre o reversor estava errada — ele está instalado e rodando (situacao_afastado_revertida=0). Corrigindo o comentário e
+  o docstring antes de commitar:
+
+  Ran 5 shell commands
+
+● Agora reabro o item com o número medido, cobrindo os dois escritores que a correção nomeou:
 
   Ran 4 shell commands
 
-● RED evidenciado: as três falhas previstas. Agora a cura, na cópia do HEAD.
+● O registro fica em 1 pendente (a escrita). Atualizo só o motivo para carregar o fato de hoje:
 
-● Applying the cure and running with the triagem neighbours
-  ⎿  $ D=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/f_aus
-     python3 - "$D" <<'PY'
-     import sys, os, py_compile
-     D = sys.argv[1]
-     p = os.path.join(D, 'triagem_batida.py')
-     s = open(p, encoding='utf-8').read()
-     old = """ if colaborador.situacao == 'afastado':
-     # A…
+● Rodar core.tests (contratos e juizes) com os dois modulos de ausencia · 47s
+  ⎿  $ cd /home/ronald/saas-hasner; source bin/recursos.sh; teste_envfile >/dev/null
+     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" \
+     -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest \
+     python manage.py test core.tests… (47s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Compacting conversation… (12h 44m 30s · ↓ 1.7m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+· Bloviating… (12h 50m 0s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -155,6 +156,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading `registrar_aparelho` in aparelho.py                                              1h 5m 39s · ↓ 166.5k tokens
+  ◯ general-purpose  Updating ATOS in test_porta_pergunta_identidade.py                                        1h 11m 8s · ↓ 87.1k tokens
   ⧉  index
 ```
