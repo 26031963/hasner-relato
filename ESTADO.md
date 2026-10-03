@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:05:54.**
+**Medido em 02/10/2026 22:11:01.**
 
 | | |
 |---|---|
@@ -93,36 +93,36 @@ da4e1f92 [O119] NO AR e provado: pago = 720 menos as pausas REAIS, 551 nos dias 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  reversão, o marcador ORDEM-VIVA-TOPO que não consegue declarar, e o O33 × O27 que uma frase sua fecha junto.
+  O RED fica evidente e é do oráculo: um dia-colab com minutos_realizados = None e pago_h = 12,0 não é esp_zero_e6_trabalho; e o caso que
+  distingue é o zero de verdade, que tem de continuar acusando.
 
 ● Ran 1 stop hook
   ⎿  Stop hook error: siga: E6-CAUDA-1 -- A CAUDA DO E6 PELA MAIOR CLASSE: esp_zero_e6_trabalho (ordem dele 02/10 21:4x, item 3:
   'a cauda do E6 pela mai
 
-● Censo feito; agora o RED, pela sua ordem. Meço por que o espelho mostra zero no caso sem ambiguidade (col887 21/08, 06:51 → 19:00, piso
-  = teto = 730):
+● A cura é no instrumento, não em dinheiro. Leio o sítio e a classificação:
 
   Ran 1 shell command
 
-● Isso corrige a classe inteira, e eu ia construir o RED contra o alvo errado. O espelho não mostra zero:
+● A cura: quando minutos_realizados é None, o oráculo deve ler o que a tela mostra (pago_h), e não zero — e se os dois forem nulos, o dia
+  sai da comparação com contador próprio. RED primeiro:
 
-  col887 21/08: minutos_realizados: None, pago_h: 12.0    (motor: 720 min)
-  col134 02/09: minutos_realizados: None, pago_h: 11.98   (motor: 719 min)
+  Ran 1 shell command
 
-  O espelho sabe o dia — paga 12,0 h. O que é None é minutos_realizados. Confiro qual campo o oráculo compara:
+● Agora a cura — a função pura que o selo cobra, e o sítio passando a usá-la:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● Confirmado em e6_oraculo.py:110: m_esp = float(de.get('minutos_realizados') or 0) — e o or 0 transforma None ("não lavrado") em zero
-  ("trabalhou zero"). É a ausência de sinal lida como sinal, na forma mais pura. Meço quantos dos 247 são isso:
+● 16 verdes (4 novos + 12 do selo irmão). Agora a remedição, que é o quarto passo da sua ordem — o oráculo curado na 09:
 
-  Splitting the class by whether the espelho really says zero
-  ⎿  $ cd /home/ronald/saas-hasner && cat >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6_split.py <<'PY'
-     """Dos dia-colab da classe `esp_zero_e6_trabalho`: o espelho diz ZERO, ou NAO DIZ?
-     `e6_oraculo.py:110` faz `float(de.get('minutos_realizados') or 0…
+● Re-measuring the oraculo with the cure · 3m 23s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; timeout 1700 docker run --rm --cpuset-cpus "$TESTE_CPUSET"
+     --cpus 3 --network saas-hasner_default --env-file "$PWD/.env" \
+     -e DJANGO_SETTINGS_MODULE=config.settings.sombra -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo \
+     -e HTT… (3m 23s)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-* Sock-hopping… (3h 53m 23s · ↓ 658.4k tokens)
+✢ Sock-hopping… (3h 58m 30s · ↓ 666.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
