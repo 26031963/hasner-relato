@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:57:51.**
+**Medido em 03/10/2026 19:02:56.**
 
 | | |
 |---|---|
@@ -114,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  @api_view, independente da política de permissão — então uma rota AllowAny serve 200 e sai "consultada". Lavanderia, igual ao context
+  processor. permissions.py não entra: ali ler is_authenticated é a decisão.
 
-● Essas duas são públicas por corte escrito (06/09) e protegidas por HMAC (comp.confere), devolvendo dados if ok else None — cumprem as
-  quatro linhas da regra de entrada, inclusive a 4ª. Lendo as cinco restantes:
+  Ran 3 shell commands
 
-  Searched for 1 pattern, ran 3 shell commands
-
-● Veredito da triagem: 1 buraco real (wizard_calendario_criar, escrita anônima) e 7 públicas por projeto. Vendo o molde das vizinhas do
-  wizard:
-
-  Searched for 1 pattern
-
-● O molde é exato: todo escritor do arquivo leva @login_required + @require_POST + @acao_required('editar_escalas'). Só esta não leva — e
-  ela nasceu entre duas decoradas, mesma forma do P7.1. Curando:
+● api_diag_cam só escreve em log (sem banco) e lê request.user.is_authenticated no próprio corpo — então ele continua "consultado"
+  legitimamente, e é o limite honesto da sonda: consultou ≠ autorizou. Vai nomeado no RELATO, não no cadastro (cadastro com entrada que não
+  serve a ninguém infla). Rodando com a lavanderia do DRF:
 
   Ran 1 shell command
 
-● Agora o cadastro, com as sete e o motivo de cada:
+● /api/auth/login/ revela um defeito na CHAVE do cadastro: o nome login é o mesmo da tela /login/, sem namespace — declarar 'login' cegaria
+  as duas rotas de uma vez. Trocando a chave pela identidade canônica da casa (a que o reverse usa):
 
-  Ran 6 shell commands
+  Ran 1 shell command
 
-● Há suíte existente para essa rota (test_wizard_folga_padrao.py, 4 POSTs) — o teste de vizinho é obrigatório. Rodando escala + core:
+● O namespace funciona (core:login ≠ api:login) e o caso anti-cegueira mordeu a troca, que é o trabalho dele. Atualizando as chaves e
+  somando as duas novas:
 
-● Rodar escala e core · 44s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER
-     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     ~/saas-hasner/app:/app saas-hasner-core:latest pyt… (44s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Chaves com namespace, duas entradas novas, nova rodada
+  ⎿  $ python3 - <<'PY'
+     import re
+     p='core/tests/test_rota_pede_sessao.py'
+     s=open(p,encoding='utf-8').read()
+     a = """ ('saas_ui', 'config.urls_ci', 'escala_buscar_colabs'),
+     ('saas_core', 'config.urls_core', 'me'),"""
+     n = """ ('saas_ui', 'config.urls_ci', 'escala:escala_buscar_colabs'),
+     ('saas_core', 'conf…
 
-✢ Bloviating… (18h 44m 20s · ↓ 2.6m tokens)
+✽ Bloviating… (18h 49m 25s · ↓ 2.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
