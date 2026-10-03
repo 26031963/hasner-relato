@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**131 obras abertas.**
+**132 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -140,3 +140,4 @@ lista — ela e o que esta EM PE._
 | **O130** | EM ABERTO DIZ O QUE FALTA | **fila 1, atras do R3.** E leitura de `t |
 | **O131** | UM CARREGADOR DE CANDIDATOS | fila 1. De-duplicacao PURA: nasce a irma |
 | **O132** | A MEDIDA QUE AGENDA O CRON NAO SE DEFENDE DE SI | espera `!` |
+| **O133** | CLEAR-NO-MARCO | **fila 2**, ordem dele. Nao e dinheiro,  |

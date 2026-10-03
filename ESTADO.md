@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 08:01:31.**
+**Medido em 03/10/2026 08:06:46.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -116,44 +117,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-   Session
+  ID: CLEAR-NO-MARCO. O Code nao da /clear em si mesmo; quem digita e um vigia do host, pelo tmux.
+  1. SINAL: ao FECHAR um marco (item da fila 1 fechado, RELATO publicado, push feito, nenhuma tarefa de fundo viva, nada medido e nao
+  publicado), rodar bin/handoff_sessao.sh e criar logs/marco.fechado com o hash do HEAD.
+  2. HOOK DE STOP: com logs/marco.fechado presente, libera o Stop em vez de devolver "siga".
+  3. VIGIA no host (timer de usuario, 1 min): se o sinal existe E o painel do tmux code esta parado (sem "esc to interrupt") E nao ha
+  mensagem na fila, entao tmux send-keys -t code "/clear" Enter, espera, e manda a frase de retomada: "retoma pelo HANDOFF-SESSAO.md;
+  segue a fila; PAREI so em lei ou !". Apaga o sinal e grava uma linha em logs/clear_no_marco.log (hora, hash, contexto antes).
+  4. SessionStart com matcher clear imprime o HANDOFF-SESSAO.md, como o compact ja faz.
+  5. Selo de host: sinal com tarefa de fundo viva ou com arvore suja de dinheiro = o vigia NAO limpa e registra o motivo.
+     PRONTO: um ciclo completo provado (marco -> sinal -> /clear -> retomada pelo handoff -> proximo item andando), com o log.
+     PROIBIDO: limpar no meio de DIFF ou apply; sleep em processo do Code; segundo tmux.
+     Segue a fila.
 
-   Total cost:            $4022.59
-   Total duration (API):  2d 22h 55m
-   Total duration (wall): 5d 15h 40m
-   Total code changes:    4794 lines added, 498 lines removed
-   Usage by model:
-          claude-opus-5:  1.3m input, 13.3m output, 6.4b cache read, 32.1m cache write ($3814.93)
-       claude-fable-5-1:  16.4m input, 876.1k output, 0 cache read, 0 cache write ($207.66)
-   Prompt cache (main):   17398 requests · 100% of input tokens from cache · 32 misses (last 1m 12s ago — likely cause: prompt
-   unchanged — likely server-side, 12.0m tokens re-cached) · 56 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL,
-   last activity 1m 12s ago)
+● Chegou o CLEAR-NO-MARCO (fila 2). PROMPT-NAO-SE-REPETE exige linha no PROMPTS.md e item no bloco OBRAS no mesmo turno — faço isso antes
+  de voltar ao R3. Primeiro conferir se o editor de fundo do BACKLOG já saiu:
 
-   Current session
-   ██                                                 4% used
-   Resets 11:30am (America/Sao_Paulo)
+  Searched for 1 pattern, ran 2 shell commands
 
-   Current week (all models)
-   ████████████████████████████▍                      57% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
+● Registro o CLEAR-NO-MARCO — PROMPTS.md + item O133 no bloco OBRAS, no mesmo turno:
 
-   Current week (Fable)
-   █████████████████                                  34% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
+  Searched for 1 pattern, read 1 file, ran 2 shell commands
 
-   What's contributing to your limits usage?
-   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
+● Agora o RED do corte parte (2) na cópia curada:
 
-   Last 24h · these are independent characteristics of your usage, not a breakdown
+● Running the part-2 RED on the cured copy
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; MONT=$(bin/arvore_do_push.sh
+     --montagem /tmp/prepush-arvore.WyKTUx); echo "MONT=$MONT"; docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file
+     ~/saas-hasner/.env --env-file "$TESTE_ENV…
 
-   100% of your usage came from subagent-heavy sessions
-    Each subagent runs its own requests. Be deliberate about spawning them — and
-    consider configuring a cheaper model for simpler subagents.
+✢ Bloviating… (7h 53m 15s · ↓ 1.0m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                  ✔ Update installed · Restart to update
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
-   100% of your usage came from sessions active for 8+ hours
-    These are often background/loop sessions. Continuous usage can add up quickly
-    so make sure it is intentional.
-
-   88% of your usage was at >150k context
-    Longer sessions are more expensive even when cached. /compact mid-task, /clear                                                      ↓
+  ● main
+  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ⧉  index
 ```
