@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:13:01.**
+**Medido em 03/10/2026 15:18:31.**
 
 | | |
 |---|---|
@@ -108,37 +108,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Aguardo o veredito do push; na sequência rodo o R4 e classifico os três RED (col935 05/09, col882, col305) por
+  e6_oraculo.py::dono_da_divergencia — só ESTRUTURA fica na fila 1.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Dois dos quatro são leitura pura — faço agora, com o push em curso. O ponto 2 é sério: o deploy.sh recarrega do bind-mount, e o
-  bind-mount é a árvore suja.
-
-  Ran 1 shell command
-
-● O WIP é a O122 etapa 1 (fila 2, corte dele de 02/10 20:45) — e o risco concreto é o reverse('escala:wizard_tipo'): o urlconf está no
-  HEAD, a view não. É a lápide de 23/09. Medindo.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
   Ran 1 shell command
 
-● Medido e inerte, provado: escala:wizard_tipo existe no urlconf do HEAD (urls.py limpo), abrirWizDrawer/#wiz-drawer-body existem na tela
-  viva, 0 respostas 500 no saas_ui desde 14:50 — e tipos_lista.html não está modificado, ou seja a tela ainda não inclui a barra: a view
-  passa quadros e ninguém lê. O ar é 0dd83989 + uma chave de contexto que nada lê. Agora o ponto 4.
+● O hook manda seguir. Antes de disparar o R4 preciso saber onde o banco sombra mora — se for dentro do saas_db, a leitura de frota pesa no
+  banco do cliente, e isso é outra lei.
 
-  Searched for 2 patterns, ran 1 shell command
+  Ran 2 shell commands
 
-● Ponto 4 fechado por leitura: api/views.py:1402-1406 monta um dicionário explícito de três chaves (veredito_dia, palavra_dia, cor_dia),
-  não serializa o dia inteiro — a chave de transporte não tem por onde vazar no payload do app, e o test_11d guarda o caminho do cartão,
-  que é quem passa limpar=True (pdf_espelho.py:582, o único).
+● Medido: o banco sombra mora dentro do saas_db (bin/sombra.sh:53), o postgres de produção — então a leitura pesa no banco do cliente, e o
+  cpuset de teste só prende o meu python. Vou pela forma canônica da casa, mas com a trava da sombra e medindo o custo no saas_db enquanto
+  roda.
 
-● Ver o andamento do push
-  ⎿  $ tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bduufrgy0.output 2>/dev/null; echo
-     "--- vivo? ---"; pgrep -fa 'git push' | head -3
+  Ran 3 shell commands
 
-✢ Bloviating… (14h 59m 30s · ↓ 2.0m tokens · thinking)
+● Duas coisas aparecem, e uma é séria: o runner carimbou HEAD: 2fd71ba1, que não é o meu 25f6cfaf. E /api/me/ está em 83-94 ms contra base
+  de 18-21. Medindo as duas antes de seguir.
+
+● Descobrir de onde veio o HEAD novo
+  ⎿  $ cd /home/ronald/saas-hasner && echo '=== HEAD agora ==='; git log --oneline -4; echo '=== reflog ==='; git reflog -6 | cut -c1-140;
+     echo '=== push vivo? ==='; pgrep -c -x git
+
+✢ Compacting conversation… (15h 5m 0s · ↓ 2.1m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 45%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -146,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reviewing stale line citations in veredito_lavrado.py                                   3h 20m 38s · ↓ 162.5k tokens
+  ◯ general-purpose  Pre-verifying M3 attribution with varrer_fonte                                           3h 26m 8s · ↓ 171.9k tokens
   ⧉  index
 ```
