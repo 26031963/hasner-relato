@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 00:12:19.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (212.9 MB). Acoes na janela: **1642**.
+**Medido em 03/10/2026 00:17:41.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (213.5 MB). Acoes na janela: **1657**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:16:55 | Bash | Read the catalogo DB loader | `grep -n "_do_banco" -A 30 ponto/catalogo/ausencias.py \| head -50` |
+| 00:16:54 | Bash | Find fixed atestado lists across the tree | `grep -rn "atestado_inss\\|'atestado'" --include=*.py . \| grep -v migrations \| grep -v "/tests/" \| grep -v catalogo/ausencias.py \| head -30` |
+| 00:16:53 | Bash | Read regua CCT tolerance declarations | `sed -n '20,80p' core/regua_cct.py` |
+| 00:16:43 | Bash | Find the atestado fixed list and the catalogo loader | `grep -rn "atestado" --include=*.py ponto/management/commands/ relatorios/ \| grep -i "lista\\|in (\\|in \[\\|codigo" \| head -20; echo "=== _do_banco"; sed -n '1,120p' ponto/catalogo/ausencias.py \| head -60` |
+| 00:16:41 | Bash | Find intrajornada dead branch and tolerance constants | `grep -rn "intrajornada_minutos" --include=*.py . \| grep -v migrations \| head -20; echo "=== TOL_MIN/TOLERANCIA consts"; grep -rn "TOLERANCIA\\|tolerancia_min\b\\|TOL_" --include=*.py ponto/motor_calculo_v2.py core/constants.py \| head -20` |
+| 00:16:39 | Bash | Read aplicar_tolerancia | `sed -n '1495,1560p' ponto/motor_calculo_v2.py` |
+| 00:16:00 | Bash | Find the tolerancia source the motor reads | `grep -rn "tolerancia" --include=*.py ponto/motor_calculo_v2.py core/regua_cct.py escala/ ponto/turnos.py \| grep -v "^.*#" \| head -30` |
+| 00:15:59 | Bash | Read PARAMETROS_CLT | `grep -n "PARAMETROS_CLT" -A 40 core/views_config.py \| head -70` |
+| 00:15:58 | Bash | Read the rest of the contract selo | `sed -n '120,169p' core/tests/test_contract_configuracao_nao_mente.py` |
+| 00:15:45 | Bash | Check background shells and tree state | `cd /home/ronald/saas-hasner && for t in b9ya5bxj8 bna2n8kvo bvl82dq98; do echo "=== $t"; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/$t.output 2>/dev/null; done; echo "=== git"; git status --short \| head -20` |
+| 00:15:42 | Bash | Read the contract selo head | `wc -l core/tests/test_contract_configuracao_nao_mente.py && sed -n '1,120p' core/tests/test_contract_configuracao_nao_mente.py` |
+| 00:15:18 | Bash | Read the remaining matrix cells | `sed -n '200,340p' core/contratos_estruturais.py` |
+| 00:15:17 | Bash | Read the parameter-effect declaration | `cat core/configuracao_efeito.py` |
+| 00:15:13 | Bash | Locate ParametroSistema and readers of medico | `grep -rn "class ParametroSistema" --include=*.py . \| head; echo ---; grep -rn "medico" --include=*.py . \| grep -v migrations \| grep -v "/tests/" \| head -40` |
+| 00:15:11 | Bash | Read the structural contracts matrix | `sed -n '1,200p' core/contratos_estruturais.py` |
 | 00:11:21 | Bash | Persist the censo and read the required corte phrase format | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c && mkdir -p logs/censo_juiz && (cd "$S" && python3 censo_juiz.py) > logs/censo_juiz/batida_e_escala.txt 2>&1 && cp "$S/censo_juiz.py" logs/censo_juiz/ && grep -n "corte Ronald: juiz" bin/tests/test_juiz_novo_tem_corte.sh \| head -3` |
 | 00:11:14 | Bash | Fix the unit mismatch and re-run | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c; cd "$S" && python3 - <<'PY' import io p = 'censo_juiz.py' s = io.open(p, encoding='utf-8').read() v = """print(' dos quais filtram `retratada_em` na mao: %3d -- re-implementam a regra do juiz' % len(set(bat_com_retratada))) print(' dos quais NAO filtram nada de retratada: %3d -- ou e exibicao (lega ...` |
 | 00:10:45 | Bash | Run the censo from the scratchpad | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c; cp /tmp/censo_juiz.py "$S/censo_juiz.py" && cd "$S" && python3 censo_juiz.py 2>&1 \| head -44` |
