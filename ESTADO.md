@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 07:56:01.**
+**Medido em 03/10/2026 08:01:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha
 
 ```
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -115,44 +116,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+   Session
 
-● Task "Apply the BACKLOG edits and refresh the placar" still running in background
+   Total cost:            $4022.59
+   Total duration (API):  2d 22h 55m
+   Total duration (wall): 5d 15h 40m
+   Total code changes:    4794 lines added, 498 lines removed
+   Usage by model:
+          claude-opus-5:  1.3m input, 13.3m output, 6.4b cache read, 32.1m cache write ($3814.93)
+       claude-fable-5-1:  16.4m input, 876.1k output, 0 cache read, 0 cache write ($207.66)
+   Prompt cache (main):   17398 requests · 100% of input tokens from cache · 32 misses (last 1m 12s ago — likely cause: prompt
+   unchanged — likely server-side, 12.0m tokens re-cached) · 56 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL,
+   last activity 1m 12s ago)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+   Current session
+   ██                                                 4% used
+   Resets 11:30am (America/Sao_Paulo)
 
-  Ran 10 shell commands
+   Current week (all models)
+   ████████████████████████████▍                      57% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+   Current week (Fable)
+   █████████████████                                  34% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-● Tracing the N+1 back to its call site
-  ⎿  $ cd /tmp/prepush-arvore.WyKTUx/app && cat > core/tests/test_zz_probe_cal.py <<'PY'
-     import traceback
-     from collections import Counter
-     from django.db import connection
-     from django.urls import reverse
-     from core.tests.test_selo_performance import SeloPerformanceTest
-     ALVO = ('escala_escalacolaborador', …
-  ⎿  Read docs/AVAIS.md (33 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6zcxtqwx.output (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bs2bgl91h.output (10 lines)
-  ⎿  Referenced file config/crons.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/background-duplo-perde-o-veredito.md (28 lines)
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
 
-● Task "RED e construção do segundo intervalo" completed in background
+   Last 24h · these are independent characteristics of your usage, not a breakdown
 
-● Task "Apply the BACKLOG edits and refresh the placar" still running in background
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
 
-✢ Bloviating… (7h 42m 30s · ↓ 1.0m tokens · thought for 10s)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
 
-  ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
-  ⧉  index
+   88% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear                                                      ↓
 ```
