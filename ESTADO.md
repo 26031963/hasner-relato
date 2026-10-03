@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:33:01.**
+**Medido em 03/10/2026 17:38:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push VERMELHO` |
+| `HEAD` local | `4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como` |
 | `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+4845e671 TICKETS: rodape reescrito pela cura declarada -- o pre-push barrou e ele mesmo disse como
 bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push VERMELHO
 42a67a87 RELATO/HANDOFF: a terceira prova velha do dia -- o gerador que comia o marcador -- com a PROVA de que o tripwire morde
 49d4cf65 [ORDEM-VIVA-TOPO] o gerador do BACKLOG comia o marcador que tres leitores exigem -- a janela preservada comecava no lugar errado
 16d2f6c8 RELATO/TICKETS: o pouso do SITUACAO-E-LAMPADA com os numeros, e os caronas da main MEDIDOS
-2984714b [SITUACAO-E-LAMPADA] a nota do pendente _A14 afirmava duas coisas que ESTE commit derruba
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ bba65eff TICKETS: a linha do ORDEM-VIVA-TOPO, que faltava e deixaria o pre-push 
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -109,44 +108,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Searched for 2 patterns, ran 1 shell command
 
-● A linha do TICKETS precisa entrar antes do push — não se commita com o push em voo:
+● O nome fora_da_autoridade não existe na árvore — era memória minha, não código. Procurando o varredor real que consome esses padrões:
 
-  Committed bba65eff
+  Searched for 2 patterns, ran 2 shell commands
 
-● 9 commits, todos meus, origin/main intacto em 2fd71ba1. Um push para o marco — o pre-push roda os dois runners, então vai ao fundo:
-
-  Ran 1 shell command
-
-● Enquanto o push roda, as memórias duráveis deste ciclo. Conferindo primeiro se já existe arquivo que as cubra:
+● Confirmado no código, e é o ponto que decide: declarados = {p['arquivo'] for p in PENDENTES} + if rel in declarados: continue — o
+  pendente blinda o arquivo INTEIRO. Conferindo o push antes de escrever:
 
   Ran 1 shell command
 
-● Background command "Empurrar o marco com o pre-push" completed (exit code 0)
+● Push ainda em voo. Usando o tempo em leitura para a lei 2, que aponta um bug na origem — turnos_do_colab respondendo diferente conforme a
+  janela:
+
+  Searched for 1 pattern
+
+● A assimetria candidata está na própria função: as batidas vêm de [ini-2, fim+1] mas as escalas de [ini-2, fim], e há um desvio de ramo em
+  len(escalas) <= 1. Procurando os 15 e os 33 que a lei nomeia:
 
   Ran 1 shell command
 
-● O push não passou — o | tail comeu o rc, a mesma família de mascaramento de antes. O pre-push barrou no rodapé do TICKETS, com a cura
-  declarada. Vendo o resto do veredito antes de curar:
+● A medição dos 33 já está publicada com o mecanismo, e ela dissolve a minha objeção de 14:3x: curar turnos_do_colab na origem faz a
+  palavra recuar para os 15 sozinha, sem gate no card do motor. Conferindo o push e consultando antes de atacar quatro leis de uma vez:
 
   Ran 1 shell command
 
-● Só esse alarme, e o pre-push morreu antes da suíte — a pista nunca foi tomada. Rodando a cura declarada:
+● Advising using Fable 5.1
 
-● Rodar a cura do rodape do TICKETS
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 | tail -8; echo "--- reconferir ---"; bash
-     bin/tickets_rodape.sh 2>&1 | tail -4; echo "--- diff ---"; git diff --stat app/docs/TICKETS.md
-
-· Bloviating… (17h 19m 30s · ↓ 2.4m tokens)
+✢ Bloviating… (17h 25m 0s · ↓ 2.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inspecting contexto writes for D4 porta                                      5h 40m 39s · ↓ 133.2k tokens · 1 queued
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading silenciado_ate writes in views_arquivar.py                                       5h 46m 8s · ↓ 169.0k tokens
   ⧉  index
 ```
