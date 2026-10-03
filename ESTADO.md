@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:24:40.**
+**Medido em 03/10/2026 03:29:50.**
 
 | | |
 |---|---|
@@ -123,42 +123,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     de arquivo. Os dois ficam verdes, e juizes novos = 0 se sustenta na leitura, não na esperança.
-  2. A janela do template é medida, não suposta. templates/core/config/parametros.html novo desempacota cinco valores (chave, descricao,
-     padrao, valor, quem_manda) de parametros_com_valor, e a view velha em memória entrega quatro → ValueError: Need 5 values to unpack,
-     500 em /configuracoes/parametros/. Mesma família do NoReverseMatch de 23/09. Nenhum dos 9 templates toca {% url %}, então esse é o
-     único sítio que 500a. O pouso virou duas etapas: os 16 .py primeiro (inertes por BUG 128, e é a única hora em que os selos de HOST
-     podem falar, porque eles leem a árvore viva e não rodam no container), depois os 9 templates → commit → deploy.sh, nada no meio.
-  3. 0070 está se ensaiando na sombra agora — é o único ato deste deploy que o bloco das 02:4x não viu, já que --conferir confere dia e st
-     do carimbo, não o conjunto de migrations.
-
-  Em curso: a suíte dos $LABELS sobre a cópia (9 min, sem FAIL/ERROR até aqui) e o ensaio da 0070. O pouso começa depois que o reload das
-  03:30 terminar (crontab: 30 3 * * * deploy.sh --reload-agendado) — com a árvore ainda em HEAD naquele minuto, ele recarrega o que já
-  está no ar.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● Two cured. Now classify the other seven — my memory says a copy without the staticfiles mount gives a false RED on anything that
+  renders.
 
   Ran 1 shell command
 
-● Background command "Rehearse migration 0070 on the sombra" completed (exit code 0)
+● Exactly that: the O124 copy's staticfiles is an empty directory where HEAD's is a symlink to the live one — the false RED my memory
+  names. Fixing and re-running the four modules.
 
-● Recording the R3 design and polling the jobs
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/DESENHO-R3-PALAVRA.md
-     <<'EOF'
-     # R3 -- A METADE DA PALAVRA: desenho medido antes de escrever (03/10 03:2x)
-     ## O que a fatia faz
-     Dia com batida FALTANDO ganha a palavra `Em aberto`. O NUMERO fi…
+  Ran 2 shell commands
 
-✢ Compacting conversation… (3h 11m 9s · ↓ 457.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 48%
+● While that runs: the R3 probe says turno_aberto reaches only 189 of 1730 odd days. But my own published aval says "183 na 10" — a 10x
+  gap against the number I just measured. One of the two is wrong, and that one is on Ronald's reading surface.
+
+  Ran 1 shell command
+
+● The old probe's script no longer exists; the gap is real and must be resolved by reading what turno_aberto means.
+
+  Ran 1 shell command
+
+● Background command "Run the four modules against the O124 copy" completed (exit code 0)
+
+  Read 1 file
+
+● My two cures are green. The seven clique smokes survive the staticfiles fix, so they are not that — test them on HEAD.
+
+● Running the same four modules against HEAD
+  ⎿  $ cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash
+     $S/rodar_4modulos.sh /tmp/headapp/app $S/m4_head.txt 2>&1 | tail -15; echo "=== detalhe de um clique:"; sed -n '1,20p' $S/m4_o124.txt
+
+✽ Bloviating… (3h 16m 19s · ↓ 468.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   1% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
