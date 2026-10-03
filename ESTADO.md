@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 09:39:01.**
+**Medido em 03/10/2026 09:44:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git` |
+| `HEAD` local | `a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes` |
 | `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,32 +22,21 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes
 e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git
 4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao
 73f7551e [MONTAGEM-TEM-UMA-PORTA] A lista do que falta na copia tinha dois escritores, e o segundo vazou 2,1 GB
 d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha por ordem, era a regra escrita duas vezes
-0d740458 [CRON-VIZINHO-DOIS-ESCRITORES] A suite ficou vermelha com o codigo certo: o vizinho da sombra estava escrito em dois lugares
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO-ARQUIVO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
- M bin/relato_afirma_com_prova.py
- M bin/tests/test_relato_afirma_com_prova.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -119,11 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Launch the chained cross-copy sombra proof in the background" completed (exit code 0)
-
-● Background command "Wait for the cross-copy probe to write FIM" completed (exit code 0)
-
-  Ran 10 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -143,12 +127,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Chain the reconciliation probe after the fleet probe finishes" completed (exit code 0)
 
-● Sweeping all host seals · 18s
-  ⎿  $ cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then
-     fail=$((fail+1)); echo "### RED $t (rc=$rc)"; echo "$out" | tail -25; fi; done; echo "=== selos VERMELHOS: $fail ===" (18s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Searched for 2 patterns, ran 18 shell commands
 
-✢ Bloviating… (9h 25m 30s · ↓ 1.3m tokens)
+● Stop Task
+  ⎿  cd /home/ronald/saas-hasner; python3 - <<'PY'
+     # -*- coding: utf-8 -*-… · stopped
+
+  Committed a1376688, ran 14 shell commands
+
+  Advising using Fable 5.1
+
+✢ Bloviating… (9h 31m 0s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
