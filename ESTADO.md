@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:23:35.**
+**Medido em 03/10/2026 20:29:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
+| `HEAD` local | `a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadlock ganha nome` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadlock ganha nome
 29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada
 560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host
 c1a1f7b6 [SITUACAO-VIGIA-E-PORTA] a familia AUSENCIA do estrutural ZERA: o vigia dos DOIS sentidos, a porta com selo de idempotencia, e o _A14 fora do registro
 bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS
-57420097 [P7.1b] wizard_calendario_criar aceitava POST ANONIMO que CADASTRAVA -- e o selo que varre as 556 rotas das duas cascas
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
 
-● Task "Nova tentativa do push (pre-push roda a suite)" still running in background
+  Ran 1 shell command
 
-● Background command "Nova tentativa do push (pre-push roda a suite)" completed (exit code 0)
+● Prod de volta (/colaboradores/ -> 302). Medindo a janela que eu abri:
 
-  Ran 2 shell commands
+  Ran 4 shell commands
 
-● Push confirmado: bc2cd2fb..29f28708 main -> main, suíte 9521 OK + control-plane 22 OK. E a fatia CELULA-SEGUNDO-INTERVALO que o
-  fabricante entregou já está em main e no ar — foi mergeada como O114 (a2e903e1) e deployada às 17:10:45 (ef06c6b9); nada a refazer ali.
+● Prod estável. Agora a causa, que é minha e é de forma: git cherry-pick ... | tail -3 jogou o código de saída fora, o && passou, e o
+  cherry-pick em conflito escreveu <<<<<<< no bind-mount vivo — o deploy recarregou com isso. Janela medida: ~30 s sem resposta na casca de
+  admin (20:25:09 → ~20:25:40); core e mensageria intactos; nem Caddy nem gunicorn registram acesso, então não há número de vítima a dar.
 
-  MARCO FECHADO -- pode compactar (SITUACAO-VIGIA-E-PORTA: a família AUSENCIA do estrutural zerada, c1a1f7b6 + prova em prod 560f7314,
-  rodapé curado 29f28708, tudo em origin/main).
+  E há um buraco no caminho que é maior que o meu erro:
 
-  Pista livre — rodando o RED/GREEN do O154:
+  Ran 4 shell commands
 
-  Listed 1 directory, ran 4 shell commands
+● Duas curas (CURA-MAIS-RESTRITIVA: as duas entram, não conflitam). Primeiro a que teria impedido isto antes do reload:
 
-● Background command "RED contra a view do HEAD e GREEN contra a curada" completed (exit code 0)
+  Ran 6 shell commands
 
-  Read 1 file
+● Extraindo a guarda para ter como selá-la contra o arquivo REAL, não contra uma cópia da lógica:
 
-● RED: 10 de 10 vermelhos contra a view do HEAD. GREEN: 1 falha — e ela é do lado da view, não do selo:
+  Escreve e prova a guarda extraída contra a árvore viva
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/arvore_sem_conflito.sh <<'SH'
+     #!/usr/bin/env bash
+     # A ARVORE VIVA NAO PODE ESTAR EM CONFLITO (licao de 03/10 20:25, e o caso foi do Code).
+     #
+     # A ARVORE E O BIND-MOUNT (secao 2 do CLAUDE.md). Um `git cherry-pick`/`git merge` que
+     # conflita grava `<<<<<<<` …
 
-● RED e GREEN de novo após a cura
-  ⎿  $ cd /home/ronald/saas-hasner && bash
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o154/rodar.sh 2>&1 | grep -E
-     '^(OK|FAILED|Ran|----|====|FAIL:)' | tail -20
-
-✶ Bloviating… (20h 10m 4s · ↓ 2.8m tokens)
+✢ Bloviating… (20h 15m 30s · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
