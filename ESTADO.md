@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:56:51.**
+**Medido em 03/10/2026 00:02:01.**
 
 | | |
 |---|---|
@@ -34,10 +34,12 @@ fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos 
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
+?? app/core/placar_estrutural.py
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? bin/r5_idempotencia_frota.py
 ?? bin/r5_idempotencia_frota.sh
@@ -95,44 +97,44 @@ fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  a byte antes e depois, e o holerite também), prova de estilo calculado no chromium de cada pílula e atalho novos contra os do painel
-  (altura, font-size, cor, borda, padding) com tabela publicada — e diferença ≠ 0 para nela, não vai para o smoke. Mais as armadilhas
-  medidas desta casa: {# #} multilinha vaza para a tela, selo de front afirma sobre as duas cascas, template vai ao ar na hora mas .py
-  não.
 
-  Enquanto isso, na fila 1: os pares do R4 e o R5 de idempotência seguem rodando na sombra.
+  Ran 2 shell commands
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Read 1 file
-
-● Seguem rodando. Voltando ao N/22 do R6, que é leitura pura:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● O N/22 do R6 já está declarado no código, com a decisão pendente nomeada: as 21 células + GLOBAL existem desde 25/09, mas a célula
-  (chamado, 'parâmetro consumido ou sem efeito') é proibida de existir por lei — família sem campo editável não tem célula —, então o teto
-  aritmético é 21/22. Lendo o número de hoje:
+● O desenho certo já está declarado ali: "para contar % de itens feitos os itens precisam existir como DADOS". Então o PLACAR-ESTRUTURAL
+  nasce como dado, não como prosa. Lendo o idioma para copiá-lo:
 
   Ran 1 shell command
 
-● O número já está medido e na mesa dele (F2-PORTAO-22-22, 02/10 10:3x: "8/22 verdes"). Mas meu grep achou 9 verde=True, então o número
-  pode ter andado — perguntando à função real que o sistema usa para julgar:
+● Agora construindo o PLACAR-ESTRUTURAL como dado, no mesmo idioma — com a regra dele de que número sem PROVA não conta:
 
-  Reading the authority that produces the N/22
+  Ran 1 shell command
 
-✢ Sock-hopping… (5h 44m 20s · ↓ 1.0m tokens)
+● Background command "Run the R5 idempotence measurement in the sombra" completed (exit code 0)
+
+● Background command "Wait for both the suite and R5" completed (exit code 0)
+
+● Background command "Wait for R5" completed (exit code 0)
+
+  Read 1 file
+
+● R5 VERDE: foto3 == foto2 = ZERO em célula, chamado, DiaPago e fechamento. E o diff de contexto (1ª rodada) diz outra coisa, grande:
+
+  Ran 1 shell command
+
+● Agora a lei numerada, a seção 4b e o ESTADO como placar principal — que é o que ele pediu para sessão nova não cobrar o critério velho:
+
+● Running 1 shell command…
+
+✢ Sock-hopping… (5h 49m 30s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                     1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading painel_situacional.html barra block                                                 1m 22s · ↓ 78.5k tokens
+  ◯ general-purpose  Inspecting hx-stat rules in hasner-ponto.css                                               6m 32s · ↓ 110.8k tokens
   ⧉  index
 ```
