@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:03:31.**
+**Medido em 03/10/2026 13:08:49.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de tu
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/escala/views.py
  M app/ponto/services/triagem_batida.py
  M app/ponto/tests/test_afastado_na_batida.py
@@ -118,35 +119,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Os 8 filtros situacao='ativo' tiram os afastados do universo de cobrança. Vou medir o tamanho disso em prod (só leitura, sem motor):
-
-  Ran 3 shell commands
-
-● Medido: os 11 têm 0 dia-célula de trabalho e 0 batidas na competência — os 8 filtros excluem quem hoje não tem o que cobrar. Confirmando
-  a afirmação sobre o reversor antes de publicá-la:
-
-  Ran 2 shell commands
-
-● Minha afirmação sobre o reversor estava errada — ele está instalado e rodando (situacao_afastado_revertida=0). Corrigindo o comentário e
-  o docstring antes de commitar:
-
-  Ran 5 shell commands
-
-● Agora reabro o item com o número medido, cobrindo os dois escritores que a correção nomeou:
-
   Ran 4 shell commands
 
 ● O registro fica em 1 pendente (a escrita). Atualizo só o motivo para carregar o fato de hoje:
 
-● Rodar core.tests (contratos e juizes) com os dois modulos de ausencia · 47s
-  ⎿  $ cd /home/ronald/saas-hasner; source bin/recursos.sh; teste_envfile >/dev/null
-     docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file .env --env-file "$TESTE_ENVFILE" \
-     -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app saas-hasner-core:latest \
-     python manage.py test core.tests… (47s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-· Bloviating… (12h 50m 0s · ↓ 1.7m tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Só o meu hunk em cada arquivo. Agora o arquivo de PROVA do número:
+
+  Ran 7 shell commands
+
+● Background command "Rodar core.tests (contratos e juizes) com os dois modulos de ausencia" completed (exit code 0)
+
+  Read 1 file
+
+● Suite completa dos contratos: 1196 testes OK. Agora a linha no TICKETS (o selo cobra o ID citado):
+
+  Conferir se logs entram no git e o status dos paths da fatia
+  ⎿  $ cd /home/ronald/saas-hasner
+     git check-ignore -v logs/o134/afastado_censo_20261003.out || echo "NAO ignorado"
+     git ls-files logs/ | head -3 || true
+     echo "--- status dos meus paths ---"
+     git status --porcelain -- app/ponto app/core/juizes.py app/docs
+
+✢ Bloviating… (12h 55m 17s · ↓ 1.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -156,6 +157,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Updating ATOS in test_porta_pergunta_identidade.py                                        1h 11m 8s · ↓ 87.1k tokens
+  ◯ general-purpose  Inspecting censo.out for the test-db collision                                          1h 16m 26s · ↓ 115.0k tokens
   ⧉  index
 ```
