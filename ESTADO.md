@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:56:31.**
+**Medido em 03/10/2026 20:02:01.**
 
 | | |
 |---|---|
@@ -43,6 +43,7 @@ b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com o
  M app/colaboradores/tests/test_porta_colaborador.py
  M app/config/crons.py
  M app/core/juizes.py
+ M app/docs/ARQUITETURA.mmd
  M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
@@ -52,6 +53,7 @@ b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com o
  M app/docs/TICKETS.md
  M app/ponto/management/commands/reverter_situacao_afastado.py
  M app/ponto/services/afastado_avisa.py
+ M app/ponto/tests/test_afastado_hoje.py
  M app/ponto/tests/test_contract_juiz_ausencia.py
 ?? app/ponto/management/commands/tripwire_situacao_afastado.py
 ?? app/ponto/tests/test_tripwire_situacao_afastado.py
@@ -126,13 +128,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-     lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-❯ corte Ronald: no cartao, (c) o rodape/topo ganha a linha 'folga trabalhada' e passa a somar os valores EXIBIDOS (arredondados UMA vez,
-  na fonte, em minutos inteiros por dia); a coluna e o badge ficam como estao -- O33 e O27 fecham juntos.
-  lei Ronald: "dia previsto exibido" e (b) todo dia que a celula diz trabalho; com isso fabrica o contador espelho_x_fechamento_dias e
   fecha o selo do O25.
   lei Ronald: para o art.130 contam falta + suspensao; atraso e saida antecipada sao parciais e NAO entram.
   aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
@@ -143,8 +138,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   reversao em logs/ e competencias exportadas intactas !
   aval Ronald: "dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado. Mede o DIFF antes e aplica !
 
-● Ler nome_canonico_dropdown
-  ⎿  $ cd /home/ronald/saas-hasner && git show raia-ui:app/escala/models.py | sed -n '470,520p'
+  Searched for 10 patterns, read 7 files, ran 76 shell commands
   ⎿  Read ponto/tests/test_tripwire_situacao_afastado.py (172 lines)
   ⎿  Referenced file core/juizes.py
   ⎿  Read docs/AVAIS.md (23 lines)
@@ -155,13 +149,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Rodar os vizinhos da fatia" still running in background
 
-· Bloviating… (19h 43m 0s · ↓ 2.7m tokens · thinking)
+● Background command "Rodar os vizinhos da fatia" completed (exit code 0)
+
+● Rodar os selos afetados · 47s
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER
+     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
+     ~/saas-hasner/app:/app saas-hasner-core:latest pyt… (47s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bloviating… (19h 48m 30s · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

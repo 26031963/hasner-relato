@@ -12,7 +12,7 @@ flowchart TD
     fr_chamados -.->|topo PROIBIDO, allowlist VAZIA| fr_ponto
   end
 
-  %% (b) PIPELINE DIARIO — fonte: config/crons.py (54 nos diarios)
+  %% (b) PIPELINE DIARIO — fonte: config/crons.py (55 nos diarios)
   subgraph e_infra["infra"]
     c_rotacionar_access_log["rotacionar_access_log<br/>00:12"]
   end
@@ -29,6 +29,7 @@ flowchart TD
     c_sincronizar_status_ferias["sincronizar_status_ferias<br/>06:15"]
     c_termometro_regua["termometro_regua<br/>06:00"]
     c_tripwire_celulas["tripwire_celulas<br/>06:05"]
+    c_tripwire_situacao_afastado["tripwire_situacao_afastado<br/>06:18"]
     c_tripwire_status_ferias["tripwire_status_ferias<br/>06:17"]
     c_tripwire_vinculo_orfao["tripwire_vinculo_orfao<br/>06:07"]
   end
@@ -114,12 +115,13 @@ flowchart TD
   c_processar_cartorio --> c_supra_juiz
   c_gerar_celulas --> c_termometro_regua
   c_gerar_celulas --> c_tripwire_celulas
+  c_reverter_situacao_afastado --> c_tripwire_situacao_afastado
   c_sincronizar_status_ferias --> c_tripwire_status_ferias
   c_flip_automatico --> c_tripwire_tipo_batida
   c_detectar_par_relampago --> c_verificar_nucleo
   c_processar_cartorio --> c_vigia_b5_ausencia
   c_flip_automatico --> c_vigia_plantio_overnight
-  %% arestas `depende` declaradas: 38
+  %% arestas `depende` declaradas: 39
 
   %% (c) PORTAS CANONICAS — fonte: AST sobre app/ (nome usado, nunca string)
   subgraph PORTAS["escritores unicos / portas canonicas"]
@@ -169,7 +171,7 @@ flowchart TD
     t_celula["CELULA / ATA por marco<br/>o que aconteceu (lampada)"]
     t_evento["EVENTO<br/>batida, ausencia, chamado -> cartorio julga na hora (signals B5.2)"]
     t_consumidor["CONSUMIDORES<br/>chamado, pergunta, tela, folha: leem a lampada, nunca re-julgam"]
-    t_vigia["CRON = VIGIA<br/>19 vigias; contador esperado 0, so alarma"]
+    t_vigia["CRON = VIGIA<br/>20 vigias; contador esperado 0, so alarma"]
     t_juiz["JUIZ POR VARREDURA (divida)<br/>27 crons ainda julgam: esperado 0"]
     t_escala --> t_celula
     t_evento --> t_celula
@@ -280,7 +282,7 @@ flowchart TD
     ja_escala_utils_py(["escala/utils.py"]) --- jf_turno_marcos
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_turno_marcos
     jmais_turno_marcos["... +1 arquivos de juiz"] --- jf_turno_marcos
-    jf_ausencia_ferias["ausencia/ferias<br/>14 com juiz · 0 sem juiz<br/>registro: 1 sitio(s)"]
+    jf_ausencia_ferias["ausencia/ferias<br/>14 com juiz · 0 sem juiz<br/>registro: 0 sitio(s)"]
     ja_ferias_models_py(["ferias/models.py"]) --- jf_ausencia_ferias
     ja_ferias_services_py(["ferias/services.py"]) --- jf_ausencia_ferias
     ja_ferias_situacao_py(["ferias/situacao.py"]) --- jf_ausencia_ferias
@@ -339,6 +341,7 @@ flowchart TD
     vg_sentinela_diario_sh["sentinela_diario.sh"]
     vg_supra_juiz["supra_juiz"]
     vg_tripwire_celulas["tripwire_celulas"]
+    vg_tripwire_situacao_afastado["tripwire_situacao_afastado"]
     vg_tripwire_status_ferias["tripwire_status_ferias"]
     vg_tripwire_tipo_batida["tripwire_tipo_batida"]
     vg_tripwire_vinculo_orfao["tripwire_vinculo_orfao"]
