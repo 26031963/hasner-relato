@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:11:31.**
+**Medido em 03/10/2026 16:17:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -107,35 +108,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  higiene. Executando a remoção.
 
-  Ran 3 shell commands
+  Ran 9 shell commands
 
-● Agora os três atos restantes do !: a escrita sai, o admin fecha, o reversor some.
+● DOSSIES.md é o texto literal do Ronald — não toco. Agora o diagrama, que é gerado e defendido por selo.
 
-  Ran 1 shell command
+  Ran 5 shell commands
 
-● Escopo do aval é literal (LEI-AKITA 9) — eu havia incluído dois campos que o ! não nomeia. Corrigindo.
+● O pendente só sai com tripwire no lugar (LEI-AKITA 7). Vendo como a varredura é aplicada antes de escrever o padrão.
 
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Referenced file core/placar_estrutural.py
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/medicao-com-motor-vai-na-sombra.md (44 lines)
-  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/merge-de-raia-recarrega-no-mesmo-ato.md (35 lines)
-  ⎿  Referenced file ponto/services/triagem_batida.py
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● O test_MORDE_pendente_curado_sai_da_lista é o que morde: a impressão saiu do código, então o pendente tem de sair no mesmo commit.
 
-● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
+  Ran 5 shell commands
 
-● Censo feito. O que o grep de *.py *.html tinha escondido: o arquivo de teste, crons_duracao.json, ARQUITETURA.mmd (regenerado e defendido
-  por selo), crons.py:1439 e core/espelho_verdade.py:40.
+● O juiz _A14 já está declarado (afastado_hoje) — nenhum juiz novo nasce. Fechando: o pendente sai e os três padrões de escrita entram no
+  lugar.
 
-● Achar contratos que enumeram commands/crons/diagrama
-  ⎿  $ cd /home/ronald/wt-lampada/app && echo "=== quem varre o DIRETORIO de commands ===" && grep -rn "management/commands" --include=*.py
-     . | grep -v "^./docs" | head -20 && echo && echo "=== quem casa crons.py x commands existentes / crons_duracao ===" && grep -rn
-     "crons_duracao" --include=*.py --inc…
+● Adicionar os casos que mordem ao contrato
+  ⎿  $ cd /home/ronald/wt-lampada/app && python3 - <<'PY'
+     import io
+     p='ponto/tests/test_contract_juiz_ausencia.py'
+     s=io.open(p,encoding='utf-8').read()
+     old = """ def test_perguntar_ao_periodo_nao_e_acusado(self):"""
+     assert s.count(old)==1
+     new = ''' def test_MORDE_escrever_a_lampada_do_afastamento_e_viol…
 
-· Bloviating… (15h 58m 0s · ↓ 2.2m tokens)
+· Bloviating… (16h 3m 30s · ↓ 2.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -145,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping REGUA_DB in ci.py settings                                                      4h 19m 8s · ↓ 163.9k tokens
+  ◯ general-purpose  Documenting P13 blindness in test_porta_disputa_ciclo.py                                4h 24m 38s · ↓ 169.4k tokens
   ⧉  index
 ```
