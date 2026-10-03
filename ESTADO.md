@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:182 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:193 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:02:01.**
+**Medido em 03/10/2026 20:07:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS` |
+| `HEAD` local | `560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host` |
 | `origin/main` | `bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,34 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host
+c1a1f7b6 [SITUACAO-VIGIA-E-PORTA] a familia AUSENCIA do estrutural ZERA: o vigia dos DOIS sentidos, a porta com selo de idempotencia, e o _A14 fora do registro
 bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS
 57420097 [P7.1b] wizard_calendario_criar aceitava POST ANONIMO que CADASTRAVA -- e o selo que varre as 556 rotas das duas cascas
 bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam
-3c229e09 [P7.1] escala_buscar_colabs respondia SEM sessao -- login_required + acao_required no molde da vizinha
-b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com os numeros
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/colaboradores/tests/test_porta_colaborador.py
- M app/config/crons.py
- M app/core/juizes.py
- M app/docs/ARQUITETURA.mmd
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/ponto/management/commands/reverter_situacao_afastado.py
- M app/ponto/services/afastado_avisa.py
- M app/ponto/tests/test_afastado_hoje.py
- M app/ponto/tests/test_contract_juiz_ausencia.py
-?? app/ponto/management/commands/tripwire_situacao_afastado.py
-?? app/ponto/tests/test_tripwire_situacao_afastado.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -128,6 +111,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  lei Ronald: "dia previsto exibido" e (b) todo dia que a celula diz trabalho; com isso fabrica o contador espelho_x_fechamento_dias e
   fecha o selo do O25.
   lei Ronald: para o art.130 contam falta + suspensao; atraso e saida antecipada sao parciais e NAO entram.
   aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
@@ -151,15 +135,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar os vizinhos da fatia" completed (exit code 0)
 
-● Rodar os selos afetados · 47s
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null; docker run --rm $TESTE_DOCKER
-     --network saas-hasner_default --env-file ~/saas-hasner/.env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v
-     ~/saas-hasner/app:/app saas-hasner-core:latest pyt… (47s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Committed c1a1f7b6, 560f7314, searched for 1 pattern, ran 23 shell commands
 
-✢ Bloviating… (19h 48m 30s · ↓ 2.7m tokens)
+● Background command "Empurrar o marco (pre-push roda a suite)" completed (exit code 0)
+
+· Compacting conversation… (19h 54m 0s · ↓ 2.7m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
