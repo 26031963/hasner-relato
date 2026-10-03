@@ -1,5 +1,83 @@
 # RELATO — esteira saas-hasner
 
+### O65: O RED REGISTRADO NAO REPRODUZ MAIS, E A CAUDA DA FALLBACK NAO E O QUE A CELULA DIZIA (03/10 11:4x)
+
+**contratos 12/20** (nada fecha celula de familia aqui -- e medicao, passo 0 do item 1 da ordem de 08:13).
+
+O marco do R3 pousou: push unico, `4ecf7a39..bf392022  main -> main`, `rc=0`, suite de negocio
+`Ran 9484 tests / OK (skipped=42)` e control-plane `Ran 22 / OK`.
+**PROVA:** `logs/o65/push_bf392022.log` (as ancoras lidas, nao a prosa) e `origin/main == bf392022`
+com `git rev-list --count origin/main..HEAD` = **0**.
+
+**O RED QUE A CELULA DO O65 REGISTRA ESTA VELHO, e quem disse isso foi o juiz de hoje.** A celula cita
+`col736 2026-09-11` devolvendo **2 turnos ABERTOS** onde o motor ve `08:47-16:23 = 420 min`. Chamando
+`turnos_do_colab` na sombra de hoje: **1 turno**, `11/09 08:47 -> 11/09 16:23`, `aberto=False`,
+`cross=False`, 4 batidas, e `realizado_do_dia` devolve `minutos=420 sem_turno=False`. A leitura da ata
+dentro do juiz (corte de 26/09, `turnos.py:1251`, os dois ramos) **ja curou aquele dia** -- o censo por
+AST confirma 4 chamadas COM `papel_por_minuto` e 11 SEM, nenhuma delas no caminho do dinheiro.
+
+**E A FALLBACK, MEDIDA, NAO E UM BURACO DE 1.274 DIAS -- E UMA CAUDA DE 48.** Medi pelo construtor REAL
+(`escala/utils.py::montar_grade_prevista_periodo`, que despacha para o por-turno) sobre os 533 ativos:
+
+| competencia | dias de TRABALHO montados | na fallback (`sem_turno`) | **com minutos > 0 (numero NAO e do juiz)** | com minutos == 0 |
+|---|---|---|---|---|
+| 09/2026 | 8.605 | 1.274 | **34 (216,6 h)** | 1.240 |
+| 10/2026 | 3.984 | 968 | **14 (96,3 h)** | 954 |
+
+**PROVA:** `logs/o65/bug145_universo_20261003.out` (sombra, carimbo `dia=20261003 diverge=0`, `erros=0`,
+`rc=0`) e a sonda em `logs/o65/bug145_universo.py`.
+
+A CAUSA de cada dia foi **perguntada ao juiz** na janela `d-1..d+1`, nunca inferida da forma:
+
+| classe | 09/2026 | 10/2026 | o que e |
+|---|---|---|---|
+| `sem_batida_nenhuma` | 1.155 | 913 | a celula diz trabalho e a pessoa nao bateu -- `sem_turno=True` e a resposta CERTA, e a fallback soma 0, o MESMO que o juiz diria |
+| `vizinho` | 93 | 44 | ha turno em dia adjacente que tem batida nesta data (3,5 h e 7,1 h de minutos somados) |
+| `orfa` | 6 | 2 | batida orfa na data, sem turno |
+| `outro` | 20 | 9 | ha batida apuravel na data civil, nenhum turno adjacente, nenhuma orfa |
+
+Isto MOVE o alvo da obra: a fallback nao e um derivador paralelo de 1.274 dias, e sim a resposta certa
+em 2.068 deles. O que fura a LEI-AKITA 2 sao os **48 dia-colab com minuto derivado fora do juiz**.
+
+**O RED VIVO E O col152, e e sistematico:** classe `outro`, **6 dias consecutivos** 25/09, 28/09, 29/09,
+30/09, 01/10 e 02/10, sempre `real=534 prev=530`. Dia com batida na data civil, juiz sem turno, sem
+vizinho e sem orfa, todo dia -- isso e estrutura, nao ruido, e e por ele que a autopsia comeca.
+**E A ORDEM IMPORTA**: a origem primeiro, a fallback depois. Tirar a fallback antes de curar o juiz faz
+o col152 exibir `534 -> 0`, que e a testemunha mentindo pelo lado mais caro.
+
+**DOIS NUMEROS NOMEADOS E FORA DO ESCOPO DO O65, para nao virarem achado perdido:** (a) os `vizinho`
+com minutos > 0 (3,5 h na 09 e 7,1 h na 10) sao candidatos a **contagem dupla** -- o juiz credita o dia
+`d-1` e a fallback credita `d` pela celula; (b) os `vizinho` com ZERO (col129, dia alternado, `prev=492`)
+sao celula-dia e `data_turno` discordando da fase de um 12x36, o que e outro juiz (R4/celula).
+
+### A MINHA SONDA DO LOTE (R6) MEDIU O NADA, E FOI O CASO QUE MORDE QUE DISSE ISSO (03/10 11:4x)
+
+**NAO publico "21 colabs de atraso": o numero nao vale.** A sonda perturbava `celula.trabalha` e depois
+chamava a funcao REAL `_propagar_regeneracao_template`. Mas a regeneracao **restaura `trabalha` do
+template**: a celula final volta a ser identica a original, e o dinheiro nao tinha por que mover. O
+terceiro bloco -- o caso que MORDE, o mesmo colab por `regenerar_celulas_vinculo(recalculo=True)` --
+devolveu `hash e56deeb5940a75fd -> e56deeb5940a75fd  PAROU TAMBEM`, e e isso que invalida o bloco de cima.
+**PROVA:** `logs/r6_dinheiro/r6_lote_INCONCLUSIVA_20261003.out` (o nome diz o veredito) e a sonda em
+`logs/r6_dinheiro/r6_lote_INCONCLUSIVA.py`.
+
+O que a sonda mediu e **vale** e o censo, porque ele nao escreve nada: **194 templates com vinculo ativo,
+534 vinculos, mediana de 1 colab por template e maximo 44** (te179=44, te177=42, te180=26, te178=21);
+**8 templates alcancam >= 10 colabs, somando 177 vinculos**. Esse e o tamanho do alcance de UM save.
+
+A perturbacao certa e a que o admin faz de verdade: mudar o **TEMPLATE** (um marco), nao a celula. E a
+ORDEM da proxima sonda muda por causa de `ponto/portas/celula.py:300` (`if recalculo and _tocadas`): se
+a frota propagar primeiro, o colab-sentinela chega sem celula tocada e para por um SEGUNDO motivo,
+fabricando o mesmo falso veredito. Entao: snapshot dos hashes -> perturba o template -> **sentinela
+primeiro** por `recalculo=True` (tem de MOVER) -> so entao `_propagar_regeneracao_template` na frota ->
+os que ficam PARADO sao o numero.
+
+**LEI-AKITA:** origem=`escala/utils.py:1296-1360` (a fallback do construtor por turno) e
+`escala/services/cadastro_tipo.py:330` (o `recalculo=False` de frota), testemunha=`turnos_do_colab` /
+`realizado_do_dia` / `_propagar_regeneracao_template`, todas chamadas como o sistema as chama,
+RED=`col152 25/09-02/10 real=534 prev=530 sem_turno=True` (vivo) e `col736 11/09` (**velho, nao
+reproduz**), quem-mais-le=censo por AST de `parear_turnos` (4 COM / 11 SEM) + os 2 sitios da fallback
+(`escala/utils.py:1290` produtor e `:1333-1334` leitor), juizes novos=0.
+
 ### R3: A PALAVRA "Em aberto" ALCANCOU O TURNO ABERTO, E O INVARIANTE NAO ERA O QUE EU IA MEDIR (03/10 11:13)
 
 **contratos 12/20** (o R3 nao fecha celula de familia -- e o placar R3, e o 12/20 nao se move).

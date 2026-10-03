@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:48:41.**
+**Medido em 03/10/2026 11:54:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
+| `HEAD` local | `0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo` |
 | `origin/main` | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo
 bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO
 8bf639f1 [PLACAR-ESTRUTURAL] O RELATO do R3 publica a PROVA do ato, e a clausula do numero deixou de ser afirmacao
 e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado
 ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro
-a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes
 ```
 
 ## `git status --short`
@@ -108,44 +108,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  │ 10/2026     │ 3.984            │ 968      │ 14 (96,3 h)                        │ 954          │
-  └─────────────┴──────────────────┴──────────┴────────────────────────────────────┴──────────────┘
+  LINHA HAIKU: (a) contadores "escritas de chamado fora de porta" e "crons que ainda julgam" no payload com rotulo de admin; (b) golden:
+  "quantos crons ainda julgam por varredura?" esperado via ferramentas; (c) degrau: leitura.
+  Segue a fila do O134 na trilha principal; PAREI so em lei ou !.
 
-  Causa perguntada ao juiz em d-1..d+1: sem_batida_nenhuma 1.155+913 (dia que a célula diz trabalho e a pessoa não bateu — aí
-  sem_turno=True é a resposta CERTA, e a fallback soma 0, o mesmo que o juiz diria), vizinho 93+44, orfa 6+2, outro 20+9. O defeito real é
-  só a cauda: 48 dia-colab, 312,9 h, com número derivado fora do juiz.
-
-  Ran 1 shell command
-
-● O caso que MORDE diz que a sonda não serve: col32 com recalculo=True também não move, logo o "21 parados" não é prova de nada (LEI-AKITA
-  8). A causa é de desenho da minha perturbação — vou confirmar no código dela.
-
-  Ran 1 shell command
-
-● Confirmado: perturbei celula.trabalha e a regeneração restaura trabalha do template — a célula final volta a ser idêntica, então o
-  dinheiro não tinha por que mover. A sonda mediu o nada. O que o admin realmente faz é mudar o template.
+● Chegou o aval Ronald: CHAMADO-EM-RAIA. Ele antecipa o item 7 do O134 em paralelo e diz explicitamente que a trilha principal segue sem
+  esperar. Registro o prompt (L-PROMPT-NAO-SE-REPETE), nasço a raia, e sigo no R6.
 
   Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● wt-esmeril2 está limpo e é ancestral de main (merge-base = ele mesmo), então avança sem risco. Nasço a raia agora — ela corre em
+  paralelo e a trilha principal não espera.
 
-● O advisor pegou um segundo motivo de PAROU na parte 3 — recalculo and _tocadas. Primeiro publico os números medidos (eles só existem em
-  logs/), depois conserto a sonda.
+● Agent(Raia CHAMADO-EM-RAIA no wt-esmeril2)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-  Reading the O65 TICKETS row and table header
-  ⎿  $ cd /home/ronald/saas-hasner/app; sed -n '493p' docs/TICKETS.md; echo; echo "=== header TICKETS ==="; sed -n '121,124p'
-     docs/TICKETS.md | cut -c1-200
+● Raia nascida e correndo. Agora registro o prompt (a lei diz: prompt que pede obra vira item no MESMO turno, senão não foi recebido, foi
+  lido).
 
-· Bloviating… (11h 35m 10s · ↓ 1.6m tokens · thinking)
+  Ran 3 shell commands
+
+● O git add abortou inteiro porque eu incluí um path inexistente e engoli o erro com 2>/dev/null — e aí o commit não teve o que gravar.
+
+● Staging the four doc files and committing
+  ⎿  $ cd /home/ronald/saas-hasner; SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/TICKETS.md app/docs/PROMPTS.md
+     echo "=== staged ==="; git diff --cached --numstat
+     git commit -F $SP/msg_o65.txt -q …
+
+✢ Bloviating… (11h 40m 30s · ↓ 1.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                  12% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                     1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading _pergunta_viva_calc in chamados/juizes.py                                          1m 38s · ↓ 135.0k tokens
   ⧉  index
 ```
