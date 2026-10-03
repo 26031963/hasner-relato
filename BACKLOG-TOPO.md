@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**152 obras abertas.**
+**158 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -152,7 +152,7 @@ lista — ela e o que esta EM PE._
 | **O142** | `turnos_do_colab` RESPONDE DIFERENTE CONFORME A JANELA, e os 33 dia-colab sao isso | **PROXIMO MARCO.** Fixture nomeada: `col |
 | **O143** | DIA COM BATIDA REAL E SEM VINCULO QUE O CUBRA E DONO CADASTRO, nao ESTRUTURA | ABERTA. Falta o censo de frota (dia-cola |
 | **O144** | O DIA QUE CONTA PARA OS 15 DA EMPRESA E O DECORRIDO, NAS DUAS TELAS | ABERTA. Falta provar o irmao `absenteism |
-| **O145** | HE-INVISIVEL | ENCAIXE (entra em toda janela com a pist |
+| **O145** | HE-INVISIVEL | espera corte |
 | **O146** | HE-FIXA-DA-ESCALA-E-CADASTRO | espera `!` |
 | **O147** | OS 3 ATRASADOS DA 09 | PAREI |
 | **O148** | FOLGAS DUPLICANDO | ENCAIXE. Medicao, nao cura: publicar ant |
@@ -161,3 +161,9 @@ lista — ela e o que esta EM PE._
 | **O151** | OS 13 CHAMADOS DO `--forcar` DE 02/10 | ENCAIXE. Retratacao pela porta (`chamado |
 | **O152** | BUSCA-DA-CASA | **FILA 2 (UI), atras dos contratos.** Ra |
 | **O153** | ROTA-PEDE-SESSAO NAO PROVA AUTORIZACAO | ENCAIXE. Nao e furo do selo atual: e a f |
+| **O154** | BUSCA-DE-ESCALA PROCURA O QUE MOSTRA | **fila 2, raia `wt-ui`**, deploy `--sem- |
+| **O155** | SELO DO O25: `espelho_x_fechamento_dias` | fila 1, atras do item em curso. **Nao e  |
+| **O156** | CARTAO SOMA O EXIBIDO (O27 + O33 FECHAM JUNTOS) | espera corte |
+| **O157** | ART.130 LE O CATALOGO, NAO UM LITERAL | fila 1, atras do item em curso. Toca DIR |
+| **O158** | ORDEM-VIVA-TOPO E AUTORIDADE | espera corte |
+| **O159** | DIA INTEIRO E O PREVISTO DO DIA | espera `!` |

@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:35:01.**
+**Medido em 03/10/2026 19:40:23.**
 
 | | |
 |---|---|
@@ -40,8 +40,20 @@ b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com o
 
 ```
  M PLANO_PISCADA.md
+ M app/colaboradores/tests/test_porta_colaborador.py
+ M app/config/crons.py
+ M app/core/juizes.py
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/ponto/management/commands/reverter_situacao_afastado.py
+ M app/ponto/services/afastado_avisa.py
+ M app/ponto/tests/test_contract_juiz_ausencia.py
+?? app/ponto/management/commands/tripwire_situacao_afastado.py
+?? app/ponto/tests/test_tripwire_situacao_afastado.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,26 +125,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Empurrar o marco pela regua normal" completed (exit code 0)
 
-  Ran 2 shell commands
-
-● MARCO FECHADO — pode compactar. Push 4845e671..bc2cd2fb liberado: suite 9507 OK (skip 42, 604 s) + control-plane 22 OK; régua de tickets
-  OK -- 10 citacoes, rodapé e placar batendo. O P7.1b está no ar e provado (400 → 302 sem sessão). HANDOFF-SESSAO.md regenerado (47
-  linhas).
-
-  Sigo no próximo item da fila 1 — o _A14, na ordem literal do corte.
-
-  Searched for 1 pattern, ran 6 shell commands
-
-❯ aval Ronald: sobem de prioridade, sem tirar a trilha principal dos contratos: (1) na raia wt-ui, AGORA: escala/views.py::buscar_escalas
-  passa a procurar no MESMO texto que mostra (nome_canonico_dropdown: tipo, dias, horario, intervalo, apelido), e termo so de digitos que
-  nao casa hora cai para nome; selo com "6x1", "12x36", "noturno" e "47". (2) HE-INVISIVEL deixa de ser encaixe solto: entra logo atras da
-  celula em curso, com a frota medida antes e o corte da "extra prevista" na mesma fatia. O componente unico de busca segue na fila 2.
-  Segue a fila.
-
-  Formato do PROMPTS e do bloco OBRAS
-  ⎿  $ sed -n '110,124p' docs/BACKLOG.md; echo "..."; grep -n "^| O15[0-9]\|^| O14[0-9]" docs/BACKLOG.md | tail -8
+  Searched for 3 patterns, read 2 files, ran 11 shell commands
   ⎿  Read docs/AVAIS.md (31 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b003n1ltd.output (23 lines)
   ⎿  Read core/rotas_publicas.py (79 lines)
@@ -142,7 +136,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Bloviating… (19h 21m 30s · ↓ 2.7m tokens · thinking)
+❯ corte Ronald: no cartao, (c) o rodape/topo ganha a linha 'folga trabalhada' e passa a somar os valores EXIBIDOS (arredondados UMA vez,
+  na fonte, em minutos inteiros por dia); a coluna e o badge ficam como estao -- O33 e O27 fecham juntos.
+  lei Ronald: "dia previsto exibido" e (b) todo dia que a celula diz trabalho; com isso fabrica o contador espelho_x_fechamento_dias e
+  fecha o selo do O25.
+  lei Ronald: para o art.130 contam falta + suspensao; atraso e saida antecipada sao parciais e NAO entram.
+  aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
+  ponto/motor_calculo_v2.py:573, junto da cura do juiz_batida.py. DIFF de frota antes, reversao em logs/, 09 e exportadas intactas, prova
+  depois !
+  corte Ronald: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE (o selo exige que ele aponte um item que EXISTE e esta aberto).
+  aval Ronald HE-FIXA: o calculo proprio da extra prevista pode entrar em ponto/motor_calculo_v2.py, com DIFF de frota publicado antes,
+  reversao em logs/ e competencias exportadas intactas !
+  aval Ronald: "dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado. Mede o DIFF antes e aplica !
+
+  Ruff nos 8 arquivos da fatia
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app -w
+     /app saas-hasner-core:latest ruff check colaboradores/tests/test_porta_colaborador.py config/crons.py core/juizes.py
+     ponto/management/commands/reverter_situacao_afasta…
+
+· Bloviating… (19h 26m 52s · ↓ 2.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
