@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:23:55.**
+**Medido em 03/10/2026 11:27:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado` |
+| `HEAD` local | `8bf639f1 [PLACAR-ESTRUTURAL] O RELATO do R3 publica a PROVA do ato, e a clausula do numero deixou de ser afirmacao` |
 | `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8bf639f1 [PLACAR-ESTRUTURAL] O RELATO do R3 publica a PROVA do ato, e a clausula do numero deixou de ser afirmacao
 e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado
 ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro
 a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes
 e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git
-4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodap
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/docs/TICKETS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
@@ -110,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  Não há par fechado aos olhos do turno, então 0.0 é aritmética, não supressão.
 
-● Selos na árvore viva, depois do deploy: Ran 76 tests · OK · rc=0.
+  Committed 8bf639f1, ran 17 shell commands
 
-  Ran 1 shell command
-
-● O seletor estava errado, não o sistema: "contagem ímpar por DATA" não é "dia com turno aberto" — os três primeiros são 12x36 noturno
-  cujas batidas caem na data seguinte e o turno está ancorado no dia anterior (turnos do juiz: []). Pergunto à autoridade em vez de
-  recontar pela forma.
-
-  Searched for 1 pattern, ran 7 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Agora o push único do marco — ele roda a régua inteira no pre-push.
 
   Ran 2 shell commands
 
-● O caso que discrimina está lido: col39 2026-08-22 — E 06:55 → S 12:08 → E 13:00, e o juiz devolve UM turno aberto=True com n_batidas=3.
-  Não há par fechado aos olhos do turno, então 0.0 é aritmética, não supressão.
+● O push roda a régua em segundo plano. Enquanto isso, leitura pura do próximo item da fila 1 (O65) — sem CPU, sem tocar a árvore.
 
-● Adding PROVA line and republish RELATO
+  Ran 1 shell command
+
+● Background command "Push the marco" completed (exit code 0)
+
+  Ran 1 shell command
+
+● O push foi recusado pela régua: regua_tickets: RED — os commits [O139] e [RELATO-RETIDO] citam fatia sem linha no TICKETS. Causa em uma
+  linha: os dois entraram pelo lote --no-verify e nunca ganharam linha.
+
+● Adding the two missing TICKETS rows and rechecking
   ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/RELATO.md'
-     s=open(p, encoding='utf-8').read()
-     old = """cartoes em prod. Medido agora: portoes OK 11:13:23, commit 11:13:23, `deploy rc=0` 11:13:41.
-     Quatro portoes"""
-     new = """cartoes em prod.
-     PROVA: portoes OK 11:13:23 · commit `e8963dc2…
+     p='app/docs/TICKETS.md'
+     lines=open(p, encoding='utf-8').read().split('\n')
+     sep='|----|--------|-------|--------|--------|------|------|-------------|------|'
+     i=lines.index(sep)
+     novas=[
+     "| RELATO-RETIDO | docs/RELATO + bin/relato_afirma_com_prova + b…
 
-* Bloviating… (11h 10m 24s · ↓ 1.5m tokens)
+✢ Compacting conversation… (11h 13m 30s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 22%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   9% until auto-compact
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
