@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:02:01.**
+**Medido em 03/10/2026 15:07:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `0dd83989 [PLACAR-ESTRUTURAL] o R6 ganha o numero que faltava -- contratos 12/22 pela funcao real, e o placar dizia 8` |
+| `HEAD` local | `8417887e [PALAVRA-SEM-TURNO-PAREADO] a palavra esta na MEMORIA do worker, nao so no disco -- smoke de leitura em prod, e a sonda que morreu era minha` |
 | `origin/main` | `f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8417887e [PALAVRA-SEM-TURNO-PAREADO] a palavra esta na MEMORIA do worker, nao so no disco -- smoke de leitura em prod, e a sonda que morreu era minha
 0dd83989 [PLACAR-ESTRUTURAL] o R6 ganha o numero que faltava -- contratos 12/22 pela funcao real, e o placar dizia 8
 7765ceb2 [PALAVRA-SEM-TURNO-PAREADO] o dia com ata e sem par pareavel ganha a palavra nos TRES leitores -- e o numero que eu publiquei era 10, mediu 48
 f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres
 44099e7a [PLACAR-ESTRUTURAL] o atraso do LOTE sao 20 de 20 na perturbacao e 3 de 233 na frota -- e o [O65-GEOMETRIA-LE-A-ATA] nao tinha 6 dias, tinha 1
-0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo
 ```
 
 ## `git status --short`
@@ -108,19 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
-
-  Searched for 7 patterns, ran 17 shell commands
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Referenced file docs/BACKLOG.md
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9junw0f5.output (29 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
 
 ● Task "Esperar o bloco da sombra por arquivo" still running in background
 
@@ -131,14 +118,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o bloco da sombra por arquivo" completed (exit code 0)
 
-● Conferir o selo do import tardio contra o ar · 29s
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== o selo que pergunta AO AR ==="; bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 |
-     tail -6; echo "rc=$?" (29s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Committed 0dd83989, searched for 2 patterns, ran 11 shell commands
+  ⎿  Read docs/AVAIS.md (30 lines)
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9junw0f5.output (29 lines)
+  ⎿  Referenced file ponto/services/dia_decidido.py
+  ⎿  Referenced file ponto/services/espelho.py
 
-✢ Bloviating… (14h 48m 30s · ↓ 2.0m tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
+
+● Smoke verde em prod, pela chamada do próprio produtor. Vou carimbar a PROVA em arquivo (rodando de novo com tee, para o arquivo ser saída
+  genuína e não transcrição minha).
+
+● Gerar handoff e conferir o que falta empurrar
+  ⎿  $ cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 | tail -5; echo '=== fetch ==='; git fetch 2>&1 | tail -3; echo '===
+     origin/main..HEAD ==='; git log --oneline origin/main..HEAD
+
+· Bloviating… (14h 54m 0s · ↓ 2.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -146,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading pergunta_sem_acao_possivel in raiox.py                                           3h 9m 38s · ↓ 104.6k tokens
+  ◯ general-purpose  Checking via_resolucao carimbo in materializacao.py                                      3h 15m 8s · ↓ 150.0k tokens
   ⧉  index
 ```
