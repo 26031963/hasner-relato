@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:50:45.**
+**Medido em 03/10/2026 20:55:45.**
 
 | | |
 |---|---|
@@ -111,40 +111,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+   a ATA ja gravada carrega a resposta velha: o cartorio lavra minutos_realizados (ponto/services/cartorio.py ~452, ~262) via
+  escala/utils.py ~1309 em janela estreita e so rejulga com insumo mudado. Censo das atas divergentes + relavratura DECLARADA com DIFF.
+   o dinheiro se move sozinho: recalcular_por_evento (ponto/services/fechamento.py ~1011) roda em toda batida, HE, validacao e vinculo --
+  a competencia 10 muda na primeira batida apos o deploy. DIFF de frota e reversao em logs/ ANTES do deploy.
+   cadeia: escala/utils.py ~1329 -> dia_pago.py ~314 -> fechamento.py ~529-533. Mudam em recalculo: FechamentoMensal.minutos_realizados,
+  DiaPago.minutos_realizados, motivos_espelho e prontidao (export.py ~637/665), horas_folga_trabalhada (fechamento.py ~455),
+  TurnoMaterializado. Horas, HE, noturno e banco NAO mudam. O motor esta fora do defeito (motor_calculo_v2.py ~739-753).
+   a 09 EXPORTADA fica intacta pela guarda CompetenciaExportada (fechamento.py ~70-80); nenhum cron a atravessa (crons.py ~890-896). 22
+  dos 33 dia-colab estao nela: saem como lista, nao como apply.
+   a cura muda tambem o ramo simples: dia fora da vigencia de vinculo unico perde os marcos (~1253-1264; col882) -- o DIFF lista esses
+  dia-colab, que pela lei de hoje sao dono CADASTRO.
 
-● Os dois templates ficaram completos. Agora o escala/views.py, que é o hunk-a-hunk de verdade.
+  SELOS DE QUERY NO CAMINHO, medir antes e depois: ponto/tests/test_selo_chokepoint_escrita.py ~95 (24/24, folga zero);
+  core/tests/test_selo_performance.py ~195-213 (calendario e espelho); chamados/tests/test_selo_teto_modal.py ~181.
+  CHAMADORES: 37 sitios diretos -- 3 persistidos (escala/utils.py ~1309, esmeril_espelho.py ~65, nucleo.py ~43), 15 de cobranca, o resto
+  tela. Janela estreita: chamados/juizes.py ~340 e ~1251, batidas_do_dia_turno, recompute_turnos.
 
-  Ran 2 shell commands
+  NAO VERIFICADO POR FORA, e seu: os vinculos reais do col736 e qual das tres formas gera o 9 x 26; a contagem real de queries apos a
+  cura; se o cartorio reescreve ata de dia da 09; se minutos_realizados/motivos_espelho mudam quem entra no TXT.
 
-● Achado importante: o main já tem a barra da etapa 1 nessa view, com a chave quadros; a raia a chama quadros_barra. Escolher errado
-  esvazia a barra em silêncio. Vou ver o que o template mergeado pede.
-
-  Ran 2 shell commands
-
-● Dois achados que mudam a resolução: o conflito 3 é a cura de segurança P7.1 (o acao_required em escala_buscar_colabs, que devolve
-  cadastro em JSON) — só o main a tem. Lá fico com o main; nos outros dois, com a raia, que é quem casa com o template mergeado.
-
-  Ran 3 shell commands
-
-● Ruff limpo e idêntico ao main. Agora os dois docs: o JSON fica com o main (fonte), e o AVAIS.md se regenera — não se resolve à mão.
-
-  Ran 1 shell command
-
-● Tudo resolvido. Commito o merge na cópia e rodo a suite lá, com as montagens que worktree exige.
-
-  Committing do merge na cópia
-  ⎿  $ cd /home/ronald/wt-merge-ui && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $SP/msg_merge.txt <<'MSG'
-     [O122] A raia-ui vem para o main EM COPIA -- 5 conflitos resolvidos por HUNK, e dois deles eram cura que se perderia
-     Lei Ronald 03/10 …
-
-· Compacting conversation… (20h 37m 14s · ↓ 2.9m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+  PROIBIDO: deploy antes do DIFF de frota publicado; tocar a 09 exportada; mudar tolerancia ou tirar caso da lista para o numero cair;
+  fallback, item proprio depois, autoridade nova.
+  PRONTO: RED nomeados vermelhos antes e verdes depois; DRY dos dois crons; DIFF de frota da 10 com reversao; censo e relavratura das
+  atas; selos de query no mesmo numero ou menor; a palavra "sem turno pareado" recuando para os 15; e so entao celula e turno verdes na
+  matriz, placar pela funcao real. Sem isso = INCOMPLETO com a lista.
+  LEI-AKITA: origem=ponto/turnos.py::turnos_do_colab, testemunha=vinculo_do_dia e a ata, RED=invariancia por janela, quem-mais-le=37
+  chamadores classificados, juizes novos=0.
+  LINHA HAIKU: (a) contador "dias cujo turno muda com a janela" (esperado 0) no payload com rotulo de admin; (b) golden: "o turno do
+  col736 em 01/09 e o mesmo na competencia e no mes?" esperado via ferramentas; (c) degrau: leitura.
+  Segue a fila; PAREI so em lei ou !.
+  ctrl+x ctrl+s to send now
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
