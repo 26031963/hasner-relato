@@ -1,5 +1,85 @@
 # RELATO — esteira saas-hasner
 
+**PUSH 93 falhou e a causa e uma linha**: `tickets_rodape_vs_git` ALARME -- o rodape do TICKETS dizia `751b53c4`, 8 commits atras de `origin/main`. Curado por `bin/tickets_rodape.sh --escrever` (a propria saida do selo nomeia a cura), e nova tentativa. O selo mordeu ANTES da suite, entao nao custou os 9 min.
+
+### O TETO QUE FALTAVA ERA O DO VAO, E OS 5 QUE "PIORARAM" SAO 5 ACUSACOES CONTRA A TELA (02/10 23:5x)
+
+**E6-CAUDA-2, familia (c) -- NO AR? nao: commit `bfb3a15b`, e deploy nao e preciso** (os dois
+chamadores de `minutos_do_oraculo` sao management commands; nenhum worker importa o modulo).
+
+**O RED, sintetico e reproduzido a mao**: `03/09 07:00 12:00 17:00 | 04/09 06:00 17:00 | 05/09 06:00
+17:00` devolvia `{'2026-09-03': 1080}` -- **18 h num dia** -- com `cortes` VAZIO.
+`AssertionError: 1080.0 not less than or equal to 840`.
+
+**A CAUSA**: `minutos_do_oraculo` so cortava por GAP. Gap < 8 h nunca corta; com contagem IMPAR, o de
+8 a 14 h tambem nao. Uma batida que FALTA faz o turno atravessar a noite e colar o dia seguinte.
+
+**A ANCORA NAO E MINHA, e e no VAO**: `ponto/turnos.py:749` fecha o turno quando
+`b - cur["entrada"] > cont_max_s` (= `MotorBase.AUT_CONT_MAX_S`, 14 h). A casa ja media no vao; o
+oraculo e que media so no gap.
+
+**REMEDICAO -- as duas versoes do nucleo sobre a MESMA entrada, na sombra de hoje**
+(carimbo `dia=20261002 tipo=completa diverge=0`), julgadas pela autoridade (espelho, tolerancia 10 min,
+a do proprio oraculo):
+
+| | dia-colab |
+|---|---|
+| universo | 7.946 (607 colabs) |
+| dias que MUDARAM | **79**, em 33 colabs |
+| CUROU (antes divergia, depois bate) | **37** |
+| CUSTOU (antes batia, depois diverge) | **5** |
+| NEUTRO (os dois divergem) | 34 |
+| NEUTRO (os dois batem) | 0 |
+
+**Saldo +32 dia-colab.** PROVA: `logs/e6_cauda2c/custo_teto_vao.txt`.
+
+**O PLACAR, remedido na sombra de hoje**: **91,4%** -- 7.193 de 7.873 dia-colab batendo ate 10 min.
+PROVA: `logs/e6_cauda2c/placar_09_depois.txt`.
+
+**E ELE RECONCILIA COM O CONGELADO, que e o que faz o numero valer**: eu NAO subtraio duas rodadas
+(os denominadores nao sao os mesmos -- dia que era `dia_sem_trabalho_ambos` e agora tem minuto ENTRA
+na comparacao). O delta vem do diff das duas versoes: **+32 dia-colab**. E 7.193 - 32 = 7.161, que
+sobre 7.873 da **90,96% ~= os 91,0% da E6-CAUDA-1**. As duas medicoes, feitas por caminhos
+diferentes, fecham na terceira casa.
+
+**O CARIMBO DO PROPRIO ORACULO sobre o que ele fez**: `impar_SO_POR_CORTE_do_oraculo` = **2** dos 219
+impares que divergem. O corte novo nao virou uma fabrica de orfaos.
+
+**DISTANCIA ATE 98%** (o alvo dele): faltam **523 dia-colab** (7.716 - 7.193), em **179 colabs com
+divergencia**. A cauda nomeada continua sendo a fila: (b2) 102 dia-colab / 152,0 h, (a) 188 / 937,7 h
+esperando a lei da ponte, (b1) 62 / 256,2 h que e o O65.
+
+**O PRIMEIRO CRITERIO QUE EU USEI CONTOU ERRADO, e e a oitava vez nesta sessao.** Eu parti os dias em
+"colado" e "plausivel" por `antes > 1440 min` -- CRITERIO PELA FORMA. `col439 14/09` tinha **1.348,7 min
+= 22,5 h num dia** e caiu em "plausivel" por caber em 1440. 22 h nao e mais plausivel que 24. A pergunta
+certa e a do proprio oraculo: o dia BATE com o espelho?
+
+**OS 5 QUE SAIRAM DO ACORDO, abertos um por um** -- e a hipotese que eu tinha (diferenca de DATA, o
+oraculo chaveia pela entrada e a casa pergunta ao juiz, O76) **caiu**: a soma da vizinhanca (-1,0,+1)
+nao fecha em 4 dos 5.
+
+| colab · dia | antes | depois | espelho | o que o espelho afirma |
+|---|---|---|---|---|
+| col924 13/09 | 1.315,6 | 56,8 | **1.315,0** | **21,9 h num dia de 3 batidas**, `vered=trabalhou` -- e o GRAVADO da 09 dele e `horas_trabalhadas=0.00` |
+| col468 17/09 | 0,0 | 582,6 | **1,0** | **1 minuto** num dia de 6 batidas (1 turno aberto na 09) |
+| col923 03/09 | 0,0 | 536,1 | 0,0 | 0 em 03 **e** 04/09, os dois `vered=trabalhou` (18 turnos abertos, 23 inconsistencias) |
+| col439 15/09 | 0,0 | 360,0 | 0,0 | 0 num dia de 4 batidas, `vered=trabalhou` (2 turnos abertos) |
+| col923 15/09 | 0,0 | 61,1 | 0,0 | dia de `folga`; aqui o fragmento E artefato do corte -- e sai CARIMBADO em `cortes` |
+
+**Em 4 dos 5 o acordo que se perdeu era acordo com um numero que a propria casa contradiz** -- o
+`FechamentoMensal` do col924 diz 0,00 h onde a tela diz 21,9 h num dia; os zeros do col923 e do col439
+sao turno ABERTO nao somando, que e a lei do BUG-144, nao "a tela perdeu o dia". **O quinto e artefato
+do corte, e declarado**: o dia entra em `cortes`, e a lapide do proprio laco diz que corte com contagem
+impar e suspeita DO ORACULO.
+
+**LIMITE DESTA MEDICAO, para nao ser lido como mais do que e**: na sombra o `conteudo` de
+`ExportacaoDominio` vem VAZIO (8 exports da 09, todos com 0 linhas), entao **daqui nao se responde se
+esses colabs constaram no TXT**. Quem precisar disso mede em prod.
+
+**FICA NA SUA MESA, com numero**: `col924` tem **21,9 h gravadas num unico dia (13/09)** no espelho e
+**0,00 h** no `FechamentoMensal` da mesma competencia. Nenhuma das duas pode estar certa. Nao e fatia
+minha hoje -- e a classe (b2) da cauda, a proxima.
+
 # E6-CAUDA-2 familia (c): a colagem vem do ENVELOPE, nao da paridade (02/10 23:4x)
 
 PROVA: `minutos_do_oraculo` chamado direto, na arvore de hoje. Com contagem IMPAR e gaps de 11-13 h o

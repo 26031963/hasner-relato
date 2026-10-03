@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:42:31.**
+**Medido em 02/10/2026 22:48:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap` |
+| `HEAD` local | `379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite` |
 | `origin/main` | `74e24761 [TICKETS] O rodape volta a bater com o origin -- quinta falha de push na mesma familia` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+379a29fd [TICKETS] O rodape estava 8 commits atras, e o selo mordeu antes da suite
+b0560aa9 [E6-CAUDA-2] A remedicao da familia (c), e os 5 que "pioraram" sao 5 acusacoes contra a tela
 bfb3a15b [E6-CAUDA-2] O oraculo somava 18 h num dia, e o teto que faltava e o do VAO -- nao o do gap
 b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois testes meus passaram VAZIOS
 3749dd5a [E6-CAUDA-2] A celula do censo, dentro do teto de 300
-3a5ac950 [E6-CAUDA-2] O censo parte a classe em QUATRO familias, e nenhuma e "o espelho soma errado"
-10e2ecc2 [TICKETS] A linha da PLACAR-E, e RELATO vira META (como o PROMPTS)
 ```
 
 ## `git status --short`
@@ -34,7 +34,6 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -93,44 +92,44 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-                                                                                                                                        ↑
-   Total cost:            $3717.48
-   Total duration (API):  2d 14h 21m
-   Total duration (wall): 5d 6h 20m
-   Total code changes:    4206 lines added, 498 lines removed
-   Usage by model:
-          claude-opus-5:  1.2m input, 11.4m output, 6.1b cache read, 27.2m cache write ($3563.68)
-       claude-fable-5-1:  12.5m input, 571.7k output, 0 cache read, 0 cache write ($153.80)
-   Prompt cache (main):   15859 requests · 100% of input tokens from cache · 29 misses (last 8h 54m 44s ago — likely cause: idle past
-   the 1h TTL, 11.9m tokens re-cached) · 28 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL, last activity 36s
-   ago)
+● Push failed on the stale rodapé — the cure is named in the output. Running it with the cause in one line:
 
-   Current session
-   ██████▌                                            13% used
-   Resets 1:30am (America/Sao_Paulo)
+  Committed 379a29fd, ran 2 shell commands
 
-   Current week (all models)
-   █████████████████████████▌                         51% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
+● While the suite runs, reading the (b2) family I measured earlier, to build its censo:
 
-   Current week (Fable)
-   █████████████████                                  34% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
+  Searched for 1 pattern, ran 2 shell commands
 
-   What's contributing to your limits usage?
-   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
+● ponto/models.py:413 names it: "Minutos realizados (relogio da grade)". And porta_export.py:36 suggests a reader already migrated away
+  from it — that's the precedent LEI-AKITA 4 asks for:
 
-   Last 7d · these are independent characteristics of your usage, not a breakdown
+  Ran 1 shell command
 
-   100% of your usage came from subagent-heavy sessions
-    Each subagent runs its own requests. Be deliberate about spawning them — and
-    consider configuring a cheaper model for simpler subagents.
+● realizado_do_dia is the espelho's source, and the house already measured that field against the motor on 29/09 — "dois juízes, duas
+  perguntas", with the motor right. Reading it:
 
-   100% of your usage came from sessions active for 8+ hours
-    These are often background/loop sessions. Continuous usage can add up quickly
-    so make sure it is intentional.
+  Searched for 1 pattern
 
-   97% of your usage was at >150k context
-    Longer sessions are more expensive even when cached. /compact mid-task, /clear
-    when switching to new tasks.                                                                                                        ↓
+● The previsto_min parameter is the thread — models.py:332 mentions a per-day cap. Reading what it does:
+
+  Searched for 1 pattern
+
+● previsto_min only sets a flag — no cap. So the espelho's 420 is the pareador's turno starting at 10:55, with 07:01 orphaned. Let me find
+  the censo probe that split the four families:
+
+● Finding where the ata persists orfas
+  ⎿  $ sed -n '265,280p' ponto/services/cartorio.py; echo "=== modelo ==="; grep -rn "orfas" ponto/models.py escala/models.py 2>/dev/null
+     | head -5
+
+· Sock-hopping… (4h 35m 30s · ↓ 786.9k tokens · thought for 6s)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                   0% until auto-compact
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+
+❯ ● main
+  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ⧉  index
 ```
