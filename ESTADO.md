@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:40:02.**
+**Medido em 03/10/2026 20:45:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadlock ganha nome` |
+| `HEAD` local | `32346df6 [RELATO] As tres do turno no papel: SEXTO-BANCO, ARVORE-SEM-CONFLITO e O154 -- e a etapa 0 vale como entrega` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,30 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+32346df6 [RELATO] As tres do turno no papel: SEXTO-BANCO, ARVORE-SEM-CONFLITO e O154 -- e a etapa 0 vale como entrega
+f6291f9d [SEXTO-BANCO] A celula da ausencia fecha e o placar sai pela funcao real: contratos_estruturais 13/22
+1efd9c3b [ARVORE-SEM-CONFLITO] O deploy recusa arvore quebrada -- as duas guardas do apagao de ~30s que EU causei
+a62593f7 [O154] A busca de escala PROCURA NO MESMO TEXTO QUE MOSTRA -- e o '19:00' nao e termo de digitos
 a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadlock ganha nome
-29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada
-560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host
-c1a1f7b6 [SITUACAO-VIGIA-E-PORTA] a familia AUSENCIA do estrutural ZERA: o vigia dos DOIS sentidos, a porta com selo de idempotencia, e o _A14 fora do registro
-bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/core/contratos_estruturais.py
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
- M app/escala/views.py
- M bin/deploy.sh
- M bin/prova_de_casca.py
-?? app/escala/tests/test_o154_busca_le_o_que_mostra.py
-?? bin/arvore_sem_conflito.sh
-?? bin/tests/test_deploy_recusa_conflito.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -124,36 +111,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Ruff limpo. Commits por PATH, um por peça.
+
+  Committed a62593f7, f6291f9d, 32346df6, cherry-picked 1efd9c3b, ran 1 shell command
+
+● Quatro commits em pé. Antes do merge da raia — o ato que já me custou prod hoje — levanto o que ele traz.
+
   Ran 1 shell command
 
-● Enquanto roda, as duas linhas do PROMPTS.md (PROMPT-NAO-SE-REPETE) e o parágrafo do 19:00 no RELATO.
+● Os 4 commits estão em pé e duráveis. O próximo ato é o merge da raia + deploy — exatamente o que me custou prod hoje, e toca template de
+  casca. Consulto o conselheiro antes.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Dois pontos mudam o que eu ia fazer. Primeiro o escala/views.py — a raia tem mais que a O154 nele.
 
   Ran 1 shell command
 
-● Background command "Rodar o selo dos contratos estruturais" completed (exit code 0)
+● Confirmado: a raia muda lista_tipos_escala (ganha quadros_barra) e buscar_escalas — só o segundo hunk é meu. Agora checo o que os
+  templates exigem da view, que é a janela de 500.
 
-  Read 1 file
+  Ran 2 shell commands
 
-● Selo verde: 13 testes OK. Agora o placar pela função real.
+● Nada de {% load %} novo e nenhum id só na raia. Monto a cópia e faço o merge lá.
 
-  Ran 5 shell commands
+● Conferir o teste e criar o worktree da cópia
+  ⎿  $ cd /home/ronald/wt-merge-ui && git merge --no-commit raia-ui 2>&1 | tail -12; echo "=== EXIT: ${PIPESTATUS[0]} ==="; echo "--- em
+     conflito ---"; git diff --name-only --diff-filter=U
 
-● Placar pela função real: contratos_estruturais: 13/22 verdes — 12 células da MATRIZ + o global; 7 vermelhas nomeadas, e o teto aritmético
-  segue 20/22 (duas células proibidas de existir, documentado em contratos_estruturais.py:263-269).
-
-  Ran 7 shell commands
-
-● Agora o RELATO: as três seções (as duas guardas nascidas do apagão, a O154, e o sexto banco).
-
-  Ran 6 shell commands
-
-● O placar do TICKETS cobra a nota nova da célula. Regenero pela própria cura que ele indica.
-
-● Regerar o placar do TICKETS e reconferir
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "SITUACAO-VIGIA-E-PORTA\|^| " app/docs/TICKETS.md | sed -n '1,6p' | cut -c1-250; echo "...";
-     grep -n "SITUACAO-VIGIA" app/docs/TICKETS.md | head -3
-
-✻ Bloviating… (20h 26m 31s · ↓ 2.8m tokens · thought for 1s)
+✢ Bloviating… (20h 32m 0s · ↓ 2.8m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
