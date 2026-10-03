@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 13:52:01.**
+**Medido em 03/10/2026 13:57:31.**
 
 | | |
 |---|---|
@@ -33,9 +33,13 @@ bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139
 
 ```
  M PLANO_PISCADA.md
+ M app/colaboradores/services/calendario.py
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/escala/views.py
+ M app/ponto/services/dia_decidido.py
+ M app/ponto/services/espelho.py
+ M app/relatorios/tests/test_palavra_do_dia.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? esteira.pausada
