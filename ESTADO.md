@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:07:31.**
+**Medido em 03/10/2026 20:13:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host` |
+| `HEAD` local | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
 | `origin/main` | `bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada
 560f7314 [RELATO] a PROVA em prod do SITUACAO-VIGIA-E-PORTA: mente=0, cala=0, universo 11/11, e o cron vivo no host
 c1a1f7b6 [SITUACAO-VIGIA-E-PORTA] a familia AUSENCIA do estrutural ZERA: o vigia dos DOIS sentidos, a porta com selo de idempotencia, e o _A14 fora do registro
 bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do TICKETS
 57420097 [P7.1b] wizard_calendario_criar aceitava POST ANONIMO que CADASTRAVA -- e o selo que varre as 556 rotas das duas cascas
-bea841ff Revert "[CHAMADO-EM-RAIA] merge da raia por PORTA FECHADA" -- os .py voltam ao que prod tem na memoria, os docs ficam
 ```
 
 ## `git status --short`
@@ -111,42 +111,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lei Ronald: "dia previsto exibido" e (b) todo dia que a celula diz trabalho; com isso fabrica o contador espelho_x_fechamento_dias e
-  fecha o selo do O25.
-  lei Ronald: para o art.130 contam falta + suspensao; atraso e saida antecipada sao parciais e NAO entram.
-  aval Ronald O119: pode mudar intervalos[ent] = [(_ii, _if)] para intervalos[ent] = itv.get('pausas') or [(_ii, _if)] em
-  ponto/motor_calculo_v2.py:573, junto da cura do juiz_batida.py. DIFF de frota antes, reversao em logs/, 09 e exportadas intactas, prova
-  depois !
-  corte Ronald: o marcador ORDEM-VIVA-TOPO passa a ser AUTORIDADE (o selo exige que ele aponte um item que EXISTE e esta aberto).
-  aval Ronald HE-FIXA: o calculo proprio da extra prevista pode entrar em ponto/motor_calculo_v2.py, com DIFF de frota publicado antes,
-  reversao em logs/ e competencias exportadas intactas !
-  aval Ronald: "dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado. Mede o DIFF antes e aplica !
-
-  Searched for 10 patterns, read 7 files, ran 76 shell commands
-  ⎿  Read ponto/tests/test_tripwire_situacao_afastado.py (172 lines)
-  ⎿  Referenced file core/juizes.py
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Referenced file docs/TICKETS.md
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Rodar os vizinhos da fatia" still running in background
-
-● Background command "Rodar os vizinhos da fatia" completed (exit code 0)
 
   Committed c1a1f7b6, 560f7314, searched for 1 pattern, ran 23 shell commands
 
 ● Background command "Empurrar o marco (pre-push roda a suite)" completed (exit code 0)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ponto/tests/test_tripwire_situacao_afastado.py (172 lines)
+  ⎿  Read ponto/management/commands/tripwire_situacao_afastado.py (52 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Referenced file ponto/tests/test_afastado_hoje.py
 
-· Compacting conversation… (19h 54m 0s · ↓ 2.7m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
+● Task "RED e construção do segundo intervalo" completed in background
+
+  Ran 1 shell command
+
+● The pre-push blocked it: tickets_rodape_vs_git ALARME — the TICKETS footer still cites 4845e671, 25 commits behind the remote. Running
+  the cure it names:
+
+  Committed 29f28708, ran 10 shell commands
+
+● Now applying the view in the raia (anchor-checked, compile before write):
+
+  Ran 5 shell commands
+
+● Ruff clean. Drafting the docs text while the push's suite holds the test DB:
+
+  Superficie de conflito da raia-ui com main
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== commits da raia nao mergeados ==="; git log --oneline main..raia-ui; echo "=== arquivos que
+     a raia toca ==="; git diff --stat $(git merge-base main raia-ui) raia-ui
+
+✢ Bloviating… (19h 59m 30s · ↓ 2.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
