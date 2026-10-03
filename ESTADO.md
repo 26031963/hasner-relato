@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:50:01.**
+**Medido em 03/10/2026 16:55:31.**
 
 | | |
 |---|---|
@@ -109,35 +109,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A suíte ainda está viva e o OK:   31 não é veredito de Django — é linha minha. Vendo o rabo do arquivo e, em paralelo, fatiando o censo
-  de 104 por família:
+● Isso fecha a questão, e contra o meu pouso. O reverter já é o escritor derivado: quem_ja_voltou pergunta a afastado_hoje nos dois efeitos
+  e escreve pela porta (gravar + evento), declarando "AQUI NAO SE MUDA JUIZ NENHUM". E a lápide dele carrega um corte anterior do Ronald
+  (24/09, item 3) que já examinou e recusou a opção de tirar o campo, nomeando o motivo. Conferindo o sinal que esse corte diz que se
+  apagaria:
 
   Ran 1 shell command
 
-● Suíte ainda rodando (893 linhas, pontos saindo). Enquanto ela corre, fatiando o censo de 104 por família — isso é só grep, não disputa
-  cpuset:
+● Conferência 2 fecha pior do que o advisor supôs. O 2º if é alarme de casa (abre Pauta para a supervisão), mas o texto dele manda "encerre
+  a AUSENCIA de afastamento (a situacao sai dela, nao do cadastro)" — e, sem reversor e com admin readonly, encerrar a ausência não limpa
+  o campo. O 1º if passa a falhar, o 2º acende, e a Pauta renasce a cada batida para sempre, apontando uma cura que deixou de existir. Não
+  é tripwire medindo 0: é laço sem porta de saída.
+
+  Enumerando o que é de qual leitura:
 
   Ran 1 shell command
 
-● O discriminador do dreno não é a contagem — é o que é irreversível. Chamado se retrata; push enviado a 11 pessoas afastadas não se
-  desenvia. Caçando os sítios que emitem para fora:
+● Preciso partir o diff por hunk: ponto/views.py carrega a cura _A12 (segura) e a remoção da escrita (leitura b); test_afastado_hoje.py
+  carrega a extensão de dois arquivos (segura) e a asserção AST (leitura b). Vendo os hunks:
 
   Ran 1 shell command
 
-● Esse é o achado decisivo: 8 dos 104 sítios emitem para fora — core/canal.py:36 e chamados/fcm_utils.py:121 varrem fcm_token de todo
-  'ativo', e comunicados/services.py:57 monta a base de comunicado. Medindo os 11 contra o juiz antes de concluir (2 queries, só leitura):
+● Separação limpa: views.py tem 3 hunks — o hunk 1 (@@ -2082) é a remoção da escrita (segurar), os hunks 2 e 3 são a cura _A12 (pousar).
+  Vendo os dois que faltam classificar:
 
-  Ran 1 shell command
+● Ver diffs de juizes e espelho_verdade
+  ⎿  $ cd /home/ronald/wt-lampada && echo "=== core/juizes.py ==="; git diff HEAD -- app/core/juizes.py; echo "=== core/espelho_verdade.py
+     ==="; git diff HEAD -- app/core/espelho_verdade.py
 
-● Isso inverte meu raciocínio anterior, e é bom ter medido antes de aplicar: o juiz acha exatamente 11 afastados hoje, e são exatamente os
-  11 do cadastro — divergência 0. O valor gravado é hoje um cache correto da lâmpada, não um resíduo. Drenar não completaria o !: criaria a
-  divergência, soltando 11 pessoas genuinamente afastadas em 104 universos (1 delas com fcm_token). Registrando antes de consultar:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-
-✶ Bloviating… (16h 36m 30s · ↓ 2.3m tokens)
+· Bloviating… (16h 42m 0s · ↓ 2.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +147,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing D3 nota in contratos_estruturais.py                                             4h 57m 38s · ↓ 167.9k tokens
+  ◯ general-purpose  Reading run_d1.sh test harness                                                             5h 3m 8s · ↓ 83.0k tokens
   ⧉  index
 ```
