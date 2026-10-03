@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:23:42.**
+**Medido em 03/10/2026 15:29:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
-| `origin/main` | `f652dfef [AUSENCIA-TELA-PERGUNTA-AO-JUIZ] a tela do bater ponto era a ultima porta decidindo por `situacao`, e o selo da cobranca cobria duas portas de tres` |
-| commits a subir (`ahead`) | **4** |
+| `origin/main` | `2fd71ba1 HANDOFF regenerado no fecho do marco (palavra no ar com smoke + R6 com o numero)` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -108,44 +108,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
 
-● p50 = 19 ms (base) mas p95 = 85 ms e max 225: a mediana está sã, a cauda é que engordou. Preciso saber de quem é a cauda antes de afirmar
-  qualquer coisa — e há um suspeito que eu mesmo pus de pé.
+● O cliente do docker run (3850882) está vivo há 9 min, então um container deve existir — mas docker ps não o mostrou. Uma das duas
+  afirmações está errada.
 
   Ran 1 shell command
 
-● Os três lentos são um estouro de 4 s (15:21:49-53); os outros 27 ficaram em 19-22 ms. saas_core está em 0,03% — a casca não está
-  apertada. Mas saas_db está em 25% com a minha leitura dentro dele, então não vou atribuir de cabeça: deixo um amostrador correndo e fatio
-  depois por janela.
+● clever_jepsen nasceu 9 min atrás, com --memory 2g e --cpus 4 — é o meu R4. Eu atribuí os dois containers pelo nome, no chute;
+  thirsty_wright era o da raia e já saiu. Perguntando à autoridade em vez de adivinhar:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Nenhuma linha de medição em 6 min: o stdout do python no container não é tty, então está tamponado — só desce no fim. Não reinicio
-  (perderia 6 min e bateria de novo no banco do cliente), mas confiro se está mesmo andando, pelo lado do postgres.
+● Confirmado: clever_jepsen tem pid 3850928, que é o sh -c da minha própria árvore — o R4 está vivo e trabalhando. Nada morreu. Duas vezes
+  hoje eu nomeei coisa de cabeça (o HEAD e o container); as duas foram pegas antes de virar afirmação, mas a correção da memória tem que
+  dizer o que está provado e o que não está.
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● A sonda está andando (consulta SUM(ponto_diapago…) recém-fechada, container thirsty_wright a 94% dentro do cpuset 4-7). O que ela carrega
-  no saas_db é o que importa, e isso toca uma memória que eu já tenho — confiro se ela já diz isto.
+● Memória corrigida. Agora preparo a sonda dos outros dois RED — cada um pelo juiz do seu nível, como o advisor apontou. Primeiro leio as
+  autoridades, para não reimplementar nenhuma.
 
-  Read 1 file
+  Searched for 6 patterns, ran 4 shell commands
 
-● A memória já dizia -e PYTHONUNBUFFERED=1 — eu tinha a lição e não a apliquei neste runner. E falta nela o fato que acabei de medir: a
-  sombra mora dentro do postgres de PRODUÇÃO.
+● Tenho tudo: previsto_em é o carimbo da lavratura, que é justamente o discriminador do col305. Escrevendo a sonda dos três RED — cada um
+  pelo juiz do seu nível, e o juiz do dia importado, não copiado.
 
-  Confirmar que a sombra mora no saas_db
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '48,58p' bin/sombra.sh; echo '--- settings ---'; cat app/config/settings/sombra.py | head -25
+● Running 1 shell command…
 
-* Bloviating… (15h 10m 11s · ↓ 2.1m tokens)
+✢ Bloviating… (15h 15m 30s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Loading Monitor to wait on red_q5.sh                                                    3h 29m 17s · ↓ 105.4k tokens
+  ◯ general-purpose  Mapping structure of validacao.py                                                       3h 36m 38s · ↓ 142.1k tokens
   ⧉  index
 ```
