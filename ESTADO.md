@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:35:45.**
+**Medido em 02/10/2026 23:40:55.**
 
 | | |
 |---|---|
@@ -94,36 +94,36 @@ a82c346d [PLACAR-ESTRUTURAL] R1: toda divergencia ganha dono, e o rotulo para de
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● RED evidenciado: exatamente 1 falha, a certa. Conferindo que a árvore voltou — a restauração veio encadeada num comando que falhou:
+● Dois chamadores mais: um signal de vínculo (um colab, inline está certo) e o laço de frota. Só este último recebe recalculo=False:
 
   Ran 1 shell command
 
-● O git checkout levou minha cura do placar_tickets.py e o git apply encadeado falhou. O patch guardado tem tudo — reaplicando só a parte
-  daquele arquivo:
+● Nove sítios de chamada. Conferindo que nenhum outro é laço de frota — um segundo laço inline seria o POST de 48 s:
 
   Ran 2 shell commands
 
-● 35 selos OK. O ALARME da cópia é artefato dela (não tem .regua_stamp, então o bloco "do mundo" sai sem o prefixo da régua) — os hashes
-  ali já são iguais. Levando à árvore viva, onde o selo roda de verdade:
+● Os dois do auto-executor são de um vínculo só. Agora o RED. Procurando um selo existente da porta para copiar a forma das fixtures em
+  vez de inventá-las:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● tickets_placar: OK na árvore viva. Registrando as duas respostas e commitando:
+● Tenho a forma exata das fixtures. Escrevendo o selo, com o caso que morde mais forte: a data representante tem de cair dentro da
+  competência que ela representa:
 
-  Committed 33412f31, ran 1 shell command
+  Ran 2 shell commands
 
-● Agora a cura do R6 na O121, que ele especificou. Lendo o sítio da regeneração:
+● 4 OK. Evidenciando o RED — a chamada retirada, patch guardado antes:
 
-  Searched for 2 patterns, ran 1 shell command
+  Evidence the RED with the call switched off
+  ⎿  $ cd /home/ronald/wt-orfa && git diff > /tmp/cura_r6.patch && wc -l /tmp/cura_r6.patch && python3 - <<'PY'
+     import io
+     p = '/home/ronald/wt-orfa/app/ponto/portas/celula.py'
+     s = io.open(p, encoding='utf-8').read()
+     v = " if recalculo and _tocadas:"
+     assert s.count(v) == 1
+     io.open(p, 'w', encoding='utf-8…
 
-● Três chamadores, incluindo o lote do cadastro_tipo. Preciso da autoridade que diz "qual competência contém esta data", para chamar uma
-  vez por competência e não por dia:
-
-● Running 1 shell command…
-
-✶ Sock-hopping… (5h 23m 14s · ↓ 958.9k tokens · thought for 16s)
+· Sock-hopping… (5h 28m 24s · ↓ 978.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
