@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:18:31.**
+**Medido em 03/10/2026 15:23:42.**
 
 | | |
 |---|---|
@@ -108,44 +108,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Aguardo o veredito do push; na sequência rodo o R4 e classifico os três RED (col935 05/09, col882, col305) por
-  e6_oraculo.py::dono_da_divergencia — só ESTRUTURA fica na fila 1.
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+● p50 = 19 ms (base) mas p95 = 85 ms e max 225: a mediana está sã, a cauda é que engordou. Preciso saber de quem é a cauda antes de afirmar
+  qualquer coisa — e há um suspeito que eu mesmo pus de pé.
 
   Ran 1 shell command
 
-● O hook manda seguir. Antes de disparar o R4 preciso saber onde o banco sombra mora — se for dentro do saas_db, a leitura de frota pesa no
-  banco do cliente, e isso é outra lei.
+● Os três lentos são um estouro de 4 s (15:21:49-53); os outros 27 ficaram em 19-22 ms. saas_core está em 0,03% — a casca não está
+  apertada. Mas saas_db está em 25% com a minha leitura dentro dele, então não vou atribuir de cabeça: deixo um amostrador correndo e fatio
+  depois por janela.
 
   Ran 2 shell commands
 
-● Medido: o banco sombra mora dentro do saas_db (bin/sombra.sh:53), o postgres de produção — então a leitura pesa no banco do cliente, e o
-  cpuset de teste só prende o meu python. Vou pela forma canônica da casa, mas com a trava da sombra e medindo o custo no saas_db enquanto
-  roda.
+● Nenhuma linha de medição em 6 min: o stdout do python no container não é tty, então está tamponado — só desce no fim. Não reinicio
+  (perderia 6 min e bateria de novo no banco do cliente), mas confiro se está mesmo andando, pelo lado do postgres.
 
-  Ran 3 shell commands
+  Ran 2 shell commands
 
-● Duas coisas aparecem, e uma é séria: o runner carimbou HEAD: 2fd71ba1, que não é o meu 25f6cfaf. E /api/me/ está em 83-94 ms contra base
-  de 18-21. Medindo as duas antes de seguir.
+● A sonda está andando (consulta SUM(ponto_diapago…) recém-fechada, container thirsty_wright a 94% dentro do cpuset 4-7). O que ela carrega
+  no saas_db é o que importa, e isso toca uma memória que eu já tenho — confiro se ela já diz isto.
 
-● Descobrir de onde veio o HEAD novo
-  ⎿  $ cd /home/ronald/saas-hasner && echo '=== HEAD agora ==='; git log --oneline -4; echo '=== reflog ==='; git reflog -6 | cut -c1-140;
-     echo '=== push vivo? ==='; pgrep -c -x git
+  Read 1 file
 
-✢ Compacting conversation… (15h 5m 0s · ↓ 2.1m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 45%
+● A memória já dizia -e PYTHONUNBUFFERED=1 — eu tinha a lição e não a apliquei neste runner. E falta nela o fato que acabei de medir: a
+  sombra mora dentro do postgres de PRODUÇÃO.
+
+  Confirmar que a sombra mora no saas_db
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '48,58p' bin/sombra.sh; echo '--- settings ---'; cat app/config/settings/sombra.py | head -25
+
+* Bloviating… (15h 10m 11s · ↓ 2.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Pre-verifying M3 attribution with varrer_fonte                                           3h 26m 8s · ↓ 171.9k tokens
+  ◯ general-purpose  Loading Monitor to wait on red_q5.sh                                                    3h 29m 17s · ↓ 105.4k tokens
   ⧉  index
 ```
