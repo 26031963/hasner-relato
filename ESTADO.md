@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 22:48:01.**
+**Medido em 02/10/2026 22:53:14.**
 
 | | |
 |---|---|
@@ -92,36 +92,36 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Push failed on the stale rodapé — the cure is named in the output. Running it with the cause in one line:
+  Ran 1 shell command
 
-  Committed 379a29fd, ran 2 shell commands
-
-● While the suite runs, reading the (b2) family I measured earlier, to build its censo:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● ponto/models.py:413 names it: "Minutos realizados (relogio da grade)". And porta_export.py:36 suggests a reader already migrated away
-  from it — that's the precedent LEI-AKITA 4 asks for:
+● The funnel closes and the attribution shifted as expected — (c) is gone from it. One crash: .get('marcos', {}) returns None when the key
+  exists holding None — the two-meanings trap again:
 
   Ran 1 shell command
 
-● realizado_do_dia is the espelho's source, and the house already measured that field against the motor on 29/09 — "dois juízes, duas
-  perguntas", with the motor right. Reading it:
+● The family's own name is falsified: only 28 of 101 have the ata orphaning the first batida, and 69 have no orfa at all. It's a bucket,
+  not a family. Cross-tabulating to find the real partition:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● The previsto_min parameter is the thread — models.py:332 mentions a per-day cap. Reading what it does:
+● The cross-table decides it. Persisting the censo, then I want a second opinion before acting on the diagnosis:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● previsto_min only sets a flag — no cap. So the espelho's 420 is the pareador's turno starting at 10:55, with 07:01 orphaned. Let me find
-  the censo probe that split the four families:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Finding where the ata persists orfas
-  ⎿  $ sed -n '265,280p' ponto/services/cartorio.py; echo "=== modelo ==="; grep -rn "orfas" ponto/models.py escala/models.py 2>/dev/null
-     | head -5
+● Point 1 is decisive and I'd read that code without connecting it: realizado_dos_turnos subtracts the declared interval window when no
+  pause was punched — corte Ronald 14/09. The oráculo subtracts only punched pairs. Testing that against the 44:
 
-· Sock-hopping… (4h 35m 30s · ↓ 786.9k tokens · thought for 6s)
+● Testing whether the b2 difference is the declared interval window
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/e6c; cat > "$S/janela_14_09.py"
+     <<'PY'
+     # -*- coding: utf-8 -*-
+     """A DIFERENCA DA (b2) E A JANELA DECLARADA DO CORTE DE 14/09?
+     `ponto/turnos.py:378-386` (corte Ronald 14/09 ~21h30): `realizado_dos_turno…
+
+✶ Sock-hopping… (4h 40m 43s · ↓ 800.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ b9dd3192 [E6-CAUDA-2] A colagem vem do ENVELOPE, nao da paridade -- e dois teste
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
