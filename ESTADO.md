@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 15:39:41.**
+**Medido em 03/10/2026 15:45:01.**
 
 | | |
 |---|---|
@@ -108,24 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  emp2 09/2026  gravado_discorda_da_propria_grade=
-    [{'colab': 305, 'campo': 'minutos_previstos',
-      'fechamento': 13020.0, 'dias_pagos': 0.0, 'grade_do_gravado': 0.0}]
-
-  13.020 min = 217 h de previsto gravado, contra 0 na grade e 0 nos dias pagos. E o col882 não é um dia solto: são 6 dias alternados
-  (21,23,25,27,29/09 e 01/10 — 12x36), todos com espelho ~11 h e dia pago 0. Disparando a classificação.
-
-  Ran 2 shell commands
-
-● O col882 aparece na competência 10/2026, e a sonda cravou MES, ANO = 9, 2026 para os três. Isso é sonda mal parametrizada lida como
-  resposta do sistema — corrigindo antes de disparar.
-
-  Ran 2 shell commands
-
-● Disparando na sombra, sob a trava, com a flag de buffer aplicada.
-
-  Ran 1 shell command
-
 ● Terminou em 20 s com arquivo vazio — o runner falhou antes de rodar. Lendo onde ele escreve.
 
   Ran 3 shell commands
@@ -133,9 +115,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os três voltaram, todos ESTRUTURA, mas com causas distintas — e duas delas são a mesma família. Antes de rotear, medindo se é caso
   isolado ou frota.
 
-  Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Bloviating… (15h 26m 10s · ↓ 2.1m tokens)
+● Background não está pegando (igual ao primeiro disparo); em primeiro plano funcionou. Rodando assim.
+
+  Ran 2 shell commands
+
+● Linha morta minha (Emp não é usada e tenants não tem esse modelo). Removendo e rodando de novo.
+
+  Ran 1 shell command
+
+● Frota medida. Agora os três têm número e dono. Chamando o advisor antes de rotear e escrever, que é onde a interpretação se fixa.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Quatro leituras pequenas antes de escrever. Primeiro o instrumento — o que grade_do_gravado realmente lê (isso é no host, sem sombra).
+
+● Achar o contador grade_do_gravado
+  ⎿  $ sed -n '185,250p' folha/porta_export.py
+
+✢ Bloviating… (15h 31m 30s · ↓ 2.1m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -145,6 +145,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading sibling porta gate assertions                                                   3h 47m 18s · ↓ 119.3k tokens
+  ◯ general-purpose  Inspecting trilha failures in test_porta_validacao_pergunta.py                          3h 52m 38s · ↓ 152.1k tokens
   ⧉  index
 ```
