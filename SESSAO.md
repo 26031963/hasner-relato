@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 03/10/2026 08:17:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (240.7 MB). Acoes na janela: **1907**.
+**Medido em 03/10/2026 08:23:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (241.1 MB). Acoes na janela: **1911**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:22:19 | Bash | Read neighbour fixture idiom | `cd /tmp/prepush-arvore.WyKTUx/app && sed -n 1,60p escala/tests/test_previsto_desconta_as_duas_pausas.py` |
+| 08:22:06 | Bash | Check weekdays and the 5x2 branch | `cd /tmp/prepush-arvore.WyKTUx/app && python3 -c " import datetime for d in ['2026-06-10','2026-07-15','2026-06-11','2026-07-16']: dd=datetime.date.fromisoformat(d); print(d, dd.weekday()) "; echo ---; grep -n 'def eh_dia_trabalho' -A 45 escala/models.py \| grep -n '5x2\\|folga_dia_semana\\|weekday\\|CICLO' \| head -20` |
+| 08:21:56 | Bash | Read the two consumers of the juiz | `cd /tmp/prepush-arvore.WyKTUx/app && sed -n 1537,1620p escala/utils.py` |
+| 08:21:46 | Bash | Re-read the cured _esc_vigente_do_dia | `cd /tmp/prepush-arvore.WyKTUx/app && grep -n 'def _esc_vigente_do_dia' -A 30 escala/utils.py \| head -50; echo ---; grep -n 'def intervalo_declarado_do_dia\\|def minutos_previstos_do_dia' escala/utils.py` |
+| 08:17:43 | Bash | Read the R3 5x2 TipoEscala fixture | `cd /tmp/prepush-arvore.WyKTUx/app && grep -n 'te = TipoEscala.objects.create' -A 8 relatorios/tests/test_r3_em_aberto_alcanca_turno_aberto.py \| head -22` |
 | 08:17:24 | Bash | Read a neighbour fixture for style | `cd /tmp/prepush-arvore.WyKTUx/app && sed -n '1,60p' escala/tests/test_previsto_desconta_as_duas_pausas.py` |
 | 08:17:19 | Bash | Raise the teto to 55 with the C8 justification and remove probes | `cd /tmp/prepush-arvore.WyKTUx/app && python3 - <<'PY' # -*- coding: utf-8 -*- import io P = 'core/tests/test_selo_performance.py' s = io.open(P, encoding='utf-8').read() a = """ 'colaboradores/N/calendario': 36,""" assert s.count(a) == 1 novo = ''' # R3 (03/10, corte Ronald): 36 -> 55, DECLARADO, e a conta esta inteira abaixo. # O QUE PEDIU: a grade passou a imprimir a palavra "Em aberto" no dia d ...` |
 | 08:16:56 | Bash | Read the TETOS block | `cd /tmp/prepush-arvore.WyKTUx/app && sed -n '205,232p' core/tests/test_selo_performance.py` |
@@ -1916,4 +1921,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:23:39 | Bash | Restore PAREI to line 1 of RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'app/docs/RELATO.md' s = io.open(p, encoding='utf-8').read() cab = '# RELATO — esteira saas-hasner\n\n' assert s.startswith(cab) corpo = s[len(cab):] blocos = corpo.split('\n\n') i_push = next(k for k, b in enumerate(blocos) if b.startswith('**PUSH 88 FALHOU')) i_parei = next(k for k, b in enumerate(blocos) if b.startswith('PAREI: O120' ...` |
 | 20:23:16 | Bash | Read the patched hook verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh35o2d60.output 2>/dev/null \| head -8` |
 | 20:23:12 | Bash | Check push 89 | `cd /home/ronald/saas-hasner && grep -aE "^(OK$\|FAILED\|Ran \|To https\|error\|exit=)" logs/push89.log \| tail -4; pgrep -f "git push origin main" >/dev/null && echo "PUSH 89 VIVO" \|\| echo "push 89 terminou"` |
-| 20:22:52 | Bash | Run the patched hook in background | `cd /home/ronald/saas-hasner && timeout 900 python3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/hook_patch.py 2>&1 \| head -3` |
