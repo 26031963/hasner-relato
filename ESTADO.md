@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 19:40:23.**
+**Medido em 03/10/2026 19:45:45.**
 
 | | |
 |---|---|
@@ -49,6 +49,7 @@ b5cde421 RELATO: o bloco do portao de auth atravessado pelo merge da raia, com o
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
  M app/ponto/management/commands/reverter_situacao_afastado.py
  M app/ponto/services/afastado_avisa.py
  M app/ponto/tests/test_contract_juiz_ausencia.py
@@ -125,6 +126,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Segue a fila.
 
   Searched for 3 patterns, read 2 files, ran 11 shell commands
   ⎿  Read docs/AVAIS.md (31 lines)
@@ -149,18 +151,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   reversao em logs/ e competencias exportadas intactas !
   aval Ronald: "dia inteiro" passa a significar o PREVISTO DO DIA, nao 720 cravado. Mede o DIFF antes e aplica !
 
-  Ruff nos 8 arquivos da fatia
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v ~/saas-hasner/app:/app -w
-     /app saas-hasner-core:latest ruff check colaboradores/tests/test_porta_colaborador.py config/crons.py core/juizes.py
-     ponto/management/commands/reverter_situacao_afasta…
+● Topo do RELATO
+  ⎿  $ head -40 docs/RELATO.md
 
-· Bloviating… (19h 26m 52s · ↓ 2.7m tokens)
+· Compacting conversation… (19h 32m 14s · ↓ 2.7m tokens)
+  ▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 14%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
