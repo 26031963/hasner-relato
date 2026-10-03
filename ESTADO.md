@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:10:31.**
+**Medido em 03/10/2026 12:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo` |
+| `HEAD` local | `44099e7a [PLACAR-ESTRUTURAL] o atraso do LOTE sao 20 de 20 na perturbacao e 3 de 233 na frota -- e o [O65-GEOMETRIA-LE-A-ATA] nao tinha 6 dias, tinha 1` |
 | `origin/main` | `bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+44099e7a [PLACAR-ESTRUTURAL] o atraso do LOTE sao 20 de 20 na perturbacao e 3 de 233 na frota -- e o [O65-GEOMETRIA-LE-A-ATA] nao tinha 6 dias, tinha 1
 0ca89cbd [O65-GEOMETRIA-LE-A-ATA] o RED registrado nao reproduz mais, e a cauda da fallback sao 48 dia-colab -- com [CHAMADO-EM-RAIA] nascendo em paralelo
 bf392022 tickets: as duas fatias que o commit citou e a tabela nao tinha -- O139 e RELATO-RETIDO
 8bf639f1 [PLACAR-ESTRUTURAL] O RELATO do R3 publica a PROVA do ato, e a clausula do numero deixou de ser afirmacao
 e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado
-ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro
 ```
 
 ## `git status --short`
@@ -34,8 +34,6 @@ ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
@@ -110,37 +108,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  sao so docs.
 
-  PROIBIDO: tirar pendente do registro sem a impressao sumir do codigo; trocar numero cravado do contrato sem a cura; apagar
-  funcao/arquivo sem o meu !; fallback, item proprio depois, autoridade nova alem das tres ja assinadas.
-  PRONTO: por celula, linha no RELATO com PROVA (pendentes antes -> 0, teste nomeado, DIFF de frota quando dinheiro, commit) e contratos
-  N/20. Sem isso = INCOMPLETO com a lista.
-  LEI-AKITA: origem=o juiz declarado de cada pergunta; testemunha=core/juizes.py + contrato da familia; RED=impressao presente antes;
-  quem-mais-le=censo por sitio; juizes novos=0.
-  LINHA HAIKU: (a) "contratos N/20" e "pendentes por familia" no payload com rotulo de admin; (b) golden: "quantas celulas de contrato
-  faltam e quais?" esperado via ferramentas; (c) degrau: leitura.
-  Segue a fila do O134; PAREI so em lei ou !.
+  Ran 1 shell command
 
-● Chegou o dossiê. Dois pontos dele mudam o que eu ia fazer agora: o item (6) proíbe entrada de RELATO longa (máx. 6 linhas) e commit só de
-  docs entre fatias; e o item (1) pede exatamente a medição que eu já tenho. Publico curto, num commit só.
+● logs/ é gitignored — as PROVAS ficam no host, como as anteriores. Commito os quatro docs.
 
-  Read 1 file, ran 2 shell commands
+  Committed 44099e7a
 
-● O item (1) tem autoridade própria (bordas_do_realizado), e é dela que o número tem de sair — não da minha classificação. Publico primeiro
-  e já ponho a sombra em refazer, porque a minha sonda a sujou para o te178.
+● Background command "Rebuild the sombra to clear the probe footprint" completed (exit code 0)
 
-● Correct the O65 cell from 6 days to 1
+❯ aval Ronald: os tres blocos de dossie de hoje (CHAMADO-EM-RAIA, DOSSIES-DAS-CELULAS) sao gravados AGORA, literais, em
+  app/docs/DOSSIES.md, e voce le a secao da familia quando chegar nela -- nao trabalha de memoria da conversa. Segue a fila.
+
+● Ordem recebida, e ela é precisamente contra o que eu faria: o texto literal do CHAMADO-EM-RAIA foi compactado, então não vou
+  reconstruí-lo de memória. Extraio do transcript.
+
+● Inspecting the queue-operation records
   ⎿  $ cd /home/ronald/saas-hasner
      python3 - <<'PY'
-     p='app/docs/BACKLOG.md'
-     L=open(p).read().split('\n')
-     novo_o65 = (" **livre** (item 1 da ordem 08:13). RED novo e **1 dia**, nao 6: col152 25/09, `parear_turnos` "
-     "da 1 periodo FECHADO e `turnos_do_colab` da 0 -- a batida das 14:40 e `disputa_s84_retro…
+     import json
+     T='/home/ronald/.claude/projects/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl'
+     want={110278,110283}
+     with open(T) as f:
+     for n,ln in enumerate(f,1):
+     if n not in want: continue
+     o=json.loads(ln)
+     print('='*25,'LINHA',n…
 
-✢ Bloviating… (11h 57m 0s · ↓ 1.6m tokens)
+· Compacting conversation… (12h 2m 14s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -148,6 +146,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Hoisting _NAO_CONSULTADA above _turno_noturno_completo                                      18m 9s · ↓ 120.2k tokens
+  ◯ general-purpose  Auditing exception classes in censo_escritas.modelos                                       23m 22s · ↓ 146.3k tokens
   ⧉  index
 ```
