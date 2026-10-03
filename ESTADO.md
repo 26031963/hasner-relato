@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 08:12:01.**
+**Medido em 03/10/2026 08:17:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,8 @@ d4af46e8 [O131] O censo acusou o sitio certo pelo motivo errado: nao era escolha
 
 ```
  M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -117,38 +119,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  LEI-AKITA: origem=o sitio de cada pendencia, testemunha=a autoridade declarada em JUIZES, RED=por ponto migrado, quem-mais-le=censo por
+  ponto, juizes novos=0 alem dos tres assinados hoje.
+  LINHA HAIKU: contador contratos_estruturais no copiloto, rotulo "arquitetura: N de 20"; golden "quantos contratos estruturais faltam?".
+  Segue a fila; PAREI so em lei ou !
 
-● RED exato, e o caso que morde (test_14) já verde. Premissas passaram: o juiz viu a jornada viva e datou no dia do card. Agora o encaixe
-  — um sítio:
+● Corte das 08:13 recebido: a O122 sai da pista e a fila 1 passa a ser O65 → ausência → escala → R3/R6. Decisão técnica minha, que
+  registro e sigo: R3 fecha primeiro — está com a cura provada numa cópia e o número medido não publicado, e parar aqui perderia
+  exatamente o que não se recupera. Ele mesmo a nomeia "já em curso". Sonda em fundo enquanto registro o corte:
 
-  Ran 5 shell commands
+  Ran 4 shell commands
 
-● O encaixe sem copiar janela nenhuma: o derivador ganha em_curso (subtração pura) e o escritor único pergunta à autoridade só quando há
-  candidato:
-
-  Ran 3 shell commands
-
-● Parte (2) do corte verde, 38 testes, vizinho intacto. Agora a cura do N+1 (opção B) que o teto C8 cobra. Primeiro a faxina e a leitura
-  do memo:
-
-  Ran 7 shell commands
-
-● O memo irmão _intervalo_desc_min também é alimentável de fora — então a opção B inteira cabe sem tocar a ZONA INVIOLÁVEL. Lendo o ponto
-  de encaixe:
-
-  Ran 3 shell commands
-
-● Agora a alimentação. Primeiro o juiz (escalas=, com o contrato explícito de que é a lista INTEIRA):
+● Background command "Run the fixed probe in background" completed (exit code 0)
 
   Ran 1 shell command
 
-● Agora o chamador carrega UMA vez e alimenta os dois memos do motor — sem tocar a zona inviolável:
+● Histograma, mas preciso do delta. Sonda melhor, nas duas cópias:
+
+  Ran 2 shell commands
+
+● O N+1 morreu: 69 → 48, e os +19 que sobram não são por dia — são uma passada da autoridade (todas as tabelas +1 ou +2, zero repetição
+  por sítio). Custo fixo por request. Vendo o teto para escrever a justificativa C8 ao lado:
+
+  Ran 2 shell commands
+
+● Agora o selo da alimentação nova, com o caso que morde o escalas or query:
 
 ● Running 1 shell command…
+  ⎿  $ cd /tmp/prepush-arvore.WyKTUx/app && sed -n '1,60p' escala/tests/test_previsto_desconta_as_duas_pausas.py
 
-✢ Bloviating… (7h 58m 30s · ↓ 1.1m tokens)
+✢ Bloviating… (8h 4m 0s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   2% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
