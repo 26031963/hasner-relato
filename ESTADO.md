@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 20:29:01.**
+**Medido em 03/10/2026 20:34:31.**
 
 | | |
 |---|---|
@@ -40,7 +40,14 @@ bc2cd2fb [RELATO] a PROVA do P7.1b em prod: 400 -> 302 sem sessao, e o rodape do
 
 ```
  M PLANO_PISCADA.md
+ M app/core/contratos_estruturais.py
  M app/docs/RELATO.md
+ M app/escala/views.py
+ M bin/deploy.sh
+ M bin/prova_de_casca.py
+?? app/escala/tests/test_o154_busca_le_o_que_mostra.py
+?? bin/arvore_sem_conflito.sh
+?? bin/tests/test_deploy_recusa_conflito.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,43 +120,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● Prod de volta (/colaboradores/ -> 302). Medindo a janela que eu abri:
-
-  Ran 4 shell commands
-
-● Prod estável. Agora a causa, que é minha e é de forma: git cherry-pick ... | tail -3 jogou o código de saída fora, o && passou, e o
-  cherry-pick em conflito escreveu <<<<<<< no bind-mount vivo — o deploy recarregou com isso. Janela medida: ~30 s sem resposta na casca de
-  admin (20:25:09 → ~20:25:40); core e mensageria intactos; nem Caddy nem gunicorn registram acesso, então não há número de vítima a dar.
-
-  E há um buraco no caminho que é maior que o meu erro:
-
-  Ran 4 shell commands
-
-● Duas curas (CURA-MAIS-RESTRITIVA: as duas entram, não conflitam). Primeiro a que teria impedido isto antes do reload:
-
   Ran 6 shell commands
 
 ● Extraindo a guarda para ter como selá-la contra o arquivo REAL, não contra uma cópia da lógica:
 
-  Escreve e prova a guarda extraída contra a árvore viva
-  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/arvore_sem_conflito.sh <<'SH'
-     #!/usr/bin/env bash
-     # A ARVORE VIVA NAO PODE ESTAR EM CONFLITO (licao de 03/10 20:25, e o caso foi do Code).
-     #
-     # A ARVORE E O BIND-MOUNT (secao 2 do CLAUDE.md). Um `git cherry-pick`/`git merge` que
-     # conflita grava `<<<<<<<` …
+  Ran 4 shell commands
 
-✢ Bloviating… (20h 15m 30s · ↓ 2.8m tokens)
+● Guardas no ar (selo 5/5). Agora o O154 em main — na cópia, que é o que eu devia ter feito:
+
+  Ran 8 shell commands
+
+❯ aval Ronald: SEXTO BANCO da ausencia -- c1a1f7b6 zerou os tetos e tirou o _A14, mas ('ausencia/ferias', 'um juiz por pergunta') segue
+  sem verde=True em core/contratos_estruturais.py e linha_do_placar() responde 12/22. Virar a celula com a nota atualizada, rodar o selo
+  test_selo_contratos_estruturais, e publicar o placar pela funcao real. Com a familia fechada, nasce o ESMERIL-NO-RASTRO dela (O137).
+  Segue a fila.
+
+● Aval recebido — sexto banco da ausência. Lendo a matriz:
+
+  Ran 6 shell commands
+
+❯ lei Ronald: o byte a byte da etapa 0 nao fecha e nunca ia fechar; o que fecha e o estilo CALCULADO, 0 de 14 elementos. Vale como entrega
+  -- manda a etapa 0 para o smoke.
+
+● Duas leis novas na mesa. Vou encaixar as duas: a célula do sexto banco e a etapa 0 que passa a valer como entrega. Primeiro a célula:
+
+● Formato do PROMPTS.md e a suíte do escala
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n '^## \|^### ' app/docs/PROMPTS.md | tail -8
+
+✢ Compacting conversation… (20h 21m 0s · ↓ 2.8m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
-  ● main
+❯ ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
