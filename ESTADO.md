@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:20:45.**
+**Medido em 03/10/2026 18:25:45.**
 
 | | |
 |---|---|
@@ -115,38 +115,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  prova por curl sem sessao = 302. NAO publicar o endereco nem o detalhe no RELATO (repo publico) antes do deploy provado. Em seguida, no
-  mesmo marco: selo que varre TODA rota de urls sem decorador de login, allowlist zero, e a lista do que ele acusar publicada so com as
-  rotas ja fechadas. Depois volta a fila.
-
-● Ele provou em prod: 200 sem sessão, devolvendo nome/matrícula/empresa. Isso fura tudo — e colide com o PAREI que publiquei: o deploy está
-  barrado pela janela de auth por causa do meu merge. Vendo o sítio da cura, o molde e minha carona suja no mesmo arquivo:
-
-  Ran 1 shell command
-
-● Minha carona em escala/views.py é o O122 ETAPA 1 (corte dele de 02/10), 25 linhas, e os templates dela já estão no ar — só o .py não.
-  Isso importa porque o deploy publica o disco. Localizando o alvo no disco e medindo se a carona é de base:
-
-  Ran 1 shell command
-
-● Alvo confirmado no disco (linha 201, sem linha em branco e sem decorador acima), e a carona não é partial de base — BUG 73 não morde
-  nela. Aplicando a cura no molde da vizinha, em memória → py_compile → gravar:
-
-  Ran 1 shell command
-
-● Curado, e os dois decoradores já estão importados no topo. Agora o censo — deixar um irmão aberto seria meia-correção. Construindo o
-  varredor por AST (que é o selo que ele pediu) e medindo com ele:
-
   Ran 1 shell command
 
 ● 87, mas a pergunta do varredor é estreita demais para acusar: a maioria é api_mensageria_*, que provavelmente confere token no corpo, não
   por decorador. Separando o que importa agora — o que não é api/ — e vendo como a mensageria se guarda:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-· Bloviating… (18h 7m 14s · ↓ 2.5m tokens)
+❯ aval Ronald: o conselheiro (advisor) passa a ser consultado SO antes de apply de dinheiro, deploy de casca ou migration, e antes de
+  apagar/voltar arquivo que prod usa. Commit de rotina, registro de lei, tickets, relato e leitura NAO consultam. Segue a fila.
+
+● Isso corrige o varredor: a mensageria se guarda no corpo (_token_ok → 403), não por decorador — então 87 é acusação por FORMA, não por
+  fato. E há um middleware de sessão na casa, que seria a autoridade real. Lendo quem de fato manda, antes de qualquer conclusão:
+
+  Searched for 1 pattern
+
+● Não há middleware que exija login — PlataformaGateMiddleware decide plataforma, não sessão. Então view sem decorador e sem guarda no
+  corpo está aberta de fato. Fechando o censo honesto: decorador ou guarda no corpo:
+
+  Ran 1 shell command
+  ⎿  Read docs/AVAIS.md (30 lines)
+  ⎿  Read ponto/tests/test_contract_juiz_ausencia.py (142 lines)
+  ⎿  Referenced file core/juizes.py
+  ⎿  Read ../../.claude/projects/-home-ronald-saas-hasner/memory/worktree-precisa-logs-e-media.md (35 lines)
+  ⎿  Referenced file core/placar_estrutural.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Advising using Fable 5.1
+
+✶ Bloviating… (18h 12m 14s · ↓ 2.5m tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
