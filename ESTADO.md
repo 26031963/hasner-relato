@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 04:12:42.**
+**Medido em 03/10/2026 04:18:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela` |
+| `HEAD` local | `400e689a [R3] O numero que eu publiquei as 03:00 era de um oraculo, e a autoridade diz outro: 526 -> 621` |
 | `origin/main` | `b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,31 +29,22 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+400e689a [R3] O numero que eu publiquei as 03:00 era de um oraculo, e a autoridade diz outro: 526 -> 621
 4088657e [O124] 16 parametros que nao faziam nada: 1 passou a fazer, 15 sairam da tela
 c7b05d59 [O126-FLIP-ARIDADE] O ensaio da sombra achou o cron de hoje morto 4h49 antes de ele rodar
 b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o gerador contando string como chamada
 7017090f [TICKETS] Tres fatias estavam no ar sem linha na tabela, e e o segundo RED do mesmo push
-9150ab4c [TICKETS] O placar do topo envelheceu na virada do dia e segurou o push dos 13
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
+ M app/docs/LEIS.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
- M bin/tests/test_esmeril_vinculo_censo.sh
-?? bin/diff_o124_frota.py
-?? bin/r3_turno_aberto_alcanca.py
-?? bin/r5_idempotencia_frota.py
-?? bin/r5_idempotencia_frota.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -125,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  --dump-agora. Committing the docs marco — and committing the R3 probe itself, so the 621 has a live source instead of repeating the
+  "numero sem fonte viva" mistake.
 
-● The hook blocks on Stop unless the top is a PAREI: with a ! — which is exactly right here: a lei question doesn't return the turn
-  (L-078), so it will keep telling me to continue. That means I only need to correct the numbers and add the marco.
+  Committed 400e689a, ran 2 shell commands
 
-  Ran 1 shell command
+● Both commits landed. The push is blocked by test_juiz_novo_tem_corte (Ronald's four signatures, AVAIS #10), and the suite would contend
+  with the sombra bloco for the same test cores — so I'll use the wait to cure the three red selos that are mine. Starting with
+  test_leis_indice.
 
-● Now the marco section for the landing, including what the selo caught and the gate debt it created.
+  Ran 3 shell commands
 
-  Ran 1 shell command
-
-● Adding the esmeril cure as its own BACKLOG item — per the house rule, a finding that isn't a fatia yet still has to become an item.
-  Checking the OBRAS format first (300-char state cell, no pipes).
-
-  Ran 1 shell command
-
-● Marking O124 closed in the portao column the hook reads, correcting O130's universe, and adding the esmeril regression as its own obra —
-  no | inside any cell.
+● Classifying each against what's already written — I must not invent law, so only a corte that already maps to an existing numbered lei
+  goes in that block. Checking LEIS.md.
 
   Ran 1 shell command
 
-● O124's row already has six cells where the header declares five — pre-existing, and my replacement text adds no pipes. Asserting only on
-  the row I'm creating.
+● L-099 already is the PLACAR-ESTRUTURAL corte, so that one maps rather than being declared. Reading the existing rows to match format
+  exactly.
 
-  Waiting for the placar to finish and checking the sombra cron · 3m 24s
-  ⎿  $ cd /home/ronald/saas-hasner; until ! kill -0 $(pgrep -f "tickets_placar" | head -1) 2>/dev/null; do sleep 5; done 2>/dev/null; date
-     "+%H:%M:%S"; cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bo9iufeh6.output | tail
-     -4; echo "=== sombra cron:"; ls log… (3m 23s)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Index the four cortes and re-run the selo
+  ⎿  $ cd /home/ronald/saas-hasner; python3 - <<'PY'
+     # -*- coding: utf-8 -*-
+     import io
+     P='/home/ronald/saas-hasner/app/docs/LEIS.md'
+     s=io.open(P,encoding='utf-8').read()
+     # (1) PLACAR-ESTRUTURAL JA E LEI: a L-099 e literalmente esse corte (linha 78). Mapeia, nao declara.
+     a=u"- `OBRA-ANDA-SOZINHA` -> **L-…
 
-* Bloviating… (3h 59m 11s · ↓ 537.1k tokens)
+✢ Compacting conversation… (4h 4m 30s · ↓ 545.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                  10% until auto-compact
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
