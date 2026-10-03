@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:25:49.**
+**Medido em 03/10/2026 12:31:01.**
 
 | | |
 |---|---|
@@ -109,37 +109,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  - Quais são "os três blocos": varri os prompts de hoje pela palavra DOSSIE e pela forma de dossiê
+    (ID/FONTE/ORDEM/RED/SELO/PROIBIDO/PRONTO/LEI-AKITA/LINHA HAIKU) — são exatamente três com essa forma, e o terceiro é o
+    ESMERIL-NO-RASTRO, não os cortes de folha. Os cortes entraram como seção 4 por dependência, com a leitura escrita no cabeçalho.
+  - Sombra DIVERGE=1 diagnosticado, e a causa é minha: migrations=1. Falta na sombra ponto.0070_alter_ausencia_tipo, aplicada em prod às
+    04:00:57 — 56 s depois do dump de backups/ das 04:00:01 que o meu --refazer puro restaurou. O ensaio automático das 04:13 usava
+    --dump-agora e tinha a migration; eu regredi a sombra. A migration só alarga Ausencia.tipo de 20 para 30 (AlterField, nenhum dado
+    tocado), então não alcança uma sonda de leitura. Cura = --refazer --dump-agora + bloco, depois da medição, porque é ela que segura o
+    deploy de hoje.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Read 1 file, ran 10 shell commands
+  Ran 3 shell commands
 
-● Background command "cd /home/ronald/saas-hasner
-mkdir -p logs/o134
-cat > logs/o134/roda_bordas_20261003.sh <<'SH'
-#!/usr/bin/env bash
-set -uo pipefail
-RAIZ=/home/ronald/saas-hasner
-OUT=$RAIZ/logs/o134/bordas_sem_turno_20261003.out
-{
-  echo "inicio $(date '+%d/%m %H:%M:%S')"
-  flock /tmp/sombra_hasner.lock \
-    bash $RAIZ/logs/sombra/rodar_na_sombra.sh bordas_sem_turno_20261003.py
-  echo "rc_sonda=$?"
-  echo "fim $(date '+%d/%m %H:%M:%S')"
-  echo FIM
-} > "$OUT" 2>&1
-SH
-chmod +x logs/o134/roda_bordas_20261003.sh
-nohup bash logs/o134/roda_bordas_20261003.sh >/dev/null 2>&1 &
-echo "lancado pid=$!"" completed (exit code 0)
+● Monitor "sonda bordas_do_realizado na sombra" stream ended
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/dossies_celulas.txt (29
+     lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/chamado_em_raia.txt (30
+     lines)
+  ⎿  Read docs/AVAIS.md (30 lines)
+  ⎿  Referenced file docs/PROMPTS.md
+  ⎿  Referenced file core/placar_estrutural.py
 
-  Running 1 shell command…
+● Task "RED e construção do segundo intervalo" completed in background
 
-✶ Bloviating… (12h 12m 18s · ↓ 1.7m tokens · thinking)
+● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
+
+✢ Bloviating… (12h 17m 30s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +147,6 @@ echo "lancado pid=$!"" completed (exit code 0)
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Linting test_censo_escritas.py with ruff                                                    33m 26s · ↓ 78.6k tokens
+  ◯ general-purpose  Appending step-2 list to RELATO-CHAMADO-EM-RAIA.md                                         38m 39s · ↓ 120.0k tokens
   ⧉  index
 ```
