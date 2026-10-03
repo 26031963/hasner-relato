@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 11:10:31.**
+**Medido em 03/10/2026 11:16:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro` |
+| `HEAD` local | `e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado` |
 | `origin/main` | `4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -22,18 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de turno ABERTO, e o invariante que eu ia publicar estava errado
 ffdc2f71 [O139] Nasce o papel "prazo": o cron que cobra a FALTA de um fato tinha dois enderecos e precisava de um terceiro
 a1376688 [RELATO-RETIDO] O portao do RELATO voltou a abrir, e o indice de leis parou de mentir por 4 cortes
 e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodape do git
 4ecf7a39 tickets: rodape do TICKETS reescrito do git, cura apontada pelo proprio portao
-73f7551e [MONTAGEM-TEM-UMA-PORTA] A lista do que falta na copia tinha dois escritores, e o segundo vazou 2,1 GB
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/escala/views.py
@@ -56,7 +55,7 @@ e034b758 tickets: o lote de 9 pousou -- os 6 "(este commit)" viraram hash, rodap
 |---|---|---|---|---|
 | **R1** | todo dia-colab divergente do E6 recebe UM dono -- ESTRUTURA, CADASTRO ou BATIDA -- pelas autoridades que ja existem, e as tres somam o total | 09: ESTRUTURA 197 (747,4 h, 60 colabs) · CADASTRO 29 (68,6 h, 12) · BATIDA 208 (867,9 h, 118) = 434. 10: 95 (393,1 h, 40) · 15 (70,3 h, 8) · 95 (448,1 h, 75) = 205. A soma fecha nas duas, e o proprio comando a cobra | tres donos, soma igual ao total de divergentes, juiz novo = 0 | logs/e6_cauda2c/r1_dono_09_e_10.txt, r1_9.csv, r1_10.csv (coluna dono_da_divergencia) |
 | **R2** | so ESTRUTURA fica na fila 1; CADASTRO e BATIDA vao para a lista do admin pela MESMA fonte do Cadastro x Realidade, e nao se curam por codigo | gap real = 7 colabs (5 de CADASTRO fora da lista + col392 e col529 sem chamado), nao 82: BATIDA JA tem casa -- 103 de 118 na 09 e 67 de 75 na 10 com chamado carimbado NO DIA. Uma leitura do corte continua na mesa dele (a lista cresce uma secao de batida, ou BATIDA fica no chamado) | 0 colaborador de dono CADASTRO ou BATIDA sem destino | logs/e6_cauda2c/r2_lista_do_admin.py + r2b.py, medidos em prod so leitura |
-| **R3** | dia com batida faltando aparece EM ABERTO com o que falta, nunca com numero, e igual em tela, PDF, cartao, app e TXT | A PALAVRA ja e compartilhada e os 5 leitores CONCORDAM (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias). MAS ela responde o FURO SEM DECISAO, nao o DIA DE BATIDA FALTANDO -- sao conjuntos DIFERENTES, e o R3 pede o segundo. `veredito_do_dia` TRADUZ em palavra e nao toca nos minutos, entao o dia impar segue mostrando NUMERO (a soma dos pares fechados, lei do BUG-144). Medido: `datas_em_aberto` = 288 na 09 e 127 na 10; dia IMPAR = 343 na 09 e 183 na 10, ou seja **526 dia-colab que hoje mostram numero onde a lei pede EM ABERTO com o que falta** | os 5 leitores iguais, nenhum mostrando numero em dia impar | logs/e6_cauda2c/r4_pares.txt (os pares e o dias_em_aberto) + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
+| **R3** | dia de turno ABERTO aparece EM ABERTO dizendo O QUE FALTA e MANTEM o numero rotulado (a soma dos pares fechados), igual em tela, PDF, cartao, app e TXT; o turno EM CURSO de hoje nao recebe a palavra -- quem esta dentro da jornada nao deixou nada em aberto | A PALAVRA ALCANCOU O TURNO ABERTO e os 5 leitores seguem CONCORDANDO (tela x PDF, cartao x TXT, calendario x espelho: todos 0 nas duas competencias; TXT=0 e RETIDOS=0 nos 6 pares empresa x competencia, medido CRUZADO HEAD x curada na mesma sombra). O VEREDITO, no universo `Colaborador.objects.filter(situacao="ativo")` (533 colabs): **0 dia de turno aberto MUDO** nas duas competencias. 09/2026: 244 dia-colab de turno aberto = 238 com a palavra + 6 DECIDIDOS pela folha (palavra propria) + 0 em curso. 10/2026: 193 = 135 com a palavra + 0 decididos + 58 EM CURSO (corte parte 2). O MUDOS=0 NAO MUDA DE UNIVERSO: no universo `FechamentoMensal` (607 e 572 colabs) da 275 = 269 + 6 + 0 na 09 e 194 = 136 + 0 + 58 na 10 -- e o 6 DECIDIDO e o mesmo nos dois. O `em curso` anda com o relogio POR DESENHO (`turno_aberto_de(agora=None)` le `timezone.now()`, ponto/turnos.py:1401): 3 medicoes no mesmo banco e no mesmo universo (ativos) deram 59 as 09:31, 58 as 09:43 e 51 as 09:55 -- e sao turnos abertos NO INSTANTE DO DUMP (ultima batida da sombra 03/10 04:11), nao gente na jornada agora. Encolher em_curso so empurra dia para a classe COM palavra, nunca para MUDO; o que nao anda e o MUDOS=0. `dias_em_aberto` subiu de 296 para 323 na 09 e de 133 para 145 na 10 -- +27 e +12 dias que ganharam a palavra, 0 que a perderam. SEGUE PARCIAL, e a parte que falta tem nome: a O130 -- a palavra dizer QUAL marco falta (hoje e a string fixa `Em aberto`). As duas partes do corte de 05:3x estao cumpridas e o MUDOS=0 esta medido nos dois universos; o que nao esta e a clausula `com o que falta`, que e da redacao dele e nao sai daqui para carimbar fechado | os 5 leitores iguais, ZERO dia de turno aberto MUDO -- nenhum dia contado sem palavra nenhuma -- e a palavra NOMEANDO o marco ausente. NAO e "todo turno aberto ganha a palavra": dia que a folha DECIDIU tem palavra propria, mais informativa (corte R3 parte 1, 03/10 05:3x; LEI-AKITA 4) | logs/r3_cross/ -- r3_frota_invariante.txt (o MUDOS=0, com a sonda r3_frota.py ao lado), r3_cross_09_e_10.txt (TXT=0/RETIDOS=0 cruzado + o caso col643), r3_recon_universo_fechamento.txt (o mesmo invariante no outro universo), r3_detalhe_as_duas_classes.txt (os 6 decididos NOMEADOS com a palavra de cada um, e a prova de que o em-curso e do dump), r3_curso_agregado_classe_inteira.txt (os 51 em curso medidos SEM AMOSTRA: data_turno 02/10 nos 51, maior batida 04:11 = o dump), r3_suite_vizinhos.txt. Antes: logs/e6_cauda2c/r4_pares.txt + r1_dono_09_e_10.txt (dia_batida_impar). A PALAVRA: autoridade em relatorios/cartao_pela_celula.py:273::folha_manda (datas_em_aberto), aplicada em ponto/services/espelho.py:308, em relatorios/pdf_espelho.py:563 (+ badge :708), lida pelo app em api/views.py:1391 e mantida FORA do TXT com linha propria em folha/porta_export.py:466 |
 | **R4** | uma resposta so, frota, 09 e 10: tela x PDF, cartao x TXT, espelho x DiaPago, fechamento x soma do DiaPago, topo do cartao x soma das linhas, app x tela | CINCO pares em ZERO nas DUAS competencias (tela x PDF, cartao x TXT, fechamento x soma do DiaPago, topo x soma das linhas, e calendario x espelho de brinde); o par 6 e ZERO por CONSTRUCAO (selo de AST). O SEXTO, espelho x DiaPago: **1 na 09** -- o col935 05/09, que e o RED 3 dele -- e 0 na 10. O par 4 medido tambem FORA do universo do TXT: 607 fechamentos na 09 e 572 na 10, 100% batendo com tolerancia de 0,02 h. Universo do TXT: 214 na 09, 21 na 10. Selo VERDE, `falhas=0`, sem allowlist | ZERO em cada par; o que nao for zero vira item da fila 1, maior primeiro | logs/e6_cauda2c/r4_pares.txt. QUATRO dos seis pares JA tinham comando (selo_leitores_no_mesmo_numero, tolerancia ZERO e sem allowlist) e o par espelho x DiaPago e a 7a testemunha de folha/porta_export.py. Os dois que faltavam foram construidos: par 4 (ORM puro) e par 6 (api/tests/test_r4_par6_app_le_a_tela.py, AST, zero montagem propria -- VERDE). TRES REDs dele de 02/10 23:55 estao abertos: col882 no universo do TXT sem vinculo, col305 com previsto gravado contra grade zero, col935 05/09 |
 | **R5** | idempotencia e determinismo de frota: rejulgar o cartorio 2x e relavrar/recalcular 2x, e a segunda rodada nao muda nada | A LEI FECHA: 2a rodada = ZERO em celula, chamado, DiaPago e hash do FechamentoMensal (competencia 10, empresas 2/3/4, sombra). O CONTEXTO da 1a rodada e que doi: 9.062 DiaPago NASCERAM, 7 morreram, 83 mudaram, e 82 FECHAMENTOS mudaram -- nao e falta de idempotencia, e ATRASO de lavratura, o mesmo fato do R6. LIMITE: a rodada usa `processar_cartorio --apply` SEM `--forcar`, entao o caminho do --forcar (que rejulga mesmo com impressao igual) NAO esta nesta medicao | diferenca ZERO na 2a rodada em celula, ata, chamado nascido ou morto, DiaPago e hash do FechamentoMensal | logs/r5_idempotencia/r5_2345.txt (+ _completo.txt). E os 13 chamados do --forcar tem DOIS produtores, medidos: 9 em 17:51-17:54 (o --forcar) e 4 em 18:00:1x no batente do */5 (o cron, em pares por colab); os 7 orfao_14h nasceram resolvido com celula=None |
 | **R6** | contratos N/22 com o que falta em cada celula e a ordem de fechar; e REATIVIDADE -- zero passo manual depois de corrigir um cadastro | REATIVIDADE: ZERO passo manual no caminho de UM colab, medido na sombra (col221, competencia 10: hash 3a5da35a -> 3a42920e sem comando nenhum). Resta o LOTE. CONTRATOS: 8/22, e o teto aritmetico e 21/22 -- a celula (chamado, parametro consumido) e PROIBIDA de existir. Ordem medida do que falta: 1 em "um escritor por entidade" (so chamado), 5 em "parametro consumido", 7 de 7 em "um juiz por pergunta" | N = 22 e zero passo manual | logs/r6_dinheiro/red_col221_10.txt (a reatividade) + core/contratos_estruturais.py::linha_do_placar (o N/22) |
@@ -110,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 12 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Suite verde na cópia (Ran 9484 tests · OK (skipped=42) · rc=0, 0 ^(FAIL|ERROR):). Portões antes da rajada; o escala/views.py sujo que o
+  deploy vai carregar está medido: contexto inerte (tipos_lista.html no HEAD não cita quadros), compila, com bin/reverter_o122.sh como
+  saída declarada.
 
-  Read 1 file, ran 37 shell commands
-  ⎿  Read docs/AVAIS.md (30 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Read ../logs/r3_cross/r3_frota_invariante.txt (26 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/r3_sombra_leitores.txt
-     (69 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6xwexsmx.output (12 lines)
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Pousou: e8963dc2, deploy rc=0 às 11:13:41 — janela commit→deploy de 18 s.
 
-● Task "Run the vizinhos then the full suite on the cured copy" still running in background
+  Searched for 1 pattern, ran 4 shell commands
 
-● Agora a sonda imprime os campos certos:
+● O trabalhadas=0.0 do col39 2026-08-22 com 3 batidas não fecha com a aritmética — e os outros três voltaram batidas=None, isto é, o laço
+  quebrou no primeiro dia com a palavra, que não é o dia-candidato. Sonda errada, não sistema errado: vou olhar o dia nomeado.
 
-  Read 1 file, ran 34 shell commands
+  Searched for 1 pattern, ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Background command "Run live-tree seals after deploy" completed (exit code 0)
 
-● Checking suite progress
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date +%H:%M:%S; wc -l <
-     "$S/suite_cheia.out"; grep -cE '^(FAIL|ERROR):' "$S/suite_cheia.out"; grep -nE '^(FIM|rc=|OK|FAILED|Ran )' "$S/suite_cheia.out" |
-     tail -3
+  Ran 1 shell command
 
-✢ Compacting conversation… (10h 57m 0s · ↓ 1.5m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 66%
+● Selos na árvore viva, depois do deploy: Ran 76 tests · OK · rc=0.
+
+● Fixing probe timestamp access and rerunning
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - <<'PY'
+     p="/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/smoke_prod_r3c.py"
+     s=open(p).read()
+     old = """ _tn = [f"{t.data_turno} {getattr(t, 'ent…
+
+· Bloviating… (11h 2m 30s · ↓ 1.5m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   0% until auto-compact
+                                                                                                  ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
