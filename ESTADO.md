@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:58 AFIRMA ato sem PROVA ao lado -- **RED primeiro** (LEI-AKITA 5): adversarial em `/tmp/o124red15`, onde devolver UM campo ao `SEM_EFEITO` sem
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:59 AFIRMA ato sem PROVA ao lado -- **RED primeiro** (LEI-AKITA 5): adversarial em `/tmp/o124red15`, onde devolver UM campo ao `SEM_EFEITO` sem
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 02:46:31.**
+**Medido em 03/10/2026 02:52:01.**
 
 | | |
 |---|---|
@@ -46,6 +46,7 @@ b26da390 [DIAGRAMA-AST] O selo do desenho recusou o push 3x, e a 3a causa era o 
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
+?? bin/diff_o124_frota.py
 ?? bin/r5_idempotencia_frota.py
 ?? bin/r5_idempotencia_frota.sh
 ?? esteira.pausada
@@ -119,42 +120,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
+  - Corrigi duas afirmações minhas que estavam adiantadas (apontadas na revisão): o bloco do O124 no RELATO dizia "aplicado, revise" e
+    "DIFF de frota: ZERO" — a suíte e o DIFF não rodaram. Agora diz EM CURSO e "o DIFF ainda NÃO foi medido", com a LEI-AKITA 8/9 nomeada.
+    Argumento não é medição.
+  - sqlmigrate ponto 0070 → uma instrução, ALTER COLUMN "tipo" TYPE varchar(30): no Postgres é catálogo, sem rewrite; maior tipo gravado
+    = 19. Declarado que o ensaio de hoje rodou sem ela.
+  - Diagrama regenerado dentro da cópia do O124: md5 idêntico — o selo do desenho não será o F.
+  - bin/diff_o124_frota.py escrito: DIFF motor-x-motor no mesmo banco sombra (não motor-x-gravado, que mostraria a deriva da frota e não o
+    efeito do meu código), os dois dumps somente_leitura=True e simultâneos para verem a mesma foto.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Raio do deploy, medido antes de deployar: o último deploy foi 02/10 21:15:26; há 31 commits / 39 arquivos no disco sem publicar, 12
+  deles código real — sobem com o flip o R6 (ponto/portas/celula.py), o E6-CAUDA-2 (espelho.py, turnos.py) e o nucleo.py. Zero migration,
+  então --sem-migrate. São 5h30 de cura no disco com os workers velhos — a mesma janela que o merge de 30/09 cobrou. Quem cobre isso é
+  este bloco, que exerce os 67 comandos contra a árvore viva.
 
-  Searched for 2 patterns, ran 22 shell commands
+  Ordem a partir daqui: bloco termina (~02:57) → bin/deploy.sh --sem-migrate → os dois dumps do DIFF → suíte cheia sobre a cópia → O124
+  cai como um ato só, e se não der para começar até 03:20 ele espera 03:35, para não atravessar o reload com .py novo e 0070 não migrada.
 
-● Background command "Wait for the O124 suite to exit and capture its verdict" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Searched for 1 pattern
+  Searched for 2 patterns, ran 2 shell commands
 
-● The --rm container took its logs with it — the O124 suite verdict is lost and must be re-run. The lane is free now, so the flip cure
-  goes first.
+● Monitor event: "sombra block progress and finish"
 
-  Committed c7b05d59, ran 35 shell commands
-  ⎿  Read docs/AVAIS.md (31 lines)
-  ⎿  Read core/tests/test_selo_diagrama_do_codigo.py (159 lines)
-  ⎿  Read ponto/tests/test_r6_dinheiro_acompanha_cadastro.py (123 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file
-     ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output
+● Reading veredito_do_dia
+  ⎿  $ sed -n '349,400p' docs/RELATO.md
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Running 1 shell command…
-
-✢ Bloviating… (2h 33m 0s · ↓ 363.7k tokens)
+✢ Compacting conversation… (2h 38m 30s · ↓ 385.3k tokens)
+  ▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 4%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                  ✔ Update installed · Restart to update
+                                                                                                                   0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
