@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 02/10/2026 23:51:30.**
+**Medido em 02/10/2026 23:56:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando` |
+| `HEAD` local | `c6722c3f [O122] A pista de teste deixa de ser combinacao verbal e passa a ser ARQUIVO` |
 | `origin/main` | `94b28144 [RELATO] A dieta arquivou um pedido de patch ABERTO, e o selo mordeu por isso` |
-| commits a subir (`ahead`) | **7** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c6722c3f [O122] A pista de teste deixa de ser combinacao verbal e passa a ser ARQUIVO
+cdd5596e [PLACAR-ESTRUTURAL] O dinheiro acompanha o cadastro (R6), e o par 6 do R4 e estrutural
 fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos seis pares ja tem comando
 33412f31 [SELO-DO-ULTIMO-PUSH] O selo aceita hash ANCESTRAL, e o bloco do R6 esta retratado
 7beff6c2 [PLACAR-ESTRUTURAL] R2 medido: o gap e 7 colabs, nao 82 -- porque BATIDA ja tem casa, e nao e a lista de cadastro
-8eaaf908 [PLACAR-ESTRUTURAL] R6, metade medida: NADA alcanca o dinheiro -- nem batida, nem correcao de cadastro
-71b00ab4 [TICKETS] O placar do topo estava um push atras -- e isso e o modelo de dado, nao esquecimento
 ```
 
 ## `git status --short`
@@ -34,10 +34,10 @@ fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos 
 ```
  M app/docs/AVAIS.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
  M app/escala/views.py
  M app/templates/core/_barra_gestao.html
  M app/templates/core/_icone_barra.html
-?? app/api/tests/test_r4_par6_app_le_a_tela.py
 ?? app/ponto/tests/test_o121_vinculo_corrige_o_passado.py
 ?? bin/r5_idempotencia_frota.py
 ?? bin/r5_idempotencia_frota.sh
@@ -95,44 +95,44 @@ fdc65c7b [PLACAR-ESTRUTURAL] R6 verde na sombra, e o R3/R4 encurtam: quatro dos 
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  a byte antes e depois, e o holerite também), prova de estilo calculado no chromium de cada pílula e atalho novos contra os do painel
+  (altura, font-size, cor, borda, padding) com tabela publicada — e diferença ≠ 0 para nela, não vai para o smoke. Mais as armadilhas
+  medidas desta casa: {# #} multilinha vaza para a tela, selo de front afirma sobre as duas cascas, template vai ao ar na hora mas .py
+  não.
 
-● lavrar escreve um MetricaSnapshot — na sombra é escrita de sombra, inofensiva. E o medir devolve ainda calendario_x_espelho, que é mais
-  um par do R4 coberto.
+  Enquanto isso, na fila 1: os pares do R4 e o R5 de idempotência seguem rodando na sombra.
 
-  Os dois jobs seguem rodando (suite dos vizinhos e R5). Nada a decidir até eles voltarem: o código da cura do R6 espera o verde para ir à
-  árvore viva, e o selo_leitores_no_mesmo_numero espera a CPU do R5.
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Read 1 file, ran 1 shell command
+  Read 1 file
 
-● Vou parar de consultar e construir o par 6 (app × tela), que é o outro que falta. Lendo o que o endpoint do app realmente chama —
-  comparar pela função, não por HTTP:
+● Seguem rodando. Voltando ao N/22 do R6, que é leitura pura:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● O N/22 do R6 já está declarado no código, com a decisão pendente nomeada: as 21 células + GLOBAL existem desde 25/09, mas a célula
+  (chamado, 'parâmetro consumido ou sem efeito') é proibida de existir por lei — família sem campo editável não tem célula —, então o teto
+  aritmético é 21/22. Lendo o número de hoje:
 
   Ran 1 shell command
 
-● O par 6 já está respondido por construção, e foi curado hoje: api/views.py:1389 diz em lápide — "NÃO HÁ CONTA NOVA AQUI, E ESSE É O
-  PONTO. _esp já é o retorno de espelho_do_colab (...) a mesma que a tela do admin e o cartão leem", e a 1ª versão da cura montava a
-  palavra de novo, 10 queries por colab. Então o par 6 é estrutural, e o selo varre AST, não texto:
+● O número já está medido e na mesa dele (F2-PORTAO-22-22, 02/10 10:3x: "8/22 verdes"). Mas meu grep achou 9 verde=True, então o número
+  pode ter andado — perguntando à função real que o sistema usa para julgar:
 
-  Read 1 file, ran 2 shell commands
+  Reading the authority that produces the N/22
 
-● Verificando que os três nomes do selo existem de verdade — nome que nunca casa é selo que não morde:
-
-  Ran 1 shell command
-
-● Os três nomes existem com definição real (def=1 cada) — o selo pode morder. Atualizando as linhas do placar com o que a descoberta
-  mudou:
-
-● Running 1 shell command…
-
-✻ Sock-hopping… (5h 38m 59s · ↓ 1.0m tokens)
+✢ Sock-hopping… (5h 44m 20s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    0% until auto-compact
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 8 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                     1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Reading painel_situacional.html barra block                                                 1m 22s · ↓ 78.5k tokens
   ⧉  index
 ```
