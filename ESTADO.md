@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 16:44:31.**
+**Medido em 03/10/2026 16:50:01.**
 
 | | |
 |---|---|
@@ -109,37 +109,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 4 shell commands
-
-● Agora a suíte pela porta, não à mão:
-
-  Ran 2 shell commands
-
-● Enquanto a suíte roda, resolvo o #2 do conselho: a linha viva das 06:16. Vejo primeiro o tamanho da divergência entre o crontab vivo e a
-  fonte única:
+● A suíte ainda está viva e o OK:   31 não é veredito de Django — é linha minha. Vendo o rabo do arquivo e, em paralelo, fatiando o censo
+  de 104 por família:
 
   Ran 1 shell command
 
-● crontab == config/crons.py (100 linhas) — eles estão em sincronia. Isso muda a cura: a linha das 06:16 não se tira à mão, sai pelo
-  escritor único (crons.sh install renderiza da fonte). E responde o achado do O91: não há nada declarado-e-não-instalado, então install
-  hoje é neutro fora da minha remoção. Vejo se há dry-run:
+● Suíte ainda rodando (893 linhas, pontos saindo). Enquanto ela corre, fatiando o censo de 104 por família — isso é só grep, não disputa
+  cpuset:
 
   Ran 1 shell command
 
-● install já faz backup em logs/ — a trilha vem de graça, e o render sai do container, então a ordem é deploy e só depois install. Vendo a
-  raia e o que vai de carona no ar:
+● O discriminador do dreno não é a contagem — é o que é irreversível. Chamado se retrata; push enviado a 11 pessoas afastadas não se
+  desenvia. Caçando os sítios que emitem para fora:
 
   Ran 1 shell command
 
-● Raia em HEAD destacado no mesmo commit da main → o merge será fast-forward. Vendo a suíte:
+● Esse é o achado decisivo: 8 dos 104 sítios emitem para fora — core/canal.py:36 e chamados/fcm_utils.py:121 varrem fcm_token de todo
+  'ativo', e comunicados/services.py:57 monta a base de comunicado. Medindo os 11 contra o juiz antes de concluir (2 queries, só leitura):
 
   Ran 1 shell command
 
-●
+● Isso inverte meu raciocínio anterior, e é bom ter medido antes de aplicar: o juiz acha exatamente 11 afastados hoje, e são exatamente os
+  11 do cadastro — divergência 0. O valor gravado é hoje um cache correto da lâmpada, não um resíduo. Drenar não completaria o !: criaria a
+  divergência, soltando 11 pessoas genuinamente afastadas em 104 universos (1 delas com fcm_token). Registrando antes de consultar:
 
-· Bloviating… (16h 31m 0s · ↓ 2.3m tokens · thought for 1s)
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✶ Bloviating… (16h 36m 30s · ↓ 2.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -147,6 +147,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Deduplicating ATOS in test_porta_remocao_motivo                                          4h 52m 8s · ↓ 163.3k tokens
+  ◯ general-purpose  Writing D3 nota in contratos_estruturais.py                                             4h 57m 38s · ↓ 167.9k tokens
   ⧉  index
 ```
