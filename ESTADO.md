@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 03:51:01.**
+**Medido em 03/10/2026 03:56:31.**
 
 | | |
 |---|---|
@@ -147,13 +147,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● While that waits, staging the R3 number correction as its own script — it's a separate commit from O124 and touches Ronald's surface, so
   it must not ride along.
 
-● Block until the suite verdict and print it · 3m 16s
+● Block until the suite verdict and print it · 8m 47s
   ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; until grep -qE "^OK$|^FAILED"
      $S/suite_o124_c.txt; do sleep 5; done; date "+%H:%M:%S"; grep -nE "^Ran [0-9]+ test|^OK$|^FAILED|^(FAIL|ERROR):" $S/suite_o124_c.txt
-     (3m 16s)
+     (8m 46s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Bloviating… (3h 37m 30s · ↓ 507.9k tokens)
+✢ Bloviating… (3h 43m 0s · ↓ 507.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                   ✔ Update installed · Restart to update
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
