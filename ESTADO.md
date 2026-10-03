@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 12:42:01.**
+**Medido em 03/10/2026 12:47:02.**
 
 | | |
 |---|---|
@@ -34,6 +34,7 @@ e8963dc2 [PLACAR-ESTRUTURAL] R3: a palavra "Em aberto" nao alcancava o dia de tu
 ```
  M PLANO_PISCADA.md
  M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
@@ -112,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 6 shell commands
+  ⎿  Referenced file core/placar_estrutural.py
 
-● Background command "Autopsy the class C days in the sombra" completed (exit code 0)
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 1 shell command
+● Task "Raia CHAMADO-EM-RAIA no wt-esmeril2" still running in background
 
-● Both call shapes say sem_turno=False on all 31 — so the divergence is the window width, not the call. Proving it:
-
-  Ran 1 shell command
-
-● 31 de 31 divergem — e na janela larga os turnos param numa data e nunca alcançam os dias com batida. Lendo o pareador:
-
-  Ran 2 shell commands
-
-● The origin is named — and it's structure, not the fallback. Reading the segment loop in full:
-
-● Writing the O65 state cell
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     python3 - <<'PY'
-     import io
-     p = 'docs/BACKLOG.md'
-     L = io.open(p, encoding='utf-8').read().split('\n')
-     i = 239
-     assert L[i].startswith('| O65 ')
-     c = L[i].split('|')
-     assert len(c) == 7 and c[3].strip().startswith('**livre**'), c[3][:40]
-     novo = ('**livre** (item 1 da or…
-
-✢ Bloviating… (12h 28m 30s · ↓ 1.7m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+❯ aval Ronald: CORRECAO DOS DOSSIES (double check por fora no commit bf392022; onde divergir dos blocos de hoje, vale ESTE).
+  CRONS: nenhum dos 12 "duplica evento" esta coberto limpo. reavaliar_ausencias_lancadas: o gancho so dispara em mudar_estado
+  (ponto/services/ausencia.py ~644-669); escapam criar_ausencia(status='aprovada') ~230 e ferias ~945, editar_ausencia_registro ~308,
+  deletes ~933/956/1013, rejeitar_ausencias_de_ferias por update() ~1026 -- mantem --apply ate os 4 chamarem reconciliar_colab.
+  reavaliar_ausencias_feriado: NAO coberto (criar Feriado nao re-julga, core/views_config.py ~81; feriado fora da impressao do cartorio
+  ~85-109). fechar_cobranca_com_lastro: so o degrau 1 esta no evento (lastro.py ~236-250 nao). reconciliar_chamados: gatilho so em
+  post_save de Batida (ponto/signals.py ~46-53). silenciar_chamados_isentos e reconciliar_perguntas_orfas: juiz proprio, universos
+  diferentes. Regra: cada cron so vira vigia depois de (1) censo dos escritores do fato que ele julga e (2) medicao na sombra pegando
+  zero.
+  O139: o papel "prazo" ainda NAO existe em config/crons.py (PAPEIS = 7, lista = 27); ffdc2f71 tocou so docs.
+  CELULA+TURNO: NAO e codigo morto (BUG-145). Gravar 0 no dia sem turno muda cobranca (ponto/supra_juiz.py ~151/166/290 classificam por
+  real == 0) e cega o contador bordas_realizado.py ~42. Reescrever o contador antes; a troca espera lei minha, com o numero.
+  AUSENCIA: custo M, nao P. situacao='afastado' tambem se grava pelo Django admin (colaboradores/admin.py ~30) e os crons de cobranca
+  filtram situacao='ativo'. Censo desses filtros antes de qualquer cura.
+  CHAMADO ESCRITOR: "so declarar" = 49, e so com selo mordendo (core/portas.py ~13-16): C3, C5, Q1, D3, D4 nao tem. Viram "mover":
+  reconciliador.py ~851-879 (duplica fio.reapontar_resolvedora), adesao.py ~113, limbo_folgas.py ~68/185, abertura.py ~116.
+  chamados/models.py ~642 grava PerguntaDisputa por update() sem trilha e esta FORA do censo: entra antes de declarar models.py.
+  api/foto_recebida.py ~50 NAO chama o core como esta (o core recusa o texto [auto] e tem efeitos a mais): porta nova. reconciliar_grade
+  ~414 esta em _disputa, sem chamador.
+  BATIDA: 17 sitios, nao 11. Novos: dedup de 5 min cru em api/views.py ~575, api/views_core.py ~567, triagem_batida.py ~621 (retratada
+  barra batida de chao; o chokepoint registro_batida.py ~66-70 ja exclui); ponto/propositor.py ~345; detectar_par_relampago.py ~162/241;
+  ponto/utils.py ~185.
+  FOLHA: item 19 -- TXT zero confirmado, mas o recalculo nao apaga linha: provar tambem os FechamentoMensal orfaos dos desligados entre
+  dia 2 e 20. Itens 14 e 15 (~879) na mesma fatia, como  1 new message (ctrl+End) ↓  da tela que abre no mes civil.
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -150,6 +151,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing test_porta_pergunta_identidade.py selo                                             49m 38s · ↓ 168.0k tokens
+  ◯ general-purpose  Reading invariants in test_chokepoint_chamado_gate.py                                      54m 40s · ↓ 100.2k tokens
   ⧉  index
 ```
