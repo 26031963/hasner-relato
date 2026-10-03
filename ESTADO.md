@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 17:54:45.**
+**Medido em 03/10/2026 18:00:02.**
 
 | | |
 |---|---|
@@ -107,37 +107,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  uma vez:
 
-● Dado intacto (199→202, 0 id perdido, 0 chave perdida, exatamente 1 alterado). Mas 2100 linhas de churn são cosméticas, e isso esconde o
-  próximo diff de verdade — vendo quem mais escreve esse JSON e com que estilo:
+  Ran 3 shell commands
 
-  Ran 1 shell command
-
-● Estilo canônico é indent=1, e há escritor canônico (core/fila_pendentes.py). Eu gravei com indent=2 — vou devolver o arquivo ao estilo da
-  casa pela porta dele, senão o próximo escritor real churna 2100 linhas de volta:
-
-  Ran 2 shell commands
-
-● bin/gerar_avais.py:99 grava o JSON de volta com indent=1 — é o estilo da casa e eu quebrei. Devolvendo e emendando o commit (ainda não
-  empurrado), senão o próximo escritor real churna 2100 linhas de volta:
+● A porta é naturalmente idempotente (setattr + save(update_fields)), e a trilha é do chamador — então o selo tem duas metades. Lendo o
+  reversor e onde o vigia se declara:
 
   Ran 1 shell command
 
-● A porta existe: gerar_avais.py --escrever normaliza E grava no estilo da casa. Usando ela em vez do meu dump:
+● Já existem testes do reversor e da porta. Vendo se a idempotência está selada ou só prometida no docstring:
+
+  Searched for 1 pattern
+
+● O selo de idempotência já existe, nas duas metades. Então a condição do corte pode já estar cumprida — mas "existir" não basta, tem que
+  MORDER. Lendo as duas:
 
   Ran 1 shell command
 
-● 44/3 contra 2157/2116 — era tudo meu. Emendando:
+● Veredito honesto: a metade do reversor morde bem (2x com --apply, trilha.count()==1, revertida=0). A metade da porta não exercita a
+  operação 'situacao' — a asserção dela é tautológica ('situacao': self.c.situacao). É esse o buraco. Vendo o vigia que já existe e onde
+  ele se declara:
 
-  Amended commit a114f126
+● Ler a divergencia declarada e o padrao de vigia nos crons
+  ⎿  $ echo "=== afastado_avisa: a divergencia declarada ==="; sed -n '1,45p' ponto/services/afastado_avisa.py; echo; echo "=== vigias em
+     crons.py (como se declara papel) ==="; grep -n "VIGIA\|vigia\|tripwire\|alarme\|esperado 0" config/crons.py | head -20
 
-● Commit limpo (108/22). A pista está com a raia (UM RUN POR VEZ), então o push espera ela. Consultando antes de declarar o marco:
-
-● Advising using Fable 5.1
-
-· Bloviating… (17h 41m 14s · ↓ 2.4m tokens)
+✻ Bloviating… (17h 46m 31s · ↓ 2.4m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+
+› Message from @a4b92115c4cb655af (ctrl+o to expand)
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -145,6 +145,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Degrading except-pass in validacao.py                                                    6h 2m 22s · ↓ 116.9k tokens
+  ◯ general-purpose  Compiling handback report for coordinator                                                6h 7m 39s · ↓ 142.1k tokens
   ⧉  index
 ```
