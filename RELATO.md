@@ -2238,46 +2238,47 @@ matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado
 > RELATO por data e levei a tabela com ele.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (35)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (36)
 
-> **ALARME: 1 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (40 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 14 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (220 h), FECHAMENTO-UI-PORTAS (201 h), PISO-NAO-SOBE-POR-BATIDA (200 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (199 h), ESTEIRA-RETA-FINAL (197 h), ZUMBIDO (194 h), CARTAO-TOTAL-IGUAL-SOMA (192 h), CERT-VIGIA (181 h), PARAMETRO-GANHA-ROTULO (179 h), CHAMADO-GANHA-CADASTRO (179 h), JUIZ-BATIDA-NASCE (179 h), JUIZ-ESCALA-NASCE (179 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (179 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (179 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 50 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 41 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 40 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 40 h | construindo | CORTES-REGISTRADOS |
-| **NOITE-23-09** | 2026-09-23 18:4x | 40 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 38 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 21 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 20 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 19 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 19 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 18 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 18 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 17 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 17 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 14 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 12 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 12 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 10 h | esperando "!" | O35 CONTRATOS-14 |
-| **CERT-VIGIA** | 2026-09-25 09:4x | 1 h | recebido | CERT-VIGIA |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 1 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 230 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 221 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 220 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 220 h | construindo | CORTES-REGISTRADOS |
+| **NOITE-23-09** | 2026-09-23 18:4x | 220 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 218 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 201 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **PISO-NAO-SOBE-POR-BATIDA** | 2026-09-24 14:xx | 200 h | recebido | O25 PISO-NAO-SOBE-POR-BATIDA |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 199 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 199 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 198 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 198 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 197 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 197 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 194 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 192 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 192 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 190 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 181 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 181 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 180 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 180 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 180 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **PARAMETRO-GANHA-ROTULO** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 179 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 179 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 179 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 179 h | recebido | E3-CHAMADO |
+| **PLACAR-ESTRUTURAL** | 2026-10-02 22:5x | 0 h | recebido | PLACAR-ESTRUTURAL |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
-| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 0 h | construindo | O42 ESTEIRA-SECA-25-09 |
-| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 0 h | construindo | O44 ARQUIVO-SIMPLES v2 |
-| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 0 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
-| **PARAMETRO-GANHA-ROTULO** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
-| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
-| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 0 h | recebido | S-BATIDA |
-| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 0 h | recebido | S-ESCALA |
-| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 0 h | recebido | O35 CONTRATOS-14 |
-| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 0 h | recebido | E3-CHAMADO |
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 <!-- SEUS-CORTES:FIM -->
 
