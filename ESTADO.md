@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 18:47:01.**
+**Medido em 03/10/2026 18:52:25.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ cc46d844 RELATO: o dossie C2 MEDIDO -- 11 escritores do silencio, tres "levantar
  M PLANO_PISCADA.md
 ?? app/core/rotas_publicas.py
 ?? app/core/tests/test_rota_pede_sessao.py
+?? app/core/tests/test_zz_quem_toca.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-      32  GET NAO JULGA ROTA SO-POST. Um 405 nao e "guardada": e "a pergunta nao se aplica" -- o Django e
-      33  o DRF recusam o metodo antes de rodar o corpo, entao o GET nao sabe se ha sessao exigida. Calar
 
-  Ran 1 shell command
+  Ran 2 shell commands
+  ⎿  Referenced file core/tests/test_rota_pede_sessao.py
+  ⎿  Read core/rotas_publicas.py (28 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_revert.txt (54
+     lines)
+  ⎿  Referenced file chamados/views.py
+  ⎿  Read docs/AVAIS.md (30 lines)
 
-● 543 rotas varridas no ui, 13 na core. Agora a triagem — e ela não é pequena. Lendo cada acusada com a vizinhança, para escolher a guarda
-  pelo molde e não por palpite:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 1 shell command
+● A sonda nova discrimina muito melhor — e o resultado mostra o combinado certo: as 23 rotas de mensageria não tocam no usuário (guardam
+  por TOKEN de header, _token_ok) mas recusam com 403. Então a autoridade são as duas juntas: acusa quem nem consultou o usuário nem
+  recusou. E o 405 do token_refresh pede o POST de volta, que eu perdi ao trocar o Client pelo RequestFactory.
 
-● servir_documento_ausencia diz no próprio docstring "SO para staff" e não tem guarda de login. Lendo os corpos dos mais sensíveis antes de
-  concluir:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● De 21+2 acusadas para 4+1. Mas isso levanta o risco oposto, e preciso medir antes de aceitar: render() passa pelo context processor auth,
+  que lê request.user — então uma view sem guarda que renderiza template tocaria no usuário por tabela, e sairia limpa. painel_vinculo é o
+  caso de prova: eu sei que ela não tem decorador.
 
-● Correção importante ao meu próprio enquadramento: servir_documento_ausencia e raiox_lente têm guarda no corpo — tem_acao(...) /
-  _is_gestor(...) e então raise Http404, de propósito (não revelar existência). Logo 404 é ambíguo: pode ser recusa legítima ou view
-  aberta. A pergunta certa não é "o corpo rodou", é "a view consultou o usuário antes de responder". Trocando a sonda por essa:
+  Medir quem toca no usuario em cada rota suspeita
+  ⎿  $ cd /home/ronald/saas-hasner && cat >
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/quem_toca.py <<'PY'
+     import traceback
+     from django.contrib.auth.models import AnonymousUser
+     from django.contrib.messages.storage import default_storage
+     from django.cont…
 
-● Trocar a sonda pela pergunta de consulta ao usuario
-  ⎿  $ python3 - <<'PY'
-     p='core/tests/test_rota_pede_sessao.py'
-     s=open(p,encoding='utf-8').read()
-     velho = s[s.index('class RotaPedeSessaoTest'):s.index(' def test_MORDE_nenhuma_rota_responde_sem_sessao')]
-     novo = '''class _UsuarioEspiao:
-     """Um AnonymousUser que ANOTA se alguem olhou para ele.
-     E' a autori…
-
-✢ Compacting conversation… (18h 33m 30s · ↓ 2.5m tokens)
-  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 7%
+✢ Bloviating… (18h 38m 54s · ↓ 2.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
