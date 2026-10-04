@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 11:55:45.**
+**Medido em 04/10/2026 12:00:45.**
 
 | | |
 |---|---|
@@ -112,7 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Read 1 file, ran 7 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../logs/o134/predicada_bordas_20261004.out (59 lines)
   ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
@@ -138,12 +137,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora os dois leitores passam a lâmpada em vez do número.
 
-  Ler a fixture do teste da palavra
-  ⎿  $ cd /home/ronald/wt-ct/app && sed -n '40,115p' relatorios/tests/test_palavra_do_dia.py
+● Cobertura da suite da autoridade
+  ⎿  $ cd /home/ronald/wt-ct/app && grep -n "def test" ponto/tests/test_realizado_do_dia_autoridade.py
 
-· Pouncing… (2h 55m 45s · ↓ 331.2k tokens)
+· Compacting conversation… (3h 0m 45s · ↓ 336.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
