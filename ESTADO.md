@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:35:01.**
+**Medido em 04/10/2026 16:40:14.**
 
 | | |
 |---|---|
@@ -115,22 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  premissa da docstring ("competência sem linha não tem número") está morta. Agora o sítio 2, pelas duas populações de borda:
-
-  Ran 1 shell command
-
-● Misto — e antes de chamar isso de lei, tiro o confundidor óbvio: um mês sem folha publicada produz zero por ausência, não por regra.
-
-  Ran 1 shell command
-
-● Um único mês publicado (08/2026) — então quase todos aqueles zeros eram ausência de folha, não regra. O que discrimina de verdade, dentro
-  do mês publicado:
-
-  Ran 1 shell command
-
-● Veredito claro: CIVIL. (A) 16/19 têm o holerite que a janela excluiria; (B) 1/17. O _limites está CERTO e o pendente está MAL ARQUIVADO —
-  era o que o selo de 21/09 já dizia, agora com número. Lendo o sítio 1 por inteiro antes de curar:
-
   Ran 3 shell commands
 
 ● Todos os cortes = 21 (medido, 7 empresas). Abrindo a raia nova a partir de k8-t20 e escrevendo o RED primeiro:
@@ -139,14 +123,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● 3 dos 4 casos RED (o 4º, "antes do dia 21", é a guarda contra correção excessiva e nasce verde). Curando na origem:
 
-● Curar os dois leitores e trocar a regra propria pelo endereco do juiz
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k5 --only "holerite.test_fech_encerrada_pelo_juiz" 2>&1 |
-     tail -12
+  Ran 3 shell commands
+  ⎿  Read docs/AVAIS.md (24 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3wsnx6z5.output (11 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output (10 lines)
+  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
 
-* Compacting conversation… (4h 23m 4s · ↓ 585.6k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 70%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● The RED is GREEN — 9/9. Now the de-list and the docstring, in the same commit.
+
+  Ran 11 shell commands
+
+● Both _K5 entries and the two _TT7 ones are now provably de-listable — and the competencia_mais_recente impressão is gone, so
+  test_MORDE_pendente_curado_sai_da_lista would go RED if I left it. Applying:
+
+  Rodar os vizinhos diretos
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k5 --only "ponto.tests.test_contract_juiz_fechamento
+     core.tests.test_contract_juiz_tela holerite.test_fech_encerrada_pelo_juiz folha.tests.test_ranking_he
+     ponto.tests.test_k8_tela_abre_na_competencia" 2>&1 | tail -15
+
+✽ Jitterbugging… (4h 28m 16s · ↓ 598.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
