@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:35:45.**
+**Medido em 04/10/2026 19:40:45.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-prime
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -143,8 +144,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      leis = [
      ("L-104","**O UNIVERSO DO HOLERITE E MES CIVIL, NAO A COMPETENCIA 21-20**:…
 
-· Compacting conversation… (7h 23m 47s · ↓ 881.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
+· Compacting conversation… (7h 28m 47s · ↓ 881.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
