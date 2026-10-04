@@ -302,11 +302,11 @@ flowchart TD
     ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_feriado_prazo
     ja_ponto_motor_calculo_v2_py(["ponto/motor_calculo_v2.py"]) --- jf_feriado_prazo
     jmais_feriado_prazo["... +1 arquivos de juiz"] --- jf_feriado_prazo
-    jf_fechamento["fechamento<br/>6 com juiz · 2 sem juiz<br/>registro: 19 sitio(s)"]
+    jf_fechamento["fechamento<br/>6 com juiz · 2 sem juiz<br/>registro: 13 sitio(s)"]
     ja_folha_export_py(["folha/export.py"]) --- jf_fechamento
     ja_ponto_janelas_py(["ponto/janelas.py"]) --- jf_fechamento
     ja_ponto_services_fechamento_py(["ponto/services/fechamento.py"]) --- jf_fechamento
-    jf_tela["tela<br/>10 com juiz · 1 sem juiz<br/>registro: 117 sitio(s)"]
+    jf_tela["tela<br/>10 com juiz · 1 sem juiz<br/>registro: 115 sitio(s)"]
     ja_chamados_juizes_py(["chamados/juizes.py"]) --- jf_tela
     ja_escala_servico_jornada_py(["escala/servico_jornada.py"]) --- jf_tela
     ja_ferias_models_py(["ferias/models.py"]) --- jf_tela
