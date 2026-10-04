@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:03:57.**
+**Medido em 04/10/2026 19:09:01.**
 
 | | |
 |---|---|
@@ -114,24 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Confirmado: em worktree .git é arquivo, então $R/.git/hooks/pre-commit não resolve — RED falso em qualquer cópia. É bug provado no
-  caminho da fatia. Censo antes da cura:
-
-  Ran 1 shell command
-
-● A forma certa já existe na casa (git-common-dir, em dois scripts) e quatro leitores não migraram. Mas só um ficou vermelho — meço por que
-  os outros três calaram:
-
-  Ran 2 shell commands
-
-● Background command "Rodar o portao completo contra a copia de pouso" completed (exit code 0)
-
-● Três coisas reais: 8 selos de host vermelhos na cópia, a suíte não rodou (rc=125, sem uma linha de teste) e o núcleo ficou vermelho com 1
-  falha — e ele agora está no portão do push. Separo falso de real:
-
-  Ran 1 shell command
-
-● Seis são artefato de cópia (a régua roda selos de host na árvore viva). Dois estão vermelhos no main também — e esses bloqueiam o push.
   Vejo o que acusam:
 
   Ran 1 shell command
@@ -139,13 +121,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Ambos nascem do meu próprio commit de registro, e os dois estão certos. Antes de curá-los, os dois problemas de código — a suíte não
   rodou e o núcleo tem 1 falha:
 
-  Identificar a falha do nucleo
-  ⎿  $ cd /home/ronald/wt-pousos && echo "=== NUCLEO: qual teste ==="; bash bin/suite_nucleo.sh --dir /home/ronald/wt-pousos --espera 300
-     2>&1 | grep -B2 -A14 "FAIL\|Error" | head -40
+  Ran 1 shell command
 
-* Jitterbugging… (6h 51m 59s · ↓ 831.6k tokens)
+● O teste é o do prompt gerado fora de sincronia com o código — mesma mecânica do selo do diagrama: o gerador confere. Confirmo que é o
+  cert-ast que mexeu nas ferramentas sem regerar, e vejo o 125 da suíte:
+
+  Ran 1 shell command
+
+● Dois achados. O RED do núcleo não é do cert-ast — está vermelho na árvore viva também, então a porta nova achou um segundo selo mudo (o
+  primeiro, test_ferramenta_certificacao, o cert-ast curou). E o 125 foi meu erro de instrumento: invoquei o bin/suite.sh da cópia, e
+  $RAIZ/.env não existe lá — --dir serve para a porta viva rodar contra cópia. Vejo o que está fora de sincronia:
+
+  Ran 2 shell commands
+
+● Rodo o gerador na cópia como meu usuário (não root — a classe O192 já custou 92 cópias órfãs) e o git diff mostra se o selo acusa código
+  certo ou arquivo velho:
+
+● Regerar o prompt e ver a divergencia
+  ⎿  $ cd /home/ronald/saas-hasner && docker run --rm --cpuset-cpus 4-7 --cpus 1 --user "$(id -u):$(id -g)" -e PYTHONDONTWRITEBYTECODE=1 -v
+     /home/ronald/wt-pousos/mensageria:/srv -w /srv saas-hasner-mensageria:latest python manage.py gerar_prompt_copiloto 2>&1 | tail -3;
+     echo "=== diff ==="; cd /home/ro…
+
+✢ Compacting conversation… (6h 57m 3s · ↓ 835.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
