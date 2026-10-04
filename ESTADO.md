@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:50:45.**
+**Medido em 04/10/2026 01:55:45.**
 
 | | |
 |---|---|
@@ -112,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● The declared portão janela_auth blocked it — a named trava, next window Monday 06:00. But the import-tardio hazard is live, so before
-  escalating I need the numbers. Measuring what actually changed and whether the 500 is reachable:
-
-  Ran 1 shell command
-
-● The blocking change is purely additive — one new diagnostic route from my own O142 commit, touching no auth path. But before I treat the
-  import hazard as urgent, I must read the selo instead of trusting my note about it:
+● Parking it is. Let me take the pre-check, the reversão audit and the FechamentoMensal foto in one read-only pass:
 
   Ran 2 shell commands
 
-● Decisive measurement. The import at 1867 is lazy, inside the view, the module is on disk, and the air has neither the line nor the route
-  — so nothing can execute it. Let me record this and the second-order finding before deciding:
+● ponto.models, not folha.models. Let me fix it and dump all fields via _meta rather than a guessed list — the AVAL-DE-CRITERIO lesson was
+  that a guessed field list hides the drift:
 
   Ran 1 shell command
 
-● Let me prove the §4 claim empirically rather than by reasoning, and verify Monday's deploy is safe:
+● The field dump landed (saved to logs/), but tail cut §1 — the decisive part. Re-running focused, and checking whether col369 is actually
+  in the 09 export:
 
   Ran 1 shell command
 
-● Proven: a new process in saas_core sees turnos.py at md5 05a22f22… — exactly the "cura" md5 from the ensaio, while gunicorn holds
-  119922ee…. The split is measured, not inferred. And manage.py check passes, so Monday's deploy is safe.
+● A bug in my sonda, not the data: I compared the full 64-char cel.impressao against the 16-char truncated value the sombra printed. The
+  strings are identical character for character. Fixing the comparison:
 
-  Advising using Fable 5.1
+● Re-running the impressão comparison correctly
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/pre2.py <<'PY'
+     from escala.models import CelulaDia
+     PKS = {112615: '0be3fb775b377c5e', 112618: 'f95bb2f3da94fb3e', 112619: 'f95bb2f3da94fb3e'}
+     print('=== IMPRE…
 
-· Incubating… (3h 28m 6s · ↓ 487.9k tokens)
+· Compacting conversation… (3h 33m 6s · ↓ 494.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 29%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Waiting on juliani_db_test flock release                                                 2h 10m 48s · ↓ 99.9k tokens
-  ◯ general-purpose  Appending C3 paragraph to contratos_estruturais.py                                       2h 9m 35s · ↓ 169.5k tokens
-  ◯ general-purpose  Awaiting suite verdict in green_tudo.out                                                1h 38m 27s · ↓ 137.5k tokens
+  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 15m 49s · ↓ 100.4k tokens
+  ◯ general-purpose  Reading contexto.py guard bodies                                                        2h 14m 35s · ↓ 103.8k tokens
+  ◯ general-purpose  Polling green_tudo.out for failures                                                     1h 43m 28s · ↓ 139.5k tokens
   ⧉  index
 ```
