@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:411 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:415 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:21:01.**
+**Medido em 03/10/2026 22:26:10.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED prim
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,41 +115,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
-  ordem das 21:4x -- o resto d
+  Listed 1 directory, ran 7 shell commands
 
-  Searched for 2 patterns, ran 1 shell command
+● O DIFF de frota está correndo (lado HEAD no ar). Enquanto isso, o selo corrigido — RED sem a cura, GREEN com ela:
 
-● O DIFF de dinheiro está rodando (b04zmg5j3): col152 na competência 10, HEAD contra a cura, pela porta real
-  ponto/services/espelho.py:875::autoridade_do_periodo — a mesma autoridade que a tela e o PDF leem, não uma conta minha (LEI-AKITA 8).
-  Leitura pura na sombra, nenhuma escrita.
+  Ran 2 shell commands
 
-  Resultado desta sequência, já durável no RELATO:
+● Background command "Rodar o selo corrigido nos dois lados" completed (exit code 0)
 
-  - Geometria medida e publicada: 8 linhas movem em 3.860, um só colaborador, col152 de 5 → 11 turnos, 0 fotos alteradas, 0 turnos perdidos
-    — a cura é aditiva.
-  - Dinheiro em medição agora, e é o último número que o PROIBIDO do aval exige antes de qualquer deploy.
-  - Depois dele, na ordem do aval: arquivo de reversão em logs/, DRY de detectar_par_relampago --apply --retratar e recompute_turnos,
-    censo/relavratura das atas divergentes, e só então RED+cura pousam juntas num commit e vão ao ar.
+  Read 1 file
 
-  Item em curso é PLACAR-ESTRUTURAL R4 (o único dos seis sem meta zero), pela cura do O142 — os pares da R4 são os REDs do O85 BURACO DE
-  VINCULO, que fazem a mesma pergunta: quem é o dono do dia quando o vínculo entra ou sai da janela.
+● Saída vazia nos dois lados — isso é falha antes do veredito, não teste verde. Vendo cru:
 
-✻ Crunched for 22h 7m 19s · done 10:20 PM · 1 shell still running
+  Ran 1 shell command
 
-● Background command "Medir o dinheiro de col152 nos dois lados, na sombra" completed (exit code 0)
+● Causa: /app montado :ro impede o Docker de criar o ponto de montagem de um arquivo novo. O comando canônico monta /app gravável; com
+  PYTHONDONTWRITEBYTECODE=1 nada é escrito na árvore.
 
-● Conferir se a sonda de dinheiro respondeu de verdade
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142diff; wc -l "$SP/din_head.txt";
-     head -6 "$SP/din_head.txt"
+  Ran 1 shell command
 
-· Zigzagging… (10s · ↓ 447 tokens · thinking)
-                                                                                                   ✔ Update installed · Restart to update
+● Enquanto roda, o ruff acusou um defeito real no meu patch — default mutável (celulas={}). Curando na forma honesta, não silenciando a
+  regra:
+
+● Curar o default mutavel e reconferir o ruff
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142cura; python3 - <<'FIM'
+     import io
+     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142cura/test_o142_turno_invariante_n
+     a_janela.py'
+     s=io.open(p,enc…
+
+* Incubating… (3m 31s · ↓ 14.3k tokens)
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
