@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:05:45.**
+**Medido em 04/10/2026 18:10:45.**
 
 | | |
 |---|---|
@@ -116,14 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Antes de escrever, confiro o vivo — há um log de régua VERMELHA no contexto (test_cortes_registrados.sh, corte TETO-20 envelhecido) que
-  pode ser anterior ao meu update do estado:
-
-  Read 1 file, ran 1 shell command
-
-● Selo de cortes OK (63 cortes, 0 sem fatia) — o log vermelho era anterior ao meu update do estado do TETO-20. HEAD == origin/main ==
-  5d31530f. Vejo o que já está escrito nos docs modificados:
-
   Ran 1 shell command
 
 ● O corte e os avais ainda não estão registrados. Vejo a estrutura de seções do PROMPTS e o selo que a cobra:
@@ -143,9 +135,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Topologia decisiva: wt-k5 contém 192aed00 (k8-t20), então o 13 é o número pós-pouso. O agente aa14fd… é de 02/10, transcript velho.
   Confiro o teto nas duas raias e o b3wsnx6z5:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-· Jitterbugging… (5h 53m 47s · ↓ 750.5k tokens)
+● k8-t20 também deixou o teto em 19 — o afrouxamento é das DUAS raias, não só da k5. Meço os três números por raia com o contador AST para
+  a anotação sair exata:
+
+  Contagem AST por raia e leitura do teste do teto
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for
+     d in saas-hasner wt-k8t wt-k5; do echo "--- $d"; python3 $S/contar.py /home/ronald/$d/app/core/juizes.py | grep -E "fechamento|tela";
+     done; echo; echo "=== como o te…
+
+· Jitterbugging… (5h 58m 47s · ↓ 752.8k tokens · deep in thought)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
