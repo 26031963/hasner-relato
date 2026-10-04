@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:50:47.**
+**Medido em 04/10/2026 10:55:50.**
 
 | | |
 |---|---|
@@ -112,15 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Medir a predicada final pelo lavrado" completed (exit code 0)
-
-  Read 1 file
-
-● Lavrado e recount concordam: 118 x 118, 0 discordâncias — então a predicada usa o LAVRADO (S133, havendo fonte não se deriva em
-  paralelo). Agora o RED:
-
-  Ran 3 shell commands
-
 ● RED evidenciado: 0 != 1 e 1 != 0, os dois sentidos. Agora a cura:
 
   Ran 1 shell command
@@ -135,14 +126,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● GREEN 8/8. Ruff e censo dos vizinhos que enumeram:
 
-  Ruff e censo de vizinhos
-  ⎿  $ cd /home/ronald/saas-hasner && docker run --rm $(bash -c 'source bin/recursos.sh; echo $TESTE_DOCKER') -v
-     /home/ronald/wt-ct/app:/app saas-hasner-core:latest sh -c 'ruff check ponto/services/bordas_realizado.py
-     ponto/tests/test_bordas_realizado.py' 2>&1 | tail -8; echo "=== vizinhos que citam o c…
+  Ran 2 shell commands
 
-· Pouncing… (1h 50m 47s · ↓ 193.2k tokens)
+● Enquanto roda, o passo 4: o censo. Primeiro o sítio exato que o passo 5 muda:
+
+  Ran 1 shell command
+
+● O passo 5 troca as linhas 1332-1334 pela palavra da autoridade (_real.minutos = None em sem_turno). Logo o censo tem de achar quem
+  colapsa None em 0 — começando pelo cartório, que grava int(... or 0):
+
+● Suite e o uso no export
+  ⎿  $ tail -12 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b4kijowol.output 2>/dev/null; echo
+     "=== export 655-705 ==="; cd /home/ronald/wt-ct/app && sed -n '655,705p' folha/export.py
+
+✽ Compacting conversation… (1h 55m 50s · ↓ 198.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   11% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
