@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:701 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:811 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:00:45.**
+**Medido em 04/10/2026 02:05:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `8f2ccd3f [O122][O121] Tres cortes dele saem do alarme por ESTADO, nao por pausa -- e o estado do O122 contradizia o proprio corte` |
+| `HEAD` local | `8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
 8f2ccd3f [O122][O121] Tres cortes dele saem do alarme por ESTADO, nao por pausa -- e o estado do O122 contradizia o proprio corte
 f9262dda [O142][O30] O escritor canonico passa a escrever a forma do disco, e a linha que a regua cobrou nasce
 5bdf439c [O142] O dono do dia vem do vinculo DAQUELE dia, e o turno para de depender da janela em que foi perguntado
 334bac72 [O163..O166] Os dois avais do fim de semana nascem como quatro itens e quatro trabalhos abertos
-a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO MEU PEDIDO, nao na medicao
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Complete.
 
-  Checking the gravado foto exists too (condition 3 needs FechamentoMensal before/after, and the reversão only covers the ata):
-
-  Ran 2 shell commands
-
-● There's a frota-wide gravado reversão from 23:12. Verifying it holds col369 with the full field set:
-
-  Ran 3 shell commands
-
-● col369 is row colaborador_id: 369, id: 5300. But that file was generated at 23:12 and the gravado gets re-watered by
-  recalcular_por_evento on every batida — so I must check whether the reversão is already stale against prod now:
+● 88 of 520 ids that do move are read as parked — every O1xx id contains O1, which is on the list. So no PAREI naming any O1xx item can
+  ever release the turn, and O142 is one. That's a bug in the fatia's path (LEI-AKITA 6). First making the RELATO durable, since condition
+  1 must land before the apply:
 
   Ran 1 shell command
 
-● Matches the 01:26 reading exactly — the reversão is not stale for col369. Taking the formal ANTES foto of the gravado and of the exported
-  09, all fields via _meta.fields, durable in logs/:
+● 147 insertions / 40 deletions — but I only prepended. Verifying my change alone is purely additive (the deletions must be pre-existing
+  uncommitted work, not mine):
 
   Ran 1 shell command
 
-● Inside the container the repo is /app; ~/saas-hasner/logs is outside the bind-mount. Passing the reversão in and copying the foto out:
+● My act is 110 insertions, 0 deletions — purely additive. Confirming the 40 deletions belong to the pre-existing uncommitted work:
 
   Ran 1 shell command
 
-● All ANTES evidence is now durable. The 23:12 reversão confirms 0 of 25 campos diverge from prod, so it isn't stale. Checking the hook's
+● The 40/37 are the generated cortes panel shrinking because 3 cortes left "recebido" in 8f2ccd3f — coherent. Committing the RELATO so
+  condition 1 is durable before any write:
 
-✶ Incubating… (3h 38m 7s · ↓ 502.8k tokens · thought for 10s)
+  Committed 8997440b, ran 1 shell command
+
+● On main, condition 1 durable, 10 commits pending. Now the hook bug — a gate change mid-fatia, so I want the direction checked before
+  touching it:
+
+  Advising using Fable 5.1
+
+✽ Incubating… (3h 43m 7s · ↓ 518.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 20m 49s · ↓ 100.4k tokens
-  ◯ general-purpose  Writing RED section into RELATO-CHAMADO-EM-RAIA.md                                      2h 19m 36s · ↓ 119.1k tokens
-  ◯ general-purpose  Reading suite.sh harness script                                                         1h 48m 28s · ↓ 151.9k tokens
+  ◯ general-purpose  Acquiring juliani_db_test lock for suite                                                2h 25m 50s · ↓ 100.9k tokens
+  ◯ general-purpose  Writing RED section into RELATO-CHAMADO-EM-RAIA.md                                      2h 24m 37s · ↓ 119.1k tokens
+  ◯ general-purpose  Polling trava_teste.sh lock holder                                                      1h 53m 29s · ↓ 167.8k tokens
   ⧉  index
 ```
