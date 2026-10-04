@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:35:45.**
+**Medido em 04/10/2026 04:40:45.**
 
 | | |
 |---|---|
@@ -111,37 +111,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● Task "Raia-chamado: escritor unico, C2 a C1" still running in background
 
-● falta_marcos lives in exactly one file and one template; the other leitores never mention it. The question is whether they pass through
-  the same day dict. Checking each leitor's source of dias:
+● Task "Push the two marco commits" still running in background
 
-  Ran 1 shell command
-
-● Scope is now exact: 4 of 5 leitores (tela, PDF/cartão, app, TXT) all funnel through espelho_do_colab, so they already carry falta_marcos
-  — they just never read it. The 5th, the calendário/grade, builds its own day dict and calls do_dia directly without it. Setting up the
-  raia and checking the stalled push:
+● BASE_DIR is app/, so the template path resolves. The module is SimpleTestCase-only — Django's get_databases(suite) then sets up no
+  database, so it cannot collide with the in-flight push suite. Running the RED:
 
   Ran 1 shell command
 
-● Holder is alive (raia's docker run under --espera 5400), so the push waits legitimately. Raia created. Now RED first — reading the
-  existing assertion I'll have to invert:
+● RED evidenced — 5 tests, 6 errors + 1 failure, in 0.004s: no database was created, confirming the module can't touch the in-flight push
+  suite. Now the cure, at the single writer:
 
-  Ran 1 shell command
+  Ran 5 shell commands
 
-● Form decided: the palavra adopts the badge's own wording (Em aberto — falta: <tipo> <hora>) so the template prints the palavra instead of
-  owning a loop — one wording, not a third. Writing the RED:
+● tipo is 'E'/'S' — the template prints the bare letter. Before inventing words, checking whether the house already has that map:
 
-  Writing the O130 RED test module
-  ⎿  $ cd /home/ronald/wt-o130/app && cat > ponto/tests/test_o130_em_aberto_diz_o_que_falta.py <<'PY'
-     """O130 — "EM ABERTO" DIZ O QUE FALTA (a 2a metade do R3).
-     O R3 pede a palavra *"EM ABERTO com o que falta"*, e a 1a metade (IMPAR, FECHADA 28/09) ja fez o
-     dict do dia carregar `falta_marcos`. O que fal…
+  Ran 2 shell commands
 
-· Compacting conversation… (6h 13m 6s · ↓ 891.6k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+● The canonical map exists — Batida.TIPO_CHOICES = ("E","Entrada"), ("S","Saida"). The palavra will read that, not a new word list. Fixing
+  the RED to use the real vocabulary ('E'/'S') rather than the words I assumed:
+
+  Ran 3 shell commands
+
+● I have the full chain. Calling advisor before writing the cure, since this commits the approach across three files plus the 5th-leitor
+  decision:
+
+● Advising using Fable 5.1
+
+· Incubating… (6h 18m 6s · ↓ 898.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -149,6 +149,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Grepping anchor line in contratos_estruturais.py                                         4h 54m 35s · ↓ 89.9k tokens
+  ◯ general-purpose  Checking suite verdict in turno_d.out                                                   4h 59m 35s · ↓ 130.1k tokens
   ⧉  index
 ```
