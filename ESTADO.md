@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:49:31.**
+**Medido em 04/10/2026 17:55:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
-| `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| commits a subir (`ahead`) | **9** |
+| `origin/main` | `5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -116,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● Push pousou: e0ad39dc..5d31530f, 9 commits num ato, suite 9605 + control-plane 22. E a lei do teto é literal: "total como TETO
+  (assertLessEqual do valor MEDIDO hoje)" — sem escritor canônico, escrito à mão. A raia quebrou a lei que ela mesma cita. Duas últimas
+  conferências:
 
   Ran 1 shell command
 
-● A raia já executa o corte inteiro, com as duas notas — o corte RATIFICA 6a350aa9, não pede obra nova. O que falta nas notas é a parte que
-  o corte nomeia: a condição de que o conforme depende (as notas de lá dizem o porquê medido, não o que o derruba). Vejo o push e o teto
-  da raia:
+● Sem prova publicada em 6a350aa9 — posso empilhar. Agora meço as duas famílias na raia por AST, não por regex (a minha regex de antes
+  contou errado):
 
   Ran 1 shell command
 
-● Dois achados reais na raia. Confiro o terceiro antes de decidir — se há prova publicada que um commit novo na raia invalidaria:
+● Medido: fechamento 19→13 na raia com teto parado em 19 e (9,0,1,9); tela 117→115 com teto em 123 — este já estava solto em 6 no main.
+  Leio os dois blocos de teto na raia para mexer no que é lei e registrar o resto:
 
   Ran 1 shell command
 
-❯ aval Ronald: o O145 + O146 (HE invisivel e extra prevista) foram prometidos "logo atras do _A14" em 03/10 19:2x e nunca viraram ORDEM
-  VIVA. Assim que a CELULA-TURNO-FECHA fechar ou parar, o marcador ORDEM-VIVA-TOPO vai para O145. Ordem: (1) frota medida por
-  bin/sonda_frota.sh -- quantos dia-colab por competencia perdem a ponta; (2) O145 POUSA SOZINHA: a Gestao de HE passa a ver a ponta do
-  dia que nao casou o marco e a porta aceita autorizar, com RED e DIFF de frota = zero sem decisao gravada; (3) O146 em seguida, com o !
-  do motor que ja dei. Isto corrige o "mesma fatia" de 03/10: continuam uma fila so, mas com dois pousos. Folha e raias de chamado ficam
-  atras. Segue a fila; PAREI so em lei ou !
+● Tudo medido. Começo pelo registro no main (é o que o selo test_cortes_registrados.sh cobra na próxima régua). Leio a forma exata que ele
+  exige:
 
-● Registrado — o aval refina o anterior: uma fila, dois pousos (frota → O145 sozinha → O146 com o ! do motor). Entra na ORDEM VIVA quando o
-  push liberar a árvore. Estado do push:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● Forma do registro conferida. Leio a cauda do PROMPTS para casar o formato:
 
-● Push ainda correndo (o hook roda os dois runners). Uso a espera para julgar o escopo do que achei na raia:
+  Ler a forma do PROMPTS.md
+  ⎿  $ cd /home/ronald/saas-hasner && head -16 app/docs/PROMPTS.md; echo "......"; tail -34 app/docs/PROMPTS.md
 
-  Advising using Fable 5.1
-
-✢ Jitterbugging… (5h 37m 33s · ↓ 738.2k tokens)
+✢ Compacting conversation… (5h 43m 3s · ↓ 744.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 29%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
