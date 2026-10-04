@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:09:01.**
+**Medido em 04/10/2026 19:14:25.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-prime
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,38 +115,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Vejo o que acusam:
 
-  Ran 1 shell command
+● Dois achados novos para situar antes de agir: o KeyError: 'POSTGRES_USER' (faltou o env-file da porta) e três veredictos que chegaram.
+  Leio o do agente e refaço o gerador com o env certo:
 
-● Ambos nascem do meu próprio commit de registro, e os dois estão certos. Antes de curá-los, os dois problemas de código — a suíte não
-  rodou e o núcleo tem 1 falha:
+  Read 1 file, ran 3 shell commands
 
-  Ran 1 shell command
+● O selo não acusava código certo — é desync real: contratos_da_pergunta entrou em nucleo/ferramentas.py::contexto_do_chat e o
+  PROMPT_GERADO.md nunca foi regerado. A cura é a regeneração pelo gerador (escritor único), e o arquivo saiu ronald:ronald. Commito e, em
+  paralelo, busco o relatório do agente e a procedência do Ran 9618:
 
-● O teste é o do prompt gerado fora de sincronia com o código — mesma mecânica do selo do diagrama: o gerador confere. Confirmo que é o
-  cert-ast que mexeu nas ferramentas sem regerar, e vejo o 125 da suíte:
+  Committed 8ffcd44d, ran 1 shell command
 
-  Ran 1 shell command
+❯ aval Ronald: se a falha do nucleo nao fechar em uma tentativa, o pouso 2/3 (CERT-AST) sai do pacote e vira item proprio; K8 e K5 pousam
+  agora, num ato so com o deploy. Depois: CELULA-TURNO-FECHA pela lei (a), e O145. Segue a fila; PAREI so em lei ou !
 
-● Dois achados. O RED do núcleo não é do cert-ast — está vermelho na árvore viva também, então a porta nova achou um segundo selo mudo (o
-  primeiro, test_ferramenta_certificacao, o cert-ast curou). E o 125 foi meu erro de instrumento: invoquei o bin/suite.sh da cópia, e
-  $RAIZ/.env não existe lá — --dir serve para a porta viva rodar contra cópia. Vejo o que está fora de sincronia:
+● O aval entra na condição decisiva: a cura do núcleo fechou em uma tentativa (uma execução do gerador → diff → commit 8ffcd44d; o KeyError
+  antes foi erro de instrumento meu, env-file faltando, não a cura falhando). Vou provar com UMA corrida da porta: se não vier OK, o
+  CERT-AST sai do pacote pela sua regra.
 
   Ran 2 shell commands
 
-● Rodo o gerador na cópia como meu usuário (não root — a classe O192 já custou 92 cópias órfãs) e o git diff mostra se o selo acusa código
-  certo ou arquivo velho:
+● O rc=127 é instrumento, não teste: bin/suite_nucleo.sh nasceu no cert-ast — não existe na árvore viva. E o Ran 9618 era
+  logs/k8t_suite_cheia_20261004.out (a raia k8t, 15:36), então a cópia mergeada segue sem veredito. Corrijo a invocação e largo a suite
+  Django na mesma leva:
 
-● Regerar o prompt e ver a divergencia
-  ⎿  $ cd /home/ronald/saas-hasner && docker run --rm --cpuset-cpus 4-7 --cpus 1 --user "$(id -u):$(id -g)" -e PYTHONDONTWRITEBYTECODE=1 -v
-     /home/ronald/wt-pousos/mensageria:/srv -w /srv saas-hasner-mensageria:latest python manage.py gerar_prompt_copiloto 2>&1 | tail -3;
-     echo "=== diff ==="; cd /home/ro…
+● Rodar a porta do nucleo pela copia onde ela nasceu
+  ⎿  $ cd /home/ronald/wt-pousos && ls -l bin/suite_nucleo.sh 2>&1 | head -2; timeout 600 bash /home/ronald/wt-pousos/bin/suite_nucleo.sh
+     --dir /home/ronald/wt-pousos --espera 420 2>&1 | tail -20; echo "nucleo_rc=${PIPESTATUS[0]}"
 
-✢ Compacting conversation… (6h 57m 3s · ↓ 835.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
+* Jitterbugging… (7h 2m 27s · ↓ 842.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
