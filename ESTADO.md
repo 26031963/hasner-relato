@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:02:01.**
+**Medido em 04/10/2026 16:07:31.**
 
 | | |
 |---|---|
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Publicado. Agora a porta. Primeiro a checagem que o advisor pediu — se o pre-push roda suite por conta própria, uma régua verde não
-  basta:
+  não tem o que montar. A cura vai no escritor único da cópia, não num segundo materializador:
+
+  Ran 2 shell commands
+
+● O buraco que minha mudança abriria já está meio fechado: o atalho "JÁ VERDE" exige REGUA_ARVORE (hash da árvore INTEIRA, que vê
+  mensageria/). Falta a segunda condição, --igual, que só olha app/. As três curas vão no escritor único:
+
+  Ran 2 shell commands
+
+● $? dentro de um if ! cmd é o status da negação (0), não o do comando — a régua imprimiria rc=0. O idioma certo é o que o próprio pre-push
+  documenta:
 
   Ran 1 shell command
 
-● Confirmado: o pre-push roda suite própria, contra o git archive da sha empurrada — então uma régua verde não barraria um núcleo vermelho.
-  E isso implica que a porta precisa de --dir. Lendo como ele monta a cópia:
+● A porta morde: rc=1 com a regressão posta na cópia, e o --dir alcança a cópia. Falta o que impede a porta de ficar órfã — a lição "selo
+  órfão não é selo" é exatamente o defeito que este item cura:
 
   Ran 1 shell command
 
-● $ARVORE_PUSH é git archive da sha, então carrega mensageria/ — a porta precisa de --dir. Primeiro a cura do settings e a prova de que,
-  consumindo POSTGRES_HOST, o DNS do compose dispensa o --add-host:
+● RED evidenciado — o selo contra a árvore VIVA, que é a que não tem a porta:
 
-  Ran 1 shell command
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3wsnx6z5.output (11 lines)
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output (10 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Referenced file docs/PROMPTS.md
+● Nomear a porta na secao 3 e rodar os selos de host desta raia · 15s
+  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PY'
+     p='CLAUDE.md'; s=open(p,encoding='utf-8').read()
+     velho = "Control-plane (tenants) roda separado, settings teste_motor.\n"
+     novo = ("Control-plane (tenants) roda separado, settings teste_motor.\n"
+     "Nucleo da mensageria roda separado tambem -- `bash ~/saas… (15s · 6 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● DNS resolve: juliani_db_test → 172.18.0.7 pelo nome. Consumindo POSTGRES_HOST, o --add-host morre com a medição. Agora a porta — preciso
-  das assinaturas exatas de recursos.sh e do critério dos selos de host que ela terá de atravessar:
-
-● Confirmar imagem da mensageria e usuario do banco de teste
-  ⎿  $ cd /home/ronald/saas-hasner && docker inspect mensageria --format '{{.Config.Image}}' && docker images --format
-     '{{.Repository}}:{{.Tag}}' | grep -i mensageria && docker exec juliani_db_test printenv POSTGRES_USER
-
-✢ Jitterbugging… (3h 50m 3s · ↓ 504.8k tokens)
+✢ Jitterbugging… (3h 55m 33s · ↓ 527.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
