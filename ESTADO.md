@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:13:26.**
+**Medido em 04/10/2026 15:18:51.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  ├──────────────────────────────────┼──────────┼──────────┤
+  │ zona dinheiro                    │ 9        │ 8        │
+  ├──────────────────────────────────┼──────────┼──────────┤
+  │ em ponto/views.py                │ 11       │ 7        │
+  ├──────────────────────────────────┼──────────┼──────────┤
+  │ pergunta K8                      │ 6        │ 2        │
+  ├──────────────────────────────────┼──────────┼──────────┤
+  │ verdes()                         │ 13 de 20 │ 13 de 20 │
+  └──────────────────────────────────┴──────────┴──────────┘
 
-● Background command "Esperar o sentinela rc= da suite" completed (exit code 0)
+  O placar não moveu, e a célula do BACKLOG diz isso (296 chars): migrar leitor derruba o contador, não a célula, que pede allowlist ZERO.
+  Os 2 de K8 que ficam não são resto — _pa(mes, ano, 2) é envelope declarado sobre [2..28], outra classe.
 
-  Ran 7 shell commands
+  3. O achado: o diagrama era o TERCEIRO leitor do contador. A suite recortada (4151 testes) voltou com 2 falhas em
+  core/tests/test_selo_diagrama_do_codigo.py — docs/ARQUITETURA.mmd carrega registro: 19 sitio(s), logo lê PENDENTES. O censo de "quem mais
+  lê" do be19b202 tinha dois consumidores e havia três; o selo B9 fez o que nasceu para fazer. Curado na fonte (regenerado, 19 -> 15). De
+  quebra, uma armadilha de host: bin/gerar_diagrama.py é docker exec saas_core cravado — rodado do host contra a cópia, ele regenerou o
+  diagrama de prod e respondeu "sem mudança". Árvore viva conferida depois: intacta.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  4. Arrumação conservadora: removi só as duas cópias limpas (wt-merge, wt-k8). wt-lps, wt-sj, wt-antes e wt-b1t têm trabalho não commitado
+  — entre ele o patch do passo 5 que a pergunta de LEI está segurando —, então salvei os diffs em logs/copias_sujas/ e não removi. O que
+  estava só no scratchpad de sessão (selo de certificação + item SUITE-DO-NUCLEO-ENTRA-NA-REGUA) foi para logs/construido_sem_pousar/.
 
-  Committed c054f5df, 50333326, 62ebc615, merged teto20, ran 16 shell commands
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
 
-● Agora o esteira.sh com os portões reais, medidos antes do ff:
+  Running 1 shell command…
 
-  Ran 14 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
-  ⎿  Read ../cortes.alarme.pausado (33 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Rodar o gerador no container em modo write e ver o diff
-  ⎿  $ cd /home/ronald/saas-hasner && head -20 bin/gerar_diagrama.py; echo "=== container, modo write:"; . bin/recursos.sh >/dev/null 2>&1
-     MONT=$(bash bin/arvore_do_push.sh --montagem /home/ronald/wt-k8t)
-     docker run --rm $TESTE_DOCKER -v /home/ronald/wt-k8t/app:/app $MONT -w /app saas-hasner-core:latest…
-
-✽ Jitterbugging… (3h 1m 28s · ↓ 390.1k tokens)
+· Jitterbugging… (3h 6m 53s · ↓ 407.7k tokens · thought for 8s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
