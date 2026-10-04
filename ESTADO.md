@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:842 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:853 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 08:53:28.**
+**Medido em 04/10/2026 08:58:51.**
 
 | | |
 |---|---|
@@ -114,21 +114,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    chamam ultimo_lavrado() direto (test_contador_vigencia_impossivel.py:108), e chamada direta fica verde com a chave fora da porta.
-  - diagrama — core.tests.test_selo_diagrama_do_codigo estava VERMELHO (3 falhas) na suite anterior, como previsto. Regenerado por
-    manage.py gerar_diagrama contra a raia (o bin/gerar_diagrama.py não serve: ele faz docker exec saas_core, que lê a árvore viva). Delta
-    só do que o código mudou: 55→56 nós, nó lavrar_previsto_cego<br/>07:33, aresta reconciliar_vinculo --> lavrar_previsto_cego, 39→40
-    arestas.
-  - selos da fatia: Ran 43 / OK pela porta (--only), já com o diagrama verde. Ruff: All checks passed! nos 9.
-  - placar R4 passou a nomear a quarta perna (api_mensageria_saude) e o motivo (LEI-AKITA 12).
-  - RELATO corrigido duas vezes: a contagem agora sai do git status --porcelain (11 arquivos, com core/placar_estrutural.py que eu omitia),
-    e a frase do censo deixou de dizer "o grep não achava nada" — o que é verdade é que nenhum selo enumerava o dict.
-
-  Falta, na ordem: ids do fixture do test_09 (estão sob a chave de intermitentes sendo os cegos), ruff no placar depois da última string,
-  rodada congelada da suite, commit [PLACAR-ESTRUTURAL] nos 11 caminhos por -F, hash no TICKETS.md:165, estado do PLACAR-ESTRUTURAL no
   BACKLOG (ainda diz "Falta R4"), bin/handoff_sessao.sh.
 
-✻ Cogitated for 1h 16m 50s · done 8:49 AM · 1 shell still running
+✻ Cogitated for 1h 16m 50s · done 8:49 AM · 3 shells still running
 
 ● Background command "Rodar a suite inteira contra a raia" completed (exit code 0)
 
@@ -136,20 +124,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar por arquivo a saida da suite" completed (exit code 0)
 
-  Rodar os selos com o relogio congelado
-  ⎿  $ cd /home/ronald/saas-hasner && ESTEIRA_QUEM=r4-relogio bin/suite.sh --dir /home/ronald/wt-r4 --espera 2 --only
-     "escala.tests.test_contador_previsto_cego escala.tests.test_c3_na_lista_e_contador_por_codigo api.tests.test_api_mensageria_saude
-     core.tests.test_selo_teste_sem_relogio core.tests.test_s…
+  Ran 19 shell commands
 
-✽ Cooking… (3m 8s · ↓ 7.4k tokens)
+● Suite final rodando na árvore congelada. O quarto RED, que só a suite inteira pegaria:
+
+  core.tests.test_selo_teste_sem_relogio ficou VERMELHO com os dois selos novos — eles liam timezone.localdate() solto no setUpTestData. O
+  agravante é específico desta fatia: as datas destes selos andam em volta de uma competência (21→20), então o mesmo fixture cai em
+  competência diferente conforme a hora em que a suite roda — a bomba de 00:00 de 19/09 com outro nome. Congelados em 2026-09-25
+  10:00:00-03:00 pelo molde do irmão (test_contador_vigencia_impossivel.py:31), e conferi no fonte do freezegun 1.5.5 que o decorador de
+  classe congela em volta do setUpClass (por onde o Django chama setUpTestData) em vez de supor que cobria. O que lia o relógio real era a
+  tela: o serviço já recebia hoje por parâmetro em toda chamada dos selos. Depois: Ran 46 / OK.
+
+  Também aplicado: ids do fixture do test_09 saíram de [43, 882, 924] (que são os cegos) para intermitentes de verdade — O184 é
+  literalmente sobre texto que ensina errado, e o fixture não ia contradizer isso. Ruff limpo nos 5 arquivos tocados depois da última
+  passada.
+
+  RELATO e msg_commit agora dizem quatro REDs, e a linha LEI-AKITA: nomeia os quatro.
+
+✻ Brewed for 4m 0s · done 8:54 AM · 3 shells still running
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
-                                                                                                                    4% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
