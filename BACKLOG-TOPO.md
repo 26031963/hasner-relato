@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**159 obras abertas.**
+**161 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -168,3 +168,5 @@ lista — ela e o que esta EM PE._
 | **O158** | ORDEM-VIVA-TOPO E AUTORIDADE | espera corte |
 | **O159** | DIA INTEIRO E O PREVISTO DO DIA | espera `!` |
 | **O160** | ARVORE-SEM-CONFLITO: O DEPLOY RECUSA ARVORE QUEBRADA | tail -3 && bin/deploy.sh` -- o pipe entr |
+| **O161** | a linha do tipo PAI nao tem Editar nem Copiar | **fila 2 (UI), raia `wt-ui`** -- registr |
+| **O162** | DOIS ROTULOS QUE NAO DIZEM O QUE SABEM, no drawer de Ausencias | **entra na O30 F2**, que o vale dele aca |
