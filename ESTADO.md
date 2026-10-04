@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:25:01.**
+**Medido em 04/10/2026 19:30:31.**
 
 | | |
 |---|---|
@@ -115,42 +115,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  de raia verde e PRE-APROVADO, salvo o que ja esta na lista NUNCA PRE-APROVADO. (b) INSTRUMENTO (bin/, selo de host, portao do push) NAO
-  entra no mesmo pacote de pouso que PRODUTO: produto pousa primeiro, instrumento em pouso proprio. (c) raia que nao pode pousar diz o
-  motivo em UMA linha no RELATO (lei, !, janela).
-  LEI 2 -- DOCS-NO-MARCO: commit que toca SO app/docs/ fora de um marco nao existe; docs entram no commit do marco, junto do codigo.
-  Excecao NOMEADA, uma so: o derivado que o bin/pos_push.sh escreve.
 
-  FONTE (grep feito): LEIS.md L-083 DEPLOY JA · CLAUDE.md sec.2 "MERGE DE RAIA CAI E RECARREGA NO MESMO ATO" · CLAUDE.md 7b "MARCO FECHADO
-  / PUSH um por MARCO" e "DIETA DE PROSA" -- as tres ultimas SEM L-NNN hoje.
-  NASCEU MEDIDA 04/10: 23 de 42 commits do dia so de docs; 6 raias com trabalho pronto fora do main, a de chamado parada desde 07:25; o
-  pouso da folha travado 1 h por um instrumento (CERT-AST) posto no mesmo pacote.
+  Ran 2 shell commands
 
-  MUDA, em DOIS tempos:
-   AGORA, sem codigo: (1) as duas leis e as tres antigas entram no LEIS.md com L-NNN, origem e dono, e uma linha no CLAUDE.md 7b; (2) a
-  conduta vale desde ja -- o pacote de pouso em curso se separa: K8 e K5 pousam, CERT-AST em pouso proprio.
-   DEPOIS da O145, como fila 2: (3) contador no ESTADO.md (bin/relato.sh): "raias com commit a frente do main ha mais de 6 h", com branch,
-  commits, idade e motivo -- esperado 0; (4) selo de host no pre-push: push com commit so de app/docs/ alem do derivado do pos_push =
-  VERMELHO, com o caso que morde nos dois sentidos; (5) as raias velhas (25-30/09 e os agentes da madrugada): lista com veredito por raia
-  -- pousa, ou morta com certidao. Apagar worktree = meu !.
+● Produto = main + k5-encerrada (que já contém o k8t linearmente). Monto essa árvore na cópia:
 
-  PROIBIDO: allowlist de commit de docs; contar como "marco" o que nao fechou item; apagar raia sem o meu !; construir (3)(4)(5) antes da
-  CELULA-TURNO-FECHA e da O145.
-  PRONTO: AGORA = as 5 linhas no LEIS.md + a linha no CLAUDE.md, no commit do proximo marco. DEPOIS = contador no ESTADO lendo 0 ou a
-  lista, selo com RED nos dois sentidos, veredito das raias velhas no RELATO.
-  LEI-AKITA: origem=LEIS.md + bin/relato.sh + bin/pre-push.sh, testemunha=git worktree list e o range do push, RED=item 4, quem-mais-le=o
-  chat a cada "le", juizes novos=0
-  LINHA HAIKU: (a) "raias paradas N" no payload com rotulo de admin; (b) golden "ha trabalho pronto fora do ar?" via ferramentas; (c)
-  degrau: leitura.
-  Segue a fila; PAREI so em lei ou !
+  Ran 1 shell command
 
-✢ Jitterbugging… (7h 13m 3s · ↓ 863.5k tokens · deep in thought)
+● Mesmo conflito de antes, só prosa. Resolvo por HEAD (o main é estritamente mais novo nas duas linhas) e remeço o teto na árvore mergeada
+  — é onde podia furar:
+
+  Ran 1 shell command
+
+● Teto na árvore de produto: 13 / (8,0,1,4) / 115 — idêntico, o que confirma que o cert-ast não tocava nenhum dos três arquivos de teto.
+  Confiro que ele realmente saiu e fecho o merge:
+
+  Committed 02391558
+
+● Agora os docs na árvore de produto, incluindo as 5 linhas de lei e a linha do CLAUDE.md que o corte pede AGORA. Antes, vejo como um corte
+  se registra para os selos não ficarem vermelhos:
+
+● Procurar ids antigos e o bloco ATO
+  ⎿  $ cd /home/ronald/wt-pousos && python3 -c "
+     import json
+     d=json.load(open('app/docs/CORTES.json'))
+     import re
+     for c in d:
+     if re.search('MERGE|MARCO|DIETA|PUSH|RAIA|DOCS', c['id']): print(c['id'],'|',c['quando'],'|',c['estado'][:70])
+     "; echo "=== bloco ATO do LEIS.md ==="; sed -n '115,130p' app/docs/L…
+
+✢ Jitterbugging… (7h 18m 33s · ↓ 873.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
