@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:24:01.**
+**Medido em 04/10/2026 16:29:31.**
 
 | | |
 |---|---|
@@ -115,36 +115,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  competência encerrada", 2 pendentes, as duas de TELA, com juiz declarado. Orientando nos dois sítios:
 
-● POSTGRES_PORT=5432 no .env e 5432 no container — o 5433 é mapeamento de host no ports:, não a chave. O no-op vale para as duas metades, e
-  agora com número. Agora (2) e (3):
+  Ran 8 shell commands
 
-  Ran 2 shell commands
-
-● Agora (3) — a lição das 92 cópias órfãs: provar que o --dir não deixa arquivo de root dentro da cópia.
+● Achado relevante antes de construir: o selo de 21/09 declara os dois sítios como "FICAM DE FORA" por responderem outra pergunta.
 
   Ran 1 shell command
 
-● Zero arquivo de root (o PYTHONDONTWRITEBYTECODE=1 da porta é o que paga isso). Rodando os selos de host que tocam estes arquivos:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Seguindo. Duas consultas, só leitura, sem motor:
 
   Ran 1 shell command
 
-● Sete verdes. Emendando o commit da porta (não empurrado) para que a porta seja UM commit:
+● Sítio 1 confirmado: a regra própria devolve (10, 2026) — a competência ABERTA, com 572 linhas parciais do recálculo por evento. A
+  premissa da docstring ("competência sem linha não tem número") está morta. Agora o sítio 2, pelas duas populações de borda:
 
-  Searched for 1 pattern, ran 13 shell commands
+  Ran 1 shell command
 
-● Item honestamente fechado na raia. Fila 1 não está vazia — o próximo é PLACAR-ESTRUTURAL. Orientando antes de construir:
+● Misto — e antes de chamar isso de lei, tiro o confundidor óbvio: um mês sem folha publicada produz zero por ausência, não por regra.
 
-● Ler o item PLACAR-ESTRUTURAL do BACKLOG
-  ⎿  $ python3 - <<'PY'
-     import re
-     for l in open('docs/BACKLOG.md'):
-     if l.startswith('| PLACAR-ESTRUTURAL'):
-     for i,c in enumerate(l.split('|')[1:-1]):
-     print(f'--- col{i}:'); print(c.strip()[:1400]); print()
-     PY
+  Ran 1 shell command
 
-✢ Jitterbugging… (4h 12m 3s · ↓ 558.4k tokens)
+● Um único mês publicado (08/2026) — então quase todos aqueles zeros eram ausência de folha, não regra. O que discrimina de verdade, dentro
+  do mês publicado:
+
+● Running 1 shell command…
+
+· Jitterbugging… (4h 17m 33s · ↓ 572.4k tokens · thought for 21s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
