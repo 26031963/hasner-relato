@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:19:51.**
+**Medido em 04/10/2026 19:25:01.**
 
 | | |
 |---|---|
@@ -115,42 +115,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  antes foi erro de instrumento meu, env-file faltando, não a cura falhando). Vou provar com UMA corrida da porta: se não vier OK, o
-  CERT-AST sai do pacote pela sua regra.
+  de raia verde e PRE-APROVADO, salvo o que ja esta na lista NUNCA PRE-APROVADO. (b) INSTRUMENTO (bin/, selo de host, portao do push) NAO
+  entra no mesmo pacote de pouso que PRODUTO: produto pousa primeiro, instrumento em pouso proprio. (c) raia que nao pode pousar diz o
+  motivo em UMA linha no RELATO (lei, !, janela).
+  LEI 2 -- DOCS-NO-MARCO: commit que toca SO app/docs/ fora de um marco nao existe; docs entram no commit do marco, junto do codigo.
+  Excecao NOMEADA, uma so: o derivado que o bin/pos_push.sh escreve.
 
-  Ran 2 shell commands
+  FONTE (grep feito): LEIS.md L-083 DEPLOY JA · CLAUDE.md sec.2 "MERGE DE RAIA CAI E RECARREGA NO MESMO ATO" · CLAUDE.md 7b "MARCO FECHADO
+  / PUSH um por MARCO" e "DIETA DE PROSA" -- as tres ultimas SEM L-NNN hoje.
+  NASCEU MEDIDA 04/10: 23 de 42 commits do dia so de docs; 6 raias com trabalho pronto fora do main, a de chamado parada desde 07:25; o
+  pouso da folha travado 1 h por um instrumento (CERT-AST) posto no mesmo pacote.
 
-● O rc=127 é instrumento, não teste: bin/suite_nucleo.sh nasceu no cert-ast — não existe na árvore viva. E o Ran 9618 era
-  logs/k8t_suite_cheia_20261004.out (a raia k8t, 15:36), então a cópia mergeada segue sem veredito. Corrijo a invocação e largo a suite
-  Django na mesma leva:
+  MUDA, em DOIS tempos:
+   AGORA, sem codigo: (1) as duas leis e as tres antigas entram no LEIS.md com L-NNN, origem e dono, e uma linha no CLAUDE.md 7b; (2) a
+  conduta vale desde ja -- o pacote de pouso em curso se separa: K8 e K5 pousam, CERT-AST em pouso proprio.
+   DEPOIS da O145, como fila 2: (3) contador no ESTADO.md (bin/relato.sh): "raias com commit a frente do main ha mais de 6 h", com branch,
+  commits, idade e motivo -- esperado 0; (4) selo de host no pre-push: push com commit so de app/docs/ alem do derivado do pos_push =
+  VERMELHO, com o caso que morde nos dois sentidos; (5) as raias velhas (25-30/09 e os agentes da madrugada): lista com veredito por raia
+  -- pousa, ou morta com certidao. Apagar worktree = meu !.
 
-  Ran 1 shell command
+  PROIBIDO: allowlist de commit de docs; contar como "marco" o que nao fechou item; apagar raia sem o meu !; construir (3)(4)(5) antes da
+  CELULA-TURNO-FECHA e da O145.
+  PRONTO: AGORA = as 5 linhas no LEIS.md + a linha no CLAUDE.md, no commit do proximo marco. DEPOIS = contador no ESTADO lendo 0 ou a
+  lista, selo com RED nos dois sentidos, veredito das raias velhas no RELATO.
+  LEI-AKITA: origem=LEIS.md + bin/relato.sh + bin/pre-push.sh, testemunha=git worktree list e o range do push, RED=item 4, quem-mais-le=o
+  chat a cada "le", juizes novos=0
+  LINHA HAIKU: (a) "raias paradas N" no payload com rotulo de admin; (b) golden "ha trabalho pronto fora do ar?" via ferramentas; (c)
+  degrau: leitura.
+  Segue a fila; PAREI so em lei ou !
 
-● Ran 520 tests ... OK, e o próprio teste imprime PROMPT_GERADO.md em sincronia. A cura do núcleo fechou em uma tentativa — o CERT-AST fica
-  no pacote, pela sua própria condição.
-
-  Não largo a suite ainda: ela monta wt-pousos, e editar a árvore que a medição monta já me custou antes. Fecho primeiro os três selos de
-  host vermelhos, commito, e só então a suite corre contra a árvore que de fato pousa:
-
-  Ran 1 shell command
-
-● Bom: cortes_registrados está OK na cópia (64 cortes, 0 sem fatia) — aquele vermelho era da árvore viva às 13:45, antes do pouso do
-  teto20. Sobram dois. Leio a forma antes de escrever:
-
-  Ran 2 shell commands
-
-● Os três registros são: marcador (BACKLOG.md:7), célula de estado do item, e o topo do RELATO. Leio as duas linhas antes de mexer:
-
-  Conferir o rascunho do RELATO
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -l $S/relato_novo.md 2>&1; echo
-     "=== head ==="; head -20 $S/relato_novo.md 2>/dev/null | cut -c1-240
-
-✻ Waiting for API response · will retry in 2m 31s · check your network
+✢ Jitterbugging… (7h 13m 3s · ↓ 863.5k tokens · deep in thought)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
