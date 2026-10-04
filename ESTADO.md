@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:43:01.**
+**Medido em 04/10/2026 02:48:31.**
 
 | | |
 |---|---|
@@ -39,7 +39,10 @@ b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do REL
 ## `git status --short`
 
 ```
+ M app/core/esteira_vigia.py
  M app/docs/HANDOFF-SESSAO.md
+ M bin/fabricante_alvo.py
+ M bin/tests/test_fabricante_seco.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,44 +114,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● test_trava_teste.sh is now green with the lock held. But a new RED appeared in my path — test_fabricante_seco.sh, which was green in the
-  01:5x sweep. LEI-AKITA 6 says it comes first:
-
-  Ran 3 shell commands
-
-● Measuring at the source rather than guessing which leg broke:
+● Advisor is right to flag the waiter — checking that before anything else, alongside the gate measurement and census:
 
   Ran 1 shell command
 
-● 47 packages, 0 recognized. The decisive question is whether those labels are absent from history or merely fell out of the -900 window:
+● Caught something important: a857's O167 suite is alive and now holds the lock — pid 934350, 5 min in, full 13-label run against its
+  worktree; raia-chamado (941097) is now the waiter, not the holder. --quem's sidecar was stale. So no suite of mine gets queued ahead of
+  them. Finding where its verdict will land:
 
   Ran 1 shell command
 
-● Measured, and the selo is right: the criterion broke by clock, not by code. The -900 window now reaches back only to 26/09 12:22, and 6
-  of the 47 packages are residue whose fatia IS in the log (23/09–26/09, e.g. [PRE-PUSH-TESTA-O-COMMIT] at 4c081b17, 26/09 12:11 — eleven
-  minutes outside the window). The other 41 were never committed and are correctly held. My own 15 commits this session slid the boundary
-  past the last residue, so this is my path.
+● Output lands in green_tudo2.out, and the sidecar did update (juiz-de-chamado-C1aC4:875154 desde 02:41:16) — my earlier read predated it.
+  Watchable by file. Now building the cure in copies of HEAD:
 
-  Two candidate cures — measuring both before choosing:
+  Ran 1 shell command
 
-● Measuring full-log cost and label reuse
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== custo de ler o log INTEIRO uma vez (3 amostras) ==="; for i in 1 2 3; do /usr/bin/time -f '
-     %e s %M KB' git log --pretty=%s >/dev/null 2>>/dev/stdout; done 2>&1 | tail -3; echo; echo "=== rotulo [X] se REPETE na historia? (o
-     perigo de tirar a janela) ===";…
+● Proving the before/after with the real function, then applying:
 
-✢ Incubating… (4h 20m 22s · ↓ 606.9k tokens · thinking)
+  Ran 1 shell command
+
+● RED→GREEN proven: ja_commitadas() 0 → 6 (exactly the six measured), em_obra() 120 → 111 — nine files released — and the selo is green
+  with a live target. Now closing the aging leg the advisor flagged, in the same act:
+
+  Ran 1 shell command
+
+●
+
+✢ Incubating… (4h 25m 52s · ↓ 619.3k tokens · thought for 9s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Patching invariants in vinculos.py draft                                                 3h 1m 51s · ↓ 112.6k tokens
+  ◯ general-purpose  Grepping justificativa_relacionada readers                                               3h 7m 22s · ↓ 142.5k tokens
   ◯ general-purpose  Committing chamados/models.py C2 cure                                                   2h 19m 38s · ↓ 165.7k tokens
   ⧉  index
 ```
