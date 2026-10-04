@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:29:31.**
+**Medido em 04/10/2026 15:35:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `50333326 O135: o ! vai para a mesa e o corte sai de "recebido" -- registro do dia, commitado onde PROD le` |
+| `HEAD` local | `31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7` |
 | `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7
 50333326 O135: o ! vai para a mesa e o corte sai de "recebido" -- registro do dia, commitado onde PROD le
 1cde743a LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push
 e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero
 8892fc31 CELULA-TURNO-FECHA passo 3: o contador do dia sem par nao predica mais no numero que a cura apaga
-98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -116,35 +113,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● blocks: 7 — já passou do TETO=5, e só o _tem_trabalho_em_curso() segura. Preciso confirmar que ele VÊ a suite do k8t:
+● Vou tornar o registro durável em git em vez de deixá-lo como sujeira — e pelo precedente de hoje (50333326) isso exige o merge de
+  reconciliação no mesmo ato, senão a GUARDA 2 para o pouso de segunda:
+
+  Committed 94218276, ran 3 shell commands
+
+● O commit levou o esteira.sh (era untracked) — e isso quebraria a GUARDA 1: o merge de reconciliação poria um arquivo fora de app/docs/ no
+  diff 48805bbf..teto20 e a esteira recusaria o próprio pouso. Corrijo pelo lado restritivo (não afrouxo a guarda):
+
+  Committed 31558c3e, ran 1 shell command
+
+● Agora o merge de reconciliação em teto20, o re-carimbo do selo e a prova de que a GUARDA 1 continua fechando:
+
+  Ran 1 shell command
+
+● Conflito esperado no RELATO (os dois lados inseriram seção antes da mesma âncora). Vou resolver mantendo as duas, em ordem de hora:
+
+  Committed 738b779f, ran 1 shell command
+
+● O merge expôs uma inversão que já existia na cópia (14:1x antes de 14:5x, num arquivo que é mais-novo-primeiro). Conserto no mesmo ato:
+
+  Committed fb1c78ac
+
+● Guardas 1 e 2 fecham de novo. Prova a seco de que o pouso de segunda segue armado e para no lugar certo:
 
   Ran 2 shell commands
 
-● O hook vê a suite (manage.py test no argv, pela trava, cpuset 4-7) — então os 7 blocks não liberam falso; o TETO está suspenso por fato,
-  não por sorte. E o selo test_hook_nao_cobra_congelado.sh:107 exige que o marcador concorde com a resposta do hook, então mover os três
-  registros juntos é obrigação, não arrumação:
+  Advising using Fable 5.1
 
-  Ran 3 shell commands
-
-● Agora o ensaio do pouso com a sujeira NOVA (ponto 5) — numa cópia descartável, nunca na árvore viva:
-
-  Ran 2 shell commands
-
-● Um achado real no ensaio: existe um stash@{0} antigo no repo (o stash é compartilhado entre worktrees). Se às 06:05 não houver sujeira, o
-  stash push não cria entrada e o pop traria esse stash velho para a árvore. Vou ver se a esteira se protege:
-
-  Ran 2 shell commands
-
-● A guarda SUJO já existe — o stash velho está seguro. Mas o refs/stash é do repo, e pop tira sempre o {0}: se outra raia empilhar um stash
-  entre o push e o pop, a esteira popa o errado. Guarda mais restritiva (recusa em vez de popar às cegas):
-
-  Ran 3 shell commands
-
-● Esteira passa as guardas 1 e 2, para na 3, nada tocado. Agora o registro:
-
-● Running 1 shell command…
-
-✢ Jitterbugging… (3h 17m 33s · ↓ 427.8k tokens)
+✢ Jitterbugging… (3h 23m 3s · ↓ 445.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
