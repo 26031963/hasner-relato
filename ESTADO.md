@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:113 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:151 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:26:51.**
+**Medido em 04/10/2026 02:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1ed33f31 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING` |
+| `HEAD` local | `1a99a3d7 [O142] O censo barateou o residuo: o escritor unico pode fechar o O171 sozinho` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **13** |
+| commits a subir (`ahead`) | **14** |
 
 ## Fabrica
 
@@ -29,19 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1a99a3d7 [O142] O censo barateou o residuo: o escritor unico pode fechar o O171 sozinho
 1ed33f31 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING
 b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do RELATO
 79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash
 8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
-8f2ccd3f [O122][O121] Tres cortes dele saem do alarme por ESTADO, nao por pausa -- e o estado do O122 contradizia o proprio corte
 ```
 
 ## `git status --short`
 
 ```
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  wrote it prescribes a money act that may be unnecessary. Running the cheap gates while I fix it:
+
+● The advisor is right — A acquired, so my leg 3 would never fire on the failure I actually saw. Reading the unread agent output and
+  checking self-containment:
 
   Ran 1 shell command
 
-● Agent "Esmeril da familia AUSENCIA" finished · 2h 45m 26s
+● Agent "Pre-requisitos C1-C4 do JUIZ-DE-CHAMADO" finished · 2h 17m 35s
 
-● My commit message's census line is wrong — I wrote "nada fora dele" and there are two consumers outside the hook. Checking what the cure
-  does to each before I correct it:
-
-  Ran 1 shell command
-
-● backlog_estado.py requires ≥6 cells and writes c[3] — my 5-column rows give 7 and put the estado exactly there, so the canonical writer
-  can drive them. Now correcting the false census in my own commit message (not pushed, so amend is the clean fix):
+● That output is the raw transcript, not a report. Extracting the agent's final text:
 
   Ran 1 shell command
 
-● Now fixing O171's PRONTO — it prescribed a money act, and the wiring says the single writer may close it by itself — and adding O175 with
-  the corrected facts:
+● aa14 closed (10832b45 + d36ae038), and it touched turnos.py:949 — the fourth raia on the file O142 cured. Now the self-containment check
+  the advisor asked for:
 
-  Correct O171 and add O175
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/BACKLOG.md'
-     t=open(p,encoding='utf-8').read()
-     # --- O171: o PRONTO estava errado. Nao se compra um ato de dinheiro antes de
-     # perguntar ao ESCRITOR UNICO se ele mesmo fecha.
-     velho_pronto = ("| achado 04/10 02:0x, **ato PROPRIO** -- o DIF…
+  Ran 1 shell command
 
-✢ Incubating… (4h 4m 12s · ↓ 569.0k tokens)
+● Fully self-contained: 42 lines, no source, no $0-relative paths. The patched-copy cure works. Reading the exact block I need to replace:
+
+  Ran 1 shell command
+
+● Both MORDE blocks drive the global lock — and the second can pass for the wrong reason (rc=75 because the raia holds it, not because its
+  own holder does), which is the same absence-of-signal family. Building a bounded RED/GREEN demo rather than running the old selo now (its
+  holder has --espera 3600 and would hang):
+
+● Running 1 shell command…
+
+✢ Incubating… (4h 9m 22s · ↓ 582.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Running ruff on contexto.py                                                             2h 45m 42s · ↓ 154.6k tokens
-  ◯ general-purpose  Appending lock-order census to msg_c2.txt                                               2h 14m 34s · ↓ 142.0k tokens
+  ◯ general-purpose  Reading C4 vinculo write sites in rejuncao.py                                           2h 50m 51s · ↓ 162.0k tokens
+  ◯ general-purpose  Committing chamados/models.py C2 cure                                                   2h 19m 38s · ↓ 165.7k tokens
   ⧉  index
 ```
