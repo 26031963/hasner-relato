@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:48:01.**
+**Medido em 04/10/2026 18:53:05.**
 
 | | |
 |---|---|
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 3 shell commands
-
-● --only é o campo dos labels — os módulos vão por ele:
-
-  Ran 1 shell command
-
-● 32 OK. Agora o RED do teto — com backup e restauração no mesmo ato, para a cópia nunca ficar com a linha falsa:
-
-  Ran 2 shell commands
-
-● Teto morde nos dois valores medidos (14 not <= 13, 116 not <= 115) e a cópia voltou com md5 idêntico. Agora os vizinhos — ponto + core
-  inteiros na raia:
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● O ponto 1 é correto e é lei da casa — medi o RED com uma réplica do helper, não com o selo. "NAO reconstruir em sonda propria a chamada
-  que o sistema faz." Enquanto a suíte roda, as verificações que não tocam a cópia:
-
-  Ran 2 shell commands
-
-● cert-ast não toca os três arquivos — a cadeia do teto é só k8t→k5, 13/115 segue valendo no merge. K5-ENCERRADA não está no TICKETS, então
-  o id sai dos colchetes. E a cópia tem 6 arquivos root dentro de .ruff_cache (classe O192, gitignored — não entra no commit, mas o rm -rf
   da limpeza vai falhar). Suíte:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Jitterbugging… (6h 36m 3s · ↓ 797.9k tokens)
+● Background command "Rodar ponto e core inteiros na raia" completed (exit code 0)
+
+  Ran 1 shell command
+
+● 4154 testes OK em ponto+core na raia — e nenhum vizinho ficou vermelho por ponto/views.py ter saído da exclusão da família fechamento.
+  Agora o RED pelo selo real, não por réplica:
+
+  Ran 1 shell command
+
+● RED 1 morde pelo teste real. RED 2 não imprimiu veredito — vejo por quê antes de afirmar:
+
+  Ran 1 shell command
+
+● Resolvido: 13 testes antes → 16 agora (3 novos), e 16+16 dos contratos = os 32 do GREEN. E o RED 2 tem uma causa que muda como se lê o
+  assertIsNotNone — ponto/urls.py:49 é uma guarda mais forte e mais cedo. Registro isso no próprio selo:
+
+● Registrar o RED medido no selo e reconferir
+  ⎿  $ cd /home/ronald/wt-k5/app && python3 - <<'PY'
+     import pathlib
+     p = pathlib.Path('ponto/tests/test_k8_tela_abre_na_competencia.py')
+     t = p.read_text(encoding='utf-8')
+     alvo = """ def test_MORDE_lista_ausencias_nao_le_fechamento(self):
+     vistos = _nomes_da_funcao("""
+     novo = """ # RED MEDIDO pelo teste RE…
+
+✢ Jitterbugging… (6h 41m 7s · ↓ 802.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
