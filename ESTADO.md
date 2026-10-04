@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:44:01.**
+**Medido em 03/10/2026 21:49:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos` |
+| `HEAD` local | `aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **16** |
+| commits a subir (`ahead`) | **17** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados
 c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos
 e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio
 282c1670 [O142-AVAL] O aval da fatia de dinheiro entra na esteira, e o ponteiro do dossie NAO confere
 77bd2096 [O154] O censo da busca encolhe 29 -> 28, e quem o tinha deixado velho fui eu
-9085f973 [O122] As tres etapas da raia ganham linha na tabela, e o smoke da etapa 0 NASCE porque a lei o mandou
 ```
 
 ## `git status --short`
@@ -41,6 +41,7 @@ e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas q
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,36 +113,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● O selo o131 não conflita (ele proíbe query nova na casca e no lote; a cura é predicado puro) e os chamadores de 2 argumentos passam por
+  escala_vigente, que desce aqui. Monto em cópia do HEAD:
+
+  Ran 3 shell commands
+
+● GREEN: 77 testes OK — as 2 que mordiam passaram, e os 11 vizinhos (o131, precedência-vínculo-encerrado, O85, chokepoint,
+  queries-invariantes) ficaram verdes. Antes de tocar a árvore, fecho o papel do marco e empurro:
+
   Ran 1 shell command
 
-● Suite cheia: Ran 9552 tests in 1125.758s / OK (skipped=42), 0 falhas nomeadas. Todos os portões medidos verdes. O ff e o deploy vão no
-  mesmo ato, sem pipe:
+● O docker -v de arquivo único criou o alvo vazio na árvore (o /app É o bind-mount) — então o arquivo já existe de fato. Confiro e aplico
+  cura + selo no ato do commit:
 
-  Merged merge-ui-o122
+  Committed aa2550b0, ran 5 shell commands
 
-● Pousado e no ar. Agora a prova de porta (somente GET) e os selos de host em main:
+● Background command "Empurrar o marco com a régua do pre-push" completed (exit code 0)
 
-  Searched for 1 pattern, ran 2 shell commands
+  Read 1 file
 
-● 58/58 verdes, as três rotas da fatia em 302. Agora o RELATO com a hora medida:
+● O push foi barrado antes da suíte, pela régua de tickets: o placar do topo não bate com o mundo. A causa em uma linha — o rodapé do
+  TICKETS ficou com o push velho e sem o carimbo da régua. Curo pela ferramenta que ele mesmo indica:
 
-  Ran 2 shell commands
+  Ran 6 shell commands
 
-● O RELATO é mais novo no topo — eu anexei no rodapé. Corrijo o lugar e atualizo o topo, que é contrato com o hook:
+● A causa em uma linha: O142 e O142-AVAL estavam citados em commit sem linha no TICKETS — a régua cobra a linha no mesmo commit que abre a
+  fatia. Abro as duas:
 
-● Conferir o que falta empurrar e de quem é
-  ⎿  $ cd /home/ronald/saas-hasner && git fetch --quiet origin 2>&1 | tail -3; echo "=== origin/main..HEAD (o que eu empurraria) ===" &&
-     git log --oneline origin/main..HEAD && echo && echo "=== autor de cada um ===" && git log --format='%h %an | %s' origin/main..HEAD
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmho0201h.output (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b8orfjafj.output (22 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byymazp0a.output (63 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o154/relato.md (36
-     lines)
+  Running 1 shell command…
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-✢ Bloviating… (21h 30m 30s · ↓ 2.9m tokens · thought for 6s)
+· Bloviating… (21h 36m 0s · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
