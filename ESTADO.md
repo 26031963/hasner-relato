@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 07:27:31.**
+**Medido em 04/10/2026 07:33:01.**
 
 | | |
 |---|---|
@@ -112,21 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Committed 15f1d7e0, ran 4 shell commands
-
-● Documentos no main. Push do marco — quatro commits, um push:
-
-  Ran 2 shell commands
-
-● Monitor(push do marco (pre-push roda os dois runners))
-  ⎿  Monitor started · task bih5omrpr · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-● Push em curso com o pre-push rodando os dois runners. Nada será commitado enquanto ele estiver de pé.
-
-  Estado até aqui:
-
   - Inscrição da bolha curada na origem — 6a9222f8 na raia. Os seis módulos que a raia declarou porta de PerguntaDisputa em core/portas.py
     ganharam cabeçalho @bolha/@entra/@sai/@invariante. Pela função real: universo=61, sem_contrato=44 (= o passivo inteiro, nada além),
     NOVAS=0, faltando() vazio nos seis. Passivo não engordou de 44 para 50 — ele é para dívida antiga e só encolhe.
@@ -141,13 +126,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ✻ Cooked for 1m 22s · done 7:26 AM · 2 shells, 1 monitor still running
 
+❯ segue a fila; PAREI so em lei ou !
+
+● Push em voo; enquanto ele corre, pego o próximo da fila 1 — trabalho de leitura, sem escrita em árvore e sem commit.
+
+● Ask the hook which item is next in the live order
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY' 2>&1 | head -30
+     import importlib.util
+     spec = importlib.util.spec_from_file_location('h', 'bin/hook_stop_fila1.py')
+     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+     import inspect
+     print(inspect.signature(m._proximo_da_fila))
+     prin…
+
+✢ Spelunking… (21s · ↓ 1.0k tokens · thinking)
+
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
-                                                                                                                    8% until auto-compact
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
