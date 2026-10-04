@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:58:31.**
+**Medido em 04/10/2026 19:03:57.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-prime
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Committed 3dfb8214, ran 3 shell commands
-
-● Commit 3dfb8214 na raia (4 arquivos, 159+/5-). Antes de mergear, confiro o portão do deploy e se as raias tocam o arquivo sujo:
-
-  Ran 1 shell command
-
-● app/docs/RELATO.md apareceu modificado depois do meu commit — vejo o que entrou antes de qualquer merge:
+● Confirmado: em worktree .git é arquivo, então $R/.git/hooks/pre-commit não resolve — RED falso em qualquer cópia. É bug provado no
+  caminho da fatia. Censo antes da cura:
 
   Ran 1 shell command
 
-● É o vigia da esteira anexando o ALARME no fim do arquivo (minhas seções ficam no topo). Vejo se as raias tocam RELATO — se não tocarem, o
-  merge nem olha:
+● A forma certa já existe na casa (git-common-dir, em dois scripts) e quatro leitores não migraram. Mas só um ficou vermelho — meço por que
+  os outros três calaram:
+
+  Ran 2 shell commands
+
+● Background command "Rodar o portao completo contra a copia de pouso" completed (exit code 0)
+
+● Três coisas reais: 8 selos de host vermelhos na cópia, a suíte não rodou (rc=125, sem uma linha de teste) e o núcleo ficou vermelho com 1
+  falha — e ele agora está no portão do push. Separo falso de real:
 
   Ran 1 shell command
 
-● Todas as três tocam RELATO.md e o main o tem sujo — e as três também tocam os docs gerados que meu 15bc08ff mexeu, então vai haver
-  conflito. Pela lei, merge em cópia e só então a árvore. Primeiro limpo a linha do vigia:
+● Seis são artefato de cópia (a régua roda selos de host na árvore viva). Dois estão vermelhos no main também — e esses bloqueiam o push.
+  Vejo o que acusam:
 
-  Committed 263535a7
+  Ran 1 shell command
 
-● Árvore limpa. Monto a cópia de pouso a partir do main:
+● Ambos nascem do meu próprio commit de registro, e os dois estão certos. Antes de curá-los, os dois problemas de código — a suíte não
+  rodou e o núcleo tem 1 falha:
 
-  Ran 4 shell commands
+  Identificar a falha do nucleo
+  ⎿  $ cd /home/ronald/wt-pousos && echo "=== NUCLEO: qual teste ==="; bash bin/suite_nucleo.sh --dir /home/ronald/wt-pousos --espera 300
+     2>&1 | grep -B2 -A14 "FAIL\|Error" | head -40
 
-● HEAD é estritamente mais novo nas duas linhas (já cita be19b202 e o desbloqueio dos passos 5-6 pela lei das 14:xx). Resolvo por HEAD e o
-  número do placar volta medido na regeneração final:
-
-● Running 1 shell command…
-
-✢ Jitterbugging… (6h 46m 33s · ↓ 815.1k tokens)
+* Jitterbugging… (6h 51m 59s · ↓ 831.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
