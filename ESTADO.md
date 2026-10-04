@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 14:30:46.**
+**Medido em 04/10/2026 14:35:46.**
 
 | | |
 |---|---|
@@ -112,11 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  === SMOKE CHAMADOS === é prosa do log e já tinha disparado um esperador frouxo (o furo que a memória espera-casa-com-prosa-do-log
-  nomeia). Aguardando o veredito para então fazer o ff + deploy.sh --sem-migrate sem nada no meio.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
   PALAVRA (item 1 dos DOSSIES, aval
 
   Ran 11 shell commands
@@ -138,12 +133,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
   PALAVRA (item 1 dos DOSSIES, aval
 
-  Tirar do HEAD o arquivo do selo de certificacao
-  ⎿  $ cd /home/ronald/saas-hasner && git show HEAD:mensageria/nucleo/tests/test_ferramenta_certificacao.py | cat -n
+  Ran 4 shell commands
 
-✽ Jitterbugging… (2h 18m 48s · ↓ 309.3k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Medir se a janela de auth morde no commit do O135
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,60p' bin/deploy_agendado.sh
+
+✽ Jitterbugging… (2h 23m 48s · ↓ 320.2k tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
