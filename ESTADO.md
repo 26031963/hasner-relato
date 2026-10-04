@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 14:46:01.**
+**Medido em 04/10/2026 14:51:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `1cde743a LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push` |
+| `HEAD` local | `50333326 O135: o ! vai para a mesa e o corte sai de "recebido" -- registro do dia, commitado onde PROD le` |
 | `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+50333326 O135: o ! vai para a mesa e o corte sai de "recebido" -- registro do dia, commitado onde PROD le
 1cde743a LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push
 e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero
 8892fc31 CELULA-TURNO-FECHA passo 3: o contador do dia sem par nao predica mais no numero que a cura apaga
 98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto
-d1689254 Merge branch 'raia-r4' into raia-merge
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -117,16 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
-  PALAVRA (item 1 dos DOSSIES, aval
-
-  Ran 4 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 21 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
   ⎿  Referenced file docs/PROMPTS.md
   ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
@@ -145,8 +130,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 7 shell commands
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Jitterbugging… (2h 34m 3s · ↓ 341.4k tokens)
+● Inspecionar os conflitos
+  ⎿  $ cd /home/ronald/wt-teto20
+     echo "##### CORTES.json #####"
+     grep -n '^<<<<<<<\|^=======\|^>>>>>>>' app/docs/CORTES.json
+     awk '/^<<<<<<</,/^>>>>>>>/' app/docs/CORTES.json | cut -c1-220
+     echo; echo "##### RELATO.md marcadores #####"
+     grep -n '^<<<<<<<\|^=======\|^>>>>>>>' app/docs/RELATO.md
+     echo; echo "#…
+
+· Jitterbugging… (2h 39m 33s · ↓ 357.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
