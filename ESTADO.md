@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:16:31.**
+**Medido em 04/10/2026 17:22:01.**
 
 | | |
 |---|---|
@@ -116,38 +116,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Commit do marco: 226673b5. Agora a régua inteira (proibido pular) — ela leva ~20 min pela suite:
+● Entradas de root criadas hoje, depois da cura de 03/10. Isso decide o tamanho do O192 — vejo o que são:
+
+  Ran 1 shell command
+
+● Um dos dois é inequívoco: mensageria/nucleo/__pycache__ de root, e __pycache__ não está entre os três tmpfs. Confiro a porta antes de
+  fechar a redação do O192:
+
+  Ran 1 shell command
+
+● Agora os dois lados estão medidos: bin/pre-push.sh:137 passa PYTHONDONTWRITEBYTECODE=1 só para app, e a wt-k5 tem .ruff_cache com arquivo
+  real de root escrito hoje 16:48. Aperto o O192:
+
+  Ran 1 shell command
+
+● Enquanto a suite roda, escrevo o achado da limpeza no RELATO como seção própria (ele não é parte da história do O135):
 
   Ran 2 shell commands
 
-● A régua está viva (pid 2371860; o exit 1 foi o sleep bloqueado). Espero por arquivo, nunca por pgrep:
+● Espero a régua. Enquanto isso, preparo a O191 só com leitura — localizo os 15 dia-colab do DIFF das 11:07:
 
   Ran 3 shell commands
 
-● Enquanto ela corre eu não toco a árvore — o impressao_digital dela recusa o carimbo se o código mudar no meio. Uso o tempo para revisar o
-  plano do push:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● O advisor achou uma contradição real no topo. Primeiro, leitura só (não toca a impressão digital):
+● Os insumos da O191 estão localizados (os 6 que trocam, com real=, em o189_ata_zero_v3), mas a condição de entrada pede sonda na sombra —
+  depois do push. Confiro quem cobra o placar dos tickets, para o push não ser surpreendido:
 
   Ran 2 shell commands
 
-● Docs não entram na impressão digital (só *.py e *.html), e tickets_placar não está no caminho do push. Então curo a contradição do topo
-  agora:
+●
 
-  Ran 3 shell commands
-
-● Alcance do push conferido: 9 commits, nenhum do fabricante, HEAD..origin/main vazio (ff puro). Espero o veredito da régua:
-
-● Progresso da regua
-  ⎿  $ cd /home/ronald/saas-hasner && cat logs/regua_o135_marco_20261004.out; echo "--- suite log ---"; tail -3 /tmp/regua_171324.log
-     2>/dev/null
-
-✢ Jitterbugging… (5h 4m 33s · ↓ 679.8k tokens)
+· Jitterbugging… (5h 10m 3s · ↓ 700.2k tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
