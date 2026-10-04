@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:66 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:05:45.**
+**Medido em 04/10/2026 17:11:01.**
 
 | | |
 |---|---|
@@ -45,6 +45,7 @@ fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-prime
  M app/docs/CORTES.json
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -120,38 +121,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Selo verde (o vermelho da régua era de antes de 50333326). Agora a escrituração — os dois JSON pelos escritores canônicos:
-
-  Ran 1 shell command
-
-● Diffs mínimos — as duas formas canônicas estavam certas. Regenero os dois gerados:
-
-  Ran 1 shell command
-
-● O AVAIS caiu de 7 para 6. Antes de commitar, vejo o que o pop do stash e o vigia deixaram no RELATO (214 linhas não é apende de vigia):
-
-  Ran 1 shell command
-
-● Isso é a minha própria seção do cert-ast, que estava no stash. Agora a célula do O135 no BACKLOG (teto de 300 caracteres, sem |):
-
-  Ran 2 shell commands
-
-● 294. Agora o RELATO do pouso e os prompts — PROMPT-NAO-SE-REPETE cobra linha para cada um:
-
-  Ran 3 shell commands
-
 ● A L-102 já tem linha — e a lei nova altera o rodapé dela (o número SAI) e acrescenta uma regra nova. Registro os dois prompts primeiro:
 
   Ran 1 shell command
 
 ● Agora a L-102 alterada e a L-103 nova. Vejo as colunas da tabela:
 
-● Colunas da tabela de leis
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '24,25p' app/docs/LEIS.md
+  Ran 4 shell commands
 
-✶ Jitterbugging… (4h 53m 48s · ↓ 657.2k tokens)
+● Agora o topo do RELATO — ele é contrato com o hook, então vejo o que está lá antes de escrever:
+
+  Ran 1 shell command
+
+● O topo diz "LEI NA MESA" e a lei chegou. Troco o rótulo e escrevo a resposta, sem apagar os números medidos:
+
+  Read 1 file, ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3wsnx6z5.output (11 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output (10 lines)
+  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Aquela task é de 02/10 (transcript cru, outro assunto). Sigo no marco. Vejo onde a primeira seção do RELATO começa, para a do O135 entrar
+  em cima (o arquivo é mais-novo-primeiro):
+
+● Localizar a primeira secao do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n '^## ' app/docs/RELATO.md | head -8 && echo '--- topo linha 1-8 ---' && sed -n '1,8p'
+     app/docs/RELATO.md
+
+· Jitterbugging… (4h 59m 3s · ↓ 663.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
