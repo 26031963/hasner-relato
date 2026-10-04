@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:53 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:58 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:24:01.**
+**Medido em 04/10/2026 15:29:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no cha
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,36 +115,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  diagrama de prod e respondeu "sem mudança". Árvore viva conferida depois: intacta.
 
-  4. Arrumação conservadora: removi só as duas cópias limpas (wt-merge, wt-k8). wt-lps, wt-sj, wt-antes e wt-b1t têm trabalho não commitado
-  — entre ele o patch do passo 5 que a pergunta de LEI está segurando —, então salvei os diffs em logs/copias_sujas/ e não removi. O que
-  estava só no scratchpad de sessão (selo de certificação + item SUITE-DO-NUCLEO-ENTRA-NA-REGUA) foi para logs/construido_sem_pousar/.
+● blocks: 7 — já passou do TETO=5, e só o _tem_trabalho_em_curso() segura. Preciso confirmar que ele VÊ a suite do k8t:
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
-  PALAVRA (item 1 dos DOSSIES, aval
+  Ran 2 shell commands
+
+● O hook vê a suite (manage.py test no argv, pela trava, cpuset 4-7) — então os 7 blocks não liberam falso; o TETO está suspenso por fato,
+  não por sorte. E o selo test_hook_nao_cobra_congelado.sh:107 exige que o marcador concorde com a resposta do hook, então mover os três
+  registros juntos é obrigação, não arrumação:
 
   Ran 3 shell commands
 
-● O hook está certo em cobrar: o item segue ABERTO. Mas os passos 5-6 dependem da lei dele — e por lei (PAREI-DE-LEI-NAO-DEVOLVE-TURNO)
-  isso não devolve turno, segue o próximo item. O que faltava era o BACKLOG declarar isso:
+● Agora o ensaio do pouso com a sujeira NOVA (ponto 5) — numa cópia descartável, nunca na árvore viva:
 
-  Ler veredito da suite k8t e shas
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== sentinela/task ==="; tail -5
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output 2>/dev/null; echo "=== suite
-     k8t ==="; ls -l logs/k8t_suite_cheia_20261004.out 2>/dev/null; grep -nE '^(Ran |OK|FAILED|rc…
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
-  ⎿  Read ../cortes.alarme.pausado (33 lines)
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Um achado real no ensaio: existe um stash@{0} antigo no repo (o stash é compartilhado entre worktrees). Se às 06:05 não houver sujeira, o
+  stash push não cria entrada e o pop traria esse stash velho para a árvore. Vou ver se a esteira se protege:
 
-● Task "Esperar pelo arquivo-sentinela da suite cheia" still running in background
+  Ran 2 shell commands
 
-✢ Jitterbugging… (3h 12m 3s · ↓ 414.7k tokens)
+● A guarda SUJO já existe — o stash velho está seguro. Mas o refs/stash é do repo, e pop tira sempre o {0}: se outra raia empilhar um stash
+  entre o push e o pop, a esteira popa o errado. Guarda mais restritiva (recusa em vez de popar às cegas):
+
+  Ran 3 shell commands
+
+● Esteira passa as guardas 1 e 2, para na 3, nada tocado. Agora o registro:
+
+● Running 1 shell command…
+
+✢ Jitterbugging… (3h 17m 33s · ↓ 427.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
