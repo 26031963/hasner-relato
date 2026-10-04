@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:35:45.**
+**Medido em 04/10/2026 10:40:45.**
 
 | | |
 |---|---|
@@ -111,15 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/baue99jb9.output (44 lines)
-  ⎿  Referenced file ponto/views.py
-  ⎿  Read ponto/janelas.py (109 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
 
 ● Task "Empurrar o marco (um push), com a regua no pre-push" still running in background
 
@@ -136,13 +127,22 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Empurrar o marco (um push), com a regua no pre-push" completed (exit code 0)
 
-  Achar a funcao e os chamadores da lavra da ata
-  ⎿  $ sed -n '230,285p' ponto/services/cartorio.py && echo "=== quem chama (grade do montador) ===" && grep -rn
-     "montar_grade_prevista_periodo_por_turno" --include=*.py . | grep -v "/tests/\|test_" | sed 's/^\.\///'
+  Searched for 3 patterns, read 1 file, ran 9 shell commands
 
-· Pouncing… (1h 35m 45s · ↓ 159.5k tokens)
+● Push landed: origin/main == 98d9861e, régua Ran 9590 OK (skipped=42) + control-plane Ran 22 OK. Marco fechado.
+
+  Agora o passo 3. Primeiro a medição do delta das duas predicadas (ainda sem tocar código), que é o que desenha o RED:
+
+  Escrever a sonda do delta das predicadas
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/predicada_bordas_20261004.py <<'PY'
+     # CELULA-TURNO-FECHA, resultado (3): o DELTA entre a predicada de HOJE e a que NAO depende da soma propria.
+     # Hoje: `minutos_realizados > 0 or orfas` -- e `minutos_realizados` do dia da grade vem de
+     # `CelulaDia.…
+
+· Compacting conversation… (1h 40m 45s · ↓ 166.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
