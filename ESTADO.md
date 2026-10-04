@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:53:05.**
+**Medido em 04/10/2026 18:58:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `15bc08ff registro: o corte do MES CIVIL ratifica a raia, e o teto dos dois contratos ficou 6 acima do medido NAS DUAS` |
+| `HEAD` local | `263535a7 vigia da esteira: a linha das 18:35 entra para a arvore ficar limpa antes dos tres pousos` |
 | `origin/main` | `5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,18 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+263535a7 vigia da esteira: a linha das 18:35 entra para a arvore ficar limpa antes dos tres pousos
 15bc08ff registro: o corte do MES CIVIL ratifica a raia, e o teto dos dois contratos ficou 6 acima do medido NAS DUAS
 5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou
 fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-primeiro e a copia tinha invertido
 738b779f reconciliacao: o registro da ORDEM VIVA (31558c3e) entra no teto20 para o ff seguir sendo ff
-31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,36 +113,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  da limpeza vai falhar). Suíte:
+  Committed 3dfb8214, ran 3 shell commands
+
+● Commit 3dfb8214 na raia (4 arquivos, 159+/5-). Antes de mergear, confiro o portão do deploy e se as raias tocam o arquivo sujo:
 
   Ran 1 shell command
 
-● Background command "Rodar ponto e core inteiros na raia" completed (exit code 0)
+● app/docs/RELATO.md apareceu modificado depois do meu commit — vejo o que entrou antes de qualquer merge:
 
   Ran 1 shell command
 
-● 4154 testes OK em ponto+core na raia — e nenhum vizinho ficou vermelho por ponto/views.py ter saído da exclusão da família fechamento.
-  Agora o RED pelo selo real, não por réplica:
+● É o vigia da esteira anexando o ALARME no fim do arquivo (minhas seções ficam no topo). Vejo se as raias tocam RELATO — se não tocarem, o
+  merge nem olha:
 
   Ran 1 shell command
 
-● RED 1 morde pelo teste real. RED 2 não imprimiu veredito — vejo por quê antes de afirmar:
+● Todas as três tocam RELATO.md e o main o tem sujo — e as três também tocam os docs gerados que meu 15bc08ff mexeu, então vai haver
+  conflito. Pela lei, merge em cópia e só então a árvore. Primeiro limpo a linha do vigia:
 
-  Ran 1 shell command
+  Committed 263535a7
 
-● Resolvido: 13 testes antes → 16 agora (3 novos), e 16+16 dos contratos = os 32 do GREEN. E o RED 2 tem uma causa que muda como se lê o
-  assertIsNotNone — ponto/urls.py:49 é uma guarda mais forte e mais cedo. Registro isso no próprio selo:
+● Árvore limpa. Monto a cópia de pouso a partir do main:
 
-● Registrar o RED medido no selo e reconferir
-  ⎿  $ cd /home/ronald/wt-k5/app && python3 - <<'PY'
-     import pathlib
-     p = pathlib.Path('ponto/tests/test_k8_tela_abre_na_competencia.py')
-     t = p.read_text(encoding='utf-8')
-     alvo = """ def test_MORDE_lista_ausencias_nao_le_fechamento(self):
-     vistos = _nomes_da_funcao("""
-     novo = """ # RED MEDIDO pelo teste RE…
+  Ran 4 shell commands
 
-✢ Jitterbugging… (6h 41m 7s · ↓ 802.8k tokens)
+● HEAD é estritamente mais novo nas duas linhas (já cita be19b202 e o desbloqueio dos passos 5-6 pela lei das 14:xx). Resolvo por HEAD e o
+  número do placar volta medido na regeneração final:
+
+● Running 1 shell command…
+
+✢ Jitterbugging… (6h 46m 33s · ↓ 815.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
