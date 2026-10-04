@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:10:45.**
+**Medido em 04/10/2026 18:15:46.**
 
 | | |
 |---|---|
@@ -116,17 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O corte e os avais ainda não estão registrados. Vejo a estrutura de seções do PROMPTS e o selo que a cobra:
-
-  Ran 5 shell commands
-
-● Tenho a forma de todos os registros. Chamo o revisor antes de escrever, porque a sequência (registro no main + construção na raia) é a
-  parte que erra caro:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
 ● Quatro checagens antes de escrever, todas baratas:
 
@@ -140,12 +129,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● k8-t20 também deixou o teto em 19 — o afrouxamento é das DUAS raias, não só da k5. Meço os três números por raia com o contador AST para
   a anotação sair exata:
 
-  Contagem AST por raia e leitura do teste do teto
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for
-     d in saas-hasner wt-k8t wt-k5; do echo "--- $d"; python3 $S/contar.py /home/ronald/$d/app/core/juizes.py | grep -E "fechamento|tela";
-     done; echo; echo "=== como o te…
+  Ran 2 shell commands
 
-· Jitterbugging… (5h 58m 47s · ↓ 752.8k tokens · deep in thought)
+● pend = PENDENTES[FAMILIA] sem filtro — a contagem AST é len(pend). Os três números, por raia: main 19/(9,0,1,9)/117 · k8-t20
+  15/(8,0,1,6)/117 · k5 13/(8,0,1,4)/115. O afrouxamento do teto é das duas raias. Vejo o campo onde antes de escrever o CORTES.json:
+
+  Ran 1 shell command
+
+● gerar_cortes.py sem flag escreve o CORTES.md e o RELATO. Confiro que ele só troca o bloco entre marcadores antes de deixá-lo passar por
+  cima do que eu vou escrever:
+
+  Ran 1 shell command
+
+● Tudo conferido. Escrevo os registros no main — o RELATO é mais-novo-primeiro, então acho o ponto de inserção:
+
+● Running 1 shell command…
+
+✻ Jitterbugging… (6h 3m 48s · ↓ 758.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
