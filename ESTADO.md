@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:00:46.**
+**Medido em 03/10/2026 21:06:01.**
 
 | | |
 |---|---|
@@ -111,40 +111,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-   a ATA ja gravada carrega a resposta velha: o cartorio lavra minutos_realizados (ponto/services/cartorio.py ~452, ~262) via
-  escala/utils.py ~1309 em janela estreita e so rejulga com insumo mudado. Censo das atas divergentes + relavratura DECLARADA com DIFF.
-   o dinheiro se move sozinho: recalcular_por_evento (ponto/services/fechamento.py ~1011) roda em toda batida, HE, validacao e vinculo --
-  a competencia 10 muda na primeira batida apos o deploy. DIFF de frota e reversao em logs/ ANTES do deploy.
-   cadeia: escala/utils.py ~1329 -> dia_pago.py ~314 -> fechamento.py ~529-533. Mudam em recalculo: FechamentoMensal.minutos_realizados,
-  DiaPago.minutos_realizados, motivos_espelho e prontidao (export.py ~637/665), horas_folga_trabalhada (fechamento.py ~455),
-  TurnoMaterializado. Horas, HE, noturno e banco NAO mudam. O motor esta fora do defeito (motor_calculo_v2.py ~739-753).
-   a 09 EXPORTADA fica intacta pela guarda CompetenciaExportada (fechamento.py ~70-80); nenhum cron a atravessa (crons.py ~890-896). 22
-  dos 33 dia-colab estao nela: saem como lista, nao como apply.
-   a cura muda tambem o ramo simples: dia fora da vigencia de vinculo unico perde os marcos (~1253-1264; col882) -- o DIFF lista esses
-  dia-colab, que pela lei de hoje sao dono CADASTRO.
 
-  SELOS DE QUERY NO CAMINHO, medir antes e depois: ponto/tests/test_selo_chokepoint_escrita.py ~95 (24/24, folga zero);
-  core/tests/test_selo_performance.py ~195-213 (calendario e espelho); chamados/tests/test_selo_teto_modal.py ~181.
-  CHAMADORES: 37 sitios diretos -- 3 persistidos (escala/utils.py ~1309, esmeril_espelho.py ~65, nucleo.py ~43), 15 de cobranca, o resto
-  tela. Janela estreita: chamados/juizes.py ~340 e ~1251, batidas_do_dia_turno, recompute_turnos.
+● Aval recebido — O142, fatia de dinheiro, com dossiê por fora. A pista de teste está ocupada pela suite do merge, então faço agora o que a
+  PROMPT-NAO-SE-REPETE exige no mesmo turno (registro + item de obra) e leio o dossiê. Como o --ff-only morre se o HEAD do main andar, o
+  registro vai na cópia, e desce com o merge.
 
-  NAO VERIFICADO POR FORA, e seu: os vinculos reais do col736 e qual das tres formas gera o 9 x 26; a contagem real de queries apos a
-  cura; se o cartorio reescreve ata de dia da 09; se minutos_realizados/motivos_espelho mudam quem entra no TXT.
+  Ran 1 shell command
 
-  PROIBIDO: deploy antes do DIFF de frota publicado; tocar a 09 exportada; mudar tolerancia ou tirar caso da lista para o numero cair;
-  fallback, item proprio depois, autoridade nova.
-  PRONTO: RED nomeados vermelhos antes e verdes depois; DRY dos dois crons; DIFF de frota da 10 com reversao; censo e relavratura das
-  atas; selos de query no mesmo numero ou menor; a palavra "sem turno pareado" recuando para os 15; e so entao celula e turno verdes na
-  matriz, placar pela funcao real. Sem isso = INCOMPLETO com a lista.
-  LEI-AKITA: origem=ponto/turnos.py::turnos_do_colab, testemunha=vinculo_do_dia e a ata, RED=invariancia por janela, quem-mais-le=37
-  chamadores classificados, juizes novos=0.
-  LINHA HAIKU: (a) contador "dias cujo turno muda com a janela" (esperado 0) no payload com rotulo de admin; (b) golden: "o turno do
-  col736 em 01/09 e o mesmo na competencia e no mes?" esperado via ferramentas; (c) degrau: leitura.
-  Segue a fila; PAREI so em lei ou !.
-  ctrl+x ctrl+s to send now
+● O SHA que o aval cita não é o dossiê: 29f28708 mexe uma linha de TICKETS.md (rodapé de push). Procuro o dossiê real em todas as refs e
+  worktrees antes de concluir.
+
+  Ran 1 shell command
+
+● Background command "Suite na árvore mergeada" completed (exit code 0)
+
+● A suite acabou. Leio o veredito antes de qualquer outra coisa.
+
+  Ran 1 shell command
+
+● Uma falha — e não é o vermelho conhecido do relógio. test_o_censo_acompanha_quem_ja_migrou é contrato que ENUMERA, e eu mexi na busca.
+  Leio o detalhe.
+
+  Ran 2 shell commands
+
+● O contrato está CERTO e a regressão é minha: a cura O154 tirou um dos dois sítios de busca crua de escala/views.py, o arquivo encolheu de
+  2 para 1, e o censo não acompanhou. Isso está vermelho no main agora — LEI-AKITA 6, cura na hora.
+
+● Ler o contrato do censo de busca
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,80p' app/core/tests/test_contract_busca.py
+
+✢ Bloviating… (20h 52m 30s · ↓ 2.9m tokens · thinking)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
