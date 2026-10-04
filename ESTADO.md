@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:37:01.**
+**Medido em 03/10/2026 22:42:08.**
 
 | | |
 |---|---|
@@ -113,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Ponto 1 é exatamente o buraco da minha própria família: fro_head.txt e fro_cura.txt têm o mesmo tamanho em bytes, e é isso que uma rodada
+  sem a cura montada também produz. Censo de hunks primeiro:
 
-● O zero mordeu, e mordeu na fonte: turnos_do_colab = 0 chamadas no caminho do dinheiro, com parear_turnos = 5 / turnos_de_batidas = 3 /
-  papel = 2. Não é silêncio — é prova de que o dinheiro pega geometria por outra porta (turnos_via_autoridade, motor_calculo_v2.py:388).
+  Ran 2 shell commands
 
-  Mas isso abre a pergunta que decide a fatia. Veja os números de col152: 22 dias previstos, 11.760 min previstos, 5.243 realizados, saldo
-  −114,5 h. Se os 6 dias que a cura entrega (~11,5 h cada) estivessem no dinheiro, não faltariam ~109 h:
+● Todos os três hunks estão em turnos_do_colab (_marcos_de é aninhada, indentação de 4) + um import copy inerte. A história do mecanismo
+  fecha. Agora a mordida do ponto 1 — provar que o lado "cura" rodou com a cura:
+
+  Ran 2 shell commands
+
+● Enquanto os dois lados rodam, ataco o ponto 2 — a RED da geradora que não discrimina. Preciso ver onde os marcos chegam à foto:
 
   Ran 1 shell command
 
-● O dinheiro dá 87,91 h — nem 4 dias (~46 h) nem 10 (~115 h). Não vou inferir: vou perguntar ao motor quais dias ele contou.
+● O teto só é consultado ao fechar aberto (linhas 567-574 e 628-634) — é por isso que meus gêmeos com par limpo saíram idênticos: par limpo
+  nunca pergunta o previsto. Vou ler o caminho que pergunta:
 
-  Searched for 1 pattern
+  Read 1 file, ran 3 shell commands
 
-● Melhor: capturar a saída de parear_turnos no caminho do dinheiro. É a geometria que o dinheiro realmente usou, lida na autoridade:
+● O md5 mata o risco de falso verde: lado HEAD 119922ee, lado cura c9579ff1 — código diferente, saída igual. Agora a RED da geradora:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● entrada aí é a Batida, não o datetime. Corrijo o leitor (e ele passa a dizer qual dos dois leu, em vez de adivinhar):
+● Antes de recuar para a asserção de dono, há um discriminador mais barato que eu deixei passar: o intervalo declarado nos marcos — ele
+  decide se quatro batidas são um turno ou dois. Vou ver os templates dos gêmeos:
 
-  Ran 2 shell commands
+● Ver os TipoEscala da fixture
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '56,105p'
+     $SP/o142cura/test_o142_turno_invariante_na_janela.py
 
-● O zero está explicado e medido, e explicado pelo lado bom: a geometria que o dinheiro usa já tinha os 10 dias — idêntica à que a cura
-  entrega. Vou gravar isso antes de qualquer outra coisa:
-
-  Ran 2 shell commands
-
-● O RELATO está durável. Antes de ir ao commit+deploy de uma fatia de dinheiro, vou consultar:
-
-● Advising using Fable 5.1
-
-✢ Incubating… (14m 22s · ↓ 37.6k tokens)
+✻ Incubating… (19m 29s · ↓ 46.9k tokens · thinking)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
