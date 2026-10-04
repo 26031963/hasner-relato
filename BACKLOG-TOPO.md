@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**182 obras abertas.**
+**183 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -191,3 +191,4 @@ lista — ela e o que esta EM PE._
 | **O181** | A TRILHA NOMINAL DO O85 E MUDA EM PROD | ABERTA. Dono = ESTRUTURA: o sistema nao  |
 | **O182** | O COMANDO CANONICO DA SEC.3 NAO PASSA PELA TRAVA QUE A PROPRIA SEC.3 EXIGE | em voo |
 | **O183** | O CAMPO `urgencia` DECLARA 4 VALORES E O BANCO TEM 6 -- 494 LINHAS, 468 VIVAS | espera `!` |
+| **O184** | `minutos_previstos_periodo` E CODIGO MORTO COM CERTIDAO, e a docstring dele ENSINA ERRADO | ABERTA. **NAO removida nesta fatia** --  |
