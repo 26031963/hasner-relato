@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:00:45.**
+**Medido em 04/10/2026 12:06:01.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/o134/predicada_bordas_20261004.out (59 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Referenced file ponto/services/dia_pago.py
-  ⎿  Referenced file folha/export.py
-
-● Task "RED e construção do segundo intervalo" completed in background
 
 ● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
 
-● Background command "Rodar o RED do montador na copia" completed (exit code 0)
+● Os 6 casos do selo de intervalo são caracterização de dois defeitos curados (HX-I-NAO-E-PONTA, HX-E-SEM-SAIDA). Memória da casa: "o selo
+  não se apaga: a asserção troca". Vou migrar os âncoras de frota para a autoridade antes de apagar — e checar se os números sobrevivem (se
+  sobreviverem, provam mesma semântica).
 
-  Read 1 file, ran 6 shell commands
+  Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Os três números de frota (243 · 419 · 600) sobreviveram à troca de sujeito — prova de mesma semântica. Agora o selo antigo sai e os
+  pendentes zeram.
 
-  Ran 7 shell commands
+  Ran 3 shell commands
 
-● Agora o patch em escala/utils.py — a soma própria sai, e a lápide fica no lugar dela.
+● Agora as cinco edições de fechamento. O fora_de_autoridade é auto-declaração — a guarda real é o varredor AST, que ao esvaziar o pendente
+  deixa de excluir escala/utils.py inteiro (memória: "pendente abriga o arquivo inteiro").
 
-  Ran 9 shell commands
+  Ran 4 shell commands
 
-● Agora os dois leitores passam a lâmpada em vez do número.
+● 15/22 — o número que o aval nomeou. Agora a prosa do placar.
 
-● Cobertura da suite da autoridade
-  ⎿  $ cd /home/ronald/wt-ct/app && grep -n "def test" ponto/tests/test_realizado_do_dia_autoridade.py
+  Ran 8 shell commands
 
-· Compacting conversation… (3h 0m 45s · ↓ 336.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱ 93%
+● Esmeril limpo (ruff + vulture). Lanço o GREEN cheio e consulto o advisor em paralelo.
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+✢ Pouncing… (3h 6m 1s · ↓ 355.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
