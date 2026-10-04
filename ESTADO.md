@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:44:01.**
+**Medido em 04/10/2026 12:49:31.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Todos os três itens do adendo estão medidos. Publico — a lei no topo, com os números, e a esteira segue.
+  (escala/utils.py::minutos_realizados_do_dia). Nao inventar sitio.
+  2. Selo de host bin/tests/test_lei_protege_sitio.sh: diff do push toca sitio da coluna PROTEGE e nenhum commit do push cita o L-NNN =
+  VERMELHO. Caso que MORDE: commit de teste tocando o sitio da L-102 sem citar -> block; citando -> passa.
+  3. CLAUDE.md sec.6, UMA linha: "antes de montar patch ou prompt, grep do arquivo e da funcao em LEIS.md, DOSSIES.md e CORTES.md; o
+  resultado vai citado com o L-NNN".
+     ITENS IRMAOS, so REGISTRAR no BACKLOG (fila 2, depois do estrutural, sem construir agora):
+      A. MAPA-QUEM-LE: o gerador do MAPA passa a listar, por campo de ata/fechamento, quem LE (hoje so diz quem escreve). Medido:
+  minutos_realizados tem 9 leitores em 5 familias e isso so apareceu em segunda passada.
+      B. SELO-DE-PENDENTE-POR-CHAMADA: o selo de PENDENTES casa frase literal (test_contract_juiz_celula.py ~76-82, turno ~29-35) e aceita
+  renomear como cura; trocar por varredura de chamada (AST).
+     RED: item 2, os dois sentidos.
+     SELO: sitio protegido tocado sem lei citada = 0.
+     PROIBIDO: preencher PROTEGE por deducao; allowlist; pular a regua; construir A ou B antes da matriz fechar.
+     PRONTO: coluna no LEIS.md com a L-102 preenchida, selo com o caso que morde rodado, linha no CLAUDE.md, A e B no BACKLOG -- tudo no
+  commit do marco, sem commit so de docs.
+     LEI-AKITA: origem=LEIS.md, testemunha=diff do push, RED=item 2, quem-mais-le=pre-push, juizes novos=0
+     LINHA HAIKU: (a) contador "leis com sitio protegido N" no payload; (b) golden "que lei protege este arquivo?" via ferramentas; (c)
+  degrau: leitura.
+     Segue a fila; PAREI so em lei ou !
 
-  Committed db8697e1, searched for 1 pattern, ran 8 shell commands
-  ⎿  Read AVAIS.md (23 lines)
-  ⎿  Read ../../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brmd3vry9.output (40
-     lines)
-  ⎿  Read ../../logs/o134/predicada_bordas_20261004.out (59 lines)
-  ⎿  Read HANDOFF-SESSAO.md (45 lines)
-  ⎿  Referenced file ../ponto/services/dia_pago.py
+● Chegou um corte novo — e ele nasceu do meu furo: a L-102 já dizia que trocar minutos_realizados_do_dia esperava lei dele, e eu montei o
+  patch sem ler. Registro e construo. A árvore viva está travada pelo push em voo, então monto em cópia do HEAD.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Conferir se as linhas da tabela tem 6 colunas limpas
+  ⎿  $ cd /home/ronald/saas-hasner && awk 'NR>=15 && /^\| \*\*L-/ { n=gsub(/\|/,"|"); print n }' app/docs/LEIS.md | sort | uniq -c; echo
+     "=== linhas fora do padrao 7 ==="; awk 'NR>=15 && /^\| \*\*L-/ { n=gsub(/\|/,"|"); if(n!=7) print NR": "n" pipes" }' app/docs/LEIS.md;
+     echo "=== o fim do arquivo (ATOS…
 
-● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
-
-● Commit db8697e1 no ar. Empurro o marco e, enquanto a régua roda, me oriento no próximo item sem escrever na árvore.
-
-  Ran 2 shell commands
-
-● Background command "Empurrar o marco pela regua normal" completed (exit code 0)
-
-  Ran 1 shell command
-
-● O push foi recusado por uma guarda da casa — o rodapé do TICKETS está 15 commits atrás (teto 5). Causa em uma linha; a cura está nomeada
-  pelo próprio alarme.
-
-  Amended commit e0ad39dc, ran 11 shell commands
-
-  Advising using Fable 5.1
-
-✢ Jitterbugging… (32m 3s · ↓ 69.3k tokens)
+✢ Compacting conversation… (37m 33s · ↓ 80.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
