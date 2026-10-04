@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 11:01:01.**
+**Medido em 04/10/2026 11:06:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto` |
+| `HEAD` local | `8892fc31 CELULA-TURNO-FECHA passo 3: o contador do dia sem par nao predica mais no numero que a cura apaga` |
 | `origin/main` | `98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8892fc31 CELULA-TURNO-FECHA passo 3: o contador do dia sem par nao predica mais no numero que a cura apaga
 98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto
 d1689254 Merge branch 'raia-r4' into raia-merge
 381af46b Merge branch 'raia-o130' into raia-merge
 160d3f5d O painel mandava construir o item que o corte dele tirou da fila, e o leitor estava certo
-9daa4cec TICKETS/BACKLOG: o R4 fechou na raia com a quarta perna, e o placar NAO mudou de numero
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,10 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Enquanto roda, o passo 4: o censo. Primeiro o sítio exato que o passo 5 muda:
-
-  Ran 1 shell command
-
 ● O passo 5 troca as linhas 1332-1334 pela palavra da autoridade (_real.minutos = None em sem_turno). Logo o censo tem de achar quem
   colapsa None em 0 — começando pelo cartório, que grava int(... or 0):
 
@@ -136,13 +133,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Sombra flag e o comando supra_juiz
-  ⎿  $ grep -n "GRADE_POR_TURNO" config/settings/sombra.py; echo "=== supra cmd 60-200 ==="; sed -n '60,120p'
-     ponto/management/commands/supra_juiz.py
+  Searched for 1 pattern, ran 8 shell commands
 
-✢ Pouncing… (2h 1m 1s · ↓ 209.5k tokens)
+● Background command "Rodar os vizinhos na copia" completed (exit code 0)
+
+● Uso do _fato_cego
+  ⎿  $ grep -n "_fato_cego" ponto/services/cartorio.py; sed -n "$(grep -n '_fato_cego' ponto/services/cartorio.py | tail -1 | cut -d:
+     -f1),+8p" ponto/services/cartorio.py
+
+✢ Pouncing… (2h 6m 31s · ↓ 229.5k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
