@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:25:31.**
+**Medido em 04/10/2026 10:30:33.**
 
 | | |
 |---|---|
@@ -111,21 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  MUDA: escala/utils.py (def minutos_realizados_do_dia ~822; real_por_data ~1290; ramo sem_turno ~1332-1334) ·
-  ponto/services/bordas_realizado.py ~42 · core/contratos_estruturais.py (duas celulas)
-  RESULTADOS, na ordem, cada um com PROVA no RELATO:
-  1. realizado_sem_turno REMEDIDO pela funcao real, 09 e 10, com o O142 no ar: total e as classes A/B/C de 03/10 (era 122 = 30/61/31).
-  2. Se sobrar dia com PAR FECHADO e sem_turno (classe A ou C > 0): cura na ORIGEM primeiro, com RED; nao troca nada antes.
-  3. Contador de bordas_realizado reescrito para nao depender do numero da soma propria -- RED antes.
-  4. Censo de quem le minutos_realizados == 0 (supra_juiz ~151/166/290 e os demais), com DIFF de cobranca na sombra publicado ANTES.
-  5. A soma propria sai: o dia sem par leva a palavra da lei de 17:2x; DIFF de frota 09 e 10 publicado ANTES, reversao em logs/.
-  6. PENDENTES celula = 0 e turno = 0, verde=True nas duas no MESMO commit, linha_do_placar() rodada no container: 15.
-     PROIBIDO: gravar 0 calado em dia sem turno; tirar pendente com a impressao ainda no codigo; allowlist; juiz novo; fallback; item
-  proprio depois.
-     PRONTO: os 6 nomeados no RELATO com PROVA e commit. Faltando algum = INCOMPLETO com a lista.
-     DIETA: docs UMA vez, no commit do marco. Nenhum commit so de TICKETS/RELATO entre os passos.
-     LEI-AKITA: origem=escala/utils.py::montar_grade_prevista_periodo_por_turno, testemunha=realizado_do_dia, RED=impressao presente +
-  contador, quem-mais-le=censo do passo 4, juizes novos=0
      LINHA HAIKU: (a) realizado_sem_turno no payload com rotulo "dias sem turno pareado"; (b) golden "quantos dias sem turno pareado ha na
   competencia?" via ferramentas; (c) degrau: leitura.
      Segue a fila; PAREI so em lei ou !
@@ -138,15 +123,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 1 shell command
 
 ● Background command "Remedir o contador e as classes na sombra de hoje" completed (exit code 0)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/baue99jb9.output (44 lines)
+  ⎿  Referenced file ponto/views.py
+  ⎿  Read ponto/janelas.py (109 lines)
 
-✢ Compacting conversation… (1h 25m 31s · ↓ 139.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 60%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
+
+● Task "Empurrar o marco (um push), com a regua no pre-push" still running in background
+
+● Fechar o parentese e compilar
+  ⎿  $ cd /home/ronald/saas-hasner && { echo "inicio $(date '+%d/%m %H:%M:%S') sonda=classeA_autopsia_20261004.py ar=$(git rev-parse
+     --short HEAD)"; flock /tmp/sombra_hasner.lock logs/sombra/rodar_na_sombra.sh classeA_autopsia_20261004.py 2>&1; echo "rc_sonda=$?";
+     echo "fim $(date '+%d/%m %H:%M:%S')"; }…
+
+✢ Pouncing… (1h 30m 33s · ↓ 150.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
