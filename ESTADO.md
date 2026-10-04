@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:55:45.**
+**Medido em 04/10/2026 02:00:45.**
 
 | | |
 |---|---|
@@ -112,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Complete.
 
-● Parking it is. Let me take the pre-check, the reversão audit and the FechamentoMensal foto in one read-only pass:
+  Checking the gravado foto exists too (condition 3 needs FechamentoMensal before/after, and the reversão only covers the ata):
 
   Ran 2 shell commands
 
-● ponto.models, not folha.models. Let me fix it and dump all fields via _meta rather than a guessed list — the AVAL-DE-CRITERIO lesson was
-  that a guessed field list hides the drift:
+● There's a frota-wide gravado reversão from 23:12. Verifying it holds col369 with the full field set:
+
+  Ran 3 shell commands
+
+● col369 is row colaborador_id: 369, id: 5300. But that file was generated at 23:12 and the gravado gets re-watered by
+  recalcular_por_evento on every batida — so I must check whether the reversão is already stale against prod now:
 
   Ran 1 shell command
 
-● The field dump landed (saved to logs/), but tail cut §1 — the decisive part. Re-running focused, and checking whether col369 is actually
-  in the 09 export:
+● Matches the 01:26 reading exactly — the reversão is not stale for col369. Taking the formal ANTES foto of the gravado and of the exported
+  09, all fields via _meta.fields, durable in logs/:
 
   Ran 1 shell command
 
-● A bug in my sonda, not the data: I compared the full 64-char cel.impressao against the 16-char truncated value the sombra printed. The
-  strings are identical character for character. Fixing the comparison:
+● Inside the container the repo is /app; ~/saas-hasner/logs is outside the bind-mount. Passing the reversão in and copying the foto out:
 
-● Re-running the impressão comparison correctly
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $S/pre2.py <<'PY'
-     from escala.models import CelulaDia
-     PKS = {112615: '0be3fb775b377c5e', 112618: 'f95bb2f3da94fb3e', 112619: 'f95bb2f3da94fb3e'}
-     print('=== IMPRE…
+  Ran 1 shell command
 
-· Compacting conversation… (3h 33m 6s · ↓ 494.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 29%
+● All ANTES evidence is now durable. The 23:12 reversão confirms 0 of 25 campos diverge from prod, so it isn't stale. Checking the hook's
+
+✶ Incubating… (3h 38m 7s · ↓ 502.8k tokens · thought for 10s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 15m 49s · ↓ 100.4k tokens
-  ◯ general-purpose  Reading contexto.py guard bodies                                                        2h 14m 35s · ↓ 103.8k tokens
-  ◯ general-purpose  Polling green_tudo.out for failures                                                     1h 43m 28s · ↓ 139.5k tokens
+  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 20m 49s · ↓ 100.4k tokens
+  ◯ general-purpose  Writing RED section into RELATO-CHAMADO-EM-RAIA.md                                      2h 19m 36s · ↓ 119.1k tokens
+  ◯ general-purpose  Reading suite.sh harness script                                                         1h 48m 28s · ↓ 151.9k tokens
   ⧉  index
 ```
