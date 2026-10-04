@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:32:01.**
+**Medido em 04/10/2026 02:37:31.**
 
 | | |
 |---|---|
@@ -112,35 +112,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● The advisor is right — A acquired, so my leg 3 would never fire on the failure I actually saw. Reading the unread agent output and
-  checking self-containment:
+● Clean RED/GREEN in the same machine state: global lock → ordem = ''; isolated copy → ordem = 'A A_fim B '. Building the cure in a copy of
+  HEAD:
 
   Ran 1 shell command
 
-● Agent "Pre-requisitos C1-C4 do JUIZ-DE-CHAMADO" finished · 2h 17m 35s
-
-● That output is the raw transcript, not a report. Extracting the agent's final text:
-
-  Ran 1 shell command
-
-● aa14 closed (10832b45 + d36ae038), and it touched turnos.py:949 — the fourth raia on the file O142 cured. Now the self-containment check
-  the advisor asked for:
+● Now proving the cured selo GREEN while the raia still holds the global lock. Checking how it resolves $R first, since that bit me on the
+  hook selo:
 
   Ran 1 shell command
 
-● Fully self-contained: 42 lines, no source, no $0-relative paths. The patched-copy cure works. Reading the exact block I need to replace:
+● GREEN with the lock held by a real run — the pair is complete. Now proving the cure's own guard bites: if that TRAVA= line ever changes
+  form, the selo must go RED instead of silently falling back to the global lock:
 
   Ran 1 shell command
 
-● Both MORDE blocks drive the global lock — and the second can pass for the wrong reason (rc=75 because the raia holds it, not because its
-  own holder does), which is the same absence-of-signal family. Building a bounded RED/GREEN demo rather than running the old selo now (its
-  holder has --espera 3600 and would hang):
+● The guard fires with the exact message — but note the Terminated: _falha records and continues, so after a format drift the selo would
+  then hit the global lock and hang the régua rather than go red. Fixing that in the same act:
 
-● Running 1 shell command…
+  Making the guard abort and re-prove both sides
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     python3 - <<'PY'
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad'
+     p=S+'/selo_trava_novo.sh'
+     t=open(p,encoding='utf-8')…
 
-✢ Incubating… (4h 9m 22s · ↓ 582.0k tokens)
+✢ Compacting conversation… (4h 14m 52s · ↓ 589.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -148,7 +148,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading C4 vinculo write sites in rejuncao.py                                           2h 50m 51s · ↓ 162.0k tokens
+  ◯ general-purpose  Reading C4 write sites in atribuir_chamado                                               2h 56m 22s · ↓ 82.0k tokens
   ◯ general-purpose  Committing chamados/models.py C2 cure                                                   2h 19m 38s · ↓ 165.7k tokens
   ⧉  index
 ```
