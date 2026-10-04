@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:00:31.**
+**Medido em 03/10/2026 22:05:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **18** |
+| `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -43,6 +43,7 @@ e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas q
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,17 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A sonda responde o que o aval deixou em aberto, e o veredito é H3 disparando H1 — não é hipótese, são os vínculos reais:
-
-  Ran 1 shell command
-
-● A trava é flock e saiu com o shell — sombra livre. Agora o censo de frota: o contador que a LINHA HAIKU pede, medido pela função real:
-
-  Ran 2 shell commands
-
-● Enquanto o censo e o push correm, leio o sítio da cura inteiro — âncoras por grep, não por linha:
-
-  Ran 3 shell commands
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnoy1kvfx.output (13 lines)
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmho0201h.output (10 lines)
@@ -140,16 +130,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O censo de frota voltou — e muda o desenho da cura. Vou publicar os números antes de qualquer coisa (compactar com número medido e não
   publicado perde o número), mas sem commitar enquanto o push está em voo.
 
-● Ler o cabecalho de turnos_do_colab
-  ⎿  $ sed -n '1211,1229p' ponto/turnos.py
+  Searched for 1 pattern, read 1 file, ran 14 shell commands
 
-✢ Bloviating… (21h 47m 0s · ↓ 3.0m tokens · thinking)
+● Background command "Segunda tentativa do push do marco" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● O constraint do banco me ensinou algo: vínculo invertido não pode mais nascer pelo ORM (ec_vigencia_fim_nunca_antes_do_inicio) — o do
+  col736 é dado legado. A forma LEGAL que dispara o mesmo corte pelo vizinho é um vínculo encerrado antes da janela civil:
+
+  Causa exata do novo erro de fixture
+  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default
+     --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app -v
+     ~/saas-hasner/app/staticfiles:/app/staticfiles:ro saas-hasner-co…
+
+* Bloviating… (21h 52m 0s · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
