@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:144 AFIRMA ato sem PROVA ao lado -- **`!` CUMPRIDO -- O135 TETO-20 ESTA NO AR** (`fb1c78ac`, ff + `deploy.sh --sem-migrate` num ato so as
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:39:31.**
+**Medido em 04/10/2026 20:40:52.**
 
 | | |
 |---|---|
@@ -116,12 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Nenhuma das 7 é do meu bloco (ele ocupa as linhas ~18-90; a primeira acusada é a 144) — o RELATO já estava retido antes de eu escrever.
-  Mas retido ele não publica o marco, e casa muda já custou 26 dias. Vejo os sítios:
-
-  Ran 1 shell command
 
 ● Todas as 7 são linhas minhas, e os fatos estão provados no próprio texto — falta a linha literal PROVA:. Confiro contra o mundo antes de
   escrevê-la:
@@ -140,14 +127,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Verdadeira e agora provável. Fecho os dois sítios que faltam conferir:
 
-● Conferir d1689254 e os dois sitios antigos
-  ⎿  $ cd /home/ronald/saas-hasner && git merge-base --is-ancestor d1689254 8c3035bc && echo " d1689254 E ancestral de 8c3035bc -> NO AR"
-     || echo " d1689254 NAO e ancestral"; echo "===== 2113 ====="; sed -n '2113,2121p' app/docs/RELATO.md | cut -c1-140; echo "===== 2858
-     ====="; sed -n '2856,2864p' app/d…
+  Ran 2 shell commands
 
-✢ Jitterbugging… (8h 27m 33s · ↓ 1.0m tokens · thinking)
+● Todos os 7 são fatos já provados no texto, faltando só a linha literal. Escrevo as PROVAs com valor conferido:
+
+  Ran 1 shell command
+
+● Selo verde. Republico:
+
+  Running 1 shell command…
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -8
+
+✶ Jitterbugging… (8h 28m 55s · ↓ 1.0m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
