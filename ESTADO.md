@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:30:31.**
+**Medido em 04/10/2026 04:35:45.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Authority located: falta_marcos ({tipo, hora} per missing marco) at ponto/services/espelho.py:785; the fixed string is
-  dia_decidido.py:62. Before building, consulting the reviewer on the approach:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Following that order. First the authority reconciliation and the hook's own reading of the ORDEM:
+● falta_marcos lives in exactly one file and one template; the other leitores never mention it. The question is whether they pass through
+  the same day dict. Checking each leitor's source of dias:
 
   Ran 1 shell command
 
-● RealizadoDoDia.aberto is just "any turno with saida is None" — it doesn't derive marcos. So falta_marcos is built elsewhere. Reading its
-  producer and the datas_em_aberto writer:
+● Scope is now exact: 4 of 5 leitores (tela, PDF/cartão, app, TXT) all funnel through espelho_do_colab, so they already carry falta_marcos
+  — they just never read it. The 5th, the calendário/grade, builds its own day dict and calls do_dia directly without it. Setting up the
+  raia and checking the stalled push:
 
   Ran 1 shell command
 
-● falta_marcos reads montar_realizado_grade — the GRADE, which §4 declares the single source of previsto, and the comment already invokes
-  LEI-AKITA 2. So reading it is a leitor migrating, not a new juiz. Now the census advisor asked for:
+● Holder is alive (raia's docker run under --espera 5400), so the push waits legitimately. Raia created. Now RED first — reading the
+  existing assertion I'll have to invert:
 
-  Searched for 1 pattern
+  Ran 1 shell command
 
-● One writer: dia_decidido.py:139-140 (if veredito in PALAVRA: return PALAVRA[veredito]), and zero templates carry the literal — so all 5
-  leitores inherit from one function. Reading it and its caller:
+● Form decided: the palavra adopts the badge's own wording (Em aberto — falta: <tipo> <hora>) so the template prints the palavra instead of
+  owning a loop — one wording, not a third. Writing the RED:
 
-● Reading the palavra writer and its caller
-  ⎿  $ echo "=== dia_decidido.py 112-160 ==="; sed -n '112,160p' ponto/services/dia_decidido.py; echo; echo "=== aplicar_palavra_do_dia:
-     assinatura e o que tem na mao ==="; grep -n -A22 "^def aplicar_palavra_do_dia" ponto/services/dia_decidido.py | head -40
+  Writing the O130 RED test module
+  ⎿  $ cd /home/ronald/wt-o130/app && cat > ponto/tests/test_o130_em_aberto_diz_o_que_falta.py <<'PY'
+     """O130 — "EM ABERTO" DIZ O QUE FALTA (a 2a metade do R3).
+     O R3 pede a palavra *"EM ABERTO com o que falta"*, e a 1a metade (IMPAR, FECHADA 28/09) ja fez o
+     dict do dia carregar `falta_marcos`. O que fal…
 
-✢ Incubating… (6h 7m 52s · ↓ 880.7k tokens · thinking)
+· Compacting conversation… (6h 13m 6s · ↓ 891.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling turno_d.out for the verdict                                                     4h 49m 22s · ↓ 159.6k tokens
+  ◯ general-purpose  Grepping anchor line in contratos_estruturais.py                                         4h 54m 35s · ↓ 89.9k tokens
   ⧉  index
 ```
