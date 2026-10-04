@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:13:01.**
+**Medido em 04/10/2026 16:18:31.**
 
 | | |
 |---|---|
@@ -116,25 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● A porta morde: rc=1 com a regressão posta na cópia, e o --dir alcança a cópia. Falta o que impede a porta de ficar órfã — a lição "selo
-  órfão não é selo" é exatamente o defeito que este item cura:
-
-  Ran 1 shell command
-
-● RED evidenciado — o selo contra a árvore VIVA, que é a que não tem a porta:
-
-  Ran 3 shell commands
-
-● test_prepux_testa_o_commit é o selo do arquivo que eu mudei — tenho de separar "minha mudança" de "worktree sem .git/staticfiles" antes
-  de qualquer coisa:
-
-  Ran 1 shell command
-
-● 6 dos 7 são artefato de worktree (verdes no vivo). O sétimo é minha regressão: o repo de brinquedo do selo só tem app/, e o git archive
-  app mensageria recusa. A fixture modela o contrato antigo — e o contrato mudou:
-
   Ran 2 shell commands
 
 ● O selo está certo e minha sequência de fixture estava errada: deixei o arquivo do núcleo em 'B' quando o app/x.py voltou a 'A', então
@@ -142,11 +123,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 4 shell commands
 
-●
+● Selos de host: só os 6 artefatos de worktree (verdes no vivo). Nada na suite do ponto parseia o CLAUDE.md. Commit:
 
-✢ Jitterbugging… (4h 1m 3s · ↓ 536.2k tokens · thought for 8s)
+  Ran 3 shell commands
+
+● Régua verde nesse selo — o 50333326 já tirou o TETO-20 de "recebido". Agora o estado do item, que mudou: a porta existe:
+
+  Ran 5 shell commands
+
+● Entregável durável: commit 1702028d na raia, BACKLOG e RELATO publicados. Antes de declarar o item fechado:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Todos os três procedem. (1) medir o POSTGRES_PORT de verdade, (2) a testemunha não pode recalcular, (3) a lição das 92 cópias:
+
+● Medir se POSTGRES_PORT existe no ambiente da mensageria
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== 1. o PORT no container da mensageria (nao e segredo; so esta chave)" && docker exec
+     mensageria printenv POSTGRES_PORT 2>&1 | sed 's/^$/<vazia>/'; echo "rc=$?"
+     echo "--- e no .env do compose:"; grep -c '^POSTGRES_PORT' .env; grep '^POSTGRES_PORT' .env || ec…
+
+· Compacting conversation… (4h 6m 33s · ↓ 546.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 62%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
