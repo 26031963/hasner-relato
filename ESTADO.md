@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:30:31.**
+**Medido em 04/10/2026 19:35:45.**
 
 | | |
 |---|---|
@@ -116,12 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 2 shell commands
-
-● Produto = main + k5-encerrada (que já contém o k8t linearmente). Monto essa árvore na cópia:
-
-  Ran 1 shell command
-
 ● Mesmo conflito de antes, só prosa. Resolvo por HEAD (o main é estritamente mais novo nas duas linhas) e remeço o teto na árvore mergeada
   — é onde podia furar:
 
@@ -135,18 +129,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Agora os docs na árvore de produto, incluindo as 5 linhas de lei e a linha do CLAUDE.md que o corte pede AGORA. Antes, vejo como um corte
   se registra para os selos não ficarem vermelhos:
 
-● Procurar ids antigos e o bloco ATO
-  ⎿  $ cd /home/ronald/wt-pousos && python3 -c "
-     import json
-     d=json.load(open('app/docs/CORTES.json'))
-     import re
-     for c in d:
-     if re.search('MERGE|MARCO|DIETA|PUSH|RAIA|DOCS', c['id']): print(c['id'],'|',c['quando'],'|',c['estado'][:70])
-     "; echo "=== bloco ATO do LEIS.md ==="; sed -n '115,130p' app/docs/L…
+  Ran 6 shell commands
 
-✢ Jitterbugging… (7h 18m 33s · ↓ 873.3k tokens · thinking)
+● Nenhum selo automático para os 300 chars — então a linha dirá isso, não um selo inventado. Escrevo os cortes na FONTE (CORTES.json, o .md
+  é gerado) e as seis leis:
+
+  Escrever as seis leis e conferir o selo
+  ⎿  $ cd /home/ronald/wt-pousos && python3 - <<'PY'
+     import sys
+     def falha(m): print('PAROU:',m); sys.exit(1)
+     p='app/docs/LEIS.md'; t=open(p).read()
+     if 'L-104' in t: falha('L-104 ja esta na arvore de produto -- conferir')
+     leis = [
+     ("L-104","**O UNIVERSO DO HOLERITE E MES CIVIL, NAO A COMPETENCIA 21-20**:…
+
+· Compacting conversation… (7h 23m 47s · ↓ 881.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
