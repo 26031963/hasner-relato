@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:07:31.**
+**Medido em 04/10/2026 16:13:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no cha
 ```
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -114,17 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  não tem o que montar. A cura vai no escritor único da cópia, não num segundo materializador:
-
-  Ran 2 shell commands
-
-● O buraco que minha mudança abriria já está meio fechado: o atalho "JÁ VERDE" exige REGUA_ARVORE (hash da árvore INTEIRA, que vê
-  mensageria/). Falta a segunda condição, --igual, que só olha app/. As três curas vão no escritor único:
-
-  Ran 2 shell commands
-
-● $? dentro de um if ! cmd é o status da negação (0), não o do comando — a régua imprimiria rc=0. O idioma certo é o que o próprio pre-push
-  documenta:
 
   Ran 1 shell command
 
@@ -135,17 +125,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● RED evidenciado — o selo contra a árvore VIVA, que é a que não tem a porta:
 
-● Nomear a porta na secao 3 e rodar os selos de host desta raia · 15s
-  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PY'
-     p='CLAUDE.md'; s=open(p,encoding='utf-8').read()
-     velho = "Control-plane (tenants) roda separado, settings teste_motor.\n"
-     novo = ("Control-plane (tenants) roda separado, settings teste_motor.\n"
-     "Nucleo da mensageria roda separado tambem -- `bash ~/saas… (15s · 6 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 3 shell commands
 
-✢ Jitterbugging… (3h 55m 33s · ↓ 527.6k tokens)
+● test_prepux_testa_o_commit é o selo do arquivo que eu mudei — tenho de separar "minha mudança" de "worktree sem .git/staticfiles" antes
+  de qualquer coisa:
+
+  Ran 1 shell command
+
+● 6 dos 7 são artefato de worktree (verdes no vivo). O sétimo é minha regressão: o repo de brinquedo do selo só tem app/, e o git archive
+  app mensageria recusa. A fixture modela o contrato antigo — e o contrato mudou:
+
+  Ran 2 shell commands
+
+● O selo está certo e minha sequência de fixture estava errada: deixei o arquivo do núcleo em 'B' quando o app/x.py voltou a 'A', então
+  "árvore limpa" não estava limpa:
+
+  Ran 4 shell commands
+
+●
+
+✢ Jitterbugging… (4h 1m 3s · ↓ 536.2k tokens · thought for 8s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
