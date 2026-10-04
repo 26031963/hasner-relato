@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:00:45.**
+**Medido em 04/10/2026 17:05:45.**
 
 | | |
 |---|---|
@@ -40,8 +40,13 @@ fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-prime
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,38 +120,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● O aval confirma a porta que eu já havia escolhido — e tira o --forcar deste marco (fatia própria, O185). Sombra com carimbo de hoje,
-  diverge=0: a GUARDA 4 passa. Migro a GUARDA 3 para a saída que existe:
+● Selo verde (o vermelho da régua era de antes de 50333326). Agora a escrituração — os dois JSON pelos escritores canônicos:
 
   Ran 1 shell command
 
-● Guardo a prova da corrida que foi BLOQUEADA (o esteira.out é sobrescrito) e disparo o ato — ff + deploy sem nada no meio:
+● Diffs mínimos — as duas formas canônicas estavam certas. Regenero os dois gerados:
 
   Ran 1 shell command
 
-● rc=0. A trilha inteira:
+● O AVAIS caiu de 7 para 6. Antes de commitar, vejo o que o pop do stash e o vigia deixaram no RELATO (214 linhas não é apende de vigia):
 
   Ran 1 shell command
 
-● O135 no ar: main = fb1c78ac, três cascas provadas, importerror_500=0, e o stash de docs voltou. Agora desarmo o agendado de segunda
-  (senão ele dispara um segundo HUP às 06:05 sem ninguém olhando) e vejo por onde o HAIKU lê:
+● Isso é a minha própria seção do cert-ast, que estava no stash. Agora a célula do O135 no BACKLOG (teto de 300 caracteres, sem |):
 
   Ran 2 shell commands
 
-● Não há subcomando de cancelar — desarmo à mão, com trilha (timer é PRE-APROVADO quando tem quem, por que e condição de saída):
+● 294. Agora o RELATO do pouso e os prompts — PROMPT-NAO-SE-REPETE cobra linha para cada um:
+
+  Ran 3 shell commands
+
+● A L-102 já tem linha — e a lei nova altera o rodapé dela (o número SAI) e acrescenta uma regra nova. Registro os dois prompts primeiro:
 
   Ran 1 shell command
 
-● deploys_agendados=0. Agora o smoke do que o marco entrega — a rota nova e o rótulo "de 20":
+● Agora a L-102 alterada e a L-103 nova. Vejo as colunas da tabela:
 
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && git diff 31558c3e fb1c78ac -- mensageria/nucleo/ferramentas.py | head -50; echo "=== o placar ===";
-     bash bin/tickets_placar.sh --conferir 2>&1 | tail -8
+● Colunas da tabela de leis
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '24,25p' app/docs/LEIS.md
 
-· Jitterbugging… (4h 48m 47s · ↓ 640.7k tokens)
+✶ Jitterbugging… (4h 53m 48s · ↓ 657.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

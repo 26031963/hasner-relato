@@ -1,4 +1,4 @@
-# AVAIS NA MESA — 7
+# AVAIS NA MESA — 6
 
 > Gerado por `bin/gerar_avais.py` a partir de `app/docs/PENDENTES_RONALD.json`.
 > **So itens ABERTOS.** Item respondido SOME daqui na proxima geracao -- a historia dele fica
@@ -12,11 +12,10 @@
 | 4 | `W12X36-HPD-SMOKE` | **smoke** | 2026-10-02T11:47 | 128 tipos 12x36, 0 com hpd, 0 de 896 dia-tipo mudam; serve 338 vinculos e 1.307 plantoes de fim de semana | `smoke Ronald: abri o wizard de um 12x36, marquei o domingo com horario proprio e salvou; um 12x36 sem marcar nada continuou igual -- pode fechar o W12X36-HPD` |
 | 5 | `PAUTA-DP-09-COL954` | **!** | 2026-10-02T17:30 | rubrica 8792, 2 dias (18/09 e 19/09), matricula 2103; emp2 213 linhas contra 210 | `col954: a falta de 18/09 e 19/09 (2 dias, rubrica 8792) entra na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   fica fora da 09 e entra na 10.` |
 | 6 | `PAUTA-DP-09-COL900` | **!** | 2026-10-02T17:30 | rubricas 0200 = 7,37 e 0243 = 4,50; matricula 657; emp3 88 linhas contra 86 | `col900: as rubricas 0200 (7,37) e 0243 (4,50) entram na 09 do Dominio por correcao LA.   OU   gera TXT novo da 09 com `--usuario` e `--motivo` meus.   OU   ficam fora da 09.` |
-| 7 | `O135-JANELA-AUTH-NO-DOMINGO` | **!** | 2026-10-04T14:45 | MARCO PRONTO NA COPIA, portao de ACESSO segurando -- nao e dinheiro. **O135 TETO-20** esta commitado em `48805bbf` (copia `/home/ronald/wt-teto20`, branch `teto20`; 21 arquivos, 611+/120-): o teto da matriz estrutural vi | `! forca a janela_auth para o O135 hoje -- a mudanca em `app/api/urls.py` e UMA LINHA de rota read-only, zero logica de auth -- e poe o ff e o `deploy.sh --sem-migrate` num ato so.   OU   nada: ele pousa sozinho segunda 06:05 pelo agendado.` |
 
 ---
 
-Total no JSON: **208** · aberto **7** · respondido **40** · sem-motivo **161**.
+Total no JSON: **208** · aberto **6** · respondido **41** · sem-motivo **161**.
 
 > `sem-motivo` nao e "resolvido": e *"ninguem julgou este item"*. A ordem de 18:4x proibe
 > triar os 163 antigos, entao eles ficam ai, nomeados, em vez de serem chutados para um lado.

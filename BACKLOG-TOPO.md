@@ -142,7 +142,7 @@ lista — ela e o que esta EM PE._
 | **O132** | A MEDIDA QUE AGENDA O CRON NAO SE DEFENDE DE SI | espera `!` |
 | **O133** | CLEAR-NO-MARCO | **fila 2**, ordem dele. Nao e dinheiro,  |
 | **O134** | ESPINHA-ANTES-DA-UI | espera corte |
-| **O135** | TETO-20: a matriz desconta familia sem campo editavel | **FECHADA 04/10** -- o teto virou PERGUN |
+| **O135** | TETO-20: a matriz desconta familia sem campo editavel | espera `!` |
 | **O136** | O DISPATCH SO PERGUNTA NUM SENTIDO | **livre, fila 1 atras da espinha** -- `m |
 | **O137** | ESMERIL-NO-RASTRO | espera aval |
 | **O138** | DADO DERIVADO DO GIT NAO SE GRAVA EM ARQUIVO QUE VAI NO PUSH | fila 2, raia `wt-ui` nao serve (e `bin/` |
