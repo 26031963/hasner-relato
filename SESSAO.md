@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 20:36:51.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (360.4 MB). Acoes na janela: **1605**.
+**Medido em 04/10/2026 20:39:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (360.5 MB). Acoes na janela: **1612**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:39:25 | Bash | Conferir d1689254 e os dois sitios antigos | `cd /home/ronald/saas-hasner && git merge-base --is-ancestor d1689254 8c3035bc && echo " d1689254 E ancestral de 8c3035bc -> NO AR" \|\| echo " d1689254 NAO e ancestral"; echo "===== 2113 ====="; sed -n '2113,2121p' app/docs/RELATO.md \| cut -c1-140; echo "===== 2858 ====="; sed -n '2856,2864p' app/docs/RELATO.md \| cut -c1-140` |
+| 20:39:07 | Bash | Provar a ancestralidade do O135 | `cd /home/ronald/saas-hasner && for S in fb1c78ac 48805bbf; do if git merge-base --is-ancestor $S 8c3035bc 2>/dev/null; then echo " $S E ancestral do que esta no ar (8c3035bc) -> NO AR"; else echo " $S NAO e ancestral de 8c3035bc"; fi; done && echo "--- e o conteudo da fatia O135 (a constante TOTAL morreu) esta no ar? ---" && grep -n "TOTAL" app/core/contratos_estruturais.py \| head -4` |
+| 20:38:36 | Bash | Achar o commit real do O135 | `cd /home/ronald/saas-hasner && echo "=== commits de hoje que citam O135 ou TETO-20 ===" && git log --since="2026-10-04 00:00" --format='%h %ad %s' --date=format:'%H:%M' \| grep -iE "o135\|teto-20\|teto20" \| sed 's/^/ /' && echo && echo "=== o que o deploy das 16:59 carimbou (logs do deploy) ===" && grep -hoE "COMMIT=[0-9a-f]{8}" logs/deploy*.log 2>/dev/null \| tail -3; ls -t logs/deploy*.log 2>/d ...` |
+| 20:38:23 | Bash | Conferir o sha no ar e os shas citados | `cd /home/ronald/saas-hasner && echo "=== o que esta NO AR, pela autoridade (logs/deploy.stamp) ===" && cat logs/deploy.stamp 2>&1 \| head -8 && echo && echo "=== os shas citados existem? ===" && for S in fb1c78ac d1689254 8c3035bc; do printf " %s -> %s\n" "$S" "$(git log -1 --format='%ad %s' --date=format:'%d/%m %H:%M' $S 2>&1 \| cut -c1-70)"; done` |
+| 20:38:10 | Bash | Ler as 4 afirmacoes de hoje | `cd /home/ronald/saas-hasner && for L in 144 161 479 524; do echo "===== linha $L ====="; sed -n "${L},$((L+6))p" app/docs/RELATO.md \| cut -c1-150; echo; done` |
+| 20:37:49 | Bash | Listar as 7 afirmacoes sem prova | `cd /home/ronald/saas-hasner && python3 bin/relato_afirma_com_prova.py app/docs/RELATO.md app/docs/RELATORIOS-PLANO.md 2>&1 \| head -20` |
+| 20:36:49 | Bash | Publicar o RELATO e os indices | `cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 \| tail -20` |
 | 20:36:42 | Bash | Gravar o item O193 no BACKLOG | `cd /home/ronald/saas-hasner && python3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o193_item.py 2>&1 && echo "--- a linha gravada ---" && grep -n "^\| O193 " app/docs/BACKLOG.md \| cut -c1-400` |
 | 20:36:37 | Bash | Localizar os dois patches preparados | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && ls -la $S/o193_item.py $S/o191_a_palavra_sem_numero.py 2>&1` |
 | 20:36:33 | Bash | Conferir os patches preparados | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && ls -la $S/ 2>&1 \| tail -8` |

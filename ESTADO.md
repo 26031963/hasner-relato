@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:36:51.**
+**Medido em 04/10/2026 20:39:31.**
 
 | | |
 |---|---|
@@ -116,36 +116,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  escrever qualquer patch:
+  Ran 1 shell command
+
+● Nenhuma das 7 é do meu bloco (ele ocupa as linhas ~18-90; a primeira acusada é a 144) — o RELATO já estava retido antes de eu escrever.
+  Mas retido ele não publica o marco, e casa muda já custou 26 dias. Vejo os sítios:
 
   Ran 1 shell command
 
-● Background command "Rodar a sonda corrigida da condicao de entrada" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Dois vereditos de uma vez, e o segundo muda o item (b).
-
-  Sonda O191 — condição de entrada VERDE: 6 de 6 com célula casada e previsto (420/660), 0 de 6 com turno naquele data_turno, 0 ABERTO,
-  sem_turno=True em todos. As batidas existem e pertencem aos turnos vizinhos (noturno: E 22:00 de d-1 → S 06:00 de d). Não é bug da
-  geometria — o dia sem par é real.
-
-  E o item (b) tem outra origem. O or 0 da supra_juiz.py:131 está morto: os dois produtores já colapsam a montante — leitor_celula.py:364
-  (int(ata.get(...) or 0)) e, pior, escala/utils.py:1334, que quando a autoridade diz sem_turno fabrica um número pelas células. É dele que
-  saem os real=60, 61, 240, 280, 300, 305 da sonda. O próprio comentário confessa: "ali o numero nao e da autoridade".
+● Todas as 7 são linhas minhas, e os fatos estão provados no próprio texto — falta a linha literal PROVA:. Confiro contra o mundo antes de
+  escrevê-la:
 
   Ran 1 shell command
 
-● PROVA limpa: zero .py entre o sha deployado e a ponta. Escrevo o bloco do RELATO com os dois vereditos:
+● O selo está certo em reter: o sha fb1c78ac citado como "O135 TETO-20 NO AR" é um commit de RELATO das 15:33, não o pouso das 16:59. Caço
+  o commit real:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Ambos os patches estão de pé. Aplico o item O193 no BACKLOG (achado de instrumento, medido e não curado):
+● O fb1c78ac era a ponta da cópia no ato do ff das 16:59 (o commit 5d31530f o nomeia no próprio assunto) — confiro a ancestralidade, que é
+  o que torna a frase verdadeira ou não:
 
-  Publicar o RELATO e os indices
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -20
+  Ran 1 shell command
 
-✢ Jitterbugging… (8h 24m 53s · ↓ 993.8k tokens)
+● Verdadeira e agora provável. Fecho os dois sítios que faltam conferir:
+
+● Conferir d1689254 e os dois sitios antigos
+  ⎿  $ cd /home/ronald/saas-hasner && git merge-base --is-ancestor d1689254 8c3035bc && echo " d1689254 E ancestral de 8c3035bc -> NO AR"
+     || echo " d1689254 NAO e ancestral"; echo "===== 2113 ====="; sed -n '2113,2121p' app/docs/RELATO.md | cut -c1-140; echo "===== 2858
+     ====="; sed -n '2856,2864p' app/d…
+
+✢ Jitterbugging… (8h 27m 33s · ↓ 1.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
