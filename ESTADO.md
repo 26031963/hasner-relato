@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 14:10:02.**
+**Medido em 04/10/2026 14:15:31.**
 
 | | |
 |---|---|
@@ -111,13 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 27 shell commands
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file docs/BACKLOG.md
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
@@ -131,18 +124,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora os dois goldens.
 
-● Apontar a prova nova e ler o gerador do placar
-  ⎿  $ cd /home/ronald/wt-teto20/app && python3 - <<'PY'
-     p='core/placar_estrutural.py'
-     s=open(p).read()
-     v = """ 'prova': 'logs/r6_dinheiro/red_col221_10.txt (a reatividade) + '
-     'logs/placar_estrutural/contratos_20261004.txt (o 13/22 de hoje pela funcao real, as '
-     '19 celulas da MATRIZ + o GLOBAL, as 7 q…
+● Atualizar o topo do RELATO
+  ⎿  $ cd /home/ronald/wt-teto20 && date "+%d/%m %H:%M" && python3 - <<'PY'
+     p='app/docs/RELATO.md'; s=open(p).read()
+     def one(a,b):
+     global s
+     assert s.count(a)==1, a[:60]
+     s=s.replace(a,b)
+     one("nao fecha (`tirar pendente com a impressao ainda no codigo` e PROIBIDO) e o placar nao vai a 15/22.",
+     "nao fecha …
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
+  ⎿  Referenced file docs/PROMPTS.md
+  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
 
-✻ Compacting conversation… (1h 58m 4s · ↓ 256.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Jitterbugging… (2h 3m 33s · ↓ 272.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
