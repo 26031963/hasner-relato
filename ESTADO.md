@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:26 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:33:01.**
+**Medido em 04/10/2026 12:38:31.**
 
 | | |
 |---|---|
@@ -112,12 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O RED está evidenciado — 7 vermelhos. Um deles, porém, parou antes da própria asserção de rótulo; corrijo a ordem para o selo morder o
-  que promete.
-
-  Ran 2 shell commands
 
 ● Item (2) fechado com prova nas duas árvores. Agora o item (3) — o DIFF de classificar_export. Vejo se o arreio da sombra aceita apontar
   para a cópia.
@@ -140,9 +134,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Todos os três itens do adendo estão medidos. Publico — a lei no topo, com os números, e a esteira segue.
 
-● Running 1 shell command…
+● Publicar a lei no topo e a secao de prova
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs && python3 - <<'PY'
+     P='RELATO.md'
+     s=open(P,encoding='utf-8').read()
+     velho = """FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** (aval dele 10:3x, item 1 dos DOSSIES,
+     antes da E6-CAUDA-2 e antes de qualquer raia de chamado). O `hook_stop_fila1` j…
 
-✢ Jitterbugging… (21m 3s · ↓ 50.4k tokens)
+· Compacting conversation… (26m 33s · ↓ 55.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
