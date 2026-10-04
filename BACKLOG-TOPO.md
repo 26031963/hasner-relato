@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**161 obras abertas.**
+**165 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -170,3 +170,7 @@ lista — ela e o que esta EM PE._
 | **O160** | ARVORE-SEM-CONFLITO: O DEPLOY RECUSA ARVORE QUEBRADA | tail -3 && bin/deploy.sh` -- o pipe entr |
 | **O161** | a linha do tipo PAI nao tem Editar nem Copiar | **fila 2 (UI), raia `wt-ui`** -- registr |
 | **O162** | DOIS ROTULOS QUE NAO DIZEM O QUE SABEM, no drawer de Ausencias | **entra na O30 F2**, que o vale dele aca |
+| **O163** | ESMERIL DA FAMILIA AUSENCIA, o SEXTO BANCO | espera aval |
+| **O164** | RAIA-CHAMADO VOLTA A CONSTRUIR: os 60 pontos do escritor unico | **agente na raia `/home/ronald/wt-esmeri |
+| **O165** | OS 39 .py DA RAIA-CHAMADO QUE NAO SAO AUTH PODEM POUSAR SOZINHOS? | **censo somente-leitura aberto 03/10 23: |
+| **O166** | O139 NO CODIGO: o papel `prazo` nasce em `config/crons.py::PAPEIS` | **agente em worktree proprio, aberto 03/ |
