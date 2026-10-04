@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:07:01.**
+**Medido em 04/10/2026 01:12:31.**
 
 | | |
 |---|---|
@@ -40,8 +40,10 @@ a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO ME
 
 ```
  M app/docs/AVAIS.md
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/TICKETS.md
+ M bin/gerar_avais.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,13 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● The ausência esmeril finished without committing — 27 files uncommitted in its worktree. Asking it to make its work durable.
-  ⎿  Resuming agent a0b86d1
-  ⎿  Allowed by auto mode classifier
-
-  Ran 8 shell commands
-
 ● Agent "Esmeril da familia AUSENCIA" finished · 1h 22m 47s
 
   Ran 6 shell commands
@@ -136,21 +131,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Wait for suite completion marker" completed (exit code 0)
 
-● Measuring doc diffs
-  ⎿  $ cd /home/ronald/saas-hasner && git diff --stat -- app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md app/docs/TICKETS.md
+  Ran 3 shell commands
 
-✢ Incubating… (2h 44m 22s · ↓ 399.8k tokens · thinking)
+● The canonical writer's indent=1 doesn't match the disk's indent=2 — it churns 2.2k lines on every run. Curing that at the origin instead
+  of committing the churn.
+
+  Running all host selos · 4m 3s
+  ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; printf '%-62s %s\n' "$(basename $f)"
+     "$([ $rc -eq 0 ] && echo OK || echo "RED($rc)")"; [ $rc -ne 0 ] && echo "$out" | tail -6; done 2>&1 | tail -70 (4m 2s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Incubating… (2h 49m 52s · ↓ 405.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading .git/hooks/pre-commit guards                                                    1h 22m 47s · ↓ 148.1k tokens
-  ◯ general-purpose  Reading PORTAS['chamado'] in core/portas.py                                              1h 25m 51s · ↓ 88.2k tokens
-  ◯ general-purpose  Writing msg_c1.txt commit message                                                          54m 44s · ↓ 168.7k tokens
+  ◯ general-purpose  Writing curar_parcial.py patch script                                                   1h 32m 34s · ↓ 164.9k tokens
+  ◯ general-purpose  Reading _Base setup in test_porta_arquivo_silencio.py                                   1h 31m 21s · ↓ 123.4k tokens
+  ◯ general-purpose  Checking trava_teste.sh lock holder                                                      1h 0m 14s · ↓ 122.1k tokens
   ⧉  index
 ```
