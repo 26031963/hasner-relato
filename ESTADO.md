@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:44:47.**
+**Medido em 04/10/2026 20:50:01.**
 
 | | |
 |---|---|
@@ -110,21 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Selo verde. Republico:
-
-  Ran 1 shell command
-
-● MARCO FECHADO — pode compactar. RELATO publicado em d05bcf7, 0 vazamento; ESTADO e SESSAO junto.
-
-  Agora a fila 1, item (a) do passo 5. Leio o patch antes de montar a cópia:
-
-  Ran 1 shell command
-
-● O patch tem R cravado — o mesmo defeito RAIZ CRAVADA que eu documentei nos selos. Não repito num patch meu. Vejo o resto e o reescrevo
-  com raiz por argumento:
-
-  Ran 1 shell command
-
 ● Reescrevo o patch com a raiz por argumento (não repito o RAIZ CRAVADA) e com um modo --so-teste, para o RED vir primeiro:
 
   Ran 1 shell command
@@ -135,16 +120,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● RED evidenciado: 3 falhas, exatamente os 3 selos invertidos, todas porque a fonte ainda emite 'Sem turno pareado (ata 8h)'. Agora a cura:
 
-  Aplicar o patch completo na copia
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "relatorios" 2>&1 | tail -12
+  Ran 2 shell commands
 
-* Jitterbugging… (8h 32m 49s · ↓ 1.0m tokens)
+● GREEN, 258 OK. Censo adversarial antes de levar para a árvore — quem mais lê a frase que mudei:
+
+  Ran 1 shell command
+
+● Um leitor a mais, e é citação de lei revogada:
+
+  Ran 1 shell command
+
+● Esse selo codifica a L-102 antiga ("o dia sem par continua com NUMERO") e avisa: "quem o deixa vermelho e o patch -- e foi assim que o
+  patch do passo 5 ficou PARADO." Pergunto empiricamente ao vizinho:
+
+● Rodar os vizinhos escala e ponto na copia patchada
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 1800 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "escala ponto" 2>&1 | grep -E
+     "^(FAIL|ERROR|OK|FAILED|Ran )|^(FAIL|ERROR):" | head -25
+
+✢ Compacting conversation… (8h 38m 3s · ↓ 1.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
