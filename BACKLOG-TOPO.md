@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**174 obras abertas.**
+**175 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -183,3 +183,4 @@ lista — ela e o que esta EM PE._
 | **O173** | O SELO DO IMPORT TARDIO TEM A DIRECAO INVERTIDA | achado 04/10 01:5x, **nao toquei o selo* |
 | **O174** | CRON E WORKER SAO DOIS SISTEMAS ENTRE UM DEPLOY E OUTRO, e isso nao esta escrito | espera aval |
 | **O175** | O BACKFILL DO NUCLEO NAO TEM GUARDA DE COMPETENCIA EXPORTADA | espera `!` |
+| **O176** | "O ROTULO ESTA NUM TITULO" NAO RESPONDE "ESTA FATIA SUBIU" | espera corte |
