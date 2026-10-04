@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:71 AFIRMA ato sem PROVA ao lado -- **`!` CUMPRIDO -- O135 TETO-20 ESTA NO AR** (`fb1c78ac`, ff + `deploy.sh --sem-migrate` num ato so as
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:144 AFIRMA ato sem PROVA ao lado -- **`!` CUMPRIDO -- O135 TETO-20 ESTA NO AR** (`fb1c78ac`, ff + `deploy.sh --sem-migrate` num ato so as
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:34:01.**
+**Medido em 04/10/2026 20:36:51.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,36 +116,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  escrever qualquer patch:
 
   Ran 1 shell command
 
-● Achado forte: a casa já curou este exato or 0 num leitor, em 02/10, e o supra_juiz não migrou — LEI-AKITA 4 literal.
+● Background command "Rodar a sonda corrigida da condicao de entrada" completed (exit code 0)
+
+  Ran 2 shell commands
+
+● Dois vereditos de uma vez, e o segundo muda o item (b).
+
+  Sonda O191 — condição de entrada VERDE: 6 de 6 com célula casada e previsto (420/660), 0 de 6 com turno naquele data_turno, 0 ABERTO,
+  sem_turno=True em todos. As batidas existem e pertencem aos turnos vizinhos (noturno: E 22:00 de d-1 → S 06:00 de d). Não é bug da
+  geometria — o dia sem par é real.
+
+  E o item (b) tem outra origem. O or 0 da supra_juiz.py:131 está morto: os dois produtores já colapsam a montante — leitor_celula.py:364
+  (int(ata.get(...) or 0)) e, pior, escala/utils.py:1334, que quando a autoridade diz sem_turno fabrica um número pelas células. É dele que
+  saem os real=60, 61, 240, 280, 300, 305 da sonda. O próprio comentário confessa: "ali o numero nao e da autoridade".
 
   Ran 1 shell command
 
-● A lei já está escrita e o produtor de None é real (fechamento.py:560). Falta o fato decisivo: o None chega a este juiz, ou o chamador já
-  o colapsou antes?
-
-  Ran 1 shell command
-
-● Background command "Empurrar o marco, terceira tentativa" completed (exit code 0)
-
-● Monitor "veredito do push do marco" stream ended
-
-● Push 3/3 verde. O marco está no remoto — fecho a sequência de pós-push:
-
-  Ran 5 shell commands
-
-● Marco no remoto. A pista de teste vagou com o pre-push — relanço a sonda corrigida da O191 (a antiga passava datas a batidas_apuraveis,
-  cuja janela é de instantes) enquanto escrevo o RELATO:
+● PROVA limpa: zero .py entre o sha deployado e a ponta. Escrevo o bloco do RELATO com os dois vereditos:
 
   Ran 3 shell commands
 
-● A sonda corre. Antes de aplicar patch em juiz que decide o que entra no TXT, consulto:
+● Ambos os patches estão de pé. Aplico o item O193 no BACKLOG (achado de instrumento, medido e não curado):
 
-● Advising using Fable 5.1
+  Publicar o RELATO e os indices
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -20
 
-· Jitterbugging… (8h 22m 3s · ↓ 981.5k tokens)
+✢ Jitterbugging… (8h 24m 53s · ↓ 993.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
