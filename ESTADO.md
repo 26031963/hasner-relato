@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:504 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:701 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:01:54.**
+**Medido em 04/10/2026 01:07:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `334bac72 [O163..O166] Os dois avais do fim de semana nascem como quatro itens e quatro trabalhos abertos` |
+| `HEAD` local | `5bdf439c [O142] O dono do dia vem do vinculo DAQUELE dia, e o turno para de depender da janela em que foi perguntado` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **6** |
+| commits a subir (`ahead`) | **7** |
 
 ## Fabrica
 
@@ -29,30 +29,24 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5bdf439c [O142] O dono do dia vem do vinculo DAQUELE dia, e o turno para de depender da janela em que foi perguntado
 334bac72 [O163..O166] Os dois avais do fim de semana nascem como quatro itens e quatro trabalhos abertos
 a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO MEU PEDIDO, nao na medicao
 697db0c7 [O30][O122] Os dois vales dele entram com as palavras dele, e os dois achados viram item em vez de prosa
 69fca443 [RELATO] Os dois arquivos da fatia moram na copia, e o erro de meia hora fica escrito onde doi
-7a335e37 [O142] A RED sai da arvore junto com a cura, nao antes dela -- senao eu deixo a arvore VERMELHA
 ```
 
 ## `git status --short`
 
 ```
- M PLANO_PISCADA.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
-?? app/ponto/tests/test_haiku_turno_invariante.py
-?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
-?? app/ponto/turno_leitura.py
+ M app/docs/AVAIS.md
+ M app/docs/PENDENTES_RONALD.json
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
 ?? fatias_agendadas/abono-no-ar/fatia.done
 ?? fatias_agendadas/abono-no-ar/msg_commit.txt
-?? mensageria/nucleo/tests/test_ferramenta_turno_invariante.py
 ```
 
 ## PLACAR-ESTRUTURAL (L-099) -- o placar PRINCIPAL
@@ -119,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b26av8eoy.output (61 lines)
-  ⎿  Referenced file ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnqc25cgf.output
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b5rhs47zz.output (8 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Esmeril da familia AUSENCIA" completed in background
-
-● Task "Raia-chamado: escritor unico, C2 a C1" still running in background
-
-● Task "Pre-requisitos C1-C4 do JUIZ-DE-CHAMADO" still running in background
-
-● Task "Run ruff, the new selos, neighbours and the full suite" still running in background
-
-● Suite started 00:44:46, ~21 min expected. Reading the two handbacks that landed while it runs.
-
-  Ran 6 shell commands
 
 ● The ausência esmeril finished without committing — 27 files uncommitted in its worktree. Asking it to make its work durable.
   ⎿  Resuming agent a0b86d1
   ⎿  Allowed by auto mode classifier
 
-  Checking suite tail again
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; date '+%H:%M:%S'; tail -c 400
-     $S/o142_haiku_suite.out | tr -d '.'
+  Ran 8 shell commands
 
-✻ Incubating… (2h 39m 15s · ↓ 386.8k tokens · thinking)
+● Agent "Esmeril da familia AUSENCIA" finished · 1h 22m 47s
+
+  Ran 6 shell commands
+
+● Background command "Run ruff, the new selos, neighbours and the full suite" completed (exit code 0)
+
+● Suite green: 9569 tests, OK (skipped=33), rc=0 (1247 s). Running the commit act.
+
+  Ran 1 shell command
+
+● Commit 5bdf439c landed. Now the two doc commits before starting the sombra (so nothing edits the tree while the bloco runs).
+
+  Ran 1 shell command
+
+● Background command "Wait for suite completion marker" completed (exit code 0)
+
+● Measuring doc diffs
+  ⎿  $ cd /home/ronald/saas-hasner && git diff --stat -- app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md app/docs/TICKETS.md
+
+✢ Incubating… (2h 44m 22s · ↓ 399.8k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 6 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Watching b2zyl7hjb.output for suite verdict                                             1h 21m 57s · ↓ 144.3k tokens
-  ◯ general-purpose  Drafting c3_dossie.md                                                                   1h 20m 44s · ↓ 169.0k tokens
-  ◯ general-purpose  Reading esmeril_da_copia.sh ruff invocation                                                49m 37s · ↓ 149.7k tokens
+  ◯ general-purpose  Reading .git/hooks/pre-commit guards                                                    1h 22m 47s · ↓ 148.1k tokens
+  ◯ general-purpose  Reading PORTAS['chamado'] in core/portas.py                                              1h 25m 51s · ↓ 88.2k tokens
+  ◯ general-purpose  Writing msg_c1.txt commit message                                                          54m 44s · ↓ 168.7k tokens
   ⧉  index
 ```
