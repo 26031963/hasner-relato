@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:40:45.**
+**Medido em 04/10/2026 04:45:46.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Raia-chamado: escritor unico, C2 a C1" still running in background
+  Ran 1 shell command
 
-● Task "Push the two marco commits" still running in background
-
-● BASE_DIR is app/, so the template path resolves. The module is SimpleTestCase-only — Django's get_databases(suite) then sets up no
-  database, so it cannot collide with the in-flight push suite. Running the RED:
+● All five leitores converge: each day carries its own marcos (_dia = dict(base, ..., marcos=_marcos)), positioned when the ata has
+  lâmpadas and [] when aggregate — and the docstring confirms "NENHUM le o marcos de topo -- todos usam dia['marcos']". So the calendário
+  gets falta_marcos with zero queries and stays honest where the ata doesn't know. Writing the cure:
 
   Ran 1 shell command
 
-● RED evidenced — 5 tests, 6 errors + 1 failure, in 0.004s: no database was created, confirming the module can't touch the in-flight push
-  suite. Now the cure, at the single writer:
+● Now the appliers — the espelho (which feeds four leitores) and the badge's ready-made phrase:
 
   Ran 5 shell commands
 
-● tipo is 'E'/'S' — the template prints the bare letter. Before inventing words, checking whether the house already has that map:
+● The phrase needs its import. Adding it where montar_dias does its other local imports:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● The canonical map exists — Batida.TIPO_CHOICES = ("E","Entrada"), ("S","Saida"). The palavra will read that, not a new word list. Fixing
-  the RED to use the real vocabulary ('E'/'S') rather than the words I assumed:
+● Now the template stops composing — it prints the ready phrase:
+
+  Ran 4 shell commands
+
+● Now the fifth leitor — the calendário, which prints palavra_dia and today would keep saying the flat string:
 
   Ran 3 shell commands
 
-● I have the full chain. Calling advisor before writing the cure, since this commits the approach across three files plus the 5th-leitor
-  decision:
+● Widening the template selo to all templates, then running the RED:
 
-● Advising using Fable 5.1
+● Running 1 shell command…
 
-· Incubating… (6h 18m 6s · ↓ 898.6k tokens)
+✽ Incubating… (6h 23m 7s · ↓ 919.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking suite verdict in turno_d.out                                                   4h 59m 35s · ↓ 130.1k tokens
+  ◯ general-purpose  Verifying sem_comentario against MORDE fixtures                                          5h 4m 36s · ↓ 158.5k tokens
   ⧉  index
 ```
