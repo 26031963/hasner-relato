@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:40:45.**
+**Medido em 04/10/2026 19:45:45.**
 
 | | |
 |---|---|
@@ -144,7 +144,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      leis = [
      ("L-104","**O UNIVERSO DO HOLERITE E MES CIVIL, NAO A COMPETENCIA 21-20**:…
 
-· Compacting conversation… (7h 28m 47s · ↓ 881.7k tokens)
+· Compacting conversation… (7h 33m 47s · ↓ 881.7k tokens)
   ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact

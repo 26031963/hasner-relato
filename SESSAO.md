@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 19:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (357.6 MB). Acoes na janela: **1606**.
+**Medido em 04/10/2026 19:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (357.6 MB). Acoes na janela: **1589**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1599,20 +1599,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:46:26 | Bash | Ler acao() e lista() inteiras | `sed -n '147,266p' escala/services/cadastro_realidade.py` |
 | 07:46:09 | Bash | Ler _jornada_que_mente e _vigencias_impossiveis | `sed -n '62,150p' escala/services/cadastro_realidade.py` |
 | 07:45:47 | Bash | Ler o contador de vigia e o censo de leitores da lista | `echo "=== vinculo.py 345..400 ===" && sed -n '345,400p' colaboradores/services/vinculo.py && echo && echo "=== quem chama cadastro_realidade.lista ===" && grep -rn "cadastro_realidade" --include=*.py --include=*.html . \| grep -v '/tests/' \| grep -v "^./escala/services/cadastro_realidade.py"` |
-| 07:45:33 | Bash | Ler o serviço Cadastro x Realidade | `echo "=== cadastro_realidade.py: docstring + defs ===" && sed -n '1,60p' escala/services/cadastro_realidade.py && echo "...." && grep -nE '^def \|^class \|^[A-Z_]+ *=' escala/services/cadastro_realidade.py && echo "=== wc ===" && wc -l escala/services/cadastro_realidade.py` |
-| 07:45:25 | Bash | Censo do leitor Cadastro x Realidade | `echo "=== dias_cadastro_x_realidade ===" && grep -rn "dias_cadastro_x_realidade\\|cadastro_x_realidade\\|CADASTRO x REALIDADE\\|cadastro_realidade" --include=*.py --include=*.html . \| grep -v '/tests/' \| head -20` |
-| 07:44:52 | Bash | Ler o resultado da sonda e o contexto do pouso da raia-r4 | `cd /home/ronald/saas-hasner && cat logs/placar_estrutural/r4_previsto_cego_20261004.txt && echo "=== contexto do pouso no RELATO ===" && sed -n '430,442p' app/docs/RELATO.md` |
-| 07:44:48 | Bash | Procurar o estado declarado da raia-r4 nos docs | `cd /home/ronald/saas-hasner && grep -n "raia-r4\\|wt-r4\\|98924ef0" app/docs/BACKLOG.md app/docs/RELATO.md app/docs/TICKETS.md 2>/dev/null \| head -20` |
-| 07:44:17 | Bash | Ler o commit pendente da raia-r4 | `cd /home/ronald/wt-r4 && git show --stat 98924ef0 \| cat \| head -30 && echo "=== mensagem ===" && git log -1 --format=%B 98924ef0 \| cat \| head -60` |
-| 07:44:13 | Bash | Ver o que a raia-r4 tem pendente e seu estado | `cd /home/ronald/wt-r4 && git log --oneline main..HEAD \| cat && echo "--- status ---" && git status --porcelain \| head && echo "--- base comum com main ---" && git merge-base --short HEAD main 2>/dev/null \|\| git rev-parse --short "$(git merge-base HEAD main)"` |
-| 07:44:06 | Bash | Listar worktrees e branches de raia existentes | `cd /home/ronald/saas-hasner && git worktree list \| cat && echo "--- branches raia ---" && git branch --list 'raia-*' \| cat` |
-| 07:43:59 | Bash | Rodar a sonda de frota do RED | `cd /home/ronald/saas-hasner && (echo "== R4: RED do tripwire previsto CEGO -- $(date '+%d/%m %H:%M:%S') HEAD=$(git rev-parse --short HEAD)"; bin/sonda_frota.sh logs/sombra/r4_previsto_cego_20261004.py 2>&1) \| tee logs/placar_estrutural/r4_previsto_cego_20261004.txt \| tail -40` |
-| 07:43:55 | Bash | Escrever a sonda read-only do RED do tripwire | `mkdir -p /home/ronald/saas-hasner/logs/sombra && cat > /home/ronald/saas-hasner/logs/sombra/r4_previsto_cego_20261004.py <<'PY' # R4 (PLACAR-ESTRUTURAL) -- O RED DO TRIPWIRE "ativo com batida e previsto 0". SO LE, zero escrita. # # A PERGUNTA, pelas autoridades DECLARADAS, sem aritmetica propria de vinculo: # universo = Colaborador.situacao='ativo' (o tripwire que o R4 nomeia e "ATIVO com batida") ...` |
-| 07:43:21 | Bash | Ler o executor de sonda de frota | `cd /home/ronald/saas-hasner && cat bin/sonda_frota.sh` |
-| 07:43:17 | Bash | Encontrar o executor de sondas na sombra | `cd /home/ronald/saas-hasner && ls bin/ \| grep -iE 'sombra\|sonda' ; echo "--- como roda sonda na sombra ---"; grep -rn "settings.sombra" bin/*.sh \| head -12` |
-| 07:43:10 | Bash | Conferir o carimbo da sombra e listar os commands de escala | `cd /home/ronald/saas-hasner && bin/sombra.sh --conferir 2>&1 \| tail -12; echo "=== commands de escala ==="; ls app/escala/management/commands/ \| head -40` |
-| 07:42:46 | Bash | Ler o vigia de motor como padrão de janela e estrutura | `sed -n '1,70p' ponto/management/commands/vigiar_motor_autoridade.py` |
-| 07:42:39 | Bash | Ler a declaração do cron, o log do vigia e os chamadores de batidas_apuraveis | `sed -n '290,312p' config/crons.py && echo "=== log do vigia hoje ===" && tail -14 ../logs/tripwire_vinculo.log 2>/dev/null && echo && echo "=== quem converte janela date->datetime para batidas_apuraveis ===" && grep -rn "batidas_apuraveis(" --include=*.py . \| grep -v '/tests/' \| head -20` |
-| 07:42:29 | Bash | Ler batidas_apuraveis e as declarações de cron dos vigias de vínculo | `echo "=== batidas_apuraveis ===" && sed -n "$(grep -n 'def batidas_apuraveis' ponto/turnos.py \| cut -d: -f1),+28p" ponto/turnos.py && echo && echo "=== tripwire_vinculo_orfao no crons.py ===" && grep -n "tripwire_vinculo_orfao\\|tripwire_situacao_afastado\\|vigiar_familia_escala" config/crons.py` |
-| 07:42:01 | Bash | Ler minutos_previstos_periodo inteiro | `sed -n '1444,1575p' escala/utils.py` |
-| 07:41:55 | Bash | Ler a sonda de referência do R4 | `cd /home/ronald/saas-hasner && echo "=== sonda de referencia (r4_frota_vinculo) ===" && cat logs/sombra/r4_frota_vinculo_20261003.py 2>/dev/null \| head -80` |
