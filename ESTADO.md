@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 23:30:31.**
+**Medido em 03/10/2026 23:36:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `69fca443 [RELATO] Os dois arquivos da fatia moram na copia, e o erro de meia hora fica escrito onde doi` |
+| `HEAD` local | `a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO MEU PEDIDO, nao na medicao` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,22 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO MEU PEDIDO, nao na medicao
+697db0c7 [O30][O122] Os dois vales dele entram com as palavras dele, e os dois achados viram item em vez de prosa
 69fca443 [RELATO] Os dois arquivos da fatia moram na copia, e o erro de meia hora fica escrito onde doi
 7a335e37 [O142] A RED sai da arvore junto com a cura, nao antes dela -- senao eu deixo a arvore VERMELHA
 0b7e0a78 [O142] A RED da invariancia fica vermelha onde a sombra disse, e a cura NAO vai para o disco antes do DIFF
-ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade
-aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados
 ```
 
 ## `git status --short`
 
 ```
  M PLANO_PISCADA.md
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -117,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
+  corrigir o endereco no registro.
 
-● Task "Rodar os DRYs dos crons e o censo da ata" still running in background
+● Terceiro vale — e com um achado que é contra mim: eu pedi o clique no endereço errado. Antes de fechar, a pergunta que importa é se o
+  selo mediu a página certa ou se eu acertei o número na página que não tem barra:
 
-❯ smoke Ronald: abri /escala/tipos/, o Nova escala agora e um atalho da barra da casa (quadro Atalhos) e nao esta mais no titulo, e o
-  clique abre o drawer do wizard como antes -- pode fechar a O122 etapa 1.
-  vale Ronald O30 F1: o drawer de Ausencias esta no molde (cabecalho, trocador, tres guias) -- abre a fatia 2. Dois ajustes para a fatia
-  2: o rotulo da escala repete o tipo ("12x36 12x36") e "Valido ate" diz "dia unico ou em aberto" em vez de dizer qual dos dois.
+  Searched for 1 pattern, ran 1 shell command
 
-  Ran 2 shell commands
+● O selo mede a página certa — colaboradores/tests/test_o122_etapa0_barra_e_a_mesma.py:390 faz
+  self.client.get('/colaboradores/painel-situacional/'). Então o erro foi no pedido, não na medição: os 0 de 14 elementos × 15 props são da
+  página que tem barra. Fecho o vale e corrijo o endereço no registro:
 
-● Relâmpago fechou invariante: o único diff entre os dois lados é a linha de md5 que eu mesmo carimbo — --dias 2 dá 1 chamado a abrir, 0
-  retratadas nos dois, --dias 50 dá 25 a abrir, 0 retratadas nos dois. A cura não muda o que o cron das 06:26 retrata.
+  Ran 1 shell command
 
-  Os seus dois vales entram agora, antes de eu seguir:
+❯ smoke Ronald: testei a busca de escala no vinculo do colaborador e ela acha pelo texto que mostra -- pode fechar a O154.
 
-  Searched for 1 pattern, ran 7 shell commands
+  Committed a2a7fc0f, read 1 file, ran 4 shell commands
 
-● Dois erros meus na linha que inscrevi há pouco: o id O160 já existia (ARVORE-SEM-CONFLITO, linha 305) e a linha caiu na tabela do
-  portão/HAIKU, não no bloco OBRAS. Corrijo antes de prosseguir:
+● O cartório fechou invariante nas três empresas (julgadas=2 carimbadas=0 pulados=100780 idêntico dos dois lados; o único delta é a linha
+  de md5). O censo da ata está rodando — 2,7 MB escritos. Enquanto ele corre, escrevo o RELATO:
 
-● Mover a linha para OBRAS, renumerar e inscrever a O162
-  ⎿  $ cp docs/BACKLOG.md /tmp/BACKLOG.bak.$$ && python3 - <<'PY'
-     import io, re
-     p = 'docs/BACKLOG.md'
-     L = io.open(p, encoding='utf-8').read().split('\n')
-     # 1. a linha que eu inscrevi na tabela errada (indice 634 = linha 635) sai de la
-     alvo = [i for i, s in enumerate(L) if s.startswith('| O160 |') and 't…
+  Ran 1 shell command
 
-✢ Incubating… (1h 7m 52s · ↓ 161.6k tokens · thinking)
+● Advising using Fable 5.1
+
+✢ Incubating… (1h 13m 22s · ↓ 176.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: SEXTO BANCO do esmeril -- f6291f9d diz "O137 destravado" e nenhum agente nasceu. A regra do O137 e nascer NA MESMA RESPOSTA
+  em que a familia fecha. Abrir agora o agente do esmeril da familia AUSENCIA em worktree proprio (codigo morto com certidao, leitor que
+  nao migrou, nome que mente, entrada no GLOSSARIO e no MAPA), sem tirar a trilha principal do O142. Segue a fila.
+  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
