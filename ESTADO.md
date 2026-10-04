@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 00:03:01.**
+**Medido em 04/10/2026 00:08:15.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ a2a7fc0f [O122][O154] Mais dois vales: e o endereco do smoke estava errado NO ME
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
 ?? esteira.pausada
@@ -114,7 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Esmeril da familia AUSENCIA" still running in background
 
 ● Task "Raia-chamado: escritor unico, C2 a C1" still running in background
 
@@ -137,10 +138,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Message queued for delivery to aa191f4ffa104591b at its next tool round.
   ⎿  Allowed by auto mode classifier
 
-● Reading cluster detector head and its close path
-  ⎿  $ sed -n '60,120p' ponto/management/commands/detectar_cluster_espurio.py
+  Searched for 7 patterns, read 1 file, ran 14 shell commands
 
-✢ Incubating… (1h 40m 22s · ↓ 247.5k tokens · thinking)
+  Advising using Fable 5.1
+
+· Incubating… (1h 45m 36s · ↓ 262.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -150,8 +152,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading ler_inscricao in core/mapa/contrato.py                                              23m 5s · ↓ 167.4k tokens
-  ◯ general-purpose  Checking chamados/models.py for related_name definitions                                   21m 51s · ↓ 113.0k tokens
-  ◯ general-purpose  Writing suite_vizinhos.sh for crons readers                                     21m 51s · ↓ 101.7k tokens · 1 queued
+  ◯ general-purpose  Measuring @nao-importa candidates in ponto/                                                28m 18s · ↓ 108.9k tokens
+  ◯ general-purpose  Asserting author in resgate trilha                                                          27m 5s · ↓ 132.0k tokens
+  ◯ general-purpose  Reading derivacao_propria in test_papel_prazo_nao_deriva.sh                                 27m 5s · ↓ 125.8k tokens
   ⧉  index
 ```

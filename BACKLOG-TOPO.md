@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**165 obras abertas.**
+**168 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -174,3 +174,6 @@ lista — ela e o que esta EM PE._
 | **O164** | RAIA-CHAMADO VOLTA A CONSTRUIR: os 60 pontos do escritor unico | **agente na raia `/home/ronald/wt-esmeri |
 | **O165** | OS 39 .py DA RAIA-CHAMADO QUE NAO SAO AUTH PODEM POUSAR SOZINHOS? | **censo somente-leitura aberto 03/10 23: |
 | **O166** | O139 NO CODIGO: o papel `prazo` nasce em `config/crons.py::PAPEIS` | **agente em worktree proprio, aberto 03/ |
+| **O167** | OS QUATRO CADASTROS FICAM SOMENTE LEITURA NO DJANGO ADMIN | espera corte |
+| **O168** | A GUARDA DE CONVERSA VALE NO EVENTO, NAO SO NA VARREDURA | **ordem explicita de sequencia**: o `--e |
+| **O169** | O CHAMADO DE CLUSTER MORRE POR IDADE, NAO POR LASTRO -- E ISSO E LEI NA MESA DELE | **lei na mesa** -- as duas pernas escrev |
