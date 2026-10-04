@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 19:14:25.**
+**Medido em 04/10/2026 19:19:51.**
 
 | | |
 |---|---|
@@ -115,22 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Dois achados novos para situar antes de agir: o KeyError: 'POSTGRES_USER' (faltou o env-file da porta) e três veredictos que chegaram.
-  Leio o do agente e refaço o gerador com o env certo:
-
-  Read 1 file, ran 3 shell commands
-
-● O selo não acusava código certo — é desync real: contratos_da_pergunta entrou em nucleo/ferramentas.py::contexto_do_chat e o
-  PROMPT_GERADO.md nunca foi regerado. A cura é a regeneração pelo gerador (escritor único), e o arquivo saiu ronald:ronald. Commito e, em
-  paralelo, busco o relatório do agente e a procedência do Ran 9618:
-
-  Committed 8ffcd44d, ran 1 shell command
-
-❯ aval Ronald: se a falha do nucleo nao fechar em uma tentativa, o pouso 2/3 (CERT-AST) sai do pacote e vira item proprio; K8 e K5 pousam
-  agora, num ato so com o deploy. Depois: CELULA-TURNO-FECHA pela lei (a), e O145. Segue a fila; PAREI so em lei ou !
-
-● O aval entra na condição decisiva: a cura do núcleo fechou em uma tentativa (uma execução do gerador → diff → commit 8ffcd44d; o KeyError
   antes foi erro de instrumento meu, env-file faltando, não a cura falhando). Vou provar com UMA corrida da porta: se não vier OK, o
   CERT-AST sai do pacote pela sua regra.
 
@@ -140,12 +124,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   logs/k8t_suite_cheia_20261004.out (a raia k8t, 15:36), então a cópia mergeada segue sem veredito. Corrijo a invocação e largo a suite
   Django na mesma leva:
 
-● Rodar a porta do nucleo pela copia onde ela nasceu
-  ⎿  $ cd /home/ronald/wt-pousos && ls -l bin/suite_nucleo.sh 2>&1 | head -2; timeout 600 bash /home/ronald/wt-pousos/bin/suite_nucleo.sh
-     --dir /home/ronald/wt-pousos --espera 420 2>&1 | tail -20; echo "nucleo_rc=${PIPESTATUS[0]}"
+  Ran 1 shell command
 
-* Jitterbugging… (7h 2m 27s · ↓ 842.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Ran 520 tests ... OK, e o próprio teste imprime PROMPT_GERADO.md em sincronia. A cura do núcleo fechou em uma tentativa — o CERT-AST fica
+  no pacote, pela sua própria condição.
+
+  Não largo a suite ainda: ela monta wt-pousos, e editar a árvore que a medição monta já me custou antes. Fecho primeiro os três selos de
+  host vermelhos, commito, e só então a suite corre contra a árvore que de fato pousa:
+
+  Ran 1 shell command
+
+● Bom: cortes_registrados está OK na cópia (64 cortes, 0 sem fatia) — aquele vermelho era da árvore viva às 13:45, antes do pouso do
+  teto20. Sobram dois. Leio a forma antes de escrever:
+
+  Ran 2 shell commands
+
+● Os três registros são: marcador (BACKLOG.md:7), célula de estado do item, e o topo do RELATO. Leio as duas linhas antes de mexer:
+
+  Conferir o rascunho do RELATO
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -l $S/relato_novo.md 2>&1; echo
+     "=== head ==="; head -20 $S/relato_novo.md 2>/dev/null | cut -c1-240
+
+✻ Waiting for API response · will retry in 2m 31s · check your network
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
