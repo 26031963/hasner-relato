@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:06:01.**
+**Medido em 03/10/2026 21:11:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadl
 
 ```
  M PLANO_PISCADA.md
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Aval recebido — O142, fatia de dinheiro, com dossiê por fora. A pista de teste está ocupada pela suite do merge, então faço agora o que a
-  PROMPT-NAO-SE-REPETE exige no mesmo turno (registro + item de obra) e leio o dossiê. Como o --ff-only morre se o HEAD do main andar, o
-  registro vai na cópia, e desce com o merge.
+● O vermelho não saiu da minha árvore: origin/main está em 29f28708 e os 5 commits não foram empurrados — o pre-push teria mordido. Curo o
+  censo na cópia, que é o que desce no --ff-only.
 
   Ran 1 shell command
 
-● O SHA que o aval cita não é o dossiê: 29f28708 mexe uma linha de TICKETS.md (rodapé de push). Procuro o dossiê real em todas as refs e
-  worktrees antes de concluir.
+● 29 → 28. Rodo o contrato sozinho — e o ruff, que já me custou três ciclos antes.
 
   Ran 1 shell command
 
-● Background command "Suite na árvore mergeada" completed (exit code 0)
+● Verde, e o ruff limpo. Commito a cura do censo.
 
-● A suite acabou. Leio o veredito antes de qualquer outra coisa.
+  Committed 77bd2096
 
-  Ran 1 shell command
-
-● Uma falha — e não é o vermelho conhecido do relógio. test_o_censo_acompanha_quem_ja_migrou é contrato que ENUMERA, e eu mexi na busca.
-  Leio o detalhe.
+● Agora o registro do O142 que a PROMPT-NAO-SE-REPETE cobra no mesmo turno. Leio a célula atual do O142 inteira.
 
   Ran 2 shell commands
 
-● O contrato está CERTO e a regressão é minha: a cura O154 tirou um dos dois sítios de busca crua de escala/views.py, o arquivo encolheu de
-  2 para 1, e o censo não acompanhou. Isso está vermelho no main agora — LEI-AKITA 6, cura na hora.
+● O assert pegou 309 — encurto a célula; o PROMPTS já entrou.
 
-● Ler o contrato do censo de busca
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,80p' app/core/tests/test_contract_busca.py
+  Committed 282c1670, ran 2 shell commands
 
-✢ Bloviating… (20h 52m 30s · ↓ 2.9m tokens · thinking)
+● 8 selos de host RED na cópia — mas a maioria cobra ambiente que só existe no checkout principal (logs/deploy.stamp, staticfiles, hooks,
+  .claude/settings.json). Comparo com o main, que é a árvore que o push carimba.
+
+  Mesma pasta de selos no main · 37s
+  ⎿  $ cd /home/ronald/saas-hasner && for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); st=$?; [ $st -ne 0 ] && echo "RED $(basename
+     $t)"; done; echo "--- fim (sem linha = pasta verde no main) ---"; echo "total de selos: $(ls bin/tests/test_*.sh | wc -l)" (36s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bloviating… (20h 58m 0s · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
