@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 06:50:31.**
+**Medido em 04/10/2026 06:55:45.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● Estado, enquanto a pista mede:
 
-● Background command "Run the chamados+api suite on the raia" completed (exit code 0)
+  Feito desde o RED do B4.6
+  - As duas funções foram para chamados/juizes.py, a casa que o próprio contrato nomeia, com as lápides intactas. O juiz do B4.6 agora vê
+    só _motor_humana (a allowlist). core/juizes.py — o registro que a TRAVA JUIZ-NOVO vigia — não foi tocado, e isso foi lido no selo
+    (test_juiz_novo_tem_corte.sh só olha aquele arquivo).
+  - O re-export de compat que eu havia escrito saiu: ele existe para chamador legado e estas duas não têm nenhum. Os três métodos de
+    models.py usam o import local que aquele arquivo já usa 10 vezes, e os 3 chamadores de fora apontam para a casa real — como os outros
+    192 arquivos que importam de chamados.juizes.
+  - RED mantido pelo juiz do próprio selo: 6 ofensores contra git show HEAD:, 0 na árvore viva. Ruff limpo nos dois apps.
 
-  Read 1 file
+  Dois defeitos nas minhas próprias citações, achados ao reconferir (a lição de :766→776 tinha 20 minutos)
+  - O patch que repontou o import empurrou a guarda do modulo de :169 para :171 — quatro sítios citavam o número velho. Trocados por âncora
+    de nome.
+  - Pior: chamados/signals.py:68-75 descrevia o clone que a própria C1 tirou de dentro do receiver em 4dd016f5. O espalhador real é o
+    ritual _rebaixar_urgencia_em_memoria, escritor único de urgencia_original, alcançado pelo receiver rebaixa_urgencia_ao_resolver.
+    Corrigido pela fonte, por nome.
 
-● A porta mora no main (5eb61383); a raia está em 4dd016f5. Rodando do repo principal com --dir:
+  Achado que o portão teria pego, não eu — rodei o regex do próprio bin/regua_tickets.sh sobre git log main..HEAD da raia: 4 IDs citados, 0
+  declarados no TICKETS (C1-PORTA-DO-CICLO, C2, C3, C4), mais o C1b nascendo. O selo lê $BASE..HEAD, então o merge trazia os quatro de uma
+  vez e o push seguinte seria recusado no portão. As 5 linhas estão prontas em patch_tickets.py, com estado honesto (NA RAIA, espera o !
+  da janela_auth).
 
-  Read 1 file, ran 7 shell commands
+  Rodando chamados api ponto core na raia (bod22nrem) — ponto entrou porque um dos 12 fixtures migrados mora lá e as duas rodadas
+  anteriores nunca o testaram; core porque test_contract_direcao_a16.py importa chamados.juizes. Com o veredito verde lido do arquivo:
+  commit da fatia na raia, depois O183 no BACKLOG + RELATO + as 5 linhas do TICKETS no main.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+✻ Churned for 8h 31m 54s · done 6:54 AM · 2 shells still running
 
-  Ran 1 shell command
-
-● Background command "Run the chamados+api suite from the main repo against the raia tree" completed (exit code 0)
-
-  Searched for 1 pattern, read 1 file, ran 1 shell command
-
-● Veredito lido do arquivo: Ran 2798 tests in 85.177s / OK (skipped=2) — o ### daquele run era carimbo meu, não da porta. Os três pontos
-  antes do commit:
-
-● Reading what the lápides claim about each anchor and finding the real spreader
-  ⎿  $ cd /home/ronald/wt-esmeril2/app
-     echo "=== o que minhas lapides afirmam sobre essas ancoras ==="
-     git diff -U0 | grep "^+" | grep -n "motor\.py:24\|motor\.py:41\|painel\.py:118\|verbos\.py:16\|signals\.py:68-75"
-     echo "=== o espalhador de urgencia_original, ao vivo ==="
-     grep -n "urgencia_original\|u…
-
-✢ Cerebrating… (50m 24s · ↓ 127.2k tokens · thought for 6s)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
