@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- **AUSENCIA FECHADA no estrutural: `contratos_estruturais: 13/22 verdes`** pela funcao real, selo `test_selo_contratos_estruturais` 13 OK (`c
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:314 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:38:31.**
+**Medido em 03/10/2026 21:44:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio` |
+| `HEAD` local | `c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **15** |
+| commits a subir (`ahead`) | **16** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos
 e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio
 282c1670 [O142-AVAL] O aval da fatia de dinheiro entra na esteira, e o ponteiro do dossie NAO confere
 77bd2096 [O154] O censo da busca encolhe 29 -> 28, e quem o tinha deixado velho fui eu
 9085f973 [O122] As tres etapas da raia ganham linha na tabela, e o smoke da etapa 0 NASCE porque a lei o mandou
-c59fbad8 [O122] A raia-ui vem para o main EM COPIA -- 5 conflitos resolvidos por HUNK, e dois deles eram cura que se perderia
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ c59fbad8 [O122] A raia-ui vem para o main EM COPIA -- 5 conflitos resolvidos por
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,20 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● O meu laço de espera girou em falso (o sleep de primeiro plano é bloqueado) — o waiter real btd0s5n1j segue de pé e a suite está em 18
-  min, 0 falhas. Uso a janela para a medição do col736 na sombra:
-
-  Searched for 1 pattern
-
-● O rótulo é o pk. Sonda na sombra, chamando a função real nas três formas de janela:
-
-  Ran 1 shell command
-
-● Background command "Aguardar o Ran da suite cheia" failed with exit code 1
-
   Ran 1 shell command
 
 ● Suite cheia: Ran 9552 tests in 1125.758s / OK (skipped=42), 0 falhas nomeadas. Todos os portões medidos verdes. O ff e o deploy vão no
@@ -140,11 +125,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● 58/58 verdes, as três rotas da fatia em 302. Agora o RELATO com a hora medida:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-✢ Bloviating… (21h 25m 0s · ↓ 2.9m tokens)
+● O RELATO é mais novo no topo — eu anexei no rodapé. Corrijo o lugar e atualizo o topo, que é contrato com o hook:
+
+● Conferir o que falta empurrar e de quem é
+  ⎿  $ cd /home/ronald/saas-hasner && git fetch --quiet origin 2>&1 | tail -3; echo "=== origin/main..HEAD (o que eu empurraria) ===" &&
+     git log --oneline origin/main..HEAD && echo && echo "=== autor de cada um ===" && git log --format='%h %an | %s' origin/main..HEAD
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmho0201h.output (10 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b8orfjafj.output (22 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byymazp0a.output (63 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o154/relato.md (36
+     lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Bloviating… (21h 30m 30s · ↓ 2.9m tokens · thought for 6s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
