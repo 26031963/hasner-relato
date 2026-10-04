@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 05:01:31.**
+**Medido em 04/10/2026 05:07:01.**
 
 | | |
 |---|---|
@@ -113,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dias is born, which is advisor's case (b):
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-2… · stopped
+
+● Now the RED for both leaks, before the cure:
+
+  Ran 2 shell commands
+
+● Confirming the RED is actually red before curing:
 
   Ran 1 shell command
 
-● api/views.py only reads the palavra from espelho_do_colab — fine. But the PDF re-applies it with limpar=True. Finding where its dias is
-  born, and what limpar strips:
+● RED confirmed — both exactly as measured in the wild ('Em aberto (falta saida ·I2)', 'falta i ·S'). Now the cure at the composer:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● The PDF's dias come from espelho_do_colab — born in montar_dias, so falta_marcos is present and the re-application gets the enriched
-  palavra. Reading the limpar key list, since I added a key to that dict:
+● No module-level imports in that file — everything is lazy there, so the clock check stays import-free to match:
 
-  Ran 1 shell command
+● Cure both leaks in the composer
+  ⎿  $ cd /home/ronald/wt-o130/app && python3 - <<'PY'
+     import py_compile, tempfile, os
+     p = 'ponto/services/dia_decidido.py'
+     s = open(p, encoding='utf-8').read()
+     velho = """ from ponto.models import Batida
+     _nome = dict(Batida.TIPO_CHOICES)
+     pedacos = []
+     for m in (falta_marcos or ()):
+     if not isinstance(m, …
 
-● limpar only pops _-prefixed private keys — falta_marcos is public and survives, which is why it's the carrier. Advisor's #1 is resolved:
-  no sixth leitor. Both do_dia callers and both aplicar_palavra_do_dia callers are migrated or fed by montar_dias. Now #3 — whether the
-  lápide's claimed remaining consumer actually exists:
-
-  Ran 1 shell command
-
-● Advisor's #3 confirmed — my lápide asserts a reader that does not exist. The only remaining falta_marcos mentions are my own kwarg, the
-  composer's parameter, a comment in e6_oraculo.py, and two selos; the chamado_id do badge E3 consumer is a phantom. Checking the marco
-  tipo set before fixing it, since #4 bears on the same code:
-
-● Finding which tipo codes the grade can emit
-  ⎿  $ cd /home/ronald/wt-o130/app && echo "=== tipos que montar_realizado_grade emite ==="; sed -n '/def montar_realizado_grade/,/^def /p'
-     escala/utils.py | grep -n "'tipo'\|tipo=\|TIPO\|'E'\|'S'" | head -20
-
-✢ Incubating… (6h 38m 52s · ↓ 958.9k tokens)
+· Compacting conversation… (6h 44m 22s · ↓ 979.5k tokens)
+  ▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 18%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,6 +151,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inspecting N2 branch in c1_patch.py                                                     5h 20m 21s · ↓ 157.7k tokens
+  ◯ general-purpose  Reading rebaixar in chamados/models.py                                                  5h 25m 51s · ↓ 168.7k tokens
   ⧉  index
 ```
