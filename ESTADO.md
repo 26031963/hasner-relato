@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 06:34:01.**
+**Medido em 04/10/2026 06:39:31.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  mediu, lendo o veredito do arquivo na hora de aplicar:
 
   Ran 1 shell command
 
-● _ch vai a objects.create, não ao gate — então os dois alta não levantam. Sobram 12 sítios com 'media' via criar. Conferindo se algum
-  depende do ritual (que exige != 'normal'), e medindo o SLA pela função real em vez de afirmá-lo:
-
-  Ran 2 shell commands
-
-● MEDIDO pela função real: os quatro valores não declarados (media, alta, baixa, critica) dão todos exatamente o comportamento de normal —
-  24 h e fora de URGENCIAS_ALTAS. A migração é preservadora de medida, com prova. Escrevendo as três peças:
-
-  Ran 2 shell commands
-
-● chamados/views.py:169-170 é o precedente da casa para esta mesma fronteira, nesta mesma função: if modulo not in _MOT: modulo =
-  'chamados', com lápide nomeando a classe idêntica de defeito (HX-MODULO-DA-REQUEST, A7 22/08). Isso contradiz o "não coagir".
-  Reconciliando antes de escrever:
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Reconciliado. Conferindo o default do campo antes de escrever — para não nascer um terceiro sítio de 'normal':
+● Agora a seção do RELATO, no mesmo script:
 
   Ran 1 shell command
 
-● default='normal' no campo — então a fronteira devolve o default do campo, não um literal. (E blank=True torna '' armazenável, o que a
-  lápide tem de nomear.) Escrevendo as quatro peças:
+● Background command "Run chamados and api tests on the raia worktree" completed (exit code 0)
 
-● Running 1 shell command…
+● rc=1 em 2 minutos — isso é falha de arranque, não suite. Lendo:
 
-· Cerebrating… (33m 54s · ↓ 80.5k tokens)
+  Read 1 file
+
+● Uma falha em 2798 testes, e é um contrato estrutural da casa que eu não conhecia: test_contract_deus_objeto.py (B4.6) proíbe função de
+  módulo nova em chamados/models.py e diz onde ela deve nascer. Lendo o contrato e o destino que ele nomeia:
+
+  Ran 1 shell command
+
+● O contrato é claro e o test_juiz_novo_tem_corte.sh só olha core/juizes.py, então chamados/juizes.py não dispara a TRAVA. Lendo o padrão
+  de re-export que o B4 já deixou, para seguir e não inventar:
+
+● Reading the existing re-export pattern in models.py
+  ⎿  $ cd /home/ronald/wt-esmeril2/app
+     echo "=== re-exports no fim de models.py ==="
+     grep -n "juizes import\|from chamados.juizes\|re-export\|noqa: F401" chamados/models.py | head -20
+     echo "=== as ultimas 30 linhas de models.py ==="
+     tail -32 chamados/models.py
+
+✢ Cerebrating… (39m 24s · ↓ 104.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
