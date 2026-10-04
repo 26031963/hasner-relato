@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:531 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:565 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 06:12:01.**
+**Medido em 04/10/2026 06:17:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `75026703 PLACAR: o R6 remedido pela funcao real -- e ele envelheceu no proprio +1 que previu` |
+| `HEAD` local | `5eb61383 [O182] A suite ganha PORTA: nao havia forma de rodar a inteira travada sem escrever o comando a mao` |
 | `origin/main` | `23d79450 HANDOFF: marco do O130 fechado -- o painel passa a dizer que a raia espera o mesmo `!`` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,18 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+5eb61383 [O182] A suite ganha PORTA: nao havia forma de rodar a inteira travada sem escrever o comando a mao
 75026703 PLACAR: o R6 remedido pela funcao real -- e ele envelheceu no proprio +1 que previu
 fcaf9a82 O topo do TICKETS fechado no ato do push (O112)
 23d79450 HANDOFF: marco do O130 fechado -- o painel passa a dizer que a raia espera o mesmo `!`
 62492b22 [O130] Em aberto passa a dizer o que falta -- e medir a fatia achou o defeito dentro dela
-06584473 TICKETS: o rodape nao envelheceu sozinho -- 18 commits num push so o levaram ao teto
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● 494 fora das choices, não 200 — e o segundo valor é meu achado, não do raia. Censo de escritores:
-
-  Ran 1 shell command
-
-● signals.py:68-75 confirmado, e apareceu um terceiro escritor que o raia não viu. Lendo os sítios:
-
-  Ran 1 shell command
-
-● Terceiro escritor é meu achado: 'baixa' (294 linhas) no par de kernels. E detectar_vinculo_divergente.py:115 já lê as choices como
-  autoridade — a lei existe. Vendo o que a raia já curou, para não curar duas vezes:
-
-  Ran 2 shell commands
-
-● A porta da raia cobre escalada, não nascimento — e é aí que o 'baixa' entra. Vendo se o selo AST dela já morde:
-
-  Ran 1 shell command
-
-● A porta da raia só pergunta pelos literais que chegam ao gate (ast.Call/ast.Attribute, linhas 339-345) — o urgencia='baixa' no nascimento
-  fica fora da pergunta dela. Antes de escrever, consultando:
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Recount by the house authority and test the porta on the baixa stock
-  ⎿  $ echo "=== _Ch9 e quem? criar() passa por abrir()? ==="
-     grep -n '_Ch9' api/views.py | head -3
-     grep -n 'def criar\|def abrir' chamados/models.py
-     echo "--- corpo de criar() ---"; sed -n "$(grep -n 'def criar' chamados/models.py | head -1 | cut -d: -f1),+22p" chamados/models.py
-     echo; echo "=== ENCERR…
+  Ran 1 shell command
 
-✢ Cerebrating… (11m 54s · ↓ 20.1k tokens · thinking)
+● Raia morta (só o fork de 1d atrás) — então o gap do nascimento é meu, e criar() confirma a origem: termina em objects.create(**campos),
+  urgencia entra sem guarda nenhuma. Landando primeiro o O182, que está pronto e com a pista livre:
+
+  Ran 3 shell commands
+
+● O selo de 300 chars da DIETA mordeu meu próprio texto. Encurtando:
+
+  Committed 5eb61383, ran 3 shell commands
+
+● O182 commitado. Rodando a suite inteira pela porta nova, que é a prova dela:
+
+  Ran 1 shell command
+
+● Preparando a medição em cópia enquanto a suite corre — a árvore é o que ela monta:
+
+  Searched for 2 patterns, ran 1 shell command
+
+● Suite correndo. Construindo a cura na worktree onde a porta mora — primeiro lendo os dois gates e o que 'normal' muda:
+
+● Reading the birth gates and the AST selo question in the worktree
+  ⎿  $ cd /home/ronald/wt-esmeril2 && echo "=== HEAD da worktree ==="; git log --oneline -1
+     echo; echo "=== URGENCIAS_ALTAS ==="; grep -rn 'URGENCIAS_ALTAS' --include=*.py app/ | head -5
+     echo; echo "=== abrir() -- o outro gate de nascimento ==="; sed -n '409,445p' app/chamados/models.py
+     echo; echo "=== …
+
+✢ Cerebrating… (17m 24s · ↓ 36.4k tokens · thinking)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
