@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**168 obras abertas.**
+**169 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -177,3 +177,4 @@ lista — ela e o que esta EM PE._
 | **O167** | OS QUATRO CADASTROS FICAM SOMENTE LEITURA NO DJANGO ADMIN | espera corte |
 | **O168** | A GUARDA DE CONVERSA VALE NO EVENTO, NAO SO NA VARREDURA | **ordem explicita de sequencia**: o `--e |
 | **O169** | O CHAMADO DE CLUSTER MORRE POR IDADE, NAO POR LASTRO -- E ISSO E LEI NA MESA DELE | **lei na mesa** -- as duas pernas escrev |
+| **O170** | JUIZ-DE-CHAMADO: OS 12 GANCHOS, COM OS 4 PRE-REQUISITOS NA FRENTE | espera aval |
