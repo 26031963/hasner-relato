@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:21:29.**
+**Medido em 04/10/2026 02:26:51.**
 
 | | |
 |---|---|
-| `HEAD` local | `478fd143 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING` |
+| `HEAD` local | `1ed33f31 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
 | commits a subir (`ahead`) | **13** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-478fd143 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING
+1ed33f31 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING
 b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do RELATO
 79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash
 8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
@@ -39,6 +39,7 @@ b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do REL
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
@@ -112,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● The RELATO delta is the esteira's own vigia alarm (cron-written), not mine — leaving it. Committing my two acts by path:
-
-  Committed b8f51891, 478fd143
-
-● Both landed. Now the open question on my own list that touches a published number — which outranks the rest (LEI-AKITA 8):
+  wrote it prescribes a money act that may be unnecessary. Running the cheap gates while I fix it:
 
   Ran 1 shell command
 
-● The published "8 move" (RELATO:454) came from the real function with the caller's own window, and lines 290-294 already carry the
-  6.074/5.856 defasagem. The load-bearing claim there is that the 60-day opener has no cron — verifying it rather than trusting my own
-  prose:
+● Agent "Esmeril da familia AUSENCIA" finished · 2h 45m 26s
+
+● My commit message's census line is wrong — I wrote "nada fora dele" and there are two consumers outside the hook. Checking what the cure
+  does to each before I correct it:
 
   Ran 1 shell command
 
-● Confirmed: config/crons.py:1136 declares it "backfill E3 sob ordem" and the live crontabs cite it 0 times. But my own grep found no
-  60-day literal, so I'm checking where that number came from rather than leaving my prose unbacked:
+● backlog_estado.py requires ≥6 cells and writes c[3] — my 5-column rows give 7 and put the estado exactly there, so the canonical writer
+  can drive them. Now correcting the false census in my own commit message (not pushed, so amend is the clean fix):
 
   Ran 1 shell command
 
-● default=60 at line 13 — the claim holds. Reading the whole command (1.1 kB) to see whether it has any guard against writing into an
-  exported competência:
+● Now fixing O171's PRONTO — it prescribed a money act, and the wiring says the single writer may close it by itself — and adding O175 with
+  the corrected facts:
 
-● Reading the backfill command in full
-  ⎿  $ cat -n ponto/management/commands/materializar_turnos.py
+  Correct O171 and add O175
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p='app/docs/BACKLOG.md'
+     t=open(p,encoding='utf-8').read()
+     # --- O171: o PRONTO estava errado. Nao se compra um ato de dinheiro antes de
+     # perguntar ao ESCRITOR UNICO se ele mesmo fecha.
+     velho_pronto = ("| achado 04/10 02:0x, **ato PROPRIO** -- o DIF…
 
-· Incubating… (3h 58m 50s · ↓ 556.3k tokens · thinking)
+✢ Incubating… (4h 4m 12s · ↓ 569.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 41m 32s · ↓ 101.1k tokens
-  ◯ general-purpose  Running ruff on contexto.py                                                             2h 40m 19s · ↓ 154.6k tokens
-  ◯ general-purpose  Adding diagram paragraph to msg_c3.txt                                                   2h 9m 12s · ↓ 116.6k tokens
+  ◯ general-purpose  Running ruff on contexto.py                                                             2h 45m 42s · ↓ 154.6k tokens
+  ◯ general-purpose  Appending lock-order census to msg_c2.txt                                               2h 14m 34s · ↓ 142.0k tokens
   ⧉  index
 ```
