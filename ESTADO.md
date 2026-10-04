@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:15:46.**
+**Medido em 04/10/2026 18:21:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
+| `HEAD` local | `15bc08ff registro: o corte do MES CIVIL ratifica a raia, e o teto dos dois contratos ficou 6 acima do medido NAS DUAS` |
 | `origin/main` | `5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+15bc08ff registro: o corte do MES CIVIL ratifica a raia, e o teto dos dois contratos ficou 6 acima do medido NAS DUAS
 5d31530f O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou
 fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-primeiro e a copia tinha invertido
 738b779f reconciliacao: o registro da ORDEM VIVA (31558c3e) entra no teto20 para o ff seguir sendo ff
 31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7
-088fdcde O135: o registro de que a GUARDA do agendado era VACUA, e do pop que conflitava
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -116,38 +113,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Quatro checagens antes de escrever, todas baratas:
-
-  Ran 2 shell commands
-
-● Topologia decisiva: wt-k5 contém 192aed00 (k8-t20), então o 13 é o número pós-pouso. O agente aa14fd… é de 02/10, transcript velho.
-  Confiro o teto nas duas raias e o b3wsnx6z5:
-
-  Ran 1 shell command
-
-● k8-t20 também deixou o teto em 19 — o afrouxamento é das DUAS raias, não só da k5. Meço os três números por raia com o contador AST para
-  a anotação sair exata:
+● Escrevo os quatro registros num ato:
 
   Ran 2 shell commands
 
-● pend = PENDENTES[FAMILIA] sem filtro — a contagem AST é len(pend). Os três números, por raia: main 19/(9,0,1,9)/117 · k8-t20
-  15/(8,0,1,6)/117 · k5 13/(8,0,1,4)/115. O afrouxamento do teto é das duas raias. Vejo o campo onde antes de escrever o CORTES.json:
+● 8 linhas, sem reformatar. Agora as células do BACKLOG e a seção do RELATO:
 
   Ran 1 shell command
 
-● gerar_cortes.py sem flag escreve o CORTES.md e o RELATO. Confiro que ele só troca o bloco entre marcadores antes de deixá-lo passar por
-  cima do que eu vou escrever:
+● Regenero o CORTES.md pelo gerador e passo os selos de host que leem estes docs:
 
   Ran 1 shell command
 
-● Tudo conferido. Escrevo os registros no main — o RELATO é mais-novo-primeiro, então acho o ponto de inserção:
+● Três selos verdes (o rc=2 do --conferir é o ALARME conhecido, coberto pela pausa declarada). Comito o registro — a árvore precisa estar
+  limpa para os merges dos pousos, que tocam estes mesmos arquivos:
+
+  Committed 15bc08ff, ran 1 shell command
+
+● Registro no main: 15bc08ff. Agora construo na raia. Leio os dois blocos de nota como estão em wt-k5:
+
+  Ran 3 shell commands
+
+● Monto a nota com as duas condições. Antes, confiro o contrato de vocabulário, que já mordeu prosa de comentário antes:
+
+  Ran 2 shell commands
+
+● Só palavras de pautas, nenhuma na minha prosa. Escrevo as notas e os dois tetos na raia:
 
 ● Running 1 shell command…
 
-✻ Jitterbugging… (6h 3m 48s · ↓ 758.4k tokens)
+✢ Jitterbugging… (6h 9m 3s · ↓ 777.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
