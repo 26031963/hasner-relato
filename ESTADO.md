@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:27:31.**
+**Medido em 03/10/2026 21:33:01.**
 
 | | |
 |---|---|
@@ -113,36 +113,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o154/relato.md (36
-     lines)
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● (2) e (4) confirmadas pela leitura — e (4) tem a lápide explícita no irmão turnos_de_batidas ("Pareia COPIAS... o carimbo vazaria"), que
+  turnos_do_colab não faz. Falta (3):
 
-● Task "Aguardar o Ran da suite cheia" still running in background
+  Ran 1 shell command
 
-● Suite 8 min adentro, 0 falhas nomeadas até aqui. Enquanto corre, sigo o O142 — e a saída da suite já mostra um sinal do H3 dele:
-  vigencia_impossivel: 1 vinculos de 1 colabs (esperado 0).
-
-  Ran 2 shell commands
-
-● A leitura fecha o achado dele com precisão maior do que o aval dizia — e o sítio real não é só a juíza:
-
-  Searched for 1 pattern
-
-● Dois sítios que o aval não cita e que mudam o desenho da RED:
+● Todas as quatro confirmadas no código, não só deduzidas: (1) o max da janela, (2) if any(t.data_turno == ontem for t in turnos) sobre a
+  lista desta chamada, (3) if any(_m in out...): continue — "a que chegou primeiro fica", e a ordem de chegada é a da janela —, (4)
+  turnos_do_colab não copia as batidas que o irmão turnos_de_batidas copia de propósito.
 
   Ran 3 shell commands
 
-● O desenho da RED fica diferente do que o aval previu, e por um motivo que achei na leitura: existe um segundo juiz da mesma pergunta,
-  escala/utils.py::_esc_vigente_do_dia (1507), que declara não filtrar ativa. Vou medir a fronteira antes de escrever.
+● O censo dele bate exato: 37 chamadas reais, e a âncora esmeril_espelho.py:65 é literal. Suite:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Escrevo a RED agora (em cópia, LEI-AKITA 10) e só rodo depois que a suite liberar o juliani_db_test — um run por vez.
+● Enquanto a suite fecha, confiro o estado de main para o ff ser seguro e preparo o RELATO:
 
-  Running 1 shell command…
+  Ran 1 shell command
 
-✢ Bloviating… (21h 14m 0s · ↓ 2.9m tokens)
+● origin/main não resolve e app/docs/RELATO.md apareceu modificado — nenhum dos dois estava assim. Antes de qualquer ff:
+
+● Esperar o Ran da suite · 1m 33s
+  ⎿  $ F=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_cheia.out; for i in 1 2 3 4 5
+     6 7 8 9 10 11 12; do if grep -qE '^Ran [0-9]+ tests in' "$F" 2>/dev/null; then break; fi; command sleep 15 2>/dev/null || true; done;
+     echo "=== VEREDITO ==="; grep -… (1m 32s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Bloviating… (21h 19m 30s · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
