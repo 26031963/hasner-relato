@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:415 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:441 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:31:31.**
+**Medido em 03/10/2026 22:37:01.**
 
 | | |
 |---|---|
@@ -113,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  dos dois:
+
+● O zero mordeu, e mordeu na fonte: turnos_do_colab = 0 chamadas no caminho do dinheiro, com parear_turnos = 5 / turnos_de_batidas = 3 /
+  papel = 2. Não é silêncio — é prova de que o dinheiro pega geometria por outra porta (turnos_via_autoridade, motor_calculo_v2.py:388).
+
+  Mas isso abre a pergunta que decide a fatia. Veja os números de col152: 22 dias previstos, 11.760 min previstos, 5.243 realizados, saldo
+  −114,5 h. Se os 6 dias que a cura entrega (~11,5 h cada) estivessem no dinheiro, não faltariam ~109 h:
 
   Ran 1 shell command
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bz9fo9gtm.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b04zmg5j3.output (6 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfoxsi9a9.output (6 lines)
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnoy1kvfx.output (13 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O censo já diz algo: motor_calculo_v2.py e ponto/services/fechamento.py não aparecem na lista. Vou confirmar por onde o dinheiro pega
-  geometria:
+● O dinheiro dá 87,91 h — nem 4 dias (~46 h) nem 10 (~115 h). Não vou inferir: vou perguntar ao motor quais dias ele contou.
 
   Searched for 1 pattern
 
-● O comentário em motor_calculo_v2.py:367 parece já nomear isso. Vou ler:
+● Melhor: capturar a saída de parear_turnos no caminho do dinheiro. É a geometria que o dinheiro realmente usou, lida na autoridade:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Confirmado por leitura: o motor não chama turnos_do_colab — ele monta marcos_por_dia sozinho (marcos_dna_periodo) e chama parear_turnos
-  direto. Isso explicaria o zero, mas leitura não é medição. Vou pôr dois contadores na fonte: se parear_turnos contar > 0 e
-  turnos_do_colab contar 0, o silêncio deixa de ser ausência de sinal e passa a ser sinal:
+● entrada aí é a Batida, não o datetime. Corrijo o leitor (e ele passa a dizer qual dos dois leu, em vez de adivinhar):
 
-  Searched for 1 pattern, ran 4 shell commands
+  Ran 2 shell commands
 
-● Três binders module-level — o patch vai nos quatro sítios para o contador não poder subcontar:
+● O zero está explicado e medido, e explicado pelo lado bom: a geometria que o dinheiro usa já tinha os 10 dias — idêntica à que a cura
+  entrega. Vou gravar isso antes de qualquer outra coisa:
 
-● Running 1 shell command…
+  Ran 2 shell commands
 
-· Incubating… (8m 52s · ↓ 24.9k tokens)
+● O RELATO está durável. Antes de ir ao commit+deploy de uma fatia de dinheiro, vou consultar:
+
+● Advising using Fable 5.1
+
+✢ Incubating… (14m 22s · ↓ 37.6k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
