@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**184 obras abertas.**
+**188 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -193,3 +193,7 @@ lista — ela e o que esta EM PE._
 | **O183** | O CAMPO `urgencia` DECLARA 4 VALORES E O BANCO TEM 6 -- 494 LINHAS, 468 VIVAS | espera `!` |
 | **O184** | `minutos_previstos_periodo` E CODIGO MORTO COM CERTIDAO, e a docstring dele ENSINA ERRADO | ABERTA. **NAO removida nesta fatia** --  |
 | **O185** | A `janela_auth` DIFFA CONTRA O QUE EU VOU EMPURRAR, NAO CONTRA O QUE ESTA NO AR | espera `!` |
+| **O186** | LEI-PROTEGE-SITIO: a lei escrita passa a MORDER no diff | espera corte |
+| **O187** | MAPA-QUEM-LE: o MAPA lista, por campo de ata/fechamento, quem LE | espera corte |
+| **O188** | SELO-DE-PENDENTE-POR-CHAMADA: o selo de PENDENTES casa FRASE LITERAL, e renomear passa por | **REGISTRADO, NAO CONSTRUIR** -- fila 2, |
+| **O189** | MEDE-OS-73-DE-ATA-ZERO | **MEDINDO** -- nao aplica nada (sombra,  |
