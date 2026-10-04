@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:05:31.**
+**Medido em 03/10/2026 22:10:45.**
 
 | | |
 |---|---|
@@ -115,14 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnoy1kvfx.output (13 lines)
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bmho0201h.output (10 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b8orfjafj.output (22 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/byymazp0a.output (63 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
 ● Task "Segunda tentativa do push do marco" still running in background
 
 ● Background command "Rodar o censo de invariância na sombra" completed (exit code 0)
@@ -139,18 +131,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● O constraint do banco me ensinou algo: vínculo invertido não pode mais nascer pelo ORM (ec_vigencia_fim_nunca_antes_do_inicio) — o do
   col736 é dado legado. A forma LEGAL que dispara o mesmo corte pelo vizinho é um vínculo encerrado antes da janela civil:
 
-  Causa exata do novo erro de fixture
-  ⎿  $ cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER --network saas-hasner_default
-     --env-file .env --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v ~/saas-hasner/app:/app -v
-     ~/saas-hasner/app/staticfiles:/app/staticfiles:ro saas-hasner-co…
+  Ran 5 shell commands
 
-* Bloviating… (21h 52m 0s · ↓ 3.0m tokens)
+● RED reproduzindo a assinatura medida em prod — na competência o colab perde os 10 dias (comp=[]) enquanto [d,d] e o civil concordam.
+  Agora a cura por bind-mount:
+
+  Ran 4 shell commands
+
+● O push pousou (29f28708..ba82736d, 9.558 + 22 testes OK). Enquanto os vizinhos rodam, vou gravar os números da cura:
+
+  Ran 4 shell commands
+
+● Advising using Fable 5.1
+
+· Bloviating… (21h 57m 14s · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
