@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 06:28:31.**
+**Medido em 04/10/2026 06:34:01.**
 
 | | |
 |---|---|
@@ -115,34 +115,34 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● Ruff e py_compile verdes. Agora o censo que falta — a varredura excluiu /tests, e os gates passam a levantar, então todo teste da árvore
-  que passe valor inválido quebra:
+● _ch vai a objects.create, não ao gate — então os dois alta não levantam. Sobram 12 sítios com 'media' via criar. Conferindo se algum
+  depende do ritual (que exige != 'normal'), e medindo o SLA pela função real em vez de afirmá-lo:
+
+  Ran 2 shell commands
+
+● MEDIDO pela função real: os quatro valores não declarados (media, alta, baixa, critica) dão todos exatamente o comportamento de normal —
+  24 h e fora de URGENCIAS_ALTAS. A migração é preservadora de medida, com prova. Escrevendo as três peças:
+
+  Ran 2 shell commands
+
+● chamados/views.py:169-170 é o precedente da casa para esta mesma fronteira, nesta mesma função: if modulo not in _MOT: modulo =
+  'chamados', com lápide nomeando a classe idêntica de defeito (HX-MODULO-DA-REQUEST, A7 22/08). Isso contradiz o "não coagir".
+  Reconciliando antes de escrever:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Reconciliado. Conferindo o default do campo antes de escrever — para não nascer um terceiro sítio de 'normal':
 
   Ran 1 shell command
 
-● Isso muda o tamanho do censo: a árvore usa seis valores fora das choices (baixa, critica, media, alta), e há um escritor por HTTP
-  (views.py:134, request.POST.get). Medindo quais passam pelo gate e quais não:
+● default='normal' no campo — então a fronteira devolve o default do campo, não um literal. (E blank=True torna '' armazenável, o que a
+  lápide tem de nomear.) Escrevendo as quatro peças:
 
-  Ran 1 shell command
+● Running 1 shell command…
 
-● Achado no caminho (LEI-AKITA 6): chamados/services/abertura.py:57 passa pelo criar(), e a urgência dele vem de views.py:134 =
-  request.POST.get('urgencia','normal').strip() — texto livre do navegador. Minha guarda transformaria isso em 500. Medindo as duas pontas
-  antes de decidir:
-
-  Ran 1 shell command
-
-● Isso fecha o censo: (A) vazio — nenhum objects.create com urgência fora de teste, então o gate criar/abrir cobre todo escritor de
-  produção. Mas (B) prova que falta a fronteira. Lendo a segunda entrada antes de decidir:
-
-● Tracing urgencia source in the second view and the existing error pattern
-  ⎿  $ cd /home/ronald/wt-esmeril2/app
-     echo "=== de onde vem 'urgencia' na view de :185 ==="
-     sed -n '160,186p' chamados/views.py | grep -n "urgencia"
-     awk 'NR>=150 && NR<=186 && /urgencia/ {print NR": "$0}' chamados/views.py
-     echo
-     echo "=== o padrao de erro que a view JA tem (para reusar, nao inventar) ==…
-
-✢ Cerebrating… (28m 24s · ↓ 69.2k tokens · thinking)
+· Cerebrating… (33m 54s · ↓ 80.5k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
