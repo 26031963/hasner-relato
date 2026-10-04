@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:35:01.**
+**Medido em 04/10/2026 15:40:31.**
 
 | | |
 |---|---|
@@ -113,41 +113,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Vou tornar o registro durável em git em vez de deixá-lo como sujeira — e pelo precedente de hoje (50333326) isso exige o merge de
-  reconciliação no mesmo ato, senão a GUARDA 2 para o pouso de segunda:
+  Ran 1 shell command
 
-  Committed 94218276, ran 3 shell commands
-
-● O commit levou o esteira.sh (era untracked) — e isso quebraria a GUARDA 1: o merge de reconciliação poria um arquivo fora de app/docs/ no
-  diff 48805bbf..teto20 e a esteira recusaria o próprio pouso. Corrijo pelo lado restritivo (não afrouxo a guarda):
-
-  Committed 31558c3e, ran 1 shell command
-
-● Agora o merge de reconciliação em teto20, o re-carimbo do selo e a prova de que a GUARDA 1 continua fechando:
+● grep do nome no log não prova nada (a suite não imprime nomes sem -v) — o número certo vem do AST, não do log:
 
   Ran 1 shell command
 
-● Conflito esperado no RELATO (os dois lados inseriram seção antes da mesma âncora). Vou resolver mantendo as duas, em ordem de hora:
+● 13 testes exatos no arquivo novo, e 9618 − 9605 = 13. O delta casa pela segunda fonte: os testes do k8 rodaram e nenhuma outra contagem
+  mudou. Agora o merge (a pista está livre e a suite acabou, então tocar a cópia é legal) — primeiro provando que o delta do teto20 é só
+  docs:
 
-  Committed 738b779f, ran 1 shell command
+  Ran 3 shell commands
 
-● O merge expôs uma inversão que já existia na cópia (14:1x antes de 14:5x, num arquivo que é mais-novo-primeiro). Conserto no mesmo ato:
-
-  Committed fb1c78ac
-
-● Guardas 1 e 2 fecham de novo. Prova a seco de que o pouso de segunda segue armado e para no lugar certo:
+● Nada foi escrito — a asserção parou antes. Vou olhar o que cada lado realmente tem:
 
   Ran 2 shell commands
 
-  Advising using Fable 5.1
+● Minha asserção estava errada, não o dado: a célula do teto20 também diz "K8 fechou". Discriminador correto:
 
-✢ Jitterbugging… (3h 23m 3s · ↓ 445.2k tokens)
+● Resolver os dois conflitos com o discriminador certo
+  ⎿  $ cd /home/ronald/wt-k8t && python3 - <<'PY'
+     p='app/docs/BACKLOG.md'
+     L=open(p,encoding='utf-8').read().split('\n')
+     assert L[97]=='<<<<<<< HEAD' and L[100]=='=======' and L[103].startswith('>>>>>>>')
+     meu=L[98:100]; dele=L[101:103]
+     _id=lambda l: l.split('|')[1].strip()
+     assert [_id(x) for x in meu]==[…
+
+✢ Compacting conversation… (3h 28m 33s · ↓ 456.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
