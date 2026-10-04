@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:51:01.**
+**Medido em 04/10/2026 15:56:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,8 @@ e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no cha
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  lista PROIBIDO. Construindo em cópia, com a incondicionalidade preservada:
+
+● A segunda metade é a origem de verdade: a porta que falta. Levantando o que ela precisa tocar — e um ponto decisivo é se POSTGRES_HOST,
+  que hoje não tem leitor, já vale db em prod (se valer, consumi-lo é no-op e cura o parâmetro morto; se não, é mudança de comportamento):
 
   Ran 1 shell command
 
-● como_esta_a_fila está dentro de um if no código vivo — isso me dá o caso que MORDE a partir da produção, não de fixture sintética: dois
-  valores reais que têm de dar status diferentes, que é a forma que a CLAUDE.md prescreve. Escrevendo:
+● POSTGRES_HOST=db já vem do .env:6 — então consumi-lo em settings.py é no-op em prod e cura o parâmetro morto pelo contrato 3, sem
+  inventar chave nova. Faltam duas coisas antes de eu tocar a régua:
 
   Ran 1 shell command
 
-● 7 testes (eram 5). Rodando o censo contra a cópia:
+● Tenho os fatos: o selo cobra a trava de qualquer script de bin/ que rode manage.py test sem REGUA_DB, e a régua pega a trava só em volta
+  da suite dela (linha 165), então uma chamada antes não aninha. Antes de tocar a régua — que é o portão de todo push — e o settings.py de
+  prod:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Publicando os números antes de construir — eles estão medidos e no chão, que é o que a HIGIENE-DE-CONTEXTO proíbe deixar. Primeiro o fim
+  do bloco OBRAS, para o item novo não deslocar o que o hook lê:
+
+  Ran 3 shell commands
+
+● Hook segue apontando PLACAR-ESTRUTURAL — o item novo não deslocou nada. Agora a seção do RELATO:
 
   Ran 1 shell command
 
-● 515, OK, rc=0 — +2 são os dois MORDE novos, e o vermelho virou verde. Agora a prova adversarial contra o arquivo REAL, numa terceira
-  cópia (não edito a árvore que a medição monta):
+●
 
-  Ran 1 shell command
-
-● Os dois pertubam para VERMELHO contra o arquivo real — o selo morde de fato. Um detalhe de higiene: na perturbação B o teste secundário
-  estoura IndentationError em vez de falhar limpo, porque o assertIn casa a linha de 4 espaços dentro da de 8. Ancorando no início de
-  linha:
-
-  Ancorar o alvo no início da linha
-  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PY'
-     p='mensageria/nucleo/tests/test_ferramenta_certificacao.py'
-     s=open(p,encoding='utf-8').read()
-     velho = """ alvo = ' dados.update(certificacao_da_pergunta(cliente, pergunta))\\n'
-     self.assertIn(alvo, src, 'a linha tem de existir para poder ser embrulhada')…
-
-· Jitterbugging… (3h 39m 3s · ↓ 484.9k tokens)
+✢ Jitterbugging… (3h 44m 33s · ↓ 498.9k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
