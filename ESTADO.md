@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:45:45.**
+**Medido em 04/10/2026 10:50:47.**
 
 | | |
 |---|---|
@@ -112,37 +112,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Push landed: origin/main == 98d9861e, régua Ran 9590 OK (skipped=42) + control-plane Ran 22 OK. Marco fechado.
+● Background command "Medir a predicada final pelo lavrado" completed (exit code 0)
 
-  Agora o passo 3. Primeiro a medição do delta das duas predicadas (ainda sem tocar código), que é o que desenha o RED:
+  Read 1 file
 
-  Read 1 file, ran 7 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read docs/HANDOFF-SESSAO.md (45 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/baue99jb9.output (44 lines)
-  ⎿  Referenced file ponto/turnos.py
-  ⎿  Referenced file ponto/views.py
+● Lavrado e recount concordam: 118 x 118, 0 discordâncias — então a predicada usa o LAVRADO (S133, havendo fonte não se deriva em
+  paralelo). Agora o RED:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 3 shell commands
 
-● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
-
-● Background command "Rodar a sonda do delta na sombra" completed (exit code 0)
+● RED evidenciado: 0 != 1 e 1 != 0, os dois sentidos. Agora a cura:
 
   Ran 1 shell command
 
-● SO_HOJE = 0 (nada sai) e SO_NOVA = 37 (o contador de hoje PERDE 37 dias com lâmpada acesa e soma própria zero). Mas 7 dos 37 são col142
-  isento=True com 4 lâmpadas "acesas" — crédito do Art.62 que a ata antiga não carimba (aplicar_isencao_no_dia não propaga a marca,
-  "deliberado"). Refino a predicada com a guarda da PESSOA, que o próprio leitor já devolve (grade_da_celula → isento_ponto), e meço a
-  forma agregada:
+● Antes do GREEN, provo que a guarda do Art.62 morde (SELO ANTI-VACUIDADE: o caso (c) passa hoje, então tem de falhar se a guarda sair):
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Advising using Fable 5.1
+● A guarda morde (1 != 0). Restauro e rodo o GREEN:
 
-✶ Pouncing… (1h 45m 46s · ↓ 177.5k tokens)
+  Ran 1 shell command
+
+● GREEN 8/8. Ruff e censo dos vizinhos que enumeram:
+
+  Ruff e censo de vizinhos
+  ⎿  $ cd /home/ronald/saas-hasner && docker run --rm $(bash -c 'source bin/recursos.sh; echo $TESTE_DOCKER') -v
+     /home/ronald/wt-ct/app:/app saas-hasner-core:latest sh -c 'ruff check ponto/services/bordas_realizado.py
+     ponto/tests/test_bordas_realizado.py' 2>&1 | tail -8; echo "=== vizinhos que citam o c…
+
+· Pouncing… (1h 50m 47s · ↓ 193.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
