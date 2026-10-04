@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 23:36:01.**
+**Medido em 03/10/2026 23:41:31.**
 
 | | |
 |---|---|
@@ -113,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  corrigir o endereco no registro.
 
-● Terceiro vale — e com um achado que é contra mim: eu pedi o clique no endereço errado. Antes de fechar, a pergunta que importa é se o
-  selo mediu a página certa ou se eu acertei o número na página que não tem barra:
+● 2 background agents launched (↓ to manage)
+   ├ Agent (Esmeril da familia AUSENCIA)
+   └ Explore (Censo de dependencia dos 39 py de auth)
 
-  Searched for 1 pattern, ran 1 shell command
+● Background command "Censo da ata nas competencias 10 e 08" completed (exit code 0)
 
-● O selo mede a página certa — colaboradores/tests/test_o122_etapa0_barra_e_a_mesma.py:390 faz
-  self.client.get('/colaboradores/painel-situacional/'). Então o erro foi no pedido, não na medição: os 0 de 14 elementos × 15 props são da
-  página que tem barra. Fecho o vale e corrijo o endereço no registro:
+  Read 1 file
 
-  Ran 1 shell command
+● col369 está na ATA da 10 — a competência aberta, 3 célula-dia (23, 26 e 27/09). A foto de geometria por competência não o mostrava porque
+  o cartório monta a grade com a aritmética de janela dele, não com a janela da competência; é exatamente a dependência de janela que a
+  cura mata. A 08 e a 09 são exportadas: lista, nunca escrita. Lanço os dois trabalhos que faltam e vou atrás de quem ESCREVE a ata:
 
-❯ smoke Ronald: testei a busca de escala no vinculo do colaborador e ela acha pelo texto que mostra -- pode fechar a O154.
+● 2 background agents launched (↓ to manage)
+   ├ Raia-chamado: escritor unico, C2 a C1
+   └ O139: papel prazo em config/crons.py
 
-  Committed a2a7fc0f, read 1 file, ran 4 shell commands
+● Quatro trabalhos correndo. Um risco que eu mesmo criei: todos disputam o juliani_db_test, e a lei é um run por vez. Vejo se existe trava
+  de arquivo para isso antes que a colisão fabrique erro falso:
 
-● O cartório fechou invariante nas três empresas (julgadas=2 carimbadas=0 pulados=100780 idêntico dos dois lados; o único delta é a linha
-  de md5). O censo da ata está rodando — 2,7 MB escritos. Enquanto ele corre, escrevo o RELATO:
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● A trava existe e nasceu medida — dois runs simultâneos deram 940 errors falsos em 24/09. Os quatro agentes receberam de mim um docker run
+  cru, que fura a trava. Corrijo nos quatro agora, antes de qualquer suite começar:
 
-● Advising using Fable 5.1
-
-✢ Incubating… (1h 13m 22s · ↓ 176.2k tokens)
+· Incubating… (1h 18m 52s · ↓ 194.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: SEXTO BANCO do esmeril -- f6291f9d diz "O137 destravado" e nenhum agente nasceu. A regra do O137 e nascer NA MESMA RESPOSTA
-  em que a familia fecha. Abrir agora o agente do esmeril da familia AUSENCIA em worktree proprio (codigo morto com certidao, leitor que
-  nao migrou, nome que mente, entrada no GLOSSARIO e no MAPA), sem tirar a trilha principal do O142. Segue a fila.
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+❯ ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ Explore          Intersecting file set with auth_sitios.txt                                                   1m 35s · ↓ 30.0k tokens
+  ◯ general-purpose  Listing uninscribed juízes via contrato.py                                                   1m 34s · ↓ 94.0k tokens
+  ◯ general-purpose  Raia-chamado: escritor unico, C2 a C1                                                           21s · ↓ 71.3k tokens
+  ◯ general-purpose  O139: papel prazo em config/crons.py                                                            20s · ↓ 78.9k tokens
   ⧉  index
 ```
