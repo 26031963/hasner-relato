@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:9 AFIRMA ato sem PROVA ao lado -- ## 04/10 10:02 — O ATO UNICO: O142 + O130 + R4 NO AR EM 14 SEGUNDOS, E O PORTAO QUE ELE MANDOU FORCAR JA ESTAVA ABERTO
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:15:01.**
+**Medido em 04/10/2026 10:20:06.**
 
 | | |
 |---|---|
-| `HEAD` local | `d1689254 Merge branch 'raia-r4' into raia-merge` |
+| `HEAD` local | `98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto` |
 | `origin/main` | `9daa4cec TICKETS/BACKLOG: o R4 fechou na raia com a quarta perna, e o placar NAO mudou de numero` |
-| commits a subir (`ahead`) | **9** |
+| commits a subir (`ahead`) | **10** |
 
 ## Fabrica
 
@@ -29,21 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto
 d1689254 Merge branch 'raia-r4' into raia-merge
 381af46b Merge branch 'raia-o130' into raia-merge
 160d3f5d O painel mandava construir o item que o corte dele tirou da fila, e o leitor estava certo
 9daa4cec TICKETS/BACKLOG: o R4 fechou na raia com a quarta perna, e o placar NAO mudou de numero
-bdd65ed0 [PLACAR-ESTRUTURAL] O R4 pedia o tripwire por nome e o molde dele tem QUATRO pernas, nao tres
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -115,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-   Total cost:            $5146.07
-   Total duration (API):  4d 11h 28m
-   Total duration (wall): 6d 17h 46m
-   Total code changes:    9243 lines added, 795 lines removed
-   Usage by model:
-          claude-opus-5:  3.1m input, 21.4m output, 7.4b cache read, 56.2m cache write ($4713.81)
-       claude-fable-5-1:  32.3m input, 2.2m output, 0 cache read, 0 cache write ($432.26)
-   Prompt cache (main):   21523 requests · 99% of input tokens from cache · 40 misses (last 5h 54m 33s ago — likely cause: prompt
-   unchanged — likely server-side, 12.0m tokens re-cached) · 147 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL,
-   last activity 50s ago)
+  12:4x, LEI-AKITA 1/2/5/8, DINHEIRO-EM-COMPETENCIA-ABERTA.
+  ID: CELULA-TURNO-FECHA
+  FONTE: ponto/turnos.py::realizado_do_dia · ponto/services/bordas_realizado.py::bordas_do_realizado · core/juizes.py::PENDENTES
+  MUDA: escala/utils.py (def minutos_realizados_do_dia ~822; real_por_data ~1290; ramo sem_turno ~1332-1334) ·
+  ponto/services/bordas_realizado.py ~42 · core/contratos_estruturais.py (duas celulas)
+  RESULTADOS, na ordem, cada um com PROVA no RELATO:
+  1. realizado_sem_turno REMEDIDO pela funcao real, 09 e 10, com o O142 no ar: total e as classes A/B/C de 03/10 (era 122 = 30/61/31).
+  2. Se sobrar dia com PAR FECHADO e sem_turno (classe A ou C > 0): cura na ORIGEM primeiro, com RED; nao troca nada antes.
+  3. Contador de bordas_realizado reescrito para nao depender do numero da soma propria -- RED antes.
+  4. Censo de quem le minutos_realizados == 0 (supra_juiz ~151/166/290 e os demais), com DIFF de cobranca na sombra publicado ANTES.
+  5. A soma propria sai: o dia sem par leva a palavra da lei de 17:2x; DIFF de frota 09 e 10 publicado ANTES, reversao em logs/.
+  6. PENDENTES celula = 0 e turno = 0, verde=True nas duas no MESMO commit, linha_do_placar() rodada no container: 15.
+     PROIBIDO: gravar 0 calado em dia sem turno; tirar pendente com a impressao ainda no codigo; allowlist; juiz novo; fallback; item
+  proprio depois.
+     PRONTO: os 6 nomeados no RELATO com PROVA e commit. Faltando algum = INCOMPLETO com a lista.
+     DIETA: docs UMA vez, no commit do marco. Nenhum commit so de TICKETS/RELATO entre os passos.
+     LEI-AKITA: origem=escala/utils.py::montar_grade_prevista_periodo_por_turno, testemunha=realizado_do_dia, RED=impressao presente +
+  contador, quem-mais-le=censo do passo 4, juizes novos=0
+     LINHA HAIKU: (a) realizado_sem_turno no payload com rotulo "dias sem turno pareado"; (b) golden "quantos dias sem turno pareado ha na
+  competencia?" via ferramentas; (c) degrau: leitura.
+     Segue a fila; PAREI so em lei ou !
 
-   Current session
-   ███▌                                               7% used
-   Resets 12:30pm (America/Sao_Paulo)
+● Remedir o contador e as classes na sombra de hoje
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/o134/roda_bordas_20261004.sh <<'EOF'
+     #!/usr/bin/env bash
+     # CELULA-TURNO-FECHA resultado (1): REMEDIR o contador e as classes com o O142 NO AR.
+     # A sonda e a MESMA de 03/10, byte por byte (logs/sombra/bordas_sem_turno_20261003.py e
+     # bordas_sem_turno_class…
 
-   Current week (all models)
-   ██████████████████████████████████████████████     92% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
+✽ Pouncing… (1h 20m 6s · ↓ 135.1k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                   ✔ Update installed · Restart to update
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+❯ 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
 
-   Current week (Fable)
-   ███████████████████████████▌                       55% used
-   Resets Oct 7, 6pm (America/Sao_Paulo)
-
-   What's contributing to your limits usage?
-   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
-
-   Last 24h · these are independent characteristics of your usage, not a breakdown
-
-   100% of your usage came from subagent-heavy sessions
-    Each subagent runs its own requests. Be deliberate about spawning them — and
-    consider configuring a cheaper model for simpler subagents.
-
-   100% of your usage came from sessions active for 8+ hours
-    These are often background/loop sessions. Continuous usage can add up quickly
-    so make sure it is intentional.
-
-   25% of your usage was at >150k context
-    Longer sessions are more expensive even when cached. /compact mid-task, /clear
-    when switching to new tasks.
-                                                                                                                                         ↓
+  ● main
+  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ⧉  index
 ```
