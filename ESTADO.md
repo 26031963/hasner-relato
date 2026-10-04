@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:33:01.**
+**Medido em 03/10/2026 21:38:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `32346df6 [RELATO] As tres do turno no papel: SEXTO-BANCO, ARVORE-SEM-CONFLITO e O154 -- e a etapa 0 vale como entrega` |
+| `HEAD` local | `e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **5** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-32346df6 [RELATO] As tres do turno no papel: SEXTO-BANCO, ARVORE-SEM-CONFLITO e O154 -- e a etapa 0 vale como entrega
-f6291f9d [SEXTO-BANCO] A celula da ausencia fecha e o placar sai pela funcao real: contratos_estruturais 13/22
-1efd9c3b [ARVORE-SEM-CONFLITO] O deploy recusa arvore quebrada -- as duas guardas do apagao de ~30s que EU causei
-a62593f7 [O154] A busca de escala PROCURA NO MESMO TEXTO QUE MOSTRA -- e o '19:00' nao e termo de digitos
-a08c60b7 [O122-AVAIS] Os dois pendentes da raia chegam a MESA do main, e o deadlock ganha nome
+e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio
+282c1670 [O142-AVAL] O aval da fatia de dinheiro entra na esteira, e o ponteiro do dossie NAO confere
+77bd2096 [O154] O censo da busca encolhe 29 -> 28, e quem o tinha deixado velho fui eu
+9085f973 [O122] As tres etapas da raia ganham linha na tabela, e o smoke da etapa 0 NASCE porque a lei o mandou
+c59fbad8 [O122] A raia-ui vem para o main EM COPIA -- 5 conflitos resolvidos por HUNK, e dois deles eram cura que se perderia
 ```
 
 ## `git status --short`
@@ -113,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● (2) e (4) confirmadas pela leitura — e (4) tem a lápide explícita no irmão turnos_de_batidas ("Pareia COPIAS... o carimbo vazaria"), que
-  turnos_do_colab não faz. Falta (3):
 
   Ran 1 shell command
 
-● Todas as quatro confirmadas no código, não só deduzidas: (1) o max da janela, (2) if any(t.data_turno == ontem for t in turnos) sobre a
-  lista desta chamada, (3) if any(_m in out...): continue — "a que chegou primeiro fica", e a ordem de chegada é a da janela —, (4)
-  turnos_do_colab não copia as batidas que o irmão turnos_de_batidas copia de propósito.
+● O meu laço de espera girou em falso (o sleep de primeiro plano é bloqueado) — o waiter real btd0s5n1j segue de pé e a suite está em 18
+  min, 0 falhas. Uso a janela para a medição do col736 na sombra:
 
-  Ran 3 shell commands
+  Searched for 1 pattern
 
-● O censo dele bate exato: 37 chamadas reais, e a âncora esmeril_espelho.py:65 é literal. Suite:
-
-  Ran 1 shell command
-
-● Enquanto a suite fecha, confiro o estado de main para o ff ser seguro e preparo o RELATO:
+● O rótulo é o pk. Sonda na sombra, chamando a função real nas três formas de janela:
 
   Ran 1 shell command
 
-● origin/main não resolve e app/docs/RELATO.md apareceu modificado — nenhum dos dois estava assim. Antes de qualquer ff:
+● Background command "Aguardar o Ran da suite cheia" failed with exit code 1
 
-● Esperar o Ran da suite · 1m 33s
-  ⎿  $ F=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_cheia.out; for i in 1 2 3 4 5
-     6 7 8 9 10 11 12; do if grep -qE '^Ran [0-9]+ tests in' "$F" 2>/dev/null; then break; fi; command sleep 15 2>/dev/null || true; done;
-     echo "=== VEREDITO ==="; grep -… (1m 32s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✢ Bloviating… (21h 19m 30s · ↓ 2.9m tokens)
+● Suite cheia: Ran 9552 tests in 1125.758s / OK (skipped=42), 0 falhas nomeadas. Todos os portões medidos verdes. O ff e o deploy vão no
+  mesmo ato, sem pipe:
+
+  Merged merge-ui-o122
+
+● Pousado e no ar. Agora a prova de porta (somente GET) e os selos de host em main:
+
+  Searched for 1 pattern, ran 2 shell commands
+
+● 58/58 verdes, as três rotas da fatia em 302. Agora o RELATO com a hora medida:
+
+● Running 1 shell command…
+
+✢ Bloviating… (21h 25m 0s · ↓ 2.9m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
