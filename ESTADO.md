@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:381 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:417 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:08:31.**
+**Medido em 04/10/2026 04:14:01.**
 
 | | |
 |---|---|
@@ -114,35 +114,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Green, with the raia in flight — the exact condition that produced the RED. So of the two RED host selos I had in hand, only one is
-  actually red today: import_tardio, whose cure is bin/deploy.sh, parked on the janela_auth !. The trava_teste RED was pre-9102af37 and is
-  stale.
-
-  That leaves a real gap the selo can't see: my own run bypassed the trava, because the canonical command in CLAUDE.md §3 doesn't use it.
-  Checking the suite first:
+  the lock, and the raia started while it was held. Something held the global lock ~10 minutes, overlapping my suite. Finding out who:
 
   Ran 1 shell command
 
-● Both suites still in flight (11 and 8 min; mine is sharing the cpuset, so slower than the 612 s of the push). The gap is real but cost
-  nothing today — REGUA_DB protected the raia and my run holds the default name alone — so it's a structural item, not a fire. Recording it
-  with today's measurement while I wait:
-
-  Searched for 1 pattern, ran 1 shell command
-
-● 5 cells, estado 131 chars, no pipes inside. Inserting before OBRAS:FIM and validating:
+● /tmp/juliani_db_test.lock has mtime 03:58:31 — the exact second the raia's container started, and the same second logs/.env_teste was
+  written. So the raia did take the trava; it was released at 04:02:34 while its container still runs. Confirming from the raia's own
+  output and checking what vigia_arvore did at 04:05:
 
   Ran 1 shell command
 
-● Inserted after the marker instead of before it. Fixing from the backup:
+● The raia runs docker run directly with REGUA_DB — it doesn't take the trava either. So neither suite held it. Finding who actually
+  touches that lock file:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Still in flight at 13 min — two suites on 4 threads, so roughly double the 612 s of the push. Writing the O182 note into the RELATO while
-  I wait:
+● vigia_arvore is paused by esteira.pausada and bails every hour without touching anything, so it's not the holder. Only trava_teste.sh
+  writes that lock; handoff_sessao.sh:141 reads it. Reading how it reads it:
 
-● Finding RELATO top sections
+  Ran 1 shell command
 
-✢ Incubating… (5h 45m 52s · ↓ 823.9k tokens)
+● flock -n "$_arq" true is how the handoff probes it. Testing empirically whether that probe truncates the lock (which would explain the
+  03:58:31 mtime without any holder), and looking for an integrador/molde run in that window:
+
+● Testing if the flock probe truncates, and listing logs in the window
+  ⎿  $ cd /tmp && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/flocktest.lock; rm -f $T;
+     echo "conteudo" > $T; ls -l --time-style=+%H:%M:%S.%N $T | awk '{print "antes :",$6}'; sleep 1.1; flock -n "$T" true; echo
+     "rc_flock=$?"; ls -l --time-style=+%H:%M:…
+
+✢ Incubating… (5h 51m 22s · ↓ 834.6k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -152,6 +152,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading urgencia writes in escalonar_chamados_supervisao.py                             4h 27m 22s · ↓ 146.0k tokens
+  ◯ general-purpose  Appending urgencia bug to c1_dossie.md                                                  4h 32m 52s · ↓ 166.6k tokens
   ⧉  index
 ```
