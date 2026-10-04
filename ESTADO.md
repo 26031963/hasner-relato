@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 03:47:31.**
+**Medido em 04/10/2026 03:52:36.**
 
 | | |
 |---|---|
 | `HEAD` local | `774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao` |
-| `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **18** |
+| `origin/main` | `774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -112,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
 
-● Task "Raia-chamado: escritor unico, C2 a C1" completed in background
-
-● Task "Retry the push after the footer cure" still running in background
-
-● Task "Wait by file for the push verdict" still running in background
-
-● The anchor missed — let me read what R4 actually says in the copy:
+● Line 132 matters — there's a source contract that mentions minutos_previstos_do_dia, and my cure adds a call to exactly that. Reading it:
 
   Ran 1 shell command
 
-● Agent "Raia-chamado: escritor unico, C2 a C1" finished · 4h 3m 21s
+● That contract requires porta_export.medir to read minutos_previstos_do_dia from the juiz — the same move I made in export.py, so the
+  precedent is the house's own. It doesn't constrain export.py. Checking the other vizinho's fixture:
 
-● The anchor wrapped differently than I assumed — frota 1 ' closes the same line. Re-anchoring on the literal text, and keeping the
-  insertion tight (DIETA DE PROSA):
+  Listed 1 directory
 
-  Ran 2 shell commands
+● test_ferias_com_batida.py creates batidas but no vínculo — that's the real vizinho risk, since HEAD's premise also saw no células there.
+  Reading it to see what kept it out of the guard:
 
-● Renders clean, but my insertion now separates frota 1 de 19 from the col882 clause it describes. Moving it to after that sentence:
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● _fech leaves horas_trabalhadas at its default and each test plants exactly one batida — so the >= 2 gate is what keeps those three green
+  on HEAD, and moving that gate first preserves them exactly. Checking the direct test of the function:
 
-● Only my two edits are in it, and this copy is not the bind-mount — so reverting this one file loses nothing but the insertion I made
-  minutes ago. Redoing it cleanly, with the clause in the right place:
+  Searched for 1 pattern
 
-● Running 1 shell command…
+● Background command "Retry the push after the footer cure" completed (exit code 0)
 
-✢ Incubating… (5h 24m 52s · ↓ 768.0k tokens)
+● Push #2 finished — reading its verdict by file, requiring the explicit rc= and the suite's own counts rather than the absence of FAILED:
+
+  Read 1 file
+
+● Background command "Wait by file for the push verdict" completed (exit code 0)
+
+✽ Incubating… (5h 29m 57s · ↓ 788.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 11 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Checking turno_b.out suite tail                                                          4h 3m 21s · ↓ 145.2k tokens
+  ◯ general-purpose  Inspecting false positives in smoke_chamados.py                                         4h 11m 26s · ↓ 163.3k tokens
   ⧉  index
 ```
