@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:40:31.**
+**Medido em 04/10/2026 15:45:45.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  nada fora de app/docs/:
 
   Ran 1 shell command
 
-● grep do nome no log não prova nada (a suite não imprime nomes sem -v) — o número certo vem do AST, não do log:
+● +13 exatos: 9605 → 9618 é a conta dos 13 test_MORDE_* do arquivo novo, medida por AST — a suite não imprime nome de teste sem -v, então a
+  contagem é a prova, não o grep. Gravando o selo:
 
   Ran 1 shell command
 
-● 13 testes exatos no arquivo novo, e 9618 − 9605 = 13. O delta casa pela segunda fonte: os testes do k8 rodaram e nenhuma outra contagem
-  mudou. Agora o merge (a pista está livre e a suite acabou, então tocar a cópia é legal) — primeiro provando que o delta do teto20 é só
-  docs:
+● Selo gravado (date lido no ato, não de cabeça). Antes do censo dos 513, preciso saber por qual porta eles rodam — mensageria não é app
+  Django do projeto:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Nada foi escrito — a asserção parou antes. Vou olhar o que cada lado realmente tem:
+● mensageria é projeto Django próprio (tem manage.py e config dele), não app do saas — então bin/suite.sh, que roda as LABELS do saas
+  contra o juliani_db_test, pode não ser a porta. Lendo a porta antes de supor:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Minha asserção estava errada, não o dado: a célula do teto20 também diz "K8 fechou". Discriminador correto:
+● bin/suite.sh monta $RAIZ/app como /app e roda config.settings.ci — mensageria/ não está dentro de app/, então a porta não alcança o
+  núcleo. Esse é exatamente o achado do SUITE-DO-NUCLEO-ENTRA-NA-REGUA: os 513 não têm porta. Medindo o que existe:
 
-● Resolver os dois conflitos com o discriminador certo
-  ⎿  $ cd /home/ronald/wt-k8t && python3 - <<'PY'
-     p='app/docs/BACKLOG.md'
-     L=open(p,encoding='utf-8').read().split('\n')
-     assert L[97]=='<<<<<<< HEAD' and L[100]=='=======' and L[103].startswith('>>>>>>>')
-     meu=L[98:100]; dele=L[101:103]
-     _id=lambda l: l.split('|')[1].strip()
-     assert [_id(x) for x in meu]==[…
+  Ran 1 shell command
 
-✢ Compacting conversation… (3h 28m 33s · ↓ 456.9k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 76%
+● Achado material: mensageria/config/settings.py:37 crava 'HOST': 'db' — rodar o censo pelo caminho natural criaria test_mensageria dentro
+  do saas_db, o postgres de produção, nos vCPU 0-3. Isso é exatamente o que a lei do CPUSET proíbe. Antes de escolher o caminho:
+
+● Advising using Fable 5.1
+
+· Jitterbugging… (3h 33m 47s · ↓ 464.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
