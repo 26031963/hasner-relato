@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 13:15:46.**
+**Medido em 04/10/2026 13:21:01.**
 
 | | |
 |---|---|
@@ -112,16 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 4 shell commands
-
-● Agora o selo, no molde da TRAVA JUIZ-NOVO:
-
-  Ran 10 shell commands
-
-● Background command "Registrar O186/O187/O188 no BACKLOG" failed with exit code 144
-
 ● Background command "Conferir linhas no TICKETS e o proximo da fila 1" failed with exit code 144
 
   Ran 4 shell commands
@@ -139,9 +129,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 15 shell commands
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✻ Jitterbugging… (1h 3m 48s · ↓ 135.3k tokens)
+● Patching None-aware no supra_juiz da copia
+  ⎿  $ cd /home/ronald/wt-sj && python3 - <<'PY'
+     import py_compile, re
+     p = 'app/ponto/supra_juiz.py'
+     s = open(p).read()
+     # (1) a linha 131 passa a DISTINGUIR None de 0 -- e a unica mudanca pedida pelo aval.
+     a = " real = dia.get('minutos_realizados') or 0\n"
+     b = (" # O189 (aval Ronald 04/10 ~13:xx) -- MED…
+
+✢ Jitterbugging… (1h 9m 3s · ↓ 144.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
