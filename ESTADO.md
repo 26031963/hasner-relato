@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:21:01.**
+**Medido em 04/10/2026 18:26:31.**
 
 | | |
 |---|---|
@@ -113,23 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Escrevo os quatro registros num ato:
-
-  Ran 2 shell commands
-
-● 8 linhas, sem reformatar. Agora as células do BACKLOG e a seção do RELATO:
-
-  Ran 1 shell command
-
-● Regenero o CORTES.md pelo gerador e passo os selos de host que leem estes docs:
-
-  Ran 1 shell command
-
-● Três selos verdes (o rc=2 do --conferir é o ALARME conhecido, coberto pela pausa declarada). Comito o registro — a árvore precisa estar
-  limpa para os merges dos pousos, que tocam estes mesmos arquivos:
-
-  Committed 15bc08ff, ran 1 shell command
-
 ● Registro no main: 15bc08ff. Agora construo na raia. Leio os dois blocos de nota como estão em wt-k5:
 
   Ran 3 shell commands
@@ -140,11 +123,28 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Só palavras de pautas, nenhuma na minha prosa. Escrevo as notas e os dois tetos na raia:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Jitterbugging… (6h 9m 3s · ↓ 777.7k tokens)
+● Agora o selo que MORDE o conforme. Leio o arquivo onde ele entra:
+
+  Ran 1 shell command
+
+● Meço a premissa antes de escrevê-la como asserção — o selo não pode afirmar por ausência de sinal:
+
+  Ran 1 shell command
+
+● Premissa medida e positiva: lista_ausencias (def 1865) toca Ausencia e Colaborador, e zero dos seis sinais de fechamento. Escrevo o selo:
+
+● Escrever o selo e passar ruff nos quatro arquivos
+  ⎿  $ cd /home/ronald/wt-k5 && cat >> app/ponto/tests/test_k8_tela_abre_na_competencia.py <<'PYEOF'
+     # ------------------------------------------------------------------ O CONFORME DO `lista_ausencias`
+     # Corte Ronald 04/10 17:5x, LITERAL: *"lista_ausencias filtra vigencia de ausencia, nao fechamento --
+     …
+
+✢ Compacting conversation… (6h 14m 33s · ↓ 785.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 75%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
