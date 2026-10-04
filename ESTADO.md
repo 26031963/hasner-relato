@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 11:17:31.**
+**Medido em 04/10/2026 11:23:01.**
 
 | | |
 |---|---|
@@ -112,11 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 8 shell commands
-
 ● Background command "Rodar os vizinhos na copia" completed (exit code 0)
 
   Committed 8892fc31, searched for 1 pattern, ran 15 shell commands
@@ -137,11 +132,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler o cabecalho do supra_juiz e o None do fechamento
-  ⎿  $ echo "=== supra_juiz.py 1-40 ===" && sed -n '1,40p' ponto/supra_juiz.py && echo && echo "=== fechamento.py 515-570 ===" && sed -n
-     '515,570p' ponto/services/fechamento.py
+  Searched for 1 pattern, ran 4 shell commands
 
-✢ Pouncing… (2h 17m 31s · ↓ 243.5k tokens · thinking more)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Ler a palavra do dia sem turno e seus leitores
+  ⎿  $ sed -n '200,245p' ponto/services/dia_decidido.py && echo "=== quem chama ata_sem_turno / SEM_TURNO_PAREADO ===" && grep -rn
+     "ata_sem_turno\|SEM_TURNO_PAREADO" --include=*.py --include=*.html . | sed 's/^\.\///'
+
+✢ Pouncing… (2h 23m 1s · ↓ 257.7k tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
