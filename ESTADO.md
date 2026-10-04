@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:441 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:452 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:42:08.**
+**Medido em 03/10/2026 22:47:31.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED prim
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
+?? app/16:57
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Ponto 1 é exatamente o buraco da minha própria família: fro_head.txt e fro_cura.txt têm o mesmo tamanho em bytes, e é isso que uma rodada
-  sem a cura montada também produz. Censo de hunks primeiro:
-
-  Ran 2 shell commands
-
-● Todos os três hunks estão em turnos_do_colab (_marcos_de é aninhada, indentação de 4) + um import copy inerte. A história do mecanismo
-  fecha. Agora a mordida do ponto 1 — provar que o lado "cura" rodou com a cura:
-
-  Ran 2 shell commands
-
-● Enquanto os dois lados rodam, ataco o ponto 2 — a RED da geradora que não discrimina. Preciso ver onde os marcos chegam à foto:
 
   Ran 1 shell command
 
-● O teto só é consultado ao fechar aberto (linhas 567-574 e 628-634) — é por isso que meus gêmeos com par limpo saíram idênticos: par limpo
-  nunca pergunta o previsto. Vou ler o caminho que pergunta:
-
-  Read 1 file, ran 3 shell commands
-
-● O md5 mata o risco de falso verde: lado HEAD 119922ee, lado cura c9579ff1 — código diferente, saída igual. Agora a RED da geradora:
+● Duas frases perderam o conteúdo entre backticks. Restauro com heredoc quoted (a mesma regra do commit por heredoc):
 
   Ran 1 shell command
 
-● Antes de recuar para a asserção de dono, há um discriminador mais barato que eu deixei passar: o intervalo declarado nos marcos — ele
-  decide se quatro batidas são um turno ou dois. Vou ver os templates dos gêmeos:
+● Agora medir se o caso morde. Rodo os dois lados do selo, com a RED copiada para dentro do container e removida no mesmo ato (para não
+  deixar entulho na árvore viva):
 
-● Ver os TipoEscala da fixture
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '56,105p'
-     $SP/o142cura/test_o142_turno_invariante_na_janela.py
+  Ran 1 shell command
 
-✻ Incubating… (19m 29s · ↓ 46.9k tokens · thinking)
-                                                                                                   ✔ Update installed · Restart to update
+● Isso é um achado, não ruído: ao declarar o intervalo, a invariância quebrou no 09-05 — o dia da pausa sem volta. É a fonte (1) que o
+  próprio aval nomeou (_fechar_aberto_na_pausa_sem_volta usa o max das batidas DA JANELA), e a minha cura não a fecha. Vou ver os dois
+  nomes que falham:
+
+  Ran 1 shell command
+
+● A foto da geradora deu igual nos dois lados mesmo com intervalo declarado — o par do meio é absorvido por duração nos dois. Medido: a
+  foto não discrimina. Mas a mudança expôs a fonte (1), e tirar o intervalo para o vermelho sumir é o PROIBIDO literal do aval ("tirar caso
+  da lista para o numero cair"). Então o intervalo fica e a fonte (1) se cura:
+
+  Ran 1 shell command
+
+● A fonte (1) é real e o mecanismo está na linha _ult = max(b.timestamp for b in bs ...) (turnos.py:615): a pergunta "há batida depois?" é
+  respondida contra a janela, não contra o mundo. Mas curá-la mexe numa autoridade que o dinheiro chama (parear_turnos), e sem query nova
+  não há como a janela [d,d] saber do dia 07. Fork real — vou consultar antes de escrever:
+
+● Advising using Fable 5.1
+
+✢ Incubating… (24m 52s · ↓ 60.3k tokens)
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
