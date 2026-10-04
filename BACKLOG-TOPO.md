@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**176 obras abertas.**
+**180 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -185,3 +185,7 @@ lista — ela e o que esta EM PE._
 | **O175** | O BACKFILL DO NUCLEO NAO TEM GUARDA DE COMPETENCIA EXPORTADA | espera `!` |
 | **O176** | "O ROTULO ESTA NUM TITULO" NAO RESPONDE "ESTA FATIA SUBIU" | espera corte |
 | **O177** | A SEGUNDA PAUSA SOMA DINHEIRO EM DOIS SITIOS QUE A FATIA DEIXOU DE FORA | nascido 04/10 03:1x da entrega da raia.  |
+| **O178** | A ROTA DE "CADASTRO" E "BATIDA" DA L-099 E UM SILENCIO, MEDIDO | espera aval |
+| **O179** | A FORMA INVERSA DO `cadastro_zero`: PREVISTO ALTO E TRABALHADAS ZERO | ABERTA, nao medida ate a causa. Dono ain |
+| **O180** | 2.986 CELULAS VIVEM ALEM DO `data_fim` DA PROPRIA GERADORA, EM 102 COLABORADORES | espera `!` |
+| **O181** | A TRILHA NOMINAL DO O85 E MUDA EM PROD | ABERTA. Dono = ESTRUTURA: o sistema nao  |

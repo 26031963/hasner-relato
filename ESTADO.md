@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:265 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:381 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 03:57:36.**
+**Medido em 04/10/2026 04:03:01.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
@@ -112,37 +113,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Push #2 landed clean: ba82736d..774447cf, rc=0, Ran 9569 tests … OK (skipped=42), control-plane Ran 22 tests … OK, nothing left to push.
-  The pista is free — now the RED, which needs HEAD's code against the new test, so a second copy at HEAD:
-
   Ran 1 shell command
 
-● Exactly the RED setup: HEAD's export.py byte-identical, only the test file new. Running it:
-
-  Ran 1 shell command
-
-● RED evidenced on HEAD — the defect in one line: 'entra' != 'fora', "celula de vinculo morto foi lida como cadastro presente -- o TXT
-  pagaria ZERO". Now the same 7 tests against the cure:
-
-  Ran 1 shell command
-
-● GREEN with the cure. Now the vizinhos before the full suite — including the contract that enumerates the placar I just edited:
+● Entries are ## DD/MM HH:xx — … at the top. Checking the 3-day dieta before I add to it:
 
   Searched for 1 pattern
 
-● Running the vizinho set — the readers of cadastro_zero, plus the selo that enumerates the placar file I edited:
+● 01/10 is exactly 3 days, so the dieta doesn't bite yet — I'll flag it rather than expand this commit. Inserting the entry at the top,
+  above the newest section:
 
   Ran 1 shell command
 
-● Vizinhos: 59 tests OK. Launching the full suite against the cure, then consulting while it runs:
+● Both sections in place. Checking the suite:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
+● Two suite containers are up — mine plus another, which breaks "UM run por vez no juliani_db_test" and can poison both verdicts.
+  Identifying them:
 
-✽ Incubating… (5h 34m 57s · ↓ 793.8k tokens)
+  Ran 1 shell command
+
+● Both are full suites on the same juliani_db_test — mine from wt-r4 at 06:55, and the esmeril2 raia's at 06:58, which with --noinput would
+  have dropped and recreated the test DB under mine. Checking the damage:
+
+● Checking whether the collision broke my run
+  ⎿  $ echo "=== o que o MEU container esta dizendo ==="; docker logs practical_germain 2>&1 | tail -12; echo; echo "=== e o segundo ===";
+     docker logs amazing_montalcini 2>&1 | head -6
+
+✢ Compacting conversation… (5h 40m 22s · ↓ 812.2k tokens)
+  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 19%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                     bash denied by auto mode · [Interfere With Workloads] · /permissions
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -150,6 +151,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inspecting walk body in csl_novo.py                                                      4h 16m 26s · ↓ 76.1k tokens
+  ◯ general-purpose  Listing orphan test containers after stopping turno_c.sh                                4h 21m 52s · ↓ 107.2k tokens
   ⧉  index
 ```
