@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:50:01.**
+**Medido em 04/10/2026 20:55:31.**
 
 | | |
 |---|---|
@@ -110,41 +110,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Reescrevo o patch com a raiz por argumento (não repito o RAIZ CRAVADA) e com um modo --so-teste, para o RED vir primeiro:
+● Background command "Rodar os vizinhos escala e ponto na copia patchada" completed (exit code 0)
+
+● ata_sem_turno não ficou órfão: segue consumido em dia_decidido.py:342 (if ata_sem_turno: — é ele que decide o veredito
+  SEM_TURNO_PAREADO). Só a viagem dele para a palavra parou. Contrato 3 está salvo. Veredito dos vizinhos:
+
+  Read 1 file
+
+● 3.934 testes OK — o selo do escala fica verde com o item (a), confirmando que ele morde o (b). Agora os vizinhos restantes + o ruff
+  (variável h possivelmente morta):
+
+  Ran 3 shell commands
+
+● Ruff limpo. Enquanto os vizinhos rodam, confiro o portão do deploy e o item do BACKLOG que o (a) fecha (ou não):
 
   Ran 1 shell command
 
-● Monto a cópia de HEAD e aplico só a inversão dos selos — o RED antes da cura:
+● O BACKLOG é explícito: passo 5 é um ato só — "a soma propria SAI … com DIFF de frota da 09 e da 10 publicado ANTES e reversao em logs/",
+  e PROIBIDO "item proprio depois". Então o (a) não se commita sozinho. Vejo o que já está medido:
 
-  Ran 2 shell commands
+  Ran 3 shell commands
 
-● RED evidenciado: 3 falhas, exatamente os 3 selos invertidos, todas porque a fonte ainda emite 'Sem turno pareado (ata 8h)'. Agora a cura:
+● O DIFF de cobrança mede o dano de fazer (b) sem o ZERO DECLARADO — os 15 que viram REALIZADO_ZERO_COM_TURNO são exatamente o que o selo
+  proíbe. Com a 131 declarando zero, eles não viram. Falta o DIFF de dinheiro. Vejo o que None faz nos dois sítios de folha:
 
-  Ran 2 shell commands
+● Ler os dois sitios de dinheiro que leem minutos_realizados
+  ⎿  $ echo "=== folha/export.py:690-706 ==="; sed -n '690,706p' folha/export.py; echo; echo "=== ponto/services/dia_pago.py:333-350 ===";
+     sed -n '333,350p' ponto/services/dia_pago.py
 
-● GREEN, 258 OK. Censo adversarial antes de levar para a árvore — quem mais lê a frase que mudei:
-
-  Ran 1 shell command
-
-● Um leitor a mais, e é citação de lei revogada:
-
-  Ran 1 shell command
-
-● Esse selo codifica a L-102 antiga ("o dia sem par continua com NUMERO") e avisa: "quem o deixa vermelho e o patch -- e foi assim que o
-  patch do passo 5 ficou PARADO." Pergunto empiricamente ao vizinho:
-
-● Rodar os vizinhos escala e ponto na copia patchada
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 1800 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "escala ponto" 2>&1 | grep -E
-     "^(FAIL|ERROR|OK|FAILED|Ran )|^(FAIL|ERROR):" | head -25
-
-✢ Compacting conversation… (8h 38m 3s · ↓ 1.0m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
+✢ Jitterbugging… (8h 43m 33s · ↓ 1.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
