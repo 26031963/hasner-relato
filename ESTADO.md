@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:25:02.**
+**Medido em 04/10/2026 04:30:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `2b7891ed RELATO/BACKLOG: a trava de suite da a vez com suite em voo -- quem nao a chama fica invisivel (O182)` |
+| `HEAD` local | `06584473 TICKETS: o rodape nao envelheceu sozinho -- 18 commits num push so o levaram ao teto` |
 | `origin/main` | `774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+06584473 TICKETS: o rodape nao envelheceu sozinho -- 18 commits num push so o levaram ao teto
 2b7891ed RELATO/BACKLOG: a trava de suite da a vez com suite em voo -- quem nao a chama fica invisivel (O182)
 774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao
 6e4a6f60 [O142] O reload das 03:30 publicaria o disco: o `!` que eu pedi ia ser dado por um timer
 6acc825a [O142] A janela de 900 commits envelheceu e o residuo da esteira voltou a segurar alvo -- pelo relogio, nao pelo codigo
-9102af37 [O142] O selo da trava exercitava o lock GLOBAL: veredito que dependia da maquina estar vazia
 ```
 
 ## `git status --short`
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  trava by design:
+
+● Authority located: falta_marcos ({tipo, hora} per missing marco) at ponto/services/espelho.py:785; the fixed string is
+  dia_decidido.py:62. Before building, consulting the reviewer on the approach:
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Following that order. First the authority reconciliation and the hook's own reading of the ORDEM:
 
   Ran 1 shell command
 
-● Clean — exactly one commit, nothing incoming. Launching the push; it will wait on the trava behind the raia:
+● RealizadoDoDia.aberto is just "any turno with saida is None" — it doesn't derive marcos. So falta_marcos is built elsewhere. Reading its
+  producer and the datas_em_aberto writer:
 
   Ran 1 shell command
 
-● Push queued. While it holds the trava I can't commit or run a suite — so read-only work. Reading the ORDEM VIVA to take the next fila-1
-  item:
+● falta_marcos reads montar_realizado_grade — the GRADE, which §4 declares the single source of previsto, and the comment already invokes
+  LEI-AKITA 2. So reading it is a leitor migrating, not a new juiz. Now the census advisor asked for:
 
-  Ran 1 shell command
+  Searched for 1 pattern
 
-● Background command "Push the marco commit" completed (exit code 0)
+● One writer: dia_decidido.py:139-140 (if veredito in PALAVRA: return PALAVRA[veredito]), and zero templates carry the literal — so all 5
+  leitores inherit from one function. Reading it and its caller:
 
-  Read 1 file
+● Reading the palavra writer and its caller
+  ⎿  $ echo "=== dia_decidido.py 112-160 ==="; sed -n '112,160p' ponto/services/dia_decidido.py; echo; echo "=== aplicar_palavra_do_dia:
+     assinatura e o que tem na mao ==="; grep -n -A22 "^def aplicar_palavra_do_dia" ponto/services/dia_decidido.py | head -40
 
-● Push rejected by the rodapé selo — and it's the same defect as 774447cf, recurred. Reading the writer before curing:
-
-  Ran 1 shell command
-
-● The rodapé writer reads origin/main before the push, so a push of N commits leaves it N behind — teto is 5, so any push over 5 commits
-  arms the next red. Reading the comparator and 774447cf before deciding:
-
-● Reading the rodape comparator and writer in full
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== core/rodape.py ==="; cat app/core/rodape.py; echo; echo "=== tickets_rodape.sh 28..96 ===";
-     sed -n '28,96p' bin/tickets_rodape.sh
-
-✽ Incubating… (6h 2m 23s · ↓ 866.8k tokens · still thinking)
+✢ Incubating… (6h 7m 52s · ↓ 880.7k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading imports in escalonar_chamados_supervisao.py                                     4h 43m 53s · ↓ 124.9k tokens
+  ◯ general-purpose  Polling turno_d.out for the verdict                                                     4h 49m 22s · ↓ 159.6k tokens
   ⧉  index
 ```
