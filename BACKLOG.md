@@ -632,4 +632,5 @@
 |---|---|---|---|
 | BATI-01 | **dinheiro-ate-export** | quantas horas este dia vale? | `ponto/motor_calculo_v2.py` :: `periodo.minutos_trabalhados = max(0, duracao)` |
 | BATI-02 | **dinheiro-ate-export** | o dia em aberto bloqueia a folha? | `folha/export.py` :: `classificar_export` |
+| O160 | **a linha do tipo PAI nao tem Editar nem Copiar** em `/escala/tipos/` (`templates/escala/tipos_lista.html` ~45-60): o pai so mostra a pilula de filhos e o `+`, entao escala SEM filhas (codigos 1 e 102) nao tem como ser editada pela lista -- e o corte de 02/10 diz que o admin edita o MODELO. A cura: a linha do pai ganha o mesmo `Editar no wizard` e o `Copiar` das filhas, pela MESMA rota `wizard_tipo_editar` (nenhuma rota nova, nenhum juiz novo) | **fila 2 (UI), raia `wt-ui`** -- registrada 03/10 23:2x, so `templates/` + selo de TELA; nao toca a trilha do O142 | aval Ronald 03/10 23:2x | selo nas DUAS cascas se o partial for incluido pelas duas; smoke de clique dele antes do push (FRONT SEM SMOKE NAO SOBE) | 03/10 23:2x |
 
