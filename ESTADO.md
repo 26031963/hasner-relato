@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 06:39:31.**
+**Medido em 04/10/2026 06:45:02.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  mediu, lendo o veredito do arquivo na hora de aplicar:
-
-  Ran 1 shell command
-
-● Agora a seção do RELATO, no mesmo script:
-
-  Ran 1 shell command
-
-● Background command "Run chamados and api tests on the raia worktree" completed (exit code 0)
-
-● rc=1 em 2 minutos — isso é falha de arranque, não suite. Lendo:
-
-  Read 1 file
-
-● Uma falha em 2798 testes, e é um contrato estrutural da casa que eu não conhecia: test_contract_deus_objeto.py (B4.6) proíbe função de
-  módulo nova em chamados/models.py e diz onde ela deve nascer. Lendo o contrato e o destino que ele nomeia:
-
   Ran 1 shell command
 
 ● O contrato é claro e o test_juiz_novo_tem_corte.sh só olha core/juizes.py, então chamados/juizes.py não dispara a TRAVA. Lendo o padrão
   de re-export que o B4 já deixou, para seguir e não inventar:
 
-● Reading the existing re-export pattern in models.py
-  ⎿  $ cd /home/ronald/wt-esmeril2/app
-     echo "=== re-exports no fim de models.py ==="
-     grep -n "juizes import\|from chamados.juizes\|re-export\|noqa: F401" chamados/models.py | head -20
-     echo "=== as ultimas 30 linhas de models.py ==="
-     tail -32 chamados/models.py
+  Ran 1 shell command
 
-✢ Cerebrating… (39m 24s · ↓ 104.3k tokens · thinking)
+● O padrão é exato: a função mora em chamados/juizes.py, models.py re-exporta no fim, e os métodos importam localmente (10 exemplos).
+  Movendo as duas para a casa que o contrato nomeia:
+
+  Ran 6 shell commands
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0wczsvpb.output (45 lines)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/buplej87y.output (29 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b2ji2c1lv.output (14 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b31acsdeu.output (27 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● 192 arquivos importam de chamados.juizes direto — o re-export é compat para chamador legado, e estes três não têm nenhum. Repontando para
+  a casa real e trocando o shim pelo import local que o próprio models.py já usa:
+
+● Checking the in-method import pattern and the test alias
+  ⎿  $ cd /home/ronald/wt-esmeril2/app
+     echo "=== import local de juizes DENTRO de metodo do models.py (padrao a seguir) ==="
+     grep -n "^ *from chamados\.juizes import" chamados/models.py
+     echo "=== _m no teste ==="
+     grep -n "_m\b" chamados/tests/test_porta_chamado_ciclo.py | head
+
+✶ Cerebrating… (44m 55s · ↓ 112.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
