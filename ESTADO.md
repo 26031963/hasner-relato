@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:37:31.**
+**Medido em 04/10/2026 02:43:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `1a99a3d7 [O142] O censo barateou o residuo: o escritor unico pode fechar o O171 sozinho` |
+| `HEAD` local | `9102af37 [O142] O selo da trava exercitava o lock GLOBAL: veredito que dependia da maquina estar vazia` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **14** |
+| commits a subir (`ahead`) | **15** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+9102af37 [O142] O selo da trava exercitava o lock GLOBAL: veredito que dependia da maquina estar vazia
 1a99a3d7 [O142] O censo barateou o residuo: o escritor unico pode fechar o O171 sozinho
 1ed33f31 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING
 b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do RELATO
 79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash
-8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
 ```
 
 ## `git status --short`
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Clean RED/GREEN in the same machine state: global lock → ordem = ''; isolated copy → ordem = 'A A_fim B '. Building the cure in a copy of
-  HEAD:
+● test_trava_teste.sh is now green with the lock held. But a new RED appeared in my path — test_fabricante_seco.sh, which was green in the
+  01:5x sweep. LEI-AKITA 6 says it comes first:
+
+  Ran 3 shell commands
+
+● Measuring at the source rather than guessing which leg broke:
 
   Ran 1 shell command
 
-● Now proving the cured selo GREEN while the raia still holds the global lock. Checking how it resolves $R first, since that bit me on the
-  hook selo:
+● 47 packages, 0 recognized. The decisive question is whether those labels are absent from history or merely fell out of the -900 window:
 
   Ran 1 shell command
 
-● GREEN with the lock held by a real run — the pair is complete. Now proving the cure's own guard bites: if that TRAVA= line ever changes
-  form, the selo must go RED instead of silently falling back to the global lock:
+● Measured, and the selo is right: the criterion broke by clock, not by code. The -900 window now reaches back only to 26/09 12:22, and 6
+  of the 47 packages are residue whose fatia IS in the log (23/09–26/09, e.g. [PRE-PUSH-TESTA-O-COMMIT] at 4c081b17, 26/09 12:11 — eleven
+  minutes outside the window). The other 41 were never committed and are correctly held. My own 15 commits this session slid the boundary
+  past the last residue, so this is my path.
 
-  Ran 1 shell command
+  Two candidate cures — measuring both before choosing:
 
-● The guard fires with the exact message — but note the Terminated: _falha records and continues, so after a format drift the selo would
-  then hit the global lock and hang the régua rather than go red. Fixing that in the same act:
+● Measuring full-log cost and label reuse
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== custo de ler o log INTEIRO uma vez (3 amostras) ==="; for i in 1 2 3; do /usr/bin/time -f '
+     %e s %M KB' git log --pretty=%s >/dev/null 2>>/dev/stdout; done 2>&1 | tail -3; echo; echo "=== rotulo [X] se REPETE na historia? (o
+     perigo de tirar a janela) ===";…
 
-  Making the guard abort and re-prove both sides
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     python3 - <<'PY'
-     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad'
-     p=S+'/selo_trava_novo.sh'
-     t=open(p,encoding='utf-8')…
-
-✢ Compacting conversation… (4h 14m 52s · ↓ 589.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱ 74%
+✢ Incubating… (4h 20m 22s · ↓ 606.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading C4 write sites in atribuir_chamado                                               2h 56m 22s · ↓ 82.0k tokens
+  ◯ general-purpose  Patching invariants in vinculos.py draft                                                 3h 1m 51s · ↓ 112.6k tokens
   ◯ general-purpose  Committing chamados/models.py C2 cure                                                   2h 19m 38s · ↓ 165.7k tokens
   ⧉  index
 ```
