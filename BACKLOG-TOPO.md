@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**180 obras abertas.**
+**181 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -189,3 +189,4 @@ lista — ela e o que esta EM PE._
 | **O179** | A FORMA INVERSA DO `cadastro_zero`: PREVISTO ALTO E TRABALHADAS ZERO | ABERTA, nao medida ate a causa. Dono ain |
 | **O180** | 2.986 CELULAS VIVEM ALEM DO `data_fim` DA PROPRIA GERADORA, EM 102 COLABORADORES | espera `!` |
 | **O181** | A TRILHA NOMINAL DO O85 E MUDA EM PROD | ABERTA. Dono = ESTRUTURA: o sistema nao  |
+| **O182** | O COMANDO CANONICO DA SEC.3 NAO PASSA PELA TRAVA QUE A PROPRIA SEC.3 EXIGE | em voo |

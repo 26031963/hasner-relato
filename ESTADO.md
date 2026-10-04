@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:03:01.**
+**Medido em 04/10/2026 04:08:31.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
@@ -113,44 +114,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+● Green, with the raia in flight — the exact condition that produced the RED. So of the two RED host selos I had in hand, only one is
+  actually red today: import_tardio, whose cure is bin/deploy.sh, parked on the janela_auth !. The trava_teste RED was pre-9102af37 and is
+  stale.
 
-● Entries are ## DD/MM HH:xx — … at the top. Checking the 3-day dieta before I add to it:
-
-  Searched for 1 pattern
-
-● 01/10 is exactly 3 days, so the dieta doesn't bite yet — I'll flag it rather than expand this commit. Inserting the entry at the top,
-  above the newest section:
+  That leaves a real gap the selo can't see: my own run bypassed the trava, because the canonical command in CLAUDE.md §3 doesn't use it.
+  Checking the suite first:
 
   Ran 1 shell command
 
-● Both sections in place. Checking the suite:
+● Both suites still in flight (11 and 8 min; mine is sharing the cpuset, so slower than the 612 s of the push). The gap is real but cost
+  nothing today — REGUA_DB protected the raia and my run holds the default name alone — so it's a structural item, not a fire. Recording it
+  with today's measurement while I wait:
+
+  Searched for 1 pattern, ran 1 shell command
+
+● 5 cells, estado 131 chars, no pipes inside. Inserting before OBRAS:FIM and validating:
 
   Ran 1 shell command
 
-● Two suite containers are up — mine plus another, which breaks "UM run por vez no juliani_db_test" and can poison both verdicts.
-  Identifying them:
+● Inserted after the marker instead of before it. Fixing from the backup:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Both are full suites on the same juliani_db_test — mine from wt-r4 at 06:55, and the esmeril2 raia's at 06:58, which with --noinput would
-  have dropped and recreated the test DB under mine. Checking the damage:
+● Still in flight at 13 min — two suites on 4 threads, so roughly double the 612 s of the push. Writing the O182 note into the RELATO while
+  I wait:
 
-● Checking whether the collision broke my run
-  ⎿  $ echo "=== o que o MEU container esta dizendo ==="; docker logs practical_germain 2>&1 | tail -12; echo; echo "=== e o segundo ===";
-     docker logs amazing_montalcini 2>&1 | head -6
+● Finding RELATO top sections
 
-✢ Compacting conversation… (5h 40m 22s · ↓ 812.2k tokens)
-  ▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 19%
+✢ Incubating… (5h 45m 52s · ↓ 823.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                     bash denied by auto mode · [Interfere With Workloads] · /permissions
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Listing orphan test containers after stopping turno_c.sh                                4h 21m 52s · ↓ 107.2k tokens
+  ◯ general-purpose  Reading urgencia writes in escalonar_chamados_supervisao.py                             4h 27m 22s · ↓ 146.0k tokens
   ⧉  index
 ```
