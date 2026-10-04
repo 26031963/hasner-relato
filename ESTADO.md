@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 21:49:31.**
+**Medido em 03/10/2026 21:55:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados` |
+| `HEAD` local | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
 | `origin/main` | `29f28708 [TICKETS] rodape do push: 4845e671 -> bc2cd2fb pela cura declarada` |
-| commits a subir (`ahead`) | **17** |
+| commits a subir (`ahead`) | **18** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade
 aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados
 c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos
 e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio
 282c1670 [O142-AVAL] O aval da fatia de dinheiro entra na esteira, e o ponteiro do dossie NAO confere
-77bd2096 [O154] O censo da busca encolhe 29 -> 28, e quem o tinha deixado velho fui eu
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas q
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,22 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O selo o131 não conflita (ele proíbe query nova na casca e no lote; a cura é predicado puro) e os chamadores de 2 argumentos passam por
-  escala_vigente, que desce aqui. Monto em cópia do HEAD:
-
-  Ran 3 shell commands
-
-● GREEN: 77 testes OK — as 2 que mordiam passaram, e os 11 vizinhos (o131, precedência-vínculo-encerrado, O85, chokepoint,
-  queries-invariantes) ficaram verdes. Antes de tocar a árvore, fecho o papel do marco e empurro:
-
-  Ran 1 shell command
-
-● O docker -v de arquivo único criou o alvo vazio na árvore (o /app É o bind-mount) — então o arquivo já existe de fato. Confiro e aplico
-  cura + selo no ato do commit:
-
-  Committed aa2550b0, ran 5 shell commands
-
-● Background command "Empurrar o marco com a régua do pre-push" completed (exit code 0)
 
   Read 1 file
 
@@ -140,15 +123,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● A causa em uma linha: O142 e O142-AVAL estavam citados em commit sem linha no TICKETS — a régua cobra a linha no mesmo commit que abre a
   fatia. Abro as duas:
 
-  Running 1 shell command…
+  Committed ba82736d, ran 4 shell commands
 
-· Bloviating… (21h 36m 0s · ↓ 3.0m tokens)
+● A sonda responde o que o aval deixou em aberto, e o veredito é H3 disparando H1 — não é hipótese, são os vínculos reais:
+
+  Ran 1 shell command
+
+● A trava é flock e saiu com o shell — sombra livre. Agora o censo de frota: o contador que a LINHA HAIKU pede, medido pela função real:
+
+  Ran 2 shell commands
+
+● Enquanto o censo e o push correm, leio o sítio da cura inteiro — âncoras por grep, não por linha:
+
+  Ler papel_por_minuto_da_ata e turnos_abertos_de
+  ⎿  $ echo "=== papel_por_minuto_da_ata: assinatura e de onde tira celulas ===" && L=$(grep -n 'def papel_por_minuto_da_ata'
+     ponto/turnos.py | cut -d: -f1) && sed -n "${L},$((L+40))p" ponto/turnos.py && echo && echo "=== turnos_abertos_de ~1479: a FORMA que o
+     aval manda imitar ===" && M=$(grep -n 'def …
+
+✢ Compacting conversation… (21h 41m 30s · ↓ 3.0m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 81%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
