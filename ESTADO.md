@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:06:01.**
+**Medido em 04/10/2026 12:11:31.**
 
 | | |
 |---|---|
@@ -113,8 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
-
 ● Os 6 casos do selo de intervalo são caracterização de dois defeitos curados (HX-I-NAO-E-PONTA, HX-E-SEM-SAIDA). Memória da casa: "o selo
   não se apaga: a asserção troca". Vou migrar os âncoras de frota para a autoridade antes de apagar — e checar se os números sobrevivem (se
   sobreviverem, provam mesma semântica).
@@ -139,15 +137,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-  Advising using Fable 5.1
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Pouncing… (3h 6m 1s · ↓ 355.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● API Error: Server error mid-response. The response above may be incomplete.
+
+✻ Brewed for 3h 11m 5s · done 12:11 PM · 3 shells still running
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
