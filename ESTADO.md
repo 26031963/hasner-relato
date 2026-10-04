@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 14:25:45.**
+**Medido em 04/10/2026 14:30:46.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  === SMOKE CHAMADOS === é prosa do log e já tinha disparado um esperador frouxo (o furo que a memória espera-casa-com-prosa-do-log
+  nomeia). Aguardando o veredito para então fazer o ff + deploy.sh --sem-migrate sem nada no meio.
+
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
+
   Ran 11 shell commands
 
-● Agora o endpoint, a rota e os dois lados da mensageria.
+● A suíte cheia segue contra a cópia (68 kB de log, nenhum ^FAIL:/^ERROR: até aqui — os Traceback são de testes que exercitam caminho de
+  erro). O esperador está armado no rc=.
 
-  Ran 4 shell commands
+  Enquanto isso, achado medido e registrado (scratchpad/achado_selo_certificacao.md), para virar fatia depois do marco do O135:
 
-● Agora os dois goldens.
+  test_MORDE_o_contexto_liga_o_bloco_junto_da_prontidao está VERMELHO no main e não é meu. O selo afirma adjacência literal de duas linhas
+  de contexto_do_chat; em mensageria/nucleo/ferramentas.py o par está em 394 e 397, com como_esta_a_fabrica e de_onde_vem_a_jornada no
+  meio. O 48805bbf liga contratos_da_pergunta na ~417, longe do par — não causou e não cura. É a 6ª ocorrência do furo que a casa já pagou
+  cinco vezes (selo estrutural varre AST, não texto): a lei que o nome do selo declara é "o contexto LIGA o bloco junto da prontidão", e
+  vizinhança de linha não é lei. Das duas curas, escolhida a (b) — o selo passa a perguntar à AST se contexto_do_chat chama as duas, com
+  MORDE —, porque a (a) seria mover código de produção para a palavra do selo passar, a mesma família do que o adendo do passo 5 chama de
+  PROIBIDO.
 
-  Committed 48805bbf, read 1 file, ran 44 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Tirar do HEAD o arquivo do selo de certificacao
+  ⎿  $ cd /home/ronald/saas-hasner && git show HEAD:mensageria/nucleo/tests/test_ferramenta_certificacao.py | cat -n
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ver como o token da api de mensageria e validado
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "_token_ok" -A12 app/api/views_mensageria.py | head -30
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
-  ⎿  Referenced file docs/PROMPTS.md
-  ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
-  ⎿  Read ../cortes.alarme.pausado (33 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-· Jitterbugging… (2h 13m 47s · ↓ 290.9k tokens · thought for 7s)
+✽ Jitterbugging… (2h 18m 48s · ↓ 309.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
