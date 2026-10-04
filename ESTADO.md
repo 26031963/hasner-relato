@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:45:46.**
+**Medido em 04/10/2026 04:50:46.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● All five leitores converge: each day carries its own marcos (_dia = dict(base, ..., marcos=_marcos)), positioned when the ata has
-  lâmpadas and [] when aggregate — and the docstring confirms "NENHUM le o marcos de topo -- todos usam dia['marcos']". So the calendário
-  gets falta_marcos with zero queries and stays honest where the ata doesn't know. Writing the cure:
+  Ran 2 shell commands
 
-  Ran 1 shell command
-
-● Now the appliers — the espelho (which feeds four leitores) and the badge's ready-made phrase:
-
-  Ran 5 shell commands
-
-● The phrase needs its import. Adding it where montar_dias does its other local imports:
+● Exactly the known gap — the worktree lacks the mount points and :ro can't create them:
 
   Ran 1 shell command
 
-● Now the template stops composing — it prints the ready phrase:
+● Measured, and advisor's concern is real: 2405 dia-colab where the phrase speaks, but the largest bucket (1057) is a full 12x36 with all
+  four marcos missing — 88 chars max, against a field whose docstring says "curta de proposito: ela divide a celula com o horario".
+  Checking how the calendário actually renders it before deciding:
 
-  Ran 4 shell commands
+  Ran 2 shell commands
 
-● Now the fifth leitor — the calendário, which prints palavra_dia and today would keep saying the flat string:
+● The calendário cell already line-clamps with the full phrase in title=, so 88 chars degrade gracefully there. Checking the PDF, which is
+  the DP's paper and has no tooltip:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Widening the template selo to all templates, then running the RED:
+● Decision settled by reading, not invention: enumerate always, no second wording. Each surface already absorbs it — calendário line-clamps
+  with the full phrase in title=, the PDF appends to the wrapping Obs column that already carries several phrases. Checking the push
+  before the DB neighbors:
 
-● Running 1 shell command…
+  Checking push progress
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bh35dq33c.output 2>/dev/null | tail
+     -20; echo "=== trava ==="; cat /tmp/juliani_db_test.lock.quem 2>/dev/null; echo "=== origin ==="; cd /home/ronald/saas-hasner && git
+     log --oneline -1 origin/main
 
-✽ Incubating… (6h 23m 7s · ↓ 919.1k tokens)
+✻ Compacting conversation… (6h 28m 7s · ↓ 932.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Verifying sem_comentario against MORDE fixtures                                          5h 4m 36s · ↓ 158.5k tokens
+  ◯ general-purpose  Stripping keepdb flags from reverifica_c4.sh                                              5h 9m 36s · ↓ 74.7k tokens
   ⧉  index
 ```
