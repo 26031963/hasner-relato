@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:16:01.**
+**Medido em 04/10/2026 02:21:29.**
 
 | | |
 |---|---|
-| `HEAD` local | `79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash` |
+| `HEAD` local | `478fd143 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **11** |
+| commits a subir (`ahead`) | **13** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+478fd143 [O30] O hook lia O142 como O1: a trava do Stop casava id por SUBSTRING
+b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do RELATO
 79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash
 8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
 8f2ccd3f [O122][O121] Tres cortes dele saem do alarme por ESTADO, nao por pausa -- e o estado do O122 contradizia o proprio corte
-f9262dda [O142][O30] O escritor canonico passa a escrever a forma do disco, e a linha que a regua cobrou nasce
-5bdf439c [O142] O dono do dia vem do vinculo DAQUELE dia, e o turno para de depender da janela em que foi perguntado
 ```
 
 ## `git status --short`
@@ -41,8 +41,6 @@ f9262dda [O142][O30] O escritor canonico passa a escrever a forma do disco, e a 
 ```
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
- M bin/hook_stop_fila1.py
-?? bin/tests/test_hook_parei_casa_id_inteiro.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Committing the cure while that runs. Checking the next free item number for the carona achados:
 
-  Read 1 file, ran 1 shell command
+● The RELATO delta is the esteira's own vigia alarm (cron-written), not mine — leaving it. Committing my two acts by path:
 
-● That's the inverted selo I already documented — RED because the deploy is pending, which is exactly its broken direction. Filing the
-  carona achados as items while the rest finishes:
+  Committed b8f51891, 478fd143
 
-  Ran 2 shell commands
-
-● 6 content columns where the table has 5 — I added one too many. Checking the header and fixing:
+● Both landed. Now the open question on my own list that touches a published number — which outranks the rest (LEI-AKITA 8):
 
   Ran 1 shell command
 
-● The header declares 6 columns and O170 uses 5 — both forms exist; what matters to the hook is that celulas[3] is the ESTADO, which my
-  rows satisfy. Checking which form dominates before I commit to one:
+● The published "8 move" (RELATO:454) came from the real function with the caller's own window, and lines 290-294 already carry the
+  6.074/5.856 defasagem. The load-bearing claim there is that the 60-day opener has no cron — verifying it rather than trusting my own
+  prose:
 
   Ran 1 shell command
 
-● 5 columns dominate (147 rows). Rewriting mine to match, with the estado still in celulas[3] where the hook reads it:
+● Confirmed: config/crons.py:1136 declares it "backfill E3 sob ordem" and the live crontabs cite it 0 times. But my own grep found no
+  60-day literal, so I'm checking where that number came from rather than leaving my prose unbacked:
 
-● Rewriting the four items with 5 columns
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
-     cat > $S/novos_itens.txt <<'ROWS'
-     | O171 | **O GRAVADO DA FOLHA NAO SEGUIU A ATA CURADA PELO O142** (medido 04/10 02:09). A relavratura do col369 moveu a ata dos 3 dia…
+  Ran 1 shell command
 
-✢ Compacting conversation… (3h 53m 22s · ↓ 545.9k tokens)
-  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 8%
+● default=60 at line 13 — the claim holds. Reading the whole command (1.1 kB) to see whether it has any guard against writing into an
+  exported competência:
+
+● Reading the backfill command in full
+  ⎿  $ cat -n ponto/management/commands/materializar_turnos.py
+
+· Incubating… (3h 58m 50s · ↓ 556.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Polling suite_final.out for verdict                                                      2h 36m 5s · ↓ 101.1k tokens
-  ◯ general-purpose  Reading TETO_POR_ENTIDADE in test_chokepoint_chamado_gate.py                            2h 34m 52s · ↓ 132.8k tokens
-  ◯ general-purpose  Stopping starved gerar_diagrama lock wait                                                2h 3m 44s · ↓ 169.5k tokens
+  ◯ general-purpose  Polling suite_final.out for verdict                                                     2h 41m 32s · ↓ 101.1k tokens
+  ◯ general-purpose  Running ruff on contexto.py                                                             2h 40m 19s · ↓ 154.6k tokens
+  ◯ general-purpose  Adding diagram paragraph to msg_c3.txt                                                   2h 9m 12s · ↓ 116.6k tokens
   ⧉  index
 ```
