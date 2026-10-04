@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 09:47:31.**
+**Medido em 04/10/2026 09:53:01.**
 
 | | |
 |---|---|
@@ -134,13 +134,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   origin/main...HEAD, e app/api/urls.py foi para origin/main no push do O142; o que ela responde é "o que vou empurrar", não "o que vou
   publicar" (o AR é e49a8289). Vou medir isso direito depois do ato. Agora, o merge em cópia:
 
-● Esperar a tarefa de fundo terminar e ler o veredito · 1m 59s
+  Esperar a tarefa de fundo terminar e ler o veredito · 7m 28s
   ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/suite_merge.log;
      T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b79wglcrw.output; for i in $(seq 1 75); do
-     if grep -q 'exited with code' "$T" 2>/dev/null; th… (1m 56s)
+     if grep -q 'exited with code' "$T" 2>/dev/null; th… (7m 26s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Pouncing… (47m 31s · ↓ 95.3k tokens)
+✢ Pouncing… (53m 1s · ↓ 95.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
