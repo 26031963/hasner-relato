@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**175 obras abertas.**
+**176 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -181,6 +181,7 @@ lista — ela e o que esta EM PE._
 | **O171** | O GRAVADO DA FOLHA NAO SEGUIU A ATA CURADA PELO O142 | espera corte |
 | **O172** | A `impressao_insumos` NAO IDENTIFICA O DIA QUE A GEROU | achado de carona do O142, **nao tocado** |
 | **O173** | O SELO DO IMPORT TARDIO TEM A DIRECAO INVERTIDA | **O SELO DO IMPORT TARDIO E MUDO NA SEGU |
-| **O174** | CRON E WORKER SAO DOIS SISTEMAS ENTRE UM DEPLOY E OUTRO, e isso nao esta escrito | espera aval |
+| **O174** | CRON E WORKER SAO DOIS SISTEMAS ENTRE UM DEPLOY E OUTRO, e isso nao esta escrito | achado 04/10 01:5x |
 | **O175** | O BACKFILL DO NUCLEO NAO TEM GUARDA DE COMPETENCIA EXPORTADA | espera `!` |
 | **O176** | "O ROTULO ESTA NUM TITULO" NAO RESPONDE "ESTA FATIA SUBIU" | espera corte |
+| **O177** | A SEGUNDA PAUSA SOMA DINHEIRO EM DOIS SITIOS QUE A FATIA DEIXOU DE FORA | nascido 04/10 03:1x da entrega da raia.  |
