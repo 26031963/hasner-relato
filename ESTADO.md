@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:3 AFIRMA ato sem PROVA ao lado -- **AUSENCIA FECHADA no estrutural: `contratos_estruturais: 13/22 verdes`** pela funcao real, selo `test_selo_contratos_estruturais` 13 OK (`c
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:403 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:10:45.**
+**Medido em 03/10/2026 22:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
+| `HEAD` local | `69fca443 [RELATO] Os dois arquivos da fatia moram na copia, e o erro de meia hora fica escrito onde doi` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+69fca443 [RELATO] Os dois arquivos da fatia moram na copia, e o erro de meia hora fica escrito onde doi
+7a335e37 [O142] A RED sai da arvore junto com a cura, nao antes dela -- senao eu deixo a arvore VERMELHA
+0b7e0a78 [O142] A RED da invariancia fica vermelha onde a sombra disse, e a cura NAO vai para o disco antes do DIFF
 ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade
 aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED primeiro, e a lei de 16/09 passa a valer nos DOIS lados
-c5487849 [RELATO] A raia-ui pousa e vai ao ar no mesmo ato -- 9.552 testes, 597 rotas, 58/58 selos
-e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas que eu nao li no relogio
-282c1670 [O142-AVAL] O aval da fatia de dinheiro entra na esteira, e o ponteiro do dossie NAO confere
 ```
 
 ## `git status --short`
@@ -41,9 +41,6 @@ e49a8289 [O142-AVAL] A leitura do ponteiro era minha, nao dele -- e duas horas q
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
-?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -115,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "Segunda tentativa do push do marco" still running in background
 
-● Background command "Rodar o censo de invariância na sombra" completed (exit code 0)
+● Background command "Aguardar por arquivo o veredito dos vizinhos" completed (exit code 0)
 
-● O censo de frota voltou — e muda o desenho da cura. Vou publicar os números antes de qualquer coisa (compactar com número medido e não
-  publicado perde o número), mas sem commitar enquanto o push está em voo.
+  Ran 1 shell command
 
-  Searched for 1 pattern, read 1 file, ran 14 shell commands
+● Vizinhos 3.886 OK com a cura. Agora o ponto do relógio — o HUP das 03:30 publica o que está no disco:
 
-● Background command "Segunda tentativa do push do marco" completed (exit code 0)
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● O deploy.sh não honra arquivo de pausa nenhum — então pausar por arquivo seria selo vazio. A opção mais restritiva é não pôr a cura no
+  disco: commito só a RED e os docs, e a cura fica na cópia nomeada.
 
-● O constraint do banco me ensinou algo: vínculo invertido não pode mais nascer pelo ORM (ec_vigencia_fim_nunca_antes_do_inicio) — o do
-  col736 é dado legado. A forma LEGAL que dispara o mesmo corte pelo vizinho é um vínculo encerrado antes da janela civil:
+  Committed 0b7e0a78, ran 1 shell command
 
-  Ran 5 shell commands
+● A RED commitada sem a cura deixa a árvore vermelha — o próximo push bloqueia e a régua fica RED. O arquivo de fatia vai para a árvore no
+  ato do commit da cura, não antes:
 
-● RED reproduzindo a assinatura medida em prod — na competência o colab perde os 10 dias (comp=[]) enquanto [d,d] e o civil concordam.
-  Agora a cura por bind-mount:
+  Ran 1 shell command
 
-  Ran 4 shell commands
+● O guarda do O57 pediu a declaração — a deleção é minha e o corpo já diz o quê e por quê:
 
-● O push pousou (29f28708..ba82736d, 9.558 + 22 testes OK). Enquanto os vizinhos rodam, vou gravar os números da cura:
+  Registrar onde os arquivos moram e commitar
+  ⎿  $ python3 - <<'PY'
+     p='docs/RELATO.md'
+     s=open(p).read()
+     v="**RED PRIMEIRO, e ele reproduziu a assinatura que a sombra mediu.**"
+     n=("**ONDE OS DOIS ARQUIVOS ESTAO, e um erro meu de meia hora**: eu commitei a RED (`0b7e0a78`) e "
+     "segurei a cura fora do disco -- as duas decisoes certas separadamente e…
 
-  Ran 4 shell commands
-
-● Advising using Fable 5.1
-
-· Bloviating… (21h 57m 14s · ↓ 3.0m tokens)
+· Bloviating… (22h 2m 14s · ↓ 3.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
