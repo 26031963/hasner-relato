@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:84 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:65 AFIRMA ato sem PROVA ao lado -- **`!` CUMPRIDO -- O135 TETO-20 ESTA NO AR** (`fb1c78ac`, ff + `deploy.sh --sem-migrate` num ato so as
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:11:01.**
+**Medido em 04/10/2026 17:16:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-primeiro e a copia tinha invertido` |
+| `HEAD` local | `226673b5 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
 | `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| commits a subir (`ahead`) | **8** |
+| commits a subir (`ahead`) | **9** |
 
 ## Fabrica
 
@@ -29,32 +29,27 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+226673b5 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou
 fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-primeiro e a copia tinha invertido
 738b779f reconciliacao: o registro da ORDEM VIVA (31558c3e) entra no teto20 para o ff seguir sendo ff
 31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7
 088fdcde O135: o registro de que a GUARDA do agendado era VACUA, e do pop que conflitava
-62ebc615 O135: a copia incorpora o registro do dia (50333326), para o pouso de segunda ser ff PURO
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
  M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
 ?? fatias_agendadas/abono-no-ar/fatia.done
 ?? fatias_agendadas/abono-no-ar/msg_commit.txt
-?? fatias_agendadas/o135-teto20/
+?? fatias_agendadas/o135-teto20/esteira.out
+?? fatias_agendadas/o135-teto20/msg_commit.txt
 ```
 
 ## PLACAR-ESTRUTURAL (L-099) -- o placar PRINCIPAL
@@ -121,42 +116,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A L-102 já tem linha — e a lei nova altera o rodapé dela (o número SAI) e acrescenta uma regra nova. Registro os dois prompts primeiro:
+● Commit do marco: 226673b5. Agora a régua inteira (proibido pular) — ela leva ~20 min pela suite:
 
-  Ran 1 shell command
+  Ran 2 shell commands
 
-● Agora a L-102 alterada e a L-103 nova. Vejo as colunas da tabela:
+● A régua está viva (pid 2371860; o exit 1 foi o sleep bloqueado). Espero por arquivo, nunca por pgrep:
 
-  Ran 4 shell commands
+  Ran 3 shell commands
 
-● Agora o topo do RELATO — ele é contrato com o hook, então vejo o que está lá antes de escrever:
+● Enquanto ela corre eu não toco a árvore — o impressao_digital dela recusa o carimbo se o código mudar no meio. Uso o tempo para revisar o
+  plano do push:
 
-  Ran 1 shell command
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● O topo diz "LEI NA MESA" e a lei chegou. Troco o rótulo e escrevo a resposta, sem apagar os números medidos:
+● O advisor achou uma contradição real no topo. Primeiro, leitura só (não toca a impressão digital):
 
-  Read 1 file, ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3wsnx6z5.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output (10 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Docs não entram na impressão digital (só *.py e *.html), e tickets_placar não está no caminho do push. Então curo a contradição do topo
+  agora:
 
-● Aquela task é de 02/10 (transcript cru, outro assunto). Sigo no marco. Vejo onde a primeira seção do RELATO começa, para a do O135 entrar
-  em cima (o arquivo é mais-novo-primeiro):
+  Ran 3 shell commands
 
-● Localizar a primeira secao do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n '^## ' app/docs/RELATO.md | head -8 && echo '--- topo linha 1-8 ---' && sed -n '1,8p'
-     app/docs/RELATO.md
+● Alcance do push conferido: 9 commits, nenhum do fabricante, HEAD..origin/main vazio (ff puro). Espero o veredito da régua:
 
-· Jitterbugging… (4h 59m 3s · ↓ 663.3k tokens)
+● Progresso da regua
+  ⎿  $ cd /home/ronald/saas-hasner && cat logs/regua_o135_marco_20261004.out; echo "--- suite log ---"; tail -3 /tmp/regua_171324.log
+     2>/dev/null
+
+✢ Jitterbugging… (5h 4m 33s · ↓ 679.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
