@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 10:09:31.**
+**Medido em 04/10/2026 10:15:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ bdd65ed0 [PLACAR-ESTRUTURAL] O R4 pedia o tripwire por nome e o molde dele tem Q
 ```
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
 ?? esteira.pausada
