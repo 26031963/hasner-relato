@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 14:35:46.**
+**Medido em 04/10/2026 14:40:46.**
 
 | | |
 |---|---|
@@ -46,6 +46,7 @@ d1689254 Merge branch 'raia-r4' into raia-merge
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
 ?? fatias_agendadas/abono-no-ar/fatia.done
 ?? fatias_agendadas/abono-no-ar/msg_commit.txt
+?? fatias_agendadas/o135-teto20/
 ```
 
 ## PLACAR-ESTRUTURAL (L-099) -- o placar PRINCIPAL
@@ -112,14 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  PALAVRA (item 1 dos DOSSIES, aval
-
-  Ran 11 shell commands
-
-● A suíte cheia segue contra a cópia (68 kB de log, nenhum ^FAIL:/^ERROR: até aqui — os Traceback são de testes que exercitam caminho de
-  erro). O esperador está armado no rc=.
-
-  Enquanto isso, achado medido e registrado (scratchpad/achado_selo_certificacao.md), para virar fatia depois do marco do O135:
 
   test_MORDE_o_contexto_liga_o_bloco_junto_da_prontidao está VERMELHO no main e não é meu. O selo afirma adjacência literal de duas linhas
   de contexto_do_chat; em mensageria/nucleo/ferramentas.py o par está em 394 e 397, com como_esta_a_fabrica e de_onde_vem_a_jornada no
@@ -138,12 +131,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Medir se a janela de auth morde no commit do O135
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,60p' bin/deploy_agendado.sh
+  Montar a fatia agendada do pouso do O135
+  ⎿  $ set -e
+     D=/home/ronald/saas-hasner/fatias_agendadas/o135-teto20
+     mkdir -p "$D"
+     cat > "$D/esteira.sh" <<'SH'
+     #!/usr/bin/env bash
+     # O135 TETO-20 POUSA QUANDO A JANELA DE AUTH ABRE (seg 06:05) -- GATE TEMPORAL = CRON + ARQUIVO.
+     #
+     # POR QUE ESTE ARQUIVO EXISTE: o commit `48805bbf` (copia /home/ronald/w…
 
-✽ Jitterbugging… (2h 23m 48s · ↓ 320.2k tokens · thought for 2s)
+✽ Compacting conversation… (2h 28m 48s · ↓ 331.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
