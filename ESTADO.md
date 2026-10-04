@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:29:01.**
+**Medido em 04/10/2026 01:34:31.**
 
 | | |
 |---|---|
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 2 shell commands
 
-● Bloco is in flight since 01:22 (~18 min). Arming a single-notification wait on the carimbo itself, with the stall case covered.
+● bloco.log is 10 minutes stale and its tail says FALHOU — crons sombra, yet the stamp still reads nao_rodou and something still holds the
+  lock. Asking the kernel who holds it rather than guessing.
+
+  Ran 1 shell command
+
+● My misread — those two lines were sombra.log's tail from yesterday's 04:13 failure, not today's bloco. The bloco is genuinely running
+  (bash + docker hold the lock). Preparing the sombra censo while it finishes.
+
+  Ran 1 shell command
+
+● The canonical runner queues on the flock, so I can fire it now and it runs when the bloco frees the lock. Checking the predicted-ata file
+  I must compare against.
 
   Ran 2 shell commands
 
-● Both background jobs end in | tail -N, which buffers to zero bytes until they finish — I'll read them on notification. Meanwhile, finding
-  the real function the cartório cron calls, so the relavratura is that function and not a bespoke one.
+● Two problems: the sombra container's /app/logs is tmpfs so the prevista json won't be readable there, and I need the house's own docker
+  form. Reading both.
 
-  Searched for 1 pattern, ran 1 shell command
+  Ran 4 shell commands
 
-● The faithful scoped act is the command's own loop body with a one-element fila. Reading what it prints per cell, so the DRY can be read
-  by competência.
+● The house launcher already exists and asserts the database. Checking the item key names so the comparison anchors on real data.
 
-  Ran 1 shell command
+  Running 1 shell command…
 
-● if apply_: guards the ata build — so a DRY cannot say which atas move. Checking where the new impressão is computed and where the skip
-  decision happens.
-
-  Ran 1 shell command
-
-● Line 132–133 says the impressão hashes batidas/cobertura/chamados/DNA and not the ata. If that's literal, the cartório will skip those
-  three cells forever and the DRY would have told me nothing. Verifying at the source instead of trusting the comment.
-
-● Reading impressao_insumos body
-  ⎿  $ sed -n '85,110p' ponto/services/cartorio.py
-
-✢ Incubating… (3h 6m 22s · ↓ 425.3k tokens · thinking)
+✢ Incubating… (3h 11m 52s · ↓ 439.9k tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 8 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 7 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
   ◯ general-purpose  Reviewing cobre_parte_do_dia in turnos.py                                               1h 46m 42s · ↓ 155.5k tokens
-  ◯ general-purpose  Polling tudo.log for suite verdict                                                      1h 47m 52s · ↓ 160.4k tokens
-  ◯ general-purpose  Polling trava_teste.sh for red_c3c2.out                                                 1h 16m 44s · ↓ 150.0k tokens
+  ◯ general-purpose  Writing msg_c3.txt commit message                                                       1h 53m 22s · ↓ 163.7k tokens
+  ◯ general-purpose  Grepping on_commit sites outside tests                                                  1h 22m 14s · ↓ 168.8k tokens
   ⧉  index
 ```
