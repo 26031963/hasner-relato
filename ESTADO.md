@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:56:01.**
+**Medido em 04/10/2026 05:01:31.**
 
 | | |
 |---|---|
@@ -40,6 +40,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -112,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 3 shell commands
-
-● Ruff clean, 5/5 GREEN, 0.011s (no DB). Checking the TICKETS line before citing [O130] in the subject:
-
-  Ran 2 shell commands
-
-● Background command "Push the two marco commits" completed (exit code 0)
+  dias is born, which is advisor's case (b):
 
   Ran 1 shell command
 
-● Push landed: 774447cf..06584473, 9569 + 22 tests OK, falta empurrar = 0. Committing O130 on the raia (no [ID] brackets — the TICKETS line
-  belongs to the merge act on main, where the table lives):
-
-  Committed deb20ebc
-
-● O130 committed on the raia: deb20ebc, 5 files, 223 insertions. Checking who holds the trava now:
+● api/views.py only reads the palavra from espelho_do_colab — fine. But the PDF re-applies it with limpar=True. Finding where its dias is
+  born, and what limpar strips:
 
   Ran 1 shell command
 
-● Trava correctly serialized: the raia-chamado agent took it the instant my push released it (04:54:43). Building the neighbor run to wait
-  on the lock itself, not poll — first the censo of who reads the two changed modules:
+● The PDF's dias come from espelho_do_colab — born in montar_dias, so falta_marcos is present and the re-application gets the enriched
+  palavra. Reading the limpar key list, since I added a key to that dict:
 
-● Census of readers and test neighbors
-  ⎿  $ cd /home/ronald/wt-o130/app && echo "=== quem importa dia_decidido ==="; grep -rln 'dia_decidido' --include='*.py' . | sort; echo;
-     echo "=== testes que citam palavra_dia / falta_marcos / falta_frase ==="; grep -rln
-     'palavra_dia\|falta_marcos\|falta_frase\|palavra_do_dia\|frase_do_que_falta' --inc…
+  Ran 1 shell command
 
-✢ Incubating… (6h 33m 22s · ↓ 946.2k tokens · thinking)
+● limpar only pops _-prefixed private keys — falta_marcos is public and survives, which is why it's the carrier. Advisor's #1 is resolved:
+  no sixth leitor. Both do_dia callers and both aplicar_palavra_do_dia callers are migrated or fed by montar_dias. Now #3 — whether the
+  lápide's claimed remaining consumer actually exists:
+
+  Ran 1 shell command
+
+● Advisor's #3 confirmed — my lápide asserts a reader that does not exist. The only remaining falta_marcos mentions are my own kwarg, the
+  composer's parameter, a comment in e6_oraculo.py, and two selos; the chamado_id do badge E3 consumer is a phantom. Checking the marco
+  tipo set before fixing it, since #4 bears on the same code:
+
+● Finding which tipo codes the grade can emit
+  ⎿  $ cd /home/ronald/wt-o130/app && echo "=== tipos que montar_realizado_grade emite ==="; sed -n '/def montar_realizado_grade/,/^def /p'
+     escala/utils.py | grep -n "'tipo'\|tipo=\|TIPO\|'E'\|'S'" | head -20
+
+✢ Incubating… (6h 38m 52s · ↓ 958.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                             You've used 88% of your weekly limit · resets Oct 7, 6pm (America/Sao_Paulo)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Correcting function names in tickets_rows.txt                                           5h 14m 52s · ↓ 131.8k tokens
+  ◯ general-purpose  Inspecting N2 branch in c1_patch.py                                                     5h 20m 21s · ↓ 157.7k tokens
   ⧉  index
 ```
