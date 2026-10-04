@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 13:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (339.3 MB). Acoes na janela: **1686**.
+**Medido em 04/10/2026 13:15:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (339.9 MB). Acoes na janela: **1702**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:15:10 | Bash | Registrar o aval novo no PROMPTS e no BACKLOG | `cd /home/ronald/wt-lps && cat >> app/docs/PROMPTS.md <<'MD' ## 04/10 ~13:xx — aval: MEDE OS 73 DE ATA ZERO COM O `supra_juiz:131` DISTINGUINDO None DE 0 `aval Ronald: antes de eu responder a lei da L-102, mede na sombra, 09 e 10: com supra_juiz.py:131 distinguindo None de 0, quantos dos 73 dia-colab de ata zero trocam de veredito e quantos colabs passam a ENTRAR ou a SAIR do TXT na relavratura. Pu ...` |
+| 13:13:51 | Bash | Ver worktrees e a sonda de export | `cd /home/ronald/saas-hasner && git worktree list; echo "=== wt-ct patch:"; [ -d /home/ronald/wt-ct ] && (cd /home/ronald/wt-ct && git status --porcelain \| head && git log --oneline -1); echo "=== sonda export:"; cat logs/sombra/export_antes_depois_20261004.py` |
+| 13:13:11 | Bash | Censo dos usos de `real` em supra_juiz | `grep -n "real" ponto/supra_juiz.py \| sed -n '1,60p'` |
+| 13:13:07 | Bash | Ler supra_juiz.py 118-175 | `sed -n '118,175p' ponto/supra_juiz.py` |
+| 13:12:39 | Bash | Ler a sonda do DIFF de cobranca | `cd /home/ronald/saas-hasner && wc -l logs/sombra/diff_cobranca_20261004.py logs/sombra/export_antes_depois_20261004.py && cat logs/sombra/diff_cobranca_20261004.py` |
+| 13:12:34 | Bash | Ler rodar_na_sombra.sh e listar sondas | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh; echo "=== sondas em logs/sombra (recentes):"; ls -t logs/sombra/*.py \| head -20` |
+| 13:12:28 | Bash | Ler o runner das bordas e a saida do export | `cd /home/ronald/saas-hasner && cat logs/o134/roda_bordas_20261004.sh; echo "######### export_antes_depois head"; head -40 logs/o134/export_antes_depois_20261004.out` |
+| 13:12:24 | Bash | Listar sondas do o134 e do scratchpad | `cd /home/ronald/saas-hasner && ls logs/o134/*.py logs/o134/*.sh 2>/dev/null; echo "=== scratchpad:"; ls -t /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ 2>/dev/null \| head -30` |
+| 13:12:14 | Bash | Ler o DIFF de cobranca do passo 4 | `cd /home/ronald/saas-hasner && echo "########## diff_cobranca_20261004.out"; cat logs/o134/diff_cobranca_20261004.out \| head -70` |
+| 13:12:11 | Bash | Listar saidas do o134 e achar a do col454 | `cd /home/ronald/saas-hasner && ls -t logs/o134/ \| head -20; echo "=== grep col454:"; grep -rln "col454" logs/o134/ 2>/dev/null \| head` |
+| 13:11:58 | Bash | Ver o preambulo (E_SOMBRA) | `cd /home/ronald/saas-hasner && sed -n '1,16p' bin/r5_idempotencia_frota.sh` |
+| 13:11:55 | Bash | Ver o docker run contra sombra | `cd /home/ronald/saas-hasner && grep -n -A14 "docker run" bin/r5_idempotencia_frota.sh \| head -40` |
+| 13:11:38 | Bash | Achar o runner de sonda contra a sombra | `cd /home/ronald/saas-hasner && grep -rln "settings.sombra\\|DJANGO_SETTINGS_MODULE=config.settings.sombra" bin/ \| head -20; echo "=== ==="; ls bin/ \| grep -iE 'sonda\|sombra' ; echo "=== o invocador que o o134 usou:"; ls -t logs/o134/ 2>/dev/null \| head; grep -rl "predicada_bordas" /tmp/claude-1001 2>/dev/null \| head -3` |
+| 13:11:33 | Bash | Ler bin/sonda_frota.sh | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/sonda_frota.sh` |
+| 13:11:23 | Bash | Achar o invocador canonico de sonda na sombra | `cd /home/ronald/saas-hasner && ls bin/ \| grep -iE 'sombra\|sonda\|medir' ; echo "=== quem gerou o predicada_bordas:"; grep -rln "predicada_bordas" bin/ app/ logs/*.sh 2>/dev/null \| head; echo "=== docker run contra sombra (exemplos recentes):"; grep -rhoE "docker run[^\n]{0,200}settings.sombra[^\n]{0,80}" bin/*.sh 2>/dev/null \| head -3` |
+| 13:10:57 | Bash | Ler o topo do RELATO | `cd /home/ronald/saas-hasner && sed -n '1,40p' app/docs/RELATO.md` |
 | 13:06:43 | Bash | Registrar o prompt no PROMPTS.md | `cd /home/ronald/wt-lps && cat >> app/docs/PROMPTS.md <<'MD' ## 04/10 ~12:5x — corte: LEI-PROTEGE-SITIO nasce (a lei escrita passa a morder no diff) `corte Ronald: LEI-PROTEGE-SITIO nasce. Toda lei do LEIS.md que proibe ou condiciona mexer num arquivo::funcao declara esse sitio numa coluna PROTEGE; commit que toca sitio protegido cita o L-NNN no corpo, senao o pre-push fica VERMELHO. Molde: TRAVA J ...` |
 | 13:06:21 | Bash | Corrigir as tres linhas para 5 colunas | `cd /home/ronald/wt-lps && python3 - <<'PY' import re p='app/docs/BACKLOG.md'; s=open(p,encoding='utf-8').read().split('\n') s=[l for l in s if not re.match(r'^\\| O18[678] \\|', l)] anc=s.index('<!-- OBRAS:FIM -->') novas=[ "\| O186 \| **LEI-PROTEGE-SITIO: a lei escrita passa a MORDER no diff** (corte dele 04/10 ~12:5x, molde TRAVA JUIZ-NOVO). `app/docs/LEIS.md` ganha a coluna PROTEGE (`arquivo::f ...` |
 | 13:06:02 | Bash | Conferir o numero de colunas da tabela de obras | `cd /home/ronald/wt-lps && grep -n '^\| # \| obra' app/docs/BACKLOG.md; awk '/^\\| O185 \\|/{print "O185 pipes="gsub(/\\|/,"\|")}' app/docs/BACKLOG.md` |
