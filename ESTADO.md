@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:27:41.**
+**Medido em 04/10/2026 12:33:01.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
 
-● Task "Conferir linhas no TICKETS e o proximo da fila 1" still running in background
+● O RED está evidenciado — 7 vermelhos. Um deles, porém, parou antes da própria asserção de rótulo; corrijo a ordem para o selo morder o
+  que promete.
 
-● Task "Suite cheia na copia (GREEN)" still running in background
+  Ran 2 shell commands
 
-● O item (1) do adendo já está medido. Classe A = 30/30 "2-BATIDAS-SAO-DO-TURNO-DO-VIZINHO", erros=0 — a autópsia fecha, e a classe C
-  zerou. Vou ver as duas fragilizações que tenho de desfazer antes de chamar o conselho.
+● Item (2) fechado com prova nas duas árvores. Agora o item (3) — o DIFF de classificar_export. Vejo se o arreio da sombra aceita apontar
+  para a cópia.
+
+  Ran 2 shell commands
+
+● motivos_retencao_celula lê CelulaDia.veredito lavrado, não classificar_dia ao vivo — isso muda o que o item (3) significa. Vou medir as
+  duas coisas: a adesão ao TXT hoje nas duas árvores, e a adesão depois de uma relavratura real.
+
+  Ran 3 shell commands
+
+● Falta o ponto de montagem na cópia — o caso que a memória registra. Crio e rodo o DEPOIS.
 
   Ran 1 shell command
 
-● Tenho os três itens do adendo mapeados e a medição que decide. Antes de escolher o caminho, consulto.
+● Os três itens do adendo estão medidos. antes == depois: os 6 digests são idênticos, 433 entram nos dois lados — e a anti-vacuidade
+  (minutos_realizados_do_dia presente = True/False) prova que as duas rodadas usaram códigos diferentes.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 2 shell commands
 
-  Ran 1 shell command
+● Todos os três itens do adendo estão medidos. Publico — a lei no topo, com os números, e a esteira segue.
 
-● Stop Task
-  ⎿  cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-ct --espera 1200 2>&1 | tail -40 · stopped
+● Running 1 shell command…
 
-  Ran 6 shell commands
-
-● O item (1) está medido e a autópsia fecha a classe A. Agora o item (2): restauro o selo da L-102 que eu havia fragilizado e escrevo o RED
-  que o adendo manda, usando as fixtures de frota que já provaram os números no HEAD.
-
-● Criar copia ANTES no HEAD com o selo novo
-  ⎿  $ cd /home/ronald/saas-hasner && echo "################ ANTES (codigo do HEAD) ################" && bin/suite.sh --dir
-     /home/ronald/wt-antes --espera 900 --only "escala.tests.test_montador_realizado_pela_autoridade relatorios.tests.test_palavra_do_dia"
-     2>&1 | tail -30; echo "rc=$?"
-
-· Jitterbugging… (15m 43s · ↓ 35.3k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+✢ Jitterbugging… (21m 3s · ↓ 50.4k tokens)
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
