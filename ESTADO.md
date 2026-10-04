@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:565 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:725 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 07:22:01.**
+**Medido em 04/10/2026 07:27:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `5eb61383 [O182] A suite ganha PORTA: nao havia forma de rodar a inteira travada sem escrever o comando a mao` |
+| `HEAD` local | `15f1d7e0 Cinco fatias entrariam no main sem linha no TICKETS, e o portao nao e o commit: e o merge` |
 | `origin/main` | `23d79450 HANDOFF: marco do O130 fechado -- o painel passa a dizer que a raia espera o mesmo `!`` |
-| commits a subir (`ahead`) | **3** |
+| commits a subir (`ahead`) | **4** |
 
 ## Fabrica
 
@@ -29,11 +29,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+15f1d7e0 Cinco fatias entrariam no main sem linha no TICKETS, e o portao nao e o commit: e o merge
 5eb61383 [O182] A suite ganha PORTA: nao havia forma de rodar a inteira travada sem escrever o comando a mao
 75026703 PLACAR: o R6 remedido pela funcao real -- e ele envelheceu no proprio +1 que previu
 fcaf9a82 O topo do TICKETS fechado no ato do push (O112)
 23d79450 HANDOFF: marco do O130 fechado -- o painel passa a dizer que a raia espera o mesmo `!`
-62492b22 [O130] Em aberto passa a dizer o que falta -- e medir a fatia achou o defeito dentro dela
 ```
 
 ## `git status --short`
@@ -41,7 +41,6 @@ fcaf9a82 O topo do TICKETS fechado no ato do push (O112)
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  Committed 15f1d7e0, ran 4 shell commands
+
+● Documentos no main. Push do marco — quatro commits, um push:
+
+  Ran 2 shell commands
+
+● Monitor(push do marco (pre-push roda os dois runners))
+  ⎿  Monitor started · task bih5omrpr · timeout 1800s
   ⎿  Allowed by auto mode classifier
 
-● Background command "Re-run the suite over the raia with the inscriptions" completed (exit code 0)
+● Push em curso com o pre-push rodando os dois runners. Nada será commitado enquanto ele estiver de pé.
 
-  Ran 1 shell command
+  Estado até aqui:
 
-● Monitor event: "verdict of the first raia suite run"
+  - Inscrição da bolha curada na origem — 6a9222f8 na raia. Os seis módulos que a raia declarou porta de PerguntaDisputa em core/portas.py
+    ganharam cabeçalho @bolha/@entra/@sai/@invariante. Pela função real: universo=61, sem_contrato=44 (= o passivo inteiro, nada além),
+    NOVAS=0, faltando() vazio nos seis. Passivo não engordou de 44 para 50 — ele é para dívida antiga e só encolhe.
+  - Três datas minhas corrigidas antes da medição: o censo de atribuição é de 04/10, não 03/10 (validacao.py, fio.py, veredito_lavrado.py).
+    O defeito de datar de cabeça é meu e tem lápide.
+  - O número publicado é de árvore congelada: o primeiro run (6.896 OK) pegou duas edições minhas no meio, então virou só sinal. O run que
+    vale carimbou md5_dos_6=5e6c65714843 no início e o mesmo no fim — Ran 6896 tests in 286.856s / OK (skipped=30) / ### bolha2 rc=0.
+  - C1b pousou — 142238fc, 20 paths, raia limpa.
+  - Documentos no main — 15f1d7e0: O183 no BACKLOG (estado 298 de 300 caracteres, rótulo dizendo que a suíte é dos 4 labels e não da régua
+    inteira), a seção no RELATO com as duas curas, e as cinco linhas no TICKETS. regua_tickets: OK, tickets_placar: OK. Um pipe em célula
+    foi barrado pelo próprio assert do patch (consulta|normal|...) e saiu antes de deslocar coluna.
 
-● Monitor "verdict of the first raia suite run" stream ended
-
-● Verde (6.896 OK), mas essa árvore mudou durante o run — o número não descreve o que vou commitar. Árvore congelada agora; run limpo:
-
-  Ran 8 shell commands
-
-● Mensagens prontas. Aguardando o run limpo (b49o0rdwa) sobre a árvore congelada.
-
-● Monitor(verdict of the frozen-tree raia suite run)
-  ⎿  Monitor started · task bxn89jpd8 · timeout 1800s
-  ⎿  Allowed by auto mode classifier
-
-  Ran 1 shell command
-
-● Três commits meus à frente do origin/main, remoto não adiantado — o push do marco levará os quatro juntos.
-
-● Checking the TICKETS placar before touching the table
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --conferir 2>&1 | tail -12
-
-✢ Brewing… (24m 57s · ↓ 59.0k tokens · thinking)
+✻ Cooked for 1m 22s · done 7:26 AM · 2 shells, 1 monitor still running
 
 ● How is Claude doing this session? (optional)
   1: Bad    2: Fine   3: Good   0: Dismiss
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
