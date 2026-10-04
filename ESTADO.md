@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:151 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:234 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:59:31.**
+**Medido em 04/10/2026 03:05:02.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ b8f51891 [O142] Os residuos da fatia nascem como ITEM, nao como paragrafo do REL
 ```
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -112,44 +113,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Those are raw transcripts. Extracting just the final report from each:
 
   Ran 1 shell command
 
-● aa14's report carries one INCOMPLETO that matters to me: "a suíte dos 5 apps não foi re-rodada inteira depois de d36ae038... A rodada
-  cheia é sua antes do merge." Since d36ae038 is already an ancestor of main, my running 13-label suite is that rodada. a857 ended
-  mid-wait, so its O167 verdict is now mine to collect:
+● Writing the RELATO for this window's two commits before anything else — the numbers are measured and unpublished, which is exactly what
+  must not be lost:
 
   Ran 1 shell command
 
-● a857's run is alive and progressing (its green_tudo2.out grew at 02:56); mine is queued third. While the pista is busy, the work that
-  doesn't need it. First measuring the two corrections I owe, before writing either:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 3 shell commands
+● Item 1 is on a clock. Measuring it first:
 
-● ponto/turno_leitura.py is a new module from my own 5bdf439c, and the air is e49a8289. So the selo's direction is precisely the one Ronald
-  ordered — "import tardio de simbolo que o HEAD carregado nao tem" — and my O173 item calls it "invertida", which is wrong against a
-  literal order. Correcting my own item before it becomes a bad fatia:
+  Ran 1 shell command
 
-  Ran 2 shell commands
+● 26 minutes to 03:30. What --reload-agendado actually does:
 
-● Now the RELATO: finding where it still says the SEGUNDO-INTERVALO raia awaits a merge:
+  Ran 1 shell command
 
-● Reading handoff and RELATO top for pending-merge claims
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== HANDOFF (modificado na arvore) ===" && cat app/docs/HANDOFF-SESSAO.md && echo && echo "===
-     topo do RELATO, 1-30 ===" && sed -n '1,30p' app/docs/RELATO.md
+● It publishes. --reload-agendado is "o mesmo reload + a mesma prova de rota", refusing only on pending migration — and deploy.sh honours
+  no pause file. So 5bdf439c goes to air at 03:30, in ~25 min, not Monday. Measuring the two things that decide what I do:
 
-✢ Incubating… (4h 36m 52s · ↓ 648.2k tokens · thinking)
+  Checking pending migrations and whether the O142 frota DIFF is published
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== migration pendente? (o UNICO portao do 03:30) ===" && docker exec saas_core python
+     manage.py showmigrations --plan 2>/dev/null | grep -c '^\[ \]' ; echo "--- por tenant ---"; docker exec saas_core python manage.py
+     tenant_command showmigrations --schema=jul…
+
+✻ Incubating… (4h 42m 23s · ↓ 656.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 5 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Reading cartorio receivers in signals.py                                                3h 18m 22s · ↓ 108.6k tokens
-  ◯ general-purpose  Committing chamados/models.py C2 cure                                                   2h 19m 38s · ↓ 165.7k tokens
+  ◯ general-purpose  Reading chamado_turno filter in api_justificativas                                      3h 23m 52s · ↓ 128.6k tokens
+  ◯ general-purpose  Reading suite verdict in green_tudo2.out                                                2h 52m 44s · ↓ 169.0k tokens
   ⧉  index
 ```
