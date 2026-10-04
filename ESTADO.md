@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:40:52.**
+**Medido em 04/10/2026 20:44:47.**
 
 | | |
 |---|---|
@@ -110,37 +110,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Todas as 7 são linhas minhas, e os fatos estão provados no próprio texto — falta a linha literal PROVA:. Confiro contra o mundo antes de
-  escrevê-la:
+● Selo verde. Republico:
 
   Ran 1 shell command
 
-● O selo está certo em reter: o sha fb1c78ac citado como "O135 TETO-20 NO AR" é um commit de RELATO das 15:33, não o pouso das 16:59. Caço
-  o commit real:
+● MARCO FECHADO — pode compactar. RELATO publicado em d05bcf7, 0 vazamento; ESTADO e SESSAO junto.
+
+  Agora a fila 1, item (a) do passo 5. Leio o patch antes de montar a cópia:
 
   Ran 1 shell command
 
-● O fb1c78ac era a ponta da cópia no ato do ff das 16:59 (o commit 5d31530f o nomeia no próprio assunto) — confiro a ancestralidade, que é
-  o que torna a frase verdadeira ou não:
+● O patch tem R cravado — o mesmo defeito RAIZ CRAVADA que eu documentei nos selos. Não repito num patch meu. Vejo o resto e o reescrevo
+  com raiz por argumento:
 
   Ran 1 shell command
 
-● Verdadeira e agora provável. Fecho os dois sítios que faltam conferir:
+● Reescrevo o patch com a raiz por argumento (não repito o RAIZ CRAVADA) e com um modo --so-teste, para o RED vir primeiro:
+
+  Ran 1 shell command
+
+● Monto a cópia de HEAD e aplico só a inversão dos selos — o RED antes da cura:
 
   Ran 2 shell commands
 
-● Todos os 7 são fatos já provados no texto, faltando só a linha literal. Escrevo as PROVAs com valor conferido:
+● RED evidenciado: 3 falhas, exatamente os 3 selos invertidos, todas porque a fonte ainda emite 'Sem turno pareado (ata 8h)'. Agora a cura:
 
-  Ran 1 shell command
+  Aplicar o patch completo na copia
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "relatorios" 2>&1 | tail -12
 
-● Selo verde. Republico:
-
-  Running 1 shell command…
-  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -8
-
-✶ Jitterbugging… (8h 28m 55s · ↓ 1.0m tokens · thought for 1s)
+* Jitterbugging… (8h 32m 49s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
