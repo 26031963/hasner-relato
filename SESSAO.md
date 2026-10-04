@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 01:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (300.5 MB). Acoes na janela: **1969**.
+**Medido em 04/10/2026 01:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (300.5 MB). Acoes na janela: **1967**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1977,5 +1977,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:19:02 | Bash | Achar o que foi publicado sobre os 10 | `cd /home/ronald/saas-hasner/app grep -n "34,6\\|34.6\\|10 dia-colab\\|par pareavel\\|pareavel\\|sem turno pareado" docs/RELATO.md \| head -40` |
 | 13:18:14 | Bash | Reler a sonda classificadora | `cd /home/ronald/saas-hasner sed -n 1,140p logs/sombra/bordas_sem_turno_classes_20261003.py` |
 | 13:18:04 | Bash | Ler realizado_dos_turnos | `cd /home/ronald/saas-hasner/app grep -n "def realizado_dos_turnos" ponto/turnos.py sed -n "$(grep -n 'def realizado_dos_turnos' ponto/turnos.py \| cut -d: -f1),+60p" ponto/turnos.py` |
-| 13:17:59 | Bash | Ler a estrutura e a funcao realizado_do_dia | `cd /home/ronald/saas-hasner/app echo "=== RealizadoDoDia (346) ===" sed -n 346,352p ponto/turnos.py echo "=== realizado_do_dia 428-500 ===" sed -n 428,505p ponto/turnos.py` |
-| 13:14:33 | Bash | Ler o dict do dia e a estrutura do realizado | `cd /home/ronald/saas-hasner/app echo "=== READ 1: o dias_out do dia de trabalho ===" sed -n 1345,1372p escala/utils.py echo echo "=== READ 2: o que o _real carrega ===" grep -n "Realizado = \\|namedtuple\\|^class Realizado\\|def realizado_do_dia" ponto/turnos.py \| head` |

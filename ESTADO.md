@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 01:12:31.**
+**Medido em 04/10/2026 01:18:01.**
 
 | | |
 |---|---|
@@ -136,12 +136,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● The canonical writer's indent=1 doesn't match the disk's indent=2 — it churns 2.2k lines on every run. Curing that at the origin instead
   of committing the churn.
 
-  Running all host selos · 4m 3s
+● Running all host selos · 9m 32s
   ⎿  $ cd /home/ronald/saas-hasner && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; printf '%-62s %s\n' "$(basename $f)"
-     "$([ $rc -eq 0 ] && echo OK || echo "RED($rc)")"; [ $rc -ne 0 ] && echo "$out" | tail -6; done 2>&1 | tail -70 (4m 2s)
+     "$([ $rc -eq 0 ] && echo OK || echo "RED($rc)")"; [ $rc -ne 0 ] && echo "$out" | tail -6; done 2>&1 | tail -70 (9m 32s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Incubating… (2h 49m 52s · ↓ 405.9k tokens)
+✢ Incubating… (2h 55m 22s · ↓ 405.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                    12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -151,8 +151,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Writing curar_parcial.py patch script                                                   1h 32m 34s · ↓ 164.9k tokens
-  ◯ general-purpose  Reading _Base setup in test_porta_arquivo_silencio.py                                   1h 31m 21s · ↓ 123.4k tokens
-  ◯ general-purpose  Checking trava_teste.sh lock holder                                                      1h 0m 14s · ↓ 122.1k tokens
+  ◯ general-purpose  Reading ausencia_cobre in turnos.py                                                       1h 38m 4s · ↓ 98.4k tokens
+  ◯ general-purpose  Verifying migrar.py anchors match once                                                  1h 36m 51s · ↓ 155.3k tokens
+  ◯ general-purpose  Reading suite.sh test harness                                                            1h 5m 44s · ↓ 143.1k tokens
   ⧉  index
 ```
