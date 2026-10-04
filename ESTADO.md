@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:45:35.**
+**Medido em 04/10/2026 16:50:45.**
 
 | | |
 |---|---|
@@ -115,40 +115,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 5 shell commands
 
-● 3 dos 4 casos RED (o 4º, "antes do dia 21", é a guarda contra correção excessiva e nasce verde). Curando na origem:
+❯ lei Ronald: (a). O dia sem par diz "Sem turno pareado" SEM numero; as horas ficam nas batidas da linha, e a L-102 passa a valer assim. O
+  supra_juiz NAO passa a tratar None como "nao sei": dia sem turno conta como realizado ZERO DECLARADO (escrito, nao por acidente do or
+  0), para os 88 dias terem o MESMO protesto de batida orfa. Efeito aceito, ja medido no DIFF das 11:07: 15 dia-colab trocam de veredito,
+  os 73 nao mudam, col454 sai do TXT da 09 na relavratura. ANTES de aplicar: dos 15, lista os que tem celula casada e previsto (ex. col250
+  29/09) e diz se e turno ABERTO que o juiz devia achar -- se for, e bug do juiz, cura na origem primeiro. Relavratura dentro do apply,
+  reversao em logs/. Segue a fila; PAREI so em lei ou !
 
-  Ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (24 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3wsnx6z5.output (11 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bb0chmp08.output (10 lines)
-  ⎿  Read ../logs/regua_lps_20261004.out (6 lines)
+● Lei recebida — registro e pré-condição dela entram assim que o _K5 estiver durável. Primeiro o commit da fatia em curso:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Committed 6a350aa9, ran 1 shell command
 
-● The RED is GREEN — 9/9. Now the de-list and the docstring, in the same commit.
+❯ ! forca a janela_auth para o O135 hoje -- a mudanca em app/api/urls.py e UMA LINHA de rota read-only, zero logica de auth -- e poe o ff
+  e
+    o deploy.sh --sem-migrate num
+  ato so.
 
-  Ran 11 shell commands
+● O ! do O135 chegou — é o item da fila 1. Vou olhar o agendado antes de disparar:
 
-● Both _K5 entries and the two _TT7 ones are now provably de-listable — and the competencia_mais_recente impressão is gone, so
-  test_MORDE_pendente_curado_sai_da_lista would go RED if I left it. Applying:
+  Listed 1 directory, ran 2 shell commands
 
-  O selo do diagrama era vermelho antes da minha mudanca?
-  ⎿  $ cd /home/ronald/saas-hasner && ARV=$(bash bin/arvore_do_push.sh 192aed00) && echo "copia=$ARV" && bash bin/suite.sh --dir "$ARV"
-     --only "core.tests.test_selo_diagrama_do_codigo" 2>&1 | grep -E "^(FAIL|ERROR):|DIVERGE|Ran |^OK|FAILED" | head; echo "COPIA=$ARV" >
-     /tmp/claude-1001/-home-ronald-saas-…
+● O --forcar que o próprio log anuncia não existe no script — é o O185, e hoje ele faz o contrário do que promete. Antes de tocar, o portão
+  do deploy:
 
-* Jitterbugging… (4h 33m 37s · ↓ 609.8k tokens)
+  Quem chama o portao
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "janela_auth" bin/*.sh bin/tests/*.sh 2>/dev/null; echo "=== deploy.sh contexto ==="; grep -n
+     "janela_auth" -B12 -A12 bin/deploy.sh
+
+· Compacting conversation… (4h 38m 47s · ↓ 621.4k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 45%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-! forca a janela_auth para o O135 hoje -- a mudanca em app/api/urls.py e UMA LINHA de rota read-only, zero logica de auth -- e poe o ff e
-  o deploy.sh --sem-migrate num ato so.
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
