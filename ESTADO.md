@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 23:09:01.**
+**Medido em 03/10/2026 23:14:07.**
 
 | | |
 |---|---|
@@ -114,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 4 shell commands
 
-  Read 1 file
-
-● O teto quebrou: 24 → 25 no caminho mais quente da casa (registrar_batida, a batida de chão). É o aggregate(Max) que eu acrescentei. Não
-  vou subir teto — vou ver se a query é evitável na origem:
+● Gero o arquivo de reversão (lei DINHEIRO-EM-COMPETENCIA-ABERTA, item 2) — leitura pura do gravado em prod, sem motor:
 
   Ran 1 shell command
 
-● O or curto-circuita, e o fato só é preciso para turno aberto que termina em S marcada como intra — raro. Então a cura é tornar o fato
-  preguiçoso, não subir o teto:
+● Reversão durável: logs/o142_reversao_fechamento_10_2026.json, 572 colaboradores × 25 campos (a sombra media 568 — ela é cópia de um dump
+  anterior, e o universo do gravado em prod é maior em 4).
 
   Ran 1 shell command
 
-● ultima_batida=_ultima_bat agora passa a função. Nova cura 05a22f22. Re-rodando tudo que ela toca:
+● O | tail -80 está retendo a saída — vejo o progresso pelos arquivos que a sonda escreve:
 
   Ran 2 shell commands
 
-● esteira.pausada é a pausa da esteira de fabricação (QUEM=Ronald, saída "critério do estrutural fechado + corte Ronald") — não é trava de
-  deploy, e não é minha para levantar. O selo LEI-AKITA cobra a linha no msg_commit; ela vai lá.
+● Geometria 09 reproduz byte a byte (md5 8ad7555a, 48 linhas / 11 colabs). Enquanto o dinheiro e o censo correm, localizo a ata e a sua
+  relavratura, que o PRONTO do aval cobra:
 
-  Read 1 file
+  Ran 3 shell commands
 
-● Vou preparar a re-verificação na sombra (geometria 09 + dinheiro + o censo de invariância), para lançar quando o cpuset de teste liberar:
+● A ata mora em CelulaDia (escala/models.py:1657), com escritor único lavrar_veredito(ata=), e quem a produz é o cartório das 06:28.
+  Preciso saber se ele re-lavra dia já lavrado:
 
-  Ran 1 shell command
+  Ver a janela do cartorio e se ele le turnos
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     grep -n "add_argument\|dias\|janela\|periodo" ponto/management/commands/processar_cartorio.py | head -20
+     echo "=== o cartorio le turnos? ==="
+     grep -n "turnos_do_colab\|parear_turnos\|turnos_apuraveis\|batidas_apuraveis\|ata_do_dia\|def processar" ponto/services/car…
 
-● Background command "Ruff, selos de query e RED com a cura preguicosa" completed (exit code 0)
-
-✢ Compacting conversation… (46m 22s · ↓ 107.6k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
+* Incubating… (51m 27s · ↓ 123.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
