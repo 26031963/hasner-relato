@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:26:10.**
+**Medido em 03/10/2026 22:31:31.**
 
 | | |
 |---|---|
@@ -42,7 +42,6 @@ aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED prim
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
-?? app/ponto/tests/test_o142_turno_invariante_na_janela.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  dos dois:
 
-  Listed 1 directory, ran 7 shell commands
+  Ran 1 shell command
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bz9fo9gtm.output (5 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b04zmg5j3.output (6 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bfoxsi9a9.output (6 lines)
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bnoy1kvfx.output (13 lines)
 
-● O DIFF de frota está correndo (lado HEAD no ar). Enquanto isso, o selo corrigido — RED sem a cura, GREEN com ela:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 2 shell commands
+● O censo já diz algo: motor_calculo_v2.py e ponto/services/fechamento.py não aparecem na lista. Vou confirmar por onde o dinheiro pega
+  geometria:
 
-● Background command "Rodar o selo corrigido nos dois lados" completed (exit code 0)
+  Searched for 1 pattern
 
-  Read 1 file
-
-● Saída vazia nos dois lados — isso é falha antes do veredito, não teste verde. Vendo cru:
+● O comentário em motor_calculo_v2.py:367 parece já nomear isso. Vou ler:
 
   Ran 1 shell command
 
-● Causa: /app montado :ro impede o Docker de criar o ponto de montagem de um arquivo novo. O comando canônico monta /app gravável; com
-  PYTHONDONTWRITEBYTECODE=1 nada é escrito na árvore.
+● Confirmado por leitura: o motor não chama turnos_do_colab — ele monta marcos_por_dia sozinho (marcos_dna_periodo) e chama parear_turnos
+  direto. Isso explicaria o zero, mas leitura não é medição. Vou pôr dois contadores na fonte: se parear_turnos contar > 0 e
+  turnos_do_colab contar 0, o silêncio deixa de ser ausência de sinal e passa a ser sinal:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 4 shell commands
 
-● Enquanto roda, o ruff acusou um defeito real no meu patch — default mutável (celulas={}). Curando na forma honesta, não silenciando a
-  regra:
+● Três binders module-level — o patch vai nos quatro sítios para o contador não poder subcontar:
 
-● Curar o default mutavel e reconferir o ruff
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142cura; python3 - <<'FIM'
-     import io
-     p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142cura/test_o142_turno_invariante_n
-     a_janela.py'
-     s=io.open(p,enc…
+● Running 1 shell command…
 
-* Incubating… (3m 31s · ↓ 14.3k tokens)
-                                                                                                                    6% until auto-compact
+· Incubating… (8m 52s · ↓ 24.9k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
