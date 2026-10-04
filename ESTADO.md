@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:417 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:424 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 04:14:01.**
+**Medido em 04/10/2026 04:19:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao` |
+| `HEAD` local | `2b7891ed RELATO/BACKLOG: a trava de suite da a vez com suite em voo -- quem nao a chama fica invisivel (O182)` |
 | `origin/main` | `774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+2b7891ed RELATO/BACKLOG: a trava de suite da a vez com suite em voo -- quem nao a chama fica invisivel (O182)
 774447cf [TICKETS] O rodape ficou 21 commits atras do remoto: o selo do pre-push recusou o push, e tinha razao
 6e4a6f60 [O142] O reload das 03:30 publicaria o disco: o `!` que eu pedi ia ser dado por um timer
 6acc825a [O142] A janela de 900 commits envelheceu e o residuo da esteira voltou a segurar alvo -- pelo relogio, nao pelo codigo
 9102af37 [O142] O selo da trava exercitava o lock GLOBAL: veredito que dependia da maquina estar vazia
-1a99a3d7 [O142] O censo barateou o residuo: o escritor unico pode fechar o O171 sozinho
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  the lock, and the raia started while it was held. Something held the global lock ~10 minutes, overlapping my suite. Finding out who:
+  Ran 2 shell commands
+
+● The fatias table feeds tickets_placar, so adding a row for an open finding risks shifting its counters and overclaims O182 as an esteira
+  fatia. Checking whether an untagged subject is acceptable instead:
 
   Ran 1 shell command
 
-● /tmp/juliani_db_test.lock has mtime 03:58:31 — the exact second the raia's container started, and the same second logs/.env_teste was
-  written. So the raia did take the trava; it was released at 04:02:34 while its container still runs. Confirming from the raia's own
-  output and checking what vigia_arvore did at 04:05:
+● Confirmed — the régua only cobras citations that exist, and 12 of the last 60 subjects are untagged (RELATO:, TICKETS:). So no bracket,
+  no overclaim, no row in the fatias table. Checking whether the R4 RELATO section needs the now-proven suite verdict:
 
   Ran 1 shell command
 
-● The raia runs docker run directly with REGUA_DB — it doesn't take the trava either. So neither suite held it. Finding who actually
-  touches that lock file:
+● The R4 section has no suite verdict and no commit sha. Appending both:
+
+  Ran 2 shell commands
+
+● Running the handoff so it lands in the same docs commit (MARCO FECHADO):
 
   Ran 1 shell command
 
-● vigia_arvore is paused by esteira.pausada and bails every hour without touching anything, so it's not the holder. Only trava_teste.sh
-  writes that lock; handoff_sessao.sh:141 reads it. Reading how it reads it:
+● Committing the docs on main, by path:
 
-  Ran 1 shell command
+● Committing the docs on main by path
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     cat > $S/msg_docs.txt <<'EOF'
+     RELATO/BACKLOG: a trava de suite da a vez com suite em voo -- quem nao a chama fica invisivel (O182)
+     Cinco achados do turno viram ITEM, e…
 
-● flock -n "$_arq" true is how the handoff probes it. Testing empirically whether that probe truncates the lock (which would explain the
-  03:58:31 mtime without any holder), and looking for an integrador/molde run in that window:
-
-● Testing if the flock probe truncates, and listing logs in the window
-  ⎿  $ cd /tmp && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/flocktest.lock; rm -f $T;
-     echo "conteudo" > $T; ls -l --time-style=+%H:%M:%S.%N $T | awk '{print "antes :",$6}'; sleep 1.1; flock -n "$T" true; echo
-     "rc_flock=$?"; ls -l --time-style=+%H:%M:…
-
-✢ Incubating… (5h 51m 22s · ↓ 834.6k tokens · thinking)
+✢ Incubating… (5h 56m 52s · ↓ 856.9k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Appending urgencia bug to c1_dossie.md                                                  4h 32m 52s · ↓ 166.6k tokens
+  ◯ general-purpose  Planning escalar_urgencia in chamados/models.py                                         4h 38m 21s · ↓ 105.1k tokens
   ⧉  index
 ```
