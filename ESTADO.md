@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:29:31.**
+**Medido em 04/10/2026 16:35:01.**
 
 | | |
 |---|---|
@@ -115,22 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  competência encerrada", 2 pendentes, as duas de TELA, com juiz declarado. Orientando nos dois sítios:
-
-  Ran 8 shell commands
-
-● Achado relevante antes de construir: o selo de 21/09 declara os dois sítios como "FICAM DE FORA" por responderem outra pergunta.
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Seguindo. Duas consultas, só leitura, sem motor:
-
-  Ran 1 shell command
-
-● Sítio 1 confirmado: a regra própria devolve (10, 2026) — a competência ABERTA, com 572 linhas parciais do recálculo por evento. A
   premissa da docstring ("competência sem linha não tem número") está morta. Agora o sítio 2, pelas duas populações de borda:
 
   Ran 1 shell command
@@ -142,11 +126,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Um único mês publicado (08/2026) — então quase todos aqueles zeros eram ausência de folha, não regra. O que discrimina de verdade, dentro
   do mês publicado:
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-· Jitterbugging… (4h 17m 33s · ↓ 572.4k tokens · thought for 21s)
+● Veredito claro: CIVIL. (A) 16/19 têm o holerite que a janela excluiria; (B) 1/17. O _limites está CERTO e o pendente está MAL ARQUIVADO —
+  era o que o selo de 21/09 já dizia, agora com número. Lendo o sítio 1 por inteiro antes de curar:
+
+  Ran 3 shell commands
+
+● Todos os cortes = 21 (medido, 7 empresas). Abrindo a raia nova a partir de k8-t20 e escrevendo o RED primeiro:
+
+  Ran 5 shell commands
+
+● 3 dos 4 casos RED (o 4º, "antes do dia 21", é a guarda contra correção excessiva e nasce verde). Curando na origem:
+
+● Curar os dois leitores e trocar a regra propria pelo endereco do juiz
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k5 --only "holerite.test_fech_encerrada_pelo_juiz" 2>&1 |
+     tail -12
+
+* Compacting conversation… (4h 23m 4s · ↓ 585.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 70%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
