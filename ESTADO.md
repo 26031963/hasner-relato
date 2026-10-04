@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:26 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:33 AFIRMA ato sem PROVA ao lado -- O marco anterior esta NO AR: o `!` das 09:3x cumprido as **10:02:41** (`d1689254`).
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 13:42:31.**
+**Medido em 04/10/2026 13:48:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
+| `HEAD` local | `1cde743a LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push` |
 | `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,25 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+1cde743a LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push
 e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero
 8892fc31 CELULA-TURNO-FECHA passo 3: o contador do dia sem par nao predica mais no numero que a cura apaga
 98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto
 d1689254 Merge branch 'raia-r4' into raia-merge
-381af46b Merge branch 'raia-o130' into raia-merge
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M bin/pre-push.sh
- M bin/tests/test_leis_indice.sh
-?? bin/tests/test_lei_protege_sitio.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -119,10 +111,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ponto/services/bordas_realizado.py (86 lines)
-  ⎿  Read ../logs/o134/predicada_bordas_20261004.out (59 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
 
   Ran 12 shell commands
 
@@ -137,9 +125,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar a v3 da sonda" completed (exit code 0)
 
-● Origem de dias_por_data
-  ⎿  $ sed -n '570,595p' ponto/services/cartorio.py; echo "=== quem monta os dias ==="; sed -n '540,572p' ponto/services/cartorio.py | grep
-     -n "dias\|grade\|for "
+  Searched for 4 patterns, read 3 files, ran 14 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/o134/o189_ata_zero_20261004.out
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brmd3vry9.output (40 lines)
@@ -148,7 +134,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Jitterbugging… (1h 30m 33s · ↓ 195.3k tokens · thought for 1s)
+● Agora o bullet do O189 na mensagem do marco e o commit único.
+
+  Committed 1cde743a, searched for 1 pattern, read 1 file, listed 1 directory, ran 10 shell commands
+
+● Advising using Fable 5.1
+
+· Jitterbugging… (1h 36m 3s · ↓ 209.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
