@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**188 obras abertas.**
+**189 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -197,3 +197,4 @@ lista — ela e o que esta EM PE._
 | **O187** | MAPA-QUEM-LE: o MAPA lista, por campo de ata/fechamento, quem LE | espera corte |
 | **O188** | SELO-DE-PENDENTE-POR-CHAMADA: o selo de PENDENTES casa FRASE LITERAL, e renomear passa por | **REGISTRADO, NAO CONSTRUIR** -- fila 2, |
 | **O189** | MEDE-OS-73-DE-ATA-ZERO | **MEDIDA e PUBLICADA** (RELATO 13:3x): 7 |
+| **O190** | O VIGIA PERIODICO E CEGO AO NUCLEO. | fila 2, depois do pouso do `cert-ast` |

@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 16:18:31.**
+**Medido em 04/10/2026 16:24:01.**
 
 | | |
 |---|---|
@@ -116,37 +116,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● POSTGRES_PORT=5432 no .env e 5432 no container — o 5433 é mapeamento de host no ports:, não a chave. O no-op vale para as duas metades, e
+  agora com número. Agora (2) e (3):
+
   Ran 2 shell commands
 
-● O selo está certo e minha sequência de fixture estava errada: deixei o arquivo do núcleo em 'B' quando o app/x.py voltou a 'A', então
-  "árvore limpa" não estava limpa:
+● Agora (3) — a lição das 92 cópias órfãs: provar que o --dir não deixa arquivo de root dentro da cópia.
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Selos de host: só os 6 artefatos de worktree (verdes no vivo). Nada na suite do ponto parseia o CLAUDE.md. Commit:
+● Zero arquivo de root (o PYTHONDONTWRITEBYTECODE=1 da porta é o que paga isso). Rodando os selos de host que tocam estes arquivos:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Régua verde nesse selo — o 50333326 já tirou o TETO-20 de "recebido". Agora o estado do item, que mudou: a porta existe:
+● Sete verdes. Emendando o commit da porta (não empurrado) para que a porta seja UM commit:
 
-  Ran 5 shell commands
+  Searched for 1 pattern, ran 13 shell commands
 
-● Entregável durável: commit 1702028d na raia, BACKLOG e RELATO publicados. Antes de declarar o item fechado:
+● Item honestamente fechado na raia. Fila 1 não está vazia — o próximo é PLACAR-ESTRUTURAL. Orientando antes de construir:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Ler o item PLACAR-ESTRUTURAL do BACKLOG
+  ⎿  $ python3 - <<'PY'
+     import re
+     for l in open('docs/BACKLOG.md'):
+     if l.startswith('| PLACAR-ESTRUTURAL'):
+     for i,c in enumerate(l.split('|')[1:-1]):
+     print(f'--- col{i}:'); print(c.strip()[:1400]); print()
+     PY
 
-● Todos os três procedem. (1) medir o POSTGRES_PORT de verdade, (2) a testemunha não pode recalcular, (3) a lição das 92 cópias:
-
-● Medir se POSTGRES_PORT existe no ambiente da mensageria
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== 1. o PORT no container da mensageria (nao e segredo; so esta chave)" && docker exec
-     mensageria printenv POSTGRES_PORT 2>&1 | sed 's/^$/<vazia>/'; echo "rc=$?"
-     echo "--- e no .env do compose:"; grep -c '^POSTGRES_PORT' .env; grep '^POSTGRES_PORT' .env || ec…
-
-· Compacting conversation… (4h 6m 33s · ↓ 546.3k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 62%
+✢ Jitterbugging… (4h 12m 3s · ↓ 558.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
