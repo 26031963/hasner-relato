@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 18:42:31.**
+**Medido em 04/10/2026 18:48:01.**
 
 | | |
 |---|---|
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
-
-● O ruff caiu pela montagem à mão — exatamente o que a porta única existe para evitar. Uso arvore_do_push.sh --montagem:
-
-  Ran 2 shell commands
-
-● Ruff limpo. Agora os dois REDs — o do selo contra a função real (não só a sintética) e o do teto. Primeiro vejo onde o tuple de
-  fechamento fecha:
-
-  Ran 2 shell commands
-
-● Teto de fechamento fecha na linha 441. Primeiro o RED do selo contra a função real (a sintética já está no teste; esta prova que o walk
-  alcança o aninhamento verdadeiro) — sem tocar árvore nenhuma:
+● --only é o campo dos labels — os módulos vão por ele:
 
   Ran 1 shell command
 
-● RED 2 pegou um return aninhado e quebrou a indentação do script, não do selo. Corrijo a injeção para nascer na indentação do corpo:
+● 32 OK. Agora o RED do teto — com backup e restauração no mesmo ato, para a cópia nunca ficar com a linha falsa:
 
   Ran 2 shell commands
 
-● RED medido quatro vezes contra a fonte real — topo, aninhado em for+if+comprehension, renomeada (devolve None, não set() vazio) e a
-  premissa positiva. Agora o GREEN pela porta:
+● Teto morde nos dois valores medidos (14 not <= 13, 116 not <= 115) e a cópia voltou com md5 idêntico. Agora os vizinhos — ponto + core
+  inteiros na raia:
 
-  Rodar o selo novo e os dois contratos na copia
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bin/suite.sh --dir /home/ronald/wt-k5 --espera 300 --
-     ponto.tests.test_k8_tela_abre_na_competencia ponto.tests.test_contract_juiz_fechamento core.tests.test_contract_juiz_tela 2>&1 | tail
-     -15; echo "rc=${PIPESTATUS[0]}"
+  Ran 1 shell command
 
-✻ Jitterbugging… (6h 30m 34s · ↓ 791.9k tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● O ponto 1 é correto e é lei da casa — medi o RED com uma réplica do helper, não com o selo. "NAO reconstruir em sonda propria a chamada
+  que o sistema faz." Enquanto a suíte roda, as verificações que não tocam a cópia:
+
+  Ran 2 shell commands
+
+● cert-ast não toca os três arquivos — a cadeia do teto é só k8t→k5, 13/115 segue valendo no merge. K5-ENCERRADA não está no TICKETS, então
+  o id sai dos colchetes. E a cópia tem 6 arquivos root dentro de .ruff_cache (classe O192, gitignored — não entra no commit, mas o rm -rf
+  da limpeza vai falhar). Suíte:
+
+● Running 1 shell command…
+
+✢ Jitterbugging… (6h 36m 3s · ↓ 797.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
