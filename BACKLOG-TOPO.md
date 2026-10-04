@@ -129,7 +129,7 @@ lista — ela e o que esta EM PE._
 | **O119** | O `intra_descontada` do motor oscila no MESMO cadastro e no MESMO padrao de batidas | espera `!` |
 | **O120** | COL221-VINCULO-DESDE-2107 | espera `!` |
 | **O121** | VINCULO-CORRIGE-O-PASSADO | espera corte |
-| **O122** | UI PLANO DE ESCALAS, ETAPA 1 | espera aval |
+| **O122** | UI PLANO DE ESCALAS, ETAPA 1 | espera corte |
 | **O123** | O-PENDENCIAS-DISPUTA-N+1 | espera aval |
 | **O124** | PARAMETROS-SEM-EFEITO-16-CAMPOS | espera `!` |
 | **O125** | R2-A-LISTA-TEM-DE-ALCANCAR | **aberta, recebida no mesmo turno do cen |
