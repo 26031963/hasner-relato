@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:27:31.**
+**Medido em 04/10/2026 17:33:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `226673b5 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
+| `HEAD` local | `b9b4e6e0 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou` |
 | `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
 | commits a subir (`ahead`) | **9** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-226673b5 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou
+b9b4e6e0 O135 TETO-20 no ar (fb1c78ac): o portao de auth se atravessou pela porta que JA existia, e a lei da L-102 chegou
 fb1c78ac RELATO: a 14:5x volta para cima da 14:1x -- o arquivo e mais-novo-primeiro e a copia tinha invertido
 738b779f reconciliacao: o registro da ORDEM VIVA (31558c3e) entra no teto20 para o ff seguir sendo ff
 31558c3e ORDEM VIVA: os tres registros do "item em curso" se movem no MESMO ato, e o TETO do hook ja estava em 7
@@ -116,40 +116,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Nenhuma linha aponta para lista_ausencias: a linha 15 cobre três sítios — 847 e 879 (fechamento real, dívida que fica) e 1841 (conforme
+  pelo corte). Agora o resto da mecânica — o que acusa holerite/matriz.py se ele sair, e onde mora o "livre":
 
-● O hook está certo: os passos 5-6 estão desbloqueados, então a fila 1 anda. Vou à condição de entrada da O191 — ela é leitura, não apply.
-  Leio o lançador que a casa já usa, para não inventar sonda:
+  Searched for 1 pattern, ran 2 shell commands
 
-  Ran 2 shell commands
-
-❯ corte Ronald: o universo do holerite e MES CIVIL, porque quem paga e o Dominio -- holerite/matriz.py sai de PENDENTES_FECHAMENTO como
-  conforme. E lista_ausencias filtra vigencia de ausencia, nao fechamento -- sai do _K8 como conforme. Os dois com a nota dizendo de que o
-  conforme depende. Segue a fila; PAREI so em lei ou !
-
-● Corte recebido. Ele toca .py e a régua está no meio da corrida — editar agora custaria o carimbo (exit 4), então localizo e registro já,
-  e o código entra no ato seguinte ao verde. Primeiro os dois sítios:
-
-  Ran 6 shell commands
-
-● Isto muda a execução do corte: o snippet do _K8 aparece 3 vezes em views.py — em fechamento_linhas:847, fechamento_mensal:879 e
-  lista_ausencias:1841. Apagar o pendente pela chave atual declararia conforme também as duas telas de fechamento, que o seu corte não
-  nomeia. Leio a forma da chave antes de tocar:
+● Três regexes só em PROIBIDOS['fechamento'], e nenhuma casa as duas impressões — então sair de PENDENTES não re-acusa ninguém pelo
+  varredor. Confirmo isso e procuro se já existe lugar declarado para "conforme com nota" (LEI-AKITA 4):
 
   Ran 1 shell command
 
-● O corte pede remoção de um pendente cuja chave cobre 3 ocorrências, e só uma é conforme. Preciso saber o que o varredor conta antes de
-  qualquer corte. Quem lê:
+● Há precedente: linha 321 já carrega um corte com a condição literal do conforme. É a lei existente para exatamente isto (LEI-AKITA 4):
 
-  Achar quem le os pendentes de fechamento
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rn "PENDENTES_FECHAMENTO\|PENDENTES\[" app --include=*.py | grep -v 'juizes.py:8[0-9][0-9]' |
-     head -10
+  Ran 1 shell command
 
-✢ Compacting conversation… (5h 15m 33s · ↓ 708.2k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
+● Precedente exato: _A14 CURADO — a linha sai da tupla e no lugar fica um comentário com a condição LITERAL do conforme. É a forma da casa,
+  sem estrutura nova. Agora as âncoras únicas para a dívida que FICA (847 e 879):
+
+  Searched for 2 patterns, ran 2 shell commands
+
+● Tenho a mecânica inteira. Antes de escrever, consulto o revisor — a execução literal do corte colide com a chave (arquivo, impressao) e
+  com dois tetos que estão exatamente no limite:
+
+● Advising using Fable 5.1
+
+✢ Jitterbugging… (5h 21m 3s · ↓ 726.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+
+❯ aval Ronald: o corte do lista_ausencias se aplica NA RAIA k5-encerrada, onde fechamento_linhas e fechamento_mensal ja leem o juiz (K8,
+  13 casos); la a frase sobra so em lista_ausencias. Nao e para declarar conforme as duas telas no main. Segue a fila; PAREI so em lei ou
+  !
+  ctrl+x ctrl+s to send now
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
