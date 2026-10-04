@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 15:45:45.**
+**Medido em 04/10/2026 15:51:01.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  nada fora de app/docs/:
+  lista PROIBIDO. Construindo em cópia, com a incondicionalidade preservada:
 
   Ran 1 shell command
 
-● +13 exatos: 9605 → 9618 é a conta dos 13 test_MORDE_* do arquivo novo, medida por AST — a suite não imprime nome de teste sem -v, então a
-  contagem é a prova, não o grep. Gravando o selo:
+● como_esta_a_fila está dentro de um if no código vivo — isso me dá o caso que MORDE a partir da produção, não de fixture sintética: dois
+  valores reais que têm de dar status diferentes, que é a forma que a CLAUDE.md prescreve. Escrevendo:
 
   Ran 1 shell command
 
-● Selo gravado (date lido no ato, não de cabeça). Antes do censo dos 513, preciso saber por qual porta eles rodam — mensageria não é app
-  Django do projeto:
+● 7 testes (eram 5). Rodando o censo contra a cópia:
 
   Ran 1 shell command
 
-● mensageria é projeto Django próprio (tem manage.py e config dele), não app do saas — então bin/suite.sh, que roda as LABELS do saas
-  contra o juliani_db_test, pode não ser a porta. Lendo a porta antes de supor:
+● 515, OK, rc=0 — +2 são os dois MORDE novos, e o vermelho virou verde. Agora a prova adversarial contra o arquivo REAL, numa terceira
+  cópia (não edito a árvore que a medição monta):
 
   Ran 1 shell command
 
-● bin/suite.sh monta $RAIZ/app como /app e roda config.settings.ci — mensageria/ não está dentro de app/, então a porta não alcança o
-  núcleo. Esse é exatamente o achado do SUITE-DO-NUCLEO-ENTRA-NA-REGUA: os 513 não têm porta. Medindo o que existe:
+● Os dois pertubam para VERMELHO contra o arquivo real — o selo morde de fato. Um detalhe de higiene: na perturbação B o teste secundário
+  estoura IndentationError em vez de falhar limpo, porque o assertIn casa a linha de 4 espaços dentro da de 8. Ancorando no início de
+  linha:
 
-  Ran 1 shell command
+  Ancorar o alvo no início da linha
+  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PY'
+     p='mensageria/nucleo/tests/test_ferramenta_certificacao.py'
+     s=open(p,encoding='utf-8').read()
+     velho = """ alvo = ' dados.update(certificacao_da_pergunta(cliente, pergunta))\\n'
+     self.assertIn(alvo, src, 'a linha tem de existir para poder ser embrulhada')…
 
-● Achado material: mensageria/config/settings.py:37 crava 'HOST': 'db' — rodar o censo pelo caminho natural criaria test_mensageria dentro
-  do saas_db, o postgres de produção, nos vCPU 0-3. Isso é exatamente o que a lei do CPUSET proíbe. Antes de escolher o caminho:
-
-● Advising using Fable 5.1
-
-· Jitterbugging… (3h 33m 47s · ↓ 464.7k tokens)
+· Jitterbugging… (3h 39m 3s · ↓ 484.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
