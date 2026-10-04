@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:403 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:411 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:15:45.**
+**Medido em 03/10/2026 22:21:01.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ aa2550b0 [O142] O vinculo MORTO sem data_fim para de ser dono de dia -- RED prim
 ```
  M PLANO_PISCADA.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,37 +114,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Aguardar por arquivo o veredito dos vizinhos" completed (exit code 0)
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: PLACAR-ESTRUTURAL -- O ESTRUTURAL SE SEPARA DO DADO (corte dele 02/10 22:5x, que SUBSTITUI o item 3 da
+  ordem das 21:4x -- o resto d
 
-  Ran 1 shell command
+  Searched for 2 patterns, ran 1 shell command
 
-● Vizinhos 3.886 OK com a cura. Agora o ponto do relógio — o HUP das 03:30 publica o que está no disco:
+● O DIFF de dinheiro está rodando (b04zmg5j3): col152 na competência 10, HEAD contra a cura, pela porta real
+  ponto/services/espelho.py:875::autoridade_do_periodo — a mesma autoridade que a tela e o PDF leem, não uma conta minha (LEI-AKITA 8).
+  Leitura pura na sombra, nenhuma escrita.
 
-  Ran 1 shell command
+  Resultado desta sequência, já durável no RELATO:
 
-● O deploy.sh não honra arquivo de pausa nenhum — então pausar por arquivo seria selo vazio. A opção mais restritiva é não pôr a cura no
-  disco: commito só a RED e os docs, e a cura fica na cópia nomeada.
+  - Geometria medida e publicada: 8 linhas movem em 3.860, um só colaborador, col152 de 5 → 11 turnos, 0 fotos alteradas, 0 turnos perdidos
+    — a cura é aditiva.
+  - Dinheiro em medição agora, e é o último número que o PROIBIDO do aval exige antes de qualquer deploy.
+  - Depois dele, na ordem do aval: arquivo de reversão em logs/, DRY de detectar_par_relampago --apply --retratar e recompute_turnos,
+    censo/relavratura das atas divergentes, e só então RED+cura pousam juntas num commit e vão ao ar.
 
-  Committed 0b7e0a78, ran 1 shell command
+  Item em curso é PLACAR-ESTRUTURAL R4 (o único dos seis sem meta zero), pela cura do O142 — os pares da R4 são os REDs do O85 BURACO DE
+  VINCULO, que fazem a mesma pergunta: quem é o dono do dia quando o vínculo entra ou sai da janela.
 
-● A RED commitada sem a cura deixa a árvore vermelha — o próximo push bloqueia e a régua fica RED. O arquivo de fatia vai para a árvore no
-  ato do commit da cura, não antes:
+✻ Crunched for 22h 7m 19s · done 10:20 PM · 1 shell still running
 
-  Ran 1 shell command
+● Background command "Medir o dinheiro de col152 nos dois lados, na sombra" completed (exit code 0)
 
-● O guarda do O57 pediu a declaração — a deleção é minha e o corpo já diz o quê e por quê:
+● Conferir se a sonda de dinheiro respondeu de verdade
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o142diff; wc -l "$SP/din_head.txt";
+     head -6 "$SP/din_head.txt"
 
-  Registrar onde os arquivos moram e commitar
-  ⎿  $ python3 - <<'PY'
-     p='docs/RELATO.md'
-     s=open(p).read()
-     v="**RED PRIMEIRO, e ele reproduziu a assinatura que a sombra mediu.**"
-     n=("**ONDE OS DOIS ARQUIVOS ESTAO, e um erro meu de meia hora**: eu commitei a RED (`0b7e0a78`) e "
-     "segurei a cura fora do disco -- as duas decisoes certas separadamente e…
-
-· Bloviating… (22h 2m 14s · ↓ 3.0m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+· Zigzagging… (10s · ↓ 447 tokens · thinking)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
