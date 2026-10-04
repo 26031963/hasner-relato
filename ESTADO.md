@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 17:38:31.**
+**Medido em 04/10/2026 17:44:01.**
 
 | | |
 |---|---|
@@ -140,12 +140,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● contratos_da_pergunta — a ferramenta nova que o próprio O135 criou ("o teto da matriz virou PERGUNTA"). O doc ficou velho no meu commit e
   a guarda pegou. Dobra e empurra:
 
-● Dobrar o HAIKU-DENTES no marco e empurrar · 1m 40s
+● Dobrar o HAIKU-DENTES no marco e empurrar · 7m 9s
   ⎿  $ cd /home/ronald/saas-hasner && git add app/docs/HAIKU-DENTES.md && git commit --amend --no-edit 2>&1 | tail -3; echo "=== push:";
-     git push origin main 2>&1 | tail -22 (1m 39s · 5 lines)
+     git push origin main 2>&1 | tail -22 (7m 9s · 5 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Jitterbugging… (5h 26m 33s · ↓ 729.8k tokens)
+✢ Jitterbugging… (5h 32m 3s · ↓ 729.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -153,7 +153,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
