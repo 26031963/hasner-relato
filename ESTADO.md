@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:452 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:478 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 03/10/2026 22:58:31.**
+**Medido em 03/10/2026 23:03:44.**
 
 | | |
 |---|---|
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  …/turnos.py:/app/ponto/turnos.py:ro): não se escreve nada na árvore viva, que é o bind-mount de prod.
 
-  Read 1 file, ran 5 shell commands
+● Vou fazer o item 1 agora — os selos de query não precisam da sombra:
 
-● DIFFs re-medindo em fundo. Enquanto isso, a linha falsa do RELATO — ela afirma o contrário do que o censo acabou de mostrar:
+  Ran 1 shell command
 
-  Searched for 1 pattern
-
-● Background command "Re-medir os dois DIFFs de frota com a cura nova" completed (exit code 0)
+● Background command "Rodar os dois DIFFs com o arreio que recusa silencio" completed (exit code 0)
 
   Read 1 file
 
-● O zero de agora é falso, e da mesma família — pela quarta vez nesta fatia. Os dois lados rodaram no schema public (relation
-  "colaboradores_empresa" does not exist), escreveram arquivo vazio, e diff de dois vazios dá 0. O defeito é no meu arreio, não na cura:
-  ele comparou silêncios.
+● Os dois DIFFs agora provados, com md5 de cada lado e guarda contra arquivo vazio:
 
-  Duas curas, e a segunda é a que importa:
+  - DINHEIRO: 0 linhas movem — 568 colabs, 14.768 campos por lado, md5 diferente provado nos dois. O zero agora é portante, não estrutural.
+  - GEOMETRIA: 8 linhas, 1 colab (col152 5→11) — idêntico ao de antes.
+
+  E esse "idêntico" é um achado, não uma confirmação: a cura da fonte (1) só morde quando existe batida depois do fim da janela. A
+  competência 10 vai até 20/10 e hoje é 03/10 — a borda direita dela não tem dado nenhum. Este DIFF não exercita a fonte (1). Vou medi-la
+  onde há dado depois da borda:
 
   Ran 1 shell command
 
-● 531 — bate com o número publicado. Agora a cura que importa mais: o arreio passa a recusar comparar silêncio.
+● Agora o selo de query, que não precisa da sombra:
 
-  Ran 1 shell command
+  Searched for 1 pattern, ran 2 shell commands
 
-● Enquanto mede, a linha falsa do RELATO:
+● Background command "DIFF de geometria na competencia 09, onde a fonte 1 pode morder" completed (exit code 0)
 
-● Ler a hora no ato
-  ⎿  $ date '+%d/%m %H:%M'
+● Reading 1 file…
+  ⎿  $ cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bwh38n4eb.output
 
-✢ Incubating… (35m 52s · ↓ 83.8k tokens)
+✶ Incubating… (41m 5s · ↓ 91.4k tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
