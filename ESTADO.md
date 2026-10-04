@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:28:31.**
+**Medido em 04/10/2026 20:34:01.**
 
 | | |
 |---|---|
@@ -114,14 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Esse output do agente é de 02/10 (a raia worktree-agent-aa14fd1a6ffa27253, duas pausas / ec1345) — ressurgiu com o contexto, não é
-  trabalho desta janela. Ele entra na lista do item (5) do corte (B), que é proibido construir antes da CELULA-TURNO-FECHA e da O145.
-  Registro e sigo.
-
-  Ran 2 shell commands
-
-● O log não avança desde 20:24 (fase control-plane). Enquanto o push corre, sigo o item (b) — e ele tem a lei já escrita três linhas abaixo
-  dele:
 
   Ran 1 shell command
 
@@ -140,10 +132,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Push 3/3 verde. O marco está no remoto — fecho a sequência de pós-push:
 
-● Ler a porta do ESTADO antes de usar
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,30p' bin/relato.sh && echo " ... " && sed -n '45,75p' bin/relato.sh
+  Ran 5 shell commands
 
-✢ Jitterbugging… (8h 16m 33s · ↓ 979.6k tokens · deep in thought)
+● Marco no remoto. A pista de teste vagou com o pre-push — relanço a sonda corrigida da O191 (a antiga passava datas a batidas_apuraveis,
+  cuja janela é de instantes) enquanto escrevo o RELATO:
+
+  Ran 3 shell commands
+
+● A sonda corre. Antes de aplicar patch em juiz que decide o que entra no TXT, consulto:
+
+● Advising using Fable 5.1
+
+· Jitterbugging… (8h 22m 3s · ↓ 981.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
