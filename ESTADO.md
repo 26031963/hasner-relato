@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 12:49:31.**
+**Medido em 04/10/2026 12:55:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
-| `origin/main` | `98d9861e TICKETS/BACKLOG/RELATO: o ato unico esta NO AR e o portao que o aval mandou forcar ja estava aberto` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `e0ad39dc CELULA-TURNO-FECHA passo 5: o selo da L-102 pousa e o patch fica no chao, porque a palavra perde o numero` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -111,44 +111,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  (escala/utils.py::minutos_realizados_do_dia). Nao inventar sitio.
-  2. Selo de host bin/tests/test_lei_protege_sitio.sh: diff do push toca sitio da coluna PROTEGE e nenhum commit do push cita o L-NNN =
-  VERMELHO. Caso que MORDE: commit de teste tocando o sitio da L-102 sem citar -> block; citando -> passa.
-  3. CLAUDE.md sec.6, UMA linha: "antes de montar patch ou prompt, grep do arquivo e da funcao em LEIS.md, DOSSIES.md e CORTES.md; o
-  resultado vai citado com o L-NNN".
-     ITENS IRMAOS, so REGISTRAR no BACKLOG (fila 2, depois do estrutural, sem construir agora):
-      A. MAPA-QUEM-LE: o gerador do MAPA passa a listar, por campo de ata/fechamento, quem LE (hoje so diz quem escreve). Medido:
-  minutos_realizados tem 9 leitores em 5 familias e isso so apareceu em segunda passada.
-      B. SELO-DE-PENDENTE-POR-CHAMADA: o selo de PENDENTES casa frase literal (test_contract_juiz_celula.py ~76-82, turno ~29-35) e aceita
-  renomear como cura; trocar por varredura de chamada (AST).
-     RED: item 2, os dois sentidos.
-     SELO: sitio protegido tocado sem lei citada = 0.
-     PROIBIDO: preencher PROTEGE por deducao; allowlist; pular a regua; construir A ou B antes da matriz fechar.
-     PRONTO: coluna no LEIS.md com a L-102 preenchida, selo com o caso que morde rodado, linha no CLAUDE.md, A e B no BACKLOG -- tudo no
-  commit do marco, sem commit so de docs.
-     LEI-AKITA: origem=LEIS.md, testemunha=diff do push, RED=item 2, quem-mais-le=pre-push, juizes novos=0
-     LINHA HAIKU: (a) contador "leis com sitio protegido N" no payload; (b) golden "que lei protege este arquivo?" via ferramentas; (c)
-  degrau: leitura.
-     Segue a fila; PAREI so em lei ou !
+   Total cost:            $5217.43
+   Total duration (API):  4d 14h 6m
+   Total duration (wall): 6d 20h 33m
+   Total code changes:    9243 lines added, 795 lines removed
+   Usage by model:
+          claude-opus-5:  3.1m input, 21.9m output, 7.4b cache read, 57.7m cache write ($4767.00)
+       claude-fable-5-1:  33.5m input, 2.3m output, 0 cache read, 0 cache write ($450.43)
+   Prompt cache (main):   21893 requests · 99% of input tokens from cache · 42 misses (last 1h 36m 48s ago — likely cause: prompt
+   unchanged — likely server-side, 12.0m tokens re-cached) · 158 expected rebuilds (compaction or tool-result clearing) · warm (1h TTL,
+   last activity 7s ago)
 
-● Chegou um corte novo — e ele nasceu do meu furo: a L-102 já dizia que trocar minutos_realizados_do_dia esperava lei dele, e eu montei o
-  patch sem ler. Registro e construo. A árvore viva está travada pelo push em voo, então monto em cópia do HEAD.
+   Current session
+   █                                                  2% used
+   Resets 5:30pm (America/Sao_Paulo)
 
-● Conferir se as linhas da tabela tem 6 colunas limpas
-  ⎿  $ cd /home/ronald/saas-hasner && awk 'NR>=15 && /^\| \*\*L-/ { n=gsub(/\|/,"|"); print n }' app/docs/LEIS.md | sort | uniq -c; echo
-     "=== linhas fora do padrao 7 ==="; awk 'NR>=15 && /^\| \*\*L-/ { n=gsub(/\|/,"|"); if(n!=7) print NR": "n" pipes" }' app/docs/LEIS.md;
-     echo "=== o fim do arquivo (ATOS…
+   Current week (all models)
+   ███████████████████████████████████████████████▌   95% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-✢ Compacting conversation… (37m 33s · ↓ 80.1k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+   Current week (Fable)
+   █████████████████████████████▌                     59% used
+   Resets Oct 7, 6pm (America/Sao_Paulo)
 
-  ● main
-❯ ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ⧉  index
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
+
+   Last 24h · these are independent characteristics of your usage, not a breakdown
+
+   100% of your usage came from subagent-heavy sessions
+    Each subagent runs its own requests. Be deliberate about spawning them — and
+    consider configuring a cheaper model for simpler subagents.
+
+   100% of your usage came from sessions active for 8+ hours
+    These are often background/loop sessions. Continuous usage can add up quickly
+    so make sure it is intentional.
+
+   25% of your usage was at >150k context
+    Longer sessions are more expensive even when cached. /compact mid-task, /clear
+    when switching to new tasks.
+                                                                                                                                         ↓
 ```
