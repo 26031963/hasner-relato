@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 03:52:36.**
+**Medido em 04/10/2026 03:57:36.**
 
 | | |
 |---|---|
@@ -112,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Line 132 matters — there's a source contract that mentions minutos_previstos_do_dia, and my cure adds a call to exactly that. Reading it:
-
-  Ran 1 shell command
-
-● That contract requires porta_export.medir to read minutos_previstos_do_dia from the juiz — the same move I made in export.py, so the
-  precedent is the house's own. It doesn't constrain export.py. Checking the other vizinho's fixture:
-
-  Listed 1 directory
-
-● test_ferias_com_batida.py creates batidas but no vínculo — that's the real vizinho risk, since HEAD's premise also saw no células there.
-  Reading it to see what kept it out of the guard:
+● Push #2 landed clean: ba82736d..774447cf, rc=0, Ran 9569 tests … OK (skipped=42), control-plane Ran 22 tests … OK, nothing left to push.
+  The pista is free — now the RED, which needs HEAD's code against the new test, so a second copy at HEAD:
 
   Ran 1 shell command
 
-● _fech leaves horas_trabalhadas at its default and each test plants exactly one batida — so the >= 2 gate is what keeps those three green
-  on HEAD, and moving that gate first preserves them exactly. Checking the direct test of the function:
+● Exactly the RED setup: HEAD's export.py byte-identical, only the test file new. Running it:
+
+  Ran 1 shell command
+
+● RED evidenced on HEAD — the defect in one line: 'entra' != 'fora', "celula de vinculo morto foi lida como cadastro presente -- o TXT
+  pagaria ZERO". Now the same 7 tests against the cure:
+
+  Ran 1 shell command
+
+● GREEN with the cure. Now the vizinhos before the full suite — including the contract that enumerates the placar I just edited:
 
   Searched for 1 pattern
 
-● Background command "Retry the push after the footer cure" completed (exit code 0)
+● Running the vizinho set — the readers of cadastro_zero, plus the selo that enumerates the placar file I edited:
 
-● Push #2 finished — reading its verdict by file, requiring the explicit rc= and the suite's own counts rather than the absence of FAILED:
+  Ran 1 shell command
 
-  Read 1 file
+● Vizinhos: 59 tests OK. Launching the full suite against the cure, then consulting while it runs:
 
-● Background command "Wait by file for the push verdict" completed (exit code 0)
+  Ran 1 shell command
 
-✽ Incubating… (5h 29m 57s · ↓ 788.3k tokens · thinking)
+● Advising using Fable 5.1
+
+✽ Incubating… (5h 34m 57s · ↓ 793.8k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Inspecting false positives in smoke_chamados.py                                         4h 11m 26s · ↓ 163.3k tokens
+  ◯ general-purpose  Inspecting walk body in csl_novo.py                                                      4h 16m 26s · ↓ 76.1k tokens
   ⧉  index
 ```
