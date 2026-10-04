@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:17:31.**
+**Medido em 04/10/2026 20:23:01.**
 
 | | |
 |---|---|
@@ -114,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  LEIS.md), nenhum .py moveu, então a prova de rota e o smoke valem. E a L-106 teve seu primeiro caso medido em horas: uma correção dentro
+  do range aberto do push não é commit de docs "fora de um marco", porque a L-108 define o marco pelo push. Não toquei a regra.
 
-● O número tem um só sítio, e é no derivador — os três leitores o recebem dele:
+  Achado novo, medido, instrumento — nasce como O193 e não entra neste pacote (L-105b): o alarme vigia_sem_efeito não migrou para a pausa
+  com dono. A lápide está escrita 60 linhas acima do defeito, no mesmo arquivo — em 27/09 o alarme vizinho trava_a_vazia aprendeu a calar
+  diante de esteira.pausada com QUEM=/SAIDA=; este, na mesma função, não consulta aquela variável. A esteira está pausada por ele desde
+  26/09 10:01, o esteira.sh:64 para pelo arquivo, nenhum .out nasce, e as 8 fatias ficam "ativa" para sempre: 43 linhas de alarme no RELATO
+  vivo. E não é só ruído — na 2ª vez seguida o caminho executa auto_revert, alcançado 2x (24/09 e 01/10, já depois da pausa); as duas
+  terminaram em "arvore nao esta vermelha", então 0 revert foi executado e não há dano. A cura é uma linha, e é migração de leitor, não
+  juiz novo.
 
-  Ran 1 shell command
+  Já pronto em cópia, para aplicar no ato (LEI-AKITA 10): o patch do item (a) da O191 — a palavra sem número tem um só sítio, o derivador
+  dia_decidido.py:202 + o transporte da 398, e os três leitores a recebem dele (é o test_11c que prova que um sítio basta). Os selos
+  test_11/test_11b não se apagam: as asserções invertem e passam a morder a volta do número. E a sonda da condição de entrada foi corrigida
+  — ela passava datas para batidas_apuraveis, cuja janela é de instantes; o censo de batidas anterior não se publica, e o novo roda assim
+  que a pista de teste vagar do pre-push.
 
-● A cura do item (a) é duas linhas num arquivo só (202 e 398), e o selo test_11b_MORDE_o_numero_sai_ROTULADO não se apaga: a asserção dele
-  inverte e passa a morder a volta do número. Vendo o push:
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
 
-  Read 1 file
+● O hook está certo: a fila 1 é a CELULA-TURNO-FECHA, e o trabalho dela é a O191. Sigo pelo item (b) — o ZERO DECLARADO —, que é leitura e
+  patch em cópia, sem tocar a árvore sob push:
 
-● Vou preparar a cura em cópia no scratchpad (a árvore está sob push), começando pelo selo que precisa inverter:
+● Ler o or 0 e o ramo que depende dele
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== supra_juiz.py:120-140 ===" && sed -n '120,142p' app/ponto/supra_juiz.py && echo "=== e o
+     ramo preso a real == 0 (linha ~290) ===" && sed -n '283,298p' app/ponto/supra_juiz.py
 
-  Ran 2 shell commands
-
-● minutos segue consumido por DESCONTADO/ABONADO — então o parâmetro fica, e só o ramo do SEM_TURNO_PAREADO para de usá-lo. Nenhum
-  parâmetro órfão. Vendo o push:
-
-  Read 1 file
-
-● A suíte do pre-push segue correndo. Monto o patch da cura no scratchpad — cópia do HEAD, aplicada só no ato (LEI-AKITA 10):
-
-● Montar o patch da cura em copia
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o191_a_palavra_sem_numero.py
-     <<'PYEOF'
-     #!/usr/bin/env python3
-     """O191 item (a): a PALAVRA do dia sem par pareavel perde o NUMERO nos tres leitores.
-     LEI (Ronald 04/10 ~14:xx, que ALTERA a propria L-…
-
-✢ Jitterbugging… (8h 5m 33s · ↓ 963.7k tokens)
+✢ Compacting conversation… (8h 11m 3s · ↓ 971.3k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 61%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    8% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
