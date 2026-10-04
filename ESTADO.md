@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:811 AFIRMA ato sem PROVA ao lado -- **A cura e uma so e a autoridade JA existe**: `logs/deploy.stamp::COMMIT` (o que esta NO AR, lido por 5 sitios,
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:113 AFIRMA ato sem PROVA ao lado -- ### 6. O APPLY, FEITO E PROVADO — **02:08:19**, condicao 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 02:05:46.**
+**Medido em 04/10/2026 02:10:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10` |
+| `HEAD` local | `79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash` |
 | `origin/main` | `ba82736d [TICKETS] As duas linhas do O142 nascem porque a regua as cobrou -- e o rodape volta a dizer a verdade` |
-| commits a subir (`ahead`) | **10** |
+| commits a subir (`ahead`) | **11** |
 
 ## Fabrica
 
@@ -29,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+79db66c2 [O142] A relavratura esta FEITA e PROVADA em prod: 3 de 3, chamados delta 0, a 09 intacta por hash
 8997440b [O142] As quatro condicoes medidas ANTES do apply -- e as tres pks nao estao na 09, estao na 10
 8f2ccd3f [O122][O121] Tres cortes dele saem do alarme por ESTADO, nao por pausa -- e o estado do O122 contradizia o proprio corte
 f9262dda [O142][O30] O escritor canonico passa a escrever a forma do disco, e a linha que a regua cobrou nasce
 5bdf439c [O142] O dono do dia vem do vinculo DAQUELE dia, e o turno para de depender da janela em que foi perguntado
-334bac72 [O163..O166] Os dois avais do fim de semana nascem como quatro itens e quatro trabalhos abertos
 ```
 
 ## `git status --short`
 
 ```
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● 88 of 520 ids that do move are read as parked — every O1xx id contains O1, which is on the list. So no PAREI naming any O1xx item can
-  ever release the turn, and O142 is one. That's a bug in the fatia's path (LEI-AKITA 6). First making the RELATO durable, since condition
-  1 must land before the apply:
+  Verifying persistence and producing the PROVA from a fresh read:
 
   Ran 1 shell command
 
-● 147 insertions / 40 deletions — but I only prepended. Verifying my change alone is purely additive (the deletions must be pre-existing
-  uncommitted work, not mine):
+● Apply proven: 3 de 3 persisted, chamados delta 0, FM 09 54ac296d22e413ac intacta, the three export hashes intacta. Checking the advisor's
+  open question — does the espelho read the ata or recompute in the worker (old code until Monday)?
+
+  Searched for 1 pattern
+
+● The espelho recomputes via the motor (d.get('minutos_realizados') from the dias dict), not from cel.ata — so the tela stays on the
+  worker's old turnos.py until Monday. That's a real line for the PROVA. Writing it:
+
+  Committed 79db66c2, ran 1 shell command
+
+● O142's apply is closed and proven. Now the hook bug — RED first. Verifying the patch seam exists:
 
   Ran 1 shell command
 
-● My act is 110 insertions, 0 deletions — purely additive. Confirming the 40 deletions belong to the pre-existing uncommitted work:
+● Single site, and BACKLOG/RELATO are module-level — the seam exists. Reading the OBRAS parser so the fixture is valid, not invented:
 
   Ran 1 shell command
 
-● The 40/37 are the generated cortes panel shrinking because 3 cortes left "recebido" in 8f2ccd3f — coherent. Committing the RELATO so
-  condition 1 is durable before any write:
+● Writing the RED selo — and it asserts its own fixture actually yields O1 as non-moving, so it can't pass vacuously:
 
-  Committed 8997440b, ran 1 shell command
+  Running 1 shell command…
 
-● On main, condition 1 durable, 10 commits pending. Now the hook bug — a gate change mid-fatia, so I want the direction checked before
-  touching it:
-
-  Advising using Fable 5.1
-
-✽ Incubating… (3h 43m 7s · ↓ 518.2k tokens)
+✻ Incubating… (3h 48m 7s · ↓ 533.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    8% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 4 shells, 1 monitor · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Acquiring juliani_db_test lock for suite                                                2h 25m 50s · ↓ 100.9k tokens
-  ◯ general-purpose  Writing RED section into RELATO-CHAMADO-EM-RAIA.md                                      2h 24m 37s · ↓ 119.1k tokens
-  ◯ general-purpose  Polling trava_teste.sh lock holder                                                      1h 53m 29s · ↓ 167.8k tokens
+  ◯ general-purpose  Acquiring juliani_db_test lock for suite                                                2h 30m 50s · ↓ 100.9k tokens
+  ◯ general-purpose  Reading TETO_POR_ENTIDADE in test_chokepoint_chamado_gate.py                            2h 29m 37s · ↓ 132.8k tokens
+  ◯ general-purpose  Polling trava_teste.sh lock holder                                                      1h 58m 29s · ↓ 167.8k tokens
   ⧉  index
 ```
