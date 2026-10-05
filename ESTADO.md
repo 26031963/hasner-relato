@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:56:01.**
+**Medido em 05/10/2026 17:01:31.**
 
 | | |
 |---|---|
@@ -117,38 +117,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
-● foto_reversao() re-consulta o banco inteiro da janela, e restaurar só alcança pks que já estavam na foto. Então célula nascida no ato
-  entra no H2 e nunca sai. O diagnóstico mediu "+0 -0" numa base onde o ato já havia rodado — vacuidade. Vou ao número do run original:
+● Advisor pegou três defeitos reais na minha própria cura. Vou conferir no código antes de aceitar:
 
   Ran 1 shell command
 
-● Linha 7 e 16: 16.883 antes e depois — a hipótese "célula nova" segue morta. Então o resíduo está nos campos. Vou olhar o model:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Os 11 campos são planos, sem auto_now — a escrita do restauro gruda. Então o resíduo tem nome e eu não o estou lendo: o instrumento só
-  diz "não voltou". Vou (a) desfazer a afirmação não provada no docstring e (b) fazer o próprio instrumento nomear o resíduo.
+● Todas as três confirmadas: pks_chamado() devolve todos os pks, então meu laço de rodadas nunca encolhe; _ser+json.dumps distingue 60 de
+  60.0 e True de 1, que o != do Python não distingue. Corrigindo:
 
   Ran 2 shell commands
 
-● Minha sonda escolheu a pior testemunha possível. As linhas 40-45 do run vermelho provam que a retratação acorda o cartório — e col950 é
-  justo onde ele se abstém (sem_celula: ata nao lavrada), além de ser o colab de teste. Refaço a sonda com testemunha válida:
+● Carimbo guarda o DIA, não o instante — então o instante sai do mtime do dump, derivado. Aplicando as quatro correções:
+
+  Ran 4 shell commands
+
+● Refazer verde (sombra_diverge_de_prod=0). Antes de rodar, fecho a incoerência que a própria receita nova expôs: o desfazer por colab em
+  prod restaura célula mas não desdiz a cobrança daquele colab.
+
+  Ran 5 shell commands
+
+● Carimbo REFEITA (o --conferir cobra o bloco, que só o deploy exige — já está na minha lista). Rodando o arreio na base nova:
 
   Ran 1 shell command
 
-● Três testemunhas válidas, nenhuma moveu a célula: a hipótese do signal está morta por medição, não por palpite. A ordem nova fica apenas
-  como ordem terminal-por-último, e o docstring já diz isso. O resíduo agora tem quem o nomeie, e a base precisa ser refeita de qualquer
-  forma (está mutada).
+● Enquanto roda, fecho as correções devidas no marco (docs não entram no import da medição):
 
-  Ran 1 shell command
+● Ler os trechos a corrigir no RELATO
+  ⎿  $ sed -n '69,73p' docs/RELATO.md; echo "---- 97-107 ----"; sed -n '97,107p' docs/RELATO.md; echo "---- 553-558 ----"; sed -n
+     '553,558p' docs/RELATO.md
 
-● Advising using Fable 5.1
-
-· Frolicking… (8h 18m 6s · ↓ 1.0m tokens)
+✢ Frolicking… (8h 23m 36s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
