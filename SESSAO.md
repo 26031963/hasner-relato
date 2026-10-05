@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 06:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **969**.
+**Medido em 05/10/2026 06:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **965**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -975,7 +975,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:31:50 | Bash | Localizar o fechamento do tuple no registro | `cd /home/ronald/wt-k5/app && grep -n "^PENDENTES\\|^}" core/juizes.py \| head -20; echo "--- fim do tuple fechamento:"; awk '/^PENDENTES/,0' core/juizes.py \| grep -n "'fechamento'\\|'tela'\\|^ )" \| head -8` |
 | 18:31:24 | Bash | Rodar ruff nos quatro arquivos pela montagem canonica | `cd /home/ronald/saas-hasner && MONT=$(bin/arvore_do_push.sh --montagem /home/ronald/wt-k5 2>/dev/null \| tail -1) && docker run --rm --cpuset-cpus 4-7 --cpus 1 -v /home/ronald/wt-k5/app:/app -w /app $MONT --entrypoint python saas-hasner-core -m ruff check /app/ponto/tests/test_k8_tela_abre_na_competencia.py /app/core/juizes.py /app/ponto/tests/test_contract_juiz_fechamento.py /app/core/tests/test_ ...` |
 | 18:31:19 | Bash | Pedir a montagem canonica da copia | `cd /home/ronald/saas-hasner && bin/arvore_do_push.sh --montagem /home/ronald/wt-k5 2>&1 \| tail -5` |
-| 18:24:24 | Bash | Escrever o selo e passar ruff nos quatro arquivos | `cd /home/ronald/wt-k5 && cat >> app/ponto/tests/test_k8_tela_abre_na_competencia.py <<'PYEOF' # ------------------------------------------------------------------ O CONFORME DO `lista_ausencias` # Corte Ronald 04/10 17:5x, LITERAL: *"lista_ausencias filtra vigencia de ausencia, nao fechamento -- # sai do _K8 como conforme. Os dois com a nota dizendo de que o conforme depende"*. # # ESTE SELO E A S ...` |
-| 18:23:44 | Bash | Medir o que lista_ausencias referencia por AST | `cd /home/ronald/wt-k5 && python3 - <<'PY' import ast src=open('app/ponto/views.py',encoding='utf-8').read() t=ast.parse(src) f=next(n for n in ast.walk(t) if isinstance(n,ast.FunctionDef) and n.name=='lista_ausencias') nomes=set(); attrs=set() for no in ast.walk(f): if isinstance(no,ast.Name): nomes.add(no.id) if isinstance(no,ast.Attribute): attrs.add(no.attr) print('linha def:', f.lineno) print( ...` |
-| 18:23:15 | Bash | Ler o selo do K8 na raia | `cd /home/ronald/wt-k5 && sed -n '1,40p' app/ponto/tests/test_k8_tela_abre_na_competencia.py; echo "=== classes/defs ==="; grep -n "^class \\| def test" app/ponto/tests/test_k8_tela_abre_na_competencia.py; echo "=== tamanho ==="; wc -l app/ponto/tests/test_k8_tela_abre_na_competencia.py` |
-| 18:21:08 | Bash | Escrever as notas e os dois tetos na raia k5 | `cd /home/ronald/wt-k5 && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/k5_notas.py <<'PYEOF' # -*- coding: utf-8 -*- import io R = '/home/ronald/wt-k5/app/' # ============================================================ 1. juizes.py J = R + 'core/juizes.py' t = io.open(J, encoding='utf-8').read() # --- _K5 / holerite: fecha o bloco com  ...` |
