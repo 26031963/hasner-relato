@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 14:15:46.**
+**Medido em 05/10/2026 14:21:01.**
 
 | | |
 |---|---|
@@ -132,8 +132,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Suite inteira contra a copia" completed (exit code 0)
 
-  Ler a publicacao do DIFF
-  ⎿  $ cd /home/ronald/saas-hasner && cat -n logs/o195_diff_dinheiro.md
+● Ler o hook que le o topo do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,120p' bin/hook_stop_fila1.py
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file docs/LEIS.md
   ⎿  Referenced file escala/utils.py
@@ -142,7 +142,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✻ Frolicking… (5h 37m 51s · ↓ 698.3k tokens)
+✢ Frolicking… (5h 43m 6s · ↓ 711.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
