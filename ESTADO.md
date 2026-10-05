@@ -3,11 +3,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:45:45.**
+**Medido em 05/10/2026 03:51:23.**
 
 | | |
 |---|---|
-| `HEAD` local | `d525c0c0 PAROU na relavratura da comp 10: o DIFF de frota surpreende, e a condicao 1 foi quem mandou parar` |
+| `HEAD` local | `e07c03f2 PAROU na relavratura da comp 10, e o motivo nao e o DIFF surpreender: a folha nao le o sitio que a cura mexeu` |
 | `origin/main` | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
 | commits a subir (`ahead`) | **1** |
 
@@ -22,7 +22,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-d525c0c0 PAROU na relavratura da comp 10: o DIFF de frota surpreende, e a condicao 1 foi quem mandou parar
+e07c03f2 PAROU na relavratura da comp 10, e o motivo nao e o DIFF surpreender: a folha nao le o sitio que a cura mexeu
 eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu
 fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
 b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
@@ -33,7 +33,6 @@ fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga tr
 
 ```
  M app/config/crons_duracao.json
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -107,11 +106,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● 46 dos 51 colabs previstos não mexeram — +851,83 h previstas que não chegaram, e 31 dos 36 que mexeram não estavam previstos. Isso é mais
-  forte do que "surpreende". Meço a origem:
-
-  Ran 4 shell commands
-
 ● A folha não lê o sítio que a cura mexeu — 571 funções no fecho de recalcular_fechamento_mes, e nenhuma das três. Isso inverte o motivo do
   PAROU e torna FALSA uma afirmação minha já publicada. Mais duas medições antes de corrigir:
 
@@ -132,13 +126,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora a seção do PAROU: o motivo real é mais forte, e o número da 09 estava na unidade errada.
 
-  Achar as bordas dos paragrafos a corrigir
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n "POR COLABORADOR\|^\*\*comp 09 nao tem apply\|^Proximo, e a esteira segue sem a resposta da
-     lei\|^\*\*O apply move DUAS tabelas" app/docs/RELATO.md
+● Amendar o commit de docs com a correcao de motivo
+  ⎿  $ cd /home/ronald/saas-hasner && bash bin/relato.sh 2>&1 | tail -20
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
+  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
+  ⎿  Referenced file core/juizes.py
 
-· Jitterbugging… (15h 33m 47s · ↓ 1.7m tokens)
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Jitterbugging… (15h 39m 25s · ↓ 1.7m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

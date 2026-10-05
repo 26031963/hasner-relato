@@ -203,4 +203,4 @@ lista — ela e o que esta EM PE._
 | **O193** | O ALARME `vigia_sem_efeito` NAO MIGROU PARA A PAUSA COM DONO | **ABERTA, INSTRUMENTO -- pouso proprio p |
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | PAREI |
-| **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS | **registrado, nao construido** -- a orde |
+| **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
