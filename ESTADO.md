@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:00:45.**
+**Medido em 05/10/2026 18:05:45.**
 
 | | |
 |---|---|
@@ -118,38 +118,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
+  ITEM 1 -- PONTA PEQUENA: dia com minutos fora do marco <= limite e RECUSADO pelo sistema (DecisaoHE estado nao, ator sistema, com
+  trilha), uma vez por dia, idempotente. O limite e CADASTRO por empresa, nasce 15. Nao move dinheiro.
+  ITEM 2 -- AUTORIZAR POR COLABORADOR E PERIODO: um ato, um motivo, e a tela mostra ANTES de confirmar as horas que entram por rubrica (o
+  DIFF daquele colab). Grava uma DecisaoHE por dia. Revoga o "um dia por ato" de ponto/portas/he.py::autorizar_em_lote. Por empresa
+  inteira continua nao existindo.
+  ITEM 3 -- TRAVA: Empresa.he_pendente_trava_export passa a contar so dia ACIMA do limite e sem decisao. Liga depois do item 2 no ar,
+  nunca antes.
+  ITEM 4 -- A 09: os dias acima do limite ficam decidiveis na Gestao de HE; o que for autorizado sai como linha na pauta do TXT da 09 ja
+  aberta, com os dois numeros. A 09 nao se recalcula por este ato.
+  RED (pela REGRA, antes do codigo):
+  1. dia com 9 min fora -> recusado pelo sistema, sai da fila, dinheiro identico.
+  2. dia com 16 min fora -> fica na fila, nada muda sozinho.
+  3. mesmo dia rodado 2x -> uma DecisaoHE, uma linha de trilha.
+  4. autorizar 5 dias de um colab num ato -> 5 DecisaoHE, e o numero mostrado antes == o numero gravado depois.
+  5. empresa com trava ligada e 1 dia grande sem decisao -> export recusa; decidido -> libera; dia pequeno recusado pelo sistema nao
+  trava.
+  6. limite trocado no cadastro -> a fila muda sem deploy.
+     PROIBIDO: codigo decidir se a hora e legitima; piso de cortesia como atalho; autorizar por empresa; fallback; juiz novo; mexer em
+  motor_calculo_v2 alem de ler; fatia posterior para o cadastro.
+     PRONTO: relato com o censo da etapa 0, os 6 REDs nomeados, a fila da 09 e da 10 antes e depois do item 1 (dias e horas), commit e
+  deploy. Sem eles = INCOMPLETO com a lista.
+     LEI-AKITA: origem=ponto/portas/he.py + ponto/services/he_pendente_lavrado.py, testemunha=DecisaoHE e dia['he_fora_da_janela'], RED=os
+  6 acima, quem-mais-le=folha/porta_export.py::medir e ponto/services/gestao_he.py, juizes novos=0
+     LINHA HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa entra no copiloto; (b) golden: "quantas horas extras o
+  colab X tem esperando decisao?" esperado via ferramentas.he_pendente(cli); (c) degrau: leitura.
 
-● Os 4 a mais estão todos em 2026-10-05 — hoje, que está FORA da janela julgada (..10-04). Isso é uma afirmação sobre o alcance do meu
-  próprio ato, então eu meço quem os emitiu:
+● Ler o contrato do hook com o topo do RELATO
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'ORDEM VIVA\|FILA 1\|PAREI\|FECHADA\|NO AR' bin/hook_stop_fila1.py | head -30 | cut -c1-150
 
-  Ran 1 shell command
-
-● A atribuição fecha: as 4 extras penduram em disputas que já existiam antes do meu ato (17:15:11, 07:15:09, 17:30:07) e em chamados de pk
-  abaixo do meu primeiro nascido. Fecho a mesma conferência pelos chamados:
-
-  Ran 1 shell command
-
-❯ aval Ronald: o LEIS.md reescrito por auditoria esta no ramo leis-auditadas-0510 (commit 3ebedaa). No proximo marco, traz esse arquivo
-  para o main junto do codigo do marco, reaplicando por cima o que voce tiver mudado no LEIS.md depois de c8031f6. Dai em diante vale a
-  regra do cabecalho: ESTADO so muda contando clausulas, no commit que muda o codigo ou o teste. segue a fila; PAREI so em lei ou !
-
-● A multilista dos 14 chamados é IDÊNTICA nos dois bancos — mesmo colab, mesmo dia, mesmo módulo. Atribuição fechada. Recebo o aval e
-  registro o prompt antes de mexer no arquivo:
-
-● Hora no ato e borda do bloco
-  ⎿  $ cd /home/ronald/saas-hasner && date '+%d/%m %H:%M' && sed -n '160,166p' app/docs/RELATO.md | cat -n | cut -c1-100
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-· Frolicking… (9h 10m 32s · ↓ 1.1m tokens)
+✶ Frolicking… (9h 15m 32s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
