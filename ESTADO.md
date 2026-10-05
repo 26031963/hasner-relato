@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 09:39:01.**
+**Medido em 05/10/2026 09:44:14.**
 
 | | |
 |---|---|
@@ -39,6 +39,7 @@ b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
  M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -113,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
-     (32 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+  CASOS PELA REGRA (C7: vale a hora em que o colab bateu):
+  1. '1791071932000' recebido 33 min depois -> hora efetiva = 03/10/2026 20:58:52 -03, com a linha "Batida offline sincronizada".
+  2. '1791158355000' -> igual a hoje.
+  3. valor em texto ISO com fuso -> igual a hoje.
+  4. hora no futuro ou com mais de 48h -> usa a chegada, e GRAVA trilha com o valor recebido; nunca em silencio.
+  5. os dois kernels e o ping leem pela MESMA funcao (paridade de kernels verde).
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  CURA: so digitos = epoch primeiro. Uma funcao, tres chamadores.
+  PROIBIDO: mexer na Batida 117746 ou em qualquer batida gravada (o ajuste dela e do admin, pelo chamado #28288); fallback; leitor proprio
+  em cada rota.
+  DEPOIS DA CURA, so leitura: propor como contar as batidas antigas atingidas e publicar o numero; nao corrigir nenhuma.
+  PRONTO: RED com os 5 casos, commit, deploy, e a mesma linha de prova repetida em prod pela funcao nova. Sem isso = INCOMPLETO com lista.
+  LEI-AKITA: origem=api/views_core.py:523-535; testemunha=a funcao unica de leitura da hora; juizes novos=0. Leis: L-110, LEI-AKITA 1,
+  kernel gemeo (P4). Nenhuma lei nova.
+  LINHA HAIKU: (a) contador "hora do aparelho descartada", esperado 0, rotulo de admin; (b) golden: "a batida do col218 de 03/10 chegou
+  com a hora do aparelho?"; (c) degrau: leitura.
 
-  Ran 8 shell commands
+  Segue a fila; PAREI so em lei ou !.
 
-● Background command "Suite inteira (labels da regua) contra a copia" completed (exit code 0)
+  Ran 10 shell commands
 
-● Registrar os 4 BOs e os 3 achados como obras
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     p='app/docs/BACKLOG.md'
-     t=open(p,encoding='utf-8').read()
-     FIM='<!-- OBRAS:FIM -->'
-     assert t.count(FIM)==1
-     rows = []
-     def r(id_, obra, portao, onde, pedido):
-     assert len(onde) <= 300, (id_, len(onde))
-     assert '|' not in obra+portao+onde+pedido
-     rows.appe…
+● Background command "Suite inteira contra a copia, saida completa" completed (exit code 0)
 
-✢ Compacting conversation… (1h 1m 6s · ↓ 134.7k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 53%
+● Rodar o modulo O122 no HEAD via --only
+  ⎿  $ cd /home/ronald/saas-hasner && SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     ESTEIRA_QUEM=o195-prova-o122 timeout 900 bash bin/suite.sh --only escala.tests.test_o122_etapa1_barra_em_tipos >
+     "$SC/o122_na_arvore_viva.out" 2>&1; echo "rc=$?"; gre…
+
+✻ Frolicking… (1h 6m 19s · ↓ 145.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
