@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 08:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (378.2 MB). Acoes na janela: **732**.
+**Medido em 05/10/2026 08:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (378.3 MB). Acoes na janela: **737**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:50:20 | Bash | Provar a porta nova nos tres casos | `cd /home/ronald/wt-cert && echo "=== --raizes:"; bash bin/arvore_do_push.sh --raizes; echo "=== montagem app (da raia, staticfiles vazio -> deve RECUSAR):"; bash bin/arvore_do_push.sh --montagem /tmp 2>&1 \| cut -c1-120; echo "rc=$?"; echo "=== montagem mensageria:"; bash bin/arvore_do_push.sh --montagem /tmp mensageria; echo " rc=$?"; echo "=== raiz desconhecida:"; bash bin/arvore_do_push.sh --mo ...` |
+| 08:50:15 | Bash | Patch da porta unica: raizes derivadas | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/p_o192_porta.py <<'PYEOF' import io, sys A = '/home/ronald/wt-cert/bin/arvore_do_push.sh' s = io.open(A, encoding='utf-8').read() if 'RAIZES=(' in s: print('SKIP: ja aplicado'); sys.exit(0) # ---------------------------------------------------------------- 1. a LISTA, uma so anc = 'RAIZ="$(cd "$(dir ...` |
+| 08:49:34 | Bash | Conferir mounts /srv e ancoras | `cd /home/ronald/wt-cert && grep -n ':/srv' bin/*.sh; echo "--- bash:"; bash --version \| head -1; echo "--- linhas exatas que vou ancorar:"; sed -n '29,31p;51,51p;99,99p;102,103p' bin/arvore_do_push.sh` |
+| 08:48:58 | Bash | Como o selo LEI-PROTEGE-SITIO cobra o diff | `cd /home/ronald/wt-cert && sed -n '1,45p' bin/tests/test_lei_protege_sitio.sh` |
+| 08:48:53 | Bash | LEI ANTES DO PATCH: grep dos sitios | `cd /home/ronald/wt-cert && grep -n "arvore_do_push\\|suite_nucleo\\|montagem\\|tmpfs" app/docs/LEIS.md app/docs/DOSSIES.md app/docs/CORTES.md 2>/dev/null \| cut -c1-230` |
+| 08:46:30 | Bash | Censo de --dir e do flag de bytecode | `cd /home/ronald/wt-cert && echo "=== quem aceita --dir:"; grep -ln '\-\-dir)' bin/*.sh; echo; echo "=== quem roda manage.py test em docker run (bin/*.sh):"; for f in bin/*.sh; do if grep -vE '^[[:space:]]*#' "$f" \| grep -qE 'manage\.py test'; then printf '%-28s pdwb=%s\n' "${f#bin/}" "$(grep -vE '^[[:space:]]*#' "$f" \| grep -c 'PYTHONDONTWRITEBYTECODE')"; fi; done` |
+| 08:45:45 | Bash | Ler o selo da montagem | `cd /home/ronald/wt-cert && cat -n bin/tests/test_montagem_vem_do_arvore_do_push.sh` |
 | 08:45:37 | Bash | Quem roda ruff | `cd /home/ronald/wt-cert && grep -rn "ruff" bin/*.sh bin/tests/*.sh 2>/dev/null \| cut -c1-190` |
 | 08:45:10 | Bash | Censo de quem monta copia e quem consulta a porta | `cd /home/ronald/wt-cert && grep -n "montagem\\|tmpfs\\|PYTHONDONTWRITEBYTECODE\\|:/app\\|:/srv\\|suite_nucleo\\|ARVORE_PUSH" bin/pre-push.sh bin/vigia_arvore.sh bin/suite.sh bin/*.sh 2>/dev/null \| grep -v "^bin/arvore_do_push.sh" \| cut -c1-200` |
 | 08:45:05 | Bash | Ler a porta unica da copia | `cd /home/ronald/wt-cert && cat -n bin/arvore_do_push.sh` |
@@ -740,5 +747,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:51:11 | Bash | Censo: quem consome a palavra do dia | `cd /home/ronald/copia-o191a/app && grep -rn "palavra_do_dia\\|palavra_dia\\|'palavra'" --include=*.py escala/ \| head -20; echo "=== quem importa palavra_do_dia (app todo) ==="; grep -rn "palavra_do_dia" --include=*.py . \| grep -v "^./ponto/services/dia_decidido.py" \| head -20` |
 | 20:51:01 | Bash | Conferir quais arquivos o patch do item (a) mudou na copia | `cd /home/ronald/copia-o191a && for f in app/ponto/services/dia_decidido.py app/relatorios/tests/test_palavra_do_dia.py app/escala/utils.py app/ponto/supra_juiz.py app/escala/services/leitor_celula.py; do printf "%-55s " "$f"; if git -C /home/ronald/saas-hasner show HEAD:$f 2>/dev/null \| diff -q - $f >/dev/null 2>&1; then echo "== HEAD"; else echo "MUDADO"; fi; done` |
 | 20:50:54 | Bash | Conferir estado da suite nos vizinhos | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output 2>/dev/null \| tail -30; echo "---"; ls -la /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output` |
-| 20:50:33 | Bash | Ler o resto do selo do montador | `sed -n '145,230p' escala/tests/test_montador_realizado_pela_autoridade.py` |
-| 20:50:29 | Bash | Ler o selo do montador por inteiro | `sed -n '1,145p' escala/tests/test_montador_realizado_pela_autoridade.py` |
