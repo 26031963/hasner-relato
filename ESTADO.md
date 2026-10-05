@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:59:31.**
+**Medido em 05/10/2026 19:05:01.**
 
 | | |
 |---|---|
@@ -114,14 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ├────────────────────────────────┼────────────┼────────────┼─────────┤
-  │ emp1 (regime vazio) na praca68 │ CCT        │ piso legal │ 1 SAI   │
-  ├────────────────────────────────┼────────────┼────────────┼─────────┤
-  │ emp3 clt (123 colabs)          │ piso legal │ piso legal │ 0 mudam │
-  └────────────────────────────────┴────────────┴────────────┴─────────┘
-
-  272 de 607 mudam de régua. Os 73 sem escala ativa são a parte que a visão por praça esconde — e é a maior fatia depois das praças sem
-  CCT.
 
   Ran 3 shell commands
 
@@ -132,9 +124,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os dois raias de produto estão fora do ato por LEI-AKITA 9 — o ! dele nomeou O142+O130+R4 e eu não o estendi (RELATO.md:1665-1667). Essa
   é a linha que a L-105 pede, e a O211 pode abrir. Construindo em cópia, como manda a LEI-AKITA 10:
 
-● Ler o arquivo de prorrogacao inteiro
-  ⎿  $ cd /home/ronald/wt-regua/app && sed -n '1,130p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py && echo "=== FIM ===" && sed -n
-     '185,260p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py
+  Read 1 file, ran 28 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
@@ -143,9 +133,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Frolicking… (10h 9m 18s · ↓ 1.3m tokens)
+❯ aval Ronald: a relavratura da frota na 10 correu (O209 fechada). A celula ('celula/precedencia', 'um juiz por pergunta') segue
+  verde=False e a nota dela ainda diz "a relavratura ainda nao correu". Mede agora por verdes() e responde no topo do RELATO uma de duas:
+  virou 15/20, com a prova; ou NAO virou, e o que falta com nome e numero. Sem "ressalva de sempre". Isto e conferencia do marco que
+  acabou de fechar, nao fatia nova; depois segue a O211. PAREI so em lei ou !
+
+  Ler a assinatura da autoridade do realizado
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "minutos_realizados\|realizado_do_dia\|ata\b" logs/sombra/relavra10_frota_20261005.py | head
+     -30
+
+✢ Compacting conversation… (10h 14m 48s · ↓ 1.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱ 68%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

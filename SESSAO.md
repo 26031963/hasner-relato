@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 18:59:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (409.5 MB). Acoes na janela: **1364**.
+**Medido em 05/10/2026 19:05:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (409.7 MB). Acoes na janela: **1375**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:03:02 | Bash | Achar o campo da ata no instrumento | `cd /home/ronald/saas-hasner && grep -n "minutos_realizados\\|realizado_do_dia\\|ata\b" logs/sombra/relavra10_frota_20261005.py \| head -30` |
+| 19:02:53 | Bash | Ler o instrumento da relavratura | `cd /home/ronald/saas-hasner && ls logs/sombra/ \| grep -i "relavra\\|o209" ; echo "=== cabecalho ==="; head -60 logs/sombra/relavra10_frota_20261005.py` |
+| 19:02:27 | Bash | Ler a impressao do cartorio | `sed -n '80,115p' ponto/services/cartorio.py` |
+| 19:02:16 | Bash | Ler o commit da O209 | `cd /home/ronald/saas-hasner && git log -1 --stat 212b25a7 \| head -40 && echo "=== msg ===" && git log -1 --format=%B 212b25a7 \| head -60` |
+| 19:02:08 | Bash | Ler o selo declarado da celula | `wc -l ponto/tests/test_contract_juiz_celula.py && grep -n "def test\\|class \\|PENDENTES\\|allowlist" ponto/tests/test_contract_juiz_celula.py \| head -40` |
+| 19:02:02 | Bash | Ler a lista PENDENTES da familia celula | `python3 - <<'PY' import re t = open('core/juizes.py').read() i = t.index("PENDENTES = ") print(t[i:i+200]) PY grep -n "'celula/precedencia':" -A 20 core/juizes.py \| head -30` |
+| 19:01:58 | Bash | Ler PENDENTES_CELULA | `grep -n "PENDENTES_CELULA" -A 12 core/juizes.py \| head -30` |
+| 19:01:41 | Bash | Ler a celula celula/precedencia x um juiz por pergunta | `sed -n '164,182p' core/contratos_estruturais.py` |
+| 19:01:38 | Bash | Ler total() e verdes() | `sed -n '340,430p' core/contratos_estruturais.py && echo "=== celula/precedencia ===" && grep -n "celula/precedencia" -A 30 core/contratos_estruturais.py \| grep -n "juiz por pergunta"` |
+| 19:01:34 | Bash | Achar verdes() e a nota da celula | `grep -n "def verdes\\|def total\\|relavratura" core/contratos_estruturais.py \| head -20` |
+| 19:01:26 | Bash | Escrever os 7 REDs como testes | `cat > /home/ronald/wt-regua/app/core/tests/test_regua_pela_empresa.py <<'PYEOF' # -*- coding: ascii -*- """A REGUA E DA EMPRESA, E A PRACA SAI DELA (lei Ronald 05/10 16:4x -- O211). A LEI, literal: *"a EMPRESA decide a regua e a PRACA sai dela. clt = piso legal (JSP, como hoje). cct = a convencao da empresa, em qualquer posto e em qualquer praca"*. E o cadastro, do adendo de 16:5x: *"APLICACAO DE  ...` |
 | 18:59:28 | Bash | Ler o arquivo de prorrogacao inteiro | `cd /home/ronald/wt-regua/app && sed -n '1,130p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py && echo "=== FIM ===" && sed -n '185,260p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
 | 18:59:17 | Bash | Ler os selos a inverter | `cd /home/ronald/wt-regua/app && cat core/tests/test_regua_para.py && echo "=== prorrogacao 140-180 ===" && sed -n '130,185p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
 | 18:59:12 | Bash | Ler o selo do regime por empresa | `cd /home/ronald/wt-regua/app && cat core/tests/test_regime_por_empresa.py` |
