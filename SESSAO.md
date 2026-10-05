@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 06:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **950**.
+**Medido em 05/10/2026 06:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **946**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -956,7 +956,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:53:15 | Bash | Conferir a arvore da raia antes do commit | `cd /home/ronald/wt-k5 && git status --short && echo "--- HEAD: $(git log --oneline -1)"` |
 | 18:52:45 | Bash | Registrar o RED medido no selo e reconferir | `cd /home/ronald/wt-k5/app && python3 - <<'PY' import pathlib p = pathlib.Path('ponto/tests/test_k8_tela_abre_na_competencia.py') t = p.read_text(encoding='utf-8') alvo = """ def test_MORDE_lista_ausencias_nao_le_fechamento(self): vistos = _nomes_da_funcao(""" novo = """ # RED MEDIDO pelo teste REAL (04/10), nao por sonda replicando o helper: # (1) `_f = FechamentoMensal.objects.none()` dentro da f ...` |
 | 18:52:10 | Bash | Investigar a causa do RED 2 sem veredito | `set -e S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd /home/ronald/wt-k5/app echo "=== quantos testes o arquivo tinha ANTES desta fatia? ===" git show HEAD:app/ponto/tests/test_k8_tela_abre_na_competencia.py \| grep -c " def test_" echo "agora: $(grep -c ' def test_' ponto/tests/test_k8_tela_abre_na_competencia.py)" echo echo "=== por que o RED 2 ...` |
-| 18:50:49 | Bash | Medir o RED do selo pelo teste real, com restauracao | `set -e S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad CLASSE=ponto.tests.test_k8_tela_abre_na_competencia.ConformeDoListaAusenciasTest cd /home/ronald/wt-k5/app cp ponto/views.py "$S/views_bom.py"; ANTES=$(md5sum ponto/views.py \| cut -d' ' -f1) echo "=== GREEN da classe isolada (resolve o 32 x 33) ===" cd /home/ronald/saas-hasner timeout 600 bin/su ...` |
-| 18:50:12 | Bash | Extrair o veredito pelo criterio canonico | `O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output; grep -nE "^(OK\|FAILED)\|^Ran \|^Found " "$O"` |
-| 18:50:06 | Bash | Ver o andamento da suite | `sleep 1; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output 2>/dev/null; echo "---"; grep -cE "^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output 2>/dev/null` |
-| 18:46:35 | Bash | Classificar as entradas root da copia | `cd /home/ronald/saas-hasner && echo "=== root por tipo ==="; find /home/ronald/wt-k5 -user root -printf '%y %p\n' 2>/dev/null; echo; echo "=== os diretorios root estao VAZIOS (ponto de montagem) ou tem conteudo? ==="; for d in .mypy_cache .hypothesis .ruff_cache staticfiles; do printf '%-14s %s entradas\n' "$d" "$(ls -A /home/ronald/wt-k5/app/$d 2>/dev/null \| wc -l)"; done; echo; echo "=== rm -rf ...` |
