@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 07:03:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **917**.
+**Medido em 05/10/2026 07:08:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **911**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -921,9 +921,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:11:11 | Bash | Diff do prompt regerado | `cd /home/ronald/wt-pousos && git diff --stat -- mensageria/ && echo "=== conteudo ===" && git diff -- mensageria/nucleo/PROMPT_GERADO.md \| head -40; echo "=== owner ==="; ls -l mensageria/nucleo/PROMPT_GERADO.md` |
 | 19:11:05 | Bash | Rodar o gerador com o env da porta unica | `cd /home/ronald/saas-hasner && . bin/recursos.sh >/dev/null 2>&1; teste_envfile >/dev/null 2>&1; echo "envfile=$TESTE_ENVFILE"; USUARIO=$(docker exec juliani_db_test printenv POSTGRES_USER 2>/dev/null); echo "usuario_ok=${USUARIO:+sim}"; docker run --rm --cpuset-cpus 4-7 --cpus 1 --user "$(id -u):$(id -g)" --network saas-hasner_default --env-file "$TESTE_ENVFILE" -e POSTGRES_USER="$USUARIO" -e POS ...` |
 | 19:11:01 | Bash | Ler o veredito do agente | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output 2>/dev/null \| head -80` |
-| 19:06:54 | Bash | Regerar o prompt e ver a divergencia | `cd /home/ronald/saas-hasner && docker run --rm --cpuset-cpus 4-7 --cpus 1 --user "$(id -u):$(id -g)" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-pousos/mensageria:/srv -w /srv saas-hasner-mensageria:latest python manage.py gerar_prompt_copiloto 2>&1 \| tail -3; echo "=== diff ==="; cd /home/ronald/wt-pousos && git diff --stat -- mensageria/ && git diff -- mensageria/nucleo/PROMPT_GERADO.md \|  ...` |
-| 19:06:38 | Bash | Ver a invocacao docker da porta do nucleo | `cd /home/ronald/wt-pousos && sed -n '40,98p' bin/suite_nucleo.sh \| grep -n "docker run" -A12` |
-| 19:06:25 | Bash | Ler o gerador do prompt | `cd /home/ronald/wt-pousos && sed -n '80,110p' mensageria/nucleo/management/commands/gerar_prompt_copiloto.py` |
-| 19:04:11 | Bash | Confirmar a origem do RED do nucleo e diagnosticar o 125 | `cd /home/ronald/wt-pousos && echo "=== o mesmo teste contra a arvore VIVA (sem cert-ast) ==="; bash bin/suite_nucleo.sh --dir /home/ronald/saas-hasner --espera 300 --only nucleo.tests.test_prompt_gerado 2>&1 \| grep -E "^Found \|^Ran \|^OK\|^FAILED"; echo; echo "=== o 125 da suite do ponto ==="; bash bin/suite.sh --dir /home/ronald/wt-pousos --espera 300 --only "core" 2>&1 \| tail -12` |
-| 19:03:56 | Bash | Identificar a falha do nucleo | `cd /home/ronald/wt-pousos && echo "=== NUCLEO: qual teste ==="; bash bin/suite_nucleo.sh --dir /home/ronald/wt-pousos --espera 300 2>&1 \| grep -B2 -A14 "FAIL\\|Error" \| head -40` |
-| 19:03:33 | Bash | Ler as duas falhas reais do main | `cd /home/ronald/saas-hasner && echo "=== test_leis_indice ==="; bash bin/tests/test_leis_indice.sh 2>&1 \| tail -12; echo; echo "=== test_hook_nao_cobra_congelado ==="; bash bin/tests/test_hook_nao_cobra_congelado.sh 2>&1 \| tail -12` |
