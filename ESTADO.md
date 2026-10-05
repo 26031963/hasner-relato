@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:16:41.**
+**Medido em 04/10/2026 21:22:00.**
 
 | | |
 |---|---|
@@ -109,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O caminho do dinheiro lê a ata lavrada, não o juiz (leitor_celula.py:364: int(ata.get('minutos_realizados') or 0)). Então a pergunta
-  decisiva é quem escreve esse número na ata:
 
   Ran 1 shell command
 
-● ponto/services/cartorio.py:262 é quem escreve a ata. Preciso saber de onde vem o dia dele — se vier do montador que eu curei, a cadeia
-  fecha e é a relavratura que move o dinheiro:
+● Condição de entrada literal, achada no item — e ela é anterior a qualquer apply (LEI-AKITA 9):
+
+  ▎ "dos 15 dia-colab que trocam de veredito, nomear os que tem celula casada E previsto (exemplo dele: col250 29/09) e dizer se aquilo é
+  ▎ turno ABERTO que o juiz da geometria devia ter achado — 'se for, é bug do juiz, cura na origem primeiro'. ... Começa pela autopsia dos
+  ▎ 15, não pela cura."
+
+  Então o apply não é o próximo passo: a autopsia é. Vejo o universo:
 
   Ran 1 shell command
 
-● Line 452 fecha a cadeia: o cartório monta a grade com eu.montar_grade_prevista_periodo — a função que eu curei. Então o DIFF zero está
-  certo e é informativo. Gravo o achado antes de seguir:
+● Background command "Corrigir o import e enumerar o universo" completed (exit code 0)
 
-  Ran 1 shell command
+● O universo reproduz a pré-conta exatamente — agora medido pela autoridade: 15 dia-colab, 12 colabs, 2.716 min = 45,27 h (09: 12/10/2.051;
+  10: 3/3/665). E todos os 15 têm célula casada e previsto — então a condição de entrada alcança os 15 inteiros, não um subconjunto. Monto
+  a autopsia perguntando ao juiz quem é dono de cada batida:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Rodar a autopsia dos 15 na sombra
+  ⎿  $ cd /home/ronald/saas-hasner
+     python3 - <<'EOF'
+     import re
+     p = 'logs/sombra/o191_autopsia_20261004.py'
+     s = open(p).read()
+     velho = """ bs_dia = [b for b in batidas_apuraveis(c, dt.datetime.combine(d, dt.time.min),
+     dt.datetime.combine(d + dt.timedelta(days=1), dt.time.min))]"""
+     novo = """ # AWARE, e f…
 
-● Três pontos certos — e o do cron é bloqueante. Faço os quatro em uma passada:
-
-  Ran 1 shell command
-
-● Sem --dias: a janela é interna, e existe --forcar ("rejulga mesmo com impressão igual"). Então o bloqueio depende de uma coisa só — se o
-  realizado entra na impressão:
-
-  Ran 1 shell command
-
-●
-
-✢ Jitterbugging… (9h 4m 43s · ↓ 1.1m tokens · thought for 7s)
+✽ Jitterbugging… (9h 10m 2s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
