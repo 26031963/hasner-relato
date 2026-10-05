@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:88 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 19:35:45.**
+**Medido em 05/10/2026 19:41:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `cb6b289e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
+| `HEAD` local | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
 | `origin/main` | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
 | commits a subir (`ahead`) | **1** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-cb6b289e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
+fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
 212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
 c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
 edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
@@ -114,10 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  acabou de fechar, nao fatia nova; depois segue a O211. PAREI so em lei ou !
-
-  Searched for 10 patterns, read 1 file, ran 32 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
   ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
@@ -142,10 +138,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-* Frolicking… (10h 45m 32s · ↓ 1.3m tokens)
+● Ler a nova API da régua
+  ⎿  $ cd /home/ronald/wt-regua && sed -n '330,430p' app/core/regua_cct.py
+
+✢ Frolicking… (10h 50m 48s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
