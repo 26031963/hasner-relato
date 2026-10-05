@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 04:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1179**.
+**Medido em 05/10/2026 04:40:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1162**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1172,20 +1172,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:40:38 | Bash | Medir o ANTES no HEAD | `cd /home/ronald/wt-k5 && git show HEAD:app/core/juizes.py > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/juizes_head.py && python3 - <<'PY' import importlib.util, collections spec = importlib.util.spec_from_file_location('j_head', '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/juizes_head.py') m = impo ...` |
 | 16:40:30 | Bash | Medir chamando a funcao | `cd /home/ronald/wt-k5/app && python3 - <<'PY' import importlib.util, collections spec = importlib.util.spec_from_file_location('juizes_k5', 'core/juizes.py') m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m) for fam in ('fechamento', 'tela'): pend = m.PENDENTES[fam] print(fam, '=', m.fora_de_autoridade(fam)) if fam == 'fechamento': c = collections.Counter(p['zona'] for p in pen ...` |
 | 16:40:23 | Bash | Ver se o modulo precisa de Django | `cd /home/ronald/wt-k5/app && sed -n '/^import\\|^from/p' core/juizes.py \| head; echo "=== fora_de_autoridade ==="; grep -n "def fora_de_autoridade" -A8 core/juizes.py` |
-| 16:39:54 | Bash | Rodar os vizinhos diretos | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k5 --only "ponto.tests.test_contract_juiz_fechamento core.tests.test_contract_juiz_tela holerite.test_fech_encerrada_pelo_juiz folha.tests.test_ranking_he ponto.tests.test_k8_tela_abre_na_competencia" 2>&1 \| tail -15` |
-| 16:39:47 | Bash | Ler os casos do vizinho | `cd /home/ronald/wt-k5/app && sed -n '56,150p' folha/tests/test_ranking_he.py` |
-| 16:39:44 | Bash | Ler o vizinho direto | `cd /home/ronald/wt-k5/app && sed -n '1,60p' folha/tests/test_ranking_he.py` |
-| 16:39:41 | Bash | Censo de quem le o modulo mudado | `cd /home/ronald/wt-k5/app && grep -rn "ranking_he\\|competencia_mais_recente\\|competencia_default" --include=*.py . \| grep -v "^./folha/services/ranking_he.py" \| grep -v test_fech_encerrada; echo "=== mensageria ==="; grep -rn "ranking_he\\|competencia_mais_recente" /home/ronald/wt-k5/mensageria --include=*.py 2>/dev/null \| head` |
-| 16:39:31 | Bash | Corrigir a docstring do selo no mesmo ato | `cd /home/ronald/wt-k5/app && python3 - <<'PY' import io p = 'holerite/test_fech_encerrada_pelo_juiz.py' s = io.open(p, encoding='utf-8').read() old = """FICAM DE FORA, declarados: `holerite/matriz.py::_limites` (o UNIVERSO por mes civil -- pergunta diferente, e mexer nela muda o que a matriz soma: e' dinheiro) e `folha/services/ranking_he.py::competencia_mais_recente` (que responde "a ultima COM A ...` |
-| 16:39:13 | Bash | Tirar os pendentes curados e o mal arquivado | `cd /home/ronald/wt-k5/app && python3 - <<'PY' import io p = 'core/juizes.py' s = io.open(p, encoding='utf-8').read() k5_old = """ _p(_K5, 'holerite/matriz.py', 'ini = datetime.date(ano, mes, 1)', TELA, 'universo da competencia pelo mes civil'), _p(_K5, 'folha/services/ranking_he.py', "f = FechamentoMensal.objects.order_by('-ano', '-mes').values('mes', 'ano').first()", TELA, 'ultima APURADA, de qua ...` |
-| 16:38:22 | Bash | Ler o contrato da tela | `cd /home/ronald/wt-k5/app && grep -n "def test\\|impressao\\|assertEqual" core/tests/test_contract_juiz_tela.py \| head -30` |
-| 16:38:17 | Bash | Ler o contrato de fechamento e achar o da tela | `cd /home/ronald/wt-k5/app && grep -n "impressao\\|def test" ponto/tests/test_contract_juiz_fechamento.py \| head -30; echo "=== tela (_TT7) contrato ==="; grep -rln "_TT7\\|PENDENTES\['tela'\]\\|'tela'" --include=test_*.py core ponto relatorios 2>/dev/null \| head` |
-| 16:38:13 | Bash | Achar o selo que recusa impressao sumida | `cd /home/ronald/wt-k5/app && grep -rln "impressao\\|fora_de_autoridade" --include=test_*.py . \| head -20` |
-| 16:38:06 | Bash | Ler cabeçalho de juizes.py | `cd /home/ronald/wt-k5/app && sed -n '1,60p' core/juizes.py` |
-| 16:38:03 | Bash | Procurar tripwire de pendente stale | `cd /home/ronald/wt-k5/app && grep -rln "PENDENTES\b" --include=*.py core/tests ponto/tests 2>/dev/null \| head; echo "---"; grep -rn "trecho" core/juizes.py \| head -8; echo "--- selos que varrem trecho ---"; grep -rln "juizes import\\|from core.juizes\\|core\.juizes" --include=*.py . \| head -20` |
-| 16:37:51 | Bash | Ler o contrato e o placar que citam o 15 | `cd /home/ronald/wt-k5/app && sed -n '275,305p' core/contratos_estruturais.py && echo "=== placar 250-285 ===" && sed -n '250,285p' core/placar_estrutural.py` |
-| 16:37:47 | Bash | Quem le os pendentes | `cd /home/ronald/wt-k5/app && grep -rn "PENDENTES_FECHAMENTO\\|PENDENTES\['fechamento'\]\\|pendentes_por_pergunta\\|PENDENTES_TELA" --include=*.py \| grep -v "^core/juizes.py" \| head -30` |
-| 16:37:40 | Bash | Ler docstring do selo | `cd /home/ronald/wt-k5/app && sed -n '1,60p' holerite/test_fech_encerrada_pelo_juiz.py` |
-| 16:37:21 | Bash | Ler a cura inteira | `cd /home/ronald/wt-k5/app && cat -n folha/services/ranking_he.py` |
-| 16:37:08 | Bash | Ler contexto das entradas | `cd /home/ronald/wt-k5/app && sed -n '340,380p' core/juizes.py && echo "=== 640-680 ===" && sed -n '640,680p' core/juizes.py` |
-| 16:37:02 | Bash | Localizar entradas _K5 e _TT7 | `cd /home/ronald/wt-k5/app && grep -n "_K5\\|_TT7" core/juizes.py \| head -40` |
