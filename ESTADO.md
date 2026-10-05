@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:359 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4 AFIRMA ato sem PROVA ao lado -- (2), `relavratura 10` restrita aos 3 colabs, esta **FECHADA e NO AR** (apply em prod 05/10 15:57, as 4
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 15:56:31.**
+**Medido em 05/10/2026 16:02:01.**
 
 | | |
 |---|---|
@@ -45,6 +45,8 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PENDENTES_RONALD.json
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
+ M app/ponto/services/cartorio.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -118,14 +120,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Antes do apply em prod — ato irreversível de dinheiro — consulto o revisor com tudo na mesa.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 2 shell commands
-
 ● Agora o script do apply, com as oito guardas que o revisor nomeou.
 
   Searched for 1 pattern, ran 4 shell commands
@@ -143,13 +137,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Foto fresca no host (215.088 bytes, 15:56). Aplicando:
 
-● Aplicar a relavratura 10 nos 3 colabs
-  ⎿  $ cd /home/ronald/saas-hasner && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "APLICAR=True;
-     exec(open('/tmp/o195_apply_3_prod.py').read())" 2>&1 | tail -70
+  Ran 3 shell commands
 
-· Frolicking… (7h 18m 36s · ↓ 893.2k tokens · thinking)
+● O apply pousou e fechou em todas as guardas pré-declaradas. Gravando o registro durável e fazendo o LEI ANTES DO PATCH do docstring:
+
+  Read 1 file, ran 5 shell commands
+
+● Agora o RELATO com a prova. Inserindo o bloco do marco:
+
+● Ver o estado da arvore e se logs esta ignorado
+  ⎿  $ cd /home/ronald/saas-hasner && git status --short | head -20; echo "=== logs ignorado? ==="; git check-ignore -v
+     logs/o195_apply_3_prod.py logs/o195_cond2_20261005.json 2>&1 | head
+
+✢ Frolicking… (7h 24m 6s · ↓ 912.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-               bash denied by auto mode · The server-side auto mode classifier judged this action dangerous (it gave no e… · /permissions
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
