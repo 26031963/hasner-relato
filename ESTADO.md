@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:14:01.**
+**Medido em 05/10/2026 03:19:31.**
 
 | | |
 |---|---|
 | `HEAD` local | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
-| `origin/main` | `024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu` |
-| commits a subir (`ahead`) | **5** |
+| `origin/main` | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -115,42 +115,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  e então rodo bin/handoff_sessao.sh.
-
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
-  PALAVRA (item 1 dos DOSSIES, aval
-
-● O hook manda seguir: a fila 1 tem CELULA-TURNO-FECHA de pé. O push corre, então não toco a árvore viva — construo em cópia do HEAD
-  (LEI-AKITA 10), que é o que o próximo passo pede de qualquer forma.
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O pendente de turno está nomeado e é UM só: Q6, dentro de minutos_realizados_do_dia — a função que o passo 5 declarou sem chamador de
-  produção. O PROIBIDO é "tirar pendente com a impressão ainda no código". Então a medição é exata:
-
-  Searched for 1 pattern
-
-● Medido, e decide o passo 6:
+● O push pousou: 024608c7..eef236e1  main -> main, suíte 9629 OK (skipped=42) + 22 OK, pre-push: OK — push liberado.
 
   Ran 1 shell command
 
-● O placar previa +2 para uma cura só. Vou conferir se o número dele é lido da fonte ou digitado na prosa:
+● MARCO FECHADO -- pode compactar. HEAD == origin/main == eef236e1, handoff em 44 linhas (teto 60).
 
-  Searched for 1 pattern, ran 1 shell command
+  Agora o passo 1 do que o hook manda seguir. Falta a medição que o advisor pediu para a linha de lei:
 
-● Antes de escrever, consulto o advisor — estou a ponto de fixar uma interpretação (passo 6 não fecha, e a nota do placar está velha contra
-  a fonte):
+  Searched for 1 pattern, ran 2 shell commands
 
-● Advising using Fable 5.1
+● O topo é contrato com o hook. Confiro como ele lê antes de escrever a linha de lei:
 
-✢ Jitterbugging… (15h 2m 3s · ↓ 1.6m tokens)
+  Ran 1 shell command
+
+● Escrevo a linha de lei no topo (ela não devolve turno) e carimbo o push:
+
+  Ran 2 shell commands
+
+● Dois achados do afirma_com_prova — e preciso saber se são meus ou pré-existentes, não supor:
+
+  Comparar o vivo com o HEAD para saber de quem e o achado
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io, importlib.util
+     spec = importlib.util.spec_from_file_location('m', 'bin/relato_afirma_com_prova.py')
+     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+     base = m.base_conhecida('.')
+     print('base: %d linhas' % len(base))
+     vi…
+
+✢ Jitterbugging… (15h 7m 33s · ↓ 1.6m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
