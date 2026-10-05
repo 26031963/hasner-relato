@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 12:25:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (390.0 MB). Acoes na janela: **868**.
+**Medido em 05/10/2026 12:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (390.1 MB). Acoes na janela: **873**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:30:22 | Bash | Ler _vespera | `grep -n "_vespera" ponto/turnos.py \| head -20; echo '=== def _vespera'; awk '/def _vespera/,/^def \|^ return/' ponto/turnos.py \| head -40` |
+| 12:26:28 | Bash | Achar janela_turno_de e ler a nota sobre _dist_marco | `grep -rn "def janela_turno_de" --include=*.py . ; echo '--- nota :770-780'; sed -n '768,812p' ponto/turnos.py` |
+| 12:26:22 | Bash | Ler _dist_marco e seus chamadores | `sed -n '104,130p' ponto/turnos.py; echo '=== quem chama _dist_marco'; grep -rn "_dist_marco" --include=*.py . \| grep -v test \| head` |
+| 12:26:21 | Bash | Ler janela_turno_de, a autoridade da janela do turno | `grep -n "def janela_turno_de\\|def marcos_turno\\|def turno_cruza_meia_noite" escala/servico_jornada.py; echo '---'; sed -n "$(grep -n 'def janela_turno_de' escala/servico_jornada.py \| cut -d: -f1),+32p" escala/servico_jornada.py` |
+| 12:25:44 | Bash | Gravar a origem nos dois ramos | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat >> $S/achado_montador_meia_noite.md <<'MD' --- ## A ORIGEM, LIDA NO CODIGO (05/10 12:3x) -- SAO DOIS [nome], NAO UM Lido em `ponto/turnos.py` (juiz GEOMETRIA DE TURNO, nao inviolavel). A hipotese "o montador usa a data civil da batida" estava certa no EFEITO e grossa na CAUSA: ha **dois** sitios, e  ...` |
 | 12:24:45 | Bash | Recuperar a autopsia com segundos | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/ \| head -30; echo '=== col382 e col250 e col235: saidas com segundos'; grep -nE "S=\|saida\|turno\|marcos=" $S/autopsia.out \| head -60` |
 | 12:24:34 | Bash | Registrar o aval O44 v2 nos tres sitios | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/reg_aval_o44.py <<'PY' # Registro do aval de 05/10 12:2x (O44 v2 itens 2-8 SOBEM). L-010: prompt que pede obra # vira item no MESMO turno. Ancora unica, assert count==1, em memoria antes de gravar. import io, re D='/home/ronald/saas-hasner/app/docs/' # ---- 1. PROMPTS.md: linha nova (o titulo do ava ...` |
 | 12:23:54 | Bash | Ler a ORDEM VIVA do topo do RELATO | `grep -n "ORDEM VIVA\\|ORDEM-VIVA-TOPO" docs/RELATO.md \| head; echo '---'; sed -n '1,40p' docs/RELATO.md` |

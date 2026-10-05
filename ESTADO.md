@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:25:31.**
+**Medido em 05/10/2026 12:30:45.**
 
 | | |
 |---|---|
@@ -112,18 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  5. Depois do toque e da validacao, o fechamento daquele colab naquela competencia recalcula; TXT gerado de novo substitui o vigente e o
-  anterior fica guardado.
-  6. Os sitios que o censo do item 1 marcou "9 MORREM" deixam de recusar; a recusa de retroatividade ALEM do piso em
-  colaboradores/services/vinculo.py:35-36 NAO e tranca e nao se toca.
-
-  SO CONTA E PUBLICA, nao cura aqui: perguntas em disputa ABERTA dentro de chamado ENCERRADO. Medido hoje no col317: 156 de 156.
-
-  PROIBIDO: excecao de tranca por colaborador (mecanismo novo); reabrir competencia inteira como caminho; fallback; juiz novo; apagar o
-  historico da via competencia_trancada.
-  PRONTO: RED com os 6 casos, DIFF de frota publicado antes, reversao em logs/, commit, deploy, e o caso 1 repetido em prod pela tela. Sem
-  isso = INCOMPLETO com lista.
-  LEI-AKITA: origem=os sitios do censo do item 1 da O44; testemunha=os juizes de fechamento ja declarados; juizes novos=0.
   LINHA HAIKU: (a) contador "recusas por competencia trancada", esperado 0, rotulo de admin; (b) golden: "posso cobrar um dia de agosto da
   col317?" esperado sim; (c) degrau: leitura.
 
@@ -139,9 +127,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora a origem está provada e são DOIS ramos, não um. Gravando o achado antes de decidir a cura.
 
-● Running 1 shell command…
+  Ran 4 shell commands
 
-✢ Frolicking… (3h 47m 36s · ↓ 450.5k tokens)
+● A lei da cura já está escrita neste mesmo pareador: S158 -- marco mais proximo DECIDE (:800-808, _di <= _db), e BUG-144 proíbe teto
+  inventado. Chamando o advisor antes de tocar o juiz.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Correções aceitas. Item 1 primeiro — _vespera, que eu não li.
+
+  Searched for 1 pattern
+
+●
+
+· Frolicking… (3h 52m 50s · ↓ 458.2k tokens · thought for 20s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
