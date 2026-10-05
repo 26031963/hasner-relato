@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 23:56:31.**
+**Medido em 05/10/2026 00:02:01.**
 
 | | |
 |---|---|
@@ -110,12 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 3 shell commands
-
-● Antes de reescrever o selo, meço se persistir as batidas faz a autoridade devolver 660.
-
-  Ran 1 shell command
-
 ● Medido e limpo: com as batidas no banco, turnos_do_colab acha um turno data_turno=2026-07-02 e a autoridade devolve exatamente 660,
   sem_turno=False. A propriedade do selo de 17/08 sobrevive — ela agora mora no juiz, que pareia por cronologia por construção.
 
@@ -132,19 +126,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Uma linha só: registro: 1 sitio(s) → 0, e o MAPA.md intacto. Agora o recorte das cinco.
 
-● Rodar o recorte das cinco falhas curadas · 34s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/copia-o191a --espera 1800 --only
-     "escala.tests.test_realizado_cronologico ponto.tests.test_realizado_do_dia_autoridade
-     api.tests.test_api_mensageria_registros_pendentes core.tests.test_selo_diagrama_do_codigo escala.tests.test_montado… (35s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-· Jitterbugging… (11h 44m 33s · ↓ 1.3m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● O único erro é meu — nome de módulo inventado. Os 54 testes reais passaram.
+
+  Ran 2 shell commands
+
+● Verde. Lanço a suite inteira na cópia e, enquanto ela corre, levo as quatro curas ao advisor.
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+✻ Waiting for API response · will retry in 2m 33s · check your network
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
