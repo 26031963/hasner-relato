@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:30:01.**
+**Medido em 05/10/2026 03:35:31.**
 
 | | |
 |---|---|
@@ -33,7 +33,10 @@ fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga tr
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/AVAIS.md
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -109,35 +112,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
+● Agora os dois itens em PENDENTES, pelo escritor canônico. Leio o normalizador primeiro para dar a forma certa:
+
+  Ran 4 shell commands
+
+● O diff tem o tamanho do ITEM (26 linhas), não do arquivo. Rodo os selos que guardam o que eu acabei de tocar:
+
+  Ran 1 shell command
+
+● O selo de PENDENTES é Django — rodo esse teste único pela porta canônica:
+
   Ran 2 shell commands
 
-● DIFF completo nas duas tabelas. O veredito é §7b-2: DIFF que surpreende não aplica. Registro pelo escritor canônico — confiro a interface
-  dele antes:
-
-  Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
-  ⎿  Referenced file core/juizes.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Primeiro: o escritor canônico diz indent=2, e a minha memória diz indent=1. Leio a lei no arquivo antes de escrever nele:
+● --only é quem substitui os labels:
 
   Ran 1 shell command
 
-● Memória errada, corrijo na origem (ela diria para eu reescrever 4.442 linhas):
+● Registro o achado de caminho no BACKLOG (registrar, não construir — a ordem da fila 1 não muda). Leio a forma do bloco OBRAS:
+
+  Ran 4 shell commands
+
+● Antes de publicar e commitar, consulto o advisor — é o passo para fora:
 
   Ran 1 shell command
 
-● O corpo da memória guardava o NÚMERO, que envelheceu em um dia. Reescrevo pelo que não envelhece:
+● Commito os docs (por path, sem o crons_duracao.json que é cron-dirty):
 
-  Ran 1 shell command
+  Running 1 shell command…
 
-●
-
-✢ Jitterbugging… (15h 18m 3s · ↓ 1.6m tokens · thought for 4s)
+✢ Jitterbugging… (15h 23m 33s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

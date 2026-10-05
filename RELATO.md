@@ -53,9 +53,78 @@ a funcao, e isso e o seu `!`; se for *"nao responde"*, o pendente sai por CARACT
 errado era a `zona` dele, nao o codigo. **Eu nao escolho** -- e vocabulario, nao implementacao (TRAVA
 JUIZ-NOVO, pela mesma razao).
 
-Proximo, e a esteira segue sem a resposta acima: a **relavratura** (ATO PROPRIO, fora do marco que
-acabou de fechar) -- comp 10 pre-aprovada pela DINHEIRO-EM-COMPETENCIA-ABERTA com as quatro condicoes,
-comp 09 como Pauta DP com os dois numeros; depois **CERT-AST** em pouso proprio e a **O145**.
+**PAROU: relavratura da comp 10 -- o DIFF de frota SURPREENDE, e eu NAO aplico.** A condicao 1 da
+DINHEIRO-EM-COMPETENCIA-ABERTA (*"DIFF de frota publicado no RELATO ANTES do apply"*) esta cumprida, e
+e' ela que me manda parar: pela §7b-2, *"DIFF que surpreende -> NAO aplica, PENDENTES 'PAROU: <motivo>',
+e SEGUE outra fatia"*. Medido na SOMBRA contra o **GRAVADO** -- nunca motor-x-motor, que foi a licao
+medida da AVAL-DE-CRITERIO em 26/09 (*"apply por recalculo nunca e' cirurgico"*): 2m26s, comp 10/2026,
+`logs/o192/relavratura_diff_comp10_20261005_0322.txt`.
+
+`fechamentos_mexidos=36 de 572` · `fechamentos_novos=0` · `processados=568`. Dos 19 campos, **9 dao
+ZERO** (noturnas, as cinco de HE, atraso, saida antecipada) e **10 se movem**:
+
+| campo | antes | depois | delta |
+|---|---|---|---|
+| `minutos_abonados` | 160.724 | 181.584 | **+20.860 min = +347,67 h** |
+| `horas_folga_trabalhada` | 394,95 | 361,61 | **-33,34** |
+| `horas_trabalhadas` | 30.485,95 | 30.518,34 | **+32,39** |
+| `horas_falta` | 179,47 | 211,60 | **+32,13** |
+| `minutos_previstos` | 5.615.420 | 5.615.472 | +52 |
+| `horas_intra_indenizada` | 1.020,61 | 1.019,96 | -0,65 |
+| `saldo_banco_horas` | -19.804,88 | -19.805,83 | -0,95 |
+| `dias_incertos` | 11 | 14 | +3 |
+| `inconsistencias` | 573 | 575 | +2 |
+| `turnos_abertos` | 266 | 265 | -1 |
+
+**POR COLABORADOR e' que o DIFF se explica, e o alvo do aval nao e' a maioria** (recontado agora, nao
+de memoria): **25 dos 36** mexem **SO** `minutos_abonados`, em degraus de 660 / 720 / 1.320 min -- isso
+e' **jornada inteira**, nao minuto de cauda, e abono nao e' o que esta cura toca; **4** mexem
+`minutos_previstos` PARA BAIXO com `horas_falta` PARA CIMA (col206, col507, col666, col893) -- e a
+docstring do proprio comando chama isso pelo nome: *"recalculo que mexe no previsto sem mexer no
+realizado e' o sintoma de regra de ausencia mudando"*; **col717** mexe `dias_incertos` 11->14 com
+`minutos_previstos` **+1.980**; e so **6** mexem `horas_trabalhadas` (col114 -1,01 · col165 **+33,34** ·
+col358 -7,19 · col384 +1,89 · col390 -0,99 · col919 +6,35), dos quais **col165** (folga_trabalhada
+33,34->0,00, trabalhadas 33,30->66,64) e' o unico com a cara da cura que subiu.
+**30 dos 36 mexem campo FORA do alvo**, entao a condicao (b) da AVAL-DE-CRITERIO -- *"todo outro campo
+de todo colaborador da ZERO"* -- **nao se cumpre**, e a (c) nao tem faixa a conferir: o aval nomeou o
+**realizado** dos dia-colab, e a leitura de impacto previa para a comp 10 **106 dia-colab / 51 colabs /
++55.155 min = +919,25 h**. O gravado moveu `horas_trabalhadas` **+32,39 h em 6 colabs**. O alvo **nao
+chegou ao gravado na medida que a leitura dizia**, e o maior movimento do DIFF esta num campo que
+**ninguem nomeou**. Isso nao e' "a cura e' menor que o previsto": e' **DERIVA** do `FechamentoMensal`
+velho vindo junto, a mesma classe de 26/09.
+
+**O apply move DUAS tabelas, e o `foto()` do comando cobre UMA.** `recalcular_fechamento_mes` tambem
+chama `dia_pago.lavrar`, que faz `DiaPago.objects.filter(...).delete()` e recria
+(`ponto/services/dia_pago.py:208`), e `colaboradores/services/calendario.py` + `folha/porta_export.py`
+LEEM `versao='motor'`. Medi a segunda tabela por SQL nos dois bancos, porque o antes/depois do comando
+nao a mostra:
+
+| versao | linhas PROD -> SOMBRA | colabs | `horas_trabalhadas` |
+|---|---|---|---|
+| `motor` | 10.720 -> **10.759** | 572 -> 572 | 30.493,86 -> **30.518,26** |
+| `oraculo` | 7.703 -> **9.221** | 387 -> **463** | 26.426,10 -> **30.210,24** |
+
+O salto do `oraculo` (+1.518 linhas, +76 colabs) e' a metade ADITIVA do S5b que **nenhum leitor le
+hoje** (aval 30/09 ~13:5x), e a recusa de lavra-lo em 81+ colabs e' PREEXISTENTE e DECLARADA, nao
+efeito deste apply: `ponto/services/dia_pago.py:276` levanta `ValueError` para 11 campos de dia **sem
+dono**, por ZERO DECLARADO (L-103) -- escreve-los como zero perderia 6,29 + 132,51 h da 09 em silencio
+--, e `ponto/services/fechamento.py:714` so registra, com `processados += 1` seguindo adiante.
+**Consequencia para a condicao 2**: a reversao que o comando escreve cobre `FechamentoMensal` e **nao**
+cobre `DiaPago`. A casa ja tem a cura disso pronta e nao sou eu que decido dispensa-la --
+`bin/snapshot_relavratura_10_2026.py` fotografa **as duas** tabelas e `bin/restore_relavratura_10_2026.py`
+e' a reversao executavel (`--dry` monta 10.684 objetos sem escrever). Quando o apply for autorizado, e'
+por essa porta que a condicao 2 se cumpre, nao pela foto do comando.
+
+**comp 09 nao tem apply** -- esta exportada, e a L-092 nao cede. Ela sai como **Pauta DP com os dois
+numeros**, que e' a forma que a REGEN-EM-EXPORTADA manda: **291 dia-colab / 94 colabs ganham +142.778
+min = +2.379,63 h** contra o que o Dominio ja recebeu. Os dois itens estao em `PENDENTES_RONALD.json`.
+PROVA: `logs/o192/relavratura_diff_comp10_20261005_0322.txt` (rc=0, 03:22:11->03:24:37),
+foto por colaborador em `logs/o192/fotos/recalculo_10-2026_20261005_032436.json`, e a leitura de impacto
+em `logs/o191/impacto_join_detalhe_20261005.tsv`. **Prod NAO foi tocada**: o DIFF rodou na sombra, no
+cpuset de teste.
+
+Proximo, e a esteira segue sem a resposta da lei acima e sem o seu `!` da relavratura: **CERT-AST** em
+pouso proprio, depois a **O145**.
 Os tres registros que respondem *"qual o item em curso"* (marcador
 `ORDEM-VIVA-TOPO`, celula do BACKLOG e esta linha) continuam DIZENDO O MESMO -- o item nao fechou, entao o
 marcador **nao se move** (`test_hook_nao_cobra_congelado.sh:107` fica VERMELHO se um discordar do outro).

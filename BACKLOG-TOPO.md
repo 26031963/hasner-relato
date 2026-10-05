@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**194 obras abertas.**
+**195 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -203,3 +203,4 @@ lista — ela e o que esta EM PE._
 | **O193** | O ALARME `vigia_sem_efeito` NAO MIGROU PARA A PAUSA COM DONO | **ABERTA, INSTRUMENTO -- pouso proprio p |
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | PAREI |
+| **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS | **registrado, nao construido** -- a orde |
