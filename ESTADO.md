@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 08:55:45.**
+**Medido em 05/10/2026 09:01:01.**
 
 | | |
 |---|---|
@@ -107,17 +107,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  pergunta encerra, 1 linha de trilha com o usuario.
-  2. Admin aceita duas vezes -> mesmo estado, 1 linha de trilha, 0 duplicado.
-  3. checar_declaracao recusa o dia -> nada se grava, o chamado fica, e a tela diz o motivo.
-  4. Colab declara e admin NAO aceita -> nada se grava (HX-ESCAPE-NAO-TRABALHEI de 26/08 intacto).
-
-  FONTE: ponto/services/declarar_dia.py::declarar_dia (escritor) e ::checar_declaracao (juiz). Nenhum escritor novo.
-  MUDA: o(s) sitio(s) onde o admin aceita/valida resposta de escape 'folga' (porta C, chamados/services/validacao.py LOTE_C e a view que a
-  serve) passam a chamar declarar_dia(tipo='folga').
-  RED: os 4 casos acima, com col951 24/09 como golden.
-  SELO: sitio de aceite de escape 'folga' que nao chama declarar_dia = 0.
-  PROIBIDO: escritor proprio de folga; fallback; gravar na declaracao do colab; estender para 'falta' ou 'atestado' (so conta quantos
   estao na mesma situacao e publica o numero).
   PRONTO: RELATO com os 4 REDs nomeados, commit, e o #25298 fechado pela porta em prod. Sem isso = INCOMPLETO com lista.
   LEI-AKITA: origem=o sitio do aceite; testemunha=declarar_dia; juizes novos=0. Leis aplicadas: L-110, HX-ESCAPE-NAO-TRABALHEI (26/08).
@@ -127,18 +116,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Segue a fila; PAREI so em lei ou !.
 
-  RED do selo novo contra o bin do HEAD
-  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PYEOF'
-     import io
-     A='bin/tests/test_montagem_vem_do_arvore_do_push.sh'
-     s=io.open(A,encoding='utf-8').read()
-     v='echo "test_montagem_vem_do_arvore_do_push: OK -- uma porta entrega o que falta na copia, e todo consumidor de archive pergunta a
-     ela."'
-     assert s.co…
+  Committed 56b4b43a, ran 11 shell commands
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
+     (32 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
+  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
+  ⎿  Referenced file core/juizes.py
 
-· Compacting conversation… (17m 50s · ↓ 36.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
-                                                                                                                    0% until auto-compact
+● Task "RED e construção do segundo intervalo" completed in background
+
+● O192 fechado e conferido. A conferência de consequência diz a verdade com a nuance que importa: 0 arquivos de root, e as 3 entradas de
+  root que sobram são os próprios pontos de montagem dos tmpfs (diretórios vazios após o container sair) — rm -rf como ronald rc=0, porque
+  remover entrada depende do pai, que é meu. Antes da cura eram 19 entradas com conteúdo e Permission denied.
+
+  Próximo carry: O193.
+
+● Rodar o label core inteiro contra a raia · 54s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-cert --only "core" --parallel 4 2>&1 | tail -14; echo
+     "RC=${PIPESTATUS[0]}" (54s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Frolicking… (23m 6s · ↓ 52.0k tokens)
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
