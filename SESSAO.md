@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 04:45:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1148**.
+**Medido em 05/10/2026 04:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1136**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1146,15 +1146,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:56:10 | Bash | Ler o esteira e os flags do deploy | `cd /home/ronald/saas-hasner && cat -n fatias_agendadas/o135-teto20/esteira.sh; echo "=== set/env do deploy.sh ==="; sed -n '1,20p' bin/deploy.sh \| grep -n "set " ; grep -n "^set \\|SEM_JANELA_AUTH" bin/deploy.sh` |
 | 16:53:50 | Bash | Ler o selo da guarda | `cd /home/ronald/saas-hasner && cat -n bin/tests/test_janela_auth.sh; echo "=== auth_sitios.txt ==="; cat bin/auth_sitios.txt` |
 | 16:53:45 | Bash | Ler a guarda inteira | `cd /home/ronald/saas-hasner && cat -n bin/janela_auth.sh` |
-| 16:49:50 | Bash | Quem chama o portao | `cd /home/ronald/saas-hasner && grep -n "janela_auth" bin/*.sh bin/tests/*.sh 2>/dev/null; echo "=== deploy.sh contexto ==="; grep -n "janela_auth" -B12 -A12 bin/deploy.sh` |
-| 16:49:29 | Bash | Ler o portao e o selo | `cd /home/ronald/saas-hasner && echo "=== esteira.out ===" && cat fatias_agendadas/o135-teto20/esteira.out && echo "=== selo ===" && cat logs/o135_suite_verde && echo "=== janela_auth.sh ===" && cat bin/janela_auth.sh` |
-| 16:49:18 | Bash | Ler o agendado do O135 | `cd /home/ronald/saas-hasner && ls -la fatias_agendadas/o135-teto20/ && echo "=== esteira.sh ===" && cat fatias_agendadas/o135-teto20/esteira.sh && echo "=== pausada? ===" && ls -l esteira.pausada 2>/dev/null && cat esteira.pausada 2>/dev/null` |
-| 16:49:14 | Bash | Ler o agendado do O135 | `ls -la /home/ronald/fatias_agendadas/o135-teto20/ 2>&1; echo "=== esteira.sh ==="; cat /home/ronald/fatias_agendadas/o135-teto20/esteira.sh 2>/dev/null; echo "=== pausada ==="; cat /home/ronald/esteira.pausada 2>/dev/null` |
-| 16:48:56 | Bash | Commitar a fatia K5 | `cd /home/ronald/wt-k5 && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_k5.txt <<'EOF' [F9] K5-ENCERRADA: o copiloto rankeava HE de meia competencia, e o outro "pendente" estava mal arquivado LEI-AKITA: origem=folha/services/ranking_he.py::competencia_default (endereco para o juiz), testemunha=ponto/janelas.py::janela_anterior, RED=holerite/ ...` |
-| 16:48:15 | Bash | Ruff nos arquivos mudados | `cd /home/ronald/saas-hasner && docker run --rm -v /home/ronald/wt-k5/app:/app -w /app saas-hasner-core:latest ruff check core/juizes.py core/placar_estrutural.py core/contratos_estruturais.py folha/services/ranking_he.py holerite/test_fech_encerrada_pelo_juiz.py 2>&1 \| tail -5` |
-| 16:46:46 | Bash | Rodar os vizinhos outra vez | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-k5 --only "core.tests.test_selo_placar_tickets core.tests.test_selo_contratos_estruturais core.tests.test_haiku_contratos_estruturais core.tests.test_contract_tabuleiro core.tests.test_contract_configuracao_nao_mente core.tests.test_selo_diagrama_do_codigo ponto.tests.test_contract_juiz_fechamento core.tests.test_contract_juiz_ ...` |
-| 16:46:39 | Bash | Ver o que o diagrama mudou | `cd /home/ronald/wt-k5 && git status --porcelain && echo "=== diff do mmd/mapa ===" && git diff -- app/docs/ARQUITETURA.mmd app/docs/MAPA.md && ls -l app/docs/ARQUITETURA.mmd app/docs/MAPA.md` |
-| 16:46:24 | Bash | Regerar o diagrama na copia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null && ls -l /home/ronald/wt-k5/app/docs/ARQUITETURA.mmd /home/ronald/wt-k5/app/docs/MAPA.md && docker run --rm $TESTE_DOCKER --env-file "$PWD/.env" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-k5/app:/app saas-hasner-core:latest python manage.py gerar_diagrama --settings=config.settings.ci 2>&1 \| tail -8` |
-| 16:46:01 | Bash | Ler a porta unica da suite | `cd /home/ronald/saas-hasner && cat bin/suite.sh` |
-| 16:45:55 | Bash | Django no host? e quem chama gerar_diagrama | `python3 -c "import django; print(django.get_version())" 2>&1 \| head -3; echo "---"; cd /home/ronald/saas-hasner && grep -n "gerar_diagrama" bin/*.sh bin/tests/*.sh 2>/dev/null \| head` |
-| 16:45:46 | Bash | Ler o gerador do diagrama | `cd /home/ronald/wt-k5/app && sed -n '1,50p' core/management/commands/gerar_diagrama.py; echo "..."; grep -n "BASE_DIR\\|open(\\|settings\\|apps\.\\|import " core/management/commands/gerar_diagrama.py \| head -30` |
