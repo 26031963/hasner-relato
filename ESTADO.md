@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:14:39.**
+**Medido em 05/10/2026 12:20:01.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O advisor achou o que eu não tinha lido: 5 colabs PERDEM minutos, e três deles são dia de trabalho indo a ZERO com protesto novo
-  REALIZADO_ZERO_COM_TURNO, com os minutos reaparecendo no dia seguinte como folga. Isso é dois juízes discordando de quem é o dono do
-  turno que cruza a meia-noite. Diagnóstico antes de qualquer apply.
+
+● A lei não só existe — ela já nomeia este caso e já diz onde curar. Dois achados nos docs:
+
+  - L-085 está vigente, com furo conhecido, e o furo é literalmente este: "NAO cobre a entrada que cruza — RED col382, obra O76", e o
+    "nasceu medida" dela diz "o col382 perdeu DSR porque a ENTRADA escorregou 10 min depois da meia-noite".
+  - L-102 carrega a condição de entrada da O191, literal dele: "dos 15 dia-colab que trocam de veredito, nomear os que tem celula casada E
+    previsto (ex. col250 29/09) e dizer se aquilo e turno ABERTO que o juiz da geometria devia ter achado; se for, a cura e no juiz,
+    PRIMEIRO".
+
+  Minha medição responde essa condição com SIM nos três. Lendo o juiz e o estado da O76.
 
   Searched for 1 pattern, ran 1 shell command
 
-● --colabs existe (entrou 30/09 19:3x). Telescopando a deriva do recálculo: prerecalc → antes são exatamente um recálculo de frota e nada
-  mais.
-
-  Ran 1 shell command
-
-● Isso responde a lista do recálculo: 3 dos 15 carregam campo fora do alvo na deriva — col250 com minutos_abonados 660→1320, exatamente o
-  campo que o ! recusou; col114 com horas_trabalhadas/saldo_banco_horas; col893 com horas_falta/minutos_previstos. Saem da lista, a ata
-  deles fica curada, e o número vai publicado com o col146. Agora a autópsia que bloqueia o apply.
+● O195 já é esta obra, medida em 04/10. Lendo o item e a guarda que ele nomeia.
 
   Ran 2 shell commands
 
-● Autópsia das 5 quedas, lendo as batidas pela autoridade com localtime — sonda só de leitura na sombra.
+● O195 é este achado, medido em 04/10, com a origem já nomeada (ponto/turnos.py:84-87, VESPERA_LONGE_DO_INICIO_MIN = 90) e a frase dele: "o
+  juiz responde pelo DIA ERRADO em 9 de 9 amostras". Minha medição acrescenta o número de dinheiro. Vendo quantas das 132 carregam a
+  assinatura do defeito.
 
-  Searched for 1 pattern, ran 3 shell commands
+  Medir a assinatura do defeito nas 132
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import json, datetime, collections
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad'
+     a=json.load(open('logs/simular_folha/o192_snap_antes.json'))
+     d=json.load(open('logs/simular_folha/o192_snap_depois.j…
 
-● O último bloco é o col899 e ele não cruza meia-noite (6x1, 08:00–16:00) — a hipótese tem de ser conferida no col382. Capturando a saída
-  inteira.
-
-● Rodar a autópsia para arquivo e ler o col382 · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash
-     bin/sombra.sh --com-a-sombra "O192 autopsia das quedas" -- bash $S/roda_autopsia.sh > $S/autopsia.out 2>&1; echo "rc=$?"; awk
-     '/^={20,}/{n++} n==1' $S/autopsia.out …
-
-✢ Frolicking… (3h 36m 44s · ↓ 423.3k tokens)
+✢ Compacting conversation… (3h 42m 6s · ↓ 438.8k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
