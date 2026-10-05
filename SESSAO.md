@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 10:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (382.9 MB). Acoes na janela: **777**.
+**Medido em 05/10/2026 10:11:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (382.9 MB). Acoes na janela: **778**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:08:40 | Bash | Conferir HEAD, arvore viva e carimbo de hash | `cd /home/ronald/saas-hasner && echo "HEAD=$(git rev-parse HEAD)"; echo "--- py na arvore viva:"; git status --short -- app \| grep '\.py$' ; echo "(vazio=ok)"; echo "--- grep HEAD em deploy/pos_push:"; grep -n 'rev-parse\\|git log' bin/deploy.sh bin/pos_push.sh \| head -20` |
 | 10:03:49 | Bash | Rodar selos de host de docs | `cd /home/ronald/saas-hasner && for s in bin/tests/test_relato_guarda_pedido_de_patch.sh bin/tests/test_relato_afirma_com_prova.sh bin/tests/test_leis_indice.sh bin/tests/test_cortes_registrados.sh bin/tests/test_lei_akita.sh bin/tests/test_prompt_virou_item.sh bin/tests/test_hook_nao_cobra_congelado.sh bin/tests/test_lei_protege_sitio.sh; do [ -f "$s" ] \|\| { echo "SEM: $s"; continue; }; out=$(ba ...` |
 | 10:03:40 | Bash | Conferir suite | `cd /home/ronald/saas-hasner && wc -c /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/btbdr3mxq.output; docker ps --format '{{.Names}} {{.Status}}'\|head -2` |
 | 10:03:34 | Bash | Abrir as duas linhas no TICKETS | `python3 - <<'PY' p='docs/TICKETS.md' t=open(p,encoding='utf-8').read() sep='\|----\|--------\|-------\|--------\|--------\|------\|------\|-------------\|------\|\n' assert t.count(sep)==1 r1=('\| CELULA-TURNO-FECHA \| estrutural (familia turno) \| **A SOMA PROPRIA DO REALIZADO SAI, E A CELULA DE TURNO ' 'FECHA PELA FUNCAO REAL** (aval dele 04/10 10:3x; o `!` do passo final em 05/10 09:0x). `escal ...` |

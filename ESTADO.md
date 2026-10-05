@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 10:05:45.**
+**Medido em 05/10/2026 10:11:01.**
 
 | | |
 |---|---|
@@ -116,9 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-✢ Frolicking… (1h 26m 2s · ↓ 192.0k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
 ❯ aval Ronald: BO 6 de tela, PROVADO por leitura. Fila 2 (raia de UI), atras dos BOs de tela ja recebidos.
 
   ID: PAINEL-OFERECE-COBRAR-NAO-REABRIR
@@ -145,12 +142,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   degrau: leitura.
 
   Segue a fila; PAREI so em lei ou !.
-  ctrl+x ctrl+s to send now
-                                                                                                                    1% until auto-compact
+
+✢ Compacting conversation… (1h 33m 6s · ↓ 192.7k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
