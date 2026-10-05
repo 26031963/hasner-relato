@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:8 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:78 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 19:25:45.**
+**Medido em 05/10/2026 19:30:45.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ c849f340 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/config/crons_duracao.json
+ M app/core/contratos_estruturais.py
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,13 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: a relavratura da frota na 10 correu (O209 fechada). A celula ('celula/precedencia', 'um juiz por pergunta') segue
-  verde=False e a nota dela ainda diz "a relavratura ainda nao correu". Mede agora por verdes() e responde no topo do RELATO uma de duas:
-  virou 15/20, com a prova; ou NAO virou, e o que falta com nome e numero. Sem "ressalva de sempre". Isto e conferencia do marco que
-  acabou de fechar, nao fatia nova; depois segue a O211. PAREI so em lei ou !
-
-  Searched for 10 patterns, read 1 file, ran 33 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
   ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
@@ -130,22 +125,29 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Medir competências 10, 09 e 08 com agregados" completed (exit code 0)
 
-  Read 1 file, ran 2 shell commands
+  Read 1 file, ran 1 shell command
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Medir a classe: ata com papel invertido por tipo de ciclo
-  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o209_classe_intermitente.py
-     <<'PY'
-     # -*- coding: utf-8 -*-
-     """A CLASSE do achado: quantos dia-colab tem a ata com PAPEL invertido, e quantos sao intermitentes.
-     `lampada` com `tipo` != `tipo_real` =…
+  Reescrever a nota da célula e conferir no vivo
+  ⎿  $ python3 - <<'PY'
+     import io
+     alvo = 'core/contratos_estruturais.py'
+     s = io.open(alvo, encoding='utf-8').read()
+     velho = """ nota='FALTA O EFEITO, NAO O CENSO (04/10): a allowlist `PENDENTES_CELULA` chegou a ZERO -- a BUG-145 fechou os '
+     'dois ramos do montador (TRABALHO pela cura (a)/L-103, FOLGA pe…
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
 
-· Compacting conversation… (10h 35m 32s · ↓ 1.3m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱ 73%
+● Task "RED e construção do segundo intervalo" completed in background
+
+· Frolicking… (10h 40m 32s · ↓ 1.3m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
