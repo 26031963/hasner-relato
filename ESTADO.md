@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:04:01.**
+**Medido em 05/10/2026 12:09:31.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Esperar o fim do A/B na sombra" completed (exit code 0)
 
-● O foto canaliza por grep -v, o que não removeria a linha. Uma conferida só em settings/sombra.py (as "saídas desligadas") e sigo — o
-  veredito do A/B é o snapshot, não o contador do comando.
+  Ran 2 shell commands
 
-  Searched for 1 pattern, ran 1 shell command
-
-● Os contadores estavam lá, 107 linhas depois — a ordem no arquivo é da descarga do buffer, não do tempo. emp2: pedidos=108
-  dentro_da_empresa_e_passado=108, julgadas=108 carimbadas=108 pulados=0 emitidos=0 — nenhum excesso sobre o recorte e zero chamado
-  emitido. emp3 em curso. Preparando o snapshot de PROD (condição 2) enquanto roda.
+● TXT do Domínio não move uma linha (125/66/3, so_antes=0 so_depois=0, horas 0); só 12 retidos trocam apto_folha. Rodando o classificador
+  para separar cura de deriva.
 
   Ran 1 shell command
 
-● O prod grava em /tmp do container e sai por docker cp — sem escrever na árvore viva nem depender de stdout. Escrevendo o snapshot de
-  prod.
+● TXT byte-idêntico nas quatro fotos (fe61d446b471 / bf3df40e7ff8 / b58bb03a898c). Classificando as 134.
 
-● Ler a cauda do snapshot
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '40,70p' $S/snap_o192.py
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file escala/utils.py
-  ⎿  Referenced file core/placar_estrutural.py
-  ⎿  Read ../bin/suite.sh (102 lines)
+  Ran 2 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● 110 células só minutos_realizados (+855,17 h); 23 com outro campo; gravado em 14 de 63 colabs, só minutos_realizados (+2.087 min) e o
+  minutos_previstos de col146 (−541) — zero minutos_abonados, que era a deriva do DIFF das 03:22. Preciso ver se a exclusão parte o mês de
+  algum colab.
 
-● Task "Esperar o fim do A/B na sombra" still running in background
+  Ran 2 shell commands
 
-● Task "Suite inteira na cópia, 2a volta" still running in background
+● Divisão limpa: nenhum colab fica partido. O único com campo fora do alvo é col146 (célula 118980, minutos_previstos 541→0) e ele não tem
+  outra célula nas 134 — então a deriva sai inteira, por colab. Gravando o recorte antes de seguir.
 
-✢ Frolicking… (3h 26m 6s · ↓ 399.1k tokens · thinking)
+  Ran 2 shell commands
+
+● Recorte fechado: 132 células / 61 colabs (107+23+2), recalc de 15 colabs. Falta a medição em forma de apply: o A/B tinha recalc de frota
+  nos DOIS lados, então a deriva do recálculo se cancelou — e prod fará recalc RESTRITO sobre o gravado atual.
+
+● Advising using Fable 5.1
+
+✢ Frolicking… (3h 31m 36s · ↓ 413.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
