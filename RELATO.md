@@ -177,6 +177,64 @@ PROVA: `d1689254` e ancestral de `logs/deploy.stamp::COMMIT` (`8c3035bc`) -- `gi
 do BACKLOG previa a `raia-chamado` neste mesmo `!`, e eu NAO a estendi por conta propria: **uma
 linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar
+
+> **Esta tabela e REGISTRO, nao cronologia**, e por isso ela nao vai para o `RELATO-ARQUIVO.md`: o
+> gerador (`bin/gerar_cortes.py`) a REESCREVE entre os marcadores e
+> `bin/tests/test_cortes_registrados.sh` a exige **aqui**. **A DIETA ja a levou DUAS vezes** -- 03/10 e
+> 05/10, as duas vezes eu --, e nas duas quem pegou foi o selo. Na segunda a cura foi na ORIGEM: o
+> ramo "marcador ausente" do gerador tentava uma ancora MORTA e, nao a achando, jogava o bloco no topo
+> **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
+
+<!-- SEUS-CORTES:INICIO -->
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (40)
+
+> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (270 h), FECHAMENTO-UI-PORTAS (251 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (249 h), ESTEIRA-RETA-FINAL (247 h), ZUMBIDO (244 h), CARTAO-TOTAL-IGUAL-SOMA (242 h), CERT-VIGIA (231 h), CHAMADO-GANHA-CADASTRO (229 h), JUIZ-BATIDA-NASCE (229 h), JUIZ-ESCALA-NASCE (229 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (229 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (229 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+
+| corte | hora | idade | estado | fatia que consome |
+|---|---|---|---|---|
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 280 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 271 h | construindo | O9 PDF-E-O-ESPELHO |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 270 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 270 h | construindo | CORTES-REGISTRADOS |
+| **NOITE-23-09** | 2026-09-23 18:4x | 270 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 268 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 251 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 249 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 249 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 248 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 248 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 247 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 247 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 244 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 242 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 242 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 240 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 231 h | recebido | CERT-VIGIA |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 231 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 230 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 230 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 230 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 229 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 229 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 229 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 229 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 229 h | recebido | E3-CHAMADO |
+| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 43 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
+| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 40 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
+| **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 39 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
+| **HOLERITE-MES-CIVIL** | 2026-10-04 17:5x | 7 h | construindo na raia `k5-encerrada` -- o corte RATIFICA `6a350aa9`, que ja tirou os dois sitios com nota MEDIDA (08/2026, a unica competencia com holerite publicado: 16 de 19 admitidos 21-31/08 TEM holerite de 08, contra 1 de 17 demitidos 21-31/07). Falta a segunda frase dele -- a CONDICAO de que cada conforme depende, na forma do `_A14 CURADO` -- e o teto dos dois contratos, que as duas raias deixaram no numero do main. | PLACAR-ESTRUTURAL R6 item 3, raia `k5-encerrada` (`6a350aa9`) |
+| **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 5 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
+| **DOCS-NO-MARCO** | 2026-10-04 19:2x | 5 h | lei L-106 escrita; conduta desde ja. O selo que a cobra no pre-push (push com commit so de app/docs/ alem do derivado = VERMELHO, com RED nos DOIS sentidos) e o item (4) e fica na fila 2. PROIBIDO allowlist de commit de docs, e PROIBIDO contar como marco o que nao fechou item | a lei no LEIS.md + a linha na CLAUDE.md 7b, no commit do marco de 04/10 19:3x |
+| **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
+| **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
+| **REFERENCIA-E-A-LEI** | 2026-10-05 00:3x | 0 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A lei REVOGADA foi desfeita no mesmo marco e nos quatro sitios em que ja havia entrado: linha do LEIS.md, mapeamento CORTES-que-viraram-lei, entrada do CORTES.json e a LEI-AKITA 13 do CLAUDE.md. O contador cravado do test_lei_akita.sh FICA em 13, porque a lei nova ocupa a mesma linha 13 -- e o rotulo dele, que dizia 12 em texto fixo, passou a derivar do $N medido | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md (com o contador do selo junto) + esta linha, no commit do marco da O191 |
+<!-- SEUS-CORTES:FIM -->
+
 ## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA TABELA DE LEITORES ESTAVA **INVERTIDA**
 
 **ESTADO: a cura (b)+(c) esta CONSTRUIDA e VERDE na copia, nada aplicado, nada commitado, nada no ar.**
@@ -278,6 +336,28 @@ sitio, sem deducao"*, o cabecalho do `LEIS.md` ja chamava de proibido preencher 
 **O QUE A L-110 MUDA NO QUE EU IA FAZER AGORA:** o DIFF (b)+(c) **nao morre, muda de PAPEL** -- deixa de ser
 gabarito e passa a ser a leitura UNICA de impacto, que e exatamente o que a **L-094** ja exigia no deploy. A
 lei vale **do proximo item em diante** e o corte isentou a O191 explicitamente.
+
+### A DIETA (L-109) CUMPRIDA, E ELA ME PEGOU **NO MESMO DEFEITO DE 03/10** -- CURADO NA ORIGEM
+**5.467 linhas** foram para `app/docs/RELATO-ARQUIVO.md`, de `## PLACAR-ESTRUTURAL (02/10 23:5x)` ate o fim
+do bloco do O108 de 01/10; o vivo caiu de **10.312 para 4.847** linhas e passa a guardar 03, 04 e 05/10
+(a mesma conta do arquivamento de 03/10, que guardou 3 dias). **Mover, nunca apagar**: conferido por
+`grep -F` dos tres titulos de fronteira -- `vivo=0 arquivo=1` em cada um -- e pela soma das linhas, que fecha.
+O corte foi por **CONTEUDO**: parou exatamente onde o comentario que o corte de 03/10 deixou no arquivo vivo
+manda parar (*"a cauda do vigia da esteira vive no FIM do arquivo"*), e as duas entradas `###` de 02/10 que
+ficaram vivas estao DENTRO da secao de 04/10 00:5x -- mover meia secao seria tocar o texto.
+**E ENTAO O SELO ME PEGOU, pelo MESMO motivo de 03/10.** `test_cortes_registrados.sh` ficou VERMELHO: *"a
+tabela SEUS CORTES nao esta no RELATO"*. Ela e **REGISTRO, nao cronologia** -- o gerador a reescreve entre
+marcadores -- e o arquivamento por DATA a levou junto. **O bloco carrega, escrito dentro dele, o aviso de
+03/10 dizendo exatamente isso**, com a frase *"Foi o selo que me pegou -- eu movi o RELATO por data e levei a
+tabela com ele"*. Licao em PROSA, dentro do proprio objeto, e o leitor que nao migrou fui eu, de novo.
+**CURA NA ORIGEM, nao no sintoma** (LEI-AKITA 1 + 6, e as duas curas nao conflitam, entao as duas entram --
+CURA-MAIS-RESTRITIVA): o ramo *"marcador ausente"* de `bin/gerar_cortes.py::escrever` tentava a ancora
+`## ESMERIL-ESPELHO`, **secao que nao existe mais**, e ao nao achar jogava o bloco no TOPO do arquivo
+**CALADO**. Isto e, o caso que acontece DUAS vezes era justamente o que ele tratava em silencio, com uma
+ancora morta. Agora o lugar e **DECLARADO e estrutural** (acima da 1a secao `## `, que e onde o topo acaba,
+achada por regex de ESTRUTURA e nao por titulo), o motivo sai por escrito no `stderr` nomeando a causa unica
+conhecida, e sem a ancora o gerador **para** (`SystemExit`) em vez de adivinhar. **PROVA**: rodado, o bloco
+renasceu no lugar declarado com o aviso impresso, e `cortes_registrados: OK (67 cortes; 0 sem fatia)`.
 
 ### O PORTAO DO DEPLOY ESTA **VERMELHO**, E O CAMINHO E O DA FRENTE
 `bin/sombra.sh --conferir` as 00:03:37 deu `carimbo dia=20261004 status=OK tipo=completa diverge=0 erros=0`:

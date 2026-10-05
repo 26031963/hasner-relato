@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:50:31.**
+**Medido em 05/10/2026 00:55:45.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ RELATO, com a lista de nomes do banco como autoridade._
  M app/docs/LEIS.md
  M app/docs/RELATO-ARQUIVO.md
  M app/docs/RELATO.md
+ M bin/gerar_cortes.py
  M bin/tests/test_lei_akita.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,22 +116,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Os três selos de lei verdes, e o nome revogado só sobra como história dentro da revogação — não como registro. Confirmando a casa inteira
-  e lendo o topo do RELATO:
-
-  Ran 1 shell command
-
-● Agora o RELATO deste marco. Vendo onde entra:
-
-  Ran 1 shell command
-
-● Escrevendo o RELATO do marco:
-
-  Ran 10 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brebvp0xk.output (16 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
 
 ● Task "RED e construção do segundo intervalo" completed in background
@@ -142,9 +127,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os três registros concordam (marcador BACKLOG.md:7, célula EM CURSO, topo) e o item não fechou — o marcador não se move. Atualizo só o
   estado do topo:
 
-● Running 1 shell command…
+  Ran 5 shell commands
 
-✢ Jitterbugging… (12h 38m 33s · ↓ 1.4m tokens)
+● A tabela SEUS CORTES foi no bolo — e é a segunda vez: o bloco carrega, escrito dentro dele, o aviso de 03/10 dizendo que ele não vai para
+  o arquivo. Curo na origem, não só o sintoma:
+
+  Ran 4 shell commands
+
+● Agora a cura na origem — o gerador não falhava quando os marcadores desapareciam, ele adivinhava uma âncora morta:
+
+  Registrar a cura no RELATO e rodar os 61 selos · 43s
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     p = 'app/docs/RELATO.md'
+     t = open(p, encoding='utf-8').read()
+     anc = """### O PORTAO DO DEPLOY ESTA **VERMELHO**, E O CAMINHO E O DA FRENTE"""
+     add = """### A DIETA (L-109) CUMPRIDA, E ELA ME PEGOU **NO MESMO DEFEITO DE 03/10** -- CURADO NA ORIGEM
+     **5… (43s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Jitterbugging… (12h 43m 47s · ↓ 1.4m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
