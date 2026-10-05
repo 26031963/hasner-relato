@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:27:10.**
+**Medido em 05/10/2026 18:32:31.**
 
 | | |
 |---|---|
@@ -113,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  the two owed measurements. Let me check the exact contract before writing.
 
-  Ran 3 shell commands
+  Two gaps closed that would have bitten later: [O209] had no TICKETS line (regua_tickets cobra every bracketed id at pre-push — now OK --
+  1 citacao com linha na tabela), and the two owed measurements had PROMPTS lines but no OBRAS row, which PROMPT-NAO-SE-REPETE calls "lido,
+  não recebido" — now O215 (the Domínio TXT×TXT pauta for the 09) and O216 (L-103's number, measured with the pareador defeituoso from
+  before O195, so it remedes per L-110). 62 host selos green; TICKETS placar conferido.
 
-● Both owed measurements have PROMPTS lines but no OBRAS row — PROMPT-NAO-SE-REPETE says that means they were read, not received. Writing
-  the TICKETS line and the two missing rows in one act.
+  Nothing went on air: no code, so no deploy.
 
-  Ran 4 shell commands
+  O211 orientation, done read-only while the suite runs (in scratchpad/o211_orientacao.md) — and the audited LEIS.md turned out to already
+  diagnose the exact defect O211 cures, L-034's ESTADO: "o valor cct nao tem leitor em regua_para (so compara com clt)". Two measured
+  findings:
 
-● Field [5] of that line says "no mesmo commit do codigo" — but this marco has no code. Correcting it to state the truth and the import
-  form.
+  - VinculoSindicatoPraca has three production readers, not one: regua_para:251, the twin praca_sem_cct_cadastrada:188 whose own docstring
+    says it reads "a mesma consulta de regua_para (mesmo sitio, mesma pergunta)", and the cadastro UI at views_config.py:281-287. Curing
+    only the first is LEI-AKITA 2.
+  - praca_sem_cct_cadastrada already has zero production callers — only two tests and a comment, nothing in .py, .html, .json, .sh or cron.
+    So L-111 doesn't leave it as pending debt: it apaga no ato, com lápide, levando os testes. That's existing law applied to the census,
+    not a new decision.
 
-  Ran 1 shell command
+  Still owed before O211's code: the other 4 of the 7 REDs exist only by reference ("os 5 do aval"), so they get written from the regra
+  first per L-110; and the three CAUDA items he declared as não-embarcam still have no rows.
 
-● Now the commit — paths only, message by heredoc, O209 the single bracketed id and every new id bare.
+  I'll pick up as soon as the push reports — handoff_sessao.sh goes after it lands, per L-108.
 
-  Ran 1 shell command
+● Ran 1 stop hook
+  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
+  PALAVRA (item 1 dos DOSSIES, aval
 
-● crons_duracao.json correctly absent. Committing.
-
-  Committed 212b25a7, ran 1 shell command
-
-● One citation, one row; one commit ahead and it is mine. Pushing — the pre-push runs the full suite, so this goes in the background and I
-  won't touch the tree while it runs.
-
-  Ran 1 shell command
-
-●
-
-✻ Frolicking… (9h 36m 56s · ↓ 1.2m tokens · thought for 2s)
+✢ Compacting conversation… (9h 42m 18s · ↓ 1.2m tokens)
+  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 1%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                 Stop hook error occurred · ctrl+o to see
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
