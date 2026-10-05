@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 23:51:01.**
+**Medido em 04/10/2026 23:56:31.**
 
 | | |
 |---|---|
@@ -109,36 +109,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cx9rm8b.output (12 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 3 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 3 patterns, listed 1 directory, ran 18 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brebvp0xk.output (16 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Background command "Esperar a suite da cópia terminar" completed (exit code 0)
-
-  Ran 2 shell commands
-
-● Cinco falhas, em três famílias. A primeira é minha: fechei o censo dos campos novos do dict de folga, mas não fechei o censo de quem lê
-  PENDENTES['celula/precedencia'] — achei um leitor (o contador) e a suite achou mais dois. Meia-correção.
+● Antes de reescrever o selo, meço se persistir as batidas faz a autoridade devolver 660.
 
   Ran 1 shell command
 
-● O censo fecha em três selos que copiam o valor; eu havia curado um. Vamos aos outros dois.
+● Medido e limpo: com as batidas no banco, turnos_do_colab acha um turno data_turno=2026-07-02 e a autoridade devolve exatamente 660,
+  sem_turno=False. A propriedade do selo de 17/08 sobrevive — ela agora mora no juiz, que pareia por cronologia por construção.
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Jitterbugging… (11h 39m 3s · ↓ 1.3m tokens)
+● Falta o diagrama. Vou ver como o selo o confere, para regenerar pela porta certa — contra a cópia curada.
+
+  Ran 2 shell commands
+
+● O atalho de host roda contra a árvore viva; preciso gerar contra a cópia curada. Mesma forma de container da suite, sem banco e sem trava
+  (o gerador só lê arquivos).
+
+  Ran 2 shell commands
+
+● Uma linha só: registro: 1 sitio(s) → 0, e o MAPA.md intacto. Agora o recorte das cinco.
+
+● Rodar o recorte das cinco falhas curadas · 34s
+  ⎿  $ cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/copia-o191a --espera 1800 --only
+     "escala.tests.test_realizado_cronologico ponto.tests.test_realizado_do_dia_autoridade
+     api.tests.test_api_mensageria_registros_pendentes core.tests.test_selo_diagrama_do_codigo escala.tests.test_montado… (35s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Jitterbugging… (11h 44m 33s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
