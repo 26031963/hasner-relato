@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 15:30:45.**
+**Medido em 05/10/2026 15:35:45.**
 
 | | |
 |---|---|
 | `HEAD` local | `edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174` |
-| `origin/main` | `8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -139,13 +139,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Conferir o remoto antes do push · 9m 46s
-  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tail -40 (9m 44s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Campos escritos pela porta da celula e localizar carimbar
+  ⎿  $ sed -n '538,582p' ponto/portas/celula.py
 
-· Frolicking… (6h 52m 50s · ↓ 847.2k tokens)
+· Compacting conversation… (6h 57m 50s · ↓ 850.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
