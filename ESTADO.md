@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 04:50:45.**
+**Medido em 05/10/2026 04:55:45.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga tr
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out

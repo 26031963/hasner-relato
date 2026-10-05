@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 04:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1136**.
+**Medido em 05/10/2026 04:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1134**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1144,5 +1144,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:57:50 | Bash | Localizar o disparo agendado de segunda | `cd /home/ronald/saas-hasner && echo "=== agendado de segunda ==="; ls -la /etc/cron.d/ 2>/dev/null \| grep -i -E "o135\|teto" \|\| echo "nada em /etc/cron.d"; crontab -l 2>/dev/null \| grep -i -E "o135\|teto" \|\| echo "nada no crontab do usuario"; echo "=== deploy_agendado listar ==="; bash bin/deploy_agendado.sh listar 2>&1 \| tail -20` |
 | 16:57:39 | Bash | Conferir a premissa do aval e o caminho do ff | `cd /home/ronald/saas-hasner && echo "=== a UMA LINHA do aval ==="; git diff --stat main teto20 -- app/api/urls.py; echo "--- o diff literal ---"; git diff main teto20 -- app/api/urls.py; echo; echo "=== crons_duracao no caminho do ff? ==="; git diff --name-only main teto20 \| grep -c crons_duracao \|\| echo "0 (nao toca)"; echo "=== sujo fora de app/docs/ na arvore viva ==="; git status --porcelai ...` |
 | 16:56:10 | Bash | Ler o esteira e os flags do deploy | `cd /home/ronald/saas-hasner && cat -n fatias_agendadas/o135-teto20/esteira.sh; echo "=== set/env do deploy.sh ==="; sed -n '1,20p' bin/deploy.sh \| grep -n "set " ; grep -n "^set \\|SEM_JANELA_AUTH" bin/deploy.sh` |
-| 16:53:50 | Bash | Ler o selo da guarda | `cd /home/ronald/saas-hasner && cat -n bin/tests/test_janela_auth.sh; echo "=== auth_sitios.txt ==="; cat bin/auth_sitios.txt` |
-| 16:53:45 | Bash | Ler a guarda inteira | `cd /home/ronald/saas-hasner && cat -n bin/janela_auth.sh` |
