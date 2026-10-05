@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 22:36:01.**
+**Medido em 04/10/2026 22:41:31.**
 
 | | |
 |---|---|
@@ -109,16 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● A lápide responde: não é lei nova. Vou conferir o furo declarado e o teste:
-
-  Ran 2 shell commands
-
-● A lápide e o selo fecham a questão — e o selo não morde:
-
-  Ran 1 shell command
-
-● Agora o corte dos 70 — a população de (i) contra a de (ii), com o overrun em segundos:
-
   Read 2 files, ran 14 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brebvp0xk.output (16 lines)
@@ -134,13 +124,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o RED, contra a cópia (que já carrega só a cura (b)):
 
-● Rodar o RED com o label certo
-  ⎿  $ cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/copia-o191a --only
-     "escala.tests.test_montador_realizado_pela_autoridade" > logs/o191/red_folga_20261004.out 2>&1; echo "rc=$?"; grep -E
-     "^(OK|FAILED|Ran)|AssertionError|^FAIL|^ERROR" logs/o191/red_folga_20261004.out | head -30
+  Ran 4 shell commands
 
-✻ Waiting for API response · will retry in 2m 35s · check your network
-                                                                                                   ✔ Update installed · Restart to update
+● Dois dos quatro passaram no HEAD — e o motivo está no próprio output: 'orfas': ['08:00', '12:00']. Isso contradiz o que eu afirmei sobre
+  o veredito. Vou medir antes de escrever mais.
+
+  Ran 8 shell commands
+
+● O meu dict veio de uma janela de 2 dias e o cartório usa a competência inteira — risco de artefato de sonda. Vou registrar o achado e
+  medir pela chamada real.
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Jitterbugging… (10h 29m 33s · ↓ 1.2m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
