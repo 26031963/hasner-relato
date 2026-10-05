@@ -198,7 +198,7 @@ lista — ela e o que esta EM PE._
 | **O188** | SELO-DE-PENDENTE-POR-CHAMADA: o selo de PENDENTES casa FRASE LITERAL, e renomear passa por | **REGISTRADO, NAO CONSTRUIR** -- fila 2, |
 | **O189** | MEDE-OS-73-DE-ATA-ZERO | **MEDIDA e PUBLICADA** (RELATO 13:3x): 7 |
 | **O190** | O VIGIA PERIODICO E CEGO AO NUCLEO. | fila 2, depois do pouso do `cert-ast` |
-| **O191** | A PALAVRA SEM NUMERO, E O ZERO DECLARADO | **CONSTRUIDA e VERDE na copia** (Ran 962 |
+| **O191** | A PALAVRA SEM NUMERO, E O ZERO DECLARADO | **FECHADA e NO AR** -- `fdd6f42c`, deplo |
 | **O192** | A COPIA E DOS DOIS PROJETOS, OS TRES `--tmpfs` SAO DE UM | **ABERTA, e PERTENCE AO POUSO DO `cert-a |
 | **O193** | O ALARME `vigia_sem_efeito` NAO MIGROU PARA A PAUSA COM DONO | **ABERTA, INSTRUMENTO -- pouso proprio p |
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |

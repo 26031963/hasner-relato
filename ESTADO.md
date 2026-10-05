@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- **ESTADO (05/10 02:1x): a O191 esta FECHADA e NO AR** -- commit `fdd6f42c`, deploy
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:10:40.**
+**Medido em 05/10/2026 02:15:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade` |
+| `HEAD` local | `b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu` |
 | `origin/main` | `024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu` |
-| commits a subir (`ahead`) | **2** |
+| commits a subir (`ahead`) | **3** |
 
 ## Fabrica
 
@@ -22,17 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
 fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
 69f017bd O topo do TICKETS fechado no ato do push (O112)
 024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu
 77eafa5f O topo do TICKETS fechado no ato do push (O112)
-8c3035bc pouso de PRODUTO (K8 + K5) com as duas leis de esteira no mesmo commit
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -129,15 +137,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
 
-  Provar em producao os quatro dia-colab nomeados
-  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     cat > $SP/prova_depois_o191.py <<'PY'
-     # O191 passo 5 -- PROVA DEPOIS (condicao 4 da DINHEIRO-EM-COMPETENCIA-ABERTA), com o codigo
-     # JA NO AR em producao (deploy 02:08, fdd6f42c). Quatro dia-colab NOME…
+● Commitar a prova de fechamento do marco
+  ⎿  $ cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $SP/msg_prova.txt <<'MSG'
+     O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
+     Fecha o marco da O191 com o que SO existe depois do deploy. Nao e commi…
 
-✽ Jitterbugging… (13h 58m 42s · ↓ 1.5m tokens)
+· Jitterbugging… (14h 3m 47s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   12% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
