@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 17:17:42.**
+**Medido em 05/10/2026 17:23:01.**
 
 | | |
 |---|---|
@@ -118,42 +118,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 1 shell command
-
-● _contar_emissao (cartorio.py:839-845): emitidos soma quando o funil não devolve string — ou seja, "dia-colab que saiu com cobrança DE
-  PÉ", incluindo o caso em que abrir() devolveu a já existente. Não é "cobrança nascida". Conferindo a cadeia:
-
-  Ran 1 shell command
-
-● Enquanto o refazer roda, releitura integral do script que vai escrever em prod — é a hora mais barata de achar defeito nele:
-
-  Ran 1 shell command
-
-● Um literal envelhecido no docstring (o dump das 16:21 já não é a base). Corrigindo para apontar ao arquivo:
-
-  Ran 3 shell commands
-
-● Lendo o próprio script achei defeito nele, e é da família do SELO ANTI-VACUIDADE: o assert soma_sem_lacuna_obs == soma_sem_lacuna_esp é
   verdadeiro por construção — as duas somas só acumulam onde mov[dia] == esp[dia], então as parcelas são idênticas termo a termo. Ele não
   prende nada. E há um furo real sem guarda nenhuma: colab do ESPERADO que caia nos dois continue (sem Colaborador, sem células) é pulado
   em silêncio. Curando os dois:
 
-● Trocar o assert vazio pelo que morde e corrigir o literal do livro-caixa
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     C='logs/o209_apply_frota_prod.py'
-     s=open(C,encoding='utf-8').read()
-     a = """print('')
-     print(' SOMA DO REALIZADO, so nos dia-colab SEM lacuna:')
-     print(' prod observou %+d min · a sombra previu %+d min' % (soma_sem_lacuna_obs, soma_sem_lacuna_esp))
-     ass…
+  Ran 2 shell commands
 
-✽ Frolicking… (8h 39m 47s · ↓ 1.1m tokens · thinking)
+● O novo assert precisa da mesma disciplina do resto do script — perguntar ao dado antes do veredito. Colab previsto sem célula pode ser
+  fato novo depois do dump:
+
+  Ran 3 shell commands
+
+● Os três confirmados: sombra_diverge_de_prod=0, lavra_de_prod=OK md5=a20f4f99, prova PULADA lendo o marcador. E o md5 da lavra é o mesmo
+  que o erro do r2 reportou como "lavra carregada" — então a recusa do ATO 2 era de procedência, não de valor:
+
+  Ran 4 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
+  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Background command "Esperar o arquivo de sinal da cadeia r3" completed (exit code 0)
+
+● Comparar o ESPERADO da base suja com o da base limpa
+  ⎿  $ cd /home/ronald/saas-hasner && python3 logs/o209_cmp_esperado.py logs/sombra/o209_esperado_20261005_BASE_SUJA.json
+     logs/sombra/o209_esperado_20261005.json 2>&1 | head -120
+
+· Frolicking… (8h 45m 6s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
