@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 20:55:31.**
+**Medido em 04/10/2026 21:00:45.**
 
 | | |
 |---|---|
@@ -110,35 +110,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Background command "Rodar os vizinhos escala e ponto na copia patchada" completed (exit code 0)
+  Ran 1 shell command
 
-● ata_sem_turno não ficou órfão: segue consumido em dia_decidido.py:342 (if ata_sem_turno: — é ele que decide o veredito
-  SEM_TURNO_PAREADO). Só a viagem dele para a palavra parou. Contrato 3 está salvo. Veredito dos vizinhos:
-
-  Read 1 file
-
-● 3.934 testes OK — o selo do escala fica verde com o item (a), confirmando que ele morde o (b). Agora os vizinhos restantes + o ruff
-  (variável h possivelmente morta):
-
-  Ran 3 shell commands
-
-● Ruff limpo. Enquanto os vizinhos rodam, confiro o portão do deploy e o item do BACKLOG que o (a) fecha (ou não):
+● Um escritor só (1348). Confiro se o ramo da autoridade (1336) pode devolver None com sem_turno=False:
 
   Ran 1 shell command
 
-● O BACKLOG é explícito: passo 5 é um ato só — "a soma propria SAI … com DIFF de frota da 09 e da 10 publicado ANTES e reversao em logs/",
-  e PROIBIDO "item proprio depois". Então o (a) não se commita sozinho. Vejo o que já está medido:
+● Provado: realizado_dos_turnos devolve None só na linha 400, e sempre junto de sem_turno=True; a 426 nunca devolve None. Então
+  minutos_realizados é None se e somente se sem_turno=True — a origem do ZERO DECLARADO é a 1334, e os or 0 de 131/337/364/698/341 ficam
+  mortos para este caso. Leio o sítio para escrever a cura:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● O DIFF de cobrança mede o dano de fazer (b) sem o ZERO DECLARADO — os 15 que viram REALIZADO_ZERO_COM_TURNO são exatamente o que o selo
-  proíbe. Com a 131 declarando zero, eles não viram. Falta o DIFF de dinheiro. Vejo o que None faz nos dois sítios de folha:
+● Confiro se a retirada deixa real_por_data e minutos_realizados_do_dia órfãos (contrato 3, allowlist zero):
 
-● Ler os dois sitios de dinheiro que leem minutos_realizados
-  ⎿  $ echo "=== folha/export.py:690-706 ==="; sed -n '690,706p' folha/export.py; echo; echo "=== ponto/services/dia_pago.py:333-350 ===";
-     sed -n '333,350p' ponto/services/dia_pago.py
+  Ran 1 shell command
 
-✢ Jitterbugging… (8h 43m 33s · ↓ 1.0m tokens · thinking)
+● core/juizes.py:250 registra o PENDENTE citando literalmente real_por_data[d] = minutos_realizados_do_dia( como impressão. Retirar a soma
+  mexe nisso — e o PROIBIDO diz "tirar pendente com a impressao ainda no codigo". Vejo o contrato:
+
+  Ran 1 shell command
+
+● Dois pendentes apontam para a mesma função, e ambas as impressões morrem com a retirada. Procuro o selo que cobra a existência da
+  impressão — se existir, ele fica VERMELHO:
+
+  Achar o selo que cobra a impressao dos pendentes
+  ⎿  $ cd /home/ronald/copia-o191a/app && grep -rln "PENDENTES" --include=*.py . | head -20; echo "=== quem afirma sobre impressao ===";
+     grep -rn "impressao" --include=*.py . | grep -iE "test|selo|assert" | head -20
+
+· Jitterbugging… (8h 48m 47s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
