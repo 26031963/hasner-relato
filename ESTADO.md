@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 17:12:31.**
+**Medido em 05/10/2026 17:17:42.**
 
 | | |
 |---|---|
@@ -118,42 +118,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Searched for 1 pattern, ran 1 shell command
 
-● ATO 1 DE VERDADE rodou sobre base suja: o ensaio deixou 14 chamados retratados (retratar não apaga), e com eles emitidos caiu de 72 para
-  7 e protestos de 733 para 704 — e protestos é um dos 11 campos. O ESPERADO saiu dessa base. Antes de decidir, duas conferências:
-
-  Ran 1 shell command
-
-● lavra_de_prod é chamada dentro de bloco() (bin/sombra.sh:285), não no --refazer — então o zero do ATO 2 está explicado: a sombra nunca
-  recebeu a lavra de prod. Agora a causa da queda de emissão:
-
-  Searched for 1 pattern
-
-● Hipótese confirmada lendo o juiz, não por suposição: chamados/models.py:413-430 — abrir() com chave existente devolve criado=False em
-  QUALQUER estado (e se o estado está em ENCERRADOS, _renascer_por_premissa_viva() — que é escrita). Os 14 chamados que o ensaio deixou
-  retratados suprimiram a emissão do ATO 1 de verdade. Gravando o achado antes de consultar:
+● _contar_emissao (cartorio.py:839-845): emitidos soma quando o funil não devolve string — ou seja, "dia-colab que saiu com cobrança DE
+  PÉ", incluindo o caso em que abrir() devolveu a já existente. Não é "cobrança nascida". Conferindo a cadeia:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Todos os pontos aceitos. Executando — primeiro salvar o ESPERADO sujo e conferir as três dependências do flag:
+● Enquanto o refazer roda, releitura integral do script que vai escrever em prod — é a hora mais barata de achar defeito nele:
 
   Ran 1 shell command
 
-● Três dependências conferidas: A_ata na 303 (fora da prova), EMITE/_LINHAS_W na 316-317 (antes), e nada depois da 448 referencia
-  F0/H0/H1/H2. Envolvendo o bloco:
+● Um literal envelhecido no docstring (o dump das 16:21 já não é a base). Corrigindo para apontar ao arquivo:
 
-● Running 1 shell command…
+  Ran 3 shell commands
 
-· Frolicking… (8h 34m 36s · ↓ 1.1m tokens)
+● Lendo o próprio script achei defeito nele, e é da família do SELO ANTI-VACUIDADE: o assert soma_sem_lacuna_obs == soma_sem_lacuna_esp é
+  verdadeiro por construção — as duas somas só acumulam onde mov[dia] == esp[dia], então as parcelas são idênticas termo a termo. Ele não
+  prende nada. E há um furo real sem guarda nenhuma: colab do ESPERADO que caia nos dois continue (sem Colaborador, sem células) é pulado
+  em silêncio. Curando os dois:
+
+● Trocar o assert vazio pelo que morde e corrigir o literal do livro-caixa
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     C='logs/o209_apply_frota_prod.py'
+     s=open(C,encoding='utf-8').read()
+     a = """print('')
+     print(' SOMA DO REALIZADO, so nos dia-colab SEM lacuna:')
+     print(' prod observou %+d min · a sombra previu %+d min' % (soma_sem_lacuna_obs, soma_sem_lacuna_esp))
+     ass…
+
+✽ Frolicking… (8h 39m 47s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
