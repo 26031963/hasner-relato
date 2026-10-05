@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 10:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (383.9 MB). Acoes na janela: **810**.
+**Medido em 05/10/2026 10:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (384.4 MB). Acoes na janela: **802**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:29:25 | Bash | Push e HEAD | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; wc -c $T/bv65uw4md.output; git log --oneline -1 origin/main 2>/dev/null; git rev-parse --short HEAD` |
+| 10:29:22 | Bash | Janela do processar_cartorio | `grep -n 'add_argument\\|dias\b' ponto/management/commands/processar_cartorio.py \| head -30` |
+| 10:29:07 | Bash | Como grade_da_celula tira realizado | `grep -n 'def grade_da_celula' -A 50 escala/services/leitor_celula.py \| grep -n 'realizado\\|ata\\|minutos'` |
+| 10:29:06 | Bash | O sitio do cartorio que chama o montador | `sed -n '430,480p' ponto/services/cartorio.py` |
+| 10:28:52 | Bash | grade_do_fechamento | `grep -n 'def grade_do_fechamento' -A 45 folha/export.py` |
+| 10:28:47 | Bash | por_dia_da_grade | `sed -n '314,345p' ponto/services/dia_pago.py` |
+| 10:28:46 | Bash | De onde a folha tira a grade | `grep -n 'realizado_por_dia\\|previsto_por_dia\\|por_dia_da_grade\\|grade' ponto/services/fechamento.py \| head -40` |
+| 10:28:32 | Bash | Resto do PAROU | `sed -n '150,200p' docs/RELATO.md` |
+| 10:28:28 | Bash | Reler o PAROU da relavratura | `sed -n '99,150p' docs/RELATO.md` |
+| 10:28:27 | Bash | Estado do push | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; echo "--- push ---"; wc -c $T/bv65uw4md.output 2>/dev/null; tail -20 $T/bv65uw4md.output 2>/dev/null` |
+| 10:28:10 | Bash | Opcoes do comando de recalculo | `ls ponto/management/commands/ \| grep -i -E 'recalc\|relavr\|lavr' ; echo "=== args ==="; grep -n 'add_argument\\|def handle' ponto/management/commands/recalcular_fechamento.py` |
+| 10:28:09 | Bash | Ler o lavrador de DiaPago | `sed -n '1,60p' ponto/services/dia_pago.py && echo "=== DEFS ===" && grep -n '^def \\|^ def ' ponto/services/dia_pago.py` |
 | 10:23:41 | Bash | Estado do push 2 | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; wc -l $T/bv65uw4md.output; tail -6 $T/bv65uw4md.output` |
 | 10:23:26 | Bash | Continuar a leitura da origem do PAROU | `cd /home/ronald/saas-hasner && sed -n '150,195p' app/docs/RELATO.md` |
 | 10:23:23 | Bash | Ler a secao do PAROU da relavratura | `cd /home/ronald/saas-hasner && sed -n '99,150p' app/docs/RELATO.md` |
@@ -800,23 +812,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 22:34:17 | Bash | Escrever o RED do ramo de folga | `cd /home/ronald/copia-o191a && cat >> app/escala/tests/test_montador_realizado_pela_autoridade.py <<'PY' # ------------------------------------------------------------------ # O191 / CELULA-TURNO-FECHA passo 5 (04/10) -- O RAMO DE FOLGA DO MONTADOR NUNCA PERGUNTA A # AUTORIDADE, e esse e um defeito SEPARADO dos de cima. `escala/utils.py:1318-1322`: # # if d not in cel_por_data: # dias_out.append({ ...` |
 | 22:33:22 | Bash | Ler o cabeçalho de classificar_dia | `cd /home/ronald/copia-o191a/app && sed -n '100,160p' ponto/supra_juiz.py` |
 | 22:33:05 | Bash | Nome da função que lê o realizado | `cd /home/ronald/copia-o191a/app && awk 'NR>=640 && NR<=700 && /^def \|^ def /' folha/export.py; echo ---; grep -n "^def " folha/export.py \| awk -F: '$1<700' \| tail -3` |
-| 22:32:54 | Bash | Ler o leitor de dinheiro em export.py | `cd /home/ronald/copia-o191a/app && sed -n '685,712p' folha/export.py` |
-| 22:32:50 | Bash | Censo de leitores de minutos_realizados | `cd /home/ronald/copia-o191a/app && grep -rn "minutos_realizados" --include=*.py . \| grep -v tests \| head -30` |
-| 22:32:45 | Bash | Localizar a função de abono previsto x real | `cd /home/ronald/copia-o191a/app && grep -rn "abono_prev\\|prev_real" --include=*.py . \| head -20` |
-| 22:32:37 | Bash | Registrar o corte da frota no entregável | `cd /home/ronald/saas-hasner && cat >> logs/o191/passo5_diff_20261004.md <<'MD' ## O CORTE DA FROTA: os 70 `concorde` por POPULACAO (medido 04/10, sombra) Sonda: `logs/sombra/o191_frota_classes_20261004.py` -> `logs/o191/passo5_frota_classes_20261004.txt`. Ela nao decide nada: repete os INSUMOS do sitio (`hi`/`hf` do dna da VESPERA, `delta = (m_hi - m) % 1440` contra `VESPERA_LONGE_DO_INICIO_MIN`,  ...` |
-| 22:32:10 | Bash | Isolar a população (i) | `cd /home/ronald/saas-hasner && grep "L085_segundos\\|L085_overrun\\|cauda_que_ficou\\|sem_par_fechado" logs/o191/passo5_frota_classes_20261004.txt \| grep "^ emp"` |
-| 22:32:06 | Bash | Ler as linhas por dia | `cd /home/ronald/saas-hasner && sed -n '/^TODOS os/,$p' logs/o191/passo5_frota_classes_20261004.txt \| sed -n '1,30p'; echo "..."; grep -c "^ emp" logs/o191/passo5_frota_classes_20261004.txt` |
-| 22:31:56 | Bash | Ler o corte por classe | `cd /home/ronald/saas-hasner && sed -n '/O CORTE QUE RONALD PRECISA/,/^TODOS os/p' logs/o191/passo5_frota_classes_20261004.txt` |
-| 22:31:50 | Bash | Ler o gate do veredito e localizar _abono_prev_real | `cd /home/ronald/copia-o191a && sed -n '195,235p' app/ponto/supra_juiz.py; echo "=== _abono_prev_real ==="; grep -rn "_abono_prev_real" app/ \| head;` |
-| 22:30:50 | Bash | Conferir progresso da sonda | `wc -l /home/ronald/saas-hasner/logs/o191/passo5_frota_classes_20261004.txt; tail -4 /home/ronald/saas-hasner/logs/o191/passo5_frota_classes_20261004.txt` |
-| 22:30:45 | Bash | Ler como os dias de trabalho entram no cel_por_data | `cd /home/ronald/copia-o191a && sed -n '1118,1200p' app/escala/utils.py` |
-| 22:30:42 | Bash | Mapear a montagem do dicionário por data | `cd /home/ronald/copia-o191a && grep -n "cel_por_data\\|esc_por_dia\\|def montar_grade_prevista_periodo\\|min_por_data\\|int_por_data\\|sem_ancora_por_data\\|orfas_por_data" app/escala/utils.py \| sed -n '1,60p'` |
-| 22:30:29 | Bash | Ler o resto do teste do montador | `cd /home/ronald/copia-o191a && sed -n '80,230p' app/escala/tests/test_montador_realizado_pela_autoridade.py` |
-| 22:30:25 | Bash | Ler o topo do teste do montador | `cd /home/ronald/copia-o191a && sed -n '1,80p' app/escala/tests/test_montador_realizado_pela_autoridade.py` |
-| 22:30:21 | Bash | Conferir progresso da sonda | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bpu07s1r5.output 2>/dev/null; echo "---"; wc -l /home/ronald/saas-hasner/logs/o191/passo5_frota_classes_20261004.txt 2>/dev/null` |
-| 22:30:15 | Bash | Reflow do comentário e checar largura de linha | `cd /home/ronald/copia-o191a && python3 - <<'PY' p = 'app/escala/utils.py' s = open(p).read() old = "nao se responde num comentario. Turno aberto soma os pares fechados; turno longo conta e leva a marca.\n" novo = "nao se responde num comentario.\n # Turno aberto soma os pares fechados; turno longo conta e leva a marca.\n" assert s.count(old) == 1 open(p, 'w').write(s.replace(old, novo)) PY python3 ...` |
-| 22:30:06 | Bash | Corrigir o comentário falso da cura (b) | `cd /home/ronald/copia-o191a && python3 - <<'PY' p = 'app/escala/utils.py' s = open(p).read() velho = """ou ZERO DECLARADO # com `realizado_sem_turno=True`, e nao a soma das celulas da propria grade: aquelas celulas sao as batidas do # turno VIZINHO, que ja contam no dia dele.""" old = """O dia em que o juiz nao acha turno leva ZERO DECLARADO # com `realizado_sem_turno=True`, e nao a soma das celul ...` |
-| 22:29:44 | Bash | Ler a cura (b) na copia | `cd /home/ronald/copia-o191a && sed -n '1300,1375p' app/escala/utils.py` |
-| 22:29:40 | Bash | Rodar a sonda de classes na sombra | `cd /home/ronald/saas-hasner && logs/sombra/rodar_na_sombra.sh o191_frota_classes_20261004.py > logs/o191/passo5_frota_classes_20261004.txt 2>&1; echo "rc=$?"; tail -5 logs/o191/passo5_frota_classes_20261004.txt` |
-| 22:29:35 | Bash | Ler o runner da sombra | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh` |
-| 22:29:32 | Bash | Localizar o runner da sonda de sombra | `cd /home/ronald/saas-hasner && ls -la logs/sombra/*.sh 2>/dev/null; echo ---; ls -t logs/o191/ \| head -20; echo ---; grep -rl "o191_frota_folga_doadora" logs/ bin/ 2>/dev/null \| head` |
