@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 01:49:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.6 MB). Acoes na janela: **1404**.
+**Medido em 05/10/2026 01:54:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.6 MB). Acoes na janela: **1383**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1393,24 +1393,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:56:08 | Bash | Censo de leitores da matriz e de TOTAL | `cd /home/ronald/wt-teto20 && grep -rn "contratos_estruturais" --include=*.py --include=*.sh --include=*.md app bin 2>/dev/null \| grep -v "^app/docs/" \| grep -v "app/core/contratos_estruturais.py:" ; echo "=== quem le TOTAL ==="; grep -rn "ce\.TOTAL\\|contratos_estruturais\.TOTAL\\|from core.contratos_estruturais import" --include=*.py app bin 2>/dev/null` |
 | 13:55:57 | Bash | Importar mock localmente no caso que morde | `cd /home/ronald/wt-teto20/app && python3 - <<'PY' p='core/tests/test_selo_contratos_estruturais.py' s=open(p).read() velho = """ from core import configuracao_efeito as cfg with mock.patch.dict(cfg.DECLARACAO, {""" novo = """ from unittest import mock from core import configuracao_efeito as cfg with mock.patch.dict(cfg.DECLARACAO, {""" assert s.count(velho)==1 open(p,'w').write(s.replace(velho,nov ...` |
 | 13:55:50 | Bash | Conferir import de mock e compilacao do selo | `cd /home/ronald/wt-teto20/app && grep -n "mock" core/tests/test_selo_contratos_estruturais.py \| head -20; echo ---; python3 -m py_compile core/tests/test_selo_contratos_estruturais.py && echo COMPILA` |
-| 13:51:47 | Bash | Escrever o RED do teto 20 no selo da matriz | `cd /home/ronald/wt-teto20/app && python3 - <<'PY' p='core/tests/test_selo_contratos_estruturais.py' s=open(p).read() velho = """ def test_o_universo_e_22(self): self.assertEqual(ce.TOTAL, 22, '7 familias x 3 contratos + 1 global') self.assertEqual(len(ce.FAMILIAS), 7) self.assertEqual(len(ce.CONTRATOS), 3) """ novo = ''' def test_o_universo_e_20_porque_o_TETO_DESCONTA_familia_sem_cadastro(self): " ...` |
-| 13:51:29 | Bash | Criar a copia do HEAD para construir o O135 | `cd /home/ronald/saas-hasner && git worktree add /home/ronald/wt-teto20 -b teto20 HEAD 2>&1 \| tail -3; mkdir -p /home/ronald/wt-teto20/app/logs /home/ronald/wt-teto20/app/media && ls /home/ronald/wt-teto20/app \| head -5` |
-| 13:51:23 | Bash | Ver quem gera o TICKETS e as linhas do placar | `grep -rn "placar_tickets" --include=*.py . \| grep -v "^core/placar_tickets.py" \| head; echo "=== 200-230 ==="; sed -n '200,225p' core/placar_tickets.py; echo "=== 305-325 ==="; sed -n '305,325p' core/placar_tickets.py` |
-| 13:51:09 | Bash | Censo dos leitores do 22 | `cd /home/ronald/saas-hasner && grep -rn "22/22\\|/22\b\\|de 22\\|Total 22\\|N/22" CLAUDE.md app/docs/TICKETS.md app/core/placar_estrutural.py app/core/placar_tickets.py app/core/contratos_estruturais.py bin/*.py bin/*.sh 2>/dev/null \| head -20` |
-| 13:50:48 | Bash | Ver o registro das ferramentas na mensageria | `sed -n '1810,1890p' api/views_mensageria.py` |
-| 13:50:45 | Bash | Achar o registro das ferramentas do copiloto | `grep -rn "placar_leitura\\|turno_leitura\\|haiku_export" --include=*.py . \| grep -v "^core/placar_leitura.py\\|^ponto/turno_leitura.py\\|^folha/haiku_export.py" \| head -15` |
-| 13:50:40 | Bash | Ler a ferramenta de leitura do placar | `sed -n '1,60p' core/placar_leitura.py` |
-| 13:50:37 | Bash | Achar onde as ferramentas de leitura do Haiku sao registradas | `grep -rn "o_que_segura\\|fora_da_folha" --include=*.py . \| grep -v "/tests/" \| grep -v "^folha/fora_da_folha.py" \| head -10` |
-| 13:50:26 | Bash | Procurar o rotulo arquitetura e as ferramentas | `grep -rn "arquitetura:" --include=*.py --include=*.md . 2>/dev/null \| head; echo "=== ferramentas do copiloto ==="; grep -rn "FERRAMENTAS\\|ferramentas" --include=*.py core/*.py chamados/*.py \| head -10` |
-| 13:50:22 | Bash | Procurar o registro de rotulos do copiloto | `grep -rn "rotulo" --include=*.py inteligencia/ \| head -20; echo "=== arquivos do copiloto ==="; ls inteligencia/ inteligencia/services 2>/dev/null \| head -40` |
-| 13:50:14 | Bash | Ver como o copiloto le o placar | `sed -n '90,130p' inteligencia/views.py` |
-| 13:50:11 | Bash | Achar o payload do copiloto e os goldens | `grep -rln "golden" --include=*.py inteligencia \| head; echo "=== contadores do payload ==="; grep -rn "contador\\|CONTADORES\\|payload" --include=*.py inteligencia/*.py \| head -20` |
-| 13:50:05 | Bash | Achar a infra da LINHA HAIKU | `grep -rn "LINHA HAIKU\\|linha_haiku\\|HAIKU" --include=*.py . \| grep -v "/tests/" \| head -15` |
-| 13:50:01 | Bash | Achar o molde do contador do HAIKU | `grep -rn "deploys_agendados\\|prompts_repetidos" --include=*.py . \| grep -v tests \| head` |
-| 13:49:56 | Bash | Conferir imports e leitores de TOTAL | `grep -n "^from\\|^import" core/configuracao_efeito.py \| head; echo "=== leitores de TOTAL ==="; grep -rn "\bTOTAL\b" --include=*.py core ponto escala folha chamados relatorios inteligencia 2>/dev/null \| grep -i "contratos\\|ce\.TOTAL\\|mt\.TOTAL" \| head; echo "---"; grep -rn "TOTAL" core/placar_tickets.py core/contratos_estruturais.py core/tests/test_selo_contratos_estruturais.py \| head -20` |
-| 13:49:36 | Bash | Ler familias_com_parametro | `grep -n "^import\\|^from\\|def familias_com_parametro\\|def sem_efeito\\|TELAS" core/configuracao_efeito.py \| head -20; echo "=== corpo ==="; sed -n "$(grep -n 'def familias_com_parametro' core/configuracao_efeito.py \| cut -d: -f1),+30p" core/configuracao_efeito.py` |
-| 13:49:22 | Bash | Ler o selo do contrato 3 | `sed -n '110,200p' core/tests/test_contract_configuracao_nao_mente.py` |
-| 13:49:16 | Bash | Ver o resto do selo da matriz | `sed -n '60,140p' core/tests/test_selo_contratos_estruturais.py` |
-| 13:49:14 | Bash | Ler o selo da matriz | `sed -n '1,60p' core/tests/test_selo_contratos_estruturais.py` |
-| 13:49:11 | Bash | Quem le a matriz dos contratos | `cd /home/ronald/saas-hasner && grep -rn "contratos_estruturais\\|FAMILIAS\b" --include=*.py app/core app/ponto/tests bin 2>/dev/null \| grep -v "^app/core/contratos_estruturais.py" \| head -20` |
-| 13:49:04 | Bash | Ver o CLI do gerar_cortes | `cd /home/ronald/saas-hasner && sed -n '110,160p' bin/gerar_cortes.py` |
