@@ -204,14 +204,14 @@ lista — ela e o que esta EM PE._
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | PAREI |
 | **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
-| **O197** | FUTURO-NAO-E-EM-ABERTO | **fila 1 -- SOBE para logo depois da rel |
+| **O197** | FUTURO-NAO-E-EM-ABERTO | espera aval |
 | **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
 | **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | espera corte |
-| **O200** | PINO-GEO-LE-O-JUIZ | **fila 1**, atras da O199. O TERCEIRO ca |
+| **O200** | PINO-GEO-LE-O-JUIZ | espera aval |
 | **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
 | **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
 | **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera aval |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
-| **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | **fila 2 (raia de UI, `wt-ui`)**, ATRAS  |
+| **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | espera aval |
 | **O207** | VINCULO-INICIO-DECLARADO | espera `!` |

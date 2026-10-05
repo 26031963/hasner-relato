@@ -10,6 +10,13 @@ depois da relavratura 10, a frente da O204"*. A ordem de hoje, entao: (1) turno 
 relavratura 10 -> **O197** -> O204 -> O207 -> **O44 itens 2-8** -> O198/O199/O200 -> O145 ->
 instrumento. A **O44 v2** entrou pelo aval de **12:2x**, literal: *"entra logo atras da O207 e a
 frente dos BOs de tela"*, sem lei nova.
+**DUAS PISTAS desde o aval de 12:4x**, literal: *"PARALELO, na MESMA sessao, sem parar a O195"*. A
+**PRINCIPAL nao muda** -- pareador (O195/O76) ate o fim, depois relavratura 10, depois **O207 -> O44 ->
+O198 -> O199 -> O145**. A **RAIA PARALELA** (worktree `wt-bos`, ramo `raia-bos`, agente da sessao) leva,
+nesta ordem: **O197 -> O204 -> O200 -> O206**, com banco de teste PROPRIO (`REGUA_DB`), **proibido tocar
+`ponto/turnos.py`, `escala/utils.py` ou qualquer arquivo que a cura da O195 abrir** (BO que precise de um
+deles PARA, registra e passa ao proximo) e **pouso proprio por BO** (merge + `bin/deploy.sh` num ato so,
+L-105/L-107), um por vez, nunca durante regua, push ou apply da principal.
 **ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
 PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de

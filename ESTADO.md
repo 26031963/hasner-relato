@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:35:45.**
+**Medido em 05/10/2026 12:40:45.**
 
 | | |
 |---|---|
@@ -112,44 +112,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  1. O197 FUTURO-NAO-E-EM-ABERTO (com o caso col499: 02/10 e 04/10 com status 'ok' E palavra 'Em aberto').
+  2. O204 HORA-DO-APARELHO-LIDA-COMO-DATA.
+  3. O200 PINO-GEO-LE-O-JUIZ.
+  4. O206 PAINEL-OFERECE-COBRAR-NAO-REABRIR.
 
-● Correções aceitas. Item 1 primeiro — _vespera, que eu não li.
+  FICAM NA FILA PRINCIPAL, atras do pareador e da relavratura: O207, O198, O199, O44, O145.
 
-  Searched for 1 pattern
+  REGRAS DA RAIA:
+  - PROIBIDO tocar ponto/turnos.py, escala/utils.py e qualquer arquivo que a cura da O195 abrir. Se um BO precisar de um deles: PARA
+  aquele BO, registra e passa ao proximo.
+  - Banco de teste PROPRIO (REGUA_DB), para nao tomar a vez da suite da principal. Suite pela porta bin/suite.sh --dir.
+  - POUSO: cada BO verde pousa sozinho, merge + bin/deploy.sh num ato so (L-107), SEM esperar o pareador (L-105). Um pouso por vez; nunca
+  durante regua, push ou apply da principal -- espera por ARQUIVO de sinal, nunca por pgrep.
+  - PRONTO de cada BO e o que o bloco dele ja diz (RED com os casos, commit, deploy, medicao repetida em prod no RELATO).
 
-● _vespera muda a diagnose: ela retorna None quando entrada is None (Ramo B nem tem véspera para perguntar) e também quando a véspera já
-  tem turno fechado. A sonda tem de passar pela entrada REAL.
+  A PRINCIPAL nao muda: O195 ate o fim, depois relavratura 10.
+  Leis aplicadas: FILA-2-EM-RAIA-PROPRIA, L-105, L-107, UM run por vez. Nenhuma lei nova.
+  Segue a fila; PAREI so em lei ou !
 
-  Searched for 1 pattern, read 1 file, ran 2 shell commands
+  Ran 6 shell commands
 
-● Os meus três casos já estão na medição da O195: col250 29/09 (240) e col382 30/09 (364) são dois dos NOVE da tabela, e col235 30/09 (658)
-  é um dos SEIS da dupla contagem. Dos 15, só esses três estão na competência 10 — o resto é 08/09, onde a O195 já diz PAREI por L-092.
+● Agent(Raia paralela: O197 O204 O200 O206)
+  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-  Read 1 file, listed 1 directory, ran 1 shell command
+● Ler o topo do achado
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '1,30p'
+     $S/achado_montador_meia_noite.md
 
-● O selo da O93 tem o caso certo e não morde: ele escreve a saída como time(7, 50) — sem segundos. Os 17 segundos da vida real passam por
-  ele. É a minha própria nota de memória, "hora truncada esconde a guarda".
-
-  Ran 1 shell command
-
-● Construindo em cópia do HEAD (LEI-AKITA 10). Conferindo antes que a árvore viva não tem .py sujo.
-
-  Ver stub de batida para parear_turnos
-  ⎿  $ grep -rln "parear_turnos" ponto/tests/ | head -5; echo '=== um stub existente'; sed -n '1,60p'
-     ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py
-
-· Compacting conversation… (3h 57m 50s · ↓ 470.5k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
+* Frolicking… (4h 2m 50s · ↓ 482.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
+  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
+  ◯ general-purpose  Raia paralela: O197 O204 O200 O206                                                              22s · ↓ 82.5k tokens
   ⧉  index
 ```
