@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:00:45.**
+**Medido em 04/10/2026 21:06:01.**
 
 | | |
 |---|---|
@@ -109,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  Ran 1 shell command
+
+● --only vai cru ao manage.py test, então aceita módulos pontilhados. Repito com a forma certa:
 
   Ran 1 shell command
 
-● Um escritor só (1348). Confiro se o ramo da autoridade (1336) pode devolver None com sem_turno=False:
+● Enquanto o RED roda, escrevo a sonda do dinheiro. Leio como as sondas anteriores do O134 falam com a sombra, para usar a mesma porta:
+
+  Ran 2 shell commands
+
+● Já existe a porta para exatamente isto — APP_SOMBRA=<dir>/app, nascida hoje para este item. Leio a assinatura das duas funções reais:
 
   Ran 1 shell command
 
-● Provado: realizado_dos_turnos devolve None só na linha 400, e sempre junto de sem_turno=True; a 426 nunca devolve None. Então
-  minutos_realizados é None se e somente se sem_turno=True — a origem do ZERO DECLARADO é a 1334, e os or 0 de 131/337/364/698/341 ficam
-  mortos para este caso. Leio o sítio para escrever a cura:
+● por_dia_da_grade é a derivação canônica dos três campos de dinheiro do FechamentoMensal. Vejo como o fechamento.py monta a grade antes de
+  chamá-la, para a sonda usar o mesmo caminho:
 
   Ran 1 shell command
 
-● Confiro se a retirada deixa real_por_data e minutos_realizados_do_dia órfãos (contrato 3, allowlist zero):
+● Caminho canônico achado: grade_do_fechamento → por_dia_da_grade. Escrevo a sonda que roda esse mesmo caminho, para a frota inteira das
+  duas competências:
 
-  Ran 1 shell command
+● Escrever a sonda do DIFF de dinheiro
+  ⎿  $ cat > /home/ronald/saas-hasner/logs/sombra/o191_dinheiro_20261004.py <<'PYEOF'
+     # O191 passo 5 -- DIFF DE FROTA DE DINHEIRO (exigencia literal do passo 5: "DIFF de frota da 09 e da
+     # 10 publicado ANTES"). Roda o CAMINHO CANONICO, nunca uma re-soma propria:
+     # folha.export.grade_do_fechamento(fech) …
 
-● core/juizes.py:250 registra o PENDENTE citando literalmente real_por_data[d] = minutos_realizados_do_dia( como impressão. Retirar a soma
-  mexe nisso — e o PROIBIDO diz "tirar pendente com a impressao ainda no codigo". Vejo o contrato:
-
-  Ran 1 shell command
-
-● Dois pendentes apontam para a mesma função, e ambas as impressões morrem com a retirada. Procuro o selo que cobra a existência da
-  impressão — se existir, ele fica VERMELHO:
-
-  Achar o selo que cobra a impressao dos pendentes
-  ⎿  $ cd /home/ronald/copia-o191a/app && grep -rln "PENDENTES" --include=*.py . | head -20; echo "=== quem afirma sobre impressao ===";
-     grep -rn "impressao" --include=*.py . | grep -iE "test|selo|assert" | head -20
-
-· Jitterbugging… (8h 48m 47s · ↓ 1.0m tokens)
+· Compacting conversation… (8h 54m 3s · ↓ 1.1m tokens)
+  ▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 18%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
