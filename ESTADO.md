@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:10:45.**
+**Medido em 05/10/2026 11:15:45.**
 
 | | |
 |---|---|
@@ -38,6 +38,7 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -111,7 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
   Searched for 3 patterns, read 1 file, listed 2 directories, ran 14 shell commands
   ⎿  Referenced file docs/LEIS.md
   ⎿  Read docs/AVAIS.md (25 lines)
@@ -136,12 +136,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Grepping cartorio em LEIS.md
-  ⎿  $ cd /home/ronald/saas-hasner/app/docs && for t in processar_cartorio julgar_colab BORDA-ATA forcar; do echo "=== $t ==="; grep -n
-     "$t" LEIS.md DOSSIES.md CORTES.md 2>/dev/null | head -20; done
+  Searched for 1 pattern, ran 4 shell commands
 
-· Frolicking… (2h 32m 50s · ↓ 303.6k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+● Sem leitor da linha fim: (só o escritor). Agora o patch, na cópia:
+
+  Running 1 shell command…
+
+✻ Waiting for API response · will retry in 2m 33s · check your network
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
