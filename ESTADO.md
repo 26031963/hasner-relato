@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:02:01.**
+**Medido em 05/10/2026 00:07:31.**
 
 | | |
 |---|---|
@@ -110,41 +110,41 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Medido e limpo: com as batidas no banco, turnos_do_colab acha um turno data_turno=2026-07-02 e a autoridade devolve exatamente 660,
-  sem_turno=False. A propriedade do selo de 17/08 sobrevive — ela agora mora no juiz, que pareia por cronologia por construção.
+● Um leitor merece cuidado extra: o e6_oraculo foi construído exatamente para distinguir None de 0, e a cura (c) passa a pôr
+  minutos_realizados: 0 onde antes a chave era ausente.
 
   Ran 1 shell command
 
-● Falta o diagrama. Vou ver como o selo o confere, para regenerar pela porta certa — contra a cópia curada.
-
-  Ran 2 shell commands
-
-● O atalho de host roda contra a árvore viva; preciso gerar contra a cópia curada. Mesma forma de container da suite, sem banco e sem trava
-  (o gerador só lê arquivos).
-
-  Ran 2 shell commands
-
-● Uma linha só: registro: 1 sitio(s) → 0, e o MAPA.md intacto. Agora o recorte das cinco.
+● Censo fechado, e com um achado que importa: o e6_oraculo lê o espelho (:179), não a grade — e o espelho escreve minutos_realizados da sua
+  própria chamada à autoridade. A cura não silencia a distinção None/0 do oráculo, que é justamente o juiz do dono da L-099.
 
   Ran 1 shell command
 
-● O único erro é meu — nome de módulo inventado. Os 54 testes reais passaram.
-
-  Ran 2 shell commands
-
-● Verde. Lanço a suite inteira na cópia e, enquanto ela corre, levo as quatro curas ao advisor.
+● São 00:03 de 05/10 e o carimbo da sombra é dia=20261004 — o portão do deploy está vermelho até o cron das 04:17. Decido pela porta da
+  frente (--refazer --dump-agora + --bloco, ~38 min), não pelo --sem-sombra: LEI-AKITA 3, custo de tempo não é argumento. Registro o censo
+  no entregável enquanto a suite corre.
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Background command "Rodar a suite inteira na copia, de novo" completed (exit code 0)
 
-✻ Waiting for API response · will retry in 2m 33s · check your network
-                                                                                                   ✔ Update installed · Restart to update
+  Ran 1 shell command
+
+● 9.629 testes OK, zero FAIL/ERROR na cópia. Agora os selos de host na árvore viva.
+
+● Rodar todos os selos de host · 50s
+  ⎿  $ cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then
+     fail=$((fail+1)); echo "=== VERMELHO: $t (rc=$rc)"; echo "$out" | tail -12; fi; done; echo "---"; echo "selos de host: $(ls
+     bin/tests/test_*.sh | wc -l) | vermelhos: $fail" (50s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+· Jitterbugging… (11h 55m 33s · ↓ 1.4m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
