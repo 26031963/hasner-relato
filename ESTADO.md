@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:40:45.**
+**Medido em 05/10/2026 12:45:45.**
 
 | | |
 |---|---|
@@ -112,18 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  1. O197 FUTURO-NAO-E-EM-ABERTO (com o caso col499: 02/10 e 04/10 com status 'ok' E palavra 'Em aberto').
-  2. O204 HORA-DO-APARELHO-LIDA-COMO-DATA.
-  3. O200 PINO-GEO-LE-O-JUIZ.
-  4. O206 PAINEL-OFERECE-COBRAR-NAO-REABRIR.
-
-  FICAM NA FILA PRINCIPAL, atras do pareador e da relavratura: O207, O198, O199, O44, O145.
-
-  REGRAS DA RAIA:
-  - PROIBIDO tocar ponto/turnos.py, escala/utils.py e qualquer arquivo que a cura da O195 abrir. Se um BO precisar de um deles: PARA
-  aquele BO, registra e passa ao proximo.
-  - Banco de teste PROPRIO (REGUA_DB), para nao tomar a vez da suite da principal. Suite pela porta bin/suite.sh --dir.
-  - POUSO: cada BO verde pousa sozinho, merge + bin/deploy.sh num ato so (L-107), SEM esperar o pareador (L-105). Um pouso por vez; nunca
   durante regua, push ou apply da principal -- espera por ARQUIVO de sinal, nunca por pgrep.
   - PRONTO de cada BO e o que o bloco dele ja diz (RED com os casos, commit, deploy, medicao repetida em prod no RELATO).
 
@@ -136,20 +124,32 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Agent(Raia paralela: O197 O204 O200 O206)
   ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
 
-● Ler o topo do achado
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '1,30p'
-     $S/achado_montador_meia_noite.md
+  Ran 8 shell commands
 
-* Frolicking… (4h 2m 50s · ↓ 482.1k tokens · thinking)
+❯ aval Ronald: a raia paralela dos BOs PARA agora, com trilha do ponto em que estava; a principal segue na O195. Segue a fila; PAREI so em
+  lei ou !
+
+● Stop Task
+  ⎿  Raia paralela: O197 O204 O200 O206 · stopped
+
+  Ran 1 shell command
+
+● Agent "Raia paralela: O197 O204 O200 O206" was stopped by Claude
+
+● Rodar o RED da O195 contra a copia
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir
+     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o195 --only
+     "ponto.tests.test_o195_dia_do_turno_por_envelope" --espera 300 2>&1 | tail -70; echo "rc=$?"
+
+* Frolicking… (4h 7m 50s · ↓ 505.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
-  ◯ fork             Confirming commit hashes in worktree                                                      1h 3m 8s · ↓ 428.9k tokens
-  ◯ general-purpose  Raia paralela: O197 O204 O200 O206                                                              22s · ↓ 82.5k tokens
+  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
