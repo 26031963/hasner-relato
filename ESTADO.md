@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:22:00.**
+**Medido em 04/10/2026 21:27:01.**
 
 | | |
 |---|---|
@@ -110,37 +110,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-  Ran 1 shell command
-
-● Condição de entrada literal, achada no item — e ela é anterior a qualquer apply (LEI-AKITA 9):
-
-  ▎ "dos 15 dia-colab que trocam de veredito, nomear os que tem celula casada E previsto (exemplo dele: col250 29/09) e dizer se aquilo é
-  ▎ turno ABERTO que o juiz da geometria devia ter achado — 'se for, é bug do juiz, cura na origem primeiro'. ... Começa pela autopsia dos
-  ▎ 15, não pela cura."
-
-  Então o apply não é o próximo passo: a autopsia é. Vejo o universo:
-
-  Ran 1 shell command
-
-● Background command "Corrigir o import e enumerar o universo" completed (exit code 0)
-
 ● O universo reproduz a pré-conta exatamente — agora medido pela autoridade: 15 dia-colab, 12 colabs, 2.716 min = 45,27 h (09: 12/10/2.051;
   10: 3/3/665). E todos os 15 têm célula casada e previsto — então a condição de entrada alcança os 15 inteiros, não um subconjunto. Monto
   a autopsia perguntando ao juiz quem é dono de cada batida:
 
-● Rodar a autopsia dos 15 na sombra
-  ⎿  $ cd /home/ronald/saas-hasner
-     python3 - <<'EOF'
-     import re
-     p = 'logs/sombra/o191_autopsia_20261004.py'
-     s = open(p).read()
-     velho = """ bs_dia = [b for b in batidas_apuraveis(c, dt.datetime.combine(d, dt.time.min),
-     dt.datetime.combine(d + dt.timedelta(days=1), dt.time.min))]"""
-     novo = """ # AWARE, e f…
+  Ran 5 shell commands
 
-✽ Jitterbugging… (9h 10m 2s · ↓ 1.1m tokens)
+● Clássico: marcos é tupla e o % a desempacota. Corrijo e rodo:
+
+  Ran 1 shell command
+
+● t.entrada/t.saida são Batidas, não timestamps. Faço _hm aceitar os dois:
+
+  Ran 1 shell command
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cx9rm8b.output (12 lines)
+  ⎿  Read ../logs/push_marco_8c3035bc.out (22 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● getattr(x,'timestamp',x) pegou o método datetime.timestamp — alguns sítios passam datetime, outros Batida. Checagem por tipo:
+
+● Ler placar e vereditos
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     sed -n '/PLACAR DA CONDICAO/,$p' $S/autopsia.out; echo "=== (se vazio, dump todo) ==="
+     grep -n '>>>' $S/autopsia.out
+
+· Jitterbugging… (9h 15m 3s · ↓ 1.1m tokens · thought for 1s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
