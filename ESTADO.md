@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:40:01.**
+**Medido em 05/10/2026 16:45:31.**
 
 | | |
 |---|---|
@@ -40,7 +40,9 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -115,44 +117,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  separa os dois passos do restauro:
 
-● Lançador pronto (/app:ro, /sombra = logs/sombra/). Rodo pela porta que pega o flock — SO_ATO1 fica no default False, os dois atos:
+  Ran 2 shell commands
 
-  Ran 1 shell command
-
-● Enquanto a sombra corre, avanço o que não depende dela. Primeiro a pergunta de autoria da L-085 (ela decide se é correção minha ou
-  pergunta de lei):
+● Background command "Rodar o diagnóstico do restauro" completed (exit code 0)
 
   Ran 1 shell command
 
-● É prosa minha, na coluna de ESTADO — não o corte dele (o corte é a coluna "27/09 02:2x, regra 1"). Então corrijo no marco, sem pergunta
-  de lei. O que foi medido:
+● Restauro dos 11 campos volta perfeito (hash11 e hashTODOS voltaram, zero resíduo fora dos 11) — mas o PASSO B foi vácuo: 0 cobranças
+  nasceram, então ele não testou o retratar. Duas hipóteses sobrevivem. Mato as duas por medição:
 
   Ran 1 shell command
 
-● Correção definida. Enquanto a medição monta app/ (mesmo :ro, não edito a árvore durante ela — lápide), avanço só em logs/. Vejo o
-  andamento:
+● _retratar não escreve célula, e a contagem segue 16883 — nenhuma célula nasceu. Sobra o grafo que o retratar acorda:
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● Lançamento é por docker cp + _RUN.py. Agora construo o apply de prod. Primeiro confiro os campos que o livro-caixa das lacunas vai
-  consultar:
+● Achei o sítio, e não era o retratar: é o que ele acorda. app/chamados/signals.py:174 — _cartorio_post_save_chamado chama
+  cartorio.julgar_celula(colaborador, dia). Meu restaurador devolvia os 11 campos e depois retratava; cada retratação re-julgava a célula e
+  a escrevia de novo. A ordem estava invertida:
 
-  Ran 3 shell commands
+  Ran 1 shell command
 
-● Agora o apply de prod. Escrevo com as guardas pré-declaradas antes de qualquer número:
+❯ - cadastro: APLICACAO DE CONVENCAO -- linha (sindicato, empresa, praca opcional, ativo). Sem praca = vale na empresa inteira; com praca
+  = vale so nela; a mais especifica vence; duas do mesmo nivel = piso legal E contador acusa. Hoje nascem duas linhas, emp2 e emp4 ->
+  sind2, sem praca. A tela de escolha e obra posterior e escreve NESTA tabela. A praca so entra na regua por linha DECLARADA aqui, nunca
+  pelo VinculoSindicatoPraca.
 
-● Running 1 shell command…
-
-✢ Frolicking… (8h 2m 6s · ↓ 986.4k tokens)
+· Compacting conversation… (8h 7m 36s · ↓ 1.0m tokens)
+  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 8%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

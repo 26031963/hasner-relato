@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**208 obras abertas.**
+**210 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -217,3 +217,5 @@ lista — ela e o que esta EM PE._
 | **O207** | VINCULO-INICIO-DECLARADO | espera `!` |
 | **O209** | A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE | espera `!` |
 | **O210** | A DERIVA DA COMPETENCIA 10: 174 de 572 fechamentos | **portao aberto** -- comp 10 aberta, app |
+| **O211** | REGUA-PELA-EMPRESA | **fila 1, logo ATRAS da O209** (ordem li |
+| **O212** | O INCREMENTAL DA SOMBRA NAO FECHA A FK DO CADASTRO | **fila 2, pouso de INSTRUMENTO proprio** |
