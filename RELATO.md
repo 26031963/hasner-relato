@@ -14,7 +14,8 @@ codigo no ar (`logs/o191/prova_depois_20261005.txt`): o numero que a sombra medi
 **nao se moveu** e o `sem_turno` viaja ao lado do zero. **Exportada 09 INTACTA**, 8 registros hash a hash
 (`diff` vazio entre `..._antes_` e `..._depois_20261005.txt`). Smoke com trafego real: 29 respostas, **0
 de 5xx, 0 traceback**. A leitura UNICA de impacto (secao de 01:1x, L-094 e, por **L-110**, medida de
-impacto e nunca validacao) diz o que a relavratura vai levar ao gravado: **397 dia-colab / 114 colabs
+impacto e nunca validacao) mede o IMPACTO NA GRADE -- e **esta linha dizia "o que a relavratura vai
+levar ao gravado", o que e FALSO e eu provei falso as 03:4x (secao do PAROU abaixo)**: **397 dia-colab / 114 colabs
 ganham numero (+197.933 min = +3.298,88 h)**, **15 / 12 colabs zeram (-2.716 min = -45,27 h)**, **0
 `SOBE`, 0 `DESCE`, 0 `PERDE_CHAVE`**, e **155 dia-colab / 43 colabs de DERIVA PREEXISTENTE (+17.889 min)
 que nao sao da cura** (`logs/o191/impacto_join_detalhe_20261005.tsv`). **O deploy move ZERO na ata**,
@@ -76,22 +77,48 @@ ZERO** (noturnas, as cinco de HE, atraso, saida antecipada) e **10 se movem**:
 | `inconsistencias` | 573 | 575 | +2 |
 | `turnos_abertos` | 266 | 265 | -1 |
 
-**POR COLABORADOR e' que o DIFF se explica, e o alvo do aval nao e' a maioria** (recontado agora, nao
-de memoria): **25 dos 36** mexem **SO** `minutos_abonados`, em degraus de 660 / 720 / 1.320 min -- isso
-e' **jornada inteira**, nao minuto de cauda, e abono nao e' o que esta cura toca; **4** mexem
-`minutos_previstos` PARA BAIXO com `horas_falta` PARA CIMA (col206, col507, col666, col893) -- e a
-docstring do proprio comando chama isso pelo nome: *"recalculo que mexe no previsto sem mexer no
-realizado e' o sintoma de regra de ausencia mudando"*; **col717** mexe `dias_incertos` 11->14 com
-`minutos_previstos` **+1.980**; e so **6** mexem `horas_trabalhadas` (col114 -1,01 · col165 **+33,34** ·
-col358 -7,19 · col384 +1,89 · col390 -0,99 · col919 +6,35), dos quais **col165** (folga_trabalhada
-33,34->0,00, trabalhadas 33,30->66,64) e' o unico com a cara da cura que subiu.
-**30 dos 36 mexem campo FORA do alvo**, entao a condicao (b) da AVAL-DE-CRITERIO -- *"todo outro campo
-de todo colaborador da ZERO"* -- **nao se cumpre**, e a (c) nao tem faixa a conferir: o aval nomeou o
-**realizado** dos dia-colab, e a leitura de impacto previa para a comp 10 **106 dia-colab / 51 colabs /
-+55.155 min = +919,25 h**. O gravado moveu `horas_trabalhadas` **+32,39 h em 6 colabs**. O alvo **nao
-chegou ao gravado na medida que a leitura dizia**, e o maior movimento do DIFF esta num campo que
-**ninguem nomeou**. Isso nao e' "a cura e' menor que o previsto": e' **DERIVA** do `FechamentoMensal`
-velho vindo junto, a mesma classe de 26/09.
+**POR COLABORADOR o DIFF nao e' "menor que o previsto": ele e' OUTRO.** Cruzei os colabs previstos
+para a comp 10 com os que de fato mexeram no gravado, e e' esta conta que vira a mesa:
+
+| | |
+|---|---|
+| previstos para a comp 10 | **51 colabs / 106 dia-colab / +919,25 h** |
+| previstos **que mexeram** | **5** |
+| previstos que **NAO mexeram** | **46** -- **+851,83 h previstas que nao chegaram ao gravado** |
+| mexeram **sem estar previstos** | **31** -- deriva pura |
+
+E dos 5 que coincidem, **UM** se move na direcao prevista: col165 (previa +28,72 h; folga_trabalhada
+33,34->0,00 e trabalhadas 33,30->66,64). col114 previa **+14,50 h e PERDEU 1,01 h**; col206 previa
++8,05 h e ganhou **8,00 h de FALTA**; col250 e col848 ganharam **abono**, nao realizado.
+
+**A ORIGEM, e nao o sintoma: a folha NAO LE o sitio que a cura mexeu.** A cura do passo 5 mora em
+`escala/utils.py::montar_grade_prevista_periodo_por_turno` (linhas 1337 e 1362, os ramos de folga e de
+trabalho). Censo por AST, nao por grep: os chamadores de producao desse montador sao
+`escala/utils.py:1451` (o wrapper `montar_grade_prevista_periodo`), e dele
+`ponto/services/cartorio.py:452` e `ponto/management/commands/reconciliar_grade.py:119`. **Nenhum e' a
+folha.** O fecho transitivo de `ponto/services/fechamento.py::recalcular_fechamento_mes` tem **571
+funcoes** e **nao alcanca nenhuma** das tres -- nem `montar_grade_prevista_periodo_por_turno`, nem
+`montar_grade_prevista_periodo`, nem `minutos_realizados_do_dia` --, e nem sequer `realizado_do_dia` /
+`realizado_dos_turnos`. Logo: **a relavratura nunca foi o veiculo desta cura.** Os +919,25 h sao numero
+de GRADE (o que o espelho e o cartorio passam a ver); o gravado da folha se monta por outro caminho, e o
+que o apply levaria para ele e' **deriva** do `FechamentoMensal` velho -- 31 dos 36 sem relacao com a
+cura. Isso nao e' o DIFF "surpreendendo": e' o DIFF dizendo que eu apontei a ferramenta errada para o
+alvo certo.
+
+**E O ERRO PUBLICADO E' MEU, no topo deste arquivo.** A linha de 01:1x dizia que a leitura de impacto
+*"diz o que a relavratura vai levar ao gravado"*. Nao diz: ela mede a GRADE. Corrigi a linha no mesmo
+ato em que medi (o topo agora nomeia o que ela mede e que a frase era falsa). A L-110 ja dizia que
+aquilo era *"medida de impacto e nunca validacao"* -- eu respeitei a letra e **inferi a unidade**, que e'
+a parte que a lei nao podia escrever por mim.
+
+**`processados=568` de `572` nao e' falta, sao DOIS UNIVERSOS impressos lado a lado** -- medido na
+funcao real, nao deduzido: `foto()` conta **linhas de `FechamentoMensal`** da competencia (572),
+enquanto o laco itera **colaboradores ELEGIVEIS** (`situacao='ativo'` ou desligado com demissao >=
+`periodo_apuracao(10,2026,2)[0]` = **02/09/2026**), que sao **568**. A intersecao e' 568, **0 elegiveis
+sem fechamento** e exatamente **4 fechamentos de colab nao elegivel** -- desligados antes da janela,
+cujo fechamento o recalculo corretamente **nao toca**. Nao ha colab perdido: `recalcular_fechamento erro`
+aparece **0 vez** no log. Mas a porta imprime `fechamentos_mexidos=36 de 572` (linhas) ao lado de
+`processados=568` (colabs) como se fossem a mesma conta, e isso entra na **O196**.
 
 **O apply move DUAS tabelas, e o `foto()` do comando cobre UMA.** `recalcular_fechamento_mes` tambem
 chama `dia_pago.lavrar`, que faz `DiaPago.objects.filter(...).delete()` e recria
@@ -105,26 +132,39 @@ nao a mostra:
 | `oraculo` | 7.703 -> **9.221** | 387 -> **463** | 26.426,10 -> **30.210,24** |
 
 O salto do `oraculo` (+1.518 linhas, +76 colabs) e' a metade ADITIVA do S5b que **nenhum leitor le
-hoje** (aval 30/09 ~13:5x), e a recusa de lavra-lo em 81+ colabs e' PREEXISTENTE e DECLARADA, nao
+hoje** (aval 30/09 ~13:5x), e a recusa de lavra-lo em **105** colabs e' PREEXISTENTE e DECLARADA, nao
 efeito deste apply: `ponto/services/dia_pago.py:276` levanta `ValueError` para 11 campos de dia **sem
 dono**, por ZERO DECLARADO (L-103) -- escreve-los como zero perderia 6,29 + 132,51 h da 09 em silencio
 --, e `ponto/services/fechamento.py:714` so registra, com `processados += 1` seguindo adiante.
 **Consequencia para a condicao 2**: a reversao que o comando escreve cobre `FechamentoMensal` e **nao**
-cobre `DiaPago`. A casa ja tem a cura disso pronta e nao sou eu que decido dispensa-la --
-`bin/snapshot_relavratura_10_2026.py` fotografa **as duas** tabelas e `bin/restore_relavratura_10_2026.py`
-e' a reversao executavel (`--dry` monta 10.684 objetos sem escrever). Quando o apply for autorizado, e'
-por essa porta que a condicao 2 se cumpre, nao pela foto do comando.
+cobre `DiaPago`. E isso nao e' descoberta minha -- **a casa ja sabia e escreveu**: o cabecalho de
+`bin/snapshot_relavratura_10_2026.py` abre com *"DUAS TABELAS, e a segunda nao e detalhe"* e nomeia o
+mesmo `dia_pago.py:208`. A cura existe **AO LADO** da porta em vez de DENTRO dela (LEI-AKITA 1), e pela
+LEI-AKITA 4 a pergunta certa nao e' "qual a regra" e sim **"qual leitor nao migrou"**: a porta. **O196.**
 
-**comp 09 nao tem apply** -- esta exportada, e a L-092 nao cede. Ela sai como **Pauta DP com os dois
-numeros**, que e' a forma que a REGEN-EM-EXPORTADA manda: **291 dia-colab / 94 colabs ganham +142.778
-min = +2.379,63 h** contra o que o Dominio ja recebeu. Os dois itens estao em `PENDENTES_RONALD.json`.
-PROVA: `logs/o192/relavratura_diff_comp10_20261005_0322.txt` (rc=0, 03:22:11->03:24:37),
-foto por colaborador em `logs/o192/fotos/recalculo_10-2026_20261005_032436.json`, e a leitura de impacto
-em `logs/o191/impacto_join_detalhe_20261005.tsv`. **Prod NAO foi tocada**: o DIFF rodou na sombra, no
-cpuset de teste.
+**comp 09: a Pauta DP NAO sai com o numero da grade, e era isso que eu ia entregar.** A 09 esta
+exportada e a L-092 nao cede, entao apply esta fora de questao -- mas o item que eu escrevi as 03:3x
+dizia **"+2.379,63 h a MAIS do que o Dominio recebeu"**, e esse numero esta na unidade da GRADE, a mesma
+que acabei de provar que **nao chega ao gravado**. As duas pautas irmas da 09 (`PAUTA-DP-09-COL954` e
+`COL900`) comparam **TXT com TXT** -- *"213 linhas contra 210"*, rubrica, data --, e e' essa a unidade
+que o DP consegue conferir. Entao o item foi **reescrito**: o numero da grade fica declarado COMO numero
+de grade (291 dia-colab / 94 colabs / +2.379,63 h de realizado de grade), e o numero do Dominio esta
+**POR MEDIR** -- gera-se a 09 na sombra com o codigo no ar e faz-se o **diff de linhas contra o TXT
+exportado**, que e' a forma que as irmas ja usam. Essa medicao espera a sombra se refazer (04:17 + o
+bloco) e entra como fatia propria.
+PROVA: `logs/o192/relavratura_diff_comp10_20261005_0322.txt` (rc=0, 03:22:11->03:24:37), foto por
+colaborador em `logs/o192/fotos/recalculo_10-2026_20261005_032436.json`, cruzamento previsto-x-mexido e
+fecho de 571 funcoes medidos as 03:4x sobre `logs/o191/impacto_join_detalhe_20261005.tsv`, e os 4
+fechamentos nao elegiveis conferidos pela funcao real (`periodo_apuracao`) no banco de prod, so leitura.
+**Prod NAO foi tocada**: o DIFF rodou na sombra, no cpuset de teste.
 
 Proximo, e a esteira segue sem a resposta da lei acima e sem o seu `!` da relavratura: **CERT-AST** em
-pouso proprio, depois a **O145**.
+pouso proprio, depois a **O145**. **A ordem entre essas duas e minha e tem motivo medido**: a O145 mede
+frota COM MOTOR, e isso vai na sombra (`medicao-com-motor-vai-na-sombra`) -- e a sombra esta ocupada com
+o apply da comp 10 que acabei de medir, so voltando ao estado de prod depois do refazer das **04:17**
+mais o bloco (~18 min). A CERT-AST e' de HOST (selos, `.git`, raiz cravada) e nao toca sombra nenhuma,
+entao ela cabe exatamente na janela em que a O145 nao caberia. Se a janela virar, a ordem volta a ser a
+do aval.
 Os tres registros que respondem *"qual o item em curso"* (marcador
 `ORDEM-VIVA-TOPO`, celula do BACKLOG e esta linha) continuam DIZENDO O MESMO -- o item nao fechou, entao o
 marcador **nao se move** (`test_hook_nao_cobra_congelado.sh:107` fica VERMELHO se um discordar do outro).

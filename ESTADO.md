@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:40:45.**
+**Medido em 05/10/2026 03:45:45.**
 
 | | |
 |---|---|
@@ -107,38 +107,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 2 shell commands
-
-● --only é quem substitui os labels:
-
-  Ran 1 shell command
-
-● Registro o achado de caminho no BACKLOG (registrar, não construir — a ordem da fila 1 não muda). Leio a forma do bloco OBRAS:
+● 46 dos 51 colabs previstos não mexeram — +851,83 h previstas que não chegaram, e 31 dos 36 que mexeram não estavam previstos. Isso é mais
+  forte do que "surpreende". Meço a origem:
 
   Ran 4 shell commands
 
-● Antes de publicar e commitar, consulto o advisor — é o passo para fora:
+● A folha não lê o sítio que a cura mexeu — 571 funções no fecho de recalcular_fechamento_mes, e nenhuma das três. Isso inverte o motivo do
+  PAROU e torna FALSA uma afirmação minha já publicada. Mais duas medições antes de corrigir:
 
   Ran 1 shell command
 
-● Commito os docs (por path, sem o crons_duracao.json que é cron-dirty):
+● O cabeçalho do snapshot já documenta as duas tabelas — então a O196 é LEI-AKITA 1 (a cura mora ao lado da porta), não 8. Agora os 4 de
+  572:
 
-  Committed d525c0c0, ran 1 shell command
+  Ran 4 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Minha data foi adivinhada e a conta não fechou — computo _esc_ini pela função real em vez de supor:
 
-● Quatro correções, e a primeira muda o que ele decide. Começo medindo — item 1 e item 3:
+  Ran 1 shell command
 
-  Ler a unidade dos 397 dia-colab
-  ⎿  $ cd /home/ronald/saas-hasner && echo "=== os 397 GANHA_CHAVE_VALOR: amostra ==="; grep "GANHA_CHAVE_VALOR"
-     logs/o191/impacto_join_detalhe_20261005.tsv | head -8; echo; echo "=== e os 15 ZERA ==="; grep "b:ZERA"
-     logs/o191/impacto_join_detalhe_20261005.tsv | head -4
+● Os quatro medidos. Agora corrijo — e a correção mais importante é uma afirmação minha, já publicada:
 
-· Jitterbugging… (15h 28m 47s · ↓ 1.7m tokens · thinking)
+  Ran 2 shell commands
+
+● Agora a seção do PAROU: o motivo real é mais forte, e o número da 09 estava na unidade errada.
+
+  Achar as bordas dos paragrafos a corrigir
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n "POR COLABORADOR\|^\*\*comp 09 nao tem apply\|^Proximo, e a esteira segue sem a resposta da
+     lei\|^\*\*O apply move DUAS tabelas" app/docs/RELATO.md
+
+· Jitterbugging… (15h 33m 47s · ↓ 1.7m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
