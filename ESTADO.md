@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:47:01.**
+**Medido em 05/10/2026 02:52:31.**
 
 | | |
 |---|---|
@@ -113,36 +113,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  boundaries of the pedido to restore:
 
-● Task "Esperar pelo arquivo de sinal da sombra" still running in background
+  Ran 4 shell commands
 
-● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
+● Now building the three cures. First the host-selo tripwire (the part that was promised on 02/10 and never built):
 
-  Searched for 1 pattern, read 2 files, ran 40 shell commands
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brebvp0xk.output (16 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● My own selo just went green by pointing at nothing — the false-green family it exists to kill. Hardening the root check and testing from
+  the real layout:
 
-● Background command "Empurrar o marco O191" completed (exit code 0)
+  Ran 1 shell command
 
-● The push came back RED — 2 failures, 9629 tests. Let me read both.
+● The extractor rendered a 6th token — verifying whether that's a real contract or over-collection:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 1 shell command
 
-● Both failures are mine and the same defect. Measuring the origin and the full census before curing:
+● Over-collection confirmed: two for nome in (...) loops share the target, and he-barra belongs to an assertNotIn against the markup.
+  Binding each assertion to its haystack and its enclosing loop:
 
-  Searched for 1 pattern, ran 4 shell commands
+  Ran 2 shell commands
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Extractor renders exactly the 5 tokens I enumerated by hand, in under a second. Now cure A — the aged anchor inverts to the authority —
+  built in a copy of HEAD:
 
-● Conferir se os dois pedidos seguem abertos e onde rodam os selos de host
+● Montar a cura A em copia do HEAD
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs && awk 'NR<=60 && /^#{1,3} |^\*\*ESTADO/{print NR": "substr($0,1,110)}' RELATO.md
+     echo "---- total linhas:"; wc -l RELATO.md
 
-✢ Jitterbugging… (14h 35m 3s · ↓ 1.5m tokens · thinking)
+· Jitterbugging… (14h 40m 33s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
