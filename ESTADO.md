@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:48:01.**
+**Medido em 05/10/2026 11:53:31.**
 
 | | |
 |---|---|
@@ -114,36 +114,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ```
   Ran 1 shell command
 
-● 6/6 verde. Mas preciso garantir que o caso do cross-midnight está no ramo normal (o dos 134 alvos reais), não no nunca_bateu — o fim:
-  mostrou nunca_bateu=5:
+❯ aval Ronald: o item [1] FUTURO-NAO-E-EM-ABERTO sobe para logo depois da relavratura 10, a frente da O204. Caso novo, medido 05/10 11:46
+  no col499: dias 02/10 e 04/10 saem com status 'ok' E palavra 'Em aberto' no mesmo dia -- dia que a propria tela julga ok nao leva a
+  palavra. Segue a fila; PAREI so em lei ou !
 
-  Searched for 2 patterns, ran 6 shell commands
+● Aval 7 (col499) recebido e vai para a fila logo depois da relavratura 10 — registro em PROMPTS/BACKLOG neste mesmo turno, assim que o A/B
+  voltar ao ar. Primeiro os três defeitos da fatia em voo. Lendo o teste inteiro.
 
-● 6/6 verde e as três prosas "SO sombra" corrigidas. Rodo a suite inteira na cópia:
+  Ran 1 shell command
 
-  Searched for 1 pattern, ran 11 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file escala/utils.py
-  ⎿  Referenced file core/placar_estrutural.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9k84c6wp.output (43 lines)
+● O único sítio de relógio é a linha 65 — e setUpTestData é classmethod, que o freeze_time de classe não cobre, então congelar sozinho
+  recriaria a mistura. Vendo o resto do teste para curar os três de uma vez.
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 1 shell command
 
-● Task "Suite inteira na copia" still running in background
+● Curando os três de uma vez — e o test_recorte_por_arquivo passava justamente porque o comentário dele não tinha vírgula (ANTI-VACUIDADE:
+  o caso não mordia). Vendo o idioma de import da casa.
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 2 shell commands
 
-● Esperar o fim do A/B na sombra
-  ⎿  $ L=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o192_sombra.log; until grep -qE
-     '^=== fim|^runner_o192: .*(falhou|SEM a trava|nao li)|^sombra: ' $L; do sleep 10; done; echo "--- A/B da sombra terminou:"; grep -nE
-     '^=== |^--- |^comparar rc=|^runner_o…
+● RED medido já existe (o A/B morreu com o erro literal). Conferindo se o runner encerrou e liberou a trava, e provando que o caso novo
+  morde o parser velho.
 
-✢ Compacting conversation… (3h 10m 6s · ↓ 362.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 69%
+● Conferir trava e provar o RED do caso novo
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== fim do log do A/B ===";
+     tail -3 $S/o192_sombra.log; echo "=== trava da sombra ==="; ls -la /home/ronald/saas-hasner/logs/sombra.lock 2>/dev/null; flock -n
+     /home/ronald/saas-hasner/logs/sombr…
+
+✢ Frolicking… (3h 15m 36s · ↓ 375.9k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
