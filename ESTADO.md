@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:05:45.**
+**Medido em 05/10/2026 11:10:45.**
 
 | | |
 |---|---|
@@ -111,27 +111,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  cadastro), L-110, VINCULO-LINHA-DO-TEMPO. Lei nova: a deste aval.
-  LINHA HAIKU: (a) contador "vigencias sobrepostas no mesmo colab", esperado 0, rotulo de admin; (b) golden: "desde quando vale a escala
-  do col948?" esperado 28/09 via ferramentas; (c) degrau: leitura.
 
-  Segue a fila; PAREI so em lei ou !
-
-  Searched for 2 patterns, ran 31 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9k84c6wp.output (43 lines)
-  ⎿  Referenced file docs/LEIS.md
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-● Inspecionar scratchpad
-  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; cat -n
-     $C/app/ponto/tests/test_cartorio_recorte_de_celulas.py
+  Searched for 3 patterns, read 1 file, listed 2 directories, ran 14 shell commands
   ⎿  Referenced file docs/LEIS.md
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file escala/utils.py
@@ -140,7 +121,26 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-· Frolicking… (2h 27m 50s · ↓ 293.3k tokens · still thinking)
+● Diagnóstico fechado: carimbar (ponto/portas/celula.py:559-571) é idempotente por desenho — mesma impressão + nada lavrado = nenhum save,
+  e julgada_em não anda. Logo julgada_em não é o observável de "rejulgou"; o observável do --forcar é a ata (é exatamente para isso que a
+  HX-BORDA-ATA existe). Reescrevo o RED sobre a ata:
+
+  Ran 2 shell commands
+
+● RED correto: 4 errors por --celulas não existir, e o MORDE verde — prova que --forcar refaz a ata (sem isso o selo passaria por ausência
+  de sinal). Mas o caso do recorte vazio passou pelo motivo ERRADO (unrecognized arguments também é CommandError) — aperto a asserção na
+  mensagem:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Grepping cartorio em LEIS.md
+  ⎿  $ cd /home/ronald/saas-hasner/app/docs && for t in processar_cartorio julgar_colab BORDA-ATA forcar; do echo "=== $t ==="; grep -n
+     "$t" LEIS.md DOSSIES.md CORTES.md 2>/dev/null | head -20; done
+
+· Frolicking… (2h 32m 50s · ↓ 303.6k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
