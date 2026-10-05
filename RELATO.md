@@ -2,12 +2,19 @@
 
 FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-4 FECHADOS com prova; os
 passos 5-6 sao a **O191**, e o passo 6 **NAO esta carimbado**. Atras dela, a **O145**.
-**ESTADO (05/10 00:4x): a cura (b)+(c) esta CONSTRUIDA e VERDE na copia -- `Ran 9629 / OK (skipped=42)`,
+**ESTADO (05/10 01:2x): a cura (b)+(c) esta CONSTRUIDA e VERDE na copia -- `Ran 9629 / OK (skipped=42)`,
 RC=0 (`logs/o191/suite_copia2_20261004.out`) e 61 selos de host com `vermelhos: 0`. NADA aplicado na arvore
-viva, NADA commitado, NADA no ar.** O que falta para o pouso, na ordem: a leitura UNICA de impacto no
-GRAVADO (L-094, e por **L-110** ela e medida de impacto, nunca validacao), o carimbo da sombra de HOJE
-(`--refazer --dump-agora` + `--bloco`, ~38 min; o de 04/10 ainda serve para MEDIR e e por isso que a medicao
-vem ANTES do refazer) e o deploy. Os tres registros que respondem *"qual o item em curso"* (marcador
+viva, NADA commitado, NADA no ar.** **A leitura UNICA de impacto no GRAVADO esta FEITA** (secao de 01:1x,
+L-094 e, por **L-110**, medida de impacto e nunca validacao): **397 dia-colab / 114 colabs ganham numero
+(+197.933 min = +3.298,88 h)**, **15 / 12 colabs zeram (-2.716 min = -45,27 h)**, **0 `SOBE`, 0 `DESCE`,
+0 `PERDE_CHAVE`**, e **155 dia-colab / 43 colabs de DERIVA PREEXISTENTE (+17.889 min) que nao sao da cura**.
+Detalhe duravel em `logs/o191/impacto_join_detalhe_20261005.tsv`. **O deploy move ZERO na ata**, provado na
+fonte (`ponto/services/cartorio.py:85-106::impressao_insumos` hasheia so INSUMO, nunca a ata; o cron das
+06:28 segue contando `pulados`) -- a relavratura e ATO PROPRIO, fora deste marco. **A reversao existe ANTES
+de qualquer apply** (condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA): `logs/o191/reversao_ata_o191_20261005.jsonl`,
+566 celulas lidas de PROD. O que falta para o pouso, na ordem: o commit do marco, o carimbo da sombra de HOJE
+(`--refazer --dump-agora` + `--bloco`, ~38 min; o de 04/10 serviu para MEDIR e e por isso que a medicao
+veio ANTES do refazer) e o deploy. Os tres registros que respondem *"qual o item em curso"* (marcador
 `ORDEM-VIVA-TOPO`, celula do BACKLOG e esta linha) continuam DIZENDO O MESMO -- o item nao fechou, entao o
 marcador **nao se move** (`test_hook_nao_cobra_congelado.sh:107` fica VERMELHO se um discordar do outro).
 
@@ -234,6 +241,131 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 | **REFERENCIA-E-A-LEI** | 2026-10-05 00:3x | 0 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A lei REVOGADA foi desfeita no mesmo marco e nos quatro sitios em que ja havia entrado: linha do LEIS.md, mapeamento CORTES-que-viraram-lei, entrada do CORTES.json e a LEI-AKITA 13 do CLAUDE.md. O contador cravado do test_lei_akita.sh FICA em 13, porque a lei nova ocupa a mesma linha 13 -- e o rotulo dele, que dizia 12 em texto fixo, passou a derivar do $N medido | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md (com o contador do selo junto) + esta linha, no commit do marco da O191 |
 <!-- SEUS-CORTES:FIM -->
+
+## 05/10 01:1x — O191 PASSO 5: A LEITURA UNICA DE IMPACTO **MEDIDA NO GRAVADO** — 397 DIAS GANHAM NUMERO, 15 ZERAM, E **155 DERIVAS QUE NAO SAO MINHAS**
+
+**LEI-AKITA: origem=`escala/utils.py` (o montador, 3 hunks ja construidos), testemunha=`CelulaDia.ata`
+lida por `escala/services/leitor_celula.py::grade_da_celula` (a MESMA chamada que `folha/export.py:221`
+faz), RED=`escala/tests/test_montador_realizado_pela_autoridade.py` (4 vermelhos evidenciados em
+`logs/o191/red_b_montador_20261004.out`) + suite `Ran 9629 / OK` em `logs/o191/suite_copia2_20261004.out`,
+quem-mais-le=os 7 sitios de producao do builder censados em `logs/o191/passo5_diff_20261004.md`,
+juizes novos=0.**
+
+Esta e a **leitura UNICA de impacto** que a L-094 manda fazer e que a **L-110** manda tratar como
+**medida de impacto, nunca validacao**. Uma sonda so (`impacto_o191.py`), o MESMO arquivo rodando nas
+duas copias, tres numeros por dia-colab, cada um pela **funcao real**:
+
+| coluna | funcao | o que e |
+|---|---|---|
+| GRAVADO | `grade_da_celula(c, ini, fim)` | a **ata**, o que o dinheiro le hoje |
+| HEAD | `montar_grade_prevista_periodo` na copia do HEAD | o builder de hoje |
+| CURADA | a mesma funcao na copia curada | o builder depois da cura |
+
+Forma de chamada **literal** do cartorio (`ponto/services/cartorio.py:433-452`): janela
+`[d0-1d, d1+3d)` com o `-1us`, `ref = fim+1d`, `n_dias = (fim-ini).days+2`, e o dia lido por
+`ref - i dias`, exatamente como `dias_por_data` monta. **Universo = o do CARTORIO**, nao um meu: quem
+tem CELULA na competencia, **sem filtro de situacao** (`processar_cartorio.py:49-51`,
+HX-CARTORIO-UNIVERSO T4.2). O primeiro rascunho desta sonda filtrava `Colaborador.ativo=True` -- campo
+que **nao existe** neste modelo -- e foi o proprio `FieldError` que me obrigou a ir buscar quem decide o
+universo em vez de inventar um.
+
+### O NUMERO, por classe e por competencia (sombra do dia 04/10, carimbo `completa diverge=0 erros=0`)
+
+| classe | dia-colab | colabs | delta (curada − head) |
+|---|---|---|---|
+| **(c) GANHA CHAVE COM VALOR** | **397** | **114** | **+197.933 min = +3.298,88 h** |
+| &nbsp;&nbsp;· comp **09** (exportada) | 291 | 94 | +142.778 min = +2.379,63 h |
+| &nbsp;&nbsp;· comp **10** (aberta) | 106 | 51 | +55.155 min = +919,25 h |
+| **(b) ZERA (ZERO DECLARADO, L-103)** | **15** | **12** | **−2.716 min = −45,27 h** |
+| &nbsp;&nbsp;· comp 09 / comp 10 | 12 / 3 | 10 / 3 | −2.051 / −665 min |
+| (c') ganha chave com ZERO | 10.542 | 555 | 0 min |
+| (c') idem, dias **FUTUROS** (≥ 05/10) | 3.790 | 521 | 0 min |
+| **DERIVA PRE-EXISTENTE** (head ≠ ata, a cura nao toca) | **155** | **43** | **+17.889 min = +298,15 h** |
+
+**Nao ha uma unica linha `SOBE`, `DESCE` ou `PERDE_CHAVE`:** fora dos 15 que zeram, **a cura nao muda
+nenhum valor que o builder ja dava**. Ela da numero onde nao havia chave, e troca soma propria por zero
+declarado. `ERROS da sonda: 0` nas duas copias (`logs/o191/impacto_head_20261005.tsv` 14.894 linhas,
+`logs/o191/impacto_curada_20261005.tsv` 577).
+
+### O QUE A CLASSE (c) E, LIDO NA ATA DE **PROD**: **FOLGA TRABALHADA**
+Nao e abstracao. Li a ata viva dos 567 dias alvo em producao (`bin/sonda_frota.sh`, LEITURA, cpuset de
+teste, banco `saas_hasner`) e ela diz:
+
+- **396 dos 397** dias da classe (c) **TEM celula** -- so 1 nao tem;
+- **394** deles tem `ata.tipo_dia = 'folga'` com **`ata.minutos_realizados = 0`**;
+- **331** ja carregam veredito **`fato_sem_previsao`**, e 63 `concorde`.
+
+Ou seja: **a casa JA SABE que houve fato naquele dia de folga -- e lavra ZERO minuto.** O montador
+entrava no ramo de folga (`d not in cel_por_data`, `escala/utils.py:1319`), nao emitia a chave, e
+`ata_do_dia` fazia `int(dia.get('minutos_realizados') or 0)` (`cartorio.py:262`): o `or 0` transformava
+*"nao perguntei"* em *"zero"*. E a familia do `[]` de dois sentidos da secao 6 do CLAUDE.md, com outro
+nome: **ausencia de sinal lida como sinal bom.**
+
+### CORROBORACAO: DUAS SONDAS DIFERENTES, OS MESMOS MINUTOS
+A medicao de ontem (frota, filtro `ata.minutos_realizados == 0 and autoridade > 0`) deu **445 dia-colab
+/ 220.041 min**; esta deu **397 / 197.933 min**. **Nao e contradicao, e universo** -- e a diferenca
+grande esta NOMEADA: as **50 linhas / 4 colabs** com veredito `sem_celula` de ontem saem daqui porque
+**colab sem celula nenhuma na competencia nao esta na fila do cartorio**, e dia sem celula **nao tem ata
+para lavrar** (a cura os alcanca no espelho e no PDF, nunca no dinheiro). As **24 linhas de amostra** que
+ontem ficaram escritas nominalmente estao **24/24 DENTRO** da classe (c) de hoje, e os minutos batem **ao
+minuto** nas quatro que eu conferi caso a caso: col190 13/09 = 728 · col203 22/08 = 426 · col255 02/09 = 2 · col654
+25/08 = 17. Dois caminhos independentes, o mesmo numero. O numero **operativo para o apply e o de hoje**,
+porque o universo dele **e o do leitor de producao**, e porque ele foi medido contra o **GRAVADO** dos
+dois lados -- a licao literal do AVAL-DE-CRITERIO, onde o DIFF motor-x-motor dava +12,29 h e escondia 10
+campos.
+
+### O QUE O DEPLOY MOVE NO GRAVADO: **ZERO**, e agora com a fonte na mao
+Reconferido no codigo, nao suposto: `impressao_insumos` (`cartorio.py:93-106`) hashea **batidas, status
+de cobranca, chamados, DNA, veto e teto** -- **nunca a ata**. O gate do pulo (`cartorio.py:568`) compara
+`cel.impressao == imp`. Logo: a cura muda o valor DERIVADO, a impressao das **412 celulas** que mudam de valor (397 + 15) **nao muda**, o
+cron das 06:28 segue contando `pulados`, **e a ata segue lavrando 0 ate uma relavratura**. `--forcar`
+existe exatamente para isso e se chama, no proprio help, *"HX-BORDA-ATA: rejulga mesmo com impressao
+igual (backfill de ata)"*.
+
+E a ressalva que **nao** e boa noticia, e que eu prefiro escrita a descoberta depois: a impressao hashea
+`cob_status` e `chamados`, entao **folga do passado cujo chamado troque de estado e re-julgada
+incidentalmente** e grava o numero novo sem apply nenhum. Mudanca latente espalhada no tempo e pior que
+mudanca imediata, porque ninguem a ve acontecer.
+
+**Decido pela lei existente e registro (PAREI-SO-LEI: decisao tecnica nao devolve turno).** A
+relavratura **nao entra neste marco**: ela e ato proprio, com DIFF proprio, e se separa por competencia
+--- comp **10** (aberta) e PRE-APROVADA pela DINHEIRO-EM-COMPETENCIA-ABERTA com as quatro condicoes;
+comp **09** esta exportada, e por O TXT E FOTOGRAFIA DO CALCULO a correcao **pode** entrar a qualquer
+momento, mas ela vale **+2.379,63 h em 94 colabs de uma competencia ja entregue**, entao sai como
+**Pauta DP com os DOIS numeros**, nunca como numero que muda em silencio. O que vai ao ar agora e o
+**calculo certo**; o que mexe no que foi pago tem dono e nome.
+
+### A REVERSAO, ANTES (condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA)
+`logs/o191/reversao_ata_o191_20261005.jsonl` -- **566 linhas** (os 567 alvos menos o unico dia sem
+celula), lidas de **prod**, uma por celula, com `celula_id`, `colaborador_id`, `data`, os campos da ata
+que a cura alcanca (`minutos_realizados`, `minutos_previstos`, `n_missing`, `n_celulas`, `tipo_dia`),
+mais `impressao`, `veredito`, `veredito_em` e `julgada_em`. Com ela, qualquer relavratura futura se
+desfaz celula por celula. **"Sem trava" nunca foi "sem prova".**
+
+### TRES COISAS QUE A MEDICAO ME COBROU E QUE EU NAO SABIA AO COMECAR
+1. **A montagem da copia tem UM escritor, e eu ia monta-la a mao outra vez.** O runner nasceu com
+   `-v .../staticfiles:...` digitado, e o docker devolveu **rc=125** duas vezes -- primeiro por
+   `/app/staticfiles`, depois pelos **tres tmpfs de cache** -- porque o `app` da copia entra `:ro` e o
+   ponto de montagem tem de **existir na copia**. A linha passou a ser
+   `$(bash bin/arvore_do_push.sh --montagem "$COPIA")`, que e o escritor unico da lista (CLAUDE.md secao
+   3, a lapide das **92 copias orfas / 2,1 GB**), e os pontos de montagem nasceram nas duas copias. O
+   defeito nao foi o mount: foi eu ter escrito a mao o que ja tem dono.
+2. **`sem_celula` nao e so "menos 50 linhas": e uma CLASSE com dono proprio.** 4 colabs, 50 dias, 417,63
+   h em que a cura muda o espelho e o PDF **e nao pode mudar o dinheiro**, porque nao existe celula para
+   lavrar. Pela **L-099** isso tem dono: **CADASTRO** (`gerar_celulas` nao fez celula para aqueles dias),
+   nao ESTRUTURA -- e dono CADASTRO **nao se cura por codigo**, vai para a lista do admin. Fica
+   registrado aqui, com numero, para nao virar "detalhe que sumiu no arredondamento".
+3. **Eu tinha uma hipotese limpa sobre o impacto no dinheiro, e ela era FALSA -- caiu porque eu medi em
+   vez de afirmar.** O raciocinio era: o ramo de folga do montador e `if d not in cel_por_data`, logo
+   esses dias **nao tem celula**, logo o numero novo nunca alcanca a ata e o impacto e estruturalmente
+   zero. Perguntei ao banco (`tem_celula.py`, sombra) e a resposta foi **396 de 397 TEM celula** -- mais
+   155/155 da DERIVA e 15/15 da (b). O motivo real: `cel_por_data[d]` so e preenchido **dentro do laco
+   dos dias de TRABALHO** (`escala/utils.py:1292`), entao dia cadastrado como FOLGA que **tem**
+   `CelulaDia` (`trabalha=False`) cai no ramo de folga de qualquer jeito -- e foi essa medicao que deu
+   NOME a classe (c). A conclusao *"o deploy move zero na ata"* sobreviveu, **mas por um motivo
+   diferente e verificado** (a impressao e insumo-only). Escrever a hipotese como fato teria deixado o
+   RELATO com a conclusao certa e a razao errada, que e a pior forma de estar certo: nao avisa quando
+   deixa de valer. A ressalva do `cob_status` acima a minha hipotese nao previa; a fonte previu.
 
 ## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA TABELA DE LEITORES ESTAVA **INVERTIDA**
 
