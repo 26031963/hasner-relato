@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:34:31.**
+**Medido em 05/10/2026 00:39:42.**
 
 | | |
 |---|---|
@@ -114,21 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-❯ aval Ronald: REVOGO a lei FROTA-PROVA-AMOSTRA-EXPLICA que colei ha pouco. Nao registra; se ja escreveu em LEIS.md, CORTES.json,
-  CLAUDE.md ou no contador do test_lei_akita.sh, desfaz no mesmo marco. No lugar dela entra esta, pelo mesmo caminho (CORTES.json, nunca a
-  mao). Nao interrompe a O191: registra agora, aplica do proximo item em diante.
-
-  ID: REFERENCIA-E-A-LEI (proximo numero livre depois da L-109).
-
-  LEI: a referencia de um numero e a REGRA (CLT, CCT, L-NNN) aplicada ao cadastro e as batidas. O codigo que existe hoje NAO e gabarito do
-  codigo novo.
-
-  ORDEM NA FATIA:
-  (1) escrever os CASOS com a resposta pela regra, antes do codigo: cadastro tal, batidas tais, o dia vale tanto, e a L-NNN que decide;
-  (2) onde a regra nao da a resposta, a pergunta de lei sobe ao topo do RELATO JUNTA com as outras da fatia, antes de codar;
-  (3) codigo novo se certifica contra os casos e contra as propriedades fixas (partes somam o total, idempotente, previsto nao depende de
-  realizado, todo leitor le o mesmo numero);
-  (4) o caminho velho e lido UMA vez, na troca, so para responder quem muda de valor e quanto (L-094, L-092). Isso e medida de impacto,
   nao validacao.
 
   PROIBIDO: gastar turno explicando por que o caminho velho da o numero que da; certificar o novo por DIFF contra o velho; validar dois
@@ -144,10 +129,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   nova: esta, com corte dado aqui.
 
   Segue a fila; PAREI so em lei ou !.
-  ctrl+x ctrl+s to send now
-                                                                                                   ✔ Update installed · Restart to update
+
+● Revogada. Desfaço a L-110 anterior e ponho a nova no lugar, no mesmo marco e pelo mesmo caminho:
+
+  Ran 2 shell commands
+
+● Os três selos de lei verdes, e o nome revogado só sobra como história dentro da revogação — não como registro. Confirmando a casa inteira
+  e lendo o topo do RELATO:
+
+● Rodar os 61 selos e ler o topo do RELATO · 1m 12s
+  ⎿  $ cd /home/ronald/saas-hasner && n=0; v=0; for s in bin/tests/test_*.sh; do n=$((n+1)); if ! bash "$s" >/tmp/claude-1001/selo.out
+     2>&1; then v=$((v+1)); echo "VERMELHO: $s"; tail -4 /tmp/claude-1001/selo.out | sed 's/^/ /'; fi; done; echo "selos=$n vermelhos=$v";
+     echo "=== RELATO topo ==="; head -3… (1m 12s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✻ Jitterbugging… (12h 27m 44s · ↓ 1.4m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
