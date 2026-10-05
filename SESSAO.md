@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 19:41:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (411.4 MB). Acoes na janela: **1441**.
+**Medido em 05/10/2026 19:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (411.9 MB). Acoes na janela: **1449**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:46:30 | Bash | Fortalecer o controle positivo e reler o trecho | `cd /home/ronald/wt-regua && python3 - <<'PY' import io p='app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py' s=io.open(p,encoding='utf-8').read() s=s.replace("self._colab('[cpf]'", "self._colab('[cpf]'") velho = """ FechamentoMensal.objects.create(colaborador=c_cct, mes=9, ano=2026) FechamentoMensal.objects.create(colaborador=c_vazio, mes=9, ano=2026) cont = contadores_da_regua(se ...` |
+| 19:46:15 | Bash | Computar CPF válido e checar validação no modelo | `cd /home/ronald/wt-regua && python3 - <<'PY' def dv(b): s=sum(int(x)*(len(b)+1-i) for i,x in enumerate(b)); d=s*10%11 return str(0 if d>9 else d) base='486290428' d1=dv(base); d2=dv(base+d1) print('cpf valido:', base+d1+d2) PY grep -rn "def clean\\|validar_cpf\\|def save" app/colaboradores/models.py \| head -20` |
+| 19:46:00 | Bash | Ler o topo do selo | `cd /home/ronald/wt-regua && sed -n '1,100p' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
+| 19:45:59 | Bash | Ler a nova API da régua | `cd /home/ronald/wt-regua && sed -n '195,300p' app/core/regua_cct.py` |
+| 19:41:57 | Bash | Inverter os dois casos do selo da prorrogação | `cd /home/ronald/wt-regua && python3 - <<'PY' import io p = 'app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py' s = io.open(p, encoding='utf-8').read() # ---- caso 1: a lacuna se ve pelo CONTADOR, nao mais por uma funcao propria velho = """ from core.regua_cct import praca_sem_cct_cadastrada pr = Praca.objects.create(nome='P SEM CCT PRO', cidade='Cambe', estado='PR') emp_cct = Empresa.objects. ...` |
+| 19:41:12 | Bash | Ver os campos do FechamentoMensal | `cd /home/ronald/wt-regua && python3 - <<'PY' import re, io s = io.open('app/ponto/models.py', encoding='utf-8').read() i = s.find('class FechamentoMensal') print(s[i:i+1800]) PY` |
+| 19:41:08 | Bash | Ler o modelo novo | `cd /home/ronald/wt-regua && grep -n -B3 -A60 'class AplicacaoConvencao' app/core/models.py \| head -90` |
+| 19:41:03 | Bash | Ler o setup do selo | `cd /home/ronald/wt-regua && sed -n '41,100p' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py; echo "=== grep vinculo no arquivo"; grep -n 'VinculoSindicatoPraca\\|FechamentoMensal' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
 | 19:40:51 | Bash | Ler o corpo novo de regua_para | `cd /home/ronald/wt-regua && sed -n '330,430p' app/core/regua_cct.py` |
 | 19:40:48 | Bash | Ler a nova API da régua | `cd /home/ronald/wt-regua && sed -n '195,330p' app/core/regua_cct.py` |
 | 19:40:39 | Bash | Ler o selo da prorrogação pós-5h | `cd /home/ronald/wt-regua && sed -n '1,40p' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py && echo "....." && sed -n '100,200p' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
