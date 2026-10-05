@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 10:38:31.**
+**Medido em 05/10/2026 10:44:01.**
 
 | | |
 |---|---|
@@ -33,7 +33,11 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
+ M app/docs/PROMPTS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -107,38 +111,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  alcanca isso: colaboradores/views_fase.py:47-65 e escala/services/fase_na_tela.py:98-163 so oferecem "a partir da mudanca" e "desde o
+  inicio do vinculo", as duas derivadas de BATIDA na janela de 28 dias.
 
-● Background command "Empurrar o marco" completed (exit code 0)
+  CASOS PELA REGRA:
+  1. Golden col948 como estava (3 vigencias 15/09, 01/10, 05/10, fase impar; batidas so em 30/09, 02/10, 04/10): admin clica um dia de
+  plantao real e declara "vale desde 28/09" -> previa "3 furos -> 1", grava 1 vigencia desde 28/09 com ancora 28/09.
+  2. Colab SEM nenhuma batida no trecho -> funciona igual; a opcao nao depende de batida.
+  3. Data declarada alem do piso da porta, ou em competencia trancada -> a recusa que julgar_vinculo JA devolve aparece na tela, e nada
+  grava.
+  4. Salvar a MESMA fase com a mesma data -> no_op, zero vigencia nova. Hoje cria: ec1342 e ec1362 nasceram assim.
+  5. Vigencia INATIVA anterior que se sobrepoe a nova (ec1228 tem fim 30/09 e a nova comeca 28/09) -> o fim dela vira D-1, com trilha.
+  6. Trecho que toca competencia exportada -> a tela mostra o que a guarda barrou, como ja faz (HX-REGEN-NAO-TOCA-EXPORTADO); nada novo.
 
-  Ran 1 shell command
+  FONTE: colaboradores/services/vinculo.py::julgar_vinculo e ::executar_vinculo (escritor unico; nenhum escritor novo).
+  MUDA: a tela do assistente de fase ganha a terceira opcao "desde uma data que eu declaro", que so preenche data_inicio e data_ancora da
+  porta existente; casos 4 e 5 se curam no sitio em que nascem.
+  PROIBIDO: segunda porta; regra de data propria na tela; tirar o piso ou a trava de competencia da porta; fallback; mexer nas vigencias
+  ja gravadas de qualquer colab (so conta e publica quantos tem sobreposicao como a do caso 5).
+  PRONTO: RED com os 6 casos, commit, deploy, e print da tela com a terceira opcao num colab de teste. Sem isso = INCOMPLETO com lista.
+  LEI-AKITA: origem=views_fase.py:47-65 + fase_na_tela.py:98-163; testemunha=julgar_vinculo; juizes novos=0. Leis: L-020 (excecao de
+  cadastro), L-110, VINCULO-LINHA-DO-TEMPO. Lei nova: a deste aval.
+  LINHA HAIKU: (a) contador "vigencias sobrepostas no mesmo colab", esperado 0, rotulo de admin; (b) golden: "desde quando vale a escala
+  do col948?" esperado 28/09 via ferramentas; (c) degrau: leitura.
 
-● Push bloqueado pelo placar do topo — e corretamente: o mundo foi a 14/20 e o bloco do TICKETS ainda dizia 13/20. Primeiro, o veredito da
-  suite do pre-push:
+  Segue a fila; PAREI so em lei ou !
 
-  Ran 2 shell commands
+● As duas opcoes derivadas de batida
+  ⎿  $ sed -n '95,165p' escala/services/fase_na_tela.py
 
-● A suite não chegou a rodar: o selo de host barrou antes (recusa barata primeiro). Escrevendo o derivado:
-
-  Committed cc4cec4c, ran 2 shell commands
-
-● Push 2 rodando (agora a suite cheia). Enquanto corre, orientação só leitura do item (2):
-
-  Searched for 5 patterns, read 1 file, listed 1 directory, ran 15 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9k84c6wp.output (43 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
-     (32 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Empurrar o marco, 2a tentativa" still running in background
-
-● Advising using Fable 5.1
-
-✢ Frolicking… (2h 0m 36s · ↓ 232.4k tokens)
+✶ Frolicking… (2h 6m 6s · ↓ 250.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    7% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
