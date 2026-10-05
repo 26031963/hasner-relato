@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:06:01.**
+**Medido em 04/10/2026 21:11:16.**
 
 | | |
 |---|---|
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Exatamente três arquivos diferem — (a), (b) e o teste de (a). Lanço as duas medições em série:
+
   Ran 1 shell command
 
-● --only vai cru ao manage.py test, então aceita módulos pontilhados. Repito com a forma certa:
+● Enquanto mede, colho em prod os hashes que a condição 3 da DINHEIRO-EM-COMPETENCIA-ABERTA exige (leitura pura, sem motor):
 
   Ran 1 shell command
 
-● Enquanto o RED roda, escrevo a sonda do dinheiro. Leio como as sondas anteriores do O134 falam com a sombra, para usar a mesma porta:
+● Background command "Medir o dinheiro nas duas arvores" completed (exit code 0)
+
+● O notification é do lançador, não da medição (background duplo). Confiro os dois de uma vez — onde mora FechamentoMensal e o estado real
+  da medição:
+
+  Ran 1 shell command
+
+● Mesmo erro meu nos dois: FechamentoMensal mora em ponto/models.py. Confiro os campos antes de repetir:
 
   Ran 2 shell commands
 
-● Já existe a porta para exatamente isto — APP_SOMBRA=<dir>/app, nascida hoje para este item. Leio a assinatura das duas funções reais:
+● Relanço a medição (agora em um único background, sem o duplo que perdeu o veredito) e corrijo a leitura de hashes em paralelo:
 
-  Ran 1 shell command
+● Colher hashes de exportacao antes do apply
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     cat > /tmp/hash_antes.py <<'PYEOF'
+     # Condicao 3 da DINHEIRO-EM-COMPETENCIA-ABERTA: competencia exportada INTACTA, hash antes/depois.
+     # Leitura PURA: nenhum motor. Vigente = a mais recente NAO invalidada (nao ha campo `vigente`).
+     from folha.models import ExportacaoD…
 
-● por_dia_da_grade é a derivação canônica dos três campos de dinheiro do FechamentoMensal. Vejo como o fechamento.py monta a grade antes de
-  chamá-la, para a sonda usar o mesmo caminho:
-
-  Ran 1 shell command
-
-● Caminho canônico achado: grade_do_fechamento → por_dia_da_grade. Escrevo a sonda que roda esse mesmo caminho, para a frota inteira das
-  duas competências:
-
-● Escrever a sonda do DIFF de dinheiro
-  ⎿  $ cat > /home/ronald/saas-hasner/logs/sombra/o191_dinheiro_20261004.py <<'PYEOF'
-     # O191 passo 5 -- DIFF DE FROTA DE DINHEIRO (exigencia literal do passo 5: "DIFF de frota da 09 e da
-     # 10 publicado ANTES"). Roda o CAMINHO CANONICO, nunca uma re-soma propria:
-     # folha.export.grade_do_fechamento(fech) …
-
-· Compacting conversation… (8h 54m 3s · ↓ 1.1m tokens)
-  ▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 18%
+✻ Jitterbugging… (8h 59m 18s · ↓ 1.1m tokens · still thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
