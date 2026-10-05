@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 20:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1466**.
+**Medido em 05/10/2026 20:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1450**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1460,19 +1460,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:48:53 | Bash | LEI ANTES DO PATCH: grep dos sitios | `cd /home/ronald/wt-cert && grep -n "arvore_do_push\\|suite_nucleo\\|montagem\\|tmpfs" app/docs/LEIS.md app/docs/DOSSIES.md app/docs/CORTES.md 2>/dev/null \| cut -c1-230` |
 | 08:46:30 | Bash | Censo de --dir e do flag de bytecode | `cd /home/ronald/wt-cert && echo "=== quem aceita --dir:"; grep -ln '\-\-dir)' bin/*.sh; echo; echo "=== quem roda manage.py test em docker run (bin/*.sh):"; for f in bin/*.sh; do if grep -vE '^[[:space:]]*#' "$f" \| grep -qE 'manage\.py test'; then printf '%-28s pdwb=%s\n' "${f#bin/}" "$(grep -vE '^[[:space:]]*#' "$f" \| grep -c 'PYTHONDONTWRITEBYTECODE')"; fi; done` |
 | 08:45:45 | Bash | Ler o selo da montagem | `cd /home/ronald/wt-cert && cat -n bin/tests/test_montagem_vem_do_arvore_do_push.sh` |
-| 08:45:37 | Bash | Quem roda ruff | `cd /home/ronald/wt-cert && grep -rn "ruff" bin/*.sh bin/tests/*.sh 2>/dev/null \| cut -c1-190` |
-| 08:45:10 | Bash | Censo de quem monta copia e quem consulta a porta | `cd /home/ronald/wt-cert && grep -n "montagem\\|tmpfs\\|PYTHONDONTWRITEBYTECODE\\|:/app\\|:/srv\\|suite_nucleo\\|ARVORE_PUSH" bin/pre-push.sh bin/vigia_arvore.sh bin/suite.sh bin/*.sh 2>/dev/null \| grep -v "^bin/arvore_do_push.sh" \| cut -c1-200` |
-| 08:45:05 | Bash | Ler a porta unica da copia | `cd /home/ronald/wt-cert && cat -n bin/arvore_do_push.sh` |
-| 08:44:57 | Bash | Ler O192 e O193 inteiros | `cd /home/ronald/wt-cert && sed -n '339,340p' app/docs/BACKLOG.md \| fold -w 180 \| head -40` |
-| 08:44:54 | Bash | Procurar O192 e O193 nos docs | `cd /home/ronald/wt-cert && grep -rn "O192\\|O193" app/docs/BACKLOG.md app/docs/TICKETS.md app/docs/RELATO.md 2>/dev/null \| cut -c1-400` |
-| 08:44:50 | Bash | Ler as linhas O192 e O193 do TICKETS | `cd /home/ronald/wt-cert && grep -n "^\| O192 \\|^\| O193 " app/docs/TICKETS.md \| cat` |
-| 08:44:39 | Bash | Ler a porta da suite do nucleo | `cd /home/ronald/wt-cert && echo "=== suite_nucleo.sh:"; cat -n bin/suite_nucleo.sh` |
-| 08:44:16 | Bash | Trecho do placar que calcula o mundo | `cd /home/ronald/saas-hasner && sed -n '19,60p' bin/tickets_placar.sh` |
-| 08:44:13 | Bash | Como o placar deriva o ultimo push | `cd /home/ronald/saas-hasner && grep -n "ultimo push\\|push\\|RAIZ\\|toplevel\\|dirname" bin/tickets_placar.sh \| head -40; echo "=== wc"; wc -l bin/tickets_placar.sh` |
-| 08:44:04 | Bash | Localizar a linha do ultimo push nos dois TICKETS | `cd /home/ronald/saas-hasner && grep -n "ultimo push" app/docs/TICKETS.md \| head; echo "=== wt-cert:"; grep -n "ultimo push" /home/ronald/wt-cert/app/docs/TICKETS.md \| head; echo "=== diff dos dois TICKETS:"; diff app/docs/TICKETS.md /home/ronald/wt-cert/app/docs/TICKETS.md \| head -20` |
-| 08:43:56 | Bash | Comparar o topo do TICKETS entre arvore e raia | `cd /home/ronald/saas-hasner && git rev-parse --short HEAD \| cat; git rev-parse --short origin/main 2>&1 \| cat; echo "--- branch -a:"; git branch -a --format='%(refname:short) %(objectname:short)' \| head -20; echo "--- linha 76 main:"; sed -n '74,78p' app/docs/TICKETS.md; echo "--- linha 76 wt-cert:"; sed -n '74,78p' /home/ronald/wt-cert/app/docs/TICKETS.md` |
-| 08:43:34 | Bash | Conferir F9 na tabela e o placar na arvore principal | `cd /home/ronald/wt-cert && echo "--- citados:"; git log --format='%s%n%b' origin/main..HEAD \| grep -oE '(^\|[^A-Za-z0-9_])\[[A-Z][A-Za-z0-9]+([ _-]?[A-Za-z0-9]+)*\]' \| grep -oE '\[[A-Z][A-Za-z0-9]+([ _-]?[A-Za-z0-9]+)*\]' \| tr -d '[]' \| sort -u; echo "--- F9 na tabela:"; grep -nE '^\\| F9 ' app/docs/TICKETS.md \| head -3; echo "=== MAIN:"; cd /home/ronald/saas-hasner && bash bin/tickets_placar ...` |
-| 08:43:20 | Bash | Ler a regua de tickets inteira | `cd /home/ronald/wt-cert && cat -n bin/regua_tickets.sh` |
-| 08:43:16 | Bash | Estrutura da regua de tickets | `cd /home/ronald/wt-cert && grep -n "F9\\|BLOQUEADO\\|placar do topo\\|^[A-Za-z_]*(" bin/regua_tickets.sh \| head -40; echo "=== wc"; wc -l bin/regua_tickets.sh` |
-| 08:42:59 | Bash | Ler saida da tarefa concluida | `tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output 2>/dev/null` |
-| 08:42:57 | Bash | Regua de tickets rodando da raia | `cd /home/ronald/wt-cert && bash bin/regua_tickets.sh 2>&1 \| tail -20; echo "RC=$?"` |
