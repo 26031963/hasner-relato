@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 05:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1021**.
+**Medido em 05/10/2026 05:37:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1012**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1022,12 +1022,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:47:29 | Bash | Ler a familia fechamento na raia e conferir o selo 1 | `cd /home/ronald/wt-k5/app && python3 - <<'EOF' import os t=open('core/juizes.py',encoding='utf-8').read() i=t.index("PENDENTES['fechamento'] = (") blk=t[i:t.index('\n)\n',i)] print("--- linhas da familia na RAIA:") n=0 for l in blk.split('\n'): if '_p(' in l: n+=1; print('%2d %s'%(n,l.strip()[:150])) print("total=%d"%n) EOF echo "=== impressao ainda no codigo? (selo 1 na raia)"; cd /home/ronald/wt ...` |
 | 17:47:11 | Bash | Conferir onde a frase sobra na raia k5 | `cd /home/ronald/wt-k5/app && python3 - <<'EOF' import re src=open('ponto/views.py',encoding='utf-8').read().split('\n') defs=[(n+1,l.strip()) for n,l in enumerate(src) if re.match(r'^def \w+', l)] def func(ln): best=('?',0) for n,d in defs: if n<=ln and n>best[1]: best=(d,n) return '%s (def l.%d)'%(best[0][:42],best[1]) for s in ["mes = mes_ou(request.GET.get('mes'), hoje.month)", "mes = mes_ou(re ...` |
 | 17:46:57 | Bash | Localizar a raia k5-encerrada | `cd /home/ronald/saas-hasner && git worktree list \| cat; echo "=== commit 6a350aa9:"; git log --oneline -1 6a350aa9 2>/dev/null \| cat` |
-| 17:36:51 | Bash | Dobrar o HAIKU-DENTES no marco e empurrar | `cd /home/ronald/saas-hasner && git add app/docs/HAIKU-DENTES.md && git commit --amend --no-edit 2>&1 \| tail -3; echo "=== push:"; git push origin main 2>&1 \| tail -22` |
-| 17:36:44 | Bash | Regerar o HAIKU-DENTES e ver por que estava fora de sincronia | `cd /home/ronald/saas-hasner && python3 bin/gerar_haiku_dentes.py 2>&1 \| tail -3; echo "=== diff:"; git diff -- app/docs/HAIKU-DENTES.md \| head -40` |
-| 17:36:36 | Bash | Achar o selo do HAIKU-DENTES | `cd /home/ronald/saas-hasner && grep -rn "HAIKU-DENTES" bin/ 2>/dev/null \| head -10` |
-| 17:36:29 | Bash | Empurrar o marco do O135 | `cd /home/ronald/saas-hasner && git push origin main 2>&1 \| tail -20` |
-| 17:36:26 | Bash | Atualizar o rodape do TICKETS e dobrar no commit do marco | `cd /home/ronald/saas-hasner && bash bin/tickets_rodape.sh --escrever 2>&1 \| tail -4; echo "=== diff:"; git diff --stat -- app/docs/TICKETS.md; git add app/docs/TICKETS.md && git commit --amend --no-edit 2>&1 \| tail -4` |
-| 17:36:12 | Bash | Empurrar o marco do O135 | `cd /home/ronald/saas-hasner && git push origin main 2>&1 \| tail -20` |
-| 17:35:56 | Bash | Conferir o range do push antes de empurrar | `cd /home/ronald/saas-hasner && git fetch origin 2>&1 \| tail -2; echo "=== range:"; git log --oneline origin/main..HEAD \| cat; echo "=== ff?"; git merge-base --is-ancestor origin/main HEAD && echo "FF LIMPO" \|\| echo "NAO-FF"` |
-| 17:32:14 | Bash | Ver para que serve _limites no holerite | `grep -n "_limites\\|janela_anterior\\|def " holerite/matriz.py \| head -25` |
-| 17:32:06 | Bash | Ler o sitio do holerite para escrever a nota com precisao | `grep -n "ini = datetime.date(ano, mes, 1)" -B 14 -A 8 holerite/matriz.py` |
