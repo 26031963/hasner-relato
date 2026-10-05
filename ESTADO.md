@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:23:51.**
+**Medido em 05/10/2026 16:29:01.**
 
 | | |
 |---|---|
@@ -115,20 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Agora o item (3), O209. Primeiro fechei o ponto que decidia o tamanho da foto de reversão:
-
-  Ran 2 shell commands
-
-● Agora o item (3), O209. Dois achados mudam o plano escrito, e os dois para melhor:
-
-  Ran 5 shell commands
-
-● O incremental da sombra falhou com bug provado — e ele é do caminho, não meu desvio:
-
-  Ran 3 shell commands
-
-● O furo é nomeável: 4 linhas (escala_escalacolaborador 1362-1365, criadas em prod depois do dump das 04:00), 3 delas referenciadas por 27
   células da janela. O incremental não carrega cadastro por desenho (linha 5-7 do próprio arquivo), e hoje o desenho encontrou o caso que
   ele não cobre.
 
@@ -143,10 +129,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 1 shell command
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Frolicking… (7h 45m 56s · ↓ 953.2k tokens)
+  Ran 8 shell commands
+
+● O DRY em prod não entrega o que o advisor supõe, e isso muda o desenho — vou medir antes de reconciliar:
+
+  Ran 2 shell commands
+
+● A sombra refez inteira (sombra_diverge_de_prod=0, dump de hoje). Antes de desenhar o apply preciso reconciliar um ponto com o advisor — e
+  primeiro medir o sítio exato:
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+✢ Frolicking… (7h 51m 6s · ↓ 960.0k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   10% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
