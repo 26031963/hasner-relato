@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:58:59.**
+**Medido em 05/10/2026 12:04:01.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Rodar os três selos pela porta --only" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Os três selos: Ran 11 tests, OK, rc=0 — os 6 casos do recorte verdes, ruff zero e nenhum relógio solto. Lançando a suite inteira em
-  paralelo com o A/B (travas diferentes: pista de teste x sombra).
-
-  Ran 4 shell commands
-
-● Nada saiu do --forcar entre o sombra_cobre e o recálculo — nem o [RECORTE]. Lendo o sítio do print no comando para saber se ele é mudo
-  por desenho ou se o passo não rodou.
-
-  Ran 1 shell command
-
-● Hipótese: stdout do Django é bufferizado no pipe e só esvazia na saída do processo, enquanto as linhas do oráculo são de log (stderr, sem
-  buffer). Medindo em vez de deduzir — quem está rodando agora no container.
-
-  Ran 2 shell commands
-
-● Decisivo: o --forcar já terminou (PID 9 do container é o recálculo) — ele rodou em ~5 s e não imprimiu nada. Isso não é buffer. Lendo o
-  handle para ver para onde vai o self.stdout.
-
-  Ran 2 shell commands
 
 ● O foto canaliza por grep -v, o que não removeria a linha. Uma conferida só em settings/sombra.py (as "saídas desligadas") e sigo — o
   veredito do A/B é o snapshot, não o contador do comando.
 
-  Ver se o settings da sombra desliga stdout
+  Searched for 1 pattern, ran 1 shell command
 
-✢ Frolicking… (3h 21m 4s · ↓ 395.5k tokens · thinking)
+● Os contadores estavam lá, 107 linhas depois — a ordem no arquivo é da descarga do buffer, não do tempo. emp2: pedidos=108
+  dentro_da_empresa_e_passado=108, julgadas=108 carimbadas=108 pulados=0 emitidos=0 — nenhum excesso sobre o recorte e zero chamado
+  emitido. emp3 em curso. Preparando o snapshot de PROD (condição 2) enquanto roda.
+
+  Ran 1 shell command
+
+● O prod grava em /tmp do container e sai por docker cp — sem escrever na árvore viva nem depender de stdout. Escrevendo o snapshot de
+  prod.
+
+● Ler a cauda do snapshot
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; sed -n '40,70p' $S/snap_o192.py
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Referenced file escala/utils.py
+  ⎿  Referenced file core/placar_estrutural.py
+  ⎿  Read ../bin/suite.sh (102 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Task "Esperar o fim do A/B na sombra" still running in background
+
+● Task "Suite inteira na cópia, 2a volta" still running in background
+
+✢ Frolicking… (3h 26m 6s · ↓ 399.1k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    4% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
