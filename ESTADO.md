@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:15:45.**
+**Medido em 05/10/2026 11:20:45.**
 
 | | |
 |---|---|
@@ -140,9 +140,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Sem leitor da linha fim: (só o escritor). Agora o patch, na cópia:
 
-  Running 1 shell command…
+● Running 1 shell command…
 
-✻ Waiting for API response · will retry in 2m 33s · check your network
+✻ Waiting for API response · will retry in 2m 36s · check your network
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

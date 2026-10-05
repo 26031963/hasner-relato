@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 11:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (386.5 MB). Acoes na janela: **850**.
+**Medido em 05/10/2026 11:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (386.5 MB). Acoes na janela: **838**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -848,15 +848,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:26:45 | Bash | Ler a porta única da suite | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh` |
 | 23:25:55 | Bash | Conferir como a rodada verde foi lançada | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/o191/green_folga_c_20261004.out 2>/dev/null \| head -20; echo ---; grep -n 'suite.sh' logs/o191/*.cmd 2>/dev/null \| head` |
 | 23:21:46 | Bash | Inverter os três selos para a L-103 | `cd /home/ronald/copia-o191a/app && python3 - <<'PYEOF' import io, py_compile p = 'escala/tests/test_montador_realizado_pela_autoridade.py' s = io.open(p, encoding='utf-8').read() # ---- 1) a MESMA frase falsa que ja saiu de escala/utils.py: MEIA-CORRECAO E PIOR QUE NENHUMA a = """ # O DANO E CONTAGEM DOBRADA, nao "numero de outra fonte": as celulas que o alinhador pos naquela linha # sao as batida ...` |
-| 23:20:40 | Bash | Ler o contra-exemplo e o bloco de cabeça | `cd /home/ronald/copia-o191a/app && sed -n '198,232p' escala/tests/test_montador_realizado_pela_autoridade.py && echo '=== bloco de cabeca 100-132 ===' && sed -n '100,132p' escala/tests/test_montador_realizado_pela_autoridade.py` |
-| 23:20:29 | Bash | Ler os três selos L-102 | `cd /home/ronald/copia-o191a/app && sed -n '126,200p' escala/tests/test_montador_realizado_pela_autoridade.py` |
-| 23:20:13 | Bash | Ver as asserções dos três selos L-102 | `cd /home/ronald/saas-hasner && grep -A 14 'FAIL: test_L102' logs/o191/green_folga_c_20261004.out \| grep -E 'AssertionError\|line [0-9]+'` |
-| 23:19:48 | Bash | Rodar o módulo com a cura (c) | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "escala.tests.test_montador_realizado_pela_autoridade" > logs/o191/green_folga_c_20261004.out 2>&1; echo "RC=$?"; grep -E '^(OK\|FAILED\|Ran\|FAIL:\|ERROR:)' logs/o191/green_folga_c_20261004.out` |
-| 23:19:44 | Bash | Aplicar a cura (c) na cópia | `cd /home/ronald/copia-o191a/app && python3 - <<'PYEOF' import io, py_compile p = 'escala/utils.py' s = io.open(p, encoding='utf-8').read() old = """ if d not in cel_por_data: dias_out.append({'label': label, 'tipo_dia': 'folga', 'minutos_previstos': 0, 'celulas': [None] * len(col), 'sem_ancora': False, 'orfas': []}) continue """ assert s.count(old) == 1, s.count(old) new = ''' if d not in cel_por_ ...` |
-| 23:19:17 | Bash | Ler o contador de bordas | `cd /home/ronald/copia-o191a/app && sed -n '60,95p' ponto/services/bordas_realizado.py` |
-| 23:19:11 | Bash | Censo de leitores das marcas de turno | `cd /home/ronald/copia-o191a/app && grep -rn "realizado_sem_turno\\|realizado_turno_aberto\\|realizado_turno_longo" --include=*.py --include=*.html . \| grep -v '/tests/' \| grep -v 'escala/utils.py'` |
-| 23:18:51 | Bash | Ler o resto do ramo de trabalho | `cd /home/ronald/copia-o191a/app && sed -n '1345,1400p' escala/utils.py` |
-| 23:18:39 | Bash | Ler o montador em volta do ramo de folga | `cd /home/ronald/copia-o191a/app && sed -n '1255,1345p' escala/utils.py` |
-| 23:18:14 | Bash | Rodar o módulo reescrito | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only "escala.tests.test_montador_realizado_pela_autoridade" > logs/o191/red_folga_v2_20261004.out 2>&1; echo "RC=$?"; tail -45 logs/o191/red_folga_v2_20261004.out` |
-| 23:18:07 | Bash | Corrigir título e números superados | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'logs/o191/passo5_diff_20261004.md' s = io.open(p, encoding='utf-8').read() reps = [ ("## O RED DESMENTIU A MINHA EXPLICACAO DO VEREDITO (04/10) -- e a sonda pode ser o artefato", "## O RED DESMENTIU A MINHA EXPLICACAO DO VEREDITO (04/10) -- e depois a frota a confirmou em 56 de 70"), ("2. **PROVADO -- a ata lavra `minutos_realizados ...` |
-| 23:17:52 | Bash | Reescrever os dois parágrafos sinalizados | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat $S/md_head.txt > $S/md_novo.txt && cat >> $S/md_novo.txt <<'MDEOF' 3. **RESPONDIDO, e nao por mim: os 70 `concorde` tem DUAS causas, e elas se separam pelo numero de orfas.** Medido em `logs/sombra/o191_universo_cura_c_20261004.py` -> `logs/o191/passo5_universo_cura ...` |
