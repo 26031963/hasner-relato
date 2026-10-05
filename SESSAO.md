@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 16:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (401.2 MB). Acoes na janela: **1013**.
+**Medido em 05/10/2026 16:18:26.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (401.7 MB). Acoes na janela: **1025**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:18:23 | Bash | Publicar o marco da relavratura | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_relavra10_20261005.out 2>&1; echo "rc=$?"; tail -22 logs/deploy_relavra10_20261005.out` |
+| 16:18:14 | Bash | Confirmar que o push pousou | `cd /home/ronald/saas-hasner && tail -12 logs/push_relavra10_20261005.out; echo "=== git ==="; git fetch -q origin && git log --oneline -1 origin/main && git status --short -- app bin \| head` |
+| 16:18:10 | Bash | Conferir se o arreio ja le chamado/pergunta | `cd /home/ronald/saas-hasner && grep -n "PerguntaDisputa\\|ChamadoColaborador" logs/sombra/relavra10_frota_20261005.py \| head; echo "--- modelos: pk e campo de data"; grep -n "class ChamadoColaborador\\|class PerguntaDisputa" app/chamados/models.py` |
+| 16:17:47 | Bash | Ler o resto do arreio da frota | `cd /home/ronald/saas-hasner && sed -n '120,284p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:17:44 | Bash | Ler o arreio da frota, primeira parte | `cd /home/ronald/saas-hasner && sed -n '1,120p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:17:35 | Bash | Gravar a prova do ponto A e conferir o push | `cd /home/ronald/saas-hasner && cat > logs/o209_ato1_nao_move_dinheiro_20261005.md <<'EOF' # ATO 1 (relavrar a ata) NAO MOVE DINHEIRO -- censo FECHADO de receivers Medido em 05/10 16:1x, no vivo, para decidir o TAMANHO da foto de reversao do O209. A pergunta era: a foto precisa de `DiaPago` + `FechamentoMensal` dos ~572 colabs, ou so dos campos de `CelulaDia` + os pk-sets de chamado/pergunta? ## O  ...` |
+| 16:17:12 | Bash | Ver o que os receivers de chamado importam | `grep -n "@receiver\\|^def _\\| from \\|fechamento\\|dia_pago\\|recalcular" chamados/signals.py \| head -50` |
+| 16:17:04 | Bash | Censo fechado de todos os receivers do app | `echo "=== TODO @receiver do app, com o sender da linha seguinte ==="; grep -rn -A1 "@receiver" --include=*.py . \| grep -v "^--" \| grep "@receiver" \| sed 's/:.*@receiver/ -> /' \| head -60` |
+| 16:16:55 | Bash | Listar receivers de escala/signals.py e de CelulaDia | `echo "=== escala/signals.py: receivers e senders ==="; grep -n "@receiver\\|^def \\|sender=\\|invalidar_previsto\\|fechamento" escala/signals.py; echo; echo "=== quem recebe post_save de CelulaDia em TODO o app ==="; grep -rn "sender=.*CelulaDia\\|sender='escala.CelulaDia\"\\|CelulaDia)" --include=*.py . \| grep -i "receiv\\|signal\\|connect" \| head -20` |
+| 16:16:48 | Bash | Conferir o estado do push | `cd /home/ronald/saas-hasner && tail -25 logs/push_relavra10_20261005.out 2>/dev/null; echo "---"; ls -la logs/push_relavra10_20261005.out` |
+| 16:16:47 | Bash | Listar receivers de ponto/signals.py | `echo "=== ponto/signals.py: CelulaDia receivers ==="; grep -n "receiver\\|def \\|post_save\\|CelulaDia" ponto/signals.py \| head -40` |
+| 16:12:57 | Bash | Ler os sinais de ponto e escala | `grep -n "fechamento\\|dia_pago\\|CelulaDia" ponto/signals.py \| head -20; echo "=== escala/signals.py ==="; grep -n "fechamento\\|dia_pago\\|CelulaDia" escala/signals.py \| head -20` |
 | 16:12:54 | Bash | Procurar o recalculo por evento | `ls ponto/signals*.py 2>/dev/null; grep -rln "post_save" --include=*.py ponto/ escala/ chamados/ \| grep -v tests \| head; echo "=== fechamento em signals ==="; for f in $(grep -rln "post_save" --include=*.py ponto/ escala/ chamados/ \| grep -v tests); do grep -l "fechamento\\|dia_pago" "$f"; done 2>/dev/null` |
 | 16:12:46 | Bash | Censo dos chamadores de fechamento | `grep -rn "from ponto.services.fechamento import\\|services.fechamento import\\|import fechamento" --include=*.py . \| grep -v tests \| head -15; echo "=== recalculo por evento ==="; grep -rn "def .*fechamento" --include=*.py ponto/services/fechamento.py \| head` |
 | 16:12:39 | Bash | Censo de quem escreve DiaPago e fechamento | `echo "=== quem chama dia_pago.lavrar ==="; grep -rn "dia_pago import\\|dia_pago\.lavrar\\|from ponto.services.dia_pago" --include=*.py . \| grep -v tests \| head; echo; echo "=== quem chama recalcular_fechamento_mes / recalcular_fechamento_colab ==="; grep -rn "recalcular_fechamento" --include=*.py . \| grep -v tests \| grep -v "^./ponto/management" \| head` |
