@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:57:31.**
+**Medido em 05/10/2026 03:03:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)` |
+| `HEAD` local | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
 | `origin/main` | `024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu` |
-| commits a subir (`ahead`) | **4** |
+| commits a subir (`ahead`) | **5** |
 
 ## Fabrica
 
@@ -29,21 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu
 fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
 b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
 fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
 69f017bd O topo do TICKETS fechado no ato do push (O112)
-024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu
 ```
 
 ## `git status --short`
 
 ```
- M app/colaboradores/tests/test_ui_cal_competencia.py
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
-?? bin/tests/test_relato_guarda_pedido_de_patch.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -120,10 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Ran 1 shell command
 
-● The extractor rendered a 6th token — verifying whether that's a real contract or over-collection:
-
-  Ran 1 shell command
-
 ● Over-collection confirmed: two for nome in (...) loops share the target, and he-barra belongs to an assertNotIn against the markup.
   Binding each assertion to its haystack and its enclosing loop:
 
@@ -136,23 +129,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Now cure B — restoring the open pedido to the vivo RELATO, under a heading that states the law:
 
-  Rodar os 62 selos de host e as reguas de tickets · 1m 13s
-  ⎿  $ cd /home/ronald/saas-hasner && v=0; n=0
-     for s in bin/tests/test_*.sh; do n=$((n+1)); out=$(bash "$s" 2>&1); rc=$?
-     [ $rc -ne 0 ] && { v=$((v+1)); echo "VERMELHO rc=$rc $s"; echo "$out" | tail -4; }
-     done
-     echo "=== selos de host: $n rodados, vermelhos=$v ==="
-     echo "=== placar/regua dos tickets ==="
-     … (1m 13s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 7 shell commands
 
-* Jitterbugging… (14h 45m 34s · ↓ 1.6m tokens)
+● Neither id is in TICKETS — safe to name. Writing the RELATO section for this cure:
+
+  Committed eef236e1, ran 3 shell commands
+
+● All green. Launching the single push (pre-push runs the full suite, ~11 min):
+
+  Ran 1 shell command
+
+● Push in flight. Writing the two durable lessons while I wait (outside the repo, so the carimbed tree doesn't move):
+
+● Running 1 shell command…
+
+✢ Jitterbugging… (14h 51m 3s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
