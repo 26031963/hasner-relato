@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-5 FECHADOS com prova; o
+FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: item (2), `relavratura 10`** -- o item (1) e a **O195**
+(a cura que o destravava) estao FECHADOS e NO AR; o bloco da O195 esta logo abaixo. Historia do (1):
+**`CELULA-TURNO-FECHA`** -- passos 1-5 FECHADOS com prova; o
 passo 6 esta **PARCIAL** e por isso segue NAO carimbado. A ordem dele de 05/10 09:0x, literal: *"(1) turno
 -- apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4)
 O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pelo aval de 09:4x (*"BO de
@@ -17,6 +19,153 @@ commit** (`git log main..raia-bos`), arvore da `wt-bos` **vazia** no `git status
 arquivo tocado, nenhum pouso, os arquivos de sinal nunca criados -- ela morreu em ORIENTACAO, lendo os
 sitios dos quatro BOs. O worktree **fica de pe** (apagar raia e `!` dele) e os quatro BOs voltam a fila
 PRINCIPAL, na ordem do bloco. A principal segue na **O195** sem interrupcao.
+
+## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+
+**O ACHADO, em uma linha**: a guarda de saida de `ponto/turnos.py::_data_do_turno` comparava o INSTANTE
+da batida ao marco `hf` do dia -- **tolerancia ZERO** --, entao `07:50:17` contra `hf 07:50` mandava o
+plantao INTEIRO para o dia seguinte, que e FOLGA. col382 **17 s**, col250 **29 s**, col235 **7 s**. E a
+casa pagava duas vezes: o dia de trabalho ficava sem realizado (ninguem o cobrava) e o dia de folga
+ganhava minuto que nao e dele.
+
+**TRES [nome], nao um** (MEIA-CORRECAO E PIOR QUE NENHUMA):
+  (A) `_data_do_turno`, a sub-guarda de saida com tolerancia zero (O93/aval 27/09);
+  (B) `_mk`, `elif saida is not None: data_turno = data_local(saida.timestamp)` -- um `S` orfao tomava a
+      data CIVIL da saida e o juiz da vespera **nunca era consultado**;
+  (C) achado pelo PROPRIO RED: a guarda da BUG-145 em `_vespera` media **EXISTENCIA** de turno na
+      vespera quando a pergunta dela e **FIM de jornada**.
+
+**O TETO E A FORMULA QUE A CASA JA TEM, nao um numero novo** (BUG-144 proibe teto inventado): `jornada
+prevista + 4 h`, com fallback `cont_max_s`. Ela vivia em DOIS escritores (O68b 10/09 e O95 27/09) e no
+mesmo ato virou **UM** corpo, `_teto_s_da_jornada`, com **tres** leitores (`:81`
+`_cabe_na_jornada_da_vespera`, `:625`, `:710`). **juizes novos = 0.**
+
+**RED**: `ponto/tests/test_o195_dia_do_turno_por_envelope.py`, **19** testes, **6 VERMELHOS** contra
+`git show HEAD:`. Mais `test_o93_dia_da_jornada.py` (o `_ts` ganhou SEGUNDO -- escrito em minuto redondo,
+o selo da O93 passava raspando pela guarda que julga em segundos) e os **3** selos da L-103 em
+`escala/tests/test_montador_realizado_pela_autoridade.py` INVERTIDOS, cada um com controle positivo
+provando que os dois gates ainda mordem no realizado-zero. Suite inteira: **Ran 9638 / OK (skipped=42)**.
+`bin/tests/` 62 selos, 0 vermelhos. ruff limpo.
+
+### O CENSO E FECHADO, NAO AMOSTRA (L-110 item 4: leitura UNICA do caminho velho, como IMPACTO)
+Pela porta real `turnos_do_colab`, 543 colabs, 21/08-20/10: **12.362** turnos, `so_esq=0 so_dir=0` -- a
+cura nao cria nem destroi UM par. **58** trocam de dia, **0** na direcao errada. Por DESTINO comp09=47 /
+comp10=11; por ORIGEM comp09=44 / comp10=14 (o enquadramento da borda e por DESTINO).
+Anatomia: **17 par FECHADO** (os unicos que carregam minuto) + **37 orfa de SAIDA** + **4 orfa de
+ENTRADA**. Orfa vale 0 nos DOIS dias: ela muda a MARCACAO (Portaria 671), a lista `orfas` da ata e o gate
+`BATIDA_ORFA_FORA_TOLERANCIA`, nunca o minuto. Logo **34 dia-colab** mudam de numero, nao os 106 tocados.
+Leitores: **47** sitios de producao em 7 apps (`parear_turnos` 11, `turnos_de_batidas` 3,
+`turnos_do_colab` 33), censo AST em `logs/o195_censo_leitores_portas.out` -- **nenhum com regra propria de
+dia**.
+
+### O DIFF DE DINHEIRO (condicao 1 da DINHEIRO-EM-COMPETENCIA-ABERTA) — `logs/o195_diff_dinheiro.md`
+Sombra REFEITA hoje (SOMBRA_DUMP=20261005, BLOCO 14:01, DIVERGE=0, ERROS=0, STATUS=OK). Substrato
+conferido: a ata que a sombra le, dia a dia, contra `logs/o195_ata_prod.out` (SELECT puro em prod) =
+**106 de 106 iguais, 0 divergem**. Arreio unico `logs/sombra/rodar_na_sombra.sh` com `APP_SOMBRA`, a
+MESMA sonda nas duas arvores -- a unica forma de um DIFF de CODIGO nao virar DIFF de DADO.
+
+Tres numeros, no nivel da ATA (min):
+
+    (1) ata -> juiz_HEAD   = A REGRESSAO JA EM VOO    comp09 trab -2051 · folga +7600 · comp10 trab -665 · folga +604 · TOTAL +5488
+    (2) head -> cura       = O QUE A CURA MUDA        comp09 trab +2219 · folga -1890 · comp10 trab +215 · folga -604 · TOTAL  -60
+    (3) ata -> cura        = o que a proxima lavra escreve  comp09 trab +168 · folga +5710 · comp10 trab -450 · TOTAL +5428
+
+**O CORTE QUE ATRIBUI OS NUMEROS** -- (3) soma coisas de donos diferentes:
+  **(A)** os **34** dia-colab que a cura MOVE -> comp09 trab **+168**, comp10 trab **-450**, folga +-0,
+          TOTAL **-282**;
+  **(B)** os **72** que ela NAO move (`head == cura` linha a linha) -> os **+5.710 de folga da comp09
+          vivem INTEIROS aqui**. Entao **zero deles e O195**: e 100% CELULA-TURNO-FECHA, no ar desde 10:20.
+
+Os **-282** fecham par a par: **-722** em 6 pares que o caminho morto DOBROU (col174 -92 e -60, col200
+-60 e -60, col235 -61, col382 -389) **-60** do col302 (abaixo) **+500** em 3 que ele SUB-contou (col489
++180, col490 +237, col515 +83). E `head_2d == cura_2d` em **16 dos 17** pares: o total dos DOIS dias e o
+mesmo para os dois juizes -- muda em QUAL dia o minuto e arquivado. **12 de 13** colabs fecham em 0.
+
+**O NUMERO QUE CHEGA AO DINHEIRO** (a ata nao e a folha): `ponto/services/fechamento.py:533` soma
+`por_dia_da_grade` (`ponto/services/dia_pago.py:314-342`, UMA derivacao, dois chamadores), que carrega
+universo `tipo_dia in ('trabalho','ausencia')`, abono = previsto da AUSENCIA, e **teto POR DIA
+`min(realizado, previsto)`** (F1 04/08, "HE de um dia nao tapa furo de outro"). Depois do teto, so em dia
+de trabalho:
+
+    comp      ata_cap  head_cap  cura_cap   cura-ata   cura-head
+    2026-09      8774      6723      9589     + 815      +2866
+    2026-10      4232      3567      4392     + 160      + 825
+    TOTAL       13006     10290     13981     **+975 (+16,25 h)**   **+3691 (+61,52 h)**
+
+E aqui aparece o que a ata escondia: o delta capado da 09 (**+815**) e MAIOR que o cru (+168) -- o dia que
+o caminho morto DOBROU ja era truncado pelo teto, e o que ele SUB-contou passava inteiro. **O defeito
+custava dinheiro ao colaborador**, e a cura devolve. Deixar o HEAD como esta custa **-61,52 h**.
+
+**FOLGA NAO DOBRA** (lido na fonte, nao temido): `por_dia_da_grade` exclui folga do universo, entao
+realizado de folga nunca alcanca `FechamentoMensal.minutos_realizados`; e `horas_folga_trabalhada` sai do
+MOTOR (`dia_pago.py:221`, `p.minutos_trabalhados`), nunca da ata. Fontes distintas, universos disjuntos.
+
+### A BORDA DA COMPETENCIA: NAO HA PAREI, e a cura e quem PRESERVA
+Dos 58, **3** cruzam a borda, os tres de `2026-09-21 (comp10)` para `2026-09-20 (comp09)`: col44, col382,
+col451. **Dois sao orfas e valem 0 min.** So o **col382** e par fechado, **389 min** -- e a ata de prod
+**JA TEM** esses 389 em 09-20, e o TXT exportado da 09 **ja os carrega**. Quem os REMOVERIA numa relavra e
+o **HEAD**; a **CURA os MANTEM**. A L-092 nao e furada aqui: ela e cumprida pela cura.
+
+### CONDICAO 3: O DEPLOY NAO REENFILEIRA DIA DA 09 (lido na fonte)
+`ponto/services/cartorio.py:550-563` seleciona as batidas do julgamento por **DATA CIVIL do timestamp**,
+nunca por `data_turno`:
+`bj = [b for b in bs if data - 1d <= _tz.localdate(b.timestamp) <= data + 1d]`, e `impressao_insumos`
+(`:85`, comentario em `:132-133`) carimba batidas/cobertura/chamados/DNA/veto/teto -- **e nao a ata**.
+Logo a cura, por si, **nao muda a `impressao` de nenhum dia da 09** e nao pode reenfileirar um dia
+exportado. O que reenfileira segue sendo o que sempre reenfileirou: batida, cobertura, chamado ou DNA
+mudando. A cura muda o VALOR que uma lavra -- disparada por OUTRA coisa -- escreveria.
+Alcance de escrita pelos chokepoints: `ponto/signals.py::_recompute_around` usa
+`data_local(batida) - 2d .. + 1d` e `_recompute_escala` usa `localdate() - 2 .. + 1`, entao trafego de
+rotina em 05/10 so alcanca 03/10-06/10 = **comp10**; a 09 so por batida ou escala RETROATIVA.
+`data_turno` nao existe na `Batida`: ele e escrito no `TurnoMaterializado` por
+`ponto/nucleo.py::recompute_turnos` (apaga-e-reconstroi, dentro de `transaction.atomic`).
+**EXPOSICAO PREEXISTENTE, nomeada e NAO criada aqui**: `ponto/portas/celula.py::lavrar_veredito` (`:508`)
+e `ponto/management/commands/processar_cartorio.py:49-62` **nao tem filtro de exportada/trancada**.
+
+### CONDICOES 2 E 4
+`logs/o195_reversao_20261005.json` (SELECT puro em prod, 14:15): a CELULA INTEIRA dos **106** dia-colab
+(ata, dna, veredito, veredito_via, veredito_em, impressao, julgada_em, origem, trabalha, insumos_em) e o
+`FechamentoMensal` 10/2026 dos **30** colabs, 37 campos cada. Hash da 09 **ANTES** -- atas INTEIRAS da 09
+dos 30 colabs, **903** linhas, janela 2026-08-21..2026-09-20, JSON canonico:
+**`37a29deb2a11b39dbc94ec7ef1ba6bc7`** (+ md5 por colaborador no mesmo arquivo). O mesmo hash se refaz
+DEPOIS do deploy e entra aqui.
+
+### O UNICO PAR QUE NAO CONSERVA: col302, -60 min, causa NOMEADA
+`logs/sombra/o195_col302_autopsia_20261005.py`, rodada nas duas arvores. 09/09 e dia de TRABALHO dele e o
+DNA declara pausa **01:00-02:00**; ele bate `01:00:02 -> 06:00:07` (300 min) mais uma orfa de saida
+`00:00:53`. O **HEAD** arquiva o turno em **10/09**, onde `trabalha=False` e `intervalo_do_dia=(None,
+None)` -- nenhuma pausa descontada, **300 min**, `janela_descontada=0`. A **CURA** arquiva em **09/09**,
+o dia que o turno E: `janela_descontada=60` -> **240 min**. Os 60 min sao a INTRAJORNADA que o DNA
+declara e que o HEAD deixava de descontar por arquivar o plantao num dia de folga. E a tese da cura
+aparecendo no numero.
+
+### L-085: O RODAPE DELA FECHA, 10 de 10
+Os 10 dia-colab que `logs/o191/passo5_frota_classes_20261004.txt` isolou (`L085_segundos` 6 dias, overrun
+7s..59s; `L085_overrun` 4 dias, 159s..3617s) foram medidos um a um nas duas arvores: **10 CURADOS, 0
+inalterados, 0 piores** -- col489 08-31 420->0, col382 10-01 364->0, col515 09-16 330->0, col852 08-22
+305->0, col302 09-10 300->0, col277 09-01 280->0, col250 09-30 240->0, col490 09-01 237->0, col654 08-25
+17->0, col454 09-02 1->0. O rodape `NAO cobre a entrada que cruza -- RED col382, obra O76` deixa de
+existir, e a celula da L-085 passa a **vigente, com selo**.
+
+### TELA x FOLHA DIVERGEM AGORA (nao e da cura; e o que a cura reduz)
+`espelho.py:300-301` chama `realizado_do_dia` AO VIVO; a folha le a ata. Desde o deploy das 10:20,
+`juiz_head != ata` em **33 dia-colab de 14 colabs**: a tela soma **8.204 min** onde a folha tem **2.716**.
+A coluna `head` deste DIFF e literalmente o que tela e PDF mostram neste momento.
+
+### A CORRIDA, dita por inteiro
+`6319b10c` (CELULA-TURNO-FECHA) pousou 10:19 e deployou 10:20, matando o segundo juiz do realizado da
+ata. As atas destes dias foram lavradas em **02/10 17:50** pelo caminho que morreu (65 das 106). O
+cartorio enfileira por IMPRESSAO DE INSUMO, nao por versao de codigo: **nao ha relavra agendada**, o dano
+pousa no primeiro movimento de insumo. Por isso a cura vem ANTES, e por isso o numero de (1) e **historia
+pre-cura**, nao projeto desta fatia.
+
+**SELO DE CONDUTA.**
+`LEI-AKITA: origem=ponto/turnos.py::_data_do_turno/_mk/_vespera, testemunha=marcos do DNA congelado via
+_cabe_na_jornada_da_vespera + CelulaDia.ata, RED=ponto/tests/test_o195_dia_do_turno_por_envelope.py (19;
+HEAD 6 falhas) + test_o93_dia_da_jornada.py + os 3 selos L-103 invertidos, quem-mais-le=47 sitios de
+producao em 7 apps (parear_turnos 11, turnos_de_batidas 3, turnos_do_colab 33), censo AST em
+logs/o195_censo_leitores_portas.out, juizes novos=0`
+
 **ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
 PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de
