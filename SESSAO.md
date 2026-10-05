@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 11:00:28.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (385.8 MB). Acoes na janela: **855**.
+**Medido em 05/10/2026 11:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (386.3 MB). Acoes na janela: **862**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:05:26 | Bash | Inspecionar scratchpad | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls $S; echo ---; find $S/copia_o192 -name 'test_cartorio_recorte*' ; echo ---; ls $S/copia_o192 \| head` |
+| 11:05:15 | Bash | Localizar a copia e o teste novo | `ls -d /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192 2>/dev/null; find / -maxdepth 6 -name 'test_cartorio_recorte_de_celulas.py' 2>/dev/null` |
+| 11:05:10 | Bash | Ler o teste novo na copia | `cd /home/ronald/saas-hasner/app/../scratchpad/copia_o192 2>/dev/null \|\| cd /home/ronald/saas-hasner/scratchpad/copia_o192; pwd; cat app/ponto/tests/test_cartorio_recorte_de_celulas.py` |
+| 11:05:04 | Bash | Ver incrementos dos contadores | `grep -n "out\['julgadas'\]\\|out\['pulados'\]\\|out\['carimbadas'\]\\|def contadores" -B2 -A4 ponto/services/cartorio.py \| head -60` |
+| 11:04:56 | Bash | Ler o comando processar_cartorio | `cat ponto/management/commands/processar_cartorio.py` |
+| 11:04:44 | Bash | Ler a porta lavrar_veredito | `grep -n 'def lavrar_veredito' -A 80 ponto/portas/celula.py` |
+| 11:01:14 | Bash | Ler lavrar_veredito | `grep -n 'def lavrar_veredito' -A 45 escala/models.py \| head -60` |
+| 11:00:45 | Bash | RED: rodar o recorte contra a copia sem patch | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && bash bin/suite.sh --dir $COP --only "ponto.tests.test_cartorio_recorte_de_celulas" --espera 300 2>&1 \| tail -16` |
+| 11:00:33 | Bash | Ler o uso do suite.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
 | 11:00:26 | Bash | Rodar o RED na copia sem o patch | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && python3 - "$COP" <<'PY' import sys p=sys.argv[1]+'/app/ponto/tests/test_cartorio_recorte_de_celulas.py' s=open(p).read() lixo=" self._bate(self.cel_noite.data, datetime.time(22, 0), 'E') if False else None\n" assert s.count(lixo)==1 s=s.replace( ...` |
 | 11:00:16 | Bash | Escrever o RED do recorte | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && cat > $COP/app/ponto/tests/test_cartorio_recorte_de_celulas.py <<'PY' """RECORTE-DE-ATA (O192): o `--forcar` do cartorio ganha ALVO, e o alvo e' dia-colab. O `--forcar` existe desde a HX-BORDA-ATA para fazer BACKFILL de ata: rejulgar mesmo com a ...` |
 | 10:59:15 | Bash | Criar a copia do HEAD e pedir a montagem | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && rm -rf $COP && mkdir -p $COP && git archive HEAD \| tar -x -C $COP && ls $COP \| head && echo "--- montagem ---" && bash bin/arvore_do_push.sh --montagem $COP 2>&1 \| head -5` |
@@ -863,5 +872,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 23:06:01 | Bash | Rodar a sonda combinada na sombra | `cd /home/ronald/saas-hasner && nohup bash logs/sombra/rodar_na_sombra.sh o191_universo_cura_c_20261004.py > logs/o191/passo5_universo_cura_c_20261004.txt 2>&1 & echo "lancado pid=$!"` |
 | 23:05:56 | Bash | Corrigir janela e indexação para a forma do cartório | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'logs/sombra/o191_universo_cura_c_20261004.py' s = io.open(p, encoding='utf-8').read() a = " j_fim = timezone.make_aware(dt.datetime.combine(jf + dt.timedelta(days=1), dt.time.min))" assert s.count(a) == 1 s = s.replace(a, " j_fim = timezone.make_aware(dt.datetime.combine(jf + dt.timedelta(days=3), dt.time.min))") b = """ por_data =  ...` |
 | 23:05:47 | Bash | Ver d0/d1/j_ini/j_fim no cartório | `cd /home/ronald/copia-o191a/app && sed -n '425,437p' ponto/services/cartorio.py` |
-| 23:05:38 | Bash | Conferir a forma exata da chamada do cartório | `cd /home/ronald/copia-o191a/app && sed -n '438,462p' ponto/services/cartorio.py && echo "--- apuraveis ---" && grep -n '_apuraveis' ponto/services/cartorio.py \| head -5 && echo "--- sig ---" && grep -n 'def batidas_apuraveis' -A3 ponto/turnos.py` |
-| 23:05:31 | Bash | Escrever a sonda combinada das duas perguntas | `cd /home/ronald/saas-hasner && cat > logs/sombra/o191_universo_cura_c_20261004.py <<'PYEOF' # DUAS PERGUNTAS QUE BLOQUEIAM A LINHA DO TOPO DO RELATO (04/10), numa passada so: # # (2) POR QUE 58 dias com `orfas` no dict lavraram `concorde`, se `classificar_dia` HOJE devolve # FATO_SEM_PREVISAO para eles? Hipotese: TETO TEMPORAL -- `dia_encerrado = not (hoje and data # and data >= hoje)` era False p ...` |
