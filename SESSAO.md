@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 01:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.3 MB). Acoes na janela: **1441**.
+**Medido em 05/10/2026 01:38:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.4 MB). Acoes na janela: **1430**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:37:51 | Bash | Listar as diferencas entre a copia curada e a arvore viva | `cd /home/ronald/copia-o191a 2>/dev/null && git -C /home/ronald/saas-hasner rev-parse --short HEAD; echo "=== diff copia x HEAD:"; cd /home/ronald/saas-hasner && for f in $(cd /home/ronald/copia-o191a && find app bin -name '*.py' -o -name '*.mmd' 2>/dev/null \| head -0); do :; done; diff -rq --exclude='.git' --exclude='staticfiles' --exclude='logs' --exclude='media' --exclude='*.pyc' --exclude='__p ...` |
+| 01:37:43 | Bash | Lancar o refazer e o bloco da sombra em sequencia | `cd /home/ronald/saas-hasner && mkdir -p logs/o191 && nohup bash -c 'bash bin/sombra.sh --refazer --dump-agora > logs/o191/sombra_refazer_20261005.out 2>&1; echo "RC_REFAZER=$?" >> logs/o191/sombra_refazer_20261005.out; bash bin/sombra.sh --bloco > logs/o191/sombra_bloco_20261005.out 2>&1; echo "RC_BLOCO=$?" >> logs/o191/sombra_bloco_20261005.out; touch logs/o191/sombra_20261005.done' > /dev/null 2 ...` |
+| 01:37:37 | Bash | Conferir as flags do sombra.sh | `cd /home/ronald/saas-hasner && grep -n -- "--bloco\\|--dump-agora\\|--refazer" bin/sombra.sh \| head -30` |
+| 01:37:32 | Bash | Conferir o carimbo da sombra e crons em curso | `cd /home/ronald/saas-hasner && date '+%F %H:%M:%S' && bash bin/sombra.sh --conferir 2>&1 \| head -20; echo "=== crons em curso:"; ls -la logs/crons_em_curso/ 2>&1 \| head` |
+| 01:35:13 | Bash | Rodar os selos de host sobre a arvore viva | `cd /home/ronald/saas-hasner && n=0; verm=0; for s in bin/tests/test_*.sh; do n=$((n+1)); if ! out="$(bash "$s" 2>&1)"; then verm=$((verm+1)); echo "VERMELHO: $(basename $s)"; echo "$out" \| tail -15 \| sed 's/^/ /'; fi; done; echo "selos=$n vermelhos=$verm"` |
+| 01:35:09 | Bash | Ler o bloco dos selos de host na regua | `cd /home/ronald/saas-hasner && sed -n '130,165p' bin/regua.sh` |
+| 01:33:11 | Bash | Ver como a regua roda os selos de host | `cd /home/ronald/saas-hasner && grep -n "bin/tests" bin/regua.sh \| head` |
+| 01:33:07 | Bash | Atualizar as duas celulas de ESTADO do BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'PY' p = 'app/docs/BACKLOG.md' s = open(p, encoding='utf-8').read() v1 = "**EM CURSO (ORDEM-VIVA-TOPO)** -- passos 1-4 FECHADOS (04/10 12:xx): sem par 88 (era 122), A=30 do turno vizinho, B=58, C=0. Passos 5-6 DESBLOQUEADOS pela lei das ~14:xx (palavra SEM numero, ZERO DECLARADO) e o trabalho e a **O191**, que comeca pela CONDICAO DE ENTRADA. Patch em `wt ...` |
 | 01:32:47 | Bash | Procurar o selo da DIETA | `cd /home/ronald/saas-hasner && ls bin/tests/ \| grep -i "dieta\\|prosa\\|backlog" ; echo ===; grep -rn "300" bin/tests/test_dieta*.sh bin/tests/*backlog* 2>/dev/null \| head` |
 | 01:32:38 | Bash | Localizar a celula do item no BACKLOG | `cd /home/ronald/saas-hasner && grep -n "O191\\|CELULA-TURNO-FECHA" app/docs/BACKLOG.md \| head -20` |
 | 01:32:34 | Bash | Registrar a hipotese derrubada pela medicao | `cd /home/ronald/saas-hasner && python3 - <<'PY' p = 'app/docs/RELATO.md' s = open(p, encoding='utf-8').read() t_v = '### DUAS COISAS QUE A MEDICAO ME COBROU E QUE EU NAO SABIA AO COMECAR' assert s.count(t_v) == 1 s = s.replace(t_v, '### TRES COISAS QUE A MEDICAO ME COBROU E QUE EU NAO SABIA AO COMECAR') fim = """ nao ESTRUTURA -- e dono CADASTRO **nao se cura por codigo**, vai para a lista do admi ...` |
@@ -1432,22 +1440,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:38:23 | Bash | Conferir o avanco da v3 | `cd /home/ronald/saas-hasner/logs/o134 && tail -2 o189_ata_zero_v3_20261004.out` |
 | 13:38:19 | Bash | Rodar os dois selos de host | `cd /home/ronald/saas-hasner && bash bin/tests/test_lei_protege_sitio.sh 2>&1 \| tail -3; bash bin/tests/test_leis_indice.sh 2>&1 \| tail -2` |
 | 13:38:14 | ToolSearch |  | `-` |
-| 13:38:01 | Bash | Conferir o avanco da v3 | `cd /home/ronald/saas-hasner/logs/o134 && tail -2 o189_ata_zero_v3_20261004.out` |
-| 13:37:58 | Bash | Conferir o estado da arvore viva | `cd /home/ronald/saas-hasner && git status --porcelain \| grep -v '^??' ; echo "--- untracked relevantes:"; git status --porcelain \| grep '^??' \| grep -v 'fatias_agendadas\\|esteira.pausada'` |
-| 13:37:50 | Bash | Conferir a secao 1 da v3 | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '15,32p' o189_ata_zero_v3_20261004.out; echo ---; tail -4 o189_ata_zero_v3_20261004.out` |
-| 13:37:47 | Bash | Escrever o rascunho da secao O189 do RELATO | `mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o189_relato.md <<'EOF' ## 04/10 13:3x — O189: OS 73 DE ATA ZERO, MEDIDOS COM A LINHA 131 DISTINGUINDO `None` DE 0 **O aval (literal):** *"antes de eu responder a lei da L-102, mede na sombra, 09 ...` |
-| 13:36:22 | Bash | Conferir a v3 | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '15,32p' o189_ata_zero_v3_20261004.out 2>/dev/null; tail -3 o189_ata_zero_v3_20261004.out` |
-| 13:36:12 | Bash | Ler o topo do RELATO | `cd /home/ronald/saas-hasner/app/docs && sed -n '1,34p' RELATO.md` |
-| 13:35:55 | Bash | Ler os ramos de supra_juiz que consomem real | `sed -n '125,135p;145,170p;285,300p' ponto/supra_juiz.py` |
-| 13:35:45 | Bash | Ler as secoes 4 e 5 da v2 | `cd /home/ronald/saas-hasner/logs/o134 && awk '/=== 4\./,0' o189_ata_zero_v2_20261004.out \| sed -n '1,20p' && echo ... && awk '/=== 5\./,0' o189_ata_zero_v2_20261004.out \| sed -n '1,14p'` |
-| 13:35:40 | Bash | Rodar a v3 da sonda | `cd /home/ronald/saas-hasner && bash logs/o134/roda_o189_v3_20261004.sh` |
-| 13:35:37 | Bash | Montar a v3 com o contador de n_ok | `cd /home/ronald/saas-hasner/logs/sombra && cp o189_ata_zero_v2_20261004.py o189_ata_zero_v3_20261004.py && python3 - <<'PY' import py_compile, pathlib p = pathlib.Path('/home/ronald/saas-hasner/logs/sombra/o189_ata_zero_v3_20261004.py') s = p.read_text() old = """ VISTOS['grupo ' + grupo] += 1 """ new = """ VISTOS['grupo ' + grupo] += 1 # ANTI-VACUIDADE DO GRUPO DOS 30 (v3): "0" so vale se a PERGU ...` |
-| 13:35:11 | Bash | Ver o predicado nova da v3 | `cd /home/ronald/saas-hasner/logs/sombra && ls \| grep -i predicada && grep -n "nova\\|acesas\\|n_ok\\|n_casadas" predicada_bordas_v3_20261004.py \| head -20` |
-| 13:35:06 | Bash | Ler a v3 da predicada | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '1,30p' predicada_bordas_v3_20261004.out` |
-| 13:34:44 | Bash | Ler a secao 3 da v2 | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '45,120p' o189_ata_zero_v2_20261004.out` |
-| 13:34:40 | Bash | Ver de onde vem n_ok no dia | `grep -n "n_ok" escala/services/leitor_celula.py \| head -20` |
-| 13:34:26 | Bash | Ler as secoes 1 e 2 da v2 | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '1,45p' o189_ata_zero_v2_20261004.out` |
-| 13:34:22 | Bash | Ler a mensagem de commit preparada | `cd /home/ronald/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_lps.txt 2>/dev/null \|\| ls /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/` |
-| 13:34:10 | Bash | Conferir o progresso da v2 | `cd /home/ronald/saas-hasner/logs/o134 && tail -c 1200 o189_ata_zero_v2_20261004.out 2>/dev/null; echo "---"; ls -la o189_ata_zero_v2_20261004.out 2>/dev/null` |
-| 13:33:52 | Bash | Ler o resultado publicado dos 15 | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '118,175p' diff_cobranca_20261004.out` |
-| 13:33:48 | Bash | Mapear a saida do diff de 11:07 | `cd /home/ronald/saas-hasner/logs/o134 && grep -n "===\\|15\b" diff_cobranca_20261004.out \| head -40` |
