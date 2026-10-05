@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 17:23:01.**
+**Medido em 05/10/2026 17:28:31.**
 
 | | |
 |---|---|
@@ -118,11 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  verdadeiro por construção — as duas somas só acumulam onde mov[dia] == esp[dia], então as parcelas são idênticas termo a termo. Ele não
-  prende nada. E há um furo real sem guarda nenhuma: colab do ESPERADO que caia nos dois continue (sem Colaborador, sem células) é pulado
-  em silêncio. Curando os dois:
-
-  Ran 2 shell commands
 
 ● O novo assert precisa da mesma disciplina do resto do script — perguntar ao dado antes do veredito. Colab previsto sem célula pode ser
   fato novo depois do dump:
@@ -143,11 +138,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar o arquivo de sinal da cadeia r3" completed (exit code 0)
 
-● Comparar o ESPERADO da base suja com o da base limpa
-  ⎿  $ cd /home/ronald/saas-hasner && python3 logs/o209_cmp_esperado.py logs/sombra/o209_esperado_20261005_BASE_SUJA.json
-     logs/sombra/o209_esperado_20261005.json 2>&1 | head -120
+  Read 1 file, ran 15 shell commands
 
-· Frolicking… (8h 45m 6s · ↓ 1.1m tokens · thinking)
+● Lendo o próprio DRY, o rótulo do universo compara duas janelas diferentes — e isso é a testemunha convidando a um alarme falso. Curo o
+  rótulo antes de escrever:
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+✢ Frolicking… (8h 50m 36s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
