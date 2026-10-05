@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 09:22:32.**
+**Medido em 05/10/2026 09:28:01.**
 
 | | |
 |---|---|
@@ -108,13 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Vou construir em CÓPIA do HEAD (LEI-AKITA 10). Primeiro ver o que a porta exige da cópia:
-
-  Ran 4 shell commands
-
-● RED-1 na cópia: apagar a função e deixar a lápide.
-
-  Ran 2 shell commands
 
 ● O selo não mordeu — e o motivo é uma armadilha nomeada da casa. Censo antes de concluir:
 
@@ -132,14 +125,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Censo fechado: 268 pendentes, 5 vivos só na prosa, 2 deles com a impressão que é um comentário e 30 sítios HTML/JS que o stripper não
   tokeniza. A cura "regra 2 varre comentário" mentiria em 2 e quebraria em 30 — descartada com o número. Fica a cura certa:
 
-  RED-2: o selo agora cobra a baixa do pendente
-  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o195
-     && timeout 900 bash bin/suite.sh --dir "$S" --only "ponto.tests.test_contract_juiz_turno escala.tests.test_realizado_intervalo
-     ponto.tests.test_realizado_do_dia_auto…
+  Ran 2 shell commands
 
-✽ Frolicking… (44m 37s · ↓ 101.9k tokens)
+● RED evidenciado pelo selo da própria casa. Agora a cura:
+
+  Ran 2 shell commands
+
+● Cura completa na cópia:
+
+● Uso do esmeril da copia
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,30p' bin/esmeril_da_copia.sh
+
+· Compacting conversation… (50m 6s · ↓ 110.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   12% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
