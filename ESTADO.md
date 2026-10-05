@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 22:00:01.**
+**Medido em 04/10/2026 22:05:06.**
 
 | | |
 |---|---|
@@ -109,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● concorde = 70 dia-colab / 42 colabs / 440,78 h — esse é o universo estrutural; os 319 fato_sem_previsao são ata stale. Agora pergunto ao
+  MOTOR, não ao DiaPago:
+
+  Ran 4 shell commands
+
+● Antes de rodar motor, confiro se as linhas DiaPago que li são frescas e de produção:
+
+  Ran 1 shell command
+
+● Proveniência: todas de produção, recalcular_fechamento_mes, 30/09–04/10. O número muda de natureza e isso vai para o entregável agora:
+
+  Ran 1 shell command
+
+● Entregável durável em 360 linhas. Confiro o enquadramento novo antes de construir o RED:
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Três leituras. dia_pago em folga e os gates antes do RAMO 1:
+● Controles antes de a seção ficar de pé. Positivo + fidelidade do instrumento:
 
-  Ran 1 shell command
+● Controle positivo e fidelidade do DiaPago
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > logs/sombra/o191_controle_diapago_20261004.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """CONTROLE DO INSTRUMENTO (ANTI-VACUIDADE aplicada a MEDICAO, 04/10).
+     Eu concluí "o motor nao forma periodo" a partir de 18 linhas `DiaPago` com tudo ZERO -- ou seja de
+     AUSENCIA DE SINA…
 
-● Background command "Corrigir filtro e relançar sonda de frota" completed (exit code 0)
-
-● _abono_prev_real exclui folga do universo (tipo_dia in ('trabalho','ausencia')), e a folga trabalhada é paga pelo MOTOR, via períodos —
-  outro caminho. Frota e os gates:
-
-  Ran 3 shell commands
-
-● 445 dia-colab / 222.141 min no total, mas são duas populações — e o corte por veredito separa:
-
-  Ran 3 shell commands
-
-● Agora a medição decisiva: o motor já paga o dia doador como folga trabalhada?
-
-  Ran 3 shell commands
-
-● Background command "Relançar frota com minutos por veredito" completed (exit code 0)
-
-● 0 de 9: o motor não atribui hora ao doador — e no ALVO também só existe min_realizados, nenhuma rubrica. Frota e o gravado da folha:
-
-● Running 1 shell command…
-
-✢ Jitterbugging… (9h 48m 3s · ↓ 1.2m tokens)
+✻ Compacting conversation… (9h 53m 8s · ↓ 1.2m tokens)
+  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 0%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
