@@ -170,6 +170,117 @@ PROVA: `d1689254` e ancestral de `logs/deploy.stamp::COMMIT` (`8c3035bc`) -- `gi
 do BACKLOG previa a `raia-chamado` neste mesmo `!`, e eu NAO a estendi por conta propria: **uma
 linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 
+## 04/10 23:4x — O191 PASSO 5: A FROTA DESMENTIU A MINHA AMOSTRA, O UNIVERSO E **441** E NAO 70, E O TETO TEMPORAL VIROU ITEM PROPRIO
+
+**A CONDICAO DE ENTRADA DELE ESTA RESPONDIDA, e nenhuma das duas respostas e a que eu tinha escrito.**
+Ele pediu (LEI-AKITA 9) que, dos 15 dia-colab que trocam de veredito, eu nomeasse os que tem celula
+casada **E** previsto e dissesse se aquilo e turno ABERTO que o juiz da geometria devia ter achado --
+*"se for, e bug do juiz, cura na origem primeiro"*. Nao e: o par esta **FECHADO** e com `data_turno`
+no proprio dia (col250 `02:00:29 -> 06:00:29`, col382 `01:01:26 -> 07:50:17`). O que ha e um **ramo do
+montador que nunca perguntou o realizado** -- o dia de FOLGA.
+
+**OS 70 `concorde` SAO TRES POPULACOES, e eu as tinha como uma.** Medido na frota, na sombra
+(`logs/o191/passo5_universo_cura_c_20261004.txt`), cruzando veredito x `orfas` x julgada-no-proprio-dia:
+
+| causa | `orfas` | julgada no dia | dias | minutos |
+|---|---|---|---|---|
+| (A) o `[]` de dois sentidos | `0` | nao (54) / sim (2) | **56** | 18.274 |
+| (B) teto temporal na lavra | `>= 1` | **SIM** | **13** | 6.146 |
+| (C) sobra nomeada: col107 emp3 23/08 | `4` | nao (julgada 23/09) | 1 | 374 |
+
+**(A) ME DA RAZAO NA EXPLICACAO QUE EU MESMO TINHA RETIRADO**, e o motivo de eu te-la retirado importa
+mais que o acerto: eu escolhi as 6 amostras do contra-exemplo **pelos maiores minutos**, e os maiores
+minutos sao os dias mais FRESCOS (02-03/10) -- que sao exatamente a populacao (B). **A amostragem por
+tamanho selecionou por frescor, e o frescor ERA a causa.** Nao foi azar: foi um criterio de amostra que
+correlaciona com a variavel em teste, e e a terceira vez que a casa paga por criterio pela FORMA.
+
+**(B) E DEFEITO NOVO, SEPARADO, E VIROU A O194** -- nao se constroi dentro da O191.
+`ponto/services/cartorio.py:881` segura o dia de hoje com `cel.trabalha is not False`, e em folga isso
+e **False** pela T3.2-FOLGA-SEM-TURNO (*"dia de FOLGA nao tem turno a esperar"*, 29/08): a folga e
+julgada **no ato da batida**, `dia_encerrado` sai False, o ramo do FATO e pulado, `cods=[]`. E o
+congelamento e **duravel**, nao transitorio: `impressao_insumos` **nao hashea `dia_encerrado`**, entao
+o cron das 06:28 recomputa a mesma impressao e conta `pulados` para sempre. PROVA: **col925 emp3 04/09
+e 06/09**, julgados as 18:02:43 e 18:06:19 do proprio dia, seguem `concorde` hoje -- **30 dias, ~270
+corridas de cartorio, zero re-julgamento**. E a familia TETO TEMPORAL da CLAUDE.md sec.6, com a casa
+julgando pela forma fraca (DATA) um fato que e encerrado pela forte (par completo).
+
+**O UNIVERSO DA CURA NAO E 70: SAO 441**, e este numero muda o que o apply significa. Dict de folga sem
+a chave + autoridade achando minuto + ata lavrando 0: **441 dia-colab, 113 colaboradores, 220.041 min =
+3.667,35 h**. Por veredito: `fato_sem_previsao` 319 · `concorde` 66 · `sem_celula` 50 · `fora_vinculo` 5
+· `trabalhou` 1. **Por competencia, que e o que decide o que pode ser aplicado: 09 (EXPORTADA) 313 dias
+/ 93 colabs / 2.552,77 h; 10 (aberta) 128 / 53 / 1.114,58 h.**
+
+**E CORRIJO UM NUMERO MEU, do jeito que o advisor cobrou:** eu havia escrito que os 319
+`fato_sem_previsao` eram *"ata STALE, que a relavratura cura"*. **Falso.** O filtro da frota foi
+`ata.minutos_realizados == 0 and autoridade > 0`, entao os 445 compartilham o MESMO defeito de NUMERO, e
+relavratura sem a cura (c) re-roda o mesmo ramo de folga -- a ata continua 0. **So a cura (c) move o
+numero.**
+
+**O QUE O DEPLOY MOVE NO GRAVADO: ZERO, POR CONTA DA CURA** -- lido no codigo, nao suposto. A cura (c)
+acrescenta chave ao dict da **GRADE**, e `impressao_insumos` nao hashea a grade: a impressao das 441
+celulas nao muda, o `cartorio.py:568` segue contando `pulados`, e a ata segue lavrando 0 **ate uma
+relavratura**. Por isso o DIFF do apply leva **DOIS numeros** (o que o classificador passa a calcular e
+o que fica gravado sem relavratura) em vez de um que exagera. **E a ressalva honesta vai junto:** a
+impressao hashea `cob_status` e `chamados`, entao folga do passado cujo chamado troque de estado e
+**re-julgada incidentalmente** e grava o numero novo sem apply nenhum -- *zero por conta da cura;
+re-julgamento incidental por insumo que mude grava o numero novo*.
+
+**NEUTRA EM DINHEIRO POR `tipo_dia`, MEDIDO CONTRA O ESCRITOR REAL.**
+`ponto/services/dia_pago.py::por_dia_da_grade` (`:314-342`) e a unica derivacao, com dois chamadores
+(`fechamento.py` e `retratar_exportada`), e o universo dela e `tipo_dia in ('trabalho','ausencia')`:
+**folga esta fora**. O selo que prova isso CHAMA a funcao (nao um mock) e tem controle positivo --
+injetar 240 min na folga nao muda nenhuma das tres somas. **E o censo dos tres campos novos esta
+fechado**: `realizado_sem_turno` / `_turno_aberto` / `_turno_longo` descem em todo dict de folga, e o
+unico leitor do dict da grade e `bordas_realizado.py`, guardado por `tipo_dia != 'trabalho'`;
+`espelho.py:752` chama a autoridade ele mesmo (independe da grade) e **template/JS: 0 casamento**. A
+hipotese contraria era barata e caia -- se o espelho lesse a chave sem guarda, toda folga de todo 12x36
+passaria a dizer "Sem turno pareado" e o `test_smoke_chromium` nao veria, porque renderiza UMA tela.
+
+**OS TRES SELOS DA L-102 SE INVERTERAM, NAO SE APAGARAM**, com os mesmos fixtures de prod e a assercao
+trocando de lado: o dia sem par agora leva `== 0` **e** `realizado_sem_turno is True` (as duas metades
+da L-103: o numero e zero, e o zero tem dono), e os codigos que ele acende passam de `assertNotIn` a
+`assertIn` -- col250 `REALIZADO_ZERO_COM_TURNO` com `previsto=660`; col174 os **TRES**
+(`+FURO_PARCIAL`, `+BATIDA_ORFA_FORA_TOLERANCIA`). **E o selo passou a nomear a batida**: a orfa e a de
+**00:57**, nao a de 03:30 que eu havia escrito no docstring -- a 03:30 CASA o marco 03:00 com 30 min, e
+um emissor que acusasse a errada passaria por um `assertIn` de codigo cobrando o colaborador por uma
+batida que tem marco. Pela terceira vez neste turno, a prosa que eu escrevi afirmava mais que a medicao.
+
+**A MESMA FRASE FALSA SAIU DOS DOIS SITIOS.** O cabecalho do arquivo de teste ainda dizia *"contagem
+dobrada -- aquelas celulas sao as batidas do turno do dia SEGUINTE, e elas JA contam no realizado
+daquele dia"*, que a medicao desmentiu (o par e do PROPRIO dia; a guarda L-085 de `ponto/turnos.py:84-87`
+o mandou para a folga e **nenhum** dia da ata recebe aqueles minutos). Corrigir em `escala/utils.py` e
+deixar no teste seria a meia-correcao da sec.6: a prosa certa e a errada convivendo, e quem le a errada
+decide por ela.
+
+**O PENDENTE DA FAMILIA `celula/precedencia` SAIU DA LISTA** (`core/juizes.py`), que era o que o
+contrato de arvore ja cobrava em VERMELHO -- *"impressao sumiu -- sitio curado? tire de PENDENTES"*, a
+regra 2 da familia: a lista so encolhe. **E a lista vazia muda o proprio selo**, o que nao e obvio:
+`fora_da_autoridade` isenta o arquivo **INTEIRO** de todo pendente (exclui por `p['arquivo']`), entao
+`escala/utils.py` volta a ser varrido pelos tres PROIBIDOS da familia -- conferido **com o pendente
+FORA** antes de eu dizer conforme: **0 casamento**. O contador literal do selo foi de 1 a **0**.
+**A celula da matriz segue `verde=False`, de proposito**: allowlist zero e UMA das duas condicoes; a
+outra -- o numero chegar ao GRAVADO -- so se cumpre na relavratura. Verde agora seria selo falando por
+efeito que ainda nao houve, e a nota da celula passa a dizer exatamente isso.
+
+**DONO POR DIVERGENCIA (L-099), escrito antes de qualquer apply**, porque a lei nao deixa tratar o
+conjunto como bloco: ESTRUTURA = os 441 do dict de folga (fatia, e esta), os 13 do teto (O194) e os 10
+que a L-085 mandou para a folga (O195, **6 deles decididos por menos de UM MINUTO** de distancia do
+corte); BATIDA = a cauda orfa do turno da vespera; **CADASTRO = os 50 `sem_celula` + 5 `fora_vinculo`
+(55 dias, 473,36 h), e esses e PROIBIDO curar por codigo** -- vao para a lista do admin pelo Cadastro x
+Realidade. O que a divisao impede: chamar os 441 de "3.667 h que o sistema deve", e chamar os 10 da
+L-085 de `dono=CADASTRO` quando o cadastro esta certo e a ATRIBUICAO do turno nao esta.
+
+A O195 fica **REGISTRADA e PARADA para a 09**: aquela competencia esta exportada, e mexer nela cai na
+L-092 / REGEN-EM-EXPORTADA. Para a 10 em diante, a DINHEIRO-EM-COMPETENCIA-ABERTA cobre.
+
+LEI-AKITA: origem=`escala/utils.py` (o ramo de FOLGA do montador, que nunca perguntou o realizado),
+testemunha=`ponto/turnos.py::realizado_do_dia` (o juiz unico da pergunta, declarado em `core/juizes.py`),
+RED=`logs/o191/red_folga_v2_20261004.out` (3 selos vermelhos, incl. `'realizado=240' not found in
+'realizado=0 em dia sem previsao'`) -> `logs/o191/green_folga_c_20261004.out` e
+`logs/o191/l103_inversao_20261004.out` (41 OK), quem-mais-le=os 8 leitores do `or 0` censados no
+comentario da cura + `bordas_realizado` (guardado) + `espelho.py:752` (independe da grade) + template
+(0), juizes novos=0.
+
 ## 04/10 19:2x — **DUAS LEIS DE ESTEIRA** NASCEM, TRES GANHAM NUMERO, E O PACOTE EM VOO SE SEPARA NO MESMO TURNO
 
 **O CORTE PEGOU UM ERRO MEU EM CURSO, e nao um erro de ontem.** `RAIA-VERDE-POUSA` (**L-105**) e
