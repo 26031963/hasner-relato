@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:37:43.**
+**Medido em 05/10/2026 18:43:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
-| `origin/main` | `c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -40,6 +40,7 @@ c849f340 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,42 +114,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  diagnose the exact defect O211 cures, L-034's ESTADO: "o valor cct nao tem leitor em regua_para (so compara com clt)". Two measured
-  findings:
+  Ran 2 shell commands
 
-  - VinculoSindicatoPraca has three production readers, not one: regua_para:251, the twin praca_sem_cct_cadastrada:188 whose own docstring
-    says it reads "a mesma consulta de regua_para (mesmo sitio, mesma pergunta)", and the cadastro UI at views_config.py:281-287. Curing
-    only the first is LEI-AKITA 2.
-  - praca_sem_cct_cadastrada already has zero production callers — only two tests and a comment, nothing in .py, .html, .json, .sh or cron.
-    So L-111 doesn't leave it as pending debt: it apaga no ato, com lápide, levando os testes. That's existing law applied to the census,
-    not a new decision.
+● MARCO FECHADO — pode compactar (L-108). 212b25a7 no ar em origin/main, handoff regerado (44 linhas). Nada vai a produção: o marco não tem
+  código.
 
-  Still owed before O211's code: the other 4 of the 7 REDs exist only by reference ("os 5 do aval"), so they get written from the regra
-  first per L-110; and the three CAUDA items he declared as não-embarcam still have no rows.
+  Agora a O211. O push soltou a árvore, então sigo com o que a L-110 manda vir antes do código — e a orientação já rendeu dois achados que
+  mudam o desenho:
 
-  I'll pick up as soon as the push reports — handoff_sessao.sh goes after it lands, per L-108.
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-  ⎿  Referenced file chamados/services/disputa_emissao.py
+  Searched for 1 pattern, ran 3 shell commands
 
-● Task "RED e construção do segundo intervalo" completed in background
+● A impactação da O211 ficou nomeável no nível do cadastro, e ela é maior do que a praça sugere:
 
-● Task "Empurrar o marco O209" still running in background
+  ┌──────────────────────┬────────┬───────────────────────┬────────────────────────┬──────────────────────────┐
+  │       empresa        │ regime │ em praca68 (CCT hoje) │ fora de 68 (piso hoje) │     o que a O211 faz     │
+  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
+  │ emp1 Confiance Force │ vazio  │ 1                     │ 0                      │ esse 1 SAI da CCT        │
+  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
+  │ emp2                 │ cct    │ 194                   │ 202                    │ os 202 ENTRAM            │
+  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
+  │ emp3                 │ clt    │ 95                    │ 18                     │ nada muda (clt já vence) │
+  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
+  │ emp4                 │ cct    │ 19                    │ 3                      │ os 3 ENTRAM              │
+  └──────────────────────┴────────┴───────────────────────┴────────────────────────┴──────────────────────────┘
 
-● Task "Empurrar o marco O209 com saida durável" still running in background
+  E os números dele casam com isto por estrutura (emp2 193×266: 202 de outras praças + os ~64 sem escala ativa). Agora os 7 REDs, escritos
+  pela regra:
 
-  Ler get_motor_cct e o campo regime_trabalhista
-  ⎿  $ sed -n '288,340p' core/regua_cct.py; echo "=== regime_trabalhista no modelo:"; sed -n '118,132p' colaboradores/models.py
+● Running 1 shell command…
 
-✶ Frolicking… (9h 47m 30s · ↓ 1.2m tokens)
+✢ Frolicking… (9h 52m 48s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
