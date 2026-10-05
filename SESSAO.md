@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 03:56:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.2 MB). Acoes na janela: **1271**.
+**Medido em 05/10/2026 04:01:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.2 MB). Acoes na janela: **1266**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1276,8 +1276,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:01:46 | Bash | Reler a porta irma para casar o idioma | `cd /home/ronald/saas-hasner && cat -n bin/suite.sh` |
 | 16:01:42 | Bash | Ler o detector do caso 3 e o criterio da trava | `cd /home/ronald/saas-hasner/bin/tests && sed -n '38,60p' test_recursos_sourced.sh && echo "######## trava" && sed -n '1,70p' test_trava_teste.sh \| grep -n 'REGUA_DB\\|manage.py test\\|trava_teste\\|for f\\|grep'` |
 | 16:01:35 | Bash | Ler criterios dos selos de host que varrem bin/*.sh | `cd /home/ronald/saas-hasner/bin/tests && for f in test_recursos_sourced.sh test_cpuset_de_teste.sh test_suite_uma_vez_por_arvore.sh test_sem_arquivo_de_mount.sh test_fonte_unica_antes_do_uso.sh; do echo "######## $f"; sed -n '1,40p' $f; echo; done 2>&1 \| head -150` |
-| 16:01:28 | Bash | Ler assinaturas de recursos.sh e listar selos de host | `cd /home/ronald/saas-hasner && echo "=== recursos.sh: teste_envfile e TESTE_DOCKER" && grep -n 'TESTE_DOCKER\\|teste_envfile\\|TESTE_ENVFILE\\|senha_teste' bin/recursos.sh \| head -40 echo echo "=== test_cpuset_de_teste.sh: o que ele cobra (existe?)" ls bin/tests/ \| tr '\n' ' '` |
-| 15:57:10 | Bash | Consumir POSTGRES_HOST e provar o DNS do container | `cd /home/ronald/wt-cert && python3 - <<'PY' p='mensageria/config/settings.py' s=open(p,encoding='utf-8').read() velho = " 'HOST': 'db', 'PORT': '5432',\n" novo = (" # O HOST SE LE DO ENV, como o NAME duas linhas acima -- e a chave JA EXISTIA sem leitor.\n" " # `POSTGRES_HOST` esta no env deste container desde sempre (vem do `.env:6`, valendo `db`)\n" " # e NINGUEM a lia: parametro nem consumido ne ...` |
-| 15:56:43 | Bash | Ver como o pre-push monta a cópia do push | `cd /home/ronald/saas-hasner echo "=== ARVORE_PUSH / _teste_irmao" grep -n 'ARVORE_PUSH\\|_teste_irmao()\\|ARVORE_MONTAGEM' bin/pre-push.sh \| head -20 echo "--- a funcao" sed -n "/^_teste_irmao()/,/^}/p" bin/pre-push.sh \| grep -vn '^\s*#' \| head -20 echo echo "=== onde a copia nasce" grep -n 'git archive\\|mktemp\\|arvore_do_push' bin/pre-push.sh \| head echo echo "=== a copia do push tem mensag ...` |
-| 15:56:33 | Bash | Ver se o pre-push roda suite própria | `cd /home/ronald/saas-hasner echo "=== pre-push: roda suite ou le carimbo?" grep -n 'manage.py test\\|regua_stamp\\|node_check\\|tests/test_' bin/pre-push.sh echo echo "=== contexto da chamada de suite no pre-push" sed -n '125,135p' bin/pre-push.sh echo "..." sed -n '155,175p' bin/pre-push.sh` |
-| 15:56:25 | Bash | Publicar a seção do RELATO com os números | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read() anc='## 04/10 15:2x — O HOOK COBRAVA UM ITEM' assert s.count(anc)==1 nova = """## 04/10 15:5x — OS 515 TESTES DO NUCLEO NAO TINHAM PORTA, E UM DELES ESTAVA **VERMELHO DESDE 16/09** O K8 PRIMEIRO, porque ele fecha. A raia `k8-t20` reconciliou com o `teto20` (`192aed00`): as duas pontas tinham es ...` |
