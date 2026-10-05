@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:43:01.**
+**Medido em 05/10/2026 18:48:31.**
 
 | | |
 |---|---|
@@ -114,38 +114,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 2 shell commands
 
-● MARCO FECHADO — pode compactar (L-108). 212b25a7 no ar em origin/main, handoff regerado (44 linhas). Nada vai a produção: o marco não tem
-  código.
+● Isto reproduz a sonda dele quase linha a linha (ele mediu emp2 193×266; eu meço 192×267 — a diferença de um é colab com mais de uma
+  escala ativa, e eu não vou chamar de igual o que difere). O quadro da 09:
 
-  Agora a O211. O push soltou a árvore, então sigo com o que a L-110 manda vir antes do código — e a orientação já rendeu dois achados que
-  mudam o desenho:
+  ┌────────────────────────────────┬────────────┬────────────┬─────────┐
+  │            de onde             │    hoje    │   depois   │    n    │
+  ├────────────────────────────────┼────────────┼────────────┼─────────┤
+  │ emp2/emp4 em praça sem CCT     │ piso legal │ CCT        │ 198     │
+  ├────────────────────────────────┼────────────┼────────────┼─────────┤
+  │ emp2/emp4 sem escala ativa     │ piso legal │ CCT        │ 73      │
+  ├────────────────────────────────┼────────────┼────────────┼─────────┤
+  │ emp1 (regime vazio) na praca68 │ CCT        │ piso legal │ 1 SAI   │
+  ├────────────────────────────────┼────────────┼────────────┼─────────┤
+  │ emp3 clt (123 colabs)          │ piso legal │ piso legal │ 0 mudam │
+  └────────────────────────────────┴────────────┴────────────┴─────────┘
 
-  Searched for 1 pattern, ran 3 shell commands
+  272 de 607 mudam de régua. Os 73 sem escala ativa são a parte que a visão por praça esconde — e é a maior fatia depois das praças sem
+  CCT.
 
-● A impactação da O211 ficou nomeável no nível do cadastro, e ela é maior do que a praça sugere:
+● Trocar o RED 5 pelo caso sem escala ativa
+  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     python3 - "$S/o211_REDs.md" <<'PY'
+     import sys, re
+     p = sys.argv[1]
+     t = open(p).read()
+     ini = t.index('## RED 5 —')
+     fim = t.index('## RED 6 —')
+     novo = '''## RED 5 — SEM ESCALA ATIVA, a convencao da EMPRES…
 
-  ┌──────────────────────┬────────┬───────────────────────┬────────────────────────┬──────────────────────────┐
-  │       empresa        │ regime │ em praca68 (CCT hoje) │ fora de 68 (piso hoje) │     o que a O211 faz     │
-  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
-  │ emp1 Confiance Force │ vazio  │ 1                     │ 0                      │ esse 1 SAI da CCT        │
-  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
-  │ emp2                 │ cct    │ 194                   │ 202                    │ os 202 ENTRAM            │
-  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
-  │ emp3                 │ clt    │ 95                    │ 18                     │ nada muda (clt já vence) │
-  ├──────────────────────┼────────┼───────────────────────┼────────────────────────┼──────────────────────────┤
-  │ emp4                 │ cct    │ 19                    │ 3                      │ os 3 ENTRAM              │
-  └──────────────────────┴────────┴───────────────────────┴────────────────────────┴──────────────────────────┘
-
-  E os números dele casam com isto por estrutura (emp2 193×266: 202 de outras praças + os ~64 sem escala ativa). Agora os 7 REDs, escritos
-  pela regra:
-
-● Running 1 shell command…
-
-✢ Frolicking… (9h 52m 48s · ↓ 1.2m tokens)
+✢ Frolicking… (9h 58m 18s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                   11% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
