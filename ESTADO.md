@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 19:30:45.**
+**Medido em 05/10/2026 19:35:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
+| `HEAD` local | `cb6b289e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
 | `origin/main` | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,20 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+cb6b289e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859
 212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
 c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
 edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
 8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga
-c849f340 O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/core/contratos_estruturais.py
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -116,6 +114,10 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  acabou de fechar, nao fatia nova; depois segue a O211. PAREI so em lei ou !
+
+  Searched for 10 patterns, read 1 file, ran 32 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
   ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
@@ -130,13 +132,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Reescrever a nota da célula e conferir no vivo
-  ⎿  $ python3 - <<'PY'
-     import io
-     alvo = 'core/contratos_estruturais.py'
-     s = io.open(alvo, encoding='utf-8').read()
-     velho = """ nota='FALTA O EFEITO, NAO O CENSO (04/10): a allowlist `PENDENTES_CELULA` chegou a ZERO -- a BUG-145 fechou os '
-     'dois ramos do montador (TRABALHO pela cura (a)/L-103, FOLGA pe…
+  Committed 123a166c, amended commit cb6b289e, ran 15 shell commands
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
@@ -145,7 +141,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-· Frolicking… (10h 40m 32s · ↓ 1.3m tokens · thinking)
+● Advising using Fable 5.1
+
+* Frolicking… (10h 45m 32s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
