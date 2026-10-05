@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:38:01.**
+**Medido em 04/10/2026 21:43:31.**
 
 | | |
 |---|---|
@@ -109,38 +109,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  previu (saída iii). Lendo caso a caso:
+
+● turnos_do_colab(colab, ini, fim, celulas=None) tem o parâmetro que o advisor mandou conferir — e nem o montador nem a minha sonda o
+  passam. Leio o que ele faz:
 
   Ran 1 shell command
 
-● Isto é maior do que os 15. Lendo a Parte 1 inteira:
+● O celulas= é só alimentação (ele mesmo carrega quando None) — a minha sonda e o montador perguntam ao mesmo juiz, então a objeção #4 do
+  advisor está fechada. E com isso a origem fica nomeada: a célula diz (por marco, n_ok=3) que aquelas batidas são do turno de 29/09; o
+  pareador ancora em 30/09. Meço o universo de frota antes de escrever a pergunta:
+
+  Ran 2 shell commands
+
+● Universo de frota, para a pergunta nascer com número:
+
+  Ran 2 shell commands
+
+● Enquanto a frota roda, gravo o achado no arquivo durável:
 
   Ran 1 shell command
 
-● Agora o quadro fechou, e ele é mais sério que os 15. O dia doador é SEMPRE uma folga (previsto=0) com ata=0 enquanto a autoridade diz >0.
-  Leio o ramo do montador para dia que não é trabalho:
+● Background command "Rodar sonda de frota" completed (exit code 0)
 
-  Ran 1 shell command
+  Read 1 file, ran 2 shell commands
 
-● Encontrei a origem, e ela desmente o comentário que eu mesmo escrevi na cura (b). escala/utils.py:1318-1322:
+● Chamo o advisor sobre a decisão da fatia — é a classe de bug que muda desenho, e quero a leitura conferida antes de escrever a pergunta e
+  virar para O145:
 
-  if d not in cel_por_data:
-      dias_out.append({'label': label, 'tipo_dia': 'folga', 'minutos_previstos': 0, ...})
-      continue        # <-- a AUTORIDADE nunca e' perguntada
+● Advising using Fable 5.1
 
-  O dia de folga que detém um turno real não ganha minutos_realizados nenhum — a chave não existe, e os or 0 a jusante lavram 0. Confirmo
-  rodando o montador de hoje nos 9 dias doadores:
-
-● Montador de hoje no dia doador
-  ⎿  $ cd /home/ronald/saas-hasner
-     cat > logs/sombra/o191_folga_doadora_20261004.py <<'PY'
-     # O MONTADOR DE HOJE, no dia DOADOR. Se ele devolve `tipo_dia='folga'` sem a chave
-     # `minutos_realizados`, relavrar o doador NAO repoe o minuto -- e a cura (b) sozinha PERDE
-     # hora de quem trabalhou (L-084). Chama…
-
-✢ Jitterbugging… (9h 26m 3s · ↓ 1.1m tokens · thinking more)
+✢ Jitterbugging… (9h 31m 33s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    3% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
