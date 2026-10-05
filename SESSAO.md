@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 14:43:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (397.4 MB). Acoes na janela: **985**.
+**Medido em 05/10/2026 14:48:12.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (397.5 MB). Acoes na janela: **991**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:46:24 | Bash | Registrar o smoke e a condicao 4 no RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'app/docs/RELATO.md' s = io.open(p, encoding='utf-8').read() anc = "logs/o195_censo_leitores_portas.out, juizes novos=0`\n" assert s.count(anc) == 1, s.count(anc) novo = anc + """ ### NO AR, EMPURRADO E SMOKADO -- a condicao 4 fechada no ar, nao na sombra `bin/deploy.sh --sem-migrate` as **14:2x** (0 migration pendente, carimbo da so ...` |
+| 14:46:00 | Bash | Ler o fim do bloco da O195 | `cd /home/ronald/saas-hasner && sed -n '155,175p' app/docs/RELATO.md` |
+| 14:45:57 | Bash | Localizar o bloco da O195 no RELATO | `cd /home/ronald/saas-hasner && grep -n "SELO DE CONDUTA\\|^## O195\\|condicao 4\\|CONDICAO 4\\|smoke" app/docs/RELATO.md \| head -20` |
+| 14:45:51 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -20 && echo "=== arquivo ===" && wc -l app/docs/HANDOFF-SESSAO.md` |
+| 14:45:42 | Bash | Rodar a sonda dos dois atos na sombra | `cd /home/ronald/saas-hasner && ROTULO=relavra10 logs/sombra/rodar_na_sombra.sh relavra10_diff_20261005.py > logs/relavra10_diff_20261005.out 2>&1; echo "rc=$?"; tail -5 logs/relavra10_diff_20261005.out` |
+| 14:45:36 | Bash | Escrever a sonda dos dois atos | `cd /home/ronald/saas-hasner && cat > logs/sombra/relavra10_diff_20261005.py <<'PYEOF' # -*- coding: utf-8 -*- """RELAVRATURA 10/2026 -- o DIFF do item (2), MEDIDO com a O195 JA CURADA. DOIS ATOS. Por que este arquivo existe: os numeros do pendente `RELAVRATURA-10-PAROU-DIFF-SURPREENDE` (36 de 572 fechamentos, +347,67 h de `minutos_abonados`) foram medidos em 05/10 03:3x com o juiz DEFEITUOSO no ar ...` |
+| 14:44:09 | Bash | Conferir o formato dos TSV do DIFF | `cd /home/ronald/saas-hasner && head -3 logs/sombra/o195_diff_cura.tsv && echo "--- head.tsv ---" && head -3 logs/sombra/o195_diff_head.tsv && echo "--- ata_prod ---" && head -5 logs/o195_ata_prod.out` |
+| 14:43:55 | Bash | Conferir o juiz do realizado na grade | `grep -n "realizado_do_dia\\|minutos_realizados" escala/utils.py \| head -20` |
+| 14:43:48 | Bash | Localizar quem monta a ata | `grep -n "ata=\\|def ata_do_dia\\|minutos_realizados" ponto/services/cartorio.py \| head -20` |
+| 14:43:29 | Bash | Ler o inicio de julgar_colab | `grep -n "def julgar_colab" ponto/services/cartorio.py && sed -n "$(grep -n 'def julgar_colab' ponto/services/cartorio.py \| cut -d: -f1),+60p" ponto/services/cartorio.py` |
+| 14:43:21 | Bash | Ler o julgar_colab e a entrada do juiz | `sed -n '530,620p' ponto/services/cartorio.py` |
 | 14:41:45 | Bash | Ler a porta lavrar_veredito | `sed -n '480,560p' ponto/portas/celula.py` |
 | 14:41:33 | Bash | Ler a janela do cartorio | `sed -n '1,70p' ponto/management/commands/processar_cartorio.py` |
 | 14:41:14 | Bash | Conferir a fonte da grade do fechamento | `grep -n "def grade_do_fechamento" -A 30 folha/export.py \| head -45` |
@@ -990,8 +1001,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 02:49:12 | Bash | Conferir python3 no host e o molde dos selos | `which python3 python 2>&1; python3 -V 2>&1 ls /home/ronald/saas-hasner/bin/tests/ \| head -40 echo "=== quantos selos de host usam python3? ===" grep -ln "python3" /home/ronald/saas-hasner/bin/tests/*.sh \| wc -l` |
 | 02:48:49 | Bash | Extrair o pedido e conferir os 4 tokens | `SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad sed -n '23954,24195p' RELATO-ARQUIVO.md > $SP/pedido_fatia2.md wc -l $SP/pedido_fatia2.md for t in url_autorizar_marcados abaixo_limite limite_decisao_rotulo autorizar_he_marcados; do printf '%-26s %s\n' "$t" "$(grep -c "$t" $SP/pedido_fatia2.md)" done echo "=== ultima linha ==="; tail -3 $SP/pedido_fa ...` |
 | 02:48:35 | Bash | Mapear os titulos do pedido de patch da fatia 2 | `cd /home/ronald/saas-hasner/app/docs && awk 'NR>=23940 && NR<=24330 && /^#{1,3} /{print NR": "$0}' RELATO-ARQUIVO.md` |
-| 02:47:17 | Bash | Conferir se a metade de nucleo da UI-CAL esta completa e incondicional | `sed -n '835,875p' colaboradores/services/calendario.py echo "=== e o modo competencia existe na view? ===" grep -n "competencia" colaboradores/services/calendario.py \| head -20` |
-| 02:46:51 | Bash | Conferir se os dois pedidos seguem abertos e onde rodam os selos de host | `echo "=== (1) o pedido UI-CAL ainda esta ABERTO? nucleo ===" grep -n "competencia_rotulo" colaboradores/services/calendario.py colaboradores/views.py 2>/dev/null \| head echo "rc=$? (vazio = aberto)" grep -rn "competencia_rotulo" --include=*.py . 2>/dev/null \| grep -v /tests/ \| head echo echo "=== (1b) fatia 2 ainda aberta? ===" grep -rn "autorizar_he_marcados" --include=*.py ponto/urls.py ponto ...` |
-| 02:44:06 | Bash | Ver o universo exato de tokens cobrados do RELATO | `cd /home/ronald/saas-hasner/app && sed -n '40,60p;218,250p' ponto/tests/test_tela_gestao_he_fatia2_lote_limite.py` |
-| 02:43:46 | Bash | Ler a secao que registra a primeira vez que a DIETA levou o contrato | `sed -n '21968,22000p' RELATO-ARQUIVO.md` |
-| 02:43:37 | Bash | Localizar as secoes arquivadas com os contratos | `cd /home/ronald/saas-hasner/app/docs && echo "=== secoes do ARQUIVO que contem os dois contratos ===" grep -n "^## \\|competencia_rotulo\\|url_autorizar_marcados" RELATO-ARQUIVO.md \| grep -B1 -A0 "rotulo\\|autorizar" \| head -40` |
