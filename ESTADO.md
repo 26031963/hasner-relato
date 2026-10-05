@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:45:45.**
+**Medido em 05/10/2026 12:50:45.**
 
 | | |
 |---|---|
@@ -112,12 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  durante regua, push ou apply da principal -- espera por ARQUIVO de sinal, nunca por pgrep.
-  - PRONTO de cada BO e o que o bloco dele ja diz (RED com os casos, commit, deploy, medicao repetida em prod no RELATO).
-
-  A PRINCIPAL nao muda: O195 ate o fim, depois relavratura 10.
-  Leis aplicadas: FILA-2-EM-RAIA-PROPRIA, L-105, L-107, UM run por vez. Nenhuma lei nova.
-  Segue a fila; PAREI so em lei ou !
 
   Ran 6 shell commands
 
@@ -136,14 +130,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agent "Raia paralela: O197 O204 O200 O206" was stopped by Claude
 
-● Rodar o RED da O195 contra a copia
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o195 --only
-     "ponto.tests.test_o195_dia_do_turno_por_envelope" --espera 300 2>&1 | tail -70; echo "rc=$?"
+● Aplicar a cura na copia
+  ⎿  $ cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cura_o195.py <<'PYEOF'
+     import io, sys, py_compile, os
+     p = sys.argv[1]
+     s = io.open(p, encoding='utf-8').read()
+     def troca(a, b, n=1):
+     global s
+     c = s.count(a)
+     assert c == n, ('ancora %d != %d' % (c, n…
 
-* Frolicking… (4h 7m 50s · ↓ 505.0k tokens)
+✶ Compacting conversation… (4h 12m 50s · ↓ 513.9k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
