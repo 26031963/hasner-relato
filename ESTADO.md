@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 17:01:31.**
+**Medido em 05/10/2026 17:07:01.**
 
 | | |
 |---|---|
@@ -42,6 +42,7 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
 ?? esteira.pausada
@@ -117,20 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Advisor pegou três defeitos reais na minha própria cura. Vou conferir no código antes de aceitar:
-
-  Ran 1 shell command
-
-● Todas as três confirmadas: pks_chamado() devolve todos os pks, então meu laço de rodadas nunca encolhe; _ser+json.dumps distingue 60 de
-  60.0 e True de 1, que o != do Python não distingue. Corrigindo:
-
-  Ran 2 shell commands
-
-● Carimbo guarda o DIA, não o instante — então o instante sai do mtime do dump, derivado. Aplicando as quatro correções:
-
-  Ran 4 shell commands
-
 ● Refazer verde (sombra_diverge_de_prod=0). Antes de rodar, fecho a incoerência que a própria receita nova expôs: o desfazer por colab em
   prod restaura célula mas não desdiz a cobrança daquele colab.
 
@@ -142,13 +129,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Enquanto roda, fecho as correções devidas no marco (docs não entram no import da medição):
 
-● Ler os trechos a corrigir no RELATO
-  ⎿  $ sed -n '69,73p' docs/RELATO.md; echo "---- 97-107 ----"; sed -n '97,107p' docs/RELATO.md; echo "---- 553-558 ----"; sed -n
-     '553,558p' docs/RELATO.md
+  Searched for 1 pattern, read 1 file, ran 9 shell commands
 
-✢ Frolicking… (8h 23m 36s · ↓ 1.0m tokens)
+● O restauro está provado — o RED fechou com o restauro incondicional. Vendo os números:
+
+  Ran 2 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
+  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Background command "Esperar o arreio pelo arquivo de sinal" completed (exit code 0)
+
+● Ler o fim: esperado, ATO 2 e hash da 09
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '126,263p' logs/o209_frota_sombra_r2.out
+
+✢ Frolicking… (8h 29m 6s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

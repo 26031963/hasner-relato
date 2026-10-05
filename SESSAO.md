@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 17:01:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (404.0 MB). Acoes na janela: **1131**.
+**Medido em 05/10/2026 17:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (404.5 MB). Acoes na janela: **1146**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:06:58 | Bash | Ler o fim: esperado, ATO 2 e hash da 09 | `cd /home/ronald/saas-hasner && sed -n '126,263p' logs/o209_frota_sombra_r2.out` |
+| 17:06:48 | Bash | Mapear a estrutura do out | `cd /home/ronald/saas-hasner && grep -n 'ESPERADO\\|ATO 2\\|^==\\|^ATO\\|^ \[ato\\|^ \[ensaio\\|DELTA DE CONJUNTO\\|ATA SE MOVEU\\|soma do realizado\\|EXPORTADA\\|residuo\\|rc=\\|cura + deriva\\|emitidos' logs/o209_frota_sombra_r2.out` |
+| 17:06:31 | Bash | Ler ATO 1 de verdade ao fim | `cd /home/ronald/saas-hasner && sed -n '/ATO 1 DE VERDADE/,$p' logs/o209_frota_sombra_r2.out` |
+| 17:06:27 | Bash | Conferir se o arreio terminou | `cd /home/ronald/saas-hasner && ls -la logs/o209_frota_sombra_r2.done 2>&1; echo "---tail---"; tail -5 logs/o209_frota_sombra_r2.out; echo "---wc---"; wc -l logs/o209_frota_sombra_r2.out` |
+| 17:02:42 | Bash | Ler o bloco da prova de restauro | `cd /home/ronald/saas-hasner && sed -n '/PROVA DE RESTAURO/,/restauro esta provado/p' logs/o209_frota_sombra_r2.out \| grep -v '^sem_celula'` |
+| 17:02:36 | Bash | Ver o andamento | `cd /home/ronald/saas-hasner && tail -5 logs/o209_frota_sombra_r2.out` |
+| 17:02:32 | Bash | Ler o portao e o estado da O209 | `awk -F'\|' '/^\\| O209 /{print $4"\n---\n"$5}' docs/BACKLOG.md \| cut -c1-700` |
+| 17:02:24 | Bash | Esperar o arreio pelo arquivo de sinal | `cd /home/ronald/saas-hasner && until [ -f logs/o209_frota_sombra_r2.done ]; do sleep 10; done; echo "=== FIM ==="; grep -n 'foto:\\|restauro incondicional\\|RESTAURO\\|residuo\\|depois do ensaio\\|rc=\\|Assertion\\|ATO 1 DE VERDADE' logs/o209_frota_sombra_r2.out \| head -30` |
+| 17:02:19 | ToolSearch |  | `-` |
+| 17:02:11 | Bash | Corrigir o plano sobre o bloco | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='logs/o209_plano_20261005.md' s=io.open(p,encoding='utf-8').read() v = """2. **SOMBRA FRESCA.** O 190/89 de 15:0x saiu do dump das 04:00, que e de ANTES do apply dos 3. `bin/sombra.sh --refazer --incremental --dias N` repoe batida/celula/ausencia/justificativa da janela por cima da completa do dia (a **celula** e o que mudou), com md5 pro ...` |
+| 17:01:55 | Bash | Ler o trecho do plano | `cd /home/ronald/saas-hasner && sed -n '12,24p' logs/o209_plano_20261005.md` |
+| 17:01:51 | Bash | Localizar a afirmacao do plano sobre o bloco | `cd /home/ronald/saas-hasner && grep -n 'BLOCO\\|bloco\\|incremental\\|dump-agora' logs/o209_plano_20261005.md \| head -20` |
+| 17:01:47 | Bash | Corrigir a linha da L-085 | `python3 - <<'PY' import io p='docs/LEIS.md' s=io.open(p,encoding='utf-8').read() v = ("o terceiro, col382 `09-21 -> 09-20`, vale **389 min** que a ata de prod JA TEM em 09-20 e o " "TXT exportado JA carrega -- quem os REMOVERIA numa relavra e o HEAD; a cura os MANTEM.") assert s.count(v) == 1, s.count(v) n = ("o terceiro, col382 `09-21 -> 09-20`, vale **389 min** que o `DiaPago` de prod JA TEM em  ...` |
+| 17:01:34 | Bash | Corrigir o RELATO | `python3 - <<'PY' import io p='docs/RELATO.md' s=io.open(p,encoding='utf-8').read() v1 = """Os outros **22 campos** das 572 linhas deram **0,00**""" assert s.count(v1) == 1 s = s.replace(v1, """Os outros **21 campos** das 572 linhas deram **0,00** (sao **24** campos de valor e **tres** se moveram -- `minutos_realizados`, `semanas_dsr_ok`, `semanas_dsr_perdido` --, entao o resto e 21, nao 22; o nume ...` |
+| 17:01:12 | Bash | Ler os trechos a corrigir no RELATO | `sed -n '69,73p' docs/RELATO.md; echo "---- 97-107 ----"; sed -n '97,107p' docs/RELATO.md; echo "---- 553-558 ----"; sed -n '553,558p' docs/RELATO.md` |
 | 17:01:04 | Bash | Reler a medicao dos 389 min | `cd /home/ronald/saas-hasner && cat logs/o195_389min_col382_medido_20261005.md` |
 | 17:00:53 | Bash | Localizar as afirmacoes a corrigir | `grep -n '389' docs/RELATO.md docs/LEIS.md \| head; echo "=== 22 campos ==="; grep -n '22 campo\\|22 dos\\|22 em 0,00\\|campos em 0,00\\|em 0,00' docs/RELATO.md \| head` |
 | 17:00:44 | Bash | Rodar o arreio na sombra refeita | `cd /home/ronald/saas-hasner && rm -f logs/o209_frota_sombra_r2.done && nohup bash -c 'timeout 3000 bash logs/sombra/rodar_na_sombra.sh relavra10_frota_20261005.py > logs/o209_frota_sombra_r2.out 2>&1; echo "rc=$?" >> logs/o209_frota_sombra_r2.out; touch logs/o209_frota_sombra_r2.done' >/dev/null 2>&1 & echo "lancado; sinal = logs/o209_frota_sombra_r2.done"` |
