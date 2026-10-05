@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:50:45.**
+**Medido em 05/10/2026 16:56:01.**
 
 | | |
 |---|---|
@@ -117,36 +117,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  cartorio.julgar_celula(colaborador, dia). Meu restaurador devolvia os 11 campos e depois retratava; cada retratação re-julgava a célula e
-  a escrevia de novo. A ordem estava invertida:
+  Ran 1 shell command
+
+● foto_reversao() re-consulta o banco inteiro da janela, e restaurar só alcança pks que já estavam na foto. Então célula nascida no ato
+  entra no H2 e nunca sai. O diagnóstico mediu "+0 -0" numa base onde o ato já havia rodado — vacuidade. Vou ao número do run original:
 
   Ran 1 shell command
 
-❯ - cadastro: APLICACAO DE CONVENCAO -- linha (sindicato, empresa, praca opcional, ativo). Sem praca = vale na empresa inteira; com praca
-  = vale so nela; a mais especifica vence; duas do mesmo nivel = piso legal E contador acusa. Hoje nascem duas linhas, emp2 e emp4 ->
-  sind2, sem praca. A tela de escolha e obra posterior e escreve NESTA tabela. A praca so entra na regua por linha DECLARADA aqui, nunca
-  pelo VinculoSindicatoPraca.
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
-  ⎿  Referenced file ponto/turnos.py
+● Linha 7 e 16: 16.883 antes e depois — a hipótese "célula nova" segue morta. Então o resíduo está nos campos. Vou olhar o model:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Searched for 1 pattern, ran 2 shell commands
 
-● Chegou adendo ao aval REGUA-PELA-EMPRESA — o cadastro agora tem forma declarada. Ele não muda a ordem (O211 segue atrás da O209), e pela
-  PROMPT-NAO-SE-REPETE entra no mesmo turno. Vou registrar e voltar ao RED.
+● Os 11 campos são planos, sem auto_now — a escrita do restauro gruda. Então o resíduo tem nome e eu não o estou lendo: o instrumento só
+  diz "não voltou". Vou (a) desfazer a afirmação não provada no docstring e (b) fazer o próprio instrumento nomear o resíduo.
 
-  Registrar o adendo no PROMPTS
-  ⎿  $ python3 - <<'PY'
-     import io
-     p='docs/PROMPTS.md'
-     t=io.open(p,encoding='utf-8').read()
-     assert 'REGUA-PELA-EMPRESA-CADASTRO' not in t
-     linha = ('| 05/10 16:5x | aval (adendo de cadastro) | REGUA-PELA-EMPRESA-CADASTRO | '
-     '**adendo ao aval de 16:4x: o cadastro da regua ganha FORMA, e ela nao e um campo…
+  Ran 2 shell commands
 
-· Frolicking… (8h 12m 50s · ↓ 1.0m tokens · thinking)
+● Minha sonda escolheu a pior testemunha possível. As linhas 40-45 do run vermelho provam que a retratação acorda o cartório — e col950 é
+  justo onde ele se abstém (sem_celula: ata nao lavrada), além de ser o colab de teste. Refaço a sonda com testemunha válida:
+
+  Ran 1 shell command
+
+● Três testemunhas válidas, nenhuma moveu a célula: a hipótese do signal está morta por medição, não por palpite. A ordem nova fica apenas
+  como ordem terminal-por-último, e o docstring já diz isso. O resíduo agora tem quem o nomeie, e a base precisa ser refeita de qualquer
+  forma (está mutada).
+
+  Ran 1 shell command
+
+● Advising using Fable 5.1
+
+· Frolicking… (8h 18m 6s · ↓ 1.0m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -154,7 +154,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
