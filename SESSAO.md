@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 23:25:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (367.1 MB). Acoes na janela: **1494**.
+**Medido em 04/10/2026 23:30:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (367.7 MB). Acoes na janela: **1503**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:30:19 | Bash | Ver como o selo da matriz usa verde | `cd /home/ronald/copia-o191a/app && grep -rn "verde" core/contratos_estruturais.py \| head -20; echo '=== selo:'; ls core/tests/ \| grep -i contrato_estrut; grep -rn "verde" core/tests/test_selo_contratos_estruturais.py 2>/dev/null \| head -20` |
+| 23:30:14 | Bash | Ler a regra de verde da matriz | `cd /home/ronald/copia-o191a/app && sed -n '1,60p' core/estrutural.py` |
+| 23:30:08 | Bash | Remover o pendente curado da lista | `cd /home/ronald/copia-o191a/app && python3 - <<'PYEOF' import io, py_compile p = 'core/juizes.py' s = io.open(p, encoding='utf-8').read() a = """ 'celula/precedencia': ( # BUG-144 (14/09): o censo nao via o montador porque ele ERA a autoridade. 861 dias normais das 3 empresas # com a ata longe do turno do juiz (465 perderam batida ou tempo, 256 com turno aberto, 34 turnos longos). _p('quantos minu ...` |
+| 23:29:46 | Bash | Ler a declaração dos juízes da família | `cd /home/ronald/copia-o191a/app && python3 - <<'PY' import io s = io.open('core/juizes.py', encoding='utf-8').read() i = s.index("JUIZES = {") if "JUIZES = {" in s else s.index("JUIZES") print(s[i:i+1800]) PY` |
+| 23:27:48 | Bash | Ler o fim da porta da suite | `cd /home/ronald/saas-hasner && sed -n '80,140p' bin/suite.sh` |
+| 23:27:44 | Bash | Conferir a rodada | `cd /home/ronald/saas-hasner && tail -5 logs/o191/l103_inversao_20261004.out 2>/dev/null; echo "[linhas=$(wc -l < logs/o191/l103_inversao_20261004.out 2>/dev/null \|\| echo 0)]"` |
+| 23:27:36 | Bash | Ver o alias da allowlist e quem a resolve | `cd /home/ronald/copia-o191a/app && grep -n "PENDENTES_CELULA\\|PENDENTES_TURNO" core/juizes.py \| head; echo '--- quem resolve excecoes:'; grep -rn "excecoes" --include=*.py core/ ponto/tests/ \| grep -v contratos_estruturais.py \| head` |
+| 23:27:29 | Bash | Ler a célula da matriz do juiz de célula | `cd /home/ronald/copia-o191a/app && sed -n '160,185p' core/contratos_estruturais.py` |
+| 23:27:24 | Bash | Censo de leitores da lista de pendentes | `cd /home/ronald/copia-o191a/app && grep -rn "PENDENTES" --include=*.py . \| grep -v '/tests/' \| grep -v 'core/juizes.py' \| head -30; echo '--- contratos:'; grep -n "celula/precedencia\\|celula_precedencia" core/contratos_estruturais.py \| head -20` |
+| 23:27:18 | Bash | Conferir se o arquivo viola padrão proibido | `cd /home/ronald/copia-o191a/app && grep -nE '\.tipo_escala\.eh_dia_trabalho\(\|tipo_escala\.data_ancora\b\|delta\s*%\s*2\s*==' escala/utils.py \|\| echo 'NENHUM dos tres padroes em escala/utils.py'` |
+| 23:27:13 | Bash | Ler os padrões proibidos da família | `cd /home/ronald/copia-o191a/app && python3 - <<'PY' import ast, re, io s = io.open('core/juizes.py', encoding='utf-8').read() i = s.index('PROIBIDOS') print(s[i:i+2600]) PY` |
+| 23:27:06 | Bash | Ler o contrato do juiz de célula | `cd /home/ronald/copia-o191a/app && sed -n '1,90p' ponto/tests/test_contract_juiz_celula.py` |
+| 23:27:01 | Bash | Ler o bloco de pendentes do juiz de célula | `cd /home/ronald/copia-o191a/app && sed -n '225,265p' core/juizes.py` |
+| 23:26:53 | Bash | Rodar o módulo invertido mais o contrato na cópia | `cd /home/ronald/saas-hasner && nohup bash -c 'bash bin/suite.sh --dir /home/ronald/copia-o191a --espera 1800 -- escala.tests.test_montador_realizado_pela_autoridade ponto.tests.test_contract_juiz_celula > logs/o191/l103_inversao_20261004.out 2>&1; echo "RC=$?" >> logs/o191/l103_inversao_20261004.out' >/dev/null 2>&1 & echo lancado` |
+| 23:26:45 | Bash | Ler a porta única da suite | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh` |
+| 23:25:55 | Bash | Conferir como a rodada verde foi lançada | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/o191/green_folga_c_20261004.out 2>/dev/null \| head -20; echo ---; grep -n 'suite.sh' logs/o191/*.cmd 2>/dev/null \| head` |
 | 23:21:46 | Bash | Inverter os três selos para a L-103 | `cd /home/ronald/copia-o191a/app && python3 - <<'PYEOF' import io, py_compile p = 'escala/tests/test_montador_realizado_pela_autoridade.py' s = io.open(p, encoding='utf-8').read() # ---- 1) a MESMA frase falsa que ja saiu de escala/utils.py: MEIA-CORRECAO E PIOR QUE NENHUMA a = """ # O DANO E CONTAGEM DOBRADA, nao "numero de outra fonte": as celulas que o alinhador pos naquela linha # sao as batida ...` |
 | 23:20:40 | Bash | Ler o contra-exemplo e o bloco de cabeça | `cd /home/ronald/copia-o191a/app && sed -n '198,232p' escala/tests/test_montador_realizado_pela_autoridade.py && echo '=== bloco de cabeca 100-132 ===' && sed -n '100,132p' escala/tests/test_montador_realizado_pela_autoridade.py` |
 | 23:20:29 | Bash | Ler os três selos L-102 | `cd /home/ronald/copia-o191a/app && sed -n '126,200p' escala/tests/test_montador_realizado_pela_autoridade.py` |
@@ -1497,10 +1513,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:31:10 | Bash | Ver as chamadas de janela na sonda | `cd /home/ronald/saas-hasner && grep -n 'janela_anterior\\|janela_atual' logs/sombra/universo_palavra_20261004.py` |
 | 11:31:06 | Bash | Ler assinaturas das janelas | `sed -n '1,80p' ponto/janelas.py` |
 | 11:31:02 | Bash | Ler a saida da sonda do universo da palavra | `cd /home/ronald/saas-hasner && cat logs/o134/universo_palavra_20261004.out 2>/dev/null \| tail -80` |
-| 11:26:39 | Bash | Conferir worktrees e HEAD | `cd /home/ronald/saas-hasner && git worktree list && git log --oneline -1 && git status --short \| head` |
-| 11:26:32 | Bash | Rodar a sonda do universo com o terceiro gate | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/sombra/universo_palavra_20261004.py' s=open(p).read() s=s.replace(""" nova_gate = bool(_orf or ((not isento) and _nok > 0))""", """ nova_gate = bool(_orf or ((not isento) and _nok > 0)) # GATE (c): "celulas CASADAS" com a MESMA regua que o supra_juiz ja usa # (`MIN_CELULAS_OK = 2`): entrada E saida acesas, sem somar minuto nenhum. casadas_gat ...` |
-| 11:26:20 | Bash | Ler o harness da sombra | `cd /home/ronald/saas-hasner && sed -n '1,40p' logs/sombra/rodar_na_sombra.sh` |
-| 11:26:14 | Bash | Ler a sonda do universo | `cd /home/ronald/saas-hasner && cat logs/o134/universo_palavra_20261004.out \| head -40` |
-| 11:25:36 | Bash | Ler decidir_dia e a precedencia da palavra | `sed -n '286,350p' ponto/services/dia_decidido.py` |
-| 11:25:29 | Bash | Rodar a sonda do universo da palavra na sombra | `cd /home/ronald/saas-hasner && flock /tmp/sombra_hasner.lock logs/sombra/rodar_na_sombra.sh logs/sombra/universo_palavra_20261004.py > logs/o134/universo_palavra_20261004.out 2>&1; echo "rc=$?"; tail -3 logs/o134/universo_palavra_20261004.out` |
-| 11:25:24 | Bash | Escrever a sonda do universo da palavra | `cd /home/ronald/saas-hasner && cat > logs/sombra/universo_palavra_20261004.py <<'PY' """Universo da palavra SEM_TURNO_PAREADO: o gate de HOJE (numero na ata) x o gate pela AUTORIDADE. Nao reconstroi juiz: le a ATA pela porta (`grade_da_celula`) e pergunta o `sem_turno` ao mesmo `realizado_do_dia` que o espelho usa, com os turnos pedidos UMA vez por periodo (como o montador faz). """ import datetim ...` |
