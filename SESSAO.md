@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 22:52:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (366.6 MB). Acoes na janela: **1510**.
+**Medido em 04/10/2026 22:58:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (366.6 MB). Acoes na janela: **1497**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1507,16 +1507,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:58:37 | Bash | Ler o handle do processar_cartorio | `sed -n '33,75p' ponto/management/commands/processar_cartorio.py` |
 | 10:58:27 | Bash | Flags do processar_cartorio | `grep -n "add_argument\\|forcar\\|def handle\\|janela\\|empresa" ponto/management/commands/processar_cartorio.py \| head -40` |
 | 10:58:07 | Bash | Ver de onde vem o dia no cartorio | `sed -n '400,460p' ponto/services/cartorio.py; echo "=== 560,600 ==="; sed -n '560,600p' ponto/services/cartorio.py` |
-| 10:57:59 | Bash | Quem chama classificar_dia | `grep -rn "classificar_dia\\|from ponto.supra_juiz\\|from ponto import supra_juiz" --include=*.py . \| grep -v "/tests/" \| grep -v "^./ponto/supra_juiz.py"` |
-| 10:57:51 | Bash | Ler ramos 205-300 do supra_juiz | `sed -n '205,300p' ponto/supra_juiz.py` |
-| 10:57:48 | Bash | Mapear supra_juiz | `grep -n "minutos_realizados\\|real\b\\|n_ok\\|def \\|REALIZADO_ZERO\\|FURO" ponto/supra_juiz.py \| sed -n '1,80p'` |
-| 10:57:41 | Bash | Rodar os vizinhos na copia | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-ct --only "ponto escala core relatorios colaboradores" --parallel 4 2>&1 \| tail -20; echo "rc=$?"` |
-| 10:57:12 | Bash | Rodar teste novo e o selo do relogio | `cd /home/ronald/saas-hasner && timeout 600 bash bin/suite.sh --dir /home/ronald/wt-ct --only "ponto.tests.test_bordas_realizado core.tests.test_selo_teste_sem_relogio" 2>&1 \| tail -12` |
-| 10:57:05 | Bash | Ruff com cache em tmpfs | `cd /home/ronald/wt-ct/app && docker run --rm -v /home/ronald/wt-ct/app:/app:ro --tmpfs /app/.ruff_cache -w /app --cpuset-cpus 4-7 --cpus 1 saas-hasner-core ruff check ponto/tests/test_bordas_realizado.py ponto/services/bordas_realizado.py 2>&1 \| tail -5` |
-| 10:57:00 | Bash | Ordenar import e rodar ruff | `cd /home/ronald/wt-ct/app && python3 - <<'PY' p = 'ponto/tests/test_bordas_realizado.py' s = open(p, encoding='utf-8').read() s = s.replace("from django.core.management import call_command\nfrom freezegun import freeze_time\n", "from django.core.management import call_command\n") a = "from django.utils import timezone\n" assert s.count(a) == 1 s = s.replace(a, "from django.utils import timezone\nf ...` |
-| 10:56:53 | Bash | Congelar o relogio no teste novo | `cd /home/ronald/wt-ct/app && python3 - <<'PY' import re p = 'ponto/tests/test_bordas_realizado.py' s = open(p, encoding='utf-8').read() a = "from django.core.management import call_command\n" assert s.count(a) == 1 s = s.replace(a, "from django.core.management import call_command\nfrom freezegun import freeze_time\n") b = "class ContadorSemTurnoNaoLeASomaPropriaTest(TestCase):\n" assert s.count(b) ...` |
-| 10:56:40 | Bash | Ler o teste inteiro relevante | `cd /home/ronald/wt-ct/app && sed -n '1,32p;67,160p' ponto/tests/test_bordas_realizado.py` |
-| 10:56:26 | Bash | Ver imports e sitios de relogio no teste | `cd /home/ronald/wt-ct/app && grep -n "localdate\\|^import\\|^from\\|^class\\|def \\|freeze" ponto/tests/test_bordas_realizado.py \| head -60` |
-| 10:56:18 | Bash | Ler o selo do relogio | `sed -n '1,120p' core/tests/test_selo_teste_sem_relogio.py` |
-| 10:56:15 | Bash | Localizar o contrato do relogio | `grep -rln "nao pode nascer" --include=*.py \| head; echo "---"; grep -rl "relogio real sem congelar" --include=*.py . \| head` |
-| 10:56:09 | Bash | Ler saida da suite vizinha e estado git | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; ls -la $T/b4kijowol.output 2>/dev/null && tail -25 $T/b4kijowol.output; echo "=== brnwvhnnn ==="; cat $T/brnwvhnnn.output 2>/dev/null \| tail -10; echo "=== git ==="; git log --oneline -1; git status --porcelain \| head` |
