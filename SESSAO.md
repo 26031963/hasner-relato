@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 07:30:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **867**.
+**Medido em 05/10/2026 07:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **864**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -874,6 +874,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:47:49 | Bash | Ver o trecho da 7b | `cd /home/ronald/wt-pousos && sed -n '708,726p' CLAUDE.md` |
 | 19:47:45 | Bash | Localizar a ancora na secao 7b | `cd /home/ronald/wt-pousos && grep -n "DIETA DE PROSA\\|PAUSA COM DONO\\|MARCO FECHADO, DEPOIS COMPACTA" CLAUDE.md` |
 | 19:47:38 | Bash | Escrever as seis leis sem pipe e conferir o selo | `cd /home/ronald/wt-pousos && python3 - <<'PY' import sys def falha(m): print('PAROU:',m); sys.exit(1) p='app/docs/LEIS.md'; t=open(p).read() if 'L-104' in t: falha('L-104 ja esta na arvore de produto -- conferir') leis = [ ("L-104","**O UNIVERSO DO HOLERITE E MES CIVIL, NAO A COMPETENCIA 21-20**: quem paga e o Dominio, entao a matriz do holerite recorta o mes calendario (dia 1 ao ultimo) e NAO le  ...` |
-| 19:33:25 | Bash | Escrever as seis leis e conferir o selo | `cd /home/ronald/wt-pousos && python3 - <<'PY' import sys def falha(m): print('PAROU:',m); sys.exit(1) p='app/docs/LEIS.md'; t=open(p).read() if 'L-104' in t: falha('L-104 ja esta na arvore de produto -- conferir') leis = [ ("L-104","**O UNIVERSO DO HOLERITE E MES CIVIL, NAO A COMPETENCIA 21-20**: quem paga e o Dominio, entao a matriz do holerite recorta o mes calendario (dia 1 ao ultimo) e NAO le  ...` |
-| 19:32:44 | Bash | Registrar os dois cortes na fonte e regerar | `cd /home/ronald/wt-pousos && python3 - <<'PY' import json,sys def falha(m): print('PAROU:',m); sys.exit(1) p='app/docs/CORTES.json'; d=json.load(open(p)) ids={c['id'] for c in d} for i in ('RAIA-VERDE-POUSA','DOCS-NO-MARCO'): if i in ids: falha(i+' ja existe') novos=[ {'id':'RAIA-VERDE-POUSA','quando':'2026-10-04 19:2x', 'frase':'corte Ronald: (a) raia com suite verde POUSA (merge + deploy.sh num  ...` |
-| 19:31:02 | Bash | Existe selo para os 300 chars? | `cd /home/ronald/wt-pousos && grep -rln "300" bin/tests/*.sh 2>/dev/null \| head -4; echo "--- dieta ---"; grep -rln "DIETA\\|dieta" bin/ app/core/tests/ 2>/dev/null \| head -4` |
