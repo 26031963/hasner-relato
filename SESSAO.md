@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 00:07:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (368.9 MB). Acoes na janela: **1465**.
+**Medido em 05/10/2026 00:13:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (369.0 MB). Acoes na janela: **1471**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:09:48 | Bash | Censo de producao dos chamadores do builder curado | `cd /home/ronald/copia-o191a/app && grep -rn "montar_grade_prevista_periodo" --include=*.py . \| grep -v '/tests/' \| grep -v 'def montar_grade'` |
+| 00:09:32 | Bash | Rastrear a fonte da grade em prontidao e grade_da_celula | `cd /home/ronald/copia-o191a/app && echo "=== prontidao: de onde vem _g ==="; sed -n '619,700p' folha/export.py \| grep -n "_g\s*=\\|_g =\\|grade" \| head; echo; echo "=== grade_da_celula: ata ou builder? ==="; grep -n "def grade_da_celula" -A 60 escala/services/leitor_celula.py \| grep -nE "ata\|montar_grade\|minutos_realizados\|realizado" \| head -25` |
+| 00:09:17 | Bash | Ler campos do FechamentoMensal e a porta da grade | `cd /home/ronald/copia-o191a/app && sed -n '325,350p' ponto/models.py; echo "=== grade_do_fechamento 221-250 ==="; sed -n '221,250p' folha/export.py` |
+| 00:09:05 | Bash | Ler a porta que monta a grade do fechamento | `cd /home/ronald/copia-o191a/app && grep -n "grade_do_fechamento" -A 25 ponto/services/dia_pago.py \| sed -n '1,45p'; echo "=== def grade_do_fechamento ==="; grep -rn "def grade_do_fechamento" --include=*.py .` |
+| 00:09:01 | Bash | Ver como fechamento.py monta a grade para por_dia_da_grade | `cd /home/ronald/copia-o191a/app && grep -rn "por_dia_da_grade" --include=*.py . \| grep -v '/tests/'; echo "=== contexto no fechamento ==="; grep -n "por_dia_da_grade" -B 18 folha/fechamento.py \| head -40` |
+| 00:08:53 | Bash | Ler a forma canonica de docker run na sombra | `cd /home/ronald/saas-hasner && sed -n '14,30p' bin/r5_idempotencia_frota.sh` |
+| 00:08:50 | Bash | Achar a forma de rodar comando contra a sombra | `cd /home/ronald/saas-hasner && grep -n "sombra" bin/simular_folha.sh 2>/dev/null \| head -20; echo "=== como se roda comando na sombra ==="; grep -rn "settings.sombra\\|settings=config.settings.sombra" bin/*.sh \| head -10` |
 | 00:06:40 | Bash | Rodar todos os selos de host | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then fail=$((fail+1)); echo "=== VERMELHO: $t (rc=$rc)"; echo "$out" \| tail -12; fi; done; echo "---"; echo "selos de host: $(ls bin/tests/test_*.sh \| wc -l) \| vermelhos: $fail"` |
 | 00:06:30 | Bash | Veredito da suite inteira na copia | `cd /home/ronald/saas-hasner && grep -nE '^(OK\|FAILED\|Ran )' logs/o191/suite_copia2_20261004.out; grep -cE '^(FAIL\|ERROR):' logs/o191/suite_copia2_20261004.out` |
 | 00:06:26 | Bash | Escrever o censo da cura (b) no entregavel | `cd /home/ronald/saas-hasner && cat >> logs/o191/passo5_diff_20261004.md <<'MD' ## QUEM LE `minutos_realizados` DE UM DIA DE **TRABALHO** (censo da cura (b), 05/10 00:0x) O censo anterior deste arquivo fechou os TRES CAMPOS NOVOS do dict de FOLGA. Ele nao respondia a outra pergunta, e a diferenca nao e detalhe: a cura (b) nao acrescenta chave, ela **troca o VALOR** de uma chave que todo mundo ja le ...` |
@@ -1474,4 +1481,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:14:07 | Bash | Estado da suite e do passo 1 no RELATO | `tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bjk0zuk21.output 2>/dev/null; echo "=== RELATO: passo 1 ==="; cd /home/ronald/saas-hasner && grep -n "classe A\\|classes A/B/C\\|A/B/C\\|realizado_sem_turno" app/docs/RELATO.md \| head -20` |
 | 12:13:28 | Bash | Ler a autoridade do realizado | `cd /home/ronald/wt-ct/app && sed -n '340,445p' ponto/turnos.py` |
 | 12:13:25 | Bash | Achar o tipo de retorno da autoridade | `cd /home/ronald/wt-ct/app && grep -n "def realizado_dos_turnos\\|def realizado_do_dia\\|class _Real\\|Realizado = \\|NamedTuple\\|dataclass" ponto/turnos.py \| head -20` |
-| 12:12:57 | Bash | Ler a L-102 literal | `cd /home/ronald/saas-hasner && grep -rn "L-102" app/docs/*.md \| head -20` |

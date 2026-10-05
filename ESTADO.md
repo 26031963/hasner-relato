@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:07:31.**
+**Medido em 05/10/2026 00:13:01.**
 
 | | |
 |---|---|
@@ -109,40 +109,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Um leitor merece cuidado extra: o e6_oraculo foi construído exatamente para distinguir None de 0, e a cura (c) passa a pôr
-  minutos_realizados: 0 onde antes a chave era ausente.
-
-  Ran 1 shell command
-
-● Censo fechado, e com um achado que importa: o e6_oraculo lê o espelho (:179), não a grade — e o espelho escreve minutos_realizados da sua
-  própria chamada à autoridade. A cura não silencia a distinção None/0 do oráculo, que é justamente o juiz do dono da L-099.
-
-  Ran 1 shell command
-
-● São 00:03 de 05/10 e o carimbo da sombra é dia=20261004 — o portão do deploy está vermelho até o cron das 04:17. Decido pela porta da
-  frente (--refazer --dump-agora + --bloco, ~38 min), não pelo --sem-sombra: LEI-AKITA 3, custo de tempo não é argumento. Registro o censo
-  no entregável enquanto a suite corre.
-
-  Ran 1 shell command
-
-● Background command "Rodar a suite inteira na copia, de novo" completed (exit code 0)
-
-  Ran 1 shell command
-
-● 9.629 testes OK, zero FAIL/ERROR na cópia. Agora os selos de host na árvore viva.
-
-● Rodar todos os selos de host · 50s
-  ⎿  $ cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then
-     fail=$((fail+1)); echo "=== VERMELHO: $t (rc=$rc)"; echo "$out" | tail -12; fi; done; echo "---"; echo "selos de host: $(ls
-     bin/tests/test_*.sh | wc -l) | vermelhos: $fail" (50s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-· Jitterbugging… (11h 55m 33s · ↓ 1.4m tokens)
+✢ Compacting conversation… (12h 1m 3s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+
+❯ aval Ronald: lei nova FROTA-PROVA-AMOSTRA-EXPLICA. Nao interrompe a O191: registra agora, aplica do proximo item em diante.
+
+  ID: FROTA-PROVA-AMOSTRA-EXPLICA (proximo numero livre depois da L-109).
+
+  LEI: quando a pergunta e "dois caminhos dao o mesmo numero?" ou "esta cura muda que numero, em quem?", a prova e a FROTA INTEIRA, pelos
+  dois caminhos, com a diferenca impressa por dia-colab e a soma. Diferenca esperada declarada ANTES de rodar. Amostra so explica a CAUSA
+  de um caso; amostra nao prova equivalencia, nao dimensiona universo e nao libera passo.
+
+  ORDEM NA FATIA: (1) ler a logica e nomear a origem; (2) DIFF de frota velho x novo na sombra, pela funcao REAL, competencias 09 e 10,
+  emp2+3+4; (3) so entao selo, cura, pouso. O DIFF da L-094 continua valendo no deploy; este e anterior, e do diagnostico.
+
+  FONTE: bin/sonda_frota.sh e o molde do R4 em core/placar_estrutural.py (pares em zero na frota).
+
+  MUDA: app/docs/LEIS.md (linha nova, coluna PROTEGE no formato arquivo.py::funcao que o selo test_lei_protege_sitio.sh cobra); CLAUDE.md
+  secao LEI-AKITA (uma linha); app/docs/CORTES.md (este corte).
+
+  PROIBIDO: escolher caso por tamanho, por frescor ou por conveniencia e chamar de prova; "medido em N dia-colab" como condicao de
+  entrada; juiz novo; instrumento novo se a sonda de frota ja responde; commit so de docs fora de marco (L-106) -- entra no marco da O191.
+
+  PRONTO: a lei no LEIS.md com numero; o RELATO da proxima fatia traz o DIFF de frota ANTES da cura, com a diferenca esperada escrita
+  antes do numero medido. Sem isso = INCOMPLETO.
+
+  LEI-AKITA: origem=metodo de prova da fatia; testemunha=a funcao real nos dois caminhos; juizes novos=0. Leis aplicadas: L-094, L-099,
+  L-106, L-108. Lei nova: esta, com corte dado aqui.
+
+  Segue a fila; PAREI so em lei ou !.
+  ctrl+x ctrl+s to send now
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
