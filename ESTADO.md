@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:54:01.**
+**Medido em 05/10/2026 18:59:31.**
 
 | | |
 |---|---|
@@ -115,8 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
   ├────────────────────────────────┼────────────┼────────────┼─────────┤
-  │ emp2/emp4 sem escala ativa     │ piso legal │ CCT        │ 73      │
-  ├────────────────────────────────┼────────────┼────────────┼─────────┤
   │ emp1 (regime vazio) na praca68 │ CCT        │ piso legal │ 1 SAI   │
   ├────────────────────────────────┼────────────┼────────────┼─────────┤
   │ emp3 clt (123 colabs)          │ piso legal │ piso legal │ 0 mudam │
@@ -134,18 +132,20 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os dois raias de produto estão fora do ato por LEI-AKITA 9 — o ! dele nomeou O142+O130+R4 e eu não o estendi (RELATO.md:1665-1667). Essa
   é a linha que a L-105 pede, e a O211 pode abrir. Construindo em cópia, como manda a LEI-AKITA 10:
 
-● Escrever a lapide, o resolvedor e os contadores
-  ⎿  $ cd /home/ronald/wt-regua/app && python3 - <<'PY'
-     p = 'core/regua_cct.py'
-     t = open(p).read()
-     # ---------- 1. a lapide de praca_sem_cct_cadastrada (L-111) ----------
-     ini = t.index('def praca_sem_cct_cadastrada(colaborador, competencia):')
-     fim = t.index('def regua_para(colaborador, competencia, tipo…
+● Ler o arquivo de prorrogacao inteiro
+  ⎿  $ cd /home/ronald/wt-regua/app && sed -n '1,130p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py && echo "=== FIM ===" && sed -n
+     '185,260p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
+  ⎿  Referenced file chamados/services/disputa_emissao.py
 
-✢ Compacting conversation… (10h 3m 48s · ↓ 1.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
+● Task "RED e construção do segundo intervalo" completed in background
+
+✢ Frolicking… (10h 9m 18s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
