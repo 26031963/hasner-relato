@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 18:32:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (407.9 MB). Acoes na janela: **1304**.
+**Medido em 05/10/2026 18:37:43.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (408.4 MB). Acoes na janela: **1313**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:37:28 | Bash | Ler get_motor_cct e o campo regime_trabalhista | `sed -n '288,340p' core/regua_cct.py; echo "=== regime_trabalhista no modelo:"; sed -n '118,132p' colaboradores/models.py` |
+| 18:37:23 | Bash | Localizar regime_trabalhista e Empresa | `grep -rn "regime_trabalhista" --include=*.py . \| grep -v "/tests/" \| head -20; echo "=== classe Empresa:"; grep -rn "^class Empresa" --include=*.py . \| head` |
+| 18:37:18 | Bash | Checar push e campos dos modelos | `cd /home/ronald/saas-hasner && tail -3 logs/push_o209_20261005.out; echo "=== RC: $(grep '^RC=' logs/push_o209_20261005.out \|\| echo ausente)"; echo "=== modelos:"; cd app && grep -n "regime_trabalhista" core/models.py \| head; echo "--- Sindicato:"; sed -n "/^class Sindicato/,/^class /p" core/models.py \| grep -nE "= models\.\|class " \| head -40` |
+| 18:37:12 | Bash | Ler regua_para e gemeo | `sed -n '120,290p' core/regua_cct.py` |
+| 18:37:08 | Bash | Ler inicio de regua_cct.py | `sed -n '1,120p' core/regua_cct.py` |
+| 18:36:58 | Bash | Localizar aval REGUA-PELA-EMPRESA nos docs | `grep -n "REGUA-PELA-EMPRESA" docs/*.md \| head -20` |
+| 18:36:52 | Bash | Ler orientacao O211 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat $S/o211_orientacao.md` |
+| 18:36:48 | Bash | Hora e conteudo do scratchpad | `date '+%d/%m %H:%M:%S'; echo "--- orientacao O211:"; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls -la $S/ 2>/dev/null \| head -20` |
+| 18:36:38 | Bash | Ler saida do push e estado do git | `cd /home/ronald/saas-hasner && tail -20 logs/push_o209_20261005.out 2>/dev/null; echo "--- RC presente? $(grep -c '^RC=' logs/push_o209_20261005.out 2>/dev/null)"; echo "--- trava:"; bin/trava_teste.sh --quem 2>/dev/null; echo "--- git:"; git log --oneline -1; git rev-parse --short origin/main` |
 | 18:32:01 | Bash | Conferir se o push terminou | `cd /home/ronald/saas-hasner && tail -6 logs/push_o209_20261005.out; echo "RC presente? $(grep -c '^RC=' logs/push_o209_20261005.out)"` |
 | 18:31:51 | Bash | Procurar os 5 REDs da O211 no RELATO | `cd /home/ronald/saas-hasner && grep -n 'REGUA-PELA-EMPRESA' app/docs/RELATO.md \| head; echo '---'; awk '/REGUA-PELA-EMPRESA/,0' app/docs/RELATO.md \| grep -n 'RED' \| head -20` |
 | 18:31:46 | Bash | Ver o andamento da suite do pre-push | `cd /home/ronald/saas-hasner && tail -12 logs/push_o209_20261005.out; echo "--- linhas: $(wc -l < logs/push_o209_20261005.out) ---"; bash bin/trava_teste.sh --quem 2>&1 \| tail -1` |

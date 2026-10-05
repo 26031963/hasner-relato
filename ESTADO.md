@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:32:31.**
+**Medido em 05/10/2026 18:37:43.**
 
 | | |
 |---|---|
@@ -113,15 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Two gaps closed that would have bitten later: [O209] had no TICKETS line (regua_tickets cobra every bracketed id at pre-push — now OK --
-  1 citacao com linha na tabela), and the two owed measurements had PROMPTS lines but no OBRAS row, which PROMPT-NAO-SE-REPETE calls "lido,
-  não recebido" — now O215 (the Domínio TXT×TXT pauta for the 09) and O216 (L-103's number, measured with the pareador defeituoso from
-  before O195, so it remedes per L-110). 62 host selos green; TICKETS placar conferido.
-
-  Nothing went on air: no code, so no deploy.
-
-  O211 orientation, done read-only while the suite runs (in scratchpad/o211_orientacao.md) — and the audited LEIS.md turned out to already
   diagnose the exact defect O211 cures, L-034's ESTADO: "o valor cct nao tem leitor em regua_para (so compara com clt)". Two measured
   findings:
 
@@ -136,15 +127,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   first per L-110; and the three CAUDA items he declared as não-embarcam still have no rows.
 
   I'll pick up as soon as the push reports — handoff_sessao.sh goes after it lands, per L-108.
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file ponto/services/cartorio.py
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
+  ⎿  Referenced file chamados/services/disputa_emissao.py
 
-● Ran 1 stop hook
-  ⎿  Stop hook error: siga: CELULA-TURNO-FECHA -- CELULA+TURNO FECHA: a soma propria do realizado sai, e o dia sem par leva a
-  PALAVRA (item 1 dos DOSSIES, aval
+● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Compacting conversation… (9h 42m 18s · ↓ 1.2m tokens)
-  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 1%
+● Task "Empurrar o marco O209" still running in background
+
+● Task "Empurrar o marco O209 com saida durável" still running in background
+
+  Ler get_motor_cct e o campo regime_trabalhista
+  ⎿  $ sed -n '288,340p' core/regua_cct.py; echo "=== regime_trabalhista no modelo:"; sed -n '118,132p' colaboradores/models.py
+
+✶ Frolicking… (9h 47m 30s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                 Stop hook error occurred · ctrl+o to see
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
