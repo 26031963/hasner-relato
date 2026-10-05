@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 08:50:45.**
+**Medido em 05/10/2026 08:55:45.**
 
 | | |
 |---|---|
@@ -107,38 +107,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  pergunta encerra, 1 linha de trilha com o usuario.
+  2. Admin aceita duas vezes -> mesmo estado, 1 linha de trilha, 0 duplicado.
+  3. checar_declaracao recusa o dia -> nada se grava, o chamado fica, e a tela diz o motivo.
+  4. Colab declara e admin NAO aceita -> nada se grava (HX-ESCAPE-NAO-TRABALHEI de 26/08 intacto).
 
-❯ segue a fila; PAREI so em lei ou !
-  ⎿  You've hit your weekly limit · resets Oct 7, 6pm (America/Sao_Paulo)
-     /usage-credits to finish what you’re working on.
+  FONTE: ponto/services/declarar_dia.py::declarar_dia (escritor) e ::checar_declaracao (juiz). Nenhum escritor novo.
+  MUDA: o(s) sitio(s) onde o admin aceita/valida resposta de escape 'folga' (porta C, chamados/services/validacao.py LOTE_C e a view que a
+  serve) passam a chamar declarar_dia(tipo='folga').
+  RED: os 4 casos acima, com col951 24/09 como golden.
+  SELO: sitio de aceite de escape 'folga' que nao chama declarar_dia = 0.
+  PROIBIDO: escritor proprio de folga; fallback; gravar na declaracao do colab; estender para 'falta' ou 'atestado' (so conta quantos
+  estao na mesma situacao e publica o numero).
+  PRONTO: RELATO com os 4 REDs nomeados, commit, e o #25298 fechado pela porta em prod. Sem isso = INCOMPLETO com lista.
+  LEI-AKITA: origem=o sitio do aceite; testemunha=declarar_dia; juizes novos=0. Leis aplicadas: L-110, HX-ESCAPE-NAO-TRABALHEI (26/08).
+  Nenhuma lei nova.
+  LINHA HAIKU: (a) contador "aceites de folga sem decisao do dia", esperado 0, rotulo de admin; (b) golden: "o admin aceitou a folga do
+  col951 em 24/09, o dia esta decidido?" esperado via ferramentas; (c) degrau: leitura.
 
-✻ Worked for 1s · done 4:02 AM · 1 shell still running
+  Segue a fila; PAREI so em lei ou !.
 
-❯ /rate-limit-options
-  ⎿  Visit https://claude.ai/settings/usage?from=cc_cli_limit_message to manage usage credits.
+  RED do selo novo contra o bin do HEAD
+  ⎿  $ cd /home/ronald/wt-cert && python3 - <<'PYEOF'
+     import io
+     A='bin/tests/test_montagem_vem_do_arvore_do_push.sh'
+     s=io.open(A,encoding='utf-8').read()
+     v='echo "test_montagem_vem_do_arvore_do_push: OK -- uma porta entrega o que falta na copia, e todo consumidor de archive pergunta a
+     ela."'
+     assert s.co…
 
-❯ segue
-
-  Committed d0e6870d, cherry-picked 36c43ff0, read 1 file, ran 24 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
-     (32 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
-  ⎿  Referenced file core/juizes.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Provar a porta nova nos tres casos
-  ⎿  $ cd /home/ronald/wt-cert && echo "=== --raizes:"; bash bin/arvore_do_push.sh --raizes; echo "=== montagem app (da raia, staticfiles
-     vazio -> deve RECUSAR):"; bash bin/arvore_do_push.sh --montagem /tmp 2>&1 | cut -c1-120; echo "rc=$?"; echo "=== montagem
-     mensageria:"; bash bin/arvore_do_push.sh --m…
-
-· Frolicking… (12m 50s · ↓ 24.9k tokens)
-                                                                                                                    9% until auto-compact
+· Compacting conversation… (17m 50s · ↓ 36.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱ 83%
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
