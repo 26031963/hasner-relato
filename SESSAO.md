@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 05:43:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1012**.
+**Medido em 05/10/2026 05:48:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1007**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1017,8 +1017,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:52:13 | Bash | Procurar o escritor canonico dos tetos | `cd /home/ronald/saas-hasner && echo "=== escritor canonico dos contadores?"; grep -rn "ajustar_contadores" app/core bin/ 2>/dev/null \| head -8; echo "--- registro_baixa:"; sed -n '1,40p' app/core/registro_baixa.py 2>/dev/null` |
 | 17:48:54 | Bash | Conferir se o push terminou | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bexdfx9eu.output 2>/dev/null \| tail -12; echo "=== HEAD vs origin:"; cd /home/ronald/saas-hasner && git log --oneline -1 origin/main \| cat` |
 | 17:48:40 | Bash | Conferir prova publicada da raia e zonas medidas | `cd /home/ronald/saas-hasner && grep -n "6a350aa9\\|k5-encerrada\\|K5-ENCERRADA" app/docs/RELATO.md \| head -12; echo "=== selo do universo civil do holerite na raia?"; cd /home/ronald/wt-k5/app && grep -rln "mes civil\\|_limites\\|universo_por_empresa" holerite/tests/ 2>/dev/null \| head; echo "=== zonas medidas na raia:"; python3 -c " import re t=open('core/juizes.py',encoding='utf-8').read() i=t ...` |
-| 17:48:11 | Bash | Ver o push e o teto/selo na raia | `tail -6 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bexdfx9eu.output 2>/dev/null; echo "=== teto na raia:"; cd /home/ronald/wt-k5/app && grep -n "assertLessEqual(len(pend)" ponto/tests/test_contract_juiz_fechamento.py; grep -n "_teto = " ponto/tests/test_contract_juiz_fechamento.py; echo "=== selo que morde lista_ausencias na raia?"; ls ponto/tests/test ...` |
-| 17:47:43 | Bash | Diff do juizes.py entre main e a raia k5 | `cd /home/ronald/saas-hasner && git diff main:app/core/juizes.py 6a350aa9:app/core/juizes.py \| head -80` |
-| 17:47:29 | Bash | Ler a familia fechamento na raia e conferir o selo 1 | `cd /home/ronald/wt-k5/app && python3 - <<'EOF' import os t=open('core/juizes.py',encoding='utf-8').read() i=t.index("PENDENTES['fechamento'] = (") blk=t[i:t.index('\n)\n',i)] print("--- linhas da familia na RAIA:") n=0 for l in blk.split('\n'): if '_p(' in l: n+=1; print('%2d %s'%(n,l.strip()[:150])) print("total=%d"%n) EOF echo "=== impressao ainda no codigo? (selo 1 na raia)"; cd /home/ronald/wt ...` |
-| 17:47:11 | Bash | Conferir onde a frase sobra na raia k5 | `cd /home/ronald/wt-k5/app && python3 - <<'EOF' import re src=open('ponto/views.py',encoding='utf-8').read().split('\n') defs=[(n+1,l.strip()) for n,l in enumerate(src) if re.match(r'^def \w+', l)] def func(ln): best=('?',0) for n,d in defs: if n<=ln and n>best[1]: best=(d,n) return '%s (def l.%d)'%(best[0][:42],best[1]) for s in ["mes = mes_ou(request.GET.get('mes'), hoje.month)", "mes = mes_ou(re ...` |
-| 17:46:57 | Bash | Localizar a raia k5-encerrada | `cd /home/ronald/saas-hasner && git worktree list \| cat; echo "=== commit 6a350aa9:"; git log --oneline -1 6a350aa9 2>/dev/null \| cat` |
