@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:39:42.**
+**Medido em 05/10/2026 00:45:01.**
 
 | | |
 |---|---|
@@ -114,15 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  nao validacao.
-
-  PROIBIDO: gastar turno explicando por que o caminho velho da o numero que da; certificar o novo por DIFF contra o velho; validar dois
-  caminhos em paralelo patch a patch; amostra como prova; juiz novo.
-
-  MUDA: app/docs/CORTES.json; app/docs/LEIS.md (PROTEGE vazia se nao houver sitio, sem deducao); CLAUDE.md secao LEI-AKITA com o contador
-  do test_lei_akita.sh junto.
-
-  PRONTO: a lei no LEIS.md com numero, e o RELATO da proxima fatia abre com a tabela de casos e a resposta de cada um ANTES de qualquer
   medicao do codigo velho. Sem isso = INCOMPLETO.
 
   LEI-AKITA: origem=metodo da fatia; testemunha=a regra escrita em caso; juizes novos=0. Leis aplicadas: L-092, L-094, L-106, L-108. Lei
@@ -137,15 +128,24 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Os três selos de lei verdes, e o nome revogado só sobra como história dentro da revogação — não como registro. Confirmando a casa inteira
   e lendo o topo do RELATO:
 
-● Rodar os 61 selos e ler o topo do RELATO · 1m 12s
-  ⎿  $ cd /home/ronald/saas-hasner && n=0; v=0; for s in bin/tests/test_*.sh; do n=$((n+1)); if ! bash "$s" >/tmp/claude-1001/selo.out
-     2>&1; then v=$((v+1)); echo "VERMELHO: $s"; tail -4 /tmp/claude-1001/selo.out | sed 's/^/ /'; fi; done; echo "selos=$n vermelhos=$v";
-     echo "=== RELATO topo ==="; head -3… (1m 12s)
-     (ctrl+b ctrl+b (twice) to run in background)
+  Ran 1 shell command
 
-✻ Jitterbugging… (12h 27m 44s · ↓ 1.4m tokens)
+● Agora o RELATO deste marco. Vendo onde entra:
+
+  Ran 1 shell command
+
+● Escrevendo o RELATO do marco:
+
+● Escrever a secao do RELATO e rodar o selo de prova
+  ⎿  $ cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/sec.md <<'FIM'
+     ## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA
+     TABELA DE LEITORES ESTAVA **INVERTIDA**
+     **ESTADO: a cura (b)+(c) esta CONSTRUIDA e VERDE na copia, …
+
+✢ Compacting conversation… (12h 33m 3s · ↓ 1.4m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 87%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    5% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

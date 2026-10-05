@@ -170,6 +170,117 @@ PROVA: `d1689254` e ancestral de `logs/deploy.stamp::COMMIT` (`8c3035bc`) -- `gi
 do BACKLOG previa a `raia-chamado` neste mesmo `!`, e eu NAO a estendi por conta propria: **uma
 linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 
+## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA TABELA DE LEITORES ESTAVA **INVERTIDA**
+
+**ESTADO: a cura (b)+(c) esta CONSTRUIDA e VERDE na copia, nada aplicado, nada commitado, nada no ar.**
+PROVA: `logs/o191/suite_copia2_20261004.out` -- **`Ran 9629 tests in 369.840s` · `OK (skipped=42)` · `RC=0`**,
+zero FAIL e zero ERROR, rodada contra a copia `/home/ronald/copia-o191a` pela porta unica (`bin/suite.sh --dir`).
+Os **61 selos de host** na arvore viva: `vermelhos: 0` (medido 05/10 00:33:17, e de novo depois dos docs).
+
+### AS 5 FALHAS DA PRIMEIRA RODADA, E AS 3 FAMILIAS DELAS
+A primeira rodada deu `FAILED (failures=5, skipped=42)` (`logs/o191/suite_copia_20261004.out`). As cinco
+cairam em tres familias, e **nenhuma pediu lei nova nem afrouxamento**:
+
+| # | sitio | familia | cura |
+|---|---|---|---|
+| 1 | `api/tests/test_api_mensageria_registros_pendentes.py:34` (`0 != 1`) | selo que **COPIA** o valor de `PENDENTES['celula/precedencia']` | literal 1 -> 0, com o motivo nomeando a BUG-145 |
+| 2 | `ponto/tests/test_realizado_do_dia_autoridade.py:115` (`'escala/utils.py' not found in set()`) | idem, mas **afirmando que o pendente EXISTE** | premissa morta por cura: a assercao se **inverte** (golden), e passa a medir por **AST** -- `chamados.count('minutos_realizados_do_dia') == 0` e `chamados.count('realizado_do_dia') >= 2` |
+| 3 | `escala/tests/test_realizado_cronologico.py:26` (`[] is not true`) | **fixture medindo caminho morto** | a batida passa a ser PERSISTIDA; o 660 fica |
+| 4-5 | `core/tests/test_selo_diagrama_do_codigo.py` (`DIVERGE`) | o `.mmd` **assa** o contador | `ARQUITETURA.mmd` regenerado contra a copia |
+
+### A FALHA 1 E A 2 SAO **A MINHA PROPRIA MEIA-CORRECAO**, e isso tem nome na casa
+Quando esvaziei `PENDENTES['celula/precedencia']` para `()`, eu fechei o censo do **codigo curado** e **nao**
+censei quem le a **LISTA**. Sao **tres** selos que copiam aquele valor; eu achei **um**
+(`ponto/tests/test_contract_juiz_celula.py:110`) e a suite achou os outros **dois**. O censo agora esta
+fechado por grep de `celula/precedencia|PENDENTES_CELULA|fora_de_autoridade|fora_da_autoridade`: **3 copiam
+o valor** (os tres acima) e **5 sao estruturais e seguem verdes** (`test_contract_juiz_celula.py:104`, que
+compara `fora_de_autoridade(FAMILIA) == len(PENDENTES_CELULA)` e da `0 == 0`; `core/placar_registro.py:17`;
+`api/views_mensageria.py:1440` e `:1448`; `core/tests/test_selo_diagrama_do_codigo.py:69`).
+**MEIA-CORRECAO E PIOR QUE NENHUMA** cobra censo de ESCRITORES; o que faltou aqui foi censo de **LEITORES da
+lista**, que e o outro lado da mesma linha -- esvaziar uma lista e uma escrita cujo universo e todo leitor dela.
+
+### A FALHA 3 NAO ERA LITERAL COPIADO: A BATERIA S133-RAIZ E **ESTRUTURALMENTE CEGA** A AUTORIDADE
+Medido com sonda de diagnostico, nao suposto: `escala/tests/test_grade_por_turno.py::_b` devolve
+`types.SimpleNamespace(timestamp=dt, tipo=tipo)` -- batida que **nunca** e persistida -- e
+`ponto/turnos.py::turnos_do_colab` **le o BANCO**. A sonda nao imprimiu **UM** turno, e os dois dias davam
+`sem_turno=True`. Conclusao com numero: o **660** daquele selo vinha **inteiro da soma propria**, por **48
+dias** (17/08 -> 04/10), e o selo nunca exercitou a autoridade que diz medir.
+Com as quatro batidas persistidas (`18:55` / `01:00` / `02:00` / `06:55`), `turnos_do_colab` acha **UM** turno
+(`data_turno=2026-07-02`, 18:55->06:55) e `realizado_do_dia` devolve **exatamente 660**, com `sem_turno=False`.
+Entao a cura foi **persistir a batida** -- a propriedade de 17/08 fica de pe e passa a correr sobre o juiz --,
+jamais afrouxar o numero. E a **guarda que faltava** entrou:
+`assertIs(dia[0].get('realizado_sem_turno'), False, ...)`, sem a qual o selo voltaria a medir caminho morto em
+silencio (SELO ANTI-VACUIDADE: ausencia de sinal lida como sinal bom).
+**ESCOPO:** a cegueira do `_b` e de toda a bateria S133-raiz, **nao** se cura dentro da O191 -- fica
+REGISTRADA aqui, com o numero, como item proprio.
+
+### O `.mmd` MUDOU **UMA LINHA**, e o `MAPA.md` nenhuma
+`jf_celula_precedencia[... registro: 1 sitio(s)]` -> `registro: 0 sitio(s)`. O atalho de host
+(`bin/gerar_diagrama.py`) roda `docker exec saas_core` e por isso so alcanca a **arvore viva**; contra a copia
+a forma e `docker run $TESTE_DOCKER -v <copia>/app:/app ... manage.py gerar_diagrama --settings=config.settings.ci`.
+
+### A MINHA TABELA DE LEITORES ESTAVA **INVERTIDA**: A PRONTIDAO **NAO** MUDA NO DEPLOY
+Eu havia escrito, no proprio deliverable, que *"no instante do deploy, sem nenhum apply, UM leitor muda: a
+`prontidao`"*. **Errado, e a correcao inverte a conclusao.** Eu classifiquei `folha/export.py::prontidao` como
+leitora da GRADE **sem ler de qual grade** ela fala: ela chama `grade_do_fechamento(fech)`, e
+`folha/export.py:221::grade_do_fechamento` nao chama o builder que eu curei -- chama
+`escala/services/leitor_celula.py::grade_da_celula`, que o proprio cabecalho declara como *"LE A CELULA
+SOBERANA (CelulaDia + ata lavrada pelo cartorio)"*. Lido linha a linha: cada dia nasce de
+`ata = (cel.ata ...) or {}` (`:331`) e o numero sai de `minutos_realizados=int(ata.get('minutos_realizados') or 0)`
+(`:364`) -- **sempre da ata**; o unico fallback do corpo e de **previsto** (`:346-352`) e nunca toca o realizado.
+Logo os **dois** leitores de dinheiro leem a ATA: `ponto/services/dia_pago.py::por_dia_da_grade` (escritor de
+`DiaPago`) e a `prontidao`. **Nenhum dos dois se move no deploy.**
+O censo CERTO -- quem consome o builder curado em producao -- e: o **CARTORIO**
+(`ponto/services/cartorio.py:452`, e e por aqui, e so por aqui, que o numero novo alcanca a ata), o PDF
+(`relatorios/pdf_espelho.py:193`), `mapa_divergencia.py:39`, `simular_dia.py:7`, o cron 06:20
+(`reconciliar_grade.py:119`, que roda **sem `--apply`** desde 30/08) e o cron 06:26
+(`detectar_par_relampago.py:93`). O espelho (`ponto/services/espelho.py:495`) importa o builder **apenas** no
+ramo que o proprio corpo chama de *"Fonte ANTIGA (builder). Fica como degradacao nomeada, nao como caminho
+normal"* (T4-CUTOVER-ESPELHO, 01/09).
+**O ORACULO SEGUE INTACTO, e agora pelo motivo certo.** Eu havia dito "porque ele le o espelho e o espelho nao
+le a grade", e a **segunda metade era falsa**. A conclusao se sustenta por outra via, medida no corpo: o
+`minutos_realizados` que o espelho publica nasce em `espelho.py:751` de `_real_dia.minutos`, isto e, da chamada
+**propria** do espelho a `ponto/turnos.py::realizado_do_dia` -- a mesma autoridade. `e6_oraculo.py:179` le
+`esp.get('dias')`, entao o juiz do dono da **L-099** nao se move e a distincao deliberada dele entre `None` e
+`0` sobrevive.
+**EM UMA LINHA:** no deploy **nenhum numero de dinheiro e nenhum `pct` de prontidao se move**; muda o que o
+cartorio passa a LAVRAR, o PDF, o mapa e a simulacao. O numero novo so alcanca o dinheiro quando a ata for
+**relavrada** -- na **10** pelo recalculo por evento (PRE-APROVADO, com DIFF antes), e na **09** por **nada**,
+porque ela esta exportada e a porta dela e a REGEN-EM-EXPORTADA.
+A correcao esta ESCRITA, nao apagada, no deliverable: `logs/o191/passo5_diff_20261004.md`, secao *"CORRECAO DO
+CENSO ACIMA"*.
+
+### A LEI NOVA **L-110 `REFERENCIA-E-A-LEI`** -- E A QUE FOI REVOGADA ANTES DELA, DESFEITA NO MESMO MARCO
+Chegaram duas leis em minutos, e a segunda revogou a primeira. **`FROTA-PROVA-AMOSTRA-EXPLICA` foi REVOGADA**
+e desfeita nos **quatro** sitios em que ja havia entrado: a linha do `LEIS.md`, o mapeamento em *CORTES que
+viraram lei*, a entrada do `CORTES.json` e a `LEI-AKITA 13` do `CLAUDE.md`. O nome dela sobra **so como
+historia** dentro da revogacao. No lugar, **L-110**: *a referencia de um numero e a **REGRA** (CLT, CCT,
+`L-NNN`) aplicada ao cadastro e as batidas -- o codigo que existe hoje **nao e gabarito** do codigo novo.*
+ORDEM NA FATIA: casos respondidos pela regra **antes** do codigo; pergunta de lei ao topo do RELATO antes de
+codar; o novo se certifica contra os casos e contra as **propriedades fixas**; o caminho velho se le **UMA
+vez, na troca**, so para dizer quem muda de valor e quanto (**L-094**, **L-092**) -- medida de **impacto**,
+nunca validacao.
+**O CONTADOR ANDOU COM A LEI, no mesmo ato:** `bin/tests/test_lei_akita.sh` cravava `[ "$N" = 12 ]` e passou a
+13; e o rotulo final dele, que dizia *"12 linhas"* em texto fixo, passou a derivar do `$N` medido -- rotulo
+cravado ao lado de contador medido e a forma que envelhece em silencio (LEI-AKITA 8).
+**A COLUNA `PROTEGE` FICA VAZIA, e por LEI, nao por omissao:** o corte manda *"PROTEGE vazia se nao houver
+sitio, sem deducao"*, o cabecalho do `LEIS.md` ja chamava de proibido preencher por deducao, e
+`bin/tests/test_leis_indice.sh` declara PROTEGE como a **unica** coluna que pode ficar vazia. O alvo e um
+**metodo**, nao um `arquivo.py::funcao`. PROVA dos tres selos de lei: `test_leis_indice: OK -- 78 leis`,
+`lei_akita: OK (13 linhas)`, `test_lei_protege_sitio: OK -- 4 sitios protegidos em 78 leis`.
+**O QUE A L-110 MUDA NO QUE EU IA FAZER AGORA:** o DIFF (b)+(c) **nao morre, muda de PAPEL** -- deixa de ser
+gabarito e passa a ser a leitura UNICA de impacto, que e exatamente o que a **L-094** ja exigia no deploy. A
+lei vale **do proximo item em diante** e o corte isentou a O191 explicitamente.
+
+### O PORTAO DO DEPLOY ESTA **VERMELHO**, E O CAMINHO E O DA FRENTE
+`bin/sombra.sh --conferir` as 00:03:37 deu `carimbo dia=20261004 status=OK tipo=completa diverge=0 erros=0`:
+carimbo **de ontem**, e `deploy.sh` exige o de **HOJE**. O cron e `17 4 * * *`. Entre 00:00 e 04:00 o portao e
+cego (`sombra.sh:203` soma +1 quando o dump nao e do dia), entao o caminho e
+`--refazer --dump-agora` + `--bloco` (~38 min), **nao** `--sem-sombra`: atalho esta na lista NUNCA
+PRE-APROVADO, e custo de tempo nao e argumento (LEI-AKITA 3). **A sombra de 04/10 segue valida para MEDIR**
+(completa, `diverge=0`) -- so o portao do deploy pede "de hoje" --, entao a medicao de impacto vem **antes** do
+refazer, que a reconstroi.
+
 ## 04/10 23:4x — O191 PASSO 5: A FROTA DESMENTIU A MINHA AMOSTRA, O UNIVERSO E **441** E NAO 70, E O TETO TEMPORAL VIROU ITEM PROPRIO
 
 **A CONDICAO DE ENTRADA DELE ESTA RESPONDIDA, e nenhuma das duas respostas e a que eu tinha escrito.**
