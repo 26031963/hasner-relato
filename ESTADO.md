@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 04:01:31.**
+**Medido em 05/10/2026 04:07:01.**
 
 | | |
 |---|---|
@@ -106,10 +106,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● O cabeçalho do snapshot já documenta as duas tabelas — então a O196 é LEI-AKITA 1 (a cura mora ao lado da porta), não 8. Agora os 4 de
-  572:
 
   Ran 4 shell commands
 
@@ -137,13 +133,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● API Error: This request would exceed your account's rate limit. Please try again later.
 
 ✻ Worked for 15h 43m 49s · done 3:55 AM · 1 shell still running
-                                                                                                   ✔ Update installed · Restart to update
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
-───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · ← for agents · ↓ to manage
 
-  ● main
-  ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
-  ⧉  index
+❯ segue a fila; PAREI so em lei ou !
+  ⎿  You've hit your weekly limit · resets Oct 7, 6pm (America/Sao_Paulo)
+
+✻ Worked for 1s · done 4:02 AM · 1 shell still running
+▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔
+   What do you want to do?
+
+   ❯ 1. Stop and wait for limit to reset
+     2. Wait here, then continue automatically at Oct 7, 6pm
+     3. Add funds to continue with usage credits
+
+   Enter to confirm · Esc to cancel
 ```
