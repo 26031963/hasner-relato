@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 13:06:31.**
+**Medido em 05/10/2026 13:12:01.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o primeiro sinal do censo HEAD" completed (exit code 0)
 
-● distinct() ineficaz: o Meta.ordering da Batida entra no SELECT e o distinct passa a ser por (colab, timestamp) — 41.168 "colabs". Mato e
-  conserto:
+● Task "RED e construção do segundo intervalo" completed in background
 
-  Ran 6 shell commands
+  Ran 7 shell commands
 
-● Background command "Esperar o censo HEAD terminar" completed (exit code 0)
+● Censo de impacto FECHADO (L-094 condição 1). Três fotos da frota pelo chamador real (turnos_do_colab, 543 colabs, 21/08→20/10, 12.362
+  turnos):
 
-  Read 1 file, ran 4 shell commands
+  ┌───────────────────────┬─────────────────────────┬────────────────┬──────────────────────────┐
+  │                       │ turnos que mudam de dia │ direção ERRADA │ pares criados/destruídos │
+  ├───────────────────────┼─────────────────────────┼────────────────┼──────────────────────────┤
+  │ HEAD → A só           │ 46                      │ 4              │ 0                        │
+  ├───────────────────────┼─────────────────────────┼────────────────┼──────────────────────────┤
+  │ HEAD → A+B            │ 58                      │ 0              │ 0                        │
+  ├───────────────────────┼─────────────────────────┼────────────────┼──────────────────────────┤
+  │ A → A+B (margem de B) │ 20                      │ 0              │ 0                        │
+  └───────────────────────┴─────────────────────────┴────────────────┴──────────────────────────┘
 
-● Background command "Renomear o TSV do HEAD e esperar o censo A" completed (exit code 0)
+  chaves head=12362 ab=12362  so_esq=0 so_dir=0 — a cura não cria nem destrói um único par; move só a propriedade do dia. E prova que A
+  sozinha é MEIA-CORREÇÃO: col334, col594, col852, col857 andavam para FRENTE (o fragmento barrado por um pedaço de si mesmo). Com B, 0
+  FRENTE em 58.
 
-● Background command "Vizinhos: labels ponto e escala" completed (exit code 0)
+  Competência: 44 em 2026-09, 14 em 2026-10, e 3 cruzam a borda de 10 para 09 (col382, col44, col451 — 21/09 → 20/09), que é exatamente o
+  PAREI por L-092 que a O195 já carrega.
 
-  Ran 1 shell command
+  Ran 9 shell commands
 
-● Vizinhos: 3 falhas, e os nomes são os próprios casos — test_L103_250_* e test_L103_174_*. São selos que caracterizam o defeito:
+● Advising using Fable 5.1
 
-  Ran 3 shell commands
-
-● 46 turnos mudam de dia com A. E 4 vão na direção errada (col334, col594, col852, col857) — são exatamente a regressão que a cura B fecha.
-  Rodo A+B para provar:
-
-  Ran 2 shell commands
-
-● Background command "Censo A+B" completed (exit code 0)
-
-✢ Compacting conversation… (4h 28m 36s · ↓ 550.6k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
+· Frolicking… (4h 34m 6s · ↓ 561.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
