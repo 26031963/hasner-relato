@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 05:59:31.**
+**Medido em 05/10/2026 06:05:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `e07c03f2 PAROU na relavratura da comp 10, e o motivo nao e o DIFF surpreender: a folha nao le o sitio que a cura mexeu` |
+| `HEAD` local | `3a9bccaa [O122] etapa sem ok ate o teto de 05/10 06:00: a tela volta ao commit aprovado 74e24761824e55526a7bb26648bc278a3fc05c3d (gate agendado, autorizado no adendo de 02/10 22:0x)` |
 | `origin/main` | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+3a9bccaa [O122] etapa sem ok ate o teto de 05/10 06:00: a tela volta ao commit aprovado 74e24761824e55526a7bb26648bc278a3fc05c3d (gate agendado, autorizado no adendo de 02/10 22:0x)
 e07c03f2 PAROU na relavratura da comp 10, e o motivo nao e o DIFF surpreender: a folha nao le o sitio que a cura mexeu
 eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu
 fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
 b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
-fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
 ```
 
 ## `git status --short`
