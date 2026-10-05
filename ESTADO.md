@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:18:26.**
+**Medido em 05/10/2026 16:23:51.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -115,35 +116,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O gravado da 09 tem os 389 min em 09-20 — mas com horas_trabalhadas=0.0 nesse dia. Antes de escrever, leio as outras rubricas do dia para
-  não publicar alarme falso:
+  Agora o item (3), O209. Primeiro fechei o ponto que decidia o tamanho da foto de reversão:
 
-  Searched for 1 pattern, ran 2 shell commands
+  Ran 2 shell commands
 
-● Leitura decisiva: minutos_realizados alimenta prontidão, não rubrica do TXT. Registrando o achado antes de perdê-lo:
+● Agora o item (3), O209. Dois achados mudam o plano escrito, e os dois para melhor:
+
+  Ran 5 shell commands
+
+● O incremental da sombra falhou com bug provado — e ele é do caminho, não meu desvio:
+
+  Ran 3 shell commands
+
+● O furo é nomeável: 4 linhas (escala_escalacolaborador 1362-1365, criadas em prod depois do dump das 04:00), 3 delas referenciadas por 27
+  células da janela. O incremental não carrega cadastro por desenho (linha 5-7 do próprio arquivo), e hoje o desenho encontrou o caso que
+  ele não cobre.
+
+  Ran 3 shell commands
+
+● Background command "Refazer a sombra inteira com dump de agora" failed with exit code 1
+
+● O nohup & dentro de um lançamento de fundo repetiu a background-duplo-perde-o-veredito: o harness relatou o lançador, não a sombra. A
+  sombra está correndo (logs/sombra_refazer_o209_20261005.out já tem a primeira linha); espero pelo ARQUIVO, que é a forma da casa de todo
+  modo.
 
   Ran 1 shell command
 
-● Ponto A do advisor — se o ATO 1 sozinho move dinheiro. Lendo os sinais:
+● Advising using Fable 5.1
 
-  Searched for 7 patterns, ran 7 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
-  ⎿  Referenced file ponto/turnos.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Task "Empurrar o marco da relavratura" still running in background
-
-● Background command "Empurrar o marco da relavratura" completed (exit code 0)
-
-● Publicar o marco da relavratura · 2s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_relavra10_20261005.out 2>&1; echo "rc=$?"; tail -22
-     logs/deploy_relavra10_20261005.out
-
-* Frolicking… (7h 40m 31s · ↓ 939.0k tokens)
+✢ Frolicking… (7h 45m 56s · ↓ 953.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
