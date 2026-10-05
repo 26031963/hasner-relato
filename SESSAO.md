@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 01:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.1 MB). Acoes na janela: **1454**.
+**Medido em 05/10/2026 01:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (372.1 MB). Acoes na janela: **1442**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1452,15 +1452,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:29:56 | Bash | Mapear a saida da sonda o189 | `cd /home/ronald/saas-hasner/logs/o134 && wc -l o189_ata_zero_20261004.out && grep -n "===\\|FIM-DA-SONDA\\|inicio\\|fim " o189_ata_zero_20261004.out \| head -40` |
 | 13:29:36 | Bash | Ler a sonda das bordas sem turno | `cd /home/ronald/saas-hasner/logs/o134 && sed -n '1,60p' bordas_sem_turno_20261004.out` |
 | 13:29:32 | Bash | Listar saidas do o134 | `cd /home/ronald/saas-hasner/logs/o134 && ls -t \| head -30 && echo "=== grep 88 / 73 ===" && grep -l "73" *.out 2>/dev/null \| head` |
-| 13:25:09 | Bash | Ler bordas_realizado.py | `cat ponto/services/bordas_realizado.py` |
-| 13:24:25 | Bash | Conferir a sonda | `sed -n '8,80p' /home/ronald/saas-hasner/logs/o134/o189_ata_zero_20261004.out; echo "---- $(date '+%H:%M:%S')"` |
-| 13:24:21 | Bash | Instalar e conferir os hooks | `cd /home/ronald/saas-hasner && bash bin/hooks.sh install 2>&1 \| tail -5 && bash bin/hooks.sh check 2>&1 \| tail -3` |
-| 13:24:14 | Bash | Ver se logs/ entra no git | `cd /home/ronald/saas-hasner && git check-ignore -v logs/sombra/o189_ata_zero_20261004.py logs/o134/roda_o189_20261004.sh logs/o134/o189_ata_zero_20261004.out 2>&1 \| head; echo "=== logs rastreados?"; git ls-files logs/ \| head -5; git ls-files logs/ \| wc -l` |
-| 13:24:05 | Bash | Conferir a sonda | `cat /home/ronald/saas-hasner/logs/o134/o189_ata_zero_20261004.out \| sed -n '8,70p'; echo "---- $(date '+%H:%M:%S')"` |
-| 13:24:00 | Bash | Escrever a mensagem do commit | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_lps.txt <<'MSG' LEI-PROTEGE-SITIO: a lei que proibe mexer num sitio passa a morder no diff do push O LEIS.md ganha a coluna PROTEGE nas 70 leis e o pre-push cobra o L-NNN de quem toca sitio protegido. Nasceu medida: a L-102 dizia no rodape que trocar escala/utils.py::minutos_realizados_do_dia "s ...` |
-| 13:23:23 | Bash | Conferir a sonda | `cat /home/ronald/saas-hasner/logs/o134/o189_ata_zero_20261004.out \| sed -n '8,60p'; echo "---- $(date '+%H:%M:%S')"` |
-| 13:23:20 | Bash | Rodar os dois selos na arvore viva | `cd /home/ronald/saas-hasner && timeout 180 bash bin/tests/test_lei_protege_sitio.sh; echo "rc=$?"; timeout 180 bash bin/tests/test_leis_indice.sh \| tail -3` |
-| 13:23:11 | Bash | Conferir o rodape do TICKETS | `cd /home/ronald/saas-hasner && timeout 300 bin/tickets_rodape.sh --conferir 2>&1 \| tail -15; echo "rc=$?"` |
-| 13:23:04 | Bash | Conferir o progresso da sonda | `cat /home/ronald/saas-hasner/logs/o134/o189_ata_zero_20261004.out 2>/dev/null \| head -30; echo "---- $(date '+%H:%M:%S')"` |
-| 13:23:00 | Bash | Inserir a secao do marco no RELATO | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/sec_lps.md <<'MD' ## 04/10 13:xx — LEI-PROTEGE-SITIO: O INDICE DE LEIS PASSA A MORDER NO DIFF DO PUSH **O corte (literal):** *"Toda lei do LEIS.md que proibe ou condiciona mexer num `arquivo::funcao` declara esse sitio numa coluna PROTEGE; commit que toca sitio protegi ...` |
-| 13:22:04 | Bash | Ver o que mudou no RELATO e conferir o arquivo novo | `cd /home/ronald/saas-hasner && git diff --stat app/docs/RELATO.md && git diff app/docs/RELATO.md \| head -40; echo "=== novo arquivo:"; git status --porcelain bin/tests/ ; ls -l bin/tests/test_lei_protege_sitio.sh` |

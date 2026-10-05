@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 01:22:01.**
+**Medido em 05/10/2026 01:27:31.**
 
 | | |
 |---|---|
@@ -145,7 +145,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
-✢ Jitterbugging… (13h 10m 3s · ↓ 1.5m tokens)
+✢ Jitterbugging… (13h 15m 33s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
