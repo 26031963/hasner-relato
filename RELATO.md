@@ -367,6 +367,37 @@ desfaz celula por celula. **"Sem trava" nunca foi "sem prova".**
    RELATO com a conclusao certa e a razao errada, que e a pior forma de estar certo: nao avisa quando
    deixa de valer. A ressalva do `cob_status` acima a minha hipotese nao previa; a fonte previu.
 
+### DOIS CENSOS QUE EU FIZ ANTES DO COMMIT, E UM DELES **CORRIGE O PLACAR DA CASA**
+
+**(1) `minutos_realizados_do_dia` fica SEM CHAMADOR DE PRODUCAO -- e a celula de TURNO nao fecha
+com isso.** O placar diz que fecharia: *"(2) celula/precedencia x juiz (1) e turno/marcos x juiz (1)
+sao O MESMO SITIO: escala/utils.py:822::minutos_realizados_do_dia (...) UMA cura fecha DUAS celulas
+(+2)"* (`core/placar_estrutural.py:262`). **Medido, e' `+1`.** As duas impressoes nao estao no mesmo
+lugar: a de **celula/precedencia** e' o CHAMADOR (`real_por_data[d] = minutos_realizados_do_dia(`),
+que eu apaguei -- e e' por isso que o `test_MORDE_pendente_curado_sai_da_lista` ficou VERMELHO na
+primeira rodada, cobrando a allowlist a zero. A de **turno/marcos** e' `escala/utils.py:861`
+(`if prev is not None and m + base < prev:`), **DENTRO do corpo da funcao** (822-878), que eu nao
+toquei. Eu matei o chamador, nao a funcao. Censo na copia curada: fora de `/tests/` restam so
+comentarios e lapides (`dia_decidido.py:165`, `espelho.py:856`, `placar_estrutural.py:263`,
+`juizes.py:249/255/291`) e o proprio `def`. **Quem mantem a funcao viva e' bateria propria**:
+`escala/tests/test_realizado_intervalo.py` a chama em **6 assercoes**. Nao apaguei de proposito --
+a celula de turno espera a lei da BUG-145 (aval 03/10 12:4x: o contador de
+`ponto/services/bordas_realizado.py` se reescreve ANTES), e apagar funcao com bateria propria e'
+alargar a cura fora da origem (a mesma linha que a MEIA-CORRECAO me cobrou ontem, pelo outro lado).
+Efeito colateral documental que eu registro em vez de corrigir: `ponto/tests/test_contract_juiz_turno.py:74`
+chama o sitio sobrevivente de *"o da TELA"*, e depois desta cura **nenhuma tela o alcanca** -- a
+frase envelheceu no ato, e consertar a prosa dela e' tocar o contrato da familia turno. **Passo 6
+continua NAO carimbado.**
+
+**(2) A folha e' CEGA ao `realizado_sem_turno`.** Procurei quem le a bandeira que o ramo (b) passa a
+emitir: fora de `/tests/`, o unico consumidor e' `ponto/services/bordas_realizado.py:79` (o contador
+do passo 1); quem a emite e' `espelho.py:752` e os dois ramos do montador. **Zero ocorrencias em
+`folha/`.** Isso tem consequencia pratica e ela e' boa para este marco: a testemunha do dinheiro nao
+ve o motivo ao lado do numero -- ela so veria o numero, e o numero so chega la pela relavratura, que
+**nao esta neste ato**. Tambem quer dizer que o `realizado_sem_turno` ainda **nao** e' um rotulo que
+a folha possa mostrar: se um dia tiver de ser, e' fatia propria, com leitor nomeado.
+
+
 ## 05/10 00:3x — O191 PASSO 5: A SUITE VOLTOU **VERDE (9.629)**, AS 5 FALHAS ERAM **UMA MEIA-CORRECAO MINHA**, E A MINHA PROPRIA TABELA DE LEITORES ESTAVA **INVERTIDA**
 
 **ESTADO: a cura (b)+(c) esta CONSTRUIDA e VERDE na copia, nada aplicado, nada commitado, nada no ar.**
@@ -5067,3 +5098,5 @@ pergunta e qual leitor nao migrou.
 **05/10 00:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **05/10 01:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 02:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
