@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 09:49:41.**
+**Medido em 05/10/2026 09:55:01.**
 
 | | |
 |---|---|
@@ -114,6 +114,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+  ORIGEM: api/views_core.py:523-535 (ordem: parse_datetime antes do epoch). Gemeo: api/views.py. Mesmo leitor no ping: api/views_core.py
+  ~933.
+
+  CASOS PELA REGRA (C7: vale a hora em que o colab bateu):
+  1. '1791071932000' recebido 33 min depois -> hora efetiva = 03/10/2026 20:58:52 -03, com a linha "Batida offline sincronizada".
+  2. '1791158355000' -> igual a hoje.
+  3. valor em texto ISO com fuso -> igual a hoje.
   4. hora no futuro ou com mais de 48h -> usa a chegada, e GRAVA trilha com o valor recebido; nunca em silencio.
   5. os dois kernels e o ping leem pela MESMA funcao (paridade de kernels verde).
 
@@ -136,16 +144,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 9 shell commands
 
 ● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Footprint da etapa, importadores e o pendente de celula
-  ⎿  $ cd /home/ronald/saas-hasner && echo '=== footprint da etapa 1:'; git show --stat --format='%s' 60a4a42d; echo '=== quem importa o
-     modulo etapa1:'; grep -rn "test_o122_etapa1" app/ --include=*.py | grep -v "^app/escala/tests/test_o122_etapa1"; echo '(vazio =
-     ninguem)'; echo '=== PENDENTES celula/p…
-
-✢ Frolicking… (1h 11m 46s · ↓ 151.8k tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+  ⎿  ✔ Advisor has reviewed the conversation and will a Jump to bottom (ctrl+End) ↓
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
