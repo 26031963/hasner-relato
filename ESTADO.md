@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:24:01.**
+**Medido em 05/10/2026 00:29:31.**
 
 | | |
 |---|---|
@@ -114,40 +114,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  não tinha: escala/utils.py:1705::grade_espelho_janela ("CONTRATO DE CHAMADA dos renders tela/cartao/folha") chama o builder curado.
+❯ aval Ronald: REVOGO a lei FROTA-PROVA-AMOSTRA-EXPLICA que colei ha pouco. Nao registra; se ja escreveu em LEIS.md, CORTES.json,
+  CLAUDE.md ou no contador do test_lei_akita.sh, desfaz no mesmo marco. No lugar dela entra esta, pelo mesmo caminho (CORTES.json, nunca a
+  mao). Nao interrompe a O191: registra agora, aplica do proximo item em diante.
 
-  Ran 1 shell command
+  ID: REFERENCIA-E-A-LEI (proximo numero livre depois da L-109).
 
-● Isso corrige também a minha afirmação sobre o oráculo: o espelho consome grade_espelho_janela, logo o builder curado alcança. Preciso ver
-  se espelho.py sobrescreve minutos_realizados com a chamada própria dele:
+  LEI: a referencia de um numero e a REGRA (CLT, CCT, L-NNN) aplicada ao cadastro e as batidas. O codigo que existe hoje NAO e gabarito do
+  codigo novo.
 
-  Ran 1 shell command
+  ORDEM NA FATIA:
+  (1) escrever os CASOS com a resposta pela regra, antes do codigo: cadastro tal, batidas tais, o dia vale tanto, e a L-NNN que decide;
+  (2) onde a regra nao da a resposta, a pergunta de lei sobe ao topo do RELATO JUNTA com as outras da fatia, antes de codar;
+  (3) codigo novo se certifica contra os casos e contra as propriedades fixas (partes somam o total, idempotente, previsto nao depende de
+  realizado, todo leitor le o mesmo numero);
+  (4) o caminho velho e lido UMA vez, na troca, so para responder quem muda de valor e quanto (L-094, L-092). Isso e medida de impacto,
+  nao validacao.
 
-● Confirmado por leitura: espelho.py:751 escreve minutos_realizados da chamada própria a realizado_do_dia, e _pela_grade() é "degradacao
-  nomeada, nao caminho normal" — então o oráculo segue intacto, como eu havia medido. Vou corrigir o censo:
+  PROIBIDO: gastar turno explicando por que o caminho velho da o numero que da; certificar o novo por DIFF contra o velho; validar dois
+  caminhos em paralelo patch a patch; amostra como prova; juiz novo.
 
-  Ran 2 shell commands
+  MUDA: app/docs/CORTES.json; app/docs/LEIS.md (PROTEGE vazia se nao houver sitio, sem deducao); CLAUDE.md secao LEI-AKITA com o contador
+  do test_lei_akita.sh junto.
 
-● Agora registro a lei. Linha L-110 no LEIS.md, com a coluna PROTEGE vazia por lei — o cabeçalho do próprio arquivo proíbe preencher por
-  dedução:
+  PRONTO: a lei no LEIS.md com numero, e o RELATO da proxima fatia abre com a tabela de casos e a resposta de cada um ANTES de qualquer
+  medicao do codigo velho. Sem isso = INCOMPLETO.
 
-  Ran 3 shell commands
+  LEI-AKITA: origem=metodo da fatia; testemunha=a regra escrita em caso; juizes novos=0. Leis aplicadas: L-092, L-094, L-106, L-108. Lei
+  nova: esta, com corte dado aqui.
 
-● CLAUDE.md ganha a LEI-AKITA 13, e o contador cravado do selo vai no mesmo ato (senão o pre-push fica vermelho):
-
-  Ran 2 shell commands
-
-● O selo passou mas a mensagem final ainda diz "12 linhas" — rótulo que mente:
-
-  Corrigir o rotulo cravado do selo
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n '12 linhas' bin/tests/test_lei_akita.sh && sed -i 's/12 linhas no CLAUDE\.md/$N linhas no
-     CLAUDE.md/' bin/tests/test_lei_akita.sh && bash bin/tests/test_lei_akita.sh; echo "rc=$?"
-
-✢ Jitterbugging… (12h 12m 3s · ↓ 1.4m tokens)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  Segue a fila; PAREI so em lei ou !.
+  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
