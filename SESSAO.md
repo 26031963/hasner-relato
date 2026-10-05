@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 08:29:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **738**.
+**Medido em 05/10/2026 08:35:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **732**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -742,9 +742,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:36:33 | Bash | Conferir os patches preparados | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && ls -la $S/ 2>&1 \| tail -8` |
 | 20:36:28 | Bash | Inserir o bloco do marco no RELATO | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relato_marco.py <<'PY' # -*- coding: utf-8 -*- import io P = '/home/ronald/saas-hasner/app/docs/RELATO.md' s = io.open(P, encoding='utf-8').read() ANC = '**LEI RESPONDIDA as ~14:xx' assert s.count(ANC) == 1, 'ancora nao unica: %s' % s.count(ANC) BLOCO = u"""**MARCO NO  ...` |
 | 20:35:06 | Bash | Provar o range e ler o topo do RELATO | `cd /home/ronald/saas-hasner && echo "=== PROVA: nenhum .py entre o sha deployado (8c3035bc) e a ponta (024608c7) ===" && git diff --stat 8c3035bc..024608c7 -- '*.py' && echo "[saida vazia acima = nenhum .py]" && echo "--- o que mudou de fato nesse range ---" && git diff --stat 8c3035bc..024608c7 \| tail -5 && echo && echo "=== topo do RELATO (18 linhas) ===" && head -18 app/docs/RELATO.md` |
-| 20:34:21 | Bash | Ler os dois produtores do campo | `echo "=== leitor_celula.py:328-368 (candidato a ORIGEM do colapso) ===" && sed -n '328,368p' escala/services/leitor_celula.py && echo && echo "=== escala/utils.py:1326-1352 (o outro produtor) ===" && sed -n '1326,1352p' escala/utils.py` |
-| 20:34:19 | Bash | Ler o veredito da sonda | `cd /home/ronald/saas-hasner && echo "=== SONDA O191 — CONDICAO DE ENTRADA ===" && cat logs/o134/o191_condicao_entrada_20261004.out` |
-| 20:34:13 | Bash | Ler os tres chamadores reais do juiz | `echo "=== (1) cartorio.py:578-600 -- que 'dia' ele passa ===" && sed -n '578,600p' ponto/services/cartorio.py && echo && echo "=== (2) commands/supra_juiz.py:180-200 ===" && sed -n '180,200p' ponto/management/commands/supra_juiz.py && echo && echo "=== (3) emitir_furo_retroativo.py:72,92 ===" && sed -n '72,92p' ponto/management/commands/emitir_furo_retroativo.py` |
-| 20:32:32 | Bash | Rodar a sonda corrigida da condicao de entrada | `cd /home/ronald/saas-hasner && bash logs/o134/roda_o191_condicao_20261004.sh; echo "lancador rc=$?"` |
-| 20:32:29 | Bash | Ler o lancador da sonda | `cd /home/ronald/saas-hasner && cat logs/o134/roda_o191_condicao_20261004.sh` |
-| 20:32:24 | Bash | Conferir a sonda corrigida e a pista | `cd /home/ronald/saas-hasner && ls -la logs/o134/roda_o191_condicao_20261004.sh 2>&1 && echo "--- a janela corrigida no corpo da sonda ---" && grep -n "INSTANTES\\|_ini = \\|_fim = \\|batidas_apuraveis" logs/sombra/o191_condicao_entrada_20261004.py \| sed 's/^/ /' && echo "--- a pista esta livre? ---" && bash bin/trava_teste.sh --quem 2>&1 \| head -3` |
