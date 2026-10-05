@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 05:21:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1055**.
+**Medido em 05/10/2026 05:26:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1037**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1047,21 +1047,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:28:22 | Bash | Atualizar o placar do TICKETS e reconferir | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -5; echo "=== diff:"; git diff --stat -- app/docs/TICKETS.md; echo "=== reconfere:"; bash bin/tickets_placar.sh --conferir >/tmp/tp.out 2>&1; echo "rc=$?"; tail -3 /tmp/tp.out` |
 | 17:28:08 | Bash | Conferir o carimbo da regua e o placar de tickets | `cd /home/ronald/saas-hasner && ls -l .regua_stamp 2>/dev/null && cat .regua_stamp 2>/dev/null \| head -20; echo "=== placar:"; bash bin/tickets_placar.sh --conferir 2>&1 \| tail -8; echo "rc=$?"` |
 | 17:27:58 | Bash | Conferir se a regua terminou | `cd /home/ronald/saas-hasner && kill -0 2371860 2>/dev/null && echo "REGUA VIVA" \|\| echo "REGUA TERMINOU"; echo "--- log:"; tail -25 logs/regua_o135_marco_20261004.out 2>/dev/null` |
-| 17:24:09 | Bash | Achar quem le os pendentes de fechamento | `cd /home/ronald/saas-hasner && grep -rn "PENDENTES_FECHAMENTO\\|PENDENTES\[" app --include=*.py \| grep -v 'juizes.py:8[0-9][0-9]' \| head -10` |
-| 17:23:48 | Bash | Ler a assinatura do registro de pendente | `cd /home/ronald/saas-hasner && grep -n 'def _p(' app/core/juizes.py; sed -n "$(grep -n 'def _p(' app/core/juizes.py \| cut -d: -f1),+22p" app/core/juizes.py` |
-| 17:23:35 | Bash | Contar o snippet e ver em que funcoes mora | `cd /home/ronald/saas-hasner && echo "ocorrencias do snippet em views.py:"; grep -n "mes = mes_ou(request.GET.get('mes'), hoje.month)" app/ponto/views.py; echo '--- em que funcao cada uma mora ---'; for l in $(grep -n "mes = mes_ou(request.GET.get('mes'), hoje.month)" app/ponto/views.py \| cut -d: -f1); do f=$(awk -v L=$l 'NR<=L && /^def /{n=NR": "$0} END{print n}' app/ponto/views.py); echo " linha ...` |
-| 17:23:25 | Bash | Ver qual pendente mora dentro de lista_ausencias | `cd /home/ronald/saas-hasner && awk 'NR>1835 && /^def \|^@/ {print NR": "$0; exit}' app/ponto/views.py; echo '--- qual snippet do _K8 mora dentro de lista_ausencias ---'; awk 'NR>=1835 && NR<=1900' app/ponto/views.py \| grep -n "mes_ou\\|_u_ini\\|data_turno__month\\|_pa_u"` |
-| 17:23:20 | Bash | Achar lista_ausencias no codigo | `cd /home/ronald/saas-hasner && grep -rn 'def lista_ausencias\\|lista_ausencias' app --include=*.py \| head -8` |
-| 17:23:13 | Bash | Listar os pendentes do _K8 | `cd /home/ronald/saas-hasner && awk 'NR>=360 && NR<=380' app/core/juizes.py \| grep -n '_K8' ; echo '=== todos os _p com _K8 ==='; grep -n "_p(_K8" app/core/juizes.py` |
-| 17:23:05 | Bash | Achar as duas linhas exatas do corte | `cd /home/ronald/saas-hasner && grep -n 'matriz.py\\|holerite' app/core/juizes.py \| head -8; echo '=== lista_ausencias ==='; grep -n 'lista_ausencias' app/core/juizes.py \| head -5` |
-| 17:23:01 | Bash | Localizar as duas listas de pendentes | `cd /home/ronald/saas-hasner && grep -rn 'PENDENTES_FECHAMENTO' app/core/*.py \| head -5; echo '=== _K8 ==='; grep -rn '_K8' app/core/*.py \| head -5` |
-| 17:22:49 | Bash | Ler o rodador da sombra | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh` |
-| 17:22:42 | Bash | Ler o lancador da sonda do O189 | `cd /home/ronald/saas-hasner && cat logs/o134/roda_o189_v3_20261004.sh` |
-| 17:22:02 | Bash | Conferir o placar dos tickets | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --conferir; echo "rc=$?"` |
-| 17:21:56 | Bash | Ver o que o regua_tickets cobra | `cd /home/ronald/saas-hasner && grep -n 'tickets_placar\\|exit' bin/regua_tickets.sh \| head -12` |
-| 17:21:50 | Bash | Ver quem chama o placar dos tickets | `cd /home/ronald/saas-hasner && grep -rln 'tickets_placar' bin/ .git/hooks/ 2>/dev/null \| head; echo '--- regua_tickets (o do pre-push) ---'; grep -n 'tickets_placar\\|regua_tickets' bin/pre-push.sh \| head -5` |
-| 17:21:30 | Bash | Extrair os 15 dia-colab | `cd /home/ronald/saas-hasner && grep -n '15:com_numero' logs/o134/o189_ata_zero_v3_20261004.out \| sed -n '1,25p'` |
-| 17:21:25 | Bash | Ler a medicao do O189 | `cd /home/ronald/saas-hasner && grep -n 'col250' logs/o134/o189_ata_zero_v3_20261004.out \| head -5; echo '=== cabecalho do v3 ==='; head -25 logs/o134/o189_ata_zero_v3_20261004.out` |
-| 17:21:20 | Bash | Achar a medicao dos 15 dia-colab | `cd /home/ronald/saas-hasner && ls -t logs/o134/ 2>/dev/null \| head -12; echo '--- onde estao os 15 ---'; grep -rln 'col250' logs/o134/ logs/*.out 2>/dev/null \| head -5` |
-| 17:21:13 | Bash | Progresso da regua | `cd /home/ronald/saas-hasner && kill -0 2371860 2>/dev/null && echo 'regua VIVA' \|\| echo 'regua terminou'; tail -c 400 /tmp/regua_171324.log 2>/dev/null \| tr -s '.' '.' \| tail -3` |
-| 17:21:07 | Bash | Escrever a secao do achado das copias | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='app/docs/RELATO.md'; s=io.open(p,encoding='utf-8').read() sec='''## 04/10 17:2x — A LAPIDE DAS COPIAS ORFAS NAO E PASSADO: **1,2 GB EM 31 COPIAS, 20 COM ROOT** (O192) `LEI-AKITA: origem=bin/arvore_do_push.sh:66 (a lista de montagem, de UM projeto so) + a montagem do nucleo sem PYTHONDONTWRITEBYTECODE, testemunha=find -user root -type f n ...` |
