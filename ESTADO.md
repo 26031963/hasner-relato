@@ -1,15 +1,22 @@
 # ESTADO -- o repo e a sessao agora
 
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+>
+> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
+> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
+> seguem valendo -- eles descrevem, nao afirmam ato.
+
+
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 14:26:31.**
+**Medido em 05/10/2026 14:32:01.**
 
 | | |
 |---|---|
-| `HEAD` local | `c849f340 O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga` |
 | `origin/main` | `cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,24 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga
 c849f340 O topo do TICKETS fechado no ato do push (O112)
 cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA
 6319b10c [CELULA-TURNO-FECHA] a familia turno/marcos FECHA: o segundo juiz de "quantos minutos o dia realizou?" morre, e o placar vai a 14/20
 034601f2 [O122] o gate reverteu UM arquivo de tres: o selo orfao sai e main volta ao verde
-3a9bccaa [O122] etapa sem ok ate o teto de 05/10 06:00: a tela volta ao commit aprovado 74e24761824e55526a7bb26648bc278a3fc05c3d (gate agendado, autorizado no adendo de 02/10 22:0x)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,6 +113,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+● Background command "Refazer a sombra e rodar o ensaio" completed (exit code 0)
+
+  Ran 10 shell commands
 
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
@@ -133,22 +136,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler a linha do O195 no BACKLOG por coluna
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '342p' app/docs/BACKLOG.md | python3 -c "
-     import sys
-     ln = sys.stdin.read().rstrip('\n')
-     cols = ln.strip().strip('|').split('|')
-     for i, c in enumerate(cols):
-     print('%d [%d ch] %s' % (i, len(c.strip()), c.strip()[:300]))
-     " && echo "--- cabecalho do bloco OBRAS …
+● Orientacao read-only sobre a relavratura 10
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '1,40p' bin/snapshot_relavratura_10_2026.py && echo "=== comandos de relavra ===" && ls
+     app/ponto/management/commands/ | grep -i 'relavr\|lavra\|recalcul' && echo "=== porta ===" && grep -rn "def recalcular_fechamento_mes"
+     app/ponto/ | head
 
-✢ Frolicking… (5h 48m 36s · ↓ 725.8k tokens)
+✢ Compacting conversation… (5h 54m 6s · ↓ 736.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
