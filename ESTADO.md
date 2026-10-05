@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:53:31.**
+**Medido em 05/10/2026 11:58:59.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-❯ aval Ronald: o item [1] FUTURO-NAO-E-EM-ABERTO sobe para logo depois da relavratura 10, a frente da O204. Caso novo, medido 05/10 11:46
-  no col499: dias 02/10 e 04/10 saem com status 'ok' E palavra 'Em aberto' no mesmo dia -- dia que a propria tela julga ok nao leva a
-  palavra. Segue a fila; PAREI so em lei ou !
-
-● Aval 7 (col499) recebido e vai para a fila logo depois da relavratura 10 — registro em PROMPTS/BACKLOG neste mesmo turno, assim que o A/B
-  voltar ao ar. Primeiro os três defeitos da fatia em voo. Lendo o teste inteiro.
+● Background command "Rodar os três selos pela porta --only" completed (exit code 0)
 
   Ran 1 shell command
 
-● O único sítio de relógio é a linha 65 — e setUpTestData é classmethod, que o freeze_time de classe não cobre, então congelar sozinho
-  recriaria a mistura. Vendo o resto do teste para curar os três de uma vez.
+● Os três selos: Ran 11 tests, OK, rc=0 — os 6 casos do recorte verdes, ruff zero e nenhum relógio solto. Lançando a suite inteira em
+  paralelo com o A/B (travas diferentes: pista de teste x sombra).
+
+  Ran 4 shell commands
+
+● Nada saiu do --forcar entre o sombra_cobre e o recálculo — nem o [RECORTE]. Lendo o sítio do print no comando para saber se ele é mudo
+  por desenho ou se o passo não rodou.
 
   Ran 1 shell command
 
-● Curando os três de uma vez — e o test_recorte_por_arquivo passava justamente porque o comentário dele não tinha vírgula (ANTI-VACUIDADE:
-  o caso não mordia). Vendo o idioma de import da casa.
+● Hipótese: stdout do Django é bufferizado no pipe e só esvazia na saída do processo, enquanto as linhas do oráculo são de log (stderr, sem
+  buffer). Medindo em vez de deduzir — quem está rodando agora no container.
 
   Ran 2 shell commands
 
-● RED medido já existe (o A/B morreu com o erro literal). Conferindo se o runner encerrou e liberou a trava, e provando que o caso novo
-  morde o parser velho.
+● Decisivo: o --forcar já terminou (PID 9 do container é o recálculo) — ele rodou em ~5 s e não imprimiu nada. Isso não é buffer. Lendo o
+  handle para ver para onde vai o self.stdout.
 
-● Conferir trava e provar o RED do caso novo
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; echo "=== fim do log do A/B ===";
-     tail -3 $S/o192_sombra.log; echo "=== trava da sombra ==="; ls -la /home/ronald/saas-hasner/logs/sombra.lock 2>/dev/null; flock -n
-     /home/ronald/saas-hasner/logs/sombr…
+  Ran 2 shell commands
 
-✢ Frolicking… (3h 15m 36s · ↓ 375.9k tokens · thinking)
+● O foto canaliza por grep -v, o que não removeria a linha. Uma conferida só em settings/sombra.py (as "saídas desligadas") e sigo — o
+  veredito do A/B é o snapshot, não o contador do comando.
+
+  Ver se o settings da sombra desliga stdout
+
+✢ Frolicking… (3h 21m 4s · ↓ 395.5k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    4% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 3 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

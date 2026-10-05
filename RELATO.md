@@ -4,7 +4,10 @@ FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-5 FE
 passo 6 esta **PARCIAL** e por isso segue NAO carimbado. A ordem dele de 05/10 09:0x, literal: *"(1) turno
 -- apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4)
 O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pelo aval de 09:4x (*"BO de
-producao PROVADO, passa a frente dos 4 BOs de tela"*).
+producao PROVADO, passa a frente dos 4 BOs de tela"*) e, pelo aval de **11:5x**, com a **O197**
+(`FUTURO-NAO-E-EM-ABERTO`) subindo para **logo depois de (2) e a FRENTE da O204** -- *"sobe para logo
+depois da relavratura 10, a frente da O204"*. A ordem de hoje, entao: (1) turno FECHADO -> (2)
+relavratura 10 -> **O197** -> O204 -> O207 -> O198/O199/O200 -> O145 -> instrumento.
 **ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
 PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de

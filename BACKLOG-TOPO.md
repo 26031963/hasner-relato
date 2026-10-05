@@ -204,7 +204,7 @@ lista — ela e o que esta EM PE._
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | PAREI |
 | **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
-| **O197** | FUTURO-NAO-E-EM-ABERTO | **fila 1** -- aval dado, item (3) da ord |
+| **O197** | FUTURO-NAO-E-EM-ABERTO | **fila 1 -- SOBE para logo depois da rel |
 | **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
 | **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | espera corte |
 | **O200** | PINO-GEO-LE-O-JUIZ | **fila 1**, atras da O199. O TERCEIRO ca |
