@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 23:14:31.**
+**Medido em 04/10/2026 23:19:50.**
 
 | | |
 |---|---|
@@ -133,14 +133,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar a sonda combinada na sombra" completed (exit code 0)
 
-● Cortar o entregável antes do item 3
-  ⎿  $ cd /home/ronald/saas-hasner && L=$(grep -n '^3\. \*\*EM ABERTO' logs/o191/passo5_diff_20261004.md | cut -d: -f1) && echo "linha=$L"
-     && head -n $((L-1)) logs/o191/passo5_diff_20261004.md >
-     /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/md_head.txt && …
+  Aplicar a cura (c) na cópia
+  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only
+     "escala.tests.test_montador_realizado_pela_autoridade" > logs/o191/green_folga_c_20261004.out 2>&1; echo "RC=$?"; grep -E
+     '^(OK|FAILED|Ran|FAIL:|ERROR:)' logs/o191/green_folga_c_20261004.out
 
-· Jitterbugging… (11h 2m 33s · ↓ 1.3m tokens)
+✽ Jitterbugging… (11h 7m 52s · ↓ 1.3m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
