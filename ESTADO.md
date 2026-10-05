@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:23 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:243 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 15:03:47.**
+**Medido em 05/10/2026 15:09:01.**
 
 | | |
 |---|---|
@@ -117,17 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Background command "Empurrar o marco (pre-push roda a suite)" completed (exit code 0)
-
-● Push pousou: cc4cec4c..8fce4967 main -> main — suite 9638 OK, control-plane 22 OK. Marco (1)/O195 fechado, no ar e empurrado.
-
-  Searched for 1 pattern, ran 4 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 2 patterns, ran 10 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Referenced file ponto/turnos.py
   ⎿  Referenced file docs/LEIS.md
@@ -143,12 +132,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Ler o topo do RELATO
-  ⎿  $ sed -n '1,24p' docs/RELATO.md
+  Searched for 2 patterns, ran 25 shell commands
 
-· Frolicking… (6h 25m 52s · ↓ 809.7k tokens)
+● Background command "Rodar a sonda da frota na sombra" completed (exit code 0)
+  ⎿  Read docs/AVAIS.md (25 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Referenced file ponto/turnos.py
+  ⎿  Referenced file docs/LEIS.md
+  ⎿  Referenced file escala/utils.py
+
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Ver o que o commit da O195 tocou
+  ⎿  $ cd /home/ronald/saas-hasner && git show --stat 8fce4967 | head -40
+
+· Frolicking… (6h 31m 6s · ↓ 817.1k tokens · thought for 36s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
