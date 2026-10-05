@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 14:37:31.**
+**Medido em 05/10/2026 14:43:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga` |
-| `origin/main` | `cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA` |
-| commits a subir (`ahead`) | **2** |
+| `origin/main` | `8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -113,17 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
-
-● Background command "Suite inteira contra a copia" completed (exit code 0)
-
-  Searched for 1 pattern, ran 25 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Referenced file escala/utils.py
-  ⎿  Referenced file core/placar_estrutural.py
-  ⎿  Referenced file ponto/turnos.py
-
 ● Task "RED e construção do segundo intervalo" completed in background
 
 ● Advising using Fable 5.1
@@ -141,14 +130,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Empurrar o marco (pre-push roda a suite)" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Frolicking… (5h 59m 36s · ↓ 743.7k tokens)
+  Read 1 file, ran 5 shell commands
+
+● Background command "Empurrar o marco (pre-push roda a suite)" completed (exit code 0)
+
+● Push pousou: cc4cec4c..8fce4967 main -> main — suite 9638 OK, control-plane 22 OK. Marco (1)/O195 fechado, no ar e empurrado.
+
+  Searched for 1 pattern, ran 4 shell commands
+
+● Advising using Fable 5.1
+
+· Frolicking… (6h 5m 6s · ↓ 759.1k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
