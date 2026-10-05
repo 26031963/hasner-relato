@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 19:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (411.9 MB). Acoes na janela: **1449**.
+**Medido em 05/10/2026 19:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.0 MB). Acoes na janela: **1455**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:47:17 | Bash | Ler o selo de regime por empresa | `cd /home/ronald/wt-regua && cat -n app/core/tests/test_regime_por_empresa.py` |
+| 19:47:16 | Bash | Ler regua_para reescrita | `cd /home/ronald/wt-regua && sed -n '300,430p' app/core/regua_cct.py` |
+| 19:47:08 | Bash | Ler o modelo AplicacaoConvencao | `cd /home/ronald/wt-regua && sed -n '119,185p' app/core/models.py` |
+| 19:46:58 | Bash | Ler o selo da régua | `cd /home/ronald/wt-regua && echo "=== test_regua_para.py ===" && cat -n app/core/tests/test_regua_para.py` |
+| 19:46:51 | Bash | Corrigir variável e CPF; conferir usos do vínculo | `cd /home/ronald/wt-regua && python3 - <<'PY' import io p='app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py' s=io.open(p,encoding='utf-8').read() velho = """ # sem estas duas linhas de folha as empresas de fixture ficam FORA do universo e o selo # passaria VAZIO, que e o defeito que esta casa ja pagou com o CNPJ `11222333...` na UI. c_clt = self._colab('[cpf]', self.emp_clt, self.te_12x ...` |
+| 19:46:41 | Bash | Gerar CPFs válidos distintos | `cd /home/ronald/wt-regua && python3 - <<'PY' def dv(b): s=sum(int(x)*(len(b)+1-i) for i,x in enumerate(b)); d=s*10%11 return str(0 if d>9 else d) for base in ('717045238','380716012'): d1=dv(base); d2=dv(base+d1); print(base+d1+d2) PY` |
 | 19:46:30 | Bash | Fortalecer o controle positivo e reler o trecho | `cd /home/ronald/wt-regua && python3 - <<'PY' import io p='app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py' s=io.open(p,encoding='utf-8').read() s=s.replace("self._colab('[cpf]'", "self._colab('[cpf]'") velho = """ FechamentoMensal.objects.create(colaborador=c_cct, mes=9, ano=2026) FechamentoMensal.objects.create(colaborador=c_vazio, mes=9, ano=2026) cont = contadores_da_regua(se ...` |
 | 19:46:15 | Bash | Computar CPF válido e checar validação no modelo | `cd /home/ronald/wt-regua && python3 - <<'PY' def dv(b): s=sum(int(x)*(len(b)+1-i) for i,x in enumerate(b)); d=s*10%11 return str(0 if d>9 else d) base='486290428' d1=dv(base); d2=dv(base+d1) print('cpf valido:', base+d1+d2) PY grep -rn "def clean\\|validar_cpf\\|def save" app/colaboradores/models.py \| head -20` |
 | 19:46:00 | Bash | Ler o topo do selo | `cd /home/ronald/wt-regua && sed -n '1,100p' app/ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
