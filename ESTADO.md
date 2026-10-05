@@ -10,11 +10,11 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:20:45.**
+**Medido em 05/10/2026 02:25:46.**
 
 | | |
 |---|---|
-| `HEAD` local | `9f090267 O topo do TICKETS fechado no ato do push, no marco da O191 (O112)` |
+| `HEAD` local | `fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)` |
 | `origin/main` | `024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu` |
 | commits a subir (`ahead`) | **4** |
 
@@ -29,7 +29,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
-9f090267 O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
+fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
 b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
 fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
 69f017bd O topo do TICKETS fechado no ato do push (O112)
@@ -114,9 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Ran 1 shell command
 
 ● Background command "Rodar a sonda de impacto nas duas copias (emp 2,3,4 x comp 09,10)" completed (exit code 0)
@@ -139,12 +136,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
 
-  Ler o que o placar diz que divergiu agora
-  ⎿  $ cd /home/ronald/saas-hasner && grep -aA 8 "nao bate com o mundo" logs/push_o191.log | cut -c1-300
+  Empurrar o marco O191 · 4m 11s
+  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; git push origin main > logs/push_o191.log 2>&1; echo "exit=$?"; grep -aE
+     "^(OK|FAILED|Ran |To https|error:|FAIL:|ERROR:|pre-push|tickets_placar|regua_tickets|parado_citado| [0-9a-f]{8})" logs/push_o191.log |
+     tail -20 (4m 11s · 2 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-· Jitterbugging… (14h 8m 47s · ↓ 1.5m tokens · deep in thought)
+✽ Jitterbugging… (14h 13m 48s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    2% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
