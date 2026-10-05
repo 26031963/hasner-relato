@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 04:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1249**.
+**Medido em 05/10/2026 04:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1243**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1253,9 +1253,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:13:03 | Bash | Conferir a arvore da raia antes do commit | `cd /home/ronald/wt-cert && git status --short && echo "--- branch: $(git rev-parse --abbrev-ref HEAD) em $(git rev-parse --short HEAD)"` |
 | 16:12:50 | Bash | Ver o que esse teste cobra do CLAUDE.md | `cd /home/ronald/wt-cert && grep -n "CLAUDE" app/ferias/test_a3_situacao_de_ferias.py \| head -12` |
 | 16:12:46 | Bash | Quais testes ABREM o CLAUDE.md, nao so o citam | `cd /home/ronald/wt-cert && grep -rln "CLAUDE.md" app --include='*.py' \| xargs grep -ln "open(.*CLAUDE\\|read_text\\|CLAUDE_MD\\|Path(.*CLAUDE" 2>/dev/null` |
-| 16:10:45 | Bash | Varredura final e censo de quem le CLAUDE.md na suite | `cd /home/ronald/wt-cert && echo "=== varredura final dos selos de host nesta raia" && for f in bin/tests/test_*.sh; do out=$(bash "$f" 2>&1); rc=$?; [ $rc -ne 0 ] && echo "RED $(basename $f) rc=$rc"; done; echo "--- fim" echo echo "=== quem na suite do ponto le CLAUDE.md (a secao 3 ganhou 8 linhas)" grep -rln "CLAUDE.md" app --include='test_*.py' \| head` |
-| 16:10:30 | Bash | Corrigir a sequencia e provar o RED contra o extrator velho | `cd /home/ronald/wt-cert && python3 - <<'PY' p='bin/tests/test_prepush_testa_o_commit.sh'; s=open(p,encoding='utf-8').read() velho = """ bash "$R/bin/arvore_do_push.sh" --igual "$SHA" && _erro "--igual disse IGUAL com app/x.py modificado" echo "VALOR = 'A'" > "$R/app/x.py" bash "$R/bin/arvore_do_push.sh" --igual "$SHA" \|\| _erro "--igual disse DIFERENTE com a arvore limpa" """ novo = """ bash "$R/ ...` |
-| 16:10:13 | Bash | Pôr a fixture no contrato novo e provar a recusa | `cd /home/ronald/wt-cert && python3 - <<'PY' p='bin/tests/test_prepush_testa_o_commit.sh'; s=open(p,encoding='utf-8').read() # 1. a fixture modela o contrato NOVO: a copia e dos DOIS projetos velho = """ R="$TMP/repo"; mkdir -p "$R/app" "$R/bin" cp "$EXTRATOR" "$R/bin/" git -C "$R" init -q echo "VALOR = 'A'" > "$R/app/x.py" echo "nota" > "$R/app/nota.md" git -C "$R" add app/x.py app/nota.md """ nov ...` |
-| 16:09:33 | Bash | Ler o resto do selo do extrator | `cd /home/ronald/wt-cert && sed -n '45,80p' bin/tests/test_prepush_testa_o_commit.sh` |
-| 16:08:17 | Bash | Separar artefato de worktree de regressao minha | `cd /home/ronald/saas-hasner && echo "=== os mesmos selos, contra a arvore VIVA (sem a minha cura)" && for f in test_commit_so_o_declarado.sh test_furo_encadeado_ao_cartorio.sh test_handoff_sessao.sh test_hook_nao_e_copia.sh test_import_tardio_contra_o_ar.sh test_inventario_pessoal_no_commit.sh test_prepush_testa_o_commit.sh; do out=$(bash bin/tests/$f 2>&1); echo "$f rc=$? $(echo "$out" \| grep -c ...` |
-| 16:07:15 | Bash | Nomear a porta na secao 3 e rodar os selos de host desta raia | `cd /home/ronald/wt-cert && python3 - <<'PY' p='CLAUDE.md'; s=open(p,encoding='utf-8').read() velho = "Control-plane (tenants) roda separado, settings teste_motor.\n" novo = ("Control-plane (tenants) roda separado, settings teste_motor.\n" "Nucleo da mensageria roda separado tambem -- `bash ~/saas-hasner/bin/suite_nucleo.sh` (515 testes).\n" "NAO e app do ponto: e PROJETO Django irmao de `app/`, co ...` |
