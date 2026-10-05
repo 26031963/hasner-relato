@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 14:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (396.6 MB). Acoes na janela: **969**.
+**Medido em 05/10/2026 14:37:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (397.2 MB). Acoes na janela: **981**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:34:25 | Bash | Recortar as linhas de competencia 10 do censo | `cd /home/ronald/saas-hasner && awk -F'\t' 'NR>1 && ($4=="2026-10" \|\| $5=="2026-10")' logs/o195_linhas58.tsv \| sort -k1,1n && echo "--- total linhas comp10: $(awk -F'\t' 'NR>1 && ($4=="2026-10"\|\|$5=="2026-10")' logs/o195_linhas58.tsv \| wc -l)" && echo "--- com PAR FECHADO (entrada e saida): " && awk -F'\t' 'NR>1 && ($4=="2026-10"\|\|$5=="2026-10") && $6!="-" && $7!="-"' logs/o195_linhas58.tsv ...` |
+| 14:34:17 | Bash | Ler o censo das 58 linhas | `cd /home/ronald/saas-hasner && head -3 logs/o195_linhas58.tsv && echo "..." && echo "=== comp10 (destino ou origem em 2026-09-21..2026-10-20) ===" && awk -F'\t' 'NR>1' logs/o195_linhas58.tsv \| head -5` |
+| 14:34:13 | Bash | Listar os artefatos do censo da O195 | `cd /home/ronald/saas-hasner && ls -la logs/ \| grep -i "o195\\|censo\\|relavr" && echo "=== sombra scripts o195 ===" && ls logs/sombra/ \| grep -i o195` |
+| 14:34:07 | Bash | Localizar os colabs citados no DIFF | `cd /home/ronald/saas-hasner && grep -n "col[0-9][0-9]*" logs/o195_diff_dinheiro.md \| head -40` |
+| 14:34:03 | Bash | Conferir o push e extrair os colabs da cura | `cd /home/ronald/saas-hasner && echo "=== push out ($(wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output) linhas) ===" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output; echo "=== colabs da cura no DIFF ===" && grep -n "col[0-9]" logs/o195_diff_dinheiro.md \| grep -i "comp10 ...` |
+| 14:33:45 | Bash | Ler o comando canonico de relavratura | `sed -n '1,30p;60,140p' ponto/management/commands/recalcular_fechamento.py` |
+| 14:33:36 | Bash | Conferir se o recalculo mexe em DiaPago | `echo "=== lavrar_dias_pagos em fechamento.py ===" && grep -n "lavrar_dias_pagos\\|dia_pago\\|def restaurar_fechamento" ponto/services/fechamento.py && echo "=== flag no comando recalcular_fechamento ===" && grep -n "lavrar\\|add_argument" ponto/management/commands/recalcular_fechamento.py \| head -20` |
+| 14:33:21 | Bash | Ler o resto do apply cirurgico | `sed -n '200,342p' ponto/management/commands/aplicar_09_corte_b.py` |
+| 14:33:06 | Bash | Ler o mecanismo do apply cirurgico | `sed -n '80,200p' ponto/management/commands/aplicar_09_corte_b.py` |
+| 14:32:54 | Bash | Ler o comando de apply cirurgico existente | `echo "=== aplicar_09_corte_b.py ($(wc -l < ponto/management/commands/aplicar_09_corte_b.py) linhas) ===" && sed -n '1,80p' ponto/management/commands/aplicar_09_corte_b.py` |
+| 14:32:43 | Bash | Ler a assinatura da porta de fechamento | `sed -n '19,40p' ponto/services/fechamento.py && echo "=== relavratura: quem relavra a ata da 10? ===" && grep -rn "relavr" --include=*.py ponto/ escala/ folha/ core/ \| head -20` |
+| 14:32:37 | Bash | Conferir o push pelo arquivo de saida | `cd /home/ronald/saas-hasner && echo "=== push out ($(wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output) linhas) ===" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output && echo "=== trava ===" && bin/trava_teste.sh --quem 2>&1 \| head -3 && echo "=== date ===" && date '+%d/% ...` |
 | 14:29:15 | Bash | Orientacao read-only sobre a relavratura 10 | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/snapshot_relavratura_10_2026.py && echo "=== comandos de relavra ===" && ls app/ponto/management/commands/ \| grep -i 'relavr\\|lavra\\|recalcul' && echo "=== porta ===" && grep -rn "def recalcular_fechamento_mes" app/ponto/ \| head` |
 | 14:29:03 | Bash | Achar o pendente da relavratura 10 | `cd /home/ronald/saas-hasner && grep -n "RELAVRATURA-10\\|relavratura" app/docs/PENDENTES_RONALD.json \| head -10` |
 | 14:28:59 | Bash | Localizar a maquinaria da relavratura 10 | `cd /home/ronald/saas-hasner && ls -l bin/snapshot_relavratura_10_2026.py 2>/dev/null; ls logs/relavratura_10* logs/relavra* 2>/dev/null \| head; echo "--- sondas de relavratura ---" && ls logs/sombra/ \| grep -i 'relav\\|lavra' \| head -20` |
