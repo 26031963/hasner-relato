@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:11:16.**
+**Medido em 04/10/2026 21:16:41.**
 
 | | |
 |---|---|
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Exatamente três arquivos diferem — (a), (b) e o teste de (a). Lanço as duas medições em série:
-
-  Ran 1 shell command
-
-● Enquanto mede, colho em prod os hashes que a condição 3 da DINHEIRO-EM-COMPETENCIA-ABERTA exige (leitura pura, sem motor):
+● O caminho do dinheiro lê a ata lavrada, não o juiz (leitor_celula.py:364: int(ata.get('minutos_realizados') or 0)). Então a pergunta
+  decisiva é quem escreve esse número na ata:
 
   Ran 1 shell command
 
-● Background command "Medir o dinheiro nas duas arvores" completed (exit code 0)
-
-● O notification é do lançador, não da medição (background duplo). Confiro os dois de uma vez — onde mora FechamentoMensal e o estado real
-  da medição:
+● ponto/services/cartorio.py:262 é quem escreve a ata. Preciso saber de onde vem o dia dele — se vier do montador que eu curei, a cadeia
+  fecha e é a relavratura que move o dinheiro:
 
   Ran 1 shell command
 
-● Mesmo erro meu nos dois: FechamentoMensal mora em ponto/models.py. Confiro os campos antes de repetir:
+● Line 452 fecha a cadeia: o cartório monta a grade com eu.montar_grade_prevista_periodo — a função que eu curei. Então o DIFF zero está
+  certo e é informativo. Gravo o achado antes de seguir:
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Relanço a medição (agora em um único background, sem o duplo que perdeu o veredito) e corrijo a leitura de hashes em paralelo:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Colher hashes de exportacao antes do apply
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     cat > /tmp/hash_antes.py <<'PYEOF'
-     # Condicao 3 da DINHEIRO-EM-COMPETENCIA-ABERTA: competencia exportada INTACTA, hash antes/depois.
-     # Leitura PURA: nenhum motor. Vigente = a mais recente NAO invalidada (nao ha campo `vigente`).
-     from folha.models import ExportacaoD…
+● Três pontos certos — e o do cron é bloqueante. Faço os quatro em uma passada:
 
-✻ Jitterbugging… (8h 59m 18s · ↓ 1.1m tokens · still thinking)
+  Ran 1 shell command
+
+● Sem --dias: a janela é interna, e existe --forcar ("rejulga mesmo com impressão igual"). Então o bloqueio depende de uma coisa só — se o
+  realizado entra na impressão:
+
+  Ran 1 shell command
+
+●
+
+✢ Jitterbugging… (9h 4m 43s · ↓ 1.1m tokens · thought for 7s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
