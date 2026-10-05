@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:02:01.**
+**Medido em 05/10/2026 16:07:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174` |
+| `HEAD` local | `c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move` |
 | `origin/main` | `edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,24 +29,18 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
 edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
 8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga
 c849f340 O topo do TICKETS fechado no ato do push (O112)
 cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA
-6319b10c [CELULA-TURNO-FECHA] a familia turno/marcos FECHA: o segundo juiz de "quantos minutos o dia realizou?" morre, e o placar vai a 14/20
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
- M app/ponto/services/cartorio.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -120,14 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Agora o script do apply, com as oito guardas que o revisor nomeou.
-
-  Searched for 1 pattern, ran 4 shell commands
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
-  ⎿  Referenced file ponto/turnos.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
 
@@ -145,17 +131,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Agora o RELATO com a prova. Inserindo o bloco do marco:
 
-● Ver o estado da arvore e se logs esta ignorado
-  ⎿  $ cd /home/ronald/saas-hasner && git status --short | head -20; echo "=== logs ignorado? ==="; git check-ignore -v
-     logs/o195_apply_3_prod.py logs/o195_cond2_20261005.json 2>&1 | head
+  Committed c8031f6d, searched for 3 patterns, read 1 file, ran 9 shell commands
 
-✢ Frolicking… (7h 24m 6s · ↓ 912.1k tokens)
+● Marco commitado (c8031f6d). Empurrando (um push por marco):
+
+  Ran 1 shell command
+
+● Enquanto o push roda (nada se escreve na árvore), preparo a O209. Lendo o medidor de frota que já existe:
+
+  Ran 3 shell commands
+
+● Advising using Fable 5.1
+
+✢ Frolicking… (7h 29m 36s · ↓ 920.7k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

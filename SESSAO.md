@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 16:02:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (400.9 MB). Acoes na janela: **992**.
+**Medido em 05/10/2026 16:07:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (401.0 MB). Acoes na janela: **999**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:06:17 | Bash | Conferir o andamento do push | `cd /home/ronald/saas-hasner && tail -20 logs/push_relavra10_20261005.out 2>/dev/null \|\| echo "sem arquivo ainda"` |
+| 16:06:13 | Bash | Escrever o plano da O209 em logs | `cd /home/ronald/saas-hasner && cat > logs/o209_plano_20261005.md <<'MD' # O209 — RELAVRA A ATA DA FROTA NA 10 (plano, escrito 05/10 16:0x) `!` dele, literal: *"depois do apply dos 3 colabs da relavratura 10, relavra a ata da frota na 10 com DIFF publicado antes e reversao em logs; as 23 cobrancas nascem. 09 exportada intacta"*. ## O QUE O AVAL AUTORIZA, e o que NAO - **ATA, so.** "relavra a ata da ...` |
+| 16:05:26 | Bash | Ler o medidor de frota da O209 | `cd /home/ronald/saas-hasner && wc -l logs/sombra/relavra10_frota_20261005.py && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:05:04 | Bash | Empurrar o marco da relavratura | `cd /home/ronald/saas-hasner && git push origin main > logs/push_relavra10_20261005.out 2>&1; echo "rc=$?"; tail -25 logs/push_relavra10_20261005.out` |
+| 16:04:44 | Bash | Commitar o marco da relavratura | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_relavra.txt <<'MSG' [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move ITEM (2) DA ORDEM VIVA, FECHADO EM PROD (05/10 15:57), pelo aval 3 item 2 dele -- literal: "relavratura 10: aplica SO o realizado dos dia-colab da cura ...` |
+| 16:03:58 | Bash | Preparar o commit do marco por PATH | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md app/ponto/services/cartorio.py && git diff --cached --stat` |
+| 16:02:10 | Bash | Rodar a pasta de selos de host | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "=== VERMELHO $t (rc=$rc)"; echo "$out" \| tail -12; fail=1; }; done; echo "selos_de_host_vermelhos=$fail"` |
 | 16:01:58 | Bash | Ver o estado da arvore e se logs esta ignorado | `cd /home/ronald/saas-hasner && git status --short \| head -20; echo "=== logs ignorado? ==="; git check-ignore -v logs/o195_apply_3_prod.py logs/o195_cond2_20261005.json 2>&1 \| head` |
 | 16:01:44 | Bash | Conferir linhas de TICKETS para os ids | `cd /home/ronald/saas-hasner && grep -c "O195\\|O209\\|O210" app/docs/TICKETS.md; for id in O195 O208 O209 O210; do printf "%s: " $id; grep -c "^\| *\`\?$id\b" app/docs/TICKETS.md \|\| true; done; grep -n "O209\\|O210" app/docs/TICKETS.md \| cut -c1-120` |
 | 16:01:37 | Bash | Ler a regra do regua_tickets | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/regua_tickets.sh` |
