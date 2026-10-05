@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:29:01.**
+**Medido em 05/10/2026 16:34:31.**
 
 | | |
 |---|---|
@@ -115,27 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  células da janela. O incremental não carrega cadastro por desenho (linha 5-7 do próprio arquivo), e hoje o desenho encontrou o caso que
-  ele não cobre.
-
-  Ran 3 shell commands
-
-● Background command "Refazer a sombra inteira com dump de agora" failed with exit code 1
-
-● O nohup & dentro de um lançamento de fundo repetiu a background-duplo-perde-o-veredito: o harness relatou o lançador, não a sombra. A
-  sombra está correndo (logs/sombra_refazer_o209_20261005.out já tem a primeira linha); espero pelo ARQUIVO, que é a forma da casa de todo
-  modo.
-
-  Ran 1 shell command
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 8 shell commands
-
-● O DRY em prod não entrega o que o advisor supõe, e isso muda o desenho — vou medir antes de reconciliar:
-
-  Ran 2 shell commands
 
 ● A sombra refez inteira (sombra_diverge_de_prod=0, dump de hoje). Antes de desenhar o apply preciso reconciliar um ponto com o advisor — e
   primeiro medir o sítio exato:
@@ -143,10 +122,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   Ran 1 shell command
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Frolicking… (7h 51m 6s · ↓ 960.0k tokens)
+● O advisor reconciliou: o DRY em prod é impossível por leitura do código, e a sombra fresca é o DRY. Agora os insumos do desenho:
+
+  Ran 6 shell commands
+
+● Os 11 campos confirmados no vivo. Agora o arreio ganha a prova de restauro — que é o piso que faltava para "assert depois da escrita":
+
+  Ran 6 shell commands
+
+● O /app/logs na sombra é tmpfs (sombra.sh:137) — o arquivo se perderia com o container. O caminho persistente é /sombra:
+
+  Corrigir o caminho do ESPERADO para o bind persistente
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
+     import io
+     p = 'logs/sombra/relavra10_frota_20261005.py'
+     s = io.open(p, encoding='utf-8').read()
+     velho = "_CAM = '/app/logs/o209_esperado_20261005.json'"
+     assert s.count(velho) == 1
+     novo = ("# `/app/logs` no container da sombra e TMPFS (`bin/sombra.sh…
+
+✢ Compacting conversation… (7h 56m 36s · ↓ 971.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                   10% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
