@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 05:26:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1037**.
+**Medido em 05/10/2026 05:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **1021**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1031,19 +1031,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:35:56 | Bash | Conferir o range do push antes de empurrar | `cd /home/ronald/saas-hasner && git fetch origin 2>&1 \| tail -2; echo "=== range:"; git log --oneline origin/main..HEAD \| cat; echo "=== ff?"; git merge-base --is-ancestor origin/main HEAD && echo "FF LIMPO" \|\| echo "NAO-FF"` |
 | 17:32:14 | Bash | Ver para que serve _limites no holerite | `grep -n "_limites\\|janela_anterior\\|def " holerite/matriz.py \| head -25` |
 | 17:32:06 | Bash | Ler o sitio do holerite para escrever a nota com precisao | `grep -n "ini = datetime.date(ano, mes, 1)" -B 14 -A 8 holerite/matriz.py` |
-| 17:31:26 | Bash | Ler os tres sitios do snippet _K8 | `sed -n '820,852p' ponto/views.py; echo "---------- 874,892"; sed -n '874,892p' ponto/views.py; echo "---------- 1835,1846"; sed -n '1835,1846p' ponto/views.py` |
-| 17:31:08 | Bash | Ler o precedente de conforme com condicao literal | `sed -n '295,351p' core/juizes.py` |
-| 17:31:03 | Bash | Conferir se os padroes acusam e se existe registro de conforme | `echo "=== os 3 padroes de fechamento batem em holerite/matriz.py ou ponto/views.py?"; python3 - <<'EOF' import re pats=[r'janela_atual\([^\n]*-\s*[\w.]*timedelta\(days=1\)', r'FechamentoMensal\.objects\.filter\([^)\n]*mes=hoje\.month', r"status\s+in\s*\(\s*'aprovado',\s*'exportado'\s*\)"] for f in ('holerite/matriz.py','ponto/views.py'): s=open(f,encoding='utf-8').read() for p in pats: m=list(re.f ...` |
-| 17:30:35 | Bash | Ler os padroes proibidos por familia | `sed -n '870,924p' core/juizes.py` |
-| 17:30:32 | Bash | Achar a declaracao de PROIBIDOS | `grep -n "PROIBIDOS" core/juizes.py \| head -20` |
-| 17:30:27 | Bash | Ler o conjunto livre e os padroes proibidos de fechamento | `grep -n "AUTORIDADE_DOS_PADROES" -A 30 core/juizes.py \| head -45; echo "=== PROIBIDOS fechamento:"; python3 - <<'EOF' t=open('core/juizes.py',encoding='utf-8').read() i=t.index("PROIBIDOS['fechamento'] = (") print(t[i:t.index('\n)\n',i)+3]) EOF` |
-| 17:30:04 | Bash | Mapear cada impressao _K8 a funcao que a contem | `python3 - <<'EOF' import re src=open('ponto/views.py',encoding='utf-8').read().split('\n') defs=[(n+1,l.strip()) for n,l in enumerate(src) if re.match(r'^def \w+', l)] def func(ln): best=('?',0) for n,d in defs: if n<=ln and n>best[1]: best=(d,n) return '%s (def l.%d)'%(best[0][:40],best[1]) imp=["mes = mes_ou(request.POST.get('mes'), hoje.month)", "mes = mes_ou(request.GET.get('mes'), hoje.month) ...` |
-| 17:29:42 | Bash | Ler o bloco de pendentes de fechamento | `sed -n '351,380p' core/juizes.py; echo "=== quantas linhas por arquivo na familia fechamento:"; python3 - <<'EOF' import re t=open('core/juizes.py',encoding='utf-8').read() i=t.index("PENDENTES['fechamento'] = (") j=t.index('\n)\n',i) blk=t[i:j] for n,l in enumerate(blk.split('\n')): if '_p(' in l: print(n, l.strip()[:120]) EOF` |
-| 17:29:27 | Bash | Ler o varredor fora_da_autoridade | `grep -n "def fora_da_autoridade" -A 45 ponto/tests/test_contract_juiz_celula.py` |
-| 17:29:06 | Bash | Ler o contrato do juiz de fechamento | `sed -n '1,100p' ponto/tests/test_contract_juiz_fechamento.py` |
-| 17:29:02 | Bash | Achar o contrato que le PENDENTES de fechamento | `grep -rn "PENDENTES" --include=*.py . \| grep -i "fechamento" \| head -20; echo "=== registro em PROMPTS:"; grep -n "MES CIVIL\\|holerite/matriz\\|lista_ausencias" docs/PROMPTS.md \| head` |
-| 17:28:49 | Bash | Dobrar a linha do placar no commit do marco | `cd /home/ronald/saas-hasner && git add app/docs/TICKETS.md && git commit --amend --no-edit 2>&1 \| tail -15; echo "=== HEAD:"; git log --oneline -1; echo "=== conteudo do marco:"; git show --stat --oneline HEAD \| head -15` |
-| 17:28:38 | Bash | Conferir index vazio e se o hash do marco e citado | `cd /home/ronald/saas-hasner && echo "=== staged agora:"; git diff --cached --name-only; echo "(vazio acima = nada staged)"; echo "=== 226673b5 citado em docs?"; grep -rn "226673b5" app/docs/ 2>/dev/null \| head; echo "(nada = livre para amend)"` |
-| 17:28:22 | Bash | Atualizar o placar do TICKETS e reconferir | `cd /home/ronald/saas-hasner && bash bin/tickets_placar.sh --escrever 2>&1 \| tail -5; echo "=== diff:"; git diff --stat -- app/docs/TICKETS.md; echo "=== reconfere:"; bash bin/tickets_placar.sh --conferir >/tmp/tp.out 2>&1; echo "rc=$?"; tail -3 /tmp/tp.out` |
-| 17:28:08 | Bash | Conferir o carimbo da regua e o placar de tickets | `cd /home/ronald/saas-hasner && ls -l .regua_stamp 2>/dev/null && cat .regua_stamp 2>/dev/null \| head -20; echo "=== placar:"; bash bin/tickets_placar.sh --conferir 2>&1 \| tail -8; echo "rc=$?"` |
-| 17:27:58 | Bash | Conferir se a regua terminou | `cd /home/ronald/saas-hasner && kill -0 2371860 2>/dev/null && echo "REGUA VIVA" \|\| echo "REGUA TERMINOU"; echo "--- log:"; tail -25 logs/regua_o135_marco_20261004.out 2>/dev/null` |
