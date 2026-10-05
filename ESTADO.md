@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 10:33:01.**
+**Medido em 05/10/2026 10:38:31.**
 
 | | |
 |---|---|
-| `HEAD` local | `cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA` |
-| `origin/main` | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
-| commits a subir (`ahead`) | **5** |
+| `HEAD` local | `c849f340 O topo do TICKETS fechado no ato do push (O112)` |
+| `origin/main` | `cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA` |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,11 +22,11 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+c849f340 O topo do TICKETS fechado no ato do push (O112)
 cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA
 6319b10c [CELULA-TURNO-FECHA] a familia turno/marcos FECHA: o segundo juiz de "quantos minutos o dia realizou?" morre, e o placar vai a 14/20
 034601f2 [O122] o gate reverteu UM arquivo de tres: o selo orfao sai e main volta ao verde
 3a9bccaa [O122] etapa sem ok ate o teto de 05/10 06:00: a tela volta ao commit aprovado 74e24761824e55526a7bb26648bc278a3fc05c3d (gate agendado, autorizado no adendo de 02/10 22:0x)
-e07c03f2 PAROU na relavratura da comp 10, e o motivo nao e o DIFF surpreender: a folha nao le o sitio que a cura mexeu
 ```
 
 ## `git status --short`
@@ -107,7 +107,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Ran 1 shell command
 
 ● Background command "Empurrar o marco" completed (exit code 0)
 
@@ -124,8 +123,7 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Push 2 rodando (agora a suite cheia). Enquanto corre, orientação só leitura do item (2):
 
-● Universo de celulas do cartorio
-  ⎿  $ sed -n '1,24p;30,110p' ponto/management/commands/processar_cartorio.py
+  Searched for 5 patterns, read 1 file, listed 1 directory, ran 15 shell commands
   ⎿  Read docs/AVAIS.md (25 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9k84c6wp.output (43 lines)
   ⎿  Referenced file docs/LEIS.md
@@ -136,15 +134,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Task "Empurrar o marco, 2a tentativa" still running in background
 
-✢ Frolicking… (1h 55m 6s · ↓ 228.9k tokens · deep in thought)
+● Advising using Fable 5.1
+
+✢ Frolicking… (2h 0m 36s · ↓ 232.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
