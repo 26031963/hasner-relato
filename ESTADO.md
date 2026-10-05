@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 20:08:01.**
+**Medido em 05/10/2026 20:13:31.**
 
 | | |
 |---|---|
@@ -114,15 +114,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Amended commit 845bf488, fd6c8c0e, searched for 2 patterns, ran 24 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
@@ -145,6 +136,15 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● API Error: This request would exceed your account's rate limit. Please try again later.
 
 ✻ Crunched for 11h 13m 26s · done 8:03 PM · 1 shell still running
+
+❯ segue a fila; PAREI so em lei ou !
+  ⎿  You've hit your weekly limit · resets Oct 7, 6pm (America/Sao_Paulo)
+     /usage-credits to finish what you’re working on.
+
+✻ Brewed for 2s · done 8:12 PM · 1 shell still running
+
+● How is Claude doing this session? (optional)
+  1: Bad    2: Fine   3: Good   0: Dismiss
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
