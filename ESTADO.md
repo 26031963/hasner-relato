@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 09:06:31.**
+**Medido em 05/10/2026 09:12:01.**
 
 | | |
 |---|---|
@@ -33,6 +33,7 @@ b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
 
 ```
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -107,40 +108,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  CASOS: (a) admin aceita -> o dia e decidido como folga pela porta ponto/services/declarar_dia.py::declarar_dia, o chamado fecha, 1 linha
-  de trilha; (b) aceitar 2x -> mesmo estado; (c) checar_declaracao recusa -> nada grava e a tela diz o motivo; (d) colab declara e admin
-  nao aceita -> nada grava (HX-ESCAPE-NAO-TRABALHEI de 26/08 intacto).
-  So 'folga'. 'falta' e 'atestado': conta quantos estao na mesma situacao e publica.
+  Committed 2a3021ab, amended commit 73a18b4c, ran 17 shell commands
 
-  [4] PINO-GEO-LE-O-JUIZ
-  ORIGEM: colaboradores/views.py:2369-2384 (_geo_status_pino) calcula distancia propria e pinta vermelho sem descontar a precisao; o juiz
-  e ponto/services/geofence.py::verificar_geofence.
-  CASO: col218 02/10 03:36, 108 m do posto, raio 100, accuracy 90 -> o juiz gravou gps_incerto; o pino NAO pode ser vermelho. ponto_fora
-  -> vermelho; gps_incerto/sinal_ruim -> cinza; dentro -> verde.
-  O terceiro calculo, dos pings (api/views_core.py:981-1006 e o gemeo api/views.py), NAO se toca aqui: vira item no BACKLOG.
+❯ aval Ronald: lei -- sitio com zero chamador de producao AINDA responde enquanto existir no codigo. Apaga
+  escala/utils.py::minutos_realizados_do_dia e os 6 testes de escala/tests/test_realizado_intervalo.py; o pendente de turno/marcos sai
+  junto e a celula fecha pela funcao real. Segue a fila; PAREI so em lei ou !
 
-  PROIBIDO em todos: fallback; regra propria em leitor; escritor novo; juiz novo; mexer em dado de escala, vinculo ou ausencia existente.
-  PRONTO: por item, RED com os casos nomeados, commit, deploy e a mesma medicao do chat repetida em prod com o numero novo no RELATO. Item
-  sem isso = INCOMPLETO com lista.
-  LEI-AKITA: origem=os 4 sitios acima; testemunha=escritor/juiz ja existente de cada um; juizes novos=0. Leis aplicadas: L-110, LEI-AKITA
-  1 e 2, TETO TEMPORAL (sec.6), HX-ESCAPE-NAO-TRABALHEI. Nenhuma lei nova.
-  LINHA HAIKU: (a) contadores "dias futuros com palavra de em aberto" e "faltas em dia sem jornada", esperado 0, rotulo de admin; (b)
-  golden: "o Luiz col951 tem falta em dia de folga?" esperado via ferramentas; (c) degrau: leitura.
+❯ aval Ronald: relavratura 10: aplica SO o realizado dos dia-colab da cura, e a deriva vira fatia propria com o numero dela publicado.
+  Segue a fila; PAREI so em lei ou !
 
-  Segue a fila; PAREI so em lei ou !.
+● Dois avais novos registrados — o (A) é lei nova e carrega o ! que libera a deleção do minutos_realizados_do_dia; o (B) responde o aval
+  aberto RELAVRATURA-10. Entram na fila atrás do pouso em curso; a lei e os registros vão no commit do marco (L-106). Antes disso tenho um
+  vermelho em main para entender:
 
-● Core inteiro verde (1197 testes, RC=0). Recebido o aval dos 4 BOs — atrás da fatia em curso, como ele diz; item [3] é o ACEITE-DE-FOLGA
-  que já chegou antes, agora como item 3 de 4. Os 4 viram item de OBRAS + linha em PROMPTS.md no commit do marco (L-106). Sigo o pouso.
+  Ran 2 shell commands
 
-● GREEN dos 4 sitios com a cura rodados da copia
-  ⎿  $ cd /home/ronald/wt-cert && echo "=== GREEN, os mesmos 4 com a cura, rodados DA COPIA:" && for t in test_hook_nao_e_copia
-     test_labels_fonte_unica test_commit_so_o_declarado; do echo "--- $t:"; bash "bin/tests/$t.sh"
-     >/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94e…
+● Bug no caminho da fatia, curado na hora (LEI-AKITA 6): o O192 deixou test_nucleo_tem_porta.sh VERMELHO acusando código certo — ele lia a
+  linha do git archive procurando a palavra mensageria, e a cura derivou a lista. É a família "selo que copia valor fica vermelho".
 
-· Frolicking… (28m 36s · ↓ 68.6k tokens)
-                                                                                                                    9% until auto-compact
+● Pasta de selos de host na raia, depois da cura · 1m 40s
+  ⎿  $ cd /home/ronald/wt-cert && falhas=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; if [ $rc -ne 0 ]; then
+     falhas=$((falhas+1)); echo "### VERMELHO rc=$rc $t"; echo "$out" | tail -3; fi; done; echo "=== pasta de selos de host na raia:
+     $falhas vermelho(s) de $(ls bin/tests/test_*.s… (1m 39s · 13 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+✢ Frolicking… (34m 6s · ↓ 77.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+
+❯ aval Ronald: o pouso do CERT-AST e os carries O192/O193 PARAM onde estao, com trilha, e voltam depois. A ordem agora e: (1) turno --
+  apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4) O145. Instrumento so depois
+  disso. Segue a fila; PAREI so em lei ou !
+  ctrl+x ctrl+s to send now
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
