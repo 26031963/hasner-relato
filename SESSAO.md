@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 06:41:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **958**.
+**Medido em 05/10/2026 06:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **950**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -960,11 +960,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:50:12 | Bash | Extrair o veredito pelo criterio canonico | `O=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output; grep -nE "^(OK\|FAILED)\|^Ran \|^Found " "$O"` |
 | 18:50:06 | Bash | Ver o andamento da suite | `sleep 1; tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output 2>/dev/null; echo "---"; grep -cE "^(OK\|FAILED)" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6g99sw0l.output 2>/dev/null` |
 | 18:46:35 | Bash | Classificar as entradas root da copia | `cd /home/ronald/saas-hasner && echo "=== root por tipo ==="; find /home/ronald/wt-k5 -user root -printf '%y %p\n' 2>/dev/null; echo; echo "=== os diretorios root estao VAZIOS (ponto de montagem) ou tem conteudo? ==="; for d in .mypy_cache .hypothesis .ruff_cache staticfiles; do printf '%-14s %s entradas\n' "$d" "$(ls -A /home/ronald/wt-k5/app/$d 2>/dev/null \| wc -l)"; done; echo; echo "=== rm -rf ...` |
-| 18:46:26 | Bash | Conferir cert-ast, TICKETS e arquivos root | `cd /home/ronald/saas-hasner && echo "=== cert-ast toca os tres arquivos de teto? ===" && git log --oneline main..cb84a4ac -- app/core/juizes.py app/ponto/tests/test_contract_juiz_fechamento.py app/core/tests/test_contract_juiz_tela.py 2>&1 \| head; echo "(vazio = nao toca)"; echo; echo "=== k8t idem (ja medido, confirmando) ==="; git log --oneline main..192aed00 -- app/core/juizes.py 2>&1 \| head  ...` |
-| 18:43:52 | Bash | Rodar ponto e core inteiros na raia | `cd /home/ronald/saas-hasner && timeout 2400 bin/suite.sh --dir /home/ronald/wt-k5 --espera 600 --only "ponto core" --parallel 4 2>&1 \| tail -25; echo "rc_suite=${PIPESTATUS[0]}"` |
-| 18:43:31 | Bash | Medir o RED do teto e restaurar no mesmo ato | `set -e S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad cd /home/ronald/wt-k5/app cp core/juizes.py "$S/juizes_bom.py" ANTES=$(md5sum core/juizes.py \| cut -d' ' -f1) # a linha falsa nasce com pergunta JA declarada, para o teste cair pelo TETO e nao por pergunta sem juiz python3 - <<'PY' import pathlib p = pathlib.Path('core/juizes.py'); L = p.read_te ...` |
-| 18:43:18 | Bash | Localizar o fim do tuple de tela | `cd /home/ronald/wt-k5/app && awk 'NR>=476 && NR<=770 && /^\)/{print NR; exit}' core/juizes.py` |
-| 18:42:50 | Bash | Rodar o selo novo e os dois contratos pela porta | `cd /home/ronald/saas-hasner && timeout 900 bin/suite.sh --dir /home/ronald/wt-k5 --espera 300 --only "ponto.tests.test_k8_tela_abre_na_competencia ponto.tests.test_contract_juiz_fechamento core.tests.test_contract_juiz_tela" 2>&1 \| tail -12; echo "rc=${PIPESTATUS[0]}"` |
-| 18:42:42 | Bash | Ver a linha de comando montada pela porta | `cd /home/ronald/saas-hasner && sed -n '95,112p' bin/suite.sh` |
-| 18:42:37 | Bash | Ver como a porta repassa argumentos | `cd /home/ronald/saas-hasner && grep -n "RESTO\\|ONLY\\|LABELS\\|manage.py test\\|--$" bin/suite.sh \| head -30` |
-| 18:42:30 | Bash | Rodar o selo novo e os dois contratos na copia | `cd /home/ronald/saas-hasner && timeout 900 bin/suite.sh --dir /home/ronald/wt-k5 --espera 300 -- ponto.tests.test_k8_tela_abre_na_competencia ponto.tests.test_contract_juiz_fechamento core.tests.test_contract_juiz_tela 2>&1 \| tail -15; echo "rc=${PIPESTATUS[0]}"` |
