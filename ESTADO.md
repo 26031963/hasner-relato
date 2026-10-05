@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:4 AFIRMA ato sem PROVA ao lado -- (2), `relavratura 10` restrita aos 3 colabs, esta **FECHADA e NO AR** (apply em prod 05/10 15:57, as 4
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:8 AFIRMA ato sem PROVA ao lado -- estao **FECHADOS e NO AR**, e a **O195** -- a cura que destravava o (2) -- tambem. Do (1) fica a ressalva
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:11:01.**
+**Medido em 05/10/2026 18:16:31.**
 
 | | |
 |---|---|
@@ -118,38 +118,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ITEM 4 -- A 09: os dias acima do limite ficam decidiveis na Gestao de HE; o que for autorizado sai como linha na pauta do TXT da 09 ja
-  aberta, com os dois numeros. A 09 nao se recalcula por este ato.
-  RED (pela REGRA, antes do codigo):
-  1. dia com 9 min fora -> recusado pelo sistema, sai da fila, dinheiro identico.
-  2. dia com 16 min fora -> fica na fila, nada muda sozinho.
-  3. mesmo dia rodado 2x -> uma DecisaoHE, uma linha de trilha.
-  4. autorizar 5 dias de um colab num ato -> 5 DecisaoHE, e o numero mostrado antes == o numero gravado depois.
-  5. empresa com trava ligada e 1 dia grande sem decisao -> export recusa; decidido -> libera; dia pequeno recusado pelo sistema nao
-  trava.
-  6. limite trocado no cadastro -> a fila muda sem deploy.
-     PROIBIDO: codigo decidir se a hora e legitima; piso de cortesia como atalho; autorizar por empresa; fallback; juiz novo; mexer em
-  motor_calculo_v2 alem de ler; fatia posterior para o cadastro.
-     PRONTO: relato com o censo da etapa 0, os 6 REDs nomeados, a fila da 09 e da 10 antes e depois do item 1 (dias e horas), commit e
-  deploy. Sem eles = INCOMPLETO com a lista.
-     LEI-AKITA: origem=ponto/portas/he.py + ponto/services/he_pendente_lavrado.py, testemunha=DecisaoHE e dia['he_fora_da_janela'], RED=os
-  6 acima, quem-mais-le=folha/porta_export.py::medir e ponto/services/gestao_he.py, juizes novos=0
-     LINHA HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa entra no copiloto; (b) golden: "quantas horas extras o
-  colab X tem esperando decisao?" esperado via ferramentas.he_pendente(cli); (c) degrau: leitura.
 
-● Medir quantas linhas de OBRAS estao fora do padrao de 6 campos
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
-     s = open('app/docs/BACKLOG.md', encoding='utf-8').read()
-     i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->', i)
-     from collections import Counter
-     cnt = Counter(); fora = []
-     for n, ln in enumerate(s[:j].splitlines()):
-     if n < s[:i].…
+● Measurement settles it — and corrects my earlier premise twice over. Arity isn't the defect (5 fields is the majority form, 194 rows);
+  and of my four rows, only O209 is actually misreported. The convention, shown by O126, is that a closing row prepends **FECHADA ...** to
+  the front of celulas[3], keeping the portão text after it. O210/O213/O214 are genuinely live, so the hook reads them right already.
 
-✢ Compacting conversation… (9h 20m 48s · ↓ 1.2m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    1% until auto-compact
+  Ran 1 shell command
+
+● Now verify with the hook's own reader rather than a reimplementation of it.
+
+  Ran 2 shell commands
+
+● The hook's first open item is CELULA-TURNO-FECHA, not O209 — so O209 was never the name it printed. The precise question is only whether
+  O209 now reads as closed. Ask the hook's own compiled regex.
+
+  Ran 1 shell command
+
+● O209 reads FECHADO by the hook's own regex; the other four read open, which is correct. Now the ORDEM VIVA at the top of the RELATO.
+
+  Ran 3 shell commands
+
+● Docs-only commit — L-106 bears on that. Let me find whether there is a guard and how it defines a marco.
+
+  Ran 1 shell command
+
+● No guard exists yet (L-106's selo is explicitly fila 2; until then it is conduta), and O209 did close a fila-1 item. Before committing,
+  run the host selos — they answer in seconds and a refusal costs a whole suite.
+
+● Ver como a regua chama a pasta de selos
+  ⎿  $ cd /home/ronald/saas-hasner && sed -n '128,165p' bin/regua.sh
+
+✻ Waiting for API response · will retry in 2m 38s · check your network
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
