@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:32:31.**
+**Medido em 04/10/2026 21:38:01.**
 
 | | |
 |---|---|
@@ -109,36 +109,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● BUG-DO-JUIZ = 0. Mas "SEM BATIDA APURAVEL no dia" em 10 de 15 pede escrutínio — a ata lavrou minutos sem batida no dia. Vendo os casos
-  nomeados por ele (col250 29/09) e os dois de col382 (n_ok=4):
+  previu (saída iii). Lendo caso a caso:
 
   Ran 1 shell command
 
-● Veredito colhido: BUG-DO-JUIZ = 0. Mas apareceu a pergunta que decide se os 2.716 min são dupla contagem desfeita ou hora que desaparece.
-  Vendo col250 (o exemplo dele) e gravando o veredito:
+● Isto é maior do que os 15. Lendo a Parte 1 inteira:
 
   Ran 1 shell command
 
-● Dupla contagem confirmada no exemplo nomeado dele: col250 29/09 tem ZERO batida no dia e casou 3 marcos com batidas de 30/09 (#114174
-  01:00, #114195 02:00, #114238 06:00) — os mesmos 240 min que o juiz ancora em turnos de 30/09. Gravo o veredito e meço se os 2.716 min
-  reaparecem no vizinho:
+● Agora o quadro fechou, e ele é mais sério que os 15. O dia doador é SEMPRE uma folga (previsto=0) com ata=0 enquanto a autoridade diz >0.
+  Leio o ramo do montador para dia que não é trabalho:
 
   Ran 1 shell command
 
-● Veredito durável. Chamo o advisor antes de medir a dupla contagem, porque isso decide se a cura é cura:
+● Encontrei a origem, e ela desmente o comentário que eu mesmo escrevi na cura (b). escala/utils.py:1318-1322:
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  if d not in cel_por_data:
+      dias_out.append({'label': label, 'tipo_dia': 'folga', 'minutos_previstos': 0, ...})
+      continue        # <-- a AUTORIDADE nunca e' perguntada
 
-● Três saídas, não duas — e o caso de teste é col382 21/09. Antes da sonda, leio como realizado_do_dia escolhe entre turnos do mesmo
-  data_turno:
+  O dia de folga que detém um turno real não ganha minutos_realizados nenhum — a chave não existe, e os or 0 a jusante lavram 0. Confirmo
+  rodando o montador de hoje nos 9 dias doadores:
 
-● Ler realizado_do_dia
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '429,520p' ponto/turnos.py
+● Montador de hoje no dia doador
+  ⎿  $ cd /home/ronald/saas-hasner
+     cat > logs/sombra/o191_folga_doadora_20261004.py <<'PY'
+     # O MONTADOR DE HOJE, no dia DOADOR. Se ele devolve `tipo_dia='folga'` sem a chave
+     # `minutos_realizados`, relavrar o doador NAO repoe o minuto -- e a cura (b) sozinha PERDE
+     # hora de quem trabalhou (L-084). Chama…
 
-✢ Jitterbugging… (9h 20m 33s · ↓ 1.1m tokens · thinking)
+✢ Jitterbugging… (9h 26m 3s · ↓ 1.1m tokens · thinking more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
