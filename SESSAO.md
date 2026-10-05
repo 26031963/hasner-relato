@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 04/10/2026 23:45:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (368.0 MB). Acoes na janela: **1492**.
+**Medido em 04/10/2026 23:51:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (368.5 MB). Acoes na janela: **1481**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:50:12 | Bash | Censo completo de quem le o pendente da familia | `cd /home/ronald/copia-o191a/app && grep -rn "celula/precedencia\\|PENDENTES_CELULA\\|fora_de_autoridade\\|fora_da_autoridade" --include=*.py --include=*.html --include=*.js . \| grep -v '^./core/juizes.py' \| grep -v '^./core/contratos_estruturais.py'` |
+| 23:49:57 | Bash | Ler o detalhe das 5 falhas | `cd /home/ronald/saas-hasner && sed -n '1924,2060p' logs/o191/suite_copia_20261004.out` |
+| 23:49:54 | Bash | Listar as 5 falhas da suite | `cd /home/ronald/saas-hasner && grep -nE '^(FAIL\|ERROR):' logs/o191/suite_copia_20261004.out` |
+| 23:49:50 | Bash | Conferir o esperador da suite | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3goufvni.output 2>/dev/null \| tail -20; echo "---"; ls -la /home/ronald/saas-hasner/logs/o191/suite_copia_20261004.out` |
 | 23:45:24 | Bash | Conferir o andamento da suite | `cd /home/ronald/saas-hasner && tail -c 400 logs/o191/suite_copia_20261004.out; echo; echo "[$(date '+%H:%M:%S')]"` |
 | 23:45:16 | Bash | Escrever a seção do RELATO | `python3 - <<'PYEOF' import io p = 'docs/RELATO.md' s = io.open(p, encoding='utf-8').read() marca = '## 04/10 19:2x — **DUAS LEIS DE ESTEIRA** NASCEM' i = s.index(marca) novo = '''## 04/10 23:4x — O191 PASSO 5: A FROTA DESMENTIU A MINHA AMOSTRA, O UNIVERSO E **441** E NAO 70, E O TETO TEMPORAL VIROU ITEM PROPRIO **A CONDICAO DE ENTRADA DELE ESTA RESPONDIDA, e nenhuma das duas respostas e a que eu t ...` |
 | 23:44:03 | Bash | Ver as seções do RELATO | `grep -n '^## ' docs/RELATO.md \| head -12; echo "[total=$(wc -l < docs/RELATO.md)]"` |
@@ -1487,18 +1491,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:51:42 | Bash | Ler as duas regioes de escala/utils | `cd /home/ronald/wt-ct/app && sed -n '1280,1300p' escala/utils.py; echo "---- 1315,1355 ----"; sed -n '1315,1355p' escala/utils.py` |
 | 11:51:20 | Bash | Ver a impressao do cartorio | `cd /home/ronald/wt-ct/app && grep -n "impressao" ponto/services/cartorio.py \| head -20` |
 | 11:51:11 | Bash | Ver a janela do cartorio | `cd /home/ronald/wt-ct/app && sed -n '430,470p' ponto/services/cartorio.py; echo "=== comando handle ==="; sed -n '30,70p' ponto/management/commands/processar_cartorio.py` |
-| 11:50:59 | Bash | Ver mount do harness e flags do cartorio | `cd /home/ronald/saas-hasner && grep -n "RAIZ/app\\|APP_DIR\\|-v " logs/sombra/rodar_na_sombra.sh; echo "=== processar_cartorio args ==="; grep -n "add_argument" app/ponto/management/commands/processar_cartorio.py` |
-| 11:50:53 | Bash | Conferir de onde veio o n_ok da sonda | `cd /home/ronald/saas-hasner && grep -n "_nok\s*=\\|_orf\s*=\\|_m\s*=\\|isento\s*=" logs/sombra/gate_palavra_trabalho_20261004.py \| head -20` |
-| 11:48:14 | Bash | Ler os dois chamadores do gate | `cd /home/ronald/wt-ct/app && echo "=== espelho 615-630 ==="; sed -n '615,632p' ponto/services/espelho.py; echo "=== espelho 845-870 ==="; sed -n '845,870p' ponto/services/espelho.py; echo "=== calendario 745-780 ==="; sed -n '745,780p' colaboradores/services/calendario.py` |
-| 11:48:09 | Bash | Censo dos chamadores do gate | `cd /home/ronald/wt-ct/app && grep -rn "_ata_sem_turno\\|ata_sem_turno" --include=*.py . \| grep -v tests/` |
-| 11:47:54 | Bash | Ver a fonte do dia no cartorio | `cd /home/ronald/wt-ct/app && sed -n '230,275p' ponto/services/cartorio.py; echo "=== de onde vem o dia? ==="; grep -n "montar_grade_prevista\\|grade_da_celula\\|def processar\\|def _dias\\|for dia in" ponto/services/cartorio.py \| head -30` |
-| 11:47:50 | Bash | Achar o escritor da ata | `cd /home/ronald/wt-ct/app && grep -rn "minutos_realizados" --include=*.py escala/services/cartorio.py ponto/services/cartorio.py 2>/dev/null \| head; echo "=== quem lavra ata ==="; grep -rln "def lavrar_veredito" --include=*.py .` |
-| 11:47:30 | Bash | Ler o dia dict do leitor e o teste 11a | `cd /home/ronald/wt-ct/app && sed -n '325,385p' escala/services/leitor_celula.py; echo "=== test_palavra 200-252 ==="; sed -n '200,252p' relatorios/tests/test_palavra_do_dia.py` |
-| 11:47:19 | Bash | Ler n_ok_lavrado e o teste da palavra | `cd /home/ronald/wt-ct/app && sed -n '55,100p' escala/services/leitor_celula.py; echo "=== test_palavra 250-310 ==="; sed -n '250,310p' relatorios/tests/test_palavra_do_dia.py` |
-| 11:47:13 | Bash | Ler o veredito do RED | `tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brmd3vry9.output` |
-| 11:47:09 | Bash | Localizar MIN_CELULAS_OK e n_ok_lavrado | `cd /home/ronald/wt-ct/app && grep -rn "MIN_CELULAS_OK" --include=*.py . \| head -20; echo "=== n_ok_lavrado ==="; grep -rn "def n_ok_lavrado\\|def n_casadas_lavrado" --include=*.py .` |
-| 11:46:52 | Bash | Ler o gate da palavra | `cd /home/ronald/wt-ct/app && echo "=== dia_decidido 150-215 ===" && sed -n '150,215p' ponto/services/dia_decidido.py && echo "=== dia_decidido 320,355 ===" && sed -n '320,355p' ponto/services/dia_decidido.py` |
-| 11:46:42 | Bash | Rodar o RED do montador na copia | `cd /home/ronald/saas-hasner && bash bin/suite.sh --dir /home/ronald/wt-ct --only "escala.tests.test_montador_realizado_pela_autoridade" --espera 900 2>&1 \| tail -60` |
-| 11:46:35 | Bash | Ver o resto da porta da suite | `cd /home/ronald/saas-hasner && sed -n '80,140p' bin/suite.sh` |
-| 11:46:30 | Bash | Ler a porta da suite | `cd /home/ronald/saas-hasner && sed -n '1,80p' bin/suite.sh` |
-| 11:46:22 | Bash | Ler saida das tarefas de fundo | `cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brnwvhnnn.output 2>/dev/null \| tail -20; echo "=== AGENTE ==="; tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output 2>/dev/null` |
