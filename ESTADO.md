@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 09:01:01.**
+**Medido em 05/10/2026 09:06:31.**
 
 | | |
 |---|---|
@@ -107,38 +107,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  estao na mesma situacao e publica o numero).
-  PRONTO: RELATO com os 4 REDs nomeados, commit, e o #25298 fechado pela porta em prod. Sem isso = INCOMPLETO com lista.
-  LEI-AKITA: origem=o sitio do aceite; testemunha=declarar_dia; juizes novos=0. Leis aplicadas: L-110, HX-ESCAPE-NAO-TRABALHEI (26/08).
-  Nenhuma lei nova.
-  LINHA HAIKU: (a) contador "aceites de folga sem decisao do dia", esperado 0, rotulo de admin; (b) golden: "o admin aceitou a folga do
-  col951 em 24/09, o dia esta decidido?" esperado via ferramentas; (c) degrau: leitura.
+  CASOS: (a) admin aceita -> o dia e decidido como folga pela porta ponto/services/declarar_dia.py::declarar_dia, o chamado fecha, 1 linha
+  de trilha; (b) aceitar 2x -> mesmo estado; (c) checar_declaracao recusa -> nada grava e a tela diz o motivo; (d) colab declara e admin
+  nao aceita -> nada grava (HX-ESCAPE-NAO-TRABALHEI de 26/08 intacto).
+  So 'folga'. 'falta' e 'atestado': conta quantos estao na mesma situacao e publica.
+
+  [4] PINO-GEO-LE-O-JUIZ
+  ORIGEM: colaboradores/views.py:2369-2384 (_geo_status_pino) calcula distancia propria e pinta vermelho sem descontar a precisao; o juiz
+  e ponto/services/geofence.py::verificar_geofence.
+  CASO: col218 02/10 03:36, 108 m do posto, raio 100, accuracy 90 -> o juiz gravou gps_incerto; o pino NAO pode ser vermelho. ponto_fora
+  -> vermelho; gps_incerto/sinal_ruim -> cinza; dentro -> verde.
+  O terceiro calculo, dos pings (api/views_core.py:981-1006 e o gemeo api/views.py), NAO se toca aqui: vira item no BACKLOG.
+
+  PROIBIDO em todos: fallback; regra propria em leitor; escritor novo; juiz novo; mexer em dado de escala, vinculo ou ausencia existente.
+  PRONTO: por item, RED com os casos nomeados, commit, deploy e a mesma medicao do chat repetida em prod com o numero novo no RELATO. Item
+  sem isso = INCOMPLETO com lista.
+  LEI-AKITA: origem=os 4 sitios acima; testemunha=escritor/juiz ja existente de cada um; juizes novos=0. Leis aplicadas: L-110, LEI-AKITA
+  1 e 2, TETO TEMPORAL (sec.6), HX-ESCAPE-NAO-TRABALHEI. Nenhuma lei nova.
+  LINHA HAIKU: (a) contadores "dias futuros com palavra de em aberto" e "faltas em dia sem jornada", esperado 0, rotulo de admin; (b)
+  golden: "o Luiz col951 tem falta em dia de folga?" esperado via ferramentas; (c) degrau: leitura.
 
   Segue a fila; PAREI so em lei ou !.
 
-  Committed 56b4b43a, ran 11 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
-     (32 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
-  ⎿  Referenced file core/juizes.py
+● Core inteiro verde (1197 testes, RC=0). Recebido o aval dos 4 BOs — atrás da fatia em curso, como ele diz; item [3] é o ACEITE-DE-FOLGA
+  que já chegou antes, agora como item 3 de 4. Os 4 viram item de OBRAS + linha em PROMPTS.md no commit do marco (L-106). Sigo o pouso.
 
-● Task "RED e construção do segundo intervalo" completed in background
+● GREEN dos 4 sitios com a cura rodados da copia
+  ⎿  $ cd /home/ronald/wt-cert && echo "=== GREEN, os mesmos 4 com a cura, rodados DA COPIA:" && for t in test_hook_nao_e_copia
+     test_labels_fonte_unica test_commit_so_o_declarado; do echo "--- $t:"; bash "bin/tests/$t.sh"
+     >/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94e…
 
-● O192 fechado e conferido. A conferência de consequência diz a verdade com a nuance que importa: 0 arquivos de root, e as 3 entradas de
-  root que sobram são os próprios pontos de montagem dos tmpfs (diretórios vazios após o container sair) — rm -rf como ronald rc=0, porque
-  remover entrada depende do pai, que é meu. Antes da cura eram 19 entradas com conteúdo e Permission denied.
-
-  Próximo carry: O193.
-
-● Rodar o label core inteiro contra a raia · 54s
-  ⎿  $ cd /home/ronald/saas-hasner && bin/suite.sh --dir /home/ronald/wt-cert --only "core" --parallel 4 2>&1 | tail -14; echo
-     "RC=${PIPESTATUS[0]}" (54s)
-     (ctrl+b ctrl+b (twice) to run in background)
-
-✢ Frolicking… (23m 6s · ↓ 52.0k tokens)
-                                                                                                   ✔ Update installed · Restart to update
+· Frolicking… (28m 36s · ↓ 68.6k tokens)
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
