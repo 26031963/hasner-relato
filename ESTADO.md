@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:30:46.**
+**Medido em 05/10/2026 02:36:01.**
 
 | | |
 |---|---|
@@ -113,9 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
 ● Background command "Rodar a sonda de impacto nas duas copias (emp 2,3,4 x comp 09,10)" completed (exit code 0)
 
   Ran 89 shell commands
@@ -136,13 +133,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
 
-● Empurrar o marco O191 · 9m 11s
-  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; git push origin main > logs/push_o191.log 2>&1; echo "exit=$?"; grep -aE
-     "^(OK|FAILED|Ran |To https|error:|FAIL:|ERROR:|pre-push|tickets_placar|regua_tickets|parado_citado| [0-9a-f]{8})" logs/push_o191.log |
-     tail -20 (9m 11s · 2 lines)
-     (ctrl+b ctrl+b (twice) to run in background)
+● Guardar a licao da autocitacao do parado
+  ⎿  $ M=/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory
+     cat > $M/commit-que-explica-parado-cita-parado.md <<'MD'
+     ---
+     name: commit-que-explica-parado-cita-parado
+     description: nomear um parado na mensagem de commit faz o commit entrar na lista de "parado citado em commit posterior"
+     metadata…
 
-✽ Jitterbugging… (14h 18m 48s · ↓ 1.5m tokens)
+✢ Compacting conversation… (14h 24m 3s · ↓ 1.5m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 94%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
