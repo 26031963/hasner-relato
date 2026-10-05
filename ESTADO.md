@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:35:31.**
+**Medido em 05/10/2026 03:40:45.**
 
 | | |
 |---|---|
-| `HEAD` local | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
+| `HEAD` local | `d525c0c0 PAROU na relavratura da comp 10: o DIFF de frota surpreende, e a condicao 1 foi quem mandou parar` |
 | `origin/main` | `eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -22,21 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+d525c0c0 PAROU na relavratura da comp 10: o DIFF de frota surpreende, e a condicao 1 foi quem mandou parar
 eef236e1 A DIETA levou o contrato de NOME de dois pedidos de patch, e o tripwire que faltava desde 02/10 nasceu
 fd36f42a O topo do TICKETS fechado no ato do push, no marco da O191 (O112)
 b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
 fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
-69f017bd O topo do TICKETS fechado no ato do push (O112)
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/AVAIS.md
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/PENDENTES_RONALD.json
  M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
@@ -112,16 +108,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Agora os dois itens em PENDENTES, pelo escritor canônico. Leio o normalizador primeiro para dar a forma certa:
-
-  Ran 4 shell commands
-
-● O diff tem o tamanho do ITEM (26 linhas), não do arquivo. Rodo os selos que guardam o que eu acabei de tocar:
-
-  Ran 1 shell command
-
-● O selo de PENDENTES é Django — rodo esse teste único pela porta canônica:
-
   Ran 2 shell commands
 
 ● --only é quem substitui os labels:
@@ -138,9 +124,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Commito os docs (por path, sem o crons_duracao.json que é cron-dirty):
 
-  Running 1 shell command…
+  Committed d525c0c0, ran 1 shell command
 
-✢ Jitterbugging… (15h 23m 33s · ↓ 1.6m tokens)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Quatro correções, e a primeira muda o que ele decide. Começo medindo — item 1 e item 3:
+
+  Ler a unidade dos 397 dia-colab
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== os 397 GANHA_CHAVE_VALOR: amostra ==="; grep "GANHA_CHAVE_VALOR"
+     logs/o191/impacto_join_detalhe_20261005.tsv | head -8; echo; echo "=== e os 15 ZERA ==="; grep "b:ZERA"
+     logs/o191/impacto_join_detalhe_20261005.tsv | head -4
+
+· Jitterbugging… (15h 28m 47s · ↓ 1.7m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
