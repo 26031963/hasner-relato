@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 23:19:50.**
+**Medido em 04/10/2026 23:25:01.**
 
 | | |
 |---|---|
@@ -109,10 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Dois dos quatro passaram no HEAD — e o motivo está no próprio output: 'orfas': ['08:00', '12:00']. Isso contradiz o que eu afirmei sobre
-  o veredito. Vou medir antes de escrever mais.
-
-  Ran 8 shell commands
 
 ● O meu dict veio de uma janela de 2 dias e o cartório usa a competência inteira — risco de artefato de sonda. Vou registrar o achado e
   medir pela chamada real.
@@ -133,14 +129,18 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Rodar a sonda combinada na sombra" completed (exit code 0)
 
-  Aplicar a cura (c) na cópia
-  ⎿  $ cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/copia-o191a --only
-     "escala.tests.test_montador_realizado_pela_autoridade" > logs/o191/green_folga_c_20261004.out 2>&1; echo "RC=$?"; grep -E
-     '^(OK|FAILED|Ran|FAIL:|ERROR:)' logs/o191/green_folga_c_20261004.out
+● Inverter os três selos para a L-103
+  ⎿  $ cd /home/ronald/copia-o191a/app && python3 - <<'PYEOF'
+     import io, py_compile
+     p = 'escala/tests/test_montador_realizado_pela_autoridade.py'
+     s = io.open(p, encoding='utf-8').read()
+     # ---- 1) a MESMA frase falsa que ja saiu de escala/utils.py: MEIA-CORRECAO E PIOR QUE NENHUMA
+     a = """ # O DANO E CONT…
 
-✽ Jitterbugging… (11h 7m 52s · ↓ 1.3m tokens)
+✢ Compacting conversation… (11h 13m 3s · ↓ 1.3m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    9% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
