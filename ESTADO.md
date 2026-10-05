@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:20:01.**
+**Medido em 05/10/2026 12:25:31.**
 
 | | |
 |---|---|
@@ -112,38 +112,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+  5. Depois do toque e da validacao, o fechamento daquele colab naquela competencia recalcula; TXT gerado de novo substitui o vigente e o
+  anterior fica guardado.
+  6. Os sitios que o censo do item 1 marcou "9 MORREM" deixam de recusar; a recusa de retroatividade ALEM do piso em
+  colaboradores/services/vinculo.py:35-36 NAO e tranca e nao se toca.
 
-● A lei não só existe — ela já nomeia este caso e já diz onde curar. Dois achados nos docs:
+  SO CONTA E PUBLICA, nao cura aqui: perguntas em disputa ABERTA dentro de chamado ENCERRADO. Medido hoje no col317: 156 de 156.
 
-  - L-085 está vigente, com furo conhecido, e o furo é literalmente este: "NAO cobre a entrada que cruza — RED col382, obra O76", e o
-    "nasceu medida" dela diz "o col382 perdeu DSR porque a ENTRADA escorregou 10 min depois da meia-noite".
-  - L-102 carrega a condição de entrada da O191, literal dele: "dos 15 dia-colab que trocam de veredito, nomear os que tem celula casada E
-    previsto (ex. col250 29/09) e dizer se aquilo e turno ABERTO que o juiz da geometria devia ter achado; se for, a cura e no juiz,
-    PRIMEIRO".
+  PROIBIDO: excecao de tranca por colaborador (mecanismo novo); reabrir competencia inteira como caminho; fallback; juiz novo; apagar o
+  historico da via competencia_trancada.
+  PRONTO: RED com os 6 casos, DIFF de frota publicado antes, reversao em logs/, commit, deploy, e o caso 1 repetido em prod pela tela. Sem
+  isso = INCOMPLETO com lista.
+  LEI-AKITA: origem=os sitios do censo do item 1 da O44; testemunha=os juizes de fechamento ja declarados; juizes novos=0.
+  LINHA HAIKU: (a) contador "recusas por competencia trancada", esperado 0, rotulo de admin; (b) golden: "posso cobrar um dia de agosto da
+  col317?" esperado sim; (c) degrau: leitura.
 
-  Minha medição responde essa condição com SIM nos três. Lendo o juiz e o estado da O76.
+  Segue a fila; PAREI so em lei ou !
 
-  Searched for 1 pattern, ran 1 shell command
+● Aval novo registrado antes de seguir (L-010: prompt que pede obra vira item no MESMO turno). Vendo a forma dos dois arquivos.
 
-● O195 já é esta obra, medida em 04/10. Lendo o item e a guarda que ele nomeia.
+  Searched for 1 pattern, ran 2 shell commands
 
-  Ran 2 shell commands
+● Agora a confirmação empírica da hipótese dos SEGUNDOS antes de afirmar — a saída contra o hf, com segundos.
 
-● O195 é este achado, medido em 04/10, com a origem já nomeada (ponto/turnos.py:84-87, VESPERA_LONGE_DO_INICIO_MIN = 90) e a frase dele: "o
-  juiz responde pelo DIA ERRADO em 9 de 9 amostras". Minha medição acrescenta o número de dinheiro. Vendo quantas das 132 carregam a
-  assinatura do defeito.
+  Ran 1 shell command
 
-  Medir a assinatura do defeito nas 132
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import json, datetime, collections
-     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad'
-     a=json.load(open('logs/simular_folha/o192_snap_antes.json'))
-     d=json.load(open('logs/simular_folha/o192_snap_depois.j…
+● Agora a origem está provada e são DOIS ramos, não um. Gravando o achado antes de decidir a cura.
 
-✢ Compacting conversation… (3h 42m 6s · ↓ 438.8k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 65%
+● Running 1 shell command…
+
+✢ Frolicking… (3h 47m 36s · ↓ 450.5k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

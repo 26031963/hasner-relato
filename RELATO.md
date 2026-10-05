@@ -7,7 +7,9 @@ O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pel
 producao PROVADO, passa a frente dos 4 BOs de tela"*) e, pelo aval de **11:5x**, com a **O197**
 (`FUTURO-NAO-E-EM-ABERTO`) subindo para **logo depois de (2) e a FRENTE da O204** -- *"sobe para logo
 depois da relavratura 10, a frente da O204"*. A ordem de hoje, entao: (1) turno FECHADO -> (2)
-relavratura 10 -> **O197** -> O204 -> O207 -> O198/O199/O200 -> O145 -> instrumento.
+relavratura 10 -> **O197** -> O204 -> O207 -> **O44 itens 2-8** -> O198/O199/O200 -> O145 ->
+instrumento. A **O44 v2** entrou pelo aval de **12:2x**, literal: *"entra logo atras da O207 e a
+frente dos BOs de tela"*, sem lei nova.
 **ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
 PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de
