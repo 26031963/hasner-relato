@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 17:07:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (404.5 MB). Acoes na janela: **1146**.
+**Medido em 05/10/2026 17:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (404.7 MB). Acoes na janela: **1153**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:12:31 | Bash | Envolver a prova de restauro no flag O209_SEM_PROVA | `cd /home/ronald/saas-hasner && ls -l logs/sombra/relavra10_frota_20261005.py && python3 - <<'PY' import io C='logs/sombra/relavra10_frota_20261005.py' L=open(C,encoding='utf-8').read().split('\n') # bloco da prova: da linha 376 ("# PROVA DE RESTAURO...") ate a 448 (`_LINHAS_W[:] = []`) i0=next(i for i,l in enumerate(L) if l.startswith('# PROVA DE RESTAURO')) i1=next(i for i,l in enumerate(L) if l. ...` |
+| 17:12:01 | Bash | Copiar o esperado sujo e localizar as dependencias | `cd /home/ronald/saas-hasner && ls -la logs/sombra/o209_esperado_20261005.json && cp logs/sombra/o209_esperado_20261005.json logs/sombra/o209_esperado_20261005_BASE_SUJA.json && echo "copiado"; echo "=== A_ata / EMITE / _LINHAS_W / F0 depois da prova ==="; grep -n 'A_ata\\|^EMITE\\|^_LINHAS_W\\|EMITE =\\|_LINHAS_W =\\|F0\\|H0\\|H1\\|H2\\|_o_p\\|_d_p\\|_n_p' logs/sombra/relavra10_frota_20261005.py` |
+| 17:09:00 | Bash | Gravar os dois achados no plano | `cd /home/ronald/saas-hasner && cat >> logs/o209_plano_20261005.md <<'EOF' ## ACHADO 05/10 ~17:1x -- O ESPERADO SAIU DE BASE SUJA (nao publicar o DIFF desta rodada) `logs/o209_frota_sombra_r2.out`: a PROVA DE RESTAURO passou (hash `e9e0212c` volta ao ponto, 16.883 reescritas, 2.862 estavam diferentes pelo `==`, 15 cobrancas retratadas pela porta). Mas a prova DEIXA RESIDUO que o hash das celulas na ...` |
+| 17:08:32 | Bash | Ler o juiz de duplicado ChamadoColaborador.abrir | `grep -n 'def abrir' -A 45 chamados/models.py \| head -70` |
+| 17:08:23 | Bash | Procurar o log do refazer e o sitio da lavra | `cd /home/ronald/saas-hasner && ls -t logs/sombra_refazer*.out logs/sombra/*refazer*.out 2>/dev/null \| head; echo "=== grep lavra nos logs de refazer de hoje ==="; grep -rl 'lavra' logs/ --include='*refazer*' 2>/dev/null \| head; echo "=== sombra.sh 275-300 ==="; sed -n '275,300p' bin/sombra.sh` |
+| 17:07:55 | Bash | Ler o bloco de prova e o ATO 1 de verdade no arreio | `cd /home/ronald/saas-hasner && sed -n '376,470p' logs/sombra/relavra10_frota_20261005.py` |
+| 17:07:49 | Bash | Procurar --lavra no sombra.sh e a estrutura do arreio | `cd /home/ronald/saas-hasner && grep -n 'lavra' bin/sombra.sh \| head -30; echo "=== arreio: prova e esperado ==="; grep -n 'PROVA DE RESTAURO\\|def ato1\\|ESPERADO\\|json.dump\\|ato1(\\|SEM_PROVA\\|os.environ' logs/sombra/relavra10_frota_20261005.py` |
 | 17:06:58 | Bash | Ler o fim: esperado, ATO 2 e hash da 09 | `cd /home/ronald/saas-hasner && sed -n '126,263p' logs/o209_frota_sombra_r2.out` |
 | 17:06:48 | Bash | Mapear a estrutura do out | `cd /home/ronald/saas-hasner && grep -n 'ESPERADO\\|ATO 2\\|^==\\|^ATO\\|^ \[ato\\|^ \[ensaio\\|DELTA DE CONJUNTO\\|ATA SE MOVEU\\|soma do realizado\\|EXPORTADA\\|residuo\\|rc=\\|cura + deriva\\|emitidos' logs/o209_frota_sombra_r2.out` |
 | 17:06:31 | Bash | Ler ATO 1 de verdade ao fim | `cd /home/ronald/saas-hasner && sed -n '/ATO 1 DE VERDADE/,$p' logs/o209_frota_sombra_r2.out` |

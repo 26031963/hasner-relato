@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 17:07:01.**
+**Medido em 05/10/2026 17:12:31.**
 
 | | |
 |---|---|
@@ -118,36 +118,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Refazer verde (sombra_diverge_de_prod=0). Antes de rodar, fecho a incoerência que a própria receita nova expôs: o desfazer por colab em
-  prod restaura célula mas não desdiz a cobrança daquele colab.
 
-  Ran 5 shell commands
-
-● Carimbo REFEITA (o --conferir cobra o bloco, que só o deploy exige — já está na minha lista). Rodando o arreio na base nova:
+● ATO 1 DE VERDADE rodou sobre base suja: o ensaio deixou 14 chamados retratados (retratar não apaga), e com eles emitidos caiu de 72 para
+  7 e protestos de 733 para 704 — e protestos é um dos 11 campos. O ESPERADO saiu dessa base. Antes de decidir, duas conferências:
 
   Ran 1 shell command
 
-● Enquanto roda, fecho as correções devidas no marco (docs não entram no import da medição):
+● lavra_de_prod é chamada dentro de bloco() (bin/sombra.sh:285), não no --refazer — então o zero do ATO 2 está explicado: a sombra nunca
+  recebeu a lavra de prod. Agora a causa da queda de emissão:
 
-  Searched for 1 pattern, read 1 file, ran 9 shell commands
+  Searched for 1 pattern
 
-● O restauro está provado — o RED fechou com o restauro incondicional. Vendo os números:
+● Hipótese confirmada lendo o juiz, não por suposição: chamados/models.py:413-430 — abrir() com chave existente devolve criado=False em
+  QUALQUER estado (e se o estado está em ENCERRADOS, _renascer_por_premissa_viva() — que é escrita). Os 14 chamados que o ensaio deixou
+  retratados suprimiram a emissão do ATO 1 de verdade. Gravando o achado antes de consultar:
 
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file docs/RELATO.md
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Background command "Esperar o arreio pelo arquivo de sinal" completed (exit code 0)
+● Todos os pontos aceitos. Executando — primeiro salvar o ESPERADO sujo e conferir as três dependências do flag:
 
-● Ler o fim: esperado, ATO 2 e hash da 09
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '126,263p' logs/o209_frota_sombra_r2.out
+  Ran 1 shell command
 
-✢ Frolicking… (8h 29m 6s · ↓ 1.1m tokens)
+● Três dependências conferidas: A_ata na 303 (fora da prova), EMITE/_LINHAS_W na 316-317 (antes), e nada depois da 448 referencia
+  F0/H0/H1/H2. Envolvendo o bloco:
+
+● Running 1 shell command…
+
+· Frolicking… (8h 34m 36s · ↓ 1.1m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
