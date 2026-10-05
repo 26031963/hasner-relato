@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**204 obras abertas.**
+**205 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -213,3 +213,4 @@ lista — ela e o que esta EM PE._
 | **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera aval |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
+| **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | **fila 2 (raia de UI, `wt-ui`)**, ATRAS  |

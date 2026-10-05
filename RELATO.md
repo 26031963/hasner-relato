@@ -5,10 +5,10 @@ passo 6 esta **PARCIAL** e por isso segue NAO carimbado. A ordem dele de 05/10 0
 -- apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4)
 O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pelo aval de 09:4x (*"BO de
 producao PROVADO, passa a frente dos 4 BOs de tela"*).
-**ESTADO (05/10 10:0x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
+**ESTADO (05/10 10:2x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
 VERDE e o placar foi a `contratos 14/20`**
 PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de
-`escala/tests/test_realizado_intervalo.py` foram com ela, `PENDENTES['turno/marcos']` saiu de 1 para **()**
+`escala/tests/test_realizado_intervalo.py` foram com ela, `PENDENTES['turno/marcos']` saiu de **1 (o ULTIMO dos 23 que a familia teve)** para **()**
 com a vaga nomeada, e **quem disse o numero foi a funcao real**: `verdes()=14`, `total()=20`,
 `linha_do_placar()='contratos_estruturais: 14/20 verdes'`, `fora_de_autoridade('turno/marcos')=0` e
 `celula('turno/marcos','um juiz por pergunta')['verde']=True`, tudo rodado no container contra a copia da
