@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 20:35:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1475**.
+**Medido em 05/10/2026 20:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1466**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1476,12 +1476,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 08:43:16 | Bash | Estrutura da regua de tickets | `cd /home/ronald/wt-cert && grep -n "F9\\|BLOQUEADO\\|placar do topo\\|^[A-Za-z_]*(" bin/regua_tickets.sh \| head -40; echo "=== wc"; wc -l bin/regua_tickets.sh` |
 | 08:42:59 | Bash | Ler saida da tarefa concluida | `tail -40 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output 2>/dev/null` |
 | 08:42:57 | Bash | Regua de tickets rodando da raia | `cd /home/ronald/wt-cert && bash bin/regua_tickets.sh 2>&1 \| tail -20; echo "RC=$?"` |
-| 08:39:01 | Bash | Cherry-pick do PROMPT_GERADO do nucleo | `cd /home/ronald/wt-cert && git cherry-pick 8ffcd44d 2>&1 \| tail -10; echo "---"; git log --oneline -3 \| cat; git status --short \| head` |
-| 08:38:57 | Bash | Commitar o merge de main na raia | `cd /home/ronald/wt-cert && git status --short \| head -30 && git commit -F - <<'FIM' merge de main na raia do CERT-AST, para o pouso ser ff e a copia nascer dos dois projetos main andou 23 commits desde cb84a4ac (O135, K8, K5, O191, a DIETA e o PAROU da relavratura da comp 10). Merge SEM conflito: a unica colisao possivel era o CLAUDE.md -- a sec.3 foi reescrita em 04/10 05:5x pelo O182 e esta rai ...` |
-| 08:38:43 | Bash | Conferir o CLAUDE.md mergeado e o selo do bloco | `cd /home/ronald/wt-cert && grep -n 'suite_nucleo.sh' CLAUDE.md \| head; echo "--- O182 bloco intacto?"; grep -n 'A FORMA DEIXOU DE SER PROSA E VIROU ARQUIVO' CLAUDE.md; echo "--- selo do suite_sh:"; bash bin/tests/test_suite_sh.sh 2>&1 \| tail -5` |
-| 08:38:38 | Bash | Diff do CLAUDE.md no cb84a4ac | `cd /home/ronald/saas-hasner && git diff cb84a4ac^ cb84a4ac -- CLAUDE.md \| cat` |
-| 08:38:35 | Bash | Ver as 7 linhas que o cert-ast poe no CLAUDE.md | `cd /home/ronald/saas-hasner && git show cb84a4ac -- CLAUDE.md \| sed -n '1,60p' \| grep -E '^[-+]' \| head -20` |
-| 08:38:30 | Bash | Mergear main no cert-ast dentro da raia | `cd /home/ronald/wt-cert && git merge --no-commit --no-ff main 2>&1 \| tail -20; echo "=== conflitos:"; git diff --name-only --diff-filter=U` |
-| 08:38:26 | Bash | Limpar o handoff gerado no wt-cert, com copia antes | `cd /home/ronald/wt-cert && cp app/docs/HANDOFF-SESSAO.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/handoff-wt-cert-antes.md && git diff --stat app/docs/HANDOFF-SESSAO.md && git checkout -- app/docs/HANDOFF-SESSAO.md && git status --short && echo "limpo (copia em scratchpad)"` |
-| 08:38:15 | Bash | Conferir estado do wt-cert | `cd /home/ronald/wt-cert && git status --short \| head -20; echo "--- branch:"; git rev-parse --abbrev-ref HEAD; echo "--- base:"; git merge-base --is-ancestor main HEAD && echo "main JA ancestral" \|\| echo "precisa merge de main"; echo "--- diff main..cert-ast nomes:"; cd /home/ronald/saas-hasner && git diff --stat main...cert-ast \| tail -12` |
-| 08:38:03 | Bash | Conferir settings do nucleo, leitores do vigia e janela da sombra | `cd /home/ronald/saas-hasner && echo "=== settings.py do cb84a4ac:"; git show cb84a4ac -- mensageria/config/settings.py \| cat; echo "=== quem importa esteira_vigia:"; grep -rn 'esteira_vigia' app/ --include=*.py \| grep -v tests \| head -20; echo "=== sombra em curso:"; ls -la logs/crons_em_curso/ 2>/dev/null; date '+%H:%M:%S'; crontab -l \| grep -i sombra` |
