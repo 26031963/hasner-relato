@@ -214,4 +214,4 @@ lista — ela e o que esta EM PE._
 | **O204** | HORA-DO-APARELHO-LIDA-COMO-DATA | espera aval |
 | **O205** | O GATE TEMPORAL REVERTE POR ARQUIVO E NAO OLHA A ARVORE DEPOIS | **fila 2 -- e INSTRUMENTO**, e a L-105 m |
 | **O206** | PAINEL-OFERECE-COBRAR-NAO-REABRIR | **fila 2 (raia de UI, `wt-ui`)**, ATRAS  |
-| **O207** | ANCORA-DO-VINCULO-SE-DECLARA | espera `!` |
+| **O207** | VINCULO-INICIO-DECLARADO | espera `!` |
