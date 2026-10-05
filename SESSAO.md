@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 12:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (390.1 MB). Acoes na janela: **873**.
+**Medido em 05/10/2026 12:35:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (390.3 MB). Acoes na janela: **882**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:33:22 | Bash | Ler a forma exata da tupla de marcos_por_dia | `sed -n '706,730p' ponto/turnos.py; echo '=== como turnos_do_colab monta _mpd_seg'; sed -n '1340,1375p' ponto/turnos.py` |
+| 12:33:18 | Bash | Ver a forma de marcos_por_dia | `grep -n "marcos_por_dia\\|_bm_de\\|_ivm_de\\|_bm_all" ponto/turnos.py \| sed -n '1,40p'` |
+| 12:33:05 | Bash | Fazer a copia do HEAD para a fatia O195 | `cd /home/ronald/saas-hasner && git status --porcelain -- '*.py' \| head; echo "rc_py=$?"; C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o195; rm -rf $C; mkdir -p $C && git archive HEAD \| tar -x -C $C && echo "copia em $C"; ls $C \| head; git rev-parse --short HEAD` |
+| 12:32:48 | Bash | Censo do cont_max_s, o envelope ja declarado | `grep -n "cont_max_s\\|14 \* 3600\\|14\*3600" ponto/turnos.py \| head -20; echo '=== constantes de topo'; sed -n '1,40p' ponto/turnos.py \| grep -nE "^[A-Z_]+ *="` |
+| 12:32:22 | Bash | Ler o selo da O93 (col616), o vizinho que nao pode cair | `cat ponto/tests/test_o93_dia_da_jornada.py` |
+| 12:32:16 | Bash | Achar os selos vizinhos da guarda | `ls ponto/tests/ \| grep -iE "145\|dupla\|vespera\|data_turno\|turno" ; echo '=== quem testa a guarda hoje'; grep -rln "VESPERA_LONGE\\|col616\\|_data_do_turno" ponto/tests/ escala/tests/ 2>/dev/null` |
+| 12:31:09 | Bash | Achar os 10 dia-colab da O195 | `cd /home/ronald/saas-hasner && ls logs/o191/ 2>/dev/null \| head; echo '=== as duas origens / os 10'; grep -nE "menos de um minuto\|col[0-9]+\|folga" logs/o191/passo5_diff_20261004.md 2>/dev/null \| head -40` |
+| 12:31:00 | Bash | Ler a celula da O195 inteira | `awk '/^\\| O195 \\|/' docs/BACKLOG.md \| head -c 6000` |
+| 12:30:48 | Bash | Censo de quem chama o montador | `grep -rn "realizado_do_dia\\|turnos_do_colab" --include=*.py . \| grep -v "/tests/\\|def realizado_do_dia\\|def turnos_do_colab" \| head -20` |
+| 12:30:47 | Bash | Ler turnos_do_colab, a entrada real | `sed -n '1243,1300p' ponto/turnos.py` |
 | 12:30:22 | Bash | Ler _vespera | `grep -n "_vespera" ponto/turnos.py \| head -20; echo '=== def _vespera'; awk '/def _vespera/,/^def \|^ return/' ponto/turnos.py \| head -40` |
 | 12:26:28 | Bash | Achar janela_turno_de e ler a nota sobre _dist_marco | `grep -rn "def janela_turno_de" --include=*.py . ; echo '--- nota :770-780'; sed -n '768,812p' ponto/turnos.py` |
 | 12:26:22 | Bash | Ler _dist_marco e seus chamadores | `sed -n '104,130p' ponto/turnos.py; echo '=== quem chama _dist_marco'; grep -rn "_dist_marco" --include=*.py . \| grep -v test \| head` |
@@ -882,4 +892,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 00:38:29 | Bash | Rodar os 61 selos e ler o topo do RELATO | `cd /home/ronald/saas-hasner && n=0; v=0; for s in bin/tests/test_*.sh; do n=$((n+1)); if ! bash "$s" >/tmp/claude-1001/selo.out 2>&1; then v=$((v+1)); echo "VERMELHO: $s"; tail -4 /tmp/claude-1001/selo.out \| sed 's/^/ /'; fi; done; echo "selos=$n vermelhos=$v"; echo "=== RELATO topo ==="; head -30 app/docs/RELATO.md` |
 | 00:38:17 | Bash | Trocar a linha do CLAUDE.md, regenerar e conferir que a lei revogada nao sobrou | `cd /home/ronald/saas-hasner && python3 - <<'PY' p = 'CLAUDE.md' t = open(p, encoding='utf-8').read() velho = ('13. **PROVA DE EQUIVALENCIA E FROTA; AMOSTRA EXPLICA CAUSA.** "Dois caminhos dao o mesmo numero?" e\n' ' "esta cura muda que numero, em quem?" se respondem com a FROTA INTEIRA pelos DOIS caminhos --\n' ' diferenca por dia-colab, soma, e a diferenca ESPERADA escrita ANTES de rodar. Amostra ...` |
 | 00:38:00 | Bash | Trocar a lei no LEIS.md e no CORTES.json | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, collections # --- 1. LEIS.md: tira a linha revogada e a do mapeamento, poe a nova p = 'app/docs/LEIS.md' linhas = open(p, encoding='utf-8').read().split('\n') antes = len(linhas) linhas = [l for l in linhas if not l.startswith('\| **L-110** \|') and l != '- `FROTA-PROVA-AMOSTRA-EXPLICA` -> **L-110**'] assert len(linhas) == antes - 2, (an ...` |
-| 00:33:17 | Bash | Rodar os selos de host todos | `cd /home/ronald/saas-hasner && sed -i '9s/com as 12 linhas/com as 13 linhas/' bin/tests/test_lei_akita.sh && date '+%d/%m %H:%M:%S' && n=0; v=0; for s in bin/tests/test_*.sh; do n=$((n+1)); if ! bash "$s" >/tmp/claude-1001/selo.out 2>&1; then v=$((v+1)); echo "VERMELHO: $s"; tail -4 /tmp/claude-1001/selo.out \| sed 's/^/ /'; fi; done; echo "selos=$n vermelhos=$v"` |

@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:30:45.**
+**Medido em 05/10/2026 12:35:45.**
 
 | | |
 |---|---|
@@ -112,26 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  LINHA HAIKU: (a) contador "recusas por competencia trancada", esperado 0, rotulo de admin; (b) golden: "posso cobrar um dia de agosto da
-  col317?" esperado sim; (c) degrau: leitura.
-
-  Segue a fila; PAREI so em lei ou !
-
-● Aval novo registrado antes de seguir (L-010: prompt que pede obra vira item no MESMO turno). Vendo a forma dos dois arquivos.
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● Agora a confirmação empírica da hipótese dos SEGUNDOS antes de afirmar — a saída contra o hf, com segundos.
-
-  Ran 1 shell command
-
-● Agora a origem está provada e são DOIS ramos, não um. Gravando o achado antes de decidir a cura.
-
-  Ran 4 shell commands
-
-● A lei da cura já está escrita neste mesmo pareador: S158 -- marco mais proximo DECIDE (:800-808, _di <= _db), e BUG-144 proíbe teto
-  inventado. Chamando o advisor antes de tocar o juiz.
-
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
@@ -139,11 +119,31 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
   Searched for 1 pattern
 
-●
+● _vespera muda a diagnose: ela retorna None quando entrada is None (Ramo B nem tem véspera para perguntar) e também quando a véspera já
+  tem turno fechado. A sonda tem de passar pela entrada REAL.
 
-· Frolicking… (3h 52m 50s · ↓ 458.2k tokens · thought for 20s)
+  Searched for 1 pattern, read 1 file, ran 2 shell commands
+
+● Os meus três casos já estão na medição da O195: col250 29/09 (240) e col382 30/09 (364) são dois dos NOVE da tabela, e col235 30/09 (658)
+  é um dos SEIS da dupla contagem. Dos 15, só esses três estão na competência 10 — o resto é 08/09, onde a O195 já diz PAREI por L-092.
+
+  Read 1 file, listed 1 directory, ran 1 shell command
+
+● O selo da O93 tem o caso certo e não morde: ele escreve a saída como time(7, 50) — sem segundos. Os 17 segundos da vida real passam por
+  ele. É a minha própria nota de memória, "hora truncada esconde a guarda".
+
+  Ran 1 shell command
+
+● Construindo em cópia do HEAD (LEI-AKITA 10). Conferindo antes que a árvore viva não tem .py sujo.
+
+  Ver stub de batida para parear_turnos
+  ⎿  $ grep -rln "parear_turnos" ponto/tests/ | head -5; echo '=== um stub existente'; sed -n '1,60p'
+     ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py
+
+· Compacting conversation… (3h 57m 50s · ↓ 470.5k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱ 71%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
