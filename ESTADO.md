@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:54:31.**
+**Medido em 04/10/2026 22:00:01.**
 
 | | |
 |---|---|
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● marcos_por_dia do pareador vem de marcos_dna_periodo — a CELULA, não o template. Isso derruba minha leitura de "vocabulário". Leitura (2)
-  e a frota:
 
-  Ran 5 shell commands
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● A lei EXISTE e o leitor não migrou. ponto/supra_juiz.py:216 — _tem_fato_dia = bool(real) or bool(dia.get('orfas')), e o ramo folga
-  entrega real=None, orfas=[]. Agora o raio de alcance: o cartório lavra célula em dia folga?
-
-  Ran 2 shell commands
-
-● O cartório itera for cel in cels: — célula EXISTENTE. Dia de folga sem célula nunca é julgado. Então quem criou a célula do col200 18/09
-  (folga de escala com 480 min)?
-
-  Ran 3 shell commands
-
-● gerar_celulas_periodo cria célula para todo dia, inclusive folga (trabalha=False). Então o cartório julga o dia doador e lavra ata 0.
-  Isso inverte a leitura — mido:
+● Três leituras. dia_pago em folga e os gates antes do RAMO 1:
 
   Ran 1 shell command
 
-● 9/9 doadores têm célula lavrada, trabalha=False, veredito concorde, ata 0 — julgados em 02-03/10. Isso derruba a minha leitura de "duas
-  autoridades" e nomeia a origem pela lei que já existe. Gravo antes de qualquer coisa:
+● Background command "Corrigir filtro e relançar sonda de frota" completed (exit code 0)
+
+● _abono_prev_real exclui folga do universo (tipo_dia in ('trabalho','ausencia')), e a folga trabalhada é paga pelo MOTOR, via períodos —
+  outro caminho. Frota e os gates:
 
   Ran 3 shell commands
 
-● Mudança de leitura gravada e a frota rodando. Confiro o enquadramento antes de construir:
+● 445 dia-colab / 222.141 min no total, mas são duas populações — e o corte por veredito separa:
 
-● Advising using Fable 5.1
+  Ran 3 shell commands
 
-✢ Jitterbugging… (9h 42m 33s · ↓ 1.2m tokens)
+● Agora a medição decisiva: o motor já paga o dia doador como folga trabalhada?
+
+  Ran 3 shell commands
+
+● Background command "Relançar frota com minutos por veredito" completed (exit code 0)
+
+● 0 de 9: o motor não atribui hora ao doador — e no ALVO também só existe min_realizados, nenhuma rubrica. Frota e o gravado da folha:
+
+● Running 1 shell command…
+
+✢ Jitterbugging… (9h 48m 3s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
