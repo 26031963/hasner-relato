@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 18:16:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (407.5 MB). Acoes na janela: **1273**.
+**Medido em 05/10/2026 18:22:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (407.6 MB). Acoes na janela: **1278**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:21:50 | Bash | Ler o pre-commit e o formato da tabela do TICKETS | `cd /home/ronald/saas-hasner && echo '=== pre-commit ==='; cat .git/hooks/pre-commit; echo '=== TICKETS cabecalho da tabela ==='; grep -n '^\| id\\|^\|---\\|^\| *# *\|' app/docs/TICKETS.md \| head -5; sed -n '118,122p' app/docs/TICKETS.md \| cut -c1-200` |
+| 18:21:41 | Bash | Ler a regra do regua_tickets e os hooks instalados | `cd /home/ronald/saas-hasner && echo '=== regua_tickets: o que exige ==='; sed -n '1,60p' bin/regua_tickets.sh; echo '=== hooks instalados ==='; ls -la .git/hooks/ \| grep -v '\.sample'` |
+| 18:21:27 | Bash | Conferir TICKETS, itens de medicao devida e os hooks instalados | `cd /home/ronald/saas-hasner && echo '=== TICKETS O209/O208 ==='; grep -n 'O209\\|O208' app/docs/TICKETS.md \| head; echo '=== BACKLOG: PAUTA-DP-09-RELAVRATURA / L-103 ==='; grep -n 'PAUTA-DP-09-RELAVRATURA\\|L-103' app/docs/BACKLOG.md \| head; echo '=== o que hooks.sh instala ==='; grep -n 'pre-commit\\|pre-push' bin/hooks.sh \| head -20` |
+| 18:19:09 | Bash | Conferir o import do LEIS.md contra o ramo auditado | `cd /home/ronald/saas-hasner && echo "leis no vivo: $(grep -c '^\| \*\*L-[0-9]' app/docs/LEIS.md)"; echo "leis em 3ebedaa3: $(git show 3ebedaa3:app/docs/LEIS.md \| grep -c '^\| \*\*L-[0-9]')"; echo "leis em c8031f6d: $(git show c8031f6d:app/docs/LEIS.md \| grep -c '^\| \*\*L-[0-9]')"; echo '--- a regra do cabecalho esta presente? ---'; grep -n 'contando clausulas' app/docs/LEIS.md \| head -3; echo  ...` |
+| 18:17:14 | Bash | Rodar a pasta inteira de selos de host | `cd /home/ronald/saas-hasner && falhou=0; for s in bin/tests/test_*.sh; do if out="$(bash "$s" 2>&1)"; then :; else falhou=1; echo "=== VERMELHO: $(basename "$s")"; echo "$out" \| sed 's/^/ /' \| head -25; fi; done; echo "---- selos de host: $(ls bin/tests/test_*.sh \| wc -l) rodados, falhou=$falhou"` |
 | 18:15:07 | Bash | Ler o trecho da regua que roda os selos de host | `cd /home/ronald/saas-hasner && sed -n '128,165p' bin/regua.sh` |
 | 18:15:04 | Bash | Ver como a regua chama a pasta de selos | `cd /home/ronald/saas-hasner && grep -n 'bin/tests' bin/regua.sh \| head -20` |
 | 18:14:43 | Bash | Procurar guarda de commit so de docs | `cd /home/ronald/saas-hasner && grep -rln 'docs' bin/tests/ 2>/dev/null \| head -20; echo '--- grep por commit so de docs ---'; grep -rln 'so_docs\\|somente docs\\|apenas docs\\|docs-only\\|DOCS-NO-MARCO\\|L-106' bin/ 2>/dev/null \| head -20` |

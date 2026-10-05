@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:16:31.**
+**Medido em 05/10/2026 18:22:01.**
 
 | | |
 |---|---|
@@ -118,26 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-● Measurement settles it — and corrects my earlier premise twice over. Arity isn't the defect (5 fields is the majority form, 194 rows);
-  and of my four rows, only O209 is actually misreported. The convention, shown by O126, is that a closing row prepends **FECHADA ...** to
-  the front of celulas[3], keeping the portão text after it. O210/O213/O214 are genuinely live, so the hook reads them right already.
-
-  Ran 1 shell command
-
-● Now verify with the hook's own reader rather than a reimplementation of it.
-
-  Ran 2 shell commands
-
-● The hook's first open item is CELULA-TURNO-FECHA, not O209 — so O209 was never the name it printed. The precise question is only whether
-  O209 now reads as closed. Ask the hook's own compiled regex.
-
-  Ran 1 shell command
-
-● O209 reads FECHADO by the hook's own regex; the other four read open, which is correct. Now the ORDEM VIVA at the top of the RELATO.
-
-  Ran 3 shell commands
-
 ● Docs-only commit — L-106 bears on that. Let me find whether there is a guard and how it defines a marco.
 
   Ran 1 shell command
@@ -145,17 +125,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● No guard exists yet (L-106's selo is explicitly fila 2; until then it is conduta), and O209 did close a fila-1 item. Before committing,
   run the host selos — they answer in seconds and a refusal costs a whole suite.
 
-● Ver como a regua chama a pasta de selos
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '128,165p' bin/regua.sh
+  Ran 3 shell commands
 
-✻ Waiting for API response · will retry in 2m 38s · check your network
+● All 62 host selos green — including test_lei_protege_sitio.sh and test_leis_indice.sh against the imported LEIS.md. Final check on that
+  import before committing.
+
+  Ran 1 shell command
+
+● Deliverables are durable on disk: 80 laws on all three sides, and the live file differs from the audited branch by exactly one line (the
+  L-085 re-application the aval ordered). Calling the advisor before the commit.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Ran 1 shell command
+
+● Two real gaps the advisor flagged, both confirmed: no O209 line in TICKETS.md (which regua_tickets.sh cobra at pre-push) and no row for
+  the two owed measurements. Let me check the exact contract before writing.
+
+● Ver se os dois avais devidos tem linha em PROMPTS
+  ⎿  $ cd /home/ronald/saas-hasner && echo '=== PROMPTS: PAUTA-DP-09-RELAVRATURA ==='; grep -n 'PAUTA-DP-09-RELAVRATURA' app/docs/*.md |
+     cut -c1-240; echo '=== PROMPTS: L-103 ==='; grep -n 'L-103' app/docs/PROMPTS.md | cut -c1-200
+
+✢ Frolicking… (9h 31m 48s · ↓ 1.2m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-❯ ● main
+  ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```
