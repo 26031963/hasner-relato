@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 19:10:31.**
+**Medido em 05/10/2026 19:15:45.**
 
 | | |
 |---|---|
@@ -114,6 +114,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+
+● Os dois raias de produto estão fora do ato por LEI-AKITA 9 — o ! dele nomeou O142+O130+R4 e eu não o estendi (RELATO.md:1665-1667). Essa
   é a linha que a L-105 pede, e a O211 pode abrir. Construindo em cópia, como manda a LEI-AKITA 10:
 
   Read 1 file, ran 27 shell commands
@@ -130,10 +132,9 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   virou 15/20, com a prova; ou NAO virou, e o que falta com nome e numero. Sem "ressalva de sempre". Isto e conferencia do marco que
   acabou de fechar, nao fatia nova; depois segue a O211. PAREI so em lei ou !
 
-● Medir a frota inteira da competência 10 em prod · 16s
-  ⎿  $ cd /home/ronald/saas-hasner && time docker exec saas_core nice -n 19 python manage.py tenant_command shell --schema=juliani
-     --command "exec(open('/tmp/o209_conf.py').read())" 2>&1 | tee /home/ronald/saas-hasner/logs/o209_conf_ata_x_autoridade_10.out | tail
-     -70 (5s)
+● Medir a competência 09 (exportada) com a mesma sonda
+  ⎿  $ cd /home/ronald/saas-hasner && docker exec -e CONF_MES=9 saas_core nice -n 19 python manage.py tenant_command shell --schema=juliani
+     --command "exec(open('/tmp/o209_conf.py').read())" 2>&1 | tail -60 | tee logs/o209_conf_ata_x_autoridade_09.out
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
   ⎿  Referenced file ponto/services/cartorio.py
@@ -141,9 +142,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   ⎿  Referenced file core/contratos_estruturais.py
 
 ● Task "RED e construção do segundo intervalo" completed in background
-     (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Frolicking… (10h 20m 18s · ↓ 1.3m tokens)
+· Frolicking… (10h 25m 32s · ↓ 1.3m tokens · thought for 16s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
