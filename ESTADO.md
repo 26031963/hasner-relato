@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:05:31.**
+**Medido em 05/10/2026 02:10:40.**
 
 | | |
 |---|---|
-| `HEAD` local | `69f017bd O topo do TICKETS fechado no ato do push (O112)` |
+| `HEAD` local | `fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade` |
 | `origin/main` | `024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu` |
-| commits a subir (`ahead`) | **1** |
+| commits a subir (`ahead`) | **2** |
 
 ## Fabrica
 
@@ -22,27 +22,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga trabalhada ganha o numero da autoridade
 69f017bd O topo do TICKETS fechado no ato do push (O112)
 024608c7 L-104 e L-108: a celula PROTEGE carregava prosa, e o selo do corte dele mordeu
 77eafa5f O topo do TICKETS fechado no ato do push (O112)
 8c3035bc pouso de PRODUTO (K8 + K5) com as duas leis de esteira no mesmo commit
-263535a7 vigia da esteira: a linha das 18:35 entra para a arvore ficar limpa antes dos tres pousos
 ```
 
 ## `git status --short`
 
 ```
- M CLAUDE.md
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/CORTES.json
- M app/docs/CORTES.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/RELATO-ARQUIVO.md
- M app/docs/RELATO.md
- M bin/gerar_cortes.py
- M bin/tests/test_lei_akita.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -117,9 +107,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
   Ran 1 shell command
 
 ● Background command "Rodar a sonda de impacto nas duas copias (emp 2,3,4 x comp 09,10)" completed (exit code 0)
@@ -142,10 +129,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
 
-● Comparar alarme e fora_do_ensaio com ensaios anteriores
-  ⎿  $ cd /home/ronald/saas-hasner && grep -rh "bloco 69/69\|bloco 6./6. comandos" logs/ 2>/dev/null | sort | uniq -c | tail -12
+  Provar em producao os quatro dia-colab nomeados
+  ⎿  $ SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
+     cat > $SP/prova_depois_o191.py <<'PY'
+     # O191 passo 5 -- PROVA DEPOIS (condicao 4 da DINHEIRO-EM-COMPETENCIA-ABERTA), com o codigo
+     # JA NO AR em producao (deploy 02:08, fdd6f42c). Quatro dia-colab NOME…
 
-✢ Jitterbugging… (13h 53m 33s · ↓ 1.5m tokens · thinking)
+✽ Jitterbugging… (13h 58m 42s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
