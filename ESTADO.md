@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:18:31.**
+**Medido em 05/10/2026 00:24:01.**
 
 | | |
 |---|---|
@@ -32,10 +32,15 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git status --short`
 
 ```
+ M CLAUDE.md
  M app/config/crons_duracao.json
  M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/LEIS.md
  M app/docs/RELATO.md
+ M bin/tests/test_lei_akita.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -109,37 +114,37 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  L-106, L-108. Lei nova: esta, com corte dado aqui.
-
-  Segue a fila; PAREI so em lei ou !.
-
-● Fechado o que eu estava verificando: grade_da_celula lê minutos_realizados=int(ata.get('minutos_realizados') or 0) sempre da ata — o
-  único fallback (:346-352) é de previsto, e vai para minutos_previstos_do_dia, não para o builder que eu curei. Vou corrigir a linha
-  errada do censo e registrar a lei nova no mesmo marco.
-
-  Ran 5 shell commands
-
-● Preciso ver a lista de IDs no topo do LEIS.md antes de inserir, e conferir o cabeçalho da tabela de cortes:
-
-  Ran 1 shell command
-
-● CORTES.md é gerado de CORTES.json — então o corte entra no JSON, não à mão. Vou ver o esquema e o selo do índice:
-
-  Ran 1 shell command
-
-● O selo é explícito: PROTEGE é a única coluna que pode ficar vazia, e preencher por dedução é proibido. Antes de escrever, duas
-  conferências:
-
-  Ran 1 shell command
-
-● test_lei_akita.sh:24 crava 12 linhas numeradas — a linha nova exige o contador junto. E achei um leitor de produção que o censo anterior
   não tinha: escala/utils.py:1705::grade_espelho_janela ("CONTRATO DE CHAMADA dos renders tela/cartao/folha") chama o builder curado.
 
-● Censo de producao de grade_espelho_janela
-  ⎿  $ cd /home/ronald/copia-o191a/app && grep -rn "grade_espelho_janela" --include=*.py . | grep -v '/tests/' | grep -v 'def
-     grade_espelho_janela'
+  Ran 1 shell command
 
-✻ Waiting for API response · will retry in 2m 31s · check your network
+● Isso corrige também a minha afirmação sobre o oráculo: o espelho consome grade_espelho_janela, logo o builder curado alcança. Preciso ver
+  se espelho.py sobrescreve minutos_realizados com a chamada própria dele:
+
+  Ran 1 shell command
+
+● Confirmado por leitura: espelho.py:751 escreve minutos_realizados da chamada própria a realizado_do_dia, e _pela_grade() é "degradacao
+  nomeada, nao caminho normal" — então o oráculo segue intacto, como eu havia medido. Vou corrigir o censo:
+
+  Ran 2 shell commands
+
+● Agora registro a lei. Linha L-110 no LEIS.md, com a coluna PROTEGE vazia por lei — o cabeçalho do próprio arquivo proíbe preencher por
+  dedução:
+
+  Ran 3 shell commands
+
+● CLAUDE.md ganha a LEI-AKITA 13, e o contador cravado do selo vai no mesmo ato (senão o pre-push fica vermelho):
+
+  Ran 2 shell commands
+
+● O selo passou mas a mensagem final ainda diz "12 linhas" — rótulo que mente:
+
+  Corrigir o rotulo cravado do selo
+  ⎿  $ cd /home/ronald/saas-hasner && grep -n '12 linhas' bin/tests/test_lei_akita.sh && sed -i 's/12 linhas no CLAUDE\.md/$N linhas no
+     CLAUDE.md/' bin/tests/test_lei_akita.sh && bash bin/tests/test_lei_akita.sh; echo "rc=$?"
+
+✢ Jitterbugging… (12h 12m 3s · ↓ 1.4m tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 

@@ -6944,51 +6944,52 @@ matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado
 > RELATO por data e levei a tabela com ele.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (39)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (40)
 
-> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (265 h), FECHAMENTO-UI-PORTAS (246 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (243 h), ESTEIRA-RETA-FINAL (242 h), ZUMBIDO (239 h), CARTAO-TOTAL-IGUAL-SOMA (237 h), CERT-VIGIA (225 h), CHAMADO-GANHA-CADASTRO (224 h), JUIZ-BATIDA-NASCE (224 h), JUIZ-ESCALA-NASCE (224 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (224 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (224 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
+> **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (269 h), FECHAMENTO-UI-PORTAS (251 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (248 h), ESTEIRA-RETA-FINAL (247 h), ZUMBIDO (244 h), CARTAO-TOTAL-IGUAL-SOMA (241 h), CERT-VIGIA (230 h), CHAMADO-GANHA-CADASTRO (229 h), JUIZ-BATIDA-NASCE (229 h), JUIZ-ESCALA-NASCE (229 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (229 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (229 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
 | corte | hora | idade | estado | fatia que consome |
 |---|---|---|---|---|
-| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 274 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
-| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 266 h | construindo | O9 PDF-E-O-ESPELHO |
-| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 265 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
-| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 265 h | construindo | CORTES-REGISTRADOS |
-| **NOITE-23-09** | 2026-09-23 18:4x | 264 h | construindo | NOITE-23-09 (infra) |
-| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 263 h | construindo | FABRICANTE-LE-O-BACKLOG |
-| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 246 h | recebido | O24 FECHAMENTO-UI-PORTAS |
-| **JANELA-EXATA** | 2026-09-24 15:xx | 244 h | construindo | O27 JANELA-EXATA |
-| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 243 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
-| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 242 h | construindo | FILA-24-09-16-5X |
-| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 242 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
-| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 242 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
-| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 242 h | recebido | O31 ESTEIRA-RETA-FINAL |
-| **ZUMBIDO** | 2026-09-24 20:xx | 239 h | recebido | O32 ZUMBIDO |
-| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 237 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
-| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 237 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
-| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 235 h | esperando "!" | O35 CONTRATOS-14 |
-| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 235 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
-| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 235 h | esperando "!" | O35 CONTRATOS-14 |
-| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 235 h | esperando "!" | O35 CONTRATOS-14 |
-| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 235 h | esperando "!" | O35 CONTRATOS-14 |
-| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 226 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
-| **CERT-VIGIA** | 2026-09-25 09:4x | 225 h | recebido | CERT-VIGIA |
-| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 225 h | construindo | O42 ESTEIRA-SECA-25-09 |
-| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 225 h | construindo | O44 ARQUIVO-SIMPLES v2 |
-| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 225 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
-| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 224 h | recebido | O35 CONTRATOS-14 |
-| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 224 h | recebido | S-BATIDA |
-| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 224 h | recebido | S-ESCALA |
-| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 224 h | recebido | O35 CONTRATOS-14 |
-| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 224 h | recebido | E3-CHAMADO |
-| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 38 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
-| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 35 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
-| **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 33 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
-| **HOLERITE-MES-CIVIL** | 2026-10-04 17:5x | 1 h | construindo na raia `k5-encerrada` -- o corte RATIFICA `6a350aa9`, que ja tirou os dois sitios com nota MEDIDA (08/2026, a unica competencia com holerite publicado: 16 de 19 admitidos 21-31/08 TEM holerite de 08, contra 1 de 17 demitidos 21-31/07). Falta a segunda frase dele -- a CONDICAO de que cada conforme depende, na forma do `_A14 CURADO` -- e o teto dos dois contratos, que as duas raias deixaram no numero do main. | PLACAR-ESTRUTURAL R6 item 3, raia `k5-encerrada` (`6a350aa9`) |
+| **ACESSO-NUNCA-EM-LOTE** | 2026-09-23 08:4x | 279 h | construindo | O4 + CREDENCIAL-POR-ESTADO |
+| **COL200-DIA-DO-TURNO** | 2026-09-23 17:xx | 271 h | construindo | O9 PDF-E-O-ESPELHO |
+| **CORTES-REGISTRADOS** | 2026-09-23 18:xx | 270 h | construindo | CORTES-REGISTRADOS |
+| **TROCA-DE-PLANTAO** | 2026-09-23 18:3x | 269 h | recebido | O10 TROCA-DE-PLANTAO (porta no Resolver dia) |
+| **NOITE-23-09** | 2026-09-23 18:4x | 269 h | construindo | NOITE-23-09 (infra) |
+| **FABRICANTE-LE-O-BACKLOG** | 2026-09-23 20:1x | 268 h | construindo | FABRICANTE-LE-O-BACKLOG |
+| **FECHAMENTO-UI-PORTAS** | 2026-09-24 13:xx | 251 h | recebido | O24 FECHAMENTO-UI-PORTAS |
+| **JANELA-EXATA** | 2026-09-24 15:xx | 249 h | construindo | O27 JANELA-EXATA |
+| **CATALOGO-SAIDA-ANTECIPADA-DESCONTA** | 2026-09-24 15:5x | 248 h | recebido | CATALOGO-SAIDA-ANTECIPADA-DESCONTA |
+| **FILA-24-09-16-5X** | 2026-09-24 16:5x | 247 h | construindo | FILA-24-09-16-5X |
+| **RELATORIO-ATESTADOS-FOTOS** | 2026-09-24 16:5x | 247 h | construindo | O29 RELATORIO-ATESTADOS-FOTOS |
+| **AUSENCIAS-DRAWER-E-LOTE** | 2026-09-24 17:xx | 247 h | construindo | O30 AUSENCIAS-DRAWER-E-LOTE |
+| **ESTEIRA-RETA-FINAL** | 2026-09-24 17:xx | 247 h | recebido | O31 ESTEIRA-RETA-FINAL |
+| **ZUMBIDO** | 2026-09-24 20:xx | 244 h | recebido | O32 ZUMBIDO |
+| **SUSPENSAO-DESCONTA-JORNADA** | 2026-09-24 22:3x | 241 h | construindo | SUSPENSAO-DESCONTA-JORNADA |
+| **CARTAO-TOTAL-IGUAL-SOMA** | 2026-09-24 22:3x | 241 h | recebido | O33 CARTAO-TOTAL-IGUAL-SOMA |
+| **CONTRATO-3-SEM-CONSUMIDOR-SAI** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **CHAMADO-VARREDURA-NAO-JULGA** | 2026-09-25 00:xx | 240 h | RESPONDIDO 03/10 09:5x pelo PAPEL-PRAZO-NASCE (4a opcao: nasce o papel prazo) | O35 CONTRATOS-14 |
+| **TETO-DA-MATRIZ-E-21** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **JUIZ-DE-BATIDA-E-DE-ESCALA** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **PERTO-DO-MOTOR-E-DO-JUIZ-DE-TURNO** | 2026-09-25 00:xx | 240 h | esperando "!" | O35 CONTRATOS-14 |
+| **K8-COMPETENCIA-NAO-E-MES-CIVIL** | 2026-09-25 09:2x | 231 h | construindo | O40 K8-COMPETENCIA-NAO-E-MES-CIVIL |
+| **CERT-VIGIA** | 2026-09-25 09:4x | 230 h | recebido | CERT-VIGIA |
+| **ESTEIRA-SECA-1-E-2-AGORA** | 2026-09-25 10:3x | 229 h | construindo | O42 ESTEIRA-SECA-25-09 |
+| **EXPORTADO-SEM-FRONTEIRA** | 2026-09-25 10:3x | 229 h | construindo | O44 ARQUIVO-SIMPLES v2 |
+| **PASSIVO-TRANCADA-E-HISTORIA** | 2026-09-25 10:3x | 229 h | construindo | O44 ARQUIVO-SIMPLES v2 item 7 |
+| **CHAMADO-GANHA-CADASTRO** | 2026-09-25 11:0x | 229 h | recebido | O35 CONTRATOS-14 |
+| **JUIZ-BATIDA-NASCE** | 2026-09-25 11:0x | 229 h | recebido | S-BATIDA |
+| **JUIZ-ESCALA-NASCE** | 2026-09-25 11:0x | 229 h | recebido | S-ESCALA |
+| **PERTO-DO-MOTOR-ESPERA-O-EXPORT** | 2026-09-25 11:0x | 229 h | recebido | O35 CONTRATOS-14 |
+| **E3-CHAMADO-APOS-ARQUIVO-SIMPLES** | 2026-09-25 11:0x | 229 h | recebido | E3-CHAMADO |
+| **JUIZES-TRES-ASSINATURAS** | 2026-10-03 05:30 | 42 h | construindo | registro em `app/docs/CORTES.json` (03/10 08:4x) -- a TRAVA cai de 2 para 1 FALHA. O `batidas_apuraveis` e o `escala_vigente` entram em `app/core/juizes.py` nos itens 6 e 3 da ordem de 08:13, cada um com o censo do seu ponto |
+| **ESPINHA-ANTES-DA-UI** | 2026-10-03 08:13 | 40 h | construindo | O134 ESPINHA-ANTES-DA-UI (ordem da fila 1) + O133 CLEAR-NO-MARCO na fila 2 |
+| **PAPEL-PRAZO-NASCE** | 2026-10-03 09:5x | 38 h | registrado -- lei L-101, obra O139; censo dos 27 a medir antes de mover um nome | O139 PAPEL-PRAZO |
+| **HOLERITE-MES-CIVIL** | 2026-10-04 17:5x | 6 h | construindo na raia `k5-encerrada` -- o corte RATIFICA `6a350aa9`, que ja tirou os dois sitios com nota MEDIDA (08/2026, a unica competencia com holerite publicado: 16 de 19 admitidos 21-31/08 TEM holerite de 08, contra 1 de 17 demitidos 21-31/07). Falta a segunda frase dele -- a CONDICAO de que cada conforme depende, na forma do `_A14 CURADO` -- e o teto dos dois contratos, que as duas raias deixaram no numero do main. | PLACAR-ESTRUTURAL R6 item 3, raia `k5-encerrada` (`6a350aa9`) |
+| **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 5 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
+| **DOCS-NO-MARCO** | 2026-10-04 19:2x | 5 h | lei L-106 escrita; conduta desde ja. O selo que a cobra no pre-push (push com commit so de app/docs/ alem do derivado = VERMELHO, com RED nos DOIS sentidos) e o item (4) e fica na fila 2. PROIBIDO allowlist de commit de docs, e PROIBIDO contar como marco o que nao fechou item | a lei no LEIS.md + a linha na CLAUDE.md 7b, no commit do marco de 04/10 19:3x |
 | **W12X36-HPD** | 2026-09-24 14:xx / 16:5x | 0 h | construindo | O26 W12X36-HPD |
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
-| **RAIA-VERDE-POUSA** | 2026-10-04 19:2x | 0 h | lei L-105 escrita e a conduta vale DESDE JA: o pacote de pouso em curso se separou no mesmo turno -- K8 e K5 pousam como PRODUTO (`02391558`), o CERT-AST sai para pouso proprio porque e INSTRUMENTO (cria `bin/suite_nucleo.sh` e o selo `test_nucleo_tem_porta.sh`). Os itens (3) contador no ESTADO, (4) selo de host no pre-push e (5) veredito das raias velhas ficam na FILA 2, depois da CELULA-TURNO-FECHA e da O145, por ordem dele | o pouso de produto de 04/10 19:3x (K8+K5) e a lei no LEIS.md, no commit do marco |
-| **DOCS-NO-MARCO** | 2026-10-04 19:2x | 0 h | lei L-106 escrita; conduta desde ja. O selo que a cobra no pre-push (push com commit so de app/docs/ alem do derivado = VERMELHO, com RED nos DOIS sentidos) e o item (4) e fica na fila 2. PROIBIDO allowlist de commit de docs, e PROIBIDO contar como marco o que nao fechou item | a lei no LEIS.md + a linha na CLAUDE.md 7b, no commit do marco de 04/10 19:3x |
+| **FROTA-PROVA-AMOSTRA-EXPLICA** | 2026-10-05 00:1x | 0 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A coluna PROTEGE fica VAZIA por LEI, e esta e a UNICA linha do aval que nao fechou na letra: o cabecalho do LEIS.md manda preencher so onde o TEXTO da lei nomeia o sitio e chama de PROIBIDO preencher por deducao, e os dois sitios que o texto nomeia nao sao protegiveis pelo selo -- bin/sonda_frota.sh e shell (o regex de test_lei_protege_sitio.sh exige .py) e o R4 e dado de modulo, nao FunctionDef. Criar funcao para a coluna seria o instrumento novo que o proprio corte PROIBE. CLAUDE.md ganhou a LEI-AKITA 13 e o contador cravado do selo (test_lei_akita.sh: 12 -> 13) foi junto, no mesmo ato | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md + esta linha, no commit do marco da O191 |
 <!-- SEUS-CORTES:FIM -->
 
 ## SUITE-UMA-VEZ-POR-ARVORE no ar -- e o criterio antigo era **CEGO para `.js`, `.css` e `bin/`**
