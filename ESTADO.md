@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:03:01.**
+**Medido em 05/10/2026 03:08:31.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga tr
 ```
  M app/config/crons_duracao.json
  M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,12 +115,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Over-collection confirmed: two for nome in (...) loops share the target, and he-barra belongs to an assertNotIn against the markup.
-  Binding each assertion to its haystack and its enclosing loop:
-
   Ran 2 shell commands
 
 ● Extractor renders exactly the 5 tokens I enumerated by hand, in under a second. Now cure A — the aged anchor inverts to the authority —
@@ -141,11 +136,17 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Push in flight. Writing the two durable lessons while I wait (outside the repo, so the carimbed tree doesn't move):
 
-● Running 1 shell command…
+  Ran 1 shell command
 
-✢ Jitterbugging… (14h 51m 3s · ↓ 1.6m tokens)
+● Push running. Read-only orientation on the next item (CERT-AST) while the pista is busy:
+
+● Olhar onde o push esta
+  ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; tail -c 600 logs/push_o191b.log 2>/dev/null | tr -d '\r' | tail -5
+
+✢ Compacting conversation… (14h 56m 33s · ↓ 1.6m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱ 79%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    3% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
