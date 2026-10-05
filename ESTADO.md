@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:20:45.**
+**Medido em 05/10/2026 11:26:01.**
 
 | | |
 |---|---|
@@ -112,23 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 3 patterns, read 1 file, listed 2 directories, ran 14 shell commands
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Referenced file escala/utils.py
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b9k84c6wp.output (43 lines)
-  ⎿  Referenced file ponto/services/cartorio.py
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Diagnóstico fechado: carimbar (ponto/portas/celula.py:559-571) é idempotente por desenho — mesma impressão + nada lavrado = nenhum save,
-  e julgada_em não anda. Logo julgada_em não é o observável de "rejulgou"; o observável do --forcar é a ata (é exatamente para isso que a
-  HX-BORDA-ATA existe). Reescrevo o RED sobre a ata:
-
-  Ran 2 shell commands
-
-● RED correto: 4 errors por --celulas não existir, e o MORDE verde — prova que --forcar refaz a ata (sem isso o selo passaria por ausência
-  de sinal). Mas o caso do recorte vazio passou pelo motivo ERRADO (unrecognized arguments também é CommandError) — aperto a asserção na
   mensagem:
 
   Ran 1 shell command
@@ -140,10 +123,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Sem leitor da linha fim: (só o escritor). Agora o patch, na cópia:
 
-● Running 1 shell command…
+  Searched for 1 pattern, ran 4 shell commands
 
-✻ Waiting for API response · will retry in 2m 36s · check your network
-                                                                                                   ✔ Update installed · Restart to update
+● Achado medido, e o teste estava se medindo a si mesmo: aplicar_precedencia_na_celula tem um único chamador — julgar_celula
+  (cartorio.py:895), o caminho de UMA célula acionado por signal. O batch do processar_cartorio nunca lavra ata['precedencia']. A chave
+  veio do signal da batida que o próprio teste criou; meu .update(ata=SUJA) a apagou e o batch — com ou sem recorte — não a repõe. Corrijo
+  o teste para comparar recorte contra o lote a partir do mesmo estado:
+
+  Ran 1 shell command
+
+● 6/6 verde. Mas preciso garantir que o caso do cross-midnight está no ramo normal (o dos 134 alvos reais), não no nunca_bateu — o fim:
+  mostrou nunca_bateu=5:
+
+  Corrigir as tres prosas "SO sombra" na copia
+  ⎿  $ C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; python3 - <<'PYEOF'
+     import io
+     C='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192/app/'
+     # (1) cartorio.py:136 -- a prosa que justific…
+
+✢ Frolicking… (2h 48m 6s · ↓ 318.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
