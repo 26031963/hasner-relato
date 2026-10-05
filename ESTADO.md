@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 15:25:31.**
+**Medido em 05/10/2026 15:30:45.**
 
 | | |
 |---|---|
@@ -139,11 +139,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Conferir o remoto antes do push · 4m 31s
-  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tail -40 (4m 31s)
+● Conferir o remoto antes do push · 9m 46s
+  ⎿  $ cd /home/ronald/saas-hasner && git push origin main 2>&1 | tail -40 (9m 44s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Frolicking… (6h 47m 36s · ↓ 847.2k tokens)
+· Frolicking… (6h 52m 50s · ↓ 847.2k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
