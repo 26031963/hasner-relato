@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 10:55:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (385.6 MB). Acoes na janela: **846**.
+**Medido em 05/10/2026 11:00:28.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (385.8 MB). Acoes na janela: **855**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:00:26 | Bash | Rodar o RED na copia sem o patch | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && python3 - "$COP" <<'PY' import sys p=sys.argv[1]+'/app/ponto/tests/test_cartorio_recorte_de_celulas.py' s=open(p).read() lixo=" self._bate(self.cel_noite.data, datetime.time(22, 0), 'E') if False else None\n" assert s.count(lixo)==1 s=s.replace( ...` |
+| 11:00:16 | Bash | Escrever o RED do recorte | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && cat > $COP/app/ponto/tests/test_cartorio_recorte_de_celulas.py <<'PY' """RECORTE-DE-ATA (O192): o `--forcar` do cartorio ganha ALVO, e o alvo e' dia-colab. O `--forcar` existe desde a HX-BORDA-ATA para fazer BACKFILL de ata: rejulgar mesmo com a ...` |
+| 10:59:15 | Bash | Criar a copia do HEAD e pedir a montagem | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && rm -rf $COP && mkdir -p $COP && git archive HEAD \| tar -x -C $COP && ls $COP \| head && echo "--- montagem ---" && bash bin/arvore_do_push.sh --montagem $COP 2>&1 \| head -5` |
+| 10:58:59 | Bash | Ler um teste de cartorio como molde | `sed -n '1,70p' ponto/tests/test_hx_cartorio_universo.py` |
+| 10:58:55 | Bash | Achar os testes do cartorio | `ls ponto/tests/ \| grep -i cartorio; echo "=== quem testa o command ==="; grep -rln 'processar_cartorio' --include=test_*.py . \| head` |
+| 10:58:45 | Bash | Ler o comando processar_cartorio | `cat -n ponto/management/commands/processar_cartorio.py \| sed -n '1,115p'` |
+| 10:58:19 | Bash | Ensaio gratis no col948 | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $SCR/sonda_col948_preview.py <<'PY' # SONDA LEITURA: o ENSAIO GRATIS -- o que a ata rejulgada com o codigo curado fez no col948. import datetime from django.utils import timezone from escala.models import CelulaDia from chamados.models import ChamadoColaborador  ...` |
+| 10:58:01 | Bash | Ler o ramo normal do laco | `sed -n '520,580p' ponto/services/cartorio.py` |
+| 10:57:50 | Bash | Ler o laco de escrita do cartorio | `sed -n '425,500p' ponto/services/cartorio.py` |
 | 10:54:54 | Bash | Registrar as medicoes no scratchpad | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat >> $SCR/o192-caminho-medido.md <<'MD' --- ## 05/10 10:5x — MEDIDO EM PROD (leitura). O ESCOPO HONESTO DO APPLY RESTRITO ### 1. A LISTA DA CURA EXISTE, COM IDENTIDADE `logs/o191/impacto_curada_20261005.tsv` (567 linhas) + `logs/o191/reversao_ata_o191_20261005.jsonl ...` |
 | 10:54:10 | Bash | Ler a origem de horas_folga_trabalhada | `sed -n '418,470p' ponto/services/fechamento.py` |
 | 10:53:59 | Bash | Ver de onde vem folga_trabalhada e o universo | `grep -n 'folga_trabalhada' ponto/services/fechamento.py \| head -10; echo "=== dia_pago universo ==="; sed -n '314,350p' ponto/services/dia_pago.py` |
