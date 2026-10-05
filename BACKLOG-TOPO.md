@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**195 obras abertas.**
+**202 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -204,3 +204,10 @@ lista — ela e o que esta EM PE._
 | **O194** | O TETO TEMPORAL DA LAVRA NAO ESPERA O TURNO DO DIA DE FOLGA | **REGISTRADO, NAO CONSTRUIDO** -- defeit |
 | **O195** | A GUARDA L-085 MANDA O TURNO PARA O DIA DE FOLGA, E O SELO DA O76 NAO MORDE | PAREI |
 | **O196** | A FOTO DA PORTA DE RELAVRATURA COBRE UMA TABELA DE DUAS, E A CASA JA TINHA ESCRITO ISSO | **registrado, nao construido** -- a orde |
+| **O197** | FUTURO-NAO-E-EM-ABERTO | **fila 1** -- aval dado, item (3) da ord |
+| **O198** | FALTA-EM-DIA-SEM-JORNADA | espera `!` |
+| **O199** | ACEITE-DE-FOLGA-DECIDE-O-DIA | espera corte |
+| **O200** | PINO-GEO-LE-O-JUIZ | **fila 1**, atras da O199. O TERCEIRO ca |
+| **O201** | A REGRA 2 DO CONTRATO NAO PODE PASSAR A VARRER COMENTARIO | **fila 2** -- e INSTRUMENTO (selo), e a  |
+| **O202** | O TERCEIRO CALCULO DE GEO -- OS PINGS | **fila 2**. O aval dos 4 BOs o declarou  |
+| **O203** | O SELO DA COLUNA PROTEGE FICA CEGO QUANDO A CELULA E ESVAZIADA NO MESMO COMMIT | **fila 2** -- INSTRUMENTO (portao do pus |
