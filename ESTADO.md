@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 22:05:06.**
+**Medido em 04/10/2026 22:10:31.**
 
 | | |
 |---|---|
@@ -137,8 +137,8 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      Eu concluí "o motor nao forma periodo" a partir de 18 linhas `DiaPago` com tudo ZERO -- ou seja de
      AUSENCIA DE SINA…
 
-✻ Compacting conversation… (9h 53m 8s · ↓ 1.2m tokens)
-  ▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 0%
+✢ Compacting conversation… (9h 58m 33s · ↓ 1.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱ 95%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     2% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
