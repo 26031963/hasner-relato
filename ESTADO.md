@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:05:45.**
+**Medido em 05/10/2026 18:11:01.**
 
 | | |
 |---|---|
@@ -118,13 +118,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ITEM 1 -- PONTA PEQUENA: dia com minutos fora do marco <= limite e RECUSADO pelo sistema (DecisaoHE estado nao, ator sistema, com
-  trilha), uma vez por dia, idempotente. O limite e CADASTRO por empresa, nasce 15. Nao move dinheiro.
-  ITEM 2 -- AUTORIZAR POR COLABORADOR E PERIODO: um ato, um motivo, e a tela mostra ANTES de confirmar as horas que entram por rubrica (o
-  DIFF daquele colab). Grava uma DecisaoHE por dia. Revoga o "um dia por ato" de ponto/portas/he.py::autorizar_em_lote. Por empresa
-  inteira continua nao existindo.
-  ITEM 3 -- TRAVA: Empresa.he_pendente_trava_export passa a contar so dia ACIMA do limite e sem decisao. Liga depois do item 2 no ar,
-  nunca antes.
   ITEM 4 -- A 09: os dias acima do limite ficam decidiveis na Gestao de HE; o que for autorizado sai como linha na pauta do TXT da 09 ja
   aberta, com os dois numeros. A 09 nao se recalcula por este ato.
   RED (pela REGRA, antes do codigo):
@@ -144,12 +137,19 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
      LINHA HAIKU: (a) contador "dias de HE acima do limite sem decisao" por empresa entra no copiloto; (b) golden: "quantas horas extras o
   colab X tem esperando decisao?" esperado via ferramentas.he_pendente(cli); (c) degrau: leitura.
 
-● Ler o contrato do hook com o topo do RELATO
-  ⎿  $ cd /home/ronald/saas-hasner && grep -n 'ORDEM VIVA\|FILA 1\|PAREI\|FECHADA\|NO AR' bin/hook_stop_fila1.py | head -30 | cut -c1-150
+● Medir quantas linhas de OBRAS estao fora do padrao de 6 campos
+  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PYEOF'
+     s = open('app/docs/BACKLOG.md', encoding='utf-8').read()
+     i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->', i)
+     from collections import Counter
+     cnt = Counter(); fora = []
+     for n, ln in enumerate(s[:j].splitlines()):
+     if n < s[:i].…
 
-✶ Frolicking… (9h 15m 32s · ↓ 1.2m tokens)
+✢ Compacting conversation… (9h 20m 48s · ↓ 1.2m tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 91%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
