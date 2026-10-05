@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 10:00:31.**
+**Medido em 05/10/2026 10:05:45.**
 
 | | |
 |---|---|
@@ -41,6 +41,7 @@ b9c7e68d O191 passo 5 NO AR: a prova depois bateu 4/4 e a ata nao se moveu
  M app/docs/LEIS.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
+ M app/docs/TICKETS.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -114,40 +115,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Dado decisivo: dois pendentes têm a impressão que É um comentário — logo varrer comentário na regra 2 produziria "curado" falso. Fecho o
-  número e descarto essa cura:
 
-  Ran 1 shell command
+✢ Frolicking… (1h 26m 2s · ↓ 192.0k tokens)
+  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
 
-● Censo fechado: 268 pendentes, 5 vivos só na prosa, 2 deles com a impressão que é um comentário e 30 sítios HTML/JS que o stripper não
-  tokeniza. A cura "regra 2 varre comentário" mentiria em 2 e quebraria em 30 — descartada com o número. Fica a cura certa:
+❯ aval Ronald: BO 6 de tela, PROVADO por leitura. Fila 2 (raia de UI), atras dos BOs de tela ja recebidos.
 
-  Ran 2 shell commands
+  ID: PAINEL-OFERECE-COBRAR-NAO-REABRIR
 
-● RED evidenciado pelo selo da própria casa. Agora a cura:
+  ORIGEM: templates/chamados/partials/modal_fio.html:314-317 -- com pergunta sem resposta, o aviso diz "Aguarde a resposta ou use Reabrir
+  questionario". O Reabrir APAGA as respostas ja dadas; o Cobrar (chamados:cobrar_chamado, views_cobrar.py:33) so manda push e nao apaga
+  nada, mas so existe na lista (_lista_chamados.html:84), e a funcao cobrarChamado mora em _lista_chamados.html:171.
 
-  Ran 2 shell commands
+  CASOS:
+  1. Disputa com pergunta sem resposta -> o painel mostra o botao "Cobrar resposta (nao apaga nada)" e o aviso passa a indicar ELE; o
+  Reabrir continua, abaixo, com o texto "so se as perguntas estiverem erradas".
+  2. Clique em Cobrar -> mesmo POST de chamados:cobrar_chamado; aparece "cobrado hoje as HH:MM"; segundo clique no dia -> a recusa que a
+  porta ja devolve ("Ja cobrado hoje as HH:MM").
+  3. Colab sem push -> a mensagem que a porta ja devolve ("Colaborador sem app/push ativo").
+  4. O botao funciona nas telas que abrem o painel SEM a lista: cobrarChamado sai de _lista_chamados.html para um lugar que as duas
+  carregam, uma definicao so.
 
-● Cura completa na cópia:
+  PROIBIDO: rota nova; regra nova de cobranca; segunda copia da funcao; mexer no Reabrir alem do texto.
+  PRONTO: selo de tela com os 4 casos nas telas que renderizam o modal_fio, commit, e print do painel do chamado #28304 com o botao. Sem
+  isso = INCOMPLETO.
+  LEI-AKITA: origem=modal_fio.html:314-317; testemunha=views_cobrar.cobrar_chamado; juizes novos=0. Leis: L-110, LEIS-UI. Nenhuma lei
+  nova.
+  LINHA HAIKU: (a) nenhum contador novo; (b) golden: "o que o admin faz quando o colaborador nao respondeu?" esperado "cobrar"; (c)
+  degrau: leitura.
 
-  Ran 23 shell commands
-  ⎿  Read docs/AVAIS.md (25 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cert-ast-orientacao.md
-     (32 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bek1k338g.output (17 lines)
-  ⎿  Referenced file docs/LEIS.md
-  ⎿  Read ponto/tests/test_realizado_do_dia_autoridade.py (145 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 8 shell commands
-
-                                                                                                   ✔ Update installed · Restart to update
+  Segue a fila; PAREI so em lei ou !.
+  ctrl+x ctrl+s to send now
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 

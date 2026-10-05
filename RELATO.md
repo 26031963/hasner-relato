@@ -1,8 +1,44 @@
 # RELATO — esteira saas-hasner
 
-FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-4 FECHADOS com prova; os
-passos 5-6 sao a **O191**, e o passo 6 **NAO esta carimbado**. Atras dela, a **O145**.
-**ESTADO (05/10 02:1x): a O191 esta FECHADA e NO AR**
+FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-5 FECHADOS com prova; o
+passo 6 esta **PARCIAL** e por isso segue NAO carimbado. A ordem dele de 05/10 09:0x, literal: *"(1) turno
+-- apagar a funcao e fechar a celula; (2) relavratura 10 restrita; (3) BOs de tela na ordem do bloco; (4)
+O145. Instrumento so depois disso"*, com a **O204** entrando entre (2) e (3) pelo aval de 09:4x (*"BO de
+producao PROVADO, passa a frente dos 4 BOs de tela"*).
+**ESTADO (05/10 10:0x): o item (1) esta FECHADO -- a celula `turno/marcos x um juiz por pergunta` ficou
+VERDE e o placar foi a `contratos 14/20`**
+PROVA: `escala/utils.py::minutos_realizados_do_dia` **APAGADA** com lapide (`:822`), os **6** testes de
+`escala/tests/test_realizado_intervalo.py` foram com ela, `PENDENTES['turno/marcos']` saiu de 1 para **()**
+com a vaga nomeada, e **quem disse o numero foi a funcao real**: `verdes()=14`, `total()=20`,
+`linha_do_placar()='contratos_estruturais: 14/20 verdes'`, `fora_de_autoridade('turno/marcos')=0` e
+`celula('turno/marcos','um juiz por pergunta')['verde']=True`, tudo rodado no container contra a copia da
+fatia -- `logs/placar_estrutural/contratos_20261005_turno.txt`. O `!` que autorizou e o da **L-111**
+(*"sitio com zero chamador de producao AINDA responde enquanto existir no codigo"*), lei escrita no
+LEIS.md, no CORTES e no CLAUDE.md **no mesmo marco** em que foi aplicada.
+**O passo 6 do CELULA-TURNO-FECHA NAO se carimba com isto, e nao e meia-correcao: e numero remedido.** A
+nota do placar previa `+2` (as duas celulas de `um juiz por pergunta` que citavam o sitio) e saiu **`+1`**.
+As duas tinham o mesmo sitio e **nao a mesma CONDICAO**: `celula/precedencia` tem allowlist ZERO desde a
+BUG-145 e segue `verde=False` **DE PROPOSITO**, porque allowlist zero e UMA das duas condicoes dela -- a
+outra, o numero chegar ao **GRAVADO**, so se cumpre na relavratura (a impressao do cartorio nao hashea a
+grade, `ponto/services/cartorio.py:93-106`). Carimbar verde ali seria selo falando por efeito que ainda
+nao houve. A nota do R6 foi corrigida no mesmo ato, com o motivo escrito.
+**DE CARONA, UM BUG DE MAIN VERMELHO QUE NAO ERA MEU E VEIO PRIMEIRO (LEI-AKITA 6).** O gate temporal das
+06:00 (`3a9bccaa`) voltou a tela do O122 ao commit aprovado -- escopo literal do aval, *"SO ELES"* --, mas
+a etapa 1 havia pousado em **tres** arquivos (`60a4a42d`: o template, `app/escala/views.py` +26 e um selo
+de 211 linhas). Voltar um e deixar dois deixou o selo recortando uma barra que nao esta mais no HTML:
+**6 testes vermelhos** (1 FAIL + 5 ERROR `ValueError: substring not found` em `recorta_barra`), e com
+main vermelho **todo push e, pela DEPLOY JA, todo deploy estavam travados desde as 06:00**. Provei que o
+vermelho **preexiste** ao meu trabalho rodando o modulo contra a arvore viva, que tem diff de `.py` ZERO
+contra HEAD. Cura pela CURA-MAIS-RESTRITIVA, em commit PROPRIO e antes do marco: o selo orfao foi apagado,
+completando a reversao que o gate deixou pela metade; a volta da etapa inteira cabe num comando
+(`git checkout 60a4a42d -- app/templates/escala/tipos_lista.html app/escala/tests/test_o122_etapa1_barra_em_tipos.py`)
+e espera o smoke dele. O defeito do gate -- reverter por ARQUIVO e nunca medir a arvore depois -- virou a
+**O205**, fila 2, instrumento.
+LEI-AKITA: origem=`escala/utils.py:822` (a funcao, nao o leitor), testemunha=`ponto/turnos.py::realizado_do_dia`,
+RED=`test_MORDE_pendente_curado_sai_da_lista` da propria casa + caso novo de EXISTENCIA por AST, quem-mais-le=censo
+de chamadores por AST (**0** de producao; so comentario, lapide e teste), juizes novos=0.
+
+**MARCO ANTERIOR (05/10 02:1x): a O191 esta FECHADA e NO AR**
 PROVA: `RC_DEPLOY=0`, suite `Ran 9629 / OK (skipped=42)`, 61 selos de host `vermelhos: 0`, prova depois
 **4/4**, exportada 09 com **8** registros hash a hash (`diff` vazio), push `024608c7..eef236e1`.
 -- commit `fdd6f42c`, deploy
@@ -33,9 +69,12 @@ ABERTA e o pedido **voltou** ao vivo -- mais o tripwire que faltava desde 02/10,
 main -> main`, suite `Ran 9629 / OK (skipped=42)` mais `Ran 22 / OK`, `pre-push: OK -- push liberado`,
 e `HEAD == origin/main == eef236e1`. **MARCO FECHADO** (handoff em 44 linhas).
 
-**lei: sitio com ZERO chamador de producao ainda "responde a pergunta por conta propria"?** (nao devolve
-turno -- PAREI-DE-LEI-NAO-DEVOLVE-TURNO; a esteira SEGUE abaixo). E o que SEGURA o passo 6, e eu nao
-tenho saida sem a sua palavra, porque as duas estao fechadas por regra. Os numeros, medidos agora:
+**lei RESPONDIDA as 09:0x, e virou a L-111**: *"sitio com zero chamador de producao AINDA responde
+enquanto existir no codigo. Apaga `escala/utils.py::minutos_realizados_do_dia` e os 6 testes de
+`escala/tests/test_realizado_intervalo.py`; o pendente de turno/marcos sai junto e a celula fecha pela
+funcao real."* Fica abaixo, sem uma virgula mexida, a pergunta COMO foi levada a mesa -- porque e ela que
+mostra que a resposta nao inventou nada, so escolheu entre duas saidas que eu havia medido e nomeado. Os
+numeros, medidos as 09:0x:
 `PENDENTES['turno/marcos']` tem **1** pendente -- Q6, *"o vao entre batidas foi intervalo?"*, impressao
 `escala/utils.py:861`, que mora **DENTRO** de `minutos_realizados_do_dia` (`:822`). Chamadores de
 producao dessa funcao: **0**, e isso e provado por AST, nao por grep -- o selo
@@ -53,8 +92,18 @@ na sua lista de nao-fazer. Se a resposta for *"ainda responde"*, a celula turno/
 a funcao, e isso e o seu `!`; se for *"nao responde"*, o pendente sai por CARACTERIZACAO e o que estava
 errado era a `zona` dele, nao o codigo. **Eu nao escolho** -- e vocabulario, nao implementacao (TRAVA
 JUIZ-NOVO, pela mesma razao).
+A resposta foi a PRIMEIRA, e com ela o `!` de apagar: a funcao saiu, os 6 testes sairam, o pendente saiu
+no MESMO commit e a celula fechou pela funcao real (prova no topo). O rotulo `zona=TELA`, que eu havia
+medido FALSO, morreu junto com o pendente -- nao houve correcao de caracterizacao a fazer.
 
-**PAROU: relavratura da comp 10 -- o DIFF de frota SURPREENDE, e eu NAO aplico.** A condicao 1 da
+**O PAROU DA RELAVRATURA 10 FOI RESPONDIDO as 09:0x e SE LEVANTA**: *"aplica SO o realizado dos dia-colab
+da cura, e a deriva vira fatia propria com o numero dela publicado"*. O apply restrito e o **item (2) da
+ordem**, logo depois deste marco, e as condicoes da DINHEIRO-EM-COMPETENCIA-ABERTA valem inteiras (DIFF
+publicado antes -- esta a seguir --, reversao em `logs/`, exportada 09 intacta, prova depois). A medicao
+que levou o PAROU a mesa fica abaixo sem uma virgula mexida, porque o numero da deriva que ele mandou
+separar e EXATAMENTE o que esta nela.
+
+**O que era o PAROU (03:3x): o DIFF de frota SURPREENDE, e eu NAO apliquei.** A condicao 1 da
 DINHEIRO-EM-COMPETENCIA-ABERTA (*"DIFF de frota publicado no RELATO ANTES do apply"*) esta cumprida, e
 e' ela que me manda parar: pela §7b-2, *"DIFF que surpreende -> NAO aplica, PENDENTES 'PAROU: <motivo>',
 e SEGUE outra fatia"*. Medido na SOMBRA contra o **GRAVADO** -- nunca motor-x-motor, que foi a licao
@@ -158,13 +207,13 @@ fecho de 571 funcoes medidos as 03:4x sobre `logs/o191/impacto_join_detalhe_2026
 fechamentos nao elegiveis conferidos pela funcao real (`periodo_apuracao`) no banco de prod, so leitura.
 **Prod NAO foi tocada**: o DIFF rodou na sombra, no cpuset de teste.
 
-Proximo, e a esteira segue sem a resposta da lei acima e sem o seu `!` da relavratura: **CERT-AST** em
-pouso proprio, depois a **O145**. **A ordem entre essas duas e minha e tem motivo medido**: a O145 mede
-frota COM MOTOR, e isso vai na sombra (`medicao-com-motor-vai-na-sombra`) -- e a sombra esta ocupada com
-o apply da comp 10 que acabei de medir, so voltando ao estado de prod depois do refazer das **04:17**
-mais o bloco (~18 min). A CERT-AST e' de HOST (selos, `.git`, raiz cravada) e nao toca sombra nenhuma,
-entao ela cabe exatamente na janela em que a O145 nao caberia. Se a janela virar, a ordem volta a ser a
-do aval.
+Proximo, pela ordem DELE e nao pela minha: **(2) relavratura 10 restrita** ao realizado dos dia-colab da
+cura, com a deriva saindo como fatia propria e com numero; depois **(3) a O204** (`HORA-DO-APARELHO-LIDA-COMO-DATA`,
+BO de producao provado, que ele poe a frente dos BOs de tela); depois os **4 BOs de tela** na ordem do bloco
+(O197 -> O198 -> O199 -> O200); depois a **O145**. **Instrumento so depois disso**, e isso inclui o pouso do
+**CERT-AST**, que fica PARADO onde esta com trilha (`logs/cert-ast.pausado`, HEAD `0bb105db`) -- a ordem das
+09:0x o suspendeu com estas palavras: *"o pouso do CERT-AST e os carries O192/O193 PARAM onde estao, com
+trilha, e voltam depois"*. A O205 (gate que reverte por arquivo) nasce na mesma fila 2, atras dele.
 Os tres registros que respondem *"qual o item em curso"* (marcador
 `ORDEM-VIVA-TOPO`, celula do BACKLOG e esta linha) continuam DIZENDO O MESMO -- o item nao fechou, entao o
 marcador **nao se move** (`test_hook_nao_cobra_congelado.sh:107` fica VERMELHO se um discordar do outro).
