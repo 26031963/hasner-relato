@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 22:15:45.**
+**Medido em 04/10/2026 22:20:45.**
 
 | | |
 |---|---|
@@ -109,20 +109,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cx9rm8b.output (12 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● Controle (1) verde: o instrumento funciona — col250/09 tem 15 de 15 linhas com horas_trabalhadas, 165,54 h. O zero do doador é real. A
-  (2) morreu em Decimal - float:
-
-  Ran 1 shell command
-
-● Ambos os controles verdes: instrumento fiel (18/18 IGUAL), logo o zero do doador é do sistema. Agora a leitura que nomeia o sítio do
-  dinheiro — o papel que a ata da véspera dá às batidas do dia doador:
-
-  Ran 5 shell commands
 
 ● Sexto palpite errado de assinatura — para= é 'folha'|'cobranca':
 
@@ -136,9 +122,23 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Medido, 9/9: o juiz que o motor consulta responde porque='sem marcos no dna'. Torno o entregável durável antes de seguir:
 
-  Running 1 shell command…
+  Ran 3 shell commands
 
-· Jitterbugging… (10h 3m 47s · ↓ 1.2m tokens)
+● Agora corrijo as duas afirmações que não resistiram ao controle e escrevo o sítio que a medição nomeou:
+
+  Ran 1 shell command
+
+● O controle mudou a leitura; falta a mais barata e a que a lição "Hora truncada" cobra — o trace com segundos:
+
+  Ran 1 shell command
+
+● 9/9 a guarda L-085 disparou — e em quatro deles por segundos (7 s, 17 s, 29 s, 45 s). Escrevo isso antes de interpretar:
+
+  Ran 1 shell command
+
+  Advising using Fable 5.1
+
+· Jitterbugging… (10h 8m 47s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
