@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:52:31.**
+**Medido em 05/10/2026 02:57:31.**
 
 | | |
 |---|---|
@@ -39,7 +39,11 @@ fdd6f42c O191 passo 5: a soma propria do realizado SAI do montador, e a folga tr
 ## `git status --short`
 
 ```
+ M app/colaboradores/tests/test_ui_cal_competencia.py
  M app/config/crons_duracao.json
+ M app/docs/HANDOFF-SESSAO.md
+ M app/docs/RELATO.md
+?? bin/tests/test_relato_guarda_pedido_de_patch.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -113,16 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  boundaries of the pedido to restore:
-
-  Ran 4 shell commands
-
-● Now building the three cures. First the host-selo tripwire (the part that was promised on 02/10 and never built):
-
-  Ran 1 shell command
-
-● My own selo just went green by pointing at nothing — the false-green family it exists to kill. Hardening the root check and testing from
-  the real layout:
 
   Ran 1 shell command
 
@@ -138,11 +132,21 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Extractor renders exactly the 5 tokens I enumerated by hand, in under a second. Now cure A — the aged anchor inverts to the authority —
   built in a copy of HEAD:
 
-● Montar a cura A em copia do HEAD
-  ⎿  $ cd /home/ronald/saas-hasner/app/docs && awk 'NR<=60 && /^#{1,3} |^\*\*ESTADO/{print NR": "substr($0,1,110)}' RELATO.md
-     echo "---- total linhas:"; wc -l RELATO.md
+  Ran 3 shell commands
 
-· Jitterbugging… (14h 40m 33s · ↓ 1.6m tokens)
+● Now cure B — restoring the open pedido to the vivo RELATO, under a heading that states the law:
+
+  Rodar os 62 selos de host e as reguas de tickets · 1m 13s
+  ⎿  $ cd /home/ronald/saas-hasner && v=0; n=0
+     for s in bin/tests/test_*.sh; do n=$((n+1)); out=$(bash "$s" 2>&1); rc=$?
+     [ $rc -ne 0 ] && { v=$((v+1)); echo "VERMELHO rc=$rc $s"; echo "$out" | tail -4; }
+     done
+     echo "=== selos de host: $n rodados, vermelhos=$v ==="
+     echo "=== placar/regua dos tickets ==="
+     … (1m 13s)
+     (ctrl+b ctrl+b (twice) to run in background)
+
+* Jitterbugging… (14h 45m 34s · ↓ 1.6m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
