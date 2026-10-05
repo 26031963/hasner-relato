@@ -10,13 +10,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 18:22:01.**
+**Medido em 05/10/2026 18:27:10.**
 
 | | |
 |---|---|
-| `HEAD` local | `c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move` |
+| `HEAD` local | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
 | `origin/main` | `c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move` |
-| commits a subir (`ahead`) | **0** |
+| commits a subir (`ahead`) | **1** |
 
 ## Fabrica
 
@@ -29,22 +29,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## `git log --oneline -5`
 
 ```
+212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta
 c8031f6d [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move
 edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 eram 174
 8fce4967 [O195] o dia do turno se decidia por 17 segundos: o juiz mandava o plantao para o dia de folga
 c849f340 O topo do TICKETS fechado no ato do push (O112)
-cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECHA
 ```
 
 ## `git status --short`
 
 ```
  M app/config/crons_duracao.json
- M app/docs/BACKLOG.md
- M app/docs/HANDOFF-SESSAO.md
- M app/docs/LEIS.md
- M app/docs/PROMPTS.md
- M app/docs/RELATO.md
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -118,42 +113,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Docs-only commit — L-106 bears on that. Let me find whether there is a guard and how it defines a marco.
-
-  Ran 1 shell command
-
-● No guard exists yet (L-106's selo is explicitly fila 2; until then it is conduta), and O209 did close a fila-1 item. Before committing,
-  run the host selos — they answer in seconds and a refusal costs a whole suite.
+  the two owed measurements. Let me check the exact contract before writing.
 
   Ran 3 shell commands
 
-● All 62 host selos green — including test_lei_protege_sitio.sh and test_leis_indice.sh against the imported LEIS.md. Final check on that
-  import before committing.
+● Both owed measurements have PROMPTS lines but no OBRAS row — PROMPT-NAO-SE-REPETE says that means they were read, not received. Writing
+  the TICKETS line and the two missing rows in one act.
+
+  Ran 4 shell commands
+
+● Field [5] of that line says "no mesmo commit do codigo" — but this marco has no code. Correcting it to state the truth and the import
+  form.
 
   Ran 1 shell command
 
-● Deliverables are durable on disk: 80 laws on all three sides, and the live file differs from the audited branch by exactly one line (the
-  L-085 re-application the aval ordered). Calling the advisor before the commit.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Now the commit — paths only, message by heredoc, O209 the single bracketed id and every new id bare.
 
   Ran 1 shell command
 
-● Two real gaps the advisor flagged, both confirmed: no O209 line in TICKETS.md (which regua_tickets.sh cobra at pre-push) and no row for
-  the two owed measurements. Let me check the exact contract before writing.
+● crons_duracao.json correctly absent. Committing.
 
-● Ver se os dois avais devidos tem linha em PROMPTS
-  ⎿  $ cd /home/ronald/saas-hasner && echo '=== PROMPTS: PAUTA-DP-09-RELAVRATURA ==='; grep -n 'PAUTA-DP-09-RELAVRATURA' app/docs/*.md |
-     cut -c1-240; echo '=== PROMPTS: L-103 ==='; grep -n 'L-103' app/docs/PROMPTS.md | cut -c1-200
+  Committed 212b25a7, ran 1 shell command
 
-✢ Frolicking… (9h 31m 48s · ↓ 1.2m tokens)
+● One citation, one row; one commit ahead and it is mine. Pushing — the pre-push runs the full suite, so this goes in the background and I
+  won't touch the tree while it runs.
+
+  Ran 1 shell command
+
+●
+
+✻ Frolicking… (9h 36m 56s · ↓ 1.2m tokens · thought for 2s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

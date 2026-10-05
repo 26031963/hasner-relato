@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**212 obras abertas.**
+**214 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -221,3 +221,5 @@ lista — ela e o que esta EM PE._
 | **O212** | O INCREMENTAL DA SOMBRA NAO FECHA A FK DO CADASTRO | **fila 2, pouso de INSTRUMENTO proprio** |
 | **O213** | O TIPO DERIVADO DO MOTIVO DISCORDA DO TIPO DA ATA NO MESMO MARCO | **sem portao** -- achado medido, nao e d |
 | **O214** | HE-DECISAO-EM-ESCALA | espera `!` |
+| **O215** | PAUTA-DP-09-RELAVRATURA: O NUMERO DO DOMINIO, TXT x TXT | **sem portao** -- e MEDICAO na sombra, n |
+| **O216** | O NUMERO DA L-103 SE REPUBLICA COM O JUIZ CURADO | **sem portao** -- conta e publica, PRE-A |
