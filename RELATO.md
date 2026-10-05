@@ -2,21 +2,415 @@
 
 FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-4 FECHADOS com prova; os
 passos 5-6 sao a **O191**, e o passo 6 **NAO esta carimbado**. Atras dela, a **O145**.
-**ESTADO (05/10 01:2x): a cura (b)+(c) esta CONSTRUIDA e VERDE na copia -- `Ran 9629 / OK (skipped=42)`,
-RC=0 (`logs/o191/suite_copia2_20261004.out`) e 61 selos de host com `vermelhos: 0`. NADA aplicado na arvore
-viva, NADA commitado, NADA no ar.** **A leitura UNICA de impacto no GRAVADO esta FEITA** (secao de 01:1x,
-L-094 e, por **L-110**, medida de impacto e nunca validacao): **397 dia-colab / 114 colabs ganham numero
-(+197.933 min = +3.298,88 h)**, **15 / 12 colabs zeram (-2.716 min = -45,27 h)**, **0 `SOBE`, 0 `DESCE`,
-0 `PERDE_CHAVE`**, e **155 dia-colab / 43 colabs de DERIVA PREEXISTENTE (+17.889 min) que nao sao da cura**.
-Detalhe duravel em `logs/o191/impacto_join_detalhe_20261005.tsv`. **O deploy move ZERO na ata**, provado na
-fonte (`ponto/services/cartorio.py:85-106::impressao_insumos` hasheia so INSUMO, nunca a ata; o cron das
-06:28 segue contando `pulados`) -- a relavratura e ATO PROPRIO, fora deste marco. **A reversao existe ANTES
-de qualquer apply** (condicao 2 da DINHEIRO-EM-COMPETENCIA-ABERTA): `logs/o191/reversao_ata_o191_20261005.jsonl`,
-566 celulas lidas de PROD. O que falta para o pouso, na ordem: o commit do marco, o carimbo da sombra de HOJE
-(`--refazer --dump-agora` + `--bloco`, ~38 min; o de 04/10 serviu para MEDIR e e por isso que a medicao
-veio ANTES do refazer) e o deploy. Os tres registros que respondem *"qual o item em curso"* (marcador
+**ESTADO (05/10 02:1x): a O191 esta FECHADA e NO AR**
+PROVA: `RC_DEPLOY=0`, suite `Ran 9629 / OK (skipped=42)`, 61 selos de host `vermelhos: 0`, prova depois
+**4/4**, exportada 09 com **8** registros hash a hash (`diff` vazio), push `024608c7..eef236e1`.
+-- commit `fdd6f42c`, deploy
+`--sem-migrate` as 02:08:12 com `RC_DEPLOY=0`, sobre a suite `Ran 9629 / OK (skipped=42)` RC=0
+(`logs/o191/suite_copia2_20261004.out`) e 61 selos de host com `vermelhos: 0`. O ensaio na sombra veio
+ANTES de aplicar os `.py` (L-107) e carimbou `dia=20261005 status=OK tipo=completa diverge=0 erros=0`,
+com o bloco `69/69 · erro=0`. **A PROVA DEPOIS bateu 4/4** em quatro dia-colab nomeados lidos com o
+codigo no ar (`logs/o191/prova_depois_20261005.txt`): o numero que a sombra mediu e' o que subiu, a ata
+**nao se moveu** e o `sem_turno` viaja ao lado do zero. **Exportada 09 INTACTA**, 8 registros hash a hash
+(`diff` vazio entre `..._antes_` e `..._depois_20261005.txt`). Smoke com trafego real: 29 respostas, **0
+de 5xx, 0 traceback**. A leitura UNICA de impacto (secao de 01:1x, L-094 e, por **L-110**, medida de
+impacto e nunca validacao) diz o que a relavratura vai levar ao gravado: **397 dia-colab / 114 colabs
+ganham numero (+197.933 min = +3.298,88 h)**, **15 / 12 colabs zeram (-2.716 min = -45,27 h)**, **0
+`SOBE`, 0 `DESCE`, 0 `PERDE_CHAVE`**, e **155 dia-colab / 43 colabs de DERIVA PREEXISTENTE (+17.889 min)
+que nao sao da cura** (`logs/o191/impacto_join_detalhe_20261005.tsv`). **O deploy move ZERO na ata**,
+provado na fonte (`cartorio.py:85-106::impressao_insumos` hasheia so INSUMO; o cron das 06:28 segue
+contando `pulados`) e agora tambem na prova depois -- **a relavratura e ATO PROPRIO**, fora deste marco:
+comp 10 pre-aprovada pela DINHEIRO-EM-COMPETENCIA-ABERTA, comp 09 como Pauta DP com os dois numeros. A
+reversao existe desde antes do apply (condicao 2): `logs/o191/reversao_ata_o191_20261005.jsonl`, 566
+celulas lidas de PROD. **O passo 6 da CELULA-TURNO-FECHA NAO esta carimbado**, e a celula turno/marcos da
+matriz **nao fechou** com esta cura -- o `+2` da nota do placar e' `+1`, medido. **O PUSH DO MARCO VOLTOU
+VERMELHO em 2 selos as 02:21** e a causa era a DIETA do proprio `fdd6f42c`, que levou do RELATO vivo o
+contrato de NOME de dois pedidos de patch (secao de 02:5x): curado em DOIS atos pelo estado medido de
+cada pedido -- a UI-CAL pousou e a assercao dela **inverteu** para a autoridade de codigo, a fatia 2 segue
+ABERTA e o pedido **voltou** ao vivo -- mais o tripwire que faltava desde 02/10,
+`bin/tests/test_relato_guarda_pedido_de_patch.sh`. **O PUSH POUSOU as 03:17** -- `024608c7..eef236e1
+main -> main`, suite `Ran 9629 / OK (skipped=42)` mais `Ran 22 / OK`, `pre-push: OK -- push liberado`,
+e `HEAD == origin/main == eef236e1`. **MARCO FECHADO** (handoff em 44 linhas).
+
+**lei: sitio com ZERO chamador de producao ainda "responde a pergunta por conta propria"?** (nao devolve
+turno -- PAREI-DE-LEI-NAO-DEVOLVE-TURNO; a esteira SEGUE abaixo). E o que SEGURA o passo 6, e eu nao
+tenho saida sem a sua palavra, porque as duas estao fechadas por regra. Os numeros, medidos agora:
+`PENDENTES['turno/marcos']` tem **1** pendente -- Q6, *"o vao entre batidas foi intervalo?"*, impressao
+`escala/utils.py:861`, que mora **DENTRO** de `minutos_realizados_do_dia` (`:822`). Chamadores de
+producao dessa funcao: **0**, e isso e provado por AST, nao por grep -- o selo
+`ponto/tests/test_realizado_do_dia_autoridade.py:139` cobra `chamados.count(...) == 0`, e o censo de
+texto no app inteiro devolve so comentario, lapide e teste. O consumidor vivo dela sao **6 testes**
+(`escala/tests/test_realizado_intervalo.py`), que fixam os numeros da semantica VELHA (731, 540, 720,
+243, 419, 600) -- e **243** e **419** sao justamente cauda sem saida, o dia que pela lei de 03/10 17:2x
+passa a levar a PALAVRA em vez de soma. A autoridade cobre as mesmas PERGUNTAS com casos proprios:
+intervalo em `test_realizado_do_dia_autoridade.py` (colab 940, 11/09 -- 480/500/540) e cauda /
+cross-midnight em `escala/tests/test_realizado_cronologico.py` e `ponto/tests/test_o96_par_da_ata_e_pausa.py`.
+Um numero ao lado: o rotulo `zona=TELA` do pendente ficou **FALSO** -- sem chamador de producao ele nao
+alcanca tela nenhuma, e a zona e o que diz o quanto ele dói. As duas saidas que eu teria estao fechadas:
+tirar o pendente com a impressao ainda no codigo e o **PROIBIDO literal** do aval, e apagar a funcao esta
+na sua lista de nao-fazer. Se a resposta for *"ainda responde"*, a celula turno/marcos so fecha apagando
+a funcao, e isso e o seu `!`; se for *"nao responde"*, o pendente sai por CARACTERIZACAO e o que estava
+errado era a `zona` dele, nao o codigo. **Eu nao escolho** -- e vocabulario, nao implementacao (TRAVA
+JUIZ-NOVO, pela mesma razao).
+
+Proximo, e a esteira segue sem a resposta acima: a **relavratura** (ATO PROPRIO, fora do marco que
+acabou de fechar) -- comp 10 pre-aprovada pela DINHEIRO-EM-COMPETENCIA-ABERTA com as quatro condicoes,
+comp 09 como Pauta DP com os dois numeros; depois **CERT-AST** em pouso proprio e a **O145**.
+Os tres registros que respondem *"qual o item em curso"* (marcador
 `ORDEM-VIVA-TOPO`, celula do BACKLOG e esta linha) continuam DIZENDO O MESMO -- o item nao fechou, entao o
 marcador **nao se move** (`test_hook_nao_cobra_congelado.sh:107` fica VERMELHO se um discordar do outro).
+
+---
+
+# PEDIDOS DE PATCH **ABERTOS** — A DIETA NAO MOVE ISTO
+
+> **A LEI E DA PROPRIA DIETA DE PROSA**, escrita em 02/10 23:5x: *"a dieta move o que ja aconteceu,
+> nao o que ainda tem de acontecer"*. Pedido de patch ABERTO e' **contrato entre duas metades de uma
+> fatia**, nao historia: a metade de TELA ja esta na arvore, atras de um gate, e a metade de NUCLEO
+> le **aqui** o nome das chaves de contexto. Nome diferente nao reprova -- so **CALA** (o `{% if %}`
+> nao abre e a tela sai byte a byte igual), e e' por isso que o nome e' cobrado por selo.
+>
+> **ESTA SECAO JA FOI QUEBRADA DUAS VEZES PELO MESMO ATO**, as duas descobertas pela suite inteira:
+> 02/10 (push 94, levou `competencia_rotulo`) e **05/10 `fdd6f42c`, que e' meu** -- a dieta do marco
+> O191 moveu 5.548 linhas do vivo e levou o pedido INTEIRO da fatia 2 junto, e o push do marco voltou
+> VERMELHO em 2 selos **depois de 619 s de suite**. Na primeira vez a cura foi restaurar a palavra, e
+> so isso: **nenhuma guarda nasceu**, entao a classe sobreviveu para reaparecer tres dias depois.
+> Agora existe o tripwire: **`bin/tests/test_relato_guarda_pedido_de_patch.sh`**, que le por AST dos
+> PROPRIOS selos quais nomes o vivo tem de carregar (nunca uma lista digitada: a lista repetida foi o
+> buraco dos LABELS em quatro lugares) e fica VERMELHO **em menos de 1 s**, na regua, antes da suite.
+>
+> **Ao arquivar pela dieta: esta secao fica.** Quando a metade de nucleo pousar, o pedido vira
+> historia e vai para o `RELATO-ARQUIVO.md` **no mesmo commit** que religa os selos pulados -- e a
+> assercao do selo **inverte** para a autoridade de codigo, como a da UI-CAL-COMPETENCIA inverteu
+> hoje (ela passou a cobrar `competencia_rotulo` em `colaboradores/services/calendario.py`, porque as
+> duas metades dela pousaram: `:225` o modo, `:857` o rotulo). Selo nao se apaga; a pergunta troca.
+>
+> Copia integral da historia deste pedido, com a conversa em volta: `app/docs/RELATO-ARQUIVO.md`
+> (a partir de `# PEDIDO DE PATCH DA RAIA UI -> MAIN`, linha ~23.954). **Mover, nunca apagar.**
+
+## 05/10 02:5x — O PUSH DO MARCO VOLTOU **VERMELHO EM 2 SELOS**, E A CAUSA FOI A MINHA PROPRIA DIETA
+
+**O FATO, com os numeros.** O push do marco O191 rodou a suite inteira -- `Ran 9629 tests in 619.614s`
+-- e voltou `FAILED (failures=2, skipped=42)`, com `error: failed to push some refs`. Os dois:
+`colaboradores.tests.test_ui_cal_competencia::test_MORDE_o_gate_e_a_MESMA_palavra_nos_QUATRO_sitios` e
+`ponto.tests.test_tela_gestao_he_fatia2_lote_limite::test_MORDE_a_fatia_2_segue_REGISTRADA_com_o_pedido_de_patch`.
+Os dois cobram do **RELATO VIVO** o contrato de NOME de um pedido de patch, e os dois ficaram vermelhos
+pelo MESMO ato: o `fdd6f42c` (o commit da cura) levou **5.548 linhas** do vivo para o
+`RELATO-ARQUIVO.md` pela DIETA DE PROSA, **a mao**, e junto foram `competencia_rotulo`,
+`url_autorizar_marcados`, `abaixo_limite`, `limite_decisao_rotulo` e `autorizar_he_marcados`. Os selos
+acertaram; quem errou fui eu.
+
+**E A CASA JA PAGOU ISSO UMA VEZ, TRES DIAS ATRAS.** `RELATO-ARQUIVO.md:21978` registra o push 94 de
+02/10 falhando no MESMO selo, pelo MESMO motivo, com a lei ja escrita na mesma linha: *"pedido de patch
+ABERTO nao e historia: a dieta move o que ja aconteceu, nao o que ainda tem de acontecer"*. A cura
+daquele dia foi **restaurar a palavra, e so isso** -- `grep -c` = 4 e segue. Nenhuma guarda nasceu, e
+por isso a classe estava viva esperando a dieta seguinte, que fui eu. **MEIA-CORRECAO E PIOR QUE
+NENHUMA**: restaurar cura o CASO; o que cura a CLASSE e um leitor que pergunte, antes da suite, se o
+vivo ainda carrega o que os selos cobram dele. **O tripwire e o entregavel desta linha; a restauracao e
+a metade facil.**
+
+### DOIS PEDIDOS, DOIS ESTADOS DIFERENTES -- e por isso DUAS curas, nao uma
+
+A pergunta que decide a cura nao e "como devolvo a palavra", e **"este pedido ainda esta ABERTO?"**.
+Medido, nao suposto:
+
+| pedido | metade de NUCLEO | veredito | cura |
+|---|---|---|---|
+| **UI-CAL-COMPETENCIA** | `colaboradores/services/calendario.py:225` (`modo == 'competencia'` lendo `janela_fechamento`) **e** `:857` (`'competencia_rotulo'` no dicionario INCONDICIONAL) | **POUSOU** -- o pedido FECHOU | a assercao **INVERTE**: passa a cobrar o nome na AUTORIDADE de codigo, nao no diario |
+| **GESTAO-HE-FATIA-2-LOTE-E-LIMITE** | `grep -rn autorizar_he_marcados --include=*.py` fora de `/tests/` = **0 sitio** | **ABERTO** | o pedido **VOLTA** ao vivo, na secao acima, com a lei no cabecalho |
+
+A inversao e a lei da casa, nao invencao de agora (`caracterizacao-de-defeito-curado-se-inverte`):
+**selo nao se apaga, a pergunta troca**. E a pergunta nova e' mais FORTE que a velha -- "o diario cita a
+palavra" virou "a view que monta o contexto manda esta chave" --, porque ancorar contrato num arquivo
+que a propria lei esvazia a cada 3 dias era fraqueza estrutural: o RELATO tem **teto de 3 dias**, e a
+palavra ja foi levada DUAS vezes. A prosa do cabecalho daquele selo, que mandava a outra metade ler o
+RELATO, envelheceu **no mesmo ato** e foi corrigida no mesmo commit (ela diria uma mentira a partir de
+hoje).
+
+### O TRIPWIRE: `bin/tests/test_relato_guarda_pedido_de_patch.sh`
+
+Ele le **por AST dos PROPRIOS selos** quais nomes o vivo tem de carregar -- nunca uma lista digitada
+dentro dele, que foi o buraco dos LABELS em quatro lugares. Universo: todo `app/*/tests/*.py` que le
+`docs/RELATO.md`; tokens: o primeiro argumento de cada `assertIn` **cujo palheiro e o texto do RELATO**,
+resolvendo o `for nome in (VAR, '...')` que ENVOLVE a assercao e as constantes de modulo. Reproduz em
+**menos de 1 s** o vermelho que custou 619 s de suite.
+
+**TRES DEFEITOS MEUS, achados construindo ele, e os tres sao da mesma familia -- sinal fraco lido como
+sinal bom:**
+1. **ele passou VERDE apontando para NADA.** Rodado de fora de `bin/tests/`, o `BASH_SOURCE/../..` caiu
+   no scratchpad, o glob achou 0 arquivo e ele imprimiu `ZERO DECLARADO ... OK`. Universo vazio POR LEI
+   e universo vazio POR CAMINHO ERRADO nao podem ter a mesma cor: agora a **raiz se prova** antes de
+   qualquer afirmacao (`RED raiz errada`, rc=3).
+2. **ele cobrava um token que a fatia 2 PROIBE.** O extrator rendeu 6 nomes, e o 6o era `he-barra` --
+   uma classe de CSS que mora num `assertNotIn` **contra o markup**, no mesmo arquivo, num `for` com o
+   alvo tambem chamado `nome`. CRITERIO PELA FORMA CONTA ERRADO: o token se liga ao **PALHEIRO**, nunca
+   a funcao. Com o palheiro amarrado: **5 tokens, exatamente o censo que eu tinha feito a mao**.
+3. **ele ficou CEGO para o arquivo da UI-CAL**, que escreve a leitura inline
+   (`assertIn(VAR, io.open(relato).read())`) em vez de guardar o texto numa variavel. Cegueira aqui
+   seria o guarda cobrando MENOS do que a suite -- entao o palheiro inline conta, e **arquivo que le o
+   RELATO e nao rende token nenhum fica VERMELHO** (`RED extrator cego`), que e a anti-vacuidade do
+   proprio extrator.
+
+O caso que MORDE: o mesmo checador roda contra o vivo com **um token apagado** e tem de acusar. Dois
+valores, dois resultados -- sem ele o selo passaria com um `exit 0` cravado.
+
+**O LIMITE, dito antes que alguem descubra por acidente:** `bin/tests/` **nao roda no pre-push**
+(`bin/pre-push.sh:15` diz isso em letra), so na **regua**. Entao o ganho e' "a regua acusa em 1 s" --
+no pre-push a rede continua sendo a suite, lenta. Mover `bin/tests/` para dentro do pre-push e' decisao
+de esteira, nao desta cura, e fica REGISTRADA, nao feita. Pela mesma linha fica registrado o que eu
+**nao** construi: a dieta ainda e' feita **a mao**, e o script que a faria (`relato_dieta.sh`,
+recortando por titulo e PULANDO a secao de pedidos abertos) e' item, nao fatia de agora -- o bug do
+caminho era o tripwire que faltava, nao a ferramenta que falta.
+
+**VERDE:** `bin/suite.sh --only` nos tres modulos (os dois curados + `test_tela_gestao_he_calendario`,
+o outro lado do interruptor da fatia 2) = `Ran 30 tests / OK (skipped=7)`. **62 selos de host,
+vermelhos=0** (o novo incluido). `tickets_placar: OK`, `regua_tickets: OK`. Os 5 nomes conferidos no
+vivo um por um.
+
+
+# PEDIDO DE PATCH DA RAIA UI -> MAIN: **GESTAO-HE-FATIA-2-LOTE-E-LIMITE** (01/10 20:1x-21:xx, `wt-ui`)
+
+> **RECORTE DE 01/10 20:5x, e ele muda o que esta escrito abaixo.** A obra virou DUAS fatias. A **FATIA 1** --
+> celula com o numero, dia de HE em FUNDO CHEIO, tres estados por led+risco+fundo, **clique no dia disparando
+> a porta POR DIA que JA EXISTE** (`ponto:decidir_he`, com o motivo pelo `hxPerguntar` da casa) e tabela de
+> apoio sem botao repetido -- e **SO TEMPLATE**, esta commitada na raia e **nao precisa de nada desta secao**:
+> ela usa porta que ja esta no ar, entao **nao ha janela de perigo** e merge/deploy nao esperam patch de `.py`.
+> O que sobrou nesta secao e a **FATIA 2**: a barra unica de lote e o limite de decisao por cadastro. Os selos
+> dela nao foram apagados -- estao em `app/ponto/tests/test_tela_gestao_he_fatia2_lote_limite.py`, PULADOS com
+> o motivo escrito, porque selo verde afirmando sobre markup ausente e pior que selo nenhum.
+>
+> **A LEI DO LIMITE ESTA RESPONDIDA** (ordem 20:5x): **opcao (b)** -- o limite filtra o **contador E o ato**.
+> Entao o patch 3 abaixo muda num ponto: `ponto/views.py:558` (`recusar_he_em_lote`, o `brutos` do
+> `todos_sem_decisao=1`) tambem passa a ignorar o dia abaixo do limite, e o botao de ciencia deixa de
+> prometer 0 e gravar 12. A pergunta que eu levantei com o numero -- 12 dias de 9 min do colab do habito --
+> era exatamente esta, e ela fecha aqui.
+>
+> **A ORDEM DO MERGE desta secao (patch 1 -> `deploy.sh` -> merge) vale para a FATIA 2, nao para a fatia 1.**
+> A nota em caixa alta mais abaixo foi escrita quando as duas eram uma so obra.
+
+A metade de TELA esta construida e COMMITADA na `raia-ui`. **Ela nao sobe sozinha**: o calendario marca, mas a
+**barra nasce DESLIGADA** e o **limite de decisao nao apaga celula nenhuma** enquanto os tres patches abaixo
+nao pousarem na main. Os tres sao `.py`/migration, que a raia 2 nao toca (FILA-2-EM-RAIA-PROPRIA).
+
+**LEI-AKITA: origem=`ponto/views.py` + `colaboradores/models.py` + `ponto/services/gestao_he.py`,
+testemunha=`DecisaoHE` pela porta `ponto/portas/he.py::decidir_he` (nenhum leitor novo),
+RED=`ponto/tests/test_tela_gestao_he_calendario.py` (15 casos, 2 que MORDEM por renderizar o recorte do
+proprio template nos DOIS cenarios), quem-mais-le=`gestao_he.html` + `gestao_he_pdf` (o papel le a MESMA `enriquecer`), juizes novos=0.**
+
+## O QUE A TELA JA FAZ SEM PATCH NENHUM, e por que isso e seguro
+
+Com o contexto de hoje o HTML servido muda de FORMA (celula com `▲19`/`▼5`, tres estados por led + risco +
+fundo, dia clicavel que marca, tabela recolhida) e **nao muda de PODER**: a barra nao tem `method` nem
+`action`, o `<button>` dela nasce `disabled` e o motivo esta em texto visivel ao lado -- nunca num `title`,
+que e o que a LEI-UI **L4** proibe (`app/docs/LEIS-UI.md:39`). `{% url %}` de rota inexistente **nao entra**:
+`NoReverseMatch` nao desabilita um botao, derruba a tela -- foi o apagao de 23/09 (cinco 500 em
+`/colaboradores/<id>/calendario/`).
+
+> **ATENCAO NA ORDEM DO MERGE, e isto e medido, nao suposto.** Template e bind-mount: ele muda a tela NA HORA
+> (secao 2 do CLAUDE.md). O calendario novo **nao tem botao Autorizar por linha** -- o desenho aprovado pede
+> *"tabela recolhida e sem botao por linha"* --, e a barra que o substitui so liga com o patch 1. Entao, entre
+> o merge e o `deploy.sh` do patch 1, **a tela nao tem caminho de AUTORIZAR** (a CIENCIA em lote continua
+> inteira: ela e `recusar_he_em_lote`, que ja existe). Merge e deploy sao **UM ato** (MERGE DE RAIA CAI E
+> RECARREGA NO MESMO ATO, corte 30/09 17:4x): aplicar o patch 1, `bin/deploy.sh`, e so entao mergear a tela --
+> ou mergear e deployar sem nada no meio. Nunca a tela primeiro.
+
+## PATCH 1 -- a view de laco e o contrato de NOME `url_autorizar_marcados`
+
+**L-081 nao cai, e nao nasce porta de lote** (decisao de 01/10 20:1x, item 3): um clique na barra = **N ATOS,
+um por dia marcado**, cada um pela porta `decidir_he`, com a propria trilha, a propria idempotencia e a
+propria relavratura. `ponto/portas/he.py:175::autorizar_em_lote` **continua levantando** -- e a funcao que
+existe para explicar por que nao existe --, e o laco mora na VIEW, exatamente como
+`ponto/views.py:512::recusar_he_em_lote` ja faz com `recusar_em_lote`.
+
+**(a) `app/ponto/views.py`** -- view nova, logo depois de `decidir_he` (que termina em `:508`):
+
+```python
+@login_required
+def autorizar_he_marcados(request):
+    """A BARRA UNICA DO CALENDARIO: N dias marcados, UM motivo, N ATOS (desenho Ronald 01/10 18:3x). POST.
+
+    NAO E LOTE E NAO E PORTA NOVA: cada `item` vira UMA chamada de `ponto/portas/he.py::decidir_he`, com a
+    propria trilha e a propria idempotencia -- o mesmo desenho de `recusar_he_em_lote`, e pela mesma razao
+    escrita la (um "modo lote" dentro da porta criaria um caminho de escrita que nenhum selo de idempotencia
+    cobre). O que a barra economiza e o GESTO do admin, nunca o ato.
+
+    O MOTIVO E UM E VALE PARA OS N DIAS: a tela mostrou os N dias e a conta antes do clique, e a porta grava
+    o mesmo porque em cada um. Motivo por dia eram treze campos abertos -- a poluicao de 01/10 11:1x.
+
+    OS MINUTOS VEM DA TELA, por dia, como na `decidir_he`: a porta nao os recalcula (a lapide dela conta por
+    que). `item` = `colab:data:minutos`, o MESMO formato que `recusar_he_em_lote` ja le -- nao nasce
+    vocabulario de transporte novo.
+    """
+    import datetime as _dt
+
+    from django.urls import reverse
+
+    from core.respostas import resposta_acao
+    from ponto.portas.he import DecisaoHERecusada, decidir_he as _porta
+    if request.method != 'POST':
+        from django.http import Http404
+        raise Http404
+    _volta = request.POST.get('voltar') or reverse('ponto:gestao_he')
+    _motivo = (request.POST.get('motivo') or '').strip()
+    brutos = request.POST.getlist('item')
+    if not brutos:
+        return resposta_acao(request, ok=False, redirect_url=_volta,
+                             msg='Nenhum dia marcado. Clique nos dias do calendario e confirme de novo.')
+    _ids = set()
+    for b in brutos:
+        _p = (b or '').split(':')
+        if len(_p) == 3 and _p[0].isdigit():
+            _ids.add(int(_p[0]))
+    _colabs = {c.pk: c for c in Colaborador.objects.filter(pk__in=_ids)}
+    ok, no_op, erros, malformados = 0, 0, [], 0
+    for b in brutos:
+        _p = (b or '').split(':')
+        if len(_p) != 3:
+            malformados += 1
+            continue
+        try:
+            _c, _d, _m = _colabs[int(_p[0])], _dt.date.fromisoformat(_p[1]), int(_p[2])
+        except (KeyError, ValueError, TypeError):
+            malformados += 1
+            continue
+        try:
+            r = _porta(_c, _d, 'autorizado', minutos=_m, autor=request.user,
+                       motivo=_motivo, request=request)
+        except DecisaoHERecusada as e:
+            # CADA DIA E UM ATO INDEPENDENTE: um dia que a porta recusa nao desfaz os outros, e volta
+            # NOMEADO -- nunca contado em silencio.
+            erros.append((getattr(_c, 'pk', _c), _d, str(e)))
+            continue
+        no_op += 1 if r['no_op'] else 0
+        ok += 0 if r['no_op'] else 1
+    _partes = ['%d dia(s) autorizados, com trilha por dia. O fechamento deles foi posto na fila de '
+               'recalculo.' % ok]
+    if no_op:
+        _partes.append('%d ja estavam autorizados (nada mudou).' % no_op)
+    if erros:
+        _partes.append('%d recusados pela porta: %s' % (
+            len(erros), '; '.join('col%s %s -- %s' % x for x in erros[:5])))
+    if malformados:
+        _partes.append('%d item(ns) ilegiveis foram ignorados.' % malformados)
+    return resposta_acao(request, ok=not (erros or malformados), msg=' '.join(_partes),
+                         redirect_url=_volta)
+```
+
+**(b) `app/ponto/urls.py:19`** -- depois da linha do `decidir_he`:
+
+```python
+    # A BARRA UNICA DO CALENDARIO: N dias marcados num gesto, N ATOS na porta `decidir_he` (18:3x).
+    # NAO e porta de lote -- `autorizar_em_lote` segue levantando, e o laco mora na view (L-081).
+    path('gestao-he/autorizar-marcados/', views.autorizar_he_marcados, name='autorizar_he_marcados'),
+```
+
+**(c) `app/ponto/views.py:768`** -- no dict do `render` de `gestao_he`, ao lado de `'pode_autorizar'`:
+
+```python
+        # O CONTRATO DE NOME com a metade de TELA: sem esta chave o `{% if %}` nao abre, a barra nasce sem
+        # `method`/`action` e diz por que. Mandar OUTRO nome nao reprova -- so cala (a barra nunca liga).
+        # Selo: `ponto/tests/test_tela_gestao_he_calendario.py` (constante `VAR`).
+        'url_autorizar_marcados': reverse('ponto:autorizar_he_marcados') if tem_acao(
+            request.user, 'autorizar_he') else '',
+```
+(a view ja tem `from django.urls import reverse`? **nao**: `gestao_he` nao importa `reverse` -- incluir
+`from django.urls import reverse` no corpo dela, como as irmas fazem.)
+
+**O selo da metade de tela que fica VERMELHO se o nome divergir** ja esta escrito:
+`test_MORDE_o_contrato_de_NOME_e_a_MESMA_palavra_nos_QUATRO_sitios` e
+`test_MORDE_o_contrato_de_NOME_esta_escrito_no_RELATO`.
+
+**RED a escrever no MESMO commit do patch** (o que a tela nao pode provar): marcar 3 dias + 1 confirmacao =
+**3 `DecisaoHE` autorizadas e 3 linhas de `LogAuditoria` com `acao='decidir_he'`**, e a segunda confirmacao
+com os mesmos 3 itens = **0 trilha nova** (idempotencia herdada da porta, contrato 2 de 13/09). Mais o caso
+que MORDE: um item com `minutos=0` volta em `erros` e **nao derruba** os outros dois.
+
+## PATCH 2 -- os dois selos que a L-081 trava e que o desenho de 18:3x SUPERA
+
+Estes dois ficam VERMELHOS no instante em que a barra ligar, e **isso e correto**: eles guardam a redacao
+antiga da L-081 no nivel de TELA, e o desenho aprovado em 01/10 18:3x a alterou (a porta segue um dia por
+ato; o que passou a poder ser multiplo e o GESTO). Quem aplicar o patch 1 ajusta os dois no mesmo commit:
+
+* `app/ponto/tests/test_tela_gestao_he.py:122::test_MORDE_AUTORIZAR_e_um_dia_por_ato_e_RECUSAR_pode_ser_em_LOTE`
+  -- ele proibe controle de lote dentro de form que autoriza. Hoje ele passa **por vacuidade** (nao ha mais
+  form com `decidir` na tag de abertura), e isso ja esta registrado aqui para nao passar por cura. A pergunta
+  dele muda de *"ha controle de lote num form que autoriza?"* para *"o form que autoriza manda UM `item` por
+  DIA, e nao uma lista de dias num campo?"* -- o que prende a lei que sobrou: **N atos, nunca 1 ato com
+  lista**.
+* `app/ponto/tests/test_tela_gestao_he.py:384::test_MORDE_AUTORIZAR_em_lote_NAO_EXISTE` -- **NAO muda**.
+  `ponto/portas/he.py:175::autorizar_em_lote` continua levantando, porque **nao nasce porta de lote**. Ele e o
+  selo que prova que o laco ficou na view.
+
+## PATCH 3 -- o LIMITE DE DECISAO e cadastro da empresa (default 10 min, SO DE TELA)
+
+Dois contratos de NOME, e os dois estao cravados na metade de tela: a chave por dia **`abaixo_limite`** e o
+rotulo pronto **`limite_decisao_rotulo`**. O template **nao compara minuto com nada** -- sem a chave, nenhuma
+celula aparece apagada, e sem o rotulo a legenda do limite nem se escreve (explicar um estado que a tela nao
+produz e a testemunha afirmando sobre o que nao mediu). Selo:
+`test_MORDE_o_template_NAO_compara_minuto_com_LIMITE_nenhum`.
+
+**(a) `app/colaboradores/models.py:46`** -- ao lado de `dia_inicio_competencia`, que e o vizinho certo (as
+duas sao regra que varia por EMPRESA, LEI-AKITA 12):
+
+```python
+    limite_decisao_he_min = models.PositiveSmallIntegerField(
+        default=10,
+        help_text='SO DE TELA: dia com menos minutos de HE fora do marco que isto nao e CHAMADO a decisao na '
+                  'Gestao de HE (aparece apagado, sem led). NAO muda dinheiro e NAO muda a L-097 -- o minuto '
+                  'segue bloqueado do mesmo jeito; o que o limite decide e se o admin e chamado a olhar.')
+```
+
+**(b) migration** `app/colaboradores/migrations/0056_limite_decisao_he_min.py` (`AddField`, default 10, sem
+`RunPython`). **Ela segura o deploy** (migration pendente trava o `deploy.sh`, DEPLOY JA), entao sobe junto.
+
+**(c) `app/colaboradores/admin.py:6`** -- o cadastro E a UI do django admin, como e para o
+`dia_inicio_competencia`; o campo ganha LEITOR visivel em `list_display`:
+
+```python
+    list_display = ["nome", "cnpj", "ativa", "dia_inicio_competencia", "limite_decisao_he_min"]
+```
+
+**(d) `app/ponto/services/gestao_he.py:121`** -- em `_tira`, no dict de `por_data`, UMA chave nova. O leitor
+COMPARA (e e o unico que compara), e o limite chega por argumento -- nunca por `getattr(empresa, ...)` dentro
+da funcao, que seria o juiz lido duas vezes:
+
+```python
+            'abaixo_limite': bool(limite) and _m <= limite,
+```
+`_tira(dias, ini, fim, limite=0)` ganha o parametro, `enriquecer(..., limite=0)` o repassa nas TRES chamadas
+(`:271`, `:296` e `:306`), e `ponto/views.py` o le do cadastro: `getattr(empresa, 'limite_decisao_he_min', 0)`.
+
+**(e) o CONTADOR muda de universo, e e aqui que mora o observavel dele** (*"col616 comp 09 com o 'sem
+decisao' caindo de 13 para os acima do limite, numero publicado"*). Em
+`app/ponto/services/gestao_he.py:246` e `:302`, `sem_decisao` passa a contar **so o que PEDE decisao**:
+
+```python
+        linha['sem_decisao'] = sum(1 for d in linha['dias']
+                                   if d['estado'] == 'sem_decisao' and not d.get('abaixo_limite'))
+```
+**CUIDADO, e isto e L1 (CONTADOR == UNIVERSO):** o mesmo `sem_decisao` alimenta (i) o chip da linha, (ii) o
+total do topo, (iii) o botao *"Dar ciencia em tudo que esta sem decisao -- N dia(s)"* e (iv) o universo que
+`ponto/views.py:538::recusar_he_em_lote` relê com `todos_sem_decisao=1`. Se o contador encolher e o ATO nao,
+o botao promete 4 e faz 13 -- **o numero e a lista tem de sair do mesmo lugar**, e saem: os quatro leem a
+MESMA `enriquecer`. O que o patch precisa decidir **por escrito** e se a ciencia em lote tambem passa a
+ignorar os dias abaixo do limite (o `brutos` de `:558` filtra por `d.get('estado') == 'sem_decisao'`, hoje
+sobre a lista COMPLETA). **Pergunta de LEI no topo deste RELATO, nao decidida aqui.**
+
+**(f) `app/ponto/views.py:768`** -- o ROTULO vai PRONTO para a tela (L7/L2: o texto sai de onde a decisao
+mora; o NUMERO nunca entra no template):
+
+```python
+        'limite_decisao_rotulo': ('abaixo do limite de decisao (%d min ou menos, cadastro da empresa)'
+                                  % _lim) if _lim else '',
+```
+com `_lim = getattr(empresa, 'limite_decisao_he_min', 0) if empresa is not None else 0`.
+
+**RED do patch 3, no mesmo commit:** empresa com limite **7** -> dia de 7 min tem `abaixo_limite=True` e dia
+de 8 min **nao** (o caso que MORDE: com o default 10 cravado em qualquer sitio, 8 cairia abaixo e o selo
+passaria por coincidencia de numero -- e o gemeo exato do `21` cravado que `ponto/janelas.py` nasceu para
+matar); e empresa com limite **0/None** -> **nenhum** dia abaixo, que e o estado de hoje.
+
+---
 
 **L-110 `REFERENCIA-E-A-LEI` NASCEU HOJE, E REVOGOU UMA LEI DE MINUTOS ANTES DELA** (secao de 00:3x): a
 referencia de um numero e a **REGRA** aplicada ao cadastro e as batidas; o codigo de hoje **nao e gabarito**
@@ -241,6 +635,91 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 | **REFERENCIA-E-A-LEI** | 2026-10-05 00:3x | 0 h | lei L-110 escrita, no marco da O191 (L-106: docs viajam com o codigo). A lei REVOGADA foi desfeita no mesmo marco e nos quatro sitios em que ja havia entrado: linha do LEIS.md, mapeamento CORTES-que-viraram-lei, entrada do CORTES.json e a LEI-AKITA 13 do CLAUDE.md. O contador cravado do test_lei_akita.sh FICA em 13, porque a lei nova ocupa a mesma linha 13 -- e o rotulo dele, que dizia 12 em texto fixo, passou a derivar do $N medido | a lei no LEIS.md + a LEI-AKITA 13 na CLAUDE.md (com o contador do selo junto) + esta linha, no commit do marco da O191 |
 <!-- SEUS-CORTES:FIM -->
+
+## 05/10 02:1x — O191 PASSO 5 **NO AR** (`fdd6f42c`): A PROVA DEPOIS BATEU **4/4**, E A ATA NAO SE MOVEU
+
+**ESTADO: FECHADA e NO AR.**
+PROVA: deploy `RC_DEPLOY=0` as **02:08:12**; suite `Ran 9629 / OK (skipped=42)`; prova depois **4/4**
+dia-colab lidos com o codigo no ar (`logs/o191/prova_depois_20261005.txt`); exportada 09 **intacta**,
+**8** registros hash a hash (`diff` vazio); push `024608c7..eef236e1` as 03:17 com `pre-push: OK`.
+Commit `fdd6f42c`, deploy `bin/deploy.sh --sem-migrate` as **02:08:12**, `RC_DEPLOY=0`. O marco inteiro num ato so -- codigo, docs e diagrama -- e **nada entre o commit e o
+deploy**, que e' a L-107 (`MERGE DE RAIA CAI E RECARREGA NO MESMO ATO`): a arvore E o bind-mount, e
+foi uma janela de 11 min entre mergear e deployar que quebrou o lote de cartoes em 30/09.
+
+### A ORDEM FOI DECIDIDA PELA LEI, E ELA INVERTE O QUE PARECIA OBVIO
+O ensaio na sombra veio **ANTES** de aplicar os `.py`, nao depois. Parece ao contrario -- o instinto e'
+*"aplico, ensaio o que apliquei, deployo"* --, e e' justamente o instinto que abre a janela da L-107:
+o `--refazer --dump-agora` + `--bloco` levou **23 min** (01:41 -> 02:04), e nesses 23 min o `saas_ui`
+estaria servindo `escala/utils.py` novo com os modulos que o importam **velhos em memoria**. Ensaiar o
+codigo PRE-deploy nao e' concessao: e' o caso de rotina da casa -- o cron das 04:17 sempre monta o
+ensaio da arvore de antes do deploy do dia.
+Carimbo: **`dia=20261005 status=OK tipo=completa diverge=0 erros=0`**, `RC_REFAZER=0`, e o bloco
+**`69/69 comandos · erro=0 · alarme=7 · fora_do_ensaio=1`**, `RC_BLOCO=0`
+(`logs/o191/sombra_refazer_20261005.out`, `logs/o191/sombra_bloco_20261005.out`). O `alarme=7` e
+`fora_do_ensaio=1` **sao a linha de base** -- conferido contra os ensaios anteriores no `logs/`, onde
+a mesma dupla aparece em todos os blocos de 67+ comandos. Entre 00:00 e 04:00 o portao e' cego sem o
+`--dump-agora` (`sombra.sh:203` soma +1 quando o dump nao e' do DIA), e e' por isso que ele foi usado.
+
+### A PROVA DEPOIS (condicao 4 da DINHEIRO-EM-COMPETENCIA-ABERTA): **4/4 CONFERE**
+Quatro dia-colab NOMEADOS, dois de cada classe, lidos **com o codigo ja no ar**
+(`bin/sonda_frota.sh`, LEITURA, cpuset 4-7, banco `saas_hasner` -- `logs/o191/prova_depois_20261005.txt`).
+As duas colunas por FUNCAO REAL: `NO_AR` = `escala/utils.py::montar_grade_prevista_periodo` na forma
+literal do cartorio; `GRAVADO` = `escala/services/leitor_celula.py::grade_da_celula`, a MESMA chamada
+que o dinheiro faz em `folha/export.py:221`.
+
+| classe | colab | data | tipo | NO AR | esperado (sombra) | GRAVADO | esperado | `sem_turno` |
+|---|---|---|---|---|---|---|---|---|
+| `c:GANHA_CHAVE_VALOR` | col925 | 06/09 | folga | **731** | 731 | **0** | 0 | False |
+| `c:GANHA_CHAVE_VALOR` | col51 | 07/09 | folga | **240** | 240 | **0** | 0 | False |
+| `b:ZERA` | col250 | 29/09 | trabalho | **0** | 0 | **240** | 240 | **True** |
+| `b:ZERA` | col382 | 30/09 | trabalho | **0** | 0 | **364** | 364 | **True** |
+
+Tres coisas se provam de uma vez nessa tabela, e nenhuma delas e' a mesma:
+1. **o numero que a sombra mediu e' o numero que subiu** -- 4 de 4, sem um minuto de diferenca, e o
+   `curada` dessas linhas saiu do join de ontem (`logs/o191/impacto_join_detalhe_20261005.tsv`), nao
+   de uma remedicao de hoje;
+2. **a ata NAO se moveu** -- o `GRAVADO` de cada um esta identico ao de antes do deploy. E' a prova
+   VIVA do que a fonte ja dizia (`cartorio.py:85-106::impressao_insumos` hasheia so INSUMO, nunca a
+   ata, e o gate de `:568` segue contando `pulados`). O deploy troca o que a TELA calcula; **quem
+   move a ata e' a relavratura, e ela e' ATO PROPRIO, fora deste marco**;
+3. **o motivo viaja ao lado do numero** -- as duas linhas `b:ZERA` voltam com `sem_turno=True`, que e'
+   o L-103 ZERO DECLARADO funcionando: nao e' "zero porque somei e deu zero", e' "zero porque nao ha
+   par, e eu digo que nao ha". As duas `c` voltam com `False`, porque ali **ha** turno -- e' folga
+   trabalhada, e era exatamente o `or 0` do `ata_do_dia` que a calava.
+
+### EXPORTADA 09 INTACTA (condicao 3), HASH A HASH
+Os **8** registros de `ExportacaoDominio` da competencia 09 relidos de prod depois do deploy
+(`logs/o191/export09_hash_depois_20261005.txt`) e comparados com a leitura de ANTES
+(`..._antes_20261005.txt`): **`diff` vazio**. Os tres VIGENTES seguem `emp2 361d0f9685f86d3a` (210
+linhas), `emp3 5c503b95f9f9cd35` (86) e `emp4 84c78cd0871f5f52` (9); as 5 invalidadas tambem, com o
+hash preservado -- que e' o desenho da porta `ExportacaoDominio.invalidar`, a que nunca toca
+`conteudo` nem `hash_sha256`.
+
+### SMOKE EM PROD, COM TRAFEGO REAL
+O deploy provou as tres rotas (`core /health/ -> 200`, `ui /colaboradores/ -> 302`,
+`mensageria /health/ -> 200`), o selo BUG 128 ficou verde nas tres cascas e `importerror_500=0`.
+Depois dele, na janela de 4 min: **29 respostas reais** (`saas_ui` 23, `saas_core` 6), **0 de 5xx, 0
+traceback** -- e nao e' trafego sintetico, sao colaboradores batendo ponto as 02:10 (`colab=288` no
+PWA, `colab=u442` no app `okhttp`). Esta fatia nao toca `static/js/`, service worker nem template
+base, entao a FRONT-SEM-SMOKE nao se aplica: o que mudou foi derivacao de servidor.
+**Contei errado na primeira tentativa e vale o registro**: pedi `docker logs --since` com um carimbo
+ABSOLUTO em UTC, o daemon leu como hora local futura, e as tres cascas voltaram `respostas=0 500=0`.
+Zero de 500 com zero de respostas nao e' noticia boa, e' a pergunta nao feita -- a mesma familia da
+`sonda-nao-conclui-com-erro`. Refiz com janela relativa e o formato real do log (`-> NNN`).
+
+### O QUE FICA DE PE, E E' DE PROPOSITO
+- **A relavratura NAO esta neste marco.** Ela e' que leva os **397 dias (+3.298,88 h)** e os **15
+  (-45,27 h)** ao gravado. Competencia **10**: pre-aprovada pela DINHEIRO-EM-COMPETENCIA-ABERTA, com
+  as quatro condicoes (DIFF antes, reversao em `logs/`, exportada intacta, PROVA depois).
+  Competencia **09**: esta EXPORTADA, entao vira **Pauta DP com os dois numeros** (L-092 + a porta
+  REGEN-EM-EXPORTADA), pelo escritor canonico `bin/gerar_avais.py --escrever`.
+- **Risco nomeado que o tempo resolve sozinho, e por isso tem de ser dito**: a impressao hasheia
+  `cob_status` e `chamados`. Um dia de folga cujo chamado mude de estado e' rejulgado por tabela, e
+  nesse rejulgamento pega o numero novo **sem apply nenhum**. Nao e' dano -- e' mudanca LATENTE
+  pingando no tempo em vez de entrar num ato medido, e e' mais um argumento para a relavratura ser
+  deliberada e logo.
+- **Passo 6 da CELULA-TURNO-FECHA segue NAO carimbado**, e a celula turno/marcos da matriz **nao
+  fechou** com esta cura (secao de 01:1x, censo (1)): o `+2` da nota do placar e' **`+1`**.
 
 ## 05/10 01:1x — O191 PASSO 5: A LEITURA UNICA DE IMPACTO **MEDIDA NO GRAVADO** — 397 DIAS GANHAM NUMERO, 15 ZERAM, E **155 DERIVAS QUE NAO SAO MINHAS**
 
@@ -5100,3 +5579,5 @@ pergunta e qual leitor nao migrou.
 **05/10 01:00 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
 
 **05/10 02:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.
+
+**05/10 03:05 vigia da esteira (ALARME)** -- vigia sem efeito: 8 fatia(s) ativa(s) na fila e nenhum .out escrito ha 30 min -- a esteira esta parada e o vigia nao esta destravando.

@@ -1,16 +1,9 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:5 AFIRMA ato sem PROVA ao lado -- **ESTADO (05/10 02:1x): a O191 esta FECHADA e NO AR** -- commit `fdd6f42c`, deploy
->
-> O RELATO nao entrou neste ciclo porque uma afirmacao de ato
-> (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
-> seguem valendo -- eles descrevem, nao afirmam ato.
-
-
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 03:19:31.**
+**Medido em 05/10/2026 03:24:38.**
 
 | | |
 |---|---|
@@ -115,38 +108,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O push pousou: 024608c7..eef236e1  main -> main, suíte 9629 OK (skipped=42) + 22 OK, pre-push: OK — push liberado.
+
+● Achado que muda a condição 1: recalcular_fechamento_mes também apaga e recria DiaPago (dia_pago.py:208), e
+  calendario.py/folha/porta_export.py leem versao='motor' — mas a foto() do comando só fotografa FechamentoMensal. O DIFF tem de cobrir as
+  duas tabelas.
 
   Ran 1 shell command
 
-● MARCO FECHADO -- pode compactar. HEAD == origin/main == eef236e1, handoff em 44 linhas (teto 60).
-
-  Agora o passo 1 do que o hook manda seguir. Falta a medição que o advisor pediu para a linha de lei:
-
-  Searched for 1 pattern, ran 2 shell commands
-
-● O topo é contrato com o hook. Confiro como ele lê antes de escrever a linha de lei:
-
-  Ran 1 shell command
-
-● Escrevo a linha de lei no topo (ela não devolve turno) e carimbo o push:
+● O apply na sombra está recusando a lavratura do DiaPago por guarda declarada. Leio a guarda antes de concluir:
 
   Ran 2 shell commands
 
-● Dois achados do afirma_com_prova — e preciso saber se são meus ou pré-existentes, não supor:
+● Confirmado: a recusa é na metade oraculo (fechamento.py:714) — aditiva, que nenhum leitor lê hoje (os dois leitores filtram
+  versao='motor'), e o processados += 1 segue. A lavratura do motor (:661) não é a que falha. É a ZERO DECLARADO pré-existente, não o meu
+  apply.
 
-  Comparar o vivo com o HEAD para saber de quem e o achado
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io, importlib.util
-     spec = importlib.util.spec_from_file_location('m', 'bin/relato_afirma_com_prova.py')
-     m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
-     base = m.base_conhecida('.')
-     print('base: %d linhas' % len(base))
-     vi…
+  Ran 1 shell command
 
-✢ Jitterbugging… (15h 7m 33s · ↓ 1.6m tokens · thinking)
+● Enquanto o apply corre, preparo o DIFF da segunda tabela (a que a foto() do comando não cobre), como leitura pura de SQL nos dois bancos:
+
+  Ran 2 shell commands
+
+● Tabela e bancos confirmados. Enquanto o apply corre, extraio do impacto já medido o material da Pauta DP da 09 (os dois números), que é a
+  outra metade do ato:
+
+  Abrir os 397 e os 15 por competencia
+  ⎿  $ cd /home/ronald/saas-hasner && f=logs/o191/impacto_join_detalhe_20261005.tsv; echo "=== classe x competencia (dia-colab) ==="; awk
+     -F'\t' '{print $1" comp"$3}' "$f" | sort | uniq -c; echo; echo "=== GANHA_CHAVE_VALOR e ZERA: colabs distintos por comp ==="; for c in
+     9 10; do for k in 'c:GANHA_CHAV…
+
+✽ Jitterbugging… (15h 12m 40s · ↓ 1.6m tokens · thought for 3s)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    6% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
