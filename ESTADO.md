@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 11:37:01.**
+**Medido em 05/10/2026 11:42:31.**
 
 | | |
 |---|---|
@@ -112,14 +112,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Searched for 1 pattern, ran 4 shell commands
-
-● Achado medido, e o teste estava se medindo a si mesmo: aplicar_precedencia_na_celula tem um único chamador — julgar_celula
-  (cartorio.py:895), o caminho de UMA célula acionado por signal. O batch do processar_cartorio nunca lavra ata['precedencia']. A chave
-  veio do signal da batida que o próprio teste criou; meu .update(ata=SUJA) a apagou e o batch — com ou sem recorte — não a repõe. Corrijo
-  o teste para comparar recorte contra o lote a partir do mesmo estado:
-
-  Ran 1 shell command
 
 ● 6/6 verde. Mas preciso garantir que o caso do cross-midnight está no ramo normal (o dos 134 alvos reais), não no nunca_bateu — o fim:
   mostrou nunca_bateu=5:
@@ -140,8 +132,16 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Task "Suite inteira na copia" still running in background
 
 ● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-✢ Frolicking… (2h 59m 6s · ↓ 330.9k tokens)
+● Escrever o snapshot da sombra
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad &&
+     python3 - <<'PYEOF'
+     import json
+     S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad'
+     alvos=json.load(open(S+'/alvos_comp10…
+
+✢ Frolicking… (3h 4m 36s · ↓ 346.4k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
