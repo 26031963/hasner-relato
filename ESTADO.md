@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:49:01.**
+**Medido em 04/10/2026 21:54:31.**
 
 | | |
 |---|---|
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Rodar sonda de frota" completed (exit code 0)
+● marcos_por_dia do pareador vem de marcos_dna_periodo — a CELULA, não o template. Isso derruba minha leitura de "vocabulário". Leitura (2)
+  e a frota:
 
-  Read 1 file, ran 2 shell commands
+  Ran 5 shell commands
 
-● Chamo o advisor sobre a decisão da fatia — é a classe de bug que muda desenho, e quero a leitura conferida antes de escrever a pergunta e
-  virar para O145:
+● A lei EXISTE e o leitor não migrou. ponto/supra_juiz.py:216 — _tem_fato_dia = bool(real) or bool(dia.get('orfas')), e o ramo folga
+  entrega real=None, orfas=[]. Agora o raio de alcance: o cartório lavra célula em dia folga?
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+  Ran 2 shell commands
 
-● Certo — a pergunta não está formulável ainda. Leituras (1) e (2). Primeiro como parear_turnos atribui data_turno:
+● O cartório itera for cel in cels: — célula EXISTENTE. Dia de folga sem célula nunca é julgado. Então quem criou a célula do col200 18/09
+  (folga de escala com 480 min)?
+
+  Ran 3 shell commands
+
+● gerar_celulas_periodo cria célula para todo dia, inclusive folga (trabalha=False). Então o cartório julga o dia doador e lavra ata 0.
+  Isso inverte a leitura — mido:
 
   Ran 1 shell command
 
-● Background command "Rodar sonda de frota corrigida" completed (exit code 0)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/brebvp0xk.output (16 lines)
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cx9rm8b.output (12 lines)
+● 9/9 doadores têm célula lavrada, trabalha=False, veredito concorde, ata 0 — julgados em 02-03/10. Isso derruba a minha leitura de "duas
+  autoridades" e nomeia a origem pela lei que já existe. Gravo antes de qualquer coisa:
 
-● Task "RED e construção do segundo intervalo" completed in background
+  Ran 3 shell commands
 
-● Ler _mk/data_turno e a alimentação de marcos_por_dia
-  ⎿  $ cd /home/ronald/saas-hasner/app
-     sed -n '60,120p' ponto/turnos.py
-     echo '=== marcos_por_dia em turnos_do_colab ==='
-     grep -n 'marcos_por_dia\|marcos_do_dia\|marcos_do_template\|_marcos_de' ponto/turnos.py
+● Mudança de leitura gravada e a frota rodando. Confiro o enquadramento antes de construir:
 
-✢ Jitterbugging… (9h 37m 3s · ↓ 1.1m tokens · thought for 2s)
+● Advising using Fable 5.1
+
+✢ Jitterbugging… (9h 42m 33s · ↓ 1.2m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
