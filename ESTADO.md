@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 00:13:01.**
+**Medido em 05/10/2026 00:18:31.**
 
 | | |
 |---|---|
@@ -109,40 +109,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-✢ Compacting conversation… (12h 1m 3s · ↓ 1.4m tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱ 88%
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-
-❯ aval Ronald: lei nova FROTA-PROVA-AMOSTRA-EXPLICA. Nao interrompe a O191: registra agora, aplica do proximo item em diante.
-
-  ID: FROTA-PROVA-AMOSTRA-EXPLICA (proximo numero livre depois da L-109).
-
-  LEI: quando a pergunta e "dois caminhos dao o mesmo numero?" ou "esta cura muda que numero, em quem?", a prova e a FROTA INTEIRA, pelos
-  dois caminhos, com a diferenca impressa por dia-colab e a soma. Diferenca esperada declarada ANTES de rodar. Amostra so explica a CAUSA
-  de um caso; amostra nao prova equivalencia, nao dimensiona universo e nao libera passo.
-
-  ORDEM NA FATIA: (1) ler a logica e nomear a origem; (2) DIFF de frota velho x novo na sombra, pela funcao REAL, competencias 09 e 10,
-  emp2+3+4; (3) so entao selo, cura, pouso. O DIFF da L-094 continua valendo no deploy; este e anterior, e do diagnostico.
-
-  FONTE: bin/sonda_frota.sh e o molde do R4 em core/placar_estrutural.py (pares em zero na frota).
-
-  MUDA: app/docs/LEIS.md (linha nova, coluna PROTEGE no formato arquivo.py::funcao que o selo test_lei_protege_sitio.sh cobra); CLAUDE.md
-  secao LEI-AKITA (uma linha); app/docs/CORTES.md (este corte).
-
-  PROIBIDO: escolher caso por tamanho, por frescor ou por conveniencia e chamar de prova; "medido em N dia-colab" como condicao de
-  entrada; juiz novo; instrumento novo se a sonda de frota ja responde; commit so de docs fora de marco (L-106) -- entra no marco da O191.
-
-  PRONTO: a lei no LEIS.md com numero; o RELATO da proxima fatia traz o DIFF de frota ANTES da cura, com a diferenca esperada escrita
-  antes do numero medido. Sem isso = INCOMPLETO.
-
-  LEI-AKITA: origem=metodo de prova da fatia; testemunha=a funcao real nos dois caminhos; juizes novos=0. Leis aplicadas: L-094, L-099,
   L-106, L-108. Lei nova: esta, com corte dado aqui.
 
   Segue a fila; PAREI so em lei ou !.
-  ctrl+x ctrl+s to send now
-                                                                                                                    0% until auto-compact
+
+● Fechado o que eu estava verificando: grade_da_celula lê minutos_realizados=int(ata.get('minutos_realizados') or 0) sempre da ata — o
+  único fallback (:346-352) é de previsto, e vai para minutos_previstos_do_dia, não para o builder que eu curei. Vou corrigir a linha
+  errada do censo e registrar a lei nova no mesmo marco.
+
+  Ran 5 shell commands
+
+● Preciso ver a lista de IDs no topo do LEIS.md antes de inserir, e conferir o cabeçalho da tabela de cortes:
+
+  Ran 1 shell command
+
+● CORTES.md é gerado de CORTES.json — então o corte entra no JSON, não à mão. Vou ver o esquema e o selo do índice:
+
+  Ran 1 shell command
+
+● O selo é explícito: PROTEGE é a única coluna que pode ficar vazia, e preencher por dedução é proibido. Antes de escrever, duas
+  conferências:
+
+  Ran 1 shell command
+
+● test_lei_akita.sh:24 crava 12 linhas numeradas — a linha nova exige o contador junto. E achei um leitor de produção que o censo anterior
+  não tinha: escala/utils.py:1705::grade_espelho_janela ("CONTRATO DE CHAMADA dos renders tela/cartao/folha") chama o builder curado.
+
+● Censo de producao de grade_espelho_janela
+  ⎿  $ cd /home/ronald/copia-o191a/app && grep -rn "grade_espelho_janela" --include=*.py . | grep -v '/tests/' | grep -v 'def
+     grade_espelho_janela'
+
+✻ Waiting for API response · will retry in 2m 31s · check your network
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ Press up to edit queued messages
+❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
