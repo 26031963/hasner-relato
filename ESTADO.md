@@ -1,6 +1,6 @@
 # ESTADO -- o repo e a sessao agora
 
-> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:243 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
+> **RELATO retido:** /home/ronald/saas-hasner/app/docs/RELATO.md:359 AFIRMA ato sem PROVA ao lado -- ## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS (05/10, cura MEDIDA, **FECHADA e NO AR**)
 >
 > O RELATO nao entrou neste ciclo porque uma afirmacao de ato
 > (APLICADO / no ar / feito) esta sem a linha `PROVA:` ao lado. O ESTADO e a SESSAO abaixo
@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 15:14:31.**
+**Medido em 05/10/2026 15:20:01.**
 
 | | |
 |---|---|
@@ -40,10 +40,12 @@ cc4cec4c O topo do TICKETS fechado no ato do push, no marco da CELULA-TURNO-FECH
 
 ```
  M app/config/crons_duracao.json
+M  app/docs/BACKLOG.md
  M app/docs/HANDOFF-SESSAO.md
- M app/docs/RELATO.md
- M app/ponto/management/commands/recalcular_fechamento.py
-?? app/ponto/tests/test_o208_contador_do_recalculo.py
+M  app/docs/RELATO.md
+M  app/docs/TICKETS.md
+M  app/ponto/management/commands/recalcular_fechamento.py
+A  app/ponto/tests/test_o208_contador_do_recalculo.py
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -141,14 +143,14 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Advising using Fable 5.1
   ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-● Achar o escritor de semanas_dsr_ok
-  ⎿  $ cd /home/ronald/saas-hasner && N89="33 39 40 80 82 87 89 90 107 112 114 115 121 138 146 152 165 168 203 206 242 245 252 255 281 282
-     288 301 303 317 325 328 335 346 366 369 373 444 476 478 489 502 510 511 518 556 587 707 736 746 749 769 784 788 820 821 822 848 859
-     865 866 868 873 879 882 885 887 8…
+  Adicionar os arquivos do marco por path
+  ⎿  $ cd /home/ronald/saas-hasner && git add app/ponto/management/commands/recalcular_fechamento.py
+     app/ponto/tests/test_o208_contador_do_recalculo.py app/docs/RELATO.md app/docs/TICKETS.md app/docs/BACKLOG.md && git diff --cached
+     --stat
 
-· Frolicking… (6h 36m 36s · ↓ 829.5k tokens · thinking)
+✢ Frolicking… (6h 42m 6s · ↓ 842.9k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    9% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
