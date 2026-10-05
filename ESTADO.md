@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 12:09:31.**
+**Medido em 05/10/2026 12:14:39.**
 
 | | |
 |---|---|
@@ -112,36 +112,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Background command "Esperar o fim do A/B na sombra" completed (exit code 0)
+● O advisor achou o que eu não tinha lido: 5 colabs PERDEM minutos, e três deles são dia de trabalho indo a ZERO com protesto novo
+  REALIZADO_ZERO_COM_TURNO, com os minutos reaparecendo no dia seguinte como folga. Isso é dois juízes discordando de quem é o dono do
+  turno que cruza a meia-noite. Diagnóstico antes de qualquer apply.
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 1 shell command
 
-● TXT do Domínio não move uma linha (125/66/3, so_antes=0 so_depois=0, horas 0); só 12 retidos trocam apto_folha. Rodando o classificador
-  para separar cura de deriva.
+● --colabs existe (entrou 30/09 19:3x). Telescopando a deriva do recálculo: prerecalc → antes são exatamente um recálculo de frota e nada
+  mais.
 
   Ran 1 shell command
 
-● TXT byte-idêntico nas quatro fotos (fe61d446b471 / bf3df40e7ff8 / b58bb03a898c). Classificando as 134.
+● Isso responde a lista do recálculo: 3 dos 15 carregam campo fora do alvo na deriva — col250 com minutos_abonados 660→1320, exatamente o
+  campo que o ! recusou; col114 com horas_trabalhadas/saldo_banco_horas; col893 com horas_falta/minutos_previstos. Saem da lista, a ata
+  deles fica curada, e o número vai publicado com o col146. Agora a autópsia que bloqueia o apply.
 
   Ran 2 shell commands
 
-● 110 células só minutos_realizados (+855,17 h); 23 com outro campo; gravado em 14 de 63 colabs, só minutos_realizados (+2.087 min) e o
-  minutos_previstos de col146 (−541) — zero minutos_abonados, que era a deriva do DIFF das 03:22. Preciso ver se a exclusão parte o mês de
-  algum colab.
+● Autópsia das 5 quedas, lendo as batidas pela autoridade com localtime — sonda só de leitura na sombra.
 
-  Ran 2 shell commands
+  Searched for 1 pattern, ran 3 shell commands
 
-● Divisão limpa: nenhum colab fica partido. O único com campo fora do alvo é col146 (célula 118980, minutos_previstos 541→0) e ele não tem
-  outra célula nas 134 — então a deriva sai inteira, por colab. Gravando o recorte antes de seguir.
+● O último bloco é o col899 e ele não cruza meia-noite (6x1, 08:00–16:00) — a hipótese tem de ser conferida no col382. Capturando a saída
+  inteira.
 
-  Ran 2 shell commands
+● Rodar a autópsia para arquivo e ler o col382 · 2s
+  ⎿  $ cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; bash
+     bin/sombra.sh --com-a-sombra "O192 autopsia das quedas" -- bash $S/roda_autopsia.sh > $S/autopsia.out 2>&1; echo "rc=$?"; awk
+     '/^={20,}/{n++} n==1' $S/autopsia.out …
 
-● Recorte fechado: 132 células / 61 colabs (107+23+2), recalc de 15 colabs. Falta a medição em forma de apply: o A/B tinha recalc de frota
-  nos DOIS lados, então a deriva do recálculo se cancelou — e prod fará recalc RESTRITO sobre o gravado atual.
-
-● Advising using Fable 5.1
-
-✢ Frolicking… (3h 31m 36s · ↓ 413.3k tokens)
+✢ Frolicking… (3h 36m 44s · ↓ 423.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
