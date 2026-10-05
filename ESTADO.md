@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:34:31.**
+**Medido em 05/10/2026 16:40:01.**
 
 | | |
 |---|---|
@@ -116,43 +116,43 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● A sombra refez inteira (sombra_diverge_de_prod=0, dump de hoje). Antes de desenhar o apply preciso reconciliar um ponto com o advisor — e
-  primeiro medir o sítio exato:
+● Lançador pronto (/app:ro, /sombra = logs/sombra/). Rodo pela porta que pega o flock — SO_ATO1 fica no default False, os dois atos:
 
   Ran 1 shell command
 
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+● Enquanto a sombra corre, avanço o que não depende dela. Primeiro a pergunta de autoria da L-085 (ela decide se é correção minha ou
+  pergunta de lei):
 
-● O advisor reconciliou: o DRY em prod é impossível por leitura do código, e a sombra fresca é o DRY. Agora os insumos do desenho:
+  Ran 1 shell command
 
-  Ran 6 shell commands
+● É prosa minha, na coluna de ESTADO — não o corte dele (o corte é a coluna "27/09 02:2x, regra 1"). Então corrijo no marco, sem pergunta
+  de lei. O que foi medido:
 
-● Os 11 campos confirmados no vivo. Agora o arreio ganha a prova de restauro — que é o piso que faltava para "assert depois da escrita":
+  Ran 1 shell command
 
-  Ran 6 shell commands
+● Correção definida. Enquanto a medição monta app/ (mesmo :ro, não edito a árvore durante ela — lápide), avanço só em logs/. Vejo o
+  andamento:
 
-● O /app/logs na sombra é tmpfs (sombra.sh:137) — o arquivo se perderia com o container. O caminho persistente é /sombra:
+  Ran 4 shell commands
 
-  Corrigir o caminho do ESPERADO para o bind persistente
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import io
-     p = 'logs/sombra/relavra10_frota_20261005.py'
-     s = io.open(p, encoding='utf-8').read()
-     velho = "_CAM = '/app/logs/o209_esperado_20261005.json'"
-     assert s.count(velho) == 1
-     novo = ("# `/app/logs` no container da sombra e TMPFS (`bin/sombra.sh…
+● Lançamento é por docker cp + _RUN.py. Agora construo o apply de prod. Primeiro confiro os campos que o livro-caixa das lacunas vai
+  consultar:
 
-✢ Compacting conversation… (7h 56m 36s · ↓ 971.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱ 84%
+  Ran 3 shell commands
+
+● Agora o apply de prod. Escrevo com as guardas pré-declaradas antes de qualquer número:
+
+● Running 1 shell command…
+
+✢ Frolicking… (8h 2m 6s · ↓ 986.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-  ● main
+❯ ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

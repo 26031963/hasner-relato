@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 16:34:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (402.2 MB). Acoes na janela: **1065**.
+**Medido em 05/10/2026 16:40:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (402.8 MB). Acoes na janela: **1083**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:38:22 | Bash | Andamento da sombra | `cd /home/ronald/saas-hasner && tail -5 logs/o209_frota_sombra_20261005.out` |
+| 16:38:18 | Bash | Campos da CelulaDia | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io, re s = io.open('app/escala/models.py', encoding='utf-8').read() m = re.search(r'^class CelulaDia\(', s, re.M) corpo = s[m.start():] fim = re.search(r'\n(class )', corpo[10:]) corpo = corpo[:fim.start()+10] print(', '.join('%s:%s' % (a,b) for a,b in re.findall(r'^\s{4}(\w+)\s*=\s*models\.(\w+)', corpo, re.M))) PY` |
+| 16:38:09 | Bash | Conferir os campos de tempo dos três modelos | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io, re for arq, cls in (('app/ponto/models.py','Batida'), ('app/ponto/models.py','Ausencia'), ('app/ponto/models.py','Justificativa')): s = io.open(arq, encoding='utf-8').read() m = re.search(r'^class %s\(' % cls, s, re.M) if not m: print('%s: NAO ACHEI' % cls); continue corpo = s[m.start():] fim = re.search(r'\n(class \|def )', corpo[10:]) co ...` |
+| 16:37:50 | Bash | Ler o lançador do apply anterior | `cd /home/ronald/saas-hasner && cat logs/o195_apply_3_prod_RUN.py` |
+| 16:37:47 | Bash | Rastrear o lançamento do apply anterior | `cd /home/ronald/saas-hasner && grep -rn "o195_apply_3_prod\\|apply_3_prod" --include=*.md --include=*.sh --include=*.out . 2>/dev/null \| grep -v "^./logs/o195_apply_3_prod.py" \| head -10; echo "=== existe em app/logs? ==="; ls -la app/logs/o195* logs/o195_apply* 2>/dev/null` |
+| 16:37:41 | Bash | Ver como o apply de prod foi lançado | `cd /home/ronald/saas-hasner && grep -rn "o195_apply_3_prod" logs/*.md logs/*.out 2>/dev/null \| head -8; echo "--- app/logs ---"; ls app/logs/ 2>/dev/null \| head; echo "--- gitignore ---"; grep -n "logs" .gitignore \| head` |
+| 16:37:27 | Bash | Ver o andamento da sombra | `cd /home/ronald/saas-hasner && wc -l logs/o209_frota_sombra_20261005.out && tail -12 logs/o209_frota_sombra_20261005.out` |
+| 16:37:16 | Bash | Ler a medição dos 389 min | `cd /home/ronald/saas-hasner && cat logs/o195_389min_col382_medido_20261005.md 2>/dev/null \|\| ls logs/ \| grep -i 389` |
+| 16:37:09 | Bash | Ler a linha da L-085 | `cd /home/ronald/saas-hasner && sed -n '80,88p' app/docs/LEIS.md` |
+| 16:36:59 | Bash | Rodar o arreio da frota na sombra | `cd /home/ronald/saas-hasner && OUT=logs/o209_frota_sombra_20261005.out && : > "$OUT" && bin/sombra.sh --com-a-sombra "o209-frota-ato1" -- bash logs/sombra/rodar_na_sombra.sh relavra10_frota_20261005.py >> "$OUT" 2>&1; echo "rc=$? (arquivo: $OUT)"` |
+| 16:36:48 | Bash | Ler o lançador existente | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh` |
+| 16:36:45 | Bash | Procurar o lançador usado antes | `cd /home/ronald/saas-hasner && ls -la logs/sombra/*.sh 2>/dev/null; grep -rln "relavra10_frota\\|com-a-sombra" logs/*.out logs/*.md bin/*.sh 2>/dev/null \| head -20` |
+| 16:36:36 | Bash | Corrigir as afirmações sobre a base da sombra | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() v1 = """A SOMBRA ESTA NO PONTO CERTO PARA ISSO, e e um acaso que vale dizer: a sonda anterior terminou com o RUN C, que recalculou a competencia INTEIRA contra a ata VELHA. Entao o `FechamentoMensal` de hoje na sombra ja esta DRENADO de deriva -- fresco em ...` |
+| 16:36:06 | Bash | Ler a segunda metade do arreio | `cd /home/ronald/saas-hasner && sed -n '250,460p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:36:02 | Bash | Ler o corpo do arreio | `cd /home/ronald/saas-hasner && sed -n '60,250p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:35:44 | Bash | Ler o cabeçalho do arreio | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
+| 16:35:39 | Bash | Ler o bloco da porta e a montagem | `cd /home/ronald/saas-hasner && sed -n '370,400p' bin/sombra.sh && echo "=== DOCKER/ENSAIO ===" && sed -n '120,145p' bin/sombra.sh` |
+| 16:35:35 | Bash | Localizar a porta --com-a-sombra | `cd /home/ronald/saas-hasner && grep -n "com-a-sombra" bin/sombra.sh \| head -30` |
 | 16:31:46 | Bash | Corrigir o caminho do ESPERADO para o bind persistente | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() velho = "_CAM = '/app/logs/o209_esperado_20261005.json'" assert s.count(velho) == 1 novo = ("# `/app/logs` no container da sombra e TMPFS (`bin/sombra.sh:137`): gravar la perde o arquivo\n" "# quando o container morre. `/sombra` e o bind de `logs/sombra/`  ...` |
 | 16:31:36 | Bash | Ver como o container da sombra e montado | `cd /home/ronald/saas-hasner && grep -n "com-a-sombra\\|container()\\|docker run\\|_v \\|-v " bin/sombra.sh \| head -25` |
 | 16:31:31 | Bash | Fazer o arreio gravar o ESPERADO em arquivo | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() velho = """print('09 EXPORTADA depois do ATO 1: hash=%s %s' % ( h09_b, 'INTACTA' if h09_b == h09_a else '*** MUDOU -- PARADA ***')) """ assert s.count(velho) == 1 novo = velho + '''assert h09_b == h09_a, 'a 09 EXPORTADA se moveu no ATO 1 -- PARADA (L-092)' ...` |
