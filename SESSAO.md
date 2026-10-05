@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 06:05:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **987**.
+**Medido em 05/10/2026 06:10:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (377.4 MB). Acoes na janela: **984**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -994,6 +994,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:15:53 | Bash | Achar o ponto de insercao no RELATO | `cd /home/ronald/saas-hasner && grep -n "^## " app/docs/RELATO.md \| head -8; echo "..."; grep -n "SEUS-CORTES:INICIO" app/docs/RELATO.md` |
 | 18:11:01 | Bash | Conferir se gerar_cortes troca so o bloco do RELATO | `cd /home/ronald/saas-hasner && sed -n '95,126p' bin/gerar_cortes.py` |
 | 18:10:53 | Bash | Ver campo onde e a escrita do gerar_cortes | `cd /home/ronald/saas-hasner && python3 -c " import json d=json.load(open('app/docs/CORTES.json')) for c in d[-4:]: print(c['id'],'\n onde:',c['onde'][:220],'\n') "; echo "=== gerar_cortes: o que escreve ==="; sed -n '125,150p' bin/gerar_cortes.py` |
-| 18:09:37 | Bash | Contagem AST por raia e leitura do teste do teto | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; for d in saas-hasner wt-k8t wt-k5; do echo "--- $d"; python3 $S/contar.py /home/ronald/$d/app/core/juizes.py \| grep -E "fechamento\|tela"; done; echo; echo "=== como o teste monta pend (fechamento 70-110) ==="; sed -n '70,112p' /home/ronald/wt-k5/app/ponto/tests/test_con ...` |
-| 18:09:28 | Bash | Rodar o contador AST nas tres arvores | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; ls $S/contar.py 2>/dev/null && for d in saas-hasner wt-k8t wt-k5; do echo "--- $d"; python3 $S/contar.py /home/ronald/$d/app 2>/dev/null \|\| python3 $S/contar.py 2>/dev/null; done; echo "=== (se faltar, mostro o contador) ==="; sed -n '1,40p' $S/contar.py 2>/dev/null` |
-| 18:09:09 | Bash | Conferir o teto do contrato nas duas raias | `cd /home/ronald/saas-hasner && for d in wt-k8t wt-k5; do echo "=== /home/ronald/$d ==="; git -C /home/ronald/$d log --oneline -1 2>/dev/null; grep -n "assertLessEqual(len(pend)" /home/ronald/$d/app/ponto/tests/test_contract_juiz_fechamento.py 2>/dev/null \| cut -c1-200; grep -n "_teto = (" /home/ronald/$d/app/ponto/tests/test_contract_juiz_fechamento.py 2>/dev/null; grep -n "assertLessEqual(len(pe ...` |
