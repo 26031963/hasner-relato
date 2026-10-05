@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 16:45:31.**
+**Medido em 05/10/2026 16:50:45.**
 
 | | |
 |---|---|
@@ -117,24 +117,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  separa os dois passos do restauro:
-
-  Ran 2 shell commands
-
-● Background command "Rodar o diagnóstico do restauro" completed (exit code 0)
-
-  Ran 1 shell command
-
-● Restauro dos 11 campos volta perfeito (hash11 e hashTODOS voltaram, zero resíduo fora dos 11) — mas o PASSO B foi vácuo: 0 cobranças
-  nasceram, então ele não testou o retratar. Duas hipóteses sobrevivem. Mato as duas por medição:
-
-  Ran 1 shell command
-
-● _retratar não escreve célula, e a contagem segue 16883 — nenhuma célula nasceu. Sobra o grafo que o retratar acorda:
-
-  Ran 1 shell command
-
-● Achei o sítio, e não era o retratar: é o que ele acorda. app/chamados/signals.py:174 — _cartorio_post_save_chamado chama
   cartorio.julgar_celula(colaborador, dia). Meu restaurador devolvia os 11 campos e depois retratava; cada retratação re-julgava a célula e
   a escrevia de novo. A ordem estava invertida:
 
@@ -144,17 +126,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   = vale so nela; a mais especifica vence; duas do mesmo nivel = piso legal E contador acusa. Hoje nascem duas linhas, emp2 e emp4 ->
   sind2, sem praca. A tela de escolha e obra posterior e escreve NESTA tabela. A praca so entra na regua por linha DECLARADA aqui, nunca
   pelo VinculoSindicatoPraca.
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
+  ⎿  Read ponto/management/commands/recalcular_fechamento.py (154 lines)
+  ⎿  Referenced file ponto/turnos.py
 
-· Compacting conversation… (8h 7m 36s · ↓ 1.0m tokens)
-  ▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 8%
+● Task "RED e construção do segundo intervalo" completed in background
+
+● Chegou adendo ao aval REGUA-PELA-EMPRESA — o cadastro agora tem forma declarada. Ele não muda a ordem (O211 segue atrás da O209), e pela
+  PROMPT-NAO-SE-REPETE entra no mesmo turno. Vou registrar e voltar ao RED.
+
+  Registrar o adendo no PROMPTS
+  ⎿  $ python3 - <<'PY'
+     import io
+     p='docs/PROMPTS.md'
+     t=io.open(p,encoding='utf-8').read()
+     assert 'REGUA-PELA-EMPRESA-CADASTRO' not in t
+     linha = ('| 05/10 16:5x | aval (adendo de cadastro) | REGUA-PELA-EMPRESA-CADASTRO | '
+     '**adendo ao aval de 16:4x: o cadastro da regua ganha FORMA, e ela nao e um campo…
+
+· Frolicking… (8h 12m 50s · ↓ 1.0m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
-  ● main
+❯ ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
   ⧉  index
 ```

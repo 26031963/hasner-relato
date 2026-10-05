@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 16:45:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (403.1 MB). Acoes na janela: **1098**.
+**Medido em 05/10/2026 16:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (403.6 MB). Acoes na janela: **1102**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:50:41 | Bash | Registrar o adendo no PROMPTS | `python3 - <<'PY' import io p='docs/PROMPTS.md' t=io.open(p,encoding='utf-8').read() assert 'REGUA-PELA-EMPRESA-CADASTRO' not in t linha = ('\| 05/10 16:5x \| aval (adendo de cadastro) \| REGUA-PELA-EMPRESA-CADASTRO \| ' '**adendo ao aval de 16:4x: o cadastro da regua ganha FORMA, e ela nao e um campo na ' 'Empresa.** Literal: *"cadastro: APLICACAO DE CONVENCAO -- linha (sindicato, empresa, ' 'prac ...` |
+| 16:50:28 | Bash | Ler a hora e o rodape do PROMPTS | `date '+%d/%m %H:%M' && tail -3 docs/PROMPTS.md \| cut -c1-200` |
+| 16:50:21 | Bash | Registrar o adendo do cadastro na O211 | `python3 - <<'PY' import io p='docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() velho = ('a Empresa ganha o campo de sindicato editavel pela tela, com nome e leitor ' '(emp2 e emp4 -> sind2); regime vazio cai no piso legal com contador ' '`empresas_sem_regime` esperado 0.') assert s.count(velho) == 1, s.count(velho) novo = ('o cadastro e a tabela **APLICACAO DE CONVENCAO** -- linha `(sindicato ...` |
+| 16:50:01 | Bash | Localizar a linha da O211 e do prompt | `grep -n 'O211' docs/BACKLOG.md \| head -20; echo ---; grep -n 'REGUA-PELA-EMPRESA' docs/PROMPTS.md` |
 | 16:45:23 | Bash | Curar a ordem do restaurador | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() velho = '''def restaurar(f): """Volta os 11 campos e RETRATA pela porta o que nasceu. -> (celulas, retratados) A cobranca nascida NAO se apaga: `chamados.reconciliador.retratar` e a porta que o supra_juiz usa, e ela deixa trilha. `.delete()` seria apagar o ...` |
 | 16:44:36 | Bash | Procurar o receiver que escreve célula | `cd /home/ronald/saas-hasner && grep -n "@receiver" -A 3 app/chamados/signals.py \| grep -E "receiver\|def " \| head -20; echo "=== quem desses toca celula/cartorio ==="; grep -nE "cartorio\|CelulaDia\|lavrar_veredito\|carimbar\|celula" app/chamados/signals.py \| head -20` |
 | 16:44:27 | Bash | Testar as duas hipóteses restantes | `cd /home/ronald/saas-hasner && echo "=== _retratar escreve celula? ===" && python3 - <<'PY' import io, re s = io.open('app/chamados/reconciliador.py', encoding='utf-8').read() m = re.search(r'^def _retratar\(', s, re.M) corpo = s[m.start():] fim = re.search(r'\n(def \|class )', corpo[10:]) corpo = corpo[:fim.start()+10] if fim else corpo print('linhas=%d' % corpo.count('\n')) for i, l in enumerate ...` |
