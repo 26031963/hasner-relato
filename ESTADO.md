@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 02:25:46.**
+**Medido em 05/10/2026 02:30:46.**
 
 | | |
 |---|---|
@@ -136,13 +136,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Background command "Esperar pelo arquivo de sinal da sombra" completed (exit code 0)
 
-  Empurrar o marco O191 · 4m 11s
+● Empurrar o marco O191 · 9m 11s
   ⎿  $ cd /home/ronald/saas-hasner && date '+%H:%M:%S'; git push origin main > logs/push_o191.log 2>&1; echo "exit=$?"; grep -aE
      "^(OK|FAILED|Ran |To https|error:|FAIL:|ERROR:|pre-push|tickets_placar|regua_tickets|parado_citado| [0-9a-f]{8})" logs/push_o191.log |
-     tail -20 (4m 11s · 2 lines)
+     tail -20 (9m 11s · 2 lines)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✽ Jitterbugging… (14h 13m 48s · ↓ 1.5m tokens)
+✽ Jitterbugging… (14h 18m 48s · ↓ 1.5m tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                                     0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
