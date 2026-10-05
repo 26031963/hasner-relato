@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 13:01:05.**
+**Medido em 05/10/2026 13:06:31.**
 
 | | |
 |---|---|
@@ -112,42 +112,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Task "RED e construção do segundo intervalo" completed in background
+● Background command "Esperar o primeiro sinal do censo HEAD" completed (exit code 0)
 
-● Ramo B curado (o órfão foi para 29/09); sobrou o par, barrado pela guarda "véspera já tem turno" — que conta o fragmento recém-criado
-  como se a véspera já tivesse sido atendida. A origem é a guarda medir EXISTÊNCIA e não FIM:
+● distinct() ineficaz: o Meta.ordering da Batida entra no SELECT e o distinct passa a ser por (colab, timestamp) — 41.168 "colabs". Mato e
+  conserto:
+
+  Ran 6 shell commands
+
+● Background command "Esperar o censo HEAD terminar" completed (exit code 0)
+
+  Read 1 file, ran 4 shell commands
+
+● Background command "Renomear o TSV do HEAD e esperar o censo A" completed (exit code 0)
+
+● Background command "Vizinhos: labels ponto e escala" completed (exit code 0)
+
+  Ran 1 shell command
+
+● Vizinhos: 3 falhas, e os nomes são os próprios casos — test_L103_250_* e test_L103_174_*. São selos que caracterizam o defeito:
 
   Ran 3 shell commands
 
-● GREEN — os 4 RED viraram, e os dois selos vizinhos (BUG-145 e O93) seguem verdes. Agora aperto o selo do O93, que era cego ao segundo:
+● 46 turnos mudam de dia com A. E 4 vão na direção errada (col334, col594, col852, col857) — são exatamente a regressão que a cura B fecha.
+  Rodo A+B para provar:
 
-  Ran 4 shell commands
+  Ran 2 shell commands
 
-● RED provado contra o HEAD (6 falhas, incluindo as duas do selo O93 que agora sabem falar em segundos). Agora os vizinhos:
+● Background command "Censo A+B" completed (exit code 0)
 
-  Ran 7 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Searched for 1 pattern, ran 8 shell commands
-
-● Agora o censo de impacto (L-094), pelo chamador real e separando A de B:
-
-● Montar a copia A-only e lancar o censo HEAD
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     rm -rf $S/copia_o195_a && cp -a $S/copia_o195_head $S/copia_o195_a
-     python3 $S/cura_o195.py $S/copia_o195_a/app/ponto/turnos.py
-     echo "=== diffs de linha (head/a/a+b) ==="
-     for d in copia_o195_head copia_…
-
-✢ Frolicking… (4h 23m 9s · ↓ 535.8k tokens)
+✢ Compacting conversation… (4h 28m 36s · ↓ 550.6k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 64%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens
