@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 04/10/2026 21:27:01.**
+**Medido em 04/10/2026 21:32:31.**
 
 | | |
 |---|---|
@@ -110,35 +110,35 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ```
 
-● O universo reproduz a pré-conta exatamente — agora medido pela autoridade: 15 dia-colab, 12 colabs, 2.716 min = 45,27 h (09: 12/10/2.051;
-  10: 3/3/665). E todos os 15 têm célula casada e previsto — então a condição de entrada alcança os 15 inteiros, não um subconjunto. Monto
-  a autopsia perguntando ao juiz quem é dono de cada batida:
-
-  Ran 5 shell commands
-
-● Clássico: marcos é tupla e o % a desempacota. Corrijo e rodo:
+● BUG-DO-JUIZ = 0. Mas "SEM BATIDA APURAVEL no dia" em 10 de 15 pede escrutínio — a ata lavrou minutos sem batida no dia. Vendo os casos
+  nomeados por ele (col250 29/09) e os dois de col382 (n_ok=4):
 
   Ran 1 shell command
 
-● t.entrada/t.saida são Batidas, não timestamps. Faço _hm aceitar os dois:
+● Veredito colhido: BUG-DO-JUIZ = 0. Mas apareceu a pergunta que decide se os 2.716 min são dupla contagem desfeita ou hora que desaparece.
+  Vendo col250 (o exemplo dele) e gravando o veredito:
 
   Ran 1 shell command
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/red_b.out (61 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bxzfimmv0.output (5 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b6cx9rm8b.output (12 lines)
-  ⎿  Read ../logs/push_marco_8c3035bc.out (22 lines)
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Dupla contagem confirmada no exemplo nomeado dele: col250 29/09 tem ZERO batida no dia e casou 3 marcos com batidas de 30/09 (#114174
+  01:00, #114195 02:00, #114238 06:00) — os mesmos 240 min que o juiz ancora em turnos de 30/09. Gravo o veredito e meço se os 2.716 min
+  reaparecem no vizinho:
 
-● getattr(x,'timestamp',x) pegou o método datetime.timestamp — alguns sítios passam datetime, outros Batida. Checagem por tipo:
+  Ran 1 shell command
 
-● Ler placar e vereditos
-  ⎿  $ S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad
-     sed -n '/PLACAR DA CONDICAO/,$p' $S/autopsia.out; echo "=== (se vazio, dump todo) ==="
-     grep -n '>>>' $S/autopsia.out
+● Veredito durável. Chamo o advisor antes de medir a dupla contagem, porque isso decide se a cura é cura:
 
-· Jitterbugging… (9h 15m 3s · ↓ 1.1m tokens · thought for 1s)
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+● Três saídas, não duas — e o caso de teste é col382 21/09. Antes da sonda, leio como realizado_do_dia escolhe entre turnos do mesmo
+  data_turno:
+
+● Ler realizado_do_dia
+  ⎿  $ cd /home/ronald/saas-hasner/app
+     sed -n '429,520p' ponto/turnos.py
+
+✢ Jitterbugging… (9h 20m 33s · ↓ 1.1m tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
