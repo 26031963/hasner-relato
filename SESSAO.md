@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 21:12:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1394**.
+**Medido em 05/10/2026 21:18:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1381**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1391,16 +1391,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 09:18:33 | Bash | Ler a celula da matriz e o varredor | `echo "=== contratos: turno:"; grep -n "turno" core/contratos_estruturais.py \| head -20; echo; echo "=== fora_da_autoridade + _fontes em test_contract_juiz_celula.py:"; sed -n '1,80p' ponto/tests/test_contract_juiz_celula.py` |
 | 09:18:13 | Bash | Ler o contrato do juiz de turno | `echo "=== test_contract_juiz_turno.py 1,130:"; sed -n '1,130p' ponto/tests/test_contract_juiz_turno.py` |
 | 09:18:12 | Bash | Ler o placar estrutural na parte do turno | `echo "=== placar_estrutural 240,285:"; sed -n '240,285p' core/placar_estrutural.py` |
-| 09:18:01 | Bash | Ler os PENDENTES de turno | `echo "=== core/juizes.py 230,300:"; sed -n '230,300p' core/juizes.py` |
-| 09:18:00 | Bash | Ler a funcao a apagar | `echo "=== escala/utils.py 805-880:"; sed -n '805,880p' escala/utils.py` |
-| 09:17:51 | Bash | Censo textual de minutos_realizados_do_dia | `cd /home/ronald/saas-hasner && echo "=== grep em app/ bin/ mensageria/ (texto, inclui comentario/lapide):"; grep -rn 'minutos_realizados_do_dia' app bin mensageria --include='*.py' --include='*.sh' --include='*.html' --include='*.md' --include='*.json' 2>/dev/null \| grep -v '^app/docs/' \| cut -c1-160` |
-| 09:17:42 | Bash | Ler o rodape da L-102 e o cabecalho do LEIS | `sed -n '10,22p' LEIS.md && echo "=== L-102 inteira:" && sed -n '95p' LEIS.md` |
-| 09:17:38 | Bash | Grep da lei do sitio e da funcao | `cd /home/ronald/saas-hasner/app/docs && for f in LEIS.md CORTES.md DOSSIES.md; do echo "=== $f:"; grep -nE 'minutos_realizados_do_dia\|test_realizado_intervalo\|realizado_do_dia\|zero chamador\|sem chamador' "$f" \| cut -c1-400; done` |
-| 09:17:20 | Bash | Pausa com dono para o pouso do CERT-AST | `cd /home/ronald/saas-hasner && bash bin/pausar.sh logs/cert-ast.pausado "Ronald (aval 05/10 09:0x), executado pelo Code" "a ordem virou (1) turno (2) relavratura 10 restrita (3) BOs de tela (4) O145; instrumento so depois disso. A raia esta VERDE e o medido ficou commitado em 0bb105db (O192+O193+O194), sem merge e sem deploy" "o aval dele liberar o pouso de INSTRUMENTO, depois da O145 -- a forma e ...` |
-| 09:17:12 | Bash | Ler a forma do pausar.sh | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/pausar.sh` |
-| 09:17:06 | Bash | Commitar o carry do .git na raia | `cd /home/ronald/wt-cert && git add bin/hooks.sh bin/tests/test_commit_so_o_declarado.sh bin/tests/test_hook_nao_e_copia.sh bin/tests/test_labels_fonte_unica.sh bin/tests/test_nucleo_tem_porta.sh && git commit -F - <<'MSG' [O194] Onde mora o hook se PERGUNTA ao git, e o selo que avisava passa a reprovar PARA COM TRILHA, por aval Ronald de 05/10 09:0x: a ordem virou (1) turno (2) relavratura 10 rest ...` |
-| 09:16:38 | Bash | Reconferir os 4 selos do carry na raia | `cd /home/ronald/wt-cert && for s in test_hook_nao_e_copia test_commit_so_o_declarado test_labels_fonte_unica test_nucleo_tem_porta; do printf '%-34s ' "$s"; out=$(bash bin/tests/$s.sh 2>&1); rc=$?; echo "rc=$rc $(echo "$out" \| tail -1 \| cut -c1-90)"; done; echo "--- a porta:"; bash bin/hooks.sh --onde` |
-| 09:16:32 | Bash | Conferir o diff dos 5 arquivos antes do commit | `cd /home/ronald/wt-cert && git diff --stat bin/hooks.sh bin/tests/test_commit_so_o_declarado.sh bin/tests/test_hook_nao_e_copia.sh bin/tests/test_labels_fonte_unica.sh bin/tests/test_nucleo_tem_porta.sh` |
-| 09:16:19 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/aa14fd1a6ffa27253.output` |
-| 09:16:18 | Bash | Estado da raia cert-ast | `cd /home/ronald/wt-cert && git log --oneline -3 && echo "--- status:" && git status --porcelain && echo "--- date:" && date '+%d/%m %H:%M'` |
-| 09:12:39 | Bash | LEI ANTES DO PATCH para os sitios de hook e selos | `cd /home/ronald/saas-hasner/app/docs && for f in LEIS.md CORTES.md DOSSIES.md; do echo "--- $f:"; grep -nE 'hooks\.sh\|HOOK-NAO-E-COPIA\|hook_nao_e_copia\|labels_fonte_unica\|commit_so_o_declarado\|nucleo_tem_porta' "$f" \| head -6; done` |
