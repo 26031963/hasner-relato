@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 01:51:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **749**.
+**Medido em 06/10/2026 01:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **739**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -749,13 +749,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:57:31 | Bash | Achar a autoridade do realizado do dia | `echo "=== montador / realizado_do_dia ==="; grep -rn "realizado_do_dia\\|realizado_sem_turno" --include=*.py . \| grep -v "/tests/" \| head -30; echo; echo "=== def realizado_do_dia em turnos.py ==="; grep -n "def realizado_do_dia" -A 40 ponto/turnos.py \| head -60` |
 | 13:57:25 | Bash | Localizar o escritor do realizado da ata | `echo "=== quem escreve minutos_realizados na ata ==="; grep -rn "minutos_realizados" --include=*.py . \| grep -v "/tests/" \| grep -vE "^\./(docs)" \| head -40` |
 | 13:57:12 | Bash | Conferir os dois trabalhos de fundo | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks && echo "=== b9kq2ij6f (sombra) ==="; tail -6 $T/b9kq2ij6f.output 2>/dev/null; echo; echo "--- resultado.tsv: $(wc -l < logs/sombra/resultado.tsv 2>/dev/null) linhas, ultima:"; tail -2 logs/sombra/resultado.tsv 2>/dev/null; echo; echo "=== bulzl0c13 (suite) ==="; tail -8 $T/bul ...` |
-| 13:53:09 | Bash | Corrigir o rotulo e enquadrar pelo destino | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PYEOF' import re p = '/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/linhas58.py' s = open(p, encoding='utf-8').read() velho = """print('\\nCRUZAM A BORDA (%d):' % len(borda)) for r in borda: print(' col%s %s ( ...` |
-| 13:52:50 | Bash | Derivar as 58 linhas do censo | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/linhas58.py <<'PYEOF' # -*- coding: utf-8 -*- """As 58 linhas do censo, com (colab, D_origem, D_destino) -- a BASE do DIFF de dinheiro. O censo tem uma linha por TURNO (colab, data_turno, entrada, saida, aberto). A chave que NAO muda com a cura e o PAR DE INSTA ...` |
-| 13:52:33 | Bash | Formato do TSV do censo | `cd /home/ronald/saas-hasner && head -2 logs/sombra/o195_censo_head.tsv; echo "..."; cat logs/sombra/o195_censo_ab.log` |
-| 13:52:23 | Bash | Arquivos da O195 em logs | `cd /home/ronald/saas-hasner && ls -lat logs/o195* logs/sombra/o195* 2>/dev/null \| head -20` |
-| 13:52:15 | Bash | Progresso | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks && wc -l logs/sombra/resultado.tsv; tail -2 logs/sombra/resultado.tsv; echo "=== suite bytes"; wc -c $T/bulzl0c13.output` |
-| 13:52:03 | Bash | A janela do recompute por signal | `sed -n '10,30p' ponto/signals.py; echo "---- escala"; sed -n '76,100p' ponto/signals.py` |
-| 13:51:58 | Bash | Nucleo recompute: janela e chamadores | `sed -n '1,60p' ponto/nucleo.py; echo "=== quem chama recompute"; grep -rn "recompute" --include="*.py" . \| grep -v "/tests/\\|test_" \| grep -v "^./ponto/nucleo.py" \| head -15` |
-| 13:51:50 | Bash | Quem ESCREVE Batida.data_turno | `grep -rn "data_turno" --include="*.py" . \| grep -E "\.data_turno\s*=\|data_turno=\|update_fields.*data_turno\|'data_turno'" \| grep -v "/tests/\\|test_" \| grep -vE "t\.data_turno ==\|b\.data_turno !=" \| head -25` |
-| 13:51:45 | Bash | O que reconciliar_fantasmas escreve e em que janela | `sed -n '55,120p' ponto/management/commands/reconciliar_fantasmas.py` |
-| 13:51:34 | Bash | Como o cartorio decide relavrar | `grep -n "impressao" ponto/services/cartorio.py \| head -25; echo "=== def julgar_colab ... forcar/impressao"; sed -n "$(grep -n 'def julgar_colab' ponto/services/cartorio.py \| cut -d: -f1),+45p" ponto/services/cartorio.py \| grep -n "impressao\\|forcar\\|continue\\|carimb"` |
