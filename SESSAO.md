@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 06:03:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **221**.
+**Medido em 06/10/2026 06:09:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **215**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -225,9 +225,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:12:23 | Bash | Imprimir a forma dominante de 5 campos | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' s = open('app/docs/BACKLOG.md', encoding='utf-8').read() for ln in s.splitlines(): if not ln.startswith('\| '): continue c = ln.split('\|') if len(c) < 3 or c[1].strip() not in ('O211', 'O207', 'O204', 'O126'): continue print('=' * 70) print('id =', c[1].strip(), ' arity =', len(c) - 2) for k in range(1, len(c) - 1): v = c[k].strip() print(' [%d]  ...` |
 | 18:12:15 | Bash | Imprimir as 4 linhas por campo | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' s = open('app/docs/BACKLOG.md', encoding='utf-8').read() for ln in s.splitlines(): if not ln.startswith('\| '): continue c = ln.split('\|') if len(c) < 3 or c[1].strip() not in ('O209', 'O210', 'O213', 'O214'): continue print('=' * 70) print('id =', c[1].strip(), ' arity =', len(c) - 2) for k in range(1, len(c) - 1): v = c[k].strip() print(' [%d]  ...` |
 | 18:12:06 | Bash | Medir em que indice o marcador de FECHADO cai por arity | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import re s = open('app/docs/BACKLOG.md', encoding='utf-8').read() i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->', i) off = s[:i].count('\n') FECHADO = re.compile(r'\*\*(FECHADA\|FECHADO\|NO AR\|no ar)\b\|~~', re.I) pos = {} exemplos = {} for n, ln in enumerate(s[:j].splitlines()): if n < off or not ln.startswith('\| '): cont ...` |
-| 18:07:21 | Bash | Medir quantas linhas de OBRAS estao fora do padrao de 6 campos | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' s = open('app/docs/BACKLOG.md', encoding='utf-8').read() i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->', i) from collections import Counter cnt = Counter(); fora = [] for n, ln in enumerate(s[:j].splitlines()): if n < s[:i].count('\n') or not ln.startswith('\| '): continue c = ln.split('\|') if len(c) < 3 or c[1].strip().lowe ...` |
-| 18:07:05 | Bash | Ver como cada linha de OBRAS declara fechado e quantos campos tem | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import re s = open('app/docs/BACKLOG.md', encoding='utf-8').read() i = s.find('<!-- OBRAS:INICIO -->'); j = s.find('<!-- OBRAS:FIM -->', i) FECH = re.compile(r'\*\*(FECHADA\|FECHADO\|NO AR\|no ar)\b\|~~', re.I) for ln in s[i:j].splitlines(): if not ln.startswith('\| '): continue c = ln.split('\|') if len(c) < 4 or c[1].strip().lower() == 'id': con ...` |
-| 18:06:51 | Bash | Achar a linha de cabecalho da tabela | `cd /home/ronald/saas-hasner && awk 'NR>=18 && NR<=60' app/docs/BACKLOG.md \| grep -n '^\| ' \| head -4 \| cut -c1-200` |
-| 18:06:47 | Bash | Ler o cabecalho da tabela OBRAS | `cd /home/ronald/saas-hasner && grep -n 'OBRAS:INICIO' -A 4 app/docs/BACKLOG.md \| cut -c1-200` |
-| 18:06:40 | Bash | Ler como o hook decide item fechado | `cd /home/ronald/saas-hasner && sed -n '140,175p' bin/hook_stop_fila1.py` |
-| 18:03:33 | Bash | Ler o contrato do hook com o topo do RELATO | `cd /home/ronald/saas-hasner && grep -n 'ORDEM VIVA\\|FILA 1\\|PAREI\\|FECHADA\\|NO AR' bin/hook_stop_fila1.py \| head -30 \| cut -c1-150` |
