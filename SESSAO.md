@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 23:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1097**.
+**Medido em 05/10/2026 23:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1091**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1101,9 +1101,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:12:14 | Bash | Leitores da linha fim e estado do selo do diagrama na copia | `cd /home/ronald/saas-hasner && echo "=== leitores da linha fim: ==="; grep -rn 'fim: julgadas' --include='*.py' --include='*.sh' app/ bin/ 2>/dev/null \| grep -v scratchpad; echo "=== diagrama na copia ==="; C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; cd $C && python3 bin/gerar_diagrama.py --conferir 2>&1 \| tail -5; echo "rc=$?"` |
 | 11:11:55 | Bash | Ler as tres mencoes a modo sombra | `sed -n '125,140p' ponto/services/cartorio.py; echo "=== placar R5 ==="; sed -n '225,240p' core/placar_estrutural.py; echo "=== crons 845,860 ==="; sed -n '845,860p' config/crons.py` |
 | 11:11:49 | Bash | Quem usa --forcar hoje | `cd /home/ronald/saas-hasner && grep -rn 'SO sombra\\|so sombra\\|forcar' app/docs/*.md 2>/dev/null \| grep -i 'forcar\\|sombra' \| head -10; echo "=== uso do --forcar em bin/ e crons ==="; grep -rn '\-\-forcar' bin/ app/config/crons.py app/ 2>/dev/null --include='*.sh' --include='*.py' \| grep -v scratchpad \| head -20` |
-| 11:09:21 | Bash | Grep cartorio em LEIS.md | `grep -n 'cartorio' LEIS.md \| head -20; echo "=== PROTEGE col ==="; grep -n 'processar_cartorio\\|services/cartorio' LEIS.md \| head` |
-| 11:09:14 | Bash | LEI ANTES DO PATCH: grep do sitio nas tres fontes | `cd /home/ronald/saas-hasner/app/docs && for t in processar_cartorio julgar_colab BORDA-ATA forcar; do echo "=== $t ==="; grep -n "$t" LEIS.md DOSSIES.md CORTES.md 2>/dev/null \| head -20; done` |
-| 11:07:49 | Bash | Apertar a asserção do recorte vazio | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; python3 - <<'EOF' import re p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192/app/ponto/tests/test_cartorio_recorte_de_celulas.py' s=open(p).read() velho = """ with self.assertRaises(CommandError): self._forcar('--celulas', ' , ')"""  ...` |
-| 11:07:19 | Bash | Rodar o RED reescrito na copia | `cd /home/ronald/saas-hasner && C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; bash bin/suite.sh --dir $C --only "ponto.tests.test_cartorio_recorte_de_celulas" --espera 300 2>&1 \| tail -40` |
-| 11:07:08 | Bash | Reescrever o RED sobre a ata | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; cat > $C/app/ponto/tests/test_cartorio_recorte_de_celulas.py <<'PYEOF' """RECORTE-DE-ATA (O192): o `--forcar` do cartorio ganha ALVO, e o alvo e' dia-colab. O `--forcar` existe desde a HX-BORDA-ATA para fazer BACKFILL de ata: rejulgar mesmo com a impressao igual. Ele nao tinha recorte -- `-- ...` |
-| 11:05:55 | Bash | Ler julgar_colab e o corpo | `sed -n '400,500p' ponto/services/cartorio.py` |
