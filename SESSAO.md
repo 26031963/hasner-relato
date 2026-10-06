@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 07:02:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **102**.
+**Medido em 06/10/2026 07:08:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **91**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -101,14 +101,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:08:21 | Bash | Procurar o arreio de prod do O209 | `cd /home/ronald/saas-hasner && ls -lt logs/o209* logs/*o209* 2>/dev/null \| head -20; echo ====; ls -lt logs/prod/ 2>/dev/null \| head -15` |
 | 19:08:17 | Bash | Localizar o instrumento do apply em prod | `cd /home/ronald/saas-hasner && ls -la app/logs/o209/ 2>/dev/null \| head; echo ====; ls -lt logs/ \| head -25; echo ====; ls -lt logs/sombra/ \| head -10` |
 | 19:08:13 | Bash | Ver o commit do O209 inteiro | `cd /home/ronald/saas-hasner && git show --stat 212b25a7 \| head -30; echo ====; git log -1 --format=%B 212b25a7 \| head -40` |
-| 19:07:59 | Bash | Ver a escrita da ata no cartório | `sed -n '240,280p' ponto/services/cartorio.py` |
-| 19:07:56 | Bash | Ver quem escreve a ata e onde ela mora | `grep -rn "minutos_realizados\\|realizado_do_dia" ponto/services/cartorio.py escala/models.py \| head -20; echo ====; grep -rn "ata\b" escala/models.py \| grep -n "models\.\\|def " \| head` |
-| 19:07:41 | Bash | Reler a célula celula/precedencia x um juiz por pergunta | `sed -n '150,200p' core/contratos_estruturais.py` |
-| 19:07:31 | Bash | Ler a porta da lavratura da ata | `sed -n '140,230p' folha/porta_export.py` |
-| 19:07:26 | Bash | Ver campos do namedtuple e os sítios de minutos_realizados | `sed -n '400,410p' ponto/turnos.py; echo ====; grep -rn "minutos_realizados" --include=*.py . \| grep -v "/tests/" \| head -30` |
-| 19:07:20 | Bash | Localizar RealizadoDoDia | `grep -n "RealizadoDoDia" ponto/turnos.py \| head; echo ----; grep -n "def realizado_dos_turnos" -A 40 ponto/turnos.py \| head -60` |
-| 19:07:17 | Bash | Ver o shape do RealizadoDoDia e a foto_ata do arreio | `grep -n "class RealizadoDoDia" -A 20 ponto/turnos.py && echo ---- && sed -n '215,235p' /home/ronald/saas-hasner/logs/sombra/relavra10_frota_20261005.py` |
-| 19:06:58 | Bash | Ler o cabeçalho do arreio da relavratura | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
-| 19:03:18 | Bash | Ler a assinatura da autoridade do realizado | `grep -n "def realizado_do_dia" -A 25 ponto/turnos.py \| head -40` |
-| 19:03:02 | Bash | Achar o campo da ata no instrumento | `cd /home/ronald/saas-hasner && grep -n "minutos_realizados\\|realizado_do_dia\\|ata\b" logs/sombra/relavra10_frota_20261005.py \| head -30` |
-| 19:02:53 | Bash | Ler o instrumento da relavratura | `cd /home/ronald/saas-hasner && ls logs/sombra/ \| grep -i "relavra\\|o209" ; echo "=== cabecalho ==="; head -60 logs/sombra/relavra10_frota_20261005.py` |
