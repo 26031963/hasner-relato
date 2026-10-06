@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 04:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **478**.
+**Medido em 06/10/2026 04:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **470**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -480,11 +480,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:11:44 | Bash | Ler o uso de minutos_realizados no export | `sed -n '655,695p' folha/export.py` |
 | 16:11:40 | Bash | Ver se minutos_realizados vira rubrica no TXT e conferir o push | `grep -rn "minutos_realizados" folha/*.py \| head; echo "=== rubricas do TXT ==="; grep -n "RUBRICA\\|rubrica" folha/export.py \| head -12; echo "=== push ==="; tail -6 ../logs/push_relavra10_20261005.out` |
 | 16:10:55 | Bash | Ler onde foram as horas do dia 09-20 | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/le_389b.py <<'PY' # SO LEITURA. Onde foram as horas do dia 2026-09-20 do col382, se horas_trabalhadas=0? from ponto.models import DiaPago import datetime as d for dia in (d.date(2026, 9, 20), d.date(2026, 9, 21)): dp = DiaPago.objects.filter(colaborador_id=382, data=di ...` |
-| 16:10:28 | Bash | Ler o gravado dos 389 min na 09 | `cd /home/ronald/saas-hasner && sed -i "s/for c in ('mes', 'ano', 'minutos')/for c in ('mes', 'ano', 'minutos_realizados', 'horas_trabalhadas')/" /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/le_389.py && docker cp /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/le_389.py saas_core:/tmp/le_389.py >/dev/nul ...` |
-| 16:10:21 | Bash | Ver o resto dos campos do DiaPago | `sed -n '320,372p' ponto/models.py \| grep -n "models\.\\|= " \| head -30` |
-| 16:10:15 | Bash | Ler os campos do DiaPago no modelo | `sed -n '271,320p' ponto/models.py` |
-| 16:10:11 | Bash | Listar os campos do DiaPago | `cd /home/ronald/saas-hasner && docker exec saas_core python -c " import django,os;os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings');django.setup() from ponto.models import DiaPago print([f.name for f in DiaPago._meta.fields])" 2>&1 \| tail -3` |
-| 16:10:06 | Bash | Ler se os 389 min estao no gravado da 09 | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/le_389.py <<'PY' # SO LEITURA. Pergunta: os 389 min do turno que a cura manda para 2026-09-20 estao no GRAVADO # da competencia 09 (DiaPago versao='motor', que e quem o TXT le) ou so na ATA? from django.db import connection _k = connection.cursor(); _k.execute('select  ...` |
-| 16:09:52 | Bash | Trazer a foto que o apply validou e conferir | `cd /home/ronald/saas-hasner && md5sum logs/o195_cond2_20261005.json && mv logs/o195_cond2_20261005.json logs/o195_cond2_20261005_1556.json && docker cp saas_core:/tmp/o195_cond2_20261005.json logs/o195_cond2_20261005.json && md5sum logs/o195_cond2_20261005*.json && python3 -c " import io,json a=json.load(io.open('logs/o195_cond2_20261005.json')) print('gerado_em da foto que o apply validou:', a['g ...` |
-| 16:06:17 | Bash | Conferir o andamento do push | `cd /home/ronald/saas-hasner && tail -20 logs/push_relavra10_20261005.out 2>/dev/null \|\| echo "sem arquivo ainda"` |
-| 16:06:13 | Bash | Escrever o plano da O209 em logs | `cd /home/ronald/saas-hasner && cat > logs/o209_plano_20261005.md <<'MD' # O209 — RELAVRA A ATA DA FROTA NA 10 (plano, escrito 05/10 16:0x) `!` dele, literal: *"depois do apply dos 3 colabs da relavratura 10, relavra a ata da frota na 10 com DIFF publicado antes e reversao em logs; as 23 cobrancas nascem. 09 exportada intacta"*. ## O QUE O AVAL AUTORIZA, e o que NAO - **ATA, so.** "relavra a ata da ...` |
