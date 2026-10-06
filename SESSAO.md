@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 01:20:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **819**.
+**Medido em 06/10/2026 01:25:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **816**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -826,6 +826,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:26:47 | Bash | Ver o inicio do output e achar o launcher | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; head -40 $T/binkekrgm.output; echo '=== launcher ==='; ls -la $S/*.sh 2>/dev/null; grep -rln 'o195_supra' $S/ 2>/dev/null` |
 | 13:26:38 | Bash | Comparar os dois logs do supra-juiz | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && diff <(sed 's/[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}//g' logs/sombra/o195_supra_head.log) <(sed 's/[0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}//g' logs/sombra/o195_supra_ab.log) \| head -40; echo "--- rc_diff=$?"; echo; python3 $S/cmp_supra.py logs/sombra/o195_supra_head.log logs/sombra ...` |
 | 13:26:28 | Bash | Ler os dois resultados de fundo | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; echo '=== b1sf62amy (label ponto com a guarda MUTADA) ==='; tail -25 $T/b1sf62amy.output; echo; echo '=== binkekrgm (supra-juiz sombra) ==='; tail -15 $T/binkekrgm.output; echo; wc -l logs/sombra/o195_supra_head.log logs/sombra/o195_supra_ab.log 2>&1` |
-| 13:22:16 | Bash | Escrever o patch de inversao dos tres selos | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $S/cura_o195e_selos.py <<'PYEOF' """O195e -- OS TRES SELOS DA L-103 SE INVERTEM (a casa nao apaga selo: troca a assercao). Eles nasceram em 04/10 para defender a L-103 ZERO DECLARADO sobre tres dias REAIS de prod. A O195 curou o juiz de geometria, e nos tres o jui ...` |
-| 13:20:34 | Bash | Ler os gates do supra_juiz | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '126,136p;146,156p;212,220p;282,292p' $S/copia_o195/app/ponto/supra_juiz.py` |
-| 13:20:12 | Bash | Escrever comparador do placar do supra-juiz | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/cmp_supra.py <<'PY' import collections, re, sys def ler(p): pl = collections.Counter(); por = collections.Counter(); cab = None for ln in open(p): if ln.startswith('@@@@'): cab = ln.split()[1] + ' ' + ln.split()[2]; continue m = re.match(r'^ ([A-Z_]+)\s+(\d+)\s*$', ln. ...` |
