@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 02:35:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **645**.
+**Medido em 06/10/2026 02:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **639**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -649,9 +649,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:41:33 | Bash | Ler a janela do cartorio | `sed -n '1,70p' ponto/management/commands/processar_cartorio.py` |
 | 14:41:14 | Bash | Conferir a fonte da grade do fechamento | `grep -n "def grade_do_fechamento" -A 30 folha/export.py \| head -45` |
 | 14:41:02 | Bash | Conferir se o fechamento le a ata ou o motor vivo | `sed -n '505,545p' ponto/services/fechamento.py && echo "=== por_dia_da_grade: de onde vem o realizado ===" && sed -n '300,345p' ponto/services/dia_pago.py` |
-| 14:40:42 | Bash | Instalar os artefatos e conferir a sombra | `cd /home/ronald/saas-hasner && SP=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cp "$SP/smoke_o195_prod.out" logs/o195_smoke_prod_20261005.out && cp "$SP/smoke_o195_prod.py" logs/sombra/o195_smoke_prod_20261005.py && cp "$SP/relavra10_diff_20261005.py" logs/sombra/relavra10_diff_20261005.py && ls -la logs/o195_smoke_prod_20261005.out logs/sombra/r ...` |
-| 14:40:23 | Bash | Escrever a sonda do DIFF da relavratura 10 | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/relavra10_diff_20261005.py <<'PYEOF' # -*- coding: utf-8 -*- """RELAVRATURA 10/2026 -- o DIFF do item (2), MEDIDO com a O195 JA CURADA. Por que este arquivo existe: os numeros do pendente `RELAVRATURA-10-PAROU-DIFF-SURPREENDE` (36 de 572 fechamentos, +347,67 h de `minutos_abonados`) foram medidos em ...` |
-| 14:38:51 | Bash | Ler o arreio unico da sombra | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh` |
-| 14:38:43 | Bash | Conferir push e censo do oraculo | `cd /home/ronald/saas-hasner && echo "=== push ($(wc -l < /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output)) ===" && cat /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b0xnzb45q.output; echo "=== oraculo em todo o app ==="; grep -rn "'oraculo'\\|\"oraculo\"" --include=*.py app/ \| grep -v "/tests/" \| ...` |
-| 14:38:29 | Bash | Conferir a foto antiga, leitores de oraculo e chamadores do recalculo | `cd /home/ronald/saas-hasner && ls -la logs/reversao_relavratura_10_2026.json 2>&1; echo "=== quem le versao='oraculo' ==="; grep -rn "oraculo" --include=*.py app/colaboradores/ app/folha/ app/ponto/services/ app/relatorios/ 2>/dev/null \| grep -i "versao\\|DiaPago" \| head -10; echo "=== recalcular_fechamento_mes chamadores ==="; grep -rn "recalcular_fechamento_mes" --include=*.py app/ \| grep -v  ...` |
-| 14:38:14 | Bash | Ler o script de reversao da relavratura | `cd /home/ronald/saas-hasner && echo "=== restore_relavratura_10_2026.py ===" && cat bin/restore_relavratura_10_2026.py` |
