@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 22:06:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1252**.
+**Medido em 05/10/2026 22:11:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1251**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1261,4 +1261,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:12:28 | Bash | Conferir def conhecido em escala/utils.py | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o195; grep -n '^def minutos_previstos_do_dia\\|^def _match_marcos\\|^def _alinhar' "$S/app/escala/utils.py"` |
 | 10:12:22 | Bash | Conferir anti-vacuidade do selo AST novo | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o195; echo "=== o selo AST: o universo (defs) tem caso que MORDE por PRESENCA?"; sed -n '120,185p' "$S/app/ponto/tests/test_realizado_do_dia_autoridade.py"` |
 | 10:12:04 | Bash | Ler o veredito da suite delta | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; echo "=== btbdr3mxq (delta escala core ponto):"; tail -25 $T/btbdr3mxq.output; echo; echo "=== OK/FAILED:"; grep -E '^(OK\|FAILED\|Ran )' $T/btbdr3mxq.output` |
-| 10:08:40 | Bash | Conferir HEAD, arvore viva e carimbo de hash | `cd /home/ronald/saas-hasner && echo "HEAD=$(git rev-parse HEAD)"; echo "--- py na arvore viva:"; git status --short -- app \| grep '\.py$' ; echo "(vazio=ok)"; echo "--- grep HEAD em deploy/pos_push:"; grep -n 'rev-parse\\|git log' bin/deploy.sh bin/pos_push.sh \| head -20` |
