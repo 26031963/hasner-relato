@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 23:27:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1075**.
+**Medido em 05/10/2026 23:32:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1070**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1080,8 +1080,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:32:50 | Bash | Rodar a sonda de leitura em prod | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && bash bin/sonda_frota.sh $S/sonda_o192_foto_fresca.py 2>&1 \| tail -40` |
 | 11:32:44 | Bash | Ver ultimo commit do diagrama | `cd /home/ronald/saas-hasner && git log --oneline -2 -- app/docs/ARQUITETURA.mmd; echo "--- mmd no HEAD x arvore:"; git diff --stat HEAD -- app/docs/ARQUITETURA.mmd` |
 | 11:32:37 | Bash | Conferir andamento da suite e a data do mmd | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb; tail -3 $S/tasks/b41ybdp9b.output 2>/dev/null; echo "--- log:"; tail -5 $S/scratchpad/o192_suite.log 2>/dev/null; echo "--- HEAD ja vermelho no diagrama?"; git log --oneline -1 -- docs/ARQUITETURA.mmd` |
-| 11:28:06 | Bash | Escrever a sonda de foto fresca dos 134 | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 - <<'PYEOF' import json S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad' alvos=json.load(open(S+'/alvos_comp10_o192.json')) payload=json.dumps([{k:a[k] for k in ('emp','cid','data','tipo','celula_id','snap_ata_real','snap_ata_prev','builder','gra ...` |
-| 11:27:38 | Bash | Ler o uso do sonda_frota.sh | `cd /home/ronald/saas-hasner && sed -n '1,40p' bin/sonda_frota.sh` |
-| 11:27:30 | Bash | Conferir o json dos 134 alvos | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; python3 -c " import json;d=json.load(open('$S/alvos_comp10_o192.json')) print(type(d), len(d));print(json.dumps(d[0] if isinstance(d,list) else list(d.items())[:1], indent=1, default=str))"` |
-| 11:27:21 | Bash | Suite inteira na copia | `cd /home/ronald/saas-hasner && C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; bash bin/suite.sh --dir $C --espera 900 > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o192_suite.log 2>&1; echo "rc=$?"; grep -E '^(OK\|FAILED)' /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-9 ...` |
-| 11:27:09 | Bash | Vizinhos: todo teste que toca o cartorio | `grep -rln "processar_cartorio\\|julgar_colab\\|julgar_celula" --include='test_*.py' . \| sed 's\|^\./\|\|;s\|/\|.\|g;s\|\.py$\|\|' \| tr '\n' ' '` |
