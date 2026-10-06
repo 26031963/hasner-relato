@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 02:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **639**.
+**Medido em 06/10/2026 02:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **628**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -638,14 +638,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:46:00 | Bash | Ler o fim do bloco da O195 | `cd /home/ronald/saas-hasner && sed -n '155,175p' app/docs/RELATO.md` |
 | 14:45:57 | Bash | Localizar o bloco da O195 no RELATO | `cd /home/ronald/saas-hasner && grep -n "SELO DE CONDUTA\\|^## O195\\|condicao 4\\|CONDICAO 4\\|smoke" app/docs/RELATO.md \| head -20` |
 | 14:45:51 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -20 && echo "=== arquivo ===" && wc -l app/docs/HANDOFF-SESSAO.md` |
-| 14:45:42 | Bash | Rodar a sonda dos dois atos na sombra | `cd /home/ronald/saas-hasner && ROTULO=relavra10 logs/sombra/rodar_na_sombra.sh relavra10_diff_20261005.py > logs/relavra10_diff_20261005.out 2>&1; echo "rc=$?"; tail -5 logs/relavra10_diff_20261005.out` |
-| 14:45:36 | Bash | Escrever a sonda dos dois atos | `cd /home/ronald/saas-hasner && cat > logs/sombra/relavra10_diff_20261005.py <<'PYEOF' # -*- coding: utf-8 -*- """RELAVRATURA 10/2026 -- o DIFF do item (2), MEDIDO com a O195 JA CURADA. DOIS ATOS. Por que este arquivo existe: os numeros do pendente `RELAVRATURA-10-PAROU-DIFF-SURPREENDE` (36 de 572 fechamentos, +347,67 h de `minutos_abonados`) foram medidos em 05/10 03:3x com o juiz DEFEITUOSO no ar ...` |
-| 14:44:09 | Bash | Conferir o formato dos TSV do DIFF | `cd /home/ronald/saas-hasner && head -3 logs/sombra/o195_diff_cura.tsv && echo "--- head.tsv ---" && head -3 logs/sombra/o195_diff_head.tsv && echo "--- ata_prod ---" && head -5 logs/o195_ata_prod.out` |
-| 14:43:55 | Bash | Conferir o juiz do realizado na grade | `grep -n "realizado_do_dia\\|minutos_realizados" escala/utils.py \| head -20` |
-| 14:43:48 | Bash | Localizar quem monta a ata | `grep -n "ata=\\|def ata_do_dia\\|minutos_realizados" ponto/services/cartorio.py \| head -20` |
-| 14:43:29 | Bash | Ler o inicio de julgar_colab | `grep -n "def julgar_colab" ponto/services/cartorio.py && sed -n "$(grep -n 'def julgar_colab' ponto/services/cartorio.py \| cut -d: -f1),+60p" ponto/services/cartorio.py` |
-| 14:43:21 | Bash | Ler o julgar_colab e a entrada do juiz | `sed -n '530,620p' ponto/services/cartorio.py` |
-| 14:41:45 | Bash | Ler a porta lavrar_veredito | `sed -n '480,560p' ponto/portas/celula.py` |
-| 14:41:33 | Bash | Ler a janela do cartorio | `sed -n '1,70p' ponto/management/commands/processar_cartorio.py` |
-| 14:41:14 | Bash | Conferir a fonte da grade do fechamento | `grep -n "def grade_do_fechamento" -A 30 folha/export.py \| head -45` |
-| 14:41:02 | Bash | Conferir se o fechamento le a ata ou o motor vivo | `sed -n '505,545p' ponto/services/fechamento.py && echo "=== por_dia_da_grade: de onde vem o realizado ===" && sed -n '300,345p' ponto/services/dia_pago.py` |
