@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 07:24:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **62**.
+**Medido em 06/10/2026 07:30:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **58**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -68,7 +68,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:30:16 | Bash | Ler a célula e sua nota no arquivo vivo | `sed -n '160,195p' core/contratos_estruturais.py` |
 | 19:30:11 | Bash | Corrigir o rótulo de hora | `sed -i 's/(05\/10 ~19:4x, medido no vivo)/(05\/10 ~19:3x, medido no vivo)/' docs/RELATO.md && grep -n '19:3x, medido no vivo' docs/RELATO.md` |
 | 19:30:08 | Bash | Ler a hora no ato | `date '+%Y-%m-%d %H:%M:%S'` |
-| 19:29:58 | Bash | Publicar a resposta da conferência no topo do RELATO | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/bloco_conf.md <<'MD' lei: **a L-092 alcanca a ATA?** As competencias que a relavratura NAO tocou medem, pelo mesmo teste de ponto fixo: **09/2026 (EXPORTADA) 424 de 17.330 dia-colab = 2,45%, 119 colabs, ata 52.492 contra autoridade 207.815 min (+2.588,72 h)**; **08/2026 (EXPORTADA) 756 de 16.894 = 4 ...` |
-| 19:29:06 | Bash | Medir o placar vivo dos contratos estruturais | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/placar_vivo.py <<'PY' import core.contratos_estruturais as ce from core import juizes print('linha :', ce.linha_do_placar()) print('verdes :', ce.verdes(), ' total:', ce.total(), ' declaradas:', ce.declaradas()) print('sem cadastro:', ce.familias_sem_cadastro()) print( ...` |
-| 19:28:42 | Bash | Ler o hook que le o topo do RELATO | `cd /home/ronald/saas-hasner && sed -n '1,200p' bin/hook_stop_fila1.py` |
-| 19:28:31 | Bash | Ler o topo do RELATO e o estado do git | `sed -n '1,40p' docs/RELATO.md && echo "=== wc" && wc -l docs/RELATO.md && echo "=== git" && git -C /home/ronald/saas-hasner log --oneline -1 && git -C /home/ronald/saas-hasner status --short \| head` |
