@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 06:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **127**.
+**Medido em 06/10/2026 07:02:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **102**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -112,28 +112,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:03:18 | Bash | Ler a assinatura da autoridade do realizado | `grep -n "def realizado_do_dia" -A 25 ponto/turnos.py \| head -40` |
 | 19:03:02 | Bash | Achar o campo da ata no instrumento | `cd /home/ronald/saas-hasner && grep -n "minutos_realizados\\|realizado_do_dia\\|ata\b" logs/sombra/relavra10_frota_20261005.py \| head -30` |
 | 19:02:53 | Bash | Ler o instrumento da relavratura | `cd /home/ronald/saas-hasner && ls logs/sombra/ \| grep -i "relavra\\|o209" ; echo "=== cabecalho ==="; head -60 logs/sombra/relavra10_frota_20261005.py` |
-| 19:02:27 | Bash | Ler a impressao do cartorio | `sed -n '80,115p' ponto/services/cartorio.py` |
-| 19:02:16 | Bash | Ler o commit da O209 | `cd /home/ronald/saas-hasner && git log -1 --stat 212b25a7 \| head -40 && echo "=== msg ===" && git log -1 --format=%B 212b25a7 \| head -60` |
-| 19:02:08 | Bash | Ler o selo declarado da celula | `wc -l ponto/tests/test_contract_juiz_celula.py && grep -n "def test\\|class \\|PENDENTES\\|allowlist" ponto/tests/test_contract_juiz_celula.py \| head -40` |
-| 19:02:02 | Bash | Ler a lista PENDENTES da familia celula | `python3 - <<'PY' import re t = open('core/juizes.py').read() i = t.index("PENDENTES = ") print(t[i:i+200]) PY grep -n "'celula/precedencia':" -A 20 core/juizes.py \| head -30` |
-| 19:01:58 | Bash | Ler PENDENTES_CELULA | `grep -n "PENDENTES_CELULA" -A 12 core/juizes.py \| head -30` |
-| 19:01:41 | Bash | Ler a celula celula/precedencia x um juiz por pergunta | `sed -n '164,182p' core/contratos_estruturais.py` |
-| 19:01:38 | Bash | Ler total() e verdes() | `sed -n '340,430p' core/contratos_estruturais.py && echo "=== celula/precedencia ===" && grep -n "celula/precedencia" -A 30 core/contratos_estruturais.py \| grep -n "juiz por pergunta"` |
-| 19:01:34 | Bash | Achar verdes() e a nota da celula | `grep -n "def verdes\\|def total\\|relavratura" core/contratos_estruturais.py \| head -20` |
-| 19:01:26 | Bash | Escrever os 7 REDs como testes | `cat > /home/ronald/wt-regua/app/core/tests/test_regua_pela_empresa.py <<'PYEOF' # -*- coding: ascii -*- """A REGUA E DA EMPRESA, E A PRACA SAI DELA (lei Ronald 05/10 16:4x -- O211). A LEI, literal: *"a EMPRESA decide a regua e a PRACA sai dela. clt = piso legal (JSP, como hoje). cct = a convencao da empresa, em qualquer posto e em qualquer praca"*. E o cadastro, do adendo de 16:5x: *"APLICACAO DE  ...` |
-| 18:59:28 | Bash | Ler o arquivo de prorrogacao inteiro | `cd /home/ronald/wt-regua/app && sed -n '1,130p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py && echo "=== FIM ===" && sed -n '185,260p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
-| 18:59:17 | Bash | Ler os selos a inverter | `cd /home/ronald/wt-regua/app && cat core/tests/test_regua_para.py && echo "=== prorrogacao 140-180 ===" && sed -n '130,185p' ponto/tests/test_prorrogacao_pos5h_por_cadastro.py` |
-| 18:59:12 | Bash | Ler o selo do regime por empresa | `cd /home/ronald/wt-regua/app && cat core/tests/test_regime_por_empresa.py` |
-| 18:59:08 | Bash | Escrever o comando de semeio com trilha | `cat > /home/ronald/wt-regua/app/core/management/commands/semear_aplicacao_convencao.py <<'EOF' """ESCRITOR da linha de APLICACAO DE CONVENCAO, com trilha (O211). POR QUE UM COMANDO, E NAO UMA DATA MIGRATION. As duas linhas que a O211 precisa -- `(sind2, emp2)` e `(sind2, emp4)` -- sao cadastro, e cadastro de empresa e de sindicato nao mora em codigo: pk de empresa ou de sindicato dentro de migrati ...` |
-| 18:58:31 | Bash | Ler get_user_sistema | `cd /home/ronald/wt-regua/app && sed -n '1,30p' core/utils.py` |
-| 18:58:28 | Bash | Achar o usuario de sistema para a trilha | `cd /home/ronald/wt-regua/app && grep -rn "usuario_sistema\\|user_sistema" core/*.py core/management/commands/garantir_user_sistema.py 2>/dev/null \| head -20` |
-| 18:58:25 | Bash | Listar comandos de core | `cd /home/ronald/wt-regua/app && ls core/management/commands/ \| head -40` |
-| 18:58:21 | Bash | Reler o documento dos REDs | `cd /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && sed -n '1,200p' o211_REDs.md` |
-| 18:58:13 | Bash | Refazer a migration com as constraints | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && _m=$(bash bin/arvore_do_push.sh --montagem /home/ronald/wt-regua) && read -r -a MONT <<< "$_m" && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file "$PWD/.env" --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-regua/app:/app "${MONT[@]}" saas-hasner-core:latest python ...` |
-| 18:58:05 | Bash | Trocar unique_together por constraints e refazer | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p='core/models.py'; t=open(p).read() old = """ unique_together = [["sindicato", "empresa", "praca"]]""" assert t.count(old) == 1 new = """ # DUAS CONSTRAINTS, e nao um `unique_together`, por causa do NULL. No Postgres # dois NULL nunca colidem num indice unico -- entao `unique_together` com `praca` # permitiria a MESMA linha de empresa duas vezes, e ...` |
-| 18:57:47 | Bash | Reescrever as migrations como o usuario | `cd /home/ronald/wt-regua/app && for f in core/migrations/0017_aplicacaoconvencao.py colaboradores/migrations/0056_alter_empresa_regime_trabalhista.py; do cp "$f" /tmp/mig.$$ && rm -f "$f" && cp /tmp/mig.$$ "$f" && rm -f /tmp/mig.$$; done && ls -l core/migrations/0017_aplicacaoconvencao.py colaboradores/migrations/0056_alter_empresa_regime_trabalhista.py` |
-| 18:57:30 | Bash | Ler a migration nova | `cd /home/ronald/wt-regua/app && ls -l core/migrations/0017_aplicacaoconvencao.py colaboradores/migrations/0056_alter_empresa_regime_trabalhista.py && cat core/migrations/0017_aplicacaoconvencao.py` |
-| 18:57:25 | Bash | Gerar a migration na copia | `cd /home/ronald/saas-hasner && source bin/recursos.sh && teste_envfile >/dev/null && _m=$(bash bin/arvore_do_push.sh --montagem /home/ronald/wt-regua) && read -r -a MONT <<< "$_m" && docker run --rm $TESTE_DOCKER --network saas-hasner_default --env-file "$PWD/.env" --env-file "$TESTE_ENVFILE" -e PYTHONDONTWRITEBYTECODE=1 -v /home/ronald/wt-regua/app:/app "${MONT[@]}" saas-hasner-core:latest python ...` |
-| 18:57:16 | Bash | Ler o resto do suite.sh | `cd /home/ronald/saas-hasner && sed -n '60,130p' bin/suite.sh` |
-| 18:57:13 | Bash | Ler o inicio do suite.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
-| 18:57:05 | Bash | Trocar os rotulos que passam a mentir | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p='colaboradores/models.py'; t=open(p).read() old = """ # PRECEDENCIA: a empresa MANDA. Vazio = comportamento de antes (a praca decide), para que o campo # novo nao mude ninguem no ato de nascer. REGIME_CLT = 'clt' REGIME_CCT = 'cct' REGIME_CHOICES = ((REGIME_CLT, 'CLT (piso legal; ignora a CCT da praca)'), (REGIME_CCT, 'CCT da praca (quando houver  ...` |
