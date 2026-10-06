@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 03:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **592**.
+**Medido em 06/10/2026 03:05:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **588**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -598,7 +598,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:09:00 | Bash | Ver o que o commit da O195 tocou | `cd /home/ronald/saas-hasner && git show --stat 8fce4967 \| head -40` |
 | 15:08:21 | Bash | Ler o resto da saida da sonda da frota | `cd /home/ronald/saas-hasner && sed -n '80,194p' logs/relavra10_frota_20261005.out` |
 | 15:08:03 | Bash | Ler o inicio da saida da sonda da frota | `cd /home/ronald/saas-hasner && wc -l logs/relavra10_frota_20261005.out 2>/dev/null; echo "--- head 80 ---"; sed -n '1,80p' logs/relavra10_frota_20261005.out 2>/dev/null` |
-| 15:03:52 | Bash | Publicar o DIFF da relavratura e o O208 no RELATO | `python3 - <<'PYEOF' import io p = 'docs/RELATO.md' s = io.open(p, encoding='utf-8').read() anc = '\n## O195 — O DIA DO TURNO SE DECIDIA POR 17 SEGUNDOS' assert s.count(anc) == 1 bloco = ''' ## O208 — O CONTADOR DO RECALCULO ERA CEGO AO CAMPO DA CURA (05/10, bug no caminho, RED→GREEN) **Achado DENTRO da medicao do item (2), e por isso vem primeiro** (LEI-AKITA 6: bug provado no meio da fatia cura n ...` |
-| 15:02:06 | Bash | Ler o topo do RELATO | `sed -n '1,24p' docs/RELATO.md` |
-| 15:01:59 | Bash | Rodar a sonda da frota na sombra | `cd /home/ronald/saas-hasner && ROTULO=relavra10frota logs/sombra/rodar_na_sombra.sh relavra10_frota_20261005.py > logs/relavra10_frota_20261005.out 2>&1` |
-| 15:01:55 | Bash | Escrever a sonda do alcance da cura na frota | `cd /home/ronald/saas-hasner && cat > logs/sombra/relavra10_frota_20261005.py <<'PYEOF' # -*- coding: utf-8 -*- """ATO 1 NA FROTA INTEIRA -- qual e o ALCANCE REAL da cura O195 na competencia 10. POR QUE ESTE SEGUNDO ATO DE MEDICAO EXISTE. A sonda das 14:45 relavrou a ata dos **11** colabs do censo das 58 linhas e achou, DENTRO deles, TRES dias que se moveram e que o censo NAO nomeia (col297 em 09-2 ...` |
