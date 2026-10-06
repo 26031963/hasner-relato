@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 04:00:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **492**.
+**Medido em 06/10/2026 04:05:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **478**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -488,17 +488,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:09:52 | Bash | Trazer a foto que o apply validou e conferir | `cd /home/ronald/saas-hasner && md5sum logs/o195_cond2_20261005.json && mv logs/o195_cond2_20261005.json logs/o195_cond2_20261005_1556.json && docker cp saas_core:/tmp/o195_cond2_20261005.json logs/o195_cond2_20261005.json && md5sum logs/o195_cond2_20261005*.json && python3 -c " import io,json a=json.load(io.open('logs/o195_cond2_20261005.json')) print('gerado_em da foto que o apply validou:', a['g ...` |
 | 16:06:17 | Bash | Conferir o andamento do push | `cd /home/ronald/saas-hasner && tail -20 logs/push_relavra10_20261005.out 2>/dev/null \|\| echo "sem arquivo ainda"` |
 | 16:06:13 | Bash | Escrever o plano da O209 em logs | `cd /home/ronald/saas-hasner && cat > logs/o209_plano_20261005.md <<'MD' # O209 — RELAVRA A ATA DA FROTA NA 10 (plano, escrito 05/10 16:0x) `!` dele, literal: *"depois do apply dos 3 colabs da relavratura 10, relavra a ata da frota na 10 com DIFF publicado antes e reversao em logs; as 23 cobrancas nascem. 09 exportada intacta"*. ## O QUE O AVAL AUTORIZA, e o que NAO - **ATA, so.** "relavra a ata da ...` |
-| 16:05:26 | Bash | Ler o medidor de frota da O209 | `cd /home/ronald/saas-hasner && wc -l logs/sombra/relavra10_frota_20261005.py && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
-| 16:05:04 | Bash | Empurrar o marco da relavratura | `cd /home/ronald/saas-hasner && git push origin main > logs/push_relavra10_20261005.out 2>&1; echo "rc=$?"; tail -25 logs/push_relavra10_20261005.out` |
-| 16:04:44 | Bash | Commitar o marco da relavratura | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/msg_relavra.txt <<'MSG' [O195] a relavratura 10 pousa nos 3 colabs: a ata anda -450 como publicado e a 09 nao se move ITEM (2) DA ORDEM VIVA, FECHADO EM PROD (05/10 15:57), pelo aval 3 item 2 dele -- literal: "relavratura 10: aplica SO o realizado dos dia-colab da cura ...` |
-| 16:03:58 | Bash | Preparar o commit do marco por PATH | `cd /home/ronald/saas-hasner && git add app/docs/RELATO.md app/docs/BACKLOG.md app/docs/PROMPTS.md app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md app/ponto/services/cartorio.py && git diff --cached --stat` |
-| 16:02:10 | Bash | Rodar a pasta de selos de host | `cd /home/ronald/saas-hasner && fail=0; for t in bin/tests/test_*.sh; do out=$(bash "$t" 2>&1); rc=$?; [ $rc -ne 0 ] && { echo "=== VERMELHO $t (rc=$rc)"; echo "$out" \| tail -12; fail=1; }; done; echo "selos_de_host_vermelhos=$fail"` |
-| 16:01:58 | Bash | Ver o estado da arvore e se logs esta ignorado | `cd /home/ronald/saas-hasner && git status --short \| head -20; echo "=== logs ignorado? ==="; git check-ignore -v logs/o195_apply_3_prod.py logs/o195_cond2_20261005.json 2>&1 \| head` |
-| 16:01:44 | Bash | Conferir linhas de TICKETS para os ids | `cd /home/ronald/saas-hasner && grep -c "O195\\|O209\\|O210" app/docs/TICKETS.md; for id in O195 O208 O209 O210; do printf "%s: " $id; grep -c "^\| *\`\?$id\b" app/docs/TICKETS.md \|\| true; done; grep -n "O209\\|O210" app/docs/TICKETS.md \| cut -c1-120` |
-| 16:01:37 | Bash | Ler a regra do regua_tickets | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/regua_tickets.sh` |
-| 16:01:27 | Bash | Atualizar o estado de O209 e O210 no BACKLOG | `python3 - <<'PY' import io p = 'docs/BACKLOG.md' s = io.open(p, encoding='utf-8').read() pares = [ ("\| `!` dado; apply dos 3 primeiro; nada escrito em prod ainda \| 05/10 15:4x \|", "\| apply dos 3 FEITO em prod 05/10 15:57 (ata -450 como publicado, comp 09 INTACTA por hash). **PROXIMO da fila 1**: foto nova da sombra, DIFF publicado ANTES, reversao dos ~89 em `logs/`. Nada escrito na frota ainda ...` |
-| 16:01:13 | Bash | Ler o cabecalho da tabela de OBRAS | `sed -n '112,118p' docs/BACKLOG.md \| cut -c1-300; echo "=== NF O209/O210 ==="; awk -F'\|' 'NR==355\|\|NR==356{print NR, NF}' docs/BACKLOG.md` |
-| 16:01:03 | Bash | Ver as colunas da celula da O195 | `awk -F'\|' 'NR==342{print "CAMPOS:", NF; for(i=2;i<NF;i++) printf "[%d] %s\n", i, substr($i,1,160)}' docs/BACKLOG.md` |
-| 16:00:57 | Bash | Procurar item proprio da O195 no BACKLOG | `grep -n "^\| O195\\|^\| RELAVRA\\|^\| O208" docs/BACKLOG.md \| cut -c1-200` |
-| 16:00:44 | Bash | Localizar o item da relavratura no BACKLOG | `grep -n "relavratura 10\\|RELAVRATURA 10\\|relavratura-10" docs/BACKLOG.md \| head; echo "=== OBRAS ==="; grep -n "^## \\|^### " docs/BACKLOG.md \| head -20` |
-| 16:00:34 | Bash | Localizar as celulas do BACKLOG | `grep -n "RELAVRATURA-10\\|O209\\|O210" docs/BACKLOG.md \| head -20` |
