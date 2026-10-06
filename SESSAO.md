@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 03:44:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **518**.
+**Medido em 06/10/2026 03:49:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **508**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -518,13 +518,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:50:52 | Bash | Trocar o exec aninhado pela guarda de frescor e fechar os argumentos do comando | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'logs/o195_apply_3_prod.py' s = io.open(p, encoding='utf-8').read() velho = """# CONDICAO 2: a foto se refaz AGORA. A de 15:41 prova o desenho; esta e a base de reversao. exec(io.open('/tmp/o195_cond2_snapshot.py', encoding='utf-8').read()) FOTO = json.load(io.open('/tmp/o195_cond2_20261005.json', encoding='utf-8')) print(' condicao  ...` |
 | 15:50:30 | Bash | Conferir os argumentos do recalcular_fechamento | `grep -n "add_argument" ponto/management/commands/recalcular_fechamento.py` |
 | 15:50:04 | Bash | Escrever o apply escopado com as oito guardas | `cd /home/ronald/saas-hasner && cat > logs/o195_apply_3_prod.py <<'PYEOF' # -*- coding: utf-8 -*- """O APPLY DA RELAVRATURA 10 EM PROD, ESCOPADO NOS 3. `APLICAR=False` = DRY. AVAL 3 ITEM 2 (Ronald, 05/10 09:0x), literal: *"relavratura 10: aplica SO o realizado dos dia-colab da cura, e a deriva vira fatia propria com o numero dela publicado"*. O criterio dele e por **dia-colab**, e a ata se moveu em ...` |
-| 15:48:35 | Bash | Ver o limite superior da lista de celulas | `cd /home/ronald/saas-hasner && grep -n "^LIM\\|LIM =" logs/sombra/relavra10_frota_20261005.py logs/sombra/relavra10_diff_20261005.py` |
-| 15:48:28 | Bash | Ler a construcao real da chamada do cartorio | `sed -n '30,75p' ponto/management/commands/processar_cartorio.py; echo "=== frota 165-200"; sed -n '165,200p' /home/ronald/saas-hasner/logs/sombra/relavra10_frota_20261005.py` |
-| 15:45:03 | Bash | Conferir o --forcar do processar_cartorio | `grep -n "forcar" ponto/management/commands/processar_cartorio.py` |
-| 15:44:55 | Bash | Ver se ATO 1 com forcar tem precedente em prod | `cd /home/ronald/saas-hasner && grep -n "forcar\\|julgar_colab\\|processar_cartorio" bin/relavrar_o118_col221.py bin/relavrar_o120_col221_09.py \| head` |
-| 15:44:47 | Bash | Ler o precedente de relavratura em prod | `cd /home/ronald/saas-hasner && sed -n '1,70p' bin/relavrar_o119_col221.py` |
-| 15:44:43 | Bash | LEI ANTES DO PATCH: grep de forcar nas leis | `cd /home/ronald/saas-hasner && for f in app/docs/LEIS.md app/docs/CORTES.md app/docs/DOSSIES.md; do echo "=== $f"; grep -n "forcar\\|HX-BORDA-ATA\\|backfill de ata" $f \| head -10; done` |
-| 15:44:35 | Bash | Ler a assinatura de julgar_colab e como a frota o chamou | `cd /home/ronald/saas-hasner && grep -n "julgar_colab" app/ponto/services/cartorio.py \| head; echo "=== assinatura"; sed -n "$(grep -n 'def julgar_colab' app/ponto/services/cartorio.py \| head -1 \| cut -d: -f1),+25p" app/ponto/services/cartorio.py; echo "=== como a frota chamou"; grep -n "julgar_colab\\|cels =\\|cels=" logs/sombra/relavra10_frota_20261005.py \| head -20` |
-| 15:44:21 | Bash | Ler o smoke que confere o hash da 09 em prod | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sombra/o195_smoke_prod_20261005.py` |
-| 15:44:18 | Bash | Achar o script que hasheia a 09 exportada | `cd /home/ronald/saas-hasner && grep -rln "hash_09_antes\\|hash09" logs/*.py logs/sombra/*.py bin/*.py 2>/dev/null \| head; echo "=== onde nasceu"; grep -rn "hash_09_antes" logs/sombra/*.py bin/*.py 2>/dev/null \| head -5` |
-| 15:44:08 | Bash | Trocar o portao da O209 pela ordem dele | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'app/docs/BACKLOG.md' s = io.open(p, encoding='utf-8').read() velho = ("\| **`!` dele** -- relavratura de frota faz nascer 23 cobrancas; e decisao dele QUANDO, nao SE " "\| medido, nao aplicado; nada escrito em prod \| 05/10 15:0x \|") novo = ("\| **`!` DADO 05/10 15:4x** -- *\"depois do apply dos 3 colabs da relavratura 10, relavra  ...` |
