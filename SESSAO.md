@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 04:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **470**.
+**Medido em 06/10/2026 04:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **461**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -471,12 +471,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:16:55 | Bash | Listar receivers de escala/signals.py e de CelulaDia | `echo "=== escala/signals.py: receivers e senders ==="; grep -n "@receiver\\|^def \\|sender=\\|invalidar_previsto\\|fechamento" escala/signals.py; echo; echo "=== quem recebe post_save de CelulaDia em TODO o app ==="; grep -rn "sender=.*CelulaDia\\|sender='escala.CelulaDia\"\\|CelulaDia)" --include=*.py . \| grep -i "receiv\\|signal\\|connect" \| head -20` |
 | 16:16:48 | Bash | Conferir o estado do push | `cd /home/ronald/saas-hasner && tail -25 logs/push_relavra10_20261005.out 2>/dev/null; echo "---"; ls -la logs/push_relavra10_20261005.out` |
 | 16:16:47 | Bash | Listar receivers de ponto/signals.py | `echo "=== ponto/signals.py: CelulaDia receivers ==="; grep -n "receiver\\|def \\|post_save\\|CelulaDia" ponto/signals.py \| head -40` |
-| 16:12:57 | Bash | Ler os sinais de ponto e escala | `grep -n "fechamento\\|dia_pago\\|CelulaDia" ponto/signals.py \| head -20; echo "=== escala/signals.py ==="; grep -n "fechamento\\|dia_pago\\|CelulaDia" escala/signals.py \| head -20` |
-| 16:12:54 | Bash | Procurar o recalculo por evento | `ls ponto/signals*.py 2>/dev/null; grep -rln "post_save" --include=*.py ponto/ escala/ chamados/ \| grep -v tests \| head; echo "=== fechamento em signals ==="; for f in $(grep -rln "post_save" --include=*.py ponto/ escala/ chamados/ \| grep -v tests); do grep -l "fechamento\\|dia_pago" "$f"; done 2>/dev/null` |
-| 16:12:46 | Bash | Censo dos chamadores de fechamento | `grep -rn "from ponto.services.fechamento import\\|services.fechamento import\\|import fechamento" --include=*.py . \| grep -v tests \| head -15; echo "=== recalculo por evento ==="; grep -rn "def .*fechamento" --include=*.py ponto/services/fechamento.py \| head` |
-| 16:12:39 | Bash | Censo de quem escreve DiaPago e fechamento | `echo "=== quem chama dia_pago.lavrar ==="; grep -rn "dia_pago import\\|dia_pago\.lavrar\\|from ponto.services.dia_pago" --include=*.py . \| grep -v tests \| head; echo; echo "=== quem chama recalcular_fechamento_mes / recalcular_fechamento_colab ==="; grep -rn "recalcular_fechamento" --include=*.py . \| grep -v tests \| grep -v "^./ponto/management" \| head` |
-| 16:12:32 | Bash | Procurar sinais sobre CelulaDia | `grep -rn "post_save\\|receiver\\|pre_save" --include=*.py . 2>/dev/null \| grep -i "celula" \| head -20` |
-| 16:12:25 | Bash | Registrar o achado dos 389 min | `cd /home/ronald/saas-hasner && cat > logs/o195_389min_col382_medido_20261005.md <<'MD' # OS 389 MIN DO col382 EM 2026-09-20 — MEDIDO, nao citado (05/10 16:1x) ## POR QUE ESTA MEDICAO EXISTE O bloco da relavratura 10 no RELATO (commit `c8031f6d`) afirma que esses minutos "nao se perderam", e a prova que ele da e uma **CITACAO**: a linha da L-085 em `app/docs/LEIS.md:84`, escrita por mim no marco da ...` |
-| 16:11:44 | Bash | Ler o uso de minutos_realizados no export | `sed -n '655,695p' folha/export.py` |
-| 16:11:40 | Bash | Ver se minutos_realizados vira rubrica no TXT e conferir o push | `grep -rn "minutos_realizados" folha/*.py \| head; echo "=== rubricas do TXT ==="; grep -n "RUBRICA\\|rubrica" folha/export.py \| head -12; echo "=== push ==="; tail -6 ../logs/push_relavra10_20261005.out` |
-| 16:10:55 | Bash | Ler onde foram as horas do dia 09-20 | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/le_389b.py <<'PY' # SO LEITURA. Onde foram as horas do dia 2026-09-20 do col382, se horas_trabalhadas=0? from ponto.models import DiaPago import datetime as d for dia in (d.date(2026, 9, 20), d.date(2026, 9, 21)): dp = DiaPago.objects.filter(colaborador_id=382, data=di ...` |
