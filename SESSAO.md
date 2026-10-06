@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 00:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **949**.
+**Medido em 06/10/2026 00:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **945**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -955,7 +955,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:31:00 | Bash | Ler a celula da O195 inteira | `awk '/^\\| O195 \\|/' docs/BACKLOG.md \| head -c 6000` |
 | 12:30:48 | Bash | Censo de quem chama o montador | `grep -rn "realizado_do_dia\\|turnos_do_colab" --include=*.py . \| grep -v "/tests/\\|def realizado_do_dia\\|def turnos_do_colab" \| head -20` |
 | 12:30:47 | Bash | Ler turnos_do_colab, a entrada real | `sed -n '1243,1300p' ponto/turnos.py` |
-| 12:30:22 | Bash | Ler _vespera | `grep -n "_vespera" ponto/turnos.py \| head -20; echo '=== def _vespera'; awk '/def _vespera/,/^def \|^ return/' ponto/turnos.py \| head -40` |
-| 12:26:28 | Bash | Achar janela_turno_de e ler a nota sobre _dist_marco | `grep -rn "def janela_turno_de" --include=*.py . ; echo '--- nota :770-780'; sed -n '768,812p' ponto/turnos.py` |
-| 12:26:22 | Bash | Ler _dist_marco e seus chamadores | `sed -n '104,130p' ponto/turnos.py; echo '=== quem chama _dist_marco'; grep -rn "_dist_marco" --include=*.py . \| grep -v test \| head` |
-| 12:26:21 | Bash | Ler janela_turno_de, a autoridade da janela do turno | `grep -n "def janela_turno_de\\|def marcos_turno\\|def turno_cruza_meia_noite" escala/servico_jornada.py; echo '---'; sed -n "$(grep -n 'def janela_turno_de' escala/servico_jornada.py \| cut -d: -f1),+32p" escala/servico_jornada.py` |
