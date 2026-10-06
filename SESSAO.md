@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 02:45:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **628**.
+**Medido em 06/10/2026 02:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **622**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -632,9 +632,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:51:15 | Bash | Ler o topo do comando e a lista RUBRICAS | `sed -n '1,60p' ponto/management/commands/recalcular_fechamento.py` |
 | 14:51:11 | Bash | Ler o bloco do contador | `sed -n '85,150p' ponto/management/commands/recalcular_fechamento.py` |
 | 14:51:07 | Bash | Localizar o contador de fechamentos mexidos | `grep -n 'mexid\\|novos\\|processad' ponto/management/commands/recalcular_fechamento.py` |
-| 14:50:06 | Bash | Ler o RUN C da sonda | `cd /home/ronald/saas-hasner && wc -l logs/relavra10_diff_20261005.out && awk 'NR>120' logs/relavra10_diff_20261005.out \| grep -v '^dia_pago oraculo: lavratura falhou'` |
-| 14:50:01 | Bash | Ler a saida da sonda da relavratura 10 | `cd /home/ronald/saas-hasner && sed -n '1,125p' logs/relavra10_diff_20261005.out \| grep -v '^dia_pago oraculo: lavratura falhou' \| head -120` |
-| 14:46:24 | Bash | Registrar o smoke e a condicao 4 no RELATO | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'app/docs/RELATO.md' s = io.open(p, encoding='utf-8').read() anc = "logs/o195_censo_leitores_portas.out, juizes novos=0`\n" assert s.count(anc) == 1, s.count(anc) novo = anc + """ ### NO AR, EMPURRADO E SMOKADO -- a condicao 4 fechada no ar, nao na sombra `bin/deploy.sh --sem-migrate` as **14:2x** (0 migration pendente, carimbo da so ...` |
-| 14:46:00 | Bash | Ler o fim do bloco da O195 | `cd /home/ronald/saas-hasner && sed -n '155,175p' app/docs/RELATO.md` |
-| 14:45:57 | Bash | Localizar o bloco da O195 no RELATO | `cd /home/ronald/saas-hasner && grep -n "SELO DE CONDUTA\\|^## O195\\|condicao 4\\|CONDICAO 4\\|smoke" app/docs/RELATO.md \| head -20` |
-| 14:45:51 | Bash | Gerar o handoff do marco fechado | `cd /home/ronald/saas-hasner && bin/handoff_sessao.sh 2>&1 \| tail -20 && echo "=== arquivo ===" && wc -l app/docs/HANDOFF-SESSAO.md` |
