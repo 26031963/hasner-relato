@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 00:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **945**.
+**Medido em 06/10/2026 00:36:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **934**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -944,14 +944,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:38:22 | Bash | Ver worktrees e convencao de REGUA_DB | `cd /home/ronald/saas-hasner && git worktree list && echo '--- REGUA_DB uso' && grep -rn 'REGUA_DB' bin/*.sh \| head -20` |
 | 12:38:04 | Bash | Ver ancoras para registrar o aval | `date '+%d/%m %H:%M' && echo '--- ORDEM VIVA no RELATO' && grep -n 'ORDEM VIVA' docs/RELATO.md \| head -5 && echo '--- cabeca PROMPTS' && head -8 docs/PROMPTS.md && echo '--- tail PROMPTS' && tail -4 docs/PROMPTS.md && echo '--- celulas dos BOs' && grep -n 'O197\\|O204\\|O200\\|O206' docs/BACKLOG.md \| head -20` |
 | 12:37:54 | Bash | Reler sitio da cura | `sed -n '36,106p' ponto/turnos.py; echo '===== _vespera'; sed -n '700,760p' ponto/turnos.py` |
-| 12:33:53 | Bash | Ver stub de batida para parear_turnos | `grep -rln "parear_turnos" ponto/tests/ \| head -5; echo '=== um stub existente'; sed -n '1,60p' ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py` |
-| 12:33:22 | Bash | Ler a forma exata da tupla de marcos_por_dia | `sed -n '706,730p' ponto/turnos.py; echo '=== como turnos_do_colab monta _mpd_seg'; sed -n '1340,1375p' ponto/turnos.py` |
-| 12:33:18 | Bash | Ver a forma de marcos_por_dia | `grep -n "marcos_por_dia\\|_bm_de\\|_ivm_de\\|_bm_all" ponto/turnos.py \| sed -n '1,40p'` |
-| 12:33:05 | Bash | Fazer a copia do HEAD para a fatia O195 | `cd /home/ronald/saas-hasner && git status --porcelain -- '*.py' \| head; echo "rc_py=$?"; C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o195; rm -rf $C; mkdir -p $C && git archive HEAD \| tar -x -C $C && echo "copia em $C"; ls $C \| head; git rev-parse --short HEAD` |
-| 12:32:48 | Bash | Censo do cont_max_s, o envelope ja declarado | `grep -n "cont_max_s\\|14 \* 3600\\|14\*3600" ponto/turnos.py \| head -20; echo '=== constantes de topo'; sed -n '1,40p' ponto/turnos.py \| grep -nE "^[A-Z_]+ *="` |
-| 12:32:22 | Bash | Ler o selo da O93 (col616), o vizinho que nao pode cair | `cat ponto/tests/test_o93_dia_da_jornada.py` |
-| 12:32:16 | Bash | Achar os selos vizinhos da guarda | `ls ponto/tests/ \| grep -iE "145\|dupla\|vespera\|data_turno\|turno" ; echo '=== quem testa a guarda hoje'; grep -rln "VESPERA_LONGE\\|col616\\|_data_do_turno" ponto/tests/ escala/tests/ 2>/dev/null` |
-| 12:31:09 | Bash | Achar os 10 dia-colab da O195 | `cd /home/ronald/saas-hasner && ls logs/o191/ 2>/dev/null \| head; echo '=== as duas origens / os 10'; grep -nE "menos de um minuto\|col[0-9]+\|folga" logs/o191/passo5_diff_20261004.md 2>/dev/null \| head -40` |
-| 12:31:00 | Bash | Ler a celula da O195 inteira | `awk '/^\\| O195 \\|/' docs/BACKLOG.md \| head -c 6000` |
-| 12:30:48 | Bash | Censo de quem chama o montador | `grep -rn "realizado_do_dia\\|turnos_do_colab" --include=*.py . \| grep -v "/tests/\\|def realizado_do_dia\\|def turnos_do_colab" \| head -20` |
-| 12:30:47 | Bash | Ler turnos_do_colab, a entrada real | `sed -n '1243,1300p' ponto/turnos.py` |
