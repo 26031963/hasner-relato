@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 03:05:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **588**.
+**Medido em 06/10/2026 03:11:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **583**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -593,8 +593,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:12:50 | Bash | Cruzar os 89 e os 11 contra as 58 linhas do censo | `cd /home/ronald/saas-hasner && N89="33 39 40 80 82 87 89 90 107 112 114 115 121 138 146 152 165 168 203 206 242 245 252 255 281 282 288 301 303 317 325 328 335 346 366 369 373 444 476 478 489 502 510 511 518 556 587 707 736 746 749 769 784 788 820 821 822 848 859 865 866 868 873 879 882 885 887 892 893 898 899 900 903 909 911 917 921 926 936 941 947 948 950 951 955 956 960 964 968" echo "=== os 89 ...` |
 | 15:12:39 | Bash | Localizar os TSV do censo da O195 | `cd /home/ronald/saas-hasner && ls -la logs/sombra/o195_*.tsv logs/o195*.tsv 2>/dev/null; echo "--- cabecalho ---"; head -3 logs/sombra/o195_diff_cura.tsv 2>/dev/null; echo "--- linhas58 ---"; ls -la logs/sombra/o195_linhas58.tsv 2>/dev/null && head -3 logs/sombra/o195_linhas58.tsv` |
 | 15:12:31 | Bash | Reler as linhas de ata movida do run dos 11 | `cd /home/ronald/saas-hasner && echo "=== ATA movida no ATO 1 dos 11 (diff run) ==="; grep -nE '^ +col[0-9]+ +2026-' logs/relavra10_diff_20261005.out \| sed -n '1,40p'` |
-| 15:10:01 | Bash | Gravar o achado da ata stale na frota | `cd /home/ronald/saas-hasner && cat > logs/o209_ata_estale_na_frota.md <<'EOF' # O209 — A ATA DA FROTA ESTA STALE CONTRA O JUIZ DE HOJE (achado, 05/10 15:0x) ## O que foi medido `logs/sombra/relavra10_frota_20261005.py` (sombra, dump 20261005, por cima do RUN C): ATO 1 com `forcar=True` sobre **TODO** colab com celula na competencia 10 (564 colabs, 16.883 celulas, janela 2026-09-21..2026-10-04). `` ...` |
-| 15:09:19 | Bash | Ler o resto da mensagem do commit da O195 | `cd /home/ronald/saas-hasner && git log -1 --format=%B 8fce4967 \| sed -n '30,70p'` |
-| 15:09:00 | Bash | Ver o que o commit da O195 tocou | `cd /home/ronald/saas-hasner && git show --stat 8fce4967 \| head -40` |
-| 15:08:21 | Bash | Ler o resto da saida da sonda da frota | `cd /home/ronald/saas-hasner && sed -n '80,194p' logs/relavra10_frota_20261005.out` |
-| 15:08:03 | Bash | Ler o inicio da saida da sonda da frota | `cd /home/ronald/saas-hasner && wc -l logs/relavra10_frota_20261005.out 2>/dev/null; echo "--- head 80 ---"; sed -n '1,80p' logs/relavra10_frota_20261005.out 2>/dev/null` |
