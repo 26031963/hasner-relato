@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 04:32:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **410**.
+**Medido em 06/10/2026 04:37:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **398**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -408,15 +408,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:37:50 | Bash | Ler o lançador do apply anterior | `cd /home/ronald/saas-hasner && cat logs/o195_apply_3_prod_RUN.py` |
 | 16:37:47 | Bash | Rastrear o lançamento do apply anterior | `cd /home/ronald/saas-hasner && grep -rn "o195_apply_3_prod\\|apply_3_prod" --include=*.md --include=*.sh --include=*.out . 2>/dev/null \| grep -v "^./logs/o195_apply_3_prod.py" \| head -10; echo "=== existe em app/logs? ==="; ls -la app/logs/o195* logs/o195_apply* 2>/dev/null` |
 | 16:37:41 | Bash | Ver como o apply de prod foi lançado | `cd /home/ronald/saas-hasner && grep -rn "o195_apply_3_prod" logs/*.md logs/*.out 2>/dev/null \| head -8; echo "--- app/logs ---"; ls app/logs/ 2>/dev/null \| head; echo "--- gitignore ---"; grep -n "logs" .gitignore \| head` |
-| 16:37:27 | Bash | Ver o andamento da sombra | `cd /home/ronald/saas-hasner && wc -l logs/o209_frota_sombra_20261005.out && tail -12 logs/o209_frota_sombra_20261005.out` |
-| 16:37:16 | Bash | Ler a medição dos 389 min | `cd /home/ronald/saas-hasner && cat logs/o195_389min_col382_medido_20261005.md 2>/dev/null \|\| ls logs/ \| grep -i 389` |
-| 16:37:09 | Bash | Ler a linha da L-085 | `cd /home/ronald/saas-hasner && sed -n '80,88p' app/docs/LEIS.md` |
-| 16:36:59 | Bash | Rodar o arreio da frota na sombra | `cd /home/ronald/saas-hasner && OUT=logs/o209_frota_sombra_20261005.out && : > "$OUT" && bin/sombra.sh --com-a-sombra "o209-frota-ato1" -- bash logs/sombra/rodar_na_sombra.sh relavra10_frota_20261005.py >> "$OUT" 2>&1; echo "rc=$? (arquivo: $OUT)"` |
-| 16:36:48 | Bash | Ler o lançador existente | `cd /home/ronald/saas-hasner && cat logs/sombra/rodar_na_sombra.sh` |
-| 16:36:45 | Bash | Procurar o lançador usado antes | `cd /home/ronald/saas-hasner && ls -la logs/sombra/*.sh 2>/dev/null; grep -rln "relavra10_frota\\|com-a-sombra" logs/*.out logs/*.md bin/*.sh 2>/dev/null \| head -20` |
-| 16:36:36 | Bash | Corrigir as afirmações sobre a base da sombra | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() v1 = """A SOMBRA ESTA NO PONTO CERTO PARA ISSO, e e um acaso que vale dizer: a sonda anterior terminou com o RUN C, que recalculou a competencia INTEIRA contra a ata VELHA. Entao o `FechamentoMensal` de hoje na sombra ja esta DRENADO de deriva -- fresco em ...` |
-| 16:36:06 | Bash | Ler a segunda metade do arreio | `cd /home/ronald/saas-hasner && sed -n '250,460p' logs/sombra/relavra10_frota_20261005.py` |
-| 16:36:02 | Bash | Ler o corpo do arreio | `cd /home/ronald/saas-hasner && sed -n '60,250p' logs/sombra/relavra10_frota_20261005.py` |
-| 16:35:44 | Bash | Ler o cabeçalho do arreio | `cd /home/ronald/saas-hasner && sed -n '1,60p' logs/sombra/relavra10_frota_20261005.py` |
-| 16:35:39 | Bash | Ler o bloco da porta e a montagem | `cd /home/ronald/saas-hasner && sed -n '370,400p' bin/sombra.sh && echo "=== DOCKER/ENSAIO ===" && sed -n '120,145p' bin/sombra.sh` |
-| 16:35:35 | Bash | Localizar a porta --com-a-sombra | `cd /home/ronald/saas-hasner && grep -n "com-a-sombra" bin/sombra.sh \| head -30` |
