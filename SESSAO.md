@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 06:51:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **134**.
+**Medido em 06/10/2026 06:57:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **127**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -137,10 +137,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:57:16 | Bash | Ler o resto do suite.sh | `cd /home/ronald/saas-hasner && sed -n '60,130p' bin/suite.sh` |
 | 18:57:13 | Bash | Ler o inicio do suite.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
 | 18:57:05 | Bash | Trocar os rotulos que passam a mentir | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p='colaboradores/models.py'; t=open(p).read() old = """ # PRECEDENCIA: a empresa MANDA. Vazio = comportamento de antes (a praca decide), para que o campo # novo nao mude ninguem no ato de nascer. REGIME_CLT = 'clt' REGIME_CCT = 'cct' REGIME_CHOICES = ((REGIME_CLT, 'CLT (piso legal; ignora a CCT da praca)'), (REGIME_CCT, 'CCT da praca (quando houver  ...` |
-| 18:56:50 | Bash | Ler o campo regime_trabalhista | `cd /home/ronald/wt-regua/app && sed -n '110,132p' colaboradores/models.py` |
-| 18:56:46 | Bash | Atualizar o docstring do modulo | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p='core/regua_cct.py'; t=open(p).read() old = '''"""Leitor da regua CCT (fatia 3, 28/07/2026). Resolve posto -> praca -> VinculoSindicatoPraca -> Sindicato VIGENTE na competencia e devolve os parametros. Sem sindicato/CCT vigente, ou com empate de sindicatos na praca (categoria nao modelada), devolve o piso legal (CLT/Portaria 671). Fonte sempre nom ...` |
-| 18:56:28 | Bash | Ler o docstring do modulo | `cd /home/ronald/wt-regua/app && sed -n '1,20p' core/regua_cct.py` |
-| 18:56:25 | Bash | Curar regua_para para ler a tabela nova | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p = 'core/regua_cct.py' t = open(p).read() old = """ from core.models import VinculoSindicatoPraca from escala.models import EscalaColaborador ec = (EscalaColaborador.objects .filter(colaborador=colaborador, ativa=True) .select_related('posto__praca', 'tipo_escala').first()) praca = getattr(getattr(ec, 'posto', None), 'praca', None)""" assert t.coun ...` |
-| 18:55:34 | Bash | Ler o resto de regua_para | `cd /home/ronald/wt-regua/app && sed -n '300,420p' core/regua_cct.py` |
-| 18:55:30 | Bash | Ler regua_para no arquivo da copia | `cd /home/ronald/wt-regua/app && grep -n "" core/regua_cct.py \| sed -n '150,300p'` |
-| 18:51:38 | Bash | Escrever a lapide, o resolvedor e os contadores | `cd /home/ronald/wt-regua/app && python3 - <<'PY' p = 'core/regua_cct.py' t = open(p).read() # ---------- 1. a lapide de praca_sem_cct_cadastrada (L-111) ---------- ini = t.index('def praca_sem_cct_cadastrada(colaborador, competencia):') fim = t.index('def regua_para(colaborador, competencia, tipo_ciclo=None):') lapide = '''# LAPIDE — `praca_sem_cct_cadastrada` (28/07 -> 05/10, apagada na O211). #  ...` |
