@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 22:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1262**.
+**Medido em 05/10/2026 22:06:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1252**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1262,13 +1262,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:12:22 | Bash | Conferir anti-vacuidade do selo AST novo | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o195; echo "=== o selo AST: o universo (defs) tem caso que MORDE por PRESENCA?"; sed -n '120,185p' "$S/app/ponto/tests/test_realizado_do_dia_autoridade.py"` |
 | 10:12:04 | Bash | Ler o veredito da suite delta | `cd /home/ronald/saas-hasner && T=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks; echo "=== btbdr3mxq (delta escala core ponto):"; tail -25 $T/btbdr3mxq.output; echo; echo "=== OK/FAILED:"; grep -E '^(OK\|FAILED\|Ran )' $T/btbdr3mxq.output` |
 | 10:08:40 | Bash | Conferir HEAD, arvore viva e carimbo de hash | `cd /home/ronald/saas-hasner && echo "HEAD=$(git rev-parse HEAD)"; echo "--- py na arvore viva:"; git status --short -- app \| grep '\.py$' ; echo "(vazio=ok)"; echo "--- grep HEAD em deploy/pos_push:"; grep -n 'rev-parse\\|git log' bin/deploy.sh bin/pos_push.sh \| head -20` |
-| 10:03:49 | Bash | Rodar selos de host de docs | `cd /home/ronald/saas-hasner && for s in bin/tests/test_relato_guarda_pedido_de_patch.sh bin/tests/test_relato_afirma_com_prova.sh bin/tests/test_leis_indice.sh bin/tests/test_cortes_registrados.sh bin/tests/test_lei_akita.sh bin/tests/test_prompt_virou_item.sh bin/tests/test_hook_nao_cobra_congelado.sh bin/tests/test_lei_protege_sitio.sh; do [ -f "$s" ] \|\| { echo "SEM: $s"; continue; }; out=$(ba ...` |
-| 10:03:40 | Bash | Conferir suite | `cd /home/ronald/saas-hasner && wc -c /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/btbdr3mxq.output; docker ps --format '{{.Names}} {{.Status}}'\|head -2` |
-| 10:03:34 | Bash | Abrir as duas linhas no TICKETS | `python3 - <<'PY' p='docs/TICKETS.md' t=open(p,encoding='utf-8').read() sep='\|----\|--------\|-------\|--------\|--------\|------\|------\|-------------\|------\|\n' assert t.count(sep)==1 r1=('\| CELULA-TURNO-FECHA \| estrutural (familia turno) \| **A SOMA PROPRIA DO REALIZADO SAI, E A CELULA DE TURNO ' 'FECHA PELA FUNCAO REAL** (aval dele 04/10 10:3x; o `!` do passo final em 05/10 09:0x). `escal ...` |
-| 10:02:51 | Bash | Ver o cabecalho da tabela principal | `sed -n '106,140p' docs/TICKETS.md \| cut -c1-160` |
-| 10:02:45 | Bash | Estrutura do TICKETS.md | `grep -n "^\| id \\|^\| # \\|^## \\|GERADO\\|:INICIO\\|:FIM" docs/TICKETS.md \| sed -n '1,40p'` |
-| 10:02:36 | Bash | Ler a logica do regua_tickets | `cd /home/ronald/saas-hasner && sed -n '55,120p' bin/regua_tickets.sh` |
-| 10:02:24 | Bash | Levantar o PAROU e registrar a lei respondida | `python3 - <<'PY' p='docs/RELATO.md' t=open(p,encoding='utf-8').read() def troca(v,n): global t assert t.count(v)==1, (t.count(v), v[:70]) t=t.replace(v,n) troca("""**lei: sitio com ZERO chamador de producao ainda "responde a pergunta por conta propria"?** (nao devolve turno -- PAREI-DE-LEI-NAO-DEVOLVE-TURNO; a esteira SEGUE abaixo). E o que SEGURA o passo 6, e eu nao tenho saida sem a sua palavra, ...` |
-| 10:01:50 | Bash | Escrever o novo topo do RELATO | `python3 - <<'PY' p='docs/RELATO.md' t=open(p,encoding='utf-8').read() # --- 1. novo topo, antes do paragrafo do O191 ------------------------------- velho_topo = """FILA 1 ANDANDO, sem PAREI. **ORDEM VIVA: `CELULA-TURNO-FECHA`** -- passos 1-4 FECHADOS com prova; os passos 5-6 sao a **O191**, e o passo 6 **NAO esta carimbado**. Atras dela, a **O145**. **ESTADO (05/10 02:1x): a O191 esta FECHADA e N ...` |
-| 10:01:15 | Bash | Conferir suite em curso | `cd /home/ronald/saas-hasner && wc -c /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/btbdr3mxq.output; bash bin/trava_teste.sh --quem 2>&1\|head -2; docker ps --format '{{.Names}} {{.Status}}' \| head` |
-| 10:00:56 | Bash | Ler o hook_stop_fila1 | `cd /home/ronald/saas-hasner && sed -n '1,120p' bin/hook_stop_fila1.py` |
