@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 00:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **967**.
+**Medido em 06/10/2026 00:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **958**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -968,12 +968,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:23:26 | Bash | Ler o topo de _data_do_turno e a constante | `sed -n '38,60p' /home/ronald/saas-hasner/app/ponto/turnos.py; echo '--- constante:'; grep -n "VESPERA_LONGE_DO_INICIO_MIN" /home/ronald/saas-hasner/app/ponto/turnos.py` |
 | 12:22:53 | Bash | Localizar a atribuicao de data_turno | `grep -n "data_turno" ponto/turnos.py \| head -40` |
 | 12:22:52 | Bash | Ler a guarda da vespera | `sed -n '60,120p' /home/ronald/saas-hasner/app/ponto/turnos.py` |
-| 12:18:26 | Bash | Medir a assinatura do defeito nas 132 | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, datetime, collections S='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad' a=json.load(open('logs/simular_folha/o192_snap_antes.json')) d=json.load(open('logs/simular_folha/o192_snap_depois.json')) rec=set(map(str, json.load(open(S+'/recorte_o192.json'))['recorte'])) # indice por (colab, data) ...` |
-| 12:17:39 | Bash | Ler a guarda VESPERA_LONGE_DO_INICIO_MIN | `sed -n '70,115p' ponto/turnos.py` |
-| 12:17:39 | Bash | Ler a O195 inteira | `cd /home/ronald/saas-hasner/app/docs && awk -F'\|' '/\\| O195 \\|/{print $3}' BACKLOG.md \| fold -w 170` |
-| 12:17:25 | Bash | Ler a atribuição de dia em turnos_do_colab | `cd /home/ronald/saas-hasner/app && grep -n "def turnos_do_colab" -A 60 ponto/turnos.py \| grep -nE "data_turno\|def \|marcos\|localdate\|\.date\(\)\|dia\|celula\|CelulaDia\|previsto" \| head -30` |
-| 12:17:23 | Bash | Estado da obra O76 | `grep -n 'O76' BACKLOG.md \| cut -c1-400 \| head -8` |
-| 12:16:50 | Bash | Ler L-085 inteira com a coluna PROTEGE | `awk -F'\|' 'NR==1\|\|/L-085\|L-073\|L-102/' LEIS.md \| sed -n '1,8p' \| fold -w 190` |
-| 12:16:36 | Bash | LEI ANTES DO PATCH: grep do sítio nas leis | `cd /home/ronald/saas-hasner/app/docs && for t in montar_grade_prevista_periodo_por_turno minutos_realizados_do_dia marcos_turno meia.noite meia_noite cross; do echo "### $t"; grep -niE "$t" LEIS.md CORTES.md DOSSIES.md 2>/dev/null \| cut -c1-230 \| head -12; done` |
-| 12:16:34 | Bash | Veredito da suite inteira | `S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; grep -nE '^(Ran \|OK$\|OK \(\|FAILED\|rc=)' $S/o192_suite2.log` |
-| 12:16:29 | Bash | Registrar o achado em arquivo | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad; cat > $S/achado_montador_meia_noite.md <<'MD' # ACHADO PROVADO, BLOQUEIA O APPLY DA RELAVRATURA 10 ## O montador atribui o realizado pela DATA DA BATIDA, nao pelo TURNO que os marcos declaram Medido na sombra em 05/10 12:0x-12:3x (A/B trava `3921190-1791212031`, autopsia  ...` |
