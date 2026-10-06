@@ -10,7 +10,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 05/10/2026 22:28:01.**
+**Medido em 05/10/2026 22:33:31.**
 
 | | |
 |---|---|
