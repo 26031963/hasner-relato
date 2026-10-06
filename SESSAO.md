@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 23:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1091**.
+**Medido em 05/10/2026 23:16:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1088**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1098,6 +1098,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:23:25 | Bash | Quem chama carimbar_precedencia | `grep -rn 'carimbar_precedencia' --include='*.py' . \| grep -v tests \| grep -v '/portas/celula.py'` |
 | 11:22:58 | Bash | Rodar os 6 casos contra o patch | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; python3 - <<'PYEOF' p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192/app/ponto/tests/test_cartorio_recorte_de_celulas.py' s=open(p).read() velho = """ # a regex importa: `assertRaises(CommandError)` puro passaria com o # `unrecognize ...` |
 | 11:22:39 | Bash | Escrever o patch do recorte na copia | `C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; python3 - <<'PYEOF' p='/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192/app/ponto/management/commands/processar_cartorio.py' s=open(p).read() # 1. import do CommandError a = "from django.core.management.base import BaseCommand\n" assert ...` |
-| 11:12:14 | Bash | Leitores da linha fim e estado do selo do diagrama na copia | `cd /home/ronald/saas-hasner && echo "=== leitores da linha fim: ==="; grep -rn 'fim: julgadas' --include='*.py' --include='*.sh' app/ bin/ 2>/dev/null \| grep -v scratchpad; echo "=== diagrama na copia ==="; C=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/copia_o192; cd $C && python3 bin/gerar_diagrama.py --conferir 2>&1 \| tail -5; echo "rc=$?"` |
-| 11:11:55 | Bash | Ler as tres mencoes a modo sombra | `sed -n '125,140p' ponto/services/cartorio.py; echo "=== placar R5 ==="; sed -n '225,240p' core/placar_estrutural.py; echo "=== crons 845,860 ==="; sed -n '845,860p' config/crons.py` |
-| 11:11:49 | Bash | Quem usa --forcar hoje | `cd /home/ronald/saas-hasner && grep -rn 'SO sombra\\|so sombra\\|forcar' app/docs/*.md 2>/dev/null \| grep -i 'forcar\\|sombra' \| head -10; echo "=== uso do --forcar em bin/ e crons ==="; grep -rn '\-\-forcar' bin/ app/config/crons.py app/ 2>/dev/null --include='*.sh' --include='*.py' \| grep -v scratchpad \| head -20` |
