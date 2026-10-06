@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 04:43:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **385**.
+**Medido em 06/10/2026 04:48:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **377**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -387,11 +387,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:50:28 | Bash | Ler a hora e o rodape do PROMPTS | `date '+%d/%m %H:%M' && tail -3 docs/PROMPTS.md \| cut -c1-200` |
 | 16:50:21 | Bash | Registrar o adendo do cadastro na O211 | `python3 - <<'PY' import io p='docs/BACKLOG.md' s=io.open(p,encoding='utf-8').read() velho = ('a Empresa ganha o campo de sindicato editavel pela tela, com nome e leitor ' '(emp2 e emp4 -> sind2); regime vazio cai no piso legal com contador ' '`empresas_sem_regime` esperado 0.') assert s.count(velho) == 1, s.count(velho) novo = ('o cadastro e a tabela **APLICACAO DE CONVENCAO** -- linha `(sindicato ...` |
 | 16:50:01 | Bash | Localizar a linha da O211 e do prompt | `grep -n 'O211' docs/BACKLOG.md \| head -20; echo ---; grep -n 'REGUA-PELA-EMPRESA' docs/PROMPTS.md` |
-| 16:45:23 | Bash | Curar a ordem do restaurador | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p = 'logs/sombra/relavra10_frota_20261005.py' s = io.open(p, encoding='utf-8').read() velho = '''def restaurar(f): """Volta os 11 campos e RETRATA pela porta o que nasceu. -> (celulas, retratados) A cobranca nascida NAO se apaga: `chamados.reconciliador.retratar` e a porta que o supra_juiz usa, e ela deixa trilha. `.delete()` seria apagar o ...` |
-| 16:44:36 | Bash | Procurar o receiver que escreve célula | `cd /home/ronald/saas-hasner && grep -n "@receiver" -A 3 app/chamados/signals.py \| grep -E "receiver\|def " \| head -20; echo "=== quem desses toca celula/cartorio ==="; grep -nE "cartorio\|CelulaDia\|lavrar_veredito\|carimbar\|celula" app/chamados/signals.py \| head -20` |
-| 16:44:27 | Bash | Testar as duas hipóteses restantes | `cd /home/ronald/saas-hasner && echo "=== _retratar escreve celula? ===" && python3 - <<'PY' import io, re s = io.open('app/chamados/reconciliador.py', encoding='utf-8').read() m = re.search(r'^def _retratar\(', s, re.M) corpo = s[m.start():] fim = re.search(r'\n(def \|class )', corpo[10:]) corpo = corpo[:fim.start()+10] if fim else corpo print('linhas=%d' % corpo.count('\n')) for i, l in enumerate ...` |
-| 16:44:05 | Bash | Ler o veredito do diagnóstico | `cd /home/ronald/saas-hasner && grep -vE "^(best-effort falhou\|NoneType: None\|sem_celula:)" logs/o209_diag_restauro_20261005.out \| tail -40` |
-| 16:44:01 | Bash | Ver a duração do refazer anterior | `cd /home/ronald/saas-hasner && grep -nE "refazer\|segundos\|duracao\|OK\|dt=\|s\)$" logs/sombra_refazer_o209_20261005.out \| tail -12` |
-| 16:43:45 | Bash | Rodar o diagnóstico do restauro | `cd /home/ronald/saas-hasner && OUT=logs/o209_diag_restauro_20261005.out && : > "$OUT" && bin/sombra.sh --com-a-sombra "o209-diag-restauro" -- bash logs/sombra/rodar_na_sombra.sh o209_diag_restauro_20261005.py >> "$OUT" 2>&1; echo "rc=$?"` |
-| 16:43:39 | Bash | Conferir a forma das linhas novas | `cd /home/ronald/saas-hasner && awk -F'\|' '/^\\| O21[12] /{print $2" NF="NF}' app/docs/BACKLOG.md; ls bin/tests/ \| grep -i backlog` |
-| 16:43:35 | Bash | Registrar a obra nova e o furo do incremental | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io b = 'app/docs/BACKLOG.md' s = io.open(b, encoding='utf-8').read() anc = '\| # \| obra \| portao \| onde esta \| pedido em \|\n\|---\|---\|---\|---\|---\|\n' assert s.count(anc) == 1 o211 = ("\| O211 \| **REGUA-PELA-EMPRESA** (lei nova dele, 05/10 16:4x): **a EMPRESA decide a regua e a PRACA sai dela**. " "`clt` = piso legal (JSP, como hoje) ...` |
