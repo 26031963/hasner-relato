@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 05/10/2026 22:55:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1116**.
+**Medido em 05/10/2026 23:00:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **1106**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1116,13 +1116,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:04:44 | Bash | Ler a porta lavrar_veredito | `grep -n 'def lavrar_veredito' -A 80 ponto/portas/celula.py` |
 | 11:01:14 | Bash | Ler lavrar_veredito | `grep -n 'def lavrar_veredito' -A 45 escala/models.py \| head -60` |
 | 11:00:45 | Bash | RED: rodar o recorte contra a copia sem patch | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && bash bin/suite.sh --dir $COP --only "ponto.tests.test_cartorio_recorte_de_celulas" --espera 300 2>&1 \| tail -16` |
-| 11:00:33 | Bash | Ler o uso do suite.sh | `cd /home/ronald/saas-hasner && sed -n '1,60p' bin/suite.sh` |
-| 11:00:26 | Bash | Rodar o RED na copia sem o patch | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && python3 - "$COP" <<'PY' import sys p=sys.argv[1]+'/app/ponto/tests/test_cartorio_recorte_de_celulas.py' s=open(p).read() lixo=" self._bate(self.cel_noite.data, datetime.time(22, 0), 'E') if False else None\n" assert s.count(lixo)==1 s=s.replace( ...` |
-| 11:00:16 | Bash | Escrever o RED do recorte | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && cat > $COP/app/ponto/tests/test_cartorio_recorte_de_celulas.py <<'PY' """RECORTE-DE-ATA (O192): o `--forcar` do cartorio ganha ALVO, e o alvo e' dia-colab. O `--forcar` existe desde a HX-BORDA-ATA para fazer BACKFILL de ata: rejulgar mesmo com a ...` |
-| 10:59:15 | Bash | Criar a copia do HEAD e pedir a montagem | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && COP=$SCR/copia_o192 && rm -rf $COP && mkdir -p $COP && git archive HEAD \| tar -x -C $COP && ls $COP \| head && echo "--- montagem ---" && bash bin/arvore_do_push.sh --montagem $COP 2>&1 \| head -5` |
-| 10:58:59 | Bash | Ler um teste de cartorio como molde | `sed -n '1,70p' ponto/tests/test_hx_cartorio_universo.py` |
-| 10:58:55 | Bash | Achar os testes do cartorio | `ls ponto/tests/ \| grep -i cartorio; echo "=== quem testa o command ==="; grep -rln 'processar_cartorio' --include=test_*.py . \| head` |
-| 10:58:45 | Bash | Ler o comando processar_cartorio | `cat -n ponto/management/commands/processar_cartorio.py \| sed -n '1,115p'` |
-| 10:58:19 | Bash | Ensaio gratis no col948 | `cd /home/ronald/saas-hasner && SCR=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && cat > $SCR/sonda_col948_preview.py <<'PY' # SONDA LEITURA: o ENSAIO GRATIS -- o que a ata rejulgada com o codigo curado fez no col948. import datetime from django.utils import timezone from escala.models import CelulaDia from chamados.models import ChamadoColaborador  ...` |
-| 10:58:01 | Bash | Ler o ramo normal do laco | `sed -n '520,580p' ponto/services/cartorio.py` |
-| 10:57:50 | Bash | Ler o laco de escrita do cartorio | `sed -n '425,500p' ponto/services/cartorio.py` |
