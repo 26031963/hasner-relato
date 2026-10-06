@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 02:50:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **622**.
+**Medido em 06/10/2026 02:55:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **614**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -624,11 +624,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:56:03 | Bash | Ler o idioma de fixture de um teste de fechamento | `sed -n '1,55p' ponto/tests/test_fechamento_escritor_guardas.py` |
 | 14:55:59 | Bash | Achar o idioma de fixture do FechamentoMensal nos testes | `grep -rln 'FechamentoMensal.objects.create' ponto/tests/ \| head -5 && echo "---" && grep -rn 'FechamentoMensal.objects.create' -A6 ponto/tests/test_o80_selo_l092.py \| head -40` |
 | 14:55:49 | Bash | Ver os modos da porta da arvore do push | `cd /home/ronald/saas-hasner && grep -n '^# uso:\\|^# bin/arvore\\|^# arvore\\|--montagem\\|--criar\\|--copia\\|^# ' bin/arvore_do_push.sh \| sed -n '1,60p'` |
-| 14:55:43 | Bash | Ler a porta unica da suite | `cd /home/ronald/saas-hasner && sed -n '1,200p' bin/suite.sh` |
-| 14:52:18 | Bash | Gravar o achado do contador cego | `cd /home/ronald/saas-hasner && cat > logs/o208_rubricas_cegas.md <<'EOF' # O208 -- o contador do recalculo e CEGO ao campo da cura (achado MEDIDO 05/10, na sonda da relavratura 10) `ponto/management/commands/recalcular_fechamento.py:36` declara a sua PROPRIA lista de campos, `RUBRICAS` (19), ao lado do `CAMPOS` canonico de 26 que o proprio `ponto/services/fechamento.py:573-575` chama de "o CAMPOS  ...` |
-| 14:51:54 | Bash | LEI ANTES DO PATCH: grep do arquivo e da funcao nas tres fontes | `for f in docs/LEIS.md docs/DOSSIES.md docs/CORTES.md; do echo "=== $f ==="; grep -n 'recalcular_fechamento\\|RUBRICAS\\|fechamentos_mexidos' "$f" \| head -20; done` |
-| 14:51:46 | Bash | Ler o CAMPOS canonico | `sed -n '55,80p' ponto/management/commands/aplicar_09_corte_b.py` |
-| 14:51:40 | Bash | Censo de quem declara e quem le a lista de campos do fechamento | `grep -rn 'CAMPOS' --include='*.py' ponto/ folha/ core/ \| grep -v '\.pyc' \| grep -iv 'campos_do_item\\|CAMPOS_EDIT\\|CAMPOS_FORM' \| head -40` |
-| 14:51:15 | Bash | Ler o topo do comando e a lista RUBRICAS | `sed -n '1,60p' ponto/management/commands/recalcular_fechamento.py` |
-| 14:51:11 | Bash | Ler o bloco do contador | `sed -n '85,150p' ponto/management/commands/recalcular_fechamento.py` |
-| 14:51:07 | Bash | Localizar o contador de fechamentos mexidos | `grep -n 'mexid\\|novos\\|processad' ponto/management/commands/recalcular_fechamento.py` |
