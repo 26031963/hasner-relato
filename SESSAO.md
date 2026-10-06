@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 02:13:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **696**.
+**Medido em 06/10/2026 02:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **687**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -697,12 +697,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:19:43 | Bash | Ler o topo do RELATO | `cd /home/ronald/saas-hasner && head -30 app/docs/RELATO.md && echo "..." && wc -l app/docs/RELATO.md` |
 | 14:19:40 | Bash | Corrigir a celula da L-085 e a nota do TICKETS | `cd /home/ronald/saas-hasner && python3 - <<'PYEOF' import io p = 'app/docs/LEIS.md' s = io.open(p, encoding='utf-8').read() velho = ('**3** cruzando a borda para a comp 09 EXPORTADA (L-092, **PAREI** nomeado no item).') novo = ('**3** cruzando a borda para a comp 09 EXPORTADA, e nenhum deles e PAREI: dois sao **orfas** ' '(0 min) e o terceiro, col382 `09-21 -> 09-20`, vale **389 min** que a ata de ...` |
 | 14:19:08 | Bash | Conferir os diffs de LEIS e TICKETS | `cd /home/ronald/saas-hasner && echo "=== LEIS.md diff ===" && git diff app/docs/LEIS.md \| head -40 && echo "=== TICKETS.md diff ===" && git diff app/docs/TICKETS.md \| head -60` |
-| 14:17:19 | Bash | Rodar a pasta de selos de host e o node_check | `cd /home/ronald/saas-hasner && R=0; N=0; for s in bin/tests/test_*.sh; do N=$((N+1)); if ! out="$(bash "$s" 2>&1)"; then R=$((R+1)); echo "VERMELHO: $(basename "$s")"; echo "$out" \| sed 's/^/ /' \| head -12; fi; done; echo "=== selos=$N vermelhos=$R ==="; bash bin/node_check.sh 2>&1 \| tail -3` |
-| 14:17:15 | Bash | Ler o trecho da regua que roda os selos de host | `cd /home/ronald/saas-hasner && sed -n '130,160p' bin/regua.sh` |
-| 14:17:11 | Bash | Ver como a regua chama a pasta de selos | `cd /home/ronald/saas-hasner && grep -n "bin/tests" bin/regua.sh \| head -10` |
-| 14:17:07 | Bash | Conferir trava, crons e estado da copia | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && echo "--- trava ---" && bin/trava_teste.sh --quem 2>&1 \| head -3 && echo "--- crons em curso ---" && ls logs/crons_em_curso/ 2>/dev/null \| head && echo "--- copia: mtime dos 4 arquivos vs fim da suite ---" && ls -l --time-style=+%H:%M:%S $S/copia_o195/app/ponto/turnos ...` |
-| 14:16:52 | Bash | Reescrever a publicacao do DIFF com as correcoes | `cd /home/ronald/saas-hasner && cat > logs/o195_diff_dinheiro.md <<'MDEOF' # O195 -- DIFF DE DINHEIRO (DINHEIRO-EM-COMPETENCIA-ABERTA, condicoes 1 a 4) Medido 05/10 14:0x na sombra REFEITA de hoje (`.sombra_stamp`: SOMBRA_DUMP=20261005, SOMBRA_REFEITA 13:37, SOMBRA_BLOCO 14:01, SOMBRA_DIVERGE=0, SOMBRA_ERROS=0, SOMBRA_STATUS=OK -- entao nao ha migration pendente entre o dump e agora, e o portao do  ...` |
-| 14:15:30 | Bash | Ler a publicacao do DIFF | `cd /home/ronald/saas-hasner && cat -n logs/o195_diff_dinheiro.md` |
-| 14:15:24 | Bash | Extrair e validar o arquivo de reversao | `cd /home/ronald/saas-hasner && awk '/^JSON-INICIO$/{f=1;next} /^JSON-FIM$/{f=0} f' logs/o195_reversao_bruto.out > logs/o195_reversao_20261005.json && python3 -c " import json d = json.load(open('logs/o195_reversao_20261005.json')) print('JSON valido \| celulas=%d fechamentos=%d hash09=%s linhas09=%d' % (len(d['celulas']), len(d['fechamento_10_2026']), d['hash_09_antes']['geral'], d['hash_09_antes' ...` |
-| 14:15:17 | Bash | Rodar a sonda de reversao em prod (leitura pura) | `cd /home/ronald/saas-hasner && S=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && docker cp "$S/reversao_o195.py" saas_core:/tmp/reversao_o195.py && docker exec saas_core python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/reversao_o195.py').read())" > logs/o195_reversao_bruto.out 2>&1; echo "rc=$?"; grep -v '^{' logs/o1 ...` |
-| 14:15:10 | Bash | Conferir campos da CelulaDia | `cd /home/ronald/saas-hasner && grep -n "insumos_em\\|veredito_via\\|impressao\\|julgada_em" app/escala/models.py \| head -20` |
