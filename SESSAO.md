@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 05:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **295**.
+**Medido em 06/10/2026 05:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **280**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -290,18 +290,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:26:28 | Bash | Curar o rotulo do universo no script de prod | `cd /home/ronald/saas-hasner && python3 - <<'PY' p='logs/o209_apply_frota_prod.py' s=open(p,encoding='utf-8').read() old = """_ncel = CelulaDia.objects.filter(data__gte=INI10, data__lte=LIM).count() print('') print('UNIVERSO EM PROD AGORA: %d celula(s) em %d colab(s) (na sombra: %d em %d)' % ( _ncel, len(alvo), PAC['universo']['celulas'], PAC['universo']['colabs'])) print(' diferenca de universo NA ...` |
 | 17:26:05 | Bash | Conferir o que o arreio chama de universo | `cd /home/ronald/saas-hasner && grep -n "universo\\|INI10\\|FIM10\\|LIM *=\\|data__lte\\|data__gte\\|def foto_reversao\\|def foto_ata" logs/sombra/relavra10_frota_20261005.py \| head -40` |
 | 17:25:47 | Bash | Rodar o DRY em prod (so leitura) | `cd /home/ronald/saas-hasner && timeout 900 docker exec saas_core nice -n 19 python manage.py tenant_command shell --schema=juliani --command "exec(open('/tmp/o209_DRY.py').read())" 2>&1 \| tail -40; echo "rc=$?"` |
-| 17:25:42 | Bash | Copiar o script e o ESPERADO para o container | `cd /home/ronald/saas-hasner && docker cp logs/o209_apply_frota_prod.py saas_core:/tmp/o209_apply_frota_prod.py && docker cp logs/sombra/o209_esperado_20261005.json saas_core:/tmp/o209_esperado_20261005.json && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o209_DRY.py <<'PY' APLICAR = False exec(open('/tmp/o209_apply_frota_prod.py').read()) PY d ...` |
-| 17:25:31 | Bash | Ler o fim do script de prod | `cd /home/ronald/saas-hasner && sed -n '360,504p' logs/o209_apply_frota_prod.py` |
-| 17:25:27 | Bash | Ler o laco principal do script de prod | `cd /home/ronald/saas-hasner && sed -n '200,360p' logs/o209_apply_frota_prod.py` |
-| 17:25:23 | Bash | Ler o corpo do script de prod | `cd /home/ronald/saas-hasner && sed -n '60,200p' logs/o209_apply_frota_prod.py` |
-| 17:25:20 | Bash | Ler o inicio do script de prod | `cd /home/ronald/saas-hasner && wc -l logs/o209_apply_frota_prod.py && sed -n '1,60p' logs/o209_apply_frota_prod.py` |
-| 17:25:15 | Bash | Conferir o script e o ESPERADO limpo | `cd /home/ronald/saas-hasner && python3 -m py_compile logs/o209_apply_frota_prod.py && echo "compila OK" && python3 -c " import json p=json.load(open('logs/sombra/o209_esperado_20261005.json')) print('chaves:', sorted(p)) print('competencia', p['competencia'], 'janela', p['janela_julgada']) print('dump_de_prod_em', p['dump_de_prod_em'], 'gerado_em', p['gerado_em']) print('hash09', p['hash09']) prin ...` |
-| 17:25:06 | Bash | Inserir o bloco no RELATO | `SC=/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad && python3 - <<'PY' p='docs/RELATO.md' s=open(p,encoding='utf-8').read() anc='## RELAVRATURA 10 — APLICADA EM PROD NOS 3 COLABS (05/10 15:57, item (2) FECHADO)' assert s.count(anc)==1, s.count(anc) novo=open('/tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/ ...` |
-| 17:24:58 | Bash | Escrever o bloco do DIFF O209 | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o209_diff.md <<'FIMDOBLOCO' ## O209 — **O DIFF DE FROTA, PUBLICADO ANTES DO APPLY** (05/10 17:2x, base LIMPA) Este bloco e a **condicao 1 da `DINHEIRO-EM-COMPETENCIA-ABERTA`**: *"DIFF de frota publicado no RELATO ANTES do apply"*. **Publicado = gravado aqui, neste arquivo, antes do ato** -- nao e o  ...` |
-| 17:23:37 | Bash | Ler o topo do RELATO | `sed -n '1,25p' docs/RELATO.md` |
-| 17:23:33 | Bash | Ler a secao O209 do RELATO | `sed -n '429,481p' docs/RELATO.md` |
-| 17:23:30 | Bash | Ver a estrutura do RELATO | `date '+%H:%M' && wc -l docs/RELATO.md && grep -n '^## ' docs/RELATO.md \| head -20` |
-| 17:23:16 | Bash | Ler o bloco do ATO 2 e a cauda | `cd /home/ronald/saas-hasner && sed -n '140,170p' logs/o209_frota_sombra_r3.out; echo "=== tail ==="; sed -n '255,268p' logs/o209_frota_sombra_r3.out` |
-| 17:22:58 | Bash | Comparar o ESPERADO da base suja com o da base limpa | `cd /home/ronald/saas-hasner && python3 logs/o209_cmp_esperado.py logs/sombra/o209_esperado_20261005_BASE_SUJA.json logs/sombra/o209_esperado_20261005.json 2>&1 \| head -120` |
-| 17:22:51 | Bash | Ler o bloco do ATO 1 na base limpa | `cd /home/ronald/saas-hasner && sed -n '55,140p' logs/o209_frota_sombra_r3.out` |
-| 17:22:44 | Bash | Conferir progresso da cadeia r3 | `cd /home/ronald/saas-hasner && date '+%H:%M:%S' && ls -la logs/o209_frota_sombra_r3.done 2>/dev/null \|\| echo "sem .done"; echo "--- grep de marcos ---"; grep -nE '^=== \|lavra_de_prod\|carimbo \|PROVA DE RESTAURO\|\[ato1\]\|\[ensaio\]\|DELTA DE CONJUNTO\|ATA SE MOVEU\|ESPERADO gravado\|ATO 2\|EXPORTADA\|^rc=\|Traceback\|relavrados' logs/o209_frota_sombra_r3.out \| tail -40` |
