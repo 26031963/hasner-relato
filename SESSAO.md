@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 03:27:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **560**.
+**Medido em 06/10/2026 03:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **551**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -561,12 +561,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:36:56 | Bash | Localizar o modelo DiaPago | `grep -rn "class DiaPago" --include=*.py . \| head -3` |
 | 15:36:44 | Bash | Publicar a cura O208 pela porta do deploy | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_o208_20261005.out 2>&1; echo "rc=$?"; tail -30 logs/deploy_o208_20261005.out` |
 | 15:36:32 | Bash | Conferir estado do push em segundo plano | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl1d81s3w.output 2>/dev/null; echo "--- fetch/compare"; git fetch origin 2>&1 \| tail -2; git log --oneline origin/main..HEAD 2>&1 \| head -5; echo "--- HEAD"; git log --oneline -1` |
-| 15:32:07 | Bash | Ler os campos escritos por lavrar_veredito e carimbar | `sed -n '538,582p' ponto/portas/celula.py` |
-| 15:32:03 | Bash | Campos escritos pela porta da celula e localizar carimbar | `grep -nE "cel\.[a-z_]+ *=\|celula\.[a-z_]+ *=\|update_fields\|campos\b" ponto/portas/celula.py \| head -30; echo "=== carimbar ==="; grep -rn "def carimbar" ponto/ escala/ \| head -3` |
-| 15:31:56 | Bash | Ler o corpo de lavrar_veredito | `n=$(grep -n "def lavrar_veredito" escala/models.py \| cut -d: -f1) && sed -n "${n},$((n+55))p" escala/models.py` |
-| 15:31:52 | Bash | Ler lavrar_veredito | `echo "=== lavrar_veredito ==="; awk '/def lavrar_veredito/,/^ def [a-z_]+\(self/' escala/models.py \| head -45` |
-| 15:31:47 | Bash | Localizar as atribuicoes de campo no cartorio | `grep -nE '(julgada_em\|impressao\|veredito\|veredito_via\|veredito_em\|protestos\|ata\|insumos_em)\s*=' ponto/services/cartorio.py \| grep -vE '^\s*[0-9]+:\s*#' \| sed -n '1,45p'` |
-| 15:31:43 | Bash | Ver quais campos da celula o cartorio escreve | `grep -nE '\b(cel\|c)\.(julgada_em\|impressao\|veredito\|veredito_via\|veredito_em\|protestos\|ata\|insumos_em\|tem_entrada\|tem_saida)\s*=' ponto/services/cartorio.py \| head -30; echo "=== update_fields usados ==="; grep -nE "update_fields=" ponto/services/cartorio.py \| head -20` |
-| 15:31:36 | Bash | Listar os campos do modelo CelulaDia | `python3 - <<'PYEOF' import io, re s = io.open('escala/models.py', encoding='utf-8').read() i = s.index('class CelulaDia') j = s.index('\nclass ', i+10) blk = s[i:j] for m in re.finditer(r'^\s{4}(\w+)\s*=\s*models\.(\w+)', blk, re.M): print(' %-22s %s' % (m.group(1), m.group(2))) PYEOF` |
-| 15:31:21 | Bash | Conferir cobertura do json de reversao para os 3 colabs | `cd /home/ronald/saas-hasner && python3 -c " import json,io d=json.load(io.open('logs/o195_reversao_20261005.json')) ks=sorted(d['celulas'].keys()) print('celulas: amostra de chave ->', ks[0]) print('campos da celula:', sorted(d['celulas'][ks[0]].keys())) # os 3 do apply for cid in (174,235,382): mine=[k for k in ks if k.startswith('%d\|'%cid) or k.startswith('%d:'%cid) or k.split('_')[0]==str(cid) ...` |
-| 15:31:14 | Bash | Inspecionar o json de reversao existente | `cd /home/ronald/saas-hasner && echo "=== o que o reversao json ja tem ==="; python3 -c " import json,io d=json.load(io.open('logs/o195_reversao_20261005.json')) print('chaves:', list(d.keys())[:20]) for k,v in d.items(): if isinstance(v,list): print(' %-28s list[%d]'%(k,len(v))) elif isinstance(v,dict): print(' %-28s dict[%d]'%(k,len(v))) else: print(' %-28s %r'%(k,v)) "` |
