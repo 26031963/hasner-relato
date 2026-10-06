@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 07:19:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **67**.
+**Medido em 06/10/2026 07:24:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **62**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -72,8 +72,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:29:06 | Bash | Medir o placar vivo dos contratos estruturais | `cd /home/ronald/saas-hasner && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/placar_vivo.py <<'PY' import core.contratos_estruturais as ce from core import juizes print('linha :', ce.linha_do_placar()) print('verdes :', ce.verdes(), ' total:', ce.total(), ' declaradas:', ce.declaradas()) print('sem cadastro:', ce.familias_sem_cadastro()) print( ...` |
 | 19:28:42 | Bash | Ler o hook que le o topo do RELATO | `cd /home/ronald/saas-hasner && sed -n '1,200p' bin/hook_stop_fila1.py` |
 | 19:28:31 | Bash | Ler o topo do RELATO e o estado do git | `sed -n '1,40p' docs/RELATO.md && echo "=== wc" && wc -l docs/RELATO.md && echo "=== git" && git -C /home/ronald/saas-hasner log --oneline -1 && git -C /home/ronald/saas-hasner status --short \| head` |
-| 19:23:45 | Bash | Medir a classe: ata com papel invertido por tipo de ciclo | `cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/o209_classe_intermitente.py <<'PY' # -*- coding: utf-8 -*- """A CLASSE do achado: quantos dia-colab tem a ata com PAPEL invertido, e quantos sao intermitentes. `lampada` com `tipo` != `tipo_real` = a ata deu a uma batida de SAIDA o papel de ENTRADA (ou o inverso). E ela realimenta o pareador (`ponto ...` |
-| 19:23:01 | Bash | Ler a ata ANTES do O209 para as células de col146 | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json d = json.load(open('app/logs/o209/reversao_frota_20261005_173212.json')) cels = d['celulas'] print('celulas: tipo', type(cels).__name__, 'len', len(cels)) for pk in ('118979', '118980', '118981', '118982', 118979, 118980, 118981, 118982): if isinstance(cels, dict) and str(pk) in cels: r = cels[str(pk)] ata = r.get('ata') or {} print('---  ...` |
-| 19:22:54 | Bash | Inspecionar a estrutura do arquivo de reversão | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json p = 'app/logs/o209/reversao_frota_20261005_173212.json' d = json.load(open(p)) print('tipo topo:', type(d).__name__) if isinstance(d, dict): ks = list(d.keys()) print('chaves topo (até 8):', ks[:8], '... total', len(ks)) k0 = ks[0] print('exemplo', k0, '->', json.dumps(d[k0])[:300] if not isinstance(d[k0], (int, str)) else d[k0]) elif isi ...` |
-| 19:19:22 | Bash | Ler os números da competência 08 | `tail -12 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output` |
-| 19:19:04 | Bash | Ver se o pareador lê a ata | `grep -rn "papel_por_minuto_da_ata" --include=*.py . \| head; echo ====; grep -n "papel_por_minuto_da_ata\\|def papel_por_minuto" -A 18 ponto/turnos.py \| sed -n '1,60p'` |
