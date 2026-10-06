@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 06/10/2026 03:33:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **551**.
+**Medido em 06/10/2026 03:38:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (412.9 MB). Acoes na janela: **539**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -549,15 +549,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:40:05 | Bash | Escrever a reversao escopada da condicao 2 | `cd /home/ronald/saas-hasner && cat > logs/o195_cond2_restore.py <<'PYEOF' # -*- coding: utf-8 -*- """A FRASE DE REVERSAO DO APPLY DOS 3, EXECUTAVEL. Le `logs/o195_cond2_20261005.json`. `DRY=True` (default) monta tudo, CONFERE as guardas e nao escreve -- e' a prova de que a reversao EXECUTA, que e' o que a condicao 2 pede. `DRY=False` escreve, num `atomic` so. ESCOPO IGUAL AO DA FOTO: colabs 174/23 ...` |
 | 15:39:22 | Bash | Escrever a foto escopada da condicao 2 | `cd /home/ronald/saas-hasner && cat > logs/o195_cond2_snapshot.py <<'PYEOF' # -*- coding: utf-8 -*- """CONDICAO 2 DA DINHEIRO-EM-COMPETENCIA-ABERTA, ESCOPADA NOS 3 IDS DO APPLY. A foto ANTES. Nao escreve nada. POR QUE ESTE ARQUIVO EXISTE, e nao e' "mais um snapshot": os dois que a casa ja tem NAO revertem o ato que vai subir. (a) `logs/o195_reversao_20261005.json` (14:15) cobre `CelulaDia`, mas lhe ...` |
 | 15:38:35 | Bash | Localizar os modelos de chamado e pergunta | `grep -rn "^class ChamadoColaborador\\|^class Pergunta" chamados/models.py \| head` |
-| 15:38:29 | Bash | Ver como o DIFF contou emitidos e perguntas | `cd /home/ronald/saas-hasner && grep -n "emitidos\\|perguntas\\|contadores" logs/sombra/relavra10_diff_20261005.py \| head -20` |
-| 15:38:20 | Bash | Censo de escrita no cartorio: quais campos o julgar toca | `grep -n "\.save(\\|update_fields\\|objects.update(\\|\.update(" ponto/services/cartorio.py \| head -30` |
-| 15:38:10 | Bash | Ver o escopo do delete na lavratura do DiaPago | `grep -n "delete()\\|def lavrar" ponto/services/dia_pago.py \| head -20` |
-| 15:38:05 | Bash | Conferir o delete/recria do DiaPago e a versao usada | `sed -n '195,225p' ponto/services/dia_pago.py; echo "=== quem chama lavrar com versao"; grep -rn "dia_pago.lavrar\\|lavrar(" ponto/services/fechamento.py \| head -10; echo "=== 660-675 fechamento"; sed -n '660,675p' ponto/services/fechamento.py` |
-| 15:37:46 | Bash | Ler o restore de competencia inteira | `cd /home/ronald/saas-hasner && cat bin/restore_relavratura_10_2026.py` |
-| 15:37:31 | Bash | Ver o snapshot/restore existentes | `cd /home/ronald/saas-hasner && ls bin/ \| grep -iE "relavr\|snapshot\|restore" ; echo "=== snapshot"; sed -n '1,60p' bin/snapshot_relavratura_10_2026.py 2>/dev/null` |
-| 15:37:25 | Bash | Ler o script do DIFF para reaproveitar a janela e a porta | `cd /home/ronald/saas-hasner && ls -la logs/sombra/relavra10*.py logs/*relavra*.py logs/o195* 2>/dev/null; echo "=== cabeca do diff"; sed -n '1,120p' logs/sombra/relavra10_diff_20261005.py` |
-| 15:37:16 | Bash | Fechar campos do DiaPago e ler o resultado do deploy | `sed -n '340,370p' ponto/models.py; echo "=== DEPLOY"; tail -25 /home/ronald/saas-hasner/logs/deploy_o208_20261005.out` |
-| 15:37:02 | Bash | Ler os campos do DiaPago | `sed -n '271,340p' ponto/models.py` |
-| 15:36:56 | Bash | Localizar o modelo DiaPago | `grep -rn "class DiaPago" --include=*.py . \| head -3` |
-| 15:36:44 | Bash | Publicar a cura O208 pela porta do deploy | `cd /home/ronald/saas-hasner && bin/deploy.sh --sem-migrate > logs/deploy_o208_20261005.out 2>&1; echo "rc=$?"; tail -30 logs/deploy_o208_20261005.out` |
-| 15:36:32 | Bash | Conferir estado do push em segundo plano | `cd /home/ronald/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/bl1d81s3w.output 2>/dev/null; echo "--- fetch/compare"; git fetch origin 2>&1 \| tail -2; git log --oneline origin/main..HEAD 2>&1 \| head -5; echo "--- HEAD"; git log --oneline -1` |
