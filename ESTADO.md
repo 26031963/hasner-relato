@@ -3,13 +3,13 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:32:46.**
+**Medido em 07/10/2026 18:38:01.**
 
 | | |
 |---|---|
 | `HEAD` local | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
-| `origin/main` | `212b25a7 [O209] a ata da frota na 10 relavrada em prod: 92 de 92 casados com a sombra e a 09 intacta` |
-| commits a subir (`ahead`) | **1** |
+| `origin/main` | `fd6c8c0e [O209] a conferencia do marco: NAO virou 15/20, e o que falta sao 2 dia-colab de 7.859` |
+| commits a subir (`ahead`) | **0** |
 
 ## Fabrica
 
@@ -109,42 +109,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-
-  Ran 1 shell command
-
-● Antes de empurrar, vou testar se o portão lê o DISCO — se ler, o fd6c8c0e sobe sozinho e os docs pegam o commit do próximo marco (L-106),
-  sem emendar o hash que o aval nomeia.
-
-  Ran 2 shell commands
-
-● Passou do portão do placar — está na suíte, em voo. Enquanto ele roda eu não escrevo na árvore; faço o diagnóstico de origem da O217, que
-  é leitura. As duas células que o aval nomeia são exatamente os 2 dia-colab que faltavam na conferência do marco.
-
-  Ran 4 shell commands
-
-● col146: a ata pôs 894 min no dia 29 e 0 no dia 28; a autoridade diz 541 no 28 e 545 no 29. É a atribuição do turno que cruza a meia-noite
-  — e a lavra não é ponto fixo. Vou medir isso na sombra com o arreio que já existe.
-
-  Ran 6 shell commands
-
-● O arreio genérico não existe (cada medição tem o seu, em arquivo). Enquanto o push roda, sigo na origem — por que a lavra não é ponto
-  fixo nesses dois dias.
-
   Ran 3 shell commands
 
 ● O realizado_do_dia com turnos=None pede fatia de UM dia (turnos_do_colab(colab, data, data)) — a armadilha que a casa já pagou. Preciso
   saber quem o cartório consulta antes de dizer quem erra.
 
-● Ver como o cartório obtém minutos_realizados
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '240,275p' app/ponto/services/cartorio.py; echo "=== quem monta 'dia' ==="; grep -n "def
-     classificar_dia\|dias_do_colab\|def _dias\|fatos_do_dia\|classificar_falta" app/ponto/services/cartorio.py | head -20
+  Ran 3 shell commands
 
-* Beboppin'… (23m 57s · ↓ 24.9k tokens · thinking)
+● Background command "Empurrar fd6c8c0e pela régua normal" completed (exit code 0)
+
+● O push terminou com rc=0 — vou confirmar no remoto, não no silêncio do log.
+
+  Ran 1 shell command
+
+● fd6c8c0e está no remoto (9.641 testes OK + 22 do control-plane). Os docs ficam para o commit do marco da O217, pela L-106. Agora a O217 —
+  falta saber quem escreve minutos_realizados na ata.
+
+  Ran 3 shell commands
+
+● O achado está nomeado: a ata e a conferência chamam a mesma autoridade, mas com janelas de turno diferentes — a grade passa
+  turnos=_turnos_do_juiz() (janela larga), a conferência passou turnos=None, que é fatia de um dia. Antes de escolher a cura, vou consultar
+  o revisor.
+
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
+
+  Achar a porta que lançou o relavra10 e o estado da O217 nos docs
+  ⎿  $ cd /home/ronald/saas-hasner && echo "=== como o relavra10 foi lançado ==="; grep -rn "relavra10_frota" bin/ app/docs/RELATO.md
+     logs/*.out 2>/dev/null | head -8; echo; echo "=== O217 em PROMPTS/BACKLOG ==="; grep -n "O217" app/docs/PROMPTS.md app/docs/BACKLOG.md
+     2>/dev/null | head
+
+✢ Beboppin'… (29m 12s · ↓ 28.9k tokens · thinking)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ⏵⏵ auto mode on · 2 shells · esc to interrupt · ← for agents · ↓ to manage
+  ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
   ● main
   ◯ fork  Confirming commit hashes in worktree                                                                 1h 3m 8s · ↓ 428.9k tokens

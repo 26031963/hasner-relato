@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:32:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.8 MB). Acoes na janela: **40**.
+**Medido em 07/10/2026 18:38:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.9 MB). Acoes na janela: **47**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:37:56 | Bash | Achar a porta que lançou o relavra10 e o estado da O217 nos docs | `cd /home/ronald/saas-hasner && echo "=== como o relavra10 foi lançado ==="; grep -rn "relavra10_frota" bin/ app/docs/RELATO.md logs/*.out 2>/dev/null \| head -8; echo; echo "=== O217 em PROMPTS/BACKLOG ==="; grep -n "O217" app/docs/PROMPTS.md app/docs/BACKLOG.md 2>/dev/null \| head` |
+| 18:33:27 | Bash | Ler como a grade deriva minutos_realizados | `cd /home/ronald/saas-hasner && sed -n '1270,1360p' app/escala/utils.py` |
+| 18:33:23 | Bash | Ver quem calcula minutos_realizados na grade | `cd /home/ronald/saas-hasner && grep -n "minutos_realizados" app/escala/utils.py \| head -20` |
+| 18:33:11 | Bash | Ver a montagem da grade no cartório | `cd /home/ronald/saas-hasner && sed -n '470,530p' app/ponto/services/cartorio.py` |
+| 18:33:01 | Bash | Confirmar o push no remoto | `cd /home/ronald/saas-hasner && tail -12 logs/push_fd6c8c0e_2.out; echo "=== remoto ==="; git fetch origin -q && git rev-parse --short origin/main && git log --oneline -1 origin/main && echo "origin/main..HEAD = $(git rev-list --count origin/main..HEAD) commit(s)"` |
+| 18:32:51 | Bash | Ler julgar_colab | `cd /home/ronald/saas-hasner && sed -n '400,470p' app/ponto/services/cartorio.py` |
+| 18:32:43 | Bash | Ver a origem do dict dia no cartório | `cd /home/ronald/saas-hasner && sed -n '240,275p' app/ponto/services/cartorio.py; echo "=== quem monta 'dia' ==="; grep -n "def classificar_dia\\|dias_do_colab\\|def _dias\\|fatos_do_dia\\|classificar_falta" app/ponto/services/cartorio.py \| head -20` |
 | 18:32:39 | Bash | Ver como o cartório obtém minutos_realizados | `cd /home/ronald/saas-hasner && grep -n "realizado_do_dia\\|minutos_realizados\\|turnos=" app/ponto/services/cartorio.py \| head -40` |
 | 18:32:29 | Bash | Ler a autoridade realizado_do_dia | `cd /home/ronald/saas-hasner && sed -n '485,560p' app/ponto/turnos.py` |
 | 18:32:11 | Bash | Ler os campos da ata na célula | `cd /home/ronald/saas-hasner && sed -n '1600,1660p' app/escala/models.py` |
