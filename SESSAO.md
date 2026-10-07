@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:35:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.3 MB). Acoes na janela: **206**.
+**Medido em 07/10/2026 20:40:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.4 MB). Acoes na janela: **211**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:39:43 | Bash | Reescrever o cenario da orfa pela regra medida | `cd /home/ronald/wt-lavra/app && cat > /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/orfa.py <<'PYEOF' class OrfaNasDuasPontasTest(_BaseMarcos): """CENARIO -- BATIDA ORFA DE ENTRADA E DE SAIDA (as duas pontas do dia). A REGRA, com numero (a resposta de cada linha MEDIDA no sistema em 07/10 20:4x, contra a funcao real, antes de escrever as assercoes):  ...` |
+| 20:38:50 | Bash | Ver o campo protestos | `cd /home/ronald/wt-lavra/app && grep -n "protestos\\|veredito" escala/models.py \| sed -n '1,20p' && grep -n "protestos" ponto/portas/celula.py \| head` |
+| 20:38:46 | Bash | Ver lavrar_veredito | `cd /home/ronald/wt-lavra/app && grep -n "def lavrar_veredito" -A 30 escala/models.py \| head -40` |
+| 20:38:14 | Bash | Sonda com contagem antes e depois | `cd /home/ronald/wt-lavra/app && cat > ponto/tests/test_tmp_sonda_orfa.py <<'PYEOF' # -*- coding: utf-8 -*- """SONDA TEMPORARIA (O218) -- nao e selo. Apagada no mesmo turno.""" import datetime from ponto.tests import test_bateria_lavratura as _b class SondaOrfa(_b.OrfaNasDuasPontasTest): def test_sonda(self): from chamados.models import ChamadoColaborador from ponto.services.cartorio import julgar_ ...` |
+| 20:37:27 | Bash | Sondar os cods e os chamados do dia orfao | `cd /home/ronald/wt-lavra/app && cat > ponto/tests/test_tmp_sonda_orfa.py <<'PYEOF' # -*- coding: utf-8 -*- """SONDA TEMPORARIA (O218) -- nao e selo. Apagada no mesmo turno.""" import datetime from ponto.tests.test_bateria_lavratura import OrfaNasDuasPontasTest class SondaOrfa(OrfaNasDuasPontasTest): def test_sonda_cods_e_chamados(self): from chamados.models import ChamadoColaborador from ponto.ser ...` |
 | 20:32:14 | Bash | Rodar a bateria com os cenarios novos | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -70` |
 | 20:32:09 | Bash | Escrever os tres primeiros cenarios novos | `cd /home/ronald/wt-lavra/app && cat >> ponto/tests/test_bateria_lavratura.py <<'PYEOF' class _BaseMarcos(_BaseLavratura): """O OUTRO LADO DA BATERIA: o cadastro COM MARCOS. Os cenarios acima sao todos do intermitente POSICIONAL (`marcos: null`), onde o papel so pode sair da ata. A maioria da frota nao e assim: tem marco no DNA, e o papel sai do MARCO que a batida ocupou. Sao dois caminhos diferent ...` |
 | 20:30:38 | Bash | Ver o emissor real | `cd /home/ronald/wt-lavra/app && grep -rln "_abrir_chamado" --include=*.py ponto/tests chamados/tests escala/tests 2>/dev/null \| head && grep -n "def _abrir_chamado" -A 40 ponto/management/commands/detectar_ausencias.py \| head -55` |
