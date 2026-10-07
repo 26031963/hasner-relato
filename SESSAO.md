@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:38:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (413.9 MB). Acoes na janela: **47**.
+**Medido em 07/10/2026 18:43:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.0 MB). Acoes na janela: **54**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:39:49 | Bash | Ler a forma exata da chamada do julgar_colab | `cd /home/ronald/saas-hasner && sed -n '60,100p' logs/o195_apply_3_prod.py; echo "...."; sed -n '175,205p' logs/o195_apply_3_prod.py` |
+| 18:39:44 | Bash | Conferir a sombra e o precedente de chamada | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| head -8; echo "=== precedente de chamada ==="; grep -n "julgar_colab\\|out = \\|emissor\\|hoje=\\|agora=" logs/o195_apply_3_prod.py \| head -20` |
+| 18:39:19 | Bash | Ver o lançador do diff da sombra | `cd /home/ronald/saas-hasner && head -8 logs/relavra10_diff_20261005.out; echo "=== procurar o lançador em logs ==="; grep -rln "relavra10_diff_20261005.py" . --include=* 2>/dev/null \| head` |
+| 18:39:07 | Bash | Ver como o diff na sombra foi lançado | `cd /home/ronald/saas-hasner && grep -n "relavra10_diff\\|sombra.sh\\|docker run" logs/relavra10_diff_20261005.out 2>/dev/null \| head -5; echo "=== cabeçalho do script ==="; head -30 logs/sombra/relavra10_diff_20261005.py` |
+| 18:38:47 | Bash | Achar a porta usada no apply da O195/O209 | `cd /home/ronald/saas-hasner && grep -rn "relavra10\\|o195_apply_3_prod" app/docs/RELATO.md app/docs/RELATO-ARQUIVO.md 2>/dev/null \| head -6; echo "=== algum .sh que roda script de logs/sombra ==="; grep -rln "sombra/.*\.py\\|/sombra/" bin/*.sh \| head` |
+| 18:38:34 | Bash | Ler papel_por_minuto_da_ata | `cd /home/ronald/saas-hasner && grep -n "def papel_por_minuto_da_ata" app/ponto/turnos.py; sed -n "$(grep -n 'def papel_por_minuto_da_ata' app/ponto/turnos.py \| cut -d: -f1),+70p" app/ponto/turnos.py` |
+| 18:38:22 | Bash | Ler papel_por_minuto_da_ata e seus chamadores | `cd /home/ronald/saas-hasner && sed -n '1375,1425p' app/ponto/turnos.py; echo "=== chamadores ==="; grep -rn "papel_por_minuto_da_ata\\|papel_por_minuto" app/ --include=*.py \| grep -v "^app/ponto/turnos.py" \| head` |
 | 18:37:56 | Bash | Achar a porta que lançou o relavra10 e o estado da O217 nos docs | `cd /home/ronald/saas-hasner && echo "=== como o relavra10 foi lançado ==="; grep -rn "relavra10_frota" bin/ app/docs/RELATO.md logs/*.out 2>/dev/null \| head -8; echo; echo "=== O217 em PROMPTS/BACKLOG ==="; grep -n "O217" app/docs/PROMPTS.md app/docs/BACKLOG.md 2>/dev/null \| head` |
 | 18:33:27 | Bash | Ler como a grade deriva minutos_realizados | `cd /home/ronald/saas-hasner && sed -n '1270,1360p' app/escala/utils.py` |
 | 18:33:23 | Bash | Ver quem calcula minutos_realizados na grade | `cd /home/ronald/saas-hasner && grep -n "minutos_realizados" app/escala/utils.py \| head -20` |
