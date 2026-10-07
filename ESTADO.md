@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:54:31.**
+**Medido em 07/10/2026 19:00:03.**
 
 | | |
 |---|---|
@@ -110,40 +110,40 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  O195 e o carimbo da sombra de hoje.
+  por competencia, esperado 0, FORA do contrato (L-099: estrutura separada de dado).
+    PRONTO: bateria verde nomeada, RED da O217 evidenciado, col146 com os dois dias certos, placar pela funcao real.
 
-  Ran 2 shell commands
+  OBRA 2 -- REGRA-NA-IMPRESSAO
+    FONTE: ponto/services/cartorio.py::impressao_insumos (hoje: batidas, cobertura, chamados, DNA).
+    MUDA: a VERSAO DA REGRA entra como quinto insumo. Mudou a regra -> a impressao muda -> o cartorio rejulga o dia pelo caminho normal.
+  Relavratura de frota por --forcar deixa de ser o caminho.
+    A VERSAO e DECLARADA e COBRADA: selo de host -- commit que toca arquivo de juiz sem subir a versao, ou sem declarar "nao muda numero",
+  = VERMELHO. Versao que depende de alguem lembrar nao serve.
+    SEM EXCECAO DE COMPETENCIA (lei nova). O fechamento e o DiaPago seguem pelo caminho de evento que o R6 ja provou.
+    DOSAGEM e decisao TECNICA sua, pela fila do cartorio que ja existe; proibido GET que escreve. Publica o contador
+  `dias_com_regra_velha` por competencia, esperado 0, com a idade do mais velho.
+    ANTES da primeira virada: DIFF de frota por competencia e por rubrica publicado como IMPACTO, e foto em logs/.
+    RED: (1) mesma batida, versao n e n+1 -> impressoes diferentes; (2) versao igual -> impressao identica a de hoje, frota nao rejulga;
+  (3) dia de competencia exportada com versao velha -> rejulga; (4) commit em arquivo de juiz sem versao -> selo vermelho.
+    PRONTO: os 4 REDs, o DIFF publicado, o contador no ESTADO, e uma mudanca de regra de ensaio na sombra chegando ao gravado SEM comando.
 
-● O instrumento certo existe e a ordem dele é editar o arreio, não forkar: vou dar ao bin/sombra.sh uma porta --rodar, que chama o
-  container() que já está lá (instrumento pousa separado do produto, L-105).
+  OBRA 3 -- DIETA-DE-CARGA (paralela, so docs e processo)
+    MEDE ANTES e publica: linhas e bytes de CLAUDE.md, RELATO.md, BACKLOG.md, LEIS.md.
+    FAZ: as historias "nasceu medida" do CLAUDE.md vao para LAPIDES.md com ponteiro e a REGRA fica (L-109 ja manda); RELATO com mais de 3
+  dias vai para o arquivo (L-109 ja manda); tropeco novo vira CENARIO de teste, nao lei nova; sessao nova a cada obra, com handoff, em vez
+  de uma sessao do dia inteiro.
+    PROIBIDO: apagar regra; tocar selo ou teste; resumir aval literal dele.
+    PRONTO: os quatro tamanhos antes e depois, e os 62 selos de host verdes.
 
-  Ran 2 shell commands
-
-● Agora a porta --rodar, aditiva, reusando o container() e a trava que já existem.
-
-  Ran 1 shell command
-
-● O arreio responde e o --conferir segue de pé. Agora a sonda: snapshot, as duas formas de janela, e três passadas de lavratura.
-
-  Read 1 file, ran 3 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file ponto/services/cartorio.py
-  ⎿  Read ../logs/deploy_o208_20261005.out (23 lines)
-
-● Task "RED e construção do segundo intervalo" completed in background
-
-● A sonda respondeu, e a resposta inverte metade da premissa. Vou ler a origem antes de escrever cura.
-
-● Ler ata_do_dia
-  ⎿  $ sed -n '230,300p' ponto/services/cartorio.py
-
-✢ Beboppin'… (45m 42s · ↓ 43.2k tokens · thinking more)
-  ⎿  Tip: Use /clear to start fresh when switching topics and free up context
+  PROIBIDO nas tres: fallback; juiz novo; mexer em motor_calculo_v2; pular DIFF, foto ou prova em ato de frota.
+  LEI-AKITA: origem=ponto/services/cartorio.py (lavra e impressao), testemunha=a ata e a impressao da celula, RED=a bateria e os 4 da obra
+  2, quem-mais-le=todo leitor de ata (tela, PDF, cartao) e o fechamento por evento, juizes novos=0
+  LINHA HAIKU: (a) contador `dias_com_regra_velha` entra no copiloto; (b) golden: "este dia foi calculado pela regra de hoje?" esperado
+  via ferramentas.regra_do_dia(cli); (c) degrau: leitura.
+  ctrl+x ctrl+s to send now
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ⏵⏵ auto mode on · 1 shell · esc to interrupt · ← for agents · ↓ to manage
 
