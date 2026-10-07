@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.8 MB). Acoes na janela: **162**.
+**Medido em 07/10/2026 19:57:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (417.2 MB). Acoes na janela: **165**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:57:17 | Bash | Conferir assinatura de turnos_do_colab e o que a isencao mexe | `cd /home/ronald/wt-lavra/app && sed -n '1330,1365p' ponto/turnos.py && echo ---- && grep -n "def _marcar_isencao" -A18 escala/utils.py \| head -30` |
+| 19:56:44 | Bash | Ler o inicio do laco de dias | `cd /home/ronald/wt-lavra/app && sed -n '1264,1302p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1263, substr($0, index($0,"\t")+1)}'` |
+| 19:56:37 | Bash | Ler o ramo trabalho e a cauda da montagem | `cd /home/ronald/wt-lavra/app && sed -n '1300,1420p' escala/utils.py \| cat -n \| awk '{printf "%d\t%s\n", $1+1299, substr($0, index($0,"\t")+1)}'` |
 | 19:51:06 | Bash | Montagem: janela do pad e saida do ramo folga | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py' s=open(p,encoding='utf-8').read() def rep(v,n,c=1): global s assert s.count(v)==c, (s.count(v), v[:70]) s=s.replace(v,n,1) # ---- (a) a janela das celulas passa a ser a do pareador rep(""" from escala.alimentacao import celulas_do_periodo, folgas_do_periodo _ini_al = floor - datetime.timedelta(days=1) _cels_gr = celulas_do_period ...` |
 | 19:50:06 | Bash | Trechos exatos a alterar | `cd /home/ronald/wt-lavra/app && sed -n '1053,1068p' escala/utils.py; echo "=== 1253-1272"; sed -n '1253,1272p' escala/utils.py` |
 | 19:49:56 | Bash | Nomeia o pad do pareador num escritor so | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='ponto/turnos.py' s=open(p,encoding='utf-8').read() # 1) a funcao, logo antes de turnos_do_colab anc="def turnos_do_colab(colab, ini, fim, celulas=None):" assert s.count(anc)==1 nova='''def janela_com_pad(ini, fim): """A janela que o pareador realmente LE para responder por [ini, fim]. -> (pad_ini, pad_fim) DOIS dias atras porque o turno que cruza ...` |
