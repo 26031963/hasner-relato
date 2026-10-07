@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:35:46.**
+**Medido em 07/10/2026 19:41:01.**
 
 | | |
 |---|---|
@@ -113,7 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    CORRECAO DE CODIGO tem HORIZONTE declarado junto da versao: "retroage ate a competencia <mm/aaaa>". Antes do horizonte o gravado fica
   como FOTO e nao rejulga por versao. Dia de competencia-foto que receber toque de dado e recalculado pela regra de HOJE e ganha o rotulo
   "recalculado em <data>"; o aviso diz isso antes de confirmar.
     RED a mais: (8) regra aplicada so a uma praca -> colab de outra praca da mesma empresa nao muda; (9) excecao com data de fim vencida
@@ -139,10 +138,11 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   em uma linha no topo do RELATO e segue a fila. Estendo o ! de pouso a ela e a raia de agente que migrou 2 crons-juiz. PAREI so em lei ou
   !
 
-● Procura a raia de agente
-  ⎿  $ ls -d /home/ronald/saas-hasner/.claude/worktrees/* 2>/dev/null; echo ---; cd /home/ronald/saas-hasner && git worktree list | tail -8
+● Marcos_out e o uso no cartorio
+  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '1370,1405p' escala/utils.py; echo "=== cartorio marcos"; sed -n '466,500p'
+     ponto/services/cartorio.py
 
-✻ Beboppin'… (1h 26m 57s · ↓ 108.4k tokens)
+· Beboppin'… (1h 32m 12s · ↓ 115.8k tokens · thinking some more)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

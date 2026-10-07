@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:35:46.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.3 MB). Acoes na janela: **128**.
+**Medido em 07/10/2026 19:41:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.5 MB). Acoes na janela: **146**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:40:17 | Bash | marcos_out e o uso no cartorio | `cd /home/ronald/wt-lavra/app && sed -n '1370,1405p' escala/utils.py; echo "=== cartorio marcos"; sed -n '466,500p' ponto/services/cartorio.py` |
+| 19:40:12 | Bash | Como marcos viaja da montagem ao cartorio | `cd /home/ronald/wt-lavra/app && grep -n "return {'marcos'\\|'marcos':" escala/utils.py \| sed -n '1,20p'; echo ===; grep -n "marcos = g\[\\|g\['marcos'\]\\|g = eu.montar" ponto/services/cartorio.py \| head` |
+| 19:40:04 | Bash | Chamadores de ata_do_dia | `cd /home/ronald/wt-lavra/app && grep -n "ata_do_dia(" -r --include=*.py . \| grep -v tests; echo ===; grep -n "ata_do_dia(" -B 12 ponto/services/cartorio.py \| sed -n '1,60p'` |
+| 19:39:51 | Bash | ata_do_dia inteiro | `cd /home/ronald/wt-lavra/app && sed -n '144,295p' ponto/services/cartorio.py` |
+| 19:39:41 | Bash | O que periodos_do_dia le da celula | `cd /home/ronald/wt-lavra/app && grep -n "celula\.\\|cel\." ponto/juiz_batida.py \| head -40; echo ===; grep -n "def periodos_do_dia" -A 25 ponto/juiz_batida.py \| head -45` |
+| 19:39:35 | Bash | papel_por_minuto_da_ata completo | `cd /home/ronald/wt-lavra/app && sed -n '1020,1130p' ponto/turnos.py` |
+| 19:39:26 | Bash | turnos_do_colab: celulas e papel | `cd /home/ronald/wt-lavra/app && sed -n '1323,1400p' ponto/turnos.py` |
+| 19:39:23 | Bash | Autoridade do realizado e o papel | `cd /home/ronald/wt-lavra/app && grep -n "papel_por_minuto_da_ata\\|def realizado_do_dia\\|def turnos_do_colab\\|celulas=" ponto/turnos.py \| head -30` |
+| 19:39:19 | Bash | Regiao do realizado_do_dia na montagem | `cd /home/ronald/wt-lavra/app && sed -n '1240,1330p' escala/utils.py` |
+| 19:39:13 | Bash | Pre-passada intermitente | `cd /home/ronald/wt-lavra/app && sed -n '1060,1135p' escala/utils.py` |
+| 19:39:08 | Bash | Insere a obra O221 no BACKLOG | `cp BACKLOG.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/BACKLOG.md.bak && python3 - <<'PY' import io p='BACKLOG.md' L=open(p,encoding='utf-8').read().split('\n') obra=("**POUSO DAS DUAS RAIAS AVALIZADAS** (`!` dele 07/10 19:35, `POUSO-CHAMADO-DEPOIS-DA-BATERIA`; REVOGA o " "\"nao mergear raia-chamado\" de 05/10). DUAS, em pouso PROPRIO cada: (1)  ...` |
+| 19:37:13 | Bash | Cabecalho da tabela OBRAS | `sed -n '110,115p' BACKLOG.md \| cut -c1-200` |
+| 19:37:08 | Bash | Colunas de uma linha de obra | `sed -n '116p' BACKLOG.md \| awk -F'\|' '{print "NF="NF; for(i=2;i<=NF;i++) print i": "substr($i,1,70)}'` |
+| 19:37:03 | Bash | Linhas de obra O21x-O22x no BACKLOG | `grep -n "^\| O2[12][0-9]" BACKLOG.md \| cut -c1-200` |
+| 19:36:58 | Bash | Confere que as linhas NF=7 nao sao minhas | `wc -l PROMPTS.md && sed -n '1055,1056p' PROMPTS.md \| cut -c1-120 && git diff --stat PROMPTS.md` |
+| 19:36:53 | Bash | Registra o aval em PROMPTS.md e confere colunas | `cd /home/ronald/saas-hasner/app/docs && cp PROMPTS.md /tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/scratchpad/PROMPTS.md.bak && cat >> PROMPTS.md <<'ROW' \| 07/10 19:35 \| aval (! de pouso) \| POUSO-CHAMADO-DEPOIS-DA-BATERIA \| **o `!` de pouso se estende a DUAS raias, e o gatilho e o marco da O218.** Literal: *"a raia-chamado (wt-esmeril2, 6 commits, escritas ...` |
+| 19:36:36 | Bash | Conteudo do commit da raia aa191f | `cd /home/ronald/saas-hasner && git show --stat 00bd05fb \| head -20; echo "=== msg"; git log -1 --format=%B 00bd05fb \| head -30` |
+| 19:36:28 | Bash | Commits de cada raia de agente | `cd /home/ronald/saas-hasner && for w in .claude/worktrees/agent-*; do echo "== $w"; git -C "$w" log --oneline -3 2>/dev/null \| cat; done` |
 | 19:35:27 | Bash | Procura a raia de agente | `ls -d /home/ronald/saas-hasner/.claude/worktrees/* 2>/dev/null; echo ---; cd /home/ronald/saas-hasner && git worktree list \| tail -8` |
 | 19:35:08 | Bash | Hora no ato e estado das raias | `date '+%d/%m %H:%M'; cd /home/ronald/saas-hasner && git -C /home/ronald/wt-esmeril2 log --oneline -1 2>/dev/null; ls -d /home/ronald/wt-* ~/.claude/worktrees/* 2>/dev/null` |
 | 19:35:03 | Bash | Formato da ultima linha de PROMPTS.md | `cd /home/ronald/saas-hasner/app/docs && tail -4 PROMPTS.md \| cat -A \| sed -e 's/\$$//' \| cut -c1-400` |

@@ -5,7 +5,7 @@ a raspagem usa a lista de nomes do banco como autoridade, nunca regex adivinhada
 `colNNN`/`ecNNN` ficam, porque nao identificam ninguem fora desta casa. Obra FEITA sai desta
 lista — ela e o que esta EM PE._
 
-**218 obras abertas.**
+**219 obras abertas.**
 
 | ID | obra | estado |
 |---|---|---|
@@ -227,3 +227,4 @@ lista — ela e o que esta EM PE._
 | **O218** | BATERIA-DA-LAVRATURA | **fila 1, a FRENTE da O211** (ordem lite |
 | **O219** | REGRA-NA-IMPRESSAO | **fila 1, atras da O218**. O `impressao_ |
 | **O220** | DIETA-DE-CARGA | **paralela**, sem portao -- nao toca pro |
+| **O221** | POUSO DAS DUAS RAIAS AVALIZADAS | espera `!` |
