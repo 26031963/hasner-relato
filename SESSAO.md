@@ -6,10 +6,26 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.5 MB). Acoes na janela: **99**.
+**Medido em 07/10/2026 19:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.7 MB). Acoes na janela: **115**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:20:09 | Bash | A pre-passagem cronologica do intermitente | `cd /home/ronald/wt-lavra/app && sed -n '1020,1100p' escala/utils.py` |
+| 19:19:42 | Bash | Rodar o RED do cenario 1 | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -60; echo "rc=$?"` |
+| 19:19:38 | Bash | Ruff no teste novo | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/wt-lavra/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest ruff check ponto/tests/test_bateria_lavratura.py 2>&1 \| tail -20` |
+| 19:19:34 | Bash | Pedir a montagem da copia a porta unica | `cd /home/ronald/saas-hasner && bash bin/arvore_do_push.sh --montagem /home/ronald/wt-lavra; echo "rc=$?"` |
+| 19:19:27 | Bash | Ler o corpo do suite.sh | `cd /home/ronald/wt-lavra && sed -n '40,140p' bin/suite.sh 2>/dev/null \|\| sed -n '40,140p' /home/ronald/saas-hasner/bin/suite.sh` |
+| 19:19:20 | Bash | Corrigir o snapshot da passada 1 | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() velho = """ self._lavrar(c, [c28, c29]) p1 = {28: dict(c28.refresh_from_db() or c28.ata or {}), 29: dict(c29.refresh_from_db() or c29.ata or {})} self._lavrar(c, [c28, c29])""" novo = """ self._lavrar(c, [c28, c29]) c28.refresh_from_db() c29.refresh_from_db() p1 = {28: co ...` |
+| 19:18:31 | Bash | Escrever o RED do cenario 1 na raia | `cat > /home/ronald/wt-lavra/app/ponto/tests/test_bateria_lavratura.py <<'PYEOF' # -*- coding: utf-8 -*- """O218 BATERIA-DA-LAVRATURA: os cenarios que o motor tem e a LAVRA nao tinha (aval 07/10 19:xx). O motor_calculo_v2 tem bateria; `ponto/services/cartorio.py::julgar_celula` -- quem ESCREVE a ata que todo leitor le (L-061: o consumidor le a lampada, nunca re-julga) -- nao tinha. Cada cenario aqu ...` |
+| 19:17:25 | Bash | tipo_ciclo do TipoEscala | `cd /home/ronald/wt-lavra/app && grep -n "tipo_ciclo\\|intermitente" escala/models.py \| head -20` |
+| 19:16:47 | Bash | Fechar a sexta coluna da linha nova | `python3 - <<'PYEOF' p='PROMPTS.md' s=open(p,encoding='utf-8').read() alvo=' \| adendo registrado 07/10 19:5x; **nada construido** -- a O219 segue atras da O218 \|\n' assert s.endswith(alvo), repr(s[-120:]) novo=(' \| adendo registrado 07/10 19:5x; **nada construido** -- a O219 segue atras da O218' ' \| BACKLOG **O219** (adendo na propria linha, REDs 8-10) \|\n') s=s[:-len(alvo)]+novo open(p,'w',en ...` |
+| 19:16:39 | Bash | Colunas da linha anterior | `tail -2 PROMPTS.md \| head -1 \| awk -F'\|' '{for(i=1;i<=NF;i++) printf "[%d] %.70s\n", i, $i}'` |
+| 19:16:32 | Bash | Todas as tabelas do PROMPTS | `grep -n '^\|---' PROMPTS.md && echo "=== headers" && grep -n '^\| [a-z]' PROMPTS.md \| head` |
+| 19:16:25 | Bash | Qual o formato da segunda tabela | `sed -n '660,664p' PROMPTS.md \| cut -c1-160 && echo "..." && awk 'NR>663 && /^\\|/ {n=split($0,a,"\|"); c[n]++} END{for(k in c) print k, c[k]}' PROMPTS.md` |
+| 19:16:20 | Bash | Header da tabela PROMPTS | `grep -n '^\| *data\\|^\|---\\|^\| *quando' PROMPTS.md \| head -3 && sed -n '5,7p' PROMPTS.md \| cut -c1-200` |
+| 19:16:15 | Bash | Conferir o numero de colunas | `tail -2 PROMPTS.md \| awk -F'\|' '{print NF}' && grep -c '^\|' PROMPTS.md` |
+| 19:16:08 | Bash | Registrar o prompt novo | `cat >> PROMPTS.md <<'PYEOF' \| 07/10 19:5x \| aval (adendo de obra) \| AVISO-E-ESCOLHA \| **adendo a O219 REGRA-NA-IMPRESSAO: a versao da regra passa a ter ESCOPO e HORIZONTE, e o aviso deixa de ser sim/nao.** Literal: *"O AVISO E UMA ESCOLHA, nao um sim/nao. Em mudanca de REGRA DE CADASTRO o admin escolhe: (1) desde sempre, correcao; (2) a partir de <data>; (3) so para um RECORTE -- empresa, prac ...` |
+| 19:15:53 | Bash | Registrar o adendo na obra O219 | `python3 - <<'PYEOF' import io p='BACKLOG.md' s=open(p,encoding='utf-8').read() lines=s.split('\n') i=116 # 0-based -> linha 117 assert lines[i].startswith('\| O219 \|'), lines[i][:40] anc=' \| **fila 1, atras da O218**.' assert lines[i].count(anc)==1 adendo=(' **ADENDO 07/10 19:5x (aval `AVISO-E-ESCOLHA`), e ele ALARGA a obra de "versao" para "versao com ESCOPO e HORIZONTE"**: ' '(a) **O AVISO E U ...` |
 | 19:15:34 | Bash | A linha O219 inteira | `sed -n '117p' BACKLOG.md` |
 | 19:15:30 | Bash | Ver o rodape do PROMPTS e as linhas das tres obras | `cd /home/ronald/saas-hasner/app/docs && tail -4 PROMPTS.md \| cut -c1-400 && echo "=== BACKLOG O219" && grep -n "O219\\|O218\\|O220" BACKLOG.md \| cut -c1-180` |
 | 19:15:19 | Bash | Campos e metodos do CelulaDia | `cd /home/ronald/wt-lavra/app && python3 - <<'EOF' s=open('escala/models.py').read() i=s.index('class CelulaDia') import re blk=s[i:s.index('\nclass ',i+10)] for m in re.finditer(r'^ (\w+) = models\.(\w+)', blk, re.M): print(m.group(1), m.group(2)) print('---- defs') for m in re.finditer(r'^ def (\w+)\(([^)]*)\)', blk, re.M): print(m.group(1), '\|', m.group(2)[:120]) EOF` |
