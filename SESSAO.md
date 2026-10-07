@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.6 MB). Acoes na janela: **152**.
+**Medido em 07/10/2026 19:52:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.8 MB). Acoes na janela: **162**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:51:06 | Bash | Montagem: janela do pad e saida do ramo folga | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='escala/utils.py' s=open(p,encoding='utf-8').read() def rep(v,n,c=1): global s assert s.count(v)==c, (s.count(v), v[:70]) s=s.replace(v,n,1) # ---- (a) a janela das celulas passa a ser a do pareador rep(""" from escala.alimentacao import celulas_do_periodo, folgas_do_periodo _ini_al = floor - datetime.timedelta(days=1) _cels_gr = celulas_do_period ...` |
+| 19:50:06 | Bash | Trechos exatos a alterar | `cd /home/ronald/wt-lavra/app && sed -n '1053,1068p' escala/utils.py; echo "=== 1253-1272"; sed -n '1253,1272p' escala/utils.py` |
+| 19:49:56 | Bash | Nomeia o pad do pareador num escritor so | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='ponto/turnos.py' s=open(p,encoding='utf-8').read() # 1) a funcao, logo antes de turnos_do_colab anc="def turnos_do_colab(colab, ini, fim, celulas=None):" assert s.count(anc)==1 nova='''def janela_com_pad(ini, fim): """A janela que o pareador realmente LE para responder por [ini, fim]. -> (pad_ini, pad_fim) DOIS dias atras porque o turno que cruza ...` |
+| 19:49:40 | Bash | Segundo sitio do pad | `cd /home/ronald/wt-lavra/app && sed -n '1985,2005p' ponto/turnos.py` |
+| 19:49:33 | Bash | Todos os sitios do pad | `cd /home/ronald/wt-lavra/app && grep -n "pad_ini\\|pad_fim" ponto/turnos.py` |
+| 19:47:55 | Bash | Overlays mexem em celulas ou tipo_dia | `cd /home/ronald/wt-lavra/app && grep -n "def _aplicar_folgas_foto" -A 30 escala/utils.py \| grep -n "dias_out\[\\|d\[.tipo_dia.\]\\|celulas\\|=" \| head -20; echo "=== ausencias"; grep -n "def _marcar_ausencias" -A 40 escala/utils.py \| grep -n "tipo_dia\\|celulas\\|dias_out\[" \| head -20` |
+| 19:47:48 | Bash | Quem le minutos_realizados dentro da montagem | `cd /home/ronald/wt-lavra/app && grep -n "minutos_realizados\\|realizado_sem_turno\\|realizado_turno" escala/utils.py \| sed -n '1,40p'` |
+| 19:47:17 | Bash | Fim do ramo trabalho e inicio do laco de sobras | `cd /home/ronald/wt-lavra/app && sed -n '1330,1372p' escala/utils.py` |
+| 19:46:53 | Bash | ata_do_dia depois da extracao | `cd /home/ronald/wt-lavra/app && sed -n '275,296p' ponto/services/cartorio.py` |
+| 19:46:50 | Bash | Extrai o produtor de lampadas no cartorio | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' p='ponto/services/cartorio.py' L=open(p,encoding='utf-8').read().split('\n') assert L[143].startswith('def ata_do_dia('), L[143] assert L[148].strip()=="cels = dia.get('celulas') or []", L[148] assert L[149].strip()=='lamp = []', L[149] assert L[259].lstrip().startswith("return {'tipo_dia'"), L[259] doc=L[144:148]; corpo='\n'.join(L[149:259]); ret=L ...` |
 | 19:46:29 | Bash | Quantos usos de _fato_cego | `cd /home/ronald/wt-lavra/app && grep -c "_fato_cego" ponto/services/cartorio.py` |
 | 19:46:23 | Bash | Extrai o produtor de lampadas no cartorio | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' import io,re p='ponto/services/cartorio.py' src=open(p,encoding='utf-8').read() L=src.split('\n') # linhas 1-indexadas: 144 def, 149 cels=, 150..259 corpo das lampadas, 260 return assert L[143].startswith('def ata_do_dia('), L[143] assert L[148].strip()=="cels = dia.get('celulas') or []", L[148] assert L[149].strip()=='lamp = []', L[149] assert L[25 ...` |
 | 19:41:51 | Bash | Fronteiras exatas do bloco a extrair | `cd /home/ronald/wt-lavra/app && grep -n "^def ata_do_dia\\| cels = dia.get\\|^ return {'tipo_dia'\\|^def dispensar_por_ausencia" ponto/services/cartorio.py \| head; echo ===; sed -n '149,152p;246,252p' ponto/services/cartorio.py` |

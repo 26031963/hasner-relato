@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:46:31.**
+**Medido em 07/10/2026 19:52:01.**
 
 | | |
 |---|---|
@@ -113,19 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-    CORRECAO DE CODIGO tem HORIZONTE declarado junto da versao: "retroage ate a competencia <mm/aaaa>". Antes do horizonte o gravado fica
-  como FOTO e nao rejulga por versao. Dia de competencia-foto que receber toque de dado e recalculado pela regra de HOJE e ganha o rotulo
-  "recalculado em <data>"; o aviso diz isso antes de confirmar.
-    RED a mais: (8) regra aplicada so a uma praca -> colab de outra praca da mesma empresa nao muda; (9) excecao com data de fim vencida
-  -> deixa de valer sozinha e sai da lista; (10) versao com horizonte 09/2026 -> dia de 08/2026 nao rejulga por versao, e rejulga se a
-  batida dele for editada, com rotulo.
-
-  Searched for 2 patterns, read 2 files, ran 19 shell commands
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 5 shell commands
   ⎿  Read docs/AVAIS.md (23 lines)
   ⎿  Referenced file docs/BACKLOG.md
   ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
@@ -139,12 +126,25 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   em uma linha no topo do RELATO e segue a fila. Estendo o ! de pouso a ela e a raia de agente que migrou 2 crons-juiz. PAREI so em lei ou
   !
 
-● Quantos usos de _fato_cego
-  ⎿  $ cd /home/ronald/wt-lavra/app && grep -c "_fato_cego" ponto/services/cartorio.py
+  Searched for 1 pattern, ran 33 shell commands
 
-✢ Beboppin'… (1h 37m 42s · ↓ 124.0k tokens · thought for 1s)
+● Agora a função que nomeia o pad, com os dois sítios migrados:
+
+● Montagem: janela do pad e saida do ramo folga
+  ⎿  $ cd /home/ronald/wt-lavra/app && python3 - <<'PY'
+     p='escala/utils.py'
+     s=open(p,encoding='utf-8').read()
+     def rep(v,n,c=1):
+     global s
+     assert s.count(v)==c, (s.count(v), v[:70])
+     s=s.replace(v,n,1)
+     # ---- (a) a janela das celulas passa a ser a do pareador
+     rep(""" from escala.alimentacao import celulas_…
+
+✢ Compacting conversation… (1h 43m 12s · ↓ 143.2k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱▱ 45%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
