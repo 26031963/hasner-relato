@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.8 MB). Acoes na janela: **120**.
+**Medido em 07/10/2026 19:30:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.9 MB). Acoes na janela: **124**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:30:09 | Bash | Entradas da montagem: locs, consumed, interm_m | `cd /home/ronald/wt-lavra/app && grep -n "def montar_grade_prevista_periodo" escala/utils.py && sed -n '/def montar_grade_prevista_periodo/,/^ col = sorted/p' escala/utils.py \| grep -n "locs\\|consumed\\|_interm_m\\|janela_datas\\|batidas\\|bs\b" \| head -40` |
+| 19:29:36 | Bash | Rodar os cinco REDs da bateria | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() velho = """ def test_MORDE_a_janela_curta_da_o_MESMO_match_da_larga(self): c, cels = self._golden() self._lavrar(c, [cels[28], cels[29]]) for d in (28, 29):""" novo = """ def test_MORDE_a_janela_curta_da_o_MESMO_match_da_larga(self): \"\"\"Pela PORTA DE EVENTO (`julgar_ce ...` |
+| 19:29:15 | Bash | RED 4: o noturno continuo pela porta de evento | `cd /home/ronald/wt-lavra/app && cat >> ponto/tests/test_bateria_lavratura.py <<'PYEOF' class EventoNaoCorrompeAtaCertaTest(_BaseLavratura): """(B) O CONTRA-EXEMPLO que fecha a classe: o noturno CONTINUO, julgado pela porta de EVENTO. LEI-AKITA 5 (adversarial depois do RED): o golden do col146 passa a ter match certo com a janela larga por SORTE -- ele nao tinha plantao de 26 para 27/09, entao a ba ...` |
+| 19:28:32 | Bash | julgar_celula, a porta de evento | `cd /home/ronald/wt-lavra/app && sed -n '878,930p' ponto/services/cartorio.py` |
 | 19:23:04 | Bash | Ruff e stage do RED na raia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/wt-lavra/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest ruff check ponto/tests/test_bateria_lavratura.py 2>&1 \| tail -5; cd /home/ronald/wt-lavra && git add app/ponto/tests/test_bateria_lavratura.py && git -c core.hooksPath=.git/hooks status --short app/ponto/tests/` |
 | 19:22:41 | Bash | Evidenciar os tres REDs | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| grep -E "^(OK\|FAILED\|Ran\|FAIL:\|ERROR:)\|AssertionError" \| head -30` |
 | 19:22:22 | Bash | Reescrever os cenarios com os dois REDs | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() i=s.index('class LampadaInvertidaTest(_BaseLavratura):') cab=s[:i] cab=cab.replace(""" def _golden(self): \"\"\"Devolve (colab, celula de 28/09, celula de 29/09) com a ata INVERTIDA ja gravada.\"\"\"""", """ def _golden(self): \"\"\"Devolve (colab, {dia: celula}) com a at ...` |
