@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:43:31.**
+**Medido em 07/10/2026 18:49:01.**
 
 | | |
 |---|---|
@@ -36,6 +36,7 @@ edb40127 [O208] o contador do recalculo era cego ao campo da cura: mexidos=36 er
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/RELATO.md
  M app/docs/TICKETS.md
+ M bin/sombra.sh
 ?? esteira.pausada
 ?? fatias_agendadas/abono-no-ar/esteira.out
 ?? fatias_agendadas/abono-no-ar/esteira_agendada.out
@@ -109,24 +110,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● O push terminou com rc=0 — vou confirmar no remoto, não no silêncio do log.
-
-  Ran 1 shell command
-
-● fd6c8c0e está no remoto (9.641 testes OK + 22 do control-plane). Os docs ficam para o commit do marco da O217, pela L-106. Agora a O217 —
-  falta saber quem escreve minutos_realizados na ata.
-
-  Ran 3 shell commands
-
-● O achado está nomeado: a ata e a conferência chamam a mesma autoridade, mas com janelas de turno diferentes — a grade passa
-  turnos=_turnos_do_juiz() (janela larga), a conferência passou turnos=None, que é fatia de um dia. Antes de escolher a cura, vou consultar
-  o revisor.
-
-● Advising using Fable 5.1
-  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
-
-  Ran 1 shell command
-
 ● O BACKLOG já tem a O217 com diagnóstico mais afiado que o meu — e ele derruba a teoria da janela: a autoridade pede o papel de cada
   batida à própria ata (papel_por_minuto_da_ata), que é o que a lavratura escreve. Vou ler a origem.
 
@@ -135,12 +118,30 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● A sombra é a porta certa e o --com-a-sombra já existe para pegar a trava. Vou ver o precedente de chamada do julgar_colab no apply da
   O195 e o carimbo da sombra de hoje.
 
-● Ler a forma exata da chamada do julgar_colab
-  ⎿  $ cd /home/ronald/saas-hasner && sed -n '60,100p' logs/o195_apply_3_prod.py; echo "...."; sed -n '175,205p' logs/o195_apply_3_prod.py
+  Ran 2 shell commands
 
-✢ Beboppin'… (34m 42s · ↓ 34.1k tokens · deep in thought)
+● O instrumento certo existe e a ordem dele é editar o arreio, não forkar: vou dar ao bin/sombra.sh uma porta --rodar, que chama o
+  container() que já está lá (instrumento pousa separado do produto, L-105).
+
+  Ran 2 shell commands
+
+● Agora a porta --rodar, aditiva, reusando o container() e a trava que já existem.
+
+  Ran 1 shell command
+
+● O arreio responde e o --conferir segue de pé. Agora a sonda: snapshot, as duas formas de janela, e três passadas de lavratura.
+
+● Rodar a sonda de ponto fixo na sombra
+  ⎿  $ cd /home/ronald/saas-hasner && cat > logs/sombra/o217_pontofixo_20261007.py <<'PY'
+     # -*- coding: utf-8 -*-
+     """O217 -- A LAVRATURA E PONTO FIXO? PRIMEIRA MEDICAO, na SOMBRA, SEM CURA.
+     A pergunta e UMA: relavrar o MESMO dado, sem nada mudar entre as passadas, devolve o MESMO numero?
+     Se devolver, a …
+
+✢ Compacting conversation… (40m 12s · ↓ 41.1k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 89%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    7% until auto-compact
+                                                                                                                    1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

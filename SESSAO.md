@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 18:43:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.0 MB). Acoes na janela: **54**.
+**Medido em 07/10/2026 18:49:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.1 MB). Acoes na janela: **58**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:45:37 | Bash | Rodar a sonda de ponto fixo na sombra | `cd /home/ronald/saas-hasner && cat > logs/sombra/o217_pontofixo_20261007.py <<'PY' # -*- coding: utf-8 -*- """O217 -- A LAVRATURA E PONTO FIXO? PRIMEIRA MEDICAO, na SOMBRA, SEM CURA. A pergunta e UMA: relavrar o MESMO dado, sem nada mudar entre as passadas, devolve o MESMO numero? Se devolver, a premissa do achado esta invertida e o relato tem de dizer isso com o numero. Se nao devolver, o defeito ...` |
+| 18:44:51 | Bash | Escrever a porta --rodar e conferir sintaxe | `cd /home/ronald/saas-hasner && python3 - <<'PY' import io p='bin/sombra.sh'; t=io.open(p,encoding='utf-8').read() # 1) a porta nova, antes do catch-all do case ancora = """ --completude) n="$(completude)" \|\| falhou "completude nao medida"; echo "sombra_incompleta=$n"; [ "$n" = 0 ] ;;""" assert t.count(ancora)==1 novo = ancora + """ # --rodar: A SONDA DA SOMBRA TEM PORTA (O217, 07/10). Ate aqui c ...` |
+| 18:44:28 | Bash | Ver as variáveis do arreio | `cd /home/ronald/saas-hasner && grep -n "^SAIDA=\\|^IMAGEM=\\|^RAIZ=\\|TESTE_CPUSET\\|^STAMP=\\|SOMBRA_NAO_ENSAIA=\\|^HOJE=" bin/sombra.sh \| head` |
+| 18:44:21 | Bash | Ler o uso e o case do sombra.sh | `cd /home/ronald/saas-hasner && sed -n '1,25p' bin/sombra.sh; echo "=== case ==="; sed -n '352,362p' bin/sombra.sh; echo "..."; sed -n '396,412p' bin/sombra.sh` |
 | 18:39:49 | Bash | Ler a forma exata da chamada do julgar_colab | `cd /home/ronald/saas-hasner && sed -n '60,100p' logs/o195_apply_3_prod.py; echo "...."; sed -n '175,205p' logs/o195_apply_3_prod.py` |
 | 18:39:44 | Bash | Conferir a sombra e o precedente de chamada | `cd /home/ronald/saas-hasner && bash bin/sombra.sh --conferir 2>&1 \| head -8; echo "=== precedente de chamada ==="; grep -n "julgar_colab\\|out = \\|emissor\\|hoje=\\|agora=" logs/o195_apply_3_prod.py \| head -20` |
 | 18:39:19 | Bash | Ver o lançador do diff da sombra | `cd /home/ronald/saas-hasner && head -8 logs/relavra10_diff_20261005.out; echo "=== procurar o lançador em logs ==="; grep -rln "relavra10_diff_20261005.py" . --include=* 2>/dev/null \| head` |
