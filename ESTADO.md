@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 20:45:45.**
+**Medido em 07/10/2026 20:50:45.**
 
 | | |
 |---|---|
@@ -113,36 +113,36 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  bateria:
+  Ran 1 shell command
 
-  Ran 18 shell commands
+● Achei uma contradição medida, e é na mesma pergunta: "a ausência cobre o dia inteiro?" tem DOIS sítios com respostas opostas —
+  cartorio.py:319 (minutos > 0 = parcial, logo 720 = parcial) e ausencias_sem_efeito_na_celula.py:22-28 (0 < minutos < 480 = parcial, logo
+  720 = dia inteiro). Elas discordam exatamente nas ~103 linhas com minutos ∈ {480,528,540,555,660,720}. Consulto antes de decidir se curo
+  dentro da O218 ou registro:
 
-● Agora os cenários que faltam. Escrevo a base com MARCOS e os três primeiros:
+● Advising using Fable 5.1
+  ⎿  ✔ Advisor has reviewed the conversation and will apply the feedback
 
-  Ran 2 shell commands
+  Ran 1 shell command
 
-● Duas respostas do sistema que não são as da minha regra. Medindo os dois antes de escrever qualquer linha:
+● Há lei, e é cadastro: ponto/catalogo/ausencias.py::parciais_vigentes() — "Tipos que o CADASTRO declara como parciais". Então não falta
+  lei: os dois sítios leem minutos em vez dela (LEI-AKITA 4 — "qual leitor não migrou"):
 
-  Ran 4 shell commands
+  Ran 1 shell command
 
-● O sistema tem nome próprio para o que medi (REALIZADO_INFLADO) e os dois chamados nascem do signal da batida, não da lavra. Reescrevo o
-  cenário pela regra medida:
+● ponto/services/ausencia.py:139 já recusa minutos em tipo não-parcial na ESCRITA — então as 195 linhas são legado que o cadastro hoje
+  proíbe, e a dispensa as pune. Meço o dano provado:
 
-  Ran 2 shell commands
-  ⎿  Read docs/AVAIS.md (23 lines)
-  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
-  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
-  ⎿  Referenced file ponto/services/cartorio.py
+  Ran 1 shell command
 
-● Task "RED e construção do segundo intervalo" completed in background
+● Provado: 222 dia-colab / 763 lâmpadas / 86 colabs acusando furo sob ausência aprovada que o cadastro não declara parcial. É linha de
+  BACKLOG com número, não cura dentro da O218. Volto à bateria — os quatro checks antes de escrever:
 
-● 19/19 verde. Agora os quatro cenários que faltam — primeiro a REGRA, lendo o código que responde cada um (L-110):
+  Ver se a raia do fork ja pousou no main
+  ⎿  $ cd /home/ronald/saas-hasner && echo "d36ae038 ja no main?"; git merge-base --is-ancestor d36ae038 main && echo "SIM -- ja pousou" ||
+     echo "NAO -- raia a frente do main"; git log --oneline main..d36ae038 2>/dev/null | head
 
-● Ver TIPO_CHOICES e campos de Ausencia
-  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '617,660p' ponto/models.py; echo "..."; sed -n '700,760p' ponto/models.py | grep -n
-     "minutos\|data_fim\|^ [a-z_]* = models"
-
-· Beboppin'… (2h 36m 56s · ↓ 223.0k tokens · thinking)
+· Beboppin'… (2h 41m 56s · ↓ 232.3k tokens · thinking)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
