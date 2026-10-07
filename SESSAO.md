@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 20:30:02.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.2 MB). Acoes na janela: **200**.
+**Medido em 07/10/2026 20:35:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (418.3 MB). Acoes na janela: **206**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:32:14 | Bash | Rodar a bateria com os cenarios novos | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -70` |
+| 20:32:09 | Bash | Escrever os tres primeiros cenarios novos | `cd /home/ronald/wt-lavra/app && cat >> ponto/tests/test_bateria_lavratura.py <<'PYEOF' class _BaseMarcos(_BaseLavratura): """O OUTRO LADO DA BATERIA: o cadastro COM MARCOS. Os cenarios acima sao todos do intermitente POSICIONAL (`marcos: null`), onde o papel so pode sair da ata. A maioria da frota nao e assim: tem marco no DNA, e o papel sai do MARCO que a batida ocupou. Sao dois caminhos diferent ...` |
+| 20:30:38 | Bash | Ver o emissor real | `cd /home/ronald/wt-lavra/app && grep -rln "_abrir_chamado" --include=*.py ponto/tests chamados/tests escala/tests 2>/dev/null \| head && grep -n "def _abrir_chamado" -A 40 ponto/management/commands/detectar_ausencias.py \| head -55` |
+| 20:30:14 | Bash | Ler o laco de sobras do periodo | `cd /home/ronald/wt-lavra/app && sed -n '1370,1430p' escala/utils.py` |
+| 20:30:10 | Bash | Ver tol_min e o laco de sobras | `cd /home/ronald/wt-lavra/app && grep -n "tol_min" escala/utils.py \| head -20 && echo "=== sobras" && grep -n "S162\\|sobra" escala/utils.py \| head -20` |
+| 20:30:02 | Bash | Ler o _match_marcos | `cd /home/ronald/wt-lavra/app && grep -n "def _match_marcos" -A 60 escala/utils.py \| head -80` |
 | 20:29:28 | Bash | Ver campos de TipoEscala | `cd /home/ronald/wt-lavra/app && sed -n '1,120p' escala/models.py \| grep -n "CICLO_\\|class TipoEscala\\|codigo\\|descricao\\|dias_trabalho\\|dias_folga\\|hora_inicio\\|hora_fim\\|intervalo" \| head -40` |
 | 20:29:19 | Bash | Ver pares de pausa do cadastro | `cd /home/ronald/wt-lavra/app && grep -n "PARES_PAUSA_CADASTRO\\|def pausas_cadastradas" -A 14 escala/models.py \| head -40` |
 | 20:29:15 | Bash | Ver pausas_do_dia | `cd /home/ronald/wt-lavra/app && grep -n "def pausas_do_dia" -A 40 escala/models.py \| head -50` |
