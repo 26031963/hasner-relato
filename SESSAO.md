@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:41:01.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.5 MB). Acoes na janela: **146**.
+**Medido em 07/10/2026 19:46:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (416.6 MB). Acoes na janela: **152**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:46:29 | Bash | Quantos usos de _fato_cego | `cd /home/ronald/wt-lavra/app && grep -c "_fato_cego" ponto/services/cartorio.py` |
+| 19:46:23 | Bash | Extrai o produtor de lampadas no cartorio | `cd /home/ronald/wt-lavra/app && python3 - <<'PY' import io,re p='ponto/services/cartorio.py' src=open(p,encoding='utf-8').read() L=src.split('\n') # linhas 1-indexadas: 144 def, 149 cels=, 150..259 corpo das lampadas, 260 return assert L[143].startswith('def ata_do_dia('), L[143] assert L[148].strip()=="cels = dia.get('celulas') or []", L[148] assert L[149].strip()=='lamp = []', L[149] assert L[25 ...` |
+| 19:41:51 | Bash | Fronteiras exatas do bloco a extrair | `cd /home/ronald/wt-lavra/app && grep -n "^def ata_do_dia\\| cels = dia.get\\|^ return {'tipo_dia'\\|^def dispensar_por_ausencia" ponto/services/cartorio.py \| head; echo ===; sed -n '149,152p;246,252p' ponto/services/cartorio.py` |
+| 19:41:30 | Bash | Onde nasce marcos_out e col | `cd /home/ronald/wt-lavra/app && grep -n "marcos_out\\|^ col = \\|_col_interm\s*=\\|_col_interm\[" escala/utils.py \| sed -n '1,30p'` |
+| 19:41:19 | Bash | A ata orfas importa para o papel? | `cd /home/ronald/wt-lavra/app && sed -n '1215,1290p' ponto/turnos.py \| grep -n "orfa\\|return\\|_dias\[" ; echo "=== grep orfas na funcao"; awk 'NR>=1054 && NR<=1322 && /orfas/' ponto/turnos.py` |
+| 19:41:11 | Bash | Resto do papel_por_minuto_da_ata | `cd /home/ronald/wt-lavra/app && sed -n '1130,1215p' ponto/turnos.py` |
 | 19:40:17 | Bash | marcos_out e o uso no cartorio | `cd /home/ronald/wt-lavra/app && sed -n '1370,1405p' escala/utils.py; echo "=== cartorio marcos"; sed -n '466,500p' ponto/services/cartorio.py` |
 | 19:40:12 | Bash | Como marcos viaja da montagem ao cartorio | `cd /home/ronald/wt-lavra/app && grep -n "return {'marcos'\\|'marcos':" escala/utils.py \| sed -n '1,20p'; echo ===; grep -n "marcos = g\[\\|g\['marcos'\]\\|g = eu.montar" ponto/services/cartorio.py \| head` |
 | 19:40:04 | Bash | Chamadores de ata_do_dia | `cd /home/ronald/wt-lavra/app && grep -n "ata_do_dia(" -r --include=*.py . \| grep -v tests; echo ===; grep -n "ata_do_dia(" -B 12 ponto/services/cartorio.py \| sed -n '1,60p'` |
