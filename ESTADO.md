@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 18:22:01.**
+**Medido em 07/10/2026 18:27:31.**
 
 | | |
 |---|---|
@@ -134,12 +134,12 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ● Antes de empurrar, vou testar se o portão lê o DISCO — se ler, o fd6c8c0e sobe sozinho e os docs pegam o commit do próximo marco (L-106),
   sem emendar o hash que o aval nomeia.
 
-● Conferir árvore e remoto antes do push · 2m 2s
+  Conferir árvore e remoto antes do push · 7m 32s
   ⎿  $ cd /home/ronald/saas-hasner && git push origin main > logs/push_fd6c8c0e_2.out 2>&1; echo "---rc=$?"; tail -25
-     logs/push_fd6c8c0e_2.out (2m 1s)
+     logs/push_fd6c8c0e_2.out (7m 31s)
      (ctrl+b ctrl+b (twice) to run in background)
 
-✢ Beboppin'… (13m 12s · ↓ 17.2k tokens)
+✢ Beboppin'… (18m 42s · ↓ 17.2k tokens)
                                                                                                    ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
