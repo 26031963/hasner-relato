@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:05:31.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.9 MB). Acoes na janela: **82**.
+**Medido em 07/10/2026 19:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.9 MB). Acoes na janela: **85**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:07:19 | Bash | Criar a raia da lavratura | `cd /home/ronald/saas-hasner && git worktree add -b raia-lavra /home/ronald/wt-lavra HEAD 2>&1 \| tail -3 && mkdir -p /home/ronald/wt-lavra/app/logs /home/ronald/wt-lavra/app/media && cd /home/ronald/wt-lavra && git log --oneline -1 && ls app/ponto/tests/ \| grep -i "cartorio\\|lavr"` |
+| 19:06:45 | Bash | Listar worktrees e ler o uso da suite | `cd /home/ronald/saas-hasner && git worktree list && echo '--- suite usage ---' && sed -n '1,40p' bin/suite.sh` |
+| 19:06:18 | Bash | Ler o cadastro das duas celulas golden | `cd /home/ronald/saas-hasner && cat > logs/sombra/o217_cadastro_20261007.py <<'PY' # -*- coding: utf-8 -*- """O217/O218 -- o CADASTRO por tras das celulas golden 118980/118981, para a fixture nascer do real.""" import json from django.conf import settings assert settings.DATABASES['default']['NAME'] == 'sombra', 'sonda de SOMBRA' from escala.models import CelulaDia, EscalaColaborador # noqa: E402 f ...` |
 | 19:05:24 | Bash | Extrair as duas celulas golden da reversao | `cd /home/ronald/saas-hasner && python3 - <<'PY' import json, io d = json.load(io.open('app/logs/o209/reversao_frota_20261005_173212.json', encoding='utf-8')) cels = d['celulas'] print('campos:', d['campos']) print('celulas tipo:', type(cels).__name__, len(cels)) alvo = {} if isinstance(cels, dict): for k in ('118980', '118981', 118980, 118981): if k in cels: alvo[str(k)] = cels[k] else: for c in c ...` |
 | 19:05:18 | Bash | Abrir o arquivo de reversao do apply de 05/10 | `cd /home/ronald/saas-hasner && ls -la app/logs/o209/ 2>/dev/null \| head && python3 - <<'PY' import glob, json, io for f in glob.glob('/home/ronald/saas-hasner/app/logs/o209/reversao_frota_*.json'): print('==', f) d = json.load(io.open(f, encoding='utf-8')) print('tipo:', type(d).__name__, 'tamanho:', len(d)) if isinstance(d, dict): print('chaves:', list(d.keys())[:12]) PY` |
 | 19:05:05 | Bash | Registrar L-113 no LEIS.md | `python3 - <<'PY' import io p = 'docs/LEIS.md' t = io.open(p, encoding='utf-8').read() def troca(velho, novo): global t n = t.count(velho) assert n == 1, 'ancora com %d: %r' % (n, velho[:60]) t = t.replace(velho, novo) L113 = ( '\| **L-113** \| **O SISTEMA CALCULA O QUE TEM**: *"o sistema calcula o que tem. Se mudei uma batida e o ' 'calculo exportado mudou, nao e responsabilidade do sistema. Se o  ...` |

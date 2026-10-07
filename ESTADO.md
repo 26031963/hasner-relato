@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:05:31.**
+**Medido em 07/10/2026 19:10:45.**
 
 | | |
 |---|---|
@@ -113,14 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  2, quem-mais-le=todo leitor de ata (tela, PDF, cartao) e o fechamento por evento, juizes novos=0
-  LINHA HAIKU: (a) contador `dias_com_regra_velha` entra no copiloto; (b) golden: "este dia foi calculado pela regra de hoje?" esperado
-  via ferramentas.regra_do_dia(cli); (c) degrau: leitura.
-
-● Aval recebido. Ordem nova: BATERIA-DA-LAVRATURA (com a O217) → REGRA-NA-IMPRESSAO → DIETA-DE-CARGA → O211 → O214 → BOs. E a lei nova
-  responde a pergunta de lei que estava no topo do RELATO. Registro primeiro (PROMPT-NAO-SE-REPETE), depois sigo na O217 — que agora é a
-  cura dentro da OBRA 1.
-
   Antes disso, a checagem que o advisor pediu respondeu: cel_por_data é populado em escala/utils.py:1122 e :1249, e turnos_do_colab só é
   importado em :1261 — o match não consome turnos, é livre de papel. A cura B é linha reta.
 
@@ -132,19 +124,27 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 
 ● Docs owed estão escritos. Agora o RED — e ele vem do arquivo de reversão, não da mão.
 
-● Extrair as duas celulas golden da reversao
-  ⎿  $ cd /home/ronald/saas-hasner && python3 - <<'PY'
-     import json, io
-     d = json.load(io.open('app/logs/o209/reversao_frota_20261005_173212.json', encoding='utf-8'))
-     cels = d['celulas']
-     print('campos:', d['campos'])
-     print('celulas tipo:', type(cels).__name__, len(cels))
-     alvo = {}
-     if isinstance(cels, dict…
+  Ran 2 shell commands
 
-✢ Beboppin'… (56m 42s · ↓ 63.6k tokens · thinking)
+● O golden está completo e o mecanismo fecha com número: a ata velha de 29/09 valia 894 = 06:31→21:25, que é o DESCANSO entre turnos lido
+  como trabalho (papel invertido), e a correta é 545 = 21:25→06:30. Agora o cadastro, para a fixture nascer do real.
+
+  Ran 1 shell command
+
+● Confirmado, e é a forma mais aguda possível do ciclo: col146 é INTERMITENTE (marcos: null), então a ata é POSICIONAL e o papel é a ata —
+  sem cadastro nenhum para ancorar. A lavra anterior é a única testemunha do papel, e ela estava invertida.
+
+  Construção em cópia do HEAD (LEI-AKITA 10):
+
+● Criar a raia da lavratura
+  ⎿  $ cd /home/ronald/saas-hasner && git worktree add -b raia-lavra /home/ronald/wt-lavra HEAD 2>&1 | tail -3 && mkdir -p
+     /home/ronald/wt-lavra/app/logs /home/ronald/wt-lavra/app/media && cd /home/ronald/wt-lavra && git log --oneline -1 && ls
+     app/ponto/tests/ | grep -i "cartorio\|lavr"
+
+· Compacting conversation… (1h 1m 56s · ↓ 69.0k tokens)
+  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    6% until auto-compact
+                                                                                                                    0% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
