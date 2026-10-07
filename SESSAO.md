@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:20:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.7 MB). Acoes na janela: **115**.
+**Medido em 07/10/2026 19:25:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.8 MB). Acoes na janela: **120**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:23:04 | Bash | Ruff e stage do RED na raia | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/wt-lavra/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest ruff check ponto/tests/test_bateria_lavratura.py 2>&1 \| tail -5; cd /home/ronald/wt-lavra && git add app/ponto/tests/test_bateria_lavratura.py && git -c core.hooksPath=.git/hooks status --short app/ponto/tests/` |
+| 19:22:41 | Bash | Evidenciar os tres REDs | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| grep -E "^(OK\|FAILED\|Ran\|FAIL:\|ERROR:)\|AssertionError" \| head -30` |
+| 19:22:22 | Bash | Reescrever os cenarios com os dois REDs | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() i=s.index('class LampadaInvertidaTest(_BaseLavratura):') cab=s[:i] cab=cab.replace(""" def _golden(self): \"\"\"Devolve (colab, celula de 28/09, celula de 29/09) com a ata INVERTIDA ja gravada.\"\"\"""", """ def _golden(self): \"\"\"Devolve (colab, {dia: celula}) com a at ...` |
+| 19:21:50 | Bash | Trocar o docstring pelo medido e tirar o diagnostico | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() i=s.index('\n\nclass _DiagJanelaTest') s=s[:i]+'\n' # o docstring do modulo: trocar o paragrafo do DEFEITO pelo MEDIDO velho = s[s.index('O DEFEITO que este cenario morde'):s.index('"""\nimport copy')] novo = '''OS DOIS DEFEITOS QUE ESTE CENARIO MORDE, medidos NESTA fixtu ...` |
+| 19:21:00 | Bash | Medir a mesma regra com a janela larga | `cd /home/ronald/wt-lavra/app && python3 - <<'PYEOF' p='ponto/tests/test_bateria_lavratura.py' s=open(p,encoding='utf-8').read() s=s.replace(""" c, c28, c29 = self._golden() self._lavrar(c, [c28, c29]) self.assertEqual( self._luzes(c28),""",""" c, c28, c29 = self._golden() self._lavrar(c, [c28, c29]) self.assertEqual( self._luzes(c28),""") # teste de DIAGNOSTICO temporario: a mesma regra com a jane ...` |
 | 19:20:09 | Bash | A pre-passagem cronologica do intermitente | `cd /home/ronald/wt-lavra/app && sed -n '1020,1100p' escala/utils.py` |
 | 19:19:42 | Bash | Rodar o RED do cenario 1 | `cd /home/ronald/saas-hasner && timeout 900 bash bin/suite.sh --dir /home/ronald/wt-lavra --only "ponto.tests.test_bateria_lavratura" 2>&1 \| tail -60; echo "rc=$?"` |
 | 19:19:38 | Bash | Ruff no teste novo | `cd /home/ronald/saas-hasner && source bin/recursos.sh >/dev/null 2>&1; docker run --rm $TESTE_DOCKER -v /home/ronald/wt-lavra/app:/app --tmpfs /app/.ruff_cache saas-hasner-core:latest ruff check ponto/tests/test_bateria_lavratura.py 2>&1 \| tail -20` |

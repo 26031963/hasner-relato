@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:20:45.**
+**Medido em 07/10/2026 19:25:45.**
 
 | | |
 |---|---|
@@ -113,7 +113,6 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-● Confirmado, e é a forma mais aguda possível do ciclo: col146 é INTERMITENTE (marcos: null), então a ata é POSICIONAL e o papel é a ata —
   sem cadastro nenhum para ancorar. A lavra anterior é a única testemunha do papel, e ela estava invertida.
 
   Construção em cópia do HEAD (LEI-AKITA 10):
@@ -139,12 +138,13 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
   -> deixa de valer sozinha e sai da lista; (10) versao com horizonte 09/2026 -> dia de 08/2026 nao rejulga por versao, e rejulga se a
   batida dele for editada, com rotulo.
 
-  A pre-passagem cronologica do intermitente
-  ⎿  $ cd /home/ronald/wt-lavra/app && sed -n '1020,1100p' escala/utils.py
+  Searched for 2 patterns, read 2 files, ran 19 shell commands
 
-· Beboppin'… (1h 11m 56s · ↓ 92.6k tokens · thinking some more)
+  Advising using Fable 5.1
+
+· Beboppin'… (1h 16m 56s · ↓ 101.3k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                   ✔ Update installed · Restart to update
+                                                                                                                    5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
