@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 07/10/2026 19:10:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (414.9 MB). Acoes na janela: **85**.
+**Medido em 07/10/2026 19:15:45.** Transcript: `ca9b0e52-210b-40af-961e-0a1df00f94eb.jsonl` (415.5 MB). Acoes na janela: **99**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:15:34 | Bash | A linha O219 inteira | `sed -n '117p' BACKLOG.md` |
+| 19:15:30 | Bash | Ver o rodape do PROMPTS e as linhas das tres obras | `cd /home/ronald/saas-hasner/app/docs && tail -4 PROMPTS.md \| cut -c1-400 && echo "=== BACKLOG O219" && grep -n "O219\\|O218\\|O220" BACKLOG.md \| cut -c1-180` |
+| 19:15:19 | Bash | Campos e metodos do CelulaDia | `cd /home/ronald/wt-lavra/app && python3 - <<'EOF' s=open('escala/models.py').read() i=s.index('class CelulaDia') import re blk=s[i:s.index('\nclass ',i+10)] for m in re.finditer(r'^ (\w+) = models\.(\w+)', blk, re.M): print(m.group(1), m.group(2)) print('---- defs') for m in re.finditer(r'^ def (\w+)\(([^)]*)\)', blk, re.M): print(m.group(1), '\|', m.group(2)[:120]) EOF` |
+| 19:14:34 | Bash | Campos do CelulaDia | `cd /home/ronald/wt-lavra/app && python3 - <<'EOF' import re s=open('escala/models.py').read() i=s.index('class CelulaDia') print(s[i:i+2600]) EOF` |
+| 19:13:47 | Bash | Reler a medicao do O217 | `cd /home/ronald/saas-hasner && cat logs/o217_pontofixo.out` |
+| 19:13:23 | Bash | ata_do_dia inteira | `cd /home/ronald/wt-lavra/app && sed -n '144,290p' ponto/services/cartorio.py` |
+| 19:13:13 | Bash | A montagem da grade: cel_por_data e o memo dos turnos | `cd /home/ronald/wt-lavra/app && sed -n '1100,1135p;1240,1290p' escala/utils.py` |
+| 19:12:51 | Bash | Corpo do julgar_colab, entrada do juizo | `cd /home/ronald/wt-lavra/app && sed -n '451,530p' ponto/services/cartorio.py` |
+| 19:12:47 | Bash | Mapa das funcoes do cartorio | `cd /home/ronald/wt-lavra/app && grep -n "def \\|montar_grade_prevista_periodo\\|ata_do_dia(" ponto/services/cartorio.py \| head -60` |
+| 19:12:42 | Bash | Fixture de teste que chama julgar_colab | `cd /home/ronald/wt-lavra/app && sed -n '1,120p' ponto/tests/test_t32_folga_sem_turno.py` |
+| 19:12:38 | Bash | Testes que chamam a lavratura | `cd /home/ronald/wt-lavra/app && grep -rln "julgar_colab\\|julgar_celula" --include=test_*.py . \| head -20` |
+| 19:12:12 | Bash | Ler o teste vizinho da lavratura | `cd /home/ronald/wt-lavra/app && wc -l ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py ponto/tests/test_cartorio.py ponto/tests/test_lavra_fora_da_regua.py && echo "=== o116" && cat ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py` |
+| 19:12:06 | Bash | Leis que protegem cartorio e juiz_batida | `cd /home/ronald/wt-lavra/app/docs && grep -n "cartorio.py\\|turnos.py::papel\\|turnos.py::realizado\\|juiz_batida" LEIS.md \| cut -c1-200` |
+| 19:12:01 | Bash | Grep das leis que protegem os sitios da cura | `cd /home/ronald/wt-lavra/app/docs && for f in LEIS.md DOSSIES.md CORTES.md; do echo "=== $f"; grep -n "ata_do_dia\\|papel_por_minuto_da_ata\\|realizado_do_dia\\|turnos_do_colab\\|montar_grade_prevista_periodo\\|julgar_colab\\|periodos_do_dia" $f 2>/dev/null \| cut -c1-240; done` |
 | 19:07:19 | Bash | Criar a raia da lavratura | `cd /home/ronald/saas-hasner && git worktree add -b raia-lavra /home/ronald/wt-lavra HEAD 2>&1 \| tail -3 && mkdir -p /home/ronald/wt-lavra/app/logs /home/ronald/wt-lavra/app/media && cd /home/ronald/wt-lavra && git log --oneline -1 && ls app/ponto/tests/ \| grep -i "cartorio\\|lavr"` |
 | 19:06:45 | Bash | Listar worktrees e ler o uso da suite | `cd /home/ronald/saas-hasner && git worktree list && echo '--- suite usage ---' && sed -n '1,40p' bin/suite.sh` |
 | 19:06:18 | Bash | Ler o cadastro das duas celulas golden | `cd /home/ronald/saas-hasner && cat > logs/sombra/o217_cadastro_20261007.py <<'PY' # -*- coding: utf-8 -*- """O217/O218 -- o CADASTRO por tras das celulas golden 118980/118981, para a fixture nascer do real.""" import json from django.conf import settings assert settings.DATABASES['default']['NAME'] == 'sombra', 'sonda de SOMBRA' from escala.models import CelulaDia, EscalaColaborador # noqa: E402 f ...` |

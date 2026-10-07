@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 07/10/2026 19:10:45.**
+**Medido em 07/10/2026 19:15:45.**
 
 | | |
 |---|---|
@@ -113,38 +113,38 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  Antes disso, a checagem que o advisor pediu respondeu: cel_por_data é populado em escala/utils.py:1122 e :1249, e turnos_do_colab só é
-  importado em :1261 — o match não consome turnos, é livre de papel. A cura B é linha reta.
-
-  Searched for 1 pattern, ran 1 shell command
-
-● Aval registrado em docs agora (PROMPT-NAO-SE-REPETE), e a lei nova responde a pergunta que estava no topo do RELATO.
-
-  Searched for 3 patterns, ran 7 shell commands
-
-● Docs owed estão escritos. Agora o RED — e ele vem do arquivo de reversão, não da mão.
-
-  Ran 2 shell commands
-
-● O golden está completo e o mecanismo fecha com número: a ata velha de 29/09 valia 894 = 06:31→21:25, que é o DESCANSO entre turnos lido
-  como trabalho (papel invertido), e a correta é 545 = 21:25→06:30. Agora o cadastro, para a fixture nascer do real.
-
-  Ran 1 shell command
-
 ● Confirmado, e é a forma mais aguda possível do ciclo: col146 é INTERMITENTE (marcos: null), então a ata é POSICIONAL e o papel é a ata —
   sem cadastro nenhum para ancorar. A lavra anterior é a única testemunha do papel, e ela estava invertida.
 
   Construção em cópia do HEAD (LEI-AKITA 10):
 
-● Criar a raia da lavratura
-  ⎿  $ cd /home/ronald/saas-hasner && git worktree add -b raia-lavra /home/ronald/wt-lavra HEAD 2>&1 | tail -3 && mkdir -p
-     /home/ronald/wt-lavra/app/logs /home/ronald/wt-lavra/app/media && cd /home/ronald/wt-lavra && git log --oneline -1 && ls
-     app/ponto/tests/ | grep -i "cartorio\|lavr"
+  Ran 14 shell commands
+  ⎿  Read docs/AVAIS.md (23 lines)
+  ⎿  Referenced file docs/RELATO.md
+  ⎿  Read ../../../../tmp/claude-1001/-home-ronald-saas-hasner-app/ca9b0e52-210b-40af-961e-0a1df00f94eb/tasks/b3mpxniru.output (30 lines)
+  ⎿  Referenced file ../logs/sombra/relavra10_frota_20261005.py
+  ⎿  Referenced file ponto/services/cartorio.py
 
-· Compacting conversation… (1h 1m 56s · ↓ 69.0k tokens)
-  ▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▱▱▱▱ 90%
+● Task "RED e construção do segundo intervalo" completed in background
+
+❯   O AVISO E UMA ESCOLHA, nao um sim/nao. Em mudanca de REGRA DE CADASTRO o admin escolhe: (1) desde sempre, correcao; (2) a partir de
+  <data>; (3) so para um RECORTE -- empresa, praca, posto ou colaborador, pela mesma tabela "mais especifico vence" da O211; (4) ver o
+  impacto antes (job com resultado por competencia e rubrica, nunca calculo no clique).
+    EXCECAO E CADASTRO, nunca desvio: linha com escopo, motivo, autor e data de FIM. Tela unica "excecoes vigentes"; contador
+  excecoes_sem_data_de_fim, esperado 0. PROIBIDO pular calculo de dia ou de colab por flag.
+    CORRECAO DE CODIGO tem HORIZONTE declarado junto da versao: "retroage ate a competencia <mm/aaaa>". Antes do horizonte o gravado fica
+  como FOTO e nao rejulga por versao. Dia de competencia-foto que receber toque de dado e recalculado pela regra de HOJE e ganha o rotulo
+  "recalculado em <data>"; o aviso diz isso antes de confirmar.
+    RED a mais: (8) regra aplicada so a uma praca -> colab de outra praca da mesma empresa nao muda; (9) excecao com data de fim vencida
+  -> deixa de valer sozinha e sai da lista; (10) versao com horizonte 09/2026 -> dia de 08/2026 nao rejulga por versao, e rejulga se a
+  batida dele for editada, com rotulo.
+
+  Ver o rodape do PROMPTS e as linhas das tres obras
+  ⎿  $ sed -n '117p' BACKLOG.md
+
+· Beboppin'… (1h 6m 56s · ↓ 78.4k tokens)
   ⎿  Tip: Use /clear to start fresh when switching topics and free up context
-                                                                                                                    0% until auto-compact
+                                                                                                   ✔ Update installed · Restart to update
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
